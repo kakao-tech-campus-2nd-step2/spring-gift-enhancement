@@ -36,8 +36,7 @@ public class WishListService {
         Member member = memberRepository.findById(wishListDTO.memberId())
             .orElseThrow(() -> new RepositoryException(ErrorCode.MEMBER_ID_NOT_FOUND,
                 wishListDTO.memberId()));
-        WishList wishList = new WishList(member,
-            product, wishListDTO.quantity());
+        WishList wishList = new WishList(member, product, wishListDTO.quantity());
         return convertToDTO(wishListRepository.save(wishList));
     }
 
@@ -59,14 +58,8 @@ public class WishListService {
             .orElseThrow(() -> new RepositoryException(
                 ErrorCode.WISHLIST_NOT_FOUND, wishListDTO.memberId(), wishListDTO.productId()));
 
-        Product product = productRepository.findById(wishListDTO.productId()).
-            orElseThrow(() -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND,
-                wishListDTO.productId()));
-        Member member = memberRepository.findById(wishListDTO.memberId())
-            .orElseThrow(() -> new RepositoryException(ErrorCode.MEMBER_ID_NOT_FOUND,
-                wishListDTO.memberId()));
-        WishList newWishList = new WishList(currentWishList.getId(), member, product,
-            wishListDTO.quantity());
+        WishList newWishList = new WishList(currentWishList.getId(), currentWishList.getMember(),
+            currentWishList.getProduct(), wishListDTO.quantity());
         return convertToDTO(wishListRepository.save(newWishList));
     }
 

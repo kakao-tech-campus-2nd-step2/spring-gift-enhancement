@@ -3,6 +3,7 @@ package gift;
 import gift.exception.RepositoryException;
 import gift.exception.UnauthorizedException;
 import gift.exception.UserNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -42,5 +43,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<String> handleUniqueConstraint(DataIntegrityViolationException ex) {
+        String message = "중복된 Member Id와 Product Id가 이미 위시 리스트가 존재합니다.";
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
     }
 }
