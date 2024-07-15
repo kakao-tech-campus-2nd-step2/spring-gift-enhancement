@@ -31,6 +31,10 @@ public class ProductCategory extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
