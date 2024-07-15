@@ -1,7 +1,8 @@
 package gift.controller.admin;
 
+import gift.dto.request.AddProductRequest;
 import gift.dto.request.ProductRequest;
-import gift.dto.response.ProductResponse;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +20,13 @@ import java.util.List;
 public class ProductAdminController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductAdminController(ProductService productService) {
+    public ProductAdminController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
+
 
     @GetMapping("/")
     public String getProducts(Model model, @PageableDefault(sort = "id") Pageable pageable) {
@@ -32,14 +36,15 @@ public class ProductAdminController {
 
     @GetMapping("/add")
     public String getAddForm(Model model) {
-        model.addAttribute("product", new ProductResponse(0L, "", 0, "")); // Add an empty Product object for the form
+        model.addAttribute("product", new AddProductRequest("", 0, "", 0L)); // Add an empty Product object for the form
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "version-SSR/add-form";
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid ProductRequest product) {
+    public String addProduct(@Valid AddProductRequest request) {
         try {
-            productService.addProduct(product.name(), product.price(), product.imageUrl());
+            productService.addProduct(request);
             return "redirect:/";
         } catch (Exception e) {
             return "version-SSR/add-error";
