@@ -32,8 +32,7 @@ public class MemberController {
                     "Member Register success", HttpStatus.OK);
                 return new ResponseEntity<>(memberRegisterSuccessResponse,
                     memberRegisterSuccessResponse.getHttpStatus());
-            })
-            .orElseGet(() -> { // isEmpty
+            }).orElseGet(() -> { // isEmpty
                 var memberRegisterFailResponse = new ApiResponse(HttpResult.ERROR,
                     "Registration Failed, 올바른 이메일 형식이 아닙니다.", HttpStatus.BAD_REQUEST);
                 return new ResponseEntity<>(memberRegisterFailResponse,
@@ -49,13 +48,10 @@ public class MemberController {
                 Map<String, Object> response = new HashMap<>();
                 response.put("token", token);
                 var memberLoginSucessResponse = new ApiResponse(HttpResult.OK,
-                    "Request Success. 정상 로그인 되었습니다",
-                    HttpStatus.OK);
+                    "Request Success. 정상 로그인 되었습니다", HttpStatus.OK);
                 return new ResponseEntity<>(memberLoginSucessResponse,
                     memberLoginSucessResponse.getHttpStatus());
-            })
-            .orElseThrow(() -> // 토큰 리턴이 안됨 -> 로그인 안됨
-                new ForbiddenException("없는 계정입니다")
-            );
+            }).orElseThrow(() -> // 토큰 리턴이 안됨 -> 로그인 안됨
+                new ForbiddenException("없는 계정입니다"));
     }
 }
