@@ -55,9 +55,9 @@ public class Category {
   public String getColor(){return this.color;}
 
 
-  public String getImageUrl(){return this.getImageUrl();}
+  public String getImageUrl(){return this.imageUrl;}
 
 
-  public String getDescription(){return this.getDescription();}
+  public String getDescription(){return this.description;}
 
 }
