@@ -27,10 +27,16 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Wish> wishes = new ArrayList<>();
 
-    public Product(String name, Integer price, String imageUrl) {
+    @ManyToOne
+    @NotNull
+    @JoinColumn(name = "categoryId")
+    private Category category;
+
+    public Product(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     protected Product() {
@@ -52,10 +58,13 @@ public class Product {
         return imageUrl;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     public void change(String name, int price, String imageUrl) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
     }
-
 }

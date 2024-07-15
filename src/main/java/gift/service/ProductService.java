@@ -1,7 +1,9 @@
 package gift.service;
 
+import gift.dto.request.AddProductRequest;
 import gift.dto.response.AddedProductIdResponse;
 import gift.dto.response.ProductResponse;
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
@@ -16,14 +18,17 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     @Transactional
-    public AddedProductIdResponse addProduct(String name, int price, String imageUrl) {
-        Long addedProductId = productRepository.save(new Product(name, price, imageUrl)).getId();
+    public AddedProductIdResponse addProduct(AddProductRequest request) {
+        Category category = categoryService.getCategory(request.categoryId());
+        Long addedProductId = productRepository.save(new Product(request.name(), request.price(), request.imageUrl(), category)).getId();
         return new AddedProductIdResponse(addedProductId);
     }
 
