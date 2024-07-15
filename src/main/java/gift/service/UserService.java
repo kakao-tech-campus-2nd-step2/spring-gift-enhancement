@@ -31,13 +31,7 @@ public class UserService {
 
         Page<User> all = userRepository.findAll(pageable);
 
-        return all.map(this::convertUserToUserRes);
-    }
-    /*
-     * User 엔티티 클래스를 UserResponse DTO 클래스로 변경해주는 메서드
-     */
-    private UserResponse convertUserToUserRes(User user){
-        return new UserResponse(user);
+        return all.map(UserResponse::new);
     }
     /*
      * User의 정보를 userId를 기준으로 찾는 로직

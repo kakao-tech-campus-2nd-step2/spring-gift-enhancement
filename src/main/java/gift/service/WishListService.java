@@ -41,13 +41,7 @@ public class WishListService {
 
         Page<WishProduct> wishes = wishListRepository.findByUserId(id, pageable);
 
-        return wishes.map(this::convertWishProductToWishProductRes);
-    }
-    /*
-     * WishProduct 엔티티 클래스를 WishProductResponse 클래스로 변환해주는 메서드
-     */
-    private WishProductResponse convertWishProductToWishProductRes(WishProduct wishProduct){
-        return new WishProductResponse(wishProduct);
+        return wishes.map(WishProductResponse::new);
     }
     /*
      * 특정 상품을 위시리스트에 추가하는 로직

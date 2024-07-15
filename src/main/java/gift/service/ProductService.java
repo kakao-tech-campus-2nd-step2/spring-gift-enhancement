@@ -27,15 +27,9 @@ public class ProductService {
         sorts.add(Sort.Order.asc("id"));
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
 
-        Page<Product> all = productRepository.findAll(pageable);
+        Page<Product> products = productRepository.findAll(pageable);
 
-        return all.map(this::convertProductToProductRes);
-    }
-    /*
-     * product -> productResponse로의 변환
-     */
-    private ProductResponse convertProductToProductRes(Product product){
-        return new ProductResponse(product);
+        return products.map(ProductResponse::new);
     }
     /*
      * DB에 저장된 Product를 ID를 기준으로 찾아 반환
