@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 관리</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+<h1>Product Management</h1>
+<a href="#" th:href="@{/api/products/create}">Add New Product</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="productDto : ${paging.content}">
+        <td th:text="${productDto.id}">1</td>
+        <td th:text="${productDto.name}">Name</td>
+        <td th:text="${productDto.price}">Price</td>
+        <td><img th:src="${productDto.imageUrl}" alt="Product Image" width="100"/></td>
+        <td>
+            <a th:href="@{|/api/products/update/${productDto.id}|}">Update</a>
+            <form th:action="@{|/api/products/delete/${productDto.id}|}" method="post" style="display:inline">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div>
+    <a th:if="${currentPage} > 0" th:href="@{/api/products(page=${currentPage - 1}, size=${paging.size})}">Previous</a>
+    <span th:text="${currentPage + 1}"></span>
+    <a th:if="${currentPage + 1 < totalPages}" th:href="@{/api/products(page=${currentPage + 1}, size=${paging.size})}">Next</a>
+</div>
+
+</body>
+</html>
