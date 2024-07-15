@@ -10,7 +10,7 @@ public class Category {
     @Id
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
@@ -21,6 +21,26 @@ public class Category {
 
     @Column(nullable = false)
     private String description;
+
+    public String getName() {
+        return name;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changeColor(String color) {
+        this.color = color;
+    }
+
+    public void changeImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
 
     public CategoryResponse toDto() {
         return new CategoryResponse(this.id, this.name, this.color, this.imageUrl, this.description);

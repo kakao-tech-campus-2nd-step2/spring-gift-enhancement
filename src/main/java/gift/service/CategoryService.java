@@ -1,6 +1,8 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.exception.CategoryNameNotDuplicateException;
+import gift.exception.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.request.CategoryRequest;
 import gift.response.CategoryResponse;
@@ -27,9 +29,27 @@ public class CategoryService {
     }
 
     public void addCategory(CategoryRequest request) {
+        if (categoryRepository.existsByName(request.getName())) {
+            throw new CategoryNameNotDuplicateException();
+        }
+
         Category category = new Category(request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
 
         categoryRepository.save(category);
+    }
+
+    public void editCategory(Long categoryId, CategoryRequest request) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryNotFoundException::new);
+
+        if (!category.getName().equals(request.getName()) && categoryRepository.existsByName(request.getName())) {
+            throw new CategoryNameNotDuplicateException();
+        }
+
+        category.changeName(request.getName());
+        category.changeColor(request.getColor());
+        category.changeImageUrl(request.getImageUrl());
+        category.changeDescription(request.getDescription());
     }
 
 }

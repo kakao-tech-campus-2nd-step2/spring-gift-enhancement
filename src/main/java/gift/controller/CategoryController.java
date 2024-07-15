@@ -33,4 +33,12 @@ public class CategoryController {
                 .build();
     }
 
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<Void> categoryEdit(@PathVariable Long categoryId, @RequestBody @Valid CategoryRequest request) {
+        categoryService.editCategory(categoryId, request);
+
+        return ResponseEntity.ok()
+                .build();
+    }
+
 }
