@@ -23,8 +23,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            Optional<User> user = getUserFromToken(authHeader);
-            User resolvedUser = user.orElse(null);
+            User resolvedUser = getUserFromToken(authHeader);
             if (resolvedUser != null) {
                 request.setAttribute("user", resolvedUser);
                 return true;
@@ -34,11 +33,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         return false;
     }
 
-    public Optional<User> getUserFromToken(String authHeader) {
+    public User getUserFromToken(String authHeader) {
         String token = authHeader.replace("Bearer ", "").trim();
-        if (userService.validateToken(token)) {
-            return userService.getUserByToken(token);
-        }
-        return Optional.empty();
+        userService.validateToken(token);
+        return userService.getUserByToken(token);
     }
 }

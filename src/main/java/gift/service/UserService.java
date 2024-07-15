@@ -36,15 +36,16 @@ public class UserService {
     }
 
     public boolean validateToken(String token) {
-        return jwtUtil.checkValidateToken(token);
+        boolean isValidToken = jwtUtil.checkValidateToken(token);
+        if(isValidToken){
+            return isValidToken;
+        }
+        throw new InvalidUserException("유효하지 않은 사용자입니다.");
     }
 
-    public Optional<User> getUserByToken(String token) {
-        try {
+    public User getUserByToken(String token) {
             String email = jwtUtil.getUserEmail(token);
-            return userRepository.findByEmail(email);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+            return userRepository.findByEmail(email).orElseThrow(()->new InvalidUserException("유효하지 않은 사용자입니다."));
+
     }
 }
