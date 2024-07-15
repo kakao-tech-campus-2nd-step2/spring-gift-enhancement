@@ -32,7 +32,7 @@ public class Category {
     String description;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductCategory> productCategory = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
     public Category() {
     }
@@ -84,15 +84,7 @@ public class Category {
         this.description = description;
     }
 
-    public void addProductCategory(ProductCategory productCategory) {
-        this.productCategory.add(productCategory);
-        productCategory.setCategories(this);
-    }
 
-    public void removeProductCategory(ProductCategory productCategory) {
-        this.productCategory.remove(productCategory);
-        productCategory.setCategories(null);
-    }
 
     public void updateCategory(CategoryRequestDTO categoryRequestDTO){
         this.name = categoryRequestDTO.getName();
@@ -101,5 +93,17 @@ public class Category {
         this.imageUrl = categoryRequestDTO.getImageUrl();
     }
 
+    public void addProduct(Product product) {
+        products.add(product);
+        product.setCategory(this);
+    }
 
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.setCategory(null);
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
 }

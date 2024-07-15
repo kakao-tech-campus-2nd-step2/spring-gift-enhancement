@@ -31,11 +31,13 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductCategory> productCategory = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id",nullable = false)
+    private Category category;
 
 
     public Product(String name, double price, String imageUrl) {
@@ -108,14 +110,17 @@ public class Product {
         wishes.remove(wish);
         wish.setProduct(null);
     }
-    public void addProductCategory(ProductCategory productCategory) {
-        this.productCategory.add(productCategory);
-        productCategory.setProduct(this);
+    public void updateCategory(Category category) {
+        this.category = category;
     }
 
-    public void removeProductCategory(ProductCategory productCategory) {
-        this.productCategory.add(productCategory);
-        productCategory.setProduct(null);
+    public void setCategory(Category category) {
+        if (this.category != null) {
+            this.category.getProducts().remove(this);
+        }
+        this.category = category;
+        if (category != null) {
+            category.getProducts().add(this);
+        }
     }
-
 }
