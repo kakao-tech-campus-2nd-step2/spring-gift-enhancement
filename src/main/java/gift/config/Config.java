@@ -29,7 +29,7 @@ public class Config implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/*")
-                .excludePathPatterns("/members/**", "/manager/**", "/manager/products/**", "**.html");
+                .excludePathPatterns("/members/**", "/manager/products", "/manager/products/**", "/manager/products/**/**", "**.html");
     }
 
     @Override
