@@ -34,6 +34,12 @@ public class Product {
     protected Product () {
     }
 
+    private Product(Builder builder) {
+        this.name = builder.name;
+        this.price = builder.price;
+        this.imageUrl = builder.imageUrl;
+    }
+
     public Product(Long id, String name, int price, String imageUrl) {
         this.id = id;
         this.name = name;
@@ -65,6 +71,31 @@ public class Product {
 
     public List<Wish> getWishes() {
         return wishes;
+    }
+
+    public static class Builder {
+        private String name;
+        private int price;
+        private String imageUrl;
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder price(int price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder imageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(this);
+        }
     }
 
     @Override
