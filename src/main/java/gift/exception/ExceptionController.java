@@ -67,8 +67,15 @@ public class ExceptionController {
 
     @ResponseBody
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ErrorResult> KeyNotFoundExceptionHandler(ForbiddenException e) {
+    public ResponseEntity<ErrorResult> forbiddenExceptionHandler(ForbiddenException e) {
         ErrorResult errorResult = new ErrorResult("403", e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(CategoryNameDuplicationException.class)
+    public ResponseEntity<ErrorResult> categoryNameExceptionHandler(CategoryNameDuplicationException e) {
+        ErrorResult errorResult = new ErrorResult("400", e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.FORBIDDEN);
     }
 
