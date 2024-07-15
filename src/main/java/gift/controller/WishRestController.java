@@ -5,6 +5,7 @@ import gift.dto.request.MemberRequestDto;
 import gift.dto.request.WishRequestDto;
 import gift.dto.response.WishResponseDto;
 import gift.service.WishService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -30,7 +31,7 @@ public class WishRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<WishResponseDto>> getMemberWishes(@LoginMember MemberRequestDto memberRequest, @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<Page<WishResponseDto>> getMemberWishes(@LoginMember MemberRequestDto memberRequest, @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(wishService.getPagedMemberWishesByMemberId(memberRequest.getId(),pageable));
     }
