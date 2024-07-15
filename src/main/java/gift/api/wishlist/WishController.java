@@ -3,6 +3,7 @@ package gift.api.wishlist;
 import gift.global.LoginMember;
 import java.net.URI;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,11 +24,8 @@ public class WishController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Wish>> getItems(@LoginMember Long memberId, @RequestParam int page,
-        @RequestParam int size, @RequestParam String criterion, @RequestParam String direction) {
-
-        return ResponseEntity.ok()
-            .body(wishService.getItems(memberId, page, size, criterion, direction));
+    public ResponseEntity<List<Wish>> getItems(@LoginMember Long memberId, Pageable pageable) {
+        return ResponseEntity.ok().body(wishService.getItems(memberId, pageable));
     }
 
     @PostMapping()

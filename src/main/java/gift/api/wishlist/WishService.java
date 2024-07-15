@@ -29,12 +29,10 @@ public class WishService {
         this.wishRepository = wishRepository;
     }
 
-    public List<Wish> getItems(Long memberId, int page, int size, String criterion, String direction) {
+    public List<Wish> getItems(Long memberId, Pageable pageable) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NoSuchIdException("member"));
-        Pageable pageRequest = PageRequest.of(page, size,
-            Sort.by(Direction.fromOptionalString(direction).orElse(Direction.ASC), "product."+criterion));
-        Page<Wish> allWishes = wishRepository.findAllByMember(member, pageRequest);
+        Page<Wish> allWishes = wishRepository.findAllByMember(member, pageable);
         return allWishes.hasContent() ? allWishes.getContent() : Collections.emptyList();
     }
 
