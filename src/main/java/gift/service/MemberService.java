@@ -2,8 +2,8 @@ package gift.service;
 
 import gift.constants.Messages;
 import gift.domain.Member;
-import gift.dto.MemberRequestDto;
-import gift.dto.MemberResponseDto;
+import gift.dto.request.MemberRequestDto;
+import gift.dto.response.MemberResponseDto;
 import gift.exception.MemberNotFoundException;
 import gift.repository.MemberRepository;
 import org.springframework.stereotype.Service;

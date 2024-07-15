@@ -1,6 +1,5 @@
-package gift.dto;
+package gift.dto.response;
 
-import gift.domain.Member;
 import gift.domain.Product;
 
 public class ProductResponseDto {

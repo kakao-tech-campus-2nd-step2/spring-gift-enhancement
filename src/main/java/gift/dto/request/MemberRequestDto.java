@@ -1,4 +1,4 @@
-package gift.dto;
+package gift.dto.request;
 
 import gift.domain.Member;
 

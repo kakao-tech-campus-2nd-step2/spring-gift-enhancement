@@ -2,9 +2,8 @@ package gift.service;
 
 import gift.constants.Messages;
 import gift.domain.Product;
-import gift.dto.ProductRequestDto;
-import gift.dto.ProductResponseDto;
-import gift.dto.WishResponseDto;
+import gift.dto.request.ProductRequestDto;
+import gift.dto.response.ProductResponseDto;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;

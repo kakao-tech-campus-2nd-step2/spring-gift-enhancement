@@ -1,7 +1,9 @@
 package gift.controller;
 
 import gift.annotation.LoginMember;
-import gift.dto.*;
+import gift.dto.request.MemberRequestDto;
+import gift.dto.request.WishRequestDto;
+import gift.dto.response.WishResponseDto;
 import gift.service.WishService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

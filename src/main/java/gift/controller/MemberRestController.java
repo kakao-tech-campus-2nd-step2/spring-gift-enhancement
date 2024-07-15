@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.dto.TokenResponseDto;
-import gift.dto.MemberRequestDto;
+import gift.dto.response.TokenResponseDto;
+import gift.dto.request.MemberRequestDto;
 import gift.service.JwtUtil;
 import gift.service.MemberService;
 import org.springframework.http.HttpHeaders;

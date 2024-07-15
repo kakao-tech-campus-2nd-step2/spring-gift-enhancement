@@ -1,8 +1,8 @@
 package gift.resolver;
 
 import gift.annotation.LoginMember;
-import gift.dto.MemberRequestDto;
-import gift.dto.MemberResponseDto;
+import gift.dto.request.MemberRequestDto;
+import gift.dto.response.MemberResponseDto;
 import gift.service.JwtUtil;
 import gift.service.MemberService;
 import org.springframework.core.MethodParameter;
