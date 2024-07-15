@@ -45,7 +45,7 @@ public class CategoryRequestValidationTest {
     }
 
     @Test
-    @DisplayName("이름이 비어 있는 카테고리 유효성 검사 테스트")
+    @DisplayName("이름이 없는 카테고리 유효성 검사 테스트")
     void checkEmptyNameCategory() {
         CategoryRequest request = new CategoryRequest(
                 "",
