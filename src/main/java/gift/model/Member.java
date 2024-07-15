@@ -31,7 +31,7 @@ public class Member {
     protected Member() {
     }
 
-    public boolean comfirmPW(String password) {
+    public boolean comfirmPassword(String password) {
         if(this.password.equals(password)){
             return true;
         }

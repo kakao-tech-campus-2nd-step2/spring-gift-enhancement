@@ -31,7 +31,7 @@ public class MemberService {
         //1. 이메일 확인
         Member loginMember = comfirmEmail(member.getEmail());
         //2. 패스워드 확인
-        if(loginMember.comfirmPW(member.getPassword())){
+        if(loginMember.comfirmPassword(member.getPassword())){
             //3. 토큰 발급
             return createJwtToken.createJwt(loginMember.getId(), loginMember.getEmail());
         }
