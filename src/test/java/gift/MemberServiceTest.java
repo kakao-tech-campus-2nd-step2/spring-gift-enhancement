@@ -36,14 +36,16 @@ class MemberServiceTest {
     @Test
     void testRegister() {
         // 회원가입
-        // 이메일과 비밀번호를 통해 회원을 등록하고 저장된 회원 정보가 올바른지 확인
         String email = "test@example.com";
         String password = "password";
         String encodedPassword = "encodedPassword";
 
         when(memberRepository.findByEmail(email)).thenReturn(null);
         when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
-        when(memberRepository.save(any(Member.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(memberRepository.save(any(Member.class))).thenAnswer(invocation -> {
+            Member member = invocation.getArgument(0);
+            return member;
+        });
 
         Member member = memberService.register(email, password);
 
@@ -54,7 +56,7 @@ class MemberServiceTest {
 
     @Test
     void testRegisterThrowsExceptionWhenEmailExists() {
-        //중복 이메일 회원가입
+        // 중복 이메일 회원가입
         String email = "test@example.com";
         String password = "password";
 
@@ -65,16 +67,14 @@ class MemberServiceTest {
 
     @Test
     void testAuthenticate() {
-        //로그인
-        //이메일과 비밀번호를 통해 로그인을 시도하고 올바른 회원 정보가 반환되는지 확인
+        // 로그인
         String email = "test@example.com";
         String password = "password";
         String encodedPassword = "encodedPassword";
 
-        Member member = Member.builder()
-                .email(email)
-                .password(encodedPassword)
-                .build();
+        Member member = new Member();
+        member.setEmail(email);
+        member.setPassword(encodedPassword);
 
         when(memberRepository.findByEmail(email)).thenReturn(member);
         when(passwordEncoder.matches(password, encodedPassword)).thenReturn(true);
@@ -87,15 +87,14 @@ class MemberServiceTest {
 
     @Test
     void testAuthenticateReturnsNullWhenPasswordDoesNotMatch() {
-        // 비밀번호 일치하지 않을 때 로그인 실패하는지 확인
+        // 비밀번호 일치하지 않을 때 로그인 실패?
         String email = "test@example.com";
         String password = "password";
         String encodedPassword = "encodedPassword";
 
-        Member member = Member.builder()
-                .email(email)
-                .password(encodedPassword)
-                .build();
+        Member member = new Member();
+        member.setEmail(email);
+        member.setPassword(encodedPassword);
 
         when(memberRepository.findByEmail(email)).thenReturn(member);
         when(passwordEncoder.matches(password, encodedPassword)).thenReturn(false);
@@ -107,25 +106,23 @@ class MemberServiceTest {
 
     @Test
     void testFindById() {
-        //ID로 회원 조회
+        // ID로 회원 조회
         Long id = 1L;
-        Member member = Member.builder()
-                .id(id)
-                .email("test@example.com")
-                .password("password")
-                .build();
+        Member member = new Member();
+        member.setEmail("test@example.com");
+        member.setPassword("password");
 
         when(memberRepository.findById(id)).thenReturn(Optional.of(member));
 
         Member foundMember = memberService.findById(id);
 
         assertThat(foundMember).isNotNull();
-        assertThat(foundMember.getId()).isEqualTo(id);
+        assertThat(foundMember.getEmail()).isEqualTo("test@example.com");
     }
 
     @Test
     void testFindByIdReturnsNullWhenNotFound() {
-        //없는 ID로 회원 조회시 Null 반환
+        // 없는 ID로 회원 조회시 Null 반환
         Long id = 1L;
 
         when(memberRepository.findById(id)).thenReturn(Optional.empty());
