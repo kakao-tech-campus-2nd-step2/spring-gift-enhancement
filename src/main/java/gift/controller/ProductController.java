@@ -8,7 +8,6 @@ import java.util.Optional;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,8 +41,7 @@ public class ProductController {
         Model model) {
 
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, size, sortBy, direction);
-        Pageable pageable = productService.createPageRequest(pageRequestDTO);
-        Page<ProductDTO> productPage = productService.findAllProducts(pageable);
+        Page<ProductDTO> productPage = productService.findAllProducts(pageRequestDTO);
 
         // 모델에 데이터 추가
         model.addAttribute("products", productPage.getContent());

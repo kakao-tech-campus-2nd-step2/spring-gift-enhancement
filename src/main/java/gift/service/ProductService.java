@@ -7,9 +7,7 @@ import gift.model.Product;
 import gift.repository.ProductRepository;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,18 +19,8 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Pageable createPageRequest(PageRequestDTO pageRequestDTO) {
-        Sort sort;
-        if (pageRequestDTO.getDirection().equalsIgnoreCase(Sort.Direction.DESC.name())) {
-            sort = Sort.by(pageRequestDTO.getSortBy()).descending();
-        } else {
-            sort = Sort.by(pageRequestDTO.getSortBy()).ascending();
-        }
-
-        return PageRequest.of(pageRequestDTO.getPage(), pageRequestDTO.getSize(), sort);
-    }
-
-    public Page<ProductDTO> findAllProducts(Pageable pageable) {
+    public Page<ProductDTO> findAllProducts(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.toPageRequest();
         Page<Product> products = productRepository.findAll(pageable);
         return products.map(ProductConverter::convertToDTO);
     }
@@ -52,12 +40,13 @@ public class ProductService {
         Product existingProduct = productRepository.findById(productDTO.getId())
             .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
-        Product updatedProduct = new Product(existingProduct.getId(),
+        existingProduct.update(
             ProductConverter.convertToEntity(productDTO).getName(),
             productDTO.getPrice(),
-            productDTO.getImageUrl());
+            productDTO.getImageUrl()
+        );
 
-        productRepository.save(updatedProduct);
+        productRepository.save(existingProduct);
     }
 
     public void deleteProduct(Long id) {

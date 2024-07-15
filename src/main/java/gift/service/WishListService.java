@@ -10,9 +10,7 @@ import gift.repository.ProductRepository;
 import gift.repository.UserRepository;
 import gift.repository.WishListRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,19 +27,9 @@ public class WishListService {
         this.productRepository = productRepository;
     }
 
-    public Pageable createPageRequest(PageRequestDTO pageRequestDTO) {
-        Sort sort;
-        if (pageRequestDTO.getDirection().equalsIgnoreCase(Sort.Direction.DESC.name())) {
-            sort = Sort.by(pageRequestDTO.getSortBy()).descending();
-        } else {
-            sort = Sort.by(pageRequestDTO.getSortBy()).ascending();
-        }
-
-        return PageRequest.of(pageRequestDTO.getPage(), pageRequestDTO.getSize(), sort);
-    }
-
-    public Page<WishListDTO> getWishListByUser(String email, Pageable pageable) {
+    public Page<WishListDTO> getWishListByUser(String email, PageRequestDTO pageRequestDTO) {
         User user = userRepository.findByEmail(email);
+        Pageable pageable = pageRequestDTO.toPageRequest();
         Page<WishList> wishLists = wishListRepository.findByUser(user, pageable);
         return wishLists.map(WishListConverter::convertToDTO);
     }

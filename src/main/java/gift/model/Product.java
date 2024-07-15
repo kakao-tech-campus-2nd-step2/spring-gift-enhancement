@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Objects;
 
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -49,6 +50,12 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void update(Name name, int price, String imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     @Override
