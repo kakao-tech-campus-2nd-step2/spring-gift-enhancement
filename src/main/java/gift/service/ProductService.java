@@ -30,7 +30,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-            .orElseThrow(() -> new ProductNotFoundException("해당 ID의 상품을 찾을 수 없습니다."));
+            .orElseThrow(ProductNotFoundException::new);
     }
 
     @Transactional
@@ -53,7 +53,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public void checkProductExist(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException("해당 ID의 상품을 찾을 수 없습니다.");
+            throw new ProductNotFoundException();
         }
     }
 }

@@ -71,12 +71,12 @@ public class WishService {
     @Transactional(readOnly = true)
     protected Wish getWish(Long id) {
         return wishRepository.findById(id)
-            .orElseThrow(() -> new WishNotFoundException("위시리스트를 찾을 수 없습니다."));
+            .orElseThrow(WishNotFoundException::new);
     }
 
     private void validateWishPage(Page<Wish> wishes) {
         if (wishes == null || wishes.isEmpty()) {
-            throw new WishNotFoundException("위시리스트가 존재하지 않습니다.");
+            throw new WishNotFoundException();
         }
     }
 
