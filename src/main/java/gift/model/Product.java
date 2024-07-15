@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import gift.repository.CategoryRepository;
 import gift.exception.CustomNotFoundException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 public class Product {
 
@@ -26,10 +23,6 @@ public class Product {
   @ManyToOne
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
-
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Option> options = new ArrayList<>();
-
 
   protected Product() {
   }
@@ -60,18 +53,11 @@ public class Product {
   public Category getCategory() {
     return category;
   }
-  public List<Option> getOptions() {
-    return options;
+  public void updateFromDto(ProductDto productDto, CategoryRepository categoryRepository) {
+    this.name = productDto.getName();
+    this.imageUrl = productDto.getImageUrl();
+    this.price = productDto.getPrice();
+    this.category = categoryRepository.findById(productDto.getCategoryId())
+            .orElseThrow(() -> new CustomNotFoundException("Category not found"));
   }
-
-  public void removeOption(Option option) {
-    options.remove(option);
-    option.setProduct(null);
-  }
-  public void updateFromDto(String name, int price, String imageUrl, Category category) {
-    this.name = name;
-    this.price = price;
-    this.imageUrl = imageUrl;
-    this.category = category;
-    }
-  }
+}
