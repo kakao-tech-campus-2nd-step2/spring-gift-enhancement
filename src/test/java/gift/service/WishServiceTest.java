@@ -67,7 +67,7 @@ public class WishServiceTest {
         when(productService.getProductById(1L)).thenReturn(productResponse);
         when(memberService.convertToEntity(any(MemberResponse.class))).thenReturn(member);
         when(productService.convertToEntity(any(ProductResponse.class))).thenReturn(product);
-        when(wishRepository.existsByMemberIdAndProductId(1L, 1L)).thenReturn(false);
+        when(wishRepository.existsByMember_IdAndProduct_Id(1L, 1L)).thenReturn(false);
         when(wishRepository.save(any(Wish.class))).thenReturn(new Wish(1L, member, product));
 
         WishCreateRequest wishCreateRequest = new WishCreateRequest(1L);
@@ -105,7 +105,7 @@ public class WishServiceTest {
         when(productService.getProductById(1L)).thenReturn(productResponse);
         when(memberService.convertToEntity(any(MemberResponse.class))).thenReturn(member);
         when(productService.convertToEntity(any(ProductResponse.class))).thenReturn(product);
-        when(wishRepository.existsByMemberIdAndProductId(1L, 1L)).thenReturn(true);
+        when(wishRepository.existsByMember_IdAndProduct_Id(1L, 1L)).thenReturn(true);
 
         WishCreateRequest wishCreateRequest = new WishCreateRequest(1L);
         DuplicateWishException exception = assertThrows(DuplicateWishException.class, () -> {
@@ -162,7 +162,7 @@ public class WishServiceTest {
         Product product = new Product(1L, "Product", 100, "imageUrl");
         Wish wish = new Wish(1L, member, product);
         Pageable pageable = PageRequest.of(0, 10);
-        when(wishRepository.findAllByMemberId(1L, pageable))
+        when(wishRepository.findAllByMember_Id(1L, pageable))
             .thenReturn(new PageImpl<>(List.of(wish), pageable, 1));
 
         Page<WishResponse> wishlist = wishService.getWishlistByMemberId(1L, pageable);

@@ -15,8 +15,8 @@ public class WishTest {
         Wish wish = new Wish(1L, member, product);
 
         assertThat(wish.getId()).isEqualTo(1L);
-        assertThat(wish.getMember()).isEqualTo(member);
-        assertThat(wish.getProduct()).isEqualTo(product);
+        assertThat(wish.getMemberId()).isEqualTo(member.getId());
+        assertThat(wish.getProductId()).isEqualTo(product.getId());
     }
 
     @Test

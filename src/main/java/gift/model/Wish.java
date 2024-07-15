@@ -37,12 +37,12 @@ public class Wish {
         return id;
     }
 
-    public Member getMember() {
-        return member;
+    public Long getMemberId() {
+        return member.getId();
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return product.getId();
     }
 
     public boolean isOwnedBy(Long memberId) {

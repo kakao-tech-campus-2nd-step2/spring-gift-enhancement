@@ -35,7 +35,7 @@ public class WishService {
 
     // 모든 위시 조회 (페이지네이션)
     public Page<WishResponse> getWishlistByMemberId(Long memberId, Pageable pageable) {
-        return wishRepository.findAllByMemberId(memberId, pageable).map(WishService::convertToDTO);
+        return wishRepository.findAllByMember_Id(memberId, pageable).map(WishService::convertToDTO);
     }
 
     public WishResponse addWish(WishCreateRequest wishCreateRequest, Long memberId) {
@@ -46,7 +46,7 @@ public class WishService {
             wishCreateRequest.productId());
         Product product = productService.convertToEntity(productResponse);
 
-        if (wishRepository.existsByMemberIdAndProductId(member.getId(), product.getId())) {
+        if (wishRepository.existsByMember_IdAndProduct_Id(member.getId(), product.getId())) {
             throw new DuplicateWishException(WISH_ALREADY_EXISTS);
         }
 
@@ -68,6 +68,6 @@ public class WishService {
 
     // Mapper methods
     private static WishResponse convertToDTO(Wish wish) {
-        return new WishResponse(wish.getId(), wish.getMember().getId(), wish.getProduct().getId());
+        return new WishResponse(wish.getId(), wish.getMemberId(), wish.getProductId());
     }
 }

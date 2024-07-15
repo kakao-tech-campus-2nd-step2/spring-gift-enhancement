@@ -39,8 +39,8 @@ public class WishRepositoryTest {
         Optional<Wish> foundWish = wishRepository.findById(savedWish.getId());
 
         assertThat(foundWish).isPresent();
-        assertThat(foundWish.get().getMember().getId()).isEqualTo(1L);
-        assertThat(foundWish.get().getProduct().getId()).isEqualTo(1L);
+        assertThat(foundWish.get().getMemberId()).isEqualTo(1L);
+        assertThat(foundWish.get().getProductId()).isEqualTo(1L);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class WishRepositoryTest {
         wishRepository.save(wish2);
 
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Wish> wishPage = wishRepository.findAllByMemberId(1L, pageable);
+        Page<Wish> wishPage = wishRepository.findAllByMember_Id(1L, pageable);
 
         assertThat(wishPage.getTotalElements()).isEqualTo(2);
         assertThat(wishPage.getContent()).hasSize(
@@ -88,7 +88,7 @@ public class WishRepositoryTest {
         Wish wish = new Wish(null, member, product);
         wishRepository.save(wish);
 
-        boolean exists = wishRepository.existsByMemberIdAndProductId(1L, 1L);
+        boolean exists = wishRepository.existsByMember_IdAndProduct_Id(1L, 1L);
         assertThat(exists).isTrue();
     }
 }
