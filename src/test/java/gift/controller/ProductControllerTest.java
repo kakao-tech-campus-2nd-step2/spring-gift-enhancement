@@ -38,8 +38,9 @@ class ProductControllerTest {
 
         var requestEntity = new RequestEntity<>(headers, HttpMethod.GET, URI.create(url));
         var actual = restTemplate.exchange(requestEntity, String.class);
+        System.out.println(actual);
         assertThat(actual.getBody()).isEqualTo(
-            "[{\"id\":1,\"name\":\"gamza\",\"price\":500,\"imageUrl\":\"gamza.jpg\"},{\"id\":2,\"name\":\"goguma\",\"price\":1000,\"imageUrl\":\"goguma.jpg\"}]");
+            "{\"response\":[{\"id\":1,\"name\":\"gamza\",\"price\":500,\"imageUrl\":\"gamza.jpg\"},{\"id\":2,\"name\":\"goguma\",\"price\":1000,\"imageUrl\":\"goguma.jpg\"}],\"pageNumber\":0,\"pageSize\":10}");
     }
 
     private HttpHeaders getToken() throws JsonProcessingException {

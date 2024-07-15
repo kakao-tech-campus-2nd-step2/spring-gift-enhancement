@@ -2,10 +2,10 @@ package gift.wish;
 
 import gift.common.auth.LoginMember;
 import gift.common.auth.LoginMemberDto;
+import gift.common.model.PageResponseDto;
 import gift.wish.model.WishRequestDto;
 import gift.wish.model.WishResponseDto;
 import java.net.URI;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -29,11 +29,11 @@ public class WishController {
     }
 
     @GetMapping
-    public ResponseEntity<List<WishResponseDto>> getWishList(
+    public ResponseEntity<PageResponseDto<WishResponseDto>> getWishList(
         @LoginMember LoginMemberDto loginMemberDto,
         @PageableDefault(size = 10, sort = "product", direction = Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok()
-            .body(wishService.getWishList(loginMemberDto, pageable));
+            .body(PageResponseDto.of(wishService.getWishList(loginMemberDto, pageable), pageable));
     }
 
     @PostMapping

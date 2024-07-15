@@ -1,11 +1,11 @@
 package gift.common.auth;
 
-import gift.member.MemberErrorCode;
 import gift.common.exception.MemberException;
+import gift.member.MemberErrorCode;
+import gift.member.MemberRepository;
 import gift.member.model.Member;
 import gift.member.model.MemberRequestDto;
 import gift.member.model.MemberResponseDto;
-import gift.member.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

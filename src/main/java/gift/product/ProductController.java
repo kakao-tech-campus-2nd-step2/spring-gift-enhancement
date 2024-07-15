@@ -1,10 +1,12 @@
 package gift.product;
 
+import gift.common.model.PageResponseDto;
 import gift.product.model.ProductRequestDto;
 import gift.product.model.ProductResponseDto;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -29,10 +31,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponseDto>> getAllProducts(
+    public ResponseEntity<PageResponseDto<ProductResponseDto>> getAllProducts(
         @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok()
-            .body(productService.getAllProducts(pageable).getContent());
+            .body(PageResponseDto.of(productService.getAllProducts(pageable).getContent(), pageable));
     }
 
     @GetMapping("/{id}")

@@ -1,8 +1,8 @@
 package gift.member;
 
+import gift.common.auth.LoginMemberDto;
 import gift.member.model.Member;
 import gift.member.model.MemberRequestDto;
-import gift.common.auth.LoginMemberDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

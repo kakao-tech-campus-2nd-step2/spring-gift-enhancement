@@ -1,7 +1,7 @@
 package gift.product.model;
 
-import gift.product.ProductErrorCode;
 import gift.common.exception.ProductException;
+import gift.product.ProductErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
