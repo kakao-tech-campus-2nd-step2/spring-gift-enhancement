@@ -5,7 +5,6 @@ import gift.user.resolver.LoginUser;
 import gift.wishlist.model.dto.AddWishRequest;
 import gift.wishlist.model.dto.WishListResponse;
 import gift.wishlist.service.WishListService;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,12 +30,6 @@ public class WishListController {
     }
 
     @GetMapping
-    public ResponseEntity<List<WishListResponse>> getWishListForUser(@LoginUser AppUser loginAppUser) {
-        final List<WishListResponse> responses = wishListService.getWishList(loginAppUser.getId());
-        return ResponseEntity.ok().body(responses);
-    }
-
-    @GetMapping("/paged")
     public ResponseEntity<Page<WishListResponse>> getWishListForUser(@LoginUser AppUser loginAppUser,
                                                                      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
                                                                      Pageable pageable) {

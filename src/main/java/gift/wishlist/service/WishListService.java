@@ -9,8 +9,6 @@ import gift.wishlist.model.dto.AddWishRequest;
 import gift.wishlist.model.dto.Wish;
 import gift.wishlist.model.dto.WishListResponse;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,23 +25,6 @@ public class WishListService {
         this.wishListRepository = wishListRepository;
         this.userService = userService;
         this.productService = productService;
-    }
-
-    @Transactional(readOnly = true)
-    public List<WishListResponse> getWishList(Long userId) {
-        List<Wish> wishes = wishListRepository.findWishesByAppUserIdAndIsActiveTrue(userId);
-        if (wishes.isEmpty()) {
-            throw new EntityNotFoundException("WishList");
-        }
-        return wishes.stream()
-                .map(w -> new WishListResponse(
-                        w.getId(),
-                        w.getProduct().getId(),
-                        w.getProduct().getName(),
-                        w.getProduct().getPrice(),
-                        w.getProduct().getImageUrl(),
-                        w.getQuantity()))
-                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
