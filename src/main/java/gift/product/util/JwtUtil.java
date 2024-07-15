@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
-import static gift.product.validation.WishListValidation.INVALID_TOKEN;
+import static gift.product.exception.GlobalExceptionHandler.INVALID_TOKEN;
 
 @Component
 public class JwtUtil {

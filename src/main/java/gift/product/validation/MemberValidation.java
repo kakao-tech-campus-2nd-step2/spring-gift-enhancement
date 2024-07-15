@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static gift.product.exception.GlobalExceptionHandler.DUPLICATE_EMAIL;
+import static gift.product.exception.GlobalExceptionHandler.INVALID_INPUT;
+
 @Service
 public class MemberValidation {
-
-    public static final String DUPLICATE_EMAIL = "이미 가입된 이메일입니다.";
-    public static final String INVALID_INPUT = "이메일 또는 비밀번호를 잘못 입력하였습니다.";
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;

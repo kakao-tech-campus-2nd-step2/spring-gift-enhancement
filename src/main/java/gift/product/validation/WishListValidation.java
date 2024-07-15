@@ -13,12 +13,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+import static gift.product.exception.GlobalExceptionHandler.NOT_EXIST_ID;
+import static gift.product.exception.GlobalExceptionHandler.NO_PERMISSION;
+
 @Component
 public class WishListValidation {
-
-    public static final String NOT_EXIST_ID = "요청한 id가 위시리스트에 존재하지 않습니다.";
-    public static final String NO_PERMISSION = "본인의 위시 리스트만 수정할 수 있습니다.";
-    public static final String INVALID_TOKEN = "유효하지 않은 토큰입니다.";
 
     private final WishListRepository wishListRepository;
     private final ProductRepository productRepository;
