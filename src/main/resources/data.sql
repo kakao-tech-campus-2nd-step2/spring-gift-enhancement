@@ -1,13 +1,13 @@
-insert into CATEGORY (name, color, image_url, description) values ('교환권', '#a', 'http://a.com', '');
-insert into CATEGORY (name, color, image_url, description) values ('상품권', '#b', 'http://b.com', '');
-insert into CATEGORY (name, color, image_url, description) values ('뷰티', '#c', 'http://c.com', '');
-insert into CATEGORY (name, color, image_url, description) values ('패션', '#d', 'http://d.com', '');
-insert into CATEGORY (name, color, image_url, description) values ('식품', '#e', 'http://e.com', '');
-insert into CATEGORY (name, color, image_url, description) values ('리빙/도서', '#f', 'http://f.com', '');
-insert into CATEGORY (name, color, image_url, description) values ('레저/스포츠', '#g', 'http://g.com', '');
-insert into CATEGORY (name, color, image_url, description) values ('아티스트/캐릭터', '#h', 'http://h.com', '');
-insert into CATEGORY (name, color, image_url, description) values ('유아동/반려', '#i', 'http://i.com', '');
-insert into CATEGORY (name, color, image_url, description) values ('카카오프렌즈', '#j', 'http://j.com', '');
+insert into CATEGORY (name) values ('교환권');
+insert into CATEGORY (name) values ('상품권');
+insert into CATEGORY (name) values ('뷰티');
+insert into CATEGORY (name) values ('패션');
+insert into CATEGORY (name) values ('식품');
+insert into CATEGORY (name) values ('리빙/도서');
+insert into CATEGORY (name) values ('레저/스포츠');
+insert into CATEGORY (name) values ('아티스트/캐릭터');
+insert into CATEGORY (name) values ('유아동/반려');
+insert into CATEGORY (name) values ('카카오프렌즈');
 
 insert into PRODUCTS (name, price, image_url, category_id) values ('productA', 1000, 'http://a.com', 1L);
 insert into PRODUCTS (name, price, image_url, category_id) values ('productB', 5000, 'http://b.com', 2L);

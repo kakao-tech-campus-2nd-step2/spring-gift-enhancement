@@ -28,16 +28,15 @@ public class CategoryService {
     }
 
     @Transactional
-    public void addCategory(String name, String color, String imageUrl, String description) {
-        Category category = new Category(name, color, imageUrl, description);
+    public void addCategory(String name) {
+        Category category = new Category(name);
         categoryRepository.save(category);
     }
 
     @Transactional
-    public void updateCategory(Long id, String name, String color, String imageUrl,
-        String description) {
+    public void updateCategory(Long id, String name) {
         categoryRepository.findById(id)
-            .ifPresentOrElse(c -> c.updateCategory(name, color, imageUrl, description),
+            .ifPresentOrElse(c -> c.updateCategory(name),
                 () -> {
                     throw new NotFoundCategoryException();
                 });

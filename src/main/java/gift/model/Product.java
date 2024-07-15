@@ -27,7 +27,8 @@ public class Product extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"))
+    @JoinColumn(name = "category_id", nullable = false,
+        foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"))
     private Category category;
 
     protected Product() {
