@@ -17,6 +17,7 @@ public record ProductRequestDto(
         Integer price,
         String imageUrl,
 
+        @NotNull(message = "카테고리를 등록하세요")
         Long categoryId) {
 
     public static ProductRequestDto of(String name, int price, String imageUrl, Long categoryId) {
