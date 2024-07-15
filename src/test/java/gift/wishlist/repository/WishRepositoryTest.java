@@ -15,9 +15,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 
 @DataJpaTest
@@ -145,7 +145,7 @@ class WishRepositoryTest {
         Product newProduct = new Product("newProduct", 6000, "http://example.com/image2.jpg");
         newProduct = productRepository.save(newProduct);
 
-        wish.setProduct(newProduct);
+        wish.addProduct(newProduct);
         Wish updatedWish = wishRepository.save(wish);
 
         em.flush();
@@ -174,12 +174,10 @@ class WishRepositoryTest {
 
         Pageable pageable = PageRequest.of(0, 5, Sort.by("id").ascending());
 
-        Page<Wish> wishPage = wishRepository.findByMemberId(member.getId(), pageable);
+        Slice<Wish> wishPage = wishRepository.findByMemberId(member.getId(), pageable);
 
         assertThat(wishPage).isNotNull();
         assertThat(wishPage.getContent()).hasSize(5);
-        assertThat(wishPage.getTotalPages()).isEqualTo(5);
-        assertThat(wishPage.getTotalElements()).isEqualTo(21);
         assertThat(wishPage.getContent().get(0).getMember().getId()).isEqualTo(member.getId());
     }
 }

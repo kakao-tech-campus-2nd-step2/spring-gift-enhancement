@@ -13,9 +13,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 @DataJpaTest
 class WishServiceTest {
@@ -50,18 +50,16 @@ class WishServiceTest {
         wishRepository.save(new Wish(member, product1));
         wishRepository.save(new Wish(member, product2));
 
-        wishService = new WishService(wishRepository);
+        wishService = new WishService(wishRepository, productRepository);
     }
 
     @Test
     void testGetWishesPaged() {
         Pageable pageable = PageRequest.of(0, 10);
-        Page<WishResponse> wishesPage = wishService.getWishes(member, pageable);
+        Slice<WishResponse> wishesPage = wishService.getWishes(member, pageable).map(WishResponse::from);
 
         assertThat(wishesPage).isNotNull();
         assertThat(wishesPage.getContent()).hasSize(2);
-        assertThat(wishesPage.getTotalElements()).isEqualTo(2);
-        assertThat(wishesPage.getTotalPages()).isEqualTo(1);
         assertThat(wishesPage.getContent().get(0).getProduct().getName()).isEqualTo(
             "Sample Product 1");
         assertThat(wishesPage.getContent().get(1).getProduct().getName()).isEqualTo(
