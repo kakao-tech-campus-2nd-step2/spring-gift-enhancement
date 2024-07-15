@@ -1,4 +1,4 @@
-package gift.wishlist.controller;
+package gift.wishlist;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,8 +40,8 @@ import org.springframework.http.RequestEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(Lifecycle.PER_CLASS)
-@DisplayName("위시 리스트 컨트롤러 테스트")
-class WishListControllerTest {
+@DisplayName("위시 리스트 API 테스트")
+class WishListE2ETest {
 
     @LocalServerPort
     private int port;

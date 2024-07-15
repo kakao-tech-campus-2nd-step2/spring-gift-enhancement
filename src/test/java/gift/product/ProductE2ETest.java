@@ -1,4 +1,4 @@
-package gift.product.controller;
+package gift.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,8 +31,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(Lifecycle.PER_CLASS)
-@DisplayName("상품 컨트롤러 테스트")
-class ProductControllerTest {
+@DisplayName("상품 API 테스트")
+class ProductE2ETest {
 
     @LocalServerPort
     private int port;
