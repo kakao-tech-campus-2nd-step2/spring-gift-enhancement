@@ -31,9 +31,8 @@ public class WishService {
 
     public Page<Wish> getWishPage(Long memberId, int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        Page<Wish> allWishPage = wishRepository.findByMemberId(memberId, pageable);
 
-        return allWishPage;
+        return wishRepository.findByMemberId(memberId, pageable);
     }
 
     public void createWish(Long memberId, Long productId, Long quantity) {
