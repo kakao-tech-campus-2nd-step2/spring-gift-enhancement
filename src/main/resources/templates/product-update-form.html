@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 수정 페이지</title>
+</head>
+<body>
+<a href="/admin/product/list"><- 상품 관리 페이지로 돌아가기</a>
+<h1>상품 정보 수정</h1>
+<form th:action="@{/admin/product}" th:object="${product}" method="post">
+    <input type="hidden" name="_method" value="put" />
+    <table>
+        <tr>
+            <td>Id: </td>
+            <td><label>
+                <input type="number" name="id" th:field="*{id}" readonly />
+            </label></td>
+        </tr>
+        <tr>
+            <td>상품명: </td>
+            <td><label>
+                <input type="text" name="name" th:field="*{name}" required />
+            </label></td>
+            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error Message</td>
+        </tr>
+        <tr>
+            <td>가격: </td>
+            <td><label><input type="number" name="price" th:field="*{price}" required /></label></td>
+            <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error Message</td>
+        </tr>
+        <tr>
+            <td>상품이미지 URL: </td>
+            <td><label><input type="text" name="imageUrl" th:field="*{imageUrl}" required /></label></td>
+            <td th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">ImageURL Error Message</td>
+        </tr>
+        <tr>
+            <td><button type="submit">수정 완료</button></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
