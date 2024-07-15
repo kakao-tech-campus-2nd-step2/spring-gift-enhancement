@@ -2,6 +2,7 @@ package gift.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import gift.product.domain.Product;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

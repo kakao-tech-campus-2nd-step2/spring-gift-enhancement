@@ -1,5 +1,7 @@
-package gift.model;
+package gift.wish.domain;
 
+import gift.product.domain.Product;
+import gift.user.domain.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

@@ -1,12 +1,13 @@
 package gift.service;
 
 
-import gift.model.Product;
-import gift.model.User;
-import gift.model.WishlistItem;
-import gift.repository.ProductRepository;
-import gift.repository.UserRepository;
-import gift.repository.WishlistRepository;
+import gift.product.domain.Product;
+import gift.user.domain.User;
+import gift.wish.domain.WishlistItem;
+import gift.product.repository.ProductRepository;
+import gift.user.repository.UserRepository;
+import gift.wish.repository.WishlistRepository;
+import gift.wish.service.WishlistService;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;

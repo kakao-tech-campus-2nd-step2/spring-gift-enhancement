@@ -1,4 +1,4 @@
-package gift.model;
+package gift.wish.domain;
 
 public class WishlistDTO {
     Long userId;

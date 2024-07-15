@@ -1,7 +1,7 @@
-package gift.service;
+package gift.product.service;
 
-import gift.model.Product;
-import gift.repository.ProductRepository;
+import gift.product.domain.Product;
+import gift.product.repository.ProductRepository;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.springframework.data.domain.Page;

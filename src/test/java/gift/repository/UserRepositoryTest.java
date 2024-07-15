@@ -1,7 +1,8 @@
 package gift.repository;
 
 
-import gift.model.User;
+import gift.user.domain.User;
+import gift.user.repository.UserRepository;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

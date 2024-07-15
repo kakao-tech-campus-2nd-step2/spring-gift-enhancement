@@ -1,7 +1,7 @@
-package gift.view;
+package gift.product.controller;
 
-import gift.model.Product;
-import gift.service.ProductService;
+import gift.product.domain.Product;
+import gift.product.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

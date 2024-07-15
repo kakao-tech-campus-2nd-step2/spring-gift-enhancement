@@ -1,6 +1,6 @@
 package gift.exception;
 
-import gift.model.Product;
+import gift.product.domain.Product;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;

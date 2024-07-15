@@ -1,7 +1,7 @@
-package gift.controller;
+package gift.user.controller;
 
-import gift.model.User;
-import gift.service.UserService;
+import gift.user.domain.User;
+import gift.user.service.UserService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

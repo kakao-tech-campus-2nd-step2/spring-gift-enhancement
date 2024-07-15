@@ -1,11 +1,11 @@
-package gift.view;
+package gift.wish.controller;
 
-import gift.model.Product;
-import gift.model.WishlistDTO;
-import gift.model.WishlistItem;
-import gift.service.ProductService;
-import gift.service.UserService;
-import gift.service.WishlistService;
+import gift.product.domain.Product;
+import gift.wish.domain.WishlistDTO;
+import gift.wish.domain.WishlistItem;
+import gift.product.service.ProductService;
+import gift.user.service.UserService;
+import gift.wish.service.WishlistService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Page;

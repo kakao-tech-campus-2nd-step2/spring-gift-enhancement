@@ -1,7 +1,7 @@
-package gift.service;
+package gift.user.service;
 
-import gift.model.User;
-import gift.repository.UserRepository;
+import gift.user.domain.User;
+import gift.user.repository.UserRepository;
 import gift.utility.JwtUtil;
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,8 @@
 package gift.repository;
 
 
-import gift.model.Product;
+import gift.product.domain.Product;
+import gift.product.repository.ProductRepository;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

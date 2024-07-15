@@ -1,7 +1,7 @@
-package gift.controller;
+package gift.wish.controller;
 
-import gift.model.WishlistItem;
-import gift.service.WishlistService;
+import gift.wish.domain.WishlistItem;
+import gift.wish.service.WishlistService;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

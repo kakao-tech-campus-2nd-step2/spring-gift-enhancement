@@ -1,7 +1,7 @@
-package gift.service;
+package gift.wish.service;
 
-import gift.model.WishlistItem;
-import gift.repository.WishlistRepository;
+import gift.wish.domain.WishlistItem;
+import gift.wish.repository.WishlistRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -1,7 +1,7 @@
-package gift.view;
+package gift.user.controller;
 
-import gift.controller.UserController;
-import gift.model.User;
+import gift.user.controller.UserController;
+import gift.user.domain.User;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

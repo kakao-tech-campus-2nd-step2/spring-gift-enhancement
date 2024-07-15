@@ -1,8 +1,11 @@
 package gift.repository;
 
-import gift.model.Product;
-import gift.model.User;
-import gift.model.WishlistItem;
+import gift.product.domain.Product;
+import gift.product.repository.ProductRepository;
+import gift.user.domain.User;
+import gift.user.repository.UserRepository;
+import gift.wish.domain.WishlistItem;
+import gift.wish.repository.WishlistRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
