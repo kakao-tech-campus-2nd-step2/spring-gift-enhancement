@@ -5,10 +5,9 @@ import gift.product.model.ProductRequestDto;
 import gift.product.model.ProductResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin/products")
@@ -32,10 +30,7 @@ public class AdminController {
 
     @GetMapping
     public String getAllProducts(Model model,
-        @RequestParam(required = false, defaultValue = "0", value = "pageNo") int pageNo,
-        @RequestParam(required = false, defaultValue = "10", value = "pageSize") int pageSize,
-        @RequestParam(required = false, defaultValue = "product", value = "criteria") String criteria) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Direction.ASC, criteria));
+        @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
         Page<ProductResponseDto> productList = productService.getAllProducts(pageable);
         model.addAttribute("productList", productList);
         return "products";
