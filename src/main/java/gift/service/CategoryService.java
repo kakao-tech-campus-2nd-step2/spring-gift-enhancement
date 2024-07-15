@@ -52,4 +52,8 @@ public class CategoryService {
         category.changeDescription(request.getDescription());
     }
 
+    public void removeCategory(Long categoryId) {
+        categoryRepository.deleteById(categoryId);
+    }
+
 }
