@@ -2,8 +2,6 @@ package gift.product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.product.model.ProductRepository;
 import gift.product.model.dto.Product;
@@ -14,7 +12,6 @@ import gift.wishlist.model.WishListRepository;
 import gift.wishlist.model.dto.Wish;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Tuple;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,19 +71,5 @@ public class ProductRepositoryTest {
 
         assertEquals(product.getName(), foundProduct.getName());
         assertEquals(1L, wishCount);
-    }
-
-    @Test
-    public void testFindAllActiveProductsWithWishCount() {
-        List<Tuple> results = productRepository.findAllActiveProductsWithWishCount();
-        assertFalse(results.isEmpty());
-
-        for (Tuple result : results) {
-            Product foundProduct = result.get("product", Product.class);
-            Long wishCount = result.get("wishCount", Long.class);
-
-            assertTrue(foundProduct.isActive());
-            assertNotNull(wishCount);
-        }
     }
 }
