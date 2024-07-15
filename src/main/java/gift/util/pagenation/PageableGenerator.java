@@ -4,7 +4,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-public class PageableGenerator {
+public final class PageableGenerator {
+    private PageableGenerator() {}
+
     public static Pageable generatePageable(PageInfoDTO pageInfoDTO) {
         Sort sort = Sort.by(pageInfoDTO.sort());
 
