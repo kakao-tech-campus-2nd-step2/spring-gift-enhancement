@@ -1,6 +1,7 @@
 package gift.exception;
 
 import gift.dto.response.ErrorResponse;
+import gift.dto.response.ErrorResponses;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +36,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponses> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         List<String> errorMessages = ex.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(new ErrorResponse(errorMessages), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponses(errorMessages), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(JwtException.class)
