@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,9 +45,8 @@ public class WishService {
             .collect(Collectors.toList());
     }
 
-    public Page<WishResponse> getWishes(Member member, Pageable pageable) {
-        Page<Wish> wishesPage = wishRepository.findByMemberId(member.getId(), pageable);
-        return wishesPage.map(wish -> new WishResponse(wish.getId(), wish.getProduct()));
+    public Slice<Wish> getWishes(Member member, Pageable pageable) {
+        return wishRepository.findByMemberId(member.getId(), pageable);
     }
 
     public void deleteWishByProductId(Member member, Long productId) {
