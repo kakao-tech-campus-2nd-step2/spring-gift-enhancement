@@ -1,9 +1,10 @@
-package gift.product.controller;
+package gift.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.auth.dto.LoginReqDto;
 import gift.auth.token.AuthToken;
+import gift.category.dto.CategoryReqDto;
 import gift.common.exception.ErrorResponse;
 import gift.common.exception.ValidationError;
 import gift.product.dto.ProductReqDto;
@@ -27,12 +28,14 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(Lifecycle.PER_CLASS)
-@DisplayName("상품 컨트롤러 테스트")
-class ProductControllerTest {
+@ActiveProfiles("test")
+@DisplayName("상품 API 테스트")
+class ProductE2ETest {
 
     @LocalServerPort
     private int port;
@@ -48,18 +51,29 @@ class ProductControllerTest {
         baseUrl = "http://localhost:" + port;
 
         var url = baseUrl + "/api/members/register";
-        var reqBody = new LoginReqDto("productController@test.com", "1234");
+        var reqBody = new LoginReqDto("productE2E@test.com", "1234");
         var requestEntity = new RequestEntity<>(reqBody, HttpMethod.POST, URI.create(url));
         var actual = restTemplate.exchange(requestEntity, AuthToken.class);
 
         accessToken = actual.getBody().accessToken();
 
+        // 카테고리 초기화
+        var categoryUrl = baseUrl + "/api/categories";
+        List.of(
+                new CategoryReqDto("카테고리1", "#FF0000", "category1.png", "카테고리1 입니다."),
+                new CategoryReqDto("카테고리2", "#00FF00", "category2.png", "카테고리2 입니다."),
+                new CategoryReqDto("카테고리3", "#0000FF", "category3.png", "카테고리3 입니다.")
+        ).forEach(categoryReqDto -> {
+            var categoryRequest = TestUtils.createRequestEntity(categoryUrl, categoryReqDto, HttpMethod.POST, accessToken);
+            restTemplate.exchange(categoryRequest, String.class);
+        });
+
         // 상품 초기화
         var productUrl = baseUrl + "/api/products";
         List.of(
-                new ProductReqDto("상품1", 1000, "keyboard.png"),
-                new ProductReqDto("상품2", 2000, "mouse.png"),
-                new ProductReqDto("상품3", 3000, "monitor.png")
+                new ProductReqDto("상품1", 1000, "keyboard.png", "카테고리1"),
+                new ProductReqDto("상품2", 2000, "mouse.png", "카테고리2"),
+                new ProductReqDto("상품3", 3000, "monitor.png", "카테고리3")
         ).forEach(productReqDto -> {
             var productRequest = TestUtils.createRequestEntity(productUrl, productReqDto, HttpMethod.POST, accessToken);
             restTemplate.exchange(productRequest, String.class);
@@ -144,7 +158,7 @@ class ProductControllerTest {
     @DisplayName("상품 추가")
     void 상품_추가() {
         //given
-        var reqBody = new ProductReqDto("새로운 상품", 10000, "https://www.google.com/new-product.png");
+        var reqBody = new ProductReqDto("새로운 상품", 10000, "https://www.google.com/new-product.png", "카테고리1");
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products", reqBody, HttpMethod.POST, accessToken);
 
         //when
@@ -166,7 +180,7 @@ class ProductControllerTest {
     @DisplayName("상품 추가 실패")
     void 상품_추가_실패() {
         //given
-        var reqBody = new ProductReqDto("카카오 상품@테스트 오류 입니다.", 10000, "https://www.google.com/new-product.png");
+        var reqBody = new ProductReqDto("카카오 상품@테스트 오류 입니다.", 10000, "https://www.google.com/new-product.png", "카테고리1");
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products", reqBody, HttpMethod.POST, accessToken);
 
         //when
@@ -201,7 +215,7 @@ class ProductControllerTest {
         var lastProduct = lastProductResponse.getBody().getContent().getLast();
         Long productId = lastProduct.id();
 
-        var reqBody = new ProductReqDto("이름 수정", 20000, "https://www.google.com/modify.png");
+        var reqBody = new ProductReqDto("이름 수정", 20000, "https://www.google.com/modify.png", "카테고리1");
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products/" + productId, reqBody, HttpMethod.PUT, accessToken);
 
         //when
@@ -224,6 +238,7 @@ class ProductControllerTest {
         assertThat(product.name()).isEqualTo("이름 수정");
         assertThat(product.price()).isEqualTo(20000);
         assertThat(product.imageUrl()).isEqualTo("https://www.google.com/modify.png");
+        assertThat(product.category()).isEqualTo("카테고리1");
     }
 
     @Test
@@ -231,7 +246,7 @@ class ProductControllerTest {
     void 상품_수정_실패() {
         //given
         Long productId = 1L;
-        var reqBody = new ProductReqDto("카카오 수정", 20000, "https://www.google.com/keyboard.png");
+        var reqBody = new ProductReqDto("카카오 수정", 20000, "https://www.google.com/keyboard.png", null);
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products/" + productId, reqBody, HttpMethod.PUT, accessToken);
 
         //when
@@ -249,9 +264,10 @@ class ProductControllerTest {
 
         List<ValidationError> invalidParams = errorResponse.getInvalidParams();
         assertThat(invalidParams).isNotNull();
-        assertThat(invalidParams.size()).isEqualTo(1);
+        assertThat(invalidParams.size()).isEqualTo(2);
         assertThat(invalidParams.parallelStream().map(ValidationError::message)).containsExactlyInAnyOrder(
-                ProductInfo.PRODUCT_NAME_KAKAO
+                ProductInfo.PRODUCT_NAME_KAKAO,
+                ProductInfo.PRODUCT_CATEGORY_REQUIRED
         );
     }
 

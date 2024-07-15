@@ -1,5 +1,6 @@
 package gift.product.service;
 
+import gift.category.repository.CategoryRepository;
 import gift.product.dto.ProductReqDto;
 import gift.product.dto.ProductResDto;
 import gift.product.entity.Product;
@@ -9,7 +10,6 @@ import gift.product.exception.ProductNotFoundException;
 import gift.product.exception.ProductUpdateException;
 import gift.product.repository.ProductRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional(readOnly = true)
@@ -47,6 +49,8 @@ public class ProductService {
         Product newProduct;
         try {
             newProduct = productRepository.save(productReqDto.toEntity());
+            categoryRepository.findByName(productReqDto.category())
+                    .ifPresent(newProduct::changeCategory);
         } catch (Exception e) {
             throw ProductCreateException.EXCEPTION;
         }
@@ -59,6 +63,8 @@ public class ProductService {
         Product findProduct = findProductByIdOrThrow(productId);
         try {
             findProduct.update(productReqDto);
+            categoryRepository.findByName(productReqDto.category())
+                    .ifPresent(findProduct::changeCategory);
         } catch (Exception e) {
             throw ProductUpdateException.EXCEPTION;
         }

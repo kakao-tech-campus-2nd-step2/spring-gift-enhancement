@@ -1,15 +1,16 @@
-package gift.wishlist.controller;
+package gift.wishlist;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.utils.RestPage;
-import gift.utils.TestUtils;
 import gift.auth.dto.LoginReqDto;
 import gift.auth.token.AuthToken;
+import gift.category.dto.CategoryReqDto;
 import gift.common.exception.ErrorResponse;
 import gift.product.dto.ProductReqDto;
 import gift.product.dto.ProductResDto;
 import gift.utils.JwtTokenProvider;
+import gift.utils.RestPage;
+import gift.utils.TestUtils;
 import gift.wishlist.dto.WishListReqDto;
 import gift.wishlist.dto.WishListResDto;
 import gift.wishlist.exception.WishListErrorCode;
@@ -37,11 +38,13 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(Lifecycle.PER_CLASS)
-@DisplayName("위시 리스트 컨트롤러 테스트")
-class WishListControllerTest {
+@ActiveProfiles("test")
+@DisplayName("위시 리스트 API 테스트")
+class WishListE2ETest {
 
     @LocalServerPort
     private int port;
@@ -56,10 +59,10 @@ class WishListControllerTest {
     private static String accessToken;
 
     private static List<ProductReqDto> products = List.of(
-            new ProductReqDto("상품1", 1000, "keyboard.png"),
-            new ProductReqDto("상품2", 2000, "mouse.png"),
-            new ProductReqDto("상품3", 3000, "monitor.png"),
-            new ProductReqDto("상품4", 4000, "headset.png")
+            new ProductReqDto("상품1", 1000, "keyboard.png", "위시리스트 카테고리1"),
+            new ProductReqDto("상품2", 2000, "mouse.png", "위시리스트 카테고리2"),
+            new ProductReqDto("상품3", 3000, "monitor.png", "위시리스트 카테고리3"),
+            new ProductReqDto("상품4", 4000, "headset.png", "위시리스트 카테고리4")
     );
     private static List<ProductResDto> productList = new ArrayList<>();
 
@@ -70,7 +73,18 @@ class WishListControllerTest {
         baseUrl = "http://localhost:" + port;
 
         // 상품 등록을 위한 임의의 회원 가입
-        accessToken = registration("productAdd@test.com");
+        accessToken = registration("wishListE2E@test.com");
+
+        String categoryUrl = baseUrl + "/api/categories";
+        List.of(
+                new CategoryReqDto("위시리스트 카테고리1", "#FF0000", "category1.png", "카테고리1 입니다."),
+                new CategoryReqDto("위시리스트 카테고리2", "#00FF00", "category2.png", "카테고리2 입니다."),
+                new CategoryReqDto("위시리스트 카테고리3", "#0000FF", "category3.png", "카테고리3 입니다."),
+                new CategoryReqDto("위시리스트 카테고리4", "#FFFF00", "category4.png", "카테고리4 입니다.")
+        ).forEach(categoryReqDto -> {
+            var categoryRequest = TestUtils.createRequestEntity(categoryUrl, categoryReqDto, HttpMethod.POST, accessToken);
+            restTemplate.exchange(categoryRequest, String.class);
+        });
 
         // 상품 초기화
         var productUrl = baseUrl + "/api/products";
