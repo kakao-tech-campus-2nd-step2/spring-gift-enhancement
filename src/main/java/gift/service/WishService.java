@@ -33,10 +33,12 @@ public class WishService {
         Product product = productResponseDto.toEntity();
         Member member = memberRequestDto.toEntity();
 
-        Wish newWish = new Wish(member,product,wishRequestDto.getQuantity());
+        Wish newWish = new Wish.Builder()
+                .member(member)
+                .product(product)
+                .qunatity(wishRequestDto.getQuantity())
+                .build();
 
-        product.addWish(newWish);
-        member.addWish(newWish);
         wishRepository.save(newWish);
     }
 
@@ -61,9 +63,7 @@ public class WishService {
     public void deleteWishByMemberIdAndId(Long memberId, Long id){
         Wish wish = wishRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(()-> new WishNotFoundException(Messages.NOT_FOUND_WISH));
-
-        wish.getMember().removeWish(wish);
-        wish.getProduct().removeWish(wish);
+        wish.detachFromMemberAndProduct();
         wishRepository.deleteById(id);
     }
 
@@ -72,7 +72,6 @@ public class WishService {
         Wish existingWish = wishRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(()-> new WishNotFoundException(Messages.NOT_FOUND_WISH));
 
-        Wish updatedWish = new Wish(existingWish.getId(),existingWish.getMember(),existingWish.getProduct(),request.getQuantity());
-        wishRepository.save(updatedWish);
+        existingWish.updateQuantity(request.getQuantity());
     }
 }
