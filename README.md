@@ -70,7 +70,8 @@ Content-Type: application/json
 - [x] 카테고리 엔티티 추가
 - [x] 상품과 카테고리 간 관계 생성
 - [ ] 카테고리 CRUD 추가
-  - [ ] `GET /api/categories`: 조회
+  - [x] `GET /api/categories`: 모든 카테고리 조회
+  - [ ] `GET /api/categories/{id}` 특정 id 카테고리 조회
   - [ ] `POST /api/categories`: 추가
   - [ ] `UPDATE /api/categories/{id}`:수정 - UPDATE를 사용할지 PUT을 사용할 지는 추후 선택
   - [ ] `DELETE /api/categories/{id}`: 삭제
