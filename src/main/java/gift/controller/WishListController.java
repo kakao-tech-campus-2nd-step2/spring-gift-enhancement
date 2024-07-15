@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,10 +30,9 @@ public class WishListController {
 
     @GetMapping("/wish")
     public ResponseEntity<?> getGiftList(@RequestAttribute("user") User user,
-                                         @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                         @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+                                         @ModelAttribute PagingRequest pagingRequest) {
         if (user != null) {
-            PagingResponse<GiftResponse> gifts = giftService.getAllGifts(page, size);
+            PagingResponse<GiftResponse> gifts = giftService.getAllGifts(pagingRequest.getPage(), pagingRequest.getSize());
             return ResponseEntity.ok(gifts);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
