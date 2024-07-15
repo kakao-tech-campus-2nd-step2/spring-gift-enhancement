@@ -34,6 +34,11 @@ public class Member {
     protected Member() {
     }
 
+    private Member(Builder builder) {
+        this.email = builder.email;
+        this.password = builder.password;
+    }
+
     public Member(Long id, String email, String password) {
         this.id = id;
         this.email = email;
@@ -59,6 +64,25 @@ public class Member {
 
     public List<Wish> getWishes() {
         return wishes;
+    }
+
+    public static class Builder{
+        private String email;
+        private String password;
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Member build() {
+            return new Member(this);
+        }
     }
 
     @Override
