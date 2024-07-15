@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,6 +38,9 @@ public class ProductEntity {
     @OneToMany(mappedBy = "productEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishListEntity> wishListEntities;
 
+    @ManyToOne(targetEntity = CategoryEntity.class, fetch = FetchType.LAZY)
+    private CategoryEntity categoryEntity;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -46,6 +50,13 @@ public class ProductEntity {
     public ProductEntity() {
     }
 
+    public CategoryEntity getCategoryEntity() {
+        return categoryEntity;
+    }
+
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
+    }
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
