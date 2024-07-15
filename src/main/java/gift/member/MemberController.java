@@ -28,7 +28,7 @@ public class MemberController {
         @Valid @RequestBody MemberRequestDto memberRequestDto) {
         Long memberId = memberService.insertMember(memberRequestDto);
 
-        return ResponseEntity.created(URI.create("/members/"+memberId))
+        return ResponseEntity.created(URI.create("/api/members/" + memberId))
             .body(authService.getToken(memberRequestDto));
     }
 

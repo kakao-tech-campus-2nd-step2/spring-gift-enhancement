@@ -8,10 +8,7 @@ import gift.wish.model.WishRequestDto;
 import gift.wish.model.WishResponseDto;
 import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,11 +32,12 @@ public class WishService {
     }
 
     @Transactional
-    public void addProductToWishList(WishRequestDto wishRequestDto, LoginMemberDto loginMemberDto) {
+    public Long addProductToWishList(WishRequestDto wishRequestDto, LoginMemberDto loginMemberDto) {
         Product product = productRepository.findById(wishRequestDto.getProductId())
             .orElseThrow(() -> new IllegalArgumentException("Wish 값이 잘못되었습니다."));
         Wish wish = new Wish(loginMemberDto.toEntity(), product, wishRequestDto.getCount());
-        wish = wishRepository.save(wish);
+        wishRepository.save(wish);
+        return wish.getId();
     }
 
     @Transactional

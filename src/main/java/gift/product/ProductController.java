@@ -50,7 +50,7 @@ public class ProductController {
     public ResponseEntity<Void> addProduct(
         @Valid @RequestBody ProductRequestDto productRequestDto) {
         Long productId = productService.insertProduct(productRequestDto);
-        return ResponseEntity.created(URI.create("/products/" + productId)).build();
+        return ResponseEntity.created(URI.create("/api/products/" + productId)).build();
     }
 
     @PutMapping("/{id}")

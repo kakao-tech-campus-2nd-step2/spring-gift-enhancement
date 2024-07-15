@@ -1,9 +1,10 @@
 package gift.wish;
 
-import gift.common.auth.LoginMemberDto;
 import gift.common.auth.LoginMember;
+import gift.common.auth.LoginMemberDto;
 import gift.wish.model.WishRequestDto;
 import gift.wish.model.WishResponseDto;
+import java.net.URI;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,8 +44,8 @@ public class WishController {
     @PostMapping
     public ResponseEntity<Void> insertProductToWishList(@RequestBody WishRequestDto wishRequestDto,
         @LoginMember LoginMemberDto loginMemberDto) {
-        wishService.addProductToWishList(wishRequestDto, loginMemberDto);
-        return ResponseEntity.ok().build();
+        Long wishId = wishService.addProductToWishList(wishRequestDto, loginMemberDto);
+        return ResponseEntity.created(URI.create("/api/wishes/" + wishId)).build();
     }
 
     @PutMapping
