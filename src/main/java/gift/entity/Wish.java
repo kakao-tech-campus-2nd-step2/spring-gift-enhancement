@@ -34,6 +34,11 @@ public class Wish {
         foreignKey = @ForeignKey(name = "fk_wishes_product_id_ref_products_id"))
     private Product product;
 
+    public Wish(User user, Product product) {
+        this.user = user;
+        this.product = product;
+    }
+
     protected Wish() {
     }
 
