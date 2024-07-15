@@ -1,10 +1,7 @@
+import { getAuthToken } from './token.js';
+
 let currentPage = 0;
 const pageSize = 5;
-
-function getAuthToken() {
-    // 토큰을 로컬 스토리지에서 가져옵니다.
-    return localStorage.getItem('authToken');
-}
 
 function loadWishlist(page) {
     const token = getAuthToken();
@@ -99,7 +96,7 @@ function createWish() {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ productId })
+        body: JSON.stringify({productId})
     }).then(response => {
         if (response.status === 201) {
             alert("위시리스트에 추가되었습니다.");
@@ -118,7 +115,7 @@ function deleteWish(id) {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ productId : id })
+        body: JSON.stringify({productId: id})
     }).then(response => {
         if (response.status == 204) {
             alert("위시리스트에서 삭제되었습니다.");
