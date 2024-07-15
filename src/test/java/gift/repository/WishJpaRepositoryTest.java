@@ -36,7 +36,7 @@ class WishJpaRepositoryTest {
         User user = userJpaRepository.findByEmailAndPassword(email, password).get();
 //        User user = new User(1L,email, password, accessToken);
 
-        List<Wish> wishList = wishJpaRepository.findByUser(user, pageable);
+        List<Wish> wishList = wishJpaRepository.findByUser(user);
         for(Wish wish : wishList){
             assertThat(wish.getProductName()).isEqualTo("product1");
         }
