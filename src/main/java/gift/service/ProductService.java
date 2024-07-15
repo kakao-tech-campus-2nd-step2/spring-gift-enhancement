@@ -3,6 +3,7 @@ package gift.service;
 import gift.dto.ProductPageResponseDto;
 import gift.dto.ProductRequestDto;
 import gift.dto.ProductResponseDto;
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.entity.ProductName;
 import gift.exception.BusinessException;
@@ -20,23 +21,30 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     public ProductResponseDto addProduct(ProductRequestDto productRequestDTO) {
-        Product product = new Product(new ProductName(productRequestDTO.getName()), productRequestDTO.getPrice(), productRequestDTO.getImageUrl());
+        Category category = categoryService.getCategoryEntityById(productRequestDTO.getCategoryId());
+        Product product = ProductMapper.toProduct(productRequestDTO, category);
         Product createdProduct = productRepository.save(product);
         return ProductMapper.toProductResponseDTO(createdProduct);
     }
 
     public ProductResponseDto updateProduct(Long id, ProductRequestDto productRequestDTO) {
         Product existingProduct = getProductEntityById(id);
+        Category category = categoryService.getCategoryEntityById(productRequestDTO.getCategoryId());
         existingProduct.update(
                 new ProductName(productRequestDTO.getName()),
                 productRequestDTO.getPrice(),
-                productRequestDTO.getImageUrl());
+                productRequestDTO.getImageUrl(),
+                category
+        );
+        productRepository.save(existingProduct);
         return ProductMapper.toProductResponseDTO(existingProduct);
     }
 
