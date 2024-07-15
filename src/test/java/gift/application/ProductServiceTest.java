@@ -84,9 +84,9 @@ class ProductServiceTest {
                 .build();
         given(productRepository.findById(any())).willReturn(Optional.of(product));
 
-        ProductResponse resultProduct = productService.getProductByIdOrThrow(product.getId());
+        ProductResponse resultProduct = productService.getProductByIdOrThrow(1L);
 
-        Assertions.assertThat(resultProduct.id()).isEqualTo(product.getId());
+        Assertions.assertThat(resultProduct.name()).isEqualTo(product.getName());
     }
 
     @Test
