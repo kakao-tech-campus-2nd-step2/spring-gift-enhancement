@@ -33,7 +33,6 @@
 #### ProductService
 - 상품에 카테고리 추가
 - 상품에 카테고리 변경
-- 상품에 카테고리 삭제
 
 ### Controller
 #### CategoryController

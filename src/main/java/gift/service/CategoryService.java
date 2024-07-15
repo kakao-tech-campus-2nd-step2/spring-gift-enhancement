@@ -1,10 +1,10 @@
 package gift.service;
 
-import gift.exception.NotFoundCategoryException;
+import gift.exception.category.DuplicateCategoryException;
+import gift.exception.category.NotFoundCategoryException;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
 import java.util.List;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +29,12 @@ public class CategoryService {
 
     @Transactional
     public void addCategory(String name) {
-        Category category = new Category(name);
-        categoryRepository.save(category);
+        categoryRepository.findByName(name)
+            .ifPresent(category -> {
+                throw new DuplicateCategoryException();
+            });
+
+        categoryRepository.save(new Category(name));
     }
 
     @Transactional
