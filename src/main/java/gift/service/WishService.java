@@ -42,6 +42,7 @@ public class WishService {
         }
     }
 
+    @Transactional
     public void removeGiftFromUser(Long userId, Long giftId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         Gift gift = giftRepository.findById(giftId).orElseThrow(() -> new IllegalArgumentException("Invalid gift ID"));
