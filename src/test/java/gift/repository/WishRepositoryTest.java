@@ -3,8 +3,6 @@ package gift.repository;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
-import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,30 +22,29 @@ class WishRepositoryTest {
     @Autowired
     private WishRepository wishes;
     @Autowired
-    private EntityManager entityManager;
-
-    private Product expectedProduct;
-    private Member expectedMember;
-    private int expectedQuantity;
-    private Wish expected;
-
-    @BeforeEach
-    void setupWish(){
-        expectedProduct = new Product("아메리카노",2000,"http://example.com/americano");
-        entityManager.persist(expectedProduct);
-
-        expectedMember = new Member("a@a.com","1234");
-        entityManager.persist(expectedMember);
-
-        entityManager.flush();
-
-        expectedQuantity = 10;
-        expected = new Wish(expectedMember,expectedProduct,expectedQuantity);
-    }
+    private ProductRepository products;
+    @Autowired
+    private MemberRepository members;
 
     @Test
     @DisplayName("위시 저장 테스트")
     void save() {
+        // given
+        Product expectedProduct = new Product.Builder()
+                .name("아메리카노")
+                .price(2000)
+                .imageUrl("http://example.com/americano")
+                .build();
+        products.save(expectedProduct);
+
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
+        members.save(expectedMember);
+
+        Wish expected = new Wish(expectedMember,expectedProduct,10);
+
         // when
         Wish actual = wishes.save(expected);
 
@@ -63,20 +60,32 @@ class WishRepositoryTest {
     @Test
     @DisplayName("위시 멤버 아이디로 위시 조회 테스트")
     void findByMemberId() {
-        // given
-        Wish savedWish = wishes.save(expected);
-        entityManager.flush();
-        entityManager.clear();
+        Product expectedProduct = new Product.Builder()
+                .name("아메리카노")
+                .price(2000)
+                .imageUrl("http://example.com/americano")
+                .build();
+        products.save(expectedProduct);
+
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
+        members.save(expectedMember);
+
+        Wish expected = new Wish(expectedMember,expectedProduct,10);
+        wishes.save(expected);
 
         // when
-        Wish findWish = wishes.findById(savedWish.getId()).get();
+        Wish foundWish = wishes.findById(expected.getId()).orElse(null);
 
         // then
+        assertNotNull(foundWish);
         assertAll(
-                () -> assertThat(findWish.getId()).isNotNull(),
-                () -> assertThat(findWish.getMember().getEmail()).isEqualTo(savedWish.getMember().getEmail()),
-                () -> assertThat(findWish.getProduct().getName()).isEqualTo(savedWish.getProduct().getName()),
-                () -> assertThat(findWish.getQuantity()).isEqualTo(savedWish.getQuantity())
+                () -> assertThat(foundWish.getId()).isNotNull(),
+                () -> assertThat(foundWish.getMember().getEmail()).isEqualTo(expected.getMember().getEmail()),
+                () -> assertThat(foundWish.getProduct().getName()).isEqualTo(expected.getProduct().getName()),
+                () -> assertThat(foundWish.getQuantity()).isEqualTo(expected.getQuantity())
         );
     }
 
@@ -84,19 +93,32 @@ class WishRepositoryTest {
     @DisplayName("위시 아이디와 멤버 아이디로 위시 조회 테스트")
     void findByIdAndMemberId() {
         // given
-        Wish savedWish = wishes.save(expected);
-        entityManager.flush();
-        entityManager.clear();
+        Product expectedProduct = new Product.Builder()
+                .name("아메리카노")
+                .price(2000)
+                .imageUrl("http://example.com/americano")
+                .build();
+        products.save(expectedProduct);
+
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
+        members.save(expectedMember);
+
+        Wish expected = new Wish(expectedMember,expectedProduct,10);
+        wishes.save(expected);
 
         // when
-        Wish findWish = wishes.findByIdAndMemberId(savedWish.getId(),savedWish.getMember().getId()).get();
+        Wish foundWish = wishes.findByIdAndMemberId(expected.getId(),expected.getMember().getId()).orElse(null);
 
         // then
+        assertNotNull(foundWish);
         assertAll(
-                () -> assertThat(findWish.getId()).isNotNull(),
-                () -> assertThat(findWish.getMember().getEmail()).isEqualTo(savedWish.getMember().getEmail()),
-                () -> assertThat(findWish.getProduct().getName()).isEqualTo(savedWish.getProduct().getName()),
-                () -> assertThat(findWish.getQuantity()).isEqualTo(savedWish.getQuantity())
+                () -> assertThat(foundWish.getId()).isNotNull(),
+                () -> assertThat(foundWish.getMember()).isEqualTo(expected.getMember()),
+                () -> assertThat(foundWish.getProduct()).isEqualTo(expected.getProduct()),
+                () -> assertThat(foundWish.getQuantity()).isEqualTo(expected.getQuantity())
         );
     }
 
@@ -104,10 +126,24 @@ class WishRepositoryTest {
     @DisplayName("위시 아이디로 위시 삭제 테스트")
     void deleteById() {
         // given
-        Wish savedWish = wishes.save(expected);
+        Product expectedProduct = new Product.Builder()
+                .name("아메리카노")
+                .price(2000)
+                .imageUrl("http://example.com/americano")
+                .build();
+        products.save(expectedProduct);
+
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
+        members.save(expectedMember);
+
+        Wish expected = new Wish(expectedMember,expectedProduct,10);
+        wishes.save(expected);
 
         // when
-        wishes.deleteById(savedWish.getId());
+        wishes.deleteById(expected.getId());
 
         // then
         List<Wish> findWishes = wishes.findAll();
@@ -120,9 +156,36 @@ class WishRepositoryTest {
     @DisplayName("위시 페이지 조회 테스트")
     void testFindByMemberId() {
         // given
-        wishes.save(new Wish(expectedMember,expectedProduct,1));
-        wishes.save(new Wish(expectedMember,expectedProduct,2));
-        wishes.save(new Wish(expectedMember,expectedProduct,3));
+        Product expectedProduct = new Product.Builder()
+                .name("아메리카노")
+                .price(2000)
+                .imageUrl("http://example.com/americano")
+                .build();
+        products.save(expectedProduct);
+
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
+        members.save(expectedMember);
+
+        wishes.save(new Wish.Builder()
+                .member(expectedMember)
+                .product(expectedProduct)
+                .qunatity(1)
+                .build());
+
+        wishes.save(new Wish.Builder()
+                .member(expectedMember)
+                .product(expectedProduct)
+                .qunatity(2)
+                .build());
+
+        wishes.save(new Wish.Builder()
+                .member(expectedMember)
+                .product(expectedProduct)
+                .qunatity(3)
+                .build());
 
         // when
         Pageable pageable = PageRequest.of(0,2, Sort.by("id").descending());
@@ -130,7 +193,6 @@ class WishRepositoryTest {
 
         // then
         assertAll(
-                () -> assertThat(page).isNotNull(),
                 () -> assertThat(page.getContent().size()).isEqualTo(2),
                 () -> assertThat(page.getTotalElements()).isEqualTo(3),
                 () -> assertThat(page.getTotalPages()).isEqualTo(2)
