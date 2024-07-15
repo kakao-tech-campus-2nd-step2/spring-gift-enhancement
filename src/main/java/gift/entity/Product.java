@@ -13,13 +13,13 @@ import java.util.List;
 public class Product extends BaseEntity {
 
     @Column(name = "name", length = 15, nullable = false, unique = true)
-    String name;
+    private String name;
 
     @Column(name = "price", nullable = false)
-    long price;
+    private long price;
 
     @Column(name = "image_url")
-    String imageUrl;
+    private String imageUrl;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Wishlist> wishlist = new ArrayList<>();
