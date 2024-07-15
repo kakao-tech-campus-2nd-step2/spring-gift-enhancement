@@ -85,4 +85,10 @@ public class WishService {
         }
     }
 
+    private void validateWishPage(Page<Wish> wishes) {
+        if (wishes == null || wishes.isEmpty()) {
+            throw new WishNotFoundException("위시리스트가 존재하지 않습니다.");
+        }
+    }
+
 }
