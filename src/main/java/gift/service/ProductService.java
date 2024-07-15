@@ -65,7 +65,7 @@ public class ProductService {
     @Transactional
     public void updateById(Long id, ProductRequestDto productDto){
         findProductByIdOrThrow(id);
-        productRepository.save(new Product(id, productDto.getName(), productDto.getPrice(), productDto.getImageUrl()));
+        productRepository.save(new Product(id, productDto.name(), productDto.price(), productDto.imageUrl()));
     }
 
     private Product findProductByIdOrThrow(Long id) {

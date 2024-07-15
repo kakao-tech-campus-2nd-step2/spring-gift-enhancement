@@ -29,7 +29,7 @@ public class WishService {
 
     @Transactional
     public void save(MemberRequestDto memberRequestDto, WishRequestDto wishRequestDto){
-        ProductResponseDto productResponseDto = productService.findByName(wishRequestDto.getProductName());
+        ProductResponseDto productResponseDto = productService.findByName(wishRequestDto.productName());
 
         Product product = productResponseDto.toEntity();
         Member member = memberRequestDto.toEntity();
@@ -37,7 +37,7 @@ public class WishService {
         Wish newWish = new Wish.Builder()
                 .member(member)
                 .product(product)
-                .qunatity(wishRequestDto.getQuantity())
+                .qunatity(wishRequestDto.quantity())
                 .build();
 
         wishRepository.save(newWish);
@@ -60,9 +60,9 @@ public class WishService {
 
     @Transactional
     public void deleteWishByMemberIdAndId(Long memberId, Long id){
-        Wish wish = wishRepository.findByIdAndMemberId(id, memberId)
+        wishRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(()-> new WishNotFoundException(Messages.NOT_FOUND_WISH));
-        wish.detachFromMemberAndProduct();
+
         wishRepository.deleteById(id);
     }
 
@@ -71,6 +71,6 @@ public class WishService {
         Wish existingWish = wishRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(()-> new WishNotFoundException(Messages.NOT_FOUND_WISH));
 
-        existingWish.updateQuantity(request.getQuantity());
+        existingWish.updateQuantity(request.quantity());
     }
 }

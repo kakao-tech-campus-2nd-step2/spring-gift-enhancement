@@ -31,18 +31,18 @@ public class WishRestController {
     @GetMapping
     public ResponseEntity<Page<WishResponseDto>> getMemberWishes(@LoginMember MemberRequestDto memberRequest, @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(wishService.getPagedMemberWishesByMemberId(memberRequest.getId(),pageable));
+                .body(wishService.getPagedMemberWishesByMemberId(memberRequest.id(),pageable));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeWish(@LoginMember MemberRequestDto memberRequest, @PathVariable Long id){
-        wishService.deleteWishByMemberIdAndId(memberRequest.getId(), id);
+        wishService.deleteWishByMemberIdAndId(memberRequest.id(), id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateQuantity(@LoginMember MemberRequestDto memberRequest, @PathVariable Long id, @RequestBody WishRequestDto wishRequest){
-        wishService.updateQuantityByMemberIdAndId(memberRequest.getId(), id, wishRequest);
+        wishService.updateQuantityByMemberIdAndId(memberRequest.id(), id, wishRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

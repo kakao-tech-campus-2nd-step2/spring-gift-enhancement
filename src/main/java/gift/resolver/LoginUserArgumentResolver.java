@@ -31,6 +31,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         String userEmail = jwtUtil.extractEmail(authHeader.substring(7));
         MemberResponseDto memberDto = memberService.findByEmail(userEmail);
 
-        return new MemberRequestDto(memberDto.getId(),memberDto.getEmail(),memberDto.getPassword());
+        return new MemberRequestDto(memberDto.id(),memberDto.email(),memberDto.password());
     }
 }

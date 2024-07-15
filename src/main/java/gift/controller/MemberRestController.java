@@ -31,8 +31,8 @@ public class MemberRestController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> giveAccessToken(@RequestBody MemberRequestDto request) {
-        memberService.checkMemberExistsByIdAndPassword(request.getEmail(),request.getPassword());
-        String token = jwtUtil.generateToken(request.getEmail());
+        memberService.checkMemberExistsByIdAndPassword(request.email(),request.password());
+        String token = jwtUtil.generateToken(request.email());
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
 
