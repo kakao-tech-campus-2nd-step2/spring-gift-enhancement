@@ -9,6 +9,7 @@ import gift.product.dao.ProductRepository;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
 import gift.product.entity.Product;
+import gift.product.util.ProductMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -109,12 +110,7 @@ class ProductServiceTest {
                 1000,
                 "https://testshop.com",
                 category.getName());
-        Product product = new Product.ProductBuilder()
-                .setName("product1")
-                .setPrice(1000)
-                .setImageUrl("https://testshop.com")
-                .setCategory(category)
-                .build();
+        Product product = ProductMapper.toEntity(request, category);
         given(productRepository.save(any())).willReturn(product);
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
 
@@ -141,7 +137,6 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 전체 삭제 서비스 테스트")
     void deleteAllProducts() {
-
         productService.deleteAllProducts();
 
         verify(productRepository).deleteAll();
