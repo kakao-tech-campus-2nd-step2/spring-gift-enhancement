@@ -12,15 +12,45 @@ public class ProductCategory extends BaseEntity{
     @Column(name = "name")
     private String name;
     @NotNull
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "description")
+    private String description;
     @NotNull
     @Column(name="color")
     private String color;
     @NotNull
-    @Column(name = "description")
-    private String description;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     protected ProductCategory(){
+    }
+
+    public ProductCategory(String name, String description, String color,String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.color = color;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void updateCategory(String name, String description, String color, String imageUrl){
+        this.name = name;
+        this.description = description;
+        this.color = color;
+        this.imageUrl = imageUrl;
     }
 }
