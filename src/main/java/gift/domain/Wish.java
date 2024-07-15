@@ -21,20 +21,6 @@ public class Wish {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    // 테스트 시 유용
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Wish wish = (Wish) o;
-        return Objects.equals(id, wish.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
     protected Wish () {
     }
 
@@ -73,5 +59,19 @@ public class Wish {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    // 테스트 시 유용
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wish wish = (Wish) o;
+        return Objects.equals(id, wish.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
