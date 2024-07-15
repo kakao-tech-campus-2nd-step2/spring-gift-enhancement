@@ -1,6 +1,9 @@
 package gift.controller;
 
+import gift.model.Category;
 import gift.model.Product;
+import gift.service.CategoryService;
+import gift.service.WishService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -20,6 +24,10 @@ public class WebController {
 
     @Autowired
     private ProductController productController;
+
+    @Autowired
+    private CategoryService categoryService;
+
 
     @GetMapping("/register")
     public String showRegisterForm() {
@@ -54,14 +62,20 @@ public class WebController {
         if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
             return "error/500";
         }
-        model.addAttribute("products", response.getBody());
+        Page<Product> productPage = response.getBody();
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", productPage.getNumber());
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("pageSize", size);
         return "product/index";
     }
 
     @GetMapping("/products/new")
     public String showNewProductForm(Model model) {
-        Product product = Product.builder().build();
+        Product product = new Product();
+        List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("product", product);
+        model.addAttribute("categories", categories);
         return "product/new";
     }
 
@@ -71,12 +85,16 @@ public class WebController {
             bindingResult.getFieldErrors().forEach(error ->
                     model.addAttribute("valid_" + error.getField(), error.getDefaultMessage())
             );
+            List<Category> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
             return "product/new";
         }
         ResponseEntity<Object> response = productController.addProduct(product, bindingResult);
         if (response.getStatusCode() == HttpStatus.BAD_REQUEST) {
             Map<String, Object> errors = (Map<String, Object>) response.getBody();
             errors.forEach((key, value) -> model.addAttribute("valid_" + key, value.toString()));
+            List<Category> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
             return "product/new";
         }
         return "redirect:/products";
@@ -88,7 +106,9 @@ public class WebController {
         if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
             return "error/500";
         }
+        List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("product", response.getBody());
+        model.addAttribute("categories", categories);
         return "product/edit";
     }
 
@@ -98,12 +118,16 @@ public class WebController {
             bindingResult.getFieldErrors().forEach(error ->
                     model.addAttribute("valid_" + error.getField(), error.getDefaultMessage())
             );
+            List<Category> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
             return "product/edit";
         }
         ResponseEntity<Object> response = productController.updateProduct(id, product, bindingResult);
         if (response.getStatusCode() == HttpStatus.BAD_REQUEST) {
             Map<String, Object> errors = (Map<String, Object>) response.getBody();
             errors.forEach((key, value) -> model.addAttribute("valid_" + key, value.toString()));
+            List<Category> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
             return "product/edit";
         }
         return "redirect:/products";

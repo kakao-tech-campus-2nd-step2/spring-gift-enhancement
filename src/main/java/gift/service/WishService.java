@@ -1,9 +1,6 @@
-// WishService.java
 package gift.service;
 
 import gift.dto.WishResponse;
-import gift.model.Member;
-import gift.model.Product;
 import gift.model.Wish;
 import gift.repository.WishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +21,9 @@ public class WishService {
     public Page<WishResponse> getWishesByMemberId(Long memberId, Pageable pageable) {
         Page<Wish> wishes = wishRepository.findByMemberId(memberId, pageable);
         return wishes.map(this::convertToWishResponse);
-
     }
 
-    public Wish addWish(Member member, Product product) {
-        Wish wish = Wish.builder()
-                .member(member)
-                .product(product)
-                .build();
+    public Wish addWish(Wish wish) {
         return wishRepository.save(wish);
     }
 
@@ -43,11 +35,13 @@ public class WishService {
     }
 
     private WishResponse convertToWishResponse(Wish wish) {
-        return WishResponse.builder()
-                .id(wish.getId())
-                .productName(wish.getProduct().getName())
-                .productPrice(wish.getProduct().getPrice())
-                .productImageurl(wish.getProduct().getImageurl())
-                .build();
+        WishResponse wishResponse = new WishResponse();
+        wishResponse.setId(wish.getId());
+        wishResponse.setProductName(wish.getProduct().getName());
+        wishResponse.setProductPrice(wish.getProduct().getPrice());
+        wishResponse.setProductImageurl(wish.getProduct().getImageurl());
+        wishResponse.setProductCategory(wish.getProduct().getCategory().getName());
+
+        return wishResponse;
     }
 }
