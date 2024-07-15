@@ -38,7 +38,7 @@ public class UserService {
     public boolean validateToken(String token) {
         boolean isValidToken = jwtUtil.checkValidateToken(token);
         if(isValidToken){
-            return isValidToken;
+            return true;
         }
         throw new InvalidUserException("유효하지 않은 사용자입니다.");
     }
