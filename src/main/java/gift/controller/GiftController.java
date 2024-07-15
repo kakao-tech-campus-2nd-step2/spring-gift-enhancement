@@ -57,7 +57,7 @@ public class GiftController {
         return ResponseEntity.ok(DTO);
     }
 
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteProduct(@PathVariable Long id) {
         Long i = giftService.deleteProducts(id);
         return ResponseEntity.ok(i);

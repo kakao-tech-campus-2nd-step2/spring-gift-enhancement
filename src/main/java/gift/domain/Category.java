@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.controller.dto.CategoryRequestDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +33,16 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductCategory> productCategory = new ArrayList<>();
+
+    public Category() {
+    }
+
+    public Category(String name, String color, String imageUrl, String description) {
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
 
     public Long getId() {
         return id;
@@ -81,6 +92,13 @@ public class Category {
     public void removeProductCategory(ProductCategory productCategory) {
         this.productCategory.remove(productCategory);
         productCategory.setCategories(null);
+    }
+
+    public void updateCategory(CategoryRequestDTO categoryRequestDTO){
+        this.name = categoryRequestDTO.getName();
+        this.color = categoryRequestDTO.getColor();
+        this.description = categoryRequestDTO.getDescription();
+        this.imageUrl = categoryRequestDTO.getImageUrl();
     }
 
 

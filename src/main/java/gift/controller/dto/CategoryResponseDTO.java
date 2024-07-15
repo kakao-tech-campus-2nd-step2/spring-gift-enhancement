@@ -2,7 +2,7 @@ package gift.controller.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public class CategoryDTO {
+public class CategoryResponseDTO {
     @NotNull
     private Long id;
     @NotNull
@@ -14,7 +14,8 @@ public class CategoryDTO {
     @NotNull
     private String description;
 
-    public CategoryDTO(Long id, String name, String color, String imageUrl, String description) {
+    public CategoryResponseDTO(Long id, String name, String color, String imageUrl,
+        String description) {
         this.id = id;
         this.name = name;
         this.color = color;
