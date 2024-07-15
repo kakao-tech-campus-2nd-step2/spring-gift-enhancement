@@ -20,9 +20,12 @@ public class Product extends TimeStamp {
     @Column(nullable = false)
     private int price;
     private String imageUrl;
-
     @OneToMany(mappedBy = "product")
     private List<Wish> wishList = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_ID")
+    private Category category;
 
     public Product() {
     }
@@ -31,12 +34,15 @@ public class Product extends TimeStamp {
         this.name = builder.name;
         this.price = builder.price;
         this.imageUrl = builder.imageUrl;
+        this.category = builder.category;
     }
 
     public static class Builder {
         private String name;
         private int price;
         private String imageUrl;
+
+        private Category category;
 
         public Builder name(String name) {
             this.name = name;
@@ -50,6 +56,11 @@ public class Product extends TimeStamp {
 
         public Builder imageUrl(String imageUrl) {
             this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public Builder category(Category category) {
+            this.category = category;
             return this;
         }
 
@@ -77,9 +88,12 @@ public class Product extends TimeStamp {
         return wishList;
     }
 
-    public void update(ProductRequestDto productDto){
-        this.name = productDto.name();
-        this.price = productDto.price();
-        this.imageUrl = productDto.imageUrl();
+    public Category getCategory() {
+        return category;
+    }
+
+    public void addCategory(Category category){
+        this.category = category;
+        category.getProducts().add(this);
     }
 }
