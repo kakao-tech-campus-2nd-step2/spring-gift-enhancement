@@ -36,7 +36,7 @@ public class AdminController {
     @GetMapping("/add")
     public ModelAndView showAddPage() {
         ModelAndView modelAndView = new ModelAndView("product-add");
-        modelAndView.addObject("product", new ProductDTO(0L, "", 0L, ""));
+        modelAndView.addObject("product", new ProductDTO(0L, "", 0L, "", 0L));
         return modelAndView;
     }
 

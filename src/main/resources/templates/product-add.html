@@ -23,6 +23,10 @@
     <input type="text" id="imageUrl" name="imageUrl" th:field="*{imageUrl}"/>
   </div>
   <div>
+    <label for="imageUrl">Category Id:</label>
+    <input type="text" id="categoryId" name="categoryId" th:field="*{categoryId}"/>
+  </div>
+  <div>
     <button type="submit">Save</button>
     <a th:href="@{/admin/product/list}">Cancel</a>
   </div>

@@ -2,9 +2,11 @@ package gift.service;
 
 import gift.exception.ErrorCode;
 import gift.exception.RepositoryException;
+import gift.model.Category;
 import gift.model.Product;
 import gift.model.ProductDTO;
 import gift.model.ProductPageDTO;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,14 +18,19 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public ProductDTO createProduct(ProductDTO productDTO) {
+        Category category = categoryRepository.findById(productDTO.categoryId()).orElseThrow(
+            () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, productDTO.categoryId()));
         Product product = new Product(productDTO.id(), productDTO.name(), productDTO.price(),
-            productDTO.imageUrl());
+            productDTO.imageUrl(), category);
         return convertToDTO(productRepository.save(product));
     }
 
@@ -51,8 +58,10 @@ public class ProductService {
     }
 
     public ProductDTO updateProduct(long id, ProductDTO productDTO) {
+        Category category = categoryRepository.findById(productDTO.categoryId()).orElseThrow(
+            () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, productDTO.categoryId()));
         Product product = new Product(id, productDTO.name(), productDTO.price(),
-            productDTO.imageUrl());
+            productDTO.imageUrl(), category);
         return convertToDTO(productRepository.save(product));
     }
 
@@ -66,7 +75,7 @@ public class ProductService {
     }
 
     private ProductDTO convertToDTO(Product product) {
-        return new ProductDTO(product.getId(), product.getName(),
-            product.getPrice(), product.getImageUrl());
+        return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
+            product.getImageUrl(), product.getCategory().getId());
     }
 }

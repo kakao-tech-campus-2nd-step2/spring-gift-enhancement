@@ -3,6 +3,8 @@ package gift.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,21 +18,30 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "price", nullable = false)
-
     private long price;
     @Column(name = "imageUrl", nullable = false)
-
     private String imageUrl;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     protected Product() {
     }
 
-    public Product(Long id, String name, long price, String imageUrl) {
+    public Product(Long id, String name, long price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {

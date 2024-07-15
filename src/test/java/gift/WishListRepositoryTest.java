@@ -5,10 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.exception.ErrorCode;
 import gift.exception.RepositoryException;
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.WishList;
-import gift.model.WishListDTO;
+import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishListRepository;
@@ -29,20 +30,22 @@ public class WishListRepositoryTest {
     private ProductRepository products;
     @Autowired
     private MemberRepository members;
+    @Autowired
+    private CategoryRepository categories;
     private Product productA;
     private Product productB;
     private Member memberA;
     private Member memberB;
-
-    private WishList createWishList(Member member, Product product, long quantity) {
-        return new WishList(member, product, quantity);
-    }
+    private final Category category = new Category(1L, "test-category", "000000", "test-image.url", "");
 
     @BeforeEach
     void setUp() {
+        // Category 객체 저장
+        categories.save(category);
+
         // Product 객체 저장
-        productA = new Product(1L, "Product A", 4500, "image-Product_A.com");
-        productB = new Product(2L, "Product B", 5500, "image-Product_B.com");
+        productA = createProduct(1L, "Product A", 4500, "image-Product_A.com");
+        productB = createProduct(2L, "Product B", 5500, "image-Product_B.com");
         products.save(productA);
         products.save(productB);
 
@@ -105,8 +108,11 @@ public class WishListRepositoryTest {
         assertThat(update.getQuantity()).isEqualTo(3);
     }
 
-    private WishListDTO converToDTO(WishList wishList) {
-        return new WishListDTO(wishList.getMember().getId(), wishList.getProduct().getId(),
-            wishList.getQuantity());
+    private Product createProduct(Long id, String name, long price, String imageUrl) {
+        return new Product(id, name, price, imageUrl, category);
     }
+    private WishList createWishList(Member member, Product product, long quantity) {
+        return new WishList(member, product, quantity);
+    }
+
 }
