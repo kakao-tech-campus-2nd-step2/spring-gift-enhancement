@@ -24,7 +24,7 @@ public class AppUserRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        AppUser appUser = new AppUser("aa@kakao.com", "1234", Role.USER, "aaaa");
+        appUser = new AppUser("aa@kakao.com", "1234", Role.USER, "aaaa");
         userRepository.save(appUser);
     }
 
