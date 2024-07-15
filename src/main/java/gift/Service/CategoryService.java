@@ -5,6 +5,7 @@ import gift.DTO.Category;
 import gift.DTO.CategoryDto;
 import gift.Repository.CategoryRepository;
 import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,5 +21,10 @@ public class CategoryService {
     List<Category> categories = categoryRepository.findAll();
     List<CategoryDto> categoryDtos = categories.stream().map(ConverterToDto::convertToCategoryDto).toList();
     return categoryDtos;
+  }
+
+  public CategoryDto getCategoryById(Long id){
+    Category category = categoryRepository.findById(id).orElseThrow(()->new EmptyResultDataAccessException("해당 카테고리가 없습니다.", 1));
+    return ConverterToDto.convertToCategoryDto(category);
   }
 }
