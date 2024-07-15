@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -65,7 +67,7 @@ public class UserServiceTests {
         Long userId = 1L;
         User user = new User(userId, "test", new UserAccount("principal", "credentials"));
         when(userRepository.existsById(userId)).thenReturn(true);
-        when(userRepository.findById(userId)).thenReturn(user);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         userService.getUserById(userId);
         verify(userRepository).findById(userId);
