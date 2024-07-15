@@ -87,7 +87,7 @@ public class ProductService {
     }
 
     private void checkProductOwner(AppUser appUser, Product product) {
-        if (product.getSeller().equals(appUser) || appUser.isAdmin()) {
+        if (product.isOwner(appUser.getId()) || appUser.isAdmin()) {
             return;
         }
         throw new ForbiddenException("해당 상품에 대한 권한이 없습니다.");
