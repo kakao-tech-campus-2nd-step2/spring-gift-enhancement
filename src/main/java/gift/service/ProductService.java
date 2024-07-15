@@ -49,8 +49,7 @@ public class ProductService {
     }
 
     public Product update(Long id, ProductDTO product) {
-        Product foundProduct = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        Product foundProduct = findById(id);
         foundProduct.setName(product.getName());
         foundProduct.setPrice(product.getPrice());
         foundProduct.setImageurl(product.getImageurl());
@@ -58,8 +57,7 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        Product product = findById(id);
         productRepository.delete(product);
     }
 }
