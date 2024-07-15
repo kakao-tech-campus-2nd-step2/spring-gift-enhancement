@@ -1,5 +1,6 @@
 package gift.member;
 
+import gift.member.model.Member;
 import gift.member.model.MemberRequestDto;
 import gift.common.auth.LoginMemberDto;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void insertMember(MemberRequestDto memberRequestDto) {
-        memberRepository.save(memberRequestDto.toEntity());
+    public Long insertMember(MemberRequestDto memberRequestDto) {
+        Member member = memberRepository.save(memberRequestDto.toEntity());
+        return member.getId();
     }
 }

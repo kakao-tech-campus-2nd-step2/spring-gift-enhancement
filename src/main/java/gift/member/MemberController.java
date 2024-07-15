@@ -4,6 +4,7 @@ import gift.common.auth.AuthService;
 import gift.member.model.MemberRequestDto;
 import gift.member.model.MemberResponseDto;
 import jakarta.validation.Valid;
+import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,8 +26,9 @@ public class MemberController {
     @PostMapping("/register")
     public ResponseEntity<MemberResponseDto> register(
         @Valid @RequestBody MemberRequestDto memberRequestDto) {
-        memberService.insertMember(memberRequestDto);
-        return ResponseEntity.ok()
+        Long memberId = memberService.insertMember(memberRequestDto);
+
+        return ResponseEntity.created(URI.create("/members/"+memberId))
             .body(authService.getToken(memberRequestDto));
     }
 
