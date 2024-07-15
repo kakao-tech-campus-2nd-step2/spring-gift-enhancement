@@ -16,7 +16,7 @@ import java.util.List;
 @Table
 public class Product {
 
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "product")
   private final List<WishList> wishlists = new ArrayList<>();
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
