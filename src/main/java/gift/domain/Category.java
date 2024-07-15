@@ -45,4 +45,8 @@ public class Category extends TimeStamp {
         return products;
     }
 
+    public void update(CategoryRequestDto categoryRequestDto){
+        this.name = categoryRequestDto.name();
+        this.color = categoryRequestDto.color();
+    }
 }
