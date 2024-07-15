@@ -11,6 +11,10 @@ import java.util.Objects;
 
 @Component
 public class WishListValidation {
+
+    public static final String NOT_EXIST_ID = "요청한 id가 위시리스트에 존재하지 않습니다.";
+    public static final String NO_PERMISSION = "본인의 위시 리스트만 수정할 수 있습니다.";
+
     private final WishListRepository wishListRepository;
 
     @Autowired
@@ -21,9 +25,9 @@ public class WishListValidation {
     public void deleteValidation(Long id, Member member) {
         System.out.println("[WishListValidation] deleteValidation()");
         if(wishListRepository.findById(id).isPresent())
-            throw new InvalidIdException("요청한 id가 위시리스트에 존재하지 않아 삭제할 수 없습니다.");
+            throw new InvalidIdException(NOT_EXIST_ID);
         if(!Objects.equals(wishListRepository.findById(id).get().getMember().getId(), member.getId()))
-            throw new UnauthorizedException("본인의 위시 리스트만 삭제가 가능합니다.");
+            throw new UnauthorizedException(NO_PERMISSION);
     }
 
 }

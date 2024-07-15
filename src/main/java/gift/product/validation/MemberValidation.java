@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class MemberValidation {
 
+    public static final String DUPLICATE_EMAIL = "이미 가입된 이메일입니다.";
+    public static final String INVALID_INPUT = "이메일 또는 비밀번호를 잘못 입력하였습니다.";
+
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -23,14 +26,14 @@ public class MemberValidation {
 
     public void signUpValidation(String email) {
         if(memberRepository.findByEmail(email) != null)
-            throw new DuplicateException("이미 가입된 이메일입니다.");
+            throw new DuplicateException(DUPLICATE_EMAIL);
     }
 
     public void loginValidation(MemberDTO memberDTO) {
         Member member = memberRepository.findByEmail(memberDTO.getEmail());
         if(member == null)
-            throw new LoginFailedException("이메일을 잘못 입력하였습니다.");
+            throw new LoginFailedException(INVALID_INPUT);
         if(!passwordEncoder.matches(memberDTO.getPassword(), member.getPassword()))
-            throw new LoginFailedException("비밀번호가 틀립니다.");
+            throw new LoginFailedException(INVALID_INPUT);
     }
 }
