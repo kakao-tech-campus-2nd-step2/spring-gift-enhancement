@@ -21,7 +21,7 @@ public class JwtUtil {
     // 토큰 생성
     public String generateToken(String email) {
         System.out.println("[JwtUtil] generateToken()");
-        long expirationTimeMillis = 3600000;
+        long expirationTimeMillis = 1000 * 60 * 60; // 밀리초 -> 초 -> 분 -> 시간 (단위 변경, default=ms)
         Date issuedAt = new Date();
         Date expiration = new Date(issuedAt.getTime() + expirationTimeMillis);
 
