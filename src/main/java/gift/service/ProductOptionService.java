@@ -27,27 +27,27 @@ public class ProductOptionService {
     }
 
     public ProductOptionResponse addOption(ProductOptionRequest productOptionRequest) {
-        var productOption = saveProductOptionWithProductRequest(productOptionRequest);
-        return getProductOptionResponseFromProductOption(productOption);
+        var productOption = saveOptionWithOptionRequest(productOptionRequest);
+        return getOptionResponseFromOption(productOption);
     }
 
     public void updateOption(Long id, ProductOptionRequest productOptionRequest) {
-        var productOption = findProductOptionById(id);
+        var productOption = findOptionById(id);
         productOption.updateOptionInfo(productOptionRequest.name(), productOptionRequest.additionalPrice());
         productOptionRepository.save(productOption);
     }
 
     @Transactional(readOnly = true)
     public ProductOptionResponse getOption(Long id) {
-        var productOption = findProductOptionById(id);
-        return getProductOptionResponseFromProductOption(productOption);
+        var productOption = findOptionById(id);
+        return getOptionResponseFromOption(productOption);
     }
 
     @Transactional(readOnly = true)
     public List<ProductOptionResponse> getOptions(Long productId, Pageable pageable) {
         return productOptionRepository.findAllByProductId(productId, pageable)
                 .stream()
-                .map(this::getProductOptionResponseFromProductOption)
+                .map(this::getOptionResponseFromOption)
                 .toList();
     }
 
@@ -55,20 +55,20 @@ public class ProductOptionService {
         productOptionRepository.deleteById(id);
     }
 
-    private ProductOption saveProductOptionWithProductRequest(ProductOptionRequest productOptionRequest) {
+    private ProductOption saveOptionWithOptionRequest(ProductOptionRequest productOptionRequest) {
         var product = productRepository.findById(productOptionRequest.productId())
                 .orElseThrow(() -> new NotFoundElementException(productOptionRequest.productId() + "를 가진 상품이 존재하지 않습니다."));
         var productOption = new ProductOption(product, productOptionRequest.name(), productOptionRequest.additionalPrice());
         return productOptionRepository.save(productOption);
     }
 
-    private ProductOptionResponse getProductOptionResponseFromProductOption(ProductOption productOption) {
+    private ProductOptionResponse getOptionResponseFromOption(ProductOption productOption) {
         var product = productOption.getProduct();
         var productBasicInformation = ProductBasicInformation.of(product.getId(), product.getName(), product.getPrice());
         return ProductOptionResponse.of(productOption.getId(), productBasicInformation, productOption.getName(), productOption.getAdditionalPrice());
     }
 
-    private ProductOption findProductOptionById(Long id) {
+    private ProductOption findOptionById(Long id) {
         return productOptionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품옵션이 존재하지 않습니다."));
     }
