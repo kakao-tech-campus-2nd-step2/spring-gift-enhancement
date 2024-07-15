@@ -55,4 +55,33 @@
   - 대부분의 게시판은 모든 게시글을 한 번에 표시하지 않고 여러 페이지로 나누어 표시한다. 정렬 방법을 설정하여 보고 싶은 정보의 우선 순위를 정할 수도 있다.
   - 페이지네이션은 원하는 정렬 방법, 페이지 크기 및 페이지에 따라 정보를 전달하는 방법이다.
 # spring-gift-enhancement
+- step1
+- 상품 정보에 카테고리를 추가한다. 상품과 카테고리 모델 간의 관계를 고려하여 설계하고 구현한다.
+  - 카테고리는 1차 카테고리만 있으며 2차 카테고리는 고려하지 않는다.
+  - 카테고리는 수정할 수 있다.
+  - 관리자 화면에서 상품을 추가할 때 카테고리를 지정할 수 있다.
+  - 카테고리의 예시는 아래와 같다.
+  - 교환권, 상품권, 뷰티, 패션, 식품, 리빙/도서, 레저/스포츠, 아티스트/캐릭터, 유아동/반려, 디지털/가전, 카카오프렌즈, 트렌드 선물, 백화점
+  - 아래 예시와 같이 HTTP 메시지를 주고받도록 구현한다.
+```
+Request
+GET /api/categories HTTP/1.1
+```
+```
+Response
+HTTP/1.1 200
+Content-Type: application/json
 
+[
+  {
+    "id": 91,
+    "name": "교환권",
+    "color": "#6c95d1",
+    "imageUrl": "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png",
+    "description": ""
+  }
+]
+```
+- Category Entity 만들기
+- Category - Product : 일대다 관계
+- Category crud api 만들기
