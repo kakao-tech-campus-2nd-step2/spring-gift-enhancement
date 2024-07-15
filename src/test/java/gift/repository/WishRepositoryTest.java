@@ -1,10 +1,6 @@
 package gift.repository;
 
-import gift.entity.Product;
-import gift.entity.ProductName;
-import gift.entity.User;
-import gift.entity.Wish;
-import gift.entity.Category;
+import gift.entity.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +11,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 public class WishRepositoryTest {

@@ -1,9 +1,9 @@
 package gift.controller;
 
 import gift.annotation.LoginMember;
+import gift.dto.WishPageResponseDto;
 import gift.dto.WishRequestDto;
 import gift.dto.WishResponseDto;
-import gift.dto.WishPageResponseDto;
 import gift.entity.User;
 import gift.service.WishService;
 import io.swagger.v3.oas.annotations.Operation;

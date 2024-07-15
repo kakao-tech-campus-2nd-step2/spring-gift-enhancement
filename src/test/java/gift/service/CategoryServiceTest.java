@@ -2,7 +2,6 @@ package gift.service;
 
 import gift.dto.CategoryRequestDto;
 import gift.dto.CategoryResponseDto;
-import gift.entity.Category;
 import gift.exception.BusinessException;
 import gift.repository.CategoryRepository;
 import org.junit.jupiter.api.AfterEach;

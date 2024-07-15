@@ -5,8 +5,8 @@ import gift.dto.ProductRequestDto;
 import gift.dto.ProductResponseDto;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import gift.service.ProductService;
 import gift.service.CategoryService;
+import gift.service.ProductService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductControllerTest {

@@ -2,7 +2,6 @@ package gift.entity;
 
 import gift.exception.BusinessException;
 import gift.exception.ErrorCode;
-
 import jakarta.persistence.*;
 
 @Entity

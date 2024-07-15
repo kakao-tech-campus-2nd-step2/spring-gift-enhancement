@@ -18,6 +18,7 @@ public class ProductMapper {
                 categoryResponseDto
         );
     }
+
     public static Product toProduct(ProductRequestDto productRequestDto, Category category) {
         return new Product(
                 new ProductName(productRequestDto.getName()),

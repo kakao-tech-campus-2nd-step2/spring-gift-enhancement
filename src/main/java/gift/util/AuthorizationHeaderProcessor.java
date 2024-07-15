@@ -2,10 +2,9 @@ package gift.util;
 
 import gift.exception.BusinessException;
 import gift.exception.ErrorCode;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class AuthorizationHeaderProcessor {
