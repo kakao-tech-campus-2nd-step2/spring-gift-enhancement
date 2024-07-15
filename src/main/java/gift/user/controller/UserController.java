@@ -1,7 +1,10 @@
 package gift.user.controller;
 
 import gift.user.domain.User;
+import gift.user.domain.dto.LoginRequest;
+import gift.user.domain.dto.LoginResponse;
 import gift.user.service.UserService;
+import gift.utility.JwtUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +32,7 @@ public class UserController {
 
     @GetMapping("")
     public ResponseEntity<List<User>> getAllUsers(@RequestHeader("Authorization") String token) {
-        if (!userService.isValidToken(token)) {
+        if (!JwtUtil.isValidToken(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<User> users = userService.getAllUsers();
@@ -38,7 +41,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id, @RequestHeader("Authorization") String token) {
-        if (!userService.isValidToken(token)) {
+        if (!JwtUtil.isValidToken(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Optional<User> user = userService.findById(id);
@@ -46,19 +49,29 @@ public class UserController {
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("")
-    public ResponseEntity<Map<String, String>> createUser(@RequestBody User user) {
-        userService.createUser(user);
-        String token = userService.generateToken(user.getEmail());
+    @PostMapping("/register")
+    public ResponseEntity<Map<String, String>> register(@RequestBody User user) {
+        userService.save(user);
+        String token = JwtUtil.generateToken(user.getEmail());
 
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        Optional<User> userOptional = userService.findByEmail(loginRequest.email());
+        if (userOptional.isPresent() && loginRequest.password().equals(userOptional.get().getPassword())) {
+            String token = JwtUtil.generateToken(loginRequest.email());
+            return ResponseEntity.ok(new LoginResponse(token));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user, @RequestHeader("Authorization") String token) {
-        if (!userService.isValidToken(token)) {
+        if (!JwtUtil.isValidToken(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Optional<User> existingUser = userService.findById(id);
@@ -71,7 +84,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteUser(@PathVariable Long id, @RequestHeader("Authorization") String token) {
-        if (!userService.isValidToken(token)) {
+        if (!JwtUtil.isValidToken(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         Optional<User> existingUser = userService.findById(id);
@@ -80,19 +93,5 @@ public class UserController {
         }
         userService.deleteUser(id);
         return new ResponseEntity<>(id, HttpStatus.OK);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginByEmailPassword(@RequestBody User user) {
-        Optional<User> userOptional = userService.authenticateUser(user.getEmail(), user.getPassword());
-        if (userOptional.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        user.setId(userOptional.get().getId());
-
-        String token = userService.generateToken(user.getEmail());
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

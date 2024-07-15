@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>User Form</title>
+  <title>Sign Up</title>
 </head>
 <body>
 <h1 th:text="'Sign Up'"></h1>
@@ -15,8 +15,8 @@
     <input type="password" id="password" th:field="*{password}" required/>
   </div>
   <div>
-    <button type="submit">Save</button>
-    <a th:href="@{/admin/products}">Cancel</a>
+    <button type="submit">Sign Up</button>
+    <a th:href="@{/users/login}">Login</a>
   </div>
 </form>
 </body>
