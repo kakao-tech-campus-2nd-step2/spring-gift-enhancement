@@ -6,11 +6,13 @@ import gift.dto.product.ProductWithOptionDTO;
 import gift.dto.product.SaveProductDTO;
 import gift.dto.product.ShowProductDTO;
 
+import gift.entity.Category;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.exception.BadRequestException;
 import gift.exception.exception.UnAuthException;
 import gift.exception.exception.NotFoundException;
+import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import jakarta.validation.Valid;
@@ -33,6 +35,8 @@ public class ProductService {
     ProductRepository productRepository;
     @Autowired
     private OptionRepository optionRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public Page<ProductWithOptionDTO> getAllProductsWithOption(Pageable pageable) {
         return optionRepository.findAllWithOption(pageable);
@@ -43,16 +47,18 @@ public class ProductService {
         return productRepository.findAllProduct(pageable);
     }
 
-
-
     public void saveProduct(SaveProductDTO product) {
         if(product.option() == null)
             throw new BadRequestException("하나의 옵션은 필요합니다.");
+        if(categoryRepository.findById(product.categoryId()).isEmpty())
+            throw new NotFoundException("해당 카테고리가 없음");
+        Category category = categoryRepository.findById(product.categoryId()).get();
+        Product saveProduct = new Product(product.name(), product.price(), product.imageUrl(),category);
 
-        Product saveProduct = new Product(product.name(), product.price(), product.imageUrl());
 
         if(isValidProduct(saveProduct)){
             saveProduct = productRepository.save(saveProduct);
+            category.addProduct(saveProduct);
         }
 
         List<String> optionList = stream(product.option().split(",")).toList();
@@ -84,6 +90,9 @@ public class ProductService {
     public void deleteProduct(int id) {
         if(productRepository.findById(id).isEmpty())
             throw new NotFoundException("존재하지 않는 id입니다.");
+        Product product = productRepository.findById(id).get();
+        Category category = product.getCategory() ;
+        category.deleteProduct(product);
         productRepository.deleteById(id);
     }
 

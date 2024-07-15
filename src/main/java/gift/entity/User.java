@@ -52,4 +52,8 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public void deleteWishlist(WishList wishList) {
+        this.wishlist.remove(wishList);
+    }
 }

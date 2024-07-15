@@ -37,6 +37,11 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     Category category;
 
+
+    public void deleteWishlist(WishList wishlist) {
+        this.wishlists.remove(wishlist);
+    }
+
     public void addOptions(Option option){
         options.add(option);
         option.setProduct(this);
@@ -44,7 +49,9 @@ public class Product {
     public void addWishlist(WishList wishlist){
         wishlists.add(wishlist);
     }
-
+    public String getCategoryName() {
+        return category.getName();
+    }
     public int getId() {
         return id;
     }
@@ -61,17 +68,23 @@ public class Product {
         return imageUrl;
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl,Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Product(int id, String name, int price, String imageUrl) {
+    public Category getCategory() {
+        return category;
+    }
+
+    public Product(int id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Product() {
@@ -81,4 +94,6 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+
 }

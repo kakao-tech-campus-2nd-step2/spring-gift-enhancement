@@ -14,7 +14,7 @@ import java.util.List;
 
 @Repository
 public interface WishListRepository extends JpaRepository<WishList, WishList.WishListId> {
-    @Query("SELECT new gift.dto.product.ShowProductDTO(p.id, p.name, p.price, p.imageUrl) " +
+    @Query("SELECT new gift.dto.product.ShowProductDTO(p.id, p.name, p.price, p.imageUrl,p.category.name) " +
             "FROM Product p join WishList w  on p.id = w.id.productId where w.id.userId = :userId")
     Page<ShowProductDTO> findByUserId(@Param("userId") int tokenUserId, Pageable pageable);
 

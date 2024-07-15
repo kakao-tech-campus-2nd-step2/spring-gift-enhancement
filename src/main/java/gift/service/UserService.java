@@ -42,7 +42,5 @@ public class UserService {
             throw new BadRequestException("비밀번호가 일치하지 않습니다.");
 
         return new Token(jwtUtil.generateToken(user1));
-
-
     }
 }

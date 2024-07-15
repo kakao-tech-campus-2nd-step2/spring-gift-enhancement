@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.category.ShowCategoryDTO;
 import gift.dto.product.ProductWithOptionDTO;
 import gift.dto.product.ShowProductDTO;
 import gift.entity.Category;
@@ -20,7 +21,7 @@ public class CategoryController {
 
     @GetMapping("/api/category")
     @ResponseBody
-    public Page<Category> getCategory(@RequestParam(value = "page", defaultValue = "0") int pageNum){
+    public Page<ShowCategoryDTO> getCategory(@RequestParam(value = "page", defaultValue = "0") int pageNum){
         Pageable pageable = PageRequest.of(pageNum, 2, Sort.by(Sort.Direction.ASC, "id"));
         return categoryService.getCategory(pageable);
     }
@@ -38,8 +39,8 @@ public class CategoryController {
     }
 
     @DeleteMapping("/api/category")
-    public void deleteCategory(int categoryId) {
-        categoryService.delete(categoryId);
+    public void deleteCategory(@RequestParam("id") int id) {
+        categoryService.delete(id);
     }
 
 }

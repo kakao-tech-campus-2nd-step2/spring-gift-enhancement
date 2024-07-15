@@ -2,6 +2,7 @@ package gift.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -39,5 +40,13 @@ public class Category {
 
     public int getId() {
         return id;
+    }
+
+    public List<Product> getProducts() {
+        return this.products;
+    }
+
+    public void deleteProduct(Product product) {
+        this.products.remove(product);
     }
 }

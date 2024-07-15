@@ -64,8 +64,19 @@ public class WishListService {
     public void deleteWishList(String token, int productId) {
         if(!jwtUtil.validateToken(token))
             throw new UnAuthException("로그인 만료");
+        if(productRepository.findById(productId).isEmpty())
+            throw new NotFoundException("해당 물건이 없음");
+
         int tokenUserId = jwtUtil.getUserIdFromToken(token);
         WishList.WishListId wishListId = new WishList.WishListId(tokenUserId,productId);
+        if(wishListRepository.findById(wishListId).isEmpty())
+            throw new NotFoundException("위시리스트에 없음");
+
+        Product product = productRepository.findById(productId).get();
+        User user = userRepository.findById(tokenUserId).get();
+        WishList wishList = wishListRepository.findById(wishListId).get();
+        product.deleteWishlist(wishList);
+        user.deleteWishlist(wishList);
         wishListRepository.deleteById(wishListId);
     }
 
