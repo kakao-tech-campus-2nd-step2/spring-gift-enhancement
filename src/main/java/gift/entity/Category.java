@@ -5,8 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity(name = "categories")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name"}, name = "uk_category"))
 public class Category {
 
     @Id
@@ -16,23 +19,11 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String color;
-
-    @Column(nullable = false)
-    private String imageUrl;
-
-    @Column(nullable = false)
-    private String description;
-
     protected Category() {
     }
 
-    public Category(String name, String color, String imageUrl, String description) {
+    public Category(String name) {
         this.name = name;
-        this.color = color;
-        this.imageUrl = imageUrl;
-        this.description = description;
     }
 
     public Long getId() {
@@ -43,16 +34,5 @@ public class Category {
         return name;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 
 }

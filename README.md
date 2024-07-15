@@ -67,8 +67,8 @@ Content-Type: application/json
 
 ### 1단계 기능 목록
 
-- [ ] 카테고리 엔티티 추가
-- [ ] 상품과 카테고리 간 관계 생성
+- [x] 카테고리 엔티티 추가
+- [x] 상품과 카테고리 간 관계 생성
 - [ ] 카테고리 CRUD 추가
   - [ ] `GET /api/categories`: 조회
   - [ ] `POST /api/categories`: 추가
