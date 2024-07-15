@@ -3,6 +3,7 @@ package gift.user.service;
 import gift.user.domain.User;
 import gift.user.repository.UserRepository;
 import gift.utility.JwtUtil;
+import jakarta.validation.constraints.Email;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void createUser(User user) {
+    public void save(User user) {
         userRepository.save(user);
     }
 
@@ -44,11 +45,7 @@ public class UserService {
         return userRepository.findByEmailAndPassword(email, password);
     }
 
-    public String generateToken(String email) {
-        return JwtUtil.generateToken(email);
-    }
-
-    public boolean isValidToken(String token) {
-        return JwtUtil.isValidToken(token);
+    public Optional<User> findByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 }
