@@ -1,6 +1,6 @@
 package gift.admin.api;
 
-import gift.pagination.dto.PageResponse;
+import gift.global.pagination.dto.PageResponse;
 import gift.product.api.ProductController;
 import gift.product.dto.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package gift.application;
 
-import gift.error.CustomException;
-import gift.error.ErrorCode;
+import gift.global.error.CustomException;
+import gift.global.error.ErrorCode;
 import gift.product.application.ProductService;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.ProductRequest;

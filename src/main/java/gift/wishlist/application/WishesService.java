@@ -1,7 +1,7 @@
 package gift.wishlist.application;
 
-import gift.error.CustomException;
-import gift.error.ErrorCode;
+import gift.global.error.CustomException;
+import gift.global.error.ErrorCode;
 import gift.member.dao.MemberRepository;
 import gift.member.entity.Member;
 import gift.product.dao.ProductRepository;

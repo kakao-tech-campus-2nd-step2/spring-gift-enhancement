@@ -1,6 +1,6 @@
 package gift.product.api;
 
-import gift.pagination.dto.PageResponse;
+import gift.global.pagination.dto.PageResponse;
 import gift.product.application.ProductService;
 import gift.product.dto.ProductResponse;
 import org.springframework.data.domain.Page;

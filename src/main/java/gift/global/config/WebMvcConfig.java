@@ -1,4 +1,4 @@
-package gift.config;
+package gift.global.config;
 
 import gift.member.validator.LoginMemberArgumentResolver;
 import org.springframework.context.annotation.Configuration;

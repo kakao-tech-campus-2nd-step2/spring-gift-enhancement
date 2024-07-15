@@ -1,7 +1,7 @@
 package gift.wishlist.api;
 
 import gift.member.validator.LoginMember;
-import gift.pagination.dto.PageResponse;
+import gift.global.pagination.dto.PageResponse;
 import gift.product.dto.ProductResponse;
 import gift.product.util.ProductMapper;
 import gift.wishlist.application.WishesService;

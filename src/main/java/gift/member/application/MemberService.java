@@ -1,8 +1,8 @@
 package gift.member.application;
 
 import gift.auth.security.JwtUtil;
-import gift.error.CustomException;
-import gift.error.ErrorCode;
+import gift.global.error.CustomException;
+import gift.global.error.ErrorCode;
 import gift.member.dao.MemberRepository;
 import gift.member.dto.MemberDto;
 import gift.member.entity.Member;
