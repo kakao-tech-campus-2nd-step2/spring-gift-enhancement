@@ -1,8 +1,6 @@
 package gift.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,22 +12,20 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(max = 15)
+    @Column(nullable = false, length = 15)
     private String name;
 
-    @NotNull
+    @Column(nullable = false)
     private Integer price;
 
-    @NotNull
+    @Column(nullable = false)
     private String imageUrl;
 
     @OneToMany(mappedBy = "product")
     private List<Wish> wishes = new ArrayList<>();
 
     @ManyToOne
-    @NotNull
-    @JoinColumn(name = "categoryId")
+    @JoinColumn(name = "categoryId", nullable = false, foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"))
     private Category category;
 
     public Product(String name, Integer price, String imageUrl, Category category) {
@@ -62,7 +58,7 @@ public class Product {
         return category;
     }
 
-    public void change(String name, int price, String imageUrl,Category category) {
+    public void change(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
