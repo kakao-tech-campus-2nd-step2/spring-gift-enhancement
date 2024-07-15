@@ -1,7 +1,6 @@
 package gift.config;
 
 import gift.filter.AuthFilter;
-import gift.filter.LoginFilter;
 import gift.repository.token.TokenSpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -29,12 +28,4 @@ public class FilterConfiguration {
         return filterRegistrationBean;
     }
 
-    @Bean(name = "loginFilterBean")
-    public FilterRegistrationBean<Filter> loginFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new LoginFilter(tokenRepository));
-        filterRegistrationBean.setOrder(2);
-        filterRegistrationBean.addUrlPatterns("/members/login");
-        return filterRegistrationBean;
-    }
 }

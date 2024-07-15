@@ -57,7 +57,8 @@ public class AuthFilter implements Filter {
     }
 
     private boolean isUnauthenticatedPath(String path) {
-        return path.equals("/home") || path.startsWith("/members") || path.startsWith("/h2-console");
+        return path.equals("/home") || path.startsWith("/members")
+                || path.startsWith("/h2-console") || path.startsWith("/api/products");
     }
 
     private boolean isTokenValid(String token) {
