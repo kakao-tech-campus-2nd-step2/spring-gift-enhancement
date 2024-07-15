@@ -27,4 +27,11 @@ public class CategoryService {
     Category category = categoryRepository.findById(id).orElseThrow(()->new EmptyResultDataAccessException("해당 카테고리가 없습니다.", 1));
     return ConverterToDto.convertToCategoryDto(category);
   }
+
+  public CategoryDto addCategory(CategoryDto categoryDto){
+    Category category = new Category(categoryDto.getId(), categoryDto.getName(),categoryDto.getColor(),
+      categoryDto.getImageUrl(), categoryDto.getDescription());
+    Category addedCategory = categoryRepository.save(category);
+    return ConverterToDto.convertToCategoryDto(addedCategory);
+  }
 }
