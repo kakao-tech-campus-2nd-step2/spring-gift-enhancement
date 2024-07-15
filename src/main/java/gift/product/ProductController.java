@@ -3,6 +3,7 @@ package gift.product;
 import gift.product.model.ProductRequestDto;
 import gift.product.model.ProductResponseDto;
 import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,8 +49,8 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Void> addProduct(
         @Valid @RequestBody ProductRequestDto productRequestDto) {
-        productService.insertProduct(productRequestDto);
-        return ResponseEntity.ok().build();
+        Long productId = productService.insertProduct(productRequestDto);
+        return ResponseEntity.created(URI.create("/products/" + productId)).build();
     }
 
     @PutMapping("/{id}")

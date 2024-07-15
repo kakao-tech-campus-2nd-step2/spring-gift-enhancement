@@ -34,8 +34,9 @@ public class ProductService {
     }
 
     @Transactional
-    public void insertProduct(ProductRequestDto productRequestDto) throws ProductException {
-        productRepository.save(productRequestDto.toEntity());
+    public Long insertProduct(ProductRequestDto productRequestDto) throws ProductException {
+        Product product = productRepository.save(productRequestDto.toEntity());
+        return product.getId();
     }
 
     @Transactional
