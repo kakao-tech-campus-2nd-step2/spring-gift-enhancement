@@ -33,9 +33,7 @@ public class WishService {
         wishRepository.save(wish);
     }
 
-    public Page<Wish> getWishList(Member member, int page, int pageSize, String sortField, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(page, pageSize, sort);
+    public Page<Wish> getWishList(Member member, Pageable pageable) {
         Page<Wish> wishListPage= wishRepository.findByMember(member,pageable);
         return wishListPage;
     }

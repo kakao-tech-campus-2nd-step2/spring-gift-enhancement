@@ -2,6 +2,9 @@ package gift.Controller;
 
 import gift.Model.*;
 import gift.Service.ProductService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
 import gift.Service.WishService;
 import gift.annotation.ValidUser;
@@ -21,19 +24,15 @@ public class WishPageController {
     }
 
     @GetMapping
-    public String getWishlist (@ValidUser Member member,
-                               @RequestParam(defaultValue = "0", value = "page") int page,
-                               @RequestParam(defaultValue = "3", value = "size") int size,
-                               @RequestParam(defaultValue = "id", value = "sortField") String sortField,
-                               @RequestParam(defaultValue = "ASC", value = "sortDir") String sortDir,
+    public String getWishlist (@ValidUser Member member, @PageableDefault(size=3, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
                                Model model){
-        Page<Wish> wishlistPage = wishService.getWishList(member, page, size, sortField, sortDir);
+        Page<Wish> wishlistPage = wishService.getWishList(member, pageable);
         model.addAttribute("wishes", wishlistPage.getContent());
-        model.addAttribute("currentPage", page);
+        model.addAttribute("currentPage", pageable.getPageNumber());
         model.addAttribute("totalPages", wishlistPage.getTotalPages());
-        model.addAttribute("size", size);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("size", pageable.getPageSize());
+        model.addAttribute("sortField", pageable.getSort().iterator().next().getProperty());
+        model.addAttribute("sortDir", pageable.getSort().iterator().next().getDirection().toString());
         return "wish-list";
     }
 

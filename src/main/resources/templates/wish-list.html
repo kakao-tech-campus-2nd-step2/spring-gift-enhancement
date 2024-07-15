@@ -47,14 +47,14 @@
 </table>
 <div>
     <span th:if="${currentPage > 0}">
-        <a th:href="@{/member/wishList(page=${currentPage - 1}, size=${size}, sortField=${sortField}, sortDir=${sortDir})}">Previous</a>
+        <a th:href="@{/member/wishList(page=${currentPage - 1}, size=${size}, sort=${sortField},${sortDir})}">Previous</a>
     </span>
     <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-        <a th:href="@{/member/wishList(page=${i}, size=${size}, sortField=${sortField}, sortDir=${sortDir})}"
+        <a th:href="@{/member/wishList(page=${i}, size=${size}, sort=${sortField},${sortDir})}"
            th:text="${i + 1}">Page Number</a>
     </span>
     <span th:if="${currentPage < totalPages - 1}">
-        <a th:href="@{/member/wishList(page=${currentPage + 1}, size=${size}, sortField=${sortField}, sortDir=${sortDir})}">Next</a>
+        <a th:href="@{/member/wishList(page=${currentPage + 1}, size=${size}, sort=${sortField},${sortDir})}">Next</a>
     </span>
 </div>
 </body>
