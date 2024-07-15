@@ -74,16 +74,19 @@ public class Product extends BaseEntity {
         return category;
     }
 
-    public void updateProduct(String newName, Integer newPrice, String newImageUrl) {
+    public void updateProduct(String newName, Integer newPrice, String newImageUrl, Category newCategory) {
         validateName(newName);
         validatePrice(newPrice);
         validateImageUrl(newImageUrl);
+        Category.validateName(category.getName());
+
         this.name = newName;
         this.price = newPrice;
         this.imageUrl = newImageUrl;
+        this.category = newCategory;
     }
 
-    private void validateName(String name) {
+    public static void validateName(String name) {
         if (name == null || name.isEmpty() || name.length() > 15) {
             throw new InputException("1~15자 사이로 입력해주세요.");
         }
@@ -92,7 +95,7 @@ public class Product extends BaseEntity {
         }
     }
 
-    private void validatePrice(Integer price) {
+    public static void validatePrice(Integer price) {
         if (price == null) {
             throw new InputException("가격을 입력해주세요.");
         }
@@ -101,7 +104,7 @@ public class Product extends BaseEntity {
         }
     }
 
-    private void validateImageUrl(String imageUrl) {
+    public static void validateImageUrl(String imageUrl) {
         if (imageUrl == null || imageUrl.isBlank()) {
             throw new InputException("이미지 주소를 입력해주세요.");
         }
