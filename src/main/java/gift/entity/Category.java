@@ -7,8 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -21,10 +19,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
     @Column(nullable = false)
     private String color;
 
@@ -36,20 +30,40 @@ public class Category {
 
     protected Category() { }
 
-    protected Category(Product product, String color, String imageUrl, String description) {
+    public Category(String color, String imageUrl, String description) {
         validateColor(color);
+        validateImageUrl(imageUrl);
 
-        this.product = product;
         this.color = color;
         this.imageUrl = imageUrl;
-        this.description = removeNullDescription(description);
+        this.description = convertNullToBlankDescription(description);
     }
 
     public Long getId() { return id; }
-    public Product getProduct() { return product; }
     public String getColor() { return color; }
     public String getImageUrl() { return imageUrl; }
     public String getDescription() { return description; }
+
+
+    private void validateColor(String color){
+        if(color.isBlank())
+            throw new BlankContentException("색상을 입력해주세요");
+
+        if(!COLOR_PATTERN.matcher(color).matches())
+            throw new BadRequestException("색상 코드가 아닙니다.");
+    }
+
+    private void validateImageUrl(String imageUrl){
+        if(imageUrl.isBlank())
+            throw new BlankContentException("이미지 url을 입력해주세요.");
+    }
+
+    private String convertNullToBlankDescription(String description){ // 순수 로직이므로 추후에 util로 옮길 필요성이 있어보임
+        if(description == null)
+            return "";
+        return description;
+    }
+
 
     @Override
     public boolean equals(Object object) {
@@ -60,28 +74,15 @@ public class Category {
             return false;
         }
         Category category = (Category) object;
-        return Objects.equals(getId(), category.getId()) && Objects.equals(
-                getProduct(), category.getProduct()) && Objects.equals(getColor(),
-                category.getColor()) && Objects.equals(getImageUrl(), category.getImageUrl())
-                && Objects.equals(getDescription(), category.getDescription());
-    }
-
-    private void validateColor(String color){
-        if(color.isBlank())
-            throw new BlankContentException("색상을 입력해주세요");
-
-        if(!COLOR_PATTERN.matcher(color).matches())
-            throw new BadRequestException("색상 코드가 아닙니다.");
-    }
-
-    private String removeNullDescription(String description){
-        if(description == null)
-            return "";
-        return description;
+        return Objects.equals(COLOR_PATTERN, category.COLOR_PATTERN)
+                && Objects.equals(getId(), category.getId()) && Objects.equals(
+                getColor(), category.getColor()) && Objects.equals(getImageUrl(),
+                category.getImageUrl()) && Objects.equals(getDescription(),
+                category.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getProduct(), getColor(), getImageUrl(), getDescription());
+        return Objects.hash(COLOR_PATTERN, getId(), getColor(), getImageUrl(), getDescription());
     }
 }

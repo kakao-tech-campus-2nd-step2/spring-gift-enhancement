@@ -8,7 +8,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -39,16 +43,22 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "Category_id", nullable = false)
+    private Category category;
+
     protected Product() {
     }
 
-    public Product(String name, Integer price, String imageUrl) {
+    public Product(String name, Integer price, String imageUrl, Category category) {
         validateName(name);
         validatePrice(price);
         validateImageUrl(imageUrl);
+
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -63,11 +73,13 @@ public class Product {
     public String getImageUrl() {
         return imageUrl;
     }
+    public Category getCategory() { return category; }
 
-    public void changeProduct(String name, Integer price, String imageUrl) {
+    public void changeProduct(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     private void validateName(String name) {
