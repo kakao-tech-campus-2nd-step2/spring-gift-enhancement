@@ -26,8 +26,7 @@ public class WishedProductService {
         this.productRepository = productDAO;
     }
 
-    public Page<WishedProductDTO> getWishedProducts(MemberDTO memberDTO, int page) {
-        Pageable pageable = PageRequest.of(page, 5);
+    public Page<WishedProductDTO> getWishedProducts(MemberDTO memberDTO, Pageable pageable) {
         return wishedProductRepository.findByMember(memberDTO.toEntity(), pageable)
             .map(wishedProduct -> wishedProduct.toDTO());
     }

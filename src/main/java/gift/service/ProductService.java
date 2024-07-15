@@ -20,8 +20,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Page<ProductDTO> getProducts(int page) {
-        Pageable pageable = PageRequest.of(page, 5);
+    public Page<ProductDTO> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
             .map(product -> product.toDTO());
     }

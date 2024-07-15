@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +22,8 @@ public class AdminController {
     }
 
     @GetMapping
-    public String getProducts(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-        model.addAttribute("pages", productService.getProducts(page));
+    public String getProducts(Model model, Pageable pageable) {
+        model.addAttribute("pages", productService.getProducts(pageable));
         return "index";
     }
 

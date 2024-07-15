@@ -45,16 +45,16 @@
     <div th:if="${!pages.empty}">
         <ul class="footer">
             <li class="page" th:classappend="${pages.first} ? 'disabled'">
-                <a th:href="@{|?page=${pages.number-1}|}">
+                <a th:href="@{|?page=${pages.number-1}&size=${pages.size}|}">
                     <span>이전</span>
                 </a>
             </li>
             <li class="page" th:each="page: ${#numbers.sequence(0, pages.totalPages-1)}"
                 th:classappend="${page == pages.number} ? 'active'">
-                <a th:text="${page}" th:href="@{|?page=${page}|}"></a>
+                <a th:text="${page}" th:href="@{|?page=${page}&size=${pages.size}|}"></a>
             </li>
             <li class="page" th:classappend="${pages.last} ? 'disabled'">
-                <a th:href="@{|?page=${pages.number+1}|}">
+                <a th:href="@{|?page=${pages.number+1}&size=${pages.size}|}">
                     <span>다음</span>
                 </a>
             </li>

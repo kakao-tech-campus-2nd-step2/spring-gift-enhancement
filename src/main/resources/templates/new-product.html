@@ -10,9 +10,7 @@
 <body>
     <div class="header">
         <span class="title">New Product</span>
-        <a th:href="@{/admin/products}">
-            <button class="btn primary-btn">Back</button>
-        </a>
+        <button class="btn primary-btn" onclick="history.back()">Back</button>
     </div>
     <div class="container">
         <form id="product-add-form">
