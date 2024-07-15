@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.category.CategoryResponse;
 import gift.entity.Category;
+import gift.exception.category.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.util.mapper.CategoryMapper;
 import org.springframework.data.domain.Page;
@@ -22,5 +23,12 @@ public class CategoryService {
     public Page<CategoryResponse> getAllCategories(Pageable pageable) {
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
         return categoryPage.map(CategoryMapper::toResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryResponse getCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(CategoryNotFoundException::new);
+        return CategoryMapper.toResponse(category);
     }
 }

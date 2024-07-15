@@ -1,15 +1,19 @@
 package gift.unit.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 import gift.dto.category.CategoryResponse;
 import gift.entity.Category;
+import gift.exception.category.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.service.CategoryService;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -74,5 +78,34 @@ public class CategoryServiceTest implements AutoCloseable {
         // then
         assertThat(categories).isEmpty();
         then(categoryRepository).should(times(1)).findAll(pageable);
+    }
+
+    @Test
+    @DisplayName("get category by id test")
+    void getCategoryByIdTest() {
+        // given
+        Category category = new Category(1L, "Category 1");
+        given(categoryRepository.findById(any())).willReturn(Optional.of(category));
+
+        // when
+        CategoryResponse actual = categoryService.getCategory(1L);
+
+        // then
+        assertThat(actual).isNotNull();
+        assertThat(actual.id()).isEqualTo(1L);
+        assertThat(actual.name()).isEqualTo("Category 1");
+        then(categoryRepository).should(times(1)).findById(any());
+    }
+
+    @Test
+    @DisplayName("get category by not exist id test")
+    void getCategoryByNotExistIdTest() {
+        // given
+        given(categoryRepository.findById(any())).willReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.getCategory(999L)).isInstanceOf(
+            CategoryNotFoundException.class);
+        then(categoryRepository).should(times(1)).findById(any());
     }
 }
