@@ -92,6 +92,13 @@ public class Product extends TimeStamp {
         return category;
     }
 
+    public void update(ProductRequestDto productDto, Category category){
+        this.name = productDto.name();
+        this.price = productDto.price();
+        this.imageUrl = productDto.imageUrl();
+        this.category = category;
+    }
+
     public void addCategory(Category category){
         this.category = category;
         category.getProducts().add(this);
