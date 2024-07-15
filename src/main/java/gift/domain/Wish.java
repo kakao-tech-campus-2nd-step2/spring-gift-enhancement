@@ -25,9 +25,16 @@ public class Wish {
     }
 
     private Wish(Builder builder) {
+        this.id = builder.id;
         this.member = builder.member;
         this.product = builder.product;
         this.quantity = builder.quantity;
+        if(builder.member != null && builder.id == null){
+            this.member.addWish(this);
+        }
+        if(builder.product != null && builder.id == null){
+            this.product.addWish(this);
+        }
     }
 
     public Wish(Long id, Member member, Product product, int quantity) {
@@ -40,6 +47,10 @@ public class Wish {
     public Wish(Member member, Product product, int quantity) {
         this.member = member;
         this.product = product;
+        this.quantity = quantity;
+    }
+
+    public void updateQuantity(int quantity){
         this.quantity = quantity;
     }
 
@@ -68,9 +79,15 @@ public class Wish {
     }
 
     public static class Builder{
+        private Long id;
         private Member member;
         private Product product;
         private int quantity;
+
+        public Builder id(Long id){
+            this.id = id;
+            return this;
+        }
 
         public Builder member(Member member){
             this.member = member;
@@ -91,6 +108,16 @@ public class Wish {
             return new Wish(this);
         }
     }
+
+    public void detachFromMemberAndProduct() {
+        if(this.product!=null){
+            this.product.removeWish(this);
+        }
+        if(member!=null){
+            this.member.removeWish(this);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
