@@ -11,5 +11,5 @@
 ### 구현할 기능 목록
 - [x] Category domain model 과 DTO model 생성 / Product Entity 와 연관관계 매핑
 - [x] Category Entity 에 대한 Repository, Service, Controller 구현
-- [ ] 관리자 화면에 카테고리를 지정 / 수정할 수 있도록 구현
+- [x] 관리자 화면에 카테고리를 지정 / 수정할 수 있도록 구현
 - [ ] 테스트 코드 작성
