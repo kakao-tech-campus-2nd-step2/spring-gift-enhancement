@@ -1,6 +1,6 @@
 package gift.member.validator;
 
-import gift.auth.security.JwtFilter;
+import gift.global.security.JwtFilter;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import org.springframework.core.MethodParameter;

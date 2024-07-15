@@ -1,4 +1,4 @@
-package gift.auth.security;
+package gift.global.security;
 
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;

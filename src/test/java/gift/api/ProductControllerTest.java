@@ -1,8 +1,8 @@
 package gift.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.auth.security.JwtFilter;
-import gift.auth.security.JwtUtil;
+import gift.global.security.JwtFilter;
+import gift.global.security.JwtUtil;
 import gift.category.entity.Category;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;

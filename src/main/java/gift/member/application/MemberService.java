@@ -1,6 +1,6 @@
 package gift.member.application;
 
-import gift.auth.security.JwtUtil;
+import gift.global.security.JwtUtil;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import gift.member.dao.MemberRepository;
