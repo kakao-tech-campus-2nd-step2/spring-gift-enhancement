@@ -8,7 +8,6 @@ function createProducts() {
         imageUrl: document.querySelector('#productImageUrl').value,
         categoryId: document.querySelector('#productCategory').value
     };
-    console.log(product);
     fetch('/api/products', {
         method: 'POST',
         headers: {

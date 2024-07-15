@@ -129,3 +129,5 @@ function deleteWish(id) {
 document.addEventListener("DOMContentLoaded", () => {
     loadWishlist(currentPage);
 });
+
+window.createWish = createWish;
