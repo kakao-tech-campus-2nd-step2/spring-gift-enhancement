@@ -1,6 +1,5 @@
 package gift.request;
 
-import gift.domain.Product;
 import gift.validation.product.KakaoNotAllowed;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,9 +20,8 @@ public class ProductRequest {
     @NotBlank
     private String imageUrl;
 
-    public Product toEntity() {
-        return new Product(this.name, this.price, this.imageUrl);
-    }
+    @NotNull
+    private Long categoryId;
 
     public ProductRequest(String name, Integer price, String imageUrl) {
         this.name = name;
@@ -41,6 +39,10 @@ public class ProductRequest {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
     }
 
 }

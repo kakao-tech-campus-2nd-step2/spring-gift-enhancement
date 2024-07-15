@@ -20,7 +20,11 @@ public enum ErrorMessage {
 
     /* WishlistService */
     PRODUCT_ALREADY_IN_WISHLIST("이미 위시리스트에 추가된 상품입니다."),
-    PRODUCT_NOT_IN_WISHLIST("이미 위시리스트에 존재하지 않는 상품입니다.");
+    PRODUCT_NOT_IN_WISHLIST("이미 위시리스트에 존재하지 않는 상품입니다."),
+
+    /* CategoryService */
+
+    CATEGORY_NOT_FOUND("존재하지 않는 카테고리입니다.");
 
     private final String message;
 

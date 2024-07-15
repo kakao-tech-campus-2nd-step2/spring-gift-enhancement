@@ -59,14 +59,19 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public void changeCategory(Category category) {
+        this.category = category;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
 }
