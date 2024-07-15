@@ -53,7 +53,7 @@ public class CategoryServiceTest implements AutoCloseable {
         given(categoryRepository.findAll(pageable)).willReturn(categoryPage);
 
         // when
-        List<CategoryResponse> categories = categoryService.getCategories(pageable).toList();
+        List<CategoryResponse> categories = categoryService.getAllCategories(pageable).toList();
 
         // then
         assertThat(categories).isNotNull();
@@ -69,7 +69,7 @@ public class CategoryServiceTest implements AutoCloseable {
         given(categoryRepository.findAll(pageable)).willReturn(Page.empty());
 
         // when
-        Page<CategoryResponse> categories = categoryService.getCategories(pageable);
+        Page<CategoryResponse> categories = categoryService.getAllCategories(pageable);
 
         // then
         assertThat(categories).isEmpty();
