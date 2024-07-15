@@ -34,6 +34,14 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
     testCompileOnly 'org.projectlombok:lombok:1.18.34'
+<<<<<<< HEAD
+=======
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+<<<<<<< HEAD
+=======
+
+>>>>>>> 299a235 (chore: lombok 추가)
+>>>>>>> 75c1f5f (chore: lombok 추가)
 }
 
 tasks.named('test') {
