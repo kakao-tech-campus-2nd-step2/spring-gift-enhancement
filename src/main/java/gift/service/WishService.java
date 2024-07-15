@@ -32,11 +32,7 @@ public class WishService {
     @Transactional(readOnly = true)
     public Page<WishResponse> getWishes(Long userId, Pageable pageable) {
         Page<Wish> wishes = wishRepository.findByUserId(userId, pageable);
-
-        if (wishes == null || wishes.isEmpty()) {
-            throw new WishNotFoundException("위시리스트가 존재하지 않습니다.");
-        }
-
+        validateWishPage(wishes);
         return wishes.map(WishMapper::toResponse);
     }
 
@@ -76,6 +72,12 @@ public class WishService {
     protected Wish getWish(Long id) {
         return wishRepository.findById(id)
             .orElseThrow(() -> new WishNotFoundException("위시리스트를 찾을 수 없습니다."));
+    }
+
+    private void validateWishPage(Page<Wish> wishes) {
+        if (wishes == null || wishes.isEmpty()) {
+            throw new WishNotFoundException("위시리스트가 존재하지 않습니다.");
+        }
     }
 
 }
