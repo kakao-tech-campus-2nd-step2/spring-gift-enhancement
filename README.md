@@ -9,6 +9,6 @@
 - 카테고리의 예시는 아래와 같다.
   - 교환권, 상품권, 뷰티, 패션, 식품, 리빙/도서, 레저/스포츠, 아티스트/캐릭터, 유아동/반려, 디지털/가전, 카카오프렌즈, 트렌드 선물, 백화점
 ### 구현할 기능 목록
-- [ ] Category domain model 과 DTO model 생성 / Product Entity 와 연관관계 매핑
-- [ ] Category Entity 에 대한 Repository, Service, Controller 구현
+- [x] Category domain model 과 DTO model 생성 / Product Entity 와 연관관계 매핑
+- [x] Category Entity 에 대한 Repository, Service, Controller 구현
 - [ ] 관리자 화면에 카테고리를 지정 / 수정할 수 있도록 구현
