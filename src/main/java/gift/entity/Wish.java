@@ -87,7 +87,7 @@ public class Wish {
     }
 
     private void validateQuantity() {
-        if(isQuantityZero()) {
+        if (isQuantityZero()) {
             throw new IllegalArgumentException("수량은 0보다 큰 수이어야 합니다.");
         }
     }
