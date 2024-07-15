@@ -31,7 +31,7 @@ public class ProductRequestValidationTest {
 
     @Test
     @DisplayName("정상 상품 유효성 검사 테스트")
-    void checkNormalProductFailed() {
+    void checkNormalProduct() {
         ProductRequest request = new ProductRequest(
                 "product",
                 1000,

@@ -8,7 +8,7 @@ public record CategoryRequest(
         @NotEmpty(message = "반드시 값이 존재해야 합니다.")
         String name,
         @NotNull
-        @Pattern(regexp = "#[\\d]{6}", message = "HEX 색상 코드를 입력해야 합니다.")
+        @Pattern(regexp = "#[\\da-f]{6}", message = "HEX 색상 코드를 입력해야 합니다.")
         String color,
         @NotNull
         String imageUrl,
