@@ -1,5 +1,6 @@
 package gift.controller;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -12,8 +13,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+
 import gift.dto.MemberDto;
 import gift.dto.request.LoginRequest;
+import gift.exception.CustomException;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MemberControllerTest {
@@ -28,7 +31,6 @@ public class MemberControllerTest {
     @Test
     void registerAndLoginTest(){
 
-        //register
         String registerUrl = "http://localhost:" + port + "/members/register";
         MemberDto memberDto = new MemberDto(1L, "testPassword", "testEmail", "testRole");
         HttpEntity<MemberDto> registerRequestEntity =new HttpEntity<>(memberDto);
@@ -37,7 +39,6 @@ public class MemberControllerTest {
         assertEquals(HttpStatus.CREATED, registerResponse.getStatusCode());
         assertNotNull(registerResponse.getBody());
 
-        //login
         String loginUrl = "http://localhost:" + port + "/members/login";
         LoginRequest loginRequest = new LoginRequest("testPassword", "testEmail");
         HttpEntity<LoginRequest> loginRequestEntity = new HttpEntity<>(loginRequest);
@@ -45,6 +46,12 @@ public class MemberControllerTest {
         ResponseEntity<String> loginResponse = restTemplate.postForEntity(loginUrl, loginRequestEntity, String.class);
         assertEquals(HttpStatus.ACCEPTED, loginResponse.getStatusCode());
         assertNotNull(loginResponse.getBody());
+
+        LoginRequest failRequest = new LoginRequest("wrongPassword", "wrongPassword");
+        HttpEntity<LoginRequest> failRequestENtity = new HttpEntity<>(failRequest);
+        assertThatThrownBy(
+            () -> restTemplate.postForEntity(loginUrl, failRequestENtity, String.class))
+                .isInstanceOf(CustomException.class);
 
     }
 
