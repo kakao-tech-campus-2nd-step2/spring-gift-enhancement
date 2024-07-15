@@ -27,13 +27,17 @@ public class Product {
     @Column(name = "image_url", nullable = false, columnDefinition = "VARCHAR(255)")
     private String imageUrl;
 
+    @Column(name = "category_id", nullable = false, columnDefinition = "BIGINT")
+    private Long categoryId;
+
     protected Product() {}
 
-    public Product(Long id, Name name, int price, String imageUrl) {
+    public Product(Long id, Name name, int price, String imageUrl, Long categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -52,10 +56,15 @@ public class Product {
         return imageUrl;
     }
 
-    public void update(Name name, int price, String imageUrl) {
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void update(Name name, int price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     @Override

@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.dto.PageRequestDTO;
 import gift.dto.ProductDTO;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.Optional;
@@ -27,9 +28,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -43,7 +46,6 @@ public class ProductController {
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, size, sortBy, direction);
         Page<ProductDTO> productPage = productService.findAllProducts(pageRequestDTO);
 
-        // 모델에 데이터 추가
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productPage.getTotalPages());
@@ -56,12 +58,14 @@ public class ProductController {
     @GetMapping("/add")
     public String addProductForm(Model model) {
         model.addAttribute("product", new ProductDTO());
+        model.addAttribute("categories", categoryService.findAllCategories());
         return "Add_product";
     }
 
     @PostMapping
     public String addProduct(@Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.findAllCategories());
             return "Add_product";
         }
         productService.addProduct(productDTO);
@@ -75,12 +79,14 @@ public class ProductController {
             return "redirect:/admin/products";
         }
         model.addAttribute("product", productDTO.get());
+        model.addAttribute("categories", categoryService.findAllCategories());
         return "Edit_product";
     }
 
     @PutMapping("/{id}")
     public String updateProduct(@Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.findAllCategories());
             return "Edit_product";
         }
         productService.updateProduct(productDTO);

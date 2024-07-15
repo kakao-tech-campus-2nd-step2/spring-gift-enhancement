@@ -16,6 +16,7 @@
     <th><a th:href="@{/admin/products(sortBy='name.name', direction=${sortDirection == 'asc' ? 'desc' : 'asc'})}">이름</a></th>
     <th><a th:href="@{/admin/products(sortBy='price', direction=${sortDirection == 'asc' ? 'desc' : 'asc'})}">가격</a></th>
     <th>URL</th>
+    <th>카테고리 ID</th>
     <th>Actions</th>
   </tr>
   </thead>
@@ -25,6 +26,7 @@
     <td th:text="${product.name.name}"></td>
     <td th:text="${product.price}"></td>
     <td th:text="${product.imageUrl}"></td>
+    <td th:text="${product.categoryId}"></td>
     <td>
       <a th:href="@{/admin/products/edit/{id}(id=${product.id})}">수정</a> |
       <form th:action="@{/admin/products/{id}(id=${product.id})}" method="post" style="display:inline;">
