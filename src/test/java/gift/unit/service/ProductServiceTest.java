@@ -1,12 +1,13 @@
-package gift.service;
+package gift.unit.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import gift.dto.product.AddProductRequest;
 import gift.dto.product.ProductResponse;
@@ -14,6 +15,7 @@ import gift.dto.product.UpdateProductRequest;
 import gift.entity.Product;
 import gift.exception.product.ProductNotFoundException;
 import gift.repository.ProductRepository;
+import gift.service.ProductService;
 import gift.util.mapper.ProductMapper;
 import java.util.List;
 import java.util.Optional;
@@ -53,14 +55,14 @@ class ProductServiceTest implements AutoCloseable {
     @DisplayName("getAllProducts empty test")
     @Transactional
     void getAllProductsEmptyTest() {
-        //given
+        // given
         Pageable pageable = Pageable.unpaged();
-        when(productRepository.findAll(pageable)).thenReturn(Page.empty());
+        given(productRepository.findAll(pageable)).willReturn(Page.empty());
 
-        //when
+        // when
         Page<ProductResponse> products = productService.getAllProducts(pageable);
 
-        //then
+        // then
         assertThat(products).isEmpty();
     }
 
@@ -68,7 +70,7 @@ class ProductServiceTest implements AutoCloseable {
     @DisplayName("getAllProducts test")
     @Transactional
     void getAllProductsTest() {
-        //given
+        // given
         Pageable pageable = Pageable.unpaged();
         List<Product> productList = List.of(
             Product.builder().id(1L).name("Product A").price(1000)
@@ -83,35 +85,35 @@ class ProductServiceTest implements AutoCloseable {
                 .imageUrl("http://example.com/images/product_e.jpg").build()
         );
         Page<Product> productPage = new PageImpl<>(productList);
-        when(productRepository.findAll(pageable)).thenReturn(productPage);
+        given(productRepository.findAll(pageable)).willReturn(productPage);
 
-        //when
+        // when
         List<ProductResponse> products = productService.getAllProducts(pageable).toList();
 
-        //then
+        // then
         assertThat(products).isNotNull();
         assertThat(products.size()).isEqualTo(5);
-        verify(productRepository, times(1)).findAll(pageable);
+        then(productRepository).should(times(1)).findAll(pageable);
     }
 
     @Test
     @DisplayName("getProductById exception test")
     @Transactional
     void getProductByIdExceptionTest() {
-        //given
-        when(productRepository.findById(7L)).thenReturn(Optional.empty());
+        // given
+        given(productRepository.findById(7L)).willReturn(Optional.empty());
 
-        //when & then
+        // when & then
         assertThatThrownBy(() -> productService.getProductById(7L))
             .isInstanceOf(ProductNotFoundException.class);
-        verify(productRepository, times(1)).findById(7L);
+        then(productRepository).should(times(1)).findById(7L);
     }
 
     @Test
     @DisplayName("getProductById test")
     @Transactional
     void getProductByIdTest() {
-        //given
+        // given
         Product expected = Product.builder()
             .id(2L)
             .name("Product B")
@@ -119,17 +121,17 @@ class ProductServiceTest implements AutoCloseable {
             .imageUrl("http://example.com/images/product_b.jpg")
             .build();
 
-        when(productRepository.findById(2L)).thenReturn(Optional.of(expected));
+        given(productRepository.findById(2L)).willReturn(Optional.of(expected));
 
-        //when
+        // when
         Product actual = productService.getProductById(2L);
 
-        //then
+        // then
         assertThat(actual.getId()).isEqualTo(expected.getId());
         assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
         assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl());
-        verify(productRepository, times(1)).findById(2L);
+        then(productRepository).should(times(1)).findById(2L);
     }
 
     @Test
@@ -144,21 +146,21 @@ class ProductServiceTest implements AutoCloseable {
             .price(1000)
             .imageUrl("http://example.com/images/product_a.jpg")
             .build();
-        when(productRepository.save(any(Product.class))).thenReturn(savedProduct);
+        given(productRepository.save(any(Product.class))).willReturn(savedProduct);
 
         // when
         Long savedId = productService.addProduct(request);
 
         // then
         assertThat(savedId).isNotNull();
-        verify(productRepository, times(1)).save(any(Product.class));
+        then(productRepository).should(times(1)).save(any(Product.class));
     }
 
     @Test
     @DisplayName("updateProduct test")
     @Transactional
     void updateProductTest() {
-        //given
+        // given
         Product product = Product.builder()
             .id(1L)
             .name("Product A")
@@ -166,9 +168,9 @@ class ProductServiceTest implements AutoCloseable {
             .imageUrl("http://example.com/images/product_a.jpg")
             .build();
         UpdateProductRequest request = new UpdateProductRequest("product3", 30000, null);
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        given(productRepository.findById(1L)).willReturn(Optional.of(product));
 
-        //when
+        // when
         productService.updateProduct(1L, request);
         Product actual = productService.getProductById(1L);
         ProductMapper.updateProduct(actual, request);
@@ -178,26 +180,26 @@ class ProductServiceTest implements AutoCloseable {
             .price(30000)
             .build();
 
-        //then
+        // then
         assertThat(actual.getId()).isEqualTo(expected.getId());
         assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
         assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl());
-        verify(productRepository, times(2)).findById(1L);
+        then(productRepository).should(times(2)).findById(1L);
     }
 
     @Test
     @DisplayName("deleteProduct test")
     @Transactional
     void deleteProductTest() {
-        //given
-        when(productRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(productRepository).deleteById(1L);
+        // given
+        given(productRepository.existsById(1L)).willReturn(true);
+        willDoNothing().given(productRepository).deleteById(1L);
 
-        //when
+        // when
         productService.deleteProduct(1L);
 
-        //then
+        // then
         verify(productRepository, times(1)).existsById(1L);
         verify(productRepository, times(1)).deleteById(1L);
     }
@@ -206,12 +208,12 @@ class ProductServiceTest implements AutoCloseable {
     @DisplayName("deleteProduct exception test")
     @Transactional
     void deleteProductExceptionTest() {
-        //given
-        when(productRepository.existsById(9L)).thenReturn(false);
+        // given
+        given(productRepository.existsById(9L)).willReturn(false);
 
-        //when & then
+        // when & then
         assertThatThrownBy(() -> productService.deleteProduct(9L))
             .isInstanceOf(ProductNotFoundException.class);
-        verify(productRepository, times(1)).existsById(9L);
+        then(productRepository).should(times(1)).existsById(9L);
     }
 }
