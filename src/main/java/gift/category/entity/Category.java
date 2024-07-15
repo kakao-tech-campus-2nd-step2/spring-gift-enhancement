@@ -1,10 +1,15 @@
 package gift.category.entity;
 
+import gift.product.entity.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PreRemove;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -23,6 +28,16 @@ public class Category {
     private String imageUrl;
 
     private String description = "";
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
+
+    @PreRemove
+    private void preRemove() {  // 카테고리가 삭제되면 해당 카테고리에 속한 상품들의 카테고리를 null로 변경
+        for (Product product : products) {
+            product.changeCategory(null);
+        }
+    }
 
     public Category(String name, String color, String imageUrl, String description) {
         this.name = name;

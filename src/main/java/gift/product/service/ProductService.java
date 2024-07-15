@@ -1,5 +1,6 @@
 package gift.product.service;
 
+import gift.category.repository.CategoryRepository;
 import gift.product.dto.ProductReqDto;
 import gift.product.dto.ProductResDto;
 import gift.product.entity.Product;
@@ -20,9 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional(readOnly = true)
@@ -47,6 +50,8 @@ public class ProductService {
         Product newProduct;
         try {
             newProduct = productRepository.save(productReqDto.toEntity());
+            categoryRepository.findByName(productReqDto.category())
+                    .ifPresent(newProduct::changeCategory);
         } catch (Exception e) {
             throw ProductCreateException.EXCEPTION;
         }
@@ -59,6 +64,8 @@ public class ProductService {
         Product findProduct = findProductByIdOrThrow(productId);
         try {
             findProduct.update(productReqDto);
+            categoryRepository.findByName(productReqDto.category())
+                    .ifPresent(findProduct::changeCategory);
         } catch (Exception e) {
             throw ProductUpdateException.EXCEPTION;
         }

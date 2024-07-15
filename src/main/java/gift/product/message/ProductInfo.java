@@ -9,6 +9,7 @@ public final class ProductInfo {
     public static final String PRODUCT_NAME_KAKAO = "상품 이름에 '카카오' 문구가 포함되어 있습니다. 담당 MD와 협의 후 사용해주세요.";
     public static final String PRODUCT_PRICE_REQUIRED = "상품 가격은 필수 입력 값입니다.";
     public static final String PRODUCT_IMAGE_URL_REQUIRED = "상품 이미지 URL은 필수 입력 값입니다.";
+    public static final String PRODUCT_CATEGORY_REQUIRED = "상품 카테고리는 필수 입력 값입니다.";
 
     private ProductInfo() {
     }

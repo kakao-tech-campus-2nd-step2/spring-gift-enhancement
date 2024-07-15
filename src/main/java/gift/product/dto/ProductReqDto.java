@@ -18,7 +18,10 @@ public record ProductReqDto(
         Integer price,
 
         @NotBlank(message = ProductInfo.PRODUCT_IMAGE_URL_REQUIRED)
-        String imageUrl
+        String imageUrl,
+
+        @NotBlank(message = ProductInfo.PRODUCT_CATEGORY_REQUIRED)
+        String category
 ) {
 
     public Product toEntity() {
@@ -26,7 +29,8 @@ public record ProductReqDto(
         return new Product(
                 name,
                 price,
-                imageUrl
+                imageUrl,
+                null
         );
     }
 }
