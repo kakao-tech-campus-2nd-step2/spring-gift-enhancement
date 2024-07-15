@@ -4,7 +4,6 @@ import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ class ProductRepositoryTest {
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
                 .build();
 
         // when
@@ -59,7 +58,7 @@ class ProductRepositoryTest {
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
                 .build();
         Product savedProduct = products.save(expectedProduct);
 
@@ -83,11 +82,9 @@ class ProductRepositoryTest {
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
                 .build();
         Product savedProduct = products.save(expectedProduct);
-        entityManager.flush();
-        entityManager.clear();
 
         // when
         Product foundProduct = products.findByName(savedProduct.getName()).orElse(null);
@@ -106,11 +103,9 @@ class ProductRepositoryTest {
     @DisplayName("상품 전체 조회 테스트")
     void findAll() {
         // given
-        Product product1 = products.save(new Product("상품1", 1000, "http://product1"));
-        Product product2 = products.save(new Product("상품2", 2000, "http://product2"));
-        Product product3 = products.save(new Product("상품3", 3000, "http://product3"));
-        entityManager.flush();
-        entityManager.clear();
+        products.save(new Product("상품1", 1000, "http://product1"));
+        products.save(new Product("상품2", 2000, "http://product2"));
+        products.save(new Product("상품3", 3000, "http://product3"));
 
         // when
         List<Product> findProducts = products.findAll();
@@ -126,7 +121,7 @@ class ProductRepositoryTest {
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
                 .build();
         Product savedProduct = products.save(expectedProduct);
 
@@ -152,7 +147,7 @@ class ProductRepositoryTest {
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
                 .build();
 
         Wish expectedWish = new Wish.Builder()
@@ -191,7 +186,7 @@ class ProductRepositoryTest {
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
                 .build();
 
         Wish expectedWish = new Wish.Builder()
@@ -203,6 +198,8 @@ class ProductRepositoryTest {
         members.save(expectedMember);
         expectedProduct.addWish(expectedWish);
         Product savedProduct = products.save(expectedProduct);
+        products.flush();
+        entityManager.clear();
 
         // when
         products.deleteById(savedProduct.getId());
@@ -228,7 +225,7 @@ class ProductRepositoryTest {
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
                 .build();
 
         Wish expectedWish = new Wish.Builder()
@@ -240,15 +237,21 @@ class ProductRepositoryTest {
         members.save(expectedMember);
         expectedProduct.addWish(expectedWish);
 
-        Product savedProduct = products.save(expectedProduct);
+        products.save(expectedProduct);
+        products.flush();
+        entityManager.clear();
+
+        Product foundProduct = products.findById(expectedProduct.getId()).orElse(null);
+        assertNotNull(foundProduct);
+        Wish foundWish = foundProduct.getWishes().get(0);
 
         // when
-        Wish savedWish = savedProduct.getWishes().get(0);
-        savedProduct.removeWish(savedWish);
-        wishes.flush();
+        foundProduct.removeWish(foundWish);
+        products.flush();
+        entityManager.clear();
 
         // then
-        Wish orphanedWish = entityManager.find(Wish.class, expectedWish.getId());
+        Wish orphanedWish = wishes.findById(expectedWish.getId()).orElse(null);
         assertThat(orphanedWish).isNull();
     }
 
@@ -264,7 +267,7 @@ class ProductRepositoryTest {
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
                 .build();
 
         Wish expected = new Wish.Builder()
