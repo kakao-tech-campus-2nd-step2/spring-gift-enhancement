@@ -25,10 +25,9 @@ public class MemberService {
             throw new IllegalArgumentException("Email already exists");
         }
         String encodedPassword = passwordEncoder.encode(password);
-        Member member = Member.builder()
-                .email(email)
-                .password(encodedPassword)
-                .build();
+        Member member = new Member();
+        member.setEmail(email);
+        member.setPassword(encodedPassword);
         return memberRepository.save(member);
     }
 
