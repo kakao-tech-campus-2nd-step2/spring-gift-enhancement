@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.dto.request.UpdateCategoryRequest;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,6 +27,13 @@ public class Category {
         this.color = color;
         this.imageUrl = imageUrl;
         this.description = description;
+    }
+
+    public void update(UpdateCategoryRequest request) {
+        this.name = request.name();
+        this.color = request.color();
+        this.imageUrl = request.imageUrl();
+        this.description = request.description();
     }
 
     public Long getId() {
