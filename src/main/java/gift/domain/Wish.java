@@ -29,12 +29,6 @@ public class Wish {
         this.member = builder.member;
         this.product = builder.product;
         this.quantity = builder.quantity;
-        if(builder.member != null && builder.id == null){
-            this.member.addWish(this);
-        }
-        if(builder.product != null && builder.id == null){
-            this.product.addWish(this);
-        }
     }
 
     public Wish(Long id, Member member, Product product, int quantity) {
@@ -106,15 +100,6 @@ public class Wish {
 
         public Wish build() {
             return new Wish(this);
-        }
-    }
-
-    public void detachFromMemberAndProduct() {
-        if(this.product!=null){
-            this.product.removeWish(this);
-        }
-        if(member!=null){
-            this.member.removeWish(this);
         }
     }
 
