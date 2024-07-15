@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.dto.ProductRequest;
+import gift.dto.ProductResponse;
 import gift.exception.category.CategoryNotFoundException;
 import gift.model.Category;
 import gift.model.Product;
@@ -9,10 +10,14 @@ import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -40,8 +45,17 @@ public class ProductService {
         throw new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다.");
     }
 
-    public Page<Product> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public Page<ProductResponse> getAllProducts(Pageable pageable) {
+        Page<Product> pageProducts = productRepository.findAll(pageable);
+        Page<ProductResponse> pageToDto = pageProducts.map(product -> new ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl(),
+                product.getCategory().getName(),
+                product.getCategory().getId()
+        ));
+        return pageToDto;
     }
 
     public Product getProduct(Long id) {
