@@ -22,7 +22,17 @@ public class Category {
     @Column(nullable = false)
     private String imageUrl;
 
-    private String description;
+    private String description = "";
+
+    public Category(String name, String color, String imageUrl, String description) {
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
+
+    protected Category() {
+    }
 
     public Long getId() {
         return id;
