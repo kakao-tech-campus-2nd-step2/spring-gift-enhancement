@@ -3,10 +3,14 @@ package gift.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +33,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductCategory> productCategory = new ArrayList<>();
 
 
     public Product(String name, double price, String imageUrl) {
@@ -101,4 +108,14 @@ public class Product {
         wishes.remove(wish);
         wish.setProduct(null);
     }
+    public void addProductCategory(ProductCategory productCategory) {
+        this.productCategory.add(productCategory);
+        productCategory.setProduct(this);
+    }
+
+    public void removeProductCategory(ProductCategory productCategory) {
+        this.productCategory.add(productCategory);
+        productCategory.setProduct(null);
+    }
+
 }
