@@ -31,19 +31,19 @@ public class WishListController {
     public ResponseEntity<Page<WishProductResponse>> getWishProducts(@MemberId Long memberId,
                                                                      @PageableDefault(sort = "createdTime", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<WishProductResponse> wishProducts = wishListService.getWishProductsByMemberId(memberId, pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(wishProducts);
+        return ResponseEntity.ok(wishProducts);
     }
 
     @PutMapping("api/wishlist")
     public ResponseEntity<Void> updateWishProductAmount(@MemberId Long memberId, @RequestBody WishListRequest request) {
         wishListService.updateWishProductAmount(memberId, request.productId(), request.amount());
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("api/wishlist")
     public ResponseEntity<Void> deleteWishProduct(@MemberId Long memberId, @RequestBody WishListRequest request) {
         wishListService.deleteProductInWishList(memberId, request.productId());
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 
 }

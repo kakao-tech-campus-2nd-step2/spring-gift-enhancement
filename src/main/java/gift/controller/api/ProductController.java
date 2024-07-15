@@ -30,19 +30,19 @@ public class ProductController {
     @GetMapping("api/products")
     public ResponseEntity<Page<ProductResponse>> getProducts(@PageableDefault(sort = "id") Pageable pageable) {
         Page<ProductResponse> productResponses = productService.getProductResponses(pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(productResponses);
+        return ResponseEntity.ok(productResponses);
     }
 
     @PutMapping("api/products")
     public ResponseEntity<Void> updateProduct(@Valid @RequestBody ProductRequest request) {
         productService.updateProduct(request.id(), request.name(), request.price(), request.imageUrl());
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("api/products/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 
 }
