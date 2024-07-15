@@ -1,10 +1,12 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.request.ProductRequestDto;
 import gift.dto.response.ProductResponseDto;
 import gift.exception.EntityNotFoundException;
 import gift.exception.KakaoInNameException;
+import gift.repository.category.CategoryRepository;
 import gift.repository.product.ProductRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,23 +20,31 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+                          CategoryRepository categoryRepository
+    ){
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional
     public ProductResponseDto addProduct(ProductRequestDto productDto){
         checkNameInKakao(productDto);
 
+        Category category = categoryRepository.findById(productDto.categoryId()).orElseThrow(() -> new EntityNotFoundException("해당 카테고리는 존재하지 않습니다."));
+
         Product product = new Product.Builder()
                 .name(productDto.name())
                 .price(productDto.price())
                 .imageUrl(productDto.imageUrl())
+                .category(category)
                 .build();
 
-        Product savedProduct = productRepository.save(product);
+        product.addCategory(category);
 
+        Product savedProduct = productRepository.save(product);
 
         return ProductResponseDto.from(savedProduct);
     }
@@ -63,8 +73,9 @@ public class ProductService {
         checkNameInKakao(productRequestDto);
 
         Product findProduct = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("존재 하지 않는 상품입니다."));
+        Category category = categoryRepository.findById(productRequestDto.categoryId()).orElseThrow(() -> new EntityNotFoundException("해당 카테고리가 존재하지 않습니다."));
 
-        findProduct.update(productRequestDto);
+        findProduct.update(productRequestDto, category);
 
         return ProductResponseDto.from(findProduct);
     }
