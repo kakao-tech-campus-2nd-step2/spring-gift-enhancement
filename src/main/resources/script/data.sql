@@ -1,7 +1,12 @@
-INSERT INTO product(name, price, image_url)
-VALUES ('product1', 4500, 'https://shop.io/product/1/image.jpg'),
-       ('product2', 8000, 'https://shop.io/product/2/image.jpg'),
-       ('product3', 20000, 'https://shop.io/product/3/image.jpg');
+INSERT INTO category(name, color, image_url, description)
+VALUES ('교환권', '#ffffff', 'https://product-shop.io/one/image.jpg', 'exchange ticket'),
+       ('상품권', '#f9f8f7', 'https://product-shop.io/two/image.jpg', 'gift ticket'),
+       ('식품', '#f134f2', 'https://product-shop.io/thr/image.jpg', 'food ticket');
+
+INSERT INTO product(name, price, image_url, category_id)
+VALUES ('product1', 4500, 'https://shop.io/product/1/image.jpg', 1),
+       ('product2', 8000, 'https://shop.io/product/2/image.jpg', 3),
+       ('product3', 20000, 'https://shop.io/product/3/image.jpg', 2);
 
 INSERT INTO member(email, password)
 VALUES ('admin@email.com', 'password'),
