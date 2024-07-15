@@ -96,4 +96,8 @@ public class AppUser extends BaseTimeEntity {
         String hashedInputPassword = SHA256Util.encodePassword(inputPassword, this.salt);
         return this.password.equals(hashedInputPassword);
     }
+
+    public boolean isAdmin() {
+        return this.role == Role.ADMIN;
+    }
 }

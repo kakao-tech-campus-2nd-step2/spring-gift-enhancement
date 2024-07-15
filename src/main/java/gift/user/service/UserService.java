@@ -3,7 +3,6 @@ package gift.user.service;
 import gift.user.exception.ForbiddenException;
 import gift.user.model.UserRepository;
 import gift.user.model.dto.AppUser;
-import gift.user.model.dto.Role;
 import gift.user.model.dto.SignUpRequest;
 import gift.user.model.dto.UpdatePasswordRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -56,7 +55,7 @@ public class UserService {
     }
 
     public void verifyAdminAccess(AppUser appUser) {
-        if (appUser.getRole() != Role.ADMIN) {
+        if (!appUser.isAdmin()) {
             throw new ForbiddenException("해당 요청에 대한 관리자 권한이 없습니다.");
         }
     }

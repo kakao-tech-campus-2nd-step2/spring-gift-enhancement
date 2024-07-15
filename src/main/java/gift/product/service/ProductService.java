@@ -7,7 +7,6 @@ import gift.product.model.dto.ProductResponse;
 import gift.product.model.dto.UpdateProductRequest;
 import gift.user.exception.ForbiddenException;
 import gift.user.model.dto.AppUser;
-import gift.user.model.dto.Role;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Tuple;
 import java.util.List;
@@ -88,7 +87,7 @@ public class ProductService {
     }
 
     private void checkProductOwner(AppUser appUser, Product product) {
-        if (product.getSeller().equals(appUser) || appUser.getRole() == Role.ADMIN) {
+        if (product.getSeller().equals(appUser) || appUser.isAdmin()) {
             return;
         }
         throw new ForbiddenException("해당 상품에 대한 권한이 없습니다.");
