@@ -18,6 +18,10 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
+    @OneToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     public Product() {
     }
 
