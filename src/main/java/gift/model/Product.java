@@ -18,8 +18,8 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
-    @OneToOne
-    @JoinColumn(name = "category_id")
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     public Product() {
