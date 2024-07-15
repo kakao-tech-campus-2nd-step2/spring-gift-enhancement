@@ -1,8 +1,11 @@
 package gift.service;
 
 import gift.dto.ProductRequest;
+import gift.exception.category.CategoryNotFoundException;
+import gift.model.Category;
 import gift.model.Product;
 import gift.exception.product.ProductNotFoundException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -13,21 +16,28 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
-  
-    private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public Product makeProduct(ProductRequest request) {
-        Product product = new Product(
-                request.name(),
-                request.price(),
-                request.imageUrl()
-        );
-        productRepository.save(product);
-        return product;
+        Optional<Category> categoryOptional = categoryRepository.findById(request.categoryId());
+        if (categoryOptional.isPresent()) {
+            Product product = new Product(
+                    request.name(),
+                    request.price(),
+                    request.imageUrl(),
+                    categoryOptional.get()
+            );
+            productRepository.save(product);
+            return product;
+        }
+        throw new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다.");
     }
 
     public Page<Product> getAllProducts(Pageable pageable) {
@@ -43,16 +53,22 @@ public class ProductService {
     @Transactional
     public Product putProduct(ProductRequest request) {
         Optional<Product> optionalProduct = productRepository.findById(request.id());
+        Optional<Category> optionalCategory = categoryRepository.findById(request.categoryId());
 
-        if (optionalProduct.isPresent()) {
-            Product updateProduct = optionalProduct.get().update(
-                    request.name(),
-                    request.price(),
-                    request.imageUrl()
-            );
-            return updateProduct;
+        if (!optionalProduct.isPresent()) {
+            throw new ProductNotFoundException("수정하려는 해당 id의 상품이 존재하지 않습니다.");
         }
-        throw new ProductNotFoundException("수정하려는 해당 id의 상품이 존재하지 않습니다.");
+        if (!optionalCategory.isPresent()) {
+            throw new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다.");
+        }
+        Product updateProduct = optionalProduct.get().update(
+                request.name(),
+                request.price(),
+                request.imageUrl(),
+                optionalCategory.get()
+        );
+        return updateProduct;
+
     }
 
     public void deleteProduct(Long id) {
