@@ -18,7 +18,7 @@ public class Product extends BaseEntity {
     @Column(name = "price", nullable = false)
     long price;
 
-    @Column(name = "imageurl")
+    @Column(name = "image_url")
     String imageUrl;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
