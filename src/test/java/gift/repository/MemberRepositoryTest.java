@@ -4,7 +4,6 @@ import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +19,21 @@ class MemberRepositoryTest {
     @Autowired
     private  MemberRepository members;
     @Autowired
+    private ProductRepository products;
+    @Autowired
+    private  WishRepository wishes;
+    @Autowired
     private EntityManager entityManager;
-
-    private String expectedEmail;
-    private String expectedPassword;
-    private Member expectedMember;
-    private Product expectedProduct;
-    private Wish expectedWish;
-
-    @BeforeEach
-    void setupMember() {
-        expectedEmail = "a@a.com";
-        expectedPassword = "1234";
-
-        expectedMember = new Member(expectedEmail,expectedPassword);
-        expectedProduct = new Product("아메리카노", 2000, "http://example.com/americano");
-        expectedWish = new Wish(expectedMember, expectedProduct, 1);
-    }
 
     @Test
     @DisplayName("멤버 저장 테스트")
     void save() {
+        // given
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
+
         // when
         Member actual = members.save(expectedMember);
 
@@ -53,40 +46,46 @@ class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("멤버 이메일, 비밀번호로 조회 테스트")
-    void findByEmailAndPassword() {
+    @DisplayName("멤버 이메일 조회 테스트")
+    void findByEmail() {
         // given
-        Member savedMember = members.save(expectedMember);
-        entityManager.flush();
-        entityManager.clear();
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
+        Member actual = members.save(expectedMember);
 
         // when
-        Member findMember = members.findByEmailAndPassword(savedMember.getEmail(),savedMember.getPassword()).get();
+        Member foundMember = members.findByEmail(actual.getEmail()).orElse(null);
 
         // then
+        assertNotNull(foundMember);
         assertAll(
-                () -> assertThat(findMember.getId()).isNotNull(),
-                () -> assertThat(findMember.getEmail()).isEqualTo(expectedEmail),
-                ()->assertThat(findMember.getPassword()).isEqualTo(expectedPassword)
+                () -> assertThat(foundMember.getId()).isNotNull(),
+                () -> assertThat(foundMember.getEmail()).isEqualTo(expectedMember.getEmail()),
+                ()->assertThat(foundMember.getPassword()).isEqualTo(expectedMember.getPassword())
         );
     }
 
     @Test
-    @DisplayName("멤버 이메일 조회 테스트")
-    void findByEmail() {
+    @DisplayName("멤버 이메일, 비밀번호로 조회 테스트")
+    void findByEmailAndPassword() {
         // given
-        Member savedMember = members.save(expectedMember);
-        entityManager.flush();
-        entityManager.clear();
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
+        members.save(expectedMember);
 
         // when
-        Member findMember = members.findByEmail(savedMember.getEmail()).get();
+        Member foundMember = members.findByEmailAndPassword(expectedMember.getEmail(),expectedMember.getPassword()).orElse(null);
 
         // then
+        assertNotNull(foundMember);
         assertAll(
-                () -> assertThat(findMember.getId()).isNotNull(),
-                () -> assertThat(findMember.getEmail()).isEqualTo(expectedEmail),
-                ()->assertThat(findMember.getPassword()).isEqualTo(expectedPassword)
+                () -> assertThat(foundMember.getId()).isNotNull(),
+                () -> assertThat(foundMember.getEmail()).isEqualTo(expectedMember.getEmail()),
+                ()->assertThat(foundMember.getPassword()).isEqualTo(expectedMember.getPassword())
         );
     }
 
@@ -94,16 +93,34 @@ class MemberRepositoryTest {
     @DisplayName("멤버->위시 영속 전파 테스트")
     void testCascadePersist(){
         // given
-        entityManager.persist(expectedProduct);
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
+
+        Product expectedProduct = new Product.Builder()
+                .name("아메리카노")
+                .price(2000)
+                .imageUrl("http://example.com/americano")
+                .build();
+
+        Wish expectedWish = new Wish.Builder()
+                .member(expectedMember)
+                .product(expectedProduct)
+                .qunatity(1)
+                .build();
+
+        products.save(expectedProduct);
+        expectedProduct.addWish(expectedWish);
 
         // when
-        expectedProduct.addWish(expectedWish);
         Member savedMember = members.save(expectedMember);
-        entityManager.flush();
+        members.flush();
         entityManager.clear();
 
         // then
-        Member foundMember = members.findById(savedMember.getId()).get();
+        Member foundMember = members.findById(savedMember.getId()).orElse(null);
+        assertNotNull(foundMember);
         assertAll(
                 () -> assertThat(foundMember).isEqualTo(savedMember),
                 () -> assertThat(foundMember.getWishes().size()).isEqualTo(1),
@@ -115,24 +132,37 @@ class MemberRepositoryTest {
     @DisplayName("멤버->위시 삭제 전파 테스트")
     void testCascadeRemove(){
         // given
-        entityManager.persist(expectedProduct);
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
 
+        Product expectedProduct = new Product.Builder()
+                .name("아메리카노")
+                .price(2000)
+                .imageUrl("http://example.com/americano")
+                .build();
+
+        Wish expectedWish = new Wish.Builder()
+                .member(expectedMember)
+                .product(expectedProduct)
+                .qunatity(1)
+                .build();
+
+        products.save(expectedProduct);
         expectedProduct.addWish(expectedWish);
         Member savedMember = members.save(expectedMember);
-        entityManager.flush();
+        members.flush();
         entityManager.clear();
 
         // when
-        Member foundMember = members.findById(savedMember.getId()).get();
-        members.deleteById(foundMember.getId());
-        entityManager.flush();
-        entityManager.clear();
+        members.deleteById(savedMember.getId());
 
         //then
-        List<Member> findMembers = members.findAll();
-        Wish deletedWish = entityManager.find(Wish.class, expectedWish.getId());
+        List<Member> foundMembers = members.findAll();
+        Wish deletedWish = wishes.findById(expectedWish.getId()).orElse(null);
         assertAll(
-                () -> assertThat(findMembers.size()).isEqualTo(0),
+                () -> assertThat(foundMembers.size()).isEqualTo(0),
                 () -> assertThat(deletedWish).isNull()
         );
     }
@@ -141,22 +171,39 @@ class MemberRepositoryTest {
     @DisplayName("고아 객체 제거 테스트")
     void testOrphanRemoval(){
         // given
-        entityManager.persist(expectedProduct);
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
 
+        Product expectedProduct = new Product.Builder()
+                .name("아메리카노")
+                .price(2000)
+                .imageUrl("http://example.com/americano")
+                .build();
+
+        Wish expectedWish = new Wish.Builder()
+                .member(expectedMember)
+                .product(expectedProduct)
+                .qunatity(1)
+                .build();
+
+        products.save(expectedProduct);
         expectedProduct.addWish(expectedWish);
         Member savedMember = members.save(expectedMember);
-        entityManager.flush();
+        members.flush();
         entityManager.clear();
 
         // when
-        Member foundMember = members.findById(savedMember.getId()).get();
-        Wish foudnWish = foundMember.getWishes().get(0);
-        foundMember.removeWish(foudnWish);
-        entityManager.flush();
+        Member foundMember = members.findById(savedMember.getId()).orElse(null);
+        assertNotNull(foundMember);
+        Wish foundWish = foundMember.getWishes().get(0);
+        foundMember.removeWish(foundWish);
+        members.flush();
         entityManager.clear();
 
         // then
-        Wish orphanedWish = entityManager.find(Wish.class, expectedWish.getId());
+        Wish orphanedWish = wishes.findById(expectedWish.getId()).orElse(null);
         assertThat(orphanedWish).isNull();
     }
 
@@ -164,17 +211,33 @@ class MemberRepositoryTest {
     @DisplayName("지연 로딩 테스트")
     void testLazyFetch(){
         // given
-        entityManager.persist(expectedProduct);
+        Member expectedMember = new Member.Builder()
+                .email("a@a.com")
+                .password("1234")
+                .build();
 
+        Product expectedProduct = new Product.Builder()
+                .name("아메리카노")
+                .price(2000)
+                .imageUrl("http://example.com/americano")
+                .build();
+
+        Wish expectedWish = new Wish.Builder()
+                .member(expectedMember)
+                .product(expectedProduct)
+                .qunatity(1)
+                .build();
+
+        products.save(expectedProduct);
         expectedProduct.addWish(expectedWish);
         Member savedMember = members.save(expectedMember);
-        entityManager.flush();
+        members.flush();
         entityManager.clear();
 
         // when
         // Product 조회 (지연 로딩이므로 연관관계 조회 안함, Product 객체만 조회함)
-        Member foundMember = members.findById(savedMember.getId()).get();
-
+        Member foundMember = members.findById(savedMember.getId()).orElse(null);
+        assertNotNull(foundMember);
         // Wish 조회 (Wish 객체도 조회함)
         List<Wish> wishes = foundMember.getWishes();
 
