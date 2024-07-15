@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
@@ -32,7 +33,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Page<Product> findAll(Pageable pageable) {
+    public Slice<Product> findAll(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
 
