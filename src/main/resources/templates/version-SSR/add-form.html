@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<form class="container" th:action="@{/add}" th:object="${product}" method="post">
+<form class="container" th:action="@{/add}" th:object="${addProductRequest}" method="post">
     <h1>상품 추가</h1>
     <label for="category">Category:</label>
     <select id="category" th:field="*{categoryId}">
