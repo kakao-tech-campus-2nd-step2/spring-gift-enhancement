@@ -1,6 +1,8 @@
 package gift.exception.wish;
 
-public class WishNotFoundException extends RuntimeException {
+import gift.exception.NotFoundException;
+
+public class WishNotFoundException extends NotFoundException {
 
     public WishNotFoundException(String message) {
         super(message);

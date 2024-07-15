@@ -1,6 +1,9 @@
 package gift.exception.user;
 
-public class UserNotFoundException extends RuntimeException {
+
+import gift.exception.NotFoundException;
+
+public class UserNotFoundException extends NotFoundException {
 
     public UserNotFoundException(String message) {
         super(message);
