@@ -31,6 +31,13 @@ public class Category {
         this.description = description;
     }
 
+    public Category(CategoryBuilder builder) {
+        this.name = builder.name;
+        this.color = builder.color;
+        this.imageUrl = builder.imageUrl;
+        this.description = builder.description;
+    }
+
     public Long getId() {
         return id;
     }
@@ -56,6 +63,38 @@ public class Category {
         this.color = request.color();
         this.imageUrl = request.imageUrl();
         this.description = request.description();
+    }
+
+    public static class CategoryBuilder {
+        private String name;
+        private String color;
+        private String imageUrl;
+        private String description;
+
+        public CategoryBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public CategoryBuilder setColor(String color) {
+            this.color = color;
+            return this;
+        }
+
+        public CategoryBuilder setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public CategoryBuilder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Category build() {
+            return new Category(this);
+        }
+
     }
 
 }
