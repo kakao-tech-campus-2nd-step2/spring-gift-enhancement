@@ -45,11 +45,7 @@ public class WishService {
         Product product = productService.getProductById(request.productId());
         User user = userService.getUserById(userId);
 
-        Wish wish = Wish.builder()
-            .quantity(request.quantity())
-            .user(user)
-            .product(product)
-            .build();
+        Wish wish = new Wish(user, product, request.quantity());
 
         Wish savedWish = wishRepository.save(wish);
         return savedWish.getId();
