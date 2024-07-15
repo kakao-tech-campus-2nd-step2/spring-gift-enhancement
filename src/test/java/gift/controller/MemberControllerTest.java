@@ -12,11 +12,11 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 
 
 import gift.dto.MemberDto;
 import gift.dto.request.LoginRequest;
-import gift.exception.CustomException;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MemberControllerTest {
@@ -48,10 +48,11 @@ public class MemberControllerTest {
         assertNotNull(loginResponse.getBody());
 
         LoginRequest failRequest = new LoginRequest("wrongPassword", "wrongPassword");
-        HttpEntity<LoginRequest> failRequestENtity = new HttpEntity<>(failRequest);
-        assertThatThrownBy(
-            () -> restTemplate.postForEntity(loginUrl, failRequestENtity, String.class))
-                .isInstanceOf(CustomException.class);
+        HttpEntity<LoginRequest> failRequestEntity = new HttpEntity<>(failRequest);
+
+        assertThatThrownBy(() -> restTemplate.postForEntity(loginUrl, failRequestEntity, String.class))
+                .isInstanceOf(HttpClientErrorException.class)
+                .hasMessageContaining("User with Request not found");
 
     }
 
