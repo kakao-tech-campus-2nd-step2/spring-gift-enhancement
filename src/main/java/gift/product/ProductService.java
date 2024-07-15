@@ -1,14 +1,11 @@
 package gift.product;
 
-import jakarta.validation.Valid;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 
 @Service
-@Validated
 public class ProductService {
     private final ProductRepository productRepository;
 
@@ -16,7 +13,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public HttpStatus createProduct(@Valid Product newProduct) throws IllegalArgumentException{
+    public HttpStatus createProduct(Product newProduct) {
         productRepository.save(newProduct);
         return HttpStatus.CREATED;
     }
