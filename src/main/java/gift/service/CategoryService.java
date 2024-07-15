@@ -28,19 +28,19 @@ public class CategoryService {
     }
 
     @Transactional
-    public void addCategory(String name) {
+    public Category addCategory(String name) {
         categoryRepository.findByName(name)
             .ifPresent(category -> {
                 throw new DuplicateCategoryException();
             });
 
-        categoryRepository.save(new Category(name));
+        return categoryRepository.save(new Category(name));
     }
 
     @Transactional
     public void updateCategory(Long id, String name) {
         categoryRepository.findById(id)
-            .ifPresentOrElse(c -> c.updateCategory(name),
+            .ifPresentOrElse(category -> category.updateCategory(name),
                 () -> {
                     throw new NotFoundCategoryException();
                 });
