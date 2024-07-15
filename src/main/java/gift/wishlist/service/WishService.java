@@ -30,8 +30,8 @@ public class WishService {
     public WishResponse addWish(Member member, WishRequest request) {
         Product product = validateProductExist(request.getProduct().getId());
         Wish wish = new Wish();
-        wish.setMember(member);
-        wish.setProduct(product);
+        wish.addMember(member);
+        wish.addProduct(product);
 
         wishRepository.save(wish);
         return new WishResponse(wish.getId(), wish.getProduct());

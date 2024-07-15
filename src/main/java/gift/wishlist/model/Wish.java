@@ -46,7 +46,7 @@ public class Wish {
         return member;
     }
 
-    public void setMember(Member member) {
+    public void addMember(Member member) {
         this.member = member;
     }
 
@@ -54,7 +54,7 @@ public class Wish {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void addProduct(Product product) {
         this.product = product;
     }
 
