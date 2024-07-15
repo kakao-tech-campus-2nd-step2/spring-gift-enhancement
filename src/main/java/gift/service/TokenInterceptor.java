@@ -50,7 +50,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
     }
 
-    public Claims getClaims(BearerToken token) throws AuthenticationException {
+    public Claims getClaims(BearerToken token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token.getToken())
@@ -58,7 +58,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         return claims;
     }
 
-    public Member getMemberByAuth(Long memberId) throws AuthenticationException {
+    public Member getMemberByAuth(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("해당 멤버가 없습니다."));
     }
