@@ -1,6 +1,7 @@
 package gift.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
@@ -10,8 +11,11 @@ public record ProductRequest(Long id,
                              @Pattern(regexp = "[a-zA-Z0-9가-힣\\(\\)\\[\\]\\-+&_\\/\\s]+", message = "상품 이름에는 (), [], -, +, &, _, /, 공백을 제외한 특수 문자를 사용할 수 없습니다.")
                              @Pattern(regexp = "^(?!.*카카오).*$", message = "상품 이름에 '카카오' 가 포함 되어 있습니다. 담당 MD와 협의가 필요합니다.")
                              String name,
+                             @NotNull
                              int price,
+                             @NotBlank
                              String imageUrl,
+                             @NotNull
                              Long categoryId
 ) {
 }
