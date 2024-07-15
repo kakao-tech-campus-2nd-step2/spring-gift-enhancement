@@ -15,7 +15,8 @@ public enum ErrorCode {
     INVALID_PRICE("가격은 음수일 수 없습니다.", HttpStatus.BAD_REQUEST),
     INVALID_IMAGE_URL("이미지 URL은 null이거나 빈 문자열일 수 없습니다.", HttpStatus.BAD_REQUEST),
     INVALID_EMAIL("이메일은 null이거나 빈 문자열일 수 없습니다.", HttpStatus.BAD_REQUEST),
-    INVALID_PASSWORD("비밀번호는 null이거나 빈 문자열일 수 없습니다.", HttpStatus.BAD_REQUEST);
+    INVALID_PASSWORD("비밀번호는 null이거나 빈 문자열일 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CATEGORY_NOT_FOUND("해당 카테고리가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
     private final String message;
     private final HttpStatus status;
