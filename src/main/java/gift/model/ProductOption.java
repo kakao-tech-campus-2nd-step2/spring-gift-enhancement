@@ -22,7 +22,7 @@ public class ProductOption extends BaseEntity {
     @Column(name = "additional_price")
     private Integer additionalPrice;
 
-    public ProductOption() {
+    protected ProductOption() {
     }
 
     public ProductOption(Product product, String name, Integer additionalPrice) {

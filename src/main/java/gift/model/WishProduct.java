@@ -23,7 +23,7 @@ public class WishProduct extends BaseEntity {
     @Column(name = "count")
     private Integer count;
 
-    public WishProduct() {
+    protected WishProduct() {
     }
 
     public WishProduct(Product product, Member member, Integer count) {
