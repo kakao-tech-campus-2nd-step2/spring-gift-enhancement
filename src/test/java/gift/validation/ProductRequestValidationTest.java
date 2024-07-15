@@ -32,7 +32,11 @@ public class ProductRequestValidationTest {
     @Test
     @DisplayName("정상 상품 유효성 검사 테스트")
     void checkNormalProductFailed() {
-        ProductRequest request = new ProductRequest("product", 1000, "https://shop.com");
+        ProductRequest request = new ProductRequest(
+                "product",
+                1000,
+                "https://shop.com",
+                "상품권");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -42,7 +46,11 @@ public class ProductRequestValidationTest {
     @Test
     @DisplayName("이름이 15자 초과인 상품 유효성 검사 테스트")
     void checkLongerNameProduct() {
-        ProductRequest request = new ProductRequest("productproductproduct", 1000, "https://shop.com");
+        ProductRequest request = new ProductRequest(
+                "productproductproduct",
+                1000,
+                "https://shop.com",
+                "상품권");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -52,7 +60,11 @@ public class ProductRequestValidationTest {
     @Test
     @DisplayName("이름에 특수 문자가 포함된 상품 유효성 검사 테스트")
     void checkEscapeCharacterProduct() {
-        ProductRequest request = new ProductRequest("pr@duct", 1000, "https://shop.com");
+        ProductRequest request = new ProductRequest(
+                "pr@duct",
+                1000,
+                "https://shop.com",
+                "상품권");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -62,7 +74,11 @@ public class ProductRequestValidationTest {
     @Test
     @DisplayName("이름에 사용 가능한 특수 문자가 포함된 상품 유효성 검사 테스트")
     void checkCorrectEscapeCharacterProduct() {
-        ProductRequest request = new ProductRequest("[(+-_&/)]", 1000, "https://shop.com");
+        ProductRequest request = new ProductRequest(
+                "[(+-_&/)]",
+                1000,
+                "https://shop.com",
+                "상품권");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -72,7 +88,11 @@ public class ProductRequestValidationTest {
     @Test
     @DisplayName("이름에 '카카오'가 포함된 상품 유효성 검사 테스트")
     void checkKakaoProduct() {
-        ProductRequest request = new ProductRequest("카카오 product", 1000, "https://shop.com");
+        ProductRequest request = new ProductRequest(
+                "카카오 product",
+                1000,
+                "https://shop.com",
+                "상품권");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -82,7 +102,11 @@ public class ProductRequestValidationTest {
     @Test
     @DisplayName("가격이 음수인 상품 유효성 검사 테스트")
     void checkMinusPriceProduct() {
-        ProductRequest request = new ProductRequest("product", -1000, "https://shop.com");
+        ProductRequest request = new ProductRequest(
+                "product",
+                -1000,
+                "https://shop.com",
+                "상품권");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 

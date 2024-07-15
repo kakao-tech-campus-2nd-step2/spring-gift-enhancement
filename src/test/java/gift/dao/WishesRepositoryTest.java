@@ -1,5 +1,6 @@
 package gift.dao;
 
+import gift.category.entity.Category;
 import gift.member.dao.MemberRepository;
 import gift.member.entity.Member;
 import gift.product.dao.ProductRepository;
@@ -29,16 +30,28 @@ class WishesRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    private final Category category = new Category.CategoryBuilder()
+            .setName("상품권")
+            .setColor("#ffffff")
+            .setImageUrl("https://product-shop.com")
+            .setDescription("")
+            .build();
+
     @Test
     @DisplayName("위시 추가 및 ID 조회 테스트")
     void saveAndFindById() {
         Member member = new Member("test@email.com", "test");
         member = memberRepository.save(member);
 
-        Product product = new Product("test", 1000, "test.jpg");
-        product = productRepository.save(product);
+        Product product = new Product.ProductBuilder()
+                .setName("test")
+                .setPrice(1000)
+                .setImageUrl("test.jpg")
+                .setCategory(category)
+                .build();
+        Product savedProduct = productRepository.save(product);
 
-        Wish wish = new Wish(member, product);
+        Wish wish = new Wish(member, savedProduct);
         Wish savedWish = wishesRepository.save(wish);
 
         Wish foundWish = wishesRepository.findById(savedWish.getId())
@@ -53,12 +66,17 @@ class WishesRepositoryTest {
     @DisplayName("위시 ID 조회 실패 테스트")
     void findByIdFailed() {
         Member member = new Member("test@email.com", "test");
-        member = memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
 
-        Product product = new Product("test", 1000, "test.jpg");
-        product = productRepository.save(product);
+        Product product = new Product.ProductBuilder()
+                .setName("test")
+                .setPrice(1000)
+                .setImageUrl("test.jpg")
+                .setCategory(category)
+                .build();
+        Product savedProduct = productRepository.save(product);
 
-        Wish wish = new Wish(member, product);
+        Wish wish = new Wish(savedMember, savedProduct);
         wishesRepository.save(wish);
 
         Wish foundWish = wishesRepository.findById(123456789L)
@@ -76,10 +94,20 @@ class WishesRepositoryTest {
         Member member2 = new Member("test2@email.com", "test2");
         member2 = memberRepository.save(member2);
 
-        Product product1 = new Product("product1", 1000, "test1.jpg");
+        Product product1 = new Product.ProductBuilder()
+                .setName("product1")
+                .setPrice(1000)
+                .setImageUrl("test1.jpg")
+                .setCategory(category)
+                .build();
         product1 = productRepository.save(product1);
 
-        Product product2 = new Product("product2", 2000, "test2.jpg");
+        Product product2 = new Product.ProductBuilder()
+                .setName("product2")
+                .setPrice(2000)
+                .setImageUrl("test2.jpg")
+                .setCategory(category)
+                .build();
         product2 = productRepository.save(product2);
 
         Wish wish1 = new Wish(member1, product1);
@@ -104,10 +132,20 @@ class WishesRepositoryTest {
         Member member2 = new Member("test2@email.com", "test2");
         member2 = memberRepository.save(member2);
 
-        Product product1 = new Product("product1", 1000, "test1.jpg");
+        Product product1 = new Product.ProductBuilder()
+                .setName("product1")
+                .setPrice(1000)
+                .setImageUrl("test1.jpg")
+                .setCategory(category)
+                .build();
         product1 = productRepository.save(product1);
 
-        Product product2 = new Product("product2", 2000, "test2.jpg");
+        Product product2 = new Product.ProductBuilder()
+                .setName("product2")
+                .setPrice(2000)
+                .setImageUrl("test2.jpg")
+                .setCategory(category)
+                .build();
         product2 = productRepository.save(product2);
 
         Wish wish1 = new Wish(member1, product1);
@@ -129,7 +167,12 @@ class WishesRepositoryTest {
         Member member = new Member("test@email.com", "test");
         member = memberRepository.save(member);
 
-        Product product = new Product("test", 1000, "test.jpg");
+        Product product = new Product.ProductBuilder()
+                .setName("test")
+                .setPrice(1000)
+                .setImageUrl("test.jpg")
+                .setCategory(category)
+                .build();
         product = productRepository.save(product);
 
         Wish wish = new Wish(member, product);
@@ -147,7 +190,12 @@ class WishesRepositoryTest {
         Member member = new Member("test@email.com", "test");
         member = memberRepository.save(member);
 
-        Product product = new Product("test", 1000, "test.jpg");
+        Product product = new Product.ProductBuilder()
+                .setName("test")
+                .setPrice(1000)
+                .setImageUrl("test.jpg")
+                .setCategory(category)
+                .build();
         product = productRepository.save(product);
 
         Wish wish = new Wish(member, product);
@@ -168,7 +216,12 @@ class WishesRepositoryTest {
         Member member = new Member("test@email.com", "test");
         member = memberRepository.save(member);
 
-        Product product = new Product("test", 1000, "test.jpg");
+        Product product = new Product.ProductBuilder()
+                .setName("test")
+                .setPrice(1000)
+                .setImageUrl("test.jpg")
+                .setCategory(category)
+                .build();
         product = productRepository.save(product);
 
         Wish wish = new Wish(member, product);

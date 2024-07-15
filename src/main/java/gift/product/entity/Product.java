@@ -50,7 +50,11 @@ public class Product {
         this.category = category;
     }
 
-    protected Product() {
+    public Product(ProductBuilder builder) {
+        this.name = builder.name;
+        this.price = builder.price;
+        this.imageUrl = builder.imageUrl;
+        this.category = builder.category;
     }
 
     public Long getId() {
@@ -78,6 +82,38 @@ public class Product {
         this.price = request.price();
         this.imageUrl = request.imageUrl();
         this.category = category;
+    }
+
+    public static class ProductBuilder {
+        private String name;
+        private int price;
+        private String imageUrl;
+        private Category category;
+
+        public ProductBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public ProductBuilder setPrice(int price) {
+            this.price = price;
+            return this;
+        }
+
+        public ProductBuilder setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public ProductBuilder setCategory(Category category) {
+            this.category = category;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(this);
+        }
+
     }
 
 }

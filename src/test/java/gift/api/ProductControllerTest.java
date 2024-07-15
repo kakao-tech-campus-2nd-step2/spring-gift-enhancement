@@ -3,6 +3,7 @@ package gift.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.auth.security.JwtFilter;
 import gift.auth.security.JwtUtil;
+import gift.category.entity.Category;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import gift.product.api.ProductController;
@@ -52,15 +53,32 @@ class ProductControllerTest {
     ProductService productService;
     private final String bearerToken = "Bearer token";
 
+    private final Category category = new Category.CategoryBuilder()
+            .setName("상품권")
+            .setColor("#ffffff")
+            .setImageUrl("https://product-shop.com")
+            .setDescription("")
+            .build();
+
     @Test
     @DisplayName("상품 전체 조회 기능 테스트")
     void getAllProducts() throws Exception {
         List<ProductResponse> products = new ArrayList<>();
         ProductResponse productResponse1 = ProductMapper.toResponseDto(
-                new Product("product1", 1000, "https://testshop.com")
+                new Product.ProductBuilder()
+                        .setName("product1")
+                        .setPrice(1000)
+                        .setImageUrl("https://testshop.com")
+                        .setCategory(category)
+                        .build()
         );
         ProductResponse productResponse2 = ProductMapper.toResponseDto(
-                new Product("product2", 3000, "https://testshop.com")
+                new Product.ProductBuilder()
+                        .setName("product2")
+                        .setPrice(3000)
+                        .setImageUrl("https://testshop.com")
+                        .setCategory(category)
+                        .build()
         );
         products.add(productResponse1);
         products.add(productResponse2);
@@ -82,7 +100,12 @@ class ProductControllerTest {
     @DisplayName("상품 상세 조회 기능 테스트")
     void getProduct() throws Exception {
         ProductResponse response = ProductMapper.toResponseDto(
-                new Product("product1", 1000, "https://testshop.com")
+                new Product.ProductBuilder()
+                        .setName("product1")
+                        .setPrice(1000)
+                        .setImageUrl("https://testshop.com")
+                        .setCategory(category)
+                        .build()
         );
         Long responseId = 1L;
         String responseJson = objectMapper.writeValueAsString(response);
@@ -119,9 +142,13 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 추가 기능 테스트")
     void addProduct() throws Exception {
-        ProductRequest request = new ProductRequest("product1", 1000, "https://testshop.com");
+        ProductRequest request = new ProductRequest(
+                "product1",
+                1000,
+                "https://testshop.com",
+                category.getName());
         ProductResponse response = ProductMapper.toResponseDto(
-                ProductMapper.toEntity(request)
+                ProductMapper.toEntity(request, category)
         );
         String requestJson = objectMapper.writeValueAsString(request);
         String responseJson = objectMapper.writeValueAsString(response);
@@ -187,7 +214,11 @@ class ProductControllerTest {
     @DisplayName("상품 수정 기능 테스트")
     void updateProduct() throws Exception {
         Long productId = 2L;
-        ProductRequest request = new ProductRequest("product2", 3000, "https://testshop.com");
+        ProductRequest request = new ProductRequest(
+                "product2",
+                3000,
+                "https://testshop.com",
+                category.getName());
         String requestJson = objectMapper.writeValueAsString(request);
         when(productService.updateProduct(productId, request)).thenReturn(productId);
 
