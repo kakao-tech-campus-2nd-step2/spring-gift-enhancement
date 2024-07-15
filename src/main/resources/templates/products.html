@@ -104,6 +104,7 @@
             <th>이름</th>
             <th>가격</th>
             <th>이미지</th>
+            <th>카테고리</th>
             <th>수정</th>
             <th>삭제</th>
         </tr>
@@ -122,34 +123,55 @@
 
         function loadProducts(page, size) {
             fetch(`/api/products?page=${page}&size=${size}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log(data); // 응답 데이터를 콘솔에 출력하여 구조 확인
                     const productTableBody = document.getElementById("productTableBody");
                     productTableBody.innerHTML = "";
-                    data.content.forEach(product => {
-                        productTableBody.innerHTML += `
-                            <tr>
-                                <td>${product.id}</td>
-                                <td>${product.name}</td>
-                                <td>${product.price}</td>
-                                <td><img src="${product.imageUrl}" alt="이미지"></td>
-                                <td class="actions"><a href="/products/edit/${product.id}">수정</a></td>
-                                <td class="actions">
-                                    <form onsubmit="event.preventDefault(); deleteProduct(${product.id});">
-                                        <button type="submit">삭제</button>
-                                    </form>
-                                </td>
-                            </tr>`;
-                    });
+
+                    if (data.products && Array.isArray(data.products)) {
+                        data.products.forEach(product => {
+                            productTableBody.innerHTML += `
+                                <tr>
+                                    <td>${product.id}</td>
+                                    <td>${product.name}</td>
+                                    <td>${product.price}</td>
+                                    <td><img src="${product.imageUrl}" alt="이미지"></td>
+                                    <td>${product.category ? product.category.name : 'N/A'}</td>
+                                    <td class="actions"><a href="/products/edit/${product.id}">수정</a></td>
+                                    <td class="actions">
+                                        <form onsubmit="event.preventDefault(); deleteProduct(${product.id});">
+                                            <button type="submit">삭제</button>
+                                        </form>
+                                    </td>
+                                </tr>`;
+                        });
+                    } else {
+                        console.error('Invalid data structure:', data);
+                        alert('상품 데이터를 로드하는 중 문제가 발생했습니다.');
+                    }
                     setupPagination(data);
+                })
+                .catch(error => {
+                    console.error('Error loading products:', error);
+                    alert('상품 목록을 로드하는 중 문제가 발생했습니다.');
                 });
         }
 
         function setupPagination(data) {
             const pagination = document.getElementById("pagination");
             pagination.innerHTML = "";
-            for (let i = 0; i < data.totalPages; i++) {
-                pagination.innerHTML += `<a href="#" onclick="loadProducts(${i}, 10); return false;">${i + 1}</a>`;
+            if (data.totalPages && data.totalPages > 0) {
+                for (let i = 0; i < data.totalPages; i++) {
+                    pagination.innerHTML += `<a href="#" onclick="loadProducts(${i}, 10); return false;">${i + 1}</a>`;
+                }
+            } else {
+                console.error('Invalid pagination data:', data);
             }
         }
 
@@ -162,6 +184,10 @@
                     } else {
                         alert('상품 삭제에 실패했습니다.');
                     }
+                })
+                .catch(error => {
+                    console.error('Error deleting product:', error);
+                    alert('상품 삭제 중 문제가 발생했습니다.');
                 });
         }
     });

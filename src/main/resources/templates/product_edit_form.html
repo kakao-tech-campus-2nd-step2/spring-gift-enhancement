@@ -32,7 +32,7 @@
             margin-bottom: 10px;
             color: #555;
         }
-        input[type="text"] {
+        input[type="text"], select {
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ddd;
@@ -54,62 +54,17 @@
 <body>
 <div class="container">
     <h1>상품 수정</h1>
-    <form onsubmit="event.preventDefault(); updateProduct();">
-        <input type="hidden" id="productId" th:value="${product.id}">
-        <label>이름: <input type="text" id="name" value=""></label><br>
-        <label>가격: <input type="text" id="price" value=""></label><br>
-        <label>이미지 URL: <input type="text" id="imageUrl" value=""></label><br>
+    <form th:action="@{/products/edit/{id}(id=${product.id})}" method="post">
+        <label>이름: <input type="text" th:value="${product.name}" name="name"></label><br>
+        <label>가격: <input type="text" th:value="${product.price}" name="price"></label><br>
+        <label>이미지 URL: <input type="text" th:value="${product.imageUrl}" name="imageUrl"></label><br>
+        <label>카테고리:
+            <select name="categoryId">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == product.category.id}"></option>
+            </select>
+        </label><br>
         <button type="submit">수정</button>
     </form>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const productId = document.getElementById('productId').value;
-
-        if (productId) {
-            fetch(`/api/products/${productId}`)
-                .then(response => response.json())
-                .then(product => {
-                    document.getElementById('name').value = product.name || '';
-                    document.getElementById('price').value = product.price || '';
-                    document.getElementById('imageUrl').value = product.imageUrl || '';
-                })
-                .catch(error => {
-                    console.error('Error fetching product:', error);
-                });
-        }
-    });
-
-    function updateProduct() {
-        const productId = document.getElementById('productId').value;
-        const name = document.getElementById('name').value;
-        const price = parseInt(document.getElementById('price').value);
-        const imageUrl = document.getElementById('imageUrl').value;
-
-        console.log('Updating product:', { productId, name, price, imageUrl });
-
-        fetch(`/api/products/${productId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name: name, price: price, imageUrl: imageUrl })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert('상품이 수정되었습니다.');
-                window.location.href = '/products';
-            })
-            .catch(error => {
-                console.error('Error updating product:', error);
-                alert('상품 수정 중 오류가 발생했습니다.');
-            });
-    }
-</script>
 </body>
 </html>

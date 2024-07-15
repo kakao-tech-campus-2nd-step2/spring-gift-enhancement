@@ -4,8 +4,7 @@ import gift.dto.ProductPageResponseDto;
 import gift.dto.ProductRequestDto;
 import gift.dto.ProductResponseDto;
 import gift.service.ProductService;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import gift.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +13,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/products")
 public class ProductViewController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductViewController(ProductService productService) {
+    public ProductViewController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
     public String getAllProducts(Model model,
-                                 @RequestParam(defaultValue = "0") @Min(0) int page,
-                                 @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size) {
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size) {
         ProductPageResponseDto productPage = productService.getAllProducts(page, size);
 
         model.addAttribute("productPage", productPage);
@@ -33,7 +34,8 @@ public class ProductViewController {
 
     @GetMapping("/new")
     public String showAddProductForm(Model model) {
-        model.addAttribute("product", new ProductRequestDto("", 0, ""));
+        model.addAttribute("product", new ProductRequestDto("", 0, "", 0L));
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "product_form";
     }
 
@@ -47,6 +49,7 @@ public class ProductViewController {
     public String showEditProductForm(@PathVariable Long id, Model model) {
         ProductResponseDto product = productService.getProductById(id);
         model.addAttribute("product", product);
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "product_edit_form";
     }
 
