@@ -39,7 +39,7 @@ public class UserControllerTest {
     }
 
     @AfterEach
-    public void 데이터_삭제() {
+    public void tearDown() {
         userRepository.deleteAll();
     }
 
