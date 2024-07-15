@@ -1,6 +1,8 @@
 package gift.Service;
 
 import gift.ConverterToDto;
+import gift.DTO.Category;
+import gift.DTO.CategoryDto;
 import gift.DTO.Product;
 import gift.DTO.ProductDto;
 import gift.Repository.ProductRepository;
@@ -34,20 +36,29 @@ public class ProductService {
   }
 
   public ProductDto addProduct(ProductDto productDto) {
-    Product product = new Product(productDto.getId(), productDto.getName(),
-      productDto.getPrice(), productDto.getImageUrl());
-    productRepository.save(product);
+    CategoryDto categoryDto = productDto.getCategoryDto();
+    Category category = new Category(categoryDto.getId(), categoryDto.getName(),
+      categoryDto.getColor(), categoryDto.getImageUrl(), categoryDto.getDescription());
 
+    Product product = new Product(productDto.getId(), productDto.getName(),
+      productDto.getPrice(), productDto.getImageUrl(), category);
+
+    productRepository.save(product);
     return productDto;
   }
 
   public ProductDto updateProduct(Long id, ProductDto updatedProductDto) {
     Product existingProduct = productRepository.findById(id)
       .orElseThrow(() -> new EmptyResultDataAccessException("해당 상품이 없습니다.", 1));
+
+    CategoryDto updateCategoryDto = updatedProductDto.getCategoryDto();
+    Category updateCategory = new Category(updatedProductDto.getId(), updatedProductDto.getName(),
+      updateCategoryDto.getColor(), updatedProductDto.getImageUrl(),
+      updateCategoryDto.getDescription());
+
     Product newProduct = new Product(id,
       updatedProductDto.getName(), updatedProductDto.getPrice(),
-      updatedProductDto.getImageUrl());
-    productRepository.deleteById(id);
+      updatedProductDto.getImageUrl(), updateCategory);
     productRepository.save(newProduct);
 
     return ConverterToDto.convertToProductDto(newProduct);

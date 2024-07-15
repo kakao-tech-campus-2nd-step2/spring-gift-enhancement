@@ -39,30 +39,33 @@ public class Product {
   public Product() {
   }
 
-  public Product(Long id, String name, int price, String imageUrl) {
+  public Product(Long id, String name, int price, String imageUrl, Category category) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
+    this.category=category;
   }
 
   public Long getId() {
-    return id;
+    return this.id;
   }
 
 
   public String getName() {
-    return name;
+    return this.name;
   }
 
 
   public int getPrice() {
-    return price;
+    return this.price;
   }
 
 
   public String getImageUrl() {
-    return imageUrl;
+    return this.imageUrl;
   }
+
+  public Category getCategory(){return this.category;}
 
 }
