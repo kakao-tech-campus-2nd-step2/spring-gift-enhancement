@@ -18,6 +18,10 @@ public class Product {
 
   @OneToMany(mappedBy = "product")
   private final List<WishList> wishlists = new ArrayList<>();
+
+  @OneToMany(mappedBy = "product")
+  private final List<Category> categories=new ArrayList<>();
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
