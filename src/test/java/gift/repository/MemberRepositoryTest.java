@@ -190,14 +190,16 @@ class MemberRepositoryTest {
 
         products.save(expectedProduct);
         expectedProduct.addWish(expectedWish);
-        Member savedMember = members.save(expectedMember);
+
+        members.save(expectedMember);
         members.flush();
         entityManager.clear();
 
-        // when
-        Member foundMember = members.findById(savedMember.getId()).orElse(null);
+        Member foundMember = members.findById(expectedMember.getId()).orElse(null);
         assertNotNull(foundMember);
         Wish foundWish = foundMember.getWishes().get(0);
+
+        // when
         foundMember.removeWish(foundWish);
         members.flush();
         entityManager.clear();
