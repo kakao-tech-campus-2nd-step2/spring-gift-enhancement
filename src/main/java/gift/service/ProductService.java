@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ public class ProductService {
         this.categoryService = categoryService;
     }
 
+    @Transactional
     public ProductResponseDto addProduct(ProductRequestDto productRequestDTO) {
         Category category = categoryService.getCategoryEntityById(productRequestDTO.getCategoryId());
         Product product = ProductMapper.toProduct(productRequestDTO, category);
@@ -35,6 +37,7 @@ public class ProductService {
         return ProductMapper.toProductResponseDTO(createdProduct);
     }
 
+    @Transactional
     public ProductResponseDto updateProduct(Long id, ProductRequestDto productRequestDTO) {
         Product existingProduct = getProductEntityById(id);
         Category category = categoryService.getCategoryEntityById(productRequestDTO.getCategoryId());
@@ -48,22 +51,26 @@ public class ProductService {
         return ProductMapper.toProductResponseDTO(existingProduct);
     }
 
+    @Transactional(readOnly = true)
     public ProductPageResponseDto getAllProducts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductResponseDto> productDTOs = productRepository.findAll(pageable).map(ProductMapper::toProductResponseDTO);
         return ProductPageResponseDto.fromPage(productDTOs);
     }
 
+    @Transactional(readOnly = true)
     public ProductResponseDto getProductById(Long id) {
         Product product = getProductEntityById(id);
         return ProductMapper.toProductResponseDTO(product);
     }
 
+    @Transactional(readOnly = true)
     public Product getProductEntityById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND, "ID: " + id));
     }
 
+    @Transactional
     public boolean deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
             throw new BusinessException(ErrorCode.PRODUCT_NOT_FOUND, "ID: " + id);
@@ -72,6 +79,7 @@ public class ProductService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<ProductResponseDto> getProductsByIds(List<Long> ids) {
         List<Product> products = productRepository.findAllById(ids);
         return products.stream()
