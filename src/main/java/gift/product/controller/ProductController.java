@@ -46,7 +46,7 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping
+    @GetMapping("/page")
     @ResponseBody
     public Page<Product> getProductsByPage(@RequestParam int page,
                                            @RequestParam int size,

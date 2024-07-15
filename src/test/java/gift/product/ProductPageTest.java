@@ -73,13 +73,13 @@ public class ProductPageTest {
         // Then
         // Page 1 assertions
         assertThat(page1.getContent()).hasSize(2);
-        assertThat(page1.getContent().get(0).getName()).isEqualTo("Hot Americano");
-        assertThat(page1.getContent().get(1).getName()).isEqualTo("Ice Americano");
+        assertThat(page1.getContent().get(0).getName()).isEqualTo("Honey Grapefruit Tea");
+        assertThat(page1.getContent().get(1).getName()).isEqualTo("Milk Shake");
 
         // Page 2 assertions
         assertThat(page2.getContent()).hasSize(2);
         assertThat(page2.getContent().get(0).getName()).isEqualTo("Caffe Latte");
-        assertThat(page2.getContent().get(1).getName()).isEqualTo("Milk Shake");
+        assertThat(page2.getContent().get(1).getName()).isEqualTo("Ice Americano");
 
         // 전체 페이지 수와 element 수에 대한 추가적인 assertion
         assertThat(page1.getTotalPages()).isEqualTo(3);
