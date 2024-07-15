@@ -1,5 +1,6 @@
 package gift.product;
 
+import gift.category.CategoryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -16,8 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/manager")
 public class ProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
+        this.categoryService = categoryService;
         ;
         this.productService = productService;
     }
@@ -71,18 +74,23 @@ public class ProductController {
     @GetMapping("/products/add")
     public String addProductView(Model model) {
         model.addAttribute("newProduct", new ProductDTO());
+        model.addAttribute("categories", categoryService.findAllCategories());
         return "AddProduct";
     }
 
     @GetMapping("/products/update/{id}")
     public String updateProduct(@PathVariable Long id, Model model) {
-        model.addAttribute(productService.findByID(id));
+        model.addAttribute("product", new ProductDTO(productService.findByID(id)));
+        model.addAttribute("categories", categoryService.findAllCategories());
+
         return "UpdateProduct";
     }
 
     @GetMapping("/products/{id}")
     public String getProduct(@PathVariable long id, Model model) {
-        model.addAttribute(productService.findByID(id));
+        model.addAttribute("product", new ProductDTO(productService.findByID(id)));
+        model.addAttribute("categories", categoryService.findAllCategories());
+
         return "ProductInfo";
     }
 }
