@@ -1,4 +1,4 @@
-package gift.exception;
+package gift.exception.product;
 
 public class NotFoundProductException extends RuntimeException {
     private static final String NOT_FOUND_PRODUCT_MESSAGE = "상품이 존재하지 않습니다.";

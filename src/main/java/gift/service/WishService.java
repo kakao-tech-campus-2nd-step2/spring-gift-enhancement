@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.exception.NotFoundProductException;
+import gift.exception.product.NotFoundProductException;
 import gift.exception.wishlist.DuplicateWishException;
 import gift.exception.member.NotFoundMemberException;
 import gift.exception.wishlist.NotFoundWishException;

@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.exception.NotFoundProductException;
+import gift.exception.product.NotFoundProductException;
 import gift.model.Product;
 import gift.repository.ProductRepository;
 import java.util.List;
