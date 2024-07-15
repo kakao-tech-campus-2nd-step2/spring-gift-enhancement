@@ -24,6 +24,15 @@
       <input type="text" id="imageUrl" th:value="${product.imageUrl}" required/>
     </div>
     <div>
+      <label for="categoryName">Category</label>
+      <select id="categoryName">
+        <option value="">Select</option>
+        <option th:each="category : ${categoryList}"
+                th:text="${category.name}"
+                th:value="${category.name}"></option>
+      </select>
+    </div>
+    <div>
       <button type="submit">Edit</button>
       <a th:href="@{/admin}">Cancel</a>
     </div>
@@ -34,6 +43,8 @@
           const name = document.getElementById('name').value;
           const price = document.getElementById('price').value;
           const imageUrl = document.getElementById('imageUrl').value;
+          const categoryName = document.getElementById('categoryName').value;
+
           const token = localStorage.getItem('token');
 
           fetch(`/api/products/${id}`, {
@@ -46,7 +57,9 @@
                   id: id,
                   name: name,
                   price: price,
-                  imageUrl: imageUrl })
+                  imageUrl: imageUrl,
+                  categoryName: categoryName
+              })
           })
               .then(response => {
                   if (!response.ok) {
