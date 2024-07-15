@@ -4,7 +4,6 @@ package gift.wishes;
 import gift.jwt.Login;
 import gift.member.UserDTO;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,7 +25,7 @@ public class WishController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Wish>> getWishList(@Login UserDTO userDTO){
+    public ResponseEntity<List<WishResponse>> getWishList(@Login UserDTO userDTO){
         return ResponseEntity.ok(wishService.findByMemberId(userDTO.getUserId()));
     }
 
@@ -51,7 +50,7 @@ public class WishController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<Page<Wish>> getWishListPage(@Login UserDTO userDTO, @RequestParam(value="page", defaultValue="0")int page){
+    public ResponseEntity<WishPageResponse> getWishListPage(@Login UserDTO userDTO, @RequestParam(value="page", defaultValue="0")int page){
         return ResponseEntity.ok(wishService.getWishPage(userDTO.getUserId(), page));
     }
 }
