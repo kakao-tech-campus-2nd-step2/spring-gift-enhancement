@@ -1,4 +1,4 @@
-# spring-gift-product
+# W4 : spring-gift-enhancement
 
 ## 프로그래밍 요구사항
 
@@ -18,72 +18,45 @@
 ## 기능 요구 사항
 
 ### Step 1
+상품 정보에 카테고리를 추가한다. 상품과 카테고리 모델 간의 관계를 고려하여 설계하고 구현한다.
 
-상품을 조회, 추가, 수정, 삭제할 수 있는 간단한 HTTP API를 구현한다.
+    - 카테고리는 1차 카테고리만 있으며 2차 카테고리는 고려하지 않는다.
+    - 카테고리는 수정할 수 있다.
+    - 관리자 화면에서 상품을 추가할 때 카테고리를 지정할 수 있다.
+    - 카테고리의 예시는 아래와 같다.
+    - -   교환권, 상품권, 뷰티, 패션, 식품, 리빙/도서, 레저/스포츠, 아티스트/캐릭터, 유아동/반려, 디지털/가전, 카카오프렌즈, 트렌드 선물, 백화점
 
-    HTTP 요청과 응답은 JSON 형식으로 주고받는다.
-    현재는 별도의 데이터베이스가 없으므로 적절한 자바 컬렉션 프레임워크를 사용하여 메모리에 저장한다.
+아래 예시와 같이 HTTP 메시지를 주고받도록 구현한다.
 
-![alt text](image-1.png)
+Request
 
-이 중 에러와 권장되지 않음에 해당하는 동작은 구현하지 않았다.
-
-
-입력 : 
 ```HTTP
-GET /api/products HTTP/1.1
+
+GET /api/categories HTTP/1.1
 ```
+                  
 
-출력 : 
+Response
+                    
 ```HTTP
+
 HTTP/1.1 200 
 Content-Type: application/json
-
 [
   {
-    "id": 8146027,
-    "name": "아이스 카페 아메리카노 T",
-    "price": 4500,
-    "imageUrl": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"
+    "id": 91,
+    "name": "교환권",
+    "color": "#6c95d1",
+    "imageUrl": "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png",
+    "description": ""
   }
 ]
-```
-
-힌트
-
-현재는 별도의 데이터베이스가 없으므로 적절한 컬렉션을 이용하여 메모리에 저장한다.
-
-```Java               
-public class ProductController {
-    private final Map<Long, Product> producsts = new HashMap<>();
-    }
 
 ```
-
-### Step 2
-기능 요구 사항
-
-상품을 조회, 추가, 수정, 삭제할 수 있는 관리자 화면을 구현한다.
-
-    Thymeleaf를 사용하여 서버 사이드 렌더링을 구현한다.
-    기본적으로는 HTML 폼 전송 등을 이용한 페이지 이동을 기반으로 하지만, 자바스크립트를 이용한 비동기 작업에 관심이 있다면 이미 만든 상품 API를 이용하여 AJAX 등의 방식을 적용할 수 있다.
-    상품 이미지의 경우, 파일을 업로드하지 않고 URL을 직접 입력한다.
-
-아래 예시와 꼭 같을 필요는 없으며, 가볍게 참고한다
-
-
-
-### Step 3
-자바 컬렉션 프레임워크를 사용하여 메모리에 저장하던 상품 정보를 데이터베이스에 저장한다.
 
 
 ## 클래스 설계
-- [X] Product : 상품 정보 저장
-- [X] ProductController : API
-- [X] Application : Spring 어플레케이션 시작
 
-### Step 2
-- [X] AdminContoller : 상품 관리자 페이지
+### Step 1
+- [ ] Category : 상품의 카테고리 저장하는 Entity
 
-### Step 3
-- [X] ProductDAO : h2 데이터에비스와 연결하여 상품 정보 저장(해시맵 대체)
