@@ -1,6 +1,8 @@
 package gift.controller;
 
 import gift.exception.ForbiddenException;
+import gift.model.ApiResponse;
+import gift.model.HttpResult;
 import gift.model.Member;
 import gift.service.MemberService;
 import java.util.Collections;
@@ -24,29 +26,33 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody Member member) {
+    public ResponseEntity<ApiResponse> register(@RequestBody Member member) {
         return memberService.registerMember(member)
             .map(token -> { // Optional<String>을 mapping -> isPresent면 map 안 실행 // 매개변수 token으로
-                Map<String, Object> response = new HashMap<>();
-                response.put("message", "Member registered successfully");
-                response.put("token", token); // 생성된 토큰도 같이 보내준다.
-                return new ResponseEntity<>(response, HttpStatus.OK);
+                var memberRegisterSuccessResponse = new ApiResponse(HttpResult.OK,
+                    "Member Register success", HttpStatus.OK);
+                return new ResponseEntity<>(memberRegisterSuccessResponse,
+                    memberRegisterSuccessResponse.getHttpStatus());
             })
             .orElseGet(() -> { // isEmpty
-                Map<String, Object> response = new HashMap<>();
-                response.put("message", "Registration failed");
-                response.put("errors", Collections.singletonList("email: 올바른 형식의 이메일 주소여야 합니다"));
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                var memberRegisterFailResponse = new ApiResponse(HttpResult.ERROR,
+                    "Registration Failed, 올바른 이메일 형식이 아닙니다.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(memberRegisterFailResponse,
+                    memberRegisterFailResponse.getHttpStatus());
             });
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Member member){
+    public ResponseEntity<ApiResponse> login(@RequestBody Member member) {
         return memberService.login(member.getEmail(), member.getPassword())
             .map(token -> { // 토큰이 리턴 -> 정상 로그인 됨
                 Map<String, Object> response = new HashMap<>();
                 response.put("token", token);
-                return new ResponseEntity<>(response, HttpStatus.OK);
+                var memberLoginSucessResponse = new ApiResponse(HttpResult.OK,
+                    "Request Success. 정상 로그인 되었습니다",
+                    HttpStatus.OK);
+                return new ResponseEntity<>(memberLoginSucessResponse,
+                    memberLoginSucessResponse.getHttpStatus());
             })
             .orElseThrow(() -> // 토큰 리턴이 안됨 -> 로그인 안됨
                 new ForbiddenException("없는 계정입니다")
