@@ -30,14 +30,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getProduct(
-        @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
-        @RequestParam(name = "productId", required = false) Long productId) {
-        if (productId != null) {
-            return ResponseEntity.ok(productService.getProductById(productId));
-        }
+    public ResponseEntity<?> getAllProduct(
+        @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         ProductPageDTO productsPage = productService.getAllProduct(page, size);
         return ResponseEntity.ok().body(productsPage.products());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PostMapping

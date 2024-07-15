@@ -37,12 +37,6 @@ public class WishListRepositoryTest {
     private Member memberA;
     private Member memberB;
     private final Category category = new Category(1L, "test-category", "000000", "test-image.url", "");
-    private Product createProduct(Long id, String name, long price, String imageUrl) {
-        return new Product(id, name, price, imageUrl, category);
-    }
-    private WishList createWishList(Member member, Product product, long quantity) {
-        return new WishList(member, product, quantity);
-    }
 
     @BeforeEach
     void setUp() {
@@ -112,6 +106,13 @@ public class WishListRepositoryTest {
         update.setQuantity(3);
 
         assertThat(update.getQuantity()).isEqualTo(3);
+    }
+
+    private Product createProduct(Long id, String name, long price, String imageUrl) {
+        return new Product(id, name, price, imageUrl, category);
+    }
+    private WishList createWishList(Member member, Product product, long quantity) {
+        return new WishList(member, product, quantity);
     }
 
 }
