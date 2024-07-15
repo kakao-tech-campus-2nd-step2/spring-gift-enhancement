@@ -20,6 +20,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByEmailAndIsDelete(String email, Integer isDelete);
 
     //    이메일,pw검증
-    Optional<UserEntity> findAllByEmailAndPasswordAndIsDelete(String email, String password,
+    Optional<UserEntity> findByEmailAndPasswordAndIsDelete(String email, String password,
         Integer isDelete);
 }
