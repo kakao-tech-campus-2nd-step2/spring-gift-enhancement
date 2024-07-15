@@ -33,7 +33,7 @@ public class Product {
     @OneToMany(mappedBy = "product", orphanRemoval = true)
     private final List<Wish> wishList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
