@@ -18,6 +18,7 @@ public class ProductRequest {
 
     private String imgUrl;
 
+    public ProductRequest() {}
 
     public ProductRequest(Long id, String name, int price, String imgUrl) {
         this.id = id;
