@@ -6,6 +6,16 @@ create table users
     password varchar(50)
 );
 
+drop table if exists category CASCADE;
+create table category
+(
+    id          bigint AUTO_INCREMENT PRIMARY KEY,
+    name        varchar(255),
+    color       varchar(255),
+    imageurl    varchar(255),
+    description varchar(255)
+);
+
 drop table if exists wishlist CASCADE;
 create table wishlist
 (
