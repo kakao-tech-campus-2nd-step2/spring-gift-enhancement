@@ -24,6 +24,12 @@ public class Wish {
     protected Wish () {
     }
 
+    private Wish(Builder builder) {
+        this.member = builder.member;
+        this.product = builder.product;
+        this.quantity = builder.quantity;
+    }
+
     public Wish(Long id, Member member, Product product, int quantity) {
         this.id = id;
         this.member = member;
@@ -61,7 +67,30 @@ public class Wish {
         this.product = product;
     }
 
-    // 테스트 시 유용
+    public static class Builder{
+        private Member member;
+        private Product product;
+        private int quantity;
+
+        public Builder member(Member member){
+            this.member = member;
+            return this;
+        }
+
+        public Builder product(Product product){
+            this.product = product;
+            return this;
+        }
+
+        public Builder qunatity(int quantity){
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Wish build() {
+            return new Wish(this);
+        }
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
