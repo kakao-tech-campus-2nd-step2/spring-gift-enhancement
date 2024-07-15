@@ -1,7 +1,7 @@
 package gift.common.resolver;
 
-import gift.member.model.Member;
-import gift.member.service.MemberService;
+import gift.entity.Member;
+import gift.service.MemberService;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

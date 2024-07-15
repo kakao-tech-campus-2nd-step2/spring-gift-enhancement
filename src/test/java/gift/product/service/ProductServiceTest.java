@@ -2,9 +2,10 @@ package gift.product.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.product.model.Product;
-import gift.product.repository.ProductRepository;
-import gift.product.validator.ProductNameValidator;
+import gift.entity.Product;
+import gift.repository.ProductRepository;
+import gift.validator.ProductNameValidator;
+import gift.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

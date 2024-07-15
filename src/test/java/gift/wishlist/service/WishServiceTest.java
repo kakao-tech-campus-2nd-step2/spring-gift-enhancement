@@ -2,13 +2,14 @@ package gift.wishlist.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.member.model.Member;
-import gift.member.repository.MemberRepository;
-import gift.product.model.Product;
-import gift.product.repository.ProductRepository;
-import gift.wishlist.dto.WishResponse;
-import gift.wishlist.model.Wish;
-import gift.wishlist.repository.WishRepository;
+import gift.entity.Member;
+import gift.repository.MemberRepository;
+import gift.entity.Product;
+import gift.repository.ProductRepository;
+import gift.dto.WishResponse;
+import gift.entity.Wish;
+import gift.repository.WishRepository;
+import gift.service.WishService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
