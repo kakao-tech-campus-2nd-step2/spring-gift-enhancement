@@ -131,6 +131,7 @@
     <th>ID</th>
     <th>Name</th>
     <th>Price</th>
+    <th>Category</th>
     <th>Image</th>
     <th>Actions</th>
   </tr>
@@ -140,6 +141,7 @@
     <td th:text="${product.id}">1</td>
     <td th:text="${product.name}">Name</td>
     <td th:text="${product.price}">Price</td>
+    <td th:text="${product.category}">Category</td>
     <td><img th:src="${product.imageUrl}" alt="product image" width="100"/></td>
     <td class="btn-group">
       <input type="number" min="1" value="1" class="quantity" style="width: 60px; margin-right: 10px;">

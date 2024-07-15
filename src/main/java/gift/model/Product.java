@@ -25,16 +25,19 @@ public class Product {
     @Column(name = "image_url", nullable = false)
     @NotNull(message = "URL에 NULL 불가능")
     private String imageUrl;
+    @Column(name = "category", nullable = false)
+    private int category;
 
     // 생성자
     public Product() {
     }
 
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, String name, int price, String imageUrl , int category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     //getter
@@ -49,6 +52,9 @@ public class Product {
     }
     public String getImageUrl() {
         return imageUrl;
+    }
+    public int getCategory() {
+        return category;
     }
 
 
@@ -65,4 +71,5 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+    public  void  setCategory(int category) { this.category=category;}
 }

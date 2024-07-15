@@ -3,21 +3,21 @@ package gift.service;
 import gift.dto.ProductDTO;
 import gift.model.Product;
 import gift.repository.ProductRepository;
-import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
-
+    @Autowired
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -38,7 +38,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void saveProduct(ProductDTO productDTO) {
-
         Product product = convertToEntity(productDTO);
         productRepository.save(product);
     }
@@ -64,6 +63,7 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setName(product.getName());
         productDTO.setPrice(product.getPrice());
         productDTO.setImageUrl(product.getImageUrl());
+        productDTO.setCategory(product.getCategory());
         return productDTO;
     }
 
@@ -73,6 +73,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
         product.setImageUrl(productDTO.getImageUrl());
+        product.setCategory(productDTO.getCategory());
         return product;
     }
 
@@ -81,6 +82,4 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageable)
             .map(this::convertToDTO);
     }
-
 }
-

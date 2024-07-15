@@ -8,6 +8,7 @@ public class ProductDTO {
     private String name;
     private int price;
     private String imageUrl;
+    private int category;
 
     public ProductDTO() {
     }
@@ -25,6 +26,7 @@ public class ProductDTO {
     public String getImageUrl() {
         return imageUrl;
     }
+    public int getCategory() {return category;}
 
     // Setters
     public void setId(Long id) {
@@ -39,5 +41,6 @@ public class ProductDTO {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+    public void setCategory(int category) {this.category = category;}
 }
 
