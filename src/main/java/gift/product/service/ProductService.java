@@ -31,7 +31,7 @@ public class ProductService {
 
         List<ProductResDto> productResDtos = products.stream()
                 .map(ProductResDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return new PageImpl<>(productResDtos, pageable, products.getTotalElements());
     }
