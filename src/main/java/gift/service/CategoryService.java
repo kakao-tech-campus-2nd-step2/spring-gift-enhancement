@@ -19,7 +19,7 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CategoryResponse> getCategories(Pageable pageable) {
+    public Page<CategoryResponse> getAllCategories(Pageable pageable) {
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
         return categoryPage.map(CategoryMapper::toResponse);
     }

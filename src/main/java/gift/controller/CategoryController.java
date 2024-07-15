@@ -25,7 +25,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<Page<CategoryResponse>> getCategories(
         @PageableDefault(size = PageConfig.PAGE_PER_COUNT, sort = PageConfig.SORT_STANDARD, direction = Direction.DESC) Pageable pageable) {
-        Page<CategoryResponse> categoryPage = categoryService.getCategories(pageable);
+        Page<CategoryResponse> categoryPage = categoryService.getAllCategories(pageable);
         return ResponseEntity.ok(categoryPage);
     }
 }
