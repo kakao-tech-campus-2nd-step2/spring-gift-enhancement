@@ -1,5 +1,7 @@
 package gift.product.service;
 
+import gift.product.dto.ProductRequest;
+import gift.product.dto.ProductResponse;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
 import gift.product.validator.ProductNameValidator;
@@ -38,9 +40,19 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public Product save(@Valid Product product) {
+    public ProductResponse addProduct(@Valid ProductRequest productRequest) {
+        Product product = ProductRequest.toEntity(productRequest);
         validateProduct(product);
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        return ProductResponse.from(savedProduct);
+    }
+
+    public ProductResponse updateProduct(Long id, @Valid ProductRequest productRequest) {
+        Product product = ProductRequest.toEntity(productRequest);
+        product.setId(id);
+        validateProduct(product);
+        Product savedProduct = productRepository.save(product);
+        return ProductResponse.from(savedProduct);
     }
 
     public void deleteById(Long id) {
