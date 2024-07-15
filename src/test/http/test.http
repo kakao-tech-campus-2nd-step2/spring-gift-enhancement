@@ -1,0 +1,39 @@
+### DELETE request with path valiable
+DELETE http://localhost:8080/api/products/5
+#Accept: application/json
+
+### 회원가입
+POST http://localhost:8080/api/member/signUp
+Content-Type: application/json
+
+{
+  "email": "asdf@gmail.com",
+  "password": "1234"
+}
+
+### 로그인
+POST http://localhost:8080/api/member/login
+Content-Type: application/json
+
+{
+  "email": "asdf@gmail.com",
+  "password": "1234"
+}
+
+### 상품추가
+POST http://localhost:8080/api/products?name=a1&price=1000&imageUrl=aaa.jpg
+
+
+### 위시리스트 페이지 조회
+GET http://localhost:8080/api/wishlist?page=0&size=10
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2RmQGdtYWlsLmNvbSJ9.wRzdf9FJyjWqf_n65eXE6ZiDKatUiOZ0h-Ll8MxDdcQ
+
+### 위시리스트 추가
+POST http://localhost:8080/api/wishlist
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2RmQGdtYWlsLmNvbSJ9.wRzdf9FJyjWqf_n65eXE6ZiDKatUiOZ0h-Ll8MxDdcQ
+
+{
+  "productName": "bbb",
+  "quantity": 5
+}
