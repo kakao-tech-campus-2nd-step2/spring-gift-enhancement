@@ -13,4 +13,11 @@ public class CategoryRequest {
         return name;
     }
 
+    public CategoryRequest() {
+    }
+
+    public CategoryRequest(String name) {
+        this.name = name;
+    }
+
 }
