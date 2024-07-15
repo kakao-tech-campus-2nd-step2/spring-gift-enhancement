@@ -33,8 +33,7 @@ public class WishRepositoryTest {
     @BeforeEach
     void beforeEach(){
         member = new Member(null, "na", "na@gmail.com","1234");
-        product = new Product(null, "test_product", 1234, null, 1L);
-
+        product = new Product(null, "test_product", 1234, null);
         memberRepository.save(member);
         productRepository.save(product);
     }

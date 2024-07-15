@@ -21,7 +21,7 @@ public class ProductRepositoryTest {
 
     @Test
     void save() {
-        Product expected = new Product(1L, "아메리카노", 1000, "no image", 1L);
+        Product expected = new Product(1L, "아메리카노", 1000, "no image");
 
         Product actual = productRepository.save(expected);
         assertAll(
@@ -33,9 +33,7 @@ public class ProductRepositoryTest {
     @Test
     void deleteById() {
         Long id = 1L;
-
-        Product expected = new Product(1L, "아메리카노", 1000, "no image", 1L);
-
+        Product expected = new Product(1L, "아메리카노", 1000, "no image");
         productRepository.save(expected);
 
         productRepository.deleteById(id);

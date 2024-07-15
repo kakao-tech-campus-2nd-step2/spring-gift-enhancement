@@ -17,9 +17,6 @@ public class ProductRequest {
 
     private String imageUrl;
 
-    @NotNull(message = "카테고리는 필수 값 입니다.")
-    private Long categoryId;
-
     public Long getId() {
         return id;
     }
@@ -52,16 +49,7 @@ public class ProductRequest {
         this.imageUrl = imageUrl;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public Product toEntity(){
-        return new Product(this.id, this.name, this.price, this.imageUrl, this.categoryId);
+        return new Product(this.id, this.name, this.price, this.imageUrl);
     }
-
 }

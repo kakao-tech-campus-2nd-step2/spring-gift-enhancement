@@ -11,13 +11,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Kakao
     private String name;
 
     private int price;
 
     private String imageUrl;
-
-    private Long categoryId;
 
     public Long getId(){
         return this.id;
@@ -35,32 +34,18 @@ public class Product {
         return this.imageUrl;
     }
 
-    public Long getCategoryId(){
-        return this.categoryId;
-    }
-
     protected Product(){
     }
-    public Product(Long id, String name, int price, String imageUrl, Long categoryId){
-        isValidName(name);
+    public Product(Long id, String name, int price, String imageUrl){
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.categoryId = categoryId;
     }
 
-    public void update(String name, int price, String imageUrl, Long categoryId){
-        isValidName(name);
+    public void update(String name, int price, String imageUrl){
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.categoryId = categoryId;
-    }
-
-    private void isValidName(String name){
-        if(name.contains("카카오")){
-            throw new IllegalArgumentException( "\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.");
-        }
     }
 }

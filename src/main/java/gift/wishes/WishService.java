@@ -6,6 +6,7 @@ import gift.member.MemberService;
 import gift.product.Product;
 import gift.product.ProductService;
 import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,15 @@ public class WishService {
         this.memberService = memberService;
     }
 
-    public List<WishResponse> findByMemberId(Long memberId) {
-        List<Wish> wishList = wishRepository.findByMemberId(memberId);
-        return wishList.stream().map(WishResponse::from).toList();
+    public List<Wish> findByMemberId(Long memberId) {
+        return wishRepository.findByMemberId(memberId);
     }
 
-    public WishPageResponse getWishPage(Long memberId, int page) {
+    public Page<Wish> getWishPage(Long memberId, int page) {
         Pageable pageable = PageRequest.of(page, 10);
+        Page<Wish> allWishPage = wishRepository.findByMemberId(memberId, pageable);
 
-        return WishPageResponse.from(wishRepository.findByMemberId(memberId, pageable));
+        return allWishPage;
     }
 
     public void createWish(Long memberId, Long productId, Long quantity) {
