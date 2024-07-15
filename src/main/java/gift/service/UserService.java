@@ -1,5 +1,7 @@
 package gift.service;
 
+import gift.exception.InvalidUserException;
+import gift.exception.UserAlreadyExistException;
 import gift.model.user.User;
 import gift.repository.UserRepository;
 import gift.util.JwtUtil;
@@ -20,18 +22,17 @@ public class UserService {
         this.jwtUtil = jwtUtil;
     }
 
-    public boolean register(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
-            userRepository.save(user);
-            return true;
-        }
-        return false;
+    public void register(User user) {
+        userRepository.findByEmail(user.getEmail()).ifPresent(existUser -> {
+            throw new UserAlreadyExistException(existUser.getEmail()+"은 이미 존재하는 이메일입니다.");
+        });
+        userRepository.save(user);
     }
 
-    public Optional<String> login(String email, String password) {
-        return userRepository.findByEmail(email)
-                .filter(user -> user.getPassword().equals(password))
-                .map(user -> jwtUtil.generateJWT(user));
+    public String login(String email, String password) {
+        User user = userRepository.findByEmailAndPassword(email, password).orElseThrow(() -> new InvalidUserException("이메일 혹은 패스워드가 유효하지 않습니다."));
+        String token = jwtUtil.generateJWT(user);
+        return token;
     }
 
     public boolean validateToken(String token) {
