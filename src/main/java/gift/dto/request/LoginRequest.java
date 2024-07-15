@@ -8,6 +8,11 @@ public class LoginRequest {
     String password;
     String email;
 
+    public LoginRequest(String password, String email){
+        this.password = password;
+        this.email = email;
+    }
+
     public String getPassword(){
         return this.password;
     }
