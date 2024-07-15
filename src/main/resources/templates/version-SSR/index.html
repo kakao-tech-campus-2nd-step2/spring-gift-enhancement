@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>상품 관리</title>
@@ -54,6 +54,7 @@
                     <th>선택</th>
                     <th>Actions</th>
                     <th>ID</th>
+                    <th>Category</th>
                     <th>NAME</th>
                     <th>PRICE</th>
                     <th>IMAGE</th>
@@ -73,12 +74,9 @@
                         <a th:href="@{/edit/{id}(id=${product.id})}">
                             <button type="button" id="editButton">수정</button>
                         </a>
-                        <!--                        <form th:action="@{/edit}" method="get" style="display:inline;">-->
-                        <!--                            <input type="hidden" th:value="${product.id}" name="productId"/>-->
-                        <!--                            <button id="editButton" type="submit">수정</button>-->
-                        <!--                        </form>-->
                     </td>
                     <td th:text="${product.id}">id</td>
+                    <td th:text="${product.categoryName}">category</td>
                     <td th:text="${product.name}">name</td>
                     <td th:text="${product.price}">price</td>
                     <td>
