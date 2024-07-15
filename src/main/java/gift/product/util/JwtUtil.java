@@ -1,22 +1,35 @@
 package gift.product.util;
 
+import gift.product.exception.InvalidIdException;
 import gift.product.exception.UnauthorizedException;
+import gift.product.model.Member;
+import gift.product.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
+import static gift.product.validation.WishListValidation.INVALID_TOKEN;
+
 @Component
 public class JwtUtil {
 
+    private final MemberRepository memberRepository;
+
     private final String secretKey = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
     private final Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
+
+    @Autowired
+    public JwtUtil(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     // 토큰 생성
     public String generateToken(String email) {
@@ -79,10 +92,13 @@ public class JwtUtil {
 
         return token;
     }
+    
+    // 토큰으로 신원 인증한 사용자 정보 반환
+    public Member identification(String authorization) {
+        String token = checkAuthorization(authorization);
+        String email = extractClaims(token).getSubject();
 
-    // 토큰을 이용해 이메일 추출
-    public String getEmailByToken(String token) {
-        System.out.println("[JwtUtil] getEmailByToken()");
-        return extractClaims(token).getSubject();
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidIdException(INVALID_TOKEN));
     }
 }

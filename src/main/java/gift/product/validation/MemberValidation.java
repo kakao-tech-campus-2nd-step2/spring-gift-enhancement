@@ -19,20 +19,22 @@ public class MemberValidation {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public MemberValidation(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+    public MemberValidation(
+            MemberRepository memberRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public void signUpValidation(String email) {
-        if(memberRepository.findByEmail(email) != null)
-            throw new DuplicateException(DUPLICATE_EMAIL);
+        memberRepository.findByEmail(email)
+                .orElseThrow(() -> new DuplicateException(DUPLICATE_EMAIL));
     }
 
     public void loginValidation(MemberDTO memberDTO) {
-        Member member = memberRepository.findByEmail(memberDTO.getEmail());
-        if(member == null)
-            throw new LoginFailedException(INVALID_INPUT);
+        Member member = memberRepository.findByEmail(memberDTO.getEmail())
+                .orElseThrow(() -> new LoginFailedException(INVALID_INPUT));
         if(!passwordEncoder.matches(memberDTO.getPassword(), member.getPassword()))
             throw new LoginFailedException(INVALID_INPUT);
     }

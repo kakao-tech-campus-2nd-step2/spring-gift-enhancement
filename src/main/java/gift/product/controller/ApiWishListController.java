@@ -35,30 +35,24 @@ public class ApiWishListController {
 
     @PostMapping()
     public ResponseEntity<String> registerWishProduct(
-        HttpServletRequest request,
-        @RequestBody Map<String, Long> requestBody
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody Map<String, Long> requestBody
     ) {
         System.out.println("[ApiWishListController] registerWishProduct()");
 
-        wishListService.registerWishProduct(
-            request,
-            requestBody
-        );
+        wishListService.registerWishProduct(authorization, requestBody);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("WishProduct registered successfully");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteWishProduct(
-        HttpServletRequest request,
-        @PathVariable Long id
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long id
     ) {
         System.out.println("[ApiWishListController] deleteWishProduct()");
 
-        wishListService.deleteWishProduct(
-            request,
-            id
-        );
+        wishListService.deleteWishProduct(authorization, id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("delete WishProduct successfully");
     }
