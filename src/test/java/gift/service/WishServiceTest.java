@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
@@ -50,10 +51,12 @@ class WishServiceTest {
         //given
         Long productId = 1L;
         Long nullProductId = 2L;
+        Category category = new Category("상품권", "#0000");
         Product product = new Product.Builder()
                 .name("테스트 상품")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         String email = "abc@pusan.ac.kr";
@@ -103,10 +106,13 @@ class WishServiceTest {
         String validEmail = "abc@pusan.ac.kr";
         String inValidEmail = "abcd@pusan.ac.kr";
 
+        Category category = new Category("상품권", "#0000");
+
         Product product = new Product.Builder()
                 .name("테스트 상품")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         Member member = new Member.Builder()
@@ -152,10 +158,13 @@ class WishServiceTest {
         String validEmail = "abc@pusan.ac.kr";
         String inValidEmail = "abcd@pusan.ac.kr";
 
+        Category category = new Category("상품권", "#0000");
+
         Product product = new Product.Builder()
                 .name("테스트 상품")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         Member member = new Member.Builder()
@@ -196,16 +205,19 @@ class WishServiceTest {
     @DisplayName("WISH 전체 조회 테스트")
     void 위시_전체_조회_테스트(){
         //given
+        Category category = new Category("상품권", "#0000");
         Product product = new Product.Builder()
                 .name("테스트 상품")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         Product product2 = new Product.Builder()
                 .name("테스트 상품2")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         Member member = new Member.Builder()
@@ -249,11 +261,13 @@ class WishServiceTest {
 
         List<Wish> wishes = new ArrayList<>();
 
+        Category category = new Category("상품권", "#0000");
         for(int i=0; i<20; i++){
             Product product = new Product.Builder()
                     .name("테스트" + i)
                     .price(i)
                     .imageUrl("abc.png")
+                    .category(category)
                     .build();
 
             Wish wish = new Wish.Builder()
