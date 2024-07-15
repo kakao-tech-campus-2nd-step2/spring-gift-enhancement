@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@ComponentScan(basePackages = "gift.repository")
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository products;
@@ -28,6 +30,8 @@ class ProductRepositoryTest {
     private  WishRepository wishes;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private RepositoryHelper helper;
 
     @Test
     @DisplayName("상품 저장 테스트")
@@ -165,7 +169,7 @@ class ProductRepositoryTest {
         entityManager.clear();
 
         // then
-        Product foundProduct = products.findById(savedProduct.getId()).orElse(null);
+        Product foundProduct = helper.findProductById(savedProduct.getId()).orElse(null);
         assertNotNull(foundProduct);
         assertAll(
                 () -> assertThat(foundProduct).isEqualTo(savedProduct),
@@ -241,7 +245,7 @@ class ProductRepositoryTest {
         products.flush();
         entityManager.clear();
 
-        Product foundProduct = products.findById(expectedProduct.getId()).orElse(null);
+        Product foundProduct = helper.findProductById(expectedProduct.getId()).orElse(null);
         assertNotNull(foundProduct);
         Wish foundWish = foundProduct.getWishes().get(0);
 
@@ -251,7 +255,7 @@ class ProductRepositoryTest {
         entityManager.clear();
 
         // then
-        Wish orphanedWish = wishes.findById(expectedWish.getId()).orElse(null);
+        Wish orphanedWish = helper.findWishById(expectedWish.getId()).orElse(null);
         assertThat(orphanedWish).isNull();
     }
 
@@ -299,7 +303,7 @@ class ProductRepositoryTest {
 
         // when
         // Product 조회 (지연 로딩이므로 연관관계 조회 안함, Product 객체만 조회함)
-        Product foundProduct = products.findById(expectedProduct.getId()).orElse(null);
+        Product foundProduct = helper.findProductById(expectedProduct.getId()).orElse(null);
         assertNotNull(foundProduct);
 
         // Wish 조회 (Wish 객체도 조회함)
