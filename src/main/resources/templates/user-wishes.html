@@ -53,6 +53,7 @@
             <thead class="thead-dark">
             <tr>
                 <th style="width: 20%;">Name</th>
+                <th style="width: 20%;">Category</th>
                 <th style="width: 15%;">Price</th>
                 <th style="width: 30%;">Image URL</th>
                 <th style="width: 10%;">Actions</th>
@@ -94,6 +95,7 @@
                     const wishRow = document.createElement('tr');
                     wishRow.innerHTML = `
                         <td class="font-weight-bold">${wish.productName}</td>
+                        <td>${wish.productCategory}</td>
                         <td>${wish.productPrice}</td>
                         <td>
                             <img src="${wish.productImageurl}" alt="Product Image" style="max-width: 100px; height: auto;">
@@ -104,7 +106,6 @@
                     `;
                     wishList.appendChild(wishRow);
                 });
-
 
                 updatePagination(data.totalPages, data.number);
             })
