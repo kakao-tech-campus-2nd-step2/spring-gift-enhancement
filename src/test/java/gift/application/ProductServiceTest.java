@@ -116,7 +116,7 @@ class ProductServiceTest {
 
         ProductResponse response = productService.createProduct(request);
 
-        Assertions.assertThat(response.id()).isEqualTo(product.getId());
+        Assertions.assertThat(response.name()).isEqualTo(product.getName());
     }
 
     @Test
