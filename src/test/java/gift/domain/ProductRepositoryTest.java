@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.request.ProductRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,9 @@ class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @DisplayName("모든 상품 정보를 조회한다.")
     @Test
     void findAll() throws Exception {
@@ -31,7 +35,9 @@ class ProductRepositoryTest {
     @Test
     void findById() throws Exception {
         //given
-        productRepository.save(createProduct());
+        Category category = categoryRepository.save(new Category("교환권"));
+        Product product = new Product("아이스 아메리카노", 3500, "https://examle.com", category);
+        productRepository.save(product);
 
         List<Product> products = productRepository.findAll();
         Long productId = products.get(0).getId();
@@ -47,7 +53,9 @@ class ProductRepositoryTest {
     @Test
     void save() throws Exception {
         //given & when
-        productRepository.save(createProduct());
+        Category category = categoryRepository.save(new Category("교환권"));
+        Product product = new Product("아이스 아메리카노", 3500, "https://examle.com", category);
+        productRepository.save(product);
 
         //then
         assertThat(productRepository.findAll().size()).isEqualTo(1);
@@ -57,11 +65,12 @@ class ProductRepositoryTest {
     @Test
     void edit() throws Exception {
         //given
-        Product product = new Product("아이스 아메리카노", 3500, "https://examle.com");
+        Category category = categoryRepository.save(new Category("교환권"));
+        Product product = new Product("아이스 아메리카노", 3500, "https://examle.com", category);
         Product savedProduct = productRepository.save(product);
         Long productId = savedProduct.getId();
 
-        ProductRequest request = new ProductRequest("망고 스무디", 5000, "https://test.com");
+        ProductRequest request = new ProductRequest("망고 스무디", 5000, "https://test.com", category.getId());
 
         //when
         savedProduct.changeName(request.getName());
@@ -80,7 +89,8 @@ class ProductRepositoryTest {
     @Test
     void deleteById() throws Exception {
         //given
-        Product product = new Product("아이스 아메리카노", 3500, "https://examle.com");
+        Category category = categoryRepository.save(new Category("교환권"));
+        Product product = new Product("아이스 아메리카노", 3500, "https://examle.com", category);
         productRepository.save(product);
 
         List<Product> products = productRepository.findAll();
@@ -95,10 +105,6 @@ class ProductRepositoryTest {
         int currSize = productRepository.findAll().size();
 
         assertThat(currSize).isEqualTo(prevSize - 1);
-    }
-
-    private Product createProduct() {
-        return new Product("아메리카노", 3500, "https://example.com");
     }
 
 }

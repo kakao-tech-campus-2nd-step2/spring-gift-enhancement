@@ -23,10 +23,11 @@ public class ProductRequest {
     @NotNull
     private Long categoryId;
 
-    public ProductRequest(String name, Integer price, String imageUrl) {
+    public ProductRequest(String name, Integer price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public String getName() {

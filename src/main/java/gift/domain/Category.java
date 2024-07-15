@@ -35,7 +35,11 @@ public class Category {
         this.name = name;
     }
 
-    protected Category() {
+    public Category() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
 }

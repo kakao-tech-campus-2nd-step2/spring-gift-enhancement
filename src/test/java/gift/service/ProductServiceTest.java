@@ -1,7 +1,9 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.exception.ProductNotFoundException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.request.ProductRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +28,9 @@ class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private CategoryRepository categoryRepository;
 
     @InjectMocks
     private ProductService productService;
@@ -77,15 +82,18 @@ class ProductServiceTest {
     @Test
     void addProduct() throws Exception {
         //given
-        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com");
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com", categoryId);
 
         given(productRepository.save(any(Product.class))).willReturn(new Product());
+        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(new Category()));
 
         //when
         productService.addProduct(request);
 
         //then
         then(productRepository).should().save(any(Product.class));
+        then(categoryRepository).should().findById(anyLong());
     }
 
     @DisplayName("상품 정보를 수정한다.")
@@ -93,15 +101,18 @@ class ProductServiceTest {
     void editProduct() throws Exception {
         //given
         Long productId = 1L;
-        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com");
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com", categoryId);
 
         given(productRepository.findById(productId)).willReturn(Optional.of(new Product()));
+        given(categoryRepository.findById(categoryId)).willReturn(Optional.of(new Category()));
 
         //when
         productService.editProduct(productId, request);
 
         //then
         then(productRepository).should().findById(productId);
+        then(categoryRepository).should().findById(categoryId);
     }
 
     @DisplayName("상품 ID를 받아 해당하는 상품을 삭제한다.")

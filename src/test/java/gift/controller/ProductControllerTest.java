@@ -78,7 +78,8 @@ class ProductControllerTest {
     @Test
     void productAdd() throws Exception {
         //given
-        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com");
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com", categoryId);
 
         willDoNothing().given(productService).addProduct(any(ProductRequest.class));
 
@@ -115,8 +116,8 @@ class ProductControllerTest {
     @Test
     void productAddWithNameExceedingMaxLength() throws Exception {
         //given
-        ProductRequest request = new ProductRequest("프리미엄 오가닉 그린티 블렌드", 2500,
-                "https://example.com");
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("프리미엄 오가닉 그린티 블렌드", 2500, "https://example.com", categoryId);
 
         //when
         ResultActions result = mvc.perform(post("/api/products")
@@ -133,7 +134,8 @@ class ProductControllerTest {
     @Test
     void productAddWithInvalidCharactersInName() throws Exception {
         //given
-        ProductRequest request = new ProductRequest("그린티 *", 2500, "https://example.com");
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("그린티 *", 2500, "https://example.com", categoryId);
 
         //when
         ResultActions result = mvc.perform(post("/api/products")
@@ -150,7 +152,8 @@ class ProductControllerTest {
     @Test
     void productAddWithNameContainingKakao() throws Exception {
         //given
-        ProductRequest request = new ProductRequest("카카오 굿즈", 2500, "https://example.com");
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("카카오 굿즈", 2500, "https://example.com", categoryId);
 
         //when
         ResultActions result = mvc.perform(post("/api/products")
@@ -184,8 +187,9 @@ class ProductControllerTest {
     @Test
     void productEdit() throws Exception {
         //given
-        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com");
         Long productId = 1L;
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com", categoryId);
 
         willDoNothing().given(productService).editProduct(anyLong(), any(ProductRequest.class));
 
@@ -224,8 +228,8 @@ class ProductControllerTest {
     @Test
     void productEditWithNameExceedingMaxLength() throws Exception {
         //given
-        ProductRequest request = new ProductRequest("프리미엄 오가닉 그린티 블렌드", 2500,
-                "https://example.com");
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("프리미엄 오가닉 그린티 블렌드", 2500, "https://example.com", categoryId);
         Long productId = 1L;
 
         //when
@@ -243,8 +247,9 @@ class ProductControllerTest {
     @Test
     void productEditWithInvalidCharactersInName() throws Exception {
         //given
-        ProductRequest request = new ProductRequest("그린티 *", 2500, "https://example.com");
         Long productId = 1L;
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("그린티 *", 2500, "https://example.com", categoryId);
 
         //when
         ResultActions result = mvc.perform(put("/api/products/{productId}", productId)
@@ -261,8 +266,9 @@ class ProductControllerTest {
     @Test
     void productEditWithNameContainingKakao() throws Exception {
         //given
-        ProductRequest request = new ProductRequest("카카오 굿즈", 2500, "https://example.com");
         Long productId = 1L;
+        Long categoryId = 1L;
+        ProductRequest request = new ProductRequest("카카오 굿즈", 2500, "https://example.com", categoryId);
 
         //when
         ResultActions result = mvc.perform(put("/api/products/{productId}", productId)
