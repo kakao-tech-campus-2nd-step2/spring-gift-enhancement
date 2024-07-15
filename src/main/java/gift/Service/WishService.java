@@ -40,10 +40,8 @@ public class WishService {
 
     public List<ResponseWishDTO> getWish(Member member) {
         List<Wish> wishList = wishRepository.findWishListByMember(member);
-        ListIterator<Wish> iterator = wishList.listIterator();
         List<ResponseWishDTO> responseWishDTOList = new ArrayList<>();
-        while(iterator.hasNext()){
-            Wish wish = iterator.next();
+        for(Wish wish : wishList){
             responseWishDTOList.add(new ResponseWishDTO(wish.getProduct().getName(), wish.getCount()));
         }
 
