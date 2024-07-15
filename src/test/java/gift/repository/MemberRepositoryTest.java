@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@ComponentScan(basePackages = "gift.repository")
 class MemberRepositoryTest {
     @Autowired
     private  MemberRepository members;
@@ -24,6 +26,8 @@ class MemberRepositoryTest {
     private  WishRepository wishes;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private RepositoryHelper helper;
 
     @Test
     @DisplayName("멤버 저장 테스트")
@@ -119,7 +123,7 @@ class MemberRepositoryTest {
         entityManager.clear();
 
         // then
-        Member foundMember = members.findById(savedMember.getId()).orElse(null);
+        Member foundMember = helper.findMemberById(savedMember.getId()).orElse(null);
         assertNotNull(foundMember);
         assertAll(
                 () -> assertThat(foundMember).isEqualTo(savedMember),
@@ -160,7 +164,7 @@ class MemberRepositoryTest {
 
         //then
         List<Member> foundMembers = members.findAll();
-        Wish deletedWish = wishes.findById(expectedWish.getId()).orElse(null);
+        Wish deletedWish = helper.findWishById(expectedWish.getId()).orElse(null);
         assertAll(
                 () -> assertThat(foundMembers.size()).isEqualTo(0),
                 () -> assertThat(deletedWish).isNull()
@@ -195,7 +199,7 @@ class MemberRepositoryTest {
         members.flush();
         entityManager.clear();
 
-        Member foundMember = members.findById(expectedMember.getId()).orElse(null);
+        Member foundMember = helper.findMemberById(expectedMember.getId()).orElse(null);
         assertNotNull(foundMember);
         Wish foundWish = foundMember.getWishes().get(0);
 
@@ -205,7 +209,7 @@ class MemberRepositoryTest {
         entityManager.clear();
 
         // then
-        Wish orphanedWish = wishes.findById(expectedWish.getId()).orElse(null);
+        Wish orphanedWish = helper.findWishById(expectedWish.getId()).orElse(null);
         assertThat(orphanedWish).isNull();
     }
 
@@ -238,7 +242,7 @@ class MemberRepositoryTest {
 
         // when
         // Product 조회 (지연 로딩이므로 연관관계 조회 안함, Product 객체만 조회함)
-        Member foundMember = members.findById(savedMember.getId()).orElse(null);
+        Member foundMember = helper.findMemberById(savedMember.getId()).orElse(null);
         assertNotNull(foundMember);
         // Wish 조회 (Wish 객체도 조회함)
         List<Wish> wishes = foundMember.getWishes();
