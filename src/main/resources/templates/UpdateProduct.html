@@ -19,6 +19,19 @@
 <div class="container">
     <form action="ProductInfo.html" th:action th:object="${product}" method="post">
         <div>
+            <div>
+                <label for="name">카테고리</label>
+                <select id="category" th:field="*{categoryID}" class="form-control">
+                    <option value="">==카테고리 선택==</option>
+                    <option th:each="category : ${categories}" th:selected="${category.getId() == product.getCategoryID()}" th:value="${category.getId()}"
+                            th:text="${category.name}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('categoryID')}">
+                    <p class="field-error" th:each="err : ${#fields.errors('categoryID')}"
+                       th:text="${err}"></p>
+
+                </div>
+            </div>
             <label for="name">상품명</label>
             <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요">
             <div th:if="${#fields.hasErrors('name') || #fields.hasErrors('nameNotContainingKakao')}">
