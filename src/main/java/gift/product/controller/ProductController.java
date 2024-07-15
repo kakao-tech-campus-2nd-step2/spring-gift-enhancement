@@ -1,5 +1,7 @@
 package gift.product.controller;
 
+import static gift.util.Utils.DEFAULT_PAGE_SIZE;
+
 import gift.product.model.dto.CreateProductRequest;
 import gift.product.model.dto.ProductResponse;
 import gift.product.model.dto.UpdateProductRequest;
@@ -39,7 +41,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> findAllProductPage(
-            @PageableDefault(size = 10, sort = "wishCount", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = DEFAULT_PAGE_SIZE, sort = "wishCount", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<ProductResponse> response = productService.findAllProductWithWishCountPageable(pageable);
         return ResponseEntity.ok().body(response);
     }

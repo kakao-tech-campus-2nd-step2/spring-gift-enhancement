@@ -1,6 +1,6 @@
 package gift.product.model.dto;
 
-import static gift.product.util.Utils.NAME_PATTERN;
+import static gift.util.Utils.NAME_PATTERN;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

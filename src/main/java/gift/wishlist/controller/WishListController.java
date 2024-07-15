@@ -1,5 +1,7 @@
 package gift.wishlist.controller;
 
+import static gift.util.Utils.DEFAULT_PAGE_SIZE;
+
 import gift.user.model.dto.AppUser;
 import gift.user.resolver.LoginUser;
 import gift.wishlist.model.dto.AddWishRequest;
@@ -31,7 +33,7 @@ public class WishListController {
 
     @GetMapping
     public ResponseEntity<Page<WishListResponse>> getWishListForUser(@LoginUser AppUser loginAppUser,
-                                                                     @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+                                                                     @PageableDefault(size = DEFAULT_PAGE_SIZE, sort = "id", direction = Sort.Direction.DESC)
                                                                      Pageable pageable) {
         Page<WishListResponse> responses = wishListService.getWishList(loginAppUser.getId(), pageable);
         return ResponseEntity.ok().body(responses);
