@@ -27,10 +27,7 @@ public class WishService {
     }
 
     @Transactional(readOnly = true)
-    public List<WishResponseDto> getWishList(LoginMemberDto loginMemberDto, int pageNo,
-        int pageSize,
-        String criteria) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Direction.ASC, criteria));
+    public List<WishResponseDto> getWishList(LoginMemberDto loginMemberDto, Pageable pageable) {
         Page<WishResponseDto> page = wishRepository.findAllByMemberId(loginMemberDto.getId(),
                 pageable)
             .map(WishResponseDto::from);
