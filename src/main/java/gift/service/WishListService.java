@@ -1,9 +1,5 @@
 package gift.service;
 
-import gift.DTO.Product.ProductRequest;
-import gift.DTO.Product.ProductResponse;
-import gift.DTO.User.UserRequest;
-import gift.DTO.User.UserResponse;
 import gift.DTO.Wish.WishProductRequest;
 import gift.DTO.Wish.WishProductResponse;
 import gift.domain.Product;
@@ -21,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class WishListService {

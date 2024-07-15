@@ -1,21 +1,16 @@
 package gift.controller;
 
-import gift.DTO.Product.ProductRequest;
 import gift.DTO.Product.ProductResponse;
-import gift.DTO.User.UserRequest;
 import gift.DTO.User.UserResponse;
 import gift.DTO.Wish.WishProductRequest;
 import gift.DTO.Wish.WishProductResponse;
 import gift.security.AuthenticateMember;
 import gift.service.ProductService;
-import gift.service.UserService;
 import gift.service.WishListService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class WishListController {

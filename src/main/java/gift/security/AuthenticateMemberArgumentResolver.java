@@ -1,6 +1,5 @@
 package gift.security;
 
-import gift.DTO.User.UserRequest;
 import gift.DTO.User.UserResponse;
 import gift.service.UserService;
 import org.springframework.beans.factory.annotation.Value;

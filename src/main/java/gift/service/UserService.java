@@ -2,7 +2,6 @@ package gift.service;
 
 import gift.DTO.User.UserRequest;
 import gift.DTO.User.UserResponse;
-import gift.domain.Product;
 import gift.domain.User;
 import gift.repository.UserRepository;
 import jakarta.transaction.Transactional;

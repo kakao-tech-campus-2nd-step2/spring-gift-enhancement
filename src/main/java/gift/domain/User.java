@@ -2,9 +2,6 @@ package gift.domain;
 
 import jakarta.persistence.*;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Entity
 @Table(name = "users")
 public class User {

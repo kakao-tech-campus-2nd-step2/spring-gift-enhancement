@@ -5,11 +5,8 @@
  */
 package gift.controller;
 
-import gift.DTO.PageDTO;
 import gift.DTO.Product.ProductRequest;
 import gift.DTO.Product.ProductResponse;
-import gift.DTO.User.UserRequest;
-import gift.security.AuthenticateMember;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
