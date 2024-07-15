@@ -5,15 +5,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "member")
+@SQLDelete(sql = "update member set deleted = true where id=?")
+@SQLRestriction("deleted is false")
 public class Member extends BaseEntity {
     @NotNull
     @Column(name = "name")
     private String name;
     @NotNull
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
     @NotNull
     @Column(name = "password")
@@ -22,6 +26,9 @@ public class Member extends BaseEntity {
     @Enumerated
     @Column(name = "role")
     private MemberRole role;
+    @NotNull
+    @Column(name = "deleted")
+    private Boolean deleted = Boolean.FALSE;
 
     protected Member() {
     }
