@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="KR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 목록</title>
+    <link rel="stylesheet" href="/style/index_style.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/index_ajax.js"></script>
+</head>
+<body>
+<div class="header" id="header">
+
+</div>
+<h1>Product List Page</h1>
+<table id="product-table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Image</th>
+        <th scope="col">Choose</th>
+    </tr>
+    </thead>
+    <tbody id="product-tbody">
+    <!-- AJAX를 통해 데이터를 로드 -->
+    </tbody>
+</table>
+<div>
+    <button id="prevPage">Previous</button>
+    <button id="nextPage">Next</button>
+</div>
+</body>
+<script>
+    var currentPage = 0;
+    var pageSize = 5;
+
+    function getProducts(page){
+        $.ajax({
+            url: '/api/products',
+            method: 'GET',
+            data : {
+                page : page,
+                size : pageSize
+            },
+            success: function(data) {
+                var contents = data.content;
+                var tbody = $('#product-tbody');
+                tbody.empty(); // 초기화
+
+                // 데이터에 따라 테이블 행을 생성
+                contents.forEach(function(product) {
+                    // 한 행의 내용
+                    var row = `
+                        <tr>
+                            <td>${product.id}</td>
+                            <td>${product.name}</td>
+                            <td>${product.price}</td>
+                            <td><img src="${product.imageUrl}" alt="image"/></td>
+                            <td>
+                                <a href="#" onclick="chooseFunction(${product.id})">추가</a>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.append(row);
+
+                    currentPage = data.number;
+
+                    $('#prevPage').prop('disabled', data.first);
+                    $('#nextPage').prop('disabled', data.last);
+                });
+            },
+            error: function(err) {
+                alert("error occur! [error code : " + err.status + "]");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        getProducts(currentPage);
+
+        $('#prevPage').click(function() {
+            if (currentPage > 0) {
+                getProducts(currentPage - 1);
+            }
+        });
+
+        $('#nextPage').click(function() {
+            getProducts(currentPage + 1);
+        });
+
+        if(localStorage.getItem('token')){
+            var inline = $('#header');
+            inline.empty();
+            inline.append('<a href="/wishList" className="header-link">위시리스트</a>\n' +
+                '            <a href="" onclick="logoutFunction()" className="header-link">로그아웃</a>');
+        }
+        else {
+            var inline = $('#header');
+            inline.empty();
+            inline.append('<a href="/login" className="header-link">로그인</a>\n' +
+                '            <a href="/register" className="header-link">회원가입</a>');
+        }
+    });
+
+    function chooseFunction(id){
+        $.ajax({
+            type : "post",
+            url : "api/wishes/" +  id,
+            headers : {
+                Authorization: 'Bearer ' + localStorage.getItem("token"),
+            },
+            success : function(res){
+                alert("상품이 위시 리스트에 등록되었습니다");
+            },
+            error : function(err){
+                alert("상품 등록에 실패했습니다");
+            }
+        })
+        console.log(localStorage.getItem("token"));
+    }
+
+    function logoutFunction(){
+        localStorage.removeItem('token');
+        backToHome();
+    }
+</script>
+</html>
