@@ -5,8 +5,11 @@ import gift.dto.ProductCategoryResponse;
 import gift.exception.NotFoundElementException;
 import gift.model.ProductCategory;
 import gift.repository.ProductCategoryRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -27,6 +30,24 @@ public class ProductCategoryService {
         var productCategory = findCategoryById(id);
         productCategory.updateCategory(productCategoryRequest.name(), productCategoryRequest.description(), productCategoryRequest.color(), productCategoryRequest.imageUrl());
         productCategoryRepository.save(productCategory);
+    }
+
+    @Transactional(readOnly = true)
+    public ProductCategoryResponse getCategory(Long id) {
+        var productCategory = findCategoryById(id);
+        return getCategoryResponseFromCategory(productCategory);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductCategoryResponse> getCategories(Pageable pageable) {
+        return productCategoryRepository.findAll(pageable)
+                .stream()
+                .map(this::getCategoryResponseFromCategory)
+                .toList();
+    }
+
+    public void deleteCategory(Long id) {
+        productCategoryRepository.deleteById(id);
     }
 
     private ProductCategory saveCategoryWithCategoryRequest(ProductCategoryRequest productCategoryRequest) {
