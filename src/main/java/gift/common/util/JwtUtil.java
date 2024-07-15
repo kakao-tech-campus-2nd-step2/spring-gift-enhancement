@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
+
     private Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String extractEmail(String token) {

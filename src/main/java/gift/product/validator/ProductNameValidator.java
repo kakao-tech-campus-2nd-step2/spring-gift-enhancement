@@ -8,7 +8,9 @@ import org.springframework.validation.Validator;
 
 @Component
 public class ProductNameValidator implements Validator {
-    private static final Pattern ALLOWED_PATTERN = Pattern.compile("^[\\w\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_가-힣]*$");
+
+    private static final Pattern ALLOWED_PATTERN = Pattern.compile(
+        "^[\\w\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_가-힣]*$");
     private static final String DISALLOWED_WORD = "카카오";
 
     @Override
@@ -29,7 +31,8 @@ public class ProductNameValidator implements Validator {
         }
 
         if (name.contains(DISALLOWED_WORD)) {
-            errors.rejectValue("name","name.disallowed","\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.");
+            errors.rejectValue("name", "name.disallowed",
+                "\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.");
         }
     }
 }

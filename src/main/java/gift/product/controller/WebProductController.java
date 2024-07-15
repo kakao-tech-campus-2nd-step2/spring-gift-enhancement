@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class WebProductController {
+
     private final ProductService productService;
 
     public WebProductController(ProductService productService) {
@@ -35,7 +36,8 @@ public class WebProductController {
     }
 
     @PostMapping("/saveProducts")
-    public String saveProducts(@ModelAttribute("product") ProductRequest productRequest, Model model) {
+    public String saveProducts(@ModelAttribute("product") ProductRequest productRequest,
+        Model model) {
         Product product = Product.from(productRequest);
         productService.save(product);
         return "redirect:/products";

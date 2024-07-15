@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MemberService {
+
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
 
@@ -19,7 +20,7 @@ public class MemberService {
     }
 
     public String register(MemberRequest memberRequest) {
-       Optional<Member> existingMember = memberRepository.findByEmail(memberRequest.getEmail());
+        Optional<Member> existingMember = memberRepository.findByEmail(memberRequest.getEmail());
         if (existingMember.isPresent()) {
             throw new DuplicateKeyException("이미 존재하는 이메일 : " + memberRequest.getEmail());
         }
