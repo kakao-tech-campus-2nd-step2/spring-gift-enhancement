@@ -60,12 +60,4 @@ public class UserController {
         }
         throw new ForbiddenException("비밀번호 찾기 실패: 로그인한 사용자의 이메일이 아닙니다");
     }
-
-    @GetMapping("/admin/email")
-    public ResponseEntity<String> findEmailForAdmin(@Valid @RequestParam Long id,
-                                                    @LoginUser AppUser loginAppUser) {
-        userService.verifyAdminAccess(loginAppUser);
-        String password = userService.findEmail(id);
-        return ResponseEntity.ok().body(password);
-    }
 }
