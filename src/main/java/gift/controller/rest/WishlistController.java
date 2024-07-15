@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.rest;
 
 import gift.entity.Product;
 import gift.entity.WishlistDTO;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/wishlist")
+@RequestMapping("/api/wishlists")
 public class WishlistController {
 
 

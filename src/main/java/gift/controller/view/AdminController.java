@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.view;
 
 import gift.entity.Product;
 import gift.repository.ProductRepository;

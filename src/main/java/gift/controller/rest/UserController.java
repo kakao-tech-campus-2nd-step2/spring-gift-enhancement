@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.rest;
 
 import gift.entity.UserDTO;
 import gift.service.UserService;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserUtility userUtility;

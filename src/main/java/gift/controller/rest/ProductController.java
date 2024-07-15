@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.rest;
 
 import gift.entity.Product;
 import gift.entity.ProductDTO;
