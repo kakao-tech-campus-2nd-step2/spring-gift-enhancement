@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
@@ -19,8 +21,10 @@ public class Product {
   @OneToMany(mappedBy = "product")
   private final List<WishList> wishlists = new ArrayList<>();
 
-  @OneToMany(mappedBy = "product")
-  private final List<Category> categories=new ArrayList<>();
+  @ManyToOne
+  @JoinColumn(name = "category_id",nullable = false)
+  private Category category;
+
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

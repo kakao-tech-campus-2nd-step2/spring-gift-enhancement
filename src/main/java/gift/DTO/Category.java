@@ -5,24 +5,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
 public class Category {
 
-  @ManyToOne
-  @JoinColumn(name="product_id")
-  private Product product;
+  @OneToMany(mappedBy = "category")
+  private final List<Product> products = new ArrayList<>();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false,unique = true)
+  @Column(nullable = false, unique = true)
   private String name;
 
   @Column(nullable = false)
@@ -37,27 +36,37 @@ public class Category {
   public Category() {
   }
 
-  public Category(Long id, String name, String color, String imageUrl, String description){
-    this.id=id;
-    this.name=name;
-    this.color=color;
-    this.imageUrl=imageUrl;
-    this.description=description;
+  public Category(Long id, String name, String color, String imageUrl, String description) {
+    this.id = id;
+    this.name = name;
+    this.color = color;
+    this.imageUrl = imageUrl;
+    this.description = description;
   }
 
 
-  public Long getId(){return this.id;}
+  public Long getId() {
+    return this.id;
+  }
 
 
-  public String getName(){return this.name;}
+  public String getName() {
+    return this.name;
+  }
 
 
-  public String getColor(){return this.color;}
+  public String getColor() {
+    return this.color;
+  }
 
 
-  public String getImageUrl(){return this.imageUrl;}
+  public String getImageUrl() {
+    return this.imageUrl;
+  }
 
 
-  public String getDescription(){return this.description;}
+  public String getDescription() {
+    return this.description;
+  }
 
 }
