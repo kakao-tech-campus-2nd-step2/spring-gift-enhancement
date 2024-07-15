@@ -14,14 +14,22 @@ public class Product {
     private int price;
     @Column(name = "imageUrl", nullable = false)
     private String imageUrl;
+    @ManyToOne
+    @JoinColumn(
+            name = "category_id",
+            foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"),
+            nullable = false)
+    private Category category;
+
     protected Product(){
 
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -32,29 +40,22 @@ public class Product {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public Category getCategory(){
+        return category;
     }
 
-    public void updateEntity(String name, int price, String imageUrl){
+    public void updateEntity(String name, int price, String imageUrl, Category category){
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 }

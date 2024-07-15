@@ -2,7 +2,9 @@ package gift.service;
 
 import gift.DTO.Product.ProductRequest;
 import gift.DTO.Product.ProductResponse;
+import gift.domain.Category;
 import gift.domain.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.*;
@@ -14,9 +16,11 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository){
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     /*
@@ -43,10 +47,13 @@ public class ProductService {
      */
     @Transactional
     public void createProduct(ProductRequest product){
+        Category category = categoryRepository.findByName(product.getCategoryName());
+
         Product productEntity = new Product(
                 product.getName(),
                 product.getPrice(),
-                product.getImageUrl()
+                product.getImageUrl(),
+                category
         );
         productRepository.save(productEntity);
     }
@@ -63,8 +70,10 @@ public class ProductService {
     @Transactional
     public void updateProduct(ProductRequest product, Long id){
         Product savedProduct = productRepository.findById(id).orElseThrow(NullPointerException::new);
+        Category category = categoryRepository.findByName(product.getCategoryName());
+
         savedProduct.updateEntity(
-                product.getName(), product.getPrice(), product.getImageUrl()
+                product.getName(), product.getPrice(), product.getImageUrl(), category
         );;
     }
     /*

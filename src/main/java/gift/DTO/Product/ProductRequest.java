@@ -13,15 +13,17 @@ public class ProductRequest {
     private String name;
     private int price;
     private String imageUrl;
+    private String categoryName;
 
     public ProductRequest(){
 
     }
 
-    public ProductRequest(String name, int price, String imageUrl) {
+    public ProductRequest(String name, int price, String imageUrl, String categoryName) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryName = categoryName;
     }
 
     public String getName() {
@@ -46,5 +48,13 @@ public class ProductRequest {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
