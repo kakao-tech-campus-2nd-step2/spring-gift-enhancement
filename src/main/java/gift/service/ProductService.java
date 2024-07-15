@@ -54,10 +54,18 @@ public class ProductService {
         return pageToDto;
     }
 
-    public Product getProduct(Long id) {
+    public ProductResponse getProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("해당 id의 상품이 존재하지 않습니다."));
-        return product;
+        ProductResponse response = new ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl(),
+                product.getCategory().getName(),
+                product.getCategory().getId()
+        );
+        return response;
     }
 
     @Transactional
