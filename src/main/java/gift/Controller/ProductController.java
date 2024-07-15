@@ -3,13 +3,14 @@ package gift.Controller;
 import gift.Service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
 import gift.Model.Product;
 import gift.Model.RequestProduct;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 @Controller
 @RequestMapping("/api")
@@ -23,19 +24,20 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String getProduct(@RequestParam (defaultValue = "0", value="page") int page,
-                             @RequestParam (defaultValue = "3", value="size") int size,
-                             @RequestParam (defaultValue = "id", value="sortField") String sortField,
-                             @RequestParam (defaultValue = "ASC", value="sortDir") String sortDir,
+    public String getProduct(@PageableDefault(size = 3, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
                              Model model) {
-        Page<Product> productPage = productService.getAllProducts(page, size, sortField, sortDir);
+        Page<Product> productPage = productService.getAllProducts(pageable);
+        String sortField = pageable.getSort().iterator().next().getProperty();
+        String sortDir = pageable.getSort().iterator().next().getDirection().toString().equalsIgnoreCase("ASC") ? "asc" : "desc";
+        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("totalPages", productPage.getTotalPages());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("size", size);
+        model.addAttribute("currentPage", pageable.getPageNumber());
+        model.addAttribute("size", pageable.getPageSize());
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("reverseSortDir", reverseSortDir);
         return "products";
     }
 

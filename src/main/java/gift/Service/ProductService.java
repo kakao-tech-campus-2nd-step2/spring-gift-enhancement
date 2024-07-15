@@ -21,9 +21,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Page<Product> getAllProducts(int page, int pageSize, String sortField, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(page, pageSize, sort);
+    public Page<Product> getAllProducts(Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(pageable);
         return productPage;
     }
