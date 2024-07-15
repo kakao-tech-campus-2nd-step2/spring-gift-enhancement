@@ -33,7 +33,7 @@ public class CategoryService {
             throw new CategoryNameNotDuplicateException();
         }
 
-        Category category = new Category(request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
+        Category category = new Category(request.getName());
 
         categoryRepository.save(category);
     }
@@ -47,9 +47,6 @@ public class CategoryService {
         }
 
         category.changeName(request.getName());
-        category.changeColor(request.getColor());
-        category.changeImageUrl(request.getImageUrl());
-        category.changeDescription(request.getDescription());
     }
 
     public void removeCategory(Long categoryId) {
