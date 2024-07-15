@@ -1,7 +1,9 @@
 package gift.controller;
 
 import gift.dto.request.ProductRequestDto;
+import gift.dto.response.CategoryResponseDto;
 import gift.dto.response.ProductResponseDto;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +20,12 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService,
+                             CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping()
@@ -32,7 +37,9 @@ public class ProductController {
     }
 
     @GetMapping("/new")
-    public String addForm(){
+    public String addForm(Model model){
+        List<CategoryResponseDto> categories = categoryService.findAllCategories();
+        model.addAttribute("categories", categories);
         return "addForm";
     }
 
@@ -45,9 +52,12 @@ public class ProductController {
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable("id") Long id,
                            Model model){
+
         ProductResponseDto productDto = productService.findProductById(id);
+        List<CategoryResponseDto> categories = categoryService.findAllCategories();
 
         model.addAttribute("productDto", productDto);
+        model.addAttribute("categories", categories);
 
         return "editForm";
     }
