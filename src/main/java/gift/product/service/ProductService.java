@@ -49,7 +49,7 @@ public class ProductService {
 
     public ProductResponse updateProduct(Long id, @Valid ProductRequest productRequest) {
         Product product = ProductRequest.toEntity(productRequest);
-        product.setId(id);
+        product.updateId(id);
         validateProduct(product);
         Product savedProduct = productRepository.save(product);
         return ProductResponse.from(savedProduct);

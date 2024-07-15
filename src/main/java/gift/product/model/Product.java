@@ -37,7 +37,7 @@ public class Product {
         return id;
     }
 
-    public void setId(Long id) {
+    public void updateId(Long id) {
         this.id = id;
     }
 
@@ -65,7 +65,4 @@ public class Product {
         this.imgUrl = imgUrl;
     }
 
-    public static Product from(ProductRequest request) {
-        return new Product(request.getName(), request.getPrice(), request.getImgUrl());
-    }
 }
