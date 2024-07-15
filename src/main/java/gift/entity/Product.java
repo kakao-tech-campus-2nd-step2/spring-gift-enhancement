@@ -29,7 +29,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false,
-        foreignKey = @ForeignKey(name = "fk_product_category_id_ref_categories_id"))
+        foreignKey = @ForeignKey(name = "fk_products_category_id_ref_categories_id"))
     private Category category;
 
     protected Product() {
