@@ -34,7 +34,7 @@ public class Product {
     private final List<Wish> wishList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_name", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     protected Product() {
