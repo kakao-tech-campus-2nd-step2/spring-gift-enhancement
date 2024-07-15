@@ -1,10 +1,13 @@
-package gift.repository;
+package gift.unit.repository;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.entity.Product;
 import gift.entity.Wish;
+import gift.repository.ProductRepository;
+import gift.repository.UserRepository;
+import gift.repository.WishRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

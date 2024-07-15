@@ -1,8 +1,9 @@
-package gift.repository;
+package gift.unit.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.entity.User;
+import gift.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
