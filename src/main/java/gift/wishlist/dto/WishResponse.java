@@ -1,6 +1,8 @@
 package gift.wishlist.dto;
 
+import gift.product.dto.ProductResponse;
 import gift.product.model.Product;
+import gift.wishlist.model.Wish;
 
 public class WishResponse {
 
@@ -18,5 +20,9 @@ public class WishResponse {
 
     public Product getProduct() {
         return product;
+    }
+
+    public static WishResponse from(Wish wish) {
+        return new WishResponse(wish.getId(), wish.getProduct());
     }
 }
