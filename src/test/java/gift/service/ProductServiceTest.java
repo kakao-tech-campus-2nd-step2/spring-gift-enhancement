@@ -17,6 +17,7 @@ import gift.domain.product.service.ProductService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,34 +67,27 @@ class ProductServiceTest {
 
         List<Product> productList = Arrays.asList(product1, product2);
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Product> pageList = new PageImpl<>(productList, pageable, productList.size());
 
-        List<ProductResponse> expected = Arrays.asList(entityToDto(product1),
-            entityToDto(product2));
+        Page<Product> pageList = new PageImpl<>(productList, pageable, productList.size());
+        Page<ProductResponse> expected = pageList.map(this::entityToDto);
 
         doReturn(pageList).when(productRepository).findAll(pageable);
 
         // when
-        List<ProductResponse> actual = productService.getAllProducts(pageable.getPageNumber(),
+        Page<ProductResponse> actual = productService.getAllProducts(pageable.getPageNumber(),
             pageable.getPageSize());
 
         // then
         assertAll(
             () -> assertThat(actual).isNotNull(),
-            () -> assertThat(actual).hasSize(2),
-            () -> {
-                for (int i = 0; i < expected.size(); i++) {
-                    final int index = i;
-                    assertAll(
-                        () -> assertThat(actual.get(index).getName()).isEqualTo(
-                            expected.get(index).getName()),
-                        () -> assertThat(actual.get(index).getPrice()).isEqualTo(
-                            expected.get(index).getPrice()),
-                        () -> assertThat(actual.get(index).getImageUrl()).isEqualTo(
-                            expected.get(index).getImageUrl())
-                    );
-                }
-            }
+            () -> IntStream.range(0, actual.getContent().size()).forEach(i -> {
+                assertThat(actual.getContent().get(i).getName())
+                    .isEqualTo(expected.getContent().get(i).getName());
+                assertThat(actual.getContent().get(i).getPrice())
+                    .isEqualTo(expected.getContent().get(i).getPrice());
+                assertThat(actual.getContent().get(i).getImageUrl())
+                    .isEqualTo(expected.getContent().get(i).getImageUrl());
+            })
         );
 
     }

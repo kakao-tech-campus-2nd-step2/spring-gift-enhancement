@@ -19,6 +19,7 @@ import gift.domain.wishlist.service.WishService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,21 +61,22 @@ class WishServiceTest {
 
         doReturn(wishPage).when(wishRepository).findAllByMember(savedMember, pageable);
 
-        List<WishResponse> expected = wishList.stream().map(this::entityToDto).toList();
+        Page<WishResponse> expected = wishPage.map(this::entityToDto);
 
         // when
-        List<WishResponse> actual = wishService.getWishesByMember(savedMember,
+        Page<WishResponse> actual = wishService.getWishesByMember(savedMember,
             pageable.getPageNumber(),
             pageable.getPageSize());
 
         // then
         assertAll(
-            () -> assertThat(actual).hasSize(2),
-            () -> assertThat(actual.get(0).getMemberId()).isEqualTo(expected.get(0).getMemberId()),
-            () -> assertThat(actual.get(0).getProductId()).isEqualTo(
-                expected.get(0).getProductId()),
-            () -> assertThat(actual.get(1).getMemberId()).isEqualTo(expected.get(1).getMemberId()),
-            () -> assertThat(actual.get(1).getProductId()).isEqualTo(expected.get(1).getProductId())
+            () -> assertThat(actual).isNotNull(),
+            () -> IntStream.range(0, actual.getContent().size()).forEach(i -> {
+                assertThat(actual.getContent().get(i).getMemberId())
+                    .isEqualTo(expected.getContent().get(i).getMemberId());
+                assertThat(actual.getContent().get(i).getProductId())
+                    .isEqualTo(expected.getContent().get(i).getProductId());
+            })
         );
     }
 
