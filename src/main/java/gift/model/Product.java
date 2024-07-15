@@ -25,14 +25,23 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     protected Product() {
     }
 
-    public Product(Long id, String name, long price, String imageUrl) {
+    public Product(Long id, String name, long price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
