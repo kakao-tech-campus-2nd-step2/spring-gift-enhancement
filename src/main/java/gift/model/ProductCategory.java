@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "product_category")
-public class ProductCategory extends BaseEntity{
+public class ProductCategory extends BaseEntity {
     @NotNull
     @Column(name = "name")
     private String name;
@@ -15,16 +15,16 @@ public class ProductCategory extends BaseEntity{
     @Column(name = "description")
     private String description;
     @NotNull
-    @Column(name="color")
+    @Column(name = "color")
     private String color;
     @NotNull
     @Column(name = "image_url")
     private String imageUrl;
 
-    protected ProductCategory(){
+    protected ProductCategory() {
     }
 
-    public ProductCategory(String name, String description, String color,String imageUrl) {
+    public ProductCategory(String name, String description, String color, String imageUrl) {
         this.name = name;
         this.description = description;
         this.color = color;
@@ -47,7 +47,7 @@ public class ProductCategory extends BaseEntity{
         return imageUrl;
     }
 
-    public void updateCategory(String name, String description, String color, String imageUrl){
+    public void updateCategory(String name, String description, String color, String imageUrl) {
         this.name = name;
         this.description = description;
         this.color = color;
