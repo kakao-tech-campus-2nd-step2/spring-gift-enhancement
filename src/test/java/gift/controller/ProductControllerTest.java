@@ -1,9 +1,11 @@
 package gift.controller;
 
+import gift.dto.response.CategoryResponseDto;
 import gift.dto.response.ProductResponseDto;
 import gift.filter.AuthFilter;
 import gift.filter.LoginFilter;
 import gift.repository.token.TokenRepository;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +41,10 @@ class ProductControllerTest {
     ProductService productService;
 
     @MockBean
+    CategoryService categoryService;
+
+
+    @MockBean
     TokenRepository tokenRepository;
 
     @Test
@@ -60,11 +66,12 @@ class ProductControllerTest {
     @DisplayName("상품 조회 페이징 API 테스트")
     void 상품_전체_조회_API_TEST() throws Exception {
         //given
-        ProductResponseDto productDto1 = ProductResponseDto.of(1L,"test1", 1000, "abc.png");
-        ProductResponseDto productDto2 = ProductResponseDto.of(2L,"test2", 1000, "abc.png");
-        ProductResponseDto productDto3 = ProductResponseDto.of(3L,"test3", 1000, "abc.png");
-        ProductResponseDto productDto4 = ProductResponseDto.of(4L,"test4", 1000, "abc.png");
-        ProductResponseDto productDto5 = ProductResponseDto.of(5L,"test5", 1000, "abc.png");
+        CategoryResponseDto categoryResponseDto = new CategoryResponseDto(1L, "상품권","#00000");
+        ProductResponseDto productDto1 = ProductResponseDto.of(1L,"test1", 1000, "abc.png", categoryResponseDto);
+        ProductResponseDto productDto2 = ProductResponseDto.of(2L,"test2", 1000, "abc.png", categoryResponseDto);
+        ProductResponseDto productDto3 = ProductResponseDto.of(3L,"test3", 1000, "abc.png", categoryResponseDto);
+        ProductResponseDto productDto4 = ProductResponseDto.of(4L,"test4", 1000, "abc.png", categoryResponseDto);
+        ProductResponseDto productDto5 = ProductResponseDto.of(5L,"test5", 1000, "abc.png", categoryResponseDto);
 
         List<ProductResponseDto> productDtos = new ArrayList<>(Arrays.asList(productDto1, productDto2, productDto3, productDto4, productDto5));
 
@@ -85,12 +92,20 @@ class ProductControllerTest {
     @DisplayName("상품 저장 GET API 테스트")
     void 상품_저장_GET_API_TEST() throws Exception {
         //given
+        CategoryResponseDto categoryResponseDto1 = new CategoryResponseDto(1L, "상품권", "#0000");
+        CategoryResponseDto categoryResponseDto2 = new CategoryResponseDto(2L, "고기", "#0000");
+        CategoryResponseDto categoryResponseDto3 = new CategoryResponseDto(3L, "생선", "#0000");
+
+        List<CategoryResponseDto> categoryResponseDtos = Arrays.asList(categoryResponseDto1, categoryResponseDto2, categoryResponseDto3);
+
+        given(categoryService.findAllCategories()).willReturn(categoryResponseDtos);
 
         //when
 
         //then
         mvc.perform(get("/products/new"))
                 .andExpect(view().name("addForm"))
+                .andExpect(model().attribute("categories",categoryResponseDtos))
                 .andDo(print());
     }
 
@@ -106,7 +121,9 @@ class ProductControllerTest {
         mvc.perform(post("/products/new")
                         .param("name","test1")
                         .param("price","1000")
-                        .param("imageUrl","abc.png"))
+                        .param("imageUrl","abc.png")
+                        .param("categoryId", "1")
+                )
                 .andExpect(view().name("redirect:/products"))
                 .andExpect(redirectedUrl("/products"))
                 .andDo(print());
@@ -116,15 +133,22 @@ class ProductControllerTest {
     @DisplayName("상품 수정 GET API 테스트")
     void 상품_수정_GET_API_TEST() throws Exception {
         //given
-        ProductResponseDto productResponseDto = ProductResponseDto.of(1L, "test", 1000, "abc.png");
+        CategoryResponseDto categoryResponseDto1 = new CategoryResponseDto(1L, "상품권", "#0000");
+        CategoryResponseDto categoryResponseDto2 = new CategoryResponseDto(2L, "고기", "#0000");
+        CategoryResponseDto categoryResponseDto3 = new CategoryResponseDto(3L, "생선", "#0000");
+        List<CategoryResponseDto> categoryResponseDtos = Arrays.asList(categoryResponseDto1, categoryResponseDto2, categoryResponseDto3);
+
+        ProductResponseDto productResponseDto = ProductResponseDto.of(1L, "test", 1000, "abc.png", categoryResponseDto1);
 
         //when
         given(productService.findProductById(1L)).willReturn(productResponseDto);
+        given(categoryService.findAllCategories()).willReturn(categoryResponseDtos);
 
         //then
         mvc.perform(get("/products/{id}/edit", 1L))
                 .andExpect(view().name("editForm"))
                 .andExpect(model().attribute("productDto",productResponseDto))
+                .andExpect(model().attribute("categories",categoryResponseDtos))
                 .andDo(print());
     }
 
@@ -137,7 +161,8 @@ class ProductControllerTest {
 
         //then
         mvc.perform(post("/products/{id}/edit", 1L)
-                        .param("price","2000"))
+                        .param("price","2000")
+                        .param("categoryId", "1"))
                 .andExpect(view().name("redirect:/products"))
                 .andExpect(redirectedUrl("/products"))
                 .andDo(print());
