@@ -26,6 +26,13 @@ public class Category {
         return new CategoryResponse(this.id, this.name, this.color, this.imageUrl, this.description);
     }
 
+    public Category(String name, String color, String imageUrl, String description) {
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
+
     protected Category() {
     }
 
