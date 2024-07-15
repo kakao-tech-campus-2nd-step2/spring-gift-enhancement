@@ -8,16 +8,14 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     String name;
-    @Column(name="color", nullable = false)
-    String color;
-    @Column(name="imageUrl", nullable = false)
-    String imageUrl;
-    @Column(name="description", nullable = false)
-    String description;
 
     protected Category() {
+    }
+
+    public Category(String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -28,15 +26,7 @@ public class Category {
         return name;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public String getDescription() {
-        return description;
+    public void update(String name){
+        this.name = name;
     }
 }
