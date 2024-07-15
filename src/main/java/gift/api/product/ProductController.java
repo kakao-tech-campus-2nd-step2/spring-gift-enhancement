@@ -3,6 +3,8 @@ package gift.api.product;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +27,8 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Product>> getProducts(@RequestParam int page, @RequestParam int size,
-        @RequestParam String criterion, @RequestParam String direction) {
-
-        return ResponseEntity.ok()
-            .body(productService.getProducts(page, size, criterion, direction));
+    public ResponseEntity<List<Product>> getProducts(Pageable pageable) {
+        return ResponseEntity.ok().body(productService.getProducts(pageable));
     }
 
     @PostMapping()
