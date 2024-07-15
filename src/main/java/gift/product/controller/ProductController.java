@@ -57,9 +57,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductResponse> addProduct(
         @Valid @RequestBody ProductRequest productRequest) {
-        Product product = ProductRequest.toEntity(productRequest);
-        Product savedProduct = productService.save(product);
-        ProductResponse productResponse = ProductResponse.from(savedProduct);
+        ProductResponse productResponse = productService.addProduct(productRequest);
         return ResponseEntity.status(201).body(productResponse);
     }
 
@@ -69,10 +67,7 @@ public class ProductController {
         if (!productService.findById(id).isPresent()) {
             return ResponseEntity.status(204).build();
         }
-        Product updatedProduct = ProductRequest.toEntity(updatedProductRequest);
-        updatedProduct.setId(id);
-        Product savedProduct = productService.save(updatedProduct);
-        ProductResponse productResponse = ProductResponse.from(savedProduct);
+        ProductResponse productResponse = productService.updateProduct(id, updatedProductRequest);
         return ResponseEntity.ok(productResponse);
     }
 
