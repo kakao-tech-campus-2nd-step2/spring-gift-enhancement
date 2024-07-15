@@ -3,12 +3,14 @@ package gift.initializer;
 import gift.entity.Category;
 import gift.repository.CategoryRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Component
+@Profile("!test") // 'test' 프로파일이 아닌 경우에만 실행
 public class CategoryDataInitializer implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
