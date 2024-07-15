@@ -12,8 +12,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
+@ActiveProfiles("test")
 @DisplayName("상품 리파지토리 테스트")
 class ProductRepositoryTest {
 
@@ -24,9 +26,9 @@ class ProductRepositoryTest {
     void setUp() {
         // 임의의 상품 3개
         List<Product> products = List.of(
-                new Product("상품1", 1000, "keyboard.png"),
-                new Product("상품2", 2000, "mouse.png"),
-                new Product("상품3", 3000, "monitor.png")
+                new Product("상품1", 1000, "keyboard.png", null),
+                new Product("상품2", 2000, "mouse.png", null),
+                new Product("상품3", 3000, "monitor.png", null)
         );
 
         productRepository.saveAll(products);
@@ -36,7 +38,7 @@ class ProductRepositoryTest {
     @DisplayName("상품 생성")
     void addProduct() {
         //given
-        Product product = new Product("상품4", 4000, "headphone.png");
+        Product product = new Product("상품4", 4000, "headphone.png", null);
         
         //when
         Product savedProduct = productRepository.save(product);
@@ -54,7 +56,7 @@ class ProductRepositoryTest {
     @DisplayName("상품 조회")
     void findProduct() {
         //given
-        Product product = new Product("상품5", 5000, "speaker.png");
+        Product product = new Product("상품5", 5000, "speaker.png", null);
         productRepository.save(product);
 
         //when
@@ -77,7 +79,7 @@ class ProductRepositoryTest {
     @DisplayName("상품 수정")
     void updateProduct() {
         //given
-        Product product = new Product("상품6", 6000, "webcam.png");
+        Product product = new Product("상품6", 6000, "webcam.png", null);
         Product savedProduct = productRepository.save(product);
 
         //when
@@ -101,7 +103,7 @@ class ProductRepositoryTest {
     @DisplayName("상품 삭제")
     void deleteProduct() {
         //given
-        Product product = new Product("상품6", 6000, "webcam.png");
+        Product product = new Product("상품6", 6000, "webcam.png", null);
         Product savedProduct = productRepository.save(product);
 
         //when

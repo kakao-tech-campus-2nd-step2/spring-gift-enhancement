@@ -16,8 +16,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
+@ActiveProfiles("test")
 @DisplayName("위시 리스트 리파지토리 테스트")
 class WishListRepositoryTest {
 
@@ -36,10 +38,10 @@ class WishListRepositoryTest {
         memberRepository.save(member);
 
         List<Product> products = List.of(
-                new Product("상품1", 1000, "image1"),
-                new Product("상품2", 2000, "image2"),
-                new Product("상품3", 3000, "image3"),
-                new Product("상품4", 4000, "image4")
+                new Product("상품1", 1000, "image1", null),
+                new Product("상품2", 2000, "image2", null),
+                new Product("상품3", 3000, "image3", null),
+                new Product("상품4", 4000, "image4", null)
         );
         productRepository.saveAll(products);
 
