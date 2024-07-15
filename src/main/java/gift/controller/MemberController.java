@@ -1,11 +1,8 @@
 package gift.controller;
 
 import gift.exception.ForbiddenException;
-<<<<<<< HEAD
 import gift.model.ApiResponse;
 import gift.model.HttpResult;
-=======
->>>>>>> 1319293 (feat: 3주차 파일 불러오기)
 import gift.model.Member;
 import gift.service.MemberService;
 import java.util.Collections;
