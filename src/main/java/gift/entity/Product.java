@@ -34,8 +34,12 @@ public class Product {
     @OneToMany(mappedBy = "product")
     List <WishList> wishlists = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    Category category;
+
     public void addOptions(Option option){
         options.add(option);
+        option.setProduct(this);
     }
     public void addWishlist(WishList wishlist){
         wishlists.add(wishlist);
@@ -74,4 +78,7 @@ public class Product {
     }
 
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

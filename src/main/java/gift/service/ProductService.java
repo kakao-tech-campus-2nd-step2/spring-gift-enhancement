@@ -60,9 +60,8 @@ public class ProductService {
             Option.OptionId optionId = new Option.OptionId(saveProduct.getId(), str);
             Option option = new Option(optionId);
             if(isValidOption(optionId)) {
-                option.setProduct(saveProduct);
-                option = optionRepository.save(option);
                 saveProduct.addOptions(option);
+                optionRepository.save(option);
             }
 
         }
@@ -86,7 +85,6 @@ public class ProductService {
         if(productRepository.findById(id).isEmpty())
             throw new NotFoundException("존재하지 않는 id입니다.");
         productRepository.deleteById(id);
-        //optionRepository.deleteByProductID(id);
     }
 
 

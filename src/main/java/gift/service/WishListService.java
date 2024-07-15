@@ -49,9 +49,8 @@ public class WishListService {
         User user = userRepository.findById(tokenUserId).get();
         wishList.setProduct(product);
         wishList.setUser(user);
-        wishList = wishListRepository.save(wishList);
-        product.addWishlist(wishList);
-        user.addWishlist(wishList);
+        wishListRepository.save(wishList);
+
     }
 
     public Page<ShowProductDTO> getWishList(String token, Pageable pageable) throws JsonProcessingException {

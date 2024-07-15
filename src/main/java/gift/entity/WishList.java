@@ -80,10 +80,12 @@ public class WishList {
 
     public void setProduct(Product product) {
         this.product = product;
+        product.addWishlist(this);
     }
 
     public void setUser(User user) {
         this.user = user;
+        user.addWishlist(this);
     }
 
     public Product getProduct() {
