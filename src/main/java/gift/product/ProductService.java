@@ -22,9 +22,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductResponseDto> getAllProducts(int pageNo, int pageSize, String criteria) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Direction.ASC, criteria));
-
+    public Page<ProductResponseDto> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
             .map(ProductResponseDto::from);
     }

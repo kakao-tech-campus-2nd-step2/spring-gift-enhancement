@@ -4,6 +4,10 @@ import gift.product.model.ProductRequestDto;
 import gift.product.model.ProductResponseDto;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +34,9 @@ public class ProductController {
         @RequestParam(required = false, defaultValue = "0", value = "pageNo") int pageNo,
         @RequestParam(required = false, defaultValue = "10", value = "pageSize") int pageSize,
         @RequestParam(required = false, defaultValue = "id", value = "criteria") String criteria) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Direction.ASC, criteria));
         return ResponseEntity.ok()
-            .body(productService.getAllProducts(pageNo, pageSize, criteria).getContent());
+            .body(productService.getAllProducts(pageable).getContent());
     }
 
     @GetMapping("/{id}")
