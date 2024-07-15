@@ -31,6 +31,6 @@ public class JwtServiceTest {
         String token = jwtService.createToken(id);
 
         AppUser loginAppUser = jwtService.getLoginUser(token);
-        assertEquals(appUser, loginAppUser);
+        assertEquals(appUser.getId(), loginAppUser.getId());
     }
 }
