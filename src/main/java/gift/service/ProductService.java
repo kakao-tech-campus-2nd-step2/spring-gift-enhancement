@@ -93,6 +93,7 @@ public class ProductService {
         Product product = productRepository.findById(id).get();
         Category category = product.getCategory() ;
         category.deleteProduct(product);
+        optionRepository.deleteAll();
         productRepository.deleteById(id);
     }
 

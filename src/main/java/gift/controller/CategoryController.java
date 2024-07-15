@@ -38,9 +38,10 @@ public class CategoryController {
         categoryService.update(category);
     }
 
-    @DeleteMapping("/api/category")
-    public void deleteCategory(@RequestParam("id") int id) {
+    @DeleteMapping("/api/category/{id}")
+    public String deleteCategory(@PathVariable("id") int id) {
         categoryService.delete(id);
+        return "redirect:/api/category";
     }
 
 }
