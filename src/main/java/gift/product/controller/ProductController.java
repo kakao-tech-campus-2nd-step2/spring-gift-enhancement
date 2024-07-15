@@ -1,6 +1,5 @@
 package gift.product.controller;
 
-import gift.product.model.dto.CreateProductAdminRequest;
 import gift.product.model.dto.CreateProductRequest;
 import gift.product.model.dto.ProductResponse;
 import gift.product.model.dto.UpdateProductRequest;
@@ -56,15 +55,6 @@ public class ProductController {
     public ResponseEntity<String> addProduct(@LoginUser AppUser loginAppUser,
                                              @Valid @RequestBody CreateProductRequest createProductRequest) {
         productService.addProduct(loginAppUser, createProductRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body("ok");
-    }
-
-    @PostMapping("/admin")
-    public ResponseEntity<String> addProductForAdmin(@LoginUser AppUser loginAppUser,
-                                                     @Valid @RequestBody CreateProductAdminRequest createProductRequest) {
-        CreateProductRequest req = new CreateProductRequest(createProductRequest.name(), createProductRequest.price(),
-                createProductRequest.imageUrl());
-        productService.addProduct(loginAppUser, req);
         return ResponseEntity.status(HttpStatus.CREATED).body("ok");
     }
 

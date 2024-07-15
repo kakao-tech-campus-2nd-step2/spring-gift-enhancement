@@ -20,6 +20,9 @@ public record CreateProductAdminRequest(
         int price,
 
         @Nullable
-        String imageUrl
+        String imageUrl,
+
+        @NotNull
+        Long sellerId
 ) {
 }

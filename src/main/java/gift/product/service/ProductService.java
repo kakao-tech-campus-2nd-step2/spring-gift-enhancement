@@ -66,8 +66,7 @@ public class ProductService {
 
     @Transactional
     public void updateProduct(AppUser appUser, Long id, UpdateProductRequest updateProductRequest) {
-        Product product = productRepository.findByIdAndIsActiveTrue(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product"));
+        Product product = findProduct(id);
         checkProductOwner(appUser, product);
 
         product.setName(updateProductRequest.name());
@@ -78,8 +77,7 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(AppUser appUser, Long id) {
-        Product product = productRepository.findByIdAndIsActiveTrue(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product"));
+        Product product = findProduct(id);
         checkProductOwner(appUser, product);
 
         product.setActive(false);
