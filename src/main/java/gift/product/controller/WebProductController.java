@@ -30,16 +30,15 @@ public class WebProductController {
 
     @GetMapping("/showNewProducts")
     public String showNewProducts(Model model) {
-        Product product = new Product();
-        model.addAttribute("product", product);
+        ProductRequest productRequest = new ProductRequest();
+        model.addAttribute("product", productRequest);
         return "newProduct";
     }
 
     @PostMapping("/saveProducts")
     public String saveProducts(@ModelAttribute("product") ProductRequest productRequest,
         Model model) {
-        Product product = Product.from(productRequest);
-        productService.save(product);
+        productService.addProduct(productRequest);
         return "redirect:/products";
     }
 
