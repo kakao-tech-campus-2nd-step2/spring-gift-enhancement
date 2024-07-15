@@ -1,10 +1,12 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.request.ProductRequestDto;
 import gift.dto.response.ProductResponseDto;
 import gift.exception.EntityNotFoundException;
 import gift.exception.KakaoInNameException;
+import gift.repository.category.CategoryRepository;
 import gift.repository.product.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,10 +37,13 @@ class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("상품 이름 카카오 포함 시 Exception 테스트")
     void 상품_카카오_포함_테스트(){
-        ProductRequestDto productRequestDto = new ProductRequestDto("테스트 카카오", 1000, "abc.png");
+        ProductRequestDto productRequestDto = new ProductRequestDto("테스트 카카오", 1000, "abc.png", 1L);
 
         assertThatThrownBy(() -> productService.addProduct(productRequestDto))
                 .isInstanceOf(KakaoInNameException.class);
@@ -51,15 +56,21 @@ class ProductServiceTest {
     @DisplayName("상품 저장 테스트")
     void 상품_저장_테스트(){
         //given
-        ProductRequestDto productRequestDto = new ProductRequestDto("테스트 상품", 1000, "abc.png");
+        ProductRequestDto productRequestDto = new ProductRequestDto("테스트 상품", 1000, "abc.png", 1L);
+        ProductRequestDto inValidproductRequestDto = new ProductRequestDto("테스트 상품", 1000, "abc.png", 2L);
+
+        Category category = new Category("상품권", "#0000");
 
         Product product = new Product.Builder()
                 .name("테스트 상품")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         given(productRepository.save(any(Product.class))).willReturn(product);
+        given(categoryRepository.findById(1L)).willReturn(Optional.of(category));
+        given(categoryRepository.findById(2L)).willReturn(Optional.empty());
 
         //when
         ProductResponseDto productResponseDto = productService.addProduct(productRequestDto);
@@ -68,7 +79,11 @@ class ProductServiceTest {
         assertAll(
                 () -> assertThat(productResponseDto.name()).isEqualTo(product.getName()),
                 () -> assertThat(productResponseDto.price()).isEqualTo(product.getPrice()),
-                () -> assertThat(productResponseDto.imageUrl()).isEqualTo(product.getImageUrl())
+                () -> assertThat(productResponseDto.imageUrl()).isEqualTo(product.getImageUrl()),
+                () -> assertThat(productResponseDto.categoryResponseDto().name()).isEqualTo("상품권"),
+                () -> assertThatThrownBy(() -> productService.addProduct(inValidproductRequestDto))
+                        .isInstanceOf(EntityNotFoundException.class)
+                        .hasMessage("해당 카테고리는 존재하지 않습니다.")
         );
     }
 
@@ -76,22 +91,27 @@ class ProductServiceTest {
     @DisplayName("상품 전체 조회 테스트")
     void 상품_전체_조회_테스트(){
         //given
+        Category category = new Category("상품권", "#0000");
+
         Product product1 = new Product.Builder()
                 .name("테스트 상품1")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         Product product2 = new Product.Builder()
                 .name("테스트 상품2")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         Product product3 = new Product.Builder()
                 .name("테스트 상품3")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         List<Product> products = Arrays.asList(product1, product2, product3);
@@ -114,16 +134,22 @@ class ProductServiceTest {
         //given
         Long testId = 1L;
         Long nullId = 2L;
-        ProductRequestDto productRequestDto = new ProductRequestDto("테스트 상품", 1000, "abc.png");
+        Category category = new Category("상품권", "#0000");
+        ProductRequestDto productRequestDto = new ProductRequestDto("테스트 상품", 1000, "abc.png", 1L);
+        ProductRequestDto inValidRequestDto = new ProductRequestDto("테스트 상품", 1000, "abc.png", 2L);
 
         Product product = new Product.Builder()
                 .name("수정 전")
                 .price(1)
                 .imageUrl("abcd.png")
+                .category(category)
                 .build();
 
         given(productRepository.findById(testId)).willReturn(Optional.of(product));
+        given(categoryRepository.findById(1L)).willReturn(Optional.of(category));
+
         given(productRepository.findById(nullId)).willReturn(Optional.empty());
+        given(categoryRepository.findById(2L)).willReturn(Optional.empty());
 
         //when
         ProductResponseDto updatedProductDto = productService.updateProduct(testId, productRequestDto);
@@ -134,7 +160,10 @@ class ProductServiceTest {
                 () -> assertThat(updatedProductDto.price()).isEqualTo(productRequestDto.price()),
                 () -> assertThat(updatedProductDto.imageUrl()).isEqualTo(productRequestDto.imageUrl()),
                 () -> assertThatThrownBy(() -> productService.updateProduct(nullId, productRequestDto))
+                        .isInstanceOf(EntityNotFoundException.class),
+                () -> assertThatThrownBy(() -> productService.updateProduct(testId, inValidRequestDto))
                         .isInstanceOf(EntityNotFoundException.class)
+                        .hasMessage("해당 카테고리가 존재하지 않습니다.")
         );
     }
 
@@ -144,11 +173,12 @@ class ProductServiceTest {
         //given
         Long testId = 1L;
         Long nullId = 2L;
-
+        Category category = new Category("상품권", "#0000");
         Product product = new Product.Builder()
                 .name("테스트 상품")
                 .price(1000)
                 .imageUrl("abc.png")
+                .category(category)
                 .build();
 
         given(productRepository.findById(testId)).willReturn(Optional.of(product));
@@ -174,11 +204,13 @@ class ProductServiceTest {
     void 상품_페이지_기능_테스트(){
         //given
         List<Product> products = new ArrayList<>();
+        Category category = new Category("상품권", "#0000");
         for(int i=0; i<20; i++){
             Product product = new Product.Builder()
                     .name("테스트" + i)
                     .price(i)
                     .imageUrl("abc.png")
+                    .category(category)
                     .build();
 
             products.add(product);
