@@ -10,7 +10,6 @@ import gift.product.exception.ProductNotFoundException;
 import gift.product.exception.ProductUpdateException;
 import gift.product.repository.ProductRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
