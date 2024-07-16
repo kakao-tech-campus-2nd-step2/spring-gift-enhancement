@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.request.WishListRequest;
 import gift.dto.response.WishProductResponse;
 import gift.entity.Member;
 import gift.entity.Product;
@@ -26,9 +27,9 @@ public class WishListService {
     }
 
     @Transactional
-    public void addProductToWishList(Long memberId, Long productId, int amount) {
+    public void addProductToWishList(Long memberId, WishListRequest request) {
         Member member = memberService.getMemberById(memberId);
-        Product product = productService.getProduct(productId);
+        Product product = productService.getProduct(request.productId());
 
         wishListRepository.findByMemberAndProduct(member, product)
                 .ifPresentOrElse(
@@ -36,7 +37,7 @@ public class WishListService {
                             throw new WishAlreadyExistsException(wish);
                         },
                         () -> {
-                            Wish wish = new Wish(member, amount, product);
+                            Wish wish = new Wish(member, request.amount(), product);
                             wishListRepository.save(wish);
                         }
                 );
@@ -52,12 +53,12 @@ public class WishListService {
     }
 
     @Transactional
-    public void updateWishProductAmount(Long memberId, Long productId, int amount) {
+    public void updateWishProductAmount(Long memberId, WishListRequest request) {
         Member member = memberService.getMemberById(memberId);
-        Product product = productService.getProduct(productId);
+        Product product = productService.getProduct(request.productId());
         Wish wish = wishListRepository.findByMemberAndProduct(member, product)
                 .orElseThrow(WishNotFoundException::new);
-        wish.changeAmount(amount);
+        wish.changeAmount(request.amount());
     }
 
     public Page<WishProductResponse> getWishProductsByMemberId(Long memberId, Pageable pageable) {
@@ -65,5 +66,4 @@ public class WishListService {
         return wishListRepository.findAllByMember(member, pageable)
                 .map(WishProductResponse::fromWish);
     }
-
 }
