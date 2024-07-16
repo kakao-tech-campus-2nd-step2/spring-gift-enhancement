@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.entity.ProductEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -28,24 +29,24 @@ public class Product {
     private String imageUrl;
 
     @NotBlank(message = "카테고리를 무조건 선택해 주세요.")
-    private Category category;
+    private Long categoryId;
 
     public Product() {
     }
 
-    public Product(String name, Long price, String imageUrl, Category category) {
+    public Product(String name, Long price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.category = category;
+        this.categoryId = categoryId;
     }
 
-    public Product(Long id, String name, Long price, String imageUrl, Category category) {
+    public Product(Long id, String name, Long price, String imageUrl, Long categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.category = category;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -80,19 +81,12 @@ public class Product {
         this.imageUrl = imageUrl;
     }\
 
-    public Category getCategory() {
-        return category;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public boolean isEqual(Product product) {
-        return Objects.equals(name, product.getName()) &&
-            Objects.equals(price, product.getPrice()) &&
-            Objects.equals(imageUrl, product.getImageUrl())&&
-            Objects.equals(category, product.getCategory());
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
 }
