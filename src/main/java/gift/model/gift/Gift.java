@@ -1,5 +1,6 @@
 package gift.model.gift;
 
+import gift.model.category.Category;
 import gift.model.wish.Wish;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,10 @@ public class Gift {
 
     @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
     protected List<Wish> wishes = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "category")
+    private Category category;
 
     public Gift() {
     }
