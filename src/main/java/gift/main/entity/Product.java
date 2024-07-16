@@ -2,6 +2,9 @@ package gift.main.entity;
 
 import gift.main.dto.ProductRequest;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+
+import java.util.List;
 
 @Entity
 public class Product {
@@ -22,6 +25,13 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private User seller;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,  cascade = CascadeType.DETACH)
+    private List<WishProduct> wishProducts;
 
 
     public Product() {
@@ -72,6 +82,14 @@ public class Product {
 
     public String getSellerName() {
         return seller.getName();
+    }
+
+    public String getCategoryName() {
+        return this.category.getName();
+    }
+
+    public int getCategoryUniNum() {
+        return this.category.getUniNumber();
     }
 
 }

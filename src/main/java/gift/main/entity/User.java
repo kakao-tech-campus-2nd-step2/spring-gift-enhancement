@@ -3,8 +3,10 @@ package gift.main.entity;
 import gift.main.dto.UserJoinRequest;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
-@Table(name = "`user`")
+@Table(name = "`users`")
 public class User {
 
     @Id
@@ -23,7 +25,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,  cascade = CascadeType.DETACH)
+    private List<WishProduct> wishProducts;
+
     public User() {
+
     }
 
     public User(long id, String name, String email, String password, Role role) {
