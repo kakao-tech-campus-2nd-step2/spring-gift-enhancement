@@ -20,6 +20,9 @@ public class CategoryService {
     }
 
     public CategoryModel.Info createCategory(CategoryCommand.Register command) {
+        categoryRepository.findByName(command.name()).ifPresent(category -> {
+            throw new IllegalArgumentException("Category already exists");
+        });
         var category = categoryRepository.save(command.toEntity());
         return CategoryModel.Info.from(category);
     }

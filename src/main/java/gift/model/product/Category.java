@@ -1,6 +1,7 @@
 package gift.model.product;
 
 import gift.model.BaseTimeEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,7 @@ public class Category extends BaseTimeEntity {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String name;
 
     protected Category() {
