@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.auth.CheckRole;
 import gift.exception.InputException;
 import gift.model.Category;
 import gift.request.CategoryAddRequest;
@@ -28,16 +29,19 @@ public class CategoryApiController {
         this.categoryService = categoryService;
     }
 
+    @CheckRole("ROLE_ADMIN")
     @GetMapping("/api/categories")
     public ResponseEntity<List<Category>> getAllCategories() {
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
+    @CheckRole("ROLE_ADMIN")
     @GetMapping("/api/categories/{id}")
     public ResponseEntity<Category> getCategory(@PathVariable Long id) {
         return new ResponseEntity<>(categoryService.getCategory(id), HttpStatus.OK);
     }
 
+    @CheckRole("ROLE_ADMIN")
     @PostMapping("/api/categories")
     public ResponseEntity<Void> addCategory(@RequestBody @Valid CategoryAddRequest dto,
         BindingResult bindingResult) {
@@ -49,6 +53,7 @@ public class CategoryApiController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @CheckRole("ROLE_ADMIN")
     @PutMapping("/api/categories")
     public ResponseEntity<Void> updateCategory(@RequestBody @Valid CategoryUpdateRequest dto,
         BindingResult bindingResult) {
@@ -60,6 +65,7 @@ public class CategoryApiController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @CheckRole("ROLE_ADMIN")
     @DeleteMapping("/api/categories")
     public ResponseEntity<Void> deleteCategory(@RequestParam("id") Long id) {
         categoryService.removeCategory(id);
