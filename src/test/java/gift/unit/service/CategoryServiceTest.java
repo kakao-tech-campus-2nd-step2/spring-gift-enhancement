@@ -150,5 +150,17 @@ public class CategoryServiceTest implements AutoCloseable {
         assertThat(existingCategory.getName()).isEqualTo(newName);
     }
 
+    @Test
+    @DisplayName("not exist category update test")
+    void notExistCategoryUpdateTest() {
+        // given
+        String newName = "update category";
+        UpdateCategoryRequest request = new UpdateCategoryRequest(newName);
+        given(categoryRepository.findById(any())).willReturn(Optional.empty());
 
+        // when & then
+        assertThatThrownBy(() -> categoryService.updateCategory(1L, request))
+            .isInstanceOf(CategoryNotFoundException.class);
+        then(categoryRepository).should(times(1)).findById(any());
+    }
 }
