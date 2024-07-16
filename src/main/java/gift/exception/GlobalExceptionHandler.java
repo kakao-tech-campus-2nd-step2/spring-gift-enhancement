@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CategoryException.class)
-    public ResponseEntity categoryException(TokenException e) {
+    public ResponseEntity categoryException(CategoryException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
