@@ -52,10 +52,12 @@ public class GiftService {
     }
 
     @Transactional
-    public void updateGift(GiftRequest giftReq, Long id) {
+    public void updateGift(GiftRequest giftRequest, Long id) {
+        Category category = categoryRepository.findById(giftRequest.getCategoryId())
+                .orElseThrow(() -> new NoSuchElementException("해당 카테고리 id가 없습니다."));
         Gift gift = giftRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Gift not found with id " + id));
-        gift.modify(giftReq.getName(), giftReq.getPrice(), giftReq.getImageUrl());
+                .orElseThrow(() -> new NoSuchElementException("해당 Gift가 없습니다. id : " + id));
+        gift.modify(giftRequest.getName(), giftRequest.getPrice(), giftRequest.getImageUrl(), category);
         giftRepository.save(gift);
     }
 

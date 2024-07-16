@@ -62,6 +62,8 @@ public class AdminController {
 
     @GetMapping("/admin/gift/modify/{id}")
     public String giftModify(Model model, @PathVariable("id") Long id) {
+        List<CategoryResponse> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         GiftResponse gift = giftService.getGift(id);
         model.addAttribute("gift", gift);
         return "modify_form";
