@@ -1,5 +1,6 @@
 package gift.category.controller;
 
+import gift.category.model.dto.CreateCategoryRequest;
 import gift.user.model.dto.AppUser;
 import gift.user.resolver.LoginUser;
 import gift.user.service.UserService;
