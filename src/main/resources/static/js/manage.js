@@ -56,10 +56,10 @@ document.getElementById('addProductForm').addEventListener('submit', function(ev
 
     const form = event.target;
     const data = {
-        id: form.id.value,
         name: form.name.value,
         price: form.price.value,
-        imageUrl: form.imageUrl.value
+        imageUrl: form.imageUrl.value,
+        categoryId: form.category.value
     };
 
     fetch(`/v3/products`, {
@@ -123,11 +123,12 @@ document.getElementById('editProductForm').addEventListener('submit', function(e
     const data = {
         name: form.name.value,
         price: form.price.value,
-        imageUrl: form.imageUrl.value
+        imageUrl: form.imageUrl.value,
+        categoryId: form.category.value
     };
 
     fetch(`/v3/products/${originalId}`, {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(data),
         headers: {
             'Content-Type': 'application/json'
