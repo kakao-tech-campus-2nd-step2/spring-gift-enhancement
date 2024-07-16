@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -22,7 +22,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PostMapping()
+    @PostMapping("/category")
     public ResponseEntity<SuccessBody<Long>> addProduct(
         @Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
         Long categoryId = categoryService.addCategory(categoryRequestDTO);
