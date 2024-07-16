@@ -32,6 +32,14 @@
         name: <input type="text" id="name" name="name" required><br>
         price: <input type="number" id="price" name="price" required><br>
         imageUrl: <input type="text" id="imageUrl" name="imageUrl" required><br>
+                <label for="category">Category:</label>
+        <select id="category" name="category">
+            <option value="">Select a category</option>
+            <option th:each="category : ${categoryList}"
+                    th:value="${category}"
+                    th:text="${category}">
+            </option>
+        </select><br>
         <button type="submit">Add Product</button>
     </form>
 </div>
