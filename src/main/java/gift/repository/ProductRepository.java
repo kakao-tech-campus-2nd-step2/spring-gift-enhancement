@@ -15,5 +15,4 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("select new gift.dto.product.ShowProductDTO(p.id, p.name, p.price, p.imageUrl, p.category.name) from Product p ")
     Page<ShowProductDTO> findAllProduct(Pageable pageable);
 
-
 }

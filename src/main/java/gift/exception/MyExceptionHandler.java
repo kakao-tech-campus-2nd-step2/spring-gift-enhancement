@@ -4,6 +4,7 @@ import gift.exception.exception.BadRequestException;
 import gift.exception.exception.NotFoundException;
 import gift.exception.exception.ServerInternalException;
 import gift.exception.exception.UnAuthException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,6 @@ public class MyExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public String exception(NotFoundException e) {
-        System.out.println("handler");
         return back(e.getMessage());
     }
 
@@ -43,5 +43,6 @@ public class MyExceptionHandler {
     public String exception(BadRequestException e) {
         return back(e.getMessage());
     }
+
 }
 

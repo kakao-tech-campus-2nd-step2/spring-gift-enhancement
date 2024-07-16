@@ -24,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 
@@ -52,37 +53,40 @@ public class ProductService {
             throw new BadRequestException("하나의 옵션은 필요합니다.");
         if(categoryRepository.findById(product.categoryId()).isEmpty())
             throw new NotFoundException("해당 카테고리가 없음");
+
         Category category = categoryRepository.findById(product.categoryId()).get();
         Product saveProduct = new Product(product.name(), product.price(), product.imageUrl(),category);
+        List<String> optionList = stream(product.option().split(",")).toList();
+        optionList= optionList.stream().distinct().collect(Collectors.toList());
 
 
         if(isValidProduct(saveProduct)){
             saveProduct = productRepository.save(saveProduct);
             category.addProduct(saveProduct);
-        }
-
-        List<String> optionList = stream(product.option().split(",")).toList();
-        for(String str : optionList){
-            Option.OptionId optionId = new Option.OptionId(saveProduct.getId(), str);
-            Option option = new Option(optionId);
-            if(isValidOption(optionId)) {
-                saveProduct.addOptions(option);
-                optionRepository.save(option);
-            }
-
+            addOptionToProduct(optionList,saveProduct);
         }
     }
 
-    private boolean isValidProduct(@Valid Product product){
-        if(product.getName().contentEquals("카카오"))
+    private void addOptionToProduct(List<String> optionList, Product product) {
+        for(String str : optionList){
+            Option option = new Option(product, str);
+            if(isValidOption(option)) {
+                product.addOptions(option);
+                optionRepository.save(option);
+            }
+        }
+    }
 
+    private boolean isValidProduct(@Validated Product product){
+        if(product.getName().contentEquals("카카오"))
             throw new UnAuthException("MD와 상담해주세요.");
+
         Optional<Product> productOptional = productRepository.findById(product.getId());
         return productOptional.map(value -> value.equals(product)).orElse(true);
     }
 
-    private boolean isValidOption(@Valid Option.OptionId optionID){
-        if(optionRepository.findById(optionID).isPresent())
+    private boolean isValidOption(@Validated Option option){
+        if(optionRepository.findById(option.getId()).isPresent())
             throw new BadRequestException("이미 존재하는 옵션입니다.");
         return true;
     }
@@ -117,7 +121,6 @@ public class ProductService {
 
     public void modifyProduct(Product product) {
         if(productRepository.findById(product.getId()).isEmpty())
-
             throw new NotFoundException("물건이 없습니다.");
         productRepository.deleteById(product.getId());
         productRepository.save(product);

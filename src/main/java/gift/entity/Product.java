@@ -29,10 +29,11 @@ public class Product {
 
 
     @OneToMany(mappedBy = "product")
+    @Size(max=100000000)//1억
     List<Option> options = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
-    List <WishList> wishlists = new ArrayList<>();
+    List<WishList> wishlists = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     Category category;
@@ -42,16 +43,19 @@ public class Product {
         this.wishlists.remove(wishlist);
     }
 
-    public void addOptions(Option option){
+    public void addOptions(Option option) {
         options.add(option);
         option.setProduct(this);
     }
-    public void addWishlist(WishList wishlist){
+
+    public void addWishlist(WishList wishlist) {
         wishlists.add(wishlist);
     }
+
     public String getCategoryName() {
         return category.getName();
     }
+
     public int getId() {
         return id;
     }
@@ -68,7 +72,7 @@ public class Product {
         return imageUrl;
     }
 
-    public Product(String name, int price, String imageUrl,Category category) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
