@@ -1,9 +1,9 @@
 package gift.dto.requestDTO;
 
-import gift.domain.Product;
 import gift.dto.common.valid.ValidProductName;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record ProductRequestDTO(
     @ValidProductName
@@ -11,10 +11,9 @@ public record ProductRequestDTO(
     @Min(1)
     int price,
     @NotBlank
-    String imageUrl) {
+    String imageUrl,
+    @NotNull
+    Long categoryId
+) {
 
-    public static Product toEntity(ProductRequestDTO productRequestDTO) {
-        return new Product(productRequestDTO.name(), productRequestDTO.price(),
-            productRequestDTO.imageUrl());
-    }
 }
