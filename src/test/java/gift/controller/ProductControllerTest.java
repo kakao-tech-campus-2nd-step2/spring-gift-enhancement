@@ -50,7 +50,7 @@ public class ProductControllerTest {
 
     @BeforeEach
     public void setUp() {
-        productDTO = new ProductResponse(1L, "Test Product", 100, "test.jpg");
+        productDTO = new ProductResponse(1L, "Test Product", 100, "test.jpg", 1L, "Category");
     }
 
     @Test
@@ -98,7 +98,7 @@ public class ProductControllerTest {
 
         mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"Test Product\", \"price\": 100, \"imageUrl\": \"test.jpg\"}"))
+                .content("{\"name\": \"Test Product\", \"price\": 100, \"imageUrl\": \"test.jpg\", \"categoryId\": 1}"))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.name").value("Test Product"));
     }
@@ -111,7 +111,7 @@ public class ProductControllerTest {
 
         mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"Test Product\", \"price\": -100, \"imageUrl\": \"test.jpg\"}"))
+                .content("{\"name\": \"Test Product\", \"price\": -100, \"imageUrl\": \"test.jpg\", \"categoryId\": 1}"))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.error").value(INVALID_PRICE));
     }
@@ -125,7 +125,7 @@ public class ProductControllerTest {
         mockMvc.perform(put("/api/products/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
-                    "{\"name\": \"Updated Product\", \"price\": 200, \"imageUrl\": \"updated.jpg\"}"))
+                    "{\"name\": \"Updated Product\", \"price\": 200, \"imageUrl\": \"updated.jpg\", \"categoryId\": 1}"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("Test Product"));
     }
@@ -139,7 +139,7 @@ public class ProductControllerTest {
         mockMvc.perform(put("/api/products/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
-                    "{\"name\": \"Updated Product\", \"price\": 200, \"imageUrl\": \"updated.jpg\"}"))
+                    "{\"name\": \"Updated Product\", \"price\": 200, \"imageUrl\": \"updated.jpg\", \"categoryId\": 1}"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.error").value(PRODUCT_NOT_FOUND + 1));
     }
