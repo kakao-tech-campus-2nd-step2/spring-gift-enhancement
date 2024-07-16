@@ -55,9 +55,6 @@ public class WishService {
                 product
         ));
 
-        member.addWish(wish);
-        product.addWish(wish);
-
         return WishResponseDTO.from(wish);
     }
 
@@ -69,8 +66,6 @@ public class WishService {
         Wish wish = wishRepository.findById(wishId)
                         .orElseThrow(NoSuchWishException::new);
 
-        wish.getOwner().removeWish(wish);
-        wish.getProduct().removeWish(wish);
         wishRepository.delete(wish);
 
     }

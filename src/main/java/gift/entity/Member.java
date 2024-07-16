@@ -16,9 +16,6 @@ public class Member {
 
     private String password;
 
-    @OneToMany(mappedBy = "member")
-    private final List<Wish> wishes = new ArrayList<>();
-
     public Member() {}
 
     public Member(String email, String password) {
@@ -40,17 +37,5 @@ public class Member {
 
     public void setPassword(String encryptedPw) {
         this.password = encryptedPw;
-    }
-
-    public List<Wish> getAllWishes() {
-        return wishes;
-    }
-
-    public void addWish(Wish wish) {
-        wishes.add(wish);
-    }
-
-    public void removeWish(Wish wish) {
-        wishes.remove(wish);
     }
 }
