@@ -7,7 +7,7 @@ public class WishlistRequest {
     @NotNull(message = "Product ID를 입력하세요")
     private Long productId;
 
-    public WishlistRequest(){
+    public WishlistRequest() {
 
     }
 

@@ -3,13 +3,12 @@ package gift.resolver;
 import gift.annotation.LoginMember;
 import gift.domain.TokenAuth;
 import gift.service.TokenService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 public class LoginMemberResolver implements HandlerMethodArgumentResolver {
 

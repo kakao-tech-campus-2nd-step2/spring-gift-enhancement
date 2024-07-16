@@ -4,8 +4,6 @@ import gift.domain.Member;
 import gift.domain.TokenAuth;
 import gift.exception.UnAuthorizationException;
 import gift.repository.token.TokenSpringDataJpaRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +27,7 @@ public class TokenService {
         this.secretKey = secretKey;
     }
 
-    public String saveToken(Member member){
+    public String saveToken(Member member) {
         String accessToken = Jwts.builder()
                 .setSubject(member.getId().toString())
                 .claim("email", member.getEmail())

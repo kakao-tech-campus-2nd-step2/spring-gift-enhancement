@@ -1,7 +1,7 @@
 package gift.service;
 
-import gift.dto.request.ProductRequest;
 import gift.domain.Product;
+import gift.dto.request.ProductRequest;
 import gift.exception.InvalidProductDataException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.product.ProductSpringDataJpaRepository;
@@ -12,19 +12,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional()
 public class ProductService {
     private final ProductSpringDataJpaRepository productRepository;
 
     @Autowired
-    public ProductService(ProductSpringDataJpaRepository productRepository){
+    public ProductService(ProductSpringDataJpaRepository productRepository) {
         this.productRepository = productRepository;
     }
 
-    public Product register(ProductRequest productRequest){
+    public Product register(ProductRequest productRequest) {
         Product product = Product.RequestToEntity(productRequest);
         try {
             return productRepository.save(product);
@@ -38,7 +36,7 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public Product findOne(Long productId){
+    public Product findOne(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
     }
@@ -52,7 +50,7 @@ public class ProductService {
         }).orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
     }
 
-    public Product delete(Long productId){
+    public Product delete(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
         productRepository.delete(product);

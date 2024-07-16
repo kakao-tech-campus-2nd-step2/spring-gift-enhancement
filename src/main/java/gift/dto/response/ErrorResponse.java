@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class ErrorResponse {
     private String message;
-    private String status;
+    private final String status;
     private Map<String, String> errors;
 
     public ErrorResponse(String message, String status) {

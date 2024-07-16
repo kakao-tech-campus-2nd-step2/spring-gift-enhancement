@@ -1,7 +1,6 @@
 package gift.dto.request;
 
 import gift.domain.Product;
-import gift.exception.InvalidProductDataException;
 import gift.validation.KakaoApproval;
 import jakarta.validation.constraints.*;
 
@@ -29,21 +28,22 @@ public class ProductRequest {
         this.imageUrl = imageUrl;
     }
 
-    public ProductRequest() {}
+    public ProductRequest() {
+    }
 
-    public String getName(){
+    public static ProductRequest entityToRequest(Product product) {
+        return new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl());
+    }
+
+    public String getName() {
         return name;
     }
 
-
-    public Integer getPrice(){
+    public Integer getPrice() {
         return price;
     }
-    public String getImageUrl(){
-        return imageUrl;
-    }
 
-    public static ProductRequest entityToRequest(Product product){
-        return new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl());
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

@@ -26,7 +26,7 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Category createCategory(CategoryRequest categoryRequest){
+    public Category createCategory(CategoryRequest categoryRequest) {
         if (categoryRepository.existsByName(categoryRequest.getName())) {
             throw new DuplicateCategoryNameException("중복된 카테고리 이름입니다.");
         }
@@ -34,7 +34,7 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public Category updateCategory(Long id, CategoryRequest categoryRequest){
+    public Category updateCategory(Long id, CategoryRequest categoryRequest) {
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("존재하지않는 카테코리입니다."));
         if (categoryRepository.existsByName(categoryRequest.getName())) {
@@ -44,7 +44,7 @@ public class CategoryService {
         return categoryRepository.save(existingCategory);
     }
 
-    public void deleteCategory(Long id){
+    public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("존재하지않는 카테코리입니다."));
         categoryRepository.delete(category);

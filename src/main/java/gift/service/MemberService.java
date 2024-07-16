@@ -1,7 +1,7 @@
 package gift.service;
 
-import gift.dto.request.MemberRequest;
 import gift.domain.Member;
+import gift.dto.request.MemberRequest;
 import gift.exception.DuplicateMemberEmailException;
 import gift.exception.InvalidCredentialsException;
 import gift.exception.MemberNotFoundException;

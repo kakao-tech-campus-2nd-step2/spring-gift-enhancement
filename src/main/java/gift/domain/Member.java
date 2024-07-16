@@ -1,6 +1,7 @@
 package gift.domain;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -23,7 +24,8 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TokenAuth> tokenAuths;
 
-    public Member() { }
+    public Member() {
+    }
 
     public Member(String email, String password) {
         this.email = email;
