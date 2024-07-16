@@ -19,15 +19,17 @@
 - **응답 예시**:
     ```json
     {
+        "success": true,
         "message": "All products retrieved successfully.",
-        "products": [
+        "data": [
             {
                 "id": 8146027,
                 "name": "아이스 카페 아메리카노 T",
                 "price": 4500,
                 "imageUrl": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"
             }
-        ]
+        ],
+        "errorCode": null
     }
     ```
 
@@ -38,19 +40,24 @@
 - **응답 예시 (성공 시)**:
     ```json
     {
+        "success": true,
         "message": "Product retrieved successfully.",
-        "product": {
+        "data": {
             "id": 8146027,
             "name": "아이스 카페 아메리카노 T",
             "price": 4500,
             "imageUrl": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"
-        }
+        },
+        "errorCode": null
     }
     ```
 - **응답 예시 (실패 시)**:
     ```json
     {
-        "message": "Product not found with id: 999"
+        "success": false,
+        "message": "Product not found with id: 999",
+        "data": null,
+        "errorCode": "404"
     }
     ```
 
@@ -69,13 +76,15 @@
 - **응답 예시**:
     ```json
     {
+        "success": true,
         "message": "Product created successfully.",
-        "product": {
+        "data": {
             "id": 8146027,
             "name": "아이스 카페 아메리카노 T",
             "price": 4500,
             "imageUrl": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"
-        }
+        },
+        "errorCode": null
     }
     ```
 
@@ -94,13 +103,15 @@
 - **응답 예시**:
     ```json
     {
+        "success": true,
         "message": "Product updated successfully.",
-        "product": {
+        "data": {
             "id": 8146027,
             "name": "아이스 카페 아메리카노 T",
             "price": 5000,
             "imageUrl": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"
-        }
+        },
+        "errorCode": null
     }
     ```
 
@@ -120,13 +131,15 @@
 - **응답 예시**:
     ```json
     {
+        "success": true,
         "message": "Product patched successfully.",
-        "product": {
+        "data": {
             "id": 8146027,
             "name": "따뜻한 카페 라떼 T",
             "price": 5500,
             "imageUrl": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"
-        }
+        },
+        "errorCode": null
     }
     ```
 
@@ -152,8 +165,9 @@
 - **응답 예시**:
     ```json
     {
+        "success": true,
         "message": "All products patched successfully.",
-        "updatedProducts": [
+        "data": [
             {
                 "id": 8146027,
                 "name": "따뜻한 카페 라떼 T",
@@ -166,7 +180,8 @@
                 "price": 6000,
                 "imageUrl": "https://example.com/newimage.jpg"
             }
-        ]
+        ],
+        "errorCode": null
     }
     ```
 
@@ -174,7 +189,24 @@
 
 - **URL**: `/api/products/{id}`
 - **Method**: `DELETE`
-- **응답**: `204 No Content`
+- **응답 예시 (성공 시)**:
+    ```json
+    {
+        "success": true,
+        "message": "Product deleted successfully.",
+        "data": null,
+        "errorCode": null
+    }
+    ```
+- **응답 예시 (실패 시)**:
+    ```json
+    {
+        "success": false,
+        "message": "Failed to delete product.",
+        "data": null,
+        "errorCode": "500"
+    }
+    ```
 
 ## 관리자 화면
 
@@ -222,11 +254,12 @@ spring.sql.init.schema-locations=classpath:schema.sql
 src/main/resources/schema.sql 파일에 데이터베이스 테이블을 생성하는 SQL 스크립트를 추가합니다.
 
 ```sql
-CREATE TABLE IF NOT EXISTS product (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    price INTEGER NOT NULL,
-    imageUrl VARCHAR(255)
+create table if not exists product (
+    id          BIGINT          not null AUTO_INCREMENT,
+    name        VARCHAR(15)     not null,
+    price       INTEGER         not null,
+    image_url   VARCHAR(255)    not null,
+    PRIMARY KEY (id)
 );
 ```
 
@@ -251,14 +284,21 @@ CREATE TABLE IF NOT EXISTS product (
 - **응답 예시 (성공 시)**:
     ```json
     {
-        "message": "Member registered successfully",
-        "token": "generated_jwt_token"
+        "success": true,
+        "message": "Member registered successfully.",
+        "data": {
+            "token": "generated_jwt_token"
+        },
+        "errorCode": null
     }
     ```
 - **응답 예시 (실패 시)**:
     ```json
     {
-        "message": "Registration failed"
+        "success": false,
+        "message": "Registration failed",
+        "data": null,
+        "errorCode": "500"
     }
     ```
 
@@ -276,13 +316,21 @@ CREATE TABLE IF NOT EXISTS product (
 - **응답 예시 (성공 시)**:
     ```json
     {
-        "token": "generated_jwt_token"
+        "success": true,
+        "message": "Login successful.",
+        "data": {
+            "token": "generated_jwt_token"
+        },
+        "errorCode": null
     }
     ```
 - **응답 예시 (실패 시)**:
     ```json
     {
-        "message": "Invalid email or password"
+        "success": false,
+        "message": "Invalid email or password",
+        "data": null,
+        "errorCode": "403"
     }
     ```
 
@@ -293,10 +341,11 @@ CREATE TABLE IF NOT EXISTS product (
 `src/main/resources/schema.sql` 파일에 데이터베이스 테이블을 생성하는 SQL 스크립트를 추가합니다.
 
 ```sql
-CREATE TABLE IF NOT EXISTS members (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+create table if not exists member (
+    id          BIGINT          not null AUTO_INCREMENT,
+    email       VARCHAR(255)    not null,
+    password    VARCHAR(255)    not null,
+    PRIMARY KEY (id)
 );
 ```
 
@@ -316,11 +365,14 @@ CREATE TABLE IF NOT EXISTS members (
 - **응답 예시**:
     ```json
     {
-        "wish": {
+        "success": true,
+        "message": "Wish added successfully.",
+        "data": {
             "id": 1,
             "memberId": 1,
             "productName": "New Product"
-        }
+        },
+        "errorCode": null
     }
     ```
 
@@ -332,13 +384,16 @@ CREATE TABLE IF NOT EXISTS members (
 - **응답 예시**:
     ```json
     {
-        "wishes": [
+        "success": true,
+        "message": "Wishes retrieved successfully.",
+        "data": [
             {
                 "id": 1,
                 "memberId": 1,
                 "productName": "New Product"
             }
-        ]
+        ],
+        "errorCode": null
     }
     ```
 
@@ -350,7 +405,10 @@ CREATE TABLE IF NOT EXISTS members (
 - **응답 예시**:
     ```json
     {
-        "removed": true
+        "success": true,
+        "message": "Wish removed successfully.",
+        "data": null,
+        "errorCode": null
     }
     ```
 
@@ -361,10 +419,12 @@ CREATE TABLE IF NOT EXISTS members (
 `src/main/resources/schema.sql` 파일에 데이터베이스 테이블을 생성하는 SQL 스크립트를 추가합니다.
 
 ```sql
-CREATE TABLE IF NOT EXISTS wishes (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    member_id BIGINT NOT NULL,
-    product_name VARCHAR(255) NOT NULL,
-    FOREIGN KEY (member_id) REFERENCES members(id)
+create table if not exists wish (
+    id          BIGINT          not null AUTO_INCREMENT,
+    member_id   BIGINT          not null,
+    product_id  BIGINT          not null,
+    PRIMARY KEY (id),
+    FOREIGN KEY (member_id)     REFERENCES member(id),
+    FOREIGN KEY (product_id)    REFERENCES product(id)
 );
 ```
