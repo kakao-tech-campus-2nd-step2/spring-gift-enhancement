@@ -1,5 +1,7 @@
 package gift.category;
 
+import gift.category.model.CategoryRequestDto;
+import gift.category.model.CategoryResponseDto;
 import gift.common.model.PageResponseDto;
 import java.net.URI;
 import org.springframework.data.domain.Pageable;

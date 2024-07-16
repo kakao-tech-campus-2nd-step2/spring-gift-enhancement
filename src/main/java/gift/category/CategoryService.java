@@ -1,5 +1,8 @@
 package gift.category;
 
+import gift.category.model.Category;
+import gift.category.model.CategoryRequestDto;
+import gift.category.model.CategoryResponseDto;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

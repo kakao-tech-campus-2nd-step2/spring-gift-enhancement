@@ -1,4 +1,4 @@
-package gift.category;
+package gift.category.model;
 
 public class CategoryRequestDto {
     private String name;

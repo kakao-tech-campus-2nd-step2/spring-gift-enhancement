@@ -1,4 +1,4 @@
-package gift.category;
+package gift.category.model;
 
 import gift.common.model.BaseEntity;
 import jakarta.persistence.Entity;
