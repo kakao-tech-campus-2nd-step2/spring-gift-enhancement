@@ -1,6 +1,7 @@
 package gift.category;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.category.model.CategoryRepository;
 import gift.category.model.dto.Category;
@@ -34,7 +35,7 @@ public class CategoryRepositoryTest {
 
     @Test
     public void testFindActiveCategoryById() {
-        Optional<Category> optionalResult = categoryRepository.findByIdAndIsActiveTrue(1L);
+        Optional<Category> optionalResult = categoryRepository.findByIdAndIsActiveTrue(category.getId());
 
         optionalResult.isPresent();
         Category category1 = optionalResult.get();
@@ -43,8 +44,13 @@ public class CategoryRepositoryTest {
     }
 
     @Test
-    public void testSaveAndDelete() {
+    public void testFindCategoryIsFalse() {
+        category.setActive(false);
+        categoryRepository.save(category);
 
+        Optional<Category> optionalResult = categoryRepository.findByIdAndIsActiveTrue(category.getId());
+
+        assertTrue(optionalResult.isEmpty());
     }
 
 }
