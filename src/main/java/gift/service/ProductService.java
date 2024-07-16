@@ -1,10 +1,13 @@
 package gift.service;
 
+import gift.dto.CategoryResponse;
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.dto.WishResponse;
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.repository.ProductRepository;
+import gift.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,10 +20,12 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public Page<ProductResponse> findAll(PageRequest pageRequest) {
@@ -33,12 +38,16 @@ public class ProductService {
     }
 
     public void save(ProductRequest productRequest) {
-        Product product = new Product(productRequest.name(), productRequest.price(), productRequest.imageUrl());
+        Category category = categoryRepository.findById(productRequest.categoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
+        Product product = new Product(productRequest.name(), productRequest.price(), productRequest.imageUrl(), category);
         productRepository.save(product);
     }
 
     public void update(Long id, ProductRequest productRequest) {
-        Product product = new Product(id, productRequest.name(), productRequest.price(), productRequest.imageUrl());
+        Category category = categoryRepository.findById(productRequest.categoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
+        Product product = new Product(id, productRequest.name(), productRequest.price(), productRequest.imageUrl(), category);
         productRepository.save(product);
     }
 
@@ -51,9 +60,19 @@ public class ProductService {
     }
 
     private ProductResponse convertToResponse(Product product) {
+        Category category = product.getCategory();
+        CategoryResponse categoryResponse = new CategoryResponse(
+                category.getId(),
+                category.getName(),
+                category.getColor(),
+                category.getImageUrl(),
+                category.getDescription()
+        );
+
         List<WishResponse> wishResponses = product.getWishes().stream()
                 .map(wish -> new WishResponse(wish.getId(), wish.getProduct().getId(), wish.getProduct().getName(), wish.getProductNumber()))
                 .collect(Collectors.toList());
-        return new ProductResponse(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), wishResponses);
+
+        return new ProductResponse(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), categoryResponse, wishResponses);
     }
 }
