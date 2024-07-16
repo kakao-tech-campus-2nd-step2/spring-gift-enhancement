@@ -22,8 +22,9 @@ public class CategoryService {
         return categoryRepository.save(categoryDTO.toEntity()).toDTO();
     }
 
-    public CategoryDTO findCategoryByName(String name){
-        return categoryRepository.findByName(name).orElseThrow().toDTO();
+    public CategoryDTO findCategoryByName(String name) {
+        return categoryRepository.findByName(name).orElseThrow(() -> new CategoryNotFoundException(
+            ErrorCode.CATEGORY_NOT_FOUND)).toDTO();
     }
 
     public List<CategoryDTO> getCategoryList() {
