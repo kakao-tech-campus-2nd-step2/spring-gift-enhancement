@@ -63,6 +63,10 @@ public class Wish {
         this.amount = amount;
     }
 
+    public boolean beDeleted() {
+        return amount.equals(0);
+    }
+
     private void checkOwner(final Member member) {
         if (!this.member.getId()
                 .equals(member.getId())) {
