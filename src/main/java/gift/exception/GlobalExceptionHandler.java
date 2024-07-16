@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         Locale locale = LocaleContextHolder.getLocale();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("error.invalid.format.price", null, locale));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("error.invalid.format", null, locale));
     }
 
     @ExceptionHandler(CustomException.class)

@@ -35,7 +35,8 @@ public class Product {
 
     }
 
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, Category category, String name, int price, String imageUrl) {
+        this.category = category;
         this.id = id;
         this.name = name;
         this.price = price;
@@ -47,6 +48,10 @@ public class Product {
     }
 
     public void setId(Long id) { this.id = id; }
+
+    public Category getCategory() {
+        return category;
+    }
 
     public String getName() {
         return name;

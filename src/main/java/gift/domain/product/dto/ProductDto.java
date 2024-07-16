@@ -1,5 +1,6 @@
 package gift.domain.product.dto;
 
+import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,9 @@ import org.hibernate.validator.constraints.URL;
 
 public record ProductDto(
     Long id,
+
+    @NotNull(message = "카테고리를 지정해주세요.")
+    Long categoryId,
 
     @NotBlank(message = "상품 이름은 필수 입력 필드이며 공백으로만 구성될 수 없습니다.")
     @Size(max = 15, message = "상품 이름은 15자를 초과할 수 없습니다.")
@@ -24,7 +28,7 @@ public record ProductDto(
     @URL(message = "잘못된 URL 형식입니다.")
     String imageUrl)
 {
-    public Product toProduct() {
-        return new Product(id, name, price, imageUrl);
+    public Product toProduct(Category category) {
+        return new Product(id, category, name, price, imageUrl);
     }
 }

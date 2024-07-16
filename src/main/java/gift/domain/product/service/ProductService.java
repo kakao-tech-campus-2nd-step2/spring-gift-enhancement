@@ -2,6 +2,7 @@ package gift.domain.product.service;
 
 import gift.domain.product.dao.ProductJpaRepository;
 import gift.domain.product.dto.ProductDto;
+import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import gift.domain.wishlist.service.WishlistService;
 import gift.exception.InvalidProductInfoException;
@@ -13,16 +14,20 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductJpaRepository productJpaRepository;
+    private final CategoryService categoryService;
     private final WishlistService wishlistService;
 
     public ProductService(ProductJpaRepository productJpaRepository,
+        CategoryService categoryService,
         WishlistService wishlistService) {
         this.productJpaRepository = productJpaRepository;
+        this.categoryService = categoryService;
         this.wishlistService = wishlistService;
     }
 
     public Product create(ProductDto productDto) {
-        Product product = productDto.toProduct();
+        Category category = categoryService.readById(productDto.categoryId());
+        Product product = productDto.toProduct(category);
         return productJpaRepository.save(product);
     }
 
