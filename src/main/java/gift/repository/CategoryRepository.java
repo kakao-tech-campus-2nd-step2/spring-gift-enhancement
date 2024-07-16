@@ -24,4 +24,5 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Query("select new gift.dto.category.ShowCategoryDTO(c.id,c.name) from Category c")
     Page<ShowCategoryDTO> findAllCategory(Pageable pageable);
+
 }

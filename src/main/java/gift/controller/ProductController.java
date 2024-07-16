@@ -1,6 +1,7 @@
 package gift.controller;
 
 
+import gift.dto.product.ModifyProductDTO;
 import gift.dto.product.SaveProductDTO;
 import gift.dto.product.ShowProductDTO;
 import gift.entity.Product;
@@ -46,8 +47,8 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/api/products")
-    public void modifyProduct(@RequestBody Product product) {
-        productService.modifyProduct(product);
+    public void modifyProduct(@RequestBody ModifyProductDTO modifyProductDTO) {
+        productService.modifyProduct(modifyProductDTO);
     }
 
 

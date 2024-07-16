@@ -27,7 +27,6 @@ public class Product {
     @Column(nullable = false)
     String imageUrl;
 
-
     @OneToMany(mappedBy = "product")
     List<Option> options = new ArrayList<>();
 

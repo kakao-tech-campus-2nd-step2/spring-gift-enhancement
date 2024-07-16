@@ -2,6 +2,7 @@ package gift.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.dto.product.ModifyProductDTO;
 import gift.dto.product.ProductWithOptionDTO;
 import gift.dto.product.SaveProductDTO;
 import gift.dto.product.ShowProductDTO;
@@ -115,12 +116,10 @@ public class ProductService {
         return jsonProduct;
     }
 
-    public void modifyProduct(Product product) {
-        if(productRepository.findById(product.getId()).isEmpty())
-
+    public void modifyProduct(ModifyProductDTO product) {
+        if(productRepository.findById(product.id()).isEmpty())
             throw new NotFoundException("물건이 없습니다.");
-        productRepository.deleteById(product.getId());
-        productRepository.save(product);
+        productRepository.updateProductById(product.id(), product.name(),product.price(),product.imageUrl());
     }
 
 }
