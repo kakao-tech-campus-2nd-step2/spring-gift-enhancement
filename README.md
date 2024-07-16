@@ -10,4 +10,4 @@
   - [x] Edit Custom VM Options : -Dfile.encoding=UTF-8 추가
   - [x] Tomcat Encoding 설정 : VM options  ->  -Dfile.encoding=UTF-8 설정
   - [x] intelliJ 파일 Encoding 설정 : settings/file encoding 의 Global Encoding / Project Encoding / Default encoding for properties files 모두 UTF-8설정
-- [ ] Test : 사용하는 값들 상단 변수로 등록해서 사용해보기
+- [x] Test : 사용하는 값들 상단 변수로 등록해서 사용해보기

@@ -15,33 +15,36 @@ class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    private static final String TEST_EMAIL = "test@gmail.com";
+    private static final String TEST_PASSWORD = "password";
+
     @Test
     void save() {
         // given
-        Member member = new Member("test@example.com", "password");
+        Member member = new Member(TEST_EMAIL, TEST_PASSWORD);
 
         // when
         Member savedMember = memberRepository.save(member);
 
         // then
         assertThat(savedMember.getId()).isNotNull();
-        assertThat(savedMember.getEmail()).isEqualTo("test@example.com");
-        assertThat(savedMember.getPassword()).isEqualTo("password");
+        assertThat(savedMember.getEmail()).isEqualTo(TEST_EMAIL);
+        assertThat(savedMember.getPassword()).isEqualTo(TEST_PASSWORD);
     }
 
     @Test
     void findByEmail() {
         // given
-        Member member = new Member("test@example.com", "password");
+        Member member = new Member(TEST_EMAIL, TEST_PASSWORD);
         memberRepository.save(member);
 
         // when
-        Optional<Member> foundMember = memberRepository.findByEmail("test@example.com");
+        Optional<Member> foundMember = memberRepository.findByEmail(TEST_EMAIL);
 
         // then
         assertThat(foundMember).isPresent();
-        assertThat(foundMember.get().getEmail()).isEqualTo("test@example.com");
-        assertThat(foundMember.get().getPassword()).isEqualTo("password");
+        assertThat(foundMember.get().getEmail()).isEqualTo(TEST_EMAIL);
+        assertThat(foundMember.get().getPassword()).isEqualTo(TEST_PASSWORD);
     }
 }
 
