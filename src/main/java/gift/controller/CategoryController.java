@@ -3,11 +3,9 @@ package gift.controller;
 import gift.domain.CategoryRequest;
 import gift.domain.Menu;
 import gift.service.CategoryService;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
 
@@ -27,6 +25,16 @@ public class CategoryController {
     ){
         CategoryRequest categoryRequest = new CategoryRequest(null,categoryName);
         categoryService.create(categoryRequest);
+        return ResponseEntity.ok().body("successfully created");
+    }
+
+    @PutMapping
+    public ResponseEntity<String> update(
+            @RequestParam("id") Long categoryId,
+            @RequestParam("categoryName") String categoryName
+    ){
+        CategoryRequest categoryRequest = new CategoryRequest(categoryId,categoryName);
+        categoryService.update(categoryRequest);
         return ResponseEntity.ok().body("successfully created");
     }
 }
