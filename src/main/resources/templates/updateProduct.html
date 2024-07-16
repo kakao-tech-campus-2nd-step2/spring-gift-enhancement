@@ -22,6 +22,12 @@
                 <input type="text" id="imgURL" th:field="*{imgUrl}" placeholder="상품의 이미지 URL을 입력하세요">
             </div>
             <div>
+                <label th:for="category">Category</label>
+                <select id="category" th:field="*{categoryId}">
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                </select>
+            </div>
+            <div>
                 <button type="submit">Add</button>
             </div>
         </form>
