@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import gift.option.entity.Option;
 import gift.product.entity.Product;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,6 +81,7 @@ class ProductRepositoryTest {
     void updateProduct() {
         //given
         Product product = new Product("상품6", 6000, "webcam.png", null);
+        product.addOption(new Option("옵션1", 10));
         Product savedProduct = productRepository.save(product);
 
         //when
