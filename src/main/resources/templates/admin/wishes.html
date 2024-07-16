@@ -33,6 +33,7 @@
         <th class="text-center">상품명</th>
         <th class="text-center">상품 가격</th>
         <th class="text-center">상품 이미지 주소</th>
+        <th class="text-center">카테고리</th>
         <th class="text-center"></th>
         <th class="text-center"></th>
       </tr>
@@ -56,6 +57,9 @@
         </td>
         <td class="text-center">
           <span th:text="${wish.product.imageUrl}">상품 이미지 주소 tmp</span>
+        </td>
+        <td class="text-center">
+          <span th:text="${wish.product.category.name}">카테고리 tmp</span>
         </td>
         <td class="text-center">
           <form th:action="@{/admin/wishes/delete/{wishId}(wishId=${wish.id})}"

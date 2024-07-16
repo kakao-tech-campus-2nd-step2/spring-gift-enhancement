@@ -16,10 +16,15 @@
               th:onclick="|location.href='@{/admin/products/insert}'|"
               type="button">상품 추가
       </button>
-      <button class="btn btn-outline-secondary mb-5"
+      <button class="btn btn-outline-secondary mb-5 me-3"
               onclick="location.href='wishes.html'"
               th:onclick="|location.href='@{/admin/wishes}'|"
               type="button">위시 리스트로 이동
+      </button>
+      <button class="btn btn-outline-secondary mb-5"
+              onclick="location.href='categories.html'"
+              th:onclick="|location.href='@{/admin/categories}'|"
+              type="button">카테고리 목록으로 이동
       </button>
     </div>
   </div>
@@ -31,6 +36,7 @@
         <th class="text-center">상품명</th>
         <th class="text-center">가격</th>
         <th class="text-center">상품 이미지</th>
+        <th class="text-center">카테고리</th>
         <th class="text-center"></th>
         <th class="text-center"></th>
       </tr>
@@ -47,7 +53,10 @@
           <span th:text="${product.price}">가격 tmp</span>
         </td>
         <td class="text-center" style="max-width: 200px; word-break: break-all">
-          <span class="w" th:text="${product.imageUrl}">상품 이미지 tmp</span>
+          <span th:text="${product.imageUrl}">상품 이미지 tmp</span>
+        </td>
+        <td class="text-center">
+          <span th:text="${product.category.name}">카테고리 tmp</span>
         </td>
         <td class="text-center">
           <button class="btn btn-primary"
