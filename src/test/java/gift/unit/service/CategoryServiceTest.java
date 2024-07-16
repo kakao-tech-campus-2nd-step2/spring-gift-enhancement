@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 
 import gift.dto.category.CategoryResponse;
 import gift.dto.category.CreateCategoryRequest;
+import gift.dto.category.UpdateCategoryRequest;
 import gift.entity.Category;
 import gift.exception.category.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
@@ -130,4 +131,24 @@ public class CategoryServiceTest implements AutoCloseable {
         then(categoryRepository).should(times(1)).save(any(Category.class));
         then(categoryRepository).should(times(1)).existsByName(any());
     }
+
+    @Test
+    @DisplayName("update category test")
+    void updateCategoryTest() {
+        // given
+        String newName = "update category";
+        UpdateCategoryRequest request = new UpdateCategoryRequest(newName);
+
+        Category existingCategory = new Category(1L, "Category 1");
+        given(categoryRepository.findById(any())).willReturn(Optional.of(existingCategory));
+
+        // when
+        categoryService.updateCategory(1L, request);
+
+        // then
+        then(categoryRepository).should(times(1)).findById(any());
+        assertThat(existingCategory.getName()).isEqualTo(newName);
+    }
+
+
 }

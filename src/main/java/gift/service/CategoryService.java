@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.category.CategoryResponse;
 import gift.dto.category.CreateCategoryRequest;
+import gift.dto.category.UpdateCategoryRequest;
 import gift.entity.Category;
 import gift.exception.category.CategoryAlreadyExistException;
 import gift.exception.category.CategoryNotFoundException;
@@ -42,7 +43,15 @@ public class CategoryService {
         return savedCategory.getId();
     }
 
-    private void validateCategory(Category category) {
+    @Transactional
+    public void updateCategory(Long id, UpdateCategoryRequest request) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(CategoryNotFoundException::new);
+        category.setName(request.name());
+    }
+
+    @Transactional(readOnly = true)
+    protected void validateCategory(Category category) {
         if (categoryRepository.existsByName(category.getName())) {
             throw new CategoryAlreadyExistException();
         }
