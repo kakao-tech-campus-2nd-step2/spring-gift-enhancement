@@ -79,7 +79,7 @@ class WishlistRepositoryTest {
         );
 
         //when
-        List<Wishlist> actual = wishlistRepository.findAllByMemberEmail("aaa@email.com");
+        List<Wishlist> actual = wishlistRepository.findAllByMember(member);
 
         //then
         assertAll(
