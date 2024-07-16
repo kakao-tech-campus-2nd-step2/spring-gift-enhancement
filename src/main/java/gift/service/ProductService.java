@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.product.AddProductRequest;
+import gift.dto.product.CreateProductRequest;
 import gift.dto.product.ProductResponse;
 import gift.dto.product.UpdateProductRequest;
 import gift.entity.Product;
@@ -34,7 +34,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Long addProduct(AddProductRequest request) {
+    public Long createProduct(CreateProductRequest request) {
         return productRepository.save(ProductMapper.toProduct(request)).getId();
     }
 
