@@ -12,3 +12,9 @@ insert into product(name, price, image_url, created_at) values ('iphone15', 1250
 insert into product(name, price, image_url, created_at) values ('Galaxy S24', 1155000, 'https://i.namu.wiki/i/ZLFbe4HCVVSYNNwPfTH4tb7LW3yy2QI-Lv_6yqWOpgajM9jITQAqf52eugmOokgN1JTq4iKq3KlyXATVpPmRnl_4Eu2upT2uMz3jEh73EJJuvXKKddJQCwQF1ztseIdhLI4_B1Xn5KZwJ3PnKiPN9Q.webp', NOW() + INTERVAL '11' SECOND);
 
 insert into member(email, password, role) values ('gudwls818@gmail.com', '1234', 'ADMIN');
+
+insert into category(name, color, image_url, description) values ('교환권', '#6c95d1', '교환권url', '');
+insert into category(name, color, image_url, description) values ('상품권', '#6c95d1', '상품권url', '');
+insert into category(name, color, image_url, description) values ('뷰티', '#6c95d1', '뷰티url', '');
+insert into category(name, color, image_url, description) values ('패션', '#6c95d1', '패션url', '');
+insert into category(name, color, image_url, description) values ('식품', '#6c95d1', '식품url', '');
