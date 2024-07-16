@@ -7,7 +7,6 @@ import gift.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import java.util.List;
 
 
 @Service
@@ -19,7 +18,7 @@ public class ProductService {
     }
 
     public Product createProduct(CreateProductDto productDto) {
-        Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
+        Product product = productDto.toProduct();
         productRepository.save(product);
         return product;
     }
@@ -35,9 +34,7 @@ public class ProductService {
 
     public Product updateProduct(Long productId, UpdateProductDto productDto) {
         Product product = productRepository.findById(productId).orElseThrow();
-        product.setName(productDto.getName());
-        product.setPrice(productDto.getPrice());
-        product.setImageUrl(productDto.getImageUrl());
+        productDto.updateProduct(product);
         productRepository.save(product);
         return product;
     }
