@@ -1,6 +1,5 @@
 package gift.model.gift;
 
-import gift.model.category.Category;
 import gift.model.category.CategoryResponse;
 
 public class GiftResponse {

@@ -11,26 +11,21 @@ import java.util.List;
 @Table(name = "category")
 public class Category {
 
+    @OneToMany(mappedBy = "category")
+    protected List<Gift> gifts = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(unique = true)
     @NotNull
     private String name;
-
     @NotNull
     private String color;
-
     @Column(name = "imageurl")
     @NotNull
     private String imageUrl;
-
     @NotNull
     private String description;
-
-    @OneToMany(mappedBy = "category")
-    protected List<Gift> gifts = new ArrayList<>();
 
     public Category() {
     }
@@ -67,7 +62,7 @@ public class Category {
         return gifts;
     }
 
-    public void modify(String name, String color, String imageUrl, String description){
+    public void modify(String name, String color, String imageUrl, String description) {
         this.name = name;
         this.color = color;
         this.imageUrl = imageUrl;

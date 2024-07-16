@@ -6,7 +6,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,14 +25,14 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public CategoryResponse getCategory(Long categoryId){
+    public CategoryResponse getCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()->new NoSuchElementException("해당 카테고리가 존재하지 않습니다. id :  " + categoryId));
+                .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 존재하지 않습니다. id :  " + categoryId));
         return CategoryResponse.fromEntity(category);
 
     }
 
-    public List<CategoryResponse> getAllCategories(){
+    public List<CategoryResponse> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
         return categories.stream()
                 .map(CategoryResponse::fromEntity)
@@ -39,9 +40,9 @@ public class CategoryService {
     }
 
     @Transactional
-    public void updateCategory(Long categoryId,CategoryRequest categoryRequest){
+    public void updateCategory(Long categoryId, CategoryRequest categoryRequest) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()->new NoSuchElementException("해당 카테고리가 존재하지 않습니다. id :  " + categoryId));
+                .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 존재하지 않습니다. id :  " + categoryId));
         category.modify(
                 categoryRequest.getName(),
                 categoryRequest.getColor(),
@@ -52,7 +53,7 @@ public class CategoryService {
     }
 
 
-    public void deleteCategory(Long categoryId){
+    public void deleteCategory(Long categoryId) {
         categoryRepository.deleteById(categoryId);
     }
 }

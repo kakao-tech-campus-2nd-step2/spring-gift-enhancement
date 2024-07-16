@@ -1,7 +1,5 @@
 package gift.model.gift;
 
-import gift.model.category.Category;
-import gift.model.category.CategoryRequest;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 

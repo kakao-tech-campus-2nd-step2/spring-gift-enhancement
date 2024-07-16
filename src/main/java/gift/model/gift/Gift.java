@@ -1,7 +1,6 @@
 package gift.model.gift;
 
 import gift.model.category.Category;
-import gift.model.category.CategoryRequest;
 import gift.model.wish.Wish;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +12,8 @@ import java.util.List;
 @Table(name = "gift")
 public class Gift {
 
+    @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
+    protected List<Wish> wishes = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,10 +24,6 @@ public class Gift {
     @NotNull
     @Column(name = "imageurl")
     private String imageUrl;
-
-    @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
-    protected List<Wish> wishes = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     @NotNull

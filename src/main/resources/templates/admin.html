@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Gift List</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -27,7 +27,7 @@
         </tr>
         </tbody>
     </table>
-    <a th:href="@{/admin/gift/create}" class="btn btn-primary">상품 등록</a>
+    <a class="btn btn-primary" th:href="@{/admin/gift/create}">상품 등록</a>
 </div>
 </body>
 </html>

@@ -23,6 +23,10 @@ public class CategoryResponse {
         this.description = description;
     }
 
+    public static CategoryResponse fromEntity(Category category) {
+        return new CategoryResponse(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
+    }
+
     public Long getId() {
         return id;
     }
@@ -61,10 +65,6 @@ public class CategoryResponse {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public static CategoryResponse fromEntity(Category category) {
-        return new CategoryResponse(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
     }
 
 }
