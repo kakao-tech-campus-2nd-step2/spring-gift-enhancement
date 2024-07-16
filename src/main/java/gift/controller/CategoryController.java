@@ -1,12 +1,16 @@
 package gift.controller;
 
+import gift.auth.LoginUser;
+import gift.domain.User;
 import gift.dto.common.apiResponse.ApiResponseBody.SuccessBody;
 import gift.dto.common.apiResponse.ApiResponseGenerator;
 import gift.dto.requestDTO.CategoryRequestDTO;
 import gift.dto.responseDTO.CategoryListResponseDTO;
 import gift.dto.responseDTO.CategoryResponseDTO;
+import gift.service.AuthService;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
+import org.apache.juli.logging.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,14 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final AuthService authService;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, AuthService authService) {
         this.categoryService = categoryService;
+        this.authService = authService;
     }
 
     @PostMapping("/category")
     public ResponseEntity<SuccessBody<Long>> addCategory(
-        @Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
+        @Valid @RequestBody CategoryRequestDTO categoryRequestDTO,
+        @LoginUser User user) {
+        authService.authorizeAdminUser(user);
         Long categoryId = categoryService.addCategory(categoryRequestDTO);
         return ApiResponseGenerator.success(HttpStatus.CREATED, "카테고리가 생성되었습니다.", categoryId);
     }
@@ -53,15 +61,18 @@ public class CategoryController {
     @PutMapping("/category/{id}")
     public ResponseEntity<SuccessBody<Long>> updateCategory(
         @PathVariable("id") Long categoryId,
-        @Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
-
+        @Valid @RequestBody CategoryRequestDTO categoryRequestDTO,
+        @LoginUser User user) {
+        authService.authorizeAdminUser(user);
         Long updatedCategoryId = categoryService.updateCategory(categoryId, categoryRequestDTO);
         return ApiResponseGenerator.success(HttpStatus.OK, "카테고리가 수정되었습니다.", updatedCategoryId);
     }
 
     @DeleteMapping("/category/{id}")
     public ResponseEntity<SuccessBody<Long>> deleteCategory(
-        @PathVariable("id") Long categoryId){
+        @PathVariable("id") Long categoryId,
+        @LoginUser User user){
+        authService.authorizeAdminUser(user);
         Long deletedCategoryId = categoryService.deleteCategory(categoryId);
         return ApiResponseGenerator.success(HttpStatus.OK, "카테고리가 삭제되었습니다.", deletedCategoryId);
     }
