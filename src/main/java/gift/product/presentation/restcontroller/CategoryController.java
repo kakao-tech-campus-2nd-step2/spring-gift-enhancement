@@ -8,8 +8,10 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,6 +36,14 @@ public class CategoryController {
         var categoryRegisterDto = requestCategoryDto.toCategoryRegisterDto();
         var createdCategoryId = categoryService.createCategory(categoryRegisterDto);
         return ResponseEntity.ok(createdCategoryId);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Long> updateCategory(@RequestParam("id") Long id,
+        @Valid @RequestBody RequestCategoryDto requestCategoryDto) {
+        var categoryRegisterDto = requestCategoryDto.toCategoryRegisterDto();
+        var updatedCategoryId = categoryService.updateCategory(id, categoryRegisterDto);
+        return ResponseEntity.ok(updatedCategoryId);
     }
 
 

@@ -24,4 +24,10 @@ public class CategoryService {
         var category = categoryRegisterDto.toCategory();
         return categoryRepository.saveCategory(category);
     }
+
+    public Long updateCategory(Long id, CategoryRegisterDto categoryRegisterDto) {
+        var category = categoryRepository.getCategory(id);
+        category.setName(categoryRegisterDto.name());
+        return categoryRepository.saveCategory(category);
+    }
 }

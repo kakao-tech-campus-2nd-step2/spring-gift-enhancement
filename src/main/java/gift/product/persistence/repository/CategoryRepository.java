@@ -10,4 +10,6 @@ public interface CategoryRepository {
     List<Category> getAllCategories();
 
     Long saveCategory(Category category);
+
+    Category getCategory(Long id);
 }
