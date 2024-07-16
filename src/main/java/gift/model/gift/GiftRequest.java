@@ -1,5 +1,7 @@
 package gift.model.gift;
 
+import gift.model.category.Category;
+import gift.model.category.CategoryRequest;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -10,11 +12,13 @@ public class GiftRequest {
     private String name;
     private int price;
     private String imageUrl;
+    private Long categoryId;
 
-    public GiftRequest(String name, int price, String imageUrl) {
+    public GiftRequest(String name, int price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public String getName() {
@@ -39,6 +43,14 @@ public class GiftRequest {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Gift toEntity() {
