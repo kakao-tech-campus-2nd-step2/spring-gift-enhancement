@@ -20,6 +20,9 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Product expected;
     private Product actual;
     private Product updateProduct;
@@ -29,6 +32,7 @@ public class ProductRepositoryTest {
     @BeforeEach
     void setUp(){
         category = new Category("testCategory");
+        categoryRepository.save(category);
         expected = new Product("testName", 1, "testUrl", category);
         actual = productRepository.save(expected);
         updateProduct = new Product("updateName", 1, "testUrl", category);
