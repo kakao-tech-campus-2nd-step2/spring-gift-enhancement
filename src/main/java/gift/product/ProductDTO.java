@@ -4,6 +4,7 @@ import static gift.exception.ErrorMessage.PRODUCT_NAME_ALLOWED_CHARACTER;
 import static gift.exception.ErrorMessage.PRODUCT_NAME_KAKAO_STRING;
 import static gift.exception.ErrorMessage.PRODUCT_NAME_LENGTH;
 
+import gift.category.Category;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
@@ -16,13 +17,15 @@ public record ProductDTO(
     String name,
 
     int price,
-    String imageUrl) {
+    String imageUrl,
+    Category category
+) {
 
     public Product toEntity() {
-        return new Product(-1, name, price, imageUrl);
+        return new Product(-1, name, price, imageUrl, category);
     }
 
     public Product toEntity(long id) {
-        return new Product(id, name, price, imageUrl);
+        return new Product(id, name, price, imageUrl, category);
     }
 }
