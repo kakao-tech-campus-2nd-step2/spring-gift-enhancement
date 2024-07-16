@@ -1,9 +1,7 @@
-package gift.controller;
+package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-import gift.auth.JwtService;
 import gift.auth.JwtTokenProvider;
 import gift.model.Category;
 import gift.model.Member;
@@ -15,14 +13,10 @@ import gift.request.ProductAddRequest;
 import gift.request.ProductUpdateRequest;
 import gift.response.ProductResponse;
 import gift.service.MemberService;
-import gift.service.ProductService;
-import java.lang.reflect.ParameterizedType;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +36,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class ProductApiControllerTest {
+class ProductApiTest {
 
     @LocalServerPort
     int port;

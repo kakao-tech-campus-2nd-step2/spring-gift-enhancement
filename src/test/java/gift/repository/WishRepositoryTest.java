@@ -2,6 +2,7 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wish;
@@ -26,14 +27,19 @@ class WishRepositoryTest {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
     Wish wish;
     Member member;
     Product product;
+    Category category;
 
     @BeforeEach
     void setUp() {
         member = memberRepository.save(new Member("aaa123@a.com", "1234"));
-        product = productRepository.save(new Product("productA", 1000, "https://a.com"));
+        category = categoryRepository.save(new Category("카테고리"));
+        product = productRepository.save(new Product("productA", 1000, "https://a.com", category));
         wish = new Wish(member, product);
     }
 
@@ -65,7 +71,7 @@ class WishRepositoryTest {
         List<Product> products = new ArrayList<>();
         IntStream.range(0, 10)
             .forEach( i -> {
-                products.add(new Product("product"+i, 1000, "https://a.com"));
+                products.add(new Product("product"+i, 1000, "https://a.com", category));
             });
 
         products.forEach(
