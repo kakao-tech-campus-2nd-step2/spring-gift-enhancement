@@ -12,13 +12,16 @@ public class ProductDTO {
     private int price;
     @NotBlank(message = "상품 이미지 URL은 필수 입력 요소입니다.")
     private String imageUrl;
+    @NotBlank(message = "상품의 카테고리가 미지정 되었습니다.")
+    private Long categoryId;
 
     public ProductDTO() {}
 
-    public ProductDTO(String name, int price, String imageUrl) {
+    public ProductDTO(String name, int price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public String getName() {
@@ -38,5 +41,11 @@ public class ProductDTO {
     }
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+    public Long getCategoryId() {
+        return categoryId;
+    }
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }

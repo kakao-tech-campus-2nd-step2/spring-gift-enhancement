@@ -22,19 +22,25 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name="category_id", nullable = false)
+    private Category category;
+
     public Product() {}
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -48,5 +54,8 @@ public class Product {
     }
     public String getImageUrl() {
         return imageUrl;
+    }
+    public Category getCategory() {
+        return category;
     }
 }

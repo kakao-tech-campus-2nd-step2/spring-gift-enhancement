@@ -1,8 +1,10 @@
 package gift.repository;
 
+import gift.product.model.Category;
 import gift.product.model.Member;
 import gift.product.model.Product;
 import gift.product.model.Wish;
+import gift.product.repository.CategoryRepository;
 import gift.product.repository.MemberRepository;
 import gift.product.repository.ProductRepository;
 import gift.product.repository.WishListRepository;
@@ -23,12 +25,17 @@ public class WishListRepositoryTest {
     @Autowired
     private WishListRepository wishListRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Product originProduct;
     private Member originMember;
+    private Category originCategory;
 
     @BeforeEach
     void setUp() {
-        originProduct = productRepository.save(new Product("product", 1000, "image.url"));
+        originCategory = categoryRepository.save(new Category("교환권"));
+        originProduct = productRepository.save(new Product("product", 1000, "image.url", originCategory));
         originMember = memberRepository.save(new Member("user@email.com", "1234"));
     }
 

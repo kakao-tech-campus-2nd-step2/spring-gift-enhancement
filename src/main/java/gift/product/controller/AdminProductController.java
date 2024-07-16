@@ -31,7 +31,7 @@ public class AdminProductController {
     @GetMapping("/register")
     public String showProductForm(Model model) {
         System.out.println("[ProductController] showProductForm()");
-        model.addAttribute("product", new ProductDTO("", 0, ""));
+        model.addAttribute("product", new ProductDTO("", 0, "", 0L));
         return "product-form";
     }
 

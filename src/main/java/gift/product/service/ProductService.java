@@ -1,7 +1,9 @@
 package gift.product.service;
 
 import gift.product.dto.ProductDTO;
+import gift.product.exception.InvalidIdException;
 import gift.product.model.Product;
+import gift.product.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import gift.product.validation.ProductValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +17,22 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static gift.product.exception.GlobalExceptionHandler.NOT_EXIST_ID;
+
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductValidation productValidation;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
     public ProductService(
             ProductRepository productRepository,
-            ProductValidation productValidation
-    ) {
+            ProductValidation productValidation,
+            CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.productValidation = productValidation;
+        this.categoryRepository = categoryRepository;
     }
 
     public ResponseEntity<String> registerProduct(ProductDTO productDTO) {
@@ -37,7 +43,9 @@ public class ProductService {
                 new Product(
                         productDTO.getName(),
                         productDTO.getPrice(),
-                        productDTO.getImageUrl()
+                        productDTO.getImageUrl(),
+                        categoryRepository.findById(productDTO.getCategoryId())
+                                .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
                 )
         );
 
@@ -56,7 +64,9 @@ public class ProductService {
                         id,
                         productDTO.getName(),
                         productDTO.getPrice(),
-                        productDTO.getImageUrl()
+                        productDTO.getImageUrl(),
+                        categoryRepository.findById(productDTO.getCategoryId())
+                                .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
                 )
         );
 
@@ -101,7 +111,8 @@ public class ProductService {
         return new ProductDTO(
                 product.getName(),
                 product.getPrice(),
-                product.getImageUrl()
+                product.getImageUrl(),
+                product.getCategory().getId()
         );
     }
 

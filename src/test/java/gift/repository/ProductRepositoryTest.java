@@ -1,6 +1,8 @@
 package gift.repository;
 
+import gift.product.model.Category;
 import gift.product.model.Product;
+import gift.product.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,15 +18,20 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     private Product product;
+    private Category category;
 
     @BeforeEach
     public void setUp() {
+        category = categoryRepository.save(new Category("교환권"));
         product = new Product(
-            "상품1",
-            1500,
-            "product1.images"
+                "상품1",
+                1500,
+                "product1.images",
+                category
         );
     }
 
@@ -35,8 +42,6 @@ public class ProductRepositoryTest {
         assertThat(registerProduct.getName()).isEqualTo("상품1");
         assertThat(registerProduct.getPrice()).isEqualTo(1500);
         assertThat(registerProduct.getImageUrl()).isEqualTo("product1.images");
-
-        System.out.println("삽입된 객체의 ID = " + registerProduct.getId());
     }
 
     @Test
@@ -64,7 +69,8 @@ public class ProductRepositoryTest {
                     registerProduct.getId(),
                     registerProduct.getName(),
                     2000,
-                    registerProduct.getImageUrl()
+                    registerProduct.getImageUrl(),
+                    registerProduct.getCategory()
             )
         );
 
