@@ -8,9 +8,9 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
-import gift.dto.category.response.CategoryResponse;
 import gift.dto.category.request.CreateCategoryRequest;
 import gift.dto.category.request.UpdateCategoryRequest;
+import gift.dto.category.response.CategoryResponse;
 import gift.entity.Category;
 import gift.exception.category.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
