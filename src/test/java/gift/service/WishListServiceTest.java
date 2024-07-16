@@ -44,7 +44,7 @@ class WishListServiceTest {
     @Test
     @DisplayName("멤버의 모든 위시리스트 상품 조회")
     void getWishProductsByMemberId() {
-        // Given
+        //Given
         Long memberId = 1L;
         Member member = new Member("test@email.com", "password");
         Product product = new Product("name", 1000, "imageUrl", null);
@@ -55,10 +55,10 @@ class WishListServiceTest {
         when(memberService.getMemberById(memberId)).thenReturn(member);
         when(wishRepository.findAllByMember(member, pageable)).thenReturn(wishPage);
 
-        // When
+        //When
         Page<WishProductResponse> responsePage = wishListService.getWishProductsByMemberId(memberId, pageable);
 
-        // Then
+        //Then
         assertThat(responsePage.getContent()).hasSize(1);
         assertThat(responsePage.getContent().get(0))
                 .extracting("productName", "productAmount")
@@ -72,7 +72,7 @@ class WishListServiceTest {
         @Test
         @DisplayName("성공")
         void success() {
-            // Given
+            //Given
             Long memberId = 1L;
             WishListRequest request = new WishListRequest(1L, 1);
             Member member = new Member("test@email.com", "password");
@@ -82,16 +82,16 @@ class WishListServiceTest {
             when(productService.getProduct(request.productId())).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.empty());
 
-            // When
+            //When
             wishListService.addProductToWishList(memberId, request);
 
-            // Then
+            //Then
             verify(wishRepository).save(any(Wish.class));
         }
 
         @Test
         @DisplayName("실패 - 이미 존재하는 위시")
-        void fail_alreadyExists() {
+        void fail() {
             // Given
             Long memberId = 1L;
             WishListRequest request = new WishListRequest(1L, 1);
@@ -103,7 +103,7 @@ class WishListServiceTest {
             when(productService.getProduct(request.productId())).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.of(existingWish));
 
-            // When Then
+            //  When Then
             assertThatThrownBy(() -> wishListService.addProductToWishList(memberId, request))
                     .isInstanceOf(WishAlreadyExistsException.class);
         }
@@ -115,7 +115,7 @@ class WishListServiceTest {
         @Test
         @DisplayName("성공")
         void success() {
-            // Given
+            //Given
             Long memberId = 1L;
             Long productId = 1L;
             Member member = new Member("test@email.com", "password");
@@ -126,17 +126,17 @@ class WishListServiceTest {
             when(productService.getProduct(productId)).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.of(wish));
 
-            // When
+            //When
             wishListService.deleteProductInWishList(memberId, productId);
 
-            // Then
+            //Then
             verify(wishRepository).delete(wish);
         }
 
         @Test
         @DisplayName("실패 - 존재하지 않는 위시")
-        void fail_notFound() {
-            // Given
+        void fail() {
+            //Given
             Long memberId = 1L;
             Long productId = 1L;
             Member member = new Member("test@email.com", "password");
@@ -146,7 +146,7 @@ class WishListServiceTest {
             when(productService.getProduct(productId)).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.empty());
 
-            // When & Then
+            //When Then
             assertThatThrownBy(() -> wishListService.deleteProductInWishList(memberId, productId))
                     .isInstanceOf(WishNotFoundException.class);
         }
@@ -178,7 +178,7 @@ class WishListServiceTest {
 
         @Test
         @DisplayName("실패 - 존재하지 않는 위시")
-        void fail_notFound() {
+        void fail() {
             //Given
             Long memberId = 1L;
             WishListRequest request = new WishListRequest(1L, 10);
