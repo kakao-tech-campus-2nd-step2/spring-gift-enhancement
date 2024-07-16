@@ -65,7 +65,7 @@ public class ProductController {
         @Valid @RequestBody ProductRequestDTO productRequestDTO,
         @LoginUser User user) {
 
-        authService.authorizeAdminUser(user, productRequestDTO.name());
+        authService.authorizeAdminUser(user);
         Long productId = productService.addProduct(productRequestDTO);
         return ApiResponseGenerator.success(HttpStatus.CREATED, "상품이 등록되었습니다.", productId);
     }
