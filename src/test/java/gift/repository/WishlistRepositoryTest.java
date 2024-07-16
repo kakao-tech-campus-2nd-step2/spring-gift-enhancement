@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.vo.Category;
 import gift.vo.Member;
 import gift.vo.Product;
 import gift.vo.Wish;
@@ -32,17 +33,29 @@ class WishlistRepositoryTest {
     @Autowired
     private WishlistRepository wishlistRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Member savedMember;
     private Product savedProduct1;
     private Product savedProduct2;
 
+
     @BeforeEach
     void setUp() {
         Member member = new Member("kookies@google.com", "@123");
-        Product product1 = new Product("Ice Americano",
+        Category category = new Category(1L, "상품권", "#6c95d1", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "");
+
+        Category savedCategory = categoryRepository.save(category); //Category pre-save
+
+        Product product1 = new Product(
+                savedCategory,
+                "Ice Americano",
                 4500,
                 "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
-        Product product2 = new Product("Hot Americano",
+        Product product2 = new Product(
+                savedCategory,
+                "Hot Americano",
                 4200,
                 "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
 

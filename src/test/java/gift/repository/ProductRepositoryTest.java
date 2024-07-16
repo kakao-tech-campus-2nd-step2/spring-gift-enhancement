@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.vo.Category;
 import gift.vo.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,31 +21,43 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductRepositoryTest {
 
     @Autowired
-    private ProductRepository repository;
-    Product savedProduct;
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    private Category savedCategory ;
+    private Product savedProduct;
 
     @BeforeEach
     void setUp() {
-        Product product = new Product("Ice Americano",
+        Category category = new Category(1L, "상품권", "#6c95d1", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "");
+        savedCategory = categoryRepository.save(category);
+
+        Product product = new Product(
+                savedCategory,
+                "Ice Americano",
                 4200,
                 "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
-        savedProduct = repository.save(product); // Product pre-save
+        savedProduct = productRepository.save(product); // Product pre-save
     }
 
     @AfterEach
     void tearDown() {
-        repository.deleteAll(); // Clean up after each test
+        productRepository.deleteAll(); // Clean up after each test
     }
 
     @Test
     @DisplayName("Product save")
     void save() {
         // given
-        Product newProduct = new Product("Ice Americano",
+        Product newProduct = new Product(
+                savedCategory,
+                "Ice Americano",
                 4200,
                 "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
         // when
-        Product actual = repository.save(newProduct);
+        Product actual = productRepository.save(newProduct);
 
         // then
         assertAll(
@@ -59,11 +72,13 @@ class ProductRepositoryTest {
     @DisplayName("Find All Product")
     void findAllProduct() {
         // given
-        Product product2 = repository.save(new Product("Ice Americano",
+        Product product2 = productRepository.save(new Product(
+                savedCategory,
+                "Ice Americano",
                 4200,
                 "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"));
         // when
-        List<Product> products = repository.findAll();
+        List<Product> products = productRepository.findAll();
 
         // then
         assertAll(
@@ -80,7 +95,7 @@ class ProductRepositoryTest {
         Long expected = savedProduct.getId();
 
         // when
-        Optional<Product> actual = repository.findById(expected);
+        Optional<Product> actual = productRepository.findById(expected);
 
         // then
         assertTrue(actual.isPresent());
@@ -91,8 +106,8 @@ class ProductRepositoryTest {
     @DisplayName("Delete Product by id")
     void deleteProductById() {
         // when
-        repository.deleteById(savedProduct.getId());
-        boolean exists = repository.existsById(savedProduct.getId());
+        productRepository.deleteById(savedProduct.getId());
+        boolean exists = productRepository.existsById(savedProduct.getId());
 
         // then
         assertThat(exists).isFalse();
