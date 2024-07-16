@@ -1,8 +1,6 @@
 package gift.controller.wish.dto;
 
-import gift.model.member.Member;
-import gift.model.product.Product;
-import gift.model.wish.Wish;
+import gift.service.wish.dto.WishCommand;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,8 +13,8 @@ public class WishRequest {
         Long count
     ) {
 
-        public Wish toEntity(Member member, Product product) {
-            return new Wish(null, member, product, count);
+        public WishCommand.Register toCommand() {
+            return new WishCommand.Register(productId, count);
         }
     }
 
@@ -27,6 +25,9 @@ public class WishRequest {
         Long count
     ) {
 
+        public WishCommand.Update toCommand() {
+            return new WishCommand.Update(productId, count);
+        }
     }
 
 }

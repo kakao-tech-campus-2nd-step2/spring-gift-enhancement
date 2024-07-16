@@ -1,7 +1,7 @@
 package gift.controller.member.dto;
 
-import gift.model.member.Member;
 import gift.model.member.Role;
+import gift.service.member.dto.MemberCommand;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -15,8 +15,8 @@ public class MemberRequest {
         @NotBlank
         String name) {
 
-        public Member toEntity() {
-            return Member.create(null, email(), password(), name(), Role.USER);
+        public MemberCommand.Create toCommand() {
+            return new MemberCommand.Create(email, password, name, Role.USER);
         }
     }
 
@@ -26,5 +26,8 @@ public class MemberRequest {
         @NotBlank
         String password) {
 
+        public MemberCommand.Login toCommand() {
+            return new MemberCommand.Login(email, password);
+        }
     }
 }
