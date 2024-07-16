@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -31,7 +32,8 @@ public class ItemController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Page<ItemDTO>> getItemList(@PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<Page<ItemDTO>> getItemList(
+        @PageableDefault(size = 5, sort = "id", direction = Direction.DESC) Pageable pageable) {
         Page<ItemDTO> list = itemService.getList(pageable);
         return ResponseEntity.ok(list);
     }
