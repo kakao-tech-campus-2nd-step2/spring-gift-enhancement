@@ -39,6 +39,14 @@ public class ProductEntity {
         this.categoryEntity = categoryEntity;
     }
 
+    public ProductEntity(Long id, String name, Long price, String imageUrl, CategoryEntity categoryEntity) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.categoryEntity = categoryEntity;
+    }
+
     public Long getId() {
         return id;
     }
