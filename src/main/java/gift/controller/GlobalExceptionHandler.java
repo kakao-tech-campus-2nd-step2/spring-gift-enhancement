@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.utils.error.CategoryNotFoundException;
+import gift.utils.error.DuplicateOptionException;
 import gift.utils.error.NotpermitNameException;
 import gift.utils.error.ProductAlreadyExistException;
 import gift.utils.error.ProductNotFoundException;
@@ -84,5 +85,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleCategoryNotFoundException(CategoryNotFoundException ex,
         WebRequest request){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DuplicateOptionException.class)
+    public ResponseEntity<?> handleDuplicateOptionException(DuplicateOptionException ex,
+        WebRequest request){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

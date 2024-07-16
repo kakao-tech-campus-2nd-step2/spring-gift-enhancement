@@ -128,6 +128,19 @@ public class Product {
         wish.setProduct(this);
     }
 
+    public void addOption(Option option){
+        options.add(option);
+        option.setProduct(this);
+    }
+
+    public List<Wish> getWishes() {
+        return wishes;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void removeWish(Wish wish) {
         wishes.remove(wish);
         wish.setProduct(null);
