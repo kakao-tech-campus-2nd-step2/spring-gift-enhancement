@@ -23,8 +23,7 @@ public class Wish {
     @Column(nullable = false)
     private int amount;
 
-    public Wish(){
-
+    protected Wish(){
     }
 
     public Wish(Product product, Member member, int amount){

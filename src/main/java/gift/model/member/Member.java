@@ -12,17 +12,17 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(255)")
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String password;
-
-    public Member() {
-    }
 
     @OneToMany(mappedBy = "member")
     private List<Wish> wishes;
+
+    protected Member() {
+    }
 
     public Member(String email, String password) {
         this.email = email;

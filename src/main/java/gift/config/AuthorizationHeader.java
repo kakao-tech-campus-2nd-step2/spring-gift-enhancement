@@ -3,7 +3,6 @@ package gift.config;
 public class AuthorizationHeader {
     private final String authHeader;
 
-
     public AuthorizationHeader(String authHeader) {
         this.authHeader = authHeader;
     }
