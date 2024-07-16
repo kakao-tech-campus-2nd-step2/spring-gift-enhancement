@@ -2,7 +2,6 @@ package gift.controller;
 
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
-import gift.model.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
