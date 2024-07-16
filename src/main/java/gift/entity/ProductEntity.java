@@ -24,14 +24,18 @@ public class ProductEntity {
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
     private List<WishListEntity> wishListEntities;
 
+    @ManyToOne(targetEntity = CategoryEntity.class, fetch = FetchType.LAZY)
+    private CategoryEntity categoryEntity;
+
     public ProductEntity() {
 
     }
 
-    public ProductEntity(String name, Long price, String imageUrl) {
+    public ProductEntity(String name, Long price, String imageUrl, CategoryEntity categoryEntity) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryEntity = categoryEntity;
     }
 
     public Long getId() {
@@ -64,6 +68,14 @@ public class ProductEntity {
 
     public List<WishListEntity> getWishListEntities() {
         return wishListEntities;
+    }
+
+    public CategoryEntity getCategoryEntity() {
+        return categoryEntity;
+    }
+
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
     }
 
 }
