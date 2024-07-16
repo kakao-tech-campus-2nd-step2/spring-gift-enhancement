@@ -51,4 +51,20 @@ public class CategoryServiceTest {
         CategoryDTO result = categoryService.updateCategory(updated);
         assertThat(result).usingRecursiveComparison().isEqualTo(updated);
     }
+
+    @DisplayName("isDuplicateName 테스트(true)")
+    @Test
+    void testIsDuplicateName() {
+        categoryService.insertCategory(testCategory1);
+        boolean result = categoryService.isDuplicateName(testCategory1.getName());
+        assertThat(result).isTrue();
+    }
+
+    @DisplayName("isDuplicateName 테스트(false)")
+    @Test
+    void testIsDuplicateNameFalse() {
+        categoryService.insertCategory(testCategory1);
+        boolean result = categoryService.isDuplicateName(testName2);
+        assertThat(result).isFalse();
+    }
 }
