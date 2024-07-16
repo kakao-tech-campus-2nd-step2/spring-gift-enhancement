@@ -49,7 +49,7 @@ public class User {
         return email;
     }
 
-    public UserDTO toUserDTO() {
+    public UserDTO toDTO() {
         return new UserDTO(id, password, email);
     }
 

@@ -36,7 +36,7 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<ItemDTO> getList(Pageable pageable) {
         Page<Item> list = itemRepository.findAllByOrderByIdDesc(pageable);
-        return list.map(Item::toItemDTO);
+        return list.map(Item::toDTO);
     }
 
     @Transactional

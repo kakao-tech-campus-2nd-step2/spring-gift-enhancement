@@ -48,6 +48,6 @@ public class WishItem {
     }
 
     public WishListResponse toResponse() {
-        return new WishListResponse(id, item.toItemDTO());
+        return new WishListResponse(id, item.toDTO());
     }
 }
