@@ -15,7 +15,7 @@ public class Category {
     @NotNull
     private Long id;
 
-    @Column(name = "name",unique = true)
+    @Column(name = "name", unique = true)
     @NotNull
     private String name;
 
