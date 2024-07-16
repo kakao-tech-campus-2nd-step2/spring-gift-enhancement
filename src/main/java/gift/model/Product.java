@@ -1,5 +1,6 @@
 package gift.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -20,68 +21,68 @@ public class Product {
     @Column(name = "image_url", columnDefinition = "varchar(255) not null")
     private String imageUrl;
 
-    public Product(long id, String name, int price, String imageUrl) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "category_id"), nullable = false)
+    private Category category;
+
+    public Product(long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
-        this.setName(name);
+        this.ValidateThenSetName(name);
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Product(String name, int price, String imageUrl) {
-        this.setName(name);
+    public Product(String name, int price, String imageUrl, Category category) {
+        this.ValidateThenSetName(name);
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Product update(String name, Integer price, String imageUrl){
-        if(!name.isEmpty()){
-            this.setName(name);
+    protected Product() {
+    }
+
+    public Product update(String name, Integer price, String imageUrl, Category category){
+        if(imageUrl != null && !name.isEmpty()){
+            this.ValidateThenSetName(name);
         }
         if(price != null){
             this.price = price;
         }
-        if(!imageUrl.isEmpty()){
+        if(imageUrl != null && !imageUrl.isEmpty()){
             this.imageUrl = imageUrl;
         }
+        if(category != null && !category.equals(this.category)){
+            this.category = category;
+        }
         return this;
-    }
-
-    protected Product() {
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public Integer getPrice() {
         return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
     }
 
     public String getName(){
         return this.name;
     }
 
-    public void setName(String name) {
-        ProductName productName = new ProductName(name);
-        this.name = productName.getName();
+    public Category getCategory() {
+        return category;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void ValidateThenSetName(String name) {
+        ProductName productName = new ProductName(name);
+        this.name = productName.getName();
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

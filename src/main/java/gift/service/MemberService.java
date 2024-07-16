@@ -7,6 +7,7 @@ import gift.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -19,7 +20,8 @@ public class MemberService {
     }
 
     public String signin(LogInMemberDTO memberDTO){
-        if(!memberRepository.existsByEmail(memberDTO.getEmail())){
+        Optional<Member> Optionalmember = memberRepository.findByEmail(memberDTO.getEmail());
+        if(!Optionalmember.isPresent()){
             Member member = new Member(memberDTO.getEmail(), memberDTO.getPassword());
             memberRepository.save(member);
             return createJwtToken.createJwt(member.getId(), member.getEmail());
