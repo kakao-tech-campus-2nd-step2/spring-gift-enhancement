@@ -1,6 +1,8 @@
 package gift.product.service;
 
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
@@ -37,5 +39,20 @@ class CategoryServiceTest {
         // then
         assertThat(savedId).isEqualTo(1L);
         then(categoryRepository).should().save(any());
+    }
+
+    @Test
+    @DisplayName("Category 생성 테스트[실패] 중복된 카테고리 이름")
+    void createCategoryWithDuplicatedNameTest() {
+        //given
+        CategoryParam categoryParam = new CategoryParam("카테고리", "색상", "이미지 URL", "설명");
+        Category existParam = new Category(1L, "카테고리", "색상", "이미지 URL", "설명");
+
+        //when
+        when(categoryRepository.findByName(any())).thenReturn(of(existParam));
+
+        //then
+        assertThatThrownBy(() -> categoryService.createCategory(categoryParam))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
