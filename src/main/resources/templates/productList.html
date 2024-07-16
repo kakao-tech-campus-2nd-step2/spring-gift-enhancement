@@ -17,6 +17,7 @@
             <th>ID</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Category</th>
             <th>Image URL</th>
             <th>Actions</th>
         </tr>
@@ -26,6 +27,7 @@
             <td th:text="${product.id}"></td>
             <td th:text="${product.name}"></td>
             <td th:text="${product.price}"></td>
+            <td th:text="${product.category.name}"></td>
             <td><img th:src="${product.imageUrl}" alt="product image" width="100"></td>
             <td>
                 <div class="action-cell">

@@ -1,6 +1,7 @@
 package gift;
-
+import gift.domain.Category;
 import gift.domain.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,17 +24,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;  //Spring MockMvc 프레임워크를 사용하여 HTTP 요청 및 응답 테스트
+    private MockMvc mockMvc;  // Spring MockMvc 프레임워크를 사용하여 HTTP 요청 및 응답 테스트
 
     @Autowired
     private ProductRepository productRepository;
 
-    private Product sampleProduct = new Product(null, "아이스 카페 아메리카노 T", 4500L,
-            "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
+    @Autowired
+    private CategoryRepository categoryRepository;
 
+    private Product sampleProduct;
 
     @BeforeEach
     void setUp() {
+        Category category = new Category("카테고리테스트", "red", "https://st.kakaocdn.net/category/image.jpg", "교환권 설명");
+        categoryRepository.save(category);
+
+        sampleProduct = new Product(null, "아이스 카페 아메리카노 T", 4500L,
+                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg", category);
         productRepository.save(sampleProduct);
     }
 
@@ -53,7 +60,8 @@ public class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("name", "복숭아 아이스티 T")
                         .param("price", "5900")
-                        .param("imageUrl", "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"))
+                        .param("imageUrl", "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg")
+                        .param("category.id", String.valueOf(sampleProduct.getCategory().getId())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/api/products"));
 
@@ -73,7 +81,8 @@ public class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("name", "아이스 카페 아메리카노 V")
                         .param("price", "3000")
-                        .param("imageUrl", "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"))
+                        .param("imageUrl", "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg")
+                        .param("category.id", String.valueOf(existingProduct.getCategory().getId())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/api/products"));
 
