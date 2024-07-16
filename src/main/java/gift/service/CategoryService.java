@@ -26,16 +26,7 @@ public class CategoryService {
         return convertToDTO(categoryRepository.save(category));
     }
 
-    public CategoryPageDTO findCategoryPage(long categoryId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<CategoryDTO> categories = categoryRepository.findById(categoryId, pageable)
-            .map(this::convertToDTO)
-            .stream()
-            .toList();
-        return new CategoryPageDTO(page, size, categories.size(), categories);
-    }
-
-    public CategoryPageDTO findAllCategoryPage(int page, int size) {
+    public CategoryPageDTO findCategoryPage(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         List<CategoryDTO> categories = categoryRepository.findAll(pageable)
             .map(this::convertToDTO)
@@ -44,10 +35,16 @@ public class CategoryService {
         return new CategoryPageDTO(page, size, categories.size(), categories);
     }
 
-    public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
-        Category currentCategory = categoryRepository.findById(categoryDTO.id()).orElseThrow(
+    public CategoryDTO findCategoryById(long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryId));
+        return convertToDTO(category);
+    }
+
+    public CategoryDTO updateCategory(long categoryId, CategoryDTO categoryDTO) {
+        Category currentCategory = categoryRepository.findById(categoryId).orElseThrow(
             () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryDTO.id()));
-        Category updateCategory = new Category(categoryDTO.id(), categoryDTO.name(),
+        Category updateCategory = new Category(categoryId, categoryDTO.name(),
             categoryDTO.color(), categoryDTO.imageUrl(), categoryDTO.description());
         return convertToDTO(categoryRepository.save(updateCategory));
     }

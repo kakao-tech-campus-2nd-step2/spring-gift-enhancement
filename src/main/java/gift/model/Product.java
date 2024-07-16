@@ -19,7 +19,7 @@ public class Product {
     private String name;
     @Column(name = "price", nullable = false)
     private long price;
-    @Column(name = "imageUrl", nullable = false)
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
