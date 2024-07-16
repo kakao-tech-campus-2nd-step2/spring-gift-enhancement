@@ -5,8 +5,6 @@ import gift.product.model.ProductRequestDto;
 import gift.product.model.ProductResponseDto;
 import jakarta.validation.Valid;
 import java.net.URI;
-import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -34,7 +32,8 @@ public class ProductController {
     public ResponseEntity<PageResponseDto<ProductResponseDto>> getAllProducts(
         @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok()
-            .body(PageResponseDto.of(productService.getAllProducts(pageable).getContent(), pageable));
+            .body(
+                PageResponseDto.of(productService.getAllProducts(pageable).getContent(), pageable));
     }
 
     @GetMapping("/{id}")

@@ -14,7 +14,7 @@ TodoList
 - [ ] categoryController
 - [ ] categoryRequestDto
 - [ ] categoryResponseDto
-- [ ] categoryEntity
+- [x] categoryEntity
 - [ ] categoryService
 - [ ] categoryRepository
 - [ ] product 에 category 추가
