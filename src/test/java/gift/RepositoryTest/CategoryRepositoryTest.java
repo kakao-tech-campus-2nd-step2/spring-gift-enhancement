@@ -1,0 +1,67 @@
+package gift.RepositoryTest;
+
+import gift.Model.Category;
+import gift.Repository.CategoryRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+
+@DataJpaTest
+public class CategoryRepositoryTest {
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Test
+    void saveTest(){
+        Category category = new Category("카테고리", "#8123f3D", "카테고리 url", "카테고리 description");
+        assertThat(category.getId()).isNull();
+        categoryRepository.save(category);
+        assertThat(category.getId()).isNotNull();
+    }
+
+    @Test
+    void findByIdTest(){
+        Category cateory = categoryRepository.save(new Category("카테고리", "#8123f3D", "카테고리 url", "카테고리 description"));
+        Optional<Category> actual = categoryRepository.findById(cateory.getId());
+        assertThat(actual.get().getName()).isEqualTo("카테고리");
+    }
+
+    @Test
+    void findByName(){
+        categoryRepository.save(new Category("카테고리", "#8123f3D", "카테고리 url", "카테고리 description"));
+        Optional<Category> actual = categoryRepository.findByName("카테고리");
+        assertThat(actual).isPresent();
+    }
+
+    @Test
+    void updateTest(){
+       categoryRepository.save(new Category("카테고리", "#8123f3D", "카테고리 url", "카테고리 description"));
+        Optional<Category> optionalCategory = categoryRepository.findByName("카테고리");
+        Category category = optionalCategory.get();
+        category.update("카테고리2", "#7324d2b", "카테고리2 url", "카테고리2 description");
+
+        Optional<Category> actualOptionalCategory=  categoryRepository.findById(category.getId());
+        Category actual = actualOptionalCategory.get();
+        assertAll(
+                () -> assertThat(actual.getName()).isEqualTo("카테고리2"),
+                () -> assertThat(actual.getColor()).isEqualTo("#7324d2b"),
+                () -> assertThat(actual.getImageUrl()).isEqualTo("카테고리2 url"),
+                () -> assertThat(actual.getDescription()).isEqualTo("카테고리2 description")
+        );
+    }
+
+    @Test
+    void deleteTest(){
+        Category category = categoryRepository.save(new Category("카테고리", "#8123f3D", "카테고리 url", "카테고리 description"));
+        categoryRepository.deleteById(category.getId());
+        Optional<Category> actual= categoryRepository.findByName("카테고리");
+        assertThat(actual).isEmpty();
+    }
+
+}
