@@ -9,6 +9,7 @@ import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,5 +57,12 @@ public class CategoryController {
 
         Long updatedCategoryId = categoryService.updateCategory(categoryId, categoryRequestDTO);
         return ApiResponseGenerator.success(HttpStatus.OK, "카테고리가 수정되었습니다.", updatedCategoryId);
+    }
+
+    @DeleteMapping("/category/{id}")
+    public ResponseEntity<SuccessBody<Long>> deleteCategory(
+        @PathVariable("id") Long categoryId){
+        Long deletedCategoryId = categoryService.deleteCategory(categoryId);
+        return ApiResponseGenerator.success(HttpStatus.OK, "카테고리가 삭제되었습니다.", deletedCategoryId);
     }
 }
