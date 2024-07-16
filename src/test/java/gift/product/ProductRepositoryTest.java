@@ -3,6 +3,7 @@ package gift.product;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import gift.category.model.CategoryRepository;
 import gift.category.model.dto.Category;
 import gift.product.model.ProductRepository;
 import gift.product.model.dto.Product;
@@ -26,6 +27,8 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private WishListRepository wishListRepository;
@@ -41,6 +44,7 @@ public class ProductRepositoryTest {
         product = new Product("Test", 1000, "url", appUser, category);
         wish = new Wish(appUser, product, 5);
         appUser = userRepository.save(appUser);
+        category = categoryRepository.save(category);
         product = productRepository.save(product);
         wishListRepository.save(wish);
 

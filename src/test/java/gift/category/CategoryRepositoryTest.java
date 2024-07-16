@@ -19,18 +19,18 @@ public class CategoryRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
     private Category category;
+    private int defaultCategorySize = 3;
 
     @BeforeEach
     public void setUp() {
         category = new Category("교환권", "모바일 교환권입니다.");
         categoryRepository.save(category);
-        categoryRepository.save(new Category("22", "2222"));
     }
 
     @Test
     public void testFindActiveCategoryList() {
         List<Category> categories = categoryRepository.findByIsActiveTrue();
-        assertEquals(5, categories.size());
+        assertEquals(defaultCategorySize + 1, categories.size());
     }
 
     @Test
