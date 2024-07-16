@@ -3,6 +3,7 @@ package gift.e2e;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.dto.category.CategoryResponse;
+import gift.dto.category.CreateCategoryRequest;
 import java.net.URI;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,6 +71,40 @@ public class CategoryTest {
 
         // when
         var actualResponse = restTemplate.exchange(request, CategoryResponse.class);
+
+        // then
+        assertThat(actualResponse.getStatusCode().is4xxClientError()).isTrue();
+    }
+
+    @Test
+    @DisplayName("create category test")
+    void createCategoryTest() {
+        // given
+        var createBody = new CreateCategoryRequest("Category 4");
+        var url = "http://localhost:" + port + "/api/categories";
+        var request = new RequestEntity<>(createBody, HttpMethod.POST, URI.create(url));
+
+        var expectedLocation = URI.create("/api/categories/4");
+
+        // when
+        var actualResponse = restTemplate.exchange(request, String.class);
+
+        // then
+        assertThat(actualResponse.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(actualResponse.getHeaders().getLocation()).isEqualTo(expectedLocation);
+        assertThat(actualResponse.getBody()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("create exist category test")
+    void createExistCategoryTest() {
+        // given
+        var createBody = new CreateCategoryRequest("Category 1");
+        var url = "http://localhost:" + port + "/api/categories";
+        var request = new RequestEntity<>(createBody, HttpMethod.POST, URI.create(url));
+
+        // when
+        var actualResponse = restTemplate.exchange(request, String.class);
 
         // then
         assertThat(actualResponse.getStatusCode().is4xxClientError()).isTrue();

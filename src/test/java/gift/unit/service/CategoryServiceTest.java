@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 import gift.dto.category.CategoryResponse;
+import gift.dto.category.CreateCategoryRequest;
 import gift.entity.Category;
 import gift.exception.category.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
@@ -107,5 +108,26 @@ public class CategoryServiceTest implements AutoCloseable {
         assertThatThrownBy(() -> categoryService.getCategory(999L)).isInstanceOf(
             CategoryNotFoundException.class);
         then(categoryRepository).should(times(1)).findById(any());
+    }
+
+    @Test
+    @DisplayName("create category test")
+    void createCategoryTest() {
+        // given
+        CreateCategoryRequest request = new CreateCategoryRequest("Category 1");
+        given(categoryRepository.existsByName(any())).willReturn(false);
+        given(categoryRepository.save(any(Category.class))).willReturn(
+            new Category(1L, "Category 1"));
+
+        Long expectedId = 1L;
+
+        // when
+        var actual = categoryService.createCategory(request);
+
+        // then
+        assertThat(actual).isNotNull();
+        assertThat(actual).isEqualTo(expectedId);
+        then(categoryRepository).should(times(1)).save(any(Category.class));
+        then(categoryRepository).should(times(1)).existsByName(any());
     }
 }
