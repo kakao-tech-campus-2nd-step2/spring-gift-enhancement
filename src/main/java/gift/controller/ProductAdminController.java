@@ -28,7 +28,6 @@ public class ProductAdminController {
         Page<ProductWithOptionDTO> products = productService.getAllProductsWithOption(pageable);
         request.setAttribute("products", products);
         return "admin/products";
-
     }
 
     @GetMapping("/admin/add")

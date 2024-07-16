@@ -34,20 +34,23 @@ public class ProductController {
 
     @PostMapping("/api/products")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addProduct(@RequestBody SaveProductDTO product) {
+    public String addProduct(@RequestBody SaveProductDTO product) {
         productService.saveProduct(product);
+        return "redirect:/api/products";
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/api/products/{Id}")
-    public void deleteProduct(@PathVariable int Id) {
+    public String deleteProduct(@PathVariable int Id) {
         productService.deleteProduct(Id);
+        return "redirect:/api/products";
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/api/products")
-    public void modifyProduct(@RequestBody Product product) {
+    public String modifyProduct(@RequestBody Product product) {
         productService.modifyProduct(product);
+        return "redirect:/api/products";
     }
 
 
