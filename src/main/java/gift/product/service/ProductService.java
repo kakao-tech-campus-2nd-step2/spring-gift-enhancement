@@ -37,21 +37,17 @@ public class ProductService {
 
     public ResponseEntity<String> registerProduct(ProductDTO productDTO) {
         System.out.println("[ProductService] registerProduct()");
-        try {
-            productValidation.registerValidation(productDTO);
+        productValidation.registerValidation(productDTO);
 
-            productRepository.save(
-                    new Product(
-                            productDTO.getName(),
-                            productDTO.getPrice(),
-                            productDTO.getImageUrl(),
-                            categoryRepository.findById(productDTO.getCategoryId())
-                                    .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
-                    )
-            );
-        } catch (Exception e) {
-            System.out.println("[ProductService] registerProduct(): " + e.getMessage());
-        }
+        productRepository.save(
+            new Product(
+                productDTO.getName(),
+                productDTO.getPrice(),
+                productDTO.getImageUrl(),
+                categoryRepository.findById(productDTO.getCategoryId())
+                    .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
+            )
+        );
         return ResponseEntity.status(HttpStatus.CREATED).body("Product registered successfully");
     }
 
