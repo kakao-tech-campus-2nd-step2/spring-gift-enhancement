@@ -1,6 +1,7 @@
 package gift.product;
 
 import gift.category.CategoryService;
+import gift.option.OptionRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -26,12 +27,12 @@ public class ProductController {
     }
 
     @PostMapping("/products/add")
-    public String addProduct(@Valid @ModelAttribute("newProduct") ProductDTO newProduct, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addProduct(@Valid @ModelAttribute("newProduct") ProductDTO newProduct, @Valid @ModelAttribute("option") OptionRequest option, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "AddProduct";
         }
 
-        Product product = productService.insertNewProduct(newProduct);
+        Product product = productService.insertNewProduct(newProduct, option);
         redirectAttributes.addAttribute("id", product.getId());
 
         return "redirect:/manager/products/{id}";
