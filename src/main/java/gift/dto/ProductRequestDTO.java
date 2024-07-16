@@ -14,14 +14,18 @@ public class ProductRequestDTO {
 
     private String imageUrl;
 
+    @NotNull(message = "카테고리를 선택해주세요.")
+    private Long categoryId;
+
     public ProductRequestDTO() {
     }
 
-    public ProductRequestDTO(Long id, String name, int price, String imageUrl) {
+    public ProductRequestDTO(Long id, String name, int price, String imageUrl, Long categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -54,5 +58,13 @@ public class ProductRequestDTO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public @NotNull(message = "카테고리를 선택해주세요.") Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(@NotNull(message = "카테고리를 선택해주세요.") Long categoryId) {
+        this.categoryId = categoryId;
     }
 }

@@ -1,14 +1,12 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Products;
 import gift.dto.ProductRequestDTO;
 import gift.dto.ProductResponseDTO;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +16,11 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public Page<ProductResponseDTO> getProducts(int page, int size, String[] sort) {
@@ -41,20 +41,28 @@ public class ProductService {
     }
 
     public void createProduct(ProductRequestDTO productRequestDTO) {
+        Category category = categoryRepository.findById(productRequestDTO.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category id: " + productRequestDTO.getCategoryId()));
+
         Products product = new Products.Builder()
                 .name(productRequestDTO.getName())
                 .price(productRequestDTO.getPrice())
                 .imageUrl(productRequestDTO.getImageUrl())
+                .category(category)
                 .build();
         productRepository.save(product);
     }
 
     public void updateProduct(Long id, ProductRequestDTO productRequestDTO) {
+        Category category = categoryRepository.findById(productRequestDTO.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category id: " + productRequestDTO.getCategoryId()));
+
         Products updatedProduct = new Products.Builder()
                 .id(id)
                 .name(productRequestDTO.getName())
                 .price(productRequestDTO.getPrice())
                 .imageUrl(productRequestDTO.getImageUrl())
+                .category(category)
                 .build();
         productRepository.save(updatedProduct);
     }
@@ -68,8 +76,9 @@ public class ProductService {
                 product.getId(),
                 product.getName(),
                 product.getPrice(),
-                product.getImageUrl()
+                product.getImageUrl(),
+                product.getCategory().getName(),
+                product.getCategory().getId() // Add this line
         );
     }
-
 }
