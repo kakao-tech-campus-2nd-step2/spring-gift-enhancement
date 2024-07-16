@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,21 +17,27 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private int price;
 
-    @Column(nullable = false)
+    @Column(name = "img_url", nullable = false)
     private String imgUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     public Product() {
     }
 
-    public Product(String name, int price, String imgUrl) {
+    public Product(String name, int price, String imgUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -44,7 +52,7 @@ public class Product {
         return name;
     }
 
-    public void setName(String name) {
+    public void updateName(String name) {
         this.name = name;
     }
 
@@ -52,7 +60,7 @@ public class Product {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void updatePrice(int price) {
         this.price = price;
     }
 
@@ -60,8 +68,15 @@ public class Product {
         return imgUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
+    public void updateImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
 }
