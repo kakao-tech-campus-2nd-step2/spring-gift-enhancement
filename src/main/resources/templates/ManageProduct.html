@@ -22,14 +22,17 @@
             <thead>
             <tr>
                 <th>ID</th>
+                <th>카테고리</th>
                 <th>상품명</th>
                 <th>가격</th>
                 <th>이미지 URL</th>
+
             </tr>
             </thead>
             <tbody>
             <tr th:each="product : ${products}">
                 <td><a href="ProductInfo.html" th:href="@{/manager/products/{id}(id=${product.getId()})}" th:text="${product.id}">회원id</a></td>
+                <td th:text="${product.getCategory().getName()}">카테고리</a></td>
                 <td th:text="${product.getName()}">상품명</a></td>
                 <td th:text="${product.getPrice()}">10000</td>
                 <td th:text="${product.getImageUrl()}">10</td>

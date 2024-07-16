@@ -16,6 +16,15 @@
     <div class="col-lg-8">
       <form th:action="@{/manager/products/delete/{id}(id=${product.id})}" method="post">
         <div>
+          <label for="name">카테고리</label>
+          <div>
+            <select id="category" class="form-control" disabled>
+              <option value="">==카테고리 선택==</option>
+              <option th:each="category : ${categories}" th:selected="${category.id() == product.getCategoryID()}" th:value="${category.id()}"
+                      th:text="${category.name}"></option>
+            </select>
+          </div>
+        <div>
           <label for="id">상품 ID</label>
           <input type="text" id="id" name="id" class="form-control" value="1" th:value="${product.getId()}" readonly>
         </div>
@@ -52,7 +61,7 @@
           </div>
         </div>
         <input type="hidden" name="_method" value="DELETE"/>
-
+        </div>
       </form>
     </div>
   </div>

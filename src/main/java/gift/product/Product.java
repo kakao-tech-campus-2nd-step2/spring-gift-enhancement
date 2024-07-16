@@ -1,5 +1,6 @@
 package gift.product;
 
+import gift.category.Category;
 import gift.wishList.WishList;
 import jakarta.persistence.*;
 
@@ -21,6 +22,10 @@ public class Product {
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "product", orphanRemoval = true)
     private List<WishList> wishLists = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public void addWishList(WishList wishList) {
         this.wishLists.add(wishList);
@@ -57,18 +62,11 @@ public class Product {
         return imageUrl;
     }
 
-    public Product(String name, Long price, String imageUrl) {
+    public Product(String name, Long price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-    }
-
-    public Product(Long id, String name, Long price, String imageUrl, List<WishList> wishLists) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.wishLists = wishLists;
+        this.category = category;
     }
 
     public void setName(String name) {
@@ -85,5 +83,13 @@ public class Product {
 
     public List<WishList> getWishLists() {
         return wishLists;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
