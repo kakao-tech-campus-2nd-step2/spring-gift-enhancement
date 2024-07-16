@@ -31,8 +31,7 @@ public class WishesViewController {
                                           sort = "id",
                                           direction = Sort.Direction.DESC)
                                   Pageable pageable) {
-        Page<ProductResponse> wishes = wishesService.getWishlistOfMember(memberId, pageable)
-                .map(ProductMapper::toResponseDto);
+        Page<ProductResponse> wishes = wishesService.getWishlistOfMember(memberId, pageable);
 
         model.addAttribute("wishlist", wishes.getContent());
         model.addAttribute("wishlistPageInfo", new PageResponse(wishes));
