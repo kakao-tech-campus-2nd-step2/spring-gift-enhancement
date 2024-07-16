@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.PageRequestDTO;
 import gift.dto.InputProductDTO;
+import gift.dto.ProductDTO;
 import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
@@ -25,14 +26,26 @@ public class ProductService {
     }
 
     //전체 조회
-    public Page<Product> getAllProducts(PageRequestDTO pageRequestDTO){
+    public Page<ProductDTO> getAllProducts(PageRequestDTO pageRequestDTO){
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage(),
                 pageRequestDTO.getSize(), pageRequestDTO.getSort());
-
-        return productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return productPage.map(ProductDTO::getProductDTO);
     }
 
     //하나 조회
+    public ProductDTO getProductDTOById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("해당 상품이 없습니다."));
+        ProductDTO productDTO = new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl(),
+                product.getCategory().getName());
+        return productDTO;
+    }
+
     public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품이 없습니다."));
@@ -73,7 +86,7 @@ public class ProductService {
         productRepository.save(updatedProduct);
     }
 
-    public int getPreviousPage(Page<Product> productPage) {
+    public int getPreviousPage(Page<ProductDTO> productPage) {
         if (productPage.hasPrevious()) {
             Pageable previousPageable = productPage.previousPageable();
             return previousPageable.getPageNumber();
@@ -81,7 +94,7 @@ public class ProductService {
         return -1;
     }
 
-    public int getNextPage(Page<Product> productPage) {
+    public int getNextPage(Page<ProductDTO> productPage) {
         if (productPage.hasNext()) {
             Pageable nextPageable = productPage.nextPageable();
             return nextPageable.getPageNumber();

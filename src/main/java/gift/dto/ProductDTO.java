@@ -15,9 +15,9 @@ public class ProductDTO {
     @JsonProperty
     private String imageUrl;
     @JsonProperty
-    private Category category;
+    private String category;
 
-    public ProductDTO(long id, String name, int price, String imageUrl, Category category) {
+    public ProductDTO(long id, String name, int price, String imageUrl, String category) {
         this.id = id;
         this.setName(name);
         this.price = price;
@@ -31,7 +31,7 @@ public class ProductDTO {
     }
 
     public static ProductDTO getProductDTO(Product product){
-        return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory());
+        return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getName());
     }
 
     public long getId() {
@@ -50,7 +50,7 @@ public class ProductDTO {
         return imageUrl;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 }

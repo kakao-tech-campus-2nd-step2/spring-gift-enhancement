@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.dto.PageRequestDTO;
 import gift.dto.InputProductDTO;
+import gift.dto.ProductDTO;
 import gift.service.ProductService;
 import gift.model.Product;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public class ProductController {
                                  @RequestParam(defaultValue = "id") String sortBy,
                                  @RequestParam(defaultValue = "asc") String sortOrder, Model model) {
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, sortBy, sortOrder);
-        Page<Product> productPage = productService.getAllProducts(pageRequestDTO);
+        Page<ProductDTO> productPage = productService.getAllProducts(pageRequestDTO);
 
         model.addAttribute("productList", productPage.getContent());
 
@@ -41,8 +42,8 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
+    public ProductDTO getProductById(@PathVariable Long id) {
+        return productService.getProductDTOById(id);
     }
 
     @PostMapping
