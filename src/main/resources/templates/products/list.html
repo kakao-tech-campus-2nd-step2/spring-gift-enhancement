@@ -16,6 +16,7 @@
             <th>Name</th>
             <th>Price</th>
             <th>Image URL</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -25,6 +26,7 @@
             <td th:text="${product.name}">Name</td>
             <td th:text="${product.price}">Price</td>
             <td th:text="${product.imageUrl}">Image URL</td>
+            <td th:text="${product.category().getName()}">Category</td>
             <td>
                 <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-sm btn-warning">수정</a>
                 <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-sm btn-danger">삭제</a>
