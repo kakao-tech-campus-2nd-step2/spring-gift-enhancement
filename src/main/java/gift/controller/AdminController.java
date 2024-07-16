@@ -32,7 +32,7 @@ public class AdminController {
 
     @PostMapping("/admin/product")
     public String registerProduct(ProductRequest productRequest) {
-        productService.register(productRequest);
+        productService.addProduct(productRequest);
         return "redirect:/admin/products";
     }
 

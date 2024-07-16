@@ -1,6 +1,7 @@
 package gift.model.product;
 
 import gift.common.annotation.ProductNameValid;
+import gift.model.category.Category;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -19,9 +20,11 @@ public record ProductRequest(
     @Min(value = 0)
     int price,
     @NotBlank
-    String imageUrl) {
+    String imageUrl,
+    Long categoryId
+) {
 
-    public Product toEntity() {
-        return new Product(null, name, price, imageUrl);
+    public Product toEntity(Category category) {
+        return new Product(null, name, price, imageUrl, category);
     }
 }
