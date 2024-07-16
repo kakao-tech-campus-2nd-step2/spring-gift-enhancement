@@ -1,6 +1,7 @@
 package gift.repository.product;
 
 import gift.model.product.Product;
+import java.util.Optional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +19,8 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long>, Prod
 
     @Override
     Page<Product> findByNameContaining(String name, Pageable pageable);
+
+    @Override
+    @Query("SELECT p FROM Product p JOIN FETCH p.category WHERE p.id = :id")
+    Optional<Product> findById(Long id);
 }
