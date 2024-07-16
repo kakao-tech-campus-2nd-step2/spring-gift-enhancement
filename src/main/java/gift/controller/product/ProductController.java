@@ -59,8 +59,7 @@ public class ProductController {
     }
 
     @Authorization(role = Role.ADMIN)
-    @DeleteMapping("/products/{id}"
-    )
+    @DeleteMapping("/products/{id}")
     public ResponseEntity<Void> deleteProduct(
         @PathVariable("id") Long id
     ) {
