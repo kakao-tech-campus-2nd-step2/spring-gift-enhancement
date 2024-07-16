@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.exceptions.CustomException;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,17 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @GetMapping
     public String getAllProducts(Model model, @PageableDefault(size = 3) Pageable pageable) {
         ProductsPageResponseDTO products = productService.getAllProducts(pageable);
+        CategoryResponseDTO categories = categoryService.getAllCategories();
+
         model.addAttribute("products", products);
+        model.addAttribute("categories", categories);
+
         return "manage";
     }
 
@@ -37,8 +45,8 @@ public class ProductController {
         return "redirect:/v3/products";
     }
 
-    @PostMapping("/{id}")
-    public String modifyProduct(@PathVariable Long id, @Valid @RequestBody ProductRequestDTO productRequestDTO) {
+    @PutMapping("/{id}")
+    public String modifyProduct(@PathVariable(name = "id") Long id, @Valid @RequestBody ProductRequestDTO productRequestDTO) {
         validateProductName(productRequestDTO.name());
         productService.updateProduct(id, productRequestDTO);
 
@@ -46,7 +54,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public String DeleteProduct(@PathVariable("id") Long id) {
+    public String DeleteProduct(@PathVariable(name = "id") Long id) {
         productService.deleteProduct(id);
 
         return "redirect:/v3/products";
