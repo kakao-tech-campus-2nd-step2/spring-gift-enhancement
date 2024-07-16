@@ -29,8 +29,8 @@ public class WishService {
     this.productRepository = productRepository;
   }
 
-  public Page<WishDto> getWishesByMemberEmail(String memberEmail, Pageable pageable) {
-    User user = userRepository.findByEmail(memberEmail)
+  public Page<WishDto> getWishesByMemberEmail(String userEmail, Pageable pageable) {
+    User user = userRepository.findByEmail(userEmail)
         .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
     Page<Wish> wishes = wishRepository.findByUserId(user.getId(), pageable);
     return wishes.map(wish -> new WishDto(

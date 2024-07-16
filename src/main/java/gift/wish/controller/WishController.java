@@ -1,5 +1,6 @@
 package gift.wish.controller;
-
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import gift.user.dto.UserDto;
 import gift.wish.dto.WishDto;
 import gift.security.LoginMember;
@@ -23,14 +24,23 @@ public class WishController {
   }
 
   @GetMapping
-  public ResponseEntity<Page<WishDto>> getAllWishes(@LoginMember User member, Pageable pageable) {
-    Page<WishDto> wishes = wishService.getWishesByMemberEmail(member.getEmail(), pageable);
+  public ResponseEntity<Page<WishDto>> getAllWishes(
+      @LoginMember User user,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "id") String sort,
+      @RequestParam(defaultValue = "asc") String direction) {
+
+    Sort.Direction sortDirection = Sort.Direction.fromString(direction);
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort));
+    Page<WishDto> wishes = wishService.getWishesByMemberEmail(user.getEmail(), pageable);
     return ResponseEntity.ok(wishes);
   }
 
   @PostMapping
   public ResponseEntity<WishDto> addWish(@RequestBody WishDto wishDto, @LoginMember User member) {
-    wishDto.setUser(new UserDto(member.getId(), member.getEmail(), member.getPassword(), member.getRole()));
+    wishDto.setUser(
+        new UserDto(member.getId(), member.getEmail(), member.getPassword(), member.getRole()));
     WishDto createdWish = wishService.addWish(wishDto);
     return ResponseEntity.ok(createdWish);
   }

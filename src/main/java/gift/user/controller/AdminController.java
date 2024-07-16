@@ -6,7 +6,9 @@ import jakarta.validation.Valid;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,13 +28,24 @@ public class AdminController {
   }
 
   @GetMapping
-  public String showAllProducts(Model model, Pageable pageable) {
+  public String showAllProducts(Model model,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "id") String sort,
+      @RequestParam(defaultValue = "asc") String direction) {
+    Sort.Direction sortDirection = Sort.Direction.fromString(direction);
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort));
     Page<ProductDto> products = productService.findAll(pageable);
+
     model.addAttribute("products", products);
     model.addAttribute("currentPage", products.getNumber());
     model.addAttribute("totalPages", products.getTotalPages());
     model.addAttribute("totalItems", products.getTotalElements());
     model.addAttribute("pageSize", products.getSize());
+    model.addAttribute("sortField", sort);
+    model.addAttribute("sortDirection", direction);
+    model.addAttribute("reverseSortDirection", direction.equals("asc") ? "desc" : "asc");
+
     return "product-list";
   }
 
@@ -49,13 +62,15 @@ public class AdminController {
       model.addAttribute("product", productDto);
       return "product-form";
     } catch (RuntimeException e) {
-/**/      return "redirect:/admin";
+      /**/
+      return "redirect:/admin";
     }
   }
 
 
   @PostMapping("/save")
-  public String saveProduct(@Valid @ModelAttribute ProductDto productDto, BindingResult bindingResult, Model model) {
+  public String saveProduct(@Valid @ModelAttribute ProductDto productDto,
+      BindingResult bindingResult, Model model) {
     if (bindingResult.hasErrors()) {
       return "product-form";
     }
