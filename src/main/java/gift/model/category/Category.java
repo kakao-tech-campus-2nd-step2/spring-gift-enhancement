@@ -1,5 +1,6 @@
 package gift.model.category;
 
+import gift.model.product.ProductRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,5 +58,12 @@ public class Category {
 
     public String getDescription() {
         return description;
+    }
+
+    public void updateCategory(CategoryRequest categoryRequest) {
+        this.name = categoryRequest.name();
+        this.color = categoryRequest.color();
+        this.imageUrl = categoryRequest.imageUrl();
+        this.description = categoryRequest.description();
     }
 }

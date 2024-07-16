@@ -7,6 +7,7 @@ import gift.model.category.Category;
 import gift.model.category.CategoryRequest;
 import gift.model.category.CategoryResponse;
 import gift.model.product.Product;
+import gift.model.product.ProductRequest;
 import gift.model.product.ProductResponse;
 import gift.repository.CategoryRepository;
 import java.util.List;
@@ -41,6 +42,14 @@ public class CategoryService {
     public CategoryResponse findCategory(Long id) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(CategoryNotFoundException::new);
+        return CategoryResponse.from(category);
+    }
+
+    @Transactional
+    public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(CategoryNotFoundException::new);
+        category.updateCategory(categoryRequest);
         return CategoryResponse.from(category);
     }
 }
