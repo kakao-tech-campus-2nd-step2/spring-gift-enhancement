@@ -2,8 +2,12 @@ package gift.category.service;
 
 import gift.category.model.Category;
 import gift.category.repository.CategoryRepository;
+import gift.product.model.Product;
+import gift.product.model.ProductDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,9 +40,24 @@ public class CategoryService {
     }
 
     // 4. 조회 로직
+    // 상품 전부 조회
+    @Transactional(readOnly = true)
+    public List<ProductDTO> getAllProducts() {
+        List<Category> categories = categoryRepository.findAll();
+        List<ProductDTO> productDTOs = new ArrayList<>();
+
+        for (Category category : categories) {
+            for (Product product : category.getProducts()) {
+                productDTOs.add(new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl()));
+            }
+        }
+
+        return productDTOs;
+    }
+
+    // 카테고리 전부 조회
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
-
 
 }

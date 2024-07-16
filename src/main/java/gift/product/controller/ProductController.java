@@ -29,13 +29,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public String createProduct(Product product) {
-        productService.createProduct(product);
+    public String createProduct(@ModelAttribute Product product) {
+        productService.createProduct(product, product.getCategory().getId());
         return "redirect:/products";
     }
 
     @PostMapping("/update/{id}")
-    public String updateProduct(@PathVariable("id") Long id, Product product) {
+    public String updateProduct(@PathVariable("id") Long id, @ModelAttribute Product product) {
         productService.updateProduct(id, product);
         return "redirect:/products";
     }

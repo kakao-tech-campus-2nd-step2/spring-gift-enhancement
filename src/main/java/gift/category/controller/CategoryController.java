@@ -2,6 +2,7 @@ package gift.category.controller;
 
 import gift.category.model.Category;
 import gift.category.service.CategoryService;
+import gift.product.model.ProductDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,25 +17,25 @@ public class CategoryController {
 
     // 1. 카테고리 생성
     @PostMapping
-    public void createCategory(Category category) {
+    public void createCategory(@RequestBody Category category) {
         categoryService.createCategory(category);
     }
 
     // 2. 카테고리 수정
     @PostMapping("/update/{id}")
-    public void updateCategory(Long id, Category category) {
+    public void updateCategory(@PathVariable Long id, @RequestBody Category category) {
         categoryService.updateCategory(id, category);
     }
 
     // 3. 카테고리 삭제
     @DeleteMapping("/delete/{id}")
-    public void deleteCategory(Long id) {
+    public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
     }
 
-    // 4. 카테고리 조회
-    @GetMapping()
-    public List<Category> getAllCategories() {
-        return categoryService.getAllCategories();
+    // 4. 카테고리에 저장된 상품들 전부 조회
+    @GetMapping
+    public List<ProductDTO> getAllProducts() {
+        return categoryService.getAllProducts();
     }
 }

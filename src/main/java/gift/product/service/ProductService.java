@@ -1,5 +1,7 @@
 package gift.product.service;
 
+import gift.category.model.Category;
+import gift.category.repository.CategoryRepository;
 import gift.common.exception.ProductAlreadyExistsException;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
@@ -18,21 +20,37 @@ import java.util.List;
 @Validated
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAllWithCategory();
     }
 
     public Product getProductById(Long id) {
         return productRepository.findById(id).orElse(null);
     }
 
-    public void createProduct(@Valid Product product) {
+    @Transactional
+    public void createProduct(Product product, Long CategoryId) {
+        // 영속화된 category
+        Category category = categoryRepository.findById(CategoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Category with id " + CategoryId + " not found"));
+
+        // product에 category 설정
+        product.setCategory(category);
+
+        // 양방향 설정
+        category.addProduct(product);
+
+        // validate
         checkForDuplicateProduct(product);
+
+        // 저장 (category에도 변동사항 반영됨)
         productRepository.save(product);
     }
 
@@ -77,10 +95,16 @@ public class ProductService {
         Sort sort;
         if (direction.equalsIgnoreCase("asc")) {
             sort = Sort.by(sortBy).ascending();
+        } else {
+            sort = Sort.by(sortBy).descending();
         }
-        sort = Sort.by(sortBy).descending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
         return productRepository.findAll(pageable);
+    }
+
+    // 카테고리 목록을 반환하는 메서드 추가
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
     }
 }

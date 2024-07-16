@@ -32,6 +32,14 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    // 생성자
+    public Product(String name, int price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
     // 활용 메서드들
     @Override
     public boolean equals(Object o) {
