@@ -1,16 +1,12 @@
 package gift.product.infrastructure.persistence;
 
+import gift.core.BaseEntity;
 import gift.core.domain.product.Product;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "product")
-public class ProductEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
+public class ProductEntity extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -34,7 +30,7 @@ public class ProductEntity {
             String imageUrl,
             ProductCategoryEntity category
     ) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -47,15 +43,10 @@ public class ProductEntity {
             String imageUrl,
             ProductCategoryEntity category
     ) {
-        this.id = 0L;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
@@ -71,6 +62,6 @@ public class ProductEntity {
     }
 
     public Product toDomain() {
-        return new Product(id, name, price, imageUrl, category.toDomain());
+        return new Product(getId(), name, price, imageUrl, category.toDomain());
     }
 }
