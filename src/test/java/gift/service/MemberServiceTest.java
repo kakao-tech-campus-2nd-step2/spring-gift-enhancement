@@ -2,12 +2,11 @@ package gift.service;
 
 import gift.dto.request.MemberRequest;
 import gift.domain.Member;
-import gift.exception.DuplicateMemberException;
+import gift.exception.DuplicateMemberEmailException;
 import gift.exception.InvalidCredentialsException;
 import gift.exception.MemberNotFoundException;
 import gift.repository.member.MemberSpringDataJpaRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,7 +42,7 @@ public class MemberServiceTest {
         MemberRequest memberRequest = new MemberRequest("test@example.com", "password");
         given(memberRepository.findByEmail("test@example.com")).willReturn(Optional.of(new Member()));
 
-        assertThrows(DuplicateMemberException.class, () -> {
+        assertThrows(DuplicateMemberEmailException.class, () -> {
             memberService.register(memberRequest);
         });
     }

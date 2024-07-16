@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -40,7 +39,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleProductNotFoundException(ProductNotFoundException ex) {
-        return buildErrorResponse("No such product: " + ex.getMessage(), "404", HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex.getMessage(), "404", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidProductDataException.class)
@@ -50,7 +49,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MemberNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleMemberNotFoundException(MemberNotFoundException ex) {
-        return buildErrorResponse("로그인 실패: " + ex.getMessage(), "401", HttpStatus.UNAUTHORIZED);
+        return buildErrorResponse(ex.getMessage(), "401", HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
@@ -58,8 +57,8 @@ public class GlobalExceptionHandler {
         return buildErrorResponse("로그인 실패: " + ex.getMessage(), "401", HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(DuplicateMemberException.class)  // 409 Conflict
-    public ResponseEntity<ErrorResponse> handleDuplicateMemberException(DuplicateMemberException ex) {
+    @ExceptionHandler(DuplicateMemberEmailException.class)  // 409 Conflict
+    public ResponseEntity<ErrorResponse> handleDuplicateMemberException(DuplicateMemberEmailException ex) {
         return buildErrorResponse("로그인 실패: " + ex.getMessage(), "409", HttpStatus.CONFLICT);
     }
 
@@ -69,8 +68,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleUnAuthorizationException(AccessDeniedException ex){
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex){
         return buildErrorResponse("삭제 실패: " + ex.getMessage(), "403", HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryNotFoundException(CategoryNotFoundException ex) {
+        return buildErrorResponse(ex.getMessage(), "404", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DuplicateCategoryNameException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateCategoryNameException(DuplicateCategoryNameException ex) {
+        return buildErrorResponse(ex.getMessage(), "409", HttpStatus.CONFLICT);
     }
 
     private ResponseEntity<ErrorResponse> buildErrorResponse(String message, String status, HttpStatus httpStatus) {

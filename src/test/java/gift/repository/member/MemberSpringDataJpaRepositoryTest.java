@@ -2,7 +2,7 @@ package gift.repository.member;
 
 import gift.domain.Member;
 import gift.dto.request.MemberRequest;
-import gift.exception.DuplicateMemberException;
+import gift.exception.DuplicateMemberEmailException;
 import gift.service.MemberService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,14 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -60,7 +58,7 @@ public class MemberSpringDataJpaRepositoryTest {
         MemberRequest memberRequest = new MemberRequest("test@example.com", "password");
 
         assertThatThrownBy(() -> memberService.register(memberRequest))
-                .isInstanceOf(DuplicateMemberException.class)
+                .isInstanceOf(DuplicateMemberEmailException.class)
                 .hasMessage("이미 등록된 이메일입니다.");
     }
 }
