@@ -40,9 +40,9 @@ class CategoryServiceTest {
     void getAllCategories() {
         //Given
         List<Category> categoryList = List.of(
-                new Category(1L, "상품권"),
-                new Category(2L, "교환권"),
-                new Category(3L, "패션잡화")
+                new Category(1L, "상품권", "test", "test","test"),
+                new Category(2L, "교환권", "test", "test","test"),
+                new Category(3L, "패션잡화", "test", "test","test")
         );
         when(categoryRepository.findAll()).thenReturn(categoryList);
 
@@ -63,7 +63,7 @@ class CategoryServiceTest {
         @DisplayName("성공")
         void success() {
             //Given
-            Category wantCategory = new Category(1L, "원하는 카테고리");
+            Category wantCategory = new Category(1L, "원하는 카테고리", "test", "test","test");
             when(categoryRepository.findById(1L)).thenReturn(Optional.of(wantCategory));
 
             //When

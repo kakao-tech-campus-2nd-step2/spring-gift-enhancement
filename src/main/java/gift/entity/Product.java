@@ -2,9 +2,6 @@ package gift.entity;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 public class Product {
 
@@ -20,9 +17,6 @@ public class Product {
 
     @Column(nullable = false)
     private String imageUrl;
-
-    @OneToMany(mappedBy = "product")
-    private List<Wish> wishes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "categoryId", nullable = false, foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"))

@@ -38,11 +38,6 @@ public class Category {
         this.description = description;
     }
 
-    public Category(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public Category(AddCategoryRequest request) {
         this.name = request.name();
         this.color = request.color();
