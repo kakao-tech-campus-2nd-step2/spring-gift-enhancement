@@ -11,4 +11,8 @@ public class SuccessMessage {
 
     public static final String ADD_WISHLIST_SUCCESS_MSG = "위시 리스트 추가 성공!";
     public static final String DELETE_WISHLIST_SUCCESS_MSG = "위시 리스트에서 삭제되었습니다.";
+
+    public static final String ADD_CATEGORY_SUCCESS_MSG = "카테고리가 추가되었습니다.";
+    public static final String EDIT_CATEGORY_SUCCESS_MSG = "카테고리가 수정되었습니다.";
+    public static final String DELETE_CATEGORY_SUCCESS_MSG = "카테고리가 삭제되었습니다.";
 }
