@@ -2,10 +2,13 @@ package gift.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(indexes = @Index(name = "idx_product_created_at", columnList = "created_at"))
 public class Product extends BasicEntity{
     @Column(nullable = false)
     private String name;
