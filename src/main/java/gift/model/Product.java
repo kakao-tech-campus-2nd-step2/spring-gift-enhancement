@@ -1,5 +1,6 @@
 package gift.model;
 
+import gift.dto.ProductDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -72,4 +73,19 @@ public class Product {
         this.imageUrl = imageUrl;
     }
     public  void  setCategory(int category) { this.category=category;}
+
+    public Product(ProductDTO productDTO) {
+        this.id = productDTO.getId();
+        this.name = productDTO.getName();
+        this.price = productDTO.getPrice();
+        this.imageUrl = productDTO.getImageUrl();
+        this.category = productDTO.getCategory();
+    }
+
+    public void updateFromDTO(ProductDTO productDTO) {
+        this.name = productDTO.getName();
+        this.price = productDTO.getPrice();
+        this.imageUrl = productDTO.getImageUrl();
+        this.category = productDTO.getCategory();
+    }
 }
