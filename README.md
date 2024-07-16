@@ -69,12 +69,12 @@ Content-Type: application/json
 
 - [x] 카테고리 엔티티 추가
 - [x] 상품과 카테고리 간 관계 생성
-- [ ] 카테고리 CRUD 추가
+- [x] 카테고리 CRUD 추가
   - [x] `GET /api/categories`: 모든 카테고리 조회
   - [x] `GET /api/categories/{id}` 특정 id 카테고리 조회
   - [x] `POST /api/categories`: 추가
   - [x] `PATCH /api/categories/{id}`:수정 - id를 고정으로 name만 수정하므로 PATCH 사용
-  - [ ] `DELETE /api/categories/{id}`: 삭제
+  - [x] `DELETE /api/categories/{id}`: 삭제
 - [ ] 상품 생성/수정할 때 카테고리 선택 가능
   - [ ] 어드민 페이지에서 가능하도록 수정
 

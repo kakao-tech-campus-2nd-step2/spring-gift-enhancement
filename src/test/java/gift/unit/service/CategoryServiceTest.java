@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
 import gift.dto.category.CategoryResponse;
@@ -151,8 +152,8 @@ public class CategoryServiceTest implements AutoCloseable {
     }
 
     @Test
-    @DisplayName("not exist category update test")
-    void notExistCategoryUpdateTest() {
+    @DisplayName("update not exist category test")
+    void updateNotExistCategoryTest() {
         // given
         String newName = "update category";
         UpdateCategoryRequest request = new UpdateCategoryRequest(newName);
@@ -162,5 +163,33 @@ public class CategoryServiceTest implements AutoCloseable {
         assertThatThrownBy(() -> categoryService.updateCategory(1L, request))
             .isInstanceOf(CategoryNotFoundException.class);
         then(categoryRepository).should(times(1)).findById(any());
+    }
+
+    @Test
+    @DisplayName("delete category test")
+    void deleteCategoryTest() {
+        // given
+        given(categoryRepository.existsById(any())).willReturn(true);
+        willDoNothing().given(categoryRepository).deleteById(any(Long.class));
+
+        // when
+        categoryService.deleteCategory(1L);
+
+        // then
+        then(categoryRepository).should(times(1)).existsById(any());
+        then(categoryRepository).should(times(1)).deleteById(any(Long.class));
+    }
+
+    @Test
+    @DisplayName("delete not exist category test")
+    void deleteNotExistCategoryTest() {
+        // given
+        given(categoryRepository.existsById(any())).willReturn(false);
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.deleteCategory(1L))
+            .isInstanceOf(CategoryNotFoundException.class);
+        then(categoryRepository).should(times(1)).existsById(any());
+        then(categoryRepository).should(times(0)).deleteById(any());
     }
 }
