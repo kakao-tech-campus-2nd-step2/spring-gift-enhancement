@@ -1,6 +1,5 @@
 package gift.model.product;
 
-import gift.dto.ProductDto;
 import gift.model.wish.Wish;
 import jakarta.persistence.*;
 
@@ -22,7 +21,7 @@ public class Product {
     private  int price;
 
     @Column(nullable = false)
-    private  String imageUrl;
+    private String imageUrl;
 
     @Column(nullable = false)
     private  int amount;

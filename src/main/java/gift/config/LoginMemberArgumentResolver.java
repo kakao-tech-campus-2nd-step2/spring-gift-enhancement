@@ -24,9 +24,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
-
     private static final Logger logger = LoggerFactory.getLogger(LoginMemberArgumentResolver.class);
-
 
     public LoginMemberArgumentResolver(MemberService memberService, JwtTokenProvider jwtTokenProvider) {
         this.memberService = memberService;
