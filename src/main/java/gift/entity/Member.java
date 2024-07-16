@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.constants.ErrorMessage;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,5 +43,12 @@ public class Member extends BaseEntity {
 
     public boolean isCorrectPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public void addWishlist(Wishlist wishlist) {
+        if (wishlist == null) {
+            throw new NullPointerException(ErrorMessage.NULL_POINTER_EXCEPTION_MSG);
+        }
+        this.wishlist.add(wishlist);
     }
 }

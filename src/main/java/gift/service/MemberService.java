@@ -87,8 +87,8 @@ public class MemberService {
             });
 
         Wishlist wishlist = new Wishlist(member, product);
-        member.getWishlist().add(wishlist);
-        product.getWishlist().add(wishlist);
+        member.addWishlist(wishlist);
+        product.addWishlist(wishlist);
 
         wishlistJpaDao.save(wishlist);
     }

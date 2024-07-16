@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.constants.ErrorMessage;
 import gift.dto.ProductDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -62,5 +63,12 @@ public class Product extends BaseEntity {
         this.name = productDto.getName();
         this.price = productDto.getPrice();
         this.imageUrl = productDto.getImageUrl();
+    }
+
+    public void addWishlist(Wishlist wishlist) {
+        if (wishlist == null) {
+            throw new NullPointerException(ErrorMessage.NULL_POINTER_EXCEPTION_MSG);
+        }
+        this.wishlist.add(wishlist);
     }
 }
