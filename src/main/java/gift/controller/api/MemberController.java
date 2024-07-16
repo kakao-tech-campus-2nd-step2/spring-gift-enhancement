@@ -23,16 +23,15 @@ public class MemberController {
 
     @PostMapping("/members/register")
     public ResponseEntity<TokenResponse> registerMember(@Valid @RequestBody MemberRequest request) {
-        Long registeredMemberId = memberService.registerMember(request.email(), request.password());
+        Long registeredMemberId = memberService.registerMember(request);
         TokenResponse token = tokenService.generateToken(registeredMemberId);
         return ResponseEntity.ok(token);
     }
 
     @PostMapping("/members/login")
     public ResponseEntity<TokenResponse> loginMember(@Valid @RequestBody MemberRequest request) {
-        Long registeredMemberId = memberService.login(request.email(), request.password());
+        Long registeredMemberId = memberService.login(request);
         TokenResponse token = tokenService.generateToken(registeredMemberId);
         return ResponseEntity.ok(token);
     }
-
 }
