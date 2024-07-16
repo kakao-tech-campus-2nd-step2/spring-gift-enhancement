@@ -1,27 +1,15 @@
 package gift.wish.model;
 
+import gift.common.model.BaseEntity;
 import gift.member.model.Member;
 import gift.product.model.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Wish {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Wish extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
@@ -31,10 +19,6 @@ public class Wish {
     private Product product;
     @Column(name = "count", nullable = false)
     private Integer count;
-    @CreatedDate
-    private LocalDateTime createdDate;
-    @LastModifiedDate
-    private LocalDateTime modifiedDate;
 
     protected Wish() {
     }
@@ -47,10 +31,6 @@ public class Wish {
         this.member = member;
         this.product = product;
         this.count = count;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Member getMember() {
