@@ -42,6 +42,7 @@ public class Menu {
         this.name = menuRequest.name();
         this.price = menuRequest.price();
         this.imageUrl = menuRequest.imageUrl();
+        this.category = menuRequest.category();
     }
 
     public Long getId() {
@@ -65,6 +66,7 @@ public class Menu {
         this.name = menu.name;
         this.price = menu.price;
         this.imageUrl = menu.imageUrl;
+        this.category = menu.category;
     }
 
     @Override

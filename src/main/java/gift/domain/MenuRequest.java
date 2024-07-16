@@ -9,7 +9,8 @@ public record MenuRequest(
         @Pattern(regexp = "^((?!카카오).)*$", message = "'카카오'가 포함된 상품명은 담당 MD와 협의해주세요")
         String name,
         int price,
-        String imageUrl
+        String imageUrl,
+        Category category
 ) {
 
 }
