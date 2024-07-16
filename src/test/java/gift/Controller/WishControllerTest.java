@@ -3,6 +3,7 @@ package gift.Controller;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import gift.DTO.CategoryDto;
 import gift.DTO.MemberDto;
 import gift.DTO.ProductDto;
 import gift.DTO.WishListDto;
@@ -22,24 +23,29 @@ class WishControllerTest {
   WishController wishController;
   ProductController productController;
   MemberController memberController;
+  CategoryController categoryController;
 
 
   @Autowired
   public WishControllerTest(WishController wishController, ProductController productController,
-    MemberController memberController) {
+    MemberController memberController, CategoryController categoryController) {
     this.wishController = wishController;
     this.productController = productController;
     this.memberController = memberController;
+    this.categoryController=categoryController;
   }
 
   @Test
   void getWishListTest() {
     Pageable pageable = PageRequest.of(0, 5);
+    CategoryDto categoryDto = new CategoryDto(1L,"교환권","#61cdef","image.url","교환권 카테고리");
+    categoryController.addCategory(categoryDto);
+
     MemberDto memberDto1 = new MemberDto(1L, "a@naver.com", "abcde");
     memberController.memberSignUp(memberDto1);
 
-    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img");
-    ProductDto productDto2 = new ProductDto(2L, "product2", 200, "efgh.img");
+    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img",categoryDto);
+    ProductDto productDto2 = new ProductDto(2L, "product2", 200, "efgh.img",categoryDto);
     productController.addProduct(productDto1);
     productController.addProduct(productDto2);
 
@@ -83,7 +89,10 @@ class WishControllerTest {
     MemberDto memberDto1 = new MemberDto(1L, "a@naver.com", "abcde");
     memberController.memberSignUp(memberDto1);
 
-    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img");
+    CategoryDto categoryDto = new CategoryDto(1L,"교환권","#61cdef","image.url","교환권 카테고리");
+    categoryController.addCategory(categoryDto);
+
+    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img",categoryDto);
     productController.addProduct(productDto1);
 
     WishListDto wishListDto1 = new WishListDto(1L, memberDto1, productDto1);
@@ -107,7 +116,10 @@ class WishControllerTest {
     MemberDto memberDto1 = new MemberDto(1L, "a@naver.com", "abcde");
     memberController.memberSignUp(memberDto1);
 
-    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img");
+    CategoryDto categoryDto = new CategoryDto(1L,"교환권","#61cdef","image.url","교환권 카테고리");
+    categoryController.addCategory(categoryDto);
+
+    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img",categoryDto);
     productController.addProduct(productDto1);
 
     WishListDto wishListDto1 = new WishListDto(1L, memberDto1, productDto1);

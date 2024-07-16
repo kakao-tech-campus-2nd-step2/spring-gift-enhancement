@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import gift.Controller.ProductController;
+import gift.DTO.CategoryDto;
 import gift.DTO.ProductDto;
+import gift.Service.CategoryService;
 import gift.Service.ProductService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -16,8 +17,6 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +34,10 @@ public class ProductControllerTest {
   private ProductService productService;
   @Autowired
   private ProductController productController;
+  @Autowired
+  private CategoryController categoryController;
+  @Autowired
+  private CategoryService categoryService;
 
   @BeforeEach
   public void setUp() {
@@ -45,20 +48,23 @@ public class ProductControllerTest {
   @DirtiesContext
   @Test
   public void testGetAllProducts() {
-    Pageable pageable= PageRequest.of(0,5);
-    
-    // 제품 추가
+    Pageable pageable = PageRequest.of(0, 5);
+
+    CategoryDto categoryDto = new CategoryDto(1L, "교환권", "#61cdef", "image.url", "교환권 카테고리");
+    categoryController.addCategory(categoryDto);
+
     ProductDto productDto1 = new ProductDto(1L, "Coffee", 100,
-      "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
+      "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
+      categoryDto);
     ProductDto productDto2 = new ProductDto(2L, "Tea", 200,
-      "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc94364879792549ads8bdd8a3.jpg");
+      "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc94364879792549ads8bdd8a3.jpg",
+      categoryDto);
 
     ProductDto addedProduct1 = productController.addProduct(productDto1);
     ProductDto addedProduct2 = productController.addProduct(productDto2);
 
     Page<ProductDto> returnedProductEntities = productController.getAllProducts(pageable).getBody();
 
-    // 반환된 제품 리스트 검증
     assertEquals(2, returnedProductEntities.getContent().size());
     assertEquals(productDto1.getId(), returnedProductEntities.getContent().get(0).getId());
     assertEquals(productDto1.getName(), returnedProductEntities.getContent().get(0).getName());
@@ -75,19 +81,19 @@ public class ProductControllerTest {
   @DirtiesContext
   @Test
   public void testGetProductById() {
-    ProductDto productDto = new ProductDto(1L, "Coffee", 100,
-      "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
+    CategoryDto categoryDto = new CategoryDto(1L, "교환권", "#61cdef", "image.url", "교환권 카테고리");
+    categoryController.addCategory(categoryDto);
 
-    // 유효성 검사를 통과하도록 수정된 제품 추가
+    ProductDto productDto = new ProductDto(1L, "Coffee", 100,
+      "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
+      categoryDto);
+
     ProductDto addedProduct = productController.addProduct(productDto);
 
-    // getProductById() 호출 - 존재하는 제품 ID
     ResponseEntity<ProductDto> responseEntity = productController.getProductById(1L);
 
-    // 반환된 ResponseEntity 검증
-    assertEquals(HttpStatus.OK, responseEntity.getStatusCode()); // 상태 코드가 200 OK인지 확인
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-    // 반환된 제품 검증
     ProductDto returnedProductDto = responseEntity.getBody();
     assertNotNull(returnedProductDto);
     assertEquals(productDto.getId(), returnedProductDto.getId());
@@ -99,8 +105,11 @@ public class ProductControllerTest {
   @DirtiesContext
   @Test
   public void testAddProduct() {
+    CategoryDto categoryDto = new CategoryDto(1L, "교환권", "#61cdef", "image.url", "교환권 카테고리");
+    categoryController.addCategory(categoryDto);
+
     ProductDto productDto = new ProductDto(1L, "Coffee", 4500,
-      "https://example.com/coffee.jpg");
+      "https://example.com/coffee.jpg", categoryDto);
 
     ProductDto addedProduct = productController.addProduct(productDto);
 
@@ -115,21 +124,19 @@ public class ProductControllerTest {
   @DirtiesContext
   @Test
   void testUpdateProduct() {
-    // 기존 제품 추가
+    CategoryDto categoryDto = new CategoryDto(1L, "교환권", "#61cdef", "image.url", "교환권 카테고리");
+    categoryController.addCategory(categoryDto);
+
     ProductDto existingProduct = new ProductDto(1L, "Coffee", 4500,
-      "https://example.com/coffee.jpg");
+      "https://example.com/coffee.jpg", categoryDto);
     productController.addProduct(existingProduct);
 
-    // 업데이트할 제품 정보 - 유효한 이름으로 수정
     ProductDto updatedProduct = new ProductDto(1L, "Hot_Coffee", 4000,
-      // Adjusted name to pass validation
-      "https://example.com/coffee.jpg");
+      "https://example.com/coffee.jpg", categoryDto);
 
-    // 유효성 검사를 통과하도록 수정된 제품 업데이트 요청
     ResponseEntity<ProductDto> response = productController.updateProduct(1L,
       updatedProduct);
 
-    // 업데이트된 제품 받아오기
     ProductDto returnedProductDto = response.getBody();
 
     assertNotNull(returnedProductDto);
@@ -142,15 +149,16 @@ public class ProductControllerTest {
   @DirtiesContext
   @Test
   public void testDeleteProduct() {
-    // 유효한 제품 추가
+    CategoryDto categoryDto = new CategoryDto(1L, "교환권", "#61cdef", "image.url", "교환권 카테고리");
+    categoryController.addCategory(categoryDto);
+
     ProductDto productDto = new ProductDto(1L, "Coffee", 100,
-      "https://example.com/coffee.jpg");
+      "https://example.com/coffee.jpg", categoryDto);
     productController.addProduct(productDto);
 
-    // deleteProduct() 호출 - 존재하는 제품 ID
     ResponseEntity<ProductDto> responseDto = productController.deleteProduct(1L);
 
-    assertEquals(HttpStatus.OK, responseDto.getStatusCode()); // 상태 코드가 200 OK인지 확인
+    assertEquals(HttpStatus.OK, responseDto.getStatusCode());
 
   }
 
@@ -160,11 +168,14 @@ public class ProductControllerTest {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     Validator validator = factory.getValidator();
 
+    CategoryDto categoryDto = new CategoryDto(1L, "교환권", "#61cdef", "image.url", "교환권 카테고리");
+    categoryController.addCategory(categoryDto);
+
     ProductDto invalidProduct1DTO = new ProductDto(1L, "pppppppppsdfsfdsppppppppProduct 1",
-      100,
-      "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
+      100, "https://st.kakaocdn.net/product/gift/product/65.jpg",
+      categoryDto);
     ProductDto invalidProduct2DTO = new ProductDto(2L, "카카오 product", 100,
-      "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
+      "https://st.kakaocdn.net/product/gift/product/65.jpg", categoryDto);
 
     Set<ConstraintViolation<ProductDto>> violations1 = validator.validate(invalidProduct1DTO);
     Set<ConstraintViolation<ProductDto>> violations2 = validator.validate(invalidProduct2DTO);
