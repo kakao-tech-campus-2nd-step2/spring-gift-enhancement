@@ -51,15 +51,18 @@ class WishServiceTest {
 
     @Test
     void 위시리스트_전체_조회_페이지_테스트() {
+        //given
         int WISH_COUNT = 9;
         int PAGE = 1;
         int SIZE = 4;
         String SORT = "product.name";
         String DIRECTION = "desc";
 
+        //when
         Pageable pageable = PageRequest.of(PAGE, SIZE, Sort.Direction.fromString(DIRECTION), SORT);
         Page<Wish> wishes = wishService.getWishAll(pageable);
 
+        //then
         assertSoftly(softly -> {
             assertThat(wishes.getTotalPages()).isEqualTo(
                 (int) Math.ceil((double) WISH_COUNT / SIZE));
@@ -72,25 +75,31 @@ class WishServiceTest {
 
     @Test
     void 존재하지_않는_위시_항목_조회() {
+        //given
         LoginMember testMember = new LoginMember(1L);
 
+        //when, then
         assertThatThrownBy(() -> wishService.getWish(-1L, testMember)).isInstanceOf(
             NoSuchElementException.class);
     }
 
     @Test
     void 존재하지_않는_위시_항목_삭제() {
+        //given
         LoginMember testMember = new LoginMember(1L);
 
+        //when, then
         assertThatThrownBy(() -> wishService.deleteWish(-1L, testMember)).isInstanceOf(
             NoSuchElementException.class);
     }
 
     @Test
     void 존재하지_않는_회원_정보로_위시리스트_추가_시도() {
+        //given
         Long productId = productRepository.findAll().getFirst().getId();
         WishDto testWishDto = new WishDto(productId);
 
+        //when, then
         assertThatThrownBy(
             () -> wishService.insertWish(testWishDto, new LoginMember(-1L))).isInstanceOf(
             NoSuchElementException.class);

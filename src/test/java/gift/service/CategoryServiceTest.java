@@ -100,9 +100,11 @@ class CategoryServiceTest {
 
     @Test
     void 이미_존재하는_카테고리_추가() {
+        //given
         CategoryDto categoryDto = new CategoryDto("테스트카테고리1");
         categoryService.insertCategory(categoryDto);
 
+        //when, then
         assertThatThrownBy(
             () -> categoryService.insertCategory(categoryDto)).isInstanceOf(
             IllegalArgumentException.class);

@@ -72,11 +72,10 @@ class WishesIntegrityTest {
 
     @BeforeAll
     void 상품_추가() {
-        String url = BASE_URL + port + "/api/products/insert";
-
         CategoryDto categoryDto = new CategoryDto("테스트카테고리1");
         categoryService.insertCategory(categoryDto);
 
+        String url = BASE_URL + port + "/api/products/insert";
         ProductDto productDto = new ClientProductDto("테스트1", 1500, "테스트주소1", "테스트카테고리1");
         RequestEntity<ProductDto> requestEntity = new RequestEntity<>(productDto, HttpMethod.POST,
             URI.create(url));
@@ -87,6 +86,7 @@ class WishesIntegrityTest {
     @Order(1)
     @Test
     void 위시리스트_추가() {
+        //given
         String url = BASE_URL + port + "/api/wishes/insert";
         WishDto wishDto = new WishDto(1L);
         HttpHeaders headers = new HttpHeaders();
@@ -94,50 +94,61 @@ class WishesIntegrityTest {
         RequestEntity<WishDto> requestEntity = new RequestEntity<>(wishDto, headers,
             HttpMethod.POST, URI.create(url));
 
+        //when
         var actual = testRestTemplate.exchange(requestEntity, String.class);
 
+        //then
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Order(2)
     @Test
     void 위시리스트_전체_조회() {
+        //given
         String url = BASE_URL + port + "/api/wishes";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
         RequestEntity<WishDto> requestEntity = new RequestEntity<>(headers, HttpMethod.GET,
             URI.create(url));
 
+        //when
         var actual = testRestTemplate.exchange(requestEntity, String.class);
 
+        //then
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Order(3)
     @Test
     void 위시리스트_조회() {
+        //given
         String url = BASE_URL + port + "/api/wishes/1";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
         RequestEntity<WishDto> requestEntity = new RequestEntity<>(headers, HttpMethod.GET,
             URI.create(url));
 
+        //when
         var actual = testRestTemplate.exchange(requestEntity, String.class);
 
+        //then
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Order(4)
     @Test
     void 위시리스트_삭제() {
+        //given
         String url = BASE_URL + port + "/api/wishes/delete/1";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
         RequestEntity<WishDto> requestEntity = new RequestEntity<>(headers, HttpMethod.DELETE,
             URI.create(url));
 
+        //when
         var actual = testRestTemplate.exchange(requestEntity, String.class);
 
+        //then
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

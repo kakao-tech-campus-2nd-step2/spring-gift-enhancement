@@ -28,8 +28,8 @@ public class CategoryService {
     @Transactional
     public Category insertCategory(CategoryDto categoryDto) {
         getRedundantValidatedCategory(categoryDto.name());
-        Category category = new Category(categoryDto.name());
 
+        Category category = new Category(categoryDto.name());
         return categoryRepository.save(category);
     }
 
@@ -44,6 +44,7 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(Long id) {
         getExistenceValidatedCategory(id);
+
         categoryRepository.deleteById(id);
     }
 

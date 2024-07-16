@@ -38,13 +38,16 @@ class WishRepositoryTest {
 
     @Test
     void 위시리스트_항목_추가() {
+        //given
         Category category = categoryRepository.save(new Category("테스트카테고리1"));
         Member member = authRepository.save(new Member("test@test.com", "1234"));
         Product product = productRepository.save(new Product("테스트1", 1500, "테스트주소1", category));
-
         Wish wish = new Wish(member, product);
+
+        //when
         Wish insertedWish = wishRepository.save(wish);
 
+        //then
         assertSoftly(softly -> {
             assertThat(insertedWish.getId()).isNotNull();
             assertThat(insertedWish.getMember().getId()).isNotNull();
@@ -54,6 +57,7 @@ class WishRepositoryTest {
 
     @Test
     void 위시리스트_전체_조회() {
+        //given
         Category category = categoryRepository.save(new Category("테스트카테고리1"));
         Member member = authRepository.save(new Member("test@test.com", "1234"));
         Product product1 = productRepository.save(new Product("테스트1", 1500, "테스트주소1", category));
@@ -62,36 +66,43 @@ class WishRepositoryTest {
         wishRepository.save(new Wish(member, product1));
         wishRepository.save(new Wish(member, product2));
 
+        //when
         List<Wish> wishes = wishRepository.findAllByMemberId(member.getId());
 
+        //then
         assertThat(wishes).hasSize(2);
     }
 
     @Test
     void 위시리스트_조회() {
+        //given
         Category category = categoryRepository.save(new Category("테스트카테고리1"));
         Member member = authRepository.save(new Member("test@test.com", "1234"));
         Product product = productRepository.save(new Product("테스트1", 1500, "테스트주소1", category));
-
         Wish wish = wishRepository.save(new Wish(member, product));
 
+        //when
         Optional<Wish> foundWish = wishRepository.findByIdAndMemberId(wish.getId(), member.getId());
 
+        //then
         assertThat(foundWish.isPresent()).isTrue();
         assertThat(foundWish.get().getProduct().getId()).isEqualTo(product.getId());
     }
 
     @Test
     void 위시리스트_항목_삭제() {
+        //given
         Category category = categoryRepository.save(new Category("테스트카테고리1"));
         Member member = authRepository.save(new Member("test@test.com", "1234"));
         Product product = productRepository.save(new Product("테스트1", 1500, "테스트주소1", category));
-
         Wish wish = wishRepository.save(new Wish(member, product));
+
+        //when
         wishRepository.deleteById(wish.getId());
         boolean isPresentWish = wishRepository.findByIdAndMemberId(wish.getId(), member.getId())
             .isPresent();
 
+        //then
         assertThat(isPresentWish).isFalse();
     }
 }

@@ -30,25 +30,33 @@ class AuthServiceTest {
 
     @Test
     void 회원가입_및_로그인() {
+        //given
         authService.register(memberDto);
+
+        //when
         JwtResponse jwtResponse = authService.login(memberDto);
 
+        //then
         assertThat(jwtResponse.token()).isNotEmpty();
     }
 
     @Test
     void 회원가입_중복() {
+        //given
         MemberDto testAcount = new MemberDto("test@test.com", "test");
         authService.register(testAcount);
 
+        //when, then
         assertThatThrownBy(() -> authService.register(testAcount)).isInstanceOf(
             IllegalArgumentException.class);
     }
 
     @Test
     void 존재하지_않는_회원_로그인() {
+        //given
         MemberDto testAcount = new MemberDto("test@test.com", "test");
 
+        //when, then
         assertThatThrownBy(() -> authService.login(testAcount)).isInstanceOf(
             LoginFailedException.class);
     }

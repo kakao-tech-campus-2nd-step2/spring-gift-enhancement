@@ -40,7 +40,6 @@ public class ProductService {
         Category category = getValidatedCategory(productDto.categoryName());
 
         Product product = new Product(productDto.name(), productDto.price(), productDto.imageUrl(), category);
-
         return productRepository.save(product);
     }
 
