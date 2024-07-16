@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,4 +27,9 @@ public class CategoryController {
             .body(PageResponseDto.of(categoryService.getAllCategories(pageable), pageable));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponseDto> getCategory(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok()
+            .body(categoryService.getCategoryById(id));
+    }
 }
