@@ -1,1 +1,7 @@
-# spring-gift-enhancement
+# spring-gift-jpa
+
+## 기능 요구 사항
+> 상품과 위시리스트 보기에 페이지네이션을 구현한다.
+
+1. 위시리스트 보기 페이지 추가
+2. 페이지네이션 구현시 사용 객체는 `Pageable`
