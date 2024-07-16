@@ -55,7 +55,7 @@ public class ProductService {
         update.setName(product.getName());
         update.setPrice(product.getPrice());
         update.setImageUrl(product.getImageUrl());
-
+        update.setCategory(product.getCategory());
         productRepository.save(update);
 
 
