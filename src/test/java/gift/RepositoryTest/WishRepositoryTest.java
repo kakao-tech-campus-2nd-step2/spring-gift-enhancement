@@ -1,8 +1,10 @@
 package gift.RepositoryTest;
 
+import gift.Model.Category;
 import gift.Model.Member;
 import gift.Model.Product;
 import gift.Model.Wish;
+import gift.Repository.CategoryRepository;
 import gift.Repository.MemberRepository;
 import gift.Repository.ProductRepository;
 import gift.Repository.WishRepository;
@@ -21,25 +23,31 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DataJpaTest
 public class WishRepositoryTest {
     @Autowired
-    WishRepository wishRepository;
+    private WishRepository wishRepository;
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
-    TestEntityManager testEntityManager;
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private TestEntityManager testEntityManager;
+
 
     private Member member;
     private Product product1;
     private Product product2;
+    private Category category;
 
     @BeforeEach
-    void beforEach(){
-        product1 = productRepository.save(new Product("아메리카노", 4000, "아메리카노url"));
-        product2 = productRepository.save(new Product("카푸치노", 4500, "카푸치노url"));
+    void beforeEach(){
+        category = categoryRepository.save(new Category("식품", "#8123f3D", "식품 url", ""));
+        product1 = productRepository.save(new Product("아메리카노", 4000, "아메리카노url", category));
+        product2 = productRepository.save(new Product("카푸치노", 4500, "카푸치노url", category));
         member = memberRepository.save(new Member("woo6388@naver.com", "12345678"));
         testEntityManager.flush();
         testEntityManager.clear();
