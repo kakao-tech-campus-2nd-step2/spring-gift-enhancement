@@ -14,12 +14,12 @@
 ```http request
 
 GET /api/categories HTTP/1.1
-Response
-HTTP/1.1 200
-Content-Type: application/json
+
 ```
 ### Response
 ```http response
+HTTP/1.1 200
+Content-Type: application/json
 [
 {
 "id": 91,
