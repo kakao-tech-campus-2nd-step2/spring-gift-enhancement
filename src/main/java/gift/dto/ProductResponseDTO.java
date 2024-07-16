@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
-public record ProductDTO(
+public record ProductResponseDTO(
         Long id,
 
         @NotBlank(message = "상품 이름을 입력해주세요.")
@@ -32,8 +32,8 @@ public record ProductDTO(
         @NotNull(message = "카테고리를 입력해주세요")
         CategoryDTO categoryDTO) {
 
-    public static ProductDTO convertToProductDTO(Product product) throws BadRequestException {
-        return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
+    public static ProductResponseDTO convertToProductResponseDTO(Product product) throws BadRequestException {
+        return new ProductResponseDTO(product.getId(), product.getName(), product.getPrice(),
                 product.getImageUrl(), CategoryDTO.convertToCategoryDTO(product.getCategory()));
     }
 }

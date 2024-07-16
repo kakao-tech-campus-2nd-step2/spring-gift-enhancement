@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.ProductDTO;
+import gift.dto.ProductResponseDTO;
 import gift.dto.ProductRequestDTO;
 import gift.entity.Category;
 import gift.entity.Product;
@@ -57,11 +57,11 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> getProductList(Pageable pageable) throws RuntimeException {
+    public Page<ProductResponseDTO> getProductList(Pageable pageable) throws RuntimeException {
         Page<Product> productPage = productRepository.findAll(pageable);
-        List<ProductDTO> productDTOList = productPage.getContent().stream()
-                .map(ProductDTO::convertToProductDTO).toList();
-        return new PageImpl<>(productDTOList, productPage.getPageable(),
+        List<ProductResponseDTO> productResponseDTOList = productPage.getContent().stream()
+                .map(ProductResponseDTO::convertToProductResponseDTO).toList();
+        return new PageImpl<>(productResponseDTOList, productPage.getPageable(),
                 productPage.getTotalElements());
     }
 

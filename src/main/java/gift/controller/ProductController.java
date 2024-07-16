@@ -3,7 +3,7 @@ package gift.controller;
 import static gift.util.ResponseEntityUtil.responseError;
 
 import gift.constants.ResponseMsgConstants;
-import gift.dto.ProductDTO;
+import gift.dto.ProductResponseDTO;
 import gift.dto.ProductRequestDTO;
 import gift.dto.ResponseDTO;
 import gift.service.ProductService;
@@ -40,7 +40,7 @@ public class ProductController {
 
     @GetMapping
     public String getProducts(Model model, Pageable pageable) {
-        Page<ProductDTO> productPage = productService.getProductList(pageable);
+        Page<ProductResponseDTO> productPage = productService.getProductList(pageable);
         model.addAttribute("productPage", productPage);
         return "getProducts";
     }

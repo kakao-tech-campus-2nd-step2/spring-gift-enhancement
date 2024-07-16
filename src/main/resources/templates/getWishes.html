@@ -67,11 +67,11 @@
   </thead>
   <tbody>
   <tr th:each="wish : ${wishDTOPage.getContent()}">
-    <td th:text="${wish.productDTO().id()}" id="productId" class = "productId">1</td>
-    <td th:text="${wish.productDTO().name()}" id="productName" class="productName">Product Name</td>
-    <td th:text="${wish.productDTO().price()}" id="productPrice" class="productPrice">1000</td>
+    <td th:text="${wish.productResponseDTO().id()}" id="productId" class = "productId">1</td>
+    <td th:text="${wish.productResponseDTO().name()}" id="productName" class="productName">Product Name</td>
+    <td th:text="${wish.productResponseDTO().price()}" id="productPrice" class="productPrice">1000</td>
     <td id="productImage" class="productImage">
-      <img th:src="${wish.productDTO().imageUrl()}" alt="Image" style="width:100px;height:auto;">
+      <img th:src="${wish.productResponseDTO().imageUrl()}" alt="Image" style="width:100px;height:auto;">
     </td>
     <td th:text="${wish.quantity()}" id="productQuantity" class="productQuantity"></td>
     <td>
@@ -80,13 +80,13 @@
     <td>
       <img th:src="@{/image/remove.png}" alt="remove" style="width:100px;height: auto"  onclick="deleteWish(this)">
     </td>
-    <td th:text="${wish.productDTO().categoryDTO().name()}" id="productCategoryName" class="productCategoryName"></td>
-    <td th:text="${wish.productDTO().categoryDTO().color()}" id="productCategoryColor" class="productCategoryColor"></td>
+    <td th:text="${wish.productResponseDTO().categoryDTO().name()}" id="productCategoryName" class="productCategoryName"></td>
+    <td th:text="${wish.productResponseDTO().categoryDTO().color()}" id="productCategoryColor" class="productCategoryColor"></td>
 
     <td id="productCategoryImageUrl" class="productCategoryImageUrl">
-      <img th:src="${wish.productDTO().categoryDTO().imageUrl()}" alt="productCategoryImageUrl">
+      <img th:src="${wish.productResponseDTO().categoryDTO().imageUrl()}" alt="productCategoryImageUrl">
     </td>
-    <td th:text="${wish.productDTO().categoryDTO().description()}" id="productCategoryDescription" class="productCategoryDescription"></td>
+    <td th:text="${wish.productResponseDTO().categoryDTO().description()}" id="productCategoryDescription" class="productCategoryDescription"></td>
 
 
 

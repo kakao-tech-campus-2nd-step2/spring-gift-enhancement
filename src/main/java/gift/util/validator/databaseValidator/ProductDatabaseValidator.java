@@ -1,6 +1,6 @@
 package gift.util.validator.databaseValidator;
 
-import gift.dto.ProductDTO;
+import gift.dto.ProductResponseDTO;
 import gift.dto.ProductRequestDTO;
 import gift.entity.Product;
 import gift.exception.BadRequestExceptions.BadRequestException;
@@ -25,10 +25,10 @@ public class ProductDatabaseValidator {
                 .orElseThrow(() -> new BadRequestException("그러한 제품은 없습니다."));
     }
 
-    public Product validateProduct(ProductDTO productDTO) {
+    public Product validateProduct(ProductResponseDTO productResponseDTO) {
         return productRepository.findByIdAndNameAndPriceAndImageUrlAndCategory(
-                        productDTO.id(), productDTO.name(), productDTO.price(),
-                        productDTO.imageUrl(), productDTO.categoryDTO().convertToCategory())
+                        productResponseDTO.id(), productResponseDTO.name(), productResponseDTO.price(),
+                        productResponseDTO.imageUrl(), productResponseDTO.categoryDTO().convertToCategory())
                 .orElseThrow(() -> new BadRequestException("그러한 제품은 없습니다."));
     }
 
