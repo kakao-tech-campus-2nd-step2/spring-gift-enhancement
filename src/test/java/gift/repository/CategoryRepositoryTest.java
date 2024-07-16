@@ -55,8 +55,7 @@ public class CategoryRepositoryTest {
         categoryRepository.save(new Category(1L, testName2, testUrl));
         categoryRepository.save(new Category(2L, testName3, testUrl));
         List<Category> result = categoryRepository.findAll();
-        assertThat(result).extracting("name").contains(testName1).contains(testName2)
-            .contains(testName3);
+        assertThat(result).extracting("name").contains(testName1,testName2,testName3);
     }
 
 }
