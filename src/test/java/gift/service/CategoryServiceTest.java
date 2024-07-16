@@ -76,7 +76,7 @@ class CategoryServiceTest {
         }
 
         @Test
-        @DisplayName("실패")
+        @DisplayName("실패 - 해당 카테고리 존재 안함")
         void fail() {
             //Given
             when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
@@ -106,7 +106,7 @@ class CategoryServiceTest {
         }
 
         @Test
-        @DisplayName("실패")
+        @DisplayName("실패 - 카테고리 이름 중복")
         void fail() {
             //Given
             when(categoryRepository.existsByName(any())).thenReturn(true);
@@ -138,7 +138,7 @@ class CategoryServiceTest {
         }
 
         @Test
-        @DisplayName("실패")
+        @DisplayName("실패 - 해당 카테고리 존재 안함")
         void fail() {
             //Given
             when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
@@ -169,7 +169,7 @@ class CategoryServiceTest {
         }
 
         @Test
-        @DisplayName("실패")
+        @DisplayName("실패 - 해당 카테고리 존재 안함")
         void fail() {
             //Given
             when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
