@@ -22,26 +22,53 @@ public class CategoryService {
         this.productJpaDao = productJpaDao;
     }
 
+    /**
+     * Pageable 객체를 통해 해당 페이지 객체를 반환.
+     *
+     * @param pageable
+     * @return Page
+     */
     public Page<CategoryDto> getCategoryPage(Pageable pageable) {
         return categoryJpaDao.findAll(pageable).map(CategoryDto::new);
     }
 
+    /**
+     * id로 카테고리 조회하여 반환
+     *
+     * @param id
+     * @return CategoryDto
+     */
     public CategoryDto getCategory(Long id) {
         Category category = checkCategoryExistsById(id);
         return new CategoryDto(category);
     }
 
+    /**
+     * 새 카테고리 추가
+     *
+     * @param categoryDto
+     */
     public void addCategory(CategoryDto categoryDto) {
         checkCategoryDuplicationByName(categoryDto.getName());
         categoryJpaDao.save(new Category(categoryDto));
     }
 
+    /**
+     * 수정한 카테고리 정보로 수정
+     *
+     * @param categoryDto
+     */
     @Transactional
     public void editCategory(CategoryDto categoryDto) {
         Category category = checkCategoryExistsById(categoryDto.getId());
         category.updateCategory(categoryDto);
     }
 
+    /**
+     * id에 해당하는 카테고리 삭제
+     *
+     * @param id
+     */
     public void deleteCategory(Long id) {
         checkCategoryExistsById(id);
         categoryJpaDao.deleteById(id);
@@ -58,6 +85,11 @@ public class CategoryService {
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
     }
 
+    /**
+     * 카테고리 이름으로 카테고리 중복 여부 확인.
+     *
+     * @param name
+     */
     private void checkCategoryDuplicationByName(String name) {
         categoryJpaDao.findByName(name)
             .ifPresent(v -> {
