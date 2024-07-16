@@ -24,6 +24,13 @@
             <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" required>
             <div th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}" class="text-danger"></div>
         </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select class="form-control" id="category" th:field="*{categoryId}" required>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" class="text-danger"></div>
+        </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
