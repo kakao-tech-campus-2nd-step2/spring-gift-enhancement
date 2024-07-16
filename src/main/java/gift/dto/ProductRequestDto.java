@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.entity.Category;
 import gift.entity.Product;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,13 +26,17 @@ public class ProductRequestDto {
 
     private String imageUrl;
 
+    @NotNull(message = "카테고리는 필수 입니다.")
+    private Long categoryId;
+
     public ProductRequestDto() {
     }
 
-    public ProductRequestDto(String name, int price, String imageUrl) {
+    public ProductRequestDto(String name, int price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
     
     public String getName() {
@@ -58,7 +63,7 @@ public class ProductRequestDto {
         this.imageUrl = imageUrl;
     }
 
-    public Product toEntity() {
-        return new Product(name, price, imageUrl);
+    public Product toEntity(Category category) {
+        return new Product(name, price, imageUrl, category);
     }
 }
