@@ -38,10 +38,10 @@ public class CategoryService {
     return ConverterToDto.convertToCategoryDto(addedCategory);
   }
 
-  public CategoryDto updateCategory(CategoryDto categoryDto) {
-    Category category = categoryRepository.findById(categoryDto.getId())
+  public CategoryDto updateCategory(Long id,CategoryDto categoryDto) {
+    Category category = categoryRepository.findById(id)
       .orElseThrow(() -> new EmptyResultDataAccessException("해당 카테고리가 없습니다.", 1));
-    Category updateCategory = new Category(categoryDto.getId(), categoryDto.getName(),
+    Category updateCategory = new Category(id, categoryDto.getName(),
       categoryDto.getColor(), categoryDto.getImageUrl(), categoryDto.getDescription());
     Category updatedCategory = categoryRepository.save(updateCategory);
     return ConverterToDto.convertToCategoryDto(updatedCategory);
