@@ -25,6 +25,7 @@ public class ProductEntity {
     private List<WishListEntity> wishListEntities;
 
     @ManyToOne(targetEntity = CategoryEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
     private CategoryEntity categoryEntity;
 
     public ProductEntity() {
