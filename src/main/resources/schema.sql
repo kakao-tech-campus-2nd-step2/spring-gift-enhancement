@@ -5,12 +5,20 @@ create table if not exists member (
     PRIMARY KEY (id)
 );
 
+create table if not exists category (
+    id          BIGINT          not null AUTO_INCREMENT,
+    name        VARCHAR(255)    not null,
+    PRIMARY KEY (id)
+);
+
 create table if not exists product (
     id          BIGINT          not null AUTO_INCREMENT,
     name        VARCHAR(15)     not null,
     price       INTEGER         not null,
     image_url   VARCHAR(255)    not null,
-    PRIMARY KEY (id)
+    category_id BIGINT          not null,
+    PRIMARY KEY (id),
+    FOREIGN KEY (category_id)   REFERENCES category(id)
 );
 
 create table if not exists wish (
@@ -23,4 +31,7 @@ create table if not exists wish (
 );
 
 alter table member
-    add constraint uk_member unique (email)
+    add constraint uk_member unique (email);
+
+alter table category
+    add constraint uk_category unique (name);
