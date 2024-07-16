@@ -2,7 +2,10 @@ package gift.product;
 
 import gift.member.business.dto.JwtToken;
 import gift.member.presentation.dto.RequestMemberDto;
+import gift.product.persistence.entity.Category;
 import gift.product.persistence.entity.Product;
+import gift.product.persistence.repository.CategoryJpaRepository;
+import gift.product.persistence.repository.CategoryRepository;
 import gift.product.presentation.dto.RequestProductDto;
 import gift.product.presentation.dto.RequestProductIdsDto;
 import gift.product.presentation.dto.ResponseProductDto;
@@ -38,8 +41,11 @@ public class ProductControllerApiTest {
 
     private static HttpHeaders headers;
 
+    private static Category category;
+
     @BeforeAll
     static void setUp(@Autowired TestRestTemplate restTemplate,
+        @Autowired CategoryJpaRepository categoryRepository,
         @LocalServerPort int port
     ) {
         RequestMemberDto requestMemberDto = new RequestMemberDto(
@@ -54,6 +60,8 @@ public class ProductControllerApiTest {
         headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
+
+        category = categoryRepository.save(new Category("카테고리"));
     }
 
     @AfterEach
@@ -69,7 +77,7 @@ public class ProductControllerApiTest {
         String description = "테스트 상품 설명";
         String imageUrl = "http://test.com";
 
-        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl);
+        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl, category.getId());
         String url = "http://localhost:"+port+"/api/products";
 
         var entity = new HttpEntity<>(requestProductDto, headers);
@@ -99,7 +107,7 @@ public class ProductControllerApiTest {
         String description = "테스트 상품 설명";
         String imageUrl = "http://test.com";
 
-        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl);
+        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl, category.getId());
         String url = "http://localhost:"+port+"/api/products";
 
         var entity = new HttpEntity<>(requestProductDto, headers);
@@ -136,7 +144,7 @@ public class ProductControllerApiTest {
         String description = "테스트 상품 설명";
         String imageUrl = "http://test.com";
 
-        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl);
+        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl, category.getId());
         String url = "http://localhost:"+port+"/api/products";
 
         var entity = new HttpEntity<>(requestProductDto, headers);
@@ -150,7 +158,7 @@ public class ProductControllerApiTest {
         String updatedDescription = "수정된 상품 설명";
         String updatedImageUrl = "http://updated.com";
 
-        RequestProductDto updateProductDto = new RequestProductDto(updatedName, updatedPrice, updatedDescription, updatedImageUrl);
+        RequestProductDto updateProductDto = new RequestProductDto(updatedName, updatedPrice, updatedDescription, updatedImageUrl, category.getId());
         String updateUrl = "http://localhost:"+port+"/api/products/"+id;
 
         entity = new HttpEntity<>(updateProductDto, headers);
@@ -181,7 +189,7 @@ public class ProductControllerApiTest {
         String description = "테스트 상품 설명";
         String imageUrl = "http://test.com";
 
-        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl);
+        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl, category.getId());
         String url = "http://localhost:" + port + "/api/products";
 
         var entity = new HttpEntity<>(requestProductDto, headers);
@@ -292,7 +300,7 @@ public class ProductControllerApiTest {
     void testUpdateProduct_NotFound() {
         // given
         Long nonExistentId = 999L;
-        RequestProductDto updateProductDto = new RequestProductDto("수정된 상품", 2000, "수정된 상품 설명", "http://updated.com");
+        RequestProductDto updateProductDto = new RequestProductDto("수정된 상품", 2000, "수정된 상품 설명", "http://updated.com", category.getId());
         String updateUrl = "http://localhost:" + port + "/api/products/" + nonExistentId;
         var entity = new HttpEntity<>(updateProductDto, headers);
 

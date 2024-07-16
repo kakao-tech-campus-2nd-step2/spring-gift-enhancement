@@ -7,7 +7,9 @@ import gift.member.persistence.entity.Member;
 import gift.member.persistence.entity.Wishlist;
 import gift.member.persistence.repository.MemberJpaRepository;
 import gift.member.persistence.repository.WishlistJpaRepository;
+import gift.product.persistence.entity.Category;
 import gift.product.persistence.entity.Product;
+import gift.product.persistence.repository.CategoryJpaRepository;
 import gift.product.persistence.repository.ProductJpaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,12 +31,15 @@ public class WishlistJpaRepositoryTest {
     @BeforeAll
     static void setUp(
         @Autowired MemberJpaRepository memberRepository,
-        @Autowired ProductJpaRepository productRepository
+        @Autowired ProductJpaRepository productRepository,
+        @Autowired CategoryJpaRepository categoryRepository
     ) {
         Member member = new Member("test@email.com", "test");
         WishlistJpaRepositoryTest.member = memberRepository.save(member);
 
-        Product product = new Product("name", "description", 1000, "http://url.com");
+        var category = categoryRepository.save(new Category("name"));
+
+        Product product = new Product("name", "description", 1000, "http://url.com", category);
         WishlistJpaRepositoryTest.product = productRepository.save(product);
     }
 
