@@ -7,7 +7,6 @@ import gift.wish.model.Wish;
 import gift.wish.model.WishRequestDto;
 import gift.wish.model.WishResponseDto;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,10 +24,10 @@ public class WishService {
 
     @Transactional(readOnly = true)
     public List<WishResponseDto> getWishList(LoginMemberDto loginMemberDto, Pageable pageable) {
-        Page<WishResponseDto> page = wishRepository.findAllByMemberId(loginMemberDto.getId(),
+        return wishRepository.findAllByMemberId(loginMemberDto.getId(),
                 pageable)
-            .map(WishResponseDto::from);
-        return page.getContent();
+            .map(WishResponseDto::from)
+            .getContent();
     }
 
     @Transactional
