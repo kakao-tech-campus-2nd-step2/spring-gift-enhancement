@@ -79,6 +79,10 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public void changeCategory(Category category) {
+        this.category = category;
+    }
+
     public static class Builder {
 
         private Long id;
