@@ -15,6 +15,9 @@ public class ProductRequestDTO {
     @Min(value = 1, message = "가격은 1 미만이 될 수 없습니다.")
     private Integer price;
 
+    @Min(value = 1, message = "카테고리 ID는 1 이상이어야 합니다.")
+    private Long categoryId;
+
     public String getName() {
         return name;
     }
@@ -27,4 +30,7 @@ public class ProductRequestDTO {
         return price;
     }
 
+    public Long getCategoryId() {
+        return categoryId;
+    }
 }
