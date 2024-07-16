@@ -9,6 +9,7 @@ import gift.dto.responseDTO.WishListResponseDTO;
 import gift.dto.responseDTO.WishResponseDTO;
 import gift.service.AuthService;
 import gift.service.WishService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,7 @@ public class WishController {
 
     @PostMapping()
     public ResponseEntity<SuccessBody<Long>> addWishes(@LoginUser User user,
-        @RequestBody WishRequestDTO wishRequestDTO) {
+        @Valid @RequestBody WishRequestDTO wishRequestDTO) {
         authService.authorizeUser(user, wishRequestDTO.userId());
         Long wishInsertedId = wishService.addWish(wishRequestDTO);
         return ApiResponseGenerator.success(HttpStatus.CREATED, "위시리스트를 추가했습니다.", wishInsertedId);

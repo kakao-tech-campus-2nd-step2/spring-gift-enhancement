@@ -72,8 +72,7 @@ public class ProductController {
 
     @PutMapping("/product/{id}")
     public ResponseEntity<SuccessBody<Long>> updateProduct(@PathVariable("id") Long productId,
-        @RequestBody
-        ProductRequestDTO productRequestDTO) {
+        @Valid @RequestBody ProductRequestDTO productRequestDTO) {
         Long updatedProductId = productService.updateProduct(productId, productRequestDTO);
         return ApiResponseGenerator.success(HttpStatus.OK, "상품이 수정되었습니다.", updatedProductId);
     }
