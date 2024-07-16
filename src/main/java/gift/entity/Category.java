@@ -13,11 +13,14 @@ import java.util.regex.Pattern;
 @Entity
 public class Category {
 
-    private final Pattern COLOR_PATTERN = Pattern.compile("^#[0-9a-fA-F]{6}$");
+    private static final Pattern COLOR_PATTERN = Pattern.compile("^#[0-9a-fA-F]{6}$");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true) //Candidate Key
+    private String name;
 
     @Column(nullable = false)
     private String color;
@@ -30,20 +33,41 @@ public class Category {
 
     protected Category() { }
 
-    public Category(String color, String imageUrl, String description) {
+    public Category(String name, String color, String imageUrl, String description) {
+        validateName(name);
         validateColor(color);
         validateImageUrl(imageUrl);
+        validateDescription(description);
 
+        this.name = name;
         this.color = color;
         this.imageUrl = imageUrl;
-        this.description = convertNullToBlankDescription(description);
+        this.description = description;
     }
 
     public Long getId() { return id; }
+    public String getName() { return name; }
     public String getColor() { return color; }
     public String getImageUrl() { return imageUrl; }
     public String getDescription() { return description; }
 
+    public void changeCategory(String name, String color, String imageUrl, String description) {
+        validateName(name);
+        validateColor(color);
+        validateImageUrl(imageUrl);
+        validateDescription(description);
+
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
+
+
+    private void validateName(String name){
+        if(name.isBlank())
+            throw new BlankContentException("이름을 입력해주세요");
+    }
 
     private void validateColor(String color){
         if(color.isBlank())
@@ -58,10 +82,9 @@ public class Category {
             throw new BlankContentException("이미지 url을 입력해주세요.");
     }
 
-    private String convertNullToBlankDescription(String description){ // 순수 로직이므로 추후에 util로 옮길 필요성이 있어보임
+    private void validateDescription(String description){
         if(description == null)
-            return "";
-        return description;
+            throw new BadRequestException("잘못된 description 입니다.");
     }
 
 
@@ -74,8 +97,7 @@ public class Category {
             return false;
         }
         Category category = (Category) object;
-        return Objects.equals(COLOR_PATTERN, category.COLOR_PATTERN)
-                && Objects.equals(getId(), category.getId()) && Objects.equals(
+        return Objects.equals(getId(), category.getId()) && Objects.equals(
                 getColor(), category.getColor()) && Objects.equals(getImageUrl(),
                 category.getImageUrl()) && Objects.equals(getDescription(),
                 category.getDescription());
@@ -83,6 +105,6 @@ public class Category {
 
     @Override
     public int hashCode() {
-        return Objects.hash(COLOR_PATTERN, getId(), getColor(), getImageUrl(), getDescription());
+        return Objects.hash(getId(), getColor(), getImageUrl(), getDescription());
     }
 }
