@@ -2,6 +2,7 @@ package gift.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import gift.controller.WishlistController;
+import gift.model.Category;
 import gift.model.Product;
 import gift.model.User;
 import gift.model.Wishlist;
@@ -39,19 +41,19 @@ public class WishlistTest {
     private User user;
     private Product product;
     private Wishlist wishlist;
+    private Category category;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
         user = new User("test@test.com", "pw");
-
-        product = new Product("아이스 아메리카노 T", 4500, "https://example.com/image.jpg");
-
+        category = new Category("교환권", "#6c95d1", "https://example.com/image.jpg", "");
+        product = new Product("아이스 아메리카노 T", 4500, "https://example.com/image.jpg", category);
         wishlist = new Wishlist(user, product);
 
         when(wishlistService.getWishlist(any(String.class), any(BindingResult.class), any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(wishlist), PageRequest.of(0, 10), 1));
+        		.thenReturn(new PageImpl<>(List.of(wishlist), PageRequest.of(0, 10), 1));
         doNothing().when(wishlistService).addWishlist(any(String.class), any(Wishlist.class), any(BindingResult.class));
         doNothing().when(wishlistService).removeWishlist(any(String.class), any(Wishlist.class), any(BindingResult.class));
         doNothing().when(wishlistService).updateWishlistQuantity(any(String.class), any(Wishlist.class), any(BindingResult.class));
@@ -61,14 +63,16 @@ public class WishlistTest {
     public void testGetWishlist() {
     	Pageable pageable = PageRequest.of(0, 10);
         ResponseEntity<Page<Wishlist>> response = wishlistController.getWishlist("Bearer token", bindingResult, pageable);
+
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).hasSize(1);
+        assertThat(response.getBody().getTotalElements()).isEqualTo(1);
         assertThat(response.getBody().getContent().get(0).getProduct().getName()).isEqualTo(product.getName());
     }
 
     @Test
     public void testAddWishlist() {
         ResponseEntity<String> response = wishlistController.addWishlist("Bearer token", wishlist, bindingResult);
+
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo("Product added to wishlist successfully.");
     }
@@ -76,6 +80,7 @@ public class WishlistTest {
     @Test
     public void testRemoveWishlist() {
         ResponseEntity<String> response = wishlistController.removeWishlist("Bearer token", wishlist, bindingResult);
+
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo("Product removed from wishlist successfully.");
     }
@@ -84,6 +89,7 @@ public class WishlistTest {
     public void testUpdateWishlist() {
         wishlist.setQuantity(10);
         ResponseEntity<String> response = wishlistController.updateWishlist("Bearer token", wishlist, bindingResult);
+
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo("Product quantity updated successfully.");
     }
