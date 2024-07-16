@@ -1,11 +1,13 @@
 package gift.category.model;
 
 import gift.common.model.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 @Entity
 public class Category extends BaseEntity {
 
+    @Column(name = "name", nullable = false, length = 255, unique = true)
     private String name;
     private String color;
     private String imageUrl;
