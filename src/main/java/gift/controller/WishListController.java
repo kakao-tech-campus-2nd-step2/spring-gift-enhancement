@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.util.Map;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -45,8 +44,7 @@ public class WishListController {
         }
 
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, size, sortBy, direction);
-        Pageable pageable = wishListService.createPageRequest(pageRequestDTO);
-        Page<WishListDTO> wishListPage = wishListService.getWishListByUser(email, pageable);
+        Page<WishListDTO> wishListPage = wishListService.getWishListByUser(email, pageRequestDTO);
 
         // 모델에 데이터 추가
         model.addAttribute("wishList", wishListPage.getContent());

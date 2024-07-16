@@ -2,6 +2,9 @@ package gift.dto;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 public class PageRequestDTO {
     @Min(0)
@@ -55,5 +58,15 @@ public class PageRequestDTO {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public Pageable toPageRequest() {
+        Sort sort = Sort.by(sortBy);
+        if (direction.equalsIgnoreCase(Sort.Direction.DESC.name())) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+        return PageRequest.of(page, size, sort);
     }
 }

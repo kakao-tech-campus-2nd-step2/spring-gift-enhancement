@@ -1,14 +1,17 @@
 package gift.controller;
 
+import gift.converter.ProductConverter;
 import gift.dto.PageRequestDTO;
 import gift.dto.ProductDTO;
+import gift.model.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import java.util.Optional;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,9 +31,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -42,10 +47,8 @@ public class ProductController {
         Model model) {
 
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, size, sortBy, direction);
-        Pageable pageable = productService.createPageRequest(pageRequestDTO);
-        Page<ProductDTO> productPage = productService.findAllProducts(pageable);
+        Page<ProductDTO> productPage = productService.findAllProducts(pageRequestDTO);
 
-        // 모델에 데이터 추가
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productPage.getTotalPages());
@@ -58,15 +61,17 @@ public class ProductController {
     @GetMapping("/add")
     public String addProductForm(Model model) {
         model.addAttribute("product", new ProductDTO());
+        model.addAttribute("categories", categoryService.findAllCategories());
         return "Add_product";
     }
 
     @PostMapping
-    public String addProduct(@Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult bindingResult, Model model) {
+    public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.findAllCategories());
             return "Add_product";
         }
-        productService.addProduct(productDTO);
+        productService.addProduct(ProductConverter.convertToDTO(product));
         return "redirect:/admin/products";
     }
 
@@ -77,12 +82,14 @@ public class ProductController {
             return "redirect:/admin/products";
         }
         model.addAttribute("product", productDTO.get());
+        model.addAttribute("categories", categoryService.findAllCategories());
         return "Edit_product";
     }
 
     @PutMapping("/{id}")
     public String updateProduct(@Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.findAllCategories());
             return "Edit_product";
         }
         productService.updateProduct(productDTO);

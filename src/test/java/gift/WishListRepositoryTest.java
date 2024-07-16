@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 
 @DataJpaTest
 class WishListRepositoryTest {
+
     @Autowired
     private WishListRepository wishListRepository;
 
@@ -35,7 +36,7 @@ class WishListRepositoryTest {
         User user = new User(null, "test@example.com", "password");
         userRepository.save(user);
 
-        Product product = new Product(null, new Name("TestProduct"), 100, "http://example.com/image.png");
+        Product product = new Product(null, new Name("TestProduct"), 100, "http://example.com/image.png", 1L);
         productRepository.save(product);
 
         WishList wishList = new WishList(null, user, product);
@@ -53,7 +54,7 @@ class WishListRepositoryTest {
         User user = new User(null, "test@example.com", "password");
         userRepository.save(user);
 
-        Product product = new Product(null, new Name("TestProduct"), 100, "http://example.com/image.png");
+        Product product = new Product(null, new Name("TestProduct"), 100, "http://example.com/image.png", 1L);
         productRepository.save(product);
 
         WishList wishList = new WishList(null, user, product);
@@ -70,11 +71,11 @@ class WishListRepositoryTest {
         User user = new User(null, "test@example.com", "password");
         userRepository.save(user);
 
-        Product product1 = new Product(null, new Name("TestProduct1"), 101, "http://example.com/image1.png");
-        Product product2 = new Product(null, new Name("TestProduct2"), 102, "http://example.com/image2.png");
-        Product product3 = new Product(null, new Name("TestProduct3"), 103, "http://example.com/image3.png");
-        Product product4 = new Product(null, new Name("TestProduct4"), 104, "http://example.com/image4.png");
-        Product product5 = new Product(null, new Name("TestProduct5"), 105, "http://example.com/image5.png");
+        Product product1 = new Product(null, new Name("TestProduct1"), 101, "http://example.com/image1.png", 1L);
+        Product product2 = new Product(null, new Name("TestProduct2"), 102, "http://example.com/image2.png", 1L);
+        Product product3 = new Product(null, new Name("TestProduct3"), 103, "http://example.com/image3.png", 1L);
+        Product product4 = new Product(null, new Name("TestProduct4"), 104, "http://example.com/image4.png", 1L);
+        Product product5 = new Product(null, new Name("TestProduct5"), 105, "http://example.com/image5.png", 1L);
 
         productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5));
 

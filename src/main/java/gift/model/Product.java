@@ -7,7 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import java.util.Objects;
+
 
 @Entity
 @Table(name = "products")
@@ -18,6 +20,7 @@ public class Product {
     private Long id;
 
     @Embedded
+    @Valid
     private Name name;
 
     @Column(nullable = false, columnDefinition = "INTEGER")
@@ -26,13 +29,17 @@ public class Product {
     @Column(name = "image_url", nullable = false, columnDefinition = "VARCHAR(255)")
     private String imageUrl;
 
+    @Column(name = "category_id", nullable = false, columnDefinition = "BIGINT")
+    private Long categoryId;
+
     protected Product() {}
 
-    public Product(Long id, Name name, int price, String imageUrl) {
+    public Product(Long id, Name name, int price, String imageUrl, Long categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -49,6 +56,17 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void update(Name name, int price, String imageUrl, Long categoryId) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     @Override
