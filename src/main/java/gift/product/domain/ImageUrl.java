@@ -1,5 +1,6 @@
 package gift.product.domain;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -23,6 +24,7 @@ public class ImageUrl {
     }
 
     @Override
+    @JsonValue
     public String toString() {
         return imageUrlValue;
     }

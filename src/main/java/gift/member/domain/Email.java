@@ -1,5 +1,6 @@
 package gift.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -22,6 +23,7 @@ public class Email {
     }
 
     @Override
+    @JsonValue
     public String toString() {
         return emailValue;
     }

@@ -1,5 +1,6 @@
 package gift.product.domain;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import gift.global.response.ErrorCode;
 import gift.product.exception.ProductValidException;
 import jakarta.persistence.Column;
@@ -28,6 +29,7 @@ public class ProductPrice {
     }
 
     @Override
+    @JsonValue
     public String toString() {
         return Long.toString(productPriceValue);
     }

@@ -1,5 +1,7 @@
 package gift.product.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import gift.global.response.ErrorCode;
 import gift.product.exception.ProductValidException;
 import jakarta.persistence.Column;
@@ -41,6 +43,7 @@ public class ProductName {
     }
 
     @Override
+    @JsonValue
     public String toString() {
         return productNameValue;
     }
