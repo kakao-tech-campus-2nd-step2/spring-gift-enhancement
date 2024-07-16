@@ -16,6 +16,9 @@ create table category
     description varchar(255)
 );
 
+INSERT INTO category (name, color, imageurl, description)
+VALUES ('DefaultCategory', '#FFFFFF', '', '');
+
 drop table if exists wishlist CASCADE;
 create table wishlist
 (
@@ -31,7 +34,9 @@ create table product
     name        varchar(255),
     price       int,
     imageurl    varchar(255),
-    wishlist_id BIGINT
+    wishlist_id BIGINT,
+    category_id bigint,
+    FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE
 );
 
 drop table if exists product_wishlist CASCADE;
