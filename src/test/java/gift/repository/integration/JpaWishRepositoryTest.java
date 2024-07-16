@@ -1,4 +1,4 @@
-package gift.repository;
+package gift.repository.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import gift.domain.Product;
 import gift.domain.User;
 import gift.domain.Wish;
+import gift.repository.JpaProductRepository;
+import gift.repository.JpaUserRepository;
+import gift.repository.JpaWishRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
