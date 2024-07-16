@@ -4,7 +4,6 @@ import gift.config.PageConfig;
 import gift.dto.category.CategoryResponse;
 import gift.dto.category.CreateCategoryRequest;
 import gift.dto.category.UpdateCategoryRequest;
-import gift.exception.category.CategoryAlreadyExistException;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -46,17 +45,13 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<Long> createCategory(@RequestBody @Valid CreateCategoryRequest request) {
-        try {
-            Long categoryId = categoryService.createCategory(request);
-            URI location = UriComponentsBuilder.newInstance()
-                .path("/api/categories/{id}")
-                .buildAndExpand(categoryId)
-                .toUri();
-            return ResponseEntity.created(location)
-                .body(categoryId);
-        } catch (CategoryAlreadyExistException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        Long categoryId = categoryService.createCategory(request);
+        URI location = UriComponentsBuilder.newInstance()
+            .path("/api/categories/{id}")
+            .buildAndExpand(categoryId)
+            .toUri();
+        return ResponseEntity.created(location)
+            .body(categoryId);
     }
 
     @PatchMapping("{id}")
