@@ -6,7 +6,11 @@ import gift.dto.wish.response.WishResponse;
 import gift.entity.Product;
 import gift.entity.User;
 import gift.entity.Wish;
+import gift.exception.product.ProductNotFoundException;
+import gift.exception.user.UserNotFoundException;
 import gift.exception.wish.WishNotFoundException;
+import gift.repository.ProductRepository;
+import gift.repository.UserRepository;
 import gift.repository.WishRepository;
 import gift.util.mapper.WishMapper;
 import java.util.List;
@@ -19,14 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class WishService {
 
     private final WishRepository wishRepository;
-    private final ProductService productService;
-    private final UserService userService;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    public WishService(WishRepository wishRepository, ProductService productService,
-        UserService userService) {
+    public WishService(WishRepository wishRepository, ProductRepository productRepository,
+        UserRepository userRepository) {
         this.wishRepository = wishRepository;
-        this.productService = productService;
-        this.userService = userService;
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional(readOnly = true)
@@ -38,8 +42,10 @@ public class WishService {
 
     @Transactional
     public Long addWish(Long userId, AddWishRequest request) {
-        Product product = productService.getProductById(request.productId());
-        User user = userService.getUserById(userId);
+        Product product = productRepository.findById(request.productId())
+            .orElseThrow(ProductNotFoundException::new);
+        User user = userRepository.findById(userId)
+            .orElseThrow(UserNotFoundException::new);
 
         Wish wish = new Wish(user, product, request.quantity());
 
