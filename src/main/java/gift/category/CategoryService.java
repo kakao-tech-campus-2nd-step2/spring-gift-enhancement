@@ -13,28 +13,25 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public CategoryResponseDTO insertNewCategory(CategoryRequestDTO newCategory) {
-        Category category = new Category(newCategory.getName(), newCategory.getColor(), newCategory.getImageUrl(), newCategory.getDescription());
-        return new CategoryResponseDTO(categoryRepository.save(category));
+    public CategoryResponse insertNewCategory(CategoryRequest newCategory) {
+        Category category = new Category(newCategory.name(), newCategory.color(), newCategory.imageUrl(), newCategory.description());
+        return new CategoryResponse(categoryRepository.save(category));
     }
 
-    public List<CategoryResponseDTO> findAllCategories() {
-        return categoryRepository.findAll().stream().map(CategoryResponseDTO::new).toList();
+    public List<CategoryResponse> findAllCategories() {
+        return categoryRepository.findAll().stream().map(CategoryResponse::new).toList();
     }
 
-    public CategoryResponseDTO findCategoriesByID(Long id) {
+    public CategoryResponse findCategoriesByID(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow();
-        return new CategoryResponseDTO(category);
+        return new CategoryResponse(category);
     }
 
     @Transactional
-    public CategoryResponseDTO updateCategoriesByID(Long id, CategoryRequestDTO updateParam) {
+    public CategoryResponse updateCategoriesByID(Long id, CategoryRequest updateParam) {
         Category category = categoryRepository.findById(id).orElseThrow();
-        category.setName(updateParam.getName());
-        category.setColor(updateParam.getColor());
-        category.setImageUrl(updateParam.getImageUrl());
-        category.setDescription(updateParam.getDescription());
-        return new CategoryResponseDTO(category);
+        category.updateWithRequest(updateParam);
+        return new CategoryResponse(category);
     }
 
     public void deleteCategoriesByID(Long id) {
