@@ -44,5 +44,10 @@ public class MyExceptionHandler {
         return back(e.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public String exception(ConstraintViolationException e) {
+        return back("제약사항 요구 어긋남");
+    }
 }
 

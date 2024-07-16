@@ -28,18 +28,15 @@ public class UserController {
         return "user/signup";
     }
 
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/signup")
     public String SignUp(@RequestBody SignUpDTO signUpDTO) {
-
         userService.signUp(signUpDTO);
         return "redirect:/signin";
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/signin")
-
     public String signIn() {
         return "user/signin";
     }
@@ -50,7 +47,6 @@ public class UserController {
     @ResponseBody
     public String signIn(@RequestBody LoginDTO loginDTO) throws JsonProcessingException {
         Token token = userService.signIn(loginDTO);
-
         return objectMapper.writeValueAsString(token);
     }
 

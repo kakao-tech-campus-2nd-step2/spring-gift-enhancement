@@ -3,6 +3,7 @@ package gift.controller;
 
 import gift.dto.product.ProductWithOptionDTO;
 import gift.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,27 +23,26 @@ public class ProductAdminController {
     private ProductService productService;
 
     @GetMapping("/admin/products")
-
-    public ModelAndView adminProducts(Model model, @RequestParam(value = "page", defaultValue = "0") int pageNum) {
+    public String adminProducts(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "0") int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, 2, Sort.by(Sort.Direction.ASC, "id"));
         Page<ProductWithOptionDTO> products = productService.getAllProductsWithOption(pageable);
-        model.addAttribute("products", products);
-        return new ModelAndView("admin/products");
+        request.setAttribute("products", products);
+        return "admin/products";
 
     }
 
     @GetMapping("/admin/add")
-    public String adminProductsAdd(Model model) {
-        return ("admin/add");
+    public String adminProductsAdd() {
+        return "admin/add";
     }
 
     @GetMapping("/admin/modify")
-    public String adminProductsModify(Model model) {
-        return ("admin/modify");
+    public String adminProductsModify() {
+        return "admin/modify";
     }
 
     @GetMapping("/admin/delete")
-    public String adminProductsDelete(Model model) {
-        return ("admin/delete");
+    public String adminProductsDelete() {
+        return "admin/delete";
     }
 }

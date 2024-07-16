@@ -49,8 +49,6 @@ public class ProductService {
     }
 
     public void saveProduct(SaveProductDTO product) {
-        if(product.option() == null)
-            throw new BadRequestException("하나의 옵션은 필요합니다.");
         if(categoryRepository.findById(product.categoryId()).isEmpty())
             throw new NotFoundException("해당 카테고리가 없음");
 
@@ -58,7 +56,8 @@ public class ProductService {
         Product saveProduct = new Product(product.name(), product.price(), product.imageUrl(),category);
         List<String> optionList = stream(product.option().split(",")).toList();
         optionList= optionList.stream().distinct().collect(Collectors.toList());
-
+        if(optionList.isEmpty())
+            throw new BadRequestException("하나의 옵션은 필요");
 
         if(isValidProduct(saveProduct)){
             saveProduct = productRepository.save(saveProduct);

@@ -29,7 +29,7 @@ public class Product {
 
 
     @OneToMany(mappedBy = "product")
-    @Size(max=100000000)//1억
+    @Size(max=100000000)//1~1억
     List<Option> options = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
