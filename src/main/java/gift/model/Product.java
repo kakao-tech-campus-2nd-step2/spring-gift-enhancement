@@ -17,19 +17,20 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "BIGINT COMMENT '상품 ID'")
     private Long id;
 
     @Embedded
     @Valid
     private Name name;
 
-    @Column(nullable = false, columnDefinition = "INTEGER")
+    @Column(nullable = false, columnDefinition = "INTEGER COMMENT '상품 가격'")
     private int price;
 
-    @Column(name = "image_url", nullable = false, columnDefinition = "VARCHAR(255)")
+    @Column(name = "image_url", nullable = false, columnDefinition = "VARCHAR(255) COMMENT '상품 이미지 URL'")
     private String imageUrl;
 
-    @Column(name = "category_id", nullable = false, columnDefinition = "BIGINT")
+    @Column(name = "category_id", nullable = false, columnDefinition = "BIGINT COMMENT '카테고리 ID'")
     private Long categoryId;
 
     protected Product() {}

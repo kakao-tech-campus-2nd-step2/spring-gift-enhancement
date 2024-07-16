@@ -19,11 +19,11 @@ public class WishList {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false, columnDefinition = "BIGINT")
+    @JoinColumn(name = "member_id", nullable = false, columnDefinition = "BIGINT COMMENT '사용자 ID'")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false, columnDefinition = "BIGINT")
+    @JoinColumn(name = "product_id", nullable = false, columnDefinition = "BIGINT COMMENT '상품 ID'")
     private Product product;
 
     protected WishList() {}
