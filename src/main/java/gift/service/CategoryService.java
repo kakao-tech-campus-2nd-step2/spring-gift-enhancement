@@ -5,6 +5,7 @@ import gift.dto.request.UpdateCategoryRequest;
 import gift.dto.response.CategoryIdResponse;
 import gift.dto.response.CategoryResponse;
 import gift.entity.Category;
+import gift.exception.CategoryNameDuplicateException;
 import gift.exception.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,12 @@ public class CategoryService {
     }
 
     public CategoryIdResponse addCategory(AddCategoryRequest request) {
-        Category category = new Category(request);
-        return new CategoryIdResponse(categoryRepository.save(category).getId());
+        if (categoryRepository.existsByName(request.name())) {
+            throw new CategoryNameDuplicateException(request.name());
+        }
+
+        Category newCategory = new Category(request);
+        return new CategoryIdResponse(categoryRepository.save(newCategory).getId());
     }
 
     @Transactional
