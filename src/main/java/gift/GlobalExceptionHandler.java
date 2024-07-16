@@ -3,28 +3,31 @@ package gift;
 import gift.exception.RepositoryException;
 import gift.exception.UnauthorizedException;
 import gift.exception.UserNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleValidationExceptions(MethodArgumentNotValidException ex, Model model) {
-        ex.getBindingResult().getAllErrors().forEach(error -> {
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(
+        MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            model.addAttribute(fieldName + "Error", errorMessage);
+            String message = error.getDefaultMessage();
+            errors.put(fieldName, message);
         });
-        return "error";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
     @ExceptionHandler(RepositoryException.class)
@@ -48,7 +51,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<String> handleUniqueConstraint(DataIntegrityViolationException ex) {
-        String message = "중복된 Member Id와 Product Id가 이미 위시 리스트가 존재합니다.";
+        String message = "데이터 베이스에 중복되는 값을 갖는 객체가 존재합니다.";
         return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
     }
 }

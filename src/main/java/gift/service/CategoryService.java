@@ -9,7 +9,6 @@ import gift.model.Product;
 import gift.model.ProductDTO;
 import gift.repository.CategoryRepository;
 import java.util.List;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +27,13 @@ public class CategoryService {
         return convertToDTO(categoryRepository.save(category));
     }
 
-    public CategoryPageDTO findCategoryPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public CategoryPageDTO findCategoryPage(Pageable pageable) {
         List<CategoryDTO> categories = categoryRepository.findAll(pageable)
             .map(this::convertToDTO)
             .stream()
             .toList();
-        return new CategoryPageDTO(page, size, categories.size(), categories);
+        return new CategoryPageDTO(pageable.getPageNumber(), pageable.getPageSize(),
+            categories.size(), categories);
     }
 
     public CategoryDTO findCategoryById(long categoryId) {

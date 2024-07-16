@@ -30,9 +30,8 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<?> getCategoryPage(Pageable pageable) {
-        CategoryPageDTO categoryPage = categoryService.findCategoryPage(pageable.getPageNumber(),
-            pageable.getPageSize());
-        return ResponseEntity.ok().body(categoryPage.categories());
+        CategoryPageDTO categoryPage = categoryService.findCategoryPage(pageable);
+        return ResponseEntity.ok(categoryPage.categories());
     }
 
     @GetMapping(params = "categoryId")
