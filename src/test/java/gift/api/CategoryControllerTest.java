@@ -1,12 +1,12 @@
 package gift.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.category.api.CategoryController;
-import gift.category.application.CategoryService;
-import gift.category.dto.CategoryRequest;
-import gift.category.dto.CategoryResponse;
-import gift.category.entity.Category;
-import gift.category.util.CategoryMapper;
+import gift.product.api.CategoryController;
+import gift.product.application.CategoryService;
+import gift.product.dto.CategoryRequest;
+import gift.product.dto.CategoryResponse;
+import gift.product.entity.Category;
+import gift.product.util.CategoryMapper;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import gift.global.security.JwtFilter;

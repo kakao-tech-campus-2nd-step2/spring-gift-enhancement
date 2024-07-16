@@ -1,6 +1,6 @@
 package gift.dao;
 
-import gift.category.entity.Category;
+import gift.product.entity.Category;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.ProductRequest;
 import gift.product.entity.Product;

@@ -1,9 +1,9 @@
-package gift.category.application;
+package gift.product.application;
 
-import gift.category.dao.CategoryRepository;
-import gift.category.dto.CategoryRequest;
-import gift.category.dto.CategoryResponse;
-import gift.category.util.CategoryMapper;
+import gift.product.dao.CategoryRepository;
+import gift.product.dto.CategoryRequest;
+import gift.product.dto.CategoryResponse;
+import gift.product.util.CategoryMapper;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import org.springframework.stereotype.Service;

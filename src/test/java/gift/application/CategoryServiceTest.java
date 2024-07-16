@@ -1,11 +1,11 @@
 package gift.application;
 
-import gift.category.application.CategoryService;
-import gift.category.dao.CategoryRepository;
-import gift.category.dto.CategoryRequest;
-import gift.category.dto.CategoryResponse;
-import gift.category.entity.Category;
-import gift.category.util.CategoryMapper;
+import gift.product.application.CategoryService;
+import gift.product.dao.CategoryRepository;
+import gift.product.dto.CategoryRequest;
+import gift.product.dto.CategoryResponse;
+import gift.product.entity.Category;
+import gift.product.util.CategoryMapper;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import org.junit.jupiter.api.DisplayName;

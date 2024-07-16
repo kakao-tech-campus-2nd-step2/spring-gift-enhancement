@@ -1,6 +1,6 @@
-package gift.category.dao;
+package gift.product.dao;
 
-import gift.category.entity.Category;
+import gift.product.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

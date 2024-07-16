@@ -1,6 +1,6 @@
 package gift.admin.api;
 
-import gift.category.api.CategoryController;
+import gift.product.api.CategoryController;
 import gift.global.pagination.dto.PageResponse;
 import gift.product.api.ProductController;
 import gift.product.dto.ProductResponse;

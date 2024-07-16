@@ -1,7 +1,7 @@
 package gift.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.category.entity.Category;
+import gift.product.entity.Category;
 import gift.global.security.JwtFilter;
 import gift.global.security.JwtUtil;
 import gift.member.validator.LoginMember;

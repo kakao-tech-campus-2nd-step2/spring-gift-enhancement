@@ -1,8 +1,8 @@
-package gift.category.api;
+package gift.product.api;
 
-import gift.category.application.CategoryService;
-import gift.category.dto.CategoryRequest;
-import gift.category.dto.CategoryResponse;
+import gift.product.application.CategoryService;
+import gift.product.dto.CategoryRequest;
+import gift.product.dto.CategoryResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

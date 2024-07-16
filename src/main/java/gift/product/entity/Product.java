@@ -1,6 +1,5 @@
 package gift.product.entity;
 
-import gift.category.entity.Category;
 import gift.product.dto.ProductRequest;
 import gift.wishlist.entity.Wish;
 import jakarta.persistence.CascadeType;

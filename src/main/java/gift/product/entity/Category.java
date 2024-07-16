@@ -1,6 +1,6 @@
-package gift.category.entity;
+package gift.product.entity;
 
-import gift.category.dto.CategoryRequest;
+import gift.product.dto.CategoryRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
