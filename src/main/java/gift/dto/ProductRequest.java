@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.entity.Category;
 import gift.entity.Product;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -18,13 +19,17 @@ public class ProductRequest {
 
     private String imgUrl;
 
-    public ProductRequest() {}
+    private Long categoryId;
 
-    public ProductRequest(Long id, String name, int price, String imgUrl) {
+    public ProductRequest() {
+    }
+
+    public ProductRequest(Long id, String name, int price, String imgUrl, Long categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -59,12 +64,20 @@ public class ProductRequest {
         this.imgUrl = imgUrl;
     }
 
-    public static ProductRequest from(Product product) {
-        return new ProductRequest(product.getId(), product.getName(), product.getPrice(),
-            product.getImgUrl());
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public static Product toEntity(ProductRequest request) {
-        return new Product(request.getName(), request.getPrice(), request.getImgUrl());
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public static ProductRequest from(Product product) {
+        return new ProductRequest(product.getId(), product.getName(), product.getPrice(),
+            product.getImgUrl(), product.getCategory().getId());
+    }
+
+    public static Product toEntity(ProductRequest request, Category category) {
+        return new Product(request.getName(), request.getPrice(), request.getImgUrl(), category);
     }
 }

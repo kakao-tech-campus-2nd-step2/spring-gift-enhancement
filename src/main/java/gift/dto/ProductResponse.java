@@ -8,12 +8,17 @@ public class ProductResponse {
     private String name;
     private int price;
     private String imgUrl;
+    private String categoryName;
 
-    public ProductResponse(Long id, String name, int price, String imgUrl) {
+    public ProductResponse() {
+    }
+
+    public ProductResponse(Long id, String name, int price, String imgUrl, String categoryName) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.categoryName = categoryName;
     }
 
     public Long getId() {
@@ -48,8 +53,16 @@ public class ProductResponse {
         this.imgUrl = imgUrl;
     }
 
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
     public static ProductResponse from(Product product) {
         return new ProductResponse(product.getId(), product.getName(), product.getPrice(),
-            product.getImgUrl());
+            product.getImgUrl(), product.getCategory().getName());
     }
 }
