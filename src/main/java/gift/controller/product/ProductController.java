@@ -43,7 +43,7 @@ public class ProductController {
     public ResponseEntity<String> createProduct(
         @RequestBody @Valid ProductRequest.Register request
     ) {
-        productService.createProduct(request);
+        productService.createProduct(request.toCommand());
         return ResponseEntity.ok().body("Product created successfully.");
     }
 
@@ -54,7 +54,7 @@ public class ProductController {
         @PathVariable("id") Long id,
         @RequestBody @Valid ProductRequest.Update request
     ) {
-        productService.updateProduct(id, request);
+        productService.updateProduct(id, request.toCommand());
         return ResponseEntity.ok().body("Product updated successfully.");
     }
 

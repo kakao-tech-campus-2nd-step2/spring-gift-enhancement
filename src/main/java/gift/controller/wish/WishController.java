@@ -39,7 +39,7 @@ public class WishController {
         @Authenticate LoginInfo loginInfo,
         @Valid @RequestBody WishRequest.Register request
     ) {
-        wishService.addWish(loginInfo.memberId(), request);
+        wishService.addWish(loginInfo.memberId(), request.toCommand());
         return ResponseEntity.ok().body("Wish insert successfully.");
     }
 
@@ -69,7 +69,7 @@ public class WishController {
         @Authenticate LoginInfo loginInfo,
         @Valid @RequestBody WishRequest.Update request
     ) {
-        wishService.updateWish(loginInfo.memberId(), request);
+        wishService.updateWish(loginInfo.memberId(), request.toCommand());
         return ResponseEntity.ok().body("Wish updated successfully.");
     }
 }

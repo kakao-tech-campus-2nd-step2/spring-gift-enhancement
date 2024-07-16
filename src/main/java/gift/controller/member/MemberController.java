@@ -29,7 +29,7 @@ public class MemberController {
     public ResponseEntity<String> register(
         @RequestBody @Valid MemberRequest.Register request
     ) {
-        memberService.register(request);
+        memberService.register(request.toCommand());
         return ResponseEntity.ok().body("User created successfully.");
     }
 
@@ -37,7 +37,7 @@ public class MemberController {
     public ResponseEntity<MemberResponse.Login> login(
         @RequestBody @Valid MemberRequest.Login request
     ) {
-        var response = memberService.login(request);
+        var response = memberService.login(request.toCommand());
         return ResponseEntity.ok().body(MemberResponse.Login.from(response));
     }
 

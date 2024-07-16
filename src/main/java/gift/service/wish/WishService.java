@@ -1,6 +1,5 @@
 package gift.service.wish;
 
-import gift.controller.wish.dto.WishRequest;
 import gift.controller.wish.dto.WishResponse;
 import gift.global.dto.PageResponse;
 import gift.model.member.Member;
@@ -11,6 +10,7 @@ import gift.repository.product.ProductRepository;
 import gift.repository.wish.WishJpaRepository;
 import gift.global.validate.NotFoundException;
 import gift.repository.wish.WishRepository;
+import gift.service.wish.dto.WishCommand;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,11 +31,11 @@ public class WishService {
     }
 
     //@Transactional
-    public void addWish(Long userId, WishRequest.Register request) {
+    public void addWish(Long userId, WishCommand.Register command) {
         Member member = memberRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException("Member not found"));
 
-        Product product = productRepository.findById(request.productId())
+        Product product = productRepository.findById(command.productId())
             .orElseThrow(() -> new NotFoundException("Product not found"));
 
         wishRepository.findByMemberAndProduct(member, product)
@@ -43,21 +43,21 @@ public class WishService {
                 throw new IllegalArgumentException("Wish already exists");
             });
 
-        wishRepository.save(request.toEntity(member, product));
+        wishRepository.save(command.toEntity(member, product));
     }
 
     @Transactional
-    public void updateWish(Long userId, WishRequest.Update request) {
+    public void updateWish(Long userId, WishCommand.Update command) {
         Member member = memberRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException("Member not found"));
 
-        Product product = productRepository.findById(request.productId())
+        Product product = productRepository.findById(command.productId())
             .orElseThrow(() -> new NotFoundException("Product not found"));
 
         Wish wish = wishRepository.findByMemberAndProduct(member, product)
             .orElseThrow(() -> new NotFoundException("Wish not found"));
 
-        wish.updateCount(request.count());
+        wish.updateCount(command.count());
     }
 
     //@Transactional
