@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -47,8 +46,10 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductAlreadyExistsException();
         }
         ProductCategory category = productCategoryRepository
-                .findByName(product.category().name())
-                .orElseGet(() -> productCategoryRepository.save(product.category()));
+                .findByName(product.category())
+                .orElseGet(
+                        () -> productCategoryRepository.save(ProductCategory.of(product.category()))
+                );
         productRepository.save(product.withCategory(category));
     }
 
@@ -59,8 +60,10 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException();
         }
         ProductCategory category = productCategoryRepository
-                .findByName(product.category().name())
-                .orElseGet(() -> productCategoryRepository.save(product.category()));
+                .findByName(product.category())
+                .orElseGet(
+                        () -> productCategoryRepository.save(ProductCategory.of(product.category()))
+                );
         productRepository.save(product.withCategory(category));
     }
 

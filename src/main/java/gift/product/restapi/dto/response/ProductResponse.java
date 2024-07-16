@@ -15,7 +15,7 @@ public record ProductResponse(
                 product.name(),
                 product.price(),
                 product.imageUrl(),
-                product.category().name()
+                product.category()
         );
     }
 }

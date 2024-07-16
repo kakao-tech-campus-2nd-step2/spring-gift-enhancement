@@ -2,13 +2,47 @@ package gift.core.domain.product;
 
 import jakarta.annotation.Nullable;
 
-public record Product(
-        Long id,
-        String name,
-        Integer price,
-        String imageUrl,
-        ProductCategory category
-) {
+public class Product {
+    private final Long id;
+    private final String name;
+    private final Integer price;
+    private final String imageUrl;
+    private final ProductCategory category;
+
+    public Product(
+            Long id,
+            String name,
+            Integer price,
+            String imageUrl,
+            ProductCategory category
+    ){
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
+    public Long id() {
+        return id;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public Integer price() {
+        return price;
+    }
+
+    public String imageUrl() {
+        return imageUrl;
+    }
+
+    public String category() {
+        return category.name();
+    }
+
     public Product applyUpdate(
             @Nullable String name,
             @Nullable Integer price,
@@ -17,10 +51,10 @@ public record Product(
     ){
         return new Product(
                 this.id(),
-                name != null ? name : this.name(),
-                price != null ? price : this.price(),
-                imageUrl != null ? imageUrl : this.imageUrl(),
-                category != null ? category : this.category()
+                name != null ? name : this.name,
+                price != null ? price : this.price,
+                imageUrl != null ? imageUrl : this.imageUrl,
+                category != null ? category : this.category
         );
     }
 
