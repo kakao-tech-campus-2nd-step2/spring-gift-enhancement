@@ -55,15 +55,20 @@ public class ProductTest {
         token = responseEntity.getBody().substring(startIndex, endIndex);
     }
 
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBearerAuth(token);
+        return headers;
+    }
+
     @Test
     @DisplayName("상품 생성")
     @DirtiesContext
     void createProduct() {
         Product product = new Product("우유", 1000L, "https://milk.jpg");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setBearerAuth(token);
+        HttpHeaders headers = getHttpHeaders();
         //form data를 받기 때문에
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("name", product.getName());
@@ -83,9 +88,7 @@ public class ProductTest {
     @DirtiesContext
     void showProductList() {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setBearerAuth(token);
+        HttpHeaders headers = getHttpHeaders();
 
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/products", HttpMethod.GET,
@@ -101,9 +104,7 @@ public class ProductTest {
 
         Product product = new Product("우유", 1000L, "https://example1.jpg");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setBearerAuth(token);
+        HttpHeaders headers = getHttpHeaders();
         //form data를 받기 때문에
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("name", product.getName());
@@ -122,9 +123,7 @@ public class ProductTest {
     @DirtiesContext
     void deleteProduct() {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setBearerAuth(token);
+        HttpHeaders headers = getHttpHeaders();
 
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/products/1", HttpMethod.DELETE,
