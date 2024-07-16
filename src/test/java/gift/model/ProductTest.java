@@ -46,7 +46,8 @@ public class ProductTest {
     public void testUpdateProduct() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
-        Category newCategory = new Category("New Category", "#111111", "newImageUrl", "newDescription");
+        Category newCategory = new Category("New Category", "#111111", "newImageUrl",
+            "newDescription");
         product.update("Product2", 200, "imageUrl2", newCategory);
 
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
@@ -62,7 +63,8 @@ public class ProductTest {
     @DisplayName("유효하지 않은 상품 이름 - 길이 초과")
     public void testInvalidProductNameSize() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Product product = new Product(1L, "가나다라마바사아자차카타파하가나다라마바사아자차카타파하", 100, "imageUrl1", category);
+        Product product = new Product(1L, "가나다라마바사아자차카타파하가나다라마바사아자차카타파하", 100, "imageUrl1",
+            category);
 
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
 

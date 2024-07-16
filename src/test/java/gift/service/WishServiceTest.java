@@ -61,7 +61,8 @@ public class WishServiceTest {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Member member = new Member(1L, "test@example.com", "password");
         MemberResponse memberResponse = new MemberResponse(1L, "test@example.com", null);
-        ProductResponse productResponse = new ProductResponse(1L, "Product", 100, "imageUrl", category.getId(), category.getName());
+        ProductResponse productResponse = new ProductResponse(1L, "Product", 100, "imageUrl",
+            category.getId(), category.getName());
         Product product = new Product(productResponse.id(), productResponse.name(),
             productResponse.price(), productResponse.imageUrl(), category);
 
@@ -102,7 +103,8 @@ public class WishServiceTest {
         Member member = new Member(1L, "test@example.com", "password");
         MemberResponse memberResponse = new MemberResponse(1L, "test@example.com", null);
         Product product = new Product(1L, "Product", 100, "imageUrl", category);
-        ProductResponse productResponse = new ProductResponse(1L, "Product", 100, "imageUrl", category.getId(), category.getName());
+        ProductResponse productResponse = new ProductResponse(1L, "Product", 100, "imageUrl",
+            category.getId(), category.getName());
 
         when(memberService.getMemberById(1L)).thenReturn(memberResponse);
         when(productService.getProductById(1L)).thenReturn(productResponse);
