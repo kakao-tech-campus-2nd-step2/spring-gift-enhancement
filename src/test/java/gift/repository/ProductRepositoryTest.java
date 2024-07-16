@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import gift.entity.Category;
 import gift.entity.Product;
 import jakarta.transaction.Transactional;
 
@@ -22,12 +24,14 @@ public class ProductRepositoryTest {
     private Product actual;
     private Product updateProduct;
     private long notExistId;
+    private Category category;
 
     @BeforeEach
     void setUp(){
-        expected = new Product("testName", 1, "testUrl");
+        category = new Category("testCategory");
+        expected = new Product("testName", 1, "testUrl", category);
         actual = productRepository.save(expected);
-        updateProduct = new Product("updateName", 1, "testUrl");
+        updateProduct = new Product("updateName", 1, "testUrl", category);
         notExistId = 1000L;
     }
 
