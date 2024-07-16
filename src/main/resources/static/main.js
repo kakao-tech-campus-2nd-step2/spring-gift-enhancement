@@ -65,15 +65,12 @@ function loadWishlist() {
 
 function addProductToWishlist(productId) {
     const token = localStorage.getItem('token');
-    fetch('/api/wishes', {
+    fetch(`/api/wishes/${productId}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            productId: productId
-        })
+        }
     })
         .then(response => {
             if (!response.ok) {
