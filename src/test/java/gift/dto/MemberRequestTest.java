@@ -1,5 +1,6 @@
 package gift.dto;
 
+import static gift.util.Constants.REQUIRED_FIELD_MISSING;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.dto.member.MemberRequest;
@@ -33,59 +34,30 @@ public class MemberRequestTest {
     }
 
     @Test
-    @DisplayName("유효하지 않은 이메일로 회원 가입 요청")
-    public void testRegisterMemberInvalidEmail() {
-        MemberRequest memberDTO = new MemberRequest(null, "invalid-email", "validpassword");
+    @DisplayName("이메일이 null인 회원 가입 요청")
+    public void testRegisterMemberNullEmail() {
+        MemberRequest memberDTO = new MemberRequest(null, null, "validpassword");
 
         Set<ConstraintViolation<MemberRequest>> violations = validator.validate(memberDTO);
 
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("email") &&
-                violation.getMessage().equals("유효한 이메일 주소를 입력해야 합니다.")
+                violation.getMessage().equals(REQUIRED_FIELD_MISSING)
         );
     }
 
     @Test
-    @DisplayName("빈 이메일로 회원 가입 요청")
-    public void testRegisterMemberBlankEmail() {
-        MemberRequest memberDTO = new MemberRequest(null, "", "validpassword");
-
-        Set<ConstraintViolation<MemberRequest>> violations = validator.validate(memberDTO);
-
-        assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(violation ->
-            violation.getPropertyPath().toString().equals("email") &&
-                violation.getMessage().equals("이메일은 필수 입력 항목입니다.")
-        );
-    }
-
-    @Test
-    @DisplayName("유효하지 않은 비밀번호로 회원 가입 요청")
-    public void testRegisterMemberInvalidPassword() {
-        MemberRequest memberDTO = new MemberRequest(null, "valid@example.com", "123");
+    @DisplayName("비밀번호가 null인 회원 가입 요청")
+    public void testRegisterMemberNullPassword() {
+        MemberRequest memberDTO = new MemberRequest(null, "valid@example.com", null);
 
         Set<ConstraintViolation<MemberRequest>> violations = validator.validate(memberDTO);
 
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("password") &&
-                violation.getMessage().equals("비밀번호는 최소 4자리 이상이어야 합니다.")
-        );
-    }
-
-    @Test
-    @DisplayName("빈 비밀번호로 회원 가입 요청")
-    public void testRegisterMemberBlankPassword() {
-        MemberRequest memberDTO = new MemberRequest(null, "valid@example.com", "");
-
-        Set<ConstraintViolation<MemberRequest>> violations = validator.validate(memberDTO);
-
-        assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(violation ->
-            violation.getPropertyPath().toString().equals("password") &&
-                (violation.getMessage().equals("비밀번호는 필수 입력 항목입니다.") ||
-                    violation.getMessage().equals("비밀번호는 최소 4자리 이상이어야 합니다."))
+                violation.getMessage().equals(REQUIRED_FIELD_MISSING)
         );
     }
 }

@@ -1,11 +1,16 @@
 package gift.model;
 
+import static gift.util.Constants.INVALID_EMAIL;
+import static gift.util.Constants.INVALID_PASSWORD;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "member")
@@ -16,9 +21,11 @@ public class Member {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @Email(message = INVALID_EMAIL)
     private String email;
 
     @Column(nullable = false)
+    @Size(min = 4, message = INVALID_PASSWORD)
     private String password;
 
     protected Member() {

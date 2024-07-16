@@ -1,7 +1,7 @@
 package gift.model;
 
-import static gift.util.Constants.PRODUCT_NAME_REQUIRES_APPROVAL;
 import static gift.util.Constants.PRODUCT_NAME_INVALID_CHARACTERS;
+import static gift.util.Constants.PRODUCT_NAME_REQUIRES_APPROVAL;
 import static gift.util.Constants.PRODUCT_NAME_SIZE_LIMIT;
 
 import jakarta.persistence.Column;
