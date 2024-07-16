@@ -1,4 +1,4 @@
-package gift.service;
+package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.DELETE;
@@ -57,7 +57,7 @@ class ProductTest {
     @Test
     @DisplayName("상품 생성")
     public void CreateProduct() {
-        CreateProduct body = new CreateProduct("test1", 1000, "test1");
+        CreateProduct body = new CreateProduct("test1", 1000, "test1",1L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -74,7 +74,7 @@ class ProductTest {
     @Test
     @DisplayName("상품 수정(유저 없음)")
     public void NotFoundUpdateProduct() {
-        UpdateProduct body = new UpdateProduct("test2", 1000, "test1");
+        UpdateProduct body = new UpdateProduct("test2", 1000, "test1",1L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -91,7 +91,7 @@ class ProductTest {
     @Test
     @DisplayName("상품 수정")
     public void UpdateProduct() {
-        UpdateProduct body = new UpdateProduct("test2", 1000, "test1");
+        UpdateProduct body = new UpdateProduct("test2", 1000, "test1",1L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

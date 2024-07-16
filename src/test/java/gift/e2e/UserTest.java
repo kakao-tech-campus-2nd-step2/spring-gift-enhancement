@@ -1,18 +1,16 @@
-package gift.service;
+package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
-import static org.springframework.http.HttpStatus.ALREADY_REPORTED;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 import gift.auth.Login;
-import gift.domain.Product.CreateProduct;
-import gift.domain.Product.UpdateProduct;
-import gift.domain.Wish.createWish;
+import gift.domain.User.CreateUser;
+import gift.domain.User.UpdateUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class WishTest {
+class UserTest {
 
     @LocalServerPort
     private int port;
@@ -41,10 +39,12 @@ class WishTest {
 
     @BeforeEach
     public void setUp() {
+
         Login login = new Login("kakao1@kakao.com", "1234");
 
         HttpEntity<Login> requestEntity = new HttpEntity<>(login);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/login", POST,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/login",
+            POST,
             requestEntity, String.class);
 
         int startIndex = responseEntity.getBody().indexOf("\"token\":\"") + "\"token\":\"".length();
@@ -56,80 +56,84 @@ class WishTest {
     }
 
     @Test
-    @DisplayName("위시리스트 조회(위시리스트 없음)")
-    public void NotFoundGetWish() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
-        HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish/9999", GET,
-            requestEntity, String.class);
-
-        System.out.println(responseEntity);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
-    }
-
-    @Test
-    @DisplayName("위시리스트 생성")
-    public void CreateWish() {
-        createWish body = new createWish(3L);
+    @DisplayName("유저 수정")
+    public void UpdateUser() {
+        UpdateUser body = new UpdateUser("123456789");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish", POST,
-            requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user/1",
+            PUT, requestEntity, String.class);
 
         System.out.println(responseEntity);
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
     @Test
-    @DisplayName("위시리스트 생성(상품 없음)")
-    public void NotFoundCreateWish() {
-        createWish body = new createWish(100L);
+    @DisplayName("유저 수정(유저 없음)")
+    public void NotFoundUpdateUser() {
+        UpdateUser body = new UpdateUser("123456789");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish", POST,
-            requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user/0",
+            PUT, requestEntity, String.class);
 
         System.out.println(responseEntity);
         assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
     }
 
     @Test
-    @DisplayName("위시리스트 생성(이미 존재)")
-    public void AlreadyCreateWish() {
-        createWish body = new createWish(2L);
+    @DisplayName("유저 생성")
+    public void CreateUser() {
+        CreateUser body = new CreateUser("kakao10@kakao.com", "1234");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish", POST,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user",
+            POST, requestEntity, String.class);
+
+        System.out.println(responseEntity);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+    }
+
+//    병렬로 수행하면 오류나지만, 단독으로 수행하면 수행 됨
+    @Test
+    @DisplayName("유저 생성(유저 중복)")
+    public void DuplicateCreateUser() {
+        CreateUser body = new CreateUser("kakao1@kakao.com", "1234");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(token);
+
+        HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user",
+            POST,
             requestEntity, String.class);
 
         System.out.println(responseEntity);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(ALREADY_REPORTED);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(FORBIDDEN);
     }
 
     @Test
-    @DisplayName("위시리스트 삭제")
-    public void removeWish() {
+    @DisplayName("유저 삭제")
+    public void removeUser() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish/1",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user/2",
             DELETE, requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -137,17 +141,18 @@ class WishTest {
     }
 
     @Test
-    @DisplayName("위시리스트 삭제(위시 리스트에 없음)")
-    public void NotFoundRemoveWish() {
+    @DisplayName("유저 삭제(유저 없음)")
+    public void NotFoundRemoveUser() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish/9999",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user/9999",
             DELETE, requestEntity, String.class);
 
         System.out.println(responseEntity);
         assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
     }
+
 }
