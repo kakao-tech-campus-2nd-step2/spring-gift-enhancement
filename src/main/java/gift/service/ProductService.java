@@ -1,7 +1,9 @@
 package gift.service;
 
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.domain.ProductDTO;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,11 +17,11 @@ import java.util.NoSuchElementException;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
-        Product product = new Product(1, "test", "imgURL");
-        productRepository.save(product);
+        this.categoryRepository = categoryRepository;
     }
 
     public Page<Product> getAllProduct(int page, int size) {
@@ -47,8 +49,10 @@ public class ProductService {
     }
 
     public Product addProduct(ProductDTO productDTO) {
-        Product product = new Product(productDTO.price(), productDTO.name(), productDTO.imgURL());
         try {
+            var category = categoryRepository.findById(productDTO.categoryId());
+            Product product = new Product(category, productDTO.price(), productDTO.name(), productDTO.imgURL());
+
             return productRepository.save(product);
         }
         catch (Exception e) {
@@ -57,8 +61,10 @@ public class ProductService {
     }
 
     public Product updateProduct(int id, ProductDTO productDTO) {
-        Product product = new Product(id, productDTO.price(), productDTO.name(), productDTO.imgURL());
         try {
+            var category = categoryRepository.findById(productDTO.categoryId());
+            Product product = new Product(id, category, productDTO.price(), productDTO.name(), productDTO.imgURL());
+
             return productRepository.save(product);
         }
         catch (NoSuchElementException e) {
