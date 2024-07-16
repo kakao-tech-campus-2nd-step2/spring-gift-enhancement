@@ -26,7 +26,6 @@
         - 상품과 카테고리는 N:1 연관 관계.
     - 상품 등록시에 카테고리를 지정할 수 있다.
     - 카테고리를 조회, 추가, 수정, 삭제가 가능하다.
-    -
 
 ---
 
@@ -84,7 +83,7 @@ DELETE /api/products/product/{id}
 
 ## Member API
 
-### 회원가입 폼
+### 회원가입 페이지
 
 ```
 GET /api/members/register
@@ -96,7 +95,7 @@ GET /api/members/register
 POST /api/members/register
 ```
 
-### 로그인 폼
+### 로그인 페이지
 
 ```
 GET /api/members/login
@@ -136,13 +135,13 @@ DELETE /api/members/wishlist/{id}
 GET /api/categories
 ```
 
-### 카테고리 추가 폼
+### 카테고리 추가 페이지
 
 ```
 GET /api/categories/addForm
 ```
 
-### 카테고리 수정 폼
+### 카테고리 수정 페이지
 
 ```
 GET /api/categories/{id}
