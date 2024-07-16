@@ -14,7 +14,10 @@ public record ProductRequest(
     Integer price,
 
     @NotNull(message = REQUIRED_FIELD_MISSING)
-    String imageUrl
+    String imageUrl,
+
+    @NotNull(message = REQUIRED_FIELD_MISSING)
+    Long categoryId
 ) {
 
 }

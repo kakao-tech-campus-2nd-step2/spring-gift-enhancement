@@ -2,6 +2,9 @@ package gift.util;
 
 public class Constants {
 
+    // Category
+    public static final String CATEGORY_NOT_FOUND = "카테고리를 다음의 id로 찾을 수 없습니다. id: ";
+
     // Product
     public static final String PRODUCT_NOT_FOUND = "상품을 다음의 id로 찾을 수 없습니다. id: ";
     public static final String INVALID_PRICE = "가격은 0 이상으로 설정되어야 합니다.";

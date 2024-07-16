@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -39,14 +41,19 @@ public class Product {
     @Column(nullable = false, name = "image_url")
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     protected Product() {
     }
 
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -65,9 +72,18 @@ public class Product {
         return imageUrl;
     }
 
-    public void update(String name, int price, String imageUrl) {
+    public Long getCategoryId() {
+        return category.getId();
+    }
+
+    public String getCategoryName() {
+        return category.getName();
+    }
+
+    public void update(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 }
