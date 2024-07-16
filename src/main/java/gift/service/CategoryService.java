@@ -5,6 +5,8 @@ import gift.exception.RepositoryException;
 import gift.model.Category;
 import gift.model.CategoryDTO;
 import gift.model.CategoryPageDTO;
+import gift.model.Product;
+import gift.model.ProductDTO;
 import gift.repository.CategoryRepository;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +43,12 @@ public class CategoryService {
         return convertToDTO(category);
     }
 
+    public List<ProductDTO> findProductsInCategory(long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryId));
+        return category.getProducts().stream().map(this::productConvertToDTO).toList();
+    }
+
     public CategoryDTO updateCategory(long categoryId, CategoryDTO categoryDTO) {
         Category currentCategory = categoryRepository.findById(categoryId).orElseThrow(
             () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryDTO.id()));
@@ -60,4 +68,8 @@ public class CategoryService {
             category.getImageUrl(), category.getDescription());
     }
 
+    private ProductDTO productConvertToDTO(Product product) {
+        return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
+            product.getImageUrl(), product.getCategory().getId());
+    }
 }

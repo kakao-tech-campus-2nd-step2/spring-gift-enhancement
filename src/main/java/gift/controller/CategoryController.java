@@ -2,7 +2,9 @@ package gift.controller;
 
 import gift.model.CategoryDTO;
 import gift.model.CategoryPageDTO;
+import gift.model.ProductDTO;
 import gift.service.CategoryService;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,15 @@ public class CategoryController {
     public ResponseEntity<?> getCategory(@RequestParam(required = true) long categoryId) {
         CategoryDTO categoryDTO = categoryService.findCategoryById(categoryId);
         return ResponseEntity.ok(categoryDTO);
+    }
+
+    @GetMapping("/{categoryId}/products")
+    public ResponseEntity<?> getProductsInCategory(Pageable pageable,
+        @PathVariable long categoryId) {
+        List<ProductDTO> products = categoryService.findProductsInCategory(categoryId);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), products.size());
+        return ResponseEntity.ok(products.subList(start, end));
     }
 
     @PostMapping
