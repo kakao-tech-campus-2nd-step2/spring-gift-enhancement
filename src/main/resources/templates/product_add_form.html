@@ -20,10 +20,10 @@
   </div>
   <div>
     <label>카테고리: </label>
-    <select th:field="*{categories}" class="form-select">
+    <select id="categoryId" class="form-select">
       <option value="">== 카테고리 선택 ==</option>
       <option th:each="category : ${categories}" th:value="${category.id}"
-              th:text="${category.name}" id="categoryId"></option>
+              th:text="${category.name}"></option>
     </select>
   </div>
   <div>
