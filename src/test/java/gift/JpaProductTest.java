@@ -1,6 +1,8 @@
 package gift;
 
+import gift.model.Category;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,16 +18,24 @@ public class JpaProductTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("상품 저장 테스트")
     void saveProduct() {
-        Product product = new Product(1L, "name", 134, "asdf");
+        Category category = new Category("name", "color", "imageUrl", "description");
+
+        categoryRepository.save(category);
+
+        Product product = new Product("name", 134, "asdf", category);
         Product real = productRepository.save(product);
         assertAll(
                 () -> assertThat(real.getId()).isNotNull(),
                 () -> assertThat(real.getName()).isEqualTo(product.getName()),
                 () -> assertThat(real.getImageUrl()).isEqualTo(product.getImageUrl()),
-                () -> assertThat(real.getPrice()).isEqualTo(product.getPrice())
+                () -> assertThat(real.getPrice()).isEqualTo(product.getPrice()),
+                () -> assertThat(real.getCategory().getId()).isEqualTo(product.getCategory().getId())
         );
     }
 }
