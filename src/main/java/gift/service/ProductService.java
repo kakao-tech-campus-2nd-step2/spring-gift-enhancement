@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.ProductRequestDTO;
 import gift.dto.ProductResponseDTO;
+import gift.model.Category;
 import gift.model.Product;
 import gift.repository.ProductRepository;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryService categoryService;
 
     public Page<ProductResponseDTO> getAllProducts(int page, int size) {
         Page<Product> products = productRepository.findAll(PageRequest.of(page, size));
@@ -34,8 +37,9 @@ public class ProductService {
             .orElseThrow(() -> new IllegalArgumentException("상품 정보를 찾을 수 없습니다."));
     }
 
-    public Page<ProductResponseDTO> createProduct(ProductRequestDTO productRequest, int page, int size) {
-        Product product = new Product(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl());
+    public Page<ProductResponseDTO> createProduct(ProductRequestDTO productRequestDTO, int page, int size) {
+        Category category = categoryService.findCategoryEntityById(productRequestDTO.getCategoryId());
+        Product product = new Product(productRequestDTO.getName(), productRequestDTO.getPrice(), productRequestDTO.getImageUrl(), category);
         productRepository.save(product);
         return getAllProducts(page, size);
     }
@@ -44,9 +48,11 @@ public class ProductService {
         Optional<Product> existingProductOpt = productRepository.findById(id);
         if (existingProductOpt.isPresent()) {
             Product existingProduct = existingProductOpt.get();
+            Category category = categoryService.findCategoryEntityById(productRequest.getCategoryId());
             existingProduct.setName(productRequest.getName());
             existingProduct.setImageUrl(productRequest.getImageUrl());
             existingProduct.setPrice(productRequest.getPrice());
+            existingProduct.setCategory(category);
             productRepository.save(existingProduct);
             return Optional.of(new ProductResponseDTO(existingProduct));
         }
