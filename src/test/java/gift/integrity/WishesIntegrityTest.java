@@ -2,11 +2,13 @@ package gift.integrity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.product.dto.CategoryDto;
 import gift.product.dto.ClientProductDto;
 import gift.product.dto.MemberDto;
 import gift.product.dto.ProductDto;
 import gift.product.dto.WishDto;
 import gift.product.service.AuthService;
+import gift.product.service.CategoryService;
 import gift.product.service.ProductService;
 import gift.product.service.WishService;
 import java.net.URI;
@@ -38,6 +40,7 @@ class WishesIntegrityTest {
 
     @LocalServerPort
     int port;
+
     String BASE_URL = "http://localhost:";
 
     @Autowired
@@ -52,6 +55,9 @@ class WishesIntegrityTest {
     @Autowired
     WishService wishService;
 
+    @Autowired
+    CategoryService categoryService;
+
     String accessToken;
 
     @BeforeAll
@@ -64,7 +70,11 @@ class WishesIntegrityTest {
     @BeforeAll
     void 상품_추가() {
         String url = BASE_URL + port + "/api/products/insert";
-        ProductDto productDto = new ClientProductDto("테스트1", 1500, "테스트주소1");
+
+        CategoryDto categoryDto = new CategoryDto("테스트카테고리1");
+        categoryService.insertCategory(categoryDto);
+
+        ProductDto productDto = new ClientProductDto("테스트1", 1500, "테스트주소1", "테스트카테고리1");
         RequestEntity<ProductDto> requestEntity = new RequestEntity<>(productDto, HttpMethod.POST,
             URI.create(url));
 
@@ -88,7 +98,7 @@ class WishesIntegrityTest {
 
     @Order(2)
     @Test
-    void 위시리스트_조회() {
+    void 위시리스트_전체_조회() {
         String url = BASE_URL + port + "/api/wishes";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
@@ -102,7 +112,7 @@ class WishesIntegrityTest {
 
     @Order(3)
     @Test
-    void 위시리스트_ID로_조회() {
+    void 위시리스트_조회() {
         String url = BASE_URL + port + "/api/wishes/1";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);

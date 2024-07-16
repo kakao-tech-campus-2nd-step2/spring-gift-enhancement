@@ -6,8 +6,10 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import gift.product.dto.LoginMember;
 import gift.product.dto.WishDto;
+import gift.product.model.Category;
 import gift.product.model.Product;
 import gift.product.model.Wish;
+import gift.product.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import gift.product.service.WishService;
 import java.util.NoSuchElementException;
@@ -32,12 +34,17 @@ class WishServiceTest {
     ProductRepository productRepository;
 
     @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
     WishService wishService;
 
     @BeforeEach
     void 위시리스트_항목_추가() {
+        Category category = categoryRepository.save(new Category("테스트카테고리1"));
+
         for (int i = 1; i <= 9; i++) {
-            Product product = productRepository.save(new Product("테스트" + i, 1000 + i, "테스트주소" + i));
+            Product product = productRepository.save(new Product("테스트" + i, 1000 + i, "테스트주소" + i, category));
             wishService.insertWish(new WishDto(product.getId()), new LoginMember(1L));
         }
     }

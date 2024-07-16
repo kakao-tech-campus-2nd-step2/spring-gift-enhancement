@@ -3,10 +3,12 @@ package gift.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import gift.product.model.Category;
 import gift.product.model.Member;
 import gift.product.model.Product;
 import gift.product.model.Wish;
 import gift.product.repository.AuthRepository;
+import gift.product.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import gift.product.repository.WishRepository;
 import java.util.List;
@@ -31,10 +33,14 @@ class WishRepositoryTest {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @Test
     void 위시리스트_항목_추가() {
+        Category category = categoryRepository.save(new Category("테스트카테고리1"));
         Member member = authRepository.save(new Member("test@test.com", "1234"));
-        Product product = productRepository.save(new Product("테스트1", 1500, "테스트주소1"));
+        Product product = productRepository.save(new Product("테스트1", 1500, "테스트주소1", category));
 
         Wish wish = new Wish(member, product);
         Wish insertedWish = wishRepository.save(wish);
@@ -48,9 +54,10 @@ class WishRepositoryTest {
 
     @Test
     void 위시리스트_전체_조회() {
+        Category category = categoryRepository.save(new Category("테스트카테고리1"));
         Member member = authRepository.save(new Member("test@test.com", "1234"));
-        Product product1 = productRepository.save(new Product("테스트1", 1500, "테스트주소1"));
-        Product product2 = productRepository.save(new Product("테스트2", 3000, "테스트주소2"));
+        Product product1 = productRepository.save(new Product("테스트1", 1500, "테스트주소1", category));
+        Product product2 = productRepository.save(new Product("테스트2", 3000, "테스트주소2", category));
 
         wishRepository.save(new Wish(member, product1));
         wishRepository.save(new Wish(member, product2));
@@ -62,8 +69,9 @@ class WishRepositoryTest {
 
     @Test
     void 위시리스트_조회() {
+        Category category = categoryRepository.save(new Category("테스트카테고리1"));
         Member member = authRepository.save(new Member("test@test.com", "1234"));
-        Product product = productRepository.save(new Product("테스트1", 1500, "테스트주소1"));
+        Product product = productRepository.save(new Product("테스트1", 1500, "테스트주소1", category));
 
         Wish wish = wishRepository.save(new Wish(member, product));
 
@@ -75,8 +83,9 @@ class WishRepositoryTest {
 
     @Test
     void 위시리스트_항목_삭제() {
+        Category category = categoryRepository.save(new Category("테스트카테고리1"));
         Member member = authRepository.save(new Member("test@test.com", "1234"));
-        Product product = productRepository.save(new Product("테스트1", 1500, "테스트주소1"));
+        Product product = productRepository.save(new Product("테스트1", 1500, "테스트주소1", category));
 
         Wish wish = wishRepository.save(new Wish(member, product));
         wishRepository.deleteById(wish.getId());

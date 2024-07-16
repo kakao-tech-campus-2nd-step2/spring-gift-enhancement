@@ -5,7 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import gift.product.dto.ClientProductDto;
+import gift.product.model.Category;
 import gift.product.model.Product;
+import gift.product.repository.CategoryRepository;
 import gift.product.service.ProductService;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,12 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 @SuppressWarnings("NonAsciiCharacters")
 class ProductServiceTest {
 
-    final ProductService productService;
+    @Autowired
+    ProductService productService;
 
     @Autowired
-    ProductServiceTest(ProductService productService) {
-        this.productService = productService;
-    }
+    CategoryRepository categoryRepository;
 
     @AfterEach
     void 상품_초기화() {
@@ -44,7 +45,8 @@ class ProductServiceTest {
 
     @Test
     void 상품_추가() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        categoryRepository.save(new Category("테스트카테고리1"));
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
         Product product = productService.insertProduct(productDTO);
 
         assertSoftly(softly -> {
@@ -56,7 +58,8 @@ class ProductServiceTest {
 
     @Test
     void 상품_조회() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        categoryRepository.save(new Category("테스트카테고리1"));
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
         Product insertedProduct = productService.insertProduct(productDTO);
 
         Product product = productService.getProduct(insertedProduct.getId());
@@ -71,7 +74,8 @@ class ProductServiceTest {
 
     @Test
     void 상품_전체_조회() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        categoryRepository.save(new Category("테스트카테고리1"));
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
         productService.insertProduct(productDTO);
 
         List<Product> productAll = productService.getProductAll();
@@ -91,8 +95,10 @@ class ProductServiceTest {
         String SORT = "name";
         String DIRECTION = "desc";
 
+        categoryRepository.save(new Category("테스트카테고리1"));
+
         for (int i = 1; i <= PRODUCT_COUNT; i++) {
-            productService.insertProduct(new ClientProductDto("테스트" + i, 1000 + i, "테스트주소" + i));
+            productService.insertProduct(new ClientProductDto("테스트" + i, 1000 + i, "테스트주소" + i, "테스트카테고리1"));
         }
 
         Pageable pageable = PageRequest.of(PAGE, SIZE, Sort.Direction.fromString(DIRECTION), SORT);
@@ -110,10 +116,12 @@ class ProductServiceTest {
 
     @Test
     void 상품_수정() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        categoryRepository.save(new Category("테스트카테고리1"));
+
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
         Product product = productService.insertProduct(productDTO);
 
-        ClientProductDto productUpdatedDTO = new ClientProductDto("사과", 5500, "사진링크2");
+        ClientProductDto productUpdatedDTO = new ClientProductDto("사과", 5500, "사진링크2", "테스트카테고리1");
 
         Product productUpdated = productService.updateProduct(product.getId(), productUpdatedDTO);
 
@@ -126,10 +134,12 @@ class ProductServiceTest {
 
     @Test
     void 상품_삭제() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        categoryRepository.save(new Category("테스트카테고리1"));
+
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
         productService.insertProduct(productDTO);
 
-        productDTO = new ClientProductDto("바나나", 1500, "사진링크2");
+        productDTO = new ClientProductDto("바나나", 1500, "사진링크2", "테스트카테고리1");
         Product product = productService.insertProduct(productDTO);
 
         productService.deleteProduct(product.getId());
