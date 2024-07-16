@@ -2,6 +2,7 @@ package gift.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.domain.category.entity.Category;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.ProductRepository;
@@ -45,7 +46,8 @@ class ProductControllerTest {
 
     @Test
     void read() {
-        Product product = productRepository.save(new Product("test", 1000, "test.jpg"));
+        Category savedCategory = new Category(1L, "test", "color", "image", "description");
+        Product product = productRepository.save(new Product("test", 1000, "test.jpg", savedCategory));
         System.out.println("테스트" + product.getName() + "id 값" + product.getId());
 
         var url = "http://localhost:" + port + "/api/products/1";
@@ -58,7 +60,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("Product 생성 API 테스트")
     void create() {
-        var request = new ProductRequest("product", 1000, "image.jpg");
+        var request = new ProductRequest("product", 1000, "image.jpg", 1L);
         var url = "http://localhost:" + port + "/api/products";
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
 
@@ -68,9 +70,10 @@ class ProductControllerTest {
 
     @Test
     void update() {
-        Product product = productRepository.save(new Product("test", 1000, "test.jpg"));
+        Category savedCategory = new Category(1L, "test", "color", "image", "description");
+        Product product = productRepository.save(new Product("test", 1000, "test.jpg", savedCategory));
         var id = 1L;
-        var request = new ProductRequest("product", 1000, "image.jpg");
+        var request = new ProductRequest("product", 1000, "image.jpg", 1L);
         var url = "http://localhost:" + port + "/api/products/" + id;
         var requestEntity = new RequestEntity<>(request, HttpMethod.PUT, URI.create(url));
 
@@ -80,7 +83,8 @@ class ProductControllerTest {
 
     @Test
     void delete() {
-        Product product = productRepository.save(new Product("test", 1000, "test.jpg"));
+        Category savedCategory = new Category(1L, "test", "color", "image", "description");
+        Product product = productRepository.save(new Product("test", 1000, "test.jpg", savedCategory));
         var id = 1L;
         var url = "http://localhost:" + port + "/api/products/" + id;
 

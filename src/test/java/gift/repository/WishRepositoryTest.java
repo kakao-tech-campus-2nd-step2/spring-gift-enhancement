@@ -3,6 +3,8 @@ package gift.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import gift.domain.category.entity.Category;
+import gift.domain.category.repository.CategoryRepository;
 import gift.domain.member.entity.Member;
 import gift.domain.member.repository.MemberRepository;
 import gift.domain.product.entity.Product;
@@ -29,15 +31,18 @@ class WishRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("memberId로 wish 리스트 가져오는 findAllByMember 테스트")
     void findAllByMemberEntity() {
         // given
         Member requestMember = new Member("test", "password");
         Member savedMember = memberRepository.save(requestMember);
-
-        Product requestProduct1 = new Product("product1", 1000, "product1.jpg");
-        Product requestProduct2 = new Product("product2", 2000, "product2.jpg");
+        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
+        Product requestProduct1 = new Product("product1", 1000, "product1.jpg", savedCategory);
+        Product requestProduct2 = new Product("product2", 2000, "product2.jpg", savedCategory);
         Product savedProduct1 = productRepository.save(requestProduct1);
         Product savedProduct2 = productRepository.save(requestProduct2);
 
@@ -64,7 +69,8 @@ class WishRepositoryTest {
         Member requestMember = new Member("test", "password");
         Member savedMember = memberRepository.save(requestMember);
 
-        Product requestProduct = new Product("product", 1000, "product1.jpg");
+        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
+        Product requestProduct = new Product("product", 1000, "product1.jpg", savedCategory);
         Product savedProduct = productRepository.save(requestProduct);
 
         Wish requestWish = new Wish(savedMember, savedProduct);
@@ -84,7 +90,8 @@ class WishRepositoryTest {
         Member requestMember = new Member("test", "password");
         Member savedMember = memberRepository.save(requestMember);
 
-        Product requestProduct = new Product("product", 1000, "product1.jpg");
+        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
+        Product requestProduct = new Product("product", 1000, "product1.jpg",savedCategory);
         Product savedProduct = productRepository.save(requestProduct);
 
         Wish expected = new Wish(savedMember, savedProduct);
@@ -107,7 +114,8 @@ class WishRepositoryTest {
         Member requestMember = new Member("test", "password");
         Member savedMember = memberRepository.save(requestMember);
 
-        Product requestProduct = new Product("product", 1000, "product1.jpg");
+        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
+        Product requestProduct = new Product("product", 1000, "product1.jpg",savedCategory);
         Product savedProduct = productRepository.save(requestProduct);
 
         Wish request = new Wish(savedMember, savedProduct);
