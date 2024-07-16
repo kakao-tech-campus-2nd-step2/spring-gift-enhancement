@@ -36,7 +36,7 @@ public class ProductController {
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<Product> postProduct(@RequestBody @Valid ProductDTO form) {
-        Product result = productService.save(new Product(form));
+        Product result = productService.save(form);
         return ResponseEntity.ok().body(result);
     }
 
