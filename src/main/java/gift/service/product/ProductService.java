@@ -1,4 +1,4 @@
-package gift.service;
+package gift.service.product;
 
 import gift.controller.product.dto.ProductRequest;
 import gift.controller.product.dto.ProductResponse;
@@ -6,6 +6,7 @@ import gift.global.dto.PageResponse;
 import gift.model.product.Product;
 import gift.global.validate.NotFoundException;
 import gift.model.product.SearchType;
+import gift.repository.product.CategoryRepository;
 import gift.repository.product.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
     }
 
@@ -30,7 +34,10 @@ public class ProductService {
 
     //@Transactional
     public void createProduct(ProductRequest.Register request) {
-        productRepository.save(request.toEntity());
+        var category = categoryRepository.findById(request.categoryId())
+            .orElseThrow(() -> new NotFoundException("Category not found"));
+        var product = request.toEntity(category);
+        productRepository.save(product);
     }
 
     @Transactional
