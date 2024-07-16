@@ -171,23 +171,26 @@ class ProductServiceTest implements AutoCloseable {
     @Transactional
     void updateProductTest() {
         // given
+        Category category = new Category(1L, "Category A");
         Product product = Product.builder()
             .id(1L)
             .name("Product A")
             .price(1000)
             .imageUrl("http://example.com/images/product_a.jpg")
             .build();
-        UpdateProductRequest request = new UpdateProductRequest("product3", 30000, null);
+        UpdateProductRequest request = new UpdateProductRequest("product3", 30000, null, 1L);
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
+        given(categoryRepository.findById(any(Long.class))).willReturn(Optional.of(category));
 
         // when
         productService.updateProduct(1L, request);
         Product actual = productRepository.findById(1L).get();
-        ProductMapper.updateProduct(actual, request);
+        ProductMapper.updateProduct(actual, request, category);
         Product expected = Product.builder()
             .id(1L)
             .name("product3")
             .price(30000)
+            .category(category)
             .build();
 
         // then
@@ -195,6 +198,7 @@ class ProductServiceTest implements AutoCloseable {
         assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
         assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl());
+        assertThat(actual.getCategoryName()).isEqualTo(expected.getCategoryName());
         then(productRepository).should(times(2)).findById(1L);
     }
 
