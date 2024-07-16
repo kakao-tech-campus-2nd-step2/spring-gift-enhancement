@@ -1,11 +1,10 @@
 package gift.service;
 
 import gift.dto.product.request.CreateProductRequest;
-import gift.dto.product.response.ProductResponse;
 import gift.dto.product.request.UpdateProductRequest;
+import gift.dto.product.response.ProductResponse;
 import gift.entity.Product;
 import gift.exception.product.ProductNotFoundException;
-import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.util.mapper.ProductMapper;
 import org.springframework.data.domain.Page;
@@ -18,7 +17,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -29,9 +28,10 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
+    public ProductResponse getProductById(Long id) {
+        Product product = productRepository.findById(id)
             .orElseThrow(ProductNotFoundException::new);
+        return ProductMapper.toResponse(product);
     }
 
     @Transactional
@@ -41,7 +41,8 @@ public class ProductService {
 
     @Transactional
     public void updateProduct(Long id, UpdateProductRequest request) {
-        Product product = getProductById(id);
+        Product product = productRepository.findById(id)
+            .orElseThrow(ProductNotFoundException::new);
         ProductMapper.updateProduct(product, request);
     }
 

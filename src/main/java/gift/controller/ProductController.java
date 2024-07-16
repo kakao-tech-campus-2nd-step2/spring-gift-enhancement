@@ -2,9 +2,8 @@ package gift.controller;
 
 import gift.config.PageConfig;
 import gift.dto.product.request.CreateProductRequest;
-import gift.dto.product.response.ProductResponse;
 import gift.dto.product.request.UpdateProductRequest;
-import gift.entity.Product;
+import gift.dto.product.response.ProductResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -47,8 +46,8 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+        ProductResponse product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
 

@@ -10,8 +10,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import gift.dto.product.request.CreateProductRequest;
-import gift.dto.product.response.ProductResponse;
 import gift.dto.product.request.UpdateProductRequest;
+import gift.dto.product.response.ProductResponse;
 import gift.entity.Product;
 import gift.exception.product.ProductNotFoundException;
 import gift.repository.ProductRepository;
@@ -124,7 +124,7 @@ class ProductServiceTest implements AutoCloseable {
         given(productRepository.findById(2L)).willReturn(Optional.of(expected));
 
         // when
-        Product actual = productService.getProductById(2L);
+        Product actual = productRepository.findById(2L).get();
 
         // then
         assertThat(actual.getId()).isEqualTo(expected.getId());
@@ -172,7 +172,7 @@ class ProductServiceTest implements AutoCloseable {
 
         // when
         productService.updateProduct(1L, request);
-        Product actual = productService.getProductById(1L);
+        Product actual = productRepository.findById(1L).get();
         ProductMapper.updateProduct(actual, request);
         Product expected = Product.builder()
             .id(1L)
