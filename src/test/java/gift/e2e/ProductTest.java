@@ -2,7 +2,6 @@ package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.category.response.CategoryResponse;
 import gift.dto.product.request.CreateProductRequest;
 import gift.dto.product.response.ProductResponse;
 import java.net.URI;
@@ -18,7 +17,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_three_categories.sql", "/sql/insert_five_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_three_categories.sql",
+    "/sql/insert_five_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class ProductTest {
 
     @LocalServerPort
@@ -63,10 +63,11 @@ public class ProductTest {
         assertThat(actualResponse.getBody().id()).isEqualTo(1L);
         assertThat(actualResponse.getBody().name()).isEqualTo("Product A");
         assertThat(actualResponse.getBody().price()).isEqualTo(1000);
-        assertThat(actualResponse.getBody().imageUrl()).isEqualTo("http://example.com/images/product_a.jpg");
+        assertThat(actualResponse.getBody().imageUrl()).isEqualTo(
+            "http://example.com/images/product_a.jpg");
         assertThat(actualResponse.getBody().categoryName()).isEqualTo("Category 1");
     }
-    
+
     @Test
     @DisplayName("get product by not exist id test")
     void getProductByNotExistIdTest() {
