@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "category")
 public class Category {
 
     @Id
@@ -22,6 +23,7 @@ public class Category {
     @NotNull
     private String color;
 
+    @Column(name = "imageurl")
     @NotNull
     private String imageUrl;
 
@@ -45,5 +47,21 @@ public class Category {
 
     public String getName() {
         return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<Gift> getGifts() {
+        return gifts;
     }
 }
