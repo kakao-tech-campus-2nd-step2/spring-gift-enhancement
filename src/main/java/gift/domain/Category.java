@@ -19,7 +19,7 @@ public class Category {
     private String color;
     @Column(name="imageUrl", nullable = false)
     private String imageUrl;
-    @Column(name="description")
+    @Column(name="description", nullable = false)
     private String description;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
