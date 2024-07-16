@@ -57,12 +57,12 @@
       </div>
       <div class="form-label-input">
         <label for="category">Category:</label>
-        <input
-            type="text"
-            id="category"
-            name="category"
-            autocomplete="off"
-        />
+        <select id="category" th:each="category : ${categories}">
+          <option
+              th:value="${category.getName()}"
+              th:text="${category.getName()}"
+          />
+        </select>
       </div>
       <button type="button">Submit</button>
     </form>
