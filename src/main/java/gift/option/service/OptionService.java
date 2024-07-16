@@ -36,9 +36,7 @@ public class OptionService {
     }
 
     private void addOptionsToProduct(Product product, List<OptionReqDto> optionReqDtos) {
-        optionReqDtos.forEach(optionReqDto -> {
-            product.addOption(optionReqDto.toEntity());
-        });
+        optionReqDtos.forEach(optionReqDto -> product.addOption(optionReqDto.toEntity()));
     }
 
     private void checkDuplicatedOptionName(List<OptionReqDto> optionReqDtos) {
