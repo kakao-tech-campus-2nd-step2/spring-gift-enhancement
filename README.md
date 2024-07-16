@@ -12,9 +12,6 @@
 
 **Response**
 ```json
-HTTP/1.1 200 
-Content-Type: application/json
-
 [
   {
     "id": 91,
@@ -24,7 +21,6 @@ Content-Type: application/json
     "description": ""
   }
 ]
-
 ```
 ### 프로그래밍 요구 사항
 - 구현한 기능들에대한 테스트 코드 작성
