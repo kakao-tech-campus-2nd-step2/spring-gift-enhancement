@@ -15,6 +15,7 @@ CREATE TABLE products (
                           name VARCHAR(15) NOT NULL,
                           price INTEGER NOT NULL,
                           image_url VARCHAR(255) NOT NULL,
+                          category_id BIGINT NOT NULL,
                           PRIMARY KEY (id)
 );
 

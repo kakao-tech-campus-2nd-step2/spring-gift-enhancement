@@ -1,7 +1,9 @@
 package gift.controller;
 
+import gift.converter.ProductConverter;
 import gift.dto.PageRequestDTO;
 import gift.dto.ProductDTO;
+import gift.model.Product;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -64,18 +66,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public String addProduct(@ModelAttribute("product") ProductDTO productDTO, BindingResult bindingResult, Model model) {
+    public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "Add_product";
-        }
-        try {
-            productService.addProduct(productDTO);
-            return "redirect:/admin/products";
-        } catch (ValidationException e) {
-            model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("categories", categoryService.findAllCategories());
             return "Add_product";
         }
+        productService.addProduct(ProductConverter.convertToDTO(product));
+        return "redirect:/admin/products";
     }
 
     @GetMapping("/edit/{id}")
@@ -92,16 +89,11 @@ public class ProductController {
     @PutMapping("/{id}")
     public String updateProduct(@Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "Add_product";
-        }
-        try {
-            productService.updateProduct(productDTO);
-            return "redirect:/admin/products";
-        } catch (ValidationException e) {
-            model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("categories", categoryService.findAllCategories());
             return "Edit_product";
         }
+        productService.updateProduct(productDTO);
+        return "redirect:/admin/products";
     }
 
     @DeleteMapping("/{id}")

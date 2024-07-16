@@ -2,6 +2,8 @@ package gift.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 public class NameDTO {
 
     @NotNull(message = "이름을 입력해주세요.")
