@@ -3,8 +3,6 @@ package gift.service;
 import gift.controller.dto.request.CategoryRequest;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +20,6 @@ class CategoryServiceTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     @Test
     @DisplayName("카테고리 업데이트 테스트[성공]")
     void updateCategory() {
@@ -40,7 +35,6 @@ class CategoryServiceTest {
 
         // when
         categoryService.updateById(id, request2);
-        entityManager.clear();
         Category category = categoryRepository.findById(id).get();
 
         // then
