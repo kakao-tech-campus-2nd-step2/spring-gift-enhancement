@@ -1,11 +1,14 @@
 package gift.service;
 
+import gift.dto.ProductCategoryInformation;
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.exception.InvalidProductNameWithKAKAOException;
 import gift.exception.NotFoundElementException;
 import gift.model.MemberRole;
 import gift.model.Product;
+import gift.model.ProductCategory;
+import gift.repository.ProductCategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,9 +21,11 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
         this.productRepository = productRepository;
+        this.productCategoryRepository = productCategoryRepository;
     }
 
     public ProductResponse addProduct(ProductRequest productRequest, MemberRole memberRole) {
@@ -53,7 +58,9 @@ public class ProductService {
     }
 
     private Product saveProductWithProductRequest(ProductRequest productRequest) {
-        var product = new Product(productRequest.name(), productRequest.price(), productRequest.imageUrl());
+        var productCategory = productCategoryRepository.findById(productRequest.categoryId())
+                .orElseThrow(() -> new NotFoundElementException(productRequest.categoryId() + "를 가진 상품 카테고리가 존재하지 않습니다."));
+        var product = new Product(productRequest.name(), productRequest.price(), productRequest.imageUrl(), productCategory);
         return productRepository.save(product);
     }
 
@@ -69,11 +76,16 @@ public class ProductService {
     }
 
     private ProductResponse getProductResponseFromProduct(Product product) {
-        return ProductResponse.of(product.getId(), product.getName(), product.getPrice(), product.getImageUrl());
+        var productCategoryInformation = getProductCategoryInformationFromProductCategory(product.getProductCategory());
+        return ProductResponse.of(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), productCategoryInformation);
     }
 
     private Product findProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품옵션이 존재하지 않습니다."));
+    }
+
+    private ProductCategoryInformation getProductCategoryInformationFromProductCategory(ProductCategory productCategory) {
+        return ProductCategoryInformation.of(productCategory.getId(), productCategory.getName());
     }
 }
