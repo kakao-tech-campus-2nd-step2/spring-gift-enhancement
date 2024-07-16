@@ -1,5 +1,3 @@
-use kakao_gift;
-
 INSERT INTO CATEGORY(name) VALUES ('교환권');
 INSERT INTO CATEGORY(name) VALUES ('상품권');
 INSERT INTO CATEGORY(name) VALUES ('뷰티');

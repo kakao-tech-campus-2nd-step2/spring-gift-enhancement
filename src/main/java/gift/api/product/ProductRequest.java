@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 
 public class ProductRequest {
 
+    @NotNull
+    private Long categoryId;
     @NotBlank(message = "Name is mandatory")
     @Size(min = 1, max = 15, message = "Must be at least 1 character, no more than 15 characters long")
     @Pattern(regexp = "^[\\w\\s가-힣()\\[\\]+\\-&/]+$", message = "Only (), [], +, -, &, / of special characters available")
@@ -20,10 +22,15 @@ public class ProductRequest {
     public ProductRequest() {
     }
 
-    public ProductRequest(String name, Integer price, String imageUrl) {
+    public ProductRequest(Long categoryId, String name, Integer price, String imageUrl) {
+        this.categoryId = categoryId;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
     }
 
     public String getName() {

@@ -1,8 +1,11 @@
 package gift.ui.admin;
 
+import gift.api.category.Category;
+import gift.api.category.CategoryRepository;
 import gift.api.product.Product;
 import gift.api.product.ProductRepository;
 import gift.api.product.ProductRequest;
+import gift.global.exception.NoSuchEntityException;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +22,11 @@ import org.springframework.web.servlet.view.RedirectView;
 public class AdminController {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public AdminController(ProductRepository productRepository) {
+    public AdminController(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping()
@@ -33,15 +38,22 @@ public class AdminController {
 
     @PostMapping("/add")
     public RedirectView add(@Valid ProductRequest productRequest) {
-        productRepository.save(new Product(
-            productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl()));
+        Category category = categoryRepository.findById(productRequest.getCategoryId())
+            .orElseThrow(() -> new NoSuchEntityException("category"));
+        Product product = new Product(category, productRequest.getName(),
+            productRequest.getPrice(), productRequest.getImageUrl());
+        productRepository.save(product);
         return new RedirectView("/api/products");
     }
 
     @PutMapping("/update/{id}")
     public RedirectView update(@PathVariable("id") long id, @Valid ProductRequest productRequest) {
-        productRepository.save(new Product(
-            id, productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl()));
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new NoSuchEntityException("product"));
+        Category category = categoryRepository.findById(productRequest.getCategoryId())
+            .orElseThrow(() -> new NoSuchEntityException("category"));
+        product.update(category, productRequest.getName(), productRequest.getPrice(),
+            productRequest.getImageUrl());
         return new RedirectView("/api/products");
     }
 

@@ -1,23 +1,24 @@
 package gift.api.product;
 
-import gift.global.exception.NoSuchIdException;
+import gift.api.category.Category;
+import gift.api.category.CategoryRepository;
+import gift.global.exception.NoSuchEntityException;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Product> getProducts(Pageable pageable) {
@@ -26,16 +27,20 @@ public class ProductService {
     }
 
     public Long add(ProductRequest productRequest) {
-        Product product = new Product(
-            productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl());
+        Category category = categoryRepository.findById(productRequest.getCategoryId())
+                                .orElseThrow(() -> new NoSuchEntityException("category"));
+        Product product = new Product(category, productRequest.getName(),
+                                productRequest.getPrice(), productRequest.getImageUrl());
         return productRepository.save(product).getId();
     }
 
     @Transactional
     public void update(Long id, ProductRequest productRequest) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new NoSuchIdException("product"));
-        product.update(productRequest.getName(), productRequest.getPrice(),
+                .orElseThrow(() -> new NoSuchEntityException("product"));
+        Category category = categoryRepository.findById(productRequest.getCategoryId())
+                .orElseThrow(() -> new NoSuchEntityException("category"));
+        product.update(category, productRequest.getName(), productRequest.getPrice(),
                 productRequest.getImageUrl());
     }
 
