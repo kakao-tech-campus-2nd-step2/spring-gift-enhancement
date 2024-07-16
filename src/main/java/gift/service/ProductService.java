@@ -3,6 +3,7 @@ package gift.service;
 import gift.exception.InvalidProductException;
 import gift.exception.InvalidUserException;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,8 +17,11 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
-
-    public Page<Product> getAllProducts(Pageable pageable) {
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
+    public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
 
@@ -27,6 +31,7 @@ public class ProductService {
 
     public Product createProduct(Product product, BindingResult bindingResult) {
     	validateBindingResult(bindingResult);
+    	validateCategory(product.getCategory().getId());
         return productRepository.save(product);
     }
 
@@ -34,6 +39,7 @@ public class ProductService {
     	validateBindingResult(bindingResult);
     	validProductId(id, updatedProduct);
     	validateProductId(id);
+    	validateCategory(updatedProduct.getCategory().getId());
     	productRepository.save(updatedProduct);
     }
 
@@ -66,5 +72,11 @@ public class ProductService {
     public Product findProductById(long id) {
 	    return productRepository.findById(id)
 	    		.orElseThrow(() -> new InvalidProductException("Product not found"));
+    }
+    
+    public void validateCategory(Long categoryId) {
+    	if(!categoryRepository.existsById(categoryId)) {
+    		throw new InvalidProductException("Category not found");
+    	}
     }
 }
