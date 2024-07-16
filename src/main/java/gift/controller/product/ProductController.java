@@ -6,7 +6,7 @@ import gift.global.auth.Authorization;
 import gift.global.dto.PageResponse;
 import gift.model.member.Role;
 import gift.model.product.SearchType;
-import gift.service.ProductService;
+import gift.service.product.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

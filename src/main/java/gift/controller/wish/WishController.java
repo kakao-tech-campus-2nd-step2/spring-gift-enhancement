@@ -7,7 +7,7 @@ import gift.global.auth.Authorization;
 import gift.global.auth.LoginInfo;
 import gift.global.dto.PageResponse;
 import gift.model.member.Role;
-import gift.service.WishService;
+import gift.service.wish.WishService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

@@ -6,7 +6,7 @@ import gift.global.auth.Authenticate;
 import gift.global.auth.Authorization;
 import gift.global.auth.LoginInfo;
 import gift.model.member.Role;
-import gift.service.MemberService;
+import gift.service.member.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
