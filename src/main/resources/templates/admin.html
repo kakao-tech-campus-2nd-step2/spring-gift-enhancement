@@ -58,13 +58,14 @@
         let name = prompt("Enter product name:");
         let price = prompt("Enter product price:");
         let imageUrl = prompt("Enter image URL:");
+        let category = prompt("Enter Category:");
 
         fetch('/products', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, price, imageUrl })
+            body: JSON.stringify({ name, price, imageUrl, category })
         }).then(response => {
             if (response.status.toString().startsWith('4')) {
                 response.json().then(data => alert(data.message));
