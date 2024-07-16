@@ -16,5 +16,5 @@ TodoList
 - [ ] categoryResponseDto
 - [x] categoryEntity
 - [ ] categoryService
-- [ ] categoryRepository
+- [x] categoryRepository
 - [ ] product 에 category 추가
