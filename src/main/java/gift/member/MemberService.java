@@ -1,0 +1,30 @@
+package gift.member;
+
+import gift.common.auth.LoginMemberDto;
+import gift.member.model.Member;
+import gift.member.model.MemberRequestDto;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class MemberService {
+
+    private final MemberRepository memberRepository;
+
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public LoginMemberDto selectLoginMemberById(Long id) {
+        return memberRepository.findById(id)
+            .map(LoginMemberDto::from)
+            .orElseThrow(() -> new IllegalArgumentException("member 값이 잘못되었습니다."));
+    }
+
+    @Transactional
+    public Long insertMember(MemberRequestDto memberRequestDto) {
+        Member member = memberRepository.save(memberRequestDto.toEntity());
+        return member.getId();
+    }
+}
