@@ -46,6 +46,13 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public Product(String name, double price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
     public Product() {
     }
 
@@ -80,6 +87,18 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Product(Long id, String name, double price, String imageUrl, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     @Override
