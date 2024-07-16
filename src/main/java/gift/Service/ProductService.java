@@ -1,13 +1,13 @@
 package gift.Service;
 
+import gift.Model.Category;
 import gift.Model.Product;
 import gift.Model.RequestProduct;
+import gift.Repository.CategoryRepository;
 import gift.Repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 
@@ -15,10 +15,12 @@ import java.util.NoSuchElementException;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository  = categoryRepository;
     }
 
     public Page<Product> getAllProducts(Pageable pageable) {
@@ -28,7 +30,9 @@ public class ProductService {
 
     @Transactional
     public void addProduct(RequestProduct requestProduct) {
-        Product product = new Product(requestProduct.name(), requestProduct.price(), requestProduct.imageUrl());
+        Category category = categoryRepository.findById(requestProduct.categoryId())
+                .orElseThrow(()-> new NoSuchElementException("매칭되는 카테고리가 없습니다"));
+        Product product = new Product(requestProduct.name(), requestProduct.price(), requestProduct.imageUrl(), category);
         productRepository.save(product);
     }
 
@@ -43,6 +47,9 @@ public class ProductService {
         product.setName(requestProduct.name());
         product.setPrice(requestProduct.price());
         product.setImageUrl(requestProduct.imageUrl());
+        Category category = categoryRepository.findById(requestProduct.categoryId())
+                        .orElseThrow(()->new NoSuchElementException("매칭되는 카테고리가 없습니다"));
+        product.setCategory(category);
     }
 
     @Transactional

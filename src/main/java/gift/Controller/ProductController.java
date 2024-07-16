@@ -43,7 +43,7 @@ public class ProductController {
 
     @GetMapping("/products/new")
     public String newProductForm(Model model) {
-        model.addAttribute("product", new RequestProduct("", 0, ""));
+        model.addAttribute("product", new RequestProduct("", 0, "", 0L));
         return "new-product";
     }
 
@@ -56,7 +56,7 @@ public class ProductController {
     @GetMapping("/products/edit/{id}")
     public String editProductForm(@PathVariable("id") Long id, Model model) {
         Product product = productService.selectProduct(id);
-        model.addAttribute("product", new RequestProduct(product.getName(), product.getPrice(), product.getImageUrl()));
+        model.addAttribute("product", new RequestProduct(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getId()));
         model.addAttribute("id", id);
         return "edit-product";
     }
