@@ -1,12 +1,12 @@
 package gift.service;
 
 import gift.constants.Messages;
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.request.ProductRequest;
 import gift.dto.response.ProductResponse;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,17 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     @Transactional
-    public void save(ProductRequest productDto){
-        productRepository.save(productDto.toEntity());
+    public void save(ProductRequest productRequest){
+        Category category = categoryService.findById(productRequest.categoryId()).toEntity();
+        productRepository.save(productRequest.toEntity(category));
     }
 
     @Transactional(readOnly = true)
@@ -61,14 +64,15 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateById(Long id, ProductRequest productDto){
-        findProductByIdOrThrow(id);
-        productRepository.save(new Product.Builder()
-                .id(id)
-                .name(productDto.name())
-                .price(productDto.price())
-                .imageUrl(productDto.imageUrl())
-                .build());
+    public void updateById(Long id, ProductRequest productRequest){
+        Product foundProduct = findProductByIdOrThrow(id);
+        Category category = categoryService.findById(productRequest.categoryId()).toEntity();
+
+        foundProduct.updateName(productRequest.name());
+        foundProduct.updatePrice(productRequest.price());
+        foundProduct.updateImageUrl(productRequest.imageUrl());
+        foundProduct.updateCategory(category);
+        productRepository.save(foundProduct);
     }
 
     private Product findProductByIdOrThrow(Long id) {
