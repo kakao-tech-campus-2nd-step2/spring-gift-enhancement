@@ -8,6 +8,7 @@ public record AdminProductDto(
     @Pattern(regexp = "^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/_]*$", message = "사용 가능한 특수 문자는 ()[]+-&/_ 입니다.")
     String name,
     int price,
-    String imageUrl) implements ProductDto {
+    String imageUrl,
+    String categoryName) implements ProductDto {
 
 }

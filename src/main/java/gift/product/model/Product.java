@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Product {
@@ -22,19 +24,24 @@ public class Product {
     @Column(nullable = false)
     private final String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private final Category category;
+
     protected Product() {
-        this(null, null, 0, null);
+        this(null, null, 0, null, null);
     }
 
-    public Product(String name, int price, String imageUrl) {
-        this(null, name, price, imageUrl);
+    public Product(String name, int price, String imageUrl, Category category) {
+        this(null, name, price, imageUrl, category);
     }
 
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -51,5 +58,9 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }
