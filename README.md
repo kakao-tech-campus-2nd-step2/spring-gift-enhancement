@@ -25,7 +25,7 @@
 - 중복된 옵션은 구매 시 고객에게 불편을 줄 수 있다. 동일한 상품 내의 옵션 이름은 중복될 수 없다.
 - (선택) 관리자 화면에서 옵션을 추가할 수 있다.
 ### 구현할 기능 목록
-- [ ] Option Entity 와 DTO 모델 생성 / Product Entity 와 연관관계 매핑
+- [x] Option Entity 와 DTO 모델 생성 / Product Entity 와 연관관계 매핑
 - [ ] Option Entity 에 대한 Repository, Service, Controller 구현
 - [ ] 관리자 화면에 옵션을 지정 / 수정할 수 있도록 구현 (선택사항)
 - [ ] 테스트 코드 작성
