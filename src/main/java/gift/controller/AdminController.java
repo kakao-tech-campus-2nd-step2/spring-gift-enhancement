@@ -28,7 +28,7 @@ public class AdminController {
     @GetMapping("/admin")
     public String adminHome(Model model, @ModelAttribute PagingRequest pagingRequest) {
         PagingResponse<GiftResponse> giftlist = giftService.getAllGifts(pagingRequest.getPage(), pagingRequest.getSize());
-        model.addAttribute("giftlist", giftlist);
+        model.addAttribute("giftlist", giftlist.getContent());
         return "admin";
     }
 
