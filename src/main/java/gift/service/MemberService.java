@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberService {
 
-    private MemberRepository memberRepository;
-    private JwtUtil jwtUtil;
+    private final MemberRepository memberRepository;
+    private final JwtUtil jwtUtil;
 
     public MemberService(MemberRepository memberRepository, JwtUtil jwtUtil) {
         this.memberRepository = memberRepository;
