@@ -25,29 +25,26 @@ public class MemberService {
 
     @Transactional
     public Token register(Member member) {
-        Optional<MemberEntity> existingMemberEntity = memberRepository.findByEmail(member.getEmail());
-        if (existingMemberEntity.isPresent()) {
-            throw new AlreadyExistsException("Alreay Exists Member");
-        }
+        memberRepository.findByEmail(member.getEmail())
+            .ifPresent(m -> { throw new AlreadyExistsException("Already Exists Member"); });
         member.setPassword(PasswordUtil.encodePassword(member.getPassword()));
-        memberRepository.save(dtoToEntity(member));
-
-        Optional<MemberEntity> loginMemberEntity = memberRepository.findByEmail(member.getEmail());
+        MemberEntity loginMemberEntity = memberRepository.save(dtoToEntity(member));
         return new Token(jwtUtil.generateToken(entityToDto(loginMemberEntity)));
     }
 
     @Transactional
     public Token login(Member member) {
-        Optional<MemberEntity> existingMemberEntity = memberRepository.findByEmail(member.getEmail());
-        if (existingMemberEntity.isPresent() && PasswordUtil.matches(member.getPassword(), existingMemberEntity.get().getPassword())) {
-            return new Token(jwtUtil.generateToken(entityToDto(existingMemberEntity)));
+        MemberEntity memberEntity = memberRepository.findByEmail(member.getEmail())
+            .orElseThrow(() -> new ForbiddenException("Invalid email or Not Exists Member"));
+        if (PasswordUtil.matches(member.getPassword(), memberEntity.getPassword())) {
+            return new Token(jwtUtil.generateToken(entityToDto(memberEntity)));
         }
-        throw new ForbiddenException("Invalid email or password");
+        throw new ForbiddenException("Invalid password");
     }
 
-    private Member entityToDto(Optional<MemberEntity> memberEntity) {
-        return new Member(memberEntity.get().getId(), memberEntity.get().getEmail(),
-            memberEntity.get().getPassword());
+    private Member entityToDto(MemberEntity memberEntity) {
+        return new Member(memberEntity.getId(), memberEntity.getEmail(),
+            memberEntity.getPassword());
     }
 
     private MemberEntity dtoToEntity(Member member) {
