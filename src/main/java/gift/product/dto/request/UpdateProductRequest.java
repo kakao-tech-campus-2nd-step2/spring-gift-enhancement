@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:src/main/java/gift/product/dto/request/UpdateProductRequest.java
 package gift.product.dto.request;
+========
+package gift.dto.product.request;
+>>>>>>>> 1304db5a (refactor(dto): DTO 디렉토리 구조 변경):src/main/java/gift/dto/product/request/UpdateProductRequest.java
 
 import gift.validation.annotation.RestrictedKeyword;
 import jakarta.validation.constraints.NotBlank;
