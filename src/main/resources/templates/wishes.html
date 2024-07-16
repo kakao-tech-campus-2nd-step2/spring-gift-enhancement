@@ -91,9 +91,9 @@
                         $('#wishTableBody').append(`
                             <tr data-id="${wish.id}">
                                 <td>${wish.productId}</td>
-                                <td>${wish.productName.value}</td>
-                                <td>${wish.imageUrl.value}</td>
-                                <td>${wish.productCount.value}</td>
+                                <td>${wish.productName}</td>
+                                <td>${wish.imageUrl}</td>
+                                <td>${wish.productCount}</td>
                                 <td>
                                     <button class="btn btn-warning btn-sm editWish">✏️</button>
                                     <button class="btn btn-danger btn-sm deleteWish">🗑️</button>
@@ -136,7 +136,7 @@
         $('#saveWish').click(function () {
             const wishData = {
                 productId: $('#productId').val(),
-                productCount: { value: $('#productCount').val() }
+                productCount: $('#productCount').val()
             };
             const wishId = $('#wishId').val();
 
@@ -177,7 +177,7 @@
                     $('#wishModalLabel').text('Edit Wish');
                     $('#wishId').val(response.data.id);
                     $('#productId').val(response.data.productId);
-                    $('#productCount').val(response.data.productCount.value);
+                    $('#productCount').val(response.data.productCount);
                     $('#wishModal').modal('show');
                 },
                 error: function (xhr) {

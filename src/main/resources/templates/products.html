@@ -90,9 +90,9 @@
                     $('#productTableBody').append(`
                         <tr data-id="${product.id}">
                             <td><input type="checkbox" class="productCheckbox"></td>
-                            <td>${product.name.value}</td>
-                            <td>${product.price.value}</td>
-                            <td>${product.imageUrl.value}</td>
+                            <td>${product.name}</td>
+                            <td>${product.price}</td>
+                            <td>${product.imageUrl}</td>
                             <td>
                                 <button class="btn btn-warning btn-sm editProduct">✏️</button>
                                 <button class="btn btn-danger btn-sm deleteProduct">🗑️</button>
@@ -130,9 +130,9 @@
 
         $('#saveProduct').click(function () {
             const productData = {
-                name: { value: $('#productName').val() },
-                price: { value: $('#productPrice').val() },
-                imageUrl: { value: $('#productImageUrl').val() }
+                name: $('#productName').val(),
+                price: $('#productPrice').val(),
+                imageUrl: $('#productImageUrl').val()
             };
             const productId = $('#productId').val();
 
@@ -165,9 +165,9 @@
             $.get(apiBaseUrl + '/' + productId, function (response) {
                 $('#productModalLabel').text('Edit Product');
                 $('#productId').val(response.data.id);
-                $('#productName').val(response.data.name.value);
-                $('#productPrice').val(response.data.price.value);
-                $('#productImageUrl').val(response.data.imageUrl.value);
+                $('#productName').val(response.data.name);
+                $('#productPrice').val(response.data.price);
+                $('#productImageUrl').val(response.data.imageUrl);
                 $('#productModal').modal('show');
             });
         });
@@ -213,9 +213,9 @@
                         $productTableBody.append(`
                             <tr data-id="${product.id}">
                                 <td><input type="checkbox" class="productCheckbox"></td>
-                                <td>${product.name.value}</td>
-                                <td>${product.price.value}</td>
-                                <td>${product.imageUrl.value}</td>
+                                <td>${product.name}</td>
+                                <td>${product.price}</td>
+                                <td>${product.imageUrl}</td>
                                 <td>
                                     <button class="btn btn-warning btn-sm editProduct">✏️</button>
                                     <button class="btn btn-danger btn-sm deleteProduct">🗑️</button>
