@@ -18,10 +18,10 @@
 # 1단계
 
 ## 구현할 기능 목록
-- [ ] 카테고리 생성
+- [x] 카테고리 생성
   - [x] entity 생성
   - [x] 카테고리 목록은 enum으로 설정해도 되나요?
-  - [ ] repository 생성
+  - [x] repository 생성
   
 - [ ] 상품 entity 수정
   - [ ] 카테고리를 foreign key로 설정

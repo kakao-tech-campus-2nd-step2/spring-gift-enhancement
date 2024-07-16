@@ -21,9 +21,12 @@ public class Product {
     @Column(nullable = false)
     String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
-
 
     public Product(String name, int price, String imageUrl) {
         this.name = name;
