@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.auth.jwt.JwtProvider;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
-import gift.domain.user.dao.UserJpaRepository;
+import gift.domain.user.repository.UserJpaRepository;
 import gift.domain.user.entity.Role;
 import gift.domain.user.entity.User;
 import gift.domain.wishlist.dto.WishItemDto;

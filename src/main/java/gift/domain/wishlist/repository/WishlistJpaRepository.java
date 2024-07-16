@@ -1,7 +1,6 @@
-package gift.domain.wishlist.dao;
+package gift.domain.wishlist.repository;
 
 import gift.domain.wishlist.entity.WishItem;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package gift.domain.user.dao;
+package gift.domain.user.repository;
 
 import gift.domain.user.entity.User;
 import java.util.Optional;

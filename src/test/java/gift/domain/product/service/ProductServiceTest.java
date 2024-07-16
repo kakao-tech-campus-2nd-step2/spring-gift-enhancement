@@ -7,7 +7,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 
-import gift.domain.product.dao.ProductJpaRepository;
+import gift.domain.product.repository.ProductJpaRepository;
 import gift.domain.product.dto.ProductDto;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;

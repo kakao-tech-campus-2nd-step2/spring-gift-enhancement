@@ -1,4 +1,4 @@
-package gift.domain.product.dao;
+package gift.domain.product.repository;
 
 import gift.domain.product.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

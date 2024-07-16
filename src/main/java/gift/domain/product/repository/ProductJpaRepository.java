@@ -1,4 +1,4 @@
-package gift.domain.product.dao;
+package gift.domain.product.repository;
 
 import gift.domain.product.entity.Product;
 import java.util.List;

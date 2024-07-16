@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
-import gift.domain.product.dao.CategoryJpaRepository;
+import gift.domain.product.repository.CategoryJpaRepository;
 import gift.domain.product.entity.Category;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

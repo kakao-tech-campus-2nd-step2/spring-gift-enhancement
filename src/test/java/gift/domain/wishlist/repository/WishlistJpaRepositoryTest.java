@@ -1,12 +1,12 @@
-package gift.domain.wishlist.dao;
+package gift.domain.wishlist.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import gift.domain.product.dao.ProductJpaRepository;
+import gift.domain.product.repository.ProductJpaRepository;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
-import gift.domain.user.dao.UserJpaRepository;
+import gift.domain.user.repository.UserJpaRepository;
 import gift.domain.user.entity.Role;
 import gift.domain.user.entity.User;
 import gift.domain.wishlist.entity.WishItem;

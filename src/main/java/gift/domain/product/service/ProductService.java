@@ -1,6 +1,6 @@
 package gift.domain.product.service;
 
-import gift.domain.product.dao.ProductJpaRepository;
+import gift.domain.product.repository.ProductJpaRepository;
 import gift.domain.product.dto.ProductDto;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;

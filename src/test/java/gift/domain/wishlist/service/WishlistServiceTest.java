@@ -9,12 +9,12 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 
-import gift.domain.product.dao.ProductJpaRepository;
+import gift.domain.product.repository.ProductJpaRepository;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import gift.domain.user.entity.Role;
 import gift.domain.user.entity.User;
-import gift.domain.wishlist.dao.WishlistJpaRepository;
+import gift.domain.wishlist.repository.WishlistJpaRepository;
 import gift.domain.wishlist.dto.WishItemDto;
 import gift.domain.wishlist.entity.WishItem;
 import gift.exception.InvalidProductInfoException;

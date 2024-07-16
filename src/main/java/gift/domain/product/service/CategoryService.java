@@ -1,6 +1,6 @@
 package gift.domain.product.service;
 
-import gift.domain.product.dao.CategoryJpaRepository;
+import gift.domain.product.repository.CategoryJpaRepository;
 import gift.domain.product.entity.Category;
 import gift.exception.InvalidCategoryInfoException;
 import java.util.List;
