@@ -48,9 +48,20 @@ public class ProductService {
     }
 
     public void updateProduct(long id, ProductDTO productDTO) {
+        Category findCategory = categoryRepository.findByName(productDTO.category().getName())
+            .orElseThrow(() -> new IllegalArgumentException(CATEGORY_NOT_FOUND));
+
         productRepository.findById(id)
             .ifPresentOrElse(
-                e -> productRepository.save(productDTO.toEntity(id)),
+                e -> productRepository.save(
+                    new Product(
+                        id,
+                        productDTO.name(),
+                        productDTO.price(),
+                        productDTO.imageUrl(),
+                        findCategory
+                    )
+                ),
                 () -> {
                     throw new IllegalArgumentException(PRODUCT_NOT_FOUND);
                 }

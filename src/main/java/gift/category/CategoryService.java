@@ -14,16 +14,16 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category addCategory(Category category) {
-        return categoryRepository.save(category);
+    public Category addCategory(CategoryDTO categoryDTO) {
+        return categoryRepository.save(categoryDTO.toEntity());
     }
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 
-    public Category getCategoryByName(Category category) {
-        return categoryRepository.findByName(category.getName())
+    public Category getCategoryByName(CategoryDTO categoryDTO) {
+        return categoryRepository.findByName(categoryDTO.getName())
             .orElseThrow(() -> new IllegalArgumentException(CATEGORY_NOT_FOUND));
     }
 }

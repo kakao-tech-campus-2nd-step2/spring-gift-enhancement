@@ -6,7 +6,6 @@ export function addProduct() {
     price: document.getElementById('productPrice').value,
     imageUrl: document.getElementById('productImageUrl').value,
     category: {
-      id: -1,
       name: document.getElementById("category").value
     }
   };
@@ -38,7 +37,6 @@ export function editProduct(id) {
     price: document.getElementById('productPrice').value,
     imageUrl: document.getElementById('productImageUrl').value,
     category: {
-      id: -1,
       name: document.getElementById("category").value
     }
   };
