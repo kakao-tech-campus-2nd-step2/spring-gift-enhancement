@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
         problemDetail.setDetail(e.getMessage());
         return ResponseEntity.badRequest().body(problemDetail);
     }
-
+  
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<ProblemDetail> categoryNotFoundException(CategoryNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);

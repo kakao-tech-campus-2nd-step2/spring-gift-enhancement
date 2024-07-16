@@ -1,3 +1,4 @@
+
 insert into category(name, color, image_url, description) values('상품권', 'red', 'https://st.kakaocdn.net/category1.jpg', '상품권 카테고리입니다.')
 insert into category(name, color, image_url, description) values('패션', 'blue', 'https://st.kakaocdn.net/category2.jpg', '패션 카테고리입니다.')
 insert into category(name, color, image_url, description) values('뷰티', 'green', 'https://st.kakaocdn.net/category3.jpg', '뷰티 카테고리입니다.')
@@ -15,4 +16,3 @@ insert into wish(user_id, product_id, count) values(1, 1, 3)
 insert into wish(user_id, product_id, count) values(1, 2, 3)
 insert into wish(user_id, product_id, count) values(1, 3, 3)
 insert into wish(user_id, product_id, count) values(1, 4, 3)
-
