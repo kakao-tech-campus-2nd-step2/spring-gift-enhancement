@@ -1,5 +1,4 @@
 package gift;
-
 import gift.domain.Category;
 import gift.domain.Product;
 import gift.repository.CategoryRepository;
