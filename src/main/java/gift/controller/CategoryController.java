@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.domain.Category;
+import gift.dto.request.CategoryRequest;
 import gift.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +27,14 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        Category responseBody = categoryService.createCategory(category);
+    public ResponseEntity<Category> createCategory(@RequestBody CategoryRequest categoryRequest) {
+        Category responseBody = categoryService.createCategory(categoryRequest);
         return ResponseEntity.ok().body(responseBody);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        Category responseBody = categoryService.updateCategory(id, category);
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody CategoryRequest categoryRequest) {
+        Category responseBody = categoryService.updateCategory(id, categoryRequest);
         return ResponseEntity.ok().body(responseBody);
     }
 

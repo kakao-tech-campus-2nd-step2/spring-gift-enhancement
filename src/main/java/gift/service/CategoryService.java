@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.dto.request.CategoryRequest;
 import gift.exception.MemberNotFoundException;
 import gift.repository.category.CategorySpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,15 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Category createCategory(Category category){
+    public Category createCategory(CategoryRequest categoryRequest){
+        Category category = new Category(categoryRequest.getName());
         return categoryRepository.save(category);
     }
 
-    public Category updateCategory(Long id, Category category){
+    public Category updateCategory(Long id, CategoryRequest categoryRequest){
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("존재하지않는 카테코리입니다."));
-        existingCategory.setName(category.getName());
+        existingCategory.setName(categoryRequest.getName());
         return categoryRepository.save(existingCategory);
     }
 
