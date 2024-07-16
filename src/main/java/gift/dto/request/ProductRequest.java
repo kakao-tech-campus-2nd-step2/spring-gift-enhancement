@@ -22,17 +22,17 @@ public class ProductRequest {
 
     private String imageUrl;
 
-    public ProductRequest(String name, Integer price, String imageUrl) {
+    @NotNull(message = "카테고리를 입력하세요")
+    private String categoryName;
+
+    public ProductRequest(){
+    }
+
+    public ProductRequest(String name, Integer price, String imageUrl, String categoryName) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-    }
-
-    public ProductRequest() {
-    }
-
-    public static ProductRequest entityToRequest(Product product) {
-        return new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl());
+        this.categoryName = categoryName;
     }
 
     public String getName() {
@@ -46,4 +46,6 @@ public class ProductRequest {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public String getCategoryName() {return categoryName; }
 }

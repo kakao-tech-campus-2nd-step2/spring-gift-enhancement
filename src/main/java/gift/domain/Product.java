@@ -31,10 +31,11 @@ public class Product {
 
     public Product() { }
 
-    public Product(String name, Integer price, String imageUrl) {
+    public Product(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public long getId() {
@@ -69,9 +70,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-
-    public static Product RequestToEntity(ProductRequest productRequest) {
-        return new Product(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl());
+    public void update(ProductRequest productRequest, Category category){
+        this.name = productRequest.getName();
+        this.price = productRequest.getPrice();
+        this.imageUrl = productRequest.getImageUrl();
+        this.category = category;
     }
 
 }

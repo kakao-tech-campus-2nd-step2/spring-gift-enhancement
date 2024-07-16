@@ -27,7 +27,7 @@ public class ProductServiceTest {
 
     @Test
     public void testRegister() {
-        ProductRequest productRequest = new ProductRequest("Product 1", 100, "test-url");
+        ProductRequest productRequest = new ProductRequest("Product 1", 100, "test-url", "testCategory");
         Product product = Product.RequestToEntity(productRequest);
 
         given(productRepository.save(Mockito.any(Product.class))).willReturn(product);
@@ -40,7 +40,7 @@ public class ProductServiceTest {
     @Test
     public void testFindOne() {
         Long productId = 1L;
-        Product product = new Product("Product 1", 100,"test-url");
+        Product product = new Product("Product 1", 100, "test-url", "testCategory");
         product.setId(productId);
 
         given(productRepository.findById(product.getId())).willReturn(Optional.of(product));

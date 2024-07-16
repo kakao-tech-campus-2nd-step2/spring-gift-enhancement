@@ -26,6 +26,12 @@ public class CategoryController {
         return ResponseEntity.ok().body(responseBody);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getCategory(@PathVariable Long id) {
+        Category responseBody = categoryService.getCategory(id);
+        return ResponseEntity.ok().body(responseBody);
+    }
+
     @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody CategoryRequest categoryRequest) {
         Category responseBody = categoryService.createCategory(categoryRequest);

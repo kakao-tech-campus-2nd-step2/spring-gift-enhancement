@@ -55,8 +55,8 @@ public class WishlistService {
         return wishlistRepository.findByMemberId(memberId);
     }
 
-    public Page<WishlistItem> getWishlistByMemberId(Long memberId, Pageable pageable) {
-        return wishlistRepository.findByMemberId(memberId, pageable);
+    public Page<WishlistItem> getWishlistByMemberIdAndPageable(Long memberId, Pageable pageable) {
+        return wishlistRepository.findByMemberIdAndPageable(memberId, pageable);
     }
 
 

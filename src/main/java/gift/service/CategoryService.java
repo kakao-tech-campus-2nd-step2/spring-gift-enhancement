@@ -26,6 +26,11 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    public Category getCategory(Long id){
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("존재하지않는 카테코리입니다."));
+    }
+
     public Category createCategory(CategoryRequest categoryRequest) {
         if (categoryRepository.existsByName(categoryRequest.getName())) {
             throw new DuplicateCategoryNameException("중복된 카테고리 이름입니다.");
