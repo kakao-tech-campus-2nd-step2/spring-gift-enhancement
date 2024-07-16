@@ -19,4 +19,10 @@ CREATE Table wishlist
     member_email VARCHAR(255),
     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE,
     FOREIGN KEY (member_email) REFERENCES member (email) ON DELETE CASCADE
+);
+
+CREATE Table category
+(
+    id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) UNIQUE
 )
