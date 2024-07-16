@@ -109,9 +109,9 @@ class ProductServiceTest {
         categoryRepository.save(new Category("테스트카테고리1"));
 
         for (int i = 1; i <= PRODUCT_COUNT; i++) {
-            productService.insertProduct(new ClientProductDto("테스트" + i, 1000 + i, "테스트주소" + i, "테스트카테고리1"));
+            productService.insertProduct(
+                new ClientProductDto("테스트" + i, 1000 + i, "테스트주소" + i, "테스트카테고리1"));
         }
-
 
         //when
         Pageable pageable = PageRequest.of(PAGE, SIZE, Sort.Direction.fromString(DIRECTION), SORT);

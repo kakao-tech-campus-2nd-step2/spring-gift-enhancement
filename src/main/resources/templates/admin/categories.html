@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/bootstrap.min.css}" type="text/css">
   <title>admin - wishes</title>
 </head>
 <body>
@@ -49,8 +49,8 @@
           </button>
         </td>
         <td class="text-center">
-          <form th:action="@{/admin/categories/delete/{categoryId}(categoryId=${category.id})}"
-                method="post" th:method="delete">
+          <form method="post"
+                th:action="@{/admin/categories/delete/{categoryId}(categoryId=${category.id})}" th:method="delete">
             <button class="btn btn-danger" type="submit">삭제</button>
           </form>
         </td>

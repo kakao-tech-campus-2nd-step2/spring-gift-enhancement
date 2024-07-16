@@ -1,15 +1,8 @@
 package gift.product.controller;
 
-import gift.product.dto.AdminProductDto;
 import gift.product.dto.CategoryDto;
-import gift.product.dto.LoginMember;
-import gift.product.dto.WishDto;
 import gift.product.model.Category;
-import gift.product.model.Product;
-import gift.product.model.Wish;
 import gift.product.service.CategoryService;
-import gift.product.service.WishService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.stereotype.Controller;

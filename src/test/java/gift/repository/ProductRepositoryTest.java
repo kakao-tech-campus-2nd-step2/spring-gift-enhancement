@@ -3,7 +3,6 @@ package gift.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import gift.product.dto.CategoryDto;
 import gift.product.model.Category;
 import gift.product.model.Product;
 import gift.product.repository.CategoryRepository;
@@ -32,7 +31,8 @@ class ProductRepositoryTest {
         Category category = categoryRepository.save(new Category("테스트카테고리1"));
 
         //when
-        Product insertedProduct = productRepository.save(new Product("테스트1", 1500, "테스트주소1", category));
+        Product insertedProduct = productRepository.save(
+            new Product("테스트1", 1500, "테스트주소1", category));
 
         //then
         assertSoftly(softly -> {

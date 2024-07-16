@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/bootstrap.min.css}" type="text/css">
   <title>admin - login processing...</title>
 </head>
 <body>
-<form th:action method="post" id="form">
-  <input type="hidden" name="accessToken" th:value="${accessToken}">
+<form id="form" method="post" th:action>
+  <input name="accessToken" th:value="${accessToken}" type="hidden">
 </form>
 </body>
 <script th:inline="javascript">

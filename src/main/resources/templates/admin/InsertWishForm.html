@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/bootstrap.min.css}" type="text/css">
   <title>admin - insert wish</title>
 </head>
 <body>
@@ -10,18 +10,19 @@
      style="display: flex; flex-direction: column; justify-content: center; margin-top: 50px;">
   <h2 class="py-4 text-center border-bottom mb-5">위시 추가</h2>
   <div>
-    <form id="form" th:action method="post">
+    <form id="form" method="post" th:action>
       <div class="mb-3">
-        <label for="productId" class="mb-2">상품 ID</label>
-        <input type="text" id="productId" name="productId" class="form-control" placeholder="상품 ID를 입력하세요.">
+        <label class="mb-2" for="productId">상품 ID</label>
+        <input class="form-control" id="productId" name="productId" placeholder="상품 ID를 입력하세요."
+               type="text">
       </div>
       <div class="row mt-5">
         <div class="col">
           <button class="btn btn-primary w-100" type="submit">추가</button>
         </div>
         <div class="col">
-          <button class="btn btn-primary w-100" th:onclick="|location.href='@{/admin/wishes}'|"
-                  onclick="location.href='wishes.html'" type="button">취소
+          <button class="btn btn-primary w-100" onclick="location.href='wishes.html'"
+                  th:onclick="|location.href='@{/admin/wishes}'|" type="button">취소
           </button>
         </div>
       </div>

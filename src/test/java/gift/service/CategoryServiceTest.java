@@ -1,13 +1,13 @@
 package gift.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import gift.product.dto.CategoryDto;
 import gift.product.model.Category;
 import gift.product.service.CategoryService;
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -72,7 +72,8 @@ class CategoryServiceTest {
 
         //when
         CategoryDto updatedCategoryDto = new CategoryDto("테스트카테고리2");
-        Category updatedCategory = categoryService.updateCategory(insertedCategory.getId(), updatedCategoryDto);
+        Category updatedCategory = categoryService.updateCategory(insertedCategory.getId(),
+            updatedCategoryDto);
 
         //then
         assertThat(updatedCategory.getName()).isEqualTo(updatedCategoryDto.name());
@@ -88,7 +89,8 @@ class CategoryServiceTest {
         categoryService.deleteCategory(insertedCategory.getId());
 
         //then
-        assertThatThrownBy(() -> categoryService.getCategory(insertedCategory.getId())).isInstanceOf(
+        assertThatThrownBy(
+            () -> categoryService.getCategory(insertedCategory.getId())).isInstanceOf(
             NoSuchElementException.class);
     }
 

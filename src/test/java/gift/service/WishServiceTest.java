@@ -44,7 +44,8 @@ class WishServiceTest {
         Category category = categoryRepository.save(new Category("테스트카테고리1"));
 
         for (int i = 1; i <= 9; i++) {
-            Product product = productRepository.save(new Product("테스트" + i, 1000 + i, "테스트주소" + i, category));
+            Product product = productRepository.save(
+                new Product("테스트" + i, 1000 + i, "테스트주소" + i, category));
             wishService.insertWish(new WishDto(product.getId()), new LoginMember(1L));
         }
     }

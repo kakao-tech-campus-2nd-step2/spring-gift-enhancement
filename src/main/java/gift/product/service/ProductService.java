@@ -18,7 +18,8 @@ public class ProductService {
 
     private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
@@ -39,7 +40,8 @@ public class ProductService {
     public Product insertProduct(ProductDto productDto) {
         Category category = getValidatedCategory(productDto.categoryName());
 
-        Product product = new Product(productDto.name(), productDto.price(), productDto.imageUrl(), category);
+        Product product = new Product(productDto.name(), productDto.price(), productDto.imageUrl(),
+            category);
         return productRepository.save(product);
     }
 
@@ -66,6 +68,7 @@ public class ProductService {
     }
 
     private Category getValidatedCategory(String categoryName) {
-        return categoryRepository.findByName(categoryName).orElseThrow(() -> new NoSuchElementException("해당 카테고리가 존재하지 않습니다."));
+        return categoryRepository.findByName(categoryName)
+            .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 존재하지 않습니다."));
     }
 }
