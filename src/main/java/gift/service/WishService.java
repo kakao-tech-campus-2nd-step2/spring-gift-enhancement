@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WishService {
@@ -30,7 +31,7 @@ public class WishService {
         this.productRepository = productRepository;
     }
 
-
+    @Transactional
     public boolean addToWishlist(String email, WishRequestDTO wishRequestDTO) {
         Product product = productRepository.findById(wishRequestDTO.getProductId()).orElseThrow(
             () -> new ProductNotFoundException("Product Not Found")
@@ -46,7 +47,7 @@ public class WishService {
         return true;
 
     }
-
+    @Transactional
     public boolean removeFromWishlist(String email, Long productId) {
         UserInfo userInfo = userInfoRepository.findByEmail(email).orElseThrow(
             () -> new UserNotFoundException("User Not Found")
@@ -73,7 +74,7 @@ public class WishService {
         );
         return wishRepository.findByUserInfoId(userInfo.getId(), pageable);
     }
-
+    @Transactional
     public boolean changeToWishlist(String email, WishRequestDTO wishRequestDTO) {
         Product product = productRepository.findById(wishRequestDTO.getProductId()).orElseThrow(
             () -> new ProductNotFoundException("Product Not Found")

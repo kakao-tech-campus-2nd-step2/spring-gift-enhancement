@@ -8,6 +8,7 @@ import gift.utils.error.ProductNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GiftService {
@@ -26,7 +27,7 @@ public class GiftService {
     public Page<Product> getAllProduct(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
-
+    @Transactional
     public ProductDTO postProducts(ProductDTO productDTO) {
         validateProductName(productDTO.getName());
 
@@ -38,7 +39,7 @@ public class GiftService {
         return new ProductDTO(savedProduct.getName(), savedProduct.getPrice(),
             savedProduct.getImageUrl());
     }
-
+    @Transactional
     public ProductDTO putProducts(ProductDTO productDTO, Long id) {
         validateProductName(productDTO.getName());
 
@@ -53,7 +54,7 @@ public class GiftService {
         return new ProductDTO(saveProduct.getName(), saveProduct.getPrice(),
             saveProduct.getImageUrl());
     }
-
+    @Transactional
     public Long deleteProducts(Long id) {
         productRepository.findById(id).orElseThrow(
             () -> new ProductNotFoundException("Product NOT FOUND"));

@@ -16,7 +16,6 @@ public class CategoryService {
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
-    @Transactional
     public List<CategoryResponseDTO> findAllCategory(){
         List<CategoryResponseDTO> categories = categoryRepository.findAll().stream().map(
             category -> new CategoryResponseDTO(
