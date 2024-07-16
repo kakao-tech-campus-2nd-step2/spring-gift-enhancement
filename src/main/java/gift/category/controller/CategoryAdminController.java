@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/category/admin")
-public class CategoryController {
+public class CategoryAdminController {
     private final UserService userService;
 
-    public CategoryController(UserService userService) {
+    public CategoryAdminController(UserService userService) {
         this.userService = userService;
     }
 
