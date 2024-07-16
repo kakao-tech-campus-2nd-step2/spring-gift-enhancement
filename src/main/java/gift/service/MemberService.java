@@ -8,17 +8,15 @@ import gift.dto.MemberRequest;
 import gift.dto.MemberResponse;
 import gift.exception.ErrorMessage;
 import gift.repository.MemberRepository;
-import gift.security.SecurityService;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final SecurityService securityService;
 
-    public MemberService(MemberRepository memberRepository, SecurityService securityService) {
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.securityService = securityService;
 }
 
     public MemberResponse registerMember(MemberRequest requestDto) {
@@ -29,7 +27,7 @@ public class MemberService {
         Member member = new Member(requestDto.getEmail(), requestDto.getPassword());
         memberRepository.save(member);
 
-        String token = securityService.generateJwtToken(member);
+        String token = JwtConfig.generateToken(member);
         return new MemberResponse(token);
     }
 
@@ -44,9 +42,8 @@ public class MemberService {
         }
     }
 
-    public Member getMemberByToken(String memberToken) {
-        //Long memberId = jwtTokenProvider.getUserIdFromToken(memberToken);
-        Long memberId = 1L;
+    public Member getMember(Authentication authentication) {
+        Member member = authentication.getMember();
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("No member found with the given token"));
     }

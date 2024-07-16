@@ -3,7 +3,6 @@ package gift.resolver;
 import gift.domain.Member;
 import gift.security.LoginMember;
 import gift.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -30,7 +29,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         String bearerToken = webRequest.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
             String memberToken = bearerToken.substring(BEARER_PREFIX_LENGTH);
-            Member member = memberService.getMemberByToken(memberToken);
+            Member member = memberService.getMember(memberToken);
             return member;
         }
         throw new IllegalArgumentException("No valid token found in the request");
