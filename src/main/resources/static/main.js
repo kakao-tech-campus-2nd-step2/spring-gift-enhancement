@@ -14,7 +14,7 @@ function login() {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
@@ -48,7 +48,7 @@ function loadWishlist() {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
@@ -65,19 +65,16 @@ function loadWishlist() {
 
 function addProductToWishlist(productId) {
     const token = localStorage.getItem('token');
-    fetch('/api/wishes', {
+    fetch(`/api/wishes/${productId}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            productId: productId
-        })
+        }
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
@@ -99,7 +96,7 @@ function deleteProductFromWishlist(productId) {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
@@ -123,7 +120,7 @@ function moveProductListPage(page) {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
@@ -149,7 +146,7 @@ function moveWishlistPage(page) {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }

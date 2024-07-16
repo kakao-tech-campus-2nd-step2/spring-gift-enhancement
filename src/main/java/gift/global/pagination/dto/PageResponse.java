@@ -1,4 +1,4 @@
-package gift.pagination.dto;
+package gift.global.pagination.dto;
 
 import org.springframework.data.domain.Page;
 

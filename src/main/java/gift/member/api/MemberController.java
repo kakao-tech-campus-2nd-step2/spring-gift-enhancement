@@ -1,6 +1,6 @@
 package gift.member.api;
 
-import gift.pagination.dto.PageResponse;
+import gift.global.pagination.dto.PageResponse;
 import gift.product.dto.ProductResponse;
 import gift.wishlist.api.WishesController;
 import gift.member.validator.LoginMember;

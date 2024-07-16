@@ -17,4 +17,6 @@ public record ProductRequest(
         @Min(value = 0, message = "0 이상의 정수를 입력해야 합니다.")
         int price,
         @NotNull
-        String imageUrl) { }
+        String imageUrl,
+        @NotNull
+        String categoryName) { }

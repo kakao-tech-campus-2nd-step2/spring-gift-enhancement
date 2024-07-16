@@ -1,4 +1,4 @@
-package gift.error;
+package gift.global.error;
 
 import org.springframework.http.HttpStatus;
 
@@ -10,6 +10,9 @@ public enum ErrorCode {
 
     // Product Error
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상품은 존재하지 않습니다."),
+
+    // Category Error
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리는 존재하지 않습니다."),
 
     // Member Error
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원 계정입니다."),

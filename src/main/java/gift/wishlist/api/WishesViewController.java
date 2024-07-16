@@ -1,9 +1,8 @@
 package gift.wishlist.api;
 
 import gift.member.validator.LoginMember;
-import gift.pagination.dto.PageResponse;
+import gift.global.pagination.dto.PageResponse;
 import gift.product.dto.ProductResponse;
-import gift.product.util.ProductMapper;
 import gift.wishlist.application.WishesService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,8 +30,7 @@ public class WishesViewController {
                                           sort = "id",
                                           direction = Sort.Direction.DESC)
                                   Pageable pageable) {
-        Page<ProductResponse> wishes = wishesService.getWishlistOfMember(memberId, pageable)
-                .map(ProductMapper::toResponseDto);
+        Page<ProductResponse> wishes = wishesService.getWishlistOfMember(memberId, pageable);
 
         model.addAttribute("wishlist", wishes.getContent());
         model.addAttribute("wishlistPageInfo", new PageResponse(wishes));

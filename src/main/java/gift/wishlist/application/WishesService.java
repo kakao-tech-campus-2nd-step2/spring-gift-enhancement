@@ -1,11 +1,13 @@
 package gift.wishlist.application;
 
-import gift.error.CustomException;
-import gift.error.ErrorCode;
+import gift.global.error.CustomException;
+import gift.global.error.ErrorCode;
 import gift.member.dao.MemberRepository;
 import gift.member.entity.Member;
 import gift.product.dao.ProductRepository;
+import gift.product.dto.ProductResponse;
 import gift.product.entity.Product;
+import gift.product.util.ProductMapper;
 import gift.wishlist.dao.WishesRepository;
 import gift.wishlist.entity.Wish;
 import org.springframework.data.domain.Page;
@@ -40,12 +42,13 @@ public class WishesService {
         Wish wish = wishesRepository.findByMember_IdAndProduct_Id(memberId, productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.WISH_NOT_FOUND));
 
-        wishesRepository.delete(wish);
+        wishesRepository.deleteById(wish.getId());
     }
 
-    public Page<Product> getWishlistOfMember(Long memberId, Pageable pageable) {
+    public Page<ProductResponse> getWishlistOfMember(Long memberId, Pageable pageable) {
         return wishesRepository.findByMember_Id(memberId, pageable)
-                .map(Wish::getProduct);
+                .map(Wish::getProduct)
+                .map(ProductMapper::toResponseDto);
     }
 
     private Wish createWish(Long memberId, Long productId) {

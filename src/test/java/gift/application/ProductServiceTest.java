@@ -1,7 +1,9 @@
 package gift.application;
 
-import gift.error.CustomException;
-import gift.error.ErrorCode;
+import gift.category.dao.CategoryRepository;
+import gift.category.entity.Category;
+import gift.global.error.CustomException;
+import gift.global.error.ErrorCode;
 import gift.product.application.ProductService;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.ProductRequest;
@@ -36,21 +38,35 @@ class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
+    private final Category category = new Category.CategoryBuilder()
+            .setName("상품권")
+            .setColor("#ffffff")
+            .setImageUrl("https://product-shop.com")
+            .setDescription("")
+            .build();
+
     @Test
     @DisplayName("상품 전체 조회 서비스 테스트")
     void getPagedProducts() {
         List<Product> productList = new ArrayList<>();
-        Product product1 = ProductMapper.toEntity(
-                new ProductRequest("product1", 1000, "https://testshop.com")
-        );
-        Product product2 = ProductMapper.toEntity(
-                new ProductRequest("product2", 2000, "https://testshop.io")
-        );
+        Product product1 = new Product.ProductBuilder()
+                .setName("product1")
+                .setPrice(1000)
+                .setImageUrl("https://testshop.com")
+                .setCategory(category)
+                .build();
+        Product product2 = new Product.ProductBuilder()
+                .setName("product2")
+                .setPrice(2000)
+                .setImageUrl("https://testshop.io")
+                .setCategory(category)
+                .build();
         productList.add(product1);
         productList.add(product2);
-
         Page<Product> productPage = new PageImpl<>(productList);
-
         given(productRepository.findAll(productPage.getPageable())).willReturn(productPage);
 
         Page<ProductResponse> responsePage = productService.getPagedProducts(productPage.getPageable());
@@ -61,12 +77,17 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 상세 조회 서비스 테스트")
     void getProductById() {
-        Product product = new Product("product1", 1000, "https://testshop.com");
+        Product product = new Product.ProductBuilder()
+                .setName("product1")
+                .setPrice(1000)
+                .setImageUrl("https://testshop.com")
+                .setCategory(category)
+                .build();
         given(productRepository.findById(any())).willReturn(Optional.of(product));
 
-        ProductResponse resultProduct = productService.getProductByIdOrThrow(product.getId());
+        ProductResponse resultProduct = productService.getProductByIdOrThrow(1L);
 
-        Assertions.assertThat(resultProduct.id()).isEqualTo(product.getId());
+        Assertions.assertThat(resultProduct.name()).isEqualTo(product.getName());
     }
 
     @Test
@@ -84,19 +105,29 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 추가 서비스 테스트")
     void createProduct() {
-        ProductRequest request = new ProductRequest("product1", 1000, "https://testshop.com");
-        Product product = new Product("product1", 1000, "https://testshop.com");
+        ProductRequest request = new ProductRequest(
+                "product1",
+                1000,
+                "https://testshop.com",
+                category.getName());
+        Product product = ProductMapper.toEntity(request, category);
         given(productRepository.save(any())).willReturn(product);
+        given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
 
         ProductResponse response = productService.createProduct(request);
 
-        Assertions.assertThat(response.id()).isEqualTo(product.getId());
+        Assertions.assertThat(response.name()).isEqualTo(product.getName());
     }
 
     @Test
     @DisplayName("단일 상품 삭제 서비스 테스트")
     void deleteProductById() {
-        Product product = new Product("product1", 1000, "https://testshop.com");
+        Product product = new Product.ProductBuilder()
+                .setName("product1")
+                .setPrice(1000)
+                .setImageUrl("https://testshop.com")
+                .setCategory(category)
+                .build();
 
         productService.deleteProductById(product.getId());
 
@@ -106,7 +137,6 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 전체 삭제 서비스 테스트")
     void deleteAllProducts() {
-
         productService.deleteAllProducts();
 
         verify(productRepository).deleteAll();
@@ -115,10 +145,20 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 수정 서비스 테스트")
     void updateProduct() {
-        Product product = new Product("product", 1000, "https://testshop.com");
-        ProductRequest request = new ProductRequest("product", 3000, "https://testshop.io");
+        Product product = new Product.ProductBuilder()
+                .setName("product1")
+                .setPrice(1000)
+                .setImageUrl("https://testshop.com")
+                .setCategory(category)
+                .build();
+        ProductRequest request = new ProductRequest(
+                "product",
+                3000,
+                "https://testshop.io",
+                category.getName());
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        product.update(request);
+        given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
+        product.update(request, category);
         given(productRepository.save(any())).willReturn(product);
 
         Long productId = productService.updateProduct(product.getId(), request);
@@ -130,7 +170,11 @@ class ProductServiceTest {
     @DisplayName("상품 서비스 수정 실패 테스트")
     void updateProductFailed() {
         Long productId = 1L;
-        ProductRequest request = new ProductRequest("product", 3000, "https://testshop.io");
+        ProductRequest request = new ProductRequest(
+                "product",
+                3000,
+                "https://testshop.io",
+                category.getName());
         given(productRepository.findById(anyLong())).willReturn(Optional.empty());
 
         Assertions.assertThatThrownBy(() -> productService.updateProduct(productId, request))

@@ -22,6 +22,7 @@
         <th>Name</th>
         <th>Price</th>
         <th>Image</th>
+        <th>Category</th>
         <th>Actions</th>
       </tr>
       </thead>
@@ -31,6 +32,7 @@
         <td th:text="${product.name}"></td>
         <td th:text="${product.price}"></td>
         <td><img th:src="${product.imageUrl}" alt="img" width="100px"></td>
+        <td th:text="${product.categoryName}"></td>
         <td>
           <form>
             <button type="button" th:onclick="|location.href='@{/admin/edit/{id}(id=${product.id})}'|">Edit</button>

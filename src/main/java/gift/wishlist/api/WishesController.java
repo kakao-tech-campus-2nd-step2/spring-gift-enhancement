@@ -2,10 +2,7 @@ package gift.wishlist.api;
 
 import gift.member.validator.LoginMember;
 import gift.product.dto.ProductResponse;
-import gift.product.util.ProductMapper;
 import gift.wishlist.application.WishesService;
-import gift.wishlist.dto.WishRequest;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,14 +30,13 @@ public class WishesController {
                                                       sort = "id",
                                                       direction = Sort.Direction.DESC)
                                                 Pageable pageable) {
-        return wishesService.getWishlistOfMember(memberId, pageable)
-                .map(ProductMapper::toResponseDto);
+        return wishesService.getWishlistOfMember(memberId, pageable);
     }
 
-    @PostMapping
+    @PostMapping("/{productId}")
     public void addWish(@LoginMember Long memberId,
-                        @RequestBody @Valid WishRequest request) {
-        wishesService.addProductToWishlist(memberId, request.productId());
+                        @PathVariable("productId") Long productId) {
+        wishesService.addProductToWishlist(memberId, productId);
     }
 
     @DeleteMapping("/{productId}")

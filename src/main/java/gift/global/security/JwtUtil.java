@@ -1,7 +1,7 @@
-package gift.auth.security;
+package gift.global.security;
 
-import gift.error.CustomException;
-import gift.error.ErrorCode;
+import gift.global.error.CustomException;
+import gift.global.error.ErrorCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

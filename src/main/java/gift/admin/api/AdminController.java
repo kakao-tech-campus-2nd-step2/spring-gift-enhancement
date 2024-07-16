@@ -1,9 +1,9 @@
 package gift.admin.api;
 
-import gift.pagination.dto.PageResponse;
+import gift.category.api.CategoryController;
+import gift.global.pagination.dto.PageResponse;
 import gift.product.api.ProductController;
 import gift.product.dto.ProductResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,9 +20,11 @@ public class AdminController {
 
     private final ProductController productController;
 
-    @Autowired
-    public AdminController(ProductController productController) {
+    private final CategoryController categoryController;
+
+    public AdminController(ProductController productController, CategoryController categoryController) {
         this.productController = productController;
+        this.categoryController = categoryController;
     }
 
     // 상품 조회
@@ -42,7 +44,8 @@ public class AdminController {
 
     // 상품 추가 폼 표시
     @GetMapping("/add")
-    public String showAddProductForm() {
+    public String showAddProductForm(Model model) {
+        model.addAttribute("categoryList", categoryController.getAllCategories());
         return "product-add-form";
     }
 
@@ -50,6 +53,7 @@ public class AdminController {
     @GetMapping("/edit/{id}")
     public String updateProduct(Model model, @PathVariable("id") Long id) {
         model.addAttribute("product", productController.getProduct(id));
+        model.addAttribute("categoryList", categoryController.getAllCategories());
         return "product-edit-form";
     }
 
