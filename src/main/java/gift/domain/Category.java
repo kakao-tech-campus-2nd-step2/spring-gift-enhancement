@@ -19,6 +19,9 @@ public class Category {
         @NotNull
         private String name;
 
+        public CreateCategory() {
+        }
+
         public CreateCategory(String name) {
             this.name = name;
         }
@@ -30,7 +33,6 @@ public class Category {
         public void setName(String name) {
             this.name = name;
         }
-
     }
 
     public static class UpdateCategory {
