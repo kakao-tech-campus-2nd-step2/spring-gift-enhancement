@@ -18,6 +18,9 @@ public class ProductDto {
   @NotBlank
   private String imageUrl;
 
+  public  ProductDto(){
+  }
+
   public ProductDto(Long id, String name, int price, String imageUrl) {
     this.id = id;
     this.name = name;
