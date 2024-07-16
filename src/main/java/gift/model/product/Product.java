@@ -1,13 +1,14 @@
 package gift.model.product;
 
-import gift.model.wish.Wish;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "products")
 public class Product {
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +27,6 @@ public class Product {
     @Column(nullable = false)
     private  int amount;
 
-    @OneToMany(mappedBy = "product" , fetch = FetchType.LAZY)
-    private List<Wish> wishes;
-
     protected Product(){
     }
 
@@ -44,6 +42,10 @@ public class Product {
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
         this.amount = product.getAmount();
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public long getId() {

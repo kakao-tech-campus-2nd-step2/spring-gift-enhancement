@@ -1,6 +1,9 @@
 package gift.model.product;
 
+import gift.model.wish.Wish;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -9,8 +12,11 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String categoryName;
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Product> products;
 
     protected Category(){
     }
