@@ -11,25 +11,25 @@ import java.util.Objects;
 public class ProductPrice {
 
     @Column(name = "price")
-    private Long value;
+    private Long productPriceValue;
 
     public ProductPrice() {
     }
 
-    public ProductPrice(Long value) {
-        if (value < 0) {
+    public ProductPrice(Long productPriceValue) {
+        if (productPriceValue < 0) {
             throw new ProductValidException(ErrorCode.PRODUCT_PRICE_OUT_OF_RANGE_ERROR);
         }
-        this.value = value;
+        this.productPriceValue = productPriceValue;
     }
 
-    public Long getValue() {
-        return value;
+    public Long getProductPriceValue() {
+        return productPriceValue;
     }
 
     @Override
     public String toString() {
-        return Long.toString(value);
+        return Long.toString(productPriceValue);
     }
 
     @Override
@@ -37,11 +37,11 @@ public class ProductPrice {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductPrice that = (ProductPrice) o;
-        return Objects.equals(value, that.value);
+        return Objects.equals(productPriceValue, that.productPriceValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(productPriceValue);
     }
 }

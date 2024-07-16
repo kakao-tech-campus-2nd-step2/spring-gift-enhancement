@@ -14,35 +14,35 @@ public class ProductName {
     private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣 ()\\[\\]+\\-&/_]*$");
 
     @Column(name = "name")
-    private String value;
+    private String productNameValue;
 
     public ProductName() {
     }
 
-    public ProductName(String value) {
-        if (Objects.isNull(value)) {
+    public ProductName(String productNameValue) {
+        if (Objects.isNull(productNameValue)) {
             throw new ProductValidException(ErrorCode.PRODUCT_NAME_LENGTH_ERROR);
         }
 
-        value = value.trim();
+        productNameValue = productNameValue.trim();
 
-        if (value.isEmpty() || value.length() > MAX_LENGTH) {
+        if (productNameValue.isEmpty() || productNameValue.length() > MAX_LENGTH) {
             throw new ProductValidException(ErrorCode.PRODUCT_NAME_LENGTH_ERROR);
         }
 
-        if (!PATTERN.matcher(value).matches()) {
+        if (!PATTERN.matcher(productNameValue).matches()) {
             throw new ProductValidException(ErrorCode.PRODUCT_NAME_PATTER_ERROR);
         }
-        this.value = value;
+        this.productNameValue = productNameValue;
     }
 
-    public String getValue() {
-        return value;
+    public String getProductNameValue() {
+        return productNameValue;
     }
 
     @Override
     public String toString() {
-        return value;
+        return productNameValue;
     }
 
     @Override
@@ -50,11 +50,11 @@ public class ProductName {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductName that = (ProductName) o;
-        return Objects.equals(value, that.value);
+        return Objects.equals(productNameValue, that.productNameValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(productNameValue);
     }
 }

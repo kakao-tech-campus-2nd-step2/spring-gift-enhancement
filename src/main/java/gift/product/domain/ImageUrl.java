@@ -1,33 +1,30 @@
 package gift.product.domain;
 
-import gift.global.response.ErrorCode;
-import gift.product.exception.ProductValidException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 @Embeddable
 public class ImageUrl {
 
     @Column(name = "image_url")
-    private String value;
+    private String imageUrlValue;
 
     public ImageUrl() {
     }
 
-    public ImageUrl(String value) {
-        this.value = value;
+    public ImageUrl(String imageUrlValue) {
+        this.imageUrlValue = imageUrlValue;
     }
 
-    public String getValue() {
-        return value;
+    public String getImageUrlValue() {
+        return imageUrlValue;
     }
 
     @Override
     public String toString() {
-        return value;
+        return imageUrlValue;
     }
 
     @Override
@@ -35,11 +32,11 @@ public class ImageUrl {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImageUrl that = (ImageUrl) o;
-        return Objects.equals(value, that.value);
+        return Objects.equals(imageUrlValue, that.imageUrlValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(imageUrlValue);
     }
 }

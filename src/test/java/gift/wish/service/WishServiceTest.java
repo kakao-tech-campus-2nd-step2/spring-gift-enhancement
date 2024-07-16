@@ -144,7 +144,7 @@ class WishServiceTest {
 
         // then
         assertThat(updatedWish).isEqualTo(wishHasId);
-        assertThat(updatedWish.getProductCount().getValue()).isEqualTo(20L);
+        assertThat(updatedWish.getProductCount().getProductCountValue()).isEqualTo(20L);
 
         verify(wishRepository, times(1)).findByMemberIdAndProductId(anyLong(), anyLong());
         verify(wishRepository, times(1)).save(any(Wish.class));

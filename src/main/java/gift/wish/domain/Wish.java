@@ -72,6 +72,6 @@ public class Wish {
     }
 
     public void increaseProductCount(ProductCount productCount) {
-        this.productCount = new ProductCount(this.productCount.getValue() + productCount.getValue());
+        this.productCount = new ProductCount(this.productCount.getProductCountValue() + productCount.getProductCountValue());
     }
 }

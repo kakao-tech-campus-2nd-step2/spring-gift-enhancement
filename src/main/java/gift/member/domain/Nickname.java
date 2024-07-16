@@ -8,22 +8,22 @@ import java.util.Objects;
 @Embeddable
 public class Nickname {
     @Column(name = "nickname")
-    private String value;
+    private String nicknameValue;
 
     public Nickname() {
     }
 
-    public Nickname(String value) {
-        this.value = value;
+    public Nickname(String nicknameValue) {
+        this.nicknameValue = nicknameValue;
     }
 
-    public String getValue() {
-        return value;
+    public String getNicknameValue() {
+        return nicknameValue;
     }
 
     @Override
     public String toString() {
-        return value;
+        return nicknameValue;
     }
 
     @Override
@@ -31,11 +31,11 @@ public class Nickname {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Nickname that = (Nickname) o;
-        return Objects.equals(value, that.value);
+        return Objects.equals(nicknameValue, that.nicknameValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(nicknameValue);
     }
 }

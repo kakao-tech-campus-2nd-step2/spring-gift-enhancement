@@ -10,25 +10,25 @@ import java.util.Objects;
 @Embeddable
 public class ProductCount {
     @Column(name = "product_count")
-    private Long value;
+    private Long productCountValue;
 
     public ProductCount() {
     }
 
-    public ProductCount(Long value) {
-        if (value < 0) {
+    public ProductCount(Long productCountValue) {
+        if (productCountValue < 0) {
             throw new ProductValidException(ErrorCode.PRODUCT_COUNT_OUT_OF_RANGE_ERROR);
         }
-        this.value = value;
+        this.productCountValue = productCountValue;
     }
 
-    public Long getValue() {
-        return value;
+    public Long getProductCountValue() {
+        return productCountValue;
     }
 
     @Override
     public String toString() {
-        return Long.toString(value);
+        return Long.toString(productCountValue);
     }
 
     @Override
@@ -36,12 +36,12 @@ public class ProductCount {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductCount that = (ProductCount) o;
-        return Objects.equals(value, that.value);
+        return Objects.equals(productCountValue, that.productCountValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(productCountValue);
     }
 
 }
