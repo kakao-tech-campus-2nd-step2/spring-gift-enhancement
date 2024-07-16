@@ -49,13 +49,15 @@ function saveQuantity(event) {
   const name = row.querySelector('.productName').innerText;
   const price = row.querySelector('.productPrice').innerText;
   const image = row.querySelector('.productImage').querySelector('img').src;
+  const categoryName = row.querySelector('.productCategoryName').innerText;
 
   requestJson = {
     "id" : id,
     "name": name,
     "price": price,
     "imageUrl": image,
-    "quantity" : quantity
+    "quantity" : quantity,
+    "categoryName" : categoryName
   };
 
   $.ajax({
