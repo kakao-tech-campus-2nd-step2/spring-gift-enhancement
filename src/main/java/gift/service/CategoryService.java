@@ -52,4 +52,15 @@ public class CategoryService {
         category.updateCategory(categoryRequest);
         return CategoryResponse.from(category);
     }
+
+    @Transactional
+    public void deleteCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(CategoryNotFoundException::new);
+
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new CategoryNotFoundException();
+        }
+        categoryRepository.deleteById(categoryId);
+    }
 }
