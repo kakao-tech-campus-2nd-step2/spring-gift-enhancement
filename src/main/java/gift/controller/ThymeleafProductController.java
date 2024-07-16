@@ -30,12 +30,13 @@ public class ThymeleafProductController {
 
 
     // 새로운 상품을 추가하기 위한 폼을 만들고 모델에 추가
-    @GetMapping("/new")
-    public String createProductForm(Model model) {
-        Product product = new Product();
-        model.addAttribute("product", product);
-        return "create-product";
-    }
+    // 현재 기본 생성자를 protected 로 변경해둬서 어플리케이션 실행에 지장 없도록 해당 메서드 주석 처리
+//    @GetMapping("/new")
+//    public String createProductForm(Model model) {
+//        Product product = new Product();
+//        model.addAttribute("product", product);
+//        return "create-product";
+//    }
 
 
     // 유효성 검사 후 통과하면 새로운 상품 추가
