@@ -2,6 +2,7 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wish;
@@ -31,8 +32,9 @@ public class WishRepositoryTest {
     @Test
     @DisplayName("위시리스트 항목 추가 및 ID로 조회")
     public void testSaveAndFindById() {
+        Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product1", 100, "imageUrl1");
+        Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
 
         Wish wish = new Wish(null, member, product);
         Wish savedWish = wishRepository.save(wish);
@@ -46,9 +48,10 @@ public class WishRepositoryTest {
     @Test
     @DisplayName("모든 위시리스트 항목 조회 (페이지네이션 적용)")
     public void testFindAllByMemberIdWithPagination() {
+        Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         Member member = new Member(1L, "test@example.com", "password");
-        Product product1 = new Product(1L, "Product1", 100, "imageUrl1");
-        Product product2 = new Product(2L, "Product2", 200, "imageUrl2");
+        Product product1 = new Product(1L, "Product1", 100, "imageUrl1", category);
+        Product product2 = new Product(2L, "Product2", 200, "imageUrl2", category);
 
         Wish wish1 = new Wish(null, member, product1);
         Wish wish2 = new Wish(null, member, product2);
@@ -67,8 +70,9 @@ public class WishRepositoryTest {
     @Test
     @DisplayName("위시리스트 항목 삭제")
     public void testDeleteById() {
+        Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product1", 100, "imageUrl1");
+        Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
 
         Wish wish = new Wish(null, member, product);
         Wish savedWish = wishRepository.save(wish);
@@ -82,8 +86,9 @@ public class WishRepositoryTest {
     @Test
     @DisplayName("회원 ID와 상품 ID로 위시리스트 항목 존재 여부 확인")
     public void testExistsByMemberIdAndProductId() {
+        Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product1", 100, "imageUrl1");
+        Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
 
         Wish wish = new Wish(null, member, product);
         wishRepository.save(wish);

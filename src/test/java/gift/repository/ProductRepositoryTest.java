@@ -2,6 +2,7 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.model.Category;
 import gift.model.Product;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -17,15 +18,21 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("상품 저장 및 ID로 조회")
     public void testSaveAndFindById() {
-        Product product = new Product(null, "Test Product", 100, "test.jpg");
+        Category category = new Category("Test Category", "#000000", "imageUrl", "description");
+        categoryRepository.save(category);
+        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
         Product savedProduct = productRepository.save(product);
         Optional<Product> foundProduct = productRepository.findById(savedProduct.getId());
 
         assertThat(foundProduct).isPresent();
         assertThat(foundProduct.get().getName()).isEqualTo("Test Product");
+        assertThat(foundProduct.get().getCategoryName()).isEqualTo("Test Category");
     }
 
     @Test
@@ -33,8 +40,11 @@ public class ProductRepositoryTest {
     public void testFindAll() {
         long initialCount = productRepository.count();
 
-        Product product1 = new Product(null, "Product 1", 100, "prod1.jpg");
-        Product product2 = new Product(null, "Product 2", 200, "prod2.jpg");
+        Category category = new Category("Test Category", "#000000", "imageUrl", "description");
+        categoryRepository.save(category);
+
+        Product product1 = new Product(null, "Product 1", 100, "prod1.jpg", category);
+        Product product2 = new Product(null, "Product 2", 200, "prod2.jpg", category);
 
         productRepository.save(product1);
         productRepository.save(product2);
@@ -46,7 +56,9 @@ public class ProductRepositoryTest {
     @Test
     @DisplayName("상품 삭제")
     public void testDelete() {
-        Product product = new Product(null, "Test Product", 100, "test.jpg");
+        Category category = new Category("Test Category", "#000000", "imageUrl", "description");
+        categoryRepository.save(category);
+        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
         Product savedProduct = productRepository.save(product);
 
         productRepository.deleteById(savedProduct.getId());

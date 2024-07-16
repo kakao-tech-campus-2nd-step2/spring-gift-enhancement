@@ -26,7 +26,7 @@ public class ProductRequestTest {
     @Test
     @DisplayName("유효한 상품 추가")
     public void testAddProductValid() {
-        ProductRequest productDTO = new ProductRequest(null, "Valid Name", 100, "valid.jpg");
+        ProductRequest productDTO = new ProductRequest(null, "Valid Name", 100, "valid.jpg", 1L);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(productDTO);
 
@@ -36,7 +36,7 @@ public class ProductRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이름")
     public void testAddProductNameMissing() {
-        ProductRequest productDTO = new ProductRequest(null, null, 100, "valid.jpg");
+        ProductRequest productDTO = new ProductRequest(null, null, 100, "valid.jpg", 1L);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(productDTO);
 
@@ -50,7 +50,7 @@ public class ProductRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 가격")
     public void testAddProductPriceMissing() {
-        ProductRequest productDTO = new ProductRequest(null, "Valid Name", null, "valid.jpg");
+        ProductRequest productDTO = new ProductRequest(null, "Valid Name", null, "valid.jpg", 1L);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(productDTO);
 
@@ -64,7 +64,7 @@ public class ProductRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이미지 URL")
     public void testAddProductImageUrlMissing() {
-        ProductRequest productDTO = new ProductRequest(null, "Valid Name", 100, null);
+        ProductRequest productDTO = new ProductRequest(null, "Valid Name", 100, null, 1L);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(productDTO);
 
