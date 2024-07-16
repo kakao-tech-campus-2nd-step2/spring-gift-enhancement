@@ -44,7 +44,8 @@ public class ProductService {
         Product product = productJpaRepository.findById(productId)
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
 
-        product.updateInfo(productDto.name(), productDto.price(), productDto.imageUrl());
+        Category category = categoryService.readById(productDto.categoryId());
+        product.updateInfo(category, productDto.name(), productDto.price(), productDto.imageUrl());
         return productJpaRepository.save(product);
     }
 

@@ -65,7 +65,8 @@ public class Product {
         return imageUrl;
     }
 
-    public void updateInfo(String name, int price, String imageUrl) {
+    public void updateInfo(Category category, String name, int price, String imageUrl) {
+        this.category = category;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
