@@ -2,7 +2,9 @@ package gift.service;
 
 import gift.constants.ErrorMessage;
 import gift.dto.ProductDto;
+import gift.entity.Category;
 import gift.entity.Product;
+import gift.repository.CategoryJpaDao;
 import gift.repository.ProductJpaDao;
 import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
@@ -14,22 +16,26 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductJpaDao productJpaDao;
+    private final CategoryJpaDao categoryJpaDao;
 
-    public ProductService(ProductJpaDao productJpaDao) {
+    public ProductService(ProductJpaDao productJpaDao, CategoryJpaDao categoryJpaDao) {
         this.productJpaDao = productJpaDao;
+        this.categoryJpaDao = categoryJpaDao;
     }
 
     /**
      * 새 상품을 저장. 이미 존재하면 IllegalArgumentException
      *
-     * @param product
+     * @param productDto
      */
-    public void addProduct(ProductDto product) {
-        productJpaDao.findByName(product.getName())
+    public void addProduct(ProductDto productDto) {
+        productJpaDao.findByName(productDto.getName())
             .ifPresent(v -> {
                 throw new IllegalArgumentException(ErrorMessage.PRODUCT_ALREADY_EXISTS_MSG);
             });
-        productJpaDao.save(new Product(product));
+        Category category = categoryJpaDao.findById(productDto.getCategoryId())
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
+        productJpaDao.save(new Product(productDto, category));
     }
 
     /**
@@ -41,7 +47,9 @@ public class ProductService {
     public void editProduct(ProductDto product) {
         Product targetProduct = productJpaDao.findById(product.getId())
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
-        targetProduct.updateProduct(product);
+        Category category = categoryJpaDao.findById(product.getCategoryId())
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
+        targetProduct.updateProduct(product, category);
     }
 
     /**

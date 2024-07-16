@@ -27,18 +27,28 @@ public class ProductDto {
 
     private String imageUrl;
 
+    @NotNull
+    private Long categoryId;
+
+    @NotBlank
+    private String categoryName;
+
     protected ProductDto() {
     }
 
-    public ProductDto(Long id, String name, long price, String imageUrl) {
+    public ProductDto(Long id, String name, long price, String imageUrl, Long categoryId,
+        String categoryName) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 
     public ProductDto(Product p) {
-        this(p.getId(), p.getName(), p.getPrice(), p.getImageUrl());
+        this(p.getId(), p.getName(), p.getPrice(), p.getImageUrl(), p.getCategory().getId(),
+            p.getCategory().getName());
     }
 
     public Long getId() {
@@ -55,5 +65,13 @@ public class ProductDto {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
     }
 }

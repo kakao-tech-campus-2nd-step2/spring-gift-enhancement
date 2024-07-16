@@ -6,6 +6,7 @@ import gift.entity.Category;
 import gift.repository.CategoryJpaDao;
 import gift.repository.ProductJpaDao;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,15 @@ public class CategoryService {
      */
     public Page<CategoryDto> getCategoryPage(Pageable pageable) {
         return categoryJpaDao.findAll(pageable).map(CategoryDto::new);
+    }
+
+    /**
+     * 카테고리 전체 목록을 리스트로 반환.
+     *
+     * @return List
+     */
+    public List<CategoryDto> getCategoryList() {
+        return categoryJpaDao.findAll().stream().map(CategoryDto::new).toList();
     }
 
     /**

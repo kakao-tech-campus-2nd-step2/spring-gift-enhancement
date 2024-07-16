@@ -2,6 +2,7 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.entity.Category;
 import gift.entity.Member;
 import gift.entity.Product;
 import gift.entity.Wishlist;
@@ -23,11 +24,16 @@ class WishlistJpaDaoTest {
     ProductJpaDao productJpaDao;
     @Autowired
     WishlistJpaDao wishlistJpaDao;
+    @Autowired
+    CategoryJpaDao categoryJpaDao;
 
 
     Wishlist generateWishlist() {
+        Category category = new Category("음식", "Red", "http", "description");
+        categoryJpaDao.save(category);
+
         Member member = new Member("sgoh", "pass");
-        Product product = new Product("coffee", 4500L, "http");
+        Product product = new Product("coffee", 4500L, "http", category);
         Wishlist wishlist = new Wishlist(member, product);
 
         member.getWishlist().add(wishlist);

@@ -31,6 +31,15 @@
             <input type="text" id="imageUrl" name="imageUrl" class="form-control"
                    placeholder="사진 URL을 입력하세요">
         </div>
+        <div class="py-3">
+            <label for="category">카테고리</label>
+            <select id="category">
+                <option value="" disabled selected>==카테고리 선택==</option>
+                <option th:each="category:${categories}" th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+        </div>
 
         <hr>
         <div class="row">

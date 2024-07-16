@@ -1,50 +1,3 @@
-INSERT INTO Product(id, name, price, image_url) VALUES(
-    1,
-    '씨솔트 카라멜 콜드 브루',
-    8000,
-    'https://image.istarbucks.co.kr/upload/store/skuimg/2024/04/[9200000004544]_20240423124241716.jpg'
-);
-
-INSERT INTO Product(id, name, price, image_url) VALUES(
-    2,
-    '돌체 콜드 브루',
-    5000,
-    'https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[9200000002081]_20210415133656839.jpg'
-);
-
-INSERT INTO Product(id, name, price, image_url) VALUES(
-    3,
-    '나이트로 바닐라 크림',
-    7000,
-    'https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[9200000002487]_20210426091745467.jpg'
-);
-
-INSERT INTO Product(id, name, price, image_url) VALUES(
-    4,
-    '리저브 나이트로',
-    6500,
-    'https://image.istarbucks.co.kr/upload/store/skuimg/2021/02/[9200000002407]_20210225095106743.jpg'
-);
-
-
-INSERT INTO Product(id, name, price, image_url) VALUES(
-    5,
-    '여수 윤슬 헤이즐넛 콜드브루',
-    7500,
-    'https://image.istarbucks.co.kr/upload/store/skuimg/2023/08/[9200000004750]_20230801101408624.jpg'
-);
-
-INSERT INTO Product(id, name, price, image_url) VALUES(
-    6,
-    '콜드 브루',
-    4500,
-    'https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[9200000000038]_20210430113202458.jpg'
-);
-
-
-INSERT INTO Member(email, password) VALUES('admin', 'admin');
-INSERT INTO Member(email, password) VALUES('root', 'root');
-
 INSERT INTO Category(name, color, image_url, description)
 VALUES('교환권', '갈색', 'https...', '커피 카테고리입니다.');
 
@@ -83,3 +36,52 @@ VALUES('트렌드 선물', '갈색', 'https...', '트렌드 선물 카테고리�
 
 INSERT INTO Category(name, color, image_url, description)
 VALUES('백화점', '갈색', 'https...', '백화점 카테고리입니다.');
+
+INSERT INTO Product(name, price, image_url, category) VALUES(
+    '씨솔트 카라멜 콜드 브루',
+    8000,
+    'https://image.istarbucks.co.kr/upload/store/skuimg/2024/04/[9200000004544]_20240423124241716.jpg',
+    1
+);
+
+INSERT INTO Product(name, price, image_url, category) VALUES(
+    '돌체 콜드 브루',
+    5000,
+    'https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[9200000002081]_20210415133656839.jpg',
+    3
+);
+
+INSERT INTO Product(name, price, image_url, category) VALUES(
+    '나이트로 바닐라 크림',
+    7000,
+    'https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[9200000002487]_20210426091745467.jpg',
+    2
+);
+
+INSERT INTO Product(name, price, image_url, category) VALUES(
+    '리저브 나이트로',
+    6500,
+    'https://image.istarbucks.co.kr/upload/store/skuimg/2021/02/[9200000002407]_20210225095106743.jpg',
+    4
+);
+
+
+INSERT INTO Product(name, price, image_url, category) VALUES(
+    '여수 윤슬 헤이즐넛 콜드브루',
+    7500,
+    'https://image.istarbucks.co.kr/upload/store/skuimg/2023/08/[9200000004750]_20230801101408624.jpg',
+    5
+);
+
+INSERT INTO Product(name, price, image_url, category) VALUES(
+    '콜드 브루',
+    4500,
+    'https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[9200000000038]_20210430113202458.jpg',
+    6
+);
+
+
+INSERT INTO Member(email, password) VALUES('admin', 'admin');
+INSERT INTO Member(email, password) VALUES('root', 'root');
+
+

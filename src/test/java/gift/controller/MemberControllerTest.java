@@ -24,6 +24,22 @@ class MemberControllerTest {
 
     private @Autowired MockMvc mockMvc;
 
+    private final String member = """
+        {"email": "sgoh", "password": "sgohpass"}
+        """;
+    private final String product = """
+        {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
+        """;
+    private final String category = """ 
+        {"name": "음식", "color": "Red", "imageUrl": "http", "description": "description"}
+        """;
+
+    void addCategory(String category) throws Exception {
+        mockMvc.perform(post("/api/categories")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(category));
+    }
+
     void registerMember(String member) throws Exception {
         mockMvc.perform(post("/api/members/register")
             .contentType(MediaType.APPLICATION_JSON)
@@ -46,9 +62,6 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원가입 테스트")
     void registerMember() throws Exception {
-        String member = """
-            {"email": "sgoh", "password": "sgohpass"}
-            """;
         mockMvc.perform(post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(member))
@@ -58,9 +71,6 @@ class MemberControllerTest {
     @Test
     @DisplayName("로그인 테스트")
     void login() throws Exception {
-        String member = """
-            {"email": "sgoh", "password": "sgohpass"}
-            """;
         registerMember(member);
 
         mockMvc.perform(post("/api/members/login")
@@ -72,24 +82,8 @@ class MemberControllerTest {
     @Test
     @DisplayName("위시 리스트 목록 테스트")
     void wishlist() throws Exception {
-        String member = """
-            {"email": "sgoh", "password": "sgohpass"}
-            """;
-        String product = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://..."}
-            """;
-        String product2 = """
-            {"name": "커피2", "price": 5500,"imageUrl": "https://..."}
-            """;
         registerMember(member);
-        addProduct(product);
-        addProduct(product2);
         String token = loginAndGetToken(member);
-
-        mockMvc.perform(post("/api/members/wishlist/1")
-            .header("Authorization", "Bearer " + token));
-        mockMvc.perform(post("/api/members/wishlist/2")
-            .header("Authorization", "Bearer " + token));
 
         mockMvc.perform(get("/api/members/wishlist")
                 .header("Authorization", "Bearer " + token))
@@ -99,12 +93,7 @@ class MemberControllerTest {
     @Test
     @DisplayName("위시 리스트 추가 테스트")
     void addWishlist() throws Exception {
-        String member = """
-            {"email": "sgoh", "password": "sgohpass"}
-            """;
-        String product = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://..."}
-            """;
+        addCategory(category);
         registerMember(member);
         addProduct(product);
         String token = loginAndGetToken(member);
@@ -117,12 +106,7 @@ class MemberControllerTest {
     @Test
     @DisplayName("위시 리스트 삭제 테스트")
     void deleteWishlist() throws Exception {
-        String member = """
-            {"email": "sgoh", "password": "sgohpass"}
-            """;
-        String product = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://..."}
-            """;
+        addCategory(category);
         registerMember(member);
         addProduct(product);
         String token = loginAndGetToken(member);
