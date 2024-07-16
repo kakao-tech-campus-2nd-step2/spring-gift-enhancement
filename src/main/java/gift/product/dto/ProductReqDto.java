@@ -1,10 +1,14 @@
 package gift.product.dto;
 
+import gift.option.dto.OptionReqDto;
 import gift.product.entity.Product;
 import gift.product.message.ProductInfo;
 import gift.product.validation.ValidProductName;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.util.List;
 
 public record ProductReqDto(
 
@@ -21,7 +25,11 @@ public record ProductReqDto(
         String imageUrl,
 
         @NotBlank(message = ProductInfo.PRODUCT_CATEGORY_REQUIRED)
-        String category
+        String category,
+
+        @Size(min = 1, message = "상품 옵션은 최소 1개 이상 입력해야 합니다.")
+        @Valid
+        List<OptionReqDto> options
 ) {
 
     public Product toEntity() {
