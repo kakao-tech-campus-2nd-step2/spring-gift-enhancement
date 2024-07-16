@@ -78,6 +78,8 @@
           <h2 th:text="${product.name}">상품 이름</h2>
           <p>상품 ID: <span th:text="${product.id}">1</span></p>
           <p>가격: <span th:text="${product.price}">10000</span>원</p>
+          <p>분류: <span th:text="${product.category.name}">카테고리</span></p>
+
         </div>
 
         <div class="product-actions">
