@@ -48,4 +48,16 @@ public class Category {
     public String getName() {
         return name;
     }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
