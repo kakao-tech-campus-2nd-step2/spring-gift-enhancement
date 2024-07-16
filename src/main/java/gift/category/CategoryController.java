@@ -25,4 +25,5 @@ public class CategoryController {
         return ResponseEntity.ok()
             .body(PageResponseDto.of(categoryService.getAllCategories(pageable), pageable));
     }
+
 }

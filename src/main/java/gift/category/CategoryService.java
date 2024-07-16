@@ -18,4 +18,10 @@ public class CategoryService {
             .map(CategoryResponseDto::from)
             .getContent();
     }
+
+    public CategoryResponseDto getCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Category 가 잘못되었습니다."));
+        return CategoryResponseDto.from(category);
+    }
 }
