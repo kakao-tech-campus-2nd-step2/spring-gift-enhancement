@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductJpaRepository extends JpaRepository<Product, Long> {
 
-    @Query("select distinct p from Product p join fetch p.category")
+    @Query("select p from Product p join fetch p.category")
     List<Product> findAll();
 }

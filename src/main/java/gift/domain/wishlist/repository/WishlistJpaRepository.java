@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WishlistJpaRepository extends JpaRepository<WishItem, Long> {
 
-    @Query("select distinct w from WishItem w join fetch w.user u join fetch w.product p where u.id = :userId")
+    @Query("select w from WishItem w join fetch w.user u join fetch w.product p where u.id = :userId")
     Page<WishItem> findAllByUserId(@Param("userId") Long userId, Pageable pageable);
 
     @Query("delete from WishItem w where w.user.id = :userId")
