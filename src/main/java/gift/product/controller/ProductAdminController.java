@@ -1,8 +1,8 @@
 package gift.product.controller;
 
 import gift.product.model.dto.CreateProductAdminRequest;
-import gift.product.model.dto.CreateProductRequest;
 import gift.product.model.dto.UpdateProductRequest;
+import gift.product.service.ProductAdminService;
 import gift.product.service.ProductService;
 import gift.user.model.dto.AppUser;
 import gift.user.resolver.LoginUser;
@@ -23,23 +23,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductAdminController {
 
     private final ProductService productService;
+    private final ProductAdminService productAdminService;
     private final UserService userService;
 
-    public ProductAdminController(ProductService productService, UserService userService) {
+    public ProductAdminController(ProductService productService, ProductAdminService productAdminService,
+                                  UserService userService) {
         this.productService = productService;
+        this.productAdminService = productAdminService;
         this.userService = userService;
     }
 
     @PostMapping
     public ResponseEntity<String> addProductForAdmin(@LoginUser AppUser loginAppUser,
-                                                     @Valid @RequestBody CreateProductAdminRequest createProductRequest) {
+                                                     @Valid @RequestBody CreateProductAdminRequest createProductAdminRequest) {
         userService.verifyAdminAccess(loginAppUser);
-        CreateProductRequest req = new CreateProductRequest(createProductRequest.name(), createProductRequest.price(),
-                createProductRequest.imageUrl());
-
-        AppUser seller = userService.findUser(createProductRequest.sellerId());
-
-        productService.addProduct(seller, req);
+        productAdminService.addProduct(createProductAdminRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("ok");
     }
 

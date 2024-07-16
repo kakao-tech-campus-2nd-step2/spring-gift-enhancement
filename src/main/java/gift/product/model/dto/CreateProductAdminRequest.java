@@ -24,7 +24,7 @@ public record CreateProductAdminRequest(
 
         @NotNull
         Long sellerId,
-        
+
         @NotNull
         Long categoryId
 ) {

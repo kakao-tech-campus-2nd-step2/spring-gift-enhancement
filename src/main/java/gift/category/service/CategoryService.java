@@ -56,4 +56,10 @@ public class CategoryService {
         category.setActive(false);
         categoryRepository.save(category);
     }
+
+    @Transactional(readOnly = true)
+    public Category getCategory(Long id) {
+        Optional<Category> categoryOptional = categoryRepository.findByIdAndIsActiveTrue(id);
+        return categoryOptional.orElseThrow(() -> new EntityNotFoundException("Category"));
+    }
 }
