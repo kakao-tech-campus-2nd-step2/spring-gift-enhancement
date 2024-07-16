@@ -13,4 +13,5 @@ public class DatabaseConfig {
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
+    // 재사용성과 용의성을 위해 따로 관리.
 }
