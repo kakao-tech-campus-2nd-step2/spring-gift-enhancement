@@ -20,6 +20,12 @@
         <input type="text" th:field="*{imageUrl}" />
     </div>
     <div>
+        <label>Category:</label>
+        <select th:field="*{categoryName}">
+            <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+        </select>
+    </div>
+    <div>
         <button type="submit">Save</button>
     </div>
 </form>
