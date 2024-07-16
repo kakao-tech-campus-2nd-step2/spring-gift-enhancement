@@ -1,8 +1,7 @@
 package gift.dto;
 
-
+import gift.entity.Category;
 import gift.entity.Product;
-import gift.exception.BadRequestExceptions.BadRequestException;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
-public record ProductDTO(
+public record ProductRequestDTO(
         Long id,
 
         @NotBlank(message = "상품 이름을 입력해주세요.")
@@ -29,11 +28,12 @@ public record ProductDTO(
         @URL(message = "URL 형식이 아닙니다.")
         String imageUrl,
 
-        @NotNull(message = "카테고리를 입력해주세요")
-        CategoryDTO categoryDTO) {
-
-    public static ProductDTO convertToProductDTO(Product product) throws BadRequestException {
-        return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
-                product.getImageUrl(), CategoryDTO.convertToCategoryDTO(product.getCategory()));
+        @NotBlank(message = "카테고리 이름을 입력해주세요.")
+        @Length(min = 1, max = 15, message = "카테고리명 길이는 1~15자만 가능합니다.")
+        String categoryName
+) {
+    public Product convertToProduct(Category category) {
+        return new Product(this.name, this.price, this.imageUrl, category);
     }
+
 }
