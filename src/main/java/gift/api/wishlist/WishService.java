@@ -4,7 +4,7 @@ import gift.api.member.Member;
 import gift.api.member.MemberRepository;
 import gift.api.product.Product;
 import gift.api.product.ProductRepository;
-import gift.global.exception.NoSuchIdException;
+import gift.global.exception.NoSuchEntityException;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +31,7 @@ public class WishService {
 
     public List<Wish> getItems(Long memberId, Pageable pageable) {
         Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new NoSuchIdException("member"));
+            .orElseThrow(() -> new NoSuchEntityException("member"));
         Page<Wish> allWishes = wishRepository.findAllByMember(member, createPageableWithProduct(pageable));
         return allWishes.hasContent() ? allWishes.getContent() : Collections.emptyList();
     }
@@ -46,16 +46,16 @@ public class WishService {
 
     public void add(Long memberId, WishRequest wishRequest) {
         Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new NoSuchIdException("member"));
+            .orElseThrow(() -> new NoSuchEntityException("member"));
         Product product = productRepository.findById(wishRequest.productId())
-            .orElseThrow(() -> new NoSuchIdException("product"));
+            .orElseThrow(() -> new NoSuchEntityException("product"));
         wishRepository.save(new Wish(member, product, wishRequest.quantity()));
     }
 
     @Transactional
     public void update(Long memberId, WishRequest wishRequest) {
         Wish wish = wishRepository.findById(new WishId(memberId, wishRequest.productId()))
-            .orElseThrow(() -> new NoSuchIdException("wish"));
+            .orElseThrow(() -> new NoSuchEntityException("wish"));
         wish.updateQuantity(wishRequest.quantity());
     }
 
