@@ -14,6 +14,7 @@ import java.util.Date;
 // Jwt를 생성하고 검증하는데 사용.
 @Component
 public class JwtUtil {
+
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
 

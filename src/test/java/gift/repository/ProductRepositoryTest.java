@@ -1,7 +1,9 @@
 package gift.repository;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.junit.jupiter.api.Assertions.*;
 
+import gift.entity.Category;
 import gift.entity.Product;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +23,8 @@ class ProductRepositoryTest {
     @Test
     void save() {
         //given
-        Product expected = new Product("product", 100, "image.jpg");
+        Category category = new Category("카테고리");
+        Product expected = new Product("product", 100, "image.jpg", category);
 
         //when
         Product actual = productRepository.save(expected);
@@ -31,15 +34,18 @@ class ProductRepositoryTest {
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getName()).isEqualTo("product"),
             () -> assertThat(actual.getPrice()).isEqualTo(100),
-            () -> assertThat(actual.getImageUrl()).isEqualTo("image.jpg")
+            () -> assertThat(actual.getImageUrl()).isEqualTo("image.jpg"),
+            () -> assertThat(actual.getCategory()).isEqualTo(category)
         );
     }
 
     @Test
     void findAll() {
         //given
-        Product expected = new Product("product", 100, "image.jpg");
-        Product expected1 = new Product("product1", 1000, "image1.jpg");
+        Category category1 = new Category("카테고리1");
+        Category category2 = new Category("카테고리2");
+        Product expected = new Product("product", 100, "image.jpg", category1);
+        Product expected1 = new Product("product1", 1000, "image1.jpg", category2);
         productRepository.save(expected);
         productRepository.save(expected1);
 
@@ -58,7 +64,8 @@ class ProductRepositoryTest {
     @Test
     void findById() {
         //given
-        Product expected = new Product("product", 100, "image.jpg");
+        Category category = new Category("카테고리");
+        Product expected = new Product("product", 100, "image.jpg", category);
         productRepository.save(expected);
 
         //when
@@ -66,11 +73,11 @@ class ProductRepositoryTest {
 
         //then
         assertAll(
-            ()->assertThat(actual).isPresent(),
+            () -> assertThat(actual).isPresent(),
             () -> assertThat(actual.get().getName()).isEqualTo("product"),
             () -> assertThat(actual.get().getPrice()).isEqualTo(100),
-            () -> assertThat(actual.get().getImageUrl()).isEqualTo("image.jpg")
-
+            () -> assertThat(actual.get().getImageUrl()).isEqualTo("image.jpg"),
+            () -> assertThat(actual.get().getCategory()).isEqualTo(category)
         );
 
     }
@@ -78,12 +85,14 @@ class ProductRepositoryTest {
     @Test
     void update() {
         //given
-        Product expected = new Product("product", 100, "image.jpg");
+        Category category = new Category("카테고리");
+        Product expected = new Product("product", 100, "image.jpg",category);
         Product updateProduct = productRepository.save(expected);
         Product productFromDB = productRepository.findById(updateProduct.getId()).get();
         expected.setName("updated");
         expected.setPrice(1000);
         expected.setImageUrl("updatedImage.jpg");
+        expected.setCategory(new Category("category"));
 
         //when
         Product actual = productRepository.save(productFromDB);
@@ -93,15 +102,16 @@ class ProductRepositoryTest {
             () -> assertThat(actual.getId()).isEqualTo(updateProduct.getId()),
             () -> assertThat(actual.getName()).isEqualTo("updated"),
             () -> assertThat(actual.getPrice()).isEqualTo(1000),
-            () -> assertThat(actual.getImageUrl()).isEqualTo("updatedImage.jpg")
-
+            () -> assertThat(actual.getImageUrl()).isEqualTo("updatedImage.jpg"),
+            ()->assertThat(actual.getCategory().getName()).isEqualTo("category")
         );
     }
 
     @Test
     void deleteById() {
         //given
-        Product product = new Product("product", 100, "image.jpg");
+        Category category = new Category("카테고리");
+        Product product = new Product("product", 100, "image.jpg",category);
         productRepository.save(product);
         Long id = product.getId();
 

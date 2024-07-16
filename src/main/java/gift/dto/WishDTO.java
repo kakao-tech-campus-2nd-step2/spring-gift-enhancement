@@ -26,7 +26,7 @@ public class WishDTO {
         return productId;
     }
 
-    public Wish toEntity(Member member,Product product){
-        return new Wish(member,product);
+    public Wish toEntity(Member member, Product product) {
+        return new Wish(member, product);
     }
 }
