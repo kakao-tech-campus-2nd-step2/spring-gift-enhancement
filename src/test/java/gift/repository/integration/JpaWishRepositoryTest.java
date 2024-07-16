@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.domain.User;
 import gift.domain.Wish;
+import gift.repository.JpaCategoryRepository;
 import gift.repository.JpaProductRepository;
 import gift.repository.JpaUserRepository;
 import gift.repository.JpaWishRepository;
@@ -29,6 +31,9 @@ class JpaWishRepositoryTest {
     private JpaUserRepository jpaUserRepository;
     @Autowired
     private JpaProductRepository jpaProductRepository;
+    @Autowired
+    private JpaCategoryRepository jpaCategoryRepository;
+
     private List<Long> userIdList = new ArrayList<>();
     private List<Wish> wishList;
 
@@ -51,12 +56,14 @@ class JpaWishRepositoryTest {
 
         userIdList.add(insertedUserId1);
         userIdList.add(insertedUserId2);
+        Category category = new Category("교환권", "#6c95d1", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "");
+        jpaCategoryRepository.save(category);
 
         List<Product> products = List.of(
-            new Product("사과", 12000, "www.naver.com"),
-            new Product("바나나", 15000, "www.daum.net"),
-            new Product("포도", 10000, "www.kakao.net"),
-            new Product("토마토", 5000, "www.kakao.com")
+            new Product("사과", 12000, "www.naver.com", category),
+            new Product("바나나", 15000, "www.daum.net", category),
+            new Product("포도", 10000, "www.kakao.net", category),
+            new Product("토마토", 5000, "www.kakao.com", category)
         );
 
         jpaProductRepository.saveAll(products);
