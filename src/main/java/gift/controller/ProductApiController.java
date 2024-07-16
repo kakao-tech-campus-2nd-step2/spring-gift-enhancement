@@ -58,7 +58,7 @@ public class ProductApiController {
             throw new InputException(bindingResult.getAllErrors());
         }
 
-        productService.addProduct(dto.name(), dto.price(), dto.imageUrl());
+        productService.addProduct(dto.name(), dto.price(), dto.imageUrl(), dto.categoryName());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -69,7 +69,8 @@ public class ProductApiController {
             throw new InputException(bindingResult.getAllErrors());
         }
 
-        productService.editProduct(dto.id(), dto.name(), dto.price(), dto.imageUrl());
+        productService.editProduct(dto.id(), dto.name(), dto.price(), dto.imageUrl(),
+            dto.categoryName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

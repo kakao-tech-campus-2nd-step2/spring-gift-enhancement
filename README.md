@@ -35,6 +35,7 @@
 - 상품에 카테고리 변경
 
 ### Controller
-#### CategoryController
-- 카테고리 관련 요청/응답
-  - 카테고리 자체 요청, 상품과 카테고리 복합 요청
+#### ProductApiController
+- 상품과 카테고리 복합 요청
+  - 상품 추가 시 카테고리 설정
+  - 상품의 카테고리 변경

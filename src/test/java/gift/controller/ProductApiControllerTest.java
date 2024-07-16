@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import gift.auth.JwtService;
 import gift.auth.JwtTokenProvider;
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.request.ProductAddRequest;
@@ -58,18 +60,23 @@ class ProductApiControllerTest {
     MemberRepository memberRepository;
 
     @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
     JwtTokenProvider jwtTokenProvider;
 
     Member member;
     String token;
     List<Product> savedProducts;
+    Category category;
 
     @BeforeEach
     void before() {
+        category = categoryRepository.save(new Category("카테고리"));
         List<Product> products = new ArrayList<>();
         IntStream.range(0, 10)
-            .forEach( i -> {
-                products.add(new Product("product"+i, 1000, "https://a.com"));
+            .forEach(i -> {
+                products.add(new Product("product" + i, 1000, "https://a.com", category));
             });
         savedProducts = productRepository.saveAll(products);
         member = memberService.join("aaa123@a.com", "1234");
@@ -80,6 +87,7 @@ class ProductApiControllerTest {
     void after() {
         memberRepository.delete(member);
         productRepository.deleteAll();
+        categoryRepository.deleteAll();
     }
 
     @Test
@@ -103,7 +111,7 @@ class ProductApiControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).hasSize(10);
         IntStream.range(0, 10)
-            .forEach( i -> {
+            .forEach(i -> {
                 ProductResponse pr = response.getBody().get(i);
                 assertThat(pr.id()).isEqualTo(savedProducts.get(i).getId());
                 assertThat(pr.name()).isEqualTo(savedProducts.get(i).getName());
@@ -120,7 +128,8 @@ class ProductApiControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-        ProductAddRequest productAddRequest = new ProductAddRequest("product11", 1500, "https://b.com");
+        ProductAddRequest productAddRequest = new ProductAddRequest("product11", 1500,
+            "https://b.com", "카테고리");
         RequestEntity<ProductAddRequest> request = new RequestEntity<>(
             productAddRequest, headers, HttpMethod.POST, URI.create(url));
 
@@ -139,7 +148,8 @@ class ProductApiControllerTest {
         headers.setBearerAuth(token);
 
         //기존 첫번째 상품을 변경한다.
-        ProductUpdateRequest ProductUpdateRequest = new ProductUpdateRequest(savedProducts.get(0).getId(), "product11", 1500, "https://b.com");
+        ProductUpdateRequest ProductUpdateRequest = new ProductUpdateRequest(
+            savedProducts.get(0).getId(), "product11", 1500, "https://b.com", "카테고리");
         RequestEntity<ProductUpdateRequest> request = new RequestEntity<>(
             ProductUpdateRequest, headers, HttpMethod.PUT, URI.create(url));
 
@@ -166,7 +176,7 @@ class ProductApiControllerTest {
 
         //기존 첫번째 상품을 삭제한다.
         RequestEntity<Void> request = new RequestEntity<>(
-             headers, HttpMethod.DELETE, uri);
+            headers, HttpMethod.DELETE, uri);
 
         //when
         ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);

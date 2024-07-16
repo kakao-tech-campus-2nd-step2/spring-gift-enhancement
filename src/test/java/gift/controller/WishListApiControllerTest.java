@@ -3,9 +3,11 @@ package gift.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.auth.JwtTokenProvider;
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wish;
+import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
@@ -55,18 +57,23 @@ class WishListApiControllerTest {
     MemberRepository memberRepository;
 
     @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
     JwtTokenProvider jwtTokenProvider;
 
     Member member;
     String token;
     List<Product> savedProducts;
+    Category category;
 
     @BeforeEach
     void before() {
+        category = categoryRepository.save(new Category("카테고리"));
         List<Product> products = new ArrayList<>();
         IntStream.range(0, 10)
-            .forEach( i -> {
-                products.add(new Product("product"+i, 1000, "https://a.com"));
+            .forEach(i -> {
+                products.add(new Product("product" + i, 1000, "https://a.com", category));
             });
         savedProducts = productRepository.saveAll(products);
 
@@ -84,6 +91,7 @@ class WishListApiControllerTest {
         wishRepository.deleteAll();
         memberRepository.delete(member);
         productRepository.deleteAll();
+        categoryRepository.deleteAll();
     }
 
     @Test
@@ -107,7 +115,7 @@ class WishListApiControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).hasSize(10);
         IntStream.range(0, 10)
-            .forEach( i -> {
+            .forEach(i -> {
                 ProductResponse pr = response.getBody().get(i);
                 assertThat(pr.id()).isEqualTo(savedProducts.get(i).getId());
                 assertThat(pr.name()).isEqualTo(savedProducts.get(i).getName());
@@ -120,7 +128,7 @@ class WishListApiControllerTest {
     @Test
     @DisplayName("위시 리스트 추가 성공 테스트")
     void addMyWish() {
-        Product saved = productRepository.save(new Product("product11", 1000, "https://a.com"));
+        Product saved = productRepository.save(new Product("product11", 1000, "https://a.com", category));
         ResponseEntity<Void> response = addAndRemoveTest(saved.getId(), HttpMethod.POST);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
@@ -128,7 +136,8 @@ class WishListApiControllerTest {
     @Test
     @DisplayName("위시 리스트 추가 실패 테스트")
     void failAddMyWish() {
-        ResponseEntity<Void> response = addAndRemoveTest(savedProducts.get(0).getId(), HttpMethod.POST);
+        ResponseEntity<Void> response = addAndRemoveTest(savedProducts.get(0).getId(),
+            HttpMethod.POST);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
@@ -150,16 +159,11 @@ class WishListApiControllerTest {
     }
 
 
-
-
-
-
     private ResponseEntity<Void> addAndRemoveTest(Long productId, HttpMethod httpMethod) {
         //given
         String url = "http://localhost:" + port + "/api/wishlist";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
-
 
         WishListRequest wishListRequest = new WishListRequest(productId);
 

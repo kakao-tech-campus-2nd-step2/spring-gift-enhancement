@@ -18,7 +18,9 @@ public record ProductAddRequest(
     Integer price,
     @NotBlank(message = "이미지 주소를 입력해주세요.")
     @Pattern(regexp = "^(https?)://[^ /$.?#].[^ ]*$", message = "올바른 url이 아닙니다.")
-    String imageUrl
+    String imageUrl,
+    @NotBlank(message = "카테고리를 입력해주세요.")
+    String categoryName
 ) {
 
 }
