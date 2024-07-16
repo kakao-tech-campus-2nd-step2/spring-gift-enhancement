@@ -8,6 +8,7 @@ public class CategoryDto {
   private String imageUrl;
   private String description;
 
+  // Constructors, Getters, and Setters
   public CategoryDto() {
   }
 

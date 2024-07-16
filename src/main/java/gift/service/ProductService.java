@@ -16,7 +16,6 @@ import java.util.Optional;
 public class ProductService {
   private final ProductRepository productRepository;
 
-  @Autowired
   public ProductService(ProductRepository productRepository) {
     this.productRepository = productRepository;
   }
@@ -34,6 +33,10 @@ public class ProductService {
     Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
     Product savedProduct = productRepository.save(product);
     return convertToDto(savedProduct);
+  }
+
+  public Product saveProduct(Product product) {
+    return productRepository.save(product);
   }
 
   public boolean updateProduct(Long id, ProductDto productDetails) {

@@ -3,35 +3,37 @@ package gift.service;
 import gift.model.Category;
 import gift.model.CategoryDto;
 import gift.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
 
-  @Autowired
-  private CategoryRepository categoryRepository;
+  private final CategoryRepository categoryRepository;
 
-  public CategoryDto saveCategory(CategoryDto categoryDto) {
-    Category category = convertToEntity(categoryDto);
-    Category savedCategory = categoryRepository.save(category);
-    return convertToDto(savedCategory);
+  public CategoryService(CategoryRepository categoryRepository) {
+    this.categoryRepository = categoryRepository;
   }
 
+  public Category saveCategory(Category category) {
+    return categoryRepository.save(category);
+  }
+
+  public List<Category> findAll() {
+    return categoryRepository.findAll();
+  }
   public Category convertToEntity(CategoryDto categoryDto) {
-    return new Category(categoryDto.getName(), categoryDto.getColor(), categoryDto.getImageUrl(), categoryDto.getDescription());
+    Category category = new Category();
+    category.setName(categoryDto.getName());
+    category.setColor(categoryDto.getColor());
+    category.setImageUrl(categoryDto.getImageUrl());
+    category.setDescription(categoryDto.getDescription());
+    return category;
   }
-  private CategoryDto convertToDto(Category category) {
+
+  public CategoryDto convertToDto(Category category) {
     return new CategoryDto(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
-  }
-  public List<CategoryDto> findAllCategories() {
-    List<Category> categories = categoryRepository.findAll();
-    return categories.stream()
-            .map(this::convertToDto)
-            .collect(Collectors.toList());
   }
 
 }
