@@ -68,8 +68,10 @@ public class AdminController {
 
     @PostMapping("/products")
     public String addProduct(@Valid @ModelAttribute("product") ProductRequest productRequest,
-        BindingResult result) {
+        BindingResult result, Model model) {
         if (result.hasErrors()) {
+            List<CategoryResponse> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
             return "product_form";
         }
         productService.addProduct(productRequest);
@@ -79,6 +81,8 @@ public class AdminController {
     @GetMapping("/products/{id}/edit")
     public String showEditProductForm(@PathVariable("id") Long id, Model model) {
         ProductResponse productResponse = productService.getProductById(id);
+        List<CategoryResponse> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("product", productResponse);
         return "product_edit";
     }
@@ -87,6 +91,8 @@ public class AdminController {
     public String updateProduct(@PathVariable("id") Long id,
         @Valid @ModelAttribute ProductRequest productRequest, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            List<CategoryResponse> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
             model.addAttribute("product", productRequest);
             model.addAttribute("org.springframework.validation.BindingResult.product", result);
             return "product_edit";

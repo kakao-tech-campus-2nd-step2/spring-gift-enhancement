@@ -42,6 +42,13 @@
       <input type="text" id="imageUrl" class="form-control" th:field="*{imageUrl}"
              placeholder="이미지 URL을 입력하세요"/>
     </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">카테고리</label>
+      <select id="category" class="form-control" th:field="*{categoryId}">
+        <option value="" disabled selected>카테고리를 선택하세요</option>
+        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+      </select>
+    </div>
     <div class="text-center">
       <button type="submit" class="btn btn-success">추가</button>
     </div>
