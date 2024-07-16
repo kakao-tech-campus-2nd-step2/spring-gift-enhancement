@@ -8,11 +8,11 @@ import java.util.List;
 @Entity
 public class Product {
 
-    @Column(nullable = false)
-    private int price;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
+    @Column(nullable = false)
+    private int price;
     @Column(nullable = false, unique = true, length = 15)
     private String name;
     @Column(nullable = false)
