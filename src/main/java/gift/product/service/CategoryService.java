@@ -21,13 +21,13 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public ResponseEntity<String> registerCategory(String name) {
+    public void registerCategory(String name) {
         System.out.println("[CategoryService] registerCategory()");
-        try {
-            categoryRepository.save(new Category(name));
-        } catch (Exception e) {
-            System.out.println("[CategoryService] registerCategory(): " + e.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Category registered successfully");
+        categoryRepository.save(new Category(name));
+    }
+
+    public void updateCategory(Category category) {
+        System.out.println("[CategoryService] updateCategory()");
+        categoryRepository.save(category);
     }
 }
