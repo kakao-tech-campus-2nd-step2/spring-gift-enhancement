@@ -8,13 +8,17 @@ public class CategoryDTO {
     @NotBlank(message = "이름을 입력하지 않았습니다.")
     String name;
 
-    public CategoryDTO(long id, String name){
+    public CategoryDTO(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

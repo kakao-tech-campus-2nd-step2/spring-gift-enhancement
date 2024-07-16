@@ -62,7 +62,7 @@ public class ProductApiController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateWishList(@PathVariable("id") Long id,
+    public ResponseEntity<String> updateProduct(@PathVariable("id") Long id,
         @Valid @RequestBody ProductDTO productDTO, BindingResult result) throws NotFoundException {
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -74,7 +74,7 @@ public class ProductApiController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteWishList(@PathVariable("id") Long id)
+    public ResponseEntity<String> deleteProduct(@PathVariable("id") Long id)
         throws NotFoundException {
         productService.deleteProduct(id);
         return ResponseEntity.ok().body("삭제되었습니다.");
