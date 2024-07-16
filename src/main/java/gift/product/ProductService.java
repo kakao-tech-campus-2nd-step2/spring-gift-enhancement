@@ -1,7 +1,10 @@
 package gift.product;
 
+import static gift.exception.ErrorMessage.CATEGORY_NOT_FOUND;
 import static gift.exception.ErrorMessage.PRODUCT_NOT_FOUND;
 
+import gift.category.Category;
+import gift.category.CategoryRepository;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,9 +14,14 @@ import org.springframework.stereotype.Component;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(
+        ProductRepository productRepository,
+        CategoryRepository categoryRepository
+    ) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Product> getAllProducts() {
@@ -25,7 +33,18 @@ public class ProductService {
     }
 
     public void addProduct(ProductDTO productDTO) {
-        productRepository.save(productDTO.toEntity());
+        Category findCategory = categoryRepository.findByName(productDTO.category().getName())
+            .orElseThrow(() -> new IllegalArgumentException(CATEGORY_NOT_FOUND));
+
+        productRepository.save(
+            new Product(
+                -1L,
+                productDTO.name(),
+                productDTO.price(),
+                productDTO.imageUrl(),
+                findCategory
+            )
+        );
     }
 
     public void updateProduct(long id, ProductDTO productDTO) {
