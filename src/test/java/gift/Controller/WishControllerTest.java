@@ -42,7 +42,7 @@ class WishControllerTest {
     categoryController.addCategory(categoryDto);
 
     MemberDto memberDto1 = new MemberDto(1L, "a@naver.com", "abcde");
-    memberController.memberSignUp(memberDto1);
+    memberController.SignUp(memberDto1);
 
     ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img",categoryDto);
     ProductDto productDto2 = new ProductDto(2L, "product2", 200, "efgh.img",categoryDto);
@@ -87,7 +87,7 @@ class WishControllerTest {
   @Test
   void addProductToWishListTest() {
     MemberDto memberDto1 = new MemberDto(1L, "a@naver.com", "abcde");
-    memberController.memberSignUp(memberDto1);
+    memberController.SignUp(memberDto1);
 
     CategoryDto categoryDto = new CategoryDto(1L,"교환권","#61cdef","image.url","교환권 카테고리");
     categoryController.addCategory(categoryDto);
@@ -114,7 +114,7 @@ class WishControllerTest {
   @Test
   void deleteProductToWishListTest() {
     MemberDto memberDto1 = new MemberDto(1L, "a@naver.com", "abcde");
-    memberController.memberSignUp(memberDto1);
+    memberController.SignUp(memberDto1);
 
     CategoryDto categoryDto = new CategoryDto(1L,"교환권","#61cdef","image.url","교환권 카테고리");
     categoryController.addCategory(categoryDto);

@@ -44,6 +44,7 @@ public class ProductService {
       productDto.getPrice(), productDto.getImageUrl(), category);
 
     productRepository.save(product);
+
     return productDto;
   }
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("admin/products")
@@ -31,12 +32,13 @@ public class ProductAdminController {
 
   @GetMapping("/new")
   public String newProductForm(Model model) {
-    model.addAttribute("product", new Product());
+    model.addAttribute("product", new ProductDto());
     return "product-form";
   }
 
   @PostMapping("/add")
-  public String addProduct(@Valid @ModelAttribute ProductDto productDto) {
+  public String addProduct(@RequestParam String name, @RequestParam int price, @RequestParam String imageUrl) {
+    ProductDto productDto = new ProductDto(name,price,imageUrl);
     productService.addProduct(productDto);
     return "redirect:/admin/products";
   }
