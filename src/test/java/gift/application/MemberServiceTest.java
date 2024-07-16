@@ -98,7 +98,7 @@ class MemberServiceTest {
         assertThatThrownBy(() -> memberService.authenticate(memberDto))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.AUTHENTICATION_FAILED
-                        .getMessage());
+                                     .getMessage());
     }
 
 }
