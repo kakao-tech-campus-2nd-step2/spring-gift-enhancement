@@ -1,5 +1,7 @@
 package gift.service;
 
+import gift.exception.CustomException.CategoryNotFoundException;
+import gift.exception.ErrorCode;
 import gift.model.categories.Category;
 import gift.model.categories.CategoryDTO;
 import gift.repository.CategoryRepository;
@@ -33,4 +35,7 @@ public class CategoryService {
         return categoryRepository.save(categoryDTO.toEntity()).toDTO();
     }
 
+    public boolean isDuplicateName(String name) {
+        return categoryRepository.existsByName(name);
+    }
 }
