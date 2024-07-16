@@ -1,6 +1,7 @@
 package gift.resolver;
 
 import gift.anotation.LoginMember;
+import gift.config.JwtConfig;
 import gift.repository.MemberRepository;
 import gift.util.JwtUtil;
 import org.springframework.core.MethodParameter;
@@ -15,10 +16,12 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
+    private final JwtConfig jwtConfig;
 
-    public LoginMemberArgumentResolver(JwtUtil jwtUtil, MemberRepository memberRepository) {
+    public LoginMemberArgumentResolver(JwtUtil jwtUtil, MemberRepository memberRepository, JwtConfig jwtConfig) {
         this.jwtUtil = jwtUtil;
         this.memberRepository = memberRepository;
+        this.jwtConfig = jwtConfig;
     }
 
     @Override

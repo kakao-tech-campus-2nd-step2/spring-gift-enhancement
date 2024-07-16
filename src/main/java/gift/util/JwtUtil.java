@@ -1,29 +1,45 @@
 package gift.util;
 
+import gift.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+    private final JwtConfig jwtConfig;
+
+
+    @Autowired
+    public JwtUtil(JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
+    }
+
+    public String generateToken(Long userId) {
+        return Jwts.builder()
+                .setSubject(userId.toString())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpirationTime()))
+                .signWith(SignatureAlgorithm.HS256, jwtConfig.getSecret().getBytes())
+                .compact();
+    }
 
     public Claims extractClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(secretKey.getBytes())
+                .setSigningKey(jwtConfig.getSecret().getBytes())
                 .parseClaimsJws(token)
                 .getBody();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(jwtConfig.getSecret().getBytes()).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
