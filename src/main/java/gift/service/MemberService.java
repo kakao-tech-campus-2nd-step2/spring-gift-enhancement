@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.member.*;
 import gift.entity.Member;
+import gift.event.event_publisher.MemberDeletionEventPublisher;
 import gift.exception.DuplicatedEmailException;
 import gift.exception.InvalidPasswordException;
 import gift.exception.NoSuchFieldException;
@@ -20,11 +21,13 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final MemberDeletionEventPublisher memberDeletionEventPublisher;
 
 
-    public MemberService(MemberRepository memberRepository, TokenProvider tokenProvider) {
+    public MemberService(MemberRepository memberRepository, TokenProvider tokenProvider, MemberDeletionEventPublisher memberDeletionEventPublisher) {
         this.memberRepository = memberRepository;
         this.tokenProvider = tokenProvider;
+        this.memberDeletionEventPublisher = memberDeletionEventPublisher;
     }
 
     public List<MemberResponseDTO> getAllUsers(PageInfoDTO pageInfoDTO) {
@@ -67,15 +70,13 @@ public class MemberService {
         return new TokenResponseDTO(token);
     }
 
-    public void deleteUser(long id) {
-        memberRepository.deleteById(id);
-    }
-
     public void deleteUser(String email) {
         Member member = memberRepository.findByEmail(email)
                         .orElseThrow(NoSuchFieldException::new);
 
         memberRepository.delete(member);
+
+        memberDeletionEventPublisher.publish(member);
     }
 
     public void updatePw(long id, PwUpdateDTO pwUpdateDTO) {

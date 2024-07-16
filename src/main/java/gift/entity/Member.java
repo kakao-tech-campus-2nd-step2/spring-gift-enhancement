@@ -16,8 +16,8 @@ public class Member {
 
     private String password;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Wish> wishes = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private final List<Wish> wishes = new ArrayList<>();
 
     public Member() {}
 
