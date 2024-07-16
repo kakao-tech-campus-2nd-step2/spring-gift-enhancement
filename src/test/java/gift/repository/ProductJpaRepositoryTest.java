@@ -3,6 +3,7 @@ package gift.repository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.repository.product.ProductRepository;
 import java.util.List;
@@ -23,7 +24,8 @@ public class ProductJpaRepositoryTest {
     @DisplayName("상품 저장")
     void save() {
         // given
-        Product product = new Product(1L, "product1", 1000, "product1.jpg");
+        Product product = new Product(1L, "product1", 1000, "product1.jpg",
+            new Category("category"));
         // when
         productRepository.save(product);
         // then
@@ -40,7 +42,8 @@ public class ProductJpaRepositoryTest {
     @DisplayName("상품 삭제")
     void delete() {
         // given
-        Product product = new Product(1L, "product1", 1000, "product1.jpg");
+        Product product = new Product(1L, "product1", 1000, "product1.jpg",
+            new Category("category"));
         productRepository.save(product);
         // when
         productRepository.deleteById(1L);
@@ -52,7 +55,8 @@ public class ProductJpaRepositoryTest {
     @DisplayName("상품 수정")
     void update() {
         // given
-        Product product = new Product(1L, "product1", 1000, "product1.jpg");
+        Product product = new Product(1L, "product1", 1000, "product1.jpg",
+            new Category("category"));
         productRepository.save(product);
         // when
         product.update("product2", 2000, "product2.jpg");
@@ -71,7 +75,8 @@ public class ProductJpaRepositoryTest {
     @DisplayName("상품 조회")
     void findById() {
         // given
-        Product product = new Product(1L, "product1", 1000, "product1.jpg");
+        Product product = new Product(1L, "product1", 1000, "product1.jpg",
+            new Category("category"));
         productRepository.save(product);
         // when
         Product findProduct = productRepository.findById(1L).get();
@@ -87,9 +92,12 @@ public class ProductJpaRepositoryTest {
     @DisplayName("상품 가격 정렬 조회")
     void testFindAllOrderByPrice() {
         //given
-        Product product1 = new Product(1L, "product1", 300, "product1.jpg");
-        Product product2 = new Product(2L, "product2", 200, "product2.jpg");
-        Product product3 = new Product(3L, "product3", 100, "product3.jpg");
+        Product product1 = new Product(1L, "product1", 300, "product1.jpg",
+            new Category("category"));
+        Product product2 = new Product(2L, "product2", 200, "product2.jpg",
+            new Category("category"));
+        Product product3 = new Product(3L, "product3", 100, "product3.jpg",
+            new Category("category"));
         productRepository.save(product1);
         productRepository.save(product2);
         productRepository.save(product3);
@@ -108,9 +116,12 @@ public class ProductJpaRepositoryTest {
     @DisplayName("상품 이름으로 조회")
     void testFindByNameContaining() {
         //given
-        Product product1 = new Product(1L, "sampleProduct1", 300, "product1.jpg");
-        Product product2 = new Product(2L, "product2", 200, "product2.jpg");
-        Product product3 = new Product(3L, "sampleProduct3", 100, "product3.jpg");
+        Product product1 = new Product(1L, "sampleProduct1", 300, "product1.jpg",
+            new Category("category"));
+        Product product2 = new Product(2L, "product2", 200, "product2.jpg",
+            new Category("category"));
+        Product product3 = new Product(3L, "sampleProduct3", 100, "product3.jpg",
+            new Category("category"));
         productRepository.save(product1);
         productRepository.save(product2);
         productRepository.save(product3);

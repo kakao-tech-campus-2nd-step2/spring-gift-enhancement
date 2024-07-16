@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +17,10 @@ public class ProductTest {
         String name = "테스트 상품";
         Integer price = 10000;
         String imageUrl = "test.jpg";
+        Category category = new Category("카테고리");
 
         //when
-        Product product = Product.create(null, name, price, imageUrl);
+        Product product = Product.create(null, name, price, imageUrl, category);
 
         // then
         assertAll(
@@ -38,19 +40,20 @@ public class ProductTest {
 
         Integer price = 10000;
         String imageUrl = "test.jpg";
+        Category category = new Category("카테고리");
 
         //when
         // then
         assertThrows(IllegalArgumentException.class, () -> {
-            Product.create(null, testName1, price, imageUrl);
+            Product.create(null, testName1, price, imageUrl, category);
         });
         // then
         assertThrows(IllegalArgumentException.class, () -> {
-            Product.create(null, testName2, price, imageUrl);
+            Product.create(null, testName2, price, imageUrl, category);
         });
         // then
         assertThrows(IllegalArgumentException.class, () -> {
-            Product.create(null, testName3, price, imageUrl);
+            Product.create(null, testName3, price, imageUrl, category);
         });
     }
 
@@ -62,9 +65,10 @@ public class ProductTest {
 
         Integer price = 10000;
         String imageUrl = "test.jpg";
+        Category category = new Category("카테고리");
 
         //when
-        Product product = Product.create(null, name, price, imageUrl);
+        Product product = Product.create(null, name, price, imageUrl, category);
 
         // then
         assertAll(

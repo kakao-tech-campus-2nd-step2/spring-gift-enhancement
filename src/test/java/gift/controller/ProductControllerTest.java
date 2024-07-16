@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.controller.product.ProductController;
+import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.repository.product.ProductRepository;
 import java.util.List;
@@ -14,8 +15,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,8 +39,8 @@ class ProductControllerTest {
     void testGetProducts() throws Exception {
         // given: 테스트에 사용될 mock 데이터를 설정합니다.
         var products = List.of(
-            Product.create(1L, "Product1", 100, "http://image1.com"),
-            Product.create(2L, "Product2", 200, "http://image2.com")
+            Product.create(1L, "Product1", 100, "http://image1.com", new Category("category")),
+            Product.create(2L, "Product2", 200, "http://image2.com", new Category("category"))
         );
         // when: productDao.findAll() 메서드가 호출될 때 products를 반환하도록 설정합니다.
         when(productRepository.findAll()).thenReturn(products);
@@ -63,7 +62,8 @@ class ProductControllerTest {
 
     @Test
     void testGetProduct() throws Exception {
-        var product = Product.create(1L, "Product1", 100, "http://image1.com");
+        var product = Product.create(1L, "Product1", 100, "http://image1.com",
+            new Category("category"));
         when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
 
         mockMvc.perform(get("/products/{id}", 1L))

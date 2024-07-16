@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.model.member.Member;
 import gift.model.member.Role;
+import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.model.wish.Wish;
 import gift.repository.member.MemberRepository;
@@ -34,7 +35,8 @@ public class WishJpaRepositoryTest {
     void findByMemberAndProduct() {
         // given
         Member member = new Member(null, "member1@asd.com", "asd", "asd", Role.USER);
-        Product product = new Product(null, "product1", 1000, "product1.jpg");
+        Product product = new Product(null, "product1", 1000, "product1.jpg",
+            new Category("category"));
         Wish wish = new Wish(null, member, product, 2L);
 
         memberRepository.save(member);
@@ -58,8 +60,10 @@ public class WishJpaRepositoryTest {
         // given
         Member member1 = new Member(null, "test1.com", "test1", "test1", Role.USER);
         Member member2 = new Member(null, "test2.com", "test2", "test2", Role.USER);
-        Product product1 = new Product(null, "product1", 1000, "product1.jpg");
-        Product product2 = new Product(null, "product2", 2000, "product2.jpg");
+        Product product1 = new Product(null, "product1", 1000, "product1.jpg",
+            new Category("category"));
+        Product product2 = new Product(null, "product2", 2000, "product2.jpg",
+            new Category("category"));
         Wish wish1 = new Wish(null, member1, product1, 2L);
         Wish wish2 = new Wish(null, member1, product2, 3L);
         Wish wish3 = new Wish(null, member2, product1, 4L);
