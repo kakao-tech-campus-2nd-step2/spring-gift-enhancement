@@ -3,7 +3,7 @@ package gift.dto;
 public class ProductResponseDTO {
     private Long id;
     private String name;
-    private int price; // 이 필드를 추가합니다.
+    private int price;
     private String imageUrl;
 
     public ProductResponseDTO(Long id, String name, int price, String imageUrl) {
@@ -13,7 +13,6 @@ public class ProductResponseDTO {
         this.imageUrl = imageUrl;
     }
 
-    // getters and setters
     public Long getId() {
         return id;
     }
