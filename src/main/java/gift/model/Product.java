@@ -1,9 +1,6 @@
 package gift.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -19,25 +16,32 @@ public class Product extends BasicEntity{
     @Column(nullable = false, length = 1000)
     private String imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     protected Product() {}
 
-    public Product(Long id, String name, int price, String imageUrl, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Product(Long id, String name, int price, String imageUrl, Category category, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(id, createdAt, updatedAt);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public void updateProduct(String name, int price, String imageUrl) {
+    public void updateProduct(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public String getName() {
@@ -50,5 +54,9 @@ public class Product extends BasicEntity{
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

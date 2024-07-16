@@ -1,13 +1,13 @@
 package gift.controller.dto.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public record CategoryRequest(
-        @NotNull
+        @NotBlank
         String name,
-        @NotNull
+        @NotBlank
         String color,
-        @NotNull
+        @NotBlank
         String imageUrl,
         String description
 ) {
