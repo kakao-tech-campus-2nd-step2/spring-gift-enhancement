@@ -1,6 +1,7 @@
 package gift.category.model.dto;
 
 import gift.BaseTimeEntity;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,4 +23,14 @@ public class Category extends BaseTimeEntity {
 
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private boolean isActive = true; // 선물의 활성화 상태
+
+    public Category() {
+    }
+
+    public Category(Long id, String name, @Nullable String description, boolean isActive) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.isActive = isActive;
+    }
 }
