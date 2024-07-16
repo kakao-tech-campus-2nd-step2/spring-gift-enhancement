@@ -136,3 +136,4 @@ VALUES (1, 19, 1);
 INSERT INTO wish (user_id, gift_id, quantity)
 VALUES (1, 20, 1);
 
+
