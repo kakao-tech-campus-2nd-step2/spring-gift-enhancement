@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -56,4 +57,14 @@ public class ProductAdminController {
         productService.deleteProduct(loginAppUser, id);
         return ResponseEntity.ok().body("ok");
     }
+
+    @PutMapping("/{productId}/category")
+    public ResponseEntity<String> updateCategoryForProduct(@LoginUser AppUser loginAppUser,
+                                                           @PathVariable Long productId,
+                                                           @RequestParam Long categoryId) {
+        userService.verifyAdminAccess(loginAppUser);
+        productAdminService.updateCategory(productId, categoryId);
+        return ResponseEntity.ok().body("ok");
+    }
 }
+

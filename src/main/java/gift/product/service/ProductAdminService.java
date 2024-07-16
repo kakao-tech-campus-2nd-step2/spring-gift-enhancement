@@ -15,12 +15,14 @@ public class ProductAdminService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final UserService userService;
+    private final ProductService productService;
 
     public ProductAdminService(ProductRepository productRepository, CategoryService categoryService,
-                               UserService userService) {
+                               UserService userService, ProductService productService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
         this.userService = userService;
+        this.productService = productService;
     }
 
     @Transactional
@@ -29,6 +31,14 @@ public class ProductAdminService {
         AppUser seller = userService.findUser(createProductAdminRequest.sellerId());
         Product product = new Product(createProductAdminRequest.name(), createProductAdminRequest.price(),
                 createProductAdminRequest.imageUrl(), seller, category);
+        productRepository.save(product);
+    }
+
+    @Transactional
+    public void updateCategory(Long productId, Long categoryId) {
+        Product product = productService.findProduct(productId);
+        Category newCategory = categoryService.getCategory(categoryId);
+        product.setCategory(newCategory);
         productRepository.save(product);
     }
 }
