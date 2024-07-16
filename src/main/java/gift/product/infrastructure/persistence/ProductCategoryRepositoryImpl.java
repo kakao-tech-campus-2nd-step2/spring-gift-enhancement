@@ -1,7 +1,10 @@
 package gift.product.infrastructure.persistence;
 
+import gift.core.PagedDto;
 import gift.core.domain.product.ProductCategory;
 import gift.core.domain.product.ProductCategoryRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,12 +20,17 @@ public class ProductCategoryRepositoryImpl implements ProductCategoryRepository 
         this.jpaProductCategoryRepository = jpaProductCategoryRepository;
     }
 
-    public List<ProductCategory> findAll() {
-        return jpaProductCategoryRepository
-                .findAll()
-                .stream()
-                .map(ProductCategoryEntity::toDomain)
-                .toList();
+    public PagedDto<ProductCategory> findAll(Pageable pageable) {
+        Page<ProductCategory> categories = jpaProductCategoryRepository
+                .findAll(pageable)
+                .map(ProductCategoryEntity::toDomain);
+        return new PagedDto<>(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                categories.getTotalElements(),
+                categories.getTotalPages(),
+                categories.getContent()
+        );
     }
 
     public ProductCategory save(ProductCategory category) {

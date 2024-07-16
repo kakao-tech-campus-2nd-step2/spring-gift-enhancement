@@ -1,9 +1,10 @@
 package gift.core.domain.product;
 
-import java.util.List;
+import gift.core.PagedDto;
+import org.springframework.data.domain.Pageable;
 
 public interface ProductCategoryService {
 
-    List<ProductCategory> findAll();
+    PagedDto<ProductCategory> findAll(Pageable pageable);
 
 }

@@ -1,5 +1,8 @@
 package gift.core.domain.product;
 
+import gift.core.PagedDto;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +12,7 @@ public interface ProductCategoryRepository {
 
     Optional<ProductCategory> findByName(String name);
 
-    List<ProductCategory> findAll();
+    PagedDto<ProductCategory> findAll(Pageable pageable);
 
     ProductCategory save(ProductCategory category);
 
