@@ -77,7 +77,7 @@ function addProductToWishlist(productId) {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
