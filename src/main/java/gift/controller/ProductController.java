@@ -64,21 +64,26 @@ public class ProductController {
     public ResponseEntity<SuccessBody<Long>> addProduct(
         @Valid @RequestBody ProductRequestDTO productRequestDTO,
         @LoginUser User user) {
-
         authService.authorizeAdminUser(user);
         Long productId = productService.addProduct(productRequestDTO);
         return ApiResponseGenerator.success(HttpStatus.CREATED, "상품이 등록되었습니다.", productId);
     }
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<SuccessBody<Long>> updateProduct(@PathVariable("id") Long productId,
-        @Valid @RequestBody ProductRequestDTO productRequestDTO) {
+    public ResponseEntity<SuccessBody<Long>> updateProduct(
+        @PathVariable("id") Long productId,
+        @Valid @RequestBody ProductRequestDTO productRequestDTO,
+        @LoginUser User user) {
+        authService.authorizeAdminUser(user);
         Long updatedProductId = productService.updateProduct(productId, productRequestDTO);
         return ApiResponseGenerator.success(HttpStatus.OK, "상품이 수정되었습니다.", updatedProductId);
     }
 
     @DeleteMapping("/product/{id}")
-    public ResponseEntity<SuccessBody<Long>> deleteProduct(@PathVariable("id") Long productId) {
+    public ResponseEntity<SuccessBody<Long>> deleteProduct(
+        @PathVariable("id") Long productId,
+        @LoginUser User user) {
+        authService.authorizeAdminUser(user);
         Long deletedProductId = productService.deleteProduct(productId);
         return ApiResponseGenerator.success(HttpStatus.OK, "상품이 삭제되었습니다.", deletedProductId);
     }
