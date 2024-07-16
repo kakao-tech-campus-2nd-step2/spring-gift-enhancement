@@ -23,8 +23,8 @@
   - [x] 카테고리 목록은 enum으로 설정해도 되나요?
   - [x] repository 생성
   
-- [ ] 상품 entity 수정
-  - [ ] 카테고리를 foreign key로 설정
+- [x] 상품 entity 수정
+  - [x] 카테고리를 foreign key로 설정
 
 - [ ] 카테고리 추가하면서 상품 service 수정
   - [ ] 상품에서 카테고리 수정 api 생성
