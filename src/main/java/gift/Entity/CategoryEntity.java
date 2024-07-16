@@ -1,5 +1,6 @@
 package gift.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +16,14 @@ public class CategoryEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false, unique = true)
+    private String code;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private CategoryEntity parent;
 
+    @JsonIgnore //json변환될 때 해당 필드 무시 -> 서로가 서로 참조 하는 경우 방지
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategoryEntity> children = new ArrayList<>();
 
