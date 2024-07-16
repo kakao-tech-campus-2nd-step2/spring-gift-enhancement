@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CategoryRepositoryTest {
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Test
     @DisplayName("카테고리 이름 중복 확인")

@@ -27,18 +27,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("카테고리 컨트롤러 단위테스트")
 class CategoryControllerTest {
 
-    @Autowired
-    MockMvc mockMvc;
-    @Autowired
-    ObjectMapper objectMapper;
-    @MockBean
-    CategoryService categoryService;
-    @MockBean
-    TokenService tokenService;
-    @MockBean
-    JpaMetamodelMappingContext jpaMetamodelMappingContext;
-
     private static final String URL = "/api/categories";
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @MockBean
+    private CategoryService categoryService;
+    @MockBean
+    private TokenService tokenService;
+    @MockBean
+    private JpaMetamodelMappingContext jpaMetamodelMappingContext;
 
     @Test
     @DisplayName("카테고리 추가")

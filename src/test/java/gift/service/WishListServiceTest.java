@@ -41,6 +41,30 @@ class WishListServiceTest {
     @InjectMocks
     private WishListService wishListService;
 
+    @Test
+    @DisplayName("멤버의 모든 위시리스트 상품 조회")
+    void getWishProductsByMemberId() {
+        // Given
+        Long memberId = 1L;
+        Member member = new Member("test@email.com", "password");
+        Product product = new Product("name", 1000, "imageUrl", null);
+        Wish wish = new Wish(member, 1, product);
+        PageRequest pageable = PageRequest.of(0, 10);
+        Page<Wish> wishPage = new PageImpl<>(List.of(wish), pageable, 1);
+
+        when(memberService.getMemberById(memberId)).thenReturn(member);
+        when(wishRepository.findAllByMember(member, pageable)).thenReturn(wishPage);
+
+        // When
+        Page<WishProductResponse> responsePage = wishListService.getWishProductsByMemberId(memberId, pageable);
+
+        // Then
+        assertThat(responsePage.getContent()).hasSize(1);
+        assertThat(responsePage.getContent().get(0))
+                .extracting("productName", "productAmount")
+                .containsExactly("name", 1);
+    }
+
     @Nested
     @DisplayName("상품을 위시리스트에 추가")
     class AddProductToWishList {
@@ -169,29 +193,5 @@ class WishListServiceTest {
             assertThatThrownBy(() -> wishListService.updateWishProductAmount(memberId, request))
                     .isInstanceOf(WishNotFoundException.class);
         }
-    }
-
-    @Test
-    @DisplayName("멤버의 모든 위시리스트 상품 조회")
-    void getWishProductsByMemberId() {
-        // Given
-        Long memberId = 1L;
-        Member member = new Member("test@email.com", "password");
-        Product product = new Product("name", 1000, "imageUrl", null);
-        Wish wish = new Wish(member, 1, product);
-        PageRequest pageable = PageRequest.of(0, 10);
-        Page<Wish> wishPage = new PageImpl<>(List.of(wish), pageable, 1);
-
-        when(memberService.getMemberById(memberId)).thenReturn(member);
-        when(wishRepository.findAllByMember(member, pageable)).thenReturn(wishPage);
-
-        // When
-        Page<WishProductResponse> responsePage = wishListService.getWishProductsByMemberId(memberId, pageable);
-
-        // Then
-        assertThat(responsePage.getContent()).hasSize(1);
-        assertThat(responsePage.getContent().get(0))
-                .extracting("productName", "productAmount")
-                .containsExactly("name", 1);
     }
 }

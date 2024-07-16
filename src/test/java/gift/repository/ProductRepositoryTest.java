@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("상품 레포지토리 단위테스트")
 class ProductRepositoryTest {
 
+    private final Category testCategory = new Category("교환권", "테스트", "테스트", "테스트");
     @Autowired
     private TestEntityManager testEntityManager;
     @Autowired
@@ -27,8 +28,6 @@ class ProductRepositoryTest {
     void setUp() {
         testEntityManager.persist(testCategory);
     }
-
-    private final Category testCategory = new Category("교환권", "테스트", "테스트", "테스트");
 
     @Test
     @DisplayName("상품 저장")

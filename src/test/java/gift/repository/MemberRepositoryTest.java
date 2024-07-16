@@ -14,12 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("멤버 레포지토리 단위테스트")
 class MemberRepositoryTest {
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-
     private static final String EMAIL = "zzoe2346@git.com";
     private static final String PASSWORD = "12345678";
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Test
     @DisplayName("이메일과 비밀번호로 멤버 찾기(for Login)")

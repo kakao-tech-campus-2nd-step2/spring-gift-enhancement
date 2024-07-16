@@ -30,20 +30,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("위시 컨트롤러 단위테스트")
 class WishListControllerTest {
 
+    private static final String URL = "/api/wishlist";
+    @MockBean
+    private TokenService tokenService;
+    @MockBean
+    private JpaMetamodelMappingContext jpaMetamodelMappingContext;
+    @MockBean
+    private AuthInterceptor authInterceptor;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    TokenService tokenService;
-    @MockBean
-    JpaMetamodelMappingContext jpaMetamodelMappingContext;
-    @MockBean
-    AuthInterceptor authInterceptor;
-    @MockBean
     private WishListService wishListService;
-
-    private static final String URL = "/api/wishlist";
 
     @Test
     @DisplayName("위시리스트 상품 추가")

@@ -22,6 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("멤버 컨트롤러 단위테스트")
 class MemberControllerTest {
 
+    private static final String REGISTER_URL = "/members/register";
+    private static final String LOGIN_URL = "/members/login";
+    @MockBean
+    JpaMetamodelMappingContext jpaMetamodelMappingContext;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -30,11 +34,6 @@ class MemberControllerTest {
     private MemberService memberService;
     @MockBean
     private TokenService tokenService;
-    @MockBean
-    JpaMetamodelMappingContext jpaMetamodelMappingContext;
-
-    private static final String REGISTER_URL = "/members/register";
-    private static final String LOGIN_URL = "/members/login";
 
     @Test
     @DisplayName("회원가입")

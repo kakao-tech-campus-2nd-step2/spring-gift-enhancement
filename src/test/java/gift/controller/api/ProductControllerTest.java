@@ -31,18 +31,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("상품 컨트롤러 단위테스트")
 class ProductControllerTest {
 
+    private static final String URL = "/api/products";
+    @Autowired
+    private ObjectMapper objectMapper;
+    @MockBean
+    private ProductService productService;
+    @MockBean
+    private TokenService tokenService;
+    @MockBean
+    private JpaMetamodelMappingContext jpaMetamodelMappingContext;
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    ObjectMapper objectMapper;
-    @MockBean
-    ProductService productService;
-    @MockBean
-    TokenService tokenService;
-    @MockBean
-    JpaMetamodelMappingContext jpaMetamodelMappingContext;
-
-    private static final String URL = "/api/products";
 
     @Test
     @DisplayName("상품 조회")
