@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,5 +42,12 @@ public class CategoryController {
         @RequestBody CategoryRequestDto categoryRequestDto) {
         Long id = categoryService.insertCategory(categoryRequestDto);
         return ResponseEntity.created(URI.create("/api/categories/" + id)).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateCategory(@RequestBody CategoryRequestDto categoryRequestDto,
+        @PathVariable(name = "id") Long id) {
+        categoryService.updateCategory(categoryRequestDto, id);
+        return ResponseEntity.ok().build();
     }
 }
