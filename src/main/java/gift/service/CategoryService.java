@@ -1,9 +1,13 @@
 package gift.service;
 
 import gift.common.dto.PageResponse;
+import gift.common.exception.CategoryNotFoundException;
+import gift.common.exception.ProductNotFoundException;
 import gift.model.category.Category;
 import gift.model.category.CategoryRequest;
 import gift.model.category.CategoryResponse;
+import gift.model.product.Product;
+import gift.model.product.ProductResponse;
 import gift.repository.CategoryRepository;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -32,5 +36,11 @@ public class CategoryService {
         List<CategoryResponse> responses = categoryList.getContent().stream()
             .map(CategoryResponse::from).toList();
         return PageResponse.from(responses, categoryList);
+    }
+
+    public CategoryResponse findCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(CategoryNotFoundException::new);
+        return CategoryResponse.from(category);
     }
 }

@@ -44,4 +44,10 @@ public class CategoryController {
         PageResponse<CategoryResponse> response = categoryService.findAllCategory(pageable);
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponse> getCategory(@PathVariable("id") Long id) {
+        CategoryResponse response = categoryService.findCategory(id);
+        return ResponseEntity.ok().body(response);
+    }
 }
