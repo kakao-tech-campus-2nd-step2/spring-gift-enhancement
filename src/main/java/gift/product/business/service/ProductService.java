@@ -2,6 +2,7 @@ package gift.product.business.service;
 
 import gift.product.business.dto.ProductPagingDto;
 import gift.product.persistence.entity.Product;
+import gift.product.persistence.repository.CategoryRepository;
 import gift.product.persistence.repository.ProductRepository;
 import gift.product.business.dto.ProductDto;
 import gift.product.business.dto.ProductRegisterDto;
@@ -15,9 +16,12 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
 
@@ -27,14 +31,17 @@ public class ProductService {
     }
 
     public Long createProduct(ProductRegisterDto productRegisterDto) {
-        Product product = productRegisterDto.toProduct();
+        var category = categoryRepository.getReferencedCategory(productRegisterDto.categoryId());
+        Product product = productRegisterDto.toProduct(category);
         return productRepository.saveProduct(product);
     }
 
     public Long updateProduct(ProductRegisterDto productRegisterDto, Long id) {
         var product = productRepository.getProductById(id);
+        var category = categoryRepository.getReferencedCategory(productRegisterDto.categoryId());
         product.update(productRegisterDto.name(), productRegisterDto.description(),
                 productRegisterDto.price(), productRegisterDto.url());
+        product.setCategory(category);
         return productRepository.saveProduct(product);
     }
 
