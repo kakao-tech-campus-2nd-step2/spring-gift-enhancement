@@ -6,8 +6,6 @@ import gift.entity.Category;
 import gift.entity.Product;
 import gift.entity.Member;
 import gift.entity.Wish;
-import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

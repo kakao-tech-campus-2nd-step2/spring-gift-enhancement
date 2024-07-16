@@ -3,7 +3,6 @@ package gift.util.validator.databaseValidator;
 import gift.entity.Category;
 import gift.exception.BadRequestExceptions.BadRequestException;
 import gift.repository.CategoryRepository;
-import javax.crypto.BadPaddingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

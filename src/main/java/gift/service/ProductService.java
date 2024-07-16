@@ -71,7 +71,7 @@ public class ProductService {
             if (!id.equals(productRequestDTO.id()))
                 throw new InvalidIdException("올바르지 않은 id입니다.");
 
-            Category categoryToReplace = categoryRepository.findByName(productRequestDTO.categoryName()).orElseThrow(() -> new BadRequestException("그러한 카테코리를 찾을 수 없습니다."));;
+            Category categoryToReplace = categoryRepository.findByName(productRequestDTO.categoryName()).orElseThrow(() -> new BadRequestException("그러한 카테코리를 찾을 수 없습니다."));
             Product productInDb = productRepository.findById(id).orElseThrow(() -> new NoSuchProductIdException("id가 %d인 상품은 존재하지 않습니다.".formatted(id)));
             Product productToUpdate = productRequestDTO.convertToProduct(categoryToReplace);
 

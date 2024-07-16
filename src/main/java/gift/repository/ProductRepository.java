@@ -4,7 +4,6 @@ package gift.repository;
 import gift.entity.Category;
 import gift.entity.Product;
 import java.util.Optional;
-import javax.swing.text.html.Option;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
