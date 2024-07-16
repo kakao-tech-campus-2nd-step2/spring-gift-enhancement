@@ -1,9 +1,10 @@
 package gift.domain.wishlist.dao;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.domain.product.dao.ProductJpaRepository;
+import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import gift.domain.user.dao.UserJpaRepository;
 import gift.domain.user.entity.Role;
@@ -16,9 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -39,7 +38,8 @@ class WishlistJpaRepositoryTest {
     void save() {
         // given
         User user = new User(null, "testUser", "test@test.com", "test123", Role.USER);
-        Product product = new Product(null, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
+        Product product = new Product(null, category, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
 
         User savedUser = userJpaRepository.save(user);
         Product savedProduct = productJpaRepository.save(product);
@@ -62,8 +62,9 @@ class WishlistJpaRepositoryTest {
     void findAllByUserId() {
         // given
         User user = new User(null, "testUser", "test@test.com", "test123", Role.USER);
-        Product product1 = new Product(null, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
-        Product product2 = new Product(null, "아이스 카페 아메리카노 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
+        Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
+        Product product1 = new Product(null, category, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        Product product2 = new Product(null, category, "아이스 카페 아메리카노 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
 
 
         User savedUser = userJpaRepository.save(user);
@@ -95,7 +96,8 @@ class WishlistJpaRepositoryTest {
     void findById() {
         // given
         User user = new User(null, "testUser", "test@test.com", "test123", Role.USER);
-        Product product = new Product(null, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
+        Product product = new Product(null, category, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
 
         User savedUser = userJpaRepository.save(user);
         Product savedProduct = productJpaRepository.save(product);
@@ -119,7 +121,8 @@ class WishlistJpaRepositoryTest {
     void delete() {
         // given
         User user = new User(null, "testUser", "test@test.com", "test123", Role.USER);
-        Product product = new Product(null, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
+        Product product = new Product(null, category, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
 
         User savedUser = userJpaRepository.save(user);
         Product savedProduct = productJpaRepository.save(product);
@@ -140,8 +143,9 @@ class WishlistJpaRepositoryTest {
     void deleteAllByUserId() {
         // given
         User user = new User(null, "testUser", "test@test.com", "test123", Role.USER);
-        Product product1 = new Product(null, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
-        Product product2 = new Product(null, "탕종종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
+        Product product1 = new Product(null, category, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        Product product2 = new Product(null, category, "탕종종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
 
         User savedUser = userJpaRepository.save(user);
         Product savedProduct1 = productJpaRepository.save(product1);
@@ -165,8 +169,9 @@ class WishlistJpaRepositoryTest {
     void deleteAllByProductId() {
         // given
         User user = new User(null, "testUser", "test@test.com", "test123", Role.USER);
-        Product product1 = new Product(null, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
-        Product product2 = new Product(null, "탕종종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
+        Product product1 = new Product(null, category, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        Product product2 = new Product(null, category, "탕종종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
 
         User savedUser = userJpaRepository.save(user);
         Product savedProduct1 = productJpaRepository.save(product1);

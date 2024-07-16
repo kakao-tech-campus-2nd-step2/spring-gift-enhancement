@@ -10,6 +10,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 
 import gift.domain.product.dao.ProductJpaRepository;
+import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import gift.domain.user.entity.Role;
 import gift.domain.user.entity.User;
@@ -46,7 +47,8 @@ class WishlistServiceTest {
 
 
     private static final User user = new User(1L, "testUser", "test@test.com", "test123", Role.USER);
-    private static final Product product = new Product(1L, "아이스 카페 아메리카노 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
+    private static final Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
+    private static final Product product = new Product(1L, category, "아이스 카페 아메리카노 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
 
 
     @Test
@@ -89,7 +91,7 @@ class WishlistServiceTest {
     @DisplayName("위시리스트 조회 성공")
     void readAll_success() {
         // given
-        Product product2 = new Product(2L, "아이스 카페 라떼 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
+        Product product2 = new Product(2L, category, "아이스 카페 라떼 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
 
         List<WishItem> wishItemList = List.of(
             new WishItem(1L, user, product),
