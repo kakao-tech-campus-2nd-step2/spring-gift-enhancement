@@ -1,7 +1,7 @@
 package gift.controller;
 
 import gift.config.PageConfig;
-import gift.dto.product.AddProductRequest;
+import gift.dto.product.CreateProductRequest;
 import gift.dto.product.ProductResponse;
 import gift.dto.product.UpdateProductRequest;
 import gift.entity.Product;
@@ -57,8 +57,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> addProduct(@RequestBody @Valid AddProductRequest request) {
-        Long productId = productService.addProduct(request);
+    public ResponseEntity<Long> createProduct(@RequestBody @Valid CreateProductRequest request) {
+        Long productId = productService.createProduct(request);
         return new ResponseEntity<>(productId, getProductLocationHeader(productId),
             HttpStatus.CREATED);
     }
