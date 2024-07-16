@@ -36,15 +36,7 @@ public class ProductService {
         Category findCategory = categoryRepository.findByName(productDTO.category().getName())
             .orElseThrow(() -> new IllegalArgumentException(CATEGORY_NOT_FOUND));
 
-        productRepository.save(
-            new Product(
-                -1L,
-                productDTO.name(),
-                productDTO.price(),
-                productDTO.imageUrl(),
-                findCategory
-            )
-        );
+        productRepository.save(productDTO.toEntity(findCategory));
     }
 
     public void updateProduct(long id, ProductDTO productDTO) {
@@ -53,15 +45,7 @@ public class ProductService {
 
         productRepository.findById(id)
             .ifPresentOrElse(
-                e -> productRepository.save(
-                    new Product(
-                        id,
-                        productDTO.name(),
-                        productDTO.price(),
-                        productDTO.imageUrl(),
-                        findCategory
-                    )
-                ),
+                e -> productRepository.save(productDTO.toEntity(id, findCategory)),
                 () -> {
                     throw new IllegalArgumentException(PRODUCT_NOT_FOUND);
                 }
@@ -69,6 +53,9 @@ public class ProductService {
     }
 
     public void deleteProduct(long id) {
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException(PRODUCT_NOT_FOUND));
+
+        productRepository.delete(product);
     }
 }
