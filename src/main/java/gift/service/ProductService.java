@@ -46,8 +46,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductResponseDTO getOneProduct(Long productId) {
-        Product product = jpaProductRepository.findById(productId)
-            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        Product product = getProduct(productId);
         return ProductResponseDTO.of(product);
     }
 
@@ -57,8 +56,7 @@ public class ProductService {
     }
 
     public Long updateProduct(Long productId, ProductRequestDTO productRequestDTO) {
-        Product product = jpaProductRepository.findById(productId)
-            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        Product product = getProduct(productId);
 
         product.update(productRequestDTO.name(), productRequestDTO.price(),
             productRequestDTO.imageUrl());
@@ -66,9 +64,14 @@ public class ProductService {
     }
 
     public Long deleteProduct(Long productId) {
-        Product product = jpaProductRepository.findById(productId)
-            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        Product product = getProduct(productId);
         jpaProductRepository.delete(product);
         return product.getId();
+    }
+
+    private Product getProduct(Long productId) {
+        Product product = jpaProductRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        return product;
     }
 }

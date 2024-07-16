@@ -26,8 +26,7 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public CategoryResponseDTO getOneCategory(Long categoryId){
-        Category category = jpaCategoryRepository.findById(categoryId)
-            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        Category category = getCategory(categoryId);
         return CategoryResponseDTO.of(category);
     }
 
@@ -42,8 +41,7 @@ public class CategoryService {
     }
 
     public Long updateCategory(Long categoryId, CategoryRequestDTO categoryRequestDTO) {
-        Category category = jpaCategoryRepository.findById(categoryId)
-            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        Category category = getCategory(categoryId);
 
         category.update(categoryRequestDTO.name(), categoryRequestDTO.color(),
             categoryRequestDTO.imageUrl(),
@@ -53,9 +51,14 @@ public class CategoryService {
     }
 
     public Long deleteCategory(Long categoryId) {
-        Category category = jpaCategoryRepository.findById(categoryId)
-            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        Category category = getCategory(categoryId);
         jpaCategoryRepository.delete(category);
         return category.getId();
+    }
+
+    private Category getCategory(Long categoryId) {
+        Category category = jpaCategoryRepository.findById(categoryId)
+            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        return category;
     }
 }
