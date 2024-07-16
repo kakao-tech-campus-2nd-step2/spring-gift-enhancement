@@ -5,6 +5,7 @@ import gift.product.model.Category;
 import gift.product.repository.CategoryRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
@@ -21,11 +22,12 @@ public class CategoryService {
     }
 
     public Category getCategory(Long id) {
-        return getValidatedCategory(id);
+        return getExistenceValidatedCategory(id);
     }
 
     @Transactional
     public Category insertCategory(CategoryDto categoryDto) {
+        getRedundantValidatedCategory(categoryDto.name());
         Category category = new Category(categoryDto.name());
 
         return categoryRepository.save(category);
@@ -33,7 +35,7 @@ public class CategoryService {
 
     @Transactional
     public Category updateCategory(Long id, CategoryDto categoryDto) {
-        getValidatedCategory(id);
+        getExistenceValidatedCategory(id);
 
         Category category = new Category(id, categoryDto.name());
         return categoryRepository.save(category);
@@ -41,12 +43,20 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long id) {
-        getValidatedCategory(id);
+        getExistenceValidatedCategory(id);
         categoryRepository.deleteById(id);
     }
 
-    private Category getValidatedCategory(Long id) {
+    private Category getExistenceValidatedCategory(Long id) {
         return categoryRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("해당 ID의 카테고리가 존재하지 않습니다."));
+    }
+
+    private void getRedundantValidatedCategory(String name) {
+        Optional<Category> categoryOptional = categoryRepository.findByName(name);
+
+        if (categoryOptional.isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
+        }
     }
 }
