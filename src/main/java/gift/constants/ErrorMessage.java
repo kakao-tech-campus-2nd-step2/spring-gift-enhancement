@@ -20,6 +20,7 @@ public class ErrorMessage {
 
     public static final String CATEGORY_NOT_EXISTS_MSG = "존재하지 않는 카테고리입니다.";
     public static final String CATEGORY_ALREADY_EXISTS_MSG = "이미 존재하는 카테고리입니다.";
+    public static final String CATEGORY_NAME_NOT_BLANK_MSG = "카테고리명을 입력해주세요.";
 
     public static final String NULL_POINTER_EXCEPTION_MSG = "객체가 null 입니다.";
 }

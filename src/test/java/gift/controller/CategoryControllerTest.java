@@ -3,9 +3,11 @@ package gift.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.constants.ErrorMessage;
 import gift.dto.CategoryDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +28,7 @@ class CategoryControllerTest {
     private final CategoryDto categoryDto = new CategoryDto(null, "생일 선물", "노랑", "http",
         "생일 선물 카테고리");
 
-    void insertCategory() throws Exception {
+    void insertCategory(CategoryDto categoryDto) throws Exception {
         String inputJson = new ObjectMapper().writeValueAsString(categoryDto);
 
         mockMvc.perform(post("/api/categories")
@@ -49,7 +51,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 수정 테스트")
     void editCategory() throws Exception {
-        insertCategory();
+        insertCategory(categoryDto);
 
         CategoryDto editedCategory = new CategoryDto(1L, "크리스마스", "빨강", "https", "크리스마스 카테고리");
         String inputJson = new ObjectMapper().writeValueAsString(editedCategory);
@@ -63,9 +65,22 @@ class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 삭제 테스트")
     void deleteCategory() throws Exception {
-        insertCategory();
+        insertCategory(categoryDto);
 
         mockMvc.perform(delete("/api/categories/1"))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("카테고리 공백 이름 입력 시, 실패 테스트")
+    void categoryNameNotBlank() throws Exception {
+        CategoryDto editedCategory = new CategoryDto(null, "", "빨강", "https", "크리스마스 카테고리");
+        String inputJson = new ObjectMapper().writeValueAsString(editedCategory);
+
+        mockMvc.perform(post("/api/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(ErrorMessage.CATEGORY_NAME_NOT_BLANK_MSG));
     }
 }

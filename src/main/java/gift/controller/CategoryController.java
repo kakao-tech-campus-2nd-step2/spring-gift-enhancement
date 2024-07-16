@@ -3,6 +3,7 @@ package gift.controller;
 import gift.constants.SuccessMessage;
 import gift.dto.CategoryDto;
 import gift.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,7 @@ public class CategoryController {
      * 카테고리 추가 엔드포인트
      */
     @PostMapping
-    public ResponseEntity<String> addCategory(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<String> addCategory(@RequestBody @Valid CategoryDto categoryDto) {
         categoryService.addCategory(categoryDto);
         return ResponseEntity.ok(SuccessMessage.ADD_CATEGORY_SUCCESS_MSG);
     }
@@ -35,7 +36,7 @@ public class CategoryController {
      * 카테고리 수정 엔드포인트
      */
     @PutMapping
-    public ResponseEntity<String> editCategory(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<String> editCategory(@RequestBody @Valid CategoryDto categoryDto) {
         categoryService.editCategory(categoryDto);
         return ResponseEntity.ok(SuccessMessage.EDIT_CATEGORY_SUCCESS_MSG);
     }
