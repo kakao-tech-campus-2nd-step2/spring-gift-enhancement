@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
-    List<ProductDTO> getAllProducts();
+    Page<ProductDTO> getProductsByCategoryId(Pageable pageable, int categoryId);
     ProductDTO getProductById(Long id);
     void saveProduct(ProductDTO productDTO);
     void updateProduct(Long id, ProductDTO productDTO);
