@@ -3,9 +3,12 @@ package gift.model.product;
 import gift.global.validate.ProductNameValidator;
 import gift.model.BaseTimeEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -24,14 +27,20 @@ public class Product extends BaseTimeEntity {
     @NotNull
     private String imageUrl;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     protected Product() {
     }
 
-    public Product(Long id, String name, Integer price, String imageUrl) {
+    public Product(Long id, String name, Integer price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -50,9 +59,14 @@ public class Product extends BaseTimeEntity {
         return imageUrl;
     }
 
-    public static Product create(Long id, String name, Integer price, String imageUrl) {
+    public Category getCategory() {
+        return category;
+    }
+
+    public static Product create(Long id, String name, Integer price, String imageUrl,
+        Category category) {
         ProductNameValidator.isValid(name);
-        return new Product(id, name, price, imageUrl);
+        return new Product(id, name, price, imageUrl, category);
     }
 
     public void update(String name, Integer price, String imageUrl) {
