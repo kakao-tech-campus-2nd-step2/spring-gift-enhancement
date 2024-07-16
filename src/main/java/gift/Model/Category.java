@@ -8,18 +8,30 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
+    @Column(nullable = false)
+    private String color;
+    @Column(nullable = false)
+    private String imageUrl;
+    private String description;
 
-    private Category (){}
 
-    public Category(String name, Long id) {
-        this.name = name;
+    protected Category (){}
+
+    public Category(Long id, String name, String color, String imageUrl, String description) {
         this.id = id;
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
 
-    public Category(String name) {
+    public Category(String name, String color, String imageUrl, String description) {
         this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
 
     public Long getId() {
@@ -30,11 +42,22 @@ public class Category {
         return name;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getColor() {
+        return color;
     }
 
-    public void setName(String name) {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void update(String name, String color, String imageUrl, String description){
         this.name = name;
+        this.color = color;
+        this. imageUrl = imageUrl;
+        this.description = description;
     }
 }
