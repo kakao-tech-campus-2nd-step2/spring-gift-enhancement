@@ -123,6 +123,7 @@
           </button>
         </th>
         <th>ImageUrl</th>
+        <th>Category</th>
         <th>Action</th>
       </tr>
 
@@ -132,6 +133,7 @@
         <td th:text="${product.getName()}"></td>
         <td th:text="${product.getPrice()}"></td>
         <td th:text="${product.getImageUrl()}"></td>
+        <td th:text="${product.getCategory().getName()}"></td>
         <td>
           <button
               class="material-symbols-outlined content-edit"

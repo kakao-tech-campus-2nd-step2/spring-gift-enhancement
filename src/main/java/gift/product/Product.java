@@ -45,6 +45,10 @@ public class Product {
         return imageUrl;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     public Product() {
     }
 
