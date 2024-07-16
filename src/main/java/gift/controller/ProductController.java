@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.domain.Product;
 import gift.dto.request.ProductRequest;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping()
@@ -38,6 +41,7 @@ public class ProductController {
     @GetMapping("/new")
     public String newProductForm(Model model) {
         model.addAttribute("product", new ProductRequest());
+        model.addAttribute("categories", categoryService.getCategories());
         return "product-add-form";
     }
 
