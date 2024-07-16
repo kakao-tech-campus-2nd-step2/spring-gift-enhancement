@@ -27,14 +27,14 @@ public class Product {
 
     public Product(long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
-        this.setName(name);
+        this.ValidateThenSetName(name);
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
     }
 
     public Product(String name, int price, String imageUrl, Category category) {
-        this.setName(name);
+        this.ValidateThenSetName(name);
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
@@ -45,7 +45,7 @@ public class Product {
 
     public Product update(String name, Integer price, String imageUrl, Category category){
         if(imageUrl != null && !name.isEmpty()){
-            this.setName(name);
+            this.ValidateThenSetName(name);
         }
         if(price != null){
             this.price = price;
