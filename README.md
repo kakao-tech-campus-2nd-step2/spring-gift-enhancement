@@ -13,8 +13,8 @@
 TodoList
 - [ ] categoryController
   - [x] 전부 보여주기
-  - [ ] 1개만 보여주기
-  - [ ] 추가하기
+  - [x] 1개만 보여주기
+  - [x] 추가하기
   - [ ] 수정하기
   - [ ] 삭제하기
 - [ ] categoryRequestDto
@@ -22,8 +22,8 @@ TodoList
 - [x] categoryEntity
 - [ ] categoryService
   - [x] 전부 보여주기
-  - [ ] 1개만 보여주기
-  - [ ] 추가하기
+  - [x] 1개만 보여주기
+  - [x] 추가하기
   - [ ] 수정하기
   - [ ] 삭제하기
 - [x] categoryRepository
