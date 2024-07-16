@@ -35,7 +35,7 @@ Content-Type: application/json
 
 # 구현할 기능 정리
 1. 힌트를 바탕으로 category 엔티티 클래스 구현
-2. 힌트를 바탕으로 product 엔티티와 category 엔티티에 양방향 맵핑 구현
+2. 힌트를 바탕으로 product->category 단방향 맵핑 구현
 3. categoryController, categoryService, categoryRepository 구현
 4. 관리자 화면에서 상품을 추가할 때 카테고리를 지정할 수 있도록, 상품을 수정할 때 카테고리를 수정할 수 있도록 api 구현
 5. categoryRepository에 대한 테스트 구현
