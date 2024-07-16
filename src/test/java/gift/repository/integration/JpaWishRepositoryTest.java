@@ -10,6 +10,7 @@ import gift.domain.Wish;
 import gift.repository.JpaProductRepository;
 import gift.repository.JpaUserRepository;
 import gift.repository.JpaWishRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,7 @@ class JpaWishRepositoryTest {
     private JpaUserRepository jpaUserRepository;
     @Autowired
     private JpaProductRepository jpaProductRepository;
+    private List<Long> userIdList = new ArrayList<>();
     private List<Wish> wishList;
 
     private Long insertWish(Wish wish) {
@@ -40,12 +42,15 @@ class JpaWishRepositoryTest {
 
     @BeforeEach
     void setWish() {
-        List<User> users = List.of(
-            new User("www.naver.com", "1234", "일반"),
-            new User("www.daum.net", "1234", "관리자")
-        );
 
-        jpaUserRepository.saveAll(users);
+        User user1 = new User("www.naver.com", "1234", "일반");
+        User user2 = new User("www.daum.net", "1234", "관리자");
+
+        Long insertedUserId1 = jpaUserRepository.save(user1).getId();
+        Long insertedUserId2 = jpaUserRepository.save(user2).getId();
+
+        userIdList.add(insertedUserId1);
+        userIdList.add(insertedUserId2);
 
         List<Product> products = List.of(
             new Product("사과", 12000, "www.naver.com"),
@@ -57,13 +62,13 @@ class JpaWishRepositoryTest {
         jpaProductRepository.saveAll(products);
 
         wishList = List.of(
-            new Wish(users.get(0), products.get(0), 10),
-            new Wish(users.get(0), products.get(1), 5),
-            new Wish(users.get(0), products.get(2), 15),
-            new Wish(users.get(0), products.get(3), 20),
+            new Wish(user1, products.get(0), 10),
+            new Wish(user1, products.get(1), 5),
+            new Wish(user1, products.get(2), 15),
+            new Wish(user1, products.get(3), 20),
 
-            new Wish(users.get(1), products.get(0), 10),
-            new Wish(users.get(1), products.get(1), 5)
+            new Wish(user2, products.get(0), 10),
+            new Wish(user2, products.get(1), 5)
         );
     }
 
@@ -101,8 +106,8 @@ class JpaWishRepositoryTest {
         //given
         insertAllWishList(wishList);
         //when
-        List<Wish> wishList1 = jpaWishRepository.findAllByUserId(1L);
-        List<Wish> wishList2 = jpaWishRepository.findAllByUserId(2L);
+        List<Wish> wishList1 = jpaWishRepository.findAllByUserId(userIdList.get(0));
+        List<Wish> wishList2 = jpaWishRepository.findAllByUserId(userIdList.get(1));
         //then
         assertAll(
             () -> assertThat(wishList1.size()).isEqualTo(4),
