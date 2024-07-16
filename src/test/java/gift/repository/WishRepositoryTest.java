@@ -1,13 +1,16 @@
 package gift.repository;
 
+import gift.dto.PageRequestDTO;
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wish;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -24,11 +27,16 @@ public class WishRepositoryTest {
     @Autowired
     private ProductRepository products;
 
+    @Autowired
+    private CategoryRepository categories;
+
     @DisplayName("wish 저장")
     @Test
     void save(){
+        Category category = new Category("교환권");
+        categories.save(category);
         members.save(new Member("test.gamil.com", "test1234"));
-        products.save(new Product("Product1", 1000, "1.img"));
+        products.save(new Product("Product1", 1000, "1.img", category));
         Member member = members.findByEmail("test.gamil.com").orElseThrow();
         Product product = products.findByName("Product1").orElseThrow();
         Wish expected = new Wish(member, product);
@@ -39,9 +47,11 @@ public class WishRepositoryTest {
     @DisplayName("해당 memberId를 가진 Wishlist 반환")
     @Test
     void getWishsbyMemberId(){
+        Category category = new Category("교환권");
+        categories.save(category);
         members.save(new Member("test.gamil.com", "test1234"));
-        products.save(new Product("Product1", 1000, "1.img"));
-        products.save(new Product("Product2", 5000, "2.img"));
+        products.save(new Product("Product1", 1000, "1.img", category));
+        products.save(new Product("Product2", 5000, "2.img", category));
         Member member = members.findByEmail("test.gamil.com").orElseThrow();
         Product product1 = products.findByName("Product1").orElseThrow();
         Product product2 = products.findByName("Product2").orElseThrow();
@@ -49,8 +59,10 @@ public class WishRepositoryTest {
         Wish wish2 = new Wish(member, product2);
         wishs.save(wish1);
         wishs.save(wish2);
-        List<Wish> actual = wishs.findByMember_Id(1L);
+        PageRequestDTO pageRequestDTO = new PageRequestDTO(0, "id", "asc");
+        PageRequest pageRequest = PageRequest.of(pageRequestDTO.getPage(), pageRequestDTO.getSize(), pageRequestDTO.getSort());
+        Page<Wish> actual = wishs.findByMember_Id(1L, pageRequest);
         List<Wish> expected = List.of(wish1, wish2);
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.getContent()).isEqualTo(expected);
     }
 }
