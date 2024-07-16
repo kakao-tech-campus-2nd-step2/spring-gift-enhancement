@@ -2,7 +2,9 @@ package gift.category;
 
 import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
