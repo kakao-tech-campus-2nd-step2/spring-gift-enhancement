@@ -85,6 +85,5 @@ public class MemberService {
         } catch (Exception e) {
             throw new AuthException("회원가입에 실패했습니다.", HttpStatus.FORBIDDEN);
         }
-
     }
 }

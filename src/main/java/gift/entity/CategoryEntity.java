@@ -27,6 +27,15 @@ public class CategoryEntity {
     @Column(nullable = false, length = 15)
     String name;
 
+    @Column(nullable = false)
+    String color;
+
+    @Column(nullable = false)
+    String imageUrl;
+
+    @Column(nullable = false)
+    String description;
+
     @JsonIgnore
     @OneToMany(mappedBy = "categoryEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductEntity> productEntities;
@@ -37,6 +46,38 @@ public class CategoryEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<ProductEntity> getProductEntities() {
+        return productEntities;
+    }
+
+    public void setProductEntities(List<ProductEntity> productEntities) {
+        this.productEntities = productEntities;
+    }
+
     public String getName() {
         return name;
     }
@@ -44,6 +85,7 @@ public class CategoryEntity {
     public void setName(String name) {
         this.name = name;
     }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -59,8 +101,6 @@ public class CategoryEntity {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-
 
     public void setId(Long id) {
         this.id = id;
