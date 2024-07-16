@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.dto.CategoryDTO;
+import gift.exception.NoSuchCategoryException;
 import gift.repository.CategoryRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,5 +23,11 @@ public class CategoryService {
             .stream()
             .map(category -> category.toDTO())
             .collect(Collectors.toList());
+    }
+
+    public CategoryDTO getCategory(Long id) {
+        return categoryRepository.findById(id)
+            .orElseThrow(NoSuchCategoryException::new)
+            .toDTO();
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({NoSuchProductException.class, NoSuchWishedProductException.class})
+    @ExceptionHandler({NoSuchProductException.class, NoSuchWishedProductException.class, NoSuchCategoryException.class})
     public ProblemDetail handleNotFoundException(RuntimeException runtimeException) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
         problemDetail.setDetail(runtimeException.getMessage());
