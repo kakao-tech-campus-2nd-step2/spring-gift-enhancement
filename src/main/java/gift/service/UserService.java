@@ -11,6 +11,7 @@ import gift.utils.error.UserNotFoundException;
 import gift.utils.error.UserPasswordNotFoundException;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -23,7 +24,7 @@ public class UserService {
         this.userInfoRepository = userInfoRepository;
         this.jwtTokenProvider = jwtTokenProvider;
     }
-
+    @Transactional
     public TokenResponseDTO registerUser(UserDTO userDTO) {
         UserInfo userInfo = new UserInfo(userDTO.getEmail(), userDTO.getPassword());
         if (userInfo.getId() != null && userInfoRepository.existsById(userInfo.getId())) {
@@ -41,7 +42,7 @@ public class UserService {
         }
         return new TokenResponseDTO(jwtTokenProvider.createToken(userDTO.getEmail()));
     }
-
+    @Transactional
     public boolean changePassword(ChangePasswordDTO changePasswordDTO) {
         UserInfo userInfo = userInfoRepository.findByEmail(changePasswordDTO.getEmail())
             .orElseThrow(() -> new UserNotFoundException("User not found"));
