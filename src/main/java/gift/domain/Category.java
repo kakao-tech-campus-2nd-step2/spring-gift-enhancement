@@ -1,6 +1,7 @@
 package gift.domain;
 
 import gift.util.page.PageParam;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,12 +16,11 @@ public class Category {
 
     public static class CreateCategory {
 
+        @NotNull
         private String name;
-        private Long productId;
 
-        public CreateCategory(String name, Long productId) {
+        public CreateCategory(String name) {
             this.name = name;
-            this.productId = productId;
         }
 
         public String getName() {
@@ -31,18 +31,15 @@ public class Category {
             this.name = name;
         }
 
-        public Long getProductId() {
-            return productId;
-        }
-
-        public void setProductId(Long productId) {
-            this.productId = productId;
-        }
     }
 
     public static class UpdateCategory {
 
+        @NotNull
         private String name;
+
+        public UpdateCategory() {
+        }
 
         public UpdateCategory(String name) {
             this.name = name;
@@ -57,7 +54,8 @@ public class Category {
         }
     }
 
-    public static class SimpleCategory{
+    public static class SimpleCategory {
+
         private Long CategoryId;
         private String CategoryName;
 
@@ -75,7 +73,8 @@ public class Category {
         }
     }
 
-    public static class DetailCategory{
+    public static class DetailCategory {
+
         private List<Long> ProductId;
         private Long CategoryId;
         private String CategoryName;
