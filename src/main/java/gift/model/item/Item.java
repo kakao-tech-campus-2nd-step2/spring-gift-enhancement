@@ -15,7 +15,9 @@ import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.hibernate.annotations.BatchSize;
 
+@BatchSize(size = 100)
 @Entity
 public class Item {
 

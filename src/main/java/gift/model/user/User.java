@@ -11,7 +11,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.BatchSize;
 
+@BatchSize(size = 100)
 @Entity
 @Table(name = "users")
 public class User {
