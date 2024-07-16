@@ -40,4 +40,9 @@ public class CategoryService {
             .orElseThrow(() -> new IllegalArgumentException("Category 가 잘못되었습니다."));
         category.updateInfo(categoryRequestDto.toEntity());
     }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
+    }
 }
