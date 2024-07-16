@@ -51,4 +51,11 @@ public class CategoryService {
 
         return category.getId();
     }
+
+    public Long deleteCategory(Long categoryId) {
+        Category category = jpaCategoryRepository.findById(categoryId)
+            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        jpaCategoryRepository.delete(category);
+        return category.getId();
+    }
 }
