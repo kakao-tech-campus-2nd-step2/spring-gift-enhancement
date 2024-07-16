@@ -175,7 +175,7 @@ public class WishServiceTest {
 
         Page<WishResponse> wishlist = wishService.getWishlistByMemberId(1L, pageable);
         assertEquals(1, wishlist.getTotalElements());
-        assertEquals(1L, wishlist.getContent().get(0).memberId());
-        assertEquals(1L, wishlist.getContent().get(0).productId());
+        assertEquals(1L, wishlist.getContent().getFirst().memberId());
+        assertEquals(1L, wishlist.getContent().getFirst().productId());
     }
 }
