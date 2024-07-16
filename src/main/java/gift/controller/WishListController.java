@@ -5,14 +5,15 @@ import static gift.util.ResponseEntityUtil.responseError;
 import gift.annotation.LoginMember;
 import gift.constants.ResponseMsgConstants;
 import gift.dto.MemberDTO;
-import gift.dto.ProductDTO;
+import gift.dto.ProductRequestDTO;
 import gift.dto.ResponseDTO;
-import gift.dto.WishListDTO;
+import gift.dto.WishDTO;
 import gift.service.WishListService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +41,8 @@ public class WishListController {
     @GetMapping
     public String getWishes(Model model, @LoginMember MemberDTO memberDTO, Pageable pageable) {
         try {
-            WishListDTO wishListDTO = wishListService.getWishList(memberDTO, pageable);
-            model.addAttribute("wishListDTO", wishListDTO);
+            Page<WishDTO> wishDTOPage = wishListService.getWishList(memberDTO, pageable);
+            model.addAttribute("wishDTOPage", wishDTOPage);
         } catch (RuntimeException e) {
             responseError(e);
         }
@@ -49,12 +50,12 @@ public class WishListController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> addWishes(@RequestBody @Valid ProductDTO productDTO,
+    public ResponseEntity<ResponseDTO> addWishes(@RequestBody @Valid ProductRequestDTO productRequestDTO,
             @LoginMember MemberDTO memberDTO) {
         try {
-            wishListService.addWishes(memberDTO, productDTO);
+            wishListService.addWishes(memberDTO, productRequestDTO);
         } catch (RuntimeException e) {
-            responseError(e);
+            return responseError(e);
         }
         return new ResponseEntity<>(new ResponseDTO(false, ResponseMsgConstants.WELL_DONE_MESSAGE),
                 HttpStatus.CREATED);
@@ -66,7 +67,7 @@ public class WishListController {
         try {
             wishListService.removeWishListProduct(memberDTO, id);
         } catch (RuntimeException e) {
-            responseError(e);
+            return responseError(e);
         }
         return new ResponseEntity<>(new ResponseDTO(false, ResponseMsgConstants.WELL_DONE_MESSAGE),
                 HttpStatus.NO_CONTENT);
@@ -74,11 +75,11 @@ public class WishListController {
 
     @PutMapping("/{quantity}")
     public ResponseEntity<ResponseDTO> setWishes(@PathVariable @Min(0) @NotNull Integer quantity, @LoginMember MemberDTO MemberDTO,
-            @RequestBody @Valid ProductDTO productDTO) {
+            @RequestBody @Valid ProductRequestDTO productRequestDTO) {
         try {
-            wishListService.setWishListNumber(MemberDTO, productDTO, quantity);
+            wishListService.setWishListNumber(MemberDTO, productRequestDTO, quantity);
         } catch (RuntimeException e) {
-            responseError(e);
+            return responseError(e);
         }
         return new ResponseEntity<>(new ResponseDTO(false, ResponseMsgConstants.WELL_DONE_MESSAGE),
                 HttpStatus.OK);
