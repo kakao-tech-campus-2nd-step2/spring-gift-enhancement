@@ -26,6 +26,11 @@ public class GlobalExceptionHandler {
         return createErrorResponseEntity(e.getErrorCode(), Map.of("description", e.getDetails()));
     }
 
+    @ExceptionHandler(DBException.class)
+    public ResponseEntity<ErrorResponseDto> handleDBException(DBException e) {
+        return createErrorResponseEntity(e.getErrorCode(), Map.of("description", e.getDetails()));
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponseDto> handleMethodArgumentTypeMismatchException(
         MethodArgumentTypeMismatchException e) {
