@@ -5,6 +5,7 @@ import gift.core.domain.user.exception.UserAlreadyExistsException;
 import gift.core.domain.user.exception.UserNotFoundException;
 import gift.user.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -44,6 +45,7 @@ public class UserServiceTests {
     }
 
     @Test
+    @DisplayName("이미 존재하는 사용자 ID로 사용자 등록 시도 테스트")
     public void testRegisterUserWithExistingUserId() {
         User user = new User(0L, "test", new UserAccount("principal", "credentials"));
 
@@ -53,6 +55,7 @@ public class UserServiceTests {
     }
 
     @Test
+    @DisplayName("이미 존재하는 사용자 계정으로 사용자 등록 시도 테스트")
     public void testRegisterUserWithExistingUserAccount() {
         User user = new User(0L, "test", new UserAccount("principal", "credentials"));
 
@@ -74,6 +77,7 @@ public class UserServiceTests {
     }
 
     @Test
+    @DisplayName("존재하지 않는 사용자 ID로 사용자 조회 시도 테스트")
     public void testGetUserByIdWithNonExistingUserId() {
         Long userId = 1L;
         when(userRepository.existsById(userId)).thenReturn(false);
@@ -91,6 +95,7 @@ public class UserServiceTests {
     }
 
     @Test
+    @DisplayName("존재하지 않는 사용자 ID로 사용자 삭제 시도 테스트")
     public void testDeleteUserByIdWithNonExistingUserId() {
         Long userId = 1L;
         when(userRepository.existsById(userId)).thenReturn(false);

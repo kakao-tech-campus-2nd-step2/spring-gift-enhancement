@@ -5,6 +5,7 @@ import gift.core.domain.product.exception.ProductAlreadyExistsException;
 import gift.core.domain.product.exception.ProductNotFoundException;
 import gift.product.service.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -50,6 +51,7 @@ public class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("이미 존재하는 상품을 생성 시도 테스트")
     public void testCreateProductWithExistingProduct() {
         Product product = new Product(
                 0L,
@@ -83,6 +85,7 @@ public class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("존재하지 않는 상품 조회 시도 테스트")
     public void testGetProductWithNonExistingProduct() {
         Long productId = 1L;
         when(productRepository.exists(productId)).thenReturn(false);
@@ -108,6 +111,7 @@ public class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("존재하지 않는 상품 수정 시도 테스트")
     public void testUpdateProductWithNonExistingProduct() {
         Product product = new Product(
                 0L,
@@ -132,6 +136,7 @@ public class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("존재하지 않는 상품 삭제 시도 테스트")
     public void testDeleteProductByIdWithNonExistingProduct() {
         Long productId = 1L;
         when(productRepository.exists(productId)).thenReturn(false);

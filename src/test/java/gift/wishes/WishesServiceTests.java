@@ -12,6 +12,7 @@ import gift.core.domain.wishes.exception.WishAlreadyExistsException;
 import gift.core.domain.wishes.exception.WishNotFoundException;
 import gift.wishes.service.WishesServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -61,6 +62,7 @@ public class WishesServiceTests {
     }
 
     @Test
+    @DisplayName("이미 존재하는 위시 상품을 추가 시도 테스트")
     public void testAddProductToWishesWithExistingWish() {
         Long userId = 1L;
         Product product = new Product(
@@ -96,6 +98,7 @@ public class WishesServiceTests {
     }
 
     @Test
+    @DisplayName("존재하지 않는 위시 상품을 삭제 시도 테스트")
     public void testRemoveProductFromWishesWithNonExistingWish() {
         Long userId = 1L;
         Product product = new Product(
