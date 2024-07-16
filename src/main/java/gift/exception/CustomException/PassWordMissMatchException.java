@@ -1,12 +1,13 @@
 package gift.exception.CustomException;
 
+import gift.exception.ErrorCode;
 import org.springframework.core.MethodParameter;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
-public class PassWordMissMatchException extends MethodArgumentNotValidException {
+public class PassWordMissMatchException extends CustomArgumentNotValidException {
+
     public PassWordMissMatchException(MethodParameter parameter,
-        BindingResult bindingResult) {
-        super(parameter, bindingResult);
+        BindingResult bindingResult, ErrorCode errorCode) {
+        super(parameter, bindingResult, errorCode);
     }
 }
