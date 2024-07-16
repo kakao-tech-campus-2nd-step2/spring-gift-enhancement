@@ -24,8 +24,5 @@ public class Application implements CommandLineRunner {
             CategoryRequest category = new CategoryRequest(s);
             categoryService.save(category);
         }
-
-
-
     }
 }
