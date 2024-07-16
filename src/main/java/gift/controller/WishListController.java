@@ -28,6 +28,15 @@ public class WishListController {
     }
 
     @GetMapping
+    public ResponseEntity<?> getWishListItems(HttpServletRequest request) {
+        String token = extractToken(request);
+        Claims claims = jwtUtil.extractAllClaims(token);
+        Number memberId = (Number) claims.get("id");
+        List<WishList> wishLists = wishListService.getWishListItems(memberId.longValue());
+        return ResponseEntity.ok(wishLists);
+    }
+
+    @GetMapping("/page")
     public ResponseEntity<?> getWishListItems(
         HttpServletRequest request,
         @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -36,17 +45,8 @@ public class WishListController {
         String token = extractToken(request);
         Claims claims = jwtUtil.extractAllClaims(token);
         Number memberId = (Number) claims.get("id");
-
-        if (page != null && size != null) {
-            //쿼리 파라미터로 page와 size가 들어온 경우 페이지 네이션 서비스
-            Page<WishList> wishLists = wishListService.getWishListItems(memberId.longValue(), page,
-                size);
-            return ResponseEntity.ok(wishLists);
-        } else {
-            //기존 서비스
-            List<WishList> wishLists = wishListService.getWishListItems(memberId.longValue());
-            return ResponseEntity.ok(wishLists);
-        }
+        Page<WishList> wishLists = wishListService.getWishListItems(memberId.longValue(), page, size);
+        return ResponseEntity.ok(wishLists);
     }
 
     @PostMapping
