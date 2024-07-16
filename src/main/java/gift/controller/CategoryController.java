@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.domain.Category;
+import gift.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable Long id) {
-        return categoryService.deleteCategory(id);
+        categoryService.deleteCategory(id);
     }
 }
 

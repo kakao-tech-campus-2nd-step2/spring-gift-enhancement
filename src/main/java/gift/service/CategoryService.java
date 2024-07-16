@@ -1,7 +1,8 @@
 package gift.service;
 
 import gift.domain.Category;
-import gift.repository.CategoryRepository;
+import gift.exception.MemberNotFoundException;
+import gift.repository.category.CategorySpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,10 @@ import java.util.List;
 @Service
 public class CategoryService {
 
-    private final CategoryRepository categoryRepository;
+    private final CategorySpringDataJpaRepository categoryRepository;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategorySpringDataJpaRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
@@ -26,11 +27,14 @@ public class CategoryService {
     }
 
     public Category updateCategory(Long id, Category category){
-        return categoryRepository.updateById(id, category);
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException("존재하지않는 카테코리입니다."));
+        existingCategory.setName(category.getName());
+        return categoryRepository.save(existingCategory);
     }
 
     public void deleteCategory(Long id){
-        return categoryRepository.deleteById(id);
+        categoryRepository.deleteById(id);
     }
 }
 
