@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.component.LoginMember;
+import gift.dto.ApiResponse;
 import gift.model.Member;
 import gift.model.Wish;
 import gift.service.WishService;
@@ -8,9 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/wishes")
@@ -23,27 +22,28 @@ public class WishController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getWishes(@LoginMember Member member) {
+    public ResponseEntity<ApiResponse<List<Wish>>> getWishes(@LoginMember Member member) {
         List<Wish> wishes = wishService.getWishesByMemberId(member.getId());
-        Map<String, Object> response = new HashMap<>();
-        response.put("wishes", wishes);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        ApiResponse<List<Wish>> response = new ApiResponse<>(true, "Wishes retrieved successfully.", wishes, null);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addWish(@RequestBody Wish wish, @LoginMember Member member) {
+    public ResponseEntity<ApiResponse<Wish>> addWish(@RequestBody Wish wish, @LoginMember Member member) {
         wish.setMember(member);
         Wish savedWish = wishService.addWish(wish);
-        Map<String, Object> response = new HashMap<>();
-        response.put("wish", savedWish);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        ApiResponse<Wish> response = new ApiResponse<>(true, "Wish added successfully.", savedWish, null);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> removeWish(@PathVariable Long id, @LoginMember Member member) {
+    public ResponseEntity<ApiResponse<Void>> removeWish(@PathVariable Long id, @LoginMember Member member) {
         boolean removed = wishService.removeWish(id, member.getId());
-        Map<String, Object> response = new HashMap<>();
-        response.put("removed", removed);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if (removed) {
+            ApiResponse<Void> response = new ApiResponse<>(true, "Wish removed successfully.", null, null);
+            return ResponseEntity.ok(response);
+        }
+        ApiResponse<Void> response = new ApiResponse<>(false, "Failed to remove wish.", null, "500");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
