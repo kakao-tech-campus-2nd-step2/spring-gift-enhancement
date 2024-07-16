@@ -42,12 +42,8 @@ public class ProductController {
             sort = PageConfig.SORT_STANDARD,
             direction = Direction.DESC
         ) Pageable pageable) {
-        try {
-            Page<ProductResponse> products = productService.getAllProducts(pageable);
-            return ResponseEntity.ok(products);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Page<ProductResponse> products = productService.getAllProducts(pageable);
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("{id}")
