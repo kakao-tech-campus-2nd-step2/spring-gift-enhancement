@@ -16,7 +16,8 @@ CREATE TABLE products (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     price BIGINT NOT NULL,
-    image_url VARCHAR(255) NOT NULL
+    image_url VARCHAR(255) NOT NULL,
+    category_id BIGINT NOT NULL
 );
 
 -- Create WISH table
@@ -26,5 +27,17 @@ CREATE TABLE wish (
     product_id BIGINT NOT NULL
 );
 
+-- Create CATEGORY table
+CREATE TABLE category (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    color VARCHAR(25) NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    description VARCHAR(255)
+);
+
+-- Add CONSTRAINT
 ALTER TABLE wish ADD CONSTRAINT fk_wish_user_id FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE wish ADD CONSTRAINT fk_wish_product_id FOREIGN KEY (product_id) REFERENCES products(id);
+
+ALTER TABLE products ADD CONSTRAINT fk_product_category_id_ref_category_id FOREIGN KEY (category_id) REFERENCES category(id);
