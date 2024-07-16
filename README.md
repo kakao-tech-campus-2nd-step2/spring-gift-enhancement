@@ -21,13 +21,13 @@ GET /api/categories HTTP/1.1
 HTTP/1.1 200
 Content-Type: application/json
 [
-{
-"id": 91,
-"name": "교환권",
-"color": "#6c95d1",
-"imageUrl": "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png",
-"description": ""
-}
+    {
+        "id": 91,
+        "name": "교환권",
+        "color": "#6c95d1",
+        "imageUrl": "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png",
+        "description": ""
+    }
 ]
 
 ```
