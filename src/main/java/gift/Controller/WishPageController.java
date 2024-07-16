@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/member/wishList")
+@RequestMapping("/member/wishes")
 public class WishPageController {
     private final WishService wishService;
     private final ProductService productService;
@@ -45,7 +45,7 @@ public class WishPageController {
     @PostMapping("/new")
     public String addWish(@ValidUser Member member, @ModelAttribute RequestWishDTO requestWishDTO) {
         wishService.addWish(member, requestWishDTO);
-        return "redirect:/member/wishList";
+        return "redirect:/member/wishes";
     }
 
     @GetMapping("/edit/{productId}")
@@ -60,13 +60,13 @@ public class WishPageController {
     @PostMapping("/edit")
     public String editWish(@ValidUser Member member, @ModelAttribute RequestWishDTO requestWishDTO) {
         wishService.editWish(member, requestWishDTO);
-        return "redirect:/member/wishList";
+        return "redirect:/member/wishes";
     }
 
     @PostMapping("/delete")
     public String deleteWish(@ValidUser Member member, @RequestBody RequestWishDTO requestWishDTO){
         wishService.deleteWish(member,requestWishDTO);
-        return "redirect:/member/wishList";
+        return "redirect:/member/wishes";
     }
 
 
