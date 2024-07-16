@@ -18,6 +18,13 @@ public class Category {
     @Column(unique = true)
     private String name;
 
+    public Category() {
+    }
+
+    public Category(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

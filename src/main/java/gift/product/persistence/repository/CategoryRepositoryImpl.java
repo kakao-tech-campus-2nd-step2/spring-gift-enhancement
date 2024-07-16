@@ -21,4 +21,9 @@ public class CategoryRepositoryImpl implements CategoryRepository{
     public List<Category> getAllCategories() {
         return categoryJpaRepository.findAll();
     }
+
+    @Override
+    public Long saveCategory(Category category) {
+        return categoryJpaRepository.save(category).getId();
+    }
 }

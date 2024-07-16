@@ -8,4 +8,6 @@ public interface CategoryRepository {
     Category getReferencedCategory(Long categoryId);
 
     List<Category> getAllCategories();
+
+    Long saveCategory(Category category);
 }

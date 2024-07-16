@@ -1,10 +1,14 @@
 package gift.product.presentation.restcontroller;
 
 import gift.product.business.service.CategoryService;
+import gift.product.presentation.dto.RequestCategoryDto;
 import gift.product.presentation.dto.ResponseCategoryDto;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +28,14 @@ public class CategoryController {
         var responseCategoryDtos = ResponseCategoryDto.of(categoryDtos);
         return ResponseEntity.ok(responseCategoryDtos);
     }
+
+    @PostMapping
+    public ResponseEntity<Long> createCategory(@Valid @RequestBody RequestCategoryDto requestCategoryDto) {
+        var categoryRegisterDto = requestCategoryDto.toCategoryRegisterDto();
+        var createdCategoryId = categoryService.createCategory(categoryRegisterDto);
+        return ResponseEntity.ok(createdCategoryId);
+    }
+
+
 
 }
