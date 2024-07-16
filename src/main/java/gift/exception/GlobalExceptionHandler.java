@@ -1,5 +1,6 @@
 package gift.exception;
 
+import gift.exception.category.CategoryAlreadyExistException;
 import gift.exception.user.UserAlreadyExistException;
 import gift.exception.user.UserUnauthorizedException;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = UserUnauthorizedException.class)
     public ProblemDetail handleUserUnauthorizedException(UserUnauthorizedException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = CategoryAlreadyExistException.class)
+    public ProblemDetail handleCategoryAlreadyExistException(CategoryAlreadyExistException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 
 
