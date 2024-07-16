@@ -27,4 +27,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalidUserException(UserNotFoundException e){
     	return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
+    
+    @ExceptionHandler(InvalidCategoryException.class)
+    public ResponseEntity<String> handleInvalideCategoryException(InvalidCategoryException e){
+    	return new ResponseEntity<>(e.getMessage(), e.getStatus());
+    }
 }
