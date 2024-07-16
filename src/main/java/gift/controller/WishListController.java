@@ -25,7 +25,7 @@ public class WishListController {
 
     @GetMapping("/wishes")
     public Page<WishListResponse> getWishList(@RequestAttribute("userId") Long userId,
-        @PageableDefault(size = 5,sort = "id",direction = Direction.DESC) Pageable pageable) {
+        @PageableDefault(size = 5, sort = "id", direction = Direction.DESC) Pageable pageable) {
         return wishListService.getWishList(userId, pageable);
     }
 

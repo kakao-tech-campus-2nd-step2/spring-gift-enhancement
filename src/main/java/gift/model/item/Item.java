@@ -32,7 +32,7 @@ public class Item {
     @JoinColumn(name = "category_id")
     private Category category;
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-    private List<WishItem> wishes = new ArrayList<>();
+    private final List<WishItem> wishes = new ArrayList<>();
 
     public Item() {
     }

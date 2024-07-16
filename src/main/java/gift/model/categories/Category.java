@@ -8,7 +8,9 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Category {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String name;
@@ -36,7 +38,7 @@ public class Category {
         this.imgUrl = imgUrl;
     }
 
-    public CategoryDTO toDTO(){
-        return new CategoryDTO(id,name,imgUrl);
+    public CategoryDTO toDTO() {
+        return new CategoryDTO(id, name, imgUrl);
     }
 }
