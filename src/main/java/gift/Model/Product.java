@@ -13,22 +13,27 @@ public class Product {
     private int price;
     @Column(nullable = false)
     private String imageUrl;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Category category;
 
     protected Product() {}
 
     // 데이터베이스에서 받아올 때 사용할 생성자
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     // 새 제품을 생성할 때 사용할 생성자
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -45,6 +50,14 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public void setId(Long id) {
