@@ -1,6 +1,6 @@
 package gift.category.controller;
 
-import gift.category.model.dto.CreateCategoryRequest;
+import gift.category.model.dto.CategoryRequest;
 import gift.user.model.dto.AppUser;
 import gift.user.resolver.LoginUser;
 import gift.user.service.UserService;
@@ -23,7 +23,7 @@ public class CategoryAdminController {
 
     @PostMapping
     public ResponseEntity<String> addProductForAdmin(@LoginUser AppUser loginAppUser,
-                                                     @Valid @RequestBody CreateCategoryRequest createCategoryRequest) {
+                                                     @Valid @RequestBody CategoryRequest categoryRequest) {
         userService.verifyAdminAccess(loginAppUser);
         return ResponseEntity.status(HttpStatus.CREATED).body("ok");
     }
