@@ -1,6 +1,5 @@
 package gift.service;
 
-import gift.dto.TokenDto;
 import gift.dto.UserResponseDto;
 import gift.entity.User;
 import gift.repository.UserRepositoryInterface;
@@ -19,12 +18,12 @@ public class UserService {
         this.tokenService = tokenService;
     }
 
-    public TokenDto save(String email, String password) {
+    public String save(String email, String password) {
 
         User newUser = new User(email, password);
 
         User actualUser = userRepositoryInterface.save(newUser);
-        return generateTokenDtoFrom(actualUser.getEmail());
+        return generateTokenFrom(actualUser.getEmail());
     }
 
 
@@ -32,9 +31,8 @@ public class UserService {
         return userRepositoryInterface.findAll().stream().map(UserResponseDto::fromEntity).toList();
     }
 
-    public TokenDto generateTokenDtoFrom(String userEmail) {
-        Long userId = findUserIdFrom(userEmail);
-        return TokenDto.fromEntity(tokenService.makeTokenFrom(userId));
+    public String generateTokenFrom(String userEmail) {
+        return findUserIdFrom(userEmail).toString();
     }
 
     private Long findUserIdFrom(String userEmail) {

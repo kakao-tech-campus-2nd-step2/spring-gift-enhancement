@@ -1,6 +1,5 @@
 package gift.controller;
 
-import gift.dto.TokenDto;
 import gift.dto.UserRequestDto;
 import gift.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -36,14 +35,14 @@ public class AuthController {
     }
 
     @PostMapping("/save")
-    public TokenDto save(@ModelAttribute UserRequestDto userRequestDto) {
+    public String save(@ModelAttribute UserRequestDto userRequestDto) {
         return userService.save(userRequestDto.getEmail(), userRequestDto.getPassword());
     }
 
     @PostMapping("/user/login")
-    public TokenDto login(@ModelAttribute UserRequestDto userRequestDto) throws AuthenticationException {
+    public String login(@ModelAttribute UserRequestDto userRequestDto) throws AuthenticationException {
         if (userService.login(userRequestDto.getEmail(), userRequestDto.getPassword())) {
-            return userService.generateTokenDtoFrom(userRequestDto.getEmail());
+            return userService.generateTokenFrom(userRequestDto.getEmail());
         }
         throw new AuthenticationException("로그인 실패");
     }

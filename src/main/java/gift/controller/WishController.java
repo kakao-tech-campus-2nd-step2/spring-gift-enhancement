@@ -1,6 +1,5 @@
 package gift.controller;
 
-import gift.dto.TokenDto;
 import gift.dto.WishRequestDto;
 import gift.dto.WishResponseDto;
 import gift.service.WishService;
@@ -32,13 +31,13 @@ public class WishController {
     }
 
     @GetMapping()
-    public List<WishResponseDto> getAll(@RequestParam TokenDto token) {
+    public List<WishResponseDto> getAll(@RequestParam("Token") String token) {
         return wishService.getAll(token);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id, @RequestParam TokenDto tokenDto) throws IllegalAccessException {
-        wishService.delete(id, tokenDto);
+    public void delete(@PathVariable("id") Long id, @RequestParam("Token") String token) throws IllegalAccessException {
+        wishService.delete(id, token);
     }
 
     @GetMapping("/wishes")

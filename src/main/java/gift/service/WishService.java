@@ -1,6 +1,5 @@
 package gift.service;
 
-import gift.dto.TokenDto;
 import gift.dto.WishResponseDto;
 import gift.entity.Product;
 import gift.entity.User;
@@ -43,18 +42,18 @@ public class WishService {
         return WishResponseDto.fromEntity(wishRepositoryInterface.save(newWish));
     }
 
-    public List<WishResponseDto> getAll(TokenDto tokenDto) {
+    public List<WishResponseDto> getAll(String tokenValue) {
 
-        Long userId = translateIdFrom(tokenDto);
+        Long userId = translateIdFrom(tokenValue);
         List<Wish> wishes = wishRepositoryInterface.findAllByUserId(userId);
 
         List<WishResponseDto> wishDtos = wishes.stream().map(WishResponseDto::fromEntity).toList();
         return wishDtos;
     }
 
-    public void delete(Long id, TokenDto tokenDto) throws IllegalAccessException {
+    public void delete(Long id, String token) throws IllegalAccessException {
 
-        Long userId = translateIdFrom(tokenDto);
+        Long userId = translateIdFrom(token);
         Wish candidateWish = wishRepositoryInterface.findById(id).get();
         Long wishUserId = candidateWish.getUserId();
 
@@ -63,23 +62,8 @@ public class WishService {
         }
     }
 
-    private Long translateIdFrom(TokenDto tokenDto) {
-
-        String tokenValue = tokenDto.getTokenValue();
-        String decodedToken = tokenService.decodeTokenValue(tokenValue);
-        String[] userInfo = decodedToken.split(" ");
-        String userId = userInfo[1];
-
-        return Long.parseLong(userId);
-    }
-
     private Long translateIdFrom(String tokenValue) {
-
-        String decodedToken = tokenService.decodeTokenValue(tokenValue);
-        String[] userInfo = decodedToken.split(" ");
-        String userId = userInfo[1];
-
-        return Long.parseLong(userId);
+        return tokenService.getUserIdByDecodeTokenValue(tokenValue);
     }
 
     public Page<WishResponseDto> getWishes(Pageable pageable) {
