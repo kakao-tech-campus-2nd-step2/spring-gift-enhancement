@@ -13,9 +13,9 @@
         <tr>
             <td>카테고리 분류: </td>
             <td><label>
-                <input type="number" name="category" th:field="*{categoryName}" />
+                <input type="number" name="categoryId" th:field="*{categoryId}" />
             </label></td>
-            <td th:if="${#fields.hasErrors('category')}" th:errors="*{categoryId}">Category Error Message</td>
+            <td th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}">Category Error Message</td>
         </tr>
         <tr>
             <td>상품명: </td>

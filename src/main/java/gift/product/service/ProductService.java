@@ -105,10 +105,11 @@ public class ProductService {
 
     public ProductDTO convertToDTO(Product product) {
         return new ProductDTO(
-                product.getName(),
-                product.getPrice(),
-                product.getImageUrl(),
-                product.getCategory().getId()
+            product.getId(),
+            product.getName(),
+            product.getPrice(),
+            product.getImageUrl(),
+            product.getCategory().getId()
         );
     }
 

@@ -22,7 +22,6 @@
 <table id="productList">
     <thead>
     <tr>
-        <th>Id</th>
         <th>Name</th>
         <th>Price</th>
         <th>ImageURL</th>
@@ -31,9 +30,6 @@
     </thead>
     <tbody th:each="product : ${productList}">
     <tr>
-        <td>
-            <span th:text="${product.id}"></span>
-        </td>
         <td>
             <span th:text="${product.name}"></span>
         </td>

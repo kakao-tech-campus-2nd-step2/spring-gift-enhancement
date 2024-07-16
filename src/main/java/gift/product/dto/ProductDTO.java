@@ -17,7 +17,19 @@ public class ProductDTO {
     @NotNull(message = "상품의 카테고리가 미지정 되었습니다.")
     private Long categoryId;
 
+    public ProductDTO() {
+
+    }
+
     public ProductDTO(String name, int price, String imageUrl, Long categoryId) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
+    }
+
+    public ProductDTO(Long id, String name, int price, String imageUrl, Long categoryId) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
