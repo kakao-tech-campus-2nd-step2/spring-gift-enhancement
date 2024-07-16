@@ -2,7 +2,8 @@ package gift.product;
 
 import gift.category.Category;
 import gift.category.CategoryRepository;
-import gift.category.CategoryService;
+import gift.option.Option;
+import gift.option.OptionRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,11 +37,15 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow();
     }
 
-    public Product insertNewProduct(ProductDTO newProduct) {
+    public Product insertNewProduct(ProductDTO newProduct, OptionRequest optionRequest) {
         Long categoryID = newProduct.getCategoryID();
         Category category = categoryRepository.findById(categoryID).orElseThrow();
+
         Product product = new Product(newProduct.getName(), newProduct.getPrice(), newProduct.getImageUrl(), category);
         category.addProduct(product);
+        Option option = new Option(optionRequest, product);
+        product.addOptions(option);
+
         return productRepository.save(product);
     }
 
