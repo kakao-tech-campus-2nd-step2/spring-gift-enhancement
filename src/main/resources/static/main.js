@@ -14,7 +14,7 @@ function login() {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
@@ -48,7 +48,7 @@ function loadWishlist() {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
@@ -99,7 +99,7 @@ function deleteProductFromWishlist(productId) {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
@@ -123,7 +123,7 @@ function moveProductListPage(page) {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
@@ -149,7 +149,7 @@ function moveWishlistPage(page) {
     })
         .then(response => {
             if (!response.ok) {
-                response.text().then(text => {
+                return response.text().then(text => {
                     throw new Error(text)
                 });
             }
