@@ -1,7 +1,9 @@
 package gift.auth;
 
 import gift.entity.UserEntity;
+import gift.errorException.BaseHandler;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.ZoneId;
@@ -9,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,8 +49,8 @@ public class JwtToken {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid token", e);
+        } catch (ExpiredJwtException e) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "만료된 토큰 입니다.");
         }
     }
 
