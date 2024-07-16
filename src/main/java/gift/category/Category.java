@@ -16,6 +16,15 @@ public class Category {
     @Unique
     private String name;
 
+    public String getName() {
+        return name;
+    }
+
     public Category() {
+    }
+
+    public Category(long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }
