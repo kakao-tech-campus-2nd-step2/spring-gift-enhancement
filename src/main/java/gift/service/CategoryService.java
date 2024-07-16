@@ -38,21 +38,23 @@ public class CategoryService {
     }
 
     @Transactional
-    public void updateCategory(Long id, String name) {
-        categoryRepository.findById(id)
-            .ifPresentOrElse(category -> category.updateCategory(name),
-                () -> {
-                    throw new NotFoundCategoryException();
-                });
+    public Category updateCategory(Long id, String name) {
+        return categoryRepository.findById(id)
+            .map(category -> {
+                category.updateCategory(name);
+                return category;
+            })
+            .orElseThrow(NotFoundCategoryException::new);
     }
 
     @Transactional
-    public void removeCategory(Long id) {
-        categoryRepository.findById(id)
-            .ifPresentOrElse(categoryRepository::delete,
-                () -> {
-                    throw new NotFoundCategoryException();
-                });
+    public Long removeCategory(Long id) {
+        return categoryRepository.findById(id)
+            .map(category -> {
+                categoryRepository.delete(category);
+                return category.getId();
+            })
+            .orElseThrow(NotFoundCategoryException::new);
     }
 
 }

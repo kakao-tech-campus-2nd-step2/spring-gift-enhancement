@@ -25,11 +25,11 @@ public class LoginWebConfig implements WebMvcConfigurer {
             .order(1)
             .addPathPatterns("/api/**")
             .excludePathPatterns("/api/login", "/api/join",
-                "/view/**");
+                "/view/**", "/api/categories/**");
         registry.addInterceptor(new AuthMvcInterceptor(jwtTokenProvider))
             .order(2)
             .addPathPatterns("/view/**")
-            .excludePathPatterns("/view/products", "/view/join",
+            .excludePathPatterns("/api/**","/view/products", "/view/join",
                 "/view/login");
 
     }
