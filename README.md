@@ -11,20 +11,20 @@
   - 교환권, 상품권, 뷰티, 패션, 식품, 리빙/도서, 레저/스포츠, 아티스트/캐릭터, 유아동/반려, 디지털/가전, 카카오프렌즈, 트렌드 선물, 백화점, ...
 
 TodoList
-- [ ] categoryController
-  - [x] 전부 보여주기
-  - [x] 1개만 보여주기
-  - [x] 추가하기
-  - [ ] 수정하기
-  - [ ] 삭제하기
-- [ ] categoryRequestDto
-- [x] categoryResponseDto
-- [x] categoryEntity
-- [ ] categoryService
+- [x] categoryController
   - [x] 전부 보여주기
   - [x] 1개만 보여주기
   - [x] 추가하기
   - [x] 수정하기
-  - [ ] 삭제하기
+  - [x] 삭제하기
+- [x] categoryRequestDto
+- [x] categoryResponseDto
+- [x] categoryEntity
+- [x] categoryService
+  - [x] 전부 보여주기
+  - [x] 1개만 보여주기
+  - [x] 추가하기
+  - [x] 수정하기
+  - [x] 삭제하기
 - [x] categoryRepository
 - [ ] product 에 category 추가
