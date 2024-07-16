@@ -37,7 +37,10 @@ public class CategoryService {
     private static CategoryResponse convertToDTO(Category category) {
         return new CategoryResponse(
             category.getId(),
-            category.getName()
+            category.getName(),
+            category.getColor(),
+            category.getImageUrl(),
+            category.getDescription()
         );
     }
 }
