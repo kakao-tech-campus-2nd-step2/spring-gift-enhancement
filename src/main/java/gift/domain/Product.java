@@ -27,20 +27,25 @@ public class Product {
     @Pattern(regexp = "^(http(s?):)([/|.\\w|\\s|-])*\\.(?:jpg|gif|png)$", message = "URL 형식에 맞추어 작성해주세요")
     private String imageUrl;
 
+    @NotBlank(message = "카테고리를 무조건 선택해 주세요.")
+    private Category category;
+
     public Product() {
     }
 
-    public Product(String name, Long price, String imageUrl) {
+    public Product(String name, Long price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Product(Long id, String name, Long price, String imageUrl) {
+    public Product(Long id, String name, Long price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -73,12 +78,21 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }\
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public boolean isEqual(Product product) {
         return Objects.equals(name, product.getName()) &&
             Objects.equals(price, product.getPrice()) &&
-            Objects.equals(imageUrl, product.getImageUrl());
+            Objects.equals(imageUrl, product.getImageUrl())&&
+            Objects.equals(category, product.getCategory());
     }
 
 }
