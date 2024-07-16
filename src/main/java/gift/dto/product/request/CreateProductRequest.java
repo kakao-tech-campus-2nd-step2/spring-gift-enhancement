@@ -19,7 +19,10 @@ public record CreateProductRequest(
 
     @NotNull
     @NotBlank
-    String imageUrl
+    String imageUrl,
+
+    @NotNull
+    Long categoryId
 ) {
 
 }

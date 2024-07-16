@@ -12,8 +12,10 @@ import static org.mockito.Mockito.verify;
 import gift.dto.product.request.CreateProductRequest;
 import gift.dto.product.request.UpdateProductRequest;
 import gift.dto.product.response.ProductResponse;
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.exception.product.ProductNotFoundException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.service.ProductService;
 import gift.util.mapper.ProductMapper;
@@ -37,6 +39,9 @@ class ProductServiceTest implements AutoCloseable {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private CategoryRepository categoryRepository;
 
     private AutoCloseable closeable;
 
@@ -72,17 +77,18 @@ class ProductServiceTest implements AutoCloseable {
     void getAllProductsTest() {
         // given
         Pageable pageable = Pageable.unpaged();
+        Category category = new Category("Category A");
         List<Product> productList = List.of(
             Product.builder().id(1L).name("Product A").price(1000)
-                .imageUrl("http://example.com/images/product_a.jpg").build(),
+                .imageUrl("http://example.com/images/product_a.jpg").category(category).build(),
             Product.builder().id(2L).name("Product B").price(2000)
-                .imageUrl("http://example.com/images/product_b.jpg").build(),
+                .imageUrl("http://example.com/images/product_b.jpg").category(category).build(),
             Product.builder().id(3L).name("Product C").price(3000)
-                .imageUrl("http://example.com/images/product_c.jpg").build(),
+                .imageUrl("http://example.com/images/product_c.jpg").category(category).build(),
             Product.builder().id(4L).name("Product D").price(4000)
-                .imageUrl("http://example.com/images/product_d.jpg").build(),
+                .imageUrl("http://example.com/images/product_d.jpg").category(category).build(),
             Product.builder().id(5L).name("Product E").price(5000)
-                .imageUrl("http://example.com/images/product_e.jpg").build()
+                .imageUrl("http://example.com/images/product_e.jpg").category(category).build()
         );
         Page<Product> productPage = new PageImpl<>(productList);
         given(productRepository.findAll(pageable)).willReturn(productPage);
@@ -139,14 +145,17 @@ class ProductServiceTest implements AutoCloseable {
     void createProductTest() {
         // given
         CreateProductRequest request = new CreateProductRequest("Product A", 1000,
-            "http://example.com/images/product_a.jpg");
+            "http://example.com/images/product_a.jpg", 1L);
+        Category category = new Category(1L, "Category A");
         Product savedProduct = Product.builder()
             .id(1L)
             .name("Product A")
             .price(1000)
             .imageUrl("http://example.com/images/product_a.jpg")
+            .category(category)
             .build();
         given(productRepository.save(any(Product.class))).willReturn(savedProduct);
+        given(categoryRepository.findById(any(Long.class))).willReturn(Optional.of(category));
 
         // when
         Long savedId = productService.createProduct(request);
@@ -154,6 +163,7 @@ class ProductServiceTest implements AutoCloseable {
         // then
         assertThat(savedId).isNotNull();
         then(productRepository).should(times(1)).save(any(Product.class));
+        then(categoryRepository).should(times(1)).findById(any(Long.class));
     }
 
     @Test
