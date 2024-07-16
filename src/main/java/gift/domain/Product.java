@@ -35,26 +35,20 @@ public class Product {
         this.category = category;
     }
 
-    public void setId(long andIncrement) {
-        this.product_id = andIncrement;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    public void setName(Object name) {
-        this.name = name.toString();
+    public void setPrice(Integer price) {
+        this.price = price;
     }
-
-    public void setPrice(Object price) {
-        this.price = (Integer) price;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
-
-    public void setImageUrl(Object imageUrl) {
-        this.imageUrl = imageUrl.toString();
-    }
+    public void setCategory(Category category) { this.category = category; }
 
     public Long getId() {
         return product_id;
     }
-
     public String getName() {
         return name;
     }
