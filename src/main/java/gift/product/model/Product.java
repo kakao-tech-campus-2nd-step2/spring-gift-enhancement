@@ -1,5 +1,7 @@
 package gift.product.model;
 
+import gift.category.model.Category;
+import gift.member.model.Member;
 import gift.wish.model.Wish;
 import jakarta.persistence.*;
 
@@ -25,6 +27,10 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     // 활용 메서드들
     @Override
@@ -95,5 +101,11 @@ public class Product {
         this.wishes = wishes;
     }
 
+    public Category getCategory() {
+        return category;
+    }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
