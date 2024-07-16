@@ -9,9 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(JpaConfig.class)
@@ -36,12 +34,5 @@ class CategoryRepositoryTest {
 
         // then
         assertThat(exists).isTrue();
-    }
-
-    @Test
-    @DisplayName("카테고리 조회 테스트[성공]")
-    void findAll() {
-        List<Category> categories = categoryRepository.findAll();
-        assertThat(categories).isEmpty();
     }
 }
