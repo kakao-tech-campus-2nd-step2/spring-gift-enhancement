@@ -70,7 +70,6 @@ public class ProductService {
     }
 
     public void updateProduct(Long id, InputProductDTO inputProductDTO) {
-        System.out.println(inputProductDTO);
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품이 없습니다."));
         Category category = null;
