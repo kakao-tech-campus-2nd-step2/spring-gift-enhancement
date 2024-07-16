@@ -21,7 +21,6 @@ public class Product {
     @Column(name = "image_url", columnDefinition = "varchar(255) not null")
     private String imageUrl;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "category_id"), nullable = false)
     private Category category;
@@ -76,19 +75,14 @@ public class Product {
         return category;
     }
 
-    public void setName(String name) {
-        ProductName productName = new ProductName(name);
-        this.name = productName.getName();
-    }
-
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setName(String name) {
+        ProductName productName = new ProductName(name);
+        this.name = productName.getName();
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
