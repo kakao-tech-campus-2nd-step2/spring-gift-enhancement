@@ -19,6 +19,7 @@
             <th>Name</th>
             <th>Price</th>
             <th>Image URL</th>
+            <th>Category Id</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -35,6 +36,9 @@
             </td>
             <td>
                 <span th:text="${product.imageUrl}"></span>
+            </td>
+            <td>
+                <span th:text="${product.categoryId}"></span>
             </td>
             <td>
                 <form th:action="@{/admin/product/update/{id}(id=${product.id})}" method="get">

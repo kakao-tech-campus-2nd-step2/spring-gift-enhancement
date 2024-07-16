@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static gift.product.exception.GlobalExceptionHandler.DUPLICATE_EMAIL;
 import static gift.product.exception.GlobalExceptionHandler.INVALID_INPUT;
 
@@ -28,8 +30,9 @@ public class MemberValidation {
     }
 
     public void signUpValidation(String email) {
-        memberRepository.findByEmail(email)
-                .orElseThrow(() -> new DuplicateException(DUPLICATE_EMAIL));
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if(member.isPresent())
+            throw new DuplicateException(DUPLICATE_EMAIL);
     }
 
     public void loginValidation(MemberDTO memberDTO) {

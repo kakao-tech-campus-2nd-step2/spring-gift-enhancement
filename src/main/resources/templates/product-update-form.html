@@ -7,14 +7,15 @@
 <body>
 <a href="/admin/product/list"><- 상품 관리 페이지로 돌아가기</a>
 <h1>상품 정보 수정</h1>
-<form th:action="@{/admin/product}" th:object="${product}" method="post">
+<form th:action="@{/admin/product/{id}(id=${product.id})}" th:object="${product}" method="post">
     <input type="hidden" name="_method" value="put" />
     <table>
         <tr>
-            <td>Id: </td>
+            <td>카테고리 분류: </td>
             <td><label>
-                <input type="number" name="id" th:field="*{id}" readonly />
+                <input type="number" name="category" th:field="*{categoryName}" />
             </label></td>
+            <td th:if="${#fields.hasErrors('category')}" th:errors="*{categoryId}">Category Error Message</td>
         </tr>
         <tr>
             <td>상품명: </td>

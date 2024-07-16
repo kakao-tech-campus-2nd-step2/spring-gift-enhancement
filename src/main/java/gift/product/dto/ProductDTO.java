@@ -1,10 +1,12 @@
 package gift.product.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public class ProductDTO {
+    private Long id;
     @NotBlank(message = "상품명은 필수 입력 요소입니다.")
     @Size(max = 15, message = "입력 가능한 상품명은 공백 포함 최대 15자 입니다.")
     private String name;
@@ -12,10 +14,8 @@ public class ProductDTO {
     private int price;
     @NotBlank(message = "상품 이미지 URL은 필수 입력 요소입니다.")
     private String imageUrl;
-    @NotBlank(message = "상품의 카테고리가 미지정 되었습니다.")
+    @NotNull(message = "상품의 카테고리가 미지정 되었습니다.")
     private Long categoryId;
-
-    public ProductDTO() {}
 
     public ProductDTO(String name, int price, String imageUrl, Long categoryId) {
         this.name = name;
@@ -24,6 +24,9 @@ public class ProductDTO {
         this.categoryId = categoryId;
     }
 
+    public Long getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }

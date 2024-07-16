@@ -44,7 +44,7 @@
             <span th:text="${product.imageUrl}"></span>
         </td>
         <td>
-            <form th:action="@{/admin/product/update/{id}(id=${product.id})}" method="get">
+            <form th:action="@{/admin/product/{id}(id=${product.id})}" method="get">
                 <button type="submit">수정</button>
             </form>
             <form th:action="@{/admin/product/{id}(id=${product.id})}" method="post">
