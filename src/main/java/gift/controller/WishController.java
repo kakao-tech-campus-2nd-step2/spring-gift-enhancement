@@ -1,19 +1,13 @@
 package gift.controller;
 
 import gift.controller.dto.PaginationDTO;
-import gift.controller.dto.WishRequestDTO;
-import gift.domain.Product;
+import gift.controller.dto.WishRequest;
 import gift.domain.Wish;
 import gift.service.WishService;
 import gift.utils.JwtTokenProvider;
 import gift.utils.PaginationUtils;
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -40,10 +33,10 @@ public class WishController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addToWishlist(@RequestBody WishRequestDTO wishRequestDTO,
+    public ResponseEntity<String> addToWishlist(@RequestBody WishRequest wishRequest,
         @RequestHeader("Authorization") String token) {
         String email = jwtTokenProvider.getEmailFromToken(token.substring(7));
-        wishlistService.addToWishlist(email, wishRequestDTO);
+        wishlistService.addToWishlist(email, wishRequest);
         return ResponseEntity.ok("Product added to wishlist");
 
     }
@@ -71,10 +64,10 @@ public class WishController {
 
     @PutMapping
     @PostMapping("/add")
-    public ResponseEntity<String> changeToWishlist(@RequestBody WishRequestDTO wishRequestDTO,
+    public ResponseEntity<String> changeToWishlist(@RequestBody WishRequest wishRequest,
         @RequestHeader("Authorization") String token) {
         String email = jwtTokenProvider.getEmailFromToken(token.substring(7));
-        wishlistService.changeToWishlist(email, wishRequestDTO);
+        wishlistService.changeToWishlist(email, wishRequest);
         return ResponseEntity.ok("Product added to wishlist");
 
     }

@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.controller.dto.WishRequestDTO;
+import gift.controller.dto.WishRequest;
 import gift.domain.Product;
 import gift.domain.UserInfo;
 import gift.domain.Wish;
@@ -9,9 +9,7 @@ import gift.repository.UserInfoRepository;
 import gift.repository.WishRepository;
 import gift.utils.error.ProductNotFoundException;
 import gift.utils.error.UserNotFoundException;
-import gift.utils.error.WishListAddFailedException;
 import gift.utils.error.WishListNotFoundException;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,13 +30,13 @@ public class WishService {
     }
 
     @Transactional
-    public boolean addToWishlist(String email, WishRequestDTO wishRequestDTO) {
-        Product product = productRepository.findById(wishRequestDTO.getProductId()).orElseThrow(
+    public boolean addToWishlist(String email, WishRequest wishRequest) {
+        Product product = productRepository.findById(wishRequest.getProductId()).orElseThrow(
             () -> new ProductNotFoundException("Product Not Found")
         );
         UserInfo byEmail = userInfoRepository.findByEmail(email).orElseThrow(
             () -> new UserNotFoundException("User Not Found"));
-        Wish wish = new Wish(product, byEmail, wishRequestDTO.getQuantity());
+        Wish wish = new Wish(product, byEmail, wishRequest.getQuantity());
 
         product.addWish(wish);
         byEmail.addWish(wish);
@@ -75,8 +73,8 @@ public class WishService {
         return wishRepository.findByUserInfoId(userInfo.getId(), pageable);
     }
     @Transactional
-    public boolean changeToWishlist(String email, WishRequestDTO wishRequestDTO) {
-        Product product = productRepository.findById(wishRequestDTO.getProductId()).orElseThrow(
+    public boolean changeToWishlist(String email, WishRequest wishRequest) {
+        Product product = productRepository.findById(wishRequest.getProductId()).orElseThrow(
             () -> new ProductNotFoundException("Product Not Found")
         );
         UserInfo userInfo = userInfoRepository.findByEmail(email).orElseThrow(
@@ -85,7 +83,7 @@ public class WishService {
         Wish existingWish = wishRepository.findByUserInfoIdAndProductId(userInfo.getId(),
             product.getId());
 
-        if (wishRequestDTO.getQuantity() == 0) {
+        if (wishRequest.getQuantity() == 0) {
             if (existingWish != null) {
                 product.removeWish(existingWish);
                 userInfo.removeWish(existingWish);
@@ -96,7 +94,7 @@ public class WishService {
         if (existingWish == null) {
             throw new ProductNotFoundException("Product Not Found");
         }
-        existingWish.setQuantity(wishRequestDTO.getQuantity());
+        existingWish.setQuantity(wishRequest.getQuantity());
         return true;
 
     }

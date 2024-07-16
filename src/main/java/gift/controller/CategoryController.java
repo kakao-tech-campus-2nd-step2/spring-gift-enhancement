@@ -1,9 +1,10 @@
 package gift.controller;
 
-import gift.controller.dto.CategoryRequestDTO;
-import gift.controller.dto.CategoryResponseDTO;
+import gift.controller.dto.CategoryRequest;
+import gift.controller.dto.CategoryResponse;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,22 +27,22 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponseDTO>> getCategory(){
-        List<CategoryResponseDTO> allCategory = categoryService.findAllCategory();
+    public ResponseEntity<List<CategoryResponse>> getCategory(){
+        List<CategoryResponse> allCategory = categoryService.findAllCategory();
         return ResponseEntity.ok(allCategory);
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponseDTO> createCategory(@Valid @RequestBody CategoryRequestDTO
-        categoryRequestDTO){
-        CategoryResponseDTO category = categoryService.createCategory(categoryRequestDTO);
+    public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest
+        categoryRequest){
+        CategoryResponse category = categoryService.createCategory(categoryRequest);
         return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@RequestParam Long id, @Valid
-    @RequestBody CategoryRequestDTO categoryRequestDTO){
-        categoryService.updateCategory(id,categoryRequestDTO);
+    public ResponseEntity<Null> updateCategory(@RequestParam Long id, @Valid
+    @RequestBody CategoryRequest categoryRequest){
+        categoryService.updateCategory(id, categoryRequest);
         return ResponseEntity.ok(null);
     }
 

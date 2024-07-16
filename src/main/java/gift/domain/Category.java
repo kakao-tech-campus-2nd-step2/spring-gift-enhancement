@@ -1,6 +1,6 @@
 package gift.domain;
 
-import gift.controller.dto.CategoryRequestDTO;
+import gift.controller.dto.CategoryRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -86,11 +86,11 @@ public class Category {
 
 
 
-    public void updateCategory(CategoryRequestDTO categoryRequestDTO){
-        this.name = categoryRequestDTO.getName();
-        this.color = categoryRequestDTO.getColor();
-        this.description = categoryRequestDTO.getDescription();
-        this.imageUrl = categoryRequestDTO.getImageUrl();
+    public void updateCategory(CategoryRequest categoryRequest){
+        this.name = categoryRequest.getName();
+        this.color = categoryRequest.getColor();
+        this.description = categoryRequest.getDescription();
+        this.imageUrl = categoryRequest.getImageUrl();
     }
 
     public void addProduct(Product product) {

@@ -1,7 +1,7 @@
 package gift.service;
 
-import gift.controller.dto.CategoryRequestDTO;
-import gift.controller.dto.CategoryResponseDTO;
+import gift.controller.dto.CategoryRequest;
+import gift.controller.dto.CategoryResponse;
 import gift.domain.Category;
 import gift.repository.CategoryRepository;
 import gift.utils.error.CategoryNotFoundException;
@@ -16,9 +16,9 @@ public class CategoryService {
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
-    public List<CategoryResponseDTO> findAllCategory(){
-        List<CategoryResponseDTO> categories = categoryRepository.findAll().stream().map(
-            category -> new CategoryResponseDTO(
+    public List<CategoryResponse> findAllCategory(){
+        List<CategoryResponse> categories = categoryRepository.findAll().stream().map(
+            category -> new CategoryResponse(
                 category.getId(),
                 category.getName(),
                 category.getColor(),
@@ -29,19 +29,19 @@ public class CategoryService {
         return categories;
     }
     @Transactional
-    public CategoryResponseDTO createCategory(CategoryRequestDTO categoryRequestDTO){
-        Category category = new Category(categoryRequestDTO.getName(),categoryRequestDTO.getColor(),
-            categoryRequestDTO.getImageUrl(),categoryRequestDTO.getDescription());
+    public CategoryResponse createCategory(CategoryRequest categoryRequest){
+        Category category = new Category(categoryRequest.getName(), categoryRequest.getColor(),
+            categoryRequest.getImageUrl(), categoryRequest.getDescription());
         Category save = categoryRepository.save(category);
-        return new CategoryResponseDTO(save.getId(),save.getName(), save.getColor(), save.getImageUrl(),
+        return new CategoryResponse(save.getId(),save.getName(), save.getColor(), save.getImageUrl(),
             save.getDescription());
     }
     @Transactional
-    public void updateCategory(Long id, CategoryRequestDTO categoryRequestDTO){
+    public void updateCategory(Long id, CategoryRequest categoryRequest){
         Category category = categoryRepository.findById(id).orElseThrow(
             () -> new CategoryNotFoundException("Category Not Found")
         );
-        category.updateCategory(categoryRequestDTO);
+        category.updateCategory(categoryRequest);
 
     }
     @Transactional
