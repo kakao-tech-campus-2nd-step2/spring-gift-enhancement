@@ -1,6 +1,8 @@
 package gift.wishes;
 
+import gift.product.infrastructure.persistence.JpaProductCategoryRepository;
 import gift.product.infrastructure.persistence.JpaProductRepository;
+import gift.product.infrastructure.persistence.ProductCategoryEntity;
 import gift.product.infrastructure.persistence.ProductEntity;
 import gift.user.infrastructure.persistence.JpaUserRepository;
 import gift.user.infrastructure.persistence.UserEntity;
@@ -26,11 +28,18 @@ public class WishRepositoryTests {
     @Autowired
     private JpaProductRepository jpaProductRepository;
 
+    @Autowired
+    private JpaProductCategoryRepository jpaProductCategoryRepository;
+
     @Test
     public void saveWish() {
         UserEntity user = new UserEntity("test");
         user = jpaUserRepository.save(user);
-        ProductEntity product = new ProductEntity("test", 100, "test");
+
+        ProductCategoryEntity category = new ProductCategoryEntity("test");
+        category = jpaProductCategoryRepository.save(category);
+
+        ProductEntity product = new ProductEntity("test", 100, "test", category);
         product = jpaProductRepository.save(product);
 
         WishEntity wish = new WishEntity(user, product);
@@ -44,7 +53,11 @@ public class WishRepositoryTests {
     public void removeWish() {
         UserEntity user = new UserEntity("test");
         user = jpaUserRepository.save(user);
-        ProductEntity product = new ProductEntity("test", 100, "test");
+
+        ProductCategoryEntity category = new ProductCategoryEntity("test");
+        category = jpaProductCategoryRepository.save(category);
+
+        ProductEntity product = new ProductEntity("test", 100, "test", category);
         product = jpaProductRepository.save(product);
 
         WishEntity wish = new WishEntity(user, product);
@@ -57,7 +70,11 @@ public class WishRepositoryTests {
     public void existsByUserIdAndProductId() {
         UserEntity user = new UserEntity("test");
         user = jpaUserRepository.save(user);
-        ProductEntity product = new ProductEntity("test", 100, "test");
+
+        ProductCategoryEntity category = new ProductCategoryEntity("test");
+        category = jpaProductCategoryRepository.save(category);
+
+        ProductEntity product = new ProductEntity("test", 100, "test", category);
         product = jpaProductRepository.save(product);
         WishEntity wish = new WishEntity(user, product);
 
@@ -69,7 +86,11 @@ public class WishRepositoryTests {
     public void findAllByUserId() {
         UserEntity user = new UserEntity("test");
         user = jpaUserRepository.save(user);
-        ProductEntity product = new ProductEntity("test", 100, "test");
+
+        ProductCategoryEntity category = new ProductCategoryEntity("test");
+        category = jpaProductCategoryRepository.save(category);
+
+        ProductEntity product = new ProductEntity("test", 100, "test", category);
         product = jpaProductRepository.save(product);
         WishEntity wish = new WishEntity(user, product);
         jpaWishRepository.save(wish);

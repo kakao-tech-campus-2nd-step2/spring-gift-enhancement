@@ -1,6 +1,7 @@
 package gift.wishes;
 
 import gift.core.domain.product.Product;
+import gift.core.domain.product.ProductCategory;
 import gift.core.domain.product.ProductRepository;
 import gift.core.domain.user.User;
 import gift.core.domain.user.UserAccount;
@@ -44,12 +45,16 @@ public class WishesServiceTests {
     @Test
     public void testAddProductToWishes() {
         Long userId = 1L;
-        Product product = new Product(1L, "test", 100, "test.jpg");
+        Product product = new Product(
+                1L,
+                "test",
+                100,
+                "test.jpg",
+                ProductCategory.of("test")
+        );
 
-        User user = new User(1L, "test", new UserAccount("test", "test"));
         when(productRepository.exists(1L)).thenReturn(true);
         when(wishesRepository.exists(1L, 1L)).thenReturn(false);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         wishesService.addProductToWishes(userId, product);
         verify(wishesRepository).saveWish(userId, product.id());
@@ -58,12 +63,16 @@ public class WishesServiceTests {
     @Test
     public void testAddProductToWishesWithExistingWish() {
         Long userId = 1L;
-        Product product = new Product(1L, "test", 100, "test.jpg");
+        Product product = new Product(
+                1L,
+                "test",
+                100,
+                "test.jpg",
+                ProductCategory.of("test")
+        );
 
-        User user = new User(1L, "test", new UserAccount("test", "test"));
         when(productRepository.exists(1L)).thenReturn(true);
         when(wishesRepository.exists(1L, 1L)).thenReturn(true);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         assertThrows(WishAlreadyExistsException.class, () -> wishesService.addProductToWishes(userId, product));
     }
@@ -71,7 +80,14 @@ public class WishesServiceTests {
     @Test
     public void testRemoveProductFromWishes() {
         Long userId = 1L;
-        Product product = new Product(1L, "test", 100, "test.jpg");
+        Product product = new Product(
+                1L,
+                "test",
+                100,
+                "test.jpg",
+                ProductCategory.of("test")
+        );
+
 
         when(wishesRepository.exists(1L, 1L)).thenReturn(true);
 
@@ -82,7 +98,14 @@ public class WishesServiceTests {
     @Test
     public void testRemoveProductFromWishesWithNonExistingWish() {
         Long userId = 1L;
-        Product product = new Product(1L, "test", 100, "test.jpg");
+        Product product = new Product(
+                1L,
+                "test",
+                100,
+                "test.jpg",
+                ProductCategory.of("test")
+        );
+
 
         when(wishesRepository.exists(1L, 1L)).thenReturn(false);
 
