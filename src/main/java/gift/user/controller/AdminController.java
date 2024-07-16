@@ -44,14 +44,15 @@ public class AdminController {
 
   @GetMapping("/edit/{id}")
   public String showEditProductForm(@PathVariable("id") Long id, Model model) {
-    Optional<ProductDto> productDto = productService.getProductById(id);
-    if (productDto.isPresent()) {
-      model.addAttribute("product", productDto.get());
+    try {
+      ProductDto productDto = productService.getProductById(id);
+      model.addAttribute("product", productDto);
       return "product-form";
-    } else {
-      return "redirect:/admin";
+    } catch (RuntimeException e) {
+/**/      return "redirect:/admin";
     }
   }
+
 
   @PostMapping("/save")
   public String saveProduct(@Valid @ModelAttribute ProductDto productDto, BindingResult bindingResult, Model model) {

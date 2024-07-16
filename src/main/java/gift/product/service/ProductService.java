@@ -1,4 +1,5 @@
 package gift.product.service;
+
 import gift.product.dto.ProductDto;
 import gift.product.entity.Product;
 import gift.product.repository.ProductRepository;
@@ -28,13 +29,16 @@ public class ProductService {
     }
   }
 
-  public Optional<ProductDto> getProductById(long id) {
+  public ProductDto getProductById(long id) {
     try {
-      return productRepository.findById(id).map(Product::toDto);
+      return productRepository.findById(id)
+          .map(Product::toDto)
+          .orElseThrow(() -> new RuntimeException("ID가 " + id + "인 상품을 찾을 수 없습니다."));
     } catch (Exception e) {
       throw new RuntimeException("ID가 " + id + "인 상품을 조회하는 중에 오류가 발생했습니다.", e);
     }
   }
+
 
   @Transactional
   public ProductDto addProduct(ProductDto productDto) {
