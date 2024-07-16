@@ -16,10 +16,7 @@ public class ProductMapRepository implements ProductRepository {
 
     @Override
     public Product save(Product product) {
-        Product newProduct = Product.create(Long.valueOf(database.size() + 1), product.getName(),
-            product.getPrice(), product.getImageUrl());
-        database.put(newProduct.getId(), newProduct);
-        return newProduct;
+        return null;
     }
 
     @Override
