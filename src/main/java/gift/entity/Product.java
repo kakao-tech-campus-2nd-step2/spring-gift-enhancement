@@ -20,10 +20,10 @@ import java.util.regex.Pattern;
 @Entity
 public class Product {
 
-    private final Pattern NAME_PATTERN = Pattern.compile(
+    private static final Pattern NAME_PATTERN = Pattern.compile(
             "[a-zA-Z0-9ㄱ-ㅎ가-힣()\\[\\]+\\-&/_ ]+"
     );
-    private final Pattern NAME_EXCLUDE_PATTERN = Pattern.compile(
+    private static final Pattern NAME_EXCLUDE_PATTERN = Pattern.compile(
             "^((?!카카오).)*$"
     );
 
@@ -47,8 +47,7 @@ public class Product {
     @JoinColumn(name = "Category_id", nullable = false)
     private Category category;
 
-    protected Product() {
-    }
+    protected Product() { }
 
     public Product(String name, Integer price, String imageUrl, Category category) {
         validateName(name);
