@@ -19,17 +19,22 @@ public class Menu {
     @Column(nullable = false)
     private String imageUrl;
 
+    @Column(nullable = false)
+    @ManyToOne
+    private Category category;
+
     public Menu() {}
 
     public Menu(String name, int price, String imageUrl) {
-        this(null,name,price,imageUrl);
+        this(null,name,price,imageUrl,null);
     }
 
-    public Menu(Long id, String name, int price, String imageUrl) {
+    public Menu(Long id, String name, int price, String imageUrl,Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Menu(Long id, MenuRequest menuRequest){
