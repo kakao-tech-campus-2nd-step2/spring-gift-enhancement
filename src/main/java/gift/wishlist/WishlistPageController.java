@@ -3,9 +3,15 @@ package gift.wishlist;
 import gift.member.MemberTokenResolver;
 import gift.product.Product;
 import gift.token.MemberTokenDTO;
+import java.util.List;
 import java.util.stream.IntStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WishlistPageController {
 
+    private static final Logger log = LoggerFactory.getLogger(WishlistPageController.class);
     private final WishlistService wishlistService;
 
     public WishlistPageController(WishlistService wishlistService) {
@@ -21,7 +28,7 @@ public class WishlistPageController {
 
     @GetMapping("/wishlist")
     public String wishlist() {
-        return "emptyWishlist";
+        return "/wishlist/emptyWishlistPage";
     }
 
     @GetMapping("/wishlistPage")
@@ -30,10 +37,9 @@ public class WishlistPageController {
         Model model,
         Pageable pageable
     ) {
+        pageable = changePageable(pageable);
         Page<Product> products = wishlistService.getAllWishlists(token, pageable);
 
-        model.addAttribute("headerText", "Manage Wishlist");
-        model.addAttribute("jsSrc", "../wishlistPage.js");
         model.addAttribute("products", products);
         model.addAttribute("page", pageable.getPageNumber() + 1);
         model.addAttribute("totalProductsSize", products.getTotalElements());
@@ -41,6 +47,19 @@ public class WishlistPageController {
         model.addAttribute("pageLists",
             IntStream.range(1, products.getTotalPages() + 1).boxed().toList());
 
-        return "basicPage";
+        return "/wishlist/page";
+    }
+
+    private Pageable changePageable(Pageable pageable) {
+        List<Order> orders = pageable.getSort()
+            .stream()
+            .map(this::changeReferenceOfOrder)
+            .toList();
+
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(orders));
+    }
+
+    private Order changeReferenceOfOrder(Order order) {
+        return new Order(order.getDirection(), "product." + order.getProperty());
     }
 }

@@ -3,6 +3,7 @@ const authToken = localStorage.getItem("Authorization")
 
 export function addProduct() {
   let id = document.getElementById("productId").value
+  alert(id)
   fetch(`${wishlistAPIUrl}/` + document.getElementById("productId").value, {
     method: 'POST',
     headers: {

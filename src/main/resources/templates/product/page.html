@@ -8,15 +8,15 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css"
   />
-  <link rel="stylesheet" th:href="@{../basicPage.css}"/>
-  <link rel="stylesheet" th:href="@{../modal.css}"/>
+  <link rel="stylesheet" th:href="@{../product/page.css}"/>
+  <link rel="stylesheet" th:href="@{../product/modal.css}"/>
 
   <!-- edit icon & delete icon -->
   <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
   />
-  <script type="module" th:src="${jsSrc}" defer></script>
+  <script type="module" th:src="@{../product/page.js}" defer></script>
 </head>
 <body>
 <!-- MODAL -->
@@ -62,7 +62,7 @@
 <div class="main-container">
   <!-- HEADER -->
   <div class="header">
-    <text th:text="${headerText}"></text>
+    <text>Mange Products</text>
     <div>
       <button
           class="header-delete"

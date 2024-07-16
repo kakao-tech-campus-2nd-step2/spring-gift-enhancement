@@ -1,4 +1,4 @@
-import {addProduct, deleteProduct, pagination} from './wishlistAPI.js';
+import {addProduct, deleteProduct, pagination} from './API.js';
 
 const modal = document.getElementById('productModal');
 const closeButton = document.getElementsByClassName('close')[0];
@@ -82,11 +82,11 @@ export function idColumnPageSort() {
   const currentOrder = document.getElementById("page-sort-by-id")
   .getAttribute("data-sort-order")
 
-  if (currentOrder === "id: ASC" || currentOrder === null) {
+  if (currentOrder === "product.id: ASC" || currentOrder === null) {
     pagination(null, null, "id,desc")
   }
 
-  if (currentOrder === "id: DESC") {
+  if (currentOrder === "product.id: DESC") {
     pagination(null, null, "id,asc")
   }
 }
@@ -97,11 +97,11 @@ export function priceColumnPageSort() {
   const currentOrder = document.getElementById("page-sort-by-price")
   .getAttribute("data-sort-order")
 
-  if (currentOrder === "price: ASC" || currentOrder === null) {
+  if (currentOrder === "product.price: ASC" || currentOrder === null) {
     pagination(null, null, "price,desc")
   }
 
-  if (currentOrder === "price: DESC") {
+  if (currentOrder === "product.price: DESC") {
     pagination(null, null, "price,asc")
   }
 }
