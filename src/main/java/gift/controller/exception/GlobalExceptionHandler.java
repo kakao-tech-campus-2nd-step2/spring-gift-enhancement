@@ -25,4 +25,10 @@ public class GlobalExceptionHandler {
         return ApiResponseGenerator.fail(HttpStatus.NOT_FOUND, e.getMessage(),
             String.valueOf(HttpStatus.NOT_FOUND.value()));
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<FailureBody> handleIllegalStateException(IllegalStateException e){
+        return ApiResponseGenerator.fail(HttpStatus.FORBIDDEN, e.getMessage(),
+            String.valueOf(HttpStatus.FORBIDDEN.value()));
+    }
 }
