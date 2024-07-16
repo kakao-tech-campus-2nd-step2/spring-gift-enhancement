@@ -1,7 +1,7 @@
 package gift.util.mapper;
 
-import gift.dto.user.UserRegisterRequest;
-import gift.dto.user.UserResponse;
+import gift.dto.user.request.UserRegisterRequest;
+import gift.dto.user.response.UserResponse;
 import gift.entity.User;
 
 public class UserMapper {

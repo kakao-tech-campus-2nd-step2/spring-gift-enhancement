@@ -1,8 +1,8 @@
 package gift.controller;
 
-import gift.dto.user.UserLoginRequest;
-import gift.dto.user.UserRegisterRequest;
-import gift.dto.user.UserResponse;
+import gift.dto.user.request.UserLoginRequest;
+import gift.dto.user.request.UserRegisterRequest;
+import gift.dto.user.response.UserResponse;
 import gift.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

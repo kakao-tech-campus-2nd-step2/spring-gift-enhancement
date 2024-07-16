@@ -1,4 +1,4 @@
-package gift.dto.product;
+package gift.dto.product.request;
 
 import gift.validation.annotation.RestrictedKeyword;
 import jakarta.validation.constraints.NotBlank;
