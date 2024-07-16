@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gift.auth.dto.LoginReqDto;
 import gift.auth.token.AuthToken;
 import gift.category.dto.CategoryReqDto;
+import gift.common.exception.CommonErrorCode;
 import gift.common.exception.ErrorResponse;
 import gift.common.exception.ValidationError;
 import gift.product.dto.ProductReqDto;
@@ -192,9 +193,9 @@ class ProductE2ETest {
         assertThat(errorResponse).isNotNull();
         assertThat(errorResponse).isInstanceOf(ErrorResponse.class);
 
-        assertThat(errorResponse.getCode()).isEqualTo(ProductErrorCode.INVALID_INPUT_VALUE_PRODUCT.getCode());
+        assertThat(errorResponse.getCode()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getCode());
         assertThat(errorResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        assertThat(errorResponse.getMessage()).isEqualTo(ProductErrorCode.INVALID_INPUT_VALUE_PRODUCT.getMessage());
+        assertThat(errorResponse.getMessage()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getMessage());
 
         List<ValidationError> invalidParams = errorResponse.getInvalidParams();
         assertThat(invalidParams).isNotNull();
@@ -258,9 +259,9 @@ class ProductE2ETest {
         assertThat(errorResponse).isNotNull();
         assertThat(errorResponse).isInstanceOf(ErrorResponse.class);
 
-        assertThat(errorResponse.getCode()).isEqualTo(ProductErrorCode.INVALID_INPUT_VALUE_PRODUCT.getCode());
+        assertThat(errorResponse.getCode()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getCode());
         assertThat(errorResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        assertThat(errorResponse.getMessage()).isEqualTo(ProductErrorCode.INVALID_INPUT_VALUE_PRODUCT.getMessage());
+        assertThat(errorResponse.getMessage()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getMessage());
 
         List<ValidationError> invalidParams = errorResponse.getInvalidParams();
         assertThat(invalidParams).isNotNull();
