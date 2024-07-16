@@ -24,10 +24,6 @@ public class AdminController {
 
     public AdminController(ProductService productService){
         this.productService = productService;
-        //페이지네이션 테스트용 데이터 추가
-        for(int i = 1; i <= 100; i++){
-            productService.add(email, new ProductDTO(0L, "test"+i, 1000, "https://i.namu.wiki/i/OgK0X2DAdO0K6vIBGUDvE8fR2jP0dmTu3z6mAM0JVGw310C7H3c9DmsQ_SyBc-s835u5kwHxVpe0HutSHIqo7Q.webp"));
-        }
     }
 
     @Autowired
@@ -47,7 +43,9 @@ public class AdminController {
 
     @GetMapping("/add")
     public String addProductForm(Model model){
-        model.addAttribute("product", new ProductDTO(0L, "a",0,"b"));
+        List<String> categories = productService.getCategoriesName();
+        model.addAttribute("product", new ProductDTO(0L, "" ,"a",0,"b"));
+        model.addAttribute("categories", categories);
         return "add";
     }
 
@@ -63,8 +61,10 @@ public class AdminController {
     @GetMapping("/edit/{id}")
     public String updateProductForm(@PathVariable("id") Long id, Model model){
         ProductDTO productDTO = productService.getById(email, id);
+        List<String> categories = productService.getCategoriesName();
 
         model.addAttribute("product", productDTO);
+        model.addAttribute("categories", categories);
         return "edit";
     }
 
