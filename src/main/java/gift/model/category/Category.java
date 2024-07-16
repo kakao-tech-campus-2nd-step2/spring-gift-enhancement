@@ -15,9 +15,18 @@ public class Category {
     @NotNull
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(unique = true)
     @NotNull
     private String name;
+
+    @NotNull
+    private String color;
+
+    @NotNull
+    private String imageUrl;
+
+    @NotNull
+    private String description;
 
     @OneToMany(mappedBy = "category")
     protected List<Gift> gifts = new ArrayList<>();
