@@ -9,9 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProductService {
-
 
     private ProductRepository productRepository;
 
@@ -29,10 +30,12 @@ public class ProductService {
     }
 
     public boolean updateProduct(Long id, ProductDto productDto) {
-        if (productRepository.existsById(id)) {
-            Product product = productRepository.findById(id).get();
-            product.updateProduct(productDto);
-            productRepository.save(product);
+        Optional<Product> product = productRepository.findById(id);
+        if(product.isPresent()){
+            Product updateProduct = product.get();
+            Product newProduct = new Product(new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
+            updateProduct.updateProduct(newProduct);
+            productRepository.save(updateProduct);
             return true;
         }
         return false;

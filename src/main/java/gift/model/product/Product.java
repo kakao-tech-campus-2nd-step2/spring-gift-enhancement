@@ -40,11 +40,11 @@ public class Product {
         this.amount = amount;
     }
 
-    public void updateProduct(ProductDto productDto){
-        this.name = new ProductName(productDto.name());
-        this.price = productDto.price();
-        this.imageUrl = productDto.imageUrl();
-        this.amount = productDto.amount();
+    public void updateProduct(Product product){
+        this.name = product.getName();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
+        this.amount = product.getAmount();
     }
 
     public long getId() {

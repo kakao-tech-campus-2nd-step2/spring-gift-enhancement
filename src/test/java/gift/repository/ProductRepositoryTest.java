@@ -41,14 +41,14 @@ class ProductRepositoryTest {
     @Test
     void update(){
         Product expected = new Product(new ProductName("product1"),1000,"qwer.com",1000);
-        ProductDto updatedProduct = new ProductDto("product2", 1500, "updated.com", 2000);
+        Product updatedProduct = new Product(new ProductName("product2"), 1500, "updated.com", 2000);
 
         Product savedProduct = productRepository.save(expected);
         savedProduct.updateProduct(updatedProduct);
         productRepository.save(savedProduct);
 
         Product fetchedProduct = productRepository.findById(savedProduct.getId()).orElse(null);
-        assertThat(fetchedProduct.getName().getName()).isEqualTo(updatedProduct.name());
+        assertThat(fetchedProduct.getName().getName()).isEqualTo(updatedProduct.getName());
     }
 
     @Test
