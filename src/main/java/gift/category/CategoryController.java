@@ -3,6 +3,7 @@ package gift.category;
 import gift.category.model.CategoryRequestDto;
 import gift.category.model.CategoryResponseDto;
 import gift.common.model.PageResponseDto;
+import jakarta.validation.Valid;
 import java.net.URI;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -42,13 +43,14 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<Void> addCategory(
-        @RequestBody CategoryRequestDto categoryRequestDto) {
+        @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
         Long id = categoryService.insertCategory(categoryRequestDto);
         return ResponseEntity.created(URI.create("/api/categories/" + id)).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCategory(@RequestBody CategoryRequestDto categoryRequestDto,
+    public ResponseEntity<Void> updateCategory(
+        @Valid @RequestBody CategoryRequestDto categoryRequestDto,
         @PathVariable(name = "id") Long id) {
         categoryService.updateCategory(categoryRequestDto, id);
         return ResponseEntity.ok().build();
