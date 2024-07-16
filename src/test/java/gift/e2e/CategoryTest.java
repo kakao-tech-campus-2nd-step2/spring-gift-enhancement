@@ -109,4 +109,33 @@ public class CategoryTest {
         // then
         assertThat(actualResponse.getStatusCode().is4xxClientError()).isTrue();
     }
+
+    @Test
+    @DisplayName("delete category test")
+    void deleteCategoryTest() {
+        // given
+        var url = "http://localhost:" + port + "/api/categories/1";
+        var request = new RequestEntity<>(HttpMethod.DELETE, URI.create(url));
+
+        // when
+        var actualResponse = restTemplate.exchange(request, String.class);
+
+        // then
+        assertThat(actualResponse.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(actualResponse.getBody()).isNull();
+    }
+
+    @Test
+    @DisplayName("delete not exist category test")
+    void deleteNotExistCategoryTest() {
+        // given
+        var url = "http://localhost:" + port + "/api/categories/999";
+        var request = new RequestEntity<>(HttpMethod.DELETE, URI.create(url));
+
+        // when
+        var actualResponse = restTemplate.exchange(request, String.class);
+
+        // then
+        assertThat(actualResponse.getStatusCode().is4xxClientError()).isTrue();
+    }
 }
