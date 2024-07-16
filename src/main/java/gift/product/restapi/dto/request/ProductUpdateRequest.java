@@ -14,6 +14,7 @@ public record ProductUpdateRequest(
         String name,
 
         @NotNull Integer price,
-        @NotBlank String imageUrl
+        @NotBlank String imageUrl,
+        @NotBlank String category
 ) {
 }

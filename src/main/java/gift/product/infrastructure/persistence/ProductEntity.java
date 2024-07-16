@@ -20,21 +20,38 @@ public class ProductEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private ProductCategoryEntity category;
+
     public ProductEntity() {
     }
 
-    public ProductEntity(Long id, String name, Integer price, String imageUrl) {
+    public ProductEntity(
+            Long id,
+            String name,
+            Integer price,
+            String imageUrl,
+            ProductCategoryEntity category
+    ) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public ProductEntity(String name, Integer price, String imageUrl) {
+    public ProductEntity(
+            String name,
+            Integer price,
+            String imageUrl,
+            ProductCategoryEntity category
+    ) {
         this.id = 0L;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -54,6 +71,6 @@ public class ProductEntity {
     }
 
     public Product toDomain() {
-        return new Product(id, name, price, imageUrl);
+        return new Product(id, name, price, imageUrl, category.toDomain());
     }
 }

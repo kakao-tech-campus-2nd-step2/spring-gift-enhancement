@@ -72,6 +72,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     private ProductEntity mapToProductEntity(Product product) {
-        return new ProductEntity(product.id(), product.name(), product.price(), product.imageUrl());
+        return new ProductEntity(
+                product.id(),
+                product.name(),
+                product.price(),
+                product.imageUrl(),
+                ProductCategoryEntity.toEntity(product.category())
+        );
     }
 }

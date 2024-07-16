@@ -12,6 +12,7 @@ public record ProductCreateRequest(
         @NotContainingKaKao
         String name,
         @NotNull Integer price,
-        @NotBlank String imageUrl
+        @NotBlank String imageUrl,
+        @NotBlank String category
 ) {
 }

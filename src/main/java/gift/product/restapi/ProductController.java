@@ -2,6 +2,7 @@ package gift.product.restapi;
 
 import gift.core.PagedDto;
 import gift.core.domain.product.Product;
+import gift.core.domain.product.ProductCategory;
 import gift.core.domain.product.ProductService;
 import gift.core.domain.product.exception.ProductNotFoundException;
 import gift.product.restapi.dto.request.ProductCreateRequest;
@@ -13,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class ProductController {
@@ -43,7 +42,7 @@ public class ProductController {
             @Valid @RequestBody ProductCreateRequest request
     ) {
         Product product = productOf(request);
-        productService.createProduct(product);
+        productService.createProductWithCategory(product);
     }
 
     @PutMapping("/api/products/{id}")
@@ -55,7 +54,12 @@ public class ProductController {
         if (originalProduct == null) {
             throw new ProductNotFoundException();
         }
-        Product updatedProduct = originalProduct.applyUpdate(request.name(), request.price(), request.imageUrl());
+        Product updatedProduct = originalProduct.applyUpdate(
+                request.name(),
+                request.price(),
+                request.imageUrl(),
+                ProductCategory.of(request.category())
+        );
         productService.updateProduct(updatedProduct);
     }
 
@@ -69,7 +73,8 @@ public class ProductController {
             0L,
                 request.name(),
                 request.price(),
-                request.imageUrl()
+                request.imageUrl(),
+                ProductCategory.of(request.category())
         );
     }
 }
