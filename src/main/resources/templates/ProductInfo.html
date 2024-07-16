@@ -20,7 +20,7 @@
           <div>
             <select id="category" class="form-control" disabled>
               <option value="">==카테고리 선택==</option>
-              <option th:each="category : ${categories}" th:selected="${category.getId() == product.getCategoryID()}" th:value="${category.getId()}"
+              <option th:each="category : ${categories}" th:selected="${category.id() == product.getCategoryID()}" th:value="${category.id()}"
                       th:text="${category.name}"></option>
             </select>
           </div>
@@ -61,7 +61,7 @@
           </div>
         </div>
         <input type="hidden" name="_method" value="DELETE"/>
-
+        </div>
       </form>
     </div>
   </div>

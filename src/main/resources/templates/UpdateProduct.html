@@ -23,7 +23,7 @@
                 <label for="name">카테고리</label>
                 <select id="category" th:field="*{categoryID}" class="form-control">
                     <option value="">==카테고리 선택==</option>
-                    <option th:each="category : ${categories}" th:selected="${category.getId() == product.getCategoryID()}" th:value="${category.getId()}"
+                    <option th:each="category : ${categories}" th:selected="${category.id() == product.getCategoryID()}" th:value="${category.id()}"
                             th:text="${category.name}"></option>
                 </select>
                 <div th:if="${#fields.hasErrors('categoryID')}">
