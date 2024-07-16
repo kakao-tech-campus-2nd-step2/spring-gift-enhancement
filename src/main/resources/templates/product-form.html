@@ -21,6 +21,12 @@
             <label for="imageUrl">Image URL:</label>
             <input type="text" id="imageUrl" th:field="*{imageUrl}" required/>
         </p>
+		<p>
+			<label for="category">Category:</label>
+			<select id="cateogry" th:field="*{category}" required>
+				<option th:each="category :${categories}" th:value="${category}" th:text="${category.name}">Category</option>
+			</select>
+		</p>
         <p>
             <button type="submit" th:if="${product.id == null}">Add Product</button>
             <button type="submit" th:if="${product.id != null}">Update Product</button>
