@@ -8,11 +8,11 @@ import gift.global.exception.NoSuchIdException;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,8 +32,16 @@ public class WishService {
     public List<Wish> getItems(Long memberId, Pageable pageable) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NoSuchIdException("member"));
-        Page<Wish> allWishes = wishRepository.findAllByMember(member, pageable);
+        Page<Wish> allWishes = wishRepository.findAllByMember(member, createPageableWithProduct(pageable));
         return allWishes.hasContent() ? allWishes.getContent() : Collections.emptyList();
+    }
+
+    private Pageable createPageableWithProduct(Pageable pageable) {
+        Sort sort = Sort.by(pageable.getSort()
+                        .get()
+                        .map(order -> order.withProperty("product." + order.getProperty()))
+                        .collect(Collectors.toList()));
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
     }
 
     public void add(Long memberId, WishRequest wishRequest) {
