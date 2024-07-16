@@ -73,9 +73,9 @@ public class ProductRepositoryTest {
         Category category = new Category("기프티콘");
         categoryRepository.save(category);
 
-        String expectedName = "치킨";
+        String expected = "치킨";
         productRepository.save(new Product("치킨", 20000, "chicken.com", category));
-        boolean exists = productRepository.existsByName(expectedName);
+        boolean exists = productRepository.existsByName(expected);
         assertThat(exists).isTrue();
     }
 
