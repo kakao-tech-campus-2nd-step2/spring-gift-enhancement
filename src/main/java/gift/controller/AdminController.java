@@ -3,21 +3,29 @@ package gift.controller;
 
 import gift.dto.PagingRequest;
 import gift.dto.PagingResponse;
+import gift.model.category.CategoryResponse;
 import gift.model.gift.GiftRequest;
 import gift.model.gift.GiftResponse;
+import gift.service.CategoryService;
 import gift.service.GiftService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class AdminController {
 
     private final GiftService giftService;
+    private final CategoryService categoryService;
 
-    public AdminController(GiftService giftService) {
+    @Autowired
+    public AdminController(GiftService giftService, CategoryService categoryService) {
         this.giftService = giftService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -33,7 +41,9 @@ public class AdminController {
     }
 
     @GetMapping("/admin/gift/create")
-    public String giftCreate() {
+    public String giftCreate(Model model) {
+        List<CategoryResponse> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "create_form";
     }
 
