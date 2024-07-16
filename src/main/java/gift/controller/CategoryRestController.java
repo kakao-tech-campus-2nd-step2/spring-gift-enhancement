@@ -3,6 +3,7 @@ package gift.controller;
 import gift.dto.request.CategoryRequest;
 import gift.dto.response.CategoryResponse;
 import gift.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class CategoryRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<Void> addCategory(@Valid @RequestBody CategoryRequest categoryRequest){
         categoryService.save(categoryRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
