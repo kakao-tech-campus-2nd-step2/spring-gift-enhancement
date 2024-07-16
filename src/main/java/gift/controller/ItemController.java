@@ -39,14 +39,21 @@ public class ItemController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/category/{category_id}")
+    public ResponseEntity<Page<ItemDTO>> getItemListByCategory(
+        @PathVariable("category_id") Long categoryId,
+        @PageableDefault(size = 5, sort = "id", direction = Direction.DESC) Pageable pageable) {
+        Page<ItemDTO> list = itemService.getListByCategoryId(categoryId, pageable);
+        return ResponseEntity.ok(list);
+    }
+
     @PostMapping("/")
     public ResponseEntity<Long> createItem(@Valid @RequestBody ItemForm form, BindingResult result)
         throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
             throw new CustomArgumentNotValidException(null, result, ErrorCode.BAD_REQUEST);
         }
-        Long itemId = itemService.insertItem(form);
-        return ResponseEntity.ok(itemId);
+        return ResponseEntity.ok(itemService.insertItem(form));
     }
 
 
@@ -56,9 +63,9 @@ public class ItemController {
         if (result.hasErrors()) {
             throw new CustomArgumentNotValidException(null, result, ErrorCode.BAD_REQUEST);
         }
-        ItemDTO itemDTO = new ItemDTO(id, form.getName(), form.getPrice(), form.getImgUrl());
-        Long itemId = itemService.updateItem(itemDTO);
-        return ResponseEntity.ok(itemId);
+        ItemDTO itemDTO = new ItemDTO(id, form.getName(), form.getPrice(), form.getImgUrl(),
+            form.getCategoryId());
+        return ResponseEntity.ok(itemService.updateItem(itemDTO));
     }
 
     @DeleteMapping("/{id}")
