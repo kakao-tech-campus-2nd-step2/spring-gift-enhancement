@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.domain.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -19,9 +20,11 @@ public class ProductController {
     private static final String REDIRECT_URL = "redirect:/api/products";
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -47,6 +50,7 @@ public class ProductController {
     @GetMapping("/new")
     public String showAddProductForm(Model model) {
         model.addAttribute("product", new Product());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "addProduct";
     }
 
@@ -59,6 +63,7 @@ public class ProductController {
         }
 
         model.addAttribute("product", product);
+        model.addAttribute("categories", categoryService.getAllCategories());
 
         return "editProduct";
     }
