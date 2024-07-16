@@ -7,7 +7,6 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import gift.dto.product.request.CreateProductRequest;
 import gift.dto.product.request.UpdateProductRequest;
@@ -214,8 +213,8 @@ class ProductServiceTest implements AutoCloseable {
         productService.deleteProduct(1L);
 
         // then
-        verify(productRepository, times(1)).existsById(1L);
-        verify(productRepository, times(1)).deleteById(1L);
+        then(productRepository).should(times(1)).existsById(1L);
+        then(productRepository).should(times(1)).deleteById(1L);
     }
 
     @Test
