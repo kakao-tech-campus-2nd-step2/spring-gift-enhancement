@@ -37,9 +37,4 @@ public class MemberService {
             throw new RuntimeException("Invalid email or password");
         }
     }
-
-
-    public Optional<Member> findById(Long id) {
-        return memberRepository.findById(id);
-    }
 }
