@@ -29,7 +29,7 @@ public class WishlistService {
 
     public List<Product> getWishlistByEmail(String email, Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Wishlist> wishes = wishlistRepository.findByMember_Email(email, pageable);
+        Page<Wishlist> wishes = wishlistRepository.findByMemberEmail(email, pageable);
         return wishes.stream().map(wish -> wish.getProduct()).toList();
     }
 
@@ -49,7 +49,7 @@ public class WishlistService {
 
     @Transactional
     public void removeWishlist(String email, Long productId) {
-        Wishlist wish = wishlistRepository.findByMember_EmailAndProduct_Id(email, productId)
+        Wishlist wish = wishlistRepository.findByMemberEmailAndProductId(email, productId)
             .orElseThrow(() -> new RuntimeException("Wish Not Found"));
         wishlistRepository.delete(wish);
     }
