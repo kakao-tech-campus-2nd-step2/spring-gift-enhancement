@@ -17,6 +17,7 @@
               <th>Name</th>
               <th>Price</th>
               <th>ImageUrl</th>
+              <th>Category</th>
             </tr>
           </thead>
           <tbody>
@@ -25,6 +26,7 @@
               <td th:text="${product.name}"></td>
               <td th:text="${product.price}"></td>
               <td th:text="${product.imageUrl}"></td>
+              <td th:text="${product.category}"></td>
               <td> 
                 <form th:action="@{'/api/products/edit/' + ${product.id}}" method="get">
                   <button type="submit">Edit</button>

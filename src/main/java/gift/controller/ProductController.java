@@ -26,7 +26,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String getProducts(Model model, @RequestParam(value = "page", defaultValue = "0")int page, @RequestParam(value = "size", defaultValue = "10") int size) {
         ProductPageResponse paging = productService.getPage(page, size);
         model.addAttribute("paging", paging);
@@ -48,7 +48,7 @@ public class ProductController {
         }
 
         productService.addProduct(productDto);
-        return "redirect:/admin";
+        return "redirect:/api/products";
     }
 
     @GetMapping("/edit/{id}")
@@ -66,12 +66,12 @@ public class ProductController {
         }
 
         productService.updateProduct(productDto);
-        return "redirect:/admin";
+        return "redirect:/api/products";
     }
 
     @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return "redirect:/admin";
+        return "redirect:/api/products";
     }
 }

@@ -50,13 +50,12 @@ public class ProductService{
 
     @Transactional
     public void addProduct(ProductDto productDto) {
-        
         Category category = categoryRepository.findByName(productDto.getCategory())
                 .orElseGet(() -> {
                     Category addCategory = new Category(productDto.getCategory());
                     return categoryRepository.save(addCategory);
                 });
-
+            
         if(productRepository.findById(productDto.getId()).isEmpty()){
             Product product = productDto.toEntity(category);
             productRepository.save(product);
