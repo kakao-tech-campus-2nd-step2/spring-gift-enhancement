@@ -3,6 +3,7 @@ package gift.controller;
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.service.ProductService;
+import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,10 +23,12 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -47,25 +50,29 @@ public class ProductController {
     public String getProduct(@PathVariable long id, Model model) {
         ProductResponse product = productService.findById(id);
         model.addAttribute("product", product);
-        model.addAttribute("productRequest", new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl()));
+        model.addAttribute("productRequest", new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategoryId()));
+        model.addAttribute("categories", categoryService.findAll());
         return "editForm";
     }
 
     @GetMapping("/new")
     public String addProductForm(Model model) {
-        model.addAttribute("productRequest", new ProductRequest("", 0, ""));
+        model.addAttribute("productRequest", new ProductRequest("", 0, "", 1L));
+        model.addAttribute("categories", categoryService.findAll());
         return "addForm";
     }
 
     @PostMapping
     public String addProduct(@Valid @ModelAttribute ProductRequest productRequest, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.findAll());
             return "addForm";
         }
         try {
             productService.save(productRequest);
         } catch (IllegalArgumentException e) {
             bindingResult.addError(new FieldError("productRequest", "name", e.getMessage()));
+            model.addAttribute("categories", categoryService.findAll());
             return "addForm";
         }
         return "redirect:/api/products";
@@ -74,14 +81,16 @@ public class ProductController {
     @PostMapping("/{id}")
     public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute ProductRequest productRequest, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("product", new ProductResponse(id, productRequest.name(), productRequest.price(), productRequest.imageUrl(), null));
+            model.addAttribute("product", new ProductResponse(id, productRequest.name(), productRequest.price(), productRequest.imageUrl(), null, null));
+            model.addAttribute("categories", categoryService.findAll());
             return "editForm";
         }
         try {
             productService.update(id, productRequest);
         } catch (IllegalArgumentException e) {
             bindingResult.addError(new FieldError("productRequest", "name", e.getMessage()));
-            model.addAttribute("product", new ProductResponse(id, productRequest.name(), productRequest.price(), productRequest.imageUrl(), null));
+            model.addAttribute("product", new ProductResponse(id, productRequest.name(), productRequest.price(), productRequest.imageUrl(), null, null));
+            model.addAttribute("categories", categoryService.findAll());
             return "editForm";
         }
         return "redirect:/api/products";
