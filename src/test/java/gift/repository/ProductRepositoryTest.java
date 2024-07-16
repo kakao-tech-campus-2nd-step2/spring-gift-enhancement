@@ -1,13 +1,16 @@
 package gift.repository;
 
+import gift.config.JpaConfig;
 import gift.model.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import(JpaConfig.class)
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
@@ -53,8 +56,7 @@ class ProductRepositoryTest {
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getPrice()).isEqualTo(price);
         assertThat(actual.getImageUrl()).isEqualTo(imageUrl);
-//        assertThat(actual.getCreatedAt()).isNotNull();
-//        assertThat(actual.getUpdatedAt()).isNotNull();
+        assertThat(actual.getCreatedAt()).isNotNull();
+        assertThat(actual.getUpdatedAt()).isNotNull();
     }
-
 }
