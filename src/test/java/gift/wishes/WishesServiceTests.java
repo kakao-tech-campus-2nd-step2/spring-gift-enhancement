@@ -37,81 +37,58 @@ public class WishesServiceTests {
     private UserRepository userRepository;
 
     private WishesService wishesService;
+    private Product sampleProduct;
 
     @BeforeEach
     public void setUp() {
         wishesService = new WishesServiceImpl(wishesRepository, productRepository, userRepository);
-    }
-
-    @Test
-    public void testAddProductToWishes() {
-        Long userId = 1L;
-        Product product = new Product(
+        sampleProduct = new Product(
                 1L,
                 "test",
                 100,
                 "test.jpg",
                 ProductCategory.of("test")
         );
+    }
+
+    @Test
+    public void testAddProductToWishes() {
+        Long userId = 1L;
 
         when(productRepository.exists(1L)).thenReturn(true);
         when(wishesRepository.exists(1L, 1L)).thenReturn(false);
 
-        wishesService.addProductToWishes(userId, product);
-        verify(wishesRepository).saveWish(userId, product.id());
+        wishesService.addProductToWishes(userId, sampleProduct);
+        verify(wishesRepository).saveWish(userId, sampleProduct.id());
     }
 
     @Test
     @DisplayName("이미 존재하는 위시 상품을 추가 시도 테스트")
     public void testAddProductToWishesWithExistingWish() {
         Long userId = 1L;
-        Product product = new Product(
-                1L,
-                "test",
-                100,
-                "test.jpg",
-                ProductCategory.of("test")
-        );
 
         when(productRepository.exists(1L)).thenReturn(true);
         when(wishesRepository.exists(1L, 1L)).thenReturn(true);
 
-        assertThrows(WishAlreadyExistsException.class, () -> wishesService.addProductToWishes(userId, product));
+        assertThrows(WishAlreadyExistsException.class, () -> wishesService.addProductToWishes(userId, sampleProduct));
     }
 
     @Test
     public void testRemoveProductFromWishes() {
         Long userId = 1L;
-        Product product = new Product(
-                1L,
-                "test",
-                100,
-                "test.jpg",
-                ProductCategory.of("test")
-        );
-
-
         when(wishesRepository.exists(1L, 1L)).thenReturn(true);
 
-        wishesService.removeProductFromWishes(userId, product);
-        verify(wishesRepository).removeWish(userId, product.id());
+        wishesService.removeProductFromWishes(userId, sampleProduct);
+        verify(wishesRepository).removeWish(userId, sampleProduct.id());
     }
 
     @Test
     @DisplayName("존재하지 않는 위시 상품을 삭제 시도 테스트")
     public void testRemoveProductFromWishesWithNonExistingWish() {
         Long userId = 1L;
-        Product product = new Product(
-                1L,
-                "test",
-                100,
-                "test.jpg",
-                ProductCategory.of("test")
-        );
-
 
         when(wishesRepository.exists(1L, 1L)).thenReturn(false);
 
-        assertThrows(WishNotFoundException.class, () -> wishesService.removeProductFromWishes(userId, product));
+        assertThrows(WishNotFoundException.class, () -> wishesService.removeProductFromWishes(userId, sampleProduct));
     }
 }
