@@ -41,4 +41,10 @@ public class CategoryService {
         Category category = new Category(id, categoryDTO.name(), categoryDTO.color(), categoryDTO.imageUrl(), categoryDTO.description());
         return categoryRepository.save(category).toDTO();
     }
+
+    public CategoryDTO deleteCategory(long id) {
+        Category deletedCategory = categoryRepository.findById(id).orElseThrow(NoSuchCategoryException::new);
+        categoryRepository.delete(deletedCategory);
+        return deletedCategory.toDTO();
+    }
 }
