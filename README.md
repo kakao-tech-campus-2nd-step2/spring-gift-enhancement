@@ -40,10 +40,10 @@ Content-Type: application/json
 
 ### ToDo
 
-- [ ]  Category `vo`, `repository`, `controller`, `service` 작성
-- [ ]  Category와 연관되는 Test 코드 수정
-    - [ ]  ProductRepositoryTest.java
-    - [ ]  WishlistRepositoryTest.java
-- [ ]  Category Get 구현
+- [X]  Category `vo`, `repository`, `controller`, `service` 작성
+- [X]  Category와 연관되는 Test 코드 수정
+    - [X]  ProductRepositoryTest.java
+    - [X]  WishlistRepositoryTest.java
+- [X]  Category Get 구현
 - [ ]  Category Update 구현
 - [ ]  Category Delete 구현
