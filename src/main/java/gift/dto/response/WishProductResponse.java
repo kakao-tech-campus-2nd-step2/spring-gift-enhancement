@@ -2,13 +2,13 @@ package gift.dto.response;
 
 import gift.domain.Product;
 
-public class WishProductsResponse {
+public class WishProductResponse {
 
     private String name;
     private int price;
     private String imageUrl;
 
-    public WishProductsResponse(Product product) {
+    public WishProductResponse(Product product) {
         this.name = product.getName();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();

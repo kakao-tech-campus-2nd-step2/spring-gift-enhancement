@@ -4,7 +4,7 @@ import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
 import gift.dto.WishProduct;
-import gift.dto.response.WishProductsResponse;
+import gift.dto.response.WishProductResponse;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
@@ -31,8 +31,8 @@ public class WishListService {
         this.productRepository = productRepository;
     }
 
-    public Page<WishProductsResponse> getWishList(Long memberId, int page) {
-        List<WishProductsResponse> wishProducts = getWishProducts(memberId);
+    public Page<WishProductResponse> getWishList(Long memberId, int page) {
+        List<WishProductResponse> wishProducts = getWishProducts(memberId);
 
         PageRequest pageRequest = PageRequest.of(page, 3);
         int start = (int) pageRequest.getOffset();
@@ -56,9 +56,9 @@ public class WishListService {
         return new Wish(member, product);
     }
 
-    private List<WishProductsResponse> getWishProducts(Long memberId) {
+    private List<WishProductResponse> getWishProducts(Long memberId) {
         List<Wish> wishes = wishRepository.findWishByMemberId(memberId);
         return wishes.stream()
-                .map(wish -> new WishProductsResponse(wish.getProduct())).toList();
+                .map(wish -> new WishProductResponse(wish.getProduct())).toList();
     }
 }

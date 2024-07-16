@@ -3,7 +3,7 @@ package gift.controller;
 import gift.Login;
 import gift.dto.LoginMember;
 import gift.dto.WishProduct;
-import gift.dto.response.WishProductsResponse;
+import gift.dto.response.WishProductResponse;
 import gift.service.WishListService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ public class WishListController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<WishProductsResponse>> getWishList(@Login LoginMember member,
-                                                                  @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
-        Page<WishProductsResponse> wishes = wishListService.getWishList(member.getId(), page);
+    public ResponseEntity<Page<WishProductResponse>> getWishList(@Login LoginMember member,
+                                                                 @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
+        Page<WishProductResponse> wishes = wishListService.getWishList(member.getId(), page);
         return ResponseEntity.ok(wishes);
     }
 
