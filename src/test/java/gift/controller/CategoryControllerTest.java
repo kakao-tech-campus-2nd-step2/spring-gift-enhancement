@@ -33,7 +33,7 @@ public class CategoryControllerTest {
 
     @BeforeEach
     public void setUp() {
-        categoryResponse = new CategoryResponse(1L, "Category");
+        categoryResponse = new CategoryResponse(1L, "Category", "color", "imageUrl", "description");
     }
 
     @Test
