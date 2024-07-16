@@ -38,6 +38,7 @@
 | id          | Long    | 위시리스트 고유 식별자 | Primary Key, 자동 생성 |
 | name        | String  | 카테고리 이름      | unique key         |
 | description | String  | 카테고리 설명      | null 허용            |
+| is_active   | Boolean     | 활성화 상태      | 기본값: true    |
 
 ### 기능 목록
 #### Product
