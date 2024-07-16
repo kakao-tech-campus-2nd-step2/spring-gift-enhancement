@@ -10,7 +10,6 @@ import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
 import gift.product.entity.Product;
 import gift.product.util.ProductMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -71,7 +71,7 @@ class ProductServiceTest {
 
         Page<ProductResponse> responsePage = productService.getPagedProducts(productPage.getPageable());
 
-        Assertions.assertThat(responsePage.getTotalElements()).isEqualTo(2);
+        assertThat(responsePage.getTotalElements()).isEqualTo(2);
     }
 
     @Test
@@ -87,7 +87,7 @@ class ProductServiceTest {
 
         ProductResponse resultProduct = productService.getProductByIdOrThrow(1L);
 
-        Assertions.assertThat(resultProduct.name()).isEqualTo(product.getName());
+        assertThat(resultProduct.name()).isEqualTo(product.getName());
     }
 
     @Test
@@ -96,7 +96,7 @@ class ProductServiceTest {
         Long productId = 1L;
         given(productRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        Assertions.assertThatThrownBy(() -> productService.getProductByIdOrThrow(productId))
+        assertThatThrownBy(() -> productService.getProductByIdOrThrow(productId))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PRODUCT_NOT_FOUND
                                      .getMessage());
@@ -116,22 +116,17 @@ class ProductServiceTest {
 
         ProductResponse response = productService.createProduct(request);
 
-        Assertions.assertThat(response.name()).isEqualTo(product.getName());
+        assertThat(response.name()).isEqualTo(product.getName());
     }
 
     @Test
     @DisplayName("단일 상품 삭제 서비스 테스트")
     void deleteProductById() {
-        Product product = new Product.ProductBuilder()
-                .setName("product1")
-                .setPrice(1000)
-                .setImageUrl("https://testshop.com")
-                .setCategory(category)
-                .build();
+        Long productId = 1L;
 
-        productService.deleteProductById(product.getId());
+        productService.deleteProductById(productId);
 
-        verify(productRepository).deleteById(product.getId());
+        verify(productRepository).deleteById(productId);
     }
 
     @Test
@@ -152,18 +147,16 @@ class ProductServiceTest {
                 .setCategory(category)
                 .build();
         ProductRequest request = new ProductRequest(
-                "product",
-                3000,
-                "https://testshop.io",
+                "product2",
+                product.getPrice(),
+                product.getImageUrl(),
                 category.getName());
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
-        product.update(request, category);
-        given(productRepository.save(any())).willReturn(product);
 
-        Long productId = productService.updateProduct(product.getId(), request);
+        productService.updateProduct(product.getId(), request);
 
-        Assertions.assertThat(productId).isEqualTo(product.getId());
+        assertThat(product.getName()).isEqualTo(request.name());
     }
 
     @Test
@@ -177,7 +170,7 @@ class ProductServiceTest {
                 category.getName());
         given(productRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        Assertions.assertThatThrownBy(() -> productService.updateProduct(productId, request))
+        assertThatThrownBy(() -> productService.updateProduct(productId, request))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PRODUCT_NOT_FOUND
                                      .getMessage());

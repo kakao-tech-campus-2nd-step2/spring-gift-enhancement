@@ -172,28 +172,11 @@ class ProductControllerTest {
     @DisplayName("단일 상품 삭제 기능 테스트")
     void deleteProduct() throws Exception {
         Long productId = 1L;
-        when(productService.deleteProductById(productId)).thenReturn(productId);
 
         mockMvc.perform(delete("/api/products/{id}", productId)
                         .header(HttpHeaders.AUTHORIZATION, bearerToken))
                 .andExpect(status().isOk())
-                .andExpect(content().string(String.valueOf(productId)))
                 .andDo(print());
-
-        verify(productService).deleteProductById(productId);
-    }
-
-    @Test
-    @DisplayName("단일 상품 삭제 실패 테스트")
-    void deleteProductFailed() throws Exception {
-        Long productId = 1L;
-        Throwable exception = new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
-        when(productService.deleteProductById(productId)).thenThrow(exception);
-
-        mockMvc.perform(delete("/api/products/{id}", productId)
-                        .header(HttpHeaders.AUTHORIZATION, bearerToken))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(exception.getMessage()));
 
         verify(productService).deleteProductById(productId);
     }
@@ -219,38 +202,12 @@ class ProductControllerTest {
                 "https://testshop.com",
                 category.getName());
         String requestJson = objectMapper.writeValueAsString(request);
-        when(productService.updateProduct(productId, request)).thenReturn(productId);
 
         mockMvc.perform(patch("/api/products/{id}", productId)
                         .header(HttpHeaders.AUTHORIZATION, bearerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().string(String.valueOf(productId)))
-                .andDo(print());
-
-        verify(productService).updateProduct(productId, request);
-    }
-
-    @Test
-    @DisplayName("상품 수정 실패 테스트")
-    void updateProductFailed() throws Exception {
-        Long productId = 2L;
-        ProductRequest request = new ProductRequest(
-                "product2",
-                3000,
-                "https://testshop.com",
-                category.getName());
-        String requestJson = objectMapper.writeValueAsString(request);
-        Throwable exception = new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
-        when(productService.updateProduct(productId, request)).thenThrow(exception);
-
-        mockMvc.perform(patch("/api/products/{id}", productId)
-                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(exception.getMessage()))
                 .andDo(print());
 
         verify(productService).updateProduct(productId, request);

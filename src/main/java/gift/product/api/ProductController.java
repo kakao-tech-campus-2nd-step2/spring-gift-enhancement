@@ -47,8 +47,8 @@ public class ProductController {
 
     // 상품 하나 삭제
     @DeleteMapping("/{id}")
-    public Long deleteProduct(@PathVariable("id") Long id) {
-        return productService.deleteProductById(id);
+    public void deleteProduct(@PathVariable("id") Long id) {
+        productService.deleteProductById(id);
     }
 
     // 상품 전체 삭제
@@ -59,9 +59,9 @@ public class ProductController {
 
     // 상품 수정
     @PatchMapping("/{id}")
-    public Long updateProduct(@PathVariable("id") Long id,
+    public void updateProduct(@PathVariable("id") Long id,
                               @RequestBody @Valid ProductRequest request) {
-        return productService.updateProduct(id, request);
+        productService.updateProduct(id, request);
     }
 
 }

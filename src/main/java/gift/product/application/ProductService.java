@@ -12,6 +12,7 @@ import gift.product.util.ProductMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
@@ -44,25 +45,22 @@ public class ProductService {
         );
     }
 
-    public Long deleteProductById(Long id) {
+    public void deleteProductById(Long id) {
         productRepository.deleteById(id);
-        return id;
     }
 
     public void deleteAllProducts() {
         productRepository.deleteAll();
     }
 
-    public Long updateProduct(Long id, ProductRequest request) {
+    @Transactional
+    public void updateProduct(Long id, ProductRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Category category = categoryRepository.findByName(request.categoryName())
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
         product.update(request, category);
-
-        return productRepository.save(product)
-                                .getId();
     }
 
 }
