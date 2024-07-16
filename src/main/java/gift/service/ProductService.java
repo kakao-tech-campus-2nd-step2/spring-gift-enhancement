@@ -1,6 +1,9 @@
 package gift.service;
 
+import gift.dto.ProductDto;
+import gift.dto.ProductUpdateDto;
 import gift.repository.ProductRepository;
+import gift.vo.Category;
 import gift.vo.Product;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -14,9 +17,15 @@ import org.springframework.validation.annotation.Validated;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
+    }
+    
+    private Category getCategory(Long categoryId) {
+        return categoryService.getCategoryById(categoryId);
     }
 
     /**
@@ -32,14 +41,16 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다."));
     }
 
-    public void addProduct(@Valid Product product) {
+    public void addProduct(@Valid ProductDto productDto) {
+        Product product = productDto.toProduct(getCategory(productDto.categoryId()));
         productRepository.save(product);
     }
 
-    public void updateProduct(@Valid Product product) {
-        productRepository.findById(product.getId())
+    public void updateProduct(@Valid ProductUpdateDto updateDto) {
+        Product updateProduct = updateDto.toProduct(getCategory(updateDto.categoryId()));
+        productRepository.findById(updateProduct.getId())
                 .orElseThrow(() -> new IllegalArgumentException("수정하려는 상품을 찾을 수 없습니다."));
-        productRepository.save(product);
+        productRepository.save(updateProduct);
     }
 
     public void deleteProduct(Long id) {

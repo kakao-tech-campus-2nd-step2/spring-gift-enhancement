@@ -57,12 +57,12 @@ public class ProductController {
 
     /**
      * 상품 추가
-     * @param productDto Product로 변환 후 처리
-     * @return ResponseEntity로 Response 받음
+     * @param productDto Dto로 받음
+     * @return ResponseEntity로 Response
      */
     @PostMapping()
     public ResponseEntity<Void> addProduct(@Valid @RequestBody ProductDto productDto) {
-        service.addProduct(productDto.toProduct());
+        service.addProduct(productDto);
         return ResponseEntity.noContent().build();
     }
 
@@ -74,7 +74,7 @@ public class ProductController {
      */
     @PutMapping()
     public ResponseEntity<Void> updateProduct(@Valid @RequestBody ProductUpdateDto productUpdateDto) {
-        service.updateProduct(productUpdateDto.toProduct());
+        service.updateProduct(productUpdateDto);
         return ResponseEntity.noContent().build();
     }
 
