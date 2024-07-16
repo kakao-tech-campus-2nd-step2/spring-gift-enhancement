@@ -20,7 +20,7 @@ public class Product {
             foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"),
             nullable = false)
     private Category category;
-
+  
     protected Product(){
 
     }
