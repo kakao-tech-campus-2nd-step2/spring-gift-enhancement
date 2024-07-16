@@ -41,6 +41,9 @@ public class Product {
         this.category = category;
     }
 
+    protected Product() {
+    }
+
     public Product update(String name, Integer price, String imageUrl, Category category){
         if(imageUrl != null && !name.isEmpty()){
             this.setName(name);
@@ -55,9 +58,6 @@ public class Product {
             this.category = category;
         }
         return this;
-    }
-
-    protected Product() {
     }
 
     public String getImageUrl() {
