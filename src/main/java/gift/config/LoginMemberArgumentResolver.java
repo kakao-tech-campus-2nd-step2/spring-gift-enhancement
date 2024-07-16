@@ -49,10 +49,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     }
 
     private Member getAuthenticatedMember(AuthorizationHeader authHeader) {
-        if (!authHeader.isValid()) {
-            throw new IllegalStateException("Invalid or missing JWT token");
-        }
-
         String token = authHeader.getToken();
         if (!jwtTokenProvider.validateToken(token)) {
             throw new IllegalStateException("Invalid or missing JWT token");

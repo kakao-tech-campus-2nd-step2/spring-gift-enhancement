@@ -4,11 +4,10 @@ public class AuthorizationHeader {
     private final String authHeader;
 
     public AuthorizationHeader(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid authorization header");
+        }
         this.authHeader = authHeader;
-    }
-
-    public boolean isValid() {
-        return authHeader != null && authHeader.startsWith("Bearer ");
     }
 
     public String getToken() {
