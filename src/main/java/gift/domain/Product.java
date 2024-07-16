@@ -33,16 +33,18 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public void update(String name, int price, String imageUrl) {
+    public void update(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -63,5 +65,9 @@ public class Product {
 
     public List<Wish> getWishList() {
         return wishList;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }
