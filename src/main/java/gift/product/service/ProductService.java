@@ -35,7 +35,7 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public ResponseEntity<String> registerProduct(ProductDTO productDTO) {
+    public void registerProduct(ProductDTO productDTO) {
         System.out.println("[ProductService] registerProduct()");
         productValidation.registerValidation(productDTO);
 
@@ -48,10 +48,9 @@ public class ProductService {
                     .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
             )
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body("Product registered successfully");
     }
 
-    public ResponseEntity<String> updateProduct(
+    public void updateProduct(
             Long id,
             ProductDTO productDTO
     ) {
@@ -68,8 +67,6 @@ public class ProductService {
                                 .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
                 )
         );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Product update successfully");
     }
 
     public void deleteProduct(Long id) {

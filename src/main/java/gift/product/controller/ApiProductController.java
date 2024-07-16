@@ -30,19 +30,21 @@ public class ApiProductController {
     @PostMapping()
     public ResponseEntity<String> registerProduct(@Valid @RequestBody ProductDTO productDTO) {
         System.out.println("[ProductController] registerProduct()");
-        return productService.registerProduct(productDTO);
+        productService.registerProduct(productDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Product registered successfully");
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) {
         System.out.println("[ProductController] updateProduct()");
-        return productService.updateProduct(id, productDTO);
+        productService.updateProduct(id, productDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Product update successfully");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         System.out.println("[ProductController] deleteProduct()");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Product delete successfully");
     }
 
     @GetMapping("/search")
