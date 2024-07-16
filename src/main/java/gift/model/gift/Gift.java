@@ -27,7 +27,7 @@ public class Gift {
     protected List<Wish> wishes = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "category")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     public Gift() {
@@ -60,6 +60,9 @@ public class Gift {
         return imageUrl;
     }
 
+    public Category getCategory() {
+        return category;
+    }
 
     private boolean isValidName(String name) {
         return name != null && !name.contains("카카오");

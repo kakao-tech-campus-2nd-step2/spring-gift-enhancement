@@ -13,7 +13,6 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
 
     @Column(unique = true)
@@ -66,5 +65,12 @@ public class Category {
 
     public List<Gift> getGifts() {
         return gifts;
+    }
+
+    public void modify(String name, String color, String imageUrl, String description){
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
 }
