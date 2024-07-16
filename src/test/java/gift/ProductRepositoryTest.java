@@ -3,7 +3,9 @@ package gift;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.entity.Category;
 import gift.entity.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -20,10 +22,16 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("상품추가 테스트")
     public void addProductTest() {
-        Product product = new Product("치킨", 20000, "chicken.com");
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
+        Product product = new Product("치킨", 20000, "chicken.com", category);
         productRepository.save(product);
 
         Optional<Product> findProduct = productRepository.findById(product.getId());
@@ -35,7 +43,10 @@ public class ProductRepositoryTest {
     @Test
     @DisplayName("상품 삭제 테스트")
     public void deleteProductTest() {
-        Product product = new Product("치킨", 20000, "chicken.com");
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
+        Product product = new Product("치킨", 20000, "chicken.com", category);
         productRepository.save(product);
 
         productRepository.deleteById(product.getId());
@@ -46,7 +57,10 @@ public class ProductRepositoryTest {
 
     @Test
     public void save() {
-        Product expected = new Product("치킨", 20000, "chicken.com");
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
+        Product expected = new Product("치킨", 20000, "chicken.com", category);
         Product actual = productRepository.save(expected);
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -56,16 +70,22 @@ public class ProductRepositoryTest {
 
     @Test
     public void findByName() {
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
         String expectedName = "치킨";
-        productRepository.save(new Product("치킨", 20000, "chicken.com"));
+        productRepository.save(new Product("치킨", 20000, "chicken.com", category));
         boolean exists = productRepository.existsByName(expectedName);
         assertThat(exists).isTrue();
     }
 
     @Test
     public void findAllPagingTest(){
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
         for(int i=0; i<50; i++){
-            Product product = new Product("name"+i,1000*i, i+".com");
+            Product product = new Product("name"+i,1000*i, i+".com", category);
             productRepository.save(product);
         }
 

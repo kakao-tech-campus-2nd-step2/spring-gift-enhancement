@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.entity.Category;
+
 public class CategoryRequestDto {
     private Long id;
     private String name;
@@ -25,5 +27,9 @@ public class CategoryRequestDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Category toEntity() {
+        return new Category(name);
     }
 }

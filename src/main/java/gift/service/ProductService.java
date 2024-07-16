@@ -24,7 +24,7 @@ public class ProductService {
             .collect(Collectors.toList());
     }
     private ProductResponseDto productToDto(Product product) {
-        return new ProductResponseDto(product.getId(), product.getName(), product.getPrice(), product.getImageUrl());
+        return new ProductResponseDto(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getName());
     }
 
 //    public List<Product> findAll() {
