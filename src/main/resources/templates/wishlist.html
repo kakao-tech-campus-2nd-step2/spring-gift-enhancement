@@ -27,6 +27,7 @@
             <th>Name</th>
             <th>Price</th>
             <th>Image-Url</th>
+            <th>Category</th>
         </tr>
         </thead>
         <tbody>
@@ -35,6 +36,7 @@
             <td th:text="${product.name}"></td>
             <td th:text="${product.price}"></td>
             <td th:text="${product.imageUrl}"></td>
+            <td th:text="${product.category.name}"></td>
         </tr>
         </tbody>
     </table>
