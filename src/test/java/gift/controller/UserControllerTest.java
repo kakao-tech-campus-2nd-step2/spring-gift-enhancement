@@ -1,6 +1,5 @@
 package gift.controller;
 
-import gift.dto.UserLoginDto;
 import gift.dto.UserRegisterDto;
 import gift.dto.UserResponseDto;
 import gift.repository.UserRepository;
@@ -18,7 +17,6 @@ import org.springframework.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest {
@@ -39,7 +37,7 @@ public class UserControllerTest {
     }
 
     @AfterEach
-    public void 데이터_삭제() {
+    public void tearDown() {
         userRepository.deleteAll();
     }
 
@@ -48,13 +46,13 @@ public class UserControllerTest {
         UserRegisterDto userRegisterDto = new UserRegisterDto("user@example.com", "password");
 
         given()
-            .contentType(ContentType.JSON)
-            .body(userRegisterDto)
-        .when()
-            .post("/api/users/register")
-        .then()
-            .statusCode(HttpStatus.CREATED.value())
-            .body("email", equalTo("user@example.com"));
+                .contentType(ContentType.JSON)
+                .body(userRegisterDto)
+                .when()
+                .post("/api/users/register")
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .body("email", equalTo("user@example.com"));
     }
 
     @Test
@@ -63,11 +61,11 @@ public class UserControllerTest {
         userService.registerUser(userRegisterDto);
 
         given()
-        .when()
-            .get("/api/users")
-        .then()
-            .statusCode(HttpStatus.OK.value())
-            .body("[0].email", equalTo("user@example.com"));
+                .when()
+                .get("/api/users")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("[0].email", equalTo("user@example.com"));
     }
 
     @Test
@@ -77,9 +75,9 @@ public class UserControllerTest {
         Long userId = userResponseDto.getId();
 
         given()
-        .when()
-            .delete("/api/users/{id}", userId)
-        .then()
-            .statusCode(HttpStatus.NO_CONTENT.value());
+                .when()
+                .delete("/api/users/{id}", userId)
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
     }
 }

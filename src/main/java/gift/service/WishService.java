@@ -1,11 +1,11 @@
 package gift.service;
 
 import gift.dto.ProductResponseDto;
+import gift.dto.WishPageResponseDto;
 import gift.dto.WishRequestDto;
 import gift.dto.WishResponseDto;
-import gift.dto.WishPageResponseDto;
-import gift.entity.User;
 import gift.entity.Product;
+import gift.entity.User;
 import gift.entity.Wish;
 import gift.exception.BusinessException;
 import gift.exception.ErrorCode;
@@ -15,6 +15,7 @@ import gift.repository.WishRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class WishService {
         this.userService = userService;
     }
 
+    @Transactional
     public WishResponseDto addWish(Long userId, WishRequestDto wishRequestDto) {
         User user = userService.getUserEntityById(userId);
         Product product = productService.getProductEntityById(wishRequestDto.getProductId());
@@ -41,6 +43,7 @@ public class WishService {
         return WishMapper.toWishResponseDto(createdWish, ProductMapper.toProductResponseDTO(product));
     }
 
+    @Transactional(readOnly = true)
     public WishPageResponseDto getWishesByUserId(Long userId, Pageable pageable) {
         User user = userService.getUserEntityById(userId);
         Page<Wish> wishes = wishRepository.findByUser(user, pageable);
@@ -60,6 +63,7 @@ public class WishService {
         return WishPageResponseDto.fromPage(wishResponseDtos);
     }
 
+    @Transactional
     public void deleteWish(Long wishId) {
         Wish wish = wishRepository.findById(wishId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND, "ID: " + wishId));

@@ -7,12 +7,9 @@ import gift.entity.User;
 import gift.exception.BusinessException;
 import gift.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +23,7 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @AfterEach
-    public void 데이터_정리() {
+    public void tearDown() {
         userRepository.deleteAll();
     }
 
