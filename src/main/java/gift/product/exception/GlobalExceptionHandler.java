@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class GlobalExceptionHandler {
 
     // 상품과 관련된 에러 메세지
-    public static final String NOT_EXIST_ID = "요청한 id가 존재하지 않습니다.";
+    public static final String NOT_EXIST_ID = "존재하지 않는 ID에 대한 접근입니다.";
     public static final String CONTAINS_PRODUCT_NAME_KAKAO = "'카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.";
     public static final String PRODUCT_PRICE_NOT_POSITIVE = "상품의 가격은 1 이상의 양의 정수만 가능합니다.";
     // 토큰 인증과 관련된 에러 메세지
@@ -22,6 +22,9 @@ public class GlobalExceptionHandler {
     // 유저 정보와 관련된 에러 메세지
     public static final String DUPLICATE_EMAIL = "이미 가입된 이메일입니다.";
     public static final String INVALID_INPUT = "이메일 또는 비밀번호를 잘못 입력하였습니다.";
+    // 카테고리와 관련된 에러 메세지
+    public static final String DUPLICATE_CATEGORY_NAME = "이미 존재하는 카테고리 입니다.";
+    public static final String USING_CATEGORY = "카테고리를 제거하려면 해당 카테고리를 참조하는 상품이 없어야 합니다.";
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -22,7 +22,7 @@ public class ApiCategoryController {
     @PostMapping
     public ResponseEntity<String> registerCategory(@Valid @RequestBody Category category) {
         System.out.println("[CategoryController] registerCategory()");
-        categoryService.registerCategory(category.getName());
+        categoryService.registerCategory(category);
         return ResponseEntity.status(HttpStatus.CREATED).body("Category registered successfully");
     }
 
