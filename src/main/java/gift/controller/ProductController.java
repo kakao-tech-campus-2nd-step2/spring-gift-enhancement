@@ -3,6 +3,7 @@ package gift.controller;
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.entity.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -20,9 +21,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -64,9 +67,6 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
         @Valid @RequestBody ProductRequest updatedProductRequest) {
-        if (!productService.findById(id).isPresent()) {
-            return ResponseEntity.status(204).build();
-        }
         ProductResponse productResponse = productService.updateProduct(id, updatedProductRequest);
         return ResponseEntity.ok(productResponse);
     }
