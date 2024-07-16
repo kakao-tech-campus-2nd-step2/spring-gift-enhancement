@@ -1,6 +1,7 @@
 package gift.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import gift.model.Category;
 import gift.model.Product;
 import gift.model.ProductName;
 
@@ -13,12 +14,15 @@ public class ProductDTO {
     private Integer price;
     @JsonProperty
     private String imageUrl;
+    @JsonProperty
+    private Category category;
 
-    public ProductDTO(long id, String name, int price, String imageUrl) {
+    public ProductDTO(long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.setName(name);
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public void setName(String name) {
@@ -27,7 +31,7 @@ public class ProductDTO {
     }
 
     public static ProductDTO getProductDTO(Product product){
-        return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl());
+        return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory());
     }
 
     public long getId() {
@@ -44,5 +48,9 @@ public class ProductDTO {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

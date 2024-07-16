@@ -1,5 +1,6 @@
 package gift.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -20,28 +21,38 @@ public class Product {
     @Column(name = "image_url", columnDefinition = "varchar(255) not null")
     private String imageUrl;
 
-    public Product(long id, String name, int price, String imageUrl) {
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "category_id"), nullable = false)
+    private Category category;
+
+    public Product(long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.setName(name);
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.setName(name);
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Product update(String name, Integer price, String imageUrl){
-        if(!name.isEmpty()){
+    public Product update(String name, Integer price, String imageUrl, Category category){
+        if(imageUrl != null && !name.isEmpty()){
             this.setName(name);
         }
         if(price != null){
             this.price = price;
         }
-        if(!imageUrl.isEmpty()){
+        if(imageUrl != null && !imageUrl.isEmpty()){
             this.imageUrl = imageUrl;
+        }
+        if(category != null && !category.equals(this.category)){
+            this.category = category;
         }
         return this;
     }
@@ -53,20 +64,16 @@ public class Product {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
     public String getName(){
         return this.name;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public void setName(String name) {
