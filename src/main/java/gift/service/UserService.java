@@ -29,9 +29,9 @@ public class UserService {
         sorts.add(Sort.Order.asc("id"));
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
 
-        Page<User> all = userRepository.findAll(pageable);
+        Page<User> users = userRepository.findAll(pageable);
 
-        return all.map(UserResponse::new);
+        return users.map(UserResponse::new);
     }
     /*
      * User의 정보를 userId를 기준으로 찾는 로직
