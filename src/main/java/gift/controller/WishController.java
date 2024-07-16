@@ -2,9 +2,9 @@ package gift.controller;
 
 import gift.annotation.LoginUserId;
 import gift.config.PageConfig;
-import gift.dto.wish.AddWishRequest;
-import gift.dto.wish.UpdateWishRequest;
-import gift.dto.wish.WishResponse;
+import gift.dto.wish.request.AddWishRequest;
+import gift.dto.wish.request.UpdateWishRequest;
+import gift.dto.wish.response.WishResponse;
 import gift.service.WishService;
 import jakarta.validation.Valid;
 import java.util.List;

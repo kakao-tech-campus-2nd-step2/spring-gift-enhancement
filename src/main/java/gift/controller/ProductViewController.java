@@ -1,7 +1,7 @@
 package gift.controller;
 
 import gift.config.PageConfig;
-import gift.dto.product.ProductResponse;
+import gift.dto.product.response.ProductResponse;
 import gift.entity.Product;
 import gift.service.CategoryService;
 import gift.service.ProductService;

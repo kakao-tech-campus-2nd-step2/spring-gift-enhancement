@@ -1,9 +1,9 @@
-package gift.dto.user;
+package gift.dto.user.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
-public record UserLoginRequest(
+public record UserRegisterRequest(
     @Email String email,
     @NotEmpty String password
 ) {

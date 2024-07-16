@@ -1,9 +1,10 @@
-package gift.dto.wish;
+package gift.dto.wish.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record AddWishRequest(
+public record UpdateWishRequest(
+    @NotNull Long id,
     @NotNull Long productId,
     @Positive(message = "상품 수량은 0보다 큰 수이어야 합니다.") Integer quantity
 ) {

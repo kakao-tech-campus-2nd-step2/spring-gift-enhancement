@@ -1,10 +1,11 @@
 package gift.service;
 
-import gift.dto.product.CreateProductRequest;
-import gift.dto.product.ProductResponse;
-import gift.dto.product.UpdateProductRequest;
+import gift.dto.product.request.CreateProductRequest;
+import gift.dto.product.response.ProductResponse;
+import gift.dto.product.request.UpdateProductRequest;
 import gift.entity.Product;
 import gift.exception.product.ProductNotFoundException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.util.mapper.ProductMapper;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
     }
 

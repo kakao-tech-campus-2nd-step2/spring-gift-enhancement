@@ -1,9 +1,9 @@
 package gift.controller;
 
 import gift.config.PageConfig;
-import gift.dto.product.CreateProductRequest;
-import gift.dto.product.ProductResponse;
-import gift.dto.product.UpdateProductRequest;
+import gift.dto.product.request.CreateProductRequest;
+import gift.dto.product.response.ProductResponse;
+import gift.dto.product.request.UpdateProductRequest;
 import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
