@@ -34,11 +34,12 @@ public class Product extends BaseEntity {
     protected Product() {
     }
 
-    public Product(Long id, String name, Integer price, String imageUrl) {
+    public Product(Long id, String name, Integer price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Product(String name, Integer price, String imageUrl) {

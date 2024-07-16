@@ -47,8 +47,6 @@ public class ProductService {
                     throw new NotFoundCategoryException();
                 }
             );
-        Product product = new Product(name, price, imageUrl);
-        productRepository.save(product);
     }
 
     @Transactional
