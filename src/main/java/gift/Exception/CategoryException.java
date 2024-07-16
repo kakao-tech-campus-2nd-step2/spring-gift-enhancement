@@ -1,25 +1,25 @@
 package gift.Exception;
 
-public class CategoryDuplicatedException extends RuntimeException {
+public class CategoryException extends RuntimeException {
 
-    public CategoryDuplicatedException() {
+    public CategoryException() {
         super();
     }
 
-    public CategoryDuplicatedException(String message) {
+    public CategoryException(String message) {
         super(message);
     }
 
-    public CategoryDuplicatedException(String message, Throwable cause) {
+    public CategoryException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CategoryDuplicatedException(Throwable cause) {
+    public CategoryException(Throwable cause) {
         super(cause);
     }
 
-    protected CategoryDuplicatedException(String message, Throwable cause, boolean enableSuppression,
-                                          boolean writableStackTrace) {
+    protected CategoryException(String message, Throwable cause, boolean enableSuppression,
+                                boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
