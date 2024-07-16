@@ -17,10 +17,12 @@ public class ProductMapper {
             .build();
     }
 
-    public static void updateProduct(Product product, UpdateProductRequest request) {
+    public static void updateProduct(Product product, UpdateProductRequest request,
+        Category category) {
         product.changeName(request.name());
         product.changePrice(request.price());
         product.changeImageUrl(request.imageUrl());
+        product.changeCategory(category);
     }
 
     public static ProductResponse toResponse(Product product) {

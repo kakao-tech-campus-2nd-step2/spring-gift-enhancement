@@ -51,7 +51,9 @@ public class ProductService {
     public void updateProduct(Long id, UpdateProductRequest request) {
         Product product = productRepository.findById(id)
             .orElseThrow(ProductNotFoundException::new);
-        ProductMapper.updateProduct(product, request);
+        Category category = categoryRepository.findById(request.categoryId())
+            .orElseThrow(CategoryNotFoundException::new);
+        ProductMapper.updateProduct(product, request, category);
     }
 
     @Transactional

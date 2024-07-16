@@ -75,8 +75,8 @@ Content-Type: application/json
   - [x] `POST /api/categories`: 추가
   - [x] `PATCH /api/categories/{id}`:수정 - id를 고정으로 name만 수정하므로 PATCH 사용
   - [x] `DELETE /api/categories/{id}`: 삭제
-- [ ] 상품 생성/수정할 때 카테고리 선택 가능
-  - [ ] 어드민 페이지에서 가능하도록 수정
+- [x] 상품 생성/수정할 때 카테고리 선택 가능
+  - [x] 어드민 페이지에서 가능하도록 수정
 
 
 
