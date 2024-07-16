@@ -27,7 +27,7 @@ public class Product {
     @Column(nullable = false)
     private  int amount;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product" , fetch = FetchType.LAZY)
     private List<Wish> wishes;
 
     protected Product(){

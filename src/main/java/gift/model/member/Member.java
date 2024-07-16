@@ -18,7 +18,7 @@ public class Member {
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String password;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Wish> wishes;
 
     protected Member() {
