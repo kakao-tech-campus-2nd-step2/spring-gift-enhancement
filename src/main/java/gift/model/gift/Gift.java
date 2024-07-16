@@ -14,16 +14,21 @@ public class Gift {
 
     @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
     protected List<Wish> wishes = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     private String name;
+
     @NotNull
     private int price;
+
     @NotNull
     @Column(name = "imageurl")
     private String imageUrl;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     @NotNull

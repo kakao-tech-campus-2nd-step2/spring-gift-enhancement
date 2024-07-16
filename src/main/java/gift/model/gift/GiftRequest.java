@@ -8,8 +8,11 @@ public class GiftRequest {
     @Size(max = 15)
     @Pattern(regexp = "[\\s\\(\\)\\[\\]\\+\\-&/_a-zA-Z0-9\uAC00-\uD7AF]*", message = "특수문자 오류")
     private String name;
+
     private int price;
+
     private String imageUrl;
+
     private Long categoryId;
 
     public GiftRequest(String name, int price, String imageUrl, Long categoryId) {
