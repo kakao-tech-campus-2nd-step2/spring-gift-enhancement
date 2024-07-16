@@ -31,7 +31,7 @@ class MemberControllerTest {
   @Test
   void memberSignUpTest() {
     MemberDto memberDto = new MemberDto(1L,"a@naver.com","abcde");
-    MemberDto signedUpMemberDto = memberController.memberSignUp(memberDto).getBody();
+    MemberDto signedUpMemberDto = memberController.SignUp(memberDto).getBody();
 
     assertThat(signedUpMemberDto.getId()).isEqualTo(memberDto.getId());
     assertThat(signedUpMemberDto.getEmail()).isEqualTo(memberDto.getEmail());
@@ -54,9 +54,9 @@ class MemberControllerTest {
     MemberDto memberDto2 = new MemberDto(1L,"","abcde");
     MemberDto memberDto3 = new MemberDto(1L,"a@naver.com","");
 
-    MemberDto signedUpMemberDto1 = memberController.memberSignUp(memberDto1).getBody();
-    MemberDto signedUpMemberDto2 = memberController.memberSignUp(memberDto2).getBody();
-    MemberDto signedUpMemberDto3 = memberController.memberSignUp(memberDto3).getBody();
+    MemberDto signedUpMemberDto1 = memberController.SignUp(memberDto1).getBody();
+    MemberDto signedUpMemberDto2 = memberController.SignUp(memberDto2).getBody();
+    MemberDto signedUpMemberDto3 = memberController.SignUp(memberDto3).getBody();
 
     Set<ConstraintViolation<MemberDto>> violations1 = validator.validate(memberDto1);
     Set<ConstraintViolation<MemberDto>> violations2 = validator.validate(memberDto2);
