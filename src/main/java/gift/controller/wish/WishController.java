@@ -8,8 +8,10 @@ import gift.global.auth.LoginInfo;
 import gift.global.dto.PageResponse;
 import gift.model.member.Role;
 import gift.service.wish.WishService;
+import gift.service.wish.dto.WishModel;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +61,8 @@ public class WishController {
         @Authenticate LoginInfo loginInfo,
         @PageableDefault(size = 5) Pageable pageable
     ) {
-        var response = wishService.getWishesPaging(loginInfo.memberId(), pageable);
+        Page<WishModel.Info> page = wishService.getWishesPaging(loginInfo.memberId(), pageable);
+        var response = PageResponse.from(page, WishResponse.Info::from);
         return ResponseEntity.ok().body(response);
     }
 

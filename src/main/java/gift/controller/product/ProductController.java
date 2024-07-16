@@ -7,7 +7,9 @@ import gift.global.dto.PageResponse;
 import gift.model.member.Role;
 import gift.model.product.SearchType;
 import gift.service.product.ProductService;
+import gift.service.product.dto.ProductModel;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -34,37 +36,40 @@ public class ProductController {
     public ResponseEntity<ProductResponse.Info> getProduct(
         @PathVariable("id") Long id
     ) {
-        var response = productService.getProduct(id);
+        var model = productService.getProduct(id);
+        ProductResponse.Info response = ProductResponse.Info.from(model);
         return ResponseEntity.ok().body(response);
     }
 
     @Authorization(role = Role.ADMIN)
     @PostMapping("/products")
-    public ResponseEntity<String> createProduct(
+    public ResponseEntity<ProductResponse.Info> createProduct(
         @RequestBody @Valid ProductRequest.Register request
     ) {
-        productService.createProduct(request.toCommand());
-        return ResponseEntity.ok().body("Product created successfully.");
+        var model = productService.createProduct(request.toCommand());
+        ProductResponse.Info response = ProductResponse.Info.from(model);
+        return ResponseEntity.ok().body(response);
     }
 
 
     @Authorization(role = Role.ADMIN)
     @PutMapping("/products/{id}")
-    public ResponseEntity<String> updateProduct(
+    public ResponseEntity<ProductResponse.Info> updateProduct(
         @PathVariable("id") Long id,
         @RequestBody @Valid ProductRequest.Update request
     ) {
-        productService.updateProduct(id, request.toCommand());
-        return ResponseEntity.ok().body("Product updated successfully.");
+        var model = productService.updateProduct(id, request.toCommand());
+        ProductResponse.Info response = ProductResponse.Info.from(model);
+        return ResponseEntity.ok().body(response);
     }
 
     @Authorization(role = Role.ADMIN)
     @DeleteMapping("/products/{id}")
-    public ResponseEntity<Void> deleteProduct(
+    public ResponseEntity<String> deleteProduct(
         @PathVariable("id") Long id
     ) {
         productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body("Product deleted successfully.");
     }
 
     @GetMapping("/products")
@@ -73,7 +78,9 @@ public class ProductController {
         @RequestParam(name = "SearchValue", required = false, defaultValue = "") String searchValue,
         @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        var response = productService.getProductsPaging(searchType, searchValue, pageable);
+        Page<ProductModel.Info> page = productService.getProductsPaging(searchType, searchValue,
+            pageable);
+        var response = PageResponse.from(page, ProductResponse.Info::from);
         return ResponseEntity.ok().body(response);
     }
 

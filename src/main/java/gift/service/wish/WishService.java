@@ -11,6 +11,7 @@ import gift.repository.wish.WishJpaRepository;
 import gift.global.validate.NotFoundException;
 import gift.repository.wish.WishRepository;
 import gift.service.wish.dto.WishCommand;
+import gift.service.wish.dto.WishModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class WishService {
     }
 
     //@Transactional
-    public void addWish(Long userId, WishCommand.Register command) {
+    public WishModel.Info addWish(Long userId, WishCommand.Register command) {
         Member member = memberRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException("Member not found"));
 
@@ -43,21 +44,18 @@ public class WishService {
                 throw new IllegalArgumentException("Wish already exists");
             });
 
-        wishRepository.save(command.toEntity(member, product));
+        var wish = wishRepository.save(command.toEntity(member, product));
+        return WishModel.Info.from(wish);
     }
 
     @Transactional
-    public void updateWish(Long userId, WishCommand.Update command) {
-        Member member = memberRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException("Member not found"));
-
-        Product product = productRepository.findById(command.productId())
-            .orElseThrow(() -> new NotFoundException("Product not found"));
-
-        Wish wish = wishRepository.findByMemberAndProduct(member, product)
+    public WishModel.Info updateWish(Long memberId, WishCommand.Update command) {
+        Wish wish = wishRepository.findByMemberIdAndProductId(memberId, command.productId())
             .orElseThrow(() -> new NotFoundException("Wish not found"));
 
         wish.updateCount(command.count());
+
+        return WishModel.Info.from(wish);
     }
 
     //@Transactional
@@ -74,9 +72,9 @@ public class WishService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<WishResponse.Info> getWishesPaging(Long memberId, Pageable pageable) {
+    public Page<WishModel.Info> getWishesPaging(Long memberId, Pageable pageable) {
         Page<Wish> wishPage = wishRepository.findAllByMemberByIdDesc(memberId, pageable);
 
-        return PageResponse.from(wishPage, WishResponse.Info::from);
+        return wishPage.map(WishModel.Info::from);
     }
 }

@@ -1,6 +1,7 @@
 package gift.controller.member.dto;
 
 import gift.model.member.Member;
+import gift.service.member.dto.MemberModel;
 
 public class MemberResponse {
 
@@ -16,8 +17,11 @@ public class MemberResponse {
         String name
     ) {
 
-        public static Info from(Member member) {
-            return new Info(member.getEmail(), member.getName());
+        public static Info from(MemberModel.Info model) {
+            return new Info(
+                model.email(),
+                model.name()
+            );
         }
     }
 }

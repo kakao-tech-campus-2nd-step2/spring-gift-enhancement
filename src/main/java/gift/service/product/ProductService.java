@@ -8,6 +8,7 @@ import gift.model.product.SearchType;
 import gift.repository.product.CategoryRepository;
 import gift.repository.product.ProductRepository;
 import gift.service.product.dto.ProductCommand;
+import gift.service.product.dto.ProductModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,25 +27,27 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductResponse.Info getProduct(Long id) {
+    public ProductModel.Info getProduct(Long id) {
         var product = productRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Product not found"));
-        return ProductResponse.Info.from(product);
+        return ProductModel.Info.from(product);
     }
 
     //@Transactional
-    public void createProduct(ProductCommand.Register command) {
+    public ProductModel.Info createProduct(ProductCommand.Register command) {
         var category = categoryRepository.findById(command.categoryId())
             .orElseThrow(() -> new NotFoundException("Category not found"));
         var product = command.toEntity(category);
         productRepository.save(product);
+        return ProductModel.Info.from(product);
     }
 
     @Transactional
-    public void updateProduct(Long id, ProductCommand.Update command) {
+    public ProductModel.Info updateProduct(Long id, ProductCommand.Update command) {
         var product = productRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Product not found"));
         product.update(command.name(), command.price(), command.imageUrl());
+        return ProductModel.Info.from(product);
     }
 
     //@Transactional
@@ -53,7 +56,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<ProductResponse.Info> getProductsPaging(
+    public Page<ProductModel.Info> getProductsPaging(
         SearchType searchType,
         String searchValue,
         Pageable pageable
@@ -65,7 +68,7 @@ public class ProductService {
             default -> productRepository.findAll(pageable);
         };
 
-        return PageResponse.from(productPage, ProductResponse.Info::from);
+        return productPage.map(ProductModel.Info::from);
     }
 }
 

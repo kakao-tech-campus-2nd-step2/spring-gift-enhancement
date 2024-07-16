@@ -1,6 +1,7 @@
 package gift.controller.product.dto;
 
 import gift.model.product.Product;
+import gift.service.product.dto.ProductModel;
 
 public class ProductResponse {
 
@@ -8,15 +9,17 @@ public class ProductResponse {
         Long productId,
         String name,
         Integer price,
-        String imageUrl
+        String imageUrl,
+        String category
     ) {
 
-        public static Info from(Product product) {
+        public static Info from(ProductModel.Info model) {
             return new Info(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getImageUrl()
+                model.id(),
+                model.name(),
+                model.price(),
+                model.imageUrl(),
+                model.category()
             );
         }
     }

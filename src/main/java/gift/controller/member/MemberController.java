@@ -50,7 +50,7 @@ public class MemberController {
     @GetMapping("")
     public ResponseEntity<MemberResponse.Info> getUser(@Authenticate LoginInfo loginInfo) {
         var response = memberService.getUser(loginInfo.memberId());
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(MemberResponse.Info.from(response));
     }
 
 }

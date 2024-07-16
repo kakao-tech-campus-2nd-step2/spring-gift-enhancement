@@ -7,6 +7,7 @@ import gift.global.validate.InvalidAuthRequestException;
 import gift.global.validate.NotFoundException;
 import gift.repository.member.MemberRepository;
 import gift.service.member.dto.MemberCommand;
+import gift.service.member.dto.MemberModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +23,12 @@ public class MemberService {
     }
 
     //@Transactional
-    public void register(MemberCommand.Create command) {
+    public MemberModel.Info register(MemberCommand.Create command) {
         if (memberRepository.existsByEmail(command.email())) {
             throw new InvalidAuthRequestException("User already exists.");
         }
-        memberRepository.save(command.toEntity());
+        var member = memberRepository.save(command.toEntity());
+        return MemberModel.Info.from(member);
     }
 
     @Transactional(readOnly = true)
@@ -41,9 +43,9 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberResponse.Info getUser(Long memberId) {
+    public MemberModel.Info getUser(Long memberId) {
         var member = memberRepository.findById(memberId)
             .orElseThrow(() -> new NotFoundException("User not found."));
-        return MemberResponse.Info.from(member);
+        return MemberModel.Info.from(member);
     }
 }
