@@ -4,7 +4,6 @@ import gift.constants.ErrorMessage;
 import gift.dto.CategoryDto;
 import gift.entity.Category;
 import gift.repository.CategoryJpaDao;
-import gift.repository.ProductJpaDao;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,11 +15,9 @@ import org.springframework.stereotype.Service;
 public class CategoryService {
 
     private final CategoryJpaDao categoryJpaDao;
-    private final ProductJpaDao productJpaDao;
 
-    public CategoryService(CategoryJpaDao categoryJpaDao, ProductJpaDao productJpaDao) {
+    public CategoryService(CategoryJpaDao categoryJpaDao) {
         this.categoryJpaDao = categoryJpaDao;
-        this.productJpaDao = productJpaDao;
     }
 
     /**
