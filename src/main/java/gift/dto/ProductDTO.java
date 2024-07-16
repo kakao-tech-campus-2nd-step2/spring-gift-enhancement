@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.entity.Category;
 import gift.entity.Product;
 
 public class ProductDTO {
@@ -8,14 +9,17 @@ public class ProductDTO {
     private int price;
     private String imageUrl;
 
+    private Long categoryId
+
     public ProductDTO() {
     }
 
 
-    public ProductDTO(Long id, String name, int price, String imageUrl) {
+    public ProductDTO(Long id, String name, int price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
 
@@ -31,8 +35,12 @@ public class ProductDTO {
         return imageUrl;
     }
 
-    public Product toEntity() {
-        return new Product(name, price, imageUrl);
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public Product toEntity(Category category) {
+        return new Product(name, price, imageUrl, category);
     }
 
 
