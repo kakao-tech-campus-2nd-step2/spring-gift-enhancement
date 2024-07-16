@@ -3,7 +3,7 @@ package gift.controller;
 import gift.domain.Product;
 import gift.domain.Product.ProductSimple;
 import gift.entity.ProductEntity;
-import gift.mapper.PageMapper;
+import gift.util.page.PageMapper;
 import gift.service.ProductService;
 import gift.util.page.PageResult;
 import gift.util.page.SingleResult;
