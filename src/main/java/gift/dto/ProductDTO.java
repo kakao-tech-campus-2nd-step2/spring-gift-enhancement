@@ -9,7 +9,7 @@ public class ProductDTO {
     private int price;
     private String imageUrl;
 
-    private Long categoryId
+    private Long categoryId;
 
     public ProductDTO() {
     }
