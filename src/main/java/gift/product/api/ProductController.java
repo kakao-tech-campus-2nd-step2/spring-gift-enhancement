@@ -42,7 +42,6 @@ public class ProductController {
 
     // 상품 추가
     @PostMapping
-    @CrossOrigin
     public ProductResponse addProduct(@RequestBody @Valid ProductRequest request) {
         return productService.createProduct(request);
     }
@@ -61,7 +60,6 @@ public class ProductController {
 
     // 상품 수정
     @PatchMapping("/{id}")
-    @CrossOrigin
     public Long updateProduct(@PathVariable("id") Long id,
                               @RequestBody @Valid ProductRequest request) {
         return productService.updateProduct(id, request);
