@@ -19,20 +19,22 @@
 <table>
     <tr>
         <th>ID</th>
+        <th>카테고리</th>
         <th>이름</th>
         <th>가격</th>
         <th>이미지 URL</th>
     </tr>
     <tr th:each="product : ${products}">
         <td th:text="${product.getId()}"></td>
+        <td th:text="${product.getCategoryId()}"></td>
         <td th:text="${product.getName()}"></td>
         <td th:text="${product.getPrice()}"></td>
         <td th:text="${product.getImageURL()}"></td>
         <td>
-            <a th:action="@{'/admin/products/'+${product.id}}" th:method="DELETE">
-            <input type="submit" value="삭제">
+            <a th:action="@{'/admin/products/'+${product.getId()}}" th:method="DELETE">
+                <input type="submit" value="삭제">
             </a>
-            <form th:action="@{'/admin/products/edit/'+${product.id}}" method="GET">
+            <form th:action="@{'/admin/products/edit/'+${product.getId()}}" method="GET">
                 <input type="submit" value="수정">
             </form>
         </td>
@@ -49,17 +51,5 @@
 
     <button type="submit">적용</button>
 </form>
-
-<div th:if="${editProduct}">
-    <h2>제품 수정</h2>
-    <form th:action="@{'/admin/products/' + ${editProduct.id}}" method="post">
-        <input type="hidden" name="id" th:value="${editProduct.id}">
-        <label for="editName">이름:</label>
-        <input type="text" id="editName" name="name" th:value="${editProduct.name}" required><br>
-        <label for="editPrice">가격:</label>
-        <input type="number" id="editPrice" name="price" th:value="${editProduct.price}" required><br>
-        <input type="submit" value="수정">
-    </form>
-</div>
 </body>
 </html>

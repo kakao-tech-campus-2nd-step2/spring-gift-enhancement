@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.domain.ProductDTO;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -12,9 +13,12 @@ import org.springframework.ui.Model;
 @RequestMapping("/admin/products")
 public class AdminController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public AdminController(ProductService productService) {
+    public AdminController(ProductService productService,
+                           CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping

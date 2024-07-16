@@ -6,11 +6,12 @@
         <html lang="en">
         <head>
         <meta charset="UTF-8">
-        <title>상품 수정 </title>
+        <title>제품 수정 </title>
 </head>
 <body>
-<h2>제품 추가</h2>
+<h2>제품 수정</h2>
 <td th:text="${product.id}"></td>
+<td th:text="${product.getCategoryId()}"></td>
 <td th:text="${product.name}"></td>
 <td th:text="${product.price}"></td>
 <td th:text="${product.imageURL}"></td>
