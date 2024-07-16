@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface WishListRepository extends JpaRepository<WishList,Long> {
     List<WishList> findByMemberId(String id, Pageable pageable);
 }
