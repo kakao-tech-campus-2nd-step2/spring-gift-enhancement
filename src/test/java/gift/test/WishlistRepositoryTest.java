@@ -2,8 +2,6 @@ package gift.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +55,7 @@ public class WishlistRepositoryTest {
     @Test
     void findByUserId() {
     	for(int i=1; i<=15; i++) {
-    		Product product = new Product("product"+1, 4500, "https://example.com/image.jpg");
+    		Product product = new Product("product "+i, 4500, "https://example.com/image.jpg");
     		productRepository.save(product);
     		Wishlist wishlist = new Wishlist(user, product);
     		wishlist.setQuantity(i);
