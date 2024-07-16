@@ -23,6 +23,14 @@
     <input type="text" id="productImageUrl" th:value="${product.imageUrl}"/>
   </div>
   <div>
+    <label>카테고리: </label>
+    <select id="categoryId" class="form-select">
+      <option th:each="category : ${categories}" th:value="${category.id}"
+              th:text="${category.name}"
+              th:selected="${category.name == product.categoryName}"></option>
+    </select>
+  </div>
+  <div>
     <button type="submit">저장</button>
   </div>
 </form>
@@ -34,7 +42,8 @@
     const product = {
       name: document.getElementById('productName').value,
       price: parseInt(document.getElementById('productPrice').value, 10),
-      imageUrl: document.getElementById('productImageUrl').value
+      imageUrl: document.getElementById('productImageUrl').value,
+      categoryId: parseInt(document.getElementById('categoryId').value, 10)
     };
 
     const response = await fetch(`/api/products/${document.getElementById('productId').value}`, {

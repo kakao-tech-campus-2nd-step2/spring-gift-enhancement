@@ -1,10 +1,12 @@
 package gift.controller;
 
 import gift.config.PageConfig;
+import gift.dto.category.response.CategoryResponse;
 import gift.dto.product.response.ProductResponse;
 import gift.entity.Product;
 import gift.service.CategoryService;
 import gift.service.ProductService;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -53,7 +55,14 @@ public class ProductViewController {
     @GetMapping("edit/{id}")
     public String editProductPage(Model model, @PathVariable Long id) {
         ProductResponse product = productService.getProductById(id);
+        List<CategoryResponse> categories = categoryService.getAllCategories();
+
+        System.out.println("Product: " + product);
+        System.out.println("Categories: " + categories);
+
         model.addAttribute("product", product);
+        model.addAttribute("categories", categories);
+
         return "product_edit_form";
     }
 
