@@ -2,23 +2,24 @@ package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.category.request.CreateCategoryRequest;
 import gift.dto.category.response.CategoryResponse;
+import gift.dto.product.request.CreateProductRequest;
+import gift.dto.product.response.ProductResponse;
 import java.net.URI;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.test.context.jdbc.Sql;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = {"/sql/initialize.sql",
-    "/sql/insert_three_categories.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-public class CategoryTest {
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_three_categories.sql", "/sql/insert_five_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+public class ProductTest {
 
     @LocalServerPort
     private int port;
@@ -32,10 +33,10 @@ public class CategoryTest {
     }
 
     @Test
-    @DisplayName("get all categories test")
-    void getAllCategoriesTest() {
+    @DisplayName("get all products test")
+    void getAllProductsTest() {
         // given
-        var url = "http://localhost:" + port + "/api/categories";
+        var url = "http://localhost:" + port + "/api/products";
         var request = new RequestEntity<>(HttpMethod.GET, URI.create(url));
 
         // when
@@ -47,45 +48,48 @@ public class CategoryTest {
     }
 
     @Test
-    @DisplayName("get id 1L category test")
-    void getId1LCategoryTest() {
+    @DisplayName("get id 1L product test")
+    void getId1LProductTest() {
         // given
-        var url = "http://localhost:" + port + "/api/categories/1";
+        var url = "http://localhost:" + port + "/api/products/1";
         var request = new RequestEntity<>(HttpMethod.GET, URI.create(url));
 
         // when
-        var actualResponse = restTemplate.exchange(request, CategoryResponse.class);
+        var actualResponse = restTemplate.exchange(request, ProductResponse.class);
 
         // then
         assertThat(actualResponse.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(actualResponse.getBody()).isNotNull();
         assertThat(actualResponse.getBody().id()).isEqualTo(1L);
-        assertThat(actualResponse.getBody().name()).isEqualTo("Category 1");
+        assertThat(actualResponse.getBody().name()).isEqualTo("Product A");
+        assertThat(actualResponse.getBody().price()).isEqualTo(1000);
+        assertThat(actualResponse.getBody().imageUrl()).isEqualTo("http://example.com/images/product_a.jpg");
+        assertThat(actualResponse.getBody().categoryName()).isEqualTo("Category 1");
     }
-
+    
     @Test
-    @DisplayName("get category by not exist id test")
-    void getCategoryByNotExistIdTest() {
+    @DisplayName("get product by not exist id test")
+    void getProductByNotExistIdTest() {
         // given
-        var url = "http://localhost:" + port + "/api/categories/999";
+        var url = "http://localhost:" + port + "/api/products/999";
         var request = new RequestEntity<>(HttpMethod.GET, URI.create(url));
 
         // when
-        var actualResponse = restTemplate.exchange(request, CategoryResponse.class);
+        var actualResponse = restTemplate.exchange(request, ProductResponse.class);
 
         // then
         assertThat(actualResponse.getStatusCode().is4xxClientError()).isTrue();
     }
 
     @Test
-    @DisplayName("create category test")
-    void createCategoryTest() {
+    @DisplayName("create product test")
+    void createProductTest() {
         // given
-        var createBody = new CreateCategoryRequest("Category 4");
-        var url = "http://localhost:" + port + "/api/categories";
-        var request = new RequestEntity<>(createBody, HttpMethod.POST, URI.create(url));
+        var url = "http://localhost:" + port + "/api/products";
+        var requestBody = new CreateProductRequest("new product", 10000, "link", 2L);
+        var request = new RequestEntity<>(requestBody, HttpMethod.POST, URI.create(url));
 
-        var expectedLocation = URI.create("/api/categories/4");
+        var expectedLocation = URI.create("/api/products/6");
 
         // when
         var actualResponse = restTemplate.exchange(request, String.class);
@@ -93,29 +97,13 @@ public class CategoryTest {
         // then
         assertThat(actualResponse.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(actualResponse.getHeaders().getLocation()).isEqualTo(expectedLocation);
-        assertThat(actualResponse.getBody()).isNotNull();
     }
 
     @Test
-    @DisplayName("create exist category test")
-    void createExistCategoryTest() {
+    @DisplayName("delete product test")
+    void deleteProductTest() {
         // given
-        var createBody = new CreateCategoryRequest("Category 1");
-        var url = "http://localhost:" + port + "/api/categories";
-        var request = new RequestEntity<>(createBody, HttpMethod.POST, URI.create(url));
-
-        // when
-        var actualResponse = restTemplate.exchange(request, String.class);
-
-        // then
-        assertThat(actualResponse.getStatusCode().is4xxClientError()).isTrue();
-    }
-
-    @Test
-    @DisplayName("delete category test")
-    void deleteCategoryTest() {
-        // given
-        var url = "http://localhost:" + port + "/api/categories/1";
+        var url = "http://localhost:" + port + "/api/products/1";
         var request = new RequestEntity<>(HttpMethod.DELETE, URI.create(url));
 
         // when
@@ -123,14 +111,13 @@ public class CategoryTest {
 
         // then
         assertThat(actualResponse.getStatusCode().is2xxSuccessful()).isTrue();
-        assertThat(actualResponse.getBody()).isNull();
     }
 
     @Test
-    @DisplayName("delete not exist category test")
-    void deleteNotExistCategoryTest() {
+    @DisplayName("delete not exist product test")
+    void deleteNotExistProductTest() {
         // given
-        var url = "http://localhost:" + port + "/api/categories/999";
+        var url = "http://localhost:" + port + "/api/products/999";
         var request = new RequestEntity<>(HttpMethod.DELETE, URI.create(url));
 
         // when
