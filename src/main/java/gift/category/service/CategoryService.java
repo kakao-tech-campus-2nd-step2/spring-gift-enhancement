@@ -20,14 +20,14 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryResponse findCategory(Long id) {
+    public CategoryResponse findCategoryById(Long id) {
         Optional<Category> categoryOptional = categoryRepository.findByIdAndIsActiveTrue(id);
         return categoryOptional.map(CategoryResponse::new)
                 .orElseThrow(() -> new EntityNotFoundException("Category"));
     }
 
     @Transactional(readOnly = true)
-    public List<CategoryResponse> findAllCategories(Long id) {
+    public List<CategoryResponse> findAllCategories() {
         List<Category> categories = categoryRepository.findAll();
         return categories.stream()
                 .map(CategoryResponse::new)
