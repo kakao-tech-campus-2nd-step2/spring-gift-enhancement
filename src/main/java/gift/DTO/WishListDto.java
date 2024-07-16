@@ -21,6 +21,11 @@ public class WishListDto {
     this.productDto = productDto;
   }
 
+  public WishListDto(MemberDto memberDto, ProductDto productDto) {
+    this.memberDto = memberDto;
+    this.productDto = productDto;
+  }
+
   public Long getId() {
     return this.id;
   }
