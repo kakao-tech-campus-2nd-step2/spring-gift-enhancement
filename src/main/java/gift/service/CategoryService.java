@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.dto.CategoryDTO;
 import gift.exception.NoSuchCategoryException;
 import gift.repository.CategoryRepository;
@@ -33,5 +34,11 @@ public class CategoryService {
 
     public CategoryDTO addCategory(CategoryDTO categoryDTO) {
         return categoryRepository.save(categoryDTO.toEntity()).toDTO();
+    }
+
+    public CategoryDTO updateCategory(long id, CategoryDTO categoryDTO) {
+        getCategory(id);
+        Category category = new Category(id, categoryDTO.name(), categoryDTO.color(), categoryDTO.imageUrl(), categoryDTO.description());
+        return categoryRepository.save(category).toDTO();
     }
 }
