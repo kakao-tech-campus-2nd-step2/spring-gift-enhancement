@@ -30,4 +30,9 @@ public class CategoryService {
         System.out.println("[CategoryService] updateCategory()");
         categoryRepository.save(category);
     }
+
+    public void deleteCategory(Long id) {
+        System.out.println("[CategoryService] deleteCategory()");
+        categoryRepository.deleteById(id);
+    }
 }

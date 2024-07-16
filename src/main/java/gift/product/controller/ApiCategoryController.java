@@ -33,4 +33,11 @@ public class ApiCategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Category registered successfully");
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
+        System.out.println("[CategoryController] deleteCategory()");
+        categoryService.deleteCategory(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Category deleted successfully");
+    }
+
 }
