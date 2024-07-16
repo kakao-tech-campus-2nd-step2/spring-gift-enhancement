@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 
 public class ProductDto {
 
-    private final Long id;
+    private Long id;
 
     @NotBlank(message = ErrorMessage.PRODUCT_NAME_VALID_NOT_BLANK_MSG)
     @Size(min = 1, max = 15, message = ErrorMessage.PRODUCT_NAME_VALID_SIZE_MSG)
@@ -20,12 +20,15 @@ public class ProductDto {
     @Pattern(
         regexp = RegularExpression.PRODUCT_NAME_FIND_KAKAO_REGEX,
         message = ErrorMessage.PRODUCT_NAME_VALID_KAKAO_MSG)
-    private final String name;
+    private String name;
 
     @NotNull
-    private final long price;
+    private long price;
 
-    private final String imageUrl;
+    private String imageUrl;
+
+    protected ProductDto() {
+    }
 
     public ProductDto(Long id, String name, long price, String imageUrl) {
         this.id = id;
