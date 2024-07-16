@@ -1,9 +1,17 @@
+CREATE Table category
+(
+    id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) UNIQUE
+);
+
 CREATE TABLE product
 (
     id        BIGINT AUTO_INCREMENT PRIMARY KEY,
     name      VARCHAR(255),
     price     INT,
-    image_url VARCHAR(255)
+    image_url VARCHAR(255),
+    category  BIGINT,
+    FOREIGN KEY (category) REFERENCES category (id)
 );
 
 CREATE TABLE member
@@ -20,9 +28,3 @@ CREATE Table wishlist
     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE,
     FOREIGN KEY (member_email) REFERENCES member (email) ON DELETE CASCADE
 );
-
-CREATE Table category
-(
-    id   BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) UNIQUE
-)

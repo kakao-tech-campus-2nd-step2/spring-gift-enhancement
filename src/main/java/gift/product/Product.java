@@ -1,10 +1,13 @@
 package gift.product;
 
+import gift.category.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Product {
@@ -21,6 +24,10 @@ public class Product {
 
     @Column(nullable = false)
     private String imageUrl;
+
+    @JoinColumn(name = "category", nullable = false)
+    @ManyToOne
+    private Category category;
 
     public long getId() {
         return id;
