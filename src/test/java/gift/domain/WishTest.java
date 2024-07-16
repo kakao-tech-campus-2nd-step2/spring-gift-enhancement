@@ -10,7 +10,7 @@ class WishTest {
     @Test
     void testWishCreation() {
         Member member = new Member("test@example.com", "password123");
-        Product product = new Product("ProductName", 1000, "http://example.com/image.jpg");
+        Products product = new Products("ProductName", 1000, "http://example.com/image.jpg");
 
         Wish wish = new Wish(member, product);
         assertNotNull(wish);
@@ -21,7 +21,7 @@ class WishTest {
     @Test
     void testWishBuilder() {
         Member member = new Member("test@example.com", "password123");
-        Product product = new Product("ProductName", 1000, "http://example.com/image.jpg");
+        Products product = new Products("ProductName", 1000, "http://example.com/image.jpg");
 
         Wish wish = new Wish.Builder()
                 .member(member)

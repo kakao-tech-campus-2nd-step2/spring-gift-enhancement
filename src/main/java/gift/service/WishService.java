@@ -1,7 +1,7 @@
 package gift.service;
 
 import gift.domain.Member;
-import gift.domain.Product;
+import gift.domain.Products;
 import gift.domain.Wish;
 import gift.repository.WishRepository;
 import gift.repository.MemberRepository;
@@ -9,8 +9,6 @@ import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class WishService {
@@ -34,7 +32,7 @@ public class WishService {
     public void addWish(Long memberId, String productName) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
-        Product product = productRepository.findByName(productName)
+        Products product = productRepository.findByName(productName)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
         if (!wishRepository.existsByMemberAndProduct(member, product)) {
@@ -46,7 +44,7 @@ public class WishService {
     public void removeWish(Long memberId, String productName) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
-        Product product = productRepository.findByName(productName)
+        Products product = productRepository.findByName(productName)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
         wishRepository.deleteByMemberAndProduct(member, product);
     }

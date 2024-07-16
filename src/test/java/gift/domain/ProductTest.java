@@ -9,7 +9,7 @@ class ProductTest {
 
     @Test
     void testProductCreation() {
-        Product product = new Product("ProductName", 1000, "http://example.com/image.jpg");
+        Products product = new Products("ProductName", 1000, "http://example.com/image.jpg");
         assertNotNull(product);
         assertEquals("ProductName", product.getName());
         assertEquals(1000, product.getPrice());
@@ -18,7 +18,7 @@ class ProductTest {
 
     @Test
     void testProductBuilder() {
-        Product product = new Product.Builder()
+        Products product = new Products.Builder()
                 .name("ProductName")
                 .price(1000)
                 .imageUrl("http://example.com/image.jpg")

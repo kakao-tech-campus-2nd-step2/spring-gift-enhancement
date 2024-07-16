@@ -1,16 +1,13 @@
 package gift.domain;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Table;
-import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import jakarta.persistence.GenerationType;
 
 
 @Entity
 @Table(name = "products")
-public class Product extends BaseEntity {
+public class Products extends BaseEntity {
 
     @Column(nullable = false, length = 15)
     private String name;
@@ -21,10 +18,10 @@ public class Product extends BaseEntity {
     @Column(nullable = false, name = "image_url")
     private String imageUrl;
 
-    public Product() {
+    public Products() {
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Products(String name, int price, String imageUrl) {
         super();
         this.name = name;
         this.price = price;
@@ -69,8 +66,8 @@ public class Product extends BaseEntity {
             return this;
         }
 
-        public Product build() {
-            Product product = new Product(name, price, imageUrl);
+        public Products build() {
+            Products product = new Products(name, price, imageUrl);
             product.id = this.id;
             return product;
         }

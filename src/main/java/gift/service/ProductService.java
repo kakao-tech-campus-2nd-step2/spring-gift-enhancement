@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.domain.Product;
+import gift.domain.Products;
 import gift.dto.ProductRequestDTO;
 import gift.dto.ProductResponseDTO;
 import gift.repository.ProductRepository;
@@ -25,7 +25,7 @@ public class ProductService {
 
     public Page<ProductResponseDTO> getProducts(int page, int size, String[] sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sort[1]), sort[0]));
-        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<Products> productPage = productRepository.findAll(pageable);
 
         List<ProductResponseDTO> productResponseDTOList = productPage.stream()
                 .map(this::convertToResponseDTO)
@@ -35,13 +35,13 @@ public class ProductService {
     }
 
     public ProductResponseDTO getProductById(Long id) {
-        Product product = productRepository.findById(id)
+        Products product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product id: " + id));
         return convertToResponseDTO(product);
     }
 
     public void createProduct(ProductRequestDTO productRequestDTO) {
-        Product product = new Product.Builder()
+        Products product = new Products.Builder()
                 .name(productRequestDTO.getName())
                 .price(productRequestDTO.getPrice())
                 .imageUrl(productRequestDTO.getImageUrl())
@@ -50,7 +50,7 @@ public class ProductService {
     }
 
     public void updateProduct(Long id, ProductRequestDTO productRequestDTO) {
-        Product updatedProduct = new Product.Builder()
+        Products updatedProduct = new Products.Builder()
                 .id(id)
                 .name(productRequestDTO.getName())
                 .price(productRequestDTO.getPrice())
@@ -63,7 +63,7 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    private ProductResponseDTO convertToResponseDTO(Product product) {
+    private ProductResponseDTO convertToResponseDTO(Products product) {
         return new ProductResponseDTO(
                 product.getId(),
                 product.getName(),

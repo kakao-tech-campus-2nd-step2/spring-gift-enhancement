@@ -2,9 +2,6 @@ package gift.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.FetchType;
@@ -20,12 +17,12 @@ public class Wish extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    private Products product;
 
     public Wish() {
     }
 
-    public Wish(Member member, Product product) {
+    public Wish(Member member, Products product) {
         super();
         this.member = member;
         this.product = product;
@@ -35,20 +32,20 @@ public class Wish extends BaseEntity {
         return member;
     }
 
-    public Product getProduct() {
+    public Products getProduct() {
         return product;
     }
 
     public static class Builder {
         private Member member;
-        private Product product;
+        private Products product;
 
         public Builder member(Member member) {
             this.member = member;
             return this;
         }
 
-        public Builder product(Product product) {
+        public Builder product(Products product) {
             this.product = product;
             return this;
         }
