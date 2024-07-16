@@ -2,7 +2,9 @@ package gift.product.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.entity.Category;
 import gift.entity.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
@@ -17,13 +19,25 @@ class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Product product1;
     private Product product2;
+    private Category category;
+    private Category category2;
 
     @BeforeEach
     void setUp() {
-        product1 = new Product("Product1", 1000, "http://example.com/image1.jpg");
-        product2 = new Product("Product2", 2000, "http://example.com/image2.jpg");
+        category = new Category("교환권", "#6c95d1",
+            "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "");
+        category2 = new Category("상품권", "#6c95d1",
+            "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "");
+        categoryRepository.save(category);
+        categoryRepository.save(category2);
+
+        product1 = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
+        product2 = new Product("Product2", 2000, "http://example.com/image2.jpg", category2);
         productRepository.save(product1);
         productRepository.save(product2);
     }
@@ -42,8 +56,9 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void testSaveNewProduct () {
-        Product newProduct = new Product("Product3", 3000, "http://example.com/image3.jpg");
+    void testSaveNewProduct() {
+        Product newProduct = new Product("Product3", 3000, "http://example.com/image3.jpg",
+            category);
         Product savedProduct = productRepository.save(newProduct);
 
         assertThat(savedProduct.getId()).isNotNull();
