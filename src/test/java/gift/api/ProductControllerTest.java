@@ -40,7 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class ProductControllerTest {
 
-
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -50,7 +49,7 @@ class ProductControllerTest {
     @MockBean
     private JwtUtil jwtUtil;
     @MockBean
-    ProductService productService;
+    private ProductService productService;
     private final String bearerToken = "Bearer token";
 
     private final Category category = new Category.CategoryBuilder()
@@ -166,7 +165,7 @@ class ProductControllerTest {
                 .andExpect(jsonPath("$.imageUrl").value(response.imageUrl()))
                 .andDo(print());
 
-        verify(productService).createProduct(any(ProductRequest.class));
+        verify(productService).createProduct(request);
     }
 
     @Test
@@ -228,6 +227,30 @@ class ProductControllerTest {
                         .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(content().string(String.valueOf(productId)))
+                .andDo(print());
+
+        verify(productService).updateProduct(productId, request);
+    }
+
+    @Test
+    @DisplayName("상품 수정 실패 테스트")
+    void updateProductFailed() throws Exception {
+        Long productId = 2L;
+        ProductRequest request = new ProductRequest(
+                "product2",
+                3000,
+                "https://testshop.com",
+                category.getName());
+        String requestJson = objectMapper.writeValueAsString(request);
+        Throwable exception = new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
+        when(productService.updateProduct(productId, request)).thenThrow(exception);
+
+        mockMvc.perform(patch("/api/products/{id}", productId)
+                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(exception.getMessage()))
                 .andDo(print());
 
         verify(productService).updateProduct(productId, request);
