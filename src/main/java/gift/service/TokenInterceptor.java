@@ -7,6 +7,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -16,14 +17,13 @@ import java.util.NoSuchElementException;
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
     private final MemberRepository memberRepository;
-    static String secretKey = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
 
     public TokenInterceptor(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
-    //    @Value("${secret_key}")
-    //    private String secretKey;
+    @Value("${secret_key}")
+    private String secretKey;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
