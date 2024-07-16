@@ -56,4 +56,5 @@ public class User {
     public void deleteWishlist(WishList wishList) {
         this.wishlist.remove(wishList);
     }
+
 }
