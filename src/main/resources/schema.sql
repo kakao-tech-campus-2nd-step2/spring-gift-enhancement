@@ -1,3 +1,9 @@
+-- 카테고리(CATEGORY) 스키마
+CREATE TABLE IF NOT EXISTS category (
+    id   BIGINT auto_increment PRIMARY KEY,
+    name VARCHAR (255) NOT NULL
+);
+
 -- 상품(PRODUCTS) 스키마
 CREATE TABLE IF NOT EXISTS product (
     id          BIGINT auto_increment PRIMARY KEY,
@@ -6,12 +12,6 @@ CREATE TABLE IF NOT EXISTS product (
     image_url   VARCHAR (255)   NOT NULL,
     category_id BIGINT          NOT NULL,
     FOREIGN KEY (category_id) REFERENCES category (id)
-);
-
--- 카테고리(CATEGORY) 스키마
-CREATE TABLE IF NOT EXISTS category (
-    id   BIGINT auto_increment PRIMARY KEY,
-    name VARCHAR (255) NOT NULL
 );
 
 -- 회원(MEMBERS) 스키마
