@@ -56,7 +56,7 @@ class CategoryServiceTest {
 
         List<CategoryResponse> responses = categoryService.getAllCategories();
 
-        assertThat(responses.size()).isEqualTo(2);
+        assertThat(responses.size()).isEqualTo(categoryList.size());
     }
 
     @Test
@@ -123,13 +123,17 @@ class CategoryServiceTest {
                 "https://product-shop.com",
                 ""
         );
-        Category category = CategoryMapper.toEntity(request);
+        Category category = new Category.CategoryBuilder()
+                .setName("교환권")
+                .setColor(request.color())
+                .setImageUrl(request.imageUrl())
+                .setDescription(request.description())
+                .build();
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
-        given(categoryRepository.save(any())).willReturn(category);
 
-        Long categoryId = categoryService.updateCategory(category.getId(), request);
+        categoryService.updateCategory(category.getId(), request);
 
-        assertThat(categoryId).isEqualTo(category.getId());
+        assertThat(category.getName()).isEqualTo(request.name());
     }
 
     @Test

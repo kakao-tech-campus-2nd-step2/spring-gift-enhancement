@@ -41,14 +41,14 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public Long deleteCategory(@PathVariable("id") Long id) {
-        return categoryService.deleteCategoryById(id);
+    public void deleteCategory(@PathVariable("id") Long id) {
+        categoryService.deleteCategoryById(id);
     }
 
     @PatchMapping("/{id}")
-    public Long updateCategory(@PathVariable("id") Long id,
+    public void updateCategory(@PathVariable("id") Long id,
                                @RequestBody @Valid CategoryRequest request) {
-        return categoryService.updateCategory(id, request);
+        categoryService.updateCategory(id, request);
     }
 
 }
