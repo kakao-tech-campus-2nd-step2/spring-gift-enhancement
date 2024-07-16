@@ -14,6 +14,7 @@
     <th>Name</th>
     <th>Price</th>
     <th>Image</th>
+    <th>Category</th>
     <th>Actions</th>
   </tr>
   </thead>
@@ -23,6 +24,7 @@
     <td th:text="${product.name}">Name</td>
     <td th:text="${product.price}">Price</td>
     <td><img th:src="${product.imageUrl}" alt="Product Image"/></td>
+    <td th:text="${product.categoryDto}">Category</td>
     <td class="actions">
       <a th:href="@{|/admin/products/product/${product.id}|}">Edit</a>
       <form th:action="@{|/admin/products/${product.id}|}" method="post" style="display:inline;">

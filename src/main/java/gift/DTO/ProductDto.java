@@ -36,6 +36,13 @@ public class ProductDto {
     this.categoryDto=categoryDto;
   }
 
+  public ProductDto(String name, int price, String imageUrl, CategoryDto categoryDto) {
+    this.name = name;
+    this.price = price;
+    this.imageUrl = imageUrl;
+    this.categoryDto=categoryDto;
+  }
+
   public Long getId() {
     return id;
   }

@@ -21,7 +21,7 @@ public class Product {
   @OneToMany(mappedBy = "product")
   private final List<WishList> wishlists = new ArrayList<>();
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "category_id",nullable = false)
   private Category category;
 
