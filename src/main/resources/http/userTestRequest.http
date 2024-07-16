@@ -54,7 +54,7 @@ Content-Type: application/json
 
 {
   "userId": 1,
-  "productId": 1
+  "productId": 2
 }
 
 ### wish delete request
