@@ -37,6 +37,7 @@ class CategoryControllerTest {
     TokenService tokenService;
     @MockBean
     JpaMetamodelMappingContext jpaMetamodelMappingContext;
+
     private static final String URL = "/api/categories";
 
     @Test

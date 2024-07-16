@@ -35,13 +35,13 @@ class WishListControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private WishListService wishListService;
-    @MockBean
     TokenService tokenService;
     @MockBean
     JpaMetamodelMappingContext jpaMetamodelMappingContext;
     @MockBean
     AuthInterceptor authInterceptor;
+    @MockBean
+    private WishListService wishListService;
 
     private static final String URL = "/api/wishlist";
 

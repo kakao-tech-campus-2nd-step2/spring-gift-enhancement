@@ -13,7 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.Mockito.when;
@@ -47,7 +46,7 @@ class MemberControllerTest {
         when(tokenService.generateToken(1L)).thenReturn(new TokenResponse("JSH"));
 
         //When
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                         .post(REGISTER_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerRequest)))
@@ -56,8 +55,7 @@ class MemberControllerTest {
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON),
                         jsonPath("token").exists()
-                ).andReturn();
-        System.out.println(mvcResult.getResponse().getContentAsString());
+                );
     }
 
     @Test

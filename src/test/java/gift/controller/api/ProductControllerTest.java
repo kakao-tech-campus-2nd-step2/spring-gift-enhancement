@@ -93,8 +93,7 @@ class ProductControllerTest {
     @DisplayName("상품 수정")
     void updateProduct() throws Exception {
         // Given
-        UpdateProductRequest updateProductRequest = new UpdateProductRequest(1L,"changeProduct1", 110, "img", 1L);
-        AddedProductIdResponse addedProductIdResponse = new AddedProductIdResponse(1L);
+        UpdateProductRequest updateProductRequest = new UpdateProductRequest(1L, "changeProduct1", 110, "img", 1L);
 
         // When
         mockMvc.perform(MockMvcRequestBuilders
@@ -113,9 +112,9 @@ class ProductControllerTest {
 
         // When
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete(URL+"/{id}",deleteTargetId))
+                        .delete(URL + "/{id}", deleteTargetId))
                 //Then
                 .andExpect(status().isOk());
-        verify(productService,times(1)).deleteProduct(deleteTargetId);
+        verify(productService, times(1)).deleteProduct(deleteTargetId);
     }
 }
