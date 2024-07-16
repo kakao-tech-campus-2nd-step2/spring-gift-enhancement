@@ -37,6 +37,13 @@ public class Category {
         this.products.remove(product);
     }
 
+    public void updateWithRequest(CategoryRequest updateParam){
+        this.name = updateParam.name();
+        this.color = updateParam.color();
+        this.imageUrl = updateParam.imageUrl();
+        this.description = updateParam.description();
+    }
+
     public void removeProducts(){
         for (Product product : products) {
             removeProduct(product);
