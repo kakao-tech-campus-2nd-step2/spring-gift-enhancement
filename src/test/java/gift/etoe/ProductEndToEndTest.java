@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.etoe;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class ProductControllerTest {
+class ProductEndToEndTest {
 
     @LocalServerPort
     private int port;
