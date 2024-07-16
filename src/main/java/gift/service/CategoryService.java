@@ -1,8 +1,8 @@
 package gift.service;
 
-import gift.dto.category.response.CategoryResponse;
 import gift.dto.category.request.CreateCategoryRequest;
 import gift.dto.category.request.UpdateCategoryRequest;
+import gift.dto.category.response.CategoryResponse;
 import gift.entity.Category;
 import gift.exception.category.CategoryAlreadyExistException;
 import gift.exception.category.CategoryNotFoundException;
