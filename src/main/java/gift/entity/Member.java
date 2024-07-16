@@ -20,7 +20,10 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    protected Member(){};
+    protected Member() {
+    }
+
+    ;
 
     public Member(String email, String password) {
         this.email = email;

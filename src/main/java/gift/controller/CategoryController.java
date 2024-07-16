@@ -24,15 +24,15 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategory(){
+    public ResponseEntity<List<Category>> getAllCategory() {
         return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<String> addCategory(@RequestBody CategoryDTO categoryDTO){
+    public ResponseEntity<String> addCategory(@RequestBody CategoryDTO categoryDTO) {
         Category category = categoryDTO.toEntity();
         categoryService.save(category);
-        return new ResponseEntity<>("OK",HttpStatus.CREATED);
+        return new ResponseEntity<>("OK", HttpStatus.CREATED);
     }
 
 }

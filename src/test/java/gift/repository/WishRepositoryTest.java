@@ -4,6 +4,7 @@ package gift.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import gift.entity.Category;
 import gift.entity.Member;
 import gift.entity.Product;
 import gift.entity.Wish;
@@ -29,17 +30,18 @@ class WishRepositoryTest {
     private Product product;
 
     @BeforeEach
-    public void setUp(){
-         product = new Product("product",1000,"imageurl.com");
-         productRepository.save(product);
-         member = new Member("email@email.com","password");
-         memberRepository.save(member);
+    public void setUp() {
+        Category category = new Category("카테고리");
+        product = new Product("product", 1000, "imageurl.com",category);
+        productRepository.save(product);
+        member = new Member("email@email.com", "password");
+        memberRepository.save(member);
     }
 
     @Test
-    void save(){
+    void save() {
         //given
-        Wish expected = new Wish(member,product);
+        Wish expected = new Wish(member, product);
         wishRepository.save(expected);
 
         //when
@@ -47,18 +49,18 @@ class WishRepositoryTest {
 
         //then
         assertAll(
-            ()->assertThat(actual.getId()).isNotNull(),
-            ()->assertThat(actual.getMember()).isEqualTo(expected.getMember()),
-            ()->assertThat(actual.getProduct()).isEqualTo(expected.getProduct())
+            () -> assertThat(actual.getId()).isNotNull(),
+            () -> assertThat(actual.getMember()).isEqualTo(expected.getMember()),
+            () -> assertThat(actual.getProduct()).isEqualTo(expected.getProduct())
 
-            );
+        );
 
     }
 
     @Test
-    void findByMemberId(){
+    void findByMemberId() {
         //given
-        Wish expected = new Wish(member,product);
+        Wish expected = new Wish(member, product);
         wishRepository.save(expected);
 
         //when
@@ -66,19 +68,19 @@ class WishRepositoryTest {
 
         //then
         assertAll(
-            ()->assertThat(actual.get(0).getId()).isNotNull(),
-            ()->assertThat(actual.get(0).getMember()).isEqualTo(member),
-            ()->assertThat(actual.get(0).getProduct()).isEqualTo(product)
+            () -> assertThat(actual.get(0).getId()).isNotNull(),
+            () -> assertThat(actual.get(0).getMember()).isEqualTo(member),
+            () -> assertThat(actual.get(0).getProduct()).isEqualTo(product)
 
-            );
+        );
 
 
     }
 
     @Test
-    void deleteWishByMemberIdAndProductId(){
+    void deleteWishByMemberIdAndProductId() {
         //given
-        Wish expected = new Wish(member,product);
+        Wish expected = new Wish(member, product);
         wishRepository.save(expected);
 
         //when

@@ -4,7 +4,7 @@ import gift.annotation.ProductName;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class ProductNameValidator implements ConstraintValidator<ProductName,String> {
+public class ProductNameValidator implements ConstraintValidator<ProductName, String> {
 
     private static final String regex = "^[a-zA-Z0-9 \\(\\)\\[\\]\\+\\-\\&\\/\\_]{1,15}$"; // 허용되는 문자의 정규식.
 
