@@ -24,7 +24,7 @@ TodoList
   - [x] 전부 보여주기
   - [x] 1개만 보여주기
   - [x] 추가하기
-  - [ ] 수정하기
+  - [x] 수정하기
   - [ ] 삭제하기
 - [x] categoryRepository
 - [ ] product 에 category 추가

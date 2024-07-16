@@ -36,4 +36,11 @@ public class Category extends BaseEntity {
     public String getDescription() {
         return description;
     }
+
+    public void updateInfo(Category category) {
+        this.name = category.getName();
+        this.color = category.getColor();
+        this.imageUrl = category.getImageUrl();
+        this.description = category.getDescription();
+    }
 }

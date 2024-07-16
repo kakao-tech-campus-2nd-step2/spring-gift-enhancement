@@ -33,4 +33,11 @@ public class CategoryService {
         Category category = categoryRepository.save(categoryRequestDto.toEntity());
         return category.getId();
     }
+
+    @Transactional
+    public void updateCategory(CategoryRequestDto categoryRequestDto, Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Category 가 잘못되었습니다."));
+        category.updateInfo(categoryRequestDto.toEntity());
+    }
 }
