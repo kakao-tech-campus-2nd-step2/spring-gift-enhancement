@@ -23,7 +23,7 @@ class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     @Test
-    void save() {
+    void whenSaveProduct_thenProductIsSavedCorrectly() {
         Product expected = new Product(null, new Name("TestProduct"), 100, "http://example.com/image.png", 1L);
         Product actual = productRepository.save(expected);
         assertAll(
@@ -35,7 +35,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void findById() {
+    void givenProductId_whenFindById_thenReturnProduct() {
         Product expected = new Product(null, new Name("TestProduct"), 100, "http://example.com/image.png", 1L);
         productRepository.save(expected);
         Optional<Product> actual = productRepository.findById(expected.getId());

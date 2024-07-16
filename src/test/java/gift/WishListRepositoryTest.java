@@ -32,7 +32,8 @@ class WishListRepositoryTest {
     private ProductRepository productRepository;
 
     @Test
-    void save() {
+    void saveWishList_ReturnSavedWishList() {
+        // given
         User user = new User(null, "test@example.com", "password");
         userRepository.save(user);
 
@@ -40,8 +41,11 @@ class WishListRepositoryTest {
         productRepository.save(product);
 
         WishList wishList = new WishList(null, user, product);
+
+        // when
         WishList savedWishList = wishListRepository.save(wishList);
 
+        // then
         assertAll(
             () -> assertThat(savedWishList.getId()).isNotNull(),
             () -> assertThat(savedWishList.getUser().getEmail()).isEqualTo(user.getEmail()),
@@ -50,7 +54,8 @@ class WishListRepositoryTest {
     }
 
     @Test
-    void findByUser() {
+    void findWishListByUser_ReturnWishList_WhenUserExists() {
+        // given
         User user = new User(null, "test@example.com", "password");
         userRepository.save(user);
 
@@ -60,7 +65,10 @@ class WishListRepositoryTest {
         WishList wishList = new WishList(null, user, product);
         wishListRepository.save(wishList);
 
+        // when
         List<WishList> wishLists = wishListRepository.findByUser(user);
+
+        // then
         assertThat(wishLists).hasSize(1);
         assertThat(wishLists.get(0).getUser().getEmail()).isEqualTo(user.getEmail());
     }
