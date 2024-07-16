@@ -9,7 +9,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import gift.dto.product.AddProductRequest;
+import gift.dto.product.CreateProductRequest;
 import gift.dto.product.ProductResponse;
 import gift.dto.product.UpdateProductRequest;
 import gift.entity.Product;
@@ -136,9 +136,9 @@ class ProductServiceTest implements AutoCloseable {
 
     @Test
     @DisplayName("Add product test")
-    void addProductTest() {
+    void createProductTest() {
         // given
-        AddProductRequest request = new AddProductRequest("Product A", 1000,
+        CreateProductRequest request = new CreateProductRequest("Product A", 1000,
             "http://example.com/images/product_a.jpg");
         Product savedProduct = Product.builder()
             .id(1L)
@@ -149,7 +149,7 @@ class ProductServiceTest implements AutoCloseable {
         given(productRepository.save(any(Product.class))).willReturn(savedProduct);
 
         // when
-        Long savedId = productService.addProduct(request);
+        Long savedId = productService.createProduct(request);
 
         // then
         assertThat(savedId).isNotNull();

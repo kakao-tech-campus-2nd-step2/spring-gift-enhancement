@@ -1,17 +1,17 @@
 package gift.util.mapper;
 
-import gift.dto.product.AddProductRequest;
+import gift.dto.product.CreateProductRequest;
 import gift.dto.product.ProductResponse;
 import gift.dto.product.UpdateProductRequest;
 import gift.entity.Product;
 
 public class ProductMapper {
 
-    public static Product toProduct(AddProductRequest addProductRequest) {
+    public static Product toProduct(CreateProductRequest createProductRequest) {
         return Product.builder()
-            .name(addProductRequest.name())
-            .price(addProductRequest.price())
-            .imageUrl(addProductRequest.imageUrl())
+            .name(createProductRequest.name())
+            .price(createProductRequest.price())
+            .imageUrl(createProductRequest.imageUrl())
             .build();
     }
 
