@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.common.exception.DuplicateDataException;
+import gift.common.exception.EntityNotFoundException;
 import gift.controller.dto.request.CategoryRequest;
 import gift.controller.dto.response.CategoryResponse;
 import gift.model.Category;
