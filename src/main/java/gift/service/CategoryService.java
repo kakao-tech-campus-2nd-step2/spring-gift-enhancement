@@ -50,10 +50,25 @@ public class CategoryService {
         category.setName(request.name());
     }
 
+    @Transactional
+    public void deleteCategory(Long id) {
+        validateCategory(id);
+        categoryRepository.deleteById(id);
+    }
+
+    // for update
     @Transactional(readOnly = true)
     protected void validateCategory(Category category) {
         if (categoryRepository.existsByName(category.getName())) {
             throw new CategoryAlreadyExistException();
+        }
+    }
+
+    // for delete
+    @Transactional(readOnly = true)
+    protected void validateCategory(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new CategoryNotFoundException();
         }
     }
 }
