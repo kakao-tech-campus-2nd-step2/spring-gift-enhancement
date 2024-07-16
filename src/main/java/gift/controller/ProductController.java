@@ -74,7 +74,7 @@ public class ProductController {
     private HttpHeaders getProductLocationHeader(Long productId) {
         HttpHeaders headers = new HttpHeaders();
         URI location = UriComponentsBuilder.newInstance()
-            .path("api/products/{id}")
+            .path("/api/products/{id}")
             .buildAndExpand(productId)
             .toUri();
         headers.setLocation(location);
