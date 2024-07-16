@@ -6,7 +6,7 @@
     </head>
     <body>
       <p>Product Manage</p>
-      <form action="/admin/new" name="product_form" method="get">
+      <form action="/api/products/new" name="product_form" method="get">
         <button>add product</button>
       </form>
       <div>
@@ -26,10 +26,10 @@
               <td th:text="${product.price}"></td>
               <td th:text="${product.imageUrl}"></td>
               <td> 
-                <form th:action="@{'/admin/edit/' + ${product.id}}" method="get">
+                <form th:action="@{'/api/products/edit/' + ${product.id}}" method="get">
                   <button type="submit">Edit</button>
                 </form>
-                <form th:action="@{'/admin/delete/' + ${product.id}}" method="post">
+                <form th:action="@{'/api/products/delete/' + ${product.id}}" method="post">
                   <button type="submit">Delete</button>
                 </form>
               </td>
