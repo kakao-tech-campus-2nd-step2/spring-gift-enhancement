@@ -7,9 +7,9 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 
-import gift.dto.user.UserLoginRequest;
-import gift.dto.user.UserRegisterRequest;
-import gift.dto.user.UserResponse;
+import gift.dto.user.request.UserLoginRequest;
+import gift.dto.user.request.UserRegisterRequest;
+import gift.dto.user.response.UserResponse;
 import gift.entity.User;
 import gift.exception.InvalidTokenException;
 import gift.exception.user.UserAlreadyExistException;

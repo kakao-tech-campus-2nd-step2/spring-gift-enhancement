@@ -1,6 +1,6 @@
 package gift.util.mapper;
 
-import gift.dto.category.CategoryResponse;
+import gift.dto.category.response.CategoryResponse;
 import gift.entity.Category;
 
 public class CategoryMapper {

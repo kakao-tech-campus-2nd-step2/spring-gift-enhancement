@@ -1,4 +1,4 @@
-package gift.dto.product;
+package gift.dto.product.response;
 
 public record ProductResponse(
     Long id,

@@ -1,8 +1,8 @@
 package gift.util.mapper;
 
-import gift.dto.product.CreateProductRequest;
-import gift.dto.product.ProductResponse;
-import gift.dto.product.UpdateProductRequest;
+import gift.dto.product.request.CreateProductRequest;
+import gift.dto.product.response.ProductResponse;
+import gift.dto.product.request.UpdateProductRequest;
 import gift.entity.Product;
 
 public class ProductMapper {
