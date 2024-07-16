@@ -40,4 +40,15 @@ public class CategoryService {
 
         return new CategoryListResponseDTO(categoryResponseDTOList);
     }
+
+    public Long updateCategory(Long categoryId, CategoryRequestDTO categoryRequestDTO) {
+        Category category = jpaCategoryRepository.findById(categoryId)
+            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+
+        category.update(categoryRequestDTO.name(), categoryRequestDTO.color(),
+            categoryRequestDTO.imageUrl(),
+            categoryRequestDTO.description());
+
+        return category.getId();
+    }
 }
