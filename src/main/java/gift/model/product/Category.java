@@ -16,4 +16,23 @@ public class Category extends BaseTimeEntity {
 
     @NotNull
     private String name;
+
+    protected Category() {
+    }
+
+    public Category(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void update(String name) {
+        this.name = name;
+    }
 }
