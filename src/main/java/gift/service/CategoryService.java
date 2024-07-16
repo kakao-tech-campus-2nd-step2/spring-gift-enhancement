@@ -29,27 +29,26 @@ public class CategoryService {
     }
 
     public CategoryIdResponse addCategory(AddCategoryRequest request) {
-        Category category = new Category(request.name(), request.color(), request.imageUrl(), request.description());
+        Category category = new Category(request);
         return new CategoryIdResponse(categoryRepository.save(category).getId());
     }
 
     @Transactional
     public void updateCategory(UpdateCategoryRequest request) {
-        checkCategoryExistence(request.id())
-                .update(request);
+        Category updateTargetCategory = categoryRepository.findById(request.id())
+                .orElseThrow(CategoryNotFoundException::new);
+        updateTargetCategory.update(request);
     }
 
     public Category getCategory(Long categoryId) {
-        return checkCategoryExistence(categoryId);
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryNotFoundException::new);
     }
 
     public void deleteCategory(Long categoryId) {
-        checkCategoryExistence(categoryId);
-        categoryRepository.deleteById(categoryId);
-    }
-
-    private Category checkCategoryExistence(Long categoryId) {
-        return categoryRepository.findById(categoryId)
+        Category deleteTargetCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(CategoryNotFoundException::new);
+
+        categoryRepository.delete(deleteTargetCategory);
     }
 }
