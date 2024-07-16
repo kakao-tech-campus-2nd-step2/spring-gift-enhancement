@@ -15,14 +15,14 @@ public class MemberService {
     private MemberRepository memberRepository;
     private JwtService jwtService;
 
-    public MemberService(MemberRepository memberRepository,JwtService jwtService){
+    public MemberService(MemberRepository memberRepository, JwtService jwtService) {
         this.memberRepository = memberRepository;
         this.jwtService = jwtService;
     }
 
     public void join(MemberRequest memberRequest) {
-        if(!memberRepository.existsById(memberRequest.id())){
-            memberRepository.save(new Member(memberRequest.id(),memberRequest.password(),new LinkedList<WishList>()));
+        if (!memberRepository.existsById(memberRequest.id())) {
+            memberRepository.save(new Member(memberRequest.id(), memberRequest.password(), new LinkedList<WishList>()));
         }
         throw new NoSuchElementException("이미 존재하는 회원입니다.");
     }
@@ -30,10 +30,9 @@ public class MemberService {
     public String login(MemberRequest memberRequest) {
         Member dbMember = memberRepository.findById(memberRequest.id())
                 .orElseThrow(() -> new NoSuchElementException("로그인에 실패했습니다 다시 시도해주세요"));
-        if(!memberRequest.password().equals(dbMember.getPassword())){
+        if (!memberRequest.password().equals(dbMember.getPassword())) {
             throw new NoSuchElementException("로그인에 실패하였습니다. 다시 시도해주세요");
-        }
-        else{
+        } else {
             String jwt = jwtService.createJWT(memberRequest.id());
             return jwt;
         }

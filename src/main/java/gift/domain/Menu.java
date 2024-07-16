@@ -23,13 +23,14 @@ public class Menu {
     @ManyToOne
     private Category category;
 
-    public Menu() {}
-
-    public Menu(String name, int price, String imageUrl) {
-        this(null,name,price,imageUrl,null);
+    public Menu() {
     }
 
-    public Menu(Long id, String name, int price, String imageUrl,Category category) {
+    public Menu(String name, int price, String imageUrl) {
+        this(null, name, price, imageUrl, null);
+    }
+
+    public Menu(Long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -37,7 +38,7 @@ public class Menu {
         this.category = category;
     }
 
-    public Menu(Long id, MenuRequest menuRequest){
+    public Menu(Long id, MenuRequest menuRequest) {
         this.id = id;
         this.name = menuRequest.name();
         this.price = menuRequest.price();

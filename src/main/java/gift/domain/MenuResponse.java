@@ -1,4 +1,5 @@
 package gift.domain;
+
 public record MenuResponse(
         Long id,
         String name,

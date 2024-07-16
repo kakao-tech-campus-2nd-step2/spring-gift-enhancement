@@ -11,7 +11,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "category")
@@ -24,7 +24,7 @@ public class Category {
     }
 
     public Category(Long id, String name) {
-        this(id, name,new LinkedList<Menu>());
+        this(id, name, new LinkedList<Menu>());
     }
 
     public Category() {

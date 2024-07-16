@@ -25,8 +25,8 @@ public class CategoryService {
         categoryRepository.save(MapCategoryRequsetToCategory(categoryRequest));
     }
 
-    public Category MapCategoryRequsetToCategory(CategoryRequest categoryRequest){
-        return new Category(categoryRequest.id(),categoryRequest.name(),new LinkedList<Menu>());
+    public Category MapCategoryRequsetToCategory(CategoryRequest categoryRequest) {
+        return new Category(categoryRequest.id(), categoryRequest.name(), new LinkedList<Menu>());
     }
 
 }

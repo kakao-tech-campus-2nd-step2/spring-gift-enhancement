@@ -50,7 +50,7 @@ public class WishListController {
             Pageable pageable
     ) {
         String jwtId = jwtService.getMemberId();
-        List<WishListResponse> nowWishList = wishListService.findById(jwtId,pageable);
+        List<WishListResponse> nowWishList = wishListService.findById(jwtId, pageable);
         return ResponseEntity.ok().body(nowWishList);
     }
 

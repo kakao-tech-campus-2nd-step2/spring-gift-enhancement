@@ -25,7 +25,7 @@ public class WishListService {
     }
 
     public List<WishListResponse> findById(String jwtId, Pageable pageable) {
-        List<WishList> wishLists =  wishListRepository.findByMemberId(jwtId,pageable);
+        List<WishList> wishLists = wishListRepository.findByMemberId(jwtId, pageable);
         return wishLists.stream()
                 .map(WishListController::MapWishListToWishListResponse)
                 .collect(Collectors.toList());

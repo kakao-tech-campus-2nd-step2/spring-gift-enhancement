@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,7 +41,7 @@ public class MenuController {
             Model model,
             Pageable pageable
     ) {
-        returnView(null, model,pageable);
+        returnView(null, model, pageable);
     }
 
     @GetMapping
