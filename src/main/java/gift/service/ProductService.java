@@ -19,6 +19,7 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
     @Autowired
     private CategoryService categoryService;
 
@@ -36,6 +37,7 @@ public class ProductService {
         return productRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("상품 정보를 찾을 수 없습니다."));
     }
+
 
     public Page<ProductResponseDTO> createProduct(ProductRequestDTO productRequestDTO, int page, int size) {
         Category category = categoryService.findCategoryEntityById(productRequestDTO.getCategoryId());

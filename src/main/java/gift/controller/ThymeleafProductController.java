@@ -39,6 +39,7 @@ public class ThymeleafProductController {
 //    }
 
 
+
     // 유효성 검사 후 통과하면 새로운 상품 추가
     @PostMapping
     public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult, Model model) {
