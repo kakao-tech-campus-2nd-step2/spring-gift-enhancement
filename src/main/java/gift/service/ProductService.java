@@ -4,6 +4,7 @@ import gift.dto.product.ProductPatchDTO;
 import gift.dto.product.ProductRequestDTO;
 import gift.dto.product.ProductResponseDTO;
 import gift.entity.Product;
+import gift.event.event_publisher.ProductDeletionEventPublisher;
 import gift.exception.NoSuchProductException;
 import gift.repository.ProductRepository;
 import gift.util.pagenation.PageInfoDTO;
@@ -16,9 +17,11 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ProductDeletionEventPublisher productDeletionEventPublisher;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductDeletionEventPublisher productDeletionEventPublisher) {
         this.productRepository = productRepository;
+        this.productDeletionEventPublisher = productDeletionEventPublisher;
     }
 
     public List<ProductResponseDTO> getAllProducts() {
@@ -45,6 +48,7 @@ public class ProductService {
 
     public void deleteProduct(long id) {
         productRepository.deleteById(id);
+        productDeletionEventPublisher.publish(id);
     }
 
     public ProductResponseDTO updateProduct(long id, ProductPatchDTO patchDTO) {

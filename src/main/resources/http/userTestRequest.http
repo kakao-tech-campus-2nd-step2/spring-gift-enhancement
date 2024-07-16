@@ -75,3 +75,7 @@ Content-Type: application/json
 ### product get
 GET http://localhost:8080/api/products?size=3&page=0&sort=iD
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
+
+### product delete
+DELETE http://localhost:8080/api/products/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
