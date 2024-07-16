@@ -1,7 +1,9 @@
 package gift.controller;
 
 import gift.dto.ProductDto;
+import gift.model.Category;
 import gift.model.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/products")
 public class ProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -42,8 +46,9 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public String addProduct(@ModelAttribute @Valid ProductDto productDto) {
-        Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
+    public String addProduct(@ModelAttribute @Valid ProductDto productDto, @RequestParam Long categoryId) {
+        Category category = categoryService.getCategoryById(categoryId);
+        Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category);
         productService.addProduct(product);
         return "redirect:/api/products";
     }
@@ -56,8 +61,9 @@ public class ProductController {
     }
 
     @PostMapping("/edit/{id}")
-    public String updateProduct(@PathVariable Long id, @ModelAttribute @Valid ProductDto productDto) {
-        Product updatedProduct = new Product(id, productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
+    public String updateProduct(@PathVariable Long id, @ModelAttribute @Valid ProductDto productDto, @RequestParam Long categoryId) {
+        Category category = categoryService.getCategoryById(categoryId);
+        Product updatedProduct = new Product(id, productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category);
         productService.updateProduct(id, updatedProduct);
         return "redirect:/api/products";
     }
