@@ -19,6 +19,13 @@ public class CategoryDto {
     this.description=description;
   }
 
+  public CategoryDto(String name, String color, String imageUrl, String description){
+    this.name=name;
+    this.color=color;
+    this.imageUrl=imageUrl;
+    this.description=description;
+  }
+
   public void setId(Long id){this.id=id;}
 
   public Long getId(){return this.id;}
