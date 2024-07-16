@@ -41,6 +41,11 @@ public class CategoryService {
         category.updateCategory(request.name(), request.color(), request.imageUrl(), request.description());
     }
 
+    @Transactional
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
+    }
+
     private void checkDuplicateCategory(CategoryRequest request) {
         if (categoryRepository.existsByName(request.name())) {
             throw new DuplicateDataException("Category with name " + request.name() + " already exists", "Duplicate Category");
