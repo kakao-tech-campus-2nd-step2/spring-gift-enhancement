@@ -18,10 +18,8 @@ public class CreateProductDto {
     Integer price;
     @NotBlank
     String imageUrl;
-    @NotBlank
-    Category category;
 
-    public Product toProduct(){
+    public Product toProduct(Category category){
         return new Product(name, price, imageUrl, category);
     }
 

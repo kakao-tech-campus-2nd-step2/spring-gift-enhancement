@@ -16,4 +16,12 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
+
+    public Category(CategoryType categoryType) {
+        this.name = categoryType;
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
 }

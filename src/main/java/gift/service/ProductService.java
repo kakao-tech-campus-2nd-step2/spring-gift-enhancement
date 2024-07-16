@@ -1,8 +1,10 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.CreateProductDto;
 import gift.dto.UpdateProductDto;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -12,14 +14,21 @@ import org.springframework.data.domain.Pageable;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
 
-    public Product createProduct(CreateProductDto productDto) {
-        Product product = productDto.toProduct();
+    public Product createProduct(CreateProductDto productDto, String categoryType) {
+        Category category = categoryService.addCategory(categoryType);
+        Product product = productDto.toProduct(category);
         productRepository.save(product);
+        category.addProduct(product);
+        categoryRepository.save(category);
         return product;
     }
 
