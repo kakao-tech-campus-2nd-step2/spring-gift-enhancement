@@ -12,6 +12,8 @@ public interface WishRepository {
 
     Optional<Wish> findByMemberAndProduct(Member member, Product product);
 
+    Optional<Wish> findByMemberIdAndProductId(Long memberId, Long productId);
+
     Wish save(Wish entity);
 
     Optional<Wish> findById(Long id);
@@ -19,5 +21,6 @@ public interface WishRepository {
     void deleteById(Long id);
 
     Page<Wish> findAllByMemberByIdDesc(Long memberId, Pageable pageable);
+
 
 }
