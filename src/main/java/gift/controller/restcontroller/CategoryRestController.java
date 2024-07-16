@@ -37,4 +37,13 @@ public class CategoryRestController {
         return ResponseEntity.ok().body(responses);
     }
 
+    @PutMapping("/category/{id}")
+    @Operation(summary = "카테고리 수정", description = "카테고리를 수정합니다.")
+    public ResponseEntity<Void> updateCategory(
+            @PathVariable("id")  @NotNull @Min(1) Long id,
+            @Valid @RequestBody CategoryRequest request) {
+        categoryService.updateById(id, request);
+        return ResponseEntity.ok().build();
+    }
+
 }

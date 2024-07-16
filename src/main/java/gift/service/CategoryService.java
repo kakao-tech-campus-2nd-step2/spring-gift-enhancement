@@ -33,6 +33,14 @@ public class CategoryService {
                 .toList();
     }
 
+    @Transactional
+    public void updateById(Long id, CategoryRequest request) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Category with id " + id + " not found"));
+        category.updateCategory(request.name(), request.color(), request.imageUrl(), request.description());
+    }
+
     private void checkDuplicateCategory(CategoryRequest request) {
         if (categoryRepository.existsByName(request.name())) {
             throw new DuplicateDataException("Category with name " + request.name() + " already exists", "Duplicate Category");
