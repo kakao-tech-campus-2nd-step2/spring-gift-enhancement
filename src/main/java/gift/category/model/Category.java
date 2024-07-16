@@ -1,7 +1,6 @@
 package gift.category.model;
 
 import gift.product.model.Product;
-import gift.wish.model.Wish;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
