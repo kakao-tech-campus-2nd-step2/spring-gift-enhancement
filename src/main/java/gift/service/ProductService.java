@@ -1,6 +1,8 @@
 package gift.service;
 
+import gift.model.Category;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,12 +13,15 @@ import java.util.NoSuchElementException;
 
 @Service
 public class ProductService {
-    private final ProductRepository productRepository;
 
-    @Autowired
-    public ProductService(ProductRepository productRepository) {
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
+
 
     public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
@@ -26,11 +31,11 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void updateProduct(Long id, Product product) {
-        productRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다."));
-        Product updateProduct = new Product(id,product.getName(), product.getPrice(), product.getImageUrl());
-        productRepository.save(updateProduct);
+    public Product updateProduct(Long id, Product product) {
+        Category category = categoryRepository.findById(product.getCategory().getId())
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+        Product updateProduct = new Product(id, product.getName(), product.getPrice(), product.getImageUrl(), category);
+        return productRepository.save(updateProduct);
     }
 
     public void deleteProduct(Long id) {
