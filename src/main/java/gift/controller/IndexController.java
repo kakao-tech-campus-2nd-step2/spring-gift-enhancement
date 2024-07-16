@@ -1,10 +1,13 @@
 package gift.controller;
 
+import gift.model.CategoryName;
 import gift.model.Product;
 import gift.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class IndexController {
@@ -20,7 +23,9 @@ public class IndexController {
     }
 
     @GetMapping("/postform")
-    public String postform(){
+    public String postform(Model model){
+        List<String> categoryList = CategoryName.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
         return "postform";
     }
 
@@ -28,6 +33,8 @@ public class IndexController {
     public String editform(@PathVariable Long id, Model model){
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
+        List<String> categoryList = CategoryName.getCategoryList();
+        model.addAttribute("categoryList", categoryList);
         return "editform";
     }
 }
