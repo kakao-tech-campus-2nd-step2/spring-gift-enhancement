@@ -31,7 +31,7 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
-    public Product() {
+    protected Product() {
 
     }
 
