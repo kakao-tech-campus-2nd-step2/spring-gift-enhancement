@@ -1,7 +1,10 @@
 -- 카테고리(CATEGORY) 스키마
 CREATE TABLE IF NOT EXISTS category (
-    id   BIGINT auto_increment PRIMARY KEY,
-    name VARCHAR (255) NOT NULL
+    id          BIGINT auto_increment PRIMARY KEY,
+    name        VARCHAR (255) NOT NULL,
+    color       VARCHAR (7),
+    image_url   VARCHAR (255),
+    description TEXT
 );
 
 -- 상품(PRODUCTS) 스키마
