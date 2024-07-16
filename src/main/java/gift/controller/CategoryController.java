@@ -42,4 +42,3 @@ public class CategoryController {
         return "categoryDetail";
     }
 }
-
