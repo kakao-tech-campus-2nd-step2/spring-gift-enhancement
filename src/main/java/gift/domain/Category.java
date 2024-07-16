@@ -49,4 +49,11 @@ public class Category {
     public String getDescription() {
         return description;
     }
+
+    public void update(String name, String color, String imageUrl, String description){
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
 }
