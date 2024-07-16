@@ -359,7 +359,7 @@ create table if not exists member (
 - **요청 본문**:
     ```json
     {
-        "productName": "New Product"
+        "productId": 1
     }
     ```
 - **응답 예시**:
@@ -370,7 +370,7 @@ create table if not exists member (
         "data": {
             "id": 1,
             "memberId": 1,
-            "productName": "New Product"
+            "productId": 1
         },
         "errorCode": null
     }
@@ -390,7 +390,7 @@ create table if not exists member (
             {
                 "id": 1,
                 "memberId": 1,
-                "productName": "New Product"
+                "productId": 1
             }
         ],
         "errorCode": null
