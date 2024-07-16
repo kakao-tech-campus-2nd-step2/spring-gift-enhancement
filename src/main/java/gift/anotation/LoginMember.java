@@ -8,6 +8,5 @@ import java.lang.annotation.Documented;
 
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
 public @interface LoginMember {
 }
