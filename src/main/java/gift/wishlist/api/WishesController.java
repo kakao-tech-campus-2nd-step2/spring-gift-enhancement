@@ -2,7 +2,6 @@ package gift.wishlist.api;
 
 import gift.member.validator.LoginMember;
 import gift.product.dto.ProductResponse;
-import gift.product.util.ProductMapper;
 import gift.wishlist.application.WishesService;
 import gift.wishlist.dto.WishRequest;
 import jakarta.validation.Valid;
@@ -34,8 +33,7 @@ public class WishesController {
                                                       sort = "id",
                                                       direction = Sort.Direction.DESC)
                                                 Pageable pageable) {
-        return wishesService.getWishlistOfMember(memberId, pageable)
-                .map(ProductMapper::toResponseDto);
+        return wishesService.getWishlistOfMember(memberId, pageable);
     }
 
     @PostMapping
