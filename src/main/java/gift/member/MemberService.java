@@ -35,18 +35,15 @@ public class MemberService {
     }
 
     public String login(MemberDTO memberDTO) {
-        memberRepository.findById(memberDTO.getEmail())
-            .ifPresentOrElse(
-                findMember -> verifyPassword(findMember, memberDTO),
-                () -> {
-                    throw new FailedLoginException(MEMBER_NOT_FOUND);
-                }
-            );
+        Member findMember = memberRepository.findById(memberDTO.getEmail())
+            .orElseThrow(() -> new FailedLoginException(MEMBER_NOT_FOUND));
+
+        verifyPassword(findMember, memberDTO);
 
         return jwtProvider.generateToken(memberDTO.toTokenDTO());
     }
 
-    private void verifyPassword(Member member, MemberDTO memberDTO) {
+    public void verifyPassword(Member member, MemberDTO memberDTO) {
         if (!member.isSamePassword(memberDTO.toEntity())) {
             throw new IllegalArgumentException(WRONG_PASSWORD);
         }
