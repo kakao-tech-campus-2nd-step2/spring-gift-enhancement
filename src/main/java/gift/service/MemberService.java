@@ -74,9 +74,10 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email)
                         .orElseThrow(NoSuchFieldException::new);
 
-        memberRepository.delete(member);
+        Long memberId = member.getId();
 
-        memberDeletionEventPublisher.publish(member);
+        memberRepository.delete(member);
+        memberDeletionEventPublisher.publish(memberId);
     }
 
     public void updatePw(long id, PwUpdateDTO pwUpdateDTO) {

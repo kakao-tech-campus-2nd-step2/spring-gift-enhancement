@@ -18,8 +18,6 @@ public class MemberDeletionEventListener {
 
     @EventListener
     public void handleMemberDeletionEvent(MemberDeletionEvent event) {
-        List<Wish> wishes = event.getMember().getAllWishes();
-
-        wishRepository.deleteAll(wishes);
+        wishRepository.deleteByMemberId(event.getMemberId());
     }
 }

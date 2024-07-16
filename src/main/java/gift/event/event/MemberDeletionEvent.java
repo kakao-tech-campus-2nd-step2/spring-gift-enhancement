@@ -4,14 +4,14 @@ import gift.entity.Member;
 import org.springframework.context.ApplicationEvent;
 
 public class MemberDeletionEvent extends ApplicationEvent {
-    private final Member member;
+    private final Long memberId;
 
-    public MemberDeletionEvent(Object source, Member member) {
+    public MemberDeletionEvent(Object source, Long memberId) {
         super(source);
-        this.member = member;
+        this.memberId = memberId;
     }
 
-    public Member getMember() {
-        return member;
+    public Long getMemberId() {
+        return memberId;
     }
 }

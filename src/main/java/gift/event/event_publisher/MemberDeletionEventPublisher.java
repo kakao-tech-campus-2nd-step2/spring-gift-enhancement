@@ -13,8 +13,8 @@ public class MemberDeletionEventPublisher {
         this.eventPublisher = eventPublisher;
     }
 
-    public void publish(Member member) {
-        eventPublisher.publishEvent(new MemberDeletionEvent(this, member));
+    public void publish(Long memberId) {
+        eventPublisher.publishEvent(new MemberDeletionEvent(this, memberId));
     }
 
 }
