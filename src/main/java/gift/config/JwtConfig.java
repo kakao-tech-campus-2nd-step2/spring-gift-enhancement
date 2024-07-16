@@ -13,9 +13,9 @@ import java.util.Date;
 
 @Configuration
 public class JwtConfig {
-    public static String generateToken(Member member) {
+    public static String generateToken(String email) {
         Claims claims = (Claims) Jwts.claims();
-        claims.put("member", member);
+        claims.put("email", email);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())

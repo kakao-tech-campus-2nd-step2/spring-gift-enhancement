@@ -27,7 +27,7 @@ public class MemberService {
         Member member = new Member(requestDto.getEmail(), requestDto.getPassword());
         memberRepository.save(member);
 
-        String token = JwtConfig.generateToken(member);
+        String token = JwtConfig.generateToken(requestDto.getEmail());
         return new MemberResponse(token);
     }
 
@@ -35,17 +35,16 @@ public class MemberService {
         Member member = memberRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException(ErrorMessage.EMAIL_NOT_FOUND));
         if (member != null && member.getPassword().equals(loginRequest.getPassword())) {
-            String token = JwtConfig.generateToken(member);
+            String token = JwtConfig.generateToken(loginRequest.getEmail());
             return new LoginResponse(token);
         } else {
             throw new IllegalArgumentException(ErrorMessage.INVALID_LOGIN_CREDENTIALS);
         }
     }
 
-    public Member getMember(Authentication authentication) {
-        Member member = authentication.getMember();
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("No member found with the given token"));
+    public Member getMember(String token) {
+        return memberRepository.findByToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("해당 토큰을 가진 회원이 없습니다."));
     }
 
 }
