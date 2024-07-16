@@ -80,4 +80,9 @@ public class ProductController {
         productService.updateProduct(id, productRequestDTO);
         return "redirect:/api/products";
     }
+    @DeleteMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return "redirect:/api/products";
+    }
 }

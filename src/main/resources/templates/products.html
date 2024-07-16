@@ -31,6 +31,7 @@
             <td>
                 <button class="btn btn-warning" th:onclick="'location.href=\'/api/products/edit/' + ${product.id} + '\';'">Edit</button>
                 <form th:action="@{/api/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="delete"/>
                     <button class="btn btn-danger" type="submit">Delete</button>
                 </form>
             </td>
