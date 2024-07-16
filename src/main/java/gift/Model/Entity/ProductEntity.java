@@ -67,7 +67,6 @@ public class ProductEntity {
         public void setImageUrl(String imageUrl) {
                 this.imageUrl = imageUrl;
         }
-
         public CategoryEntity getCategory() {
                 return category;
         }
