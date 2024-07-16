@@ -79,7 +79,7 @@ public class Product {
         return id;
     }
 
-    public void setName(String name) {
+    public void ValidateThenSetName(String name) {
         ProductName productName = new ProductName(name);
         this.name = productName.getName();
     }
