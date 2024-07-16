@@ -1,11 +1,9 @@
 package gift.category;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
@@ -17,22 +15,22 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryResponseDTO addCategories(@RequestBody CategoryRequestDTO newCategory){
+    public CategoryResponse addCategory(@RequestBody CategoryRequest newCategory){
         return categoryService.insertNewCategory(newCategory);
     }
 
     @GetMapping
-    public List<CategoryResponseDTO> getAllCategories(){
+    public List<CategoryResponse> getAllCategories(){
         return categoryService.findAllCategories();
     }
 
     @GetMapping("/{id}")
-    public CategoryResponseDTO getCategoriesByID(@PathVariable Long id){
+    public CategoryResponse getCategoriesByID(@PathVariable Long id){
         return categoryService.findCategoriesByID(id);
     }
 
     @PutMapping("/{id}")
-    public CategoryResponseDTO updateCategories(@PathVariable Long id, @RequestBody CategoryRequestDTO categoryDTO){
+    public CategoryResponse updateCategories(@PathVariable Long id, @RequestBody CategoryRequest categoryDTO){
         return categoryService.updateCategoriesByID(id, categoryDTO);
     }
 
