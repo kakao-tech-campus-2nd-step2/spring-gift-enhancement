@@ -28,6 +28,7 @@ public class Gift {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @NotNull
     private Category category;
 
     public Gift() {
