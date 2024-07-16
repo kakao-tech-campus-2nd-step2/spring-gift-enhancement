@@ -10,9 +10,11 @@ import java.util.Optional;
 
 import gift.dto.ProductDto;
 import gift.dto.response.ProductPageResponse;
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.entity.WishList;
 import gift.exception.CustomException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishListRepository;
 import jakarta.transaction.Transactional;
@@ -22,11 +24,13 @@ public class ProductService{
 
     private ProductRepository productRepository;
     private WishListRepository wishListRepository;
+    private CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository) {
+    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.wishListRepository = wishListRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional
@@ -46,9 +50,15 @@ public class ProductService{
 
     @Transactional
     public void addProduct(ProductDto productDto) {
+        
+        Category category = categoryRepository.findByName(productDto.getCategory())
+                .orElseGet(() -> {
+                    Category addCategory = new Category(productDto.getCategory());
+                    return categoryRepository.save(addCategory);
+                });
 
         if(productRepository.findById(productDto.getId()).isEmpty()){
-            Product product = productDto.toEntity();
+            Product product = productDto.toEntity(category);
             productRepository.save(product);
         }else{
             throw new CustomException("Product with id " + productDto.getId() + "exists", HttpStatus.CONFLICT);
@@ -60,8 +70,14 @@ public class ProductService{
 
         Optional<Product> optionalProduct = productRepository.findById(productDto.getId());
 
+        Category category = categoryRepository.findByName(productDto.getCategory())
+                .orElseGet(() -> {
+                    Category addCategory = new Category(productDto.getCategory());
+                    return categoryRepository.save(addCategory);
+                });
+
         if (optionalProduct.isPresent()) {
-            Product product = productDto.toEntity();
+            Product product = productDto.toEntity(category);
             productRepository.delete(optionalProduct.get());
             productRepository.save(product);
         }else{

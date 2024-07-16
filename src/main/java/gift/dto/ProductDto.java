@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.entity.Category;
 import gift.entity.Product;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -14,15 +15,17 @@ public class ProductDto {
     private String name;
     private int price;
     private String imageUrl;
+    private String category;
 
     public ProductDto() {
     }
 
-    public ProductDto(long id, String name, int price, String imageUrl) {
+    public ProductDto(long id, String name, int price, String imageUrl, String category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public long getId() {
@@ -57,11 +60,19 @@ public class ProductDto {
         this.imageUrl = imageUrl;
     }
 
-    public Product toEntity() {
-        return new Product(this.name, this.price, this.imageUrl);
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Product toEntity(Category category) {
+        return new Product(this.name, this.price, this.imageUrl, category);
     }
 
     public static ProductDto fromEntity(Product product) {
-        return new ProductDto(product.getId(), product.getName(), product.getPrice(), product.getImageUrl());
+        return new ProductDto(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getName());
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import gift.dto.ProductDto;
 import gift.dto.response.ProductPageResponse;
-import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 
@@ -18,7 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private ProductService productService;
@@ -36,7 +35,7 @@ public class ProductController {
 
     @GetMapping("/new")
     public String showProductForm(Model model){
-        model.addAttribute("product", new Product("", 0, ""));
+        model.addAttribute("product", new ProductDto(0, "", 0, "", ""));
         return "product_form";
     }
 
