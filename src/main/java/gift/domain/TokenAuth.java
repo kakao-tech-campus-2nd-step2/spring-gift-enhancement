@@ -9,7 +9,7 @@ public class TokenAuth {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String token;
 
     @ManyToOne(fetch = FetchType.LAZY)

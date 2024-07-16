@@ -25,8 +25,11 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<WishlistItem> wishlistItems;
 
-    public Product() { }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
+    public Product() { }
 
     public Product(String name, Integer price, String imageUrl) {
         this.name = name;
@@ -64,10 +67,6 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public List<WishlistItem> getWishlistItems() {
-        return wishlistItems;
     }
 
 
