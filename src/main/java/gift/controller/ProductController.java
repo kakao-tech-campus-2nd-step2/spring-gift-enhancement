@@ -27,6 +27,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @GetMapping("/api/products")
+
     public Page<ShowProductDTO> getProducts(@RequestParam(value = "page", defaultValue = "0") int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, 2, Sort.by(Sort.Direction.ASC, "id"));
         return productService.getAllProducts(pageable);
@@ -37,6 +38,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addProduct(@RequestBody SaveProductDTO product) {
         productService.saveProduct(product);
+
     }
 
     @ResponseStatus(HttpStatus.OK)
