@@ -35,6 +35,9 @@
 - 상품에 카테고리 변경
 
 ### Controller
+#### CategoryApiController
+- 카테고리 조회/추가/변경 삭제 요청
+
 #### ProductApiController
 - 상품과 카테고리 복합 요청
   - 상품 추가 시 카테고리 설정
