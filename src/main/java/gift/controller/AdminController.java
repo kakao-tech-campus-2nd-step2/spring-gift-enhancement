@@ -34,7 +34,8 @@ public class AdminController {
     private final MemberService memberService;
     private final CategoryService categoryService;
 
-    public AdminController(ProductService productService, MemberService memberService, CategoryService categoryService) {
+    public AdminController(ProductService productService, MemberService memberService,
+        CategoryService categoryService) {
         this.productService = productService;
         this.memberService = memberService;
         this.categoryService = categoryService;

@@ -22,7 +22,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
@@ -43,7 +44,8 @@ public class ProductService {
     public ProductResponse addProduct(ProductRequest productRequest) {
         validatePrice(productRequest.price());
         Category category = categoryRepository.findById(productRequest.categoryId())
-            .orElseThrow(() -> new ProductNotFoundException(CATEGORY_NOT_FOUND + productRequest.categoryId()));
+            .orElseThrow(() -> new ProductNotFoundException(
+                CATEGORY_NOT_FOUND + productRequest.categoryId()));
         Product product = convertToEntity(productRequest, category);
         Product savedProduct = productRepository.save(product);
         return convertToDTO(savedProduct);
@@ -56,9 +58,11 @@ public class ProductService {
         validatePrice(productRequest.price());
 
         Category category = categoryRepository.findById(productRequest.categoryId())
-            .orElseThrow(() -> new ProductNotFoundException(CATEGORY_NOT_FOUND + productRequest.categoryId()));
+            .orElseThrow(() -> new ProductNotFoundException(
+                CATEGORY_NOT_FOUND + productRequest.categoryId()));
 
-        product.update(productRequest.name(), productRequest.price(), productRequest.imageUrl(), category);
+        product.update(productRequest.name(), productRequest.price(), productRequest.imageUrl(),
+            category);
         Product updatedProduct = productRepository.save(product);
         return convertToDTO(updatedProduct);
     }
@@ -100,7 +104,8 @@ public class ProductService {
 
     public Product convertToEntity(ProductResponse productResponse) {
         Category category = categoryRepository.findById(productResponse.categoryId())
-            .orElseThrow(() -> new ProductNotFoundException(CATEGORY_NOT_FOUND + productResponse.categoryId()));
+            .orElseThrow(() -> new ProductNotFoundException(
+                CATEGORY_NOT_FOUND + productResponse.categoryId()));
         return new Product(
             productResponse.id(),
             productResponse.name(),

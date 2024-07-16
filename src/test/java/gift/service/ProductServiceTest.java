@@ -111,7 +111,8 @@ public class ProductServiceTest {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Product existingProduct = new Product(1L, "Old Product", 100, "old.jpg", category);
         Product updatedProduct = new Product(1L, "Updated Product", 200, "updated.jpg", category);
-        ProductRequest productDTO = new ProductRequest(1L, "Updated Product", 200, "updated.jpg", 1L);
+        ProductRequest productDTO = new ProductRequest(1L, "Updated Product", 200, "updated.jpg",
+            1L);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
@@ -125,7 +126,8 @@ public class ProductServiceTest {
     @Test
     @DisplayName("존재하지 않는 상품 ID로 업데이트")
     public void testUpdateProductNotFound() {
-        ProductRequest productDTO = new ProductRequest(1L, "Updated Product", 200, "updated.jpg", 1L);
+        ProductRequest productDTO = new ProductRequest(1L, "Updated Product", 200, "updated.jpg",
+            1L);
 
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
 

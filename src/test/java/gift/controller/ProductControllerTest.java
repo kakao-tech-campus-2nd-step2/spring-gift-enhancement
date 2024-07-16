@@ -46,18 +46,18 @@ public class ProductControllerTest {
     @MockBean
     private TokenValidator tokenValidator;
 
-    private ProductResponse productDTO;
+    private ProductResponse productResponse;
 
     @BeforeEach
     public void setUp() {
-        productDTO = new ProductResponse(1L, "Test Product", 100, "test.jpg", 1L, "Category");
+        productResponse = new ProductResponse(1L, "Test Product", 100, "test.jpg", 1L, "Category");
     }
 
     @Test
     @DisplayName("모든 상품 조회 (페이지네이션 적용)")
     public void testGetAllProducts() throws Exception {
         Pageable pageable = PageRequest.of(0, 10);
-        Page<ProductResponse> page = new PageImpl<>(List.of(productDTO), pageable, 1);
+        Page<ProductResponse> page = new PageImpl<>(List.of(productResponse), pageable, 1);
 
         when(productService.getAllProducts(any(Pageable.class))).thenReturn(page);
 
@@ -73,7 +73,7 @@ public class ProductControllerTest {
     @Test
     @DisplayName("상품 ID로 조회")
     public void testGetProductById() throws Exception {
-        when(productService.getProductById(1L)).thenReturn(productDTO);
+        when(productService.getProductById(1L)).thenReturn(productResponse);
 
         mockMvc.perform(get("/api/products/1"))
             .andExpect(status().isOk())
@@ -94,11 +94,12 @@ public class ProductControllerTest {
     @Test
     @DisplayName("상품 추가")
     public void testAddProduct() throws Exception {
-        when(productService.addProduct(any(ProductRequest.class))).thenReturn(productDTO);
+        when(productService.addProduct(any(ProductRequest.class))).thenReturn(productResponse);
 
         mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"Test Product\", \"price\": 100, \"imageUrl\": \"test.jpg\", \"categoryId\": 1}"))
+                .content(
+                    "{\"name\": \"Test Product\", \"price\": 100, \"imageUrl\": \"test.jpg\", \"categoryId\": 1}"))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.name").value("Test Product"));
     }
@@ -111,7 +112,8 @@ public class ProductControllerTest {
 
         mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"Test Product\", \"price\": -100, \"imageUrl\": \"test.jpg\", \"categoryId\": 1}"))
+                .content(
+                    "{\"name\": \"Test Product\", \"price\": -100, \"imageUrl\": \"test.jpg\", \"categoryId\": 1}"))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.error").value(INVALID_PRICE));
     }
@@ -120,7 +122,7 @@ public class ProductControllerTest {
     @DisplayName("상품 업데이트")
     public void testUpdateProduct() throws Exception {
         when(productService.updateProduct(eq(1L), any(ProductRequest.class))).thenReturn(
-            productDTO);
+            productResponse);
 
         mockMvc.perform(put("/api/products/1")
                 .contentType(MediaType.APPLICATION_JSON)
