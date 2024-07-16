@@ -52,7 +52,7 @@ public class ProductViewController {
 
     @GetMapping("edit/{id}")
     public String editProductPage(Model model, @PathVariable Long id) {
-        Product product = productService.getProductById(id);
+        ProductResponse product = productService.getProductById(id);
         model.addAttribute("product", product);
         return "product_edit_form";
     }
