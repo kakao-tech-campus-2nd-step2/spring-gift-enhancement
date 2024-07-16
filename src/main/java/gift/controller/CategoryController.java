@@ -2,11 +2,14 @@ package gift.controller;
 
 import gift.dto.CategoryDTO;
 import gift.service.CategoryService;
+import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private static final String BASE_PATH = "/api/categories";
 
     @Autowired
     public CategoryController(CategoryService categoryService) {
@@ -29,5 +33,11 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDTO> getCategory(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(categoryService.getCategory(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<CategoryDTO> addCategory(@RequestBody CategoryDTO categoryDTO) {
+        CategoryDTO addedcategoryDTO = categoryService.addCategory(categoryDTO);
+        return ResponseEntity.created(URI.create(BASE_PATH + addedcategoryDTO.id())).body(addedcategoryDTO);
     }
 }

@@ -30,4 +30,8 @@ public class CategoryService {
             .orElseThrow(NoSuchCategoryException::new)
             .toDTO();
     }
+
+    public CategoryDTO addCategory(CategoryDTO categoryDTO) {
+        return categoryRepository.save(categoryDTO.toEntity()).toDTO();
+    }
 }
