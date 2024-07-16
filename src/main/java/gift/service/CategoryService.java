@@ -5,6 +5,7 @@ import gift.domain.Category;
 import gift.dto.request.CategoryRequest;
 import gift.dto.response.CategoryResponse;
 import gift.exception.CategoryNotFoundException;
+import gift.exception.DuplicateCategoryNameException;
 import gift.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,10 @@ public class CategoryService {
 
     @Transactional
     public void save(CategoryRequest categoryDto){
+        categoryRepository.findByName(categoryDto.name())
+                .ifPresent(e -> {
+                    throw new DuplicateCategoryNameException(Messages.CATEGORY_NAME_ALREADY_EXISTS);
+                });
         categoryRepository.save(categoryDto.toEntity());
     }
 
