@@ -10,7 +10,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
         String role = (String) request.getAttribute("ROLE");
-        System.out.println(role);
         if(role == null || !role.equals(Role.ADMIN.toString())) {
             throw new AuthorizationException("You do not have permissions to access this resource");
         }
