@@ -46,4 +46,11 @@ public class CategoryService {
     Category updatedCategory = categoryRepository.save(updateCategory);
     return ConverterToDto.convertToCategoryDto(updatedCategory);
   }
+
+  public CategoryDto deleteCategory(Long id){
+    Category category = categoryRepository.findById(id)
+      .orElseThrow(() -> new EmptyResultDataAccessException("해당 카테고리가 없습니다.", 1));
+    categoryRepository.deleteById(id);
+    return ConverterToDto.convertToCategoryDto(category);
+  }
 }
