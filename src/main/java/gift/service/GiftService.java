@@ -36,7 +36,6 @@ public class GiftService {
         return products.map(this::convertToProductResponse);
     }
 
-    @Transactional
     public ProductResponse postProducts(ProductRequest productRequest) {
         validateProductName(productRequest.getName());
 
@@ -52,7 +51,6 @@ public class GiftService {
         return convertToProductResponse(savedProduct);
     }
 
-    @Transactional
     public ProductResponse putProducts(ProductRequest productRequest, Long id) {
         validateProductName(productRequest.getName());
 

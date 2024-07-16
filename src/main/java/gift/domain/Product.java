@@ -39,6 +39,9 @@ public class Product {
     @JoinColumn(name = "category_id",nullable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
+
 
     public Product(String name, double price, String imageUrl) {
         this.name = name;
