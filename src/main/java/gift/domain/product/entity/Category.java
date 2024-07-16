@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Table
@@ -19,9 +21,11 @@ public class Category {
     private String name;
 
     @Column(length = 7, nullable = false)
+    @Pattern(regexp = "#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})")
     private String color;
 
     @Column(nullable = false)
+    @URL
     private String imageUrl;
 
     @Column
