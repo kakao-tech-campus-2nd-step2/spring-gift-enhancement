@@ -6,10 +6,7 @@ import gift.entity.Category;
 import gift.repository.CategoryJpaDao;
 import gift.repository.ProductJpaDao;
 import jakarta.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.IntStream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -66,13 +63,5 @@ public class CategoryService {
             .ifPresent(v -> {
                 throw new IllegalArgumentException(ErrorMessage.CATEGORY_ALREADY_EXISTS_MSG);
             });
-    }
-
-    public List<Integer> generatePageNumberList(Page<CategoryDto> categories) {
-        int totalPages = categories.getTotalPages();
-        if (totalPages > 0) {
-            return IntStream.rangeClosed(1, totalPages).boxed().toList();
-        }
-        return Collections.emptyList();
     }
 }

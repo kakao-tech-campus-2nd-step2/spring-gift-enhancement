@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.dto.CategoryDto;
 import gift.service.CategoryService;
+import gift.utils.PageNumberListGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -27,7 +28,8 @@ public class CategoryViewController {
     @GetMapping
     public String getAllCategoriesView(Model model, @PageableDefault(size = 5) Pageable pageable) {
         Page<CategoryDto> categories = categoryService.getCategoryPage(pageable);
-        model.addAttribute("pageNumbers", categoryService.generatePageNumberList(categories));
+        model.addAttribute("pageNumbers",
+            PageNumberListGenerator.generatePageNumberList(categories));
         model.addAttribute("categories", categories);
 
         return "category";

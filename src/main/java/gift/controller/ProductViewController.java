@@ -2,8 +2,7 @@ package gift.controller;
 
 import gift.dto.ProductDto;
 import gift.service.ProductService;
-import java.util.List;
-import java.util.stream.IntStream;
+import gift.utils.PageNumberListGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -32,11 +31,7 @@ public class ProductViewController {
     public String getAllProducts(Model model, @PageableDefault(size = 5) Pageable pageable) {
         Page<ProductDto> products = productService.getAllProducts(pageable);
 
-        int totalPages = products.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().toList();
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+        model.addAttribute("pageNumbers", PageNumberListGenerator.generatePageNumberList(products));
         model.addAttribute("products", products);
         return "products";
     }
