@@ -31,6 +31,7 @@
             <th>Name</th>
             <th>Price</th>
             <th>Image-Url</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -41,6 +42,7 @@
             <td th:text="${product.name}"></td>
             <td th:text="${product.price}"></td>
             <td th:text="${product.imageUrl}"></td>
+            <td th:text="${product.category.name}"></td>
             <td>
                 <button class="edit-btn" type="button" data-toggle="modal" data-target="#editProduct"
                         th:data-id="${product.id}" th:data-name="${product.name}" th:data-price="${product.price}" th:data-imageurl="${product.imageUrl}">
