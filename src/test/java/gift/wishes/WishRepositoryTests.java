@@ -8,6 +8,7 @@ import gift.user.infrastructure.persistence.JpaUserRepository;
 import gift.user.infrastructure.persistence.UserEntity;
 import gift.wishes.infrastructure.persistence.JpaWishRepository;
 import gift.wishes.infrastructure.persistence.WishEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -31,68 +32,50 @@ public class WishRepositoryTests {
     @Autowired
     private JpaProductCategoryRepository jpaProductCategoryRepository;
 
+    private ProductEntity product;
+    private ProductCategoryEntity category;
+    private UserEntity user;
+
+    @BeforeEach
+    public void setUp() {
+        user = jpaUserRepository.save(new UserEntity("test"));
+        category = jpaProductCategoryRepository.save(new ProductCategoryEntity("test"));
+        product = jpaProductRepository.save(new ProductEntity("test", 100, "test", category));
+    }
+
     @Test
     public void saveWish() {
-        UserEntity user = new UserEntity("test");
-        user = jpaUserRepository.save(user);
-
-        ProductCategoryEntity category = new ProductCategoryEntity("test");
-        category = jpaProductCategoryRepository.save(category);
-
-        ProductEntity product = new ProductEntity("test", 100, "test", category);
-        product = jpaProductRepository.save(product);
-
         WishEntity wish = new WishEntity(user, product);
 
         wish = jpaWishRepository.save(wish);
+
         assertThat(jpaWishRepository.existsByUser_IdAndProduct_Id(user.getId(), product.getId())).isTrue();
         assertThat(jpaWishRepository.findById(wish.getId()).get()).isEqualTo(wish);
     }
 
     @Test
     public void removeWish() {
-        UserEntity user = new UserEntity("test");
-        user = jpaUserRepository.save(user);
-
-        ProductCategoryEntity category = new ProductCategoryEntity("test");
-        category = jpaProductCategoryRepository.save(category);
-
-        ProductEntity product = new ProductEntity("test", 100, "test", category);
-        product = jpaProductRepository.save(product);
-
         WishEntity wish = new WishEntity(user, product);
+
         wish = jpaWishRepository.save(wish);
+
         jpaWishRepository.deleteByUser_IdAndProduct_Id(user.getId(), wish.getId());
         assertThat(jpaWishRepository.existsByUser_IdAndProduct_Id(wish.getId(), wish.getId())).isFalse();
     }
 
     @Test
     public void existsByUserIdAndProductId() {
-        UserEntity user = new UserEntity("test");
-        user = jpaUserRepository.save(user);
-
-        ProductCategoryEntity category = new ProductCategoryEntity("test");
-        category = jpaProductCategoryRepository.save(category);
-
-        ProductEntity product = new ProductEntity("test", 100, "test", category);
-        product = jpaProductRepository.save(product);
         WishEntity wish = new WishEntity(user, product);
 
         wish = jpaWishRepository.save(wish);
+
         assertThat(jpaWishRepository.existsByUser_IdAndProduct_Id(wish.getId(), wish.getId())).isTrue();
     }
 
     @Test
     public void findAllByUserId() {
-        UserEntity user = new UserEntity("test");
-        user = jpaUserRepository.save(user);
-
-        ProductCategoryEntity category = new ProductCategoryEntity("test");
-        category = jpaProductCategoryRepository.save(category);
-
-        ProductEntity product = new ProductEntity("test", 100, "test", category);
-        product = jpaProductRepository.save(product);
         WishEntity wish = new WishEntity(user, product);
+
         jpaWishRepository.save(wish);
 
         assertThat(jpaWishRepository.findAllByUser(user).size()).isEqualTo(1);
