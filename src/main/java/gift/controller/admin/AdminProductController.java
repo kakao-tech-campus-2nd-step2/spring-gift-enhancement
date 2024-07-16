@@ -1,8 +1,10 @@
 package gift.controller.admin;
 
 import gift.controller.dto.request.ProductRequest;
+import gift.controller.dto.response.CategoryResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -12,14 +14,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/product")
 public class AdminProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public AdminProductController(ProductService productService) {
+    public AdminProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("")
@@ -31,14 +37,18 @@ public class AdminProductController {
     }
 
     @GetMapping("/new")
-    public String newProduct() {
+    public String newProduct(Model model) {
+        List<CategoryResponse> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "product/newProduct";
     }
 
     @GetMapping("/{id}")
     public String updateProduct(@PathVariable("id") @NotNull @Min(1) Long id, Model model) {
         ProductResponse product = productService.findById(id);
+        List<CategoryResponse> categories = categoryService.getAllCategories();
         model.addAttribute("product", product);
+        model.addAttribute("categories", categories);
         return "product/editProduct";
     }
 

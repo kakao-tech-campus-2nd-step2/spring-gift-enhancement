@@ -20,6 +20,11 @@
         <label for="imageUrl_edit">이미지주소:</label>
         <input type="text" id="imageUrl_edit" name="imageUrl" th:field="*{imageUrl}" required/>
     </div>
+    <label for="categoryName">카테고리:</label>
+    <select id="categoryName" name="categoryName" required>
+        <option th:each="category : ${categories}" th:value="${category.name}"
+                th:text="${category.name}" th:selected="${category.name.equals(product.category)}"></option>
+    </select>
     <p><input type="submit" value="저장"/></p>
 </form>
 <a th:href="@{/admin/product}">뒤로가기</a>
