@@ -1,16 +1,12 @@
 package gift.controller;
 
-import gift.config.PageConfig;
 import gift.dto.category.CategoryResponse;
 import gift.dto.category.CreateCategoryRequest;
 import gift.dto.category.UpdateCategoryRequest;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import java.net.URI;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,10 +29,9 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CategoryResponse>> getCategories(
-        @PageableDefault(size = PageConfig.PAGE_PER_COUNT, sort = PageConfig.SORT_STANDARD, direction = Direction.DESC) Pageable pageable) {
-        Page<CategoryResponse> categoryPage = categoryService.getAllCategories(pageable);
-        return ResponseEntity.ok(categoryPage);
+    public ResponseEntity<List<CategoryResponse>> getCategories() {
+        List<CategoryResponse> categoryList = categoryService.getAllCategories();
+        return ResponseEntity.ok(categoryList);
     }
 
     @GetMapping("{id}")
