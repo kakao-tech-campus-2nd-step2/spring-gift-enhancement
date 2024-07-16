@@ -2,6 +2,7 @@ package gift.controller;
 
 
 import gift.dto.ProductDTO;
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -52,7 +53,8 @@ public class ProductController {
     //product 추가
     @PostMapping
     public ResponseEntity<String> addProduct(@RequestBody @Valid ProductDTO productDTO) {
-        Product product = productDTO.toEntity();
+        Category category = productService.findCategoryById(productDTO.getCategoryId());
+        Product product = productDTO.toEntity(category);
         productService.saveProduct(product);
         return new ResponseEntity<>("OK", HttpStatus.CREATED);
 
