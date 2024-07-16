@@ -42,11 +42,14 @@ public class Member extends BaseEntity {
         this.role = Role.ROLE_USER;
     }
 
-    // Role 커스터마이징 기능
     public Member(String email, String password, Role role) {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    public void makeAdminMember() {
+        this.role = Role.ROLE_ADMIN;
     }
 
     public Long getId() {

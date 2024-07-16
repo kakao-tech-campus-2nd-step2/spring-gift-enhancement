@@ -6,6 +6,7 @@ import gift.auth.JwtTokenProvider;
 import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
+import gift.model.Role;
 import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
@@ -74,6 +75,7 @@ class ProductApiTest {
             });
         savedProducts = productRepository.saveAll(products);
         member = memberService.join("aaa123@a.com", "1234");
+        member.makeAdminMember();
         token = jwtTokenProvider.generateToken(member);
     }
 

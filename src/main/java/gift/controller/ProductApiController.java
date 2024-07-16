@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.auth.CheckRole;
 import gift.request.ProductAddRequest;
 import gift.response.ProductResponse;
 import gift.request.ProductUpdateRequest;
@@ -29,6 +30,7 @@ public class ProductApiController {
         this.productService = productService;
     }
 
+    @CheckRole("ROLE_ADMIN")
     @GetMapping("/api/products")
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
         List<ProductResponse> dtoList;
@@ -40,6 +42,7 @@ public class ProductApiController {
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    @CheckRole("ROLE_ADMIN")
     @GetMapping("/api/products/{id}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
 
@@ -51,6 +54,7 @@ public class ProductApiController {
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
+    @CheckRole("ROLE_ADMIN")
     @PostMapping("/api/products")
     public ResponseEntity<Void> addProduct(@RequestBody @Valid ProductAddRequest dto,
         BindingResult bindingResult) {
@@ -62,6 +66,7 @@ public class ProductApiController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @CheckRole("ROLE_ADMIN")
     @PutMapping("/api/products")
     public ResponseEntity<Void> updateProduct(@RequestBody @Valid ProductUpdateRequest dto,
         BindingResult bindingResult) {
@@ -74,6 +79,7 @@ public class ProductApiController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @CheckRole("ROLE_ADMIN")
     @DeleteMapping("/api/products")
     public ResponseEntity<Void> deleteProduct(@RequestParam("id") Long id) {
         productService.removeProduct(id);
