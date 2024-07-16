@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.dto.response.TokenResponseDto;
-import gift.dto.request.MemberRequestDto;
+import gift.dto.response.TokenResponse;
+import gift.dto.request.MemberRequest;
 import gift.service.JwtUtil;
 import gift.service.MemberService;
 import org.springframework.http.HttpHeaders;
@@ -24,18 +24,18 @@ public class MemberRestController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> registerMember(@RequestBody MemberRequestDto request){
+    public ResponseEntity<Void> registerMember(@RequestBody MemberRequest request){
         memberService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDto> giveAccessToken(@RequestBody MemberRequestDto request) {
+    public ResponseEntity<TokenResponse> giveAccessToken(@RequestBody MemberRequest request) {
         memberService.checkMemberExistsByIdAndPassword(request.email(),request.password());
         String token = jwtUtil.generateToken(request.email());
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
 
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new TokenResponseDto(token));
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(new TokenResponse(token));
     }
 }

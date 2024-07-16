@@ -4,9 +4,9 @@ import gift.constants.Messages;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
-import gift.dto.request.MemberRequestDto;
-import gift.dto.response.ProductResponseDto;
-import gift.dto.request.WishRequestDto;
+import gift.dto.request.MemberRequest;
+import gift.dto.response.ProductResponse;
+import gift.dto.request.WishRequest;
 import gift.dto.response.WishResponseDto;
 import gift.exception.WishNotFoundException;
 import gift.repository.WishRepository;
@@ -28,16 +28,16 @@ public class WishService {
     }
 
     @Transactional
-    public void save(MemberRequestDto memberRequestDto, WishRequestDto wishRequestDto){
-        ProductResponseDto productResponseDto = productService.findByName(wishRequestDto.productName());
+    public void save(MemberRequest memberRequest, WishRequest wishRequest){
+        ProductResponse productResponseDto = productService.findByName(wishRequest.productName());
 
         Product product = productResponseDto.toEntity();
-        Member member = memberRequestDto.toEntity();
+        Member member = memberRequest.toEntity();
 
         Wish newWish = new Wish.Builder()
                 .member(member)
                 .product(product)
-                .qunatity(wishRequestDto.quantity())
+                .qunatity(wishRequest.quantity())
                 .build();
 
         wishRepository.save(newWish);
@@ -67,7 +67,7 @@ public class WishService {
     }
 
     @Transactional
-    public void updateQuantityByMemberIdAndId(Long memberId, Long id, WishRequestDto request){
+    public void updateQuantityByMemberIdAndId(Long memberId, Long id, WishRequest request){
         Wish existingWish = wishRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(()-> new WishNotFoundException(Messages.NOT_FOUND_WISH));
 

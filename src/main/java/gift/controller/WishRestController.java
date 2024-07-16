@@ -1,8 +1,8 @@
 package gift.controller;
 
 import gift.annotation.LoginMember;
-import gift.dto.request.MemberRequestDto;
-import gift.dto.request.WishRequestDto;
+import gift.dto.request.MemberRequest;
+import gift.dto.request.WishRequest;
 import gift.dto.response.WishResponseDto;
 import gift.service.WishService;
 import org.springframework.data.domain.Page;
@@ -23,25 +23,25 @@ public class WishRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addWish(@LoginMember MemberRequestDto memberRequest, @RequestBody WishRequestDto wishRequest){
+    public ResponseEntity<Void> addWish(@LoginMember MemberRequest memberRequest, @RequestBody WishRequest wishRequest){
         wishService.save(memberRequest, wishRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping
-    public ResponseEntity<Page<WishResponseDto>> getMemberWishes(@LoginMember MemberRequestDto memberRequest, @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<Page<WishResponseDto>> getMemberWishes(@LoginMember MemberRequest memberRequest, @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(wishService.getPagedMemberWishesByMemberId(memberRequest.id(),pageable));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeWish(@LoginMember MemberRequestDto memberRequest, @PathVariable Long id){
+    public ResponseEntity<Void> removeWish(@LoginMember MemberRequest memberRequest, @PathVariable Long id){
         wishService.deleteWishByMemberIdAndId(memberRequest.id(), id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateQuantity(@LoginMember MemberRequestDto memberRequest, @PathVariable Long id, @RequestBody WishRequestDto wishRequest){
+    public ResponseEntity<Void> updateQuantity(@LoginMember MemberRequest memberRequest, @PathVariable Long id, @RequestBody WishRequest wishRequest){
         wishService.updateQuantityByMemberIdAndId(memberRequest.id(), id, wishRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

@@ -2,8 +2,8 @@ package gift.service;
 
 import gift.constants.Messages;
 import gift.domain.Member;
-import gift.dto.request.MemberRequestDto;
-import gift.dto.response.MemberResponseDto;
+import gift.dto.request.MemberRequest;
+import gift.dto.response.MemberResponse;
 import gift.exception.MemberNotFoundException;
 import gift.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -18,8 +18,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void save(MemberRequestDto memberRequestDto){
-        memberRepository.save(memberRequestDto.toEntity());
+    public void save(MemberRequest memberRequest){
+        memberRepository.save(memberRequest.toEntity());
     }
 
     @Transactional(readOnly = true)
@@ -30,9 +30,9 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberResponseDto findByEmail(String email){
+    public MemberResponse findByEmail(String email){
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberNotFoundException(Messages.NOT_FOUND_MEMBER));
-        return MemberResponseDto.from(member);
+        return MemberResponse.from(member);
     }
 }

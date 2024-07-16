@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.dto.request.ProductRequestDto;
-import gift.dto.response.ProductResponseDto;
+import gift.dto.request.ProductRequest;
+import gift.dto.response.ProductResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -11,8 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -24,19 +22,19 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> add(@Valid @RequestBody ProductRequestDto request) {
+    public ResponseEntity<Void> add(@Valid @RequestBody ProductRequest request) {
         productService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
-        ProductResponseDto product = productService.findById(id);
+        ProductResponse product = productService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponseDto>> getPagedProducts(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<Page<ProductResponse>> getPagedProducts(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(productService.getPagedProducts(pageable));
     }
@@ -48,7 +46,7 @@ public class ProductRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody ProductRequestDto request) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
         productService.updateById(id, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

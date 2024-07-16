@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.dto.request.ProductRequestDto;
+import gift.dto.request.ProductRequest;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -24,12 +24,12 @@ public class ProductController {
 
     @GetMapping("/new")
     public String showAddProductForm(Model model){
-        model.addAttribute("productDto", new ProductRequestDto("", 0, ""));
+        model.addAttribute("productDto", new ProductRequest("", 0, ""));
         return "products/add";
     }
 
     @PostMapping
-    public String addProduct(@Valid @ModelAttribute ProductRequestDto productDto) {
+    public String addProduct(@Valid @ModelAttribute ProductRequest productDto) {
         productService.save(productDto);
         return "redirect:/products";
     }
@@ -41,7 +41,7 @@ public class ProductController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute ProductRequestDto productDto){
+    public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute ProductRequest productDto){
         productService.updateById(id, productDto);
         return "redirect:/products";
     }
