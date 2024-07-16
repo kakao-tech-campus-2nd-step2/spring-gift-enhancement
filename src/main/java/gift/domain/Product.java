@@ -3,6 +3,7 @@ package gift.domain;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +19,9 @@ public class Product {
     private int price;
     @Column(name="image_url", nullable = false)
     private String imageUrl;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
 
@@ -29,6 +33,16 @@ public class Product {
     public void removeWish(Wish wish) {
         wish.setProduct(null);
         this.wishes.remove(wish);
+    }
+
+    public void removeWishes() {
+        Iterator<Wish> iterator = wishes.iterator();
+
+        while(iterator.hasNext()) {
+            Wish wish = iterator.next();
+            wish.setProduct(null);
+            iterator.remove();
+        }
     }
 
     protected Product () {
@@ -72,6 +86,14 @@ public class Product {
 
     public List<Wish> getWishes() {
         return wishes;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public static class Builder {

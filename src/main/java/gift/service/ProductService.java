@@ -2,8 +2,8 @@ package gift.service;
 
 import gift.constants.Messages;
 import gift.domain.Product;
-import gift.dto.request.ProductRequestDto;
-import gift.dto.response.ProductResponseDto;
+import gift.dto.request.ProductRequest;
+import gift.dto.response.ProductResponse;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,40 +18,39 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    @Autowired
     public ProductService(ProductRepository productRepository){
         this.productRepository = productRepository;
     }
 
     @Transactional
-    public void save(ProductRequestDto productDto){
+    public void save(ProductRequest productDto){
         productRepository.save(productDto.toEntity());
     }
 
     @Transactional(readOnly = true)
-    public ProductResponseDto findById(Long id){
+    public ProductResponse findById(Long id){
          Product product = findProductByIdOrThrow(id);
-         return ProductResponseDto.from(product);
+         return ProductResponse.from(product);
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductResponseDto> getPagedProducts(Pageable pageable){
+    public Page<ProductResponse> getPagedProducts(Pageable pageable){
         Page<Product> pagedProduct = productRepository.findAll(pageable);
-        return pagedProduct.map(ProductResponseDto::from);
+        return pagedProduct.map(ProductResponse::from);
     }
 
     @Transactional(readOnly = true)
-    public ProductResponseDto findByName(String name){
+    public ProductResponse findByName(String name){
         Product product =  productRepository.findByName(name)
                 .orElseThrow(()->  new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_BY_NAME));
-        return ProductResponseDto.from(product);
+        return ProductResponse.from(product);
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponseDto> findAll(){
+    public List<ProductResponse> findAll(){
         return productRepository.findAll()
                 .stream()
-                .map(ProductResponseDto::from)
+                .map(ProductResponse::from)
                 .toList();
     }
 
@@ -62,7 +61,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateById(Long id, ProductRequestDto productDto){
+    public void updateById(Long id, ProductRequest productDto){
         findProductByIdOrThrow(id);
         productRepository.save(new Product.Builder()
                 .id(id)

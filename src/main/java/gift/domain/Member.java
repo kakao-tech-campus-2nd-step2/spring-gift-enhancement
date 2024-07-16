@@ -3,6 +3,7 @@ package gift.domain;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +29,16 @@ public class Member {
     public void removeWish(Wish wish) {
         wish.setMember(null);
         this.wishes.remove(wish);
+    }
+
+    public void removeWishes() {
+        Iterator<Wish> iterator = wishes.iterator();
+
+        while(iterator.hasNext()){
+            Wish wish = iterator.next();
+            wish.setMember(null);
+            iterator.remove();
+        }
     }
 
     // JPA가 엔티티 객체를 생성할 때 reflection을 사용하기 때문에 필요함

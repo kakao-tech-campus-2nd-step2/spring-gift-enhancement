@@ -7,7 +7,7 @@ import gift.domain.Wish;
 import gift.dto.request.MemberRequest;
 import gift.dto.response.ProductResponse;
 import gift.dto.request.WishRequest;
-import gift.dto.response.WishResponseDto;
+import gift.dto.response.WishResponse;
 import gift.exception.WishNotFoundException;
 import gift.repository.WishRepository;
 import org.springframework.data.domain.Page;
@@ -44,18 +44,18 @@ public class WishService {
     }
 
     @Transactional(readOnly = true)
-    public List<WishResponseDto> getMemberWishesByMemberId(Long memberId){
+    public List<WishResponse> getMemberWishesByMemberId(Long memberId){
         return wishRepository.findByMemberId(memberId)
                 .stream()
-                .map(WishResponseDto::from)
+                .map(WishResponse::from)
                 .toList();
 
     }
 
     @Transactional(readOnly = true)
-    public Page<WishResponseDto> getPagedMemberWishesByMemberId(Long memberId, Pageable pageable){
+    public Page<WishResponse> getPagedMemberWishesByMemberId(Long memberId, Pageable pageable){
         Page<Wish> wishPage = wishRepository.findByMemberId(memberId,pageable);
-        return wishPage.map(WishResponseDto::from);
+        return wishPage.map(WishResponse::from);
     }
 
     @Transactional
