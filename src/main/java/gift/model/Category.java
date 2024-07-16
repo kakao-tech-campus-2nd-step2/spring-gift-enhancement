@@ -33,4 +33,12 @@ public class Category {
         this.imageUrl = imageUrl;
         this.description = description;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
