@@ -67,7 +67,7 @@ public class MemberService {
      */
     public Page<ProductDto> getAllWishlist(String email, Pageable pageable) {
         return wishlistJpaDao.findAllByMember_Email(email, pageable)
-            .map(o -> new ProductDto(o.getProduct()));
+            .map(wishlist -> new ProductDto(wishlist.getProduct()));
     }
 
     /**
