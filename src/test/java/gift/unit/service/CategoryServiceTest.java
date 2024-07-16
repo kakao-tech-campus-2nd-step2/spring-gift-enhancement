@@ -23,9 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 public class CategoryServiceTest implements AutoCloseable {
 
@@ -51,36 +48,33 @@ public class CategoryServiceTest implements AutoCloseable {
     @DisplayName("get all categories test")
     void getAllCategoriesTest() {
         // given
-        Pageable pageable = Pageable.unpaged();
         Category category1 = new Category("Category 1");
         Category category2 = new Category("Category 2");
         Category category3 = new Category("Category 3");
         List<Category> categoryList = List.of(category1, category2, category3);
-        Page<Category> categoryPage = new PageImpl<>(categoryList);
-        given(categoryRepository.findAll(pageable)).willReturn(categoryPage);
+        given(categoryRepository.findAll()).willReturn(categoryList);
 
         // when
-        List<CategoryResponse> categories = categoryService.getAllCategories(pageable).toList();
+        List<CategoryResponse> categories = categoryService.getAllCategories();
 
         // then
         assertThat(categories).isNotNull();
         assertThat(categories.size()).isEqualTo(3);
-        then(categoryRepository).should(times(1)).findAll(pageable);
+        then(categoryRepository).should(times(1)).findAll();
     }
 
     @Test
     @DisplayName("get all categories empty test")
     void getAllCategoriesEmptyTest() {
         // given
-        Pageable pageable = Pageable.unpaged();
-        given(categoryRepository.findAll(pageable)).willReturn(Page.empty());
+        given(categoryRepository.findAll()).willReturn(List.of());
 
         // when
-        Page<CategoryResponse> categories = categoryService.getAllCategories(pageable);
+        List<CategoryResponse> categories = categoryService.getAllCategories();
 
         // then
         assertThat(categories).isEmpty();
-        then(categoryRepository).should(times(1)).findAll(pageable);
+        then(categoryRepository).should(times(1)).findAll();
     }
 
     @Test
