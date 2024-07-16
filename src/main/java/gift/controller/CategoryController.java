@@ -3,6 +3,7 @@ package gift.controller;
 import gift.config.PageConfig;
 import gift.dto.category.CategoryResponse;
 import gift.dto.category.CreateCategoryRequest;
+import gift.dto.category.UpdateCategoryRequest;
 import gift.exception.category.CategoryAlreadyExistException;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,5 +57,12 @@ public class CategoryController {
         } catch (CategoryAlreadyExistException e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<Void> updateCategory(@PathVariable Long id,
+        @RequestBody @Valid UpdateCategoryRequest request) {
+        categoryService.updateCategory(id, request);
+        return ResponseEntity.ok().build();
     }
 }
