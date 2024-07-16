@@ -30,4 +30,11 @@ public class CategoryRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
+    @GetMapping("/categories")
+    @Operation(summary = "전체 카테고리 조회", description = "전체 카테고리를 조회합니다.")
+    public ResponseEntity<List<CategoryResponse>> getCategories() {
+        List<CategoryResponse> responses = categoryService.getAllCategories();
+        return ResponseEntity.ok().body(responses);
+    }
+
 }

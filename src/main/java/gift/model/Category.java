@@ -23,6 +23,12 @@ public class Category extends BasicEntity{
         this.description = description;
     }
 
+    public void updateCategory(String name, String color, String imageUrl, String description) {
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
     public String getName() {
         return name;
     }

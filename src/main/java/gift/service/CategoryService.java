@@ -26,6 +26,13 @@ public class CategoryService {
         return categoryRepository.save(category).getId();
     }
 
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepository.findAll().stream()
+                .map(CategoryResponse::from)
+                .toList();
+    }
+
     private void checkDuplicateCategory(CategoryRequest request) {
         if (categoryRepository.existsByName(request.name())) {
             throw new DuplicateDataException("Category with name " + request.name() + " already exists", "Duplicate Category");
