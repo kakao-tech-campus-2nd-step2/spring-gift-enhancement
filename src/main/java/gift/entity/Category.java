@@ -1,10 +1,12 @@
 package gift.entity;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Category extends BaseEntity {
     private String name;
     private String color;
