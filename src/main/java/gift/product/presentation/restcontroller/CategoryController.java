@@ -6,6 +6,7 @@ import gift.product.presentation.dto.ResponseCategoryDto;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,6 +45,12 @@ public class CategoryController {
         var categoryRegisterDto = requestCategoryDto.toCategoryRegisterDto();
         var updatedCategoryId = categoryService.updateCategory(id, categoryRegisterDto);
         return ResponseEntity.ok(updatedCategoryId);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> deleteCategory(@RequestParam("id") Long id) {
+        var deletedCategoryId = categoryService.deleteCategory(id);
+        return ResponseEntity.ok(deletedCategoryId);
     }
 
 

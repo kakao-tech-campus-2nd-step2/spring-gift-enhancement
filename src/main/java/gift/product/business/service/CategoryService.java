@@ -30,4 +30,8 @@ public class CategoryService {
         category.setName(categoryRegisterDto.name());
         return categoryRepository.saveCategory(category);
     }
+
+    public Long deleteCategory(Long id) {
+        return categoryRepository.deleteCategory(id);
+    }
 }

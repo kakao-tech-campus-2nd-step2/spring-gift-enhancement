@@ -12,4 +12,6 @@ public interface CategoryRepository {
     Long saveCategory(Category category);
 
     Category getCategory(Long id);
+
+    Long deleteCategory(Long id);
 }
