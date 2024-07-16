@@ -1,5 +1,6 @@
 package gift.model.product;
 
+import gift.model.category.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -18,10 +19,11 @@ public record ProductRequest(
     )
     String name,
     int price,
-    String imageUrl
+    String imageUrl,
+    Long categoryId
 ) {
-    public Product toEntity() {
-        return new Product(name, price, imageUrl);
+    public Product toEntity(Category category) {
+        return new Product(name, price, imageUrl, category);
     }
 
 }
