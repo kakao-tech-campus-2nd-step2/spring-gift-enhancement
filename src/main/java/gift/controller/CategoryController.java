@@ -29,7 +29,7 @@ public class CategoryController {
     }
 
     @PostMapping("/category")
-    public ResponseEntity<SuccessBody<Long>> addProduct(
+    public ResponseEntity<SuccessBody<Long>> addCategory(
         @Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
         Long categoryId = categoryService.addCategory(categoryRequestDTO);
         return ApiResponseGenerator.success(HttpStatus.CREATED, "카테고리가 생성되었습니다.", categoryId);
