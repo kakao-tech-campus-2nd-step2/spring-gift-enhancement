@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
-        return buildResponseEntity("서버 오류 발생.", HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildResponseEntity("서버 오류 발생."+ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**

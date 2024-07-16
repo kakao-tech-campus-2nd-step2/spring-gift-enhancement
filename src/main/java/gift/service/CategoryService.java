@@ -27,6 +27,11 @@ public class CategoryService {
         repository.save(category);
     }
 
+    public void updateCategory(Category category) {
+        repository.findById(category.getId()).orElseThrow(() -> new IllegalArgumentException("수정하려는 카테고리를 찾을 수 없습니다."));
+        repository.save(category);
+    }
+
     public void deleteCategoryById(Long categoryId) {
         repository.deleteById(categoryId);
     }

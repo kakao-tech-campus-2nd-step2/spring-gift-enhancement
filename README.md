@@ -46,5 +46,5 @@ Content-Type: application/json
     - [X]  WishlistRepositoryTest.java
 - [X]  Category Get 구현
 - [X]  Category Add 구현
-- [ ]  Category Update 구현
+- [X]  Category Update 구현
 - [X]  Category Delete 구현
