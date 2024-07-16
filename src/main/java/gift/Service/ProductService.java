@@ -34,7 +34,7 @@ public class ProductService {
   }
 
   public ProductDto addProduct(ProductDto productDto) {
-    Product product = new Product(productDto.getId(), productDto.getName(),
+    Product product = new Product(productDto.getName(),
       productDto.getPrice(), productDto.getImageUrl());
     productRepository.save(product);
 
