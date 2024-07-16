@@ -4,8 +4,11 @@ import gift.common.exception.DuplicateDataException;
 import gift.common.exception.EntityNotFoundException;
 import gift.controller.dto.request.CategoryRequest;
 import gift.controller.dto.response.CategoryResponse;
+import gift.controller.dto.response.PagingResponse;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,12 +36,25 @@ public class CategoryService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public CategoryResponse findById(Long id) {
+        return CategoryResponse.from(categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " not found")));
+    }
+
     @Transactional
     public void updateById(Long id, CategoryRequest request) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Category with id " + id + " not found"));
         category.updateCategory(request.name(), request.color(), request.imageUrl(), request.description());
+    }
+
+    @Transactional(readOnly = true)
+    public PagingResponse<CategoryResponse> findAllPaging(Pageable pageable) {
+        Page<CategoryResponse> pages = categoryRepository.findAll(pageable)
+                .map(CategoryResponse::from);
+        return PagingResponse.from(pages);
     }
 
     @Transactional
