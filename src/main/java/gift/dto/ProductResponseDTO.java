@@ -6,6 +6,13 @@ public class ProductResponseDTO {
     private int price; // 이 필드를 추가합니다.
     private String imageUrl;
 
+    public ProductResponseDTO(Long id, String name, int price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
     // getters and setters
     public Long getId() {
         return id;

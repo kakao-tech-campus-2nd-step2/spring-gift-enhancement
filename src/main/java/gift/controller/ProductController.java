@@ -1,15 +1,10 @@
 package gift.controller;
 
-import gift.domain.Product;
 import gift.dto.ProductRequestDTO;
 import gift.dto.ProductResponseDTO;
-import gift.repository.ProductRepository;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,19 +15,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.stereotype.Controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Controller
 @RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
-    private final ProductRepository productRepository;
 
-    public ProductController(ProductService productService, ProductRepository productRepository) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.productRepository = productRepository;
     }
 
     @GetMapping
@@ -40,16 +30,9 @@ public class ProductController {
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size,
                               @RequestParam(defaultValue = "name,asc") String[] sort) {
-        Page<Product> productPage = productService.getProducts(page, size, sort);
+        Page<ProductResponseDTO> productPage = productService.getProducts(page, size, sort);
 
-        List<ProductResponseDTO> productResponseDTOList = productPage.stream()
-                .map(this::convertToResponseDTO)
-                .collect(Collectors.toList());
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<ProductResponseDTO> productResponseDTOPage = new PageImpl<>(productResponseDTOList, pageable, productPage.getTotalElements());
-
-        model.addAttribute("productPage", productResponseDTOPage);
+        model.addAttribute("productPage", productPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
         return "products";
@@ -72,23 +55,14 @@ public class ProductController {
             return "productForm";
         }
 
-        Product product = new Product.Builder()
-                .name(productRequestDTO.getName())
-                .price(productRequestDTO.getPrice())
-                .imageUrl(productRequestDTO.getImageUrl())
-                .build();
-
-        productRepository.save(product);
+        productService.createProduct(productRequestDTO);
         return "redirect:/api/products"; // 리디렉션 설정
     }
 
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product id: " + id));
-
-        ProductRequestDTO productRequestDTO = convertToRequestDTO(product);
-        model.addAttribute("productRequestDTO", productRequestDTO);
+        ProductResponseDTO productResponseDTO = productService.getProductById(id);
+        model.addAttribute("productRequestDTO", productResponseDTO);
         return "productForm";
     }
 
@@ -103,38 +77,13 @@ public class ProductController {
             return "productForm";
         }
 
-        Product updatedProduct = new Product.Builder()
-                .id(id)
-                .name(updatedProductDTO.getName())
-                .price(updatedProductDTO.getPrice())
-                .imageUrl(updatedProductDTO.getImageUrl())
-                .build();
-
-        productRepository.save(updatedProduct);
+        productService.updateProduct(id, updatedProductDTO);
         return "redirect:/api/products"; // 리디렉션 설정
     }
 
     @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
-        productRepository.deleteById(id);
+        productService.deleteProduct(id);
         return "redirect:/api/products"; // 리디렉션 설정
-    }
-
-    private ProductRequestDTO convertToRequestDTO(Product product) {
-        return new ProductRequestDTO(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getImageUrl()
-        );
-    }
-
-    private ProductResponseDTO convertToResponseDTO(Product product) {
-        ProductResponseDTO productResponseDTO = new ProductResponseDTO();
-        productResponseDTO.setId(product.getId());
-        productResponseDTO.setName(product.getName());
-        productResponseDTO.setPrice(product.getPrice());
-        productResponseDTO.setImageUrl(product.getImageUrl());
-        return productResponseDTO;
     }
 }
