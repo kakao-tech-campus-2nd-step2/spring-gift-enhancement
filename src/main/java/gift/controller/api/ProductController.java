@@ -1,6 +1,7 @@
 package gift.controller.api;
 
-import gift.dto.request.ProductRequest;
+import gift.dto.request.AddProductRequest;
+import gift.dto.request.UpdateProductRequest;
 import gift.dto.response.AddedProductIdResponse;
 import gift.dto.response.ProductResponse;
 import gift.service.ProductService;
@@ -22,9 +23,9 @@ public class ProductController {
     }
 
     @PostMapping("api/products")
-    public ResponseEntity<AddedProductIdResponse> addProduct(@Valid @RequestBody ProductRequest request) {
+    public ResponseEntity<AddedProductIdResponse> addProduct(@Valid @RequestBody AddProductRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(productService.addProduct(request.name(), request.price(), request.imageUrl()));
+                .body(productService.addProduct(request));
     }
 
     @GetMapping("api/products")
@@ -34,8 +35,8 @@ public class ProductController {
     }
 
     @PutMapping("api/products")
-    public ResponseEntity<Void> updateProduct(@Valid @RequestBody ProductRequest request) {
-        productService.updateProduct(request.id(), request.name(), request.price(), request.imageUrl());
+    public ResponseEntity<Void> updateProduct(@Valid @RequestBody UpdateProductRequest request) {
+        productService.updateProduct(request);
         return ResponseEntity.ok().build();
     }
 

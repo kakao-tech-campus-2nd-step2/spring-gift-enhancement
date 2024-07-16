@@ -23,7 +23,7 @@ public class WishListController {
 
     @PostMapping("api/wishlist")
     public ResponseEntity<Void> addProductToWishList(@MemberId Long memberId, @RequestBody WishListRequest request) {
-        wishListService.addProductToWishList(memberId, request.productId(), request.amount());
+        wishListService.addProductToWishList(memberId, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -36,14 +36,13 @@ public class WishListController {
 
     @PutMapping("api/wishlist")
     public ResponseEntity<Void> updateWishProductAmount(@MemberId Long memberId, @RequestBody WishListRequest request) {
-        wishListService.updateWishProductAmount(memberId, request.productId(), request.amount());
+        wishListService.updateWishProductAmount(memberId, request);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("api/wishlist")
-    public ResponseEntity<Void> deleteWishProduct(@MemberId Long memberId, @RequestBody WishListRequest request) {
-        wishListService.deleteProductInWishList(memberId, request.productId());
+    @DeleteMapping("api/wishlist/{id}")
+    public ResponseEntity<Void> deleteWishProduct(@MemberId Long memberId, @PathVariable("id") Long productId) {
+        wishListService.deleteProductInWishList(memberId, productId);
         return ResponseEntity.ok().build();
     }
-
 }

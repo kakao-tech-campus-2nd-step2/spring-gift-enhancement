@@ -1,8 +1,11 @@
 package gift.dto.request;
 
-public record WishListRequest(
-        Long productId,
+import jakarta.validation.constraints.NotBlank;
 
+public record WishListRequest(
+        @NotBlank
+        Long productId,
+        @NotBlank
         int amount
 ) {
 }

@@ -11,16 +11,18 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@DisplayName("멤버 레포지토리 단위테스트")
 class MemberRepositoryTest {
-
-    private static final String EMAIL = "zzoe2346@git.com";
-    private static final String PASSWORD = "12345678";
 
     @Autowired
     private MemberRepository memberRepository;
 
+
+    private static final String EMAIL = "zzoe2346@git.com";
+    private static final String PASSWORD = "12345678";
+
     @Test
-    @DisplayName("이메일과 비밀번호로 멤버 찾기(로그인용)")
+    @DisplayName("이메일과 비밀번호로 멤버 찾기(for Login)")
     void findMemberByEmailAndPassword() {
         //Given
         Member member = new Member(EMAIL, PASSWORD);
@@ -38,7 +40,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("이메일로 멤버 찾기(이메일 중복 확인용)")
+    @DisplayName("이메일로 멤버 찾기")
     void findByEmail() {
         //Given
         Member member = new Member(EMAIL, PASSWORD);
@@ -53,5 +55,4 @@ class MemberRepositoryTest {
                         assertThat(m.getId()).isEqualTo(savedMemberId)
                 );
     }
-
 }
