@@ -14,6 +14,13 @@ public class Category extends BaseEntity {
     protected Category() {
     }
 
+    public Category(String name, String color, String imageUrl, String description) {
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
+
     public String getName() {
         return name;
     }
