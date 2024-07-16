@@ -3,6 +3,7 @@ package gift.product;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import gift.category.model.dto.Category;
 import gift.product.model.ProductRepository;
 import gift.product.model.dto.Product;
 import gift.user.model.UserRepository;
@@ -31,11 +32,13 @@ public class ProductRepositoryTest {
     private AppUser appUser;
     private Product product;
     private Wish wish;
+    private Category category;
 
     @BeforeEach
     public void setUp() {
         appUser = new AppUser("aabb@kakao.com", "1234", Role.USER, "aaaa");
-        product = new Product("Test", 1000, "url", appUser);
+        category = new Category("기타", "");
+        product = new Product("Test", 1000, "url", appUser, category);
         wish = new Wish(appUser, product, 5);
         appUser = userRepository.save(appUser);
         product = productRepository.save(product);

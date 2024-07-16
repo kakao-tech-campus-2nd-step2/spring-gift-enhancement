@@ -41,7 +41,7 @@ public class Product extends BaseTimeEntity {
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private boolean isActive = true; // 선물의 활성화 상태
 
-    public Product(String name, int price, String imageUrl, AppUser sellerm, Category category) {
+    public Product(String name, int price, String imageUrl, AppUser seller, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
