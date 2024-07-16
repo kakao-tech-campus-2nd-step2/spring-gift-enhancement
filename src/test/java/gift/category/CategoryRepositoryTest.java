@@ -22,9 +22,9 @@ public class CategoryRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        category = new Category(1L, "교환권", "모바일 교환권입니다.", true);
+        category = new Category("교환권", "모바일 교환권입니다.");
         categoryRepository.save(category);
-        categoryRepository.save(new Category(2L, "22", "2222", true));
+        categoryRepository.save(new Category("22", "2222"));
     }
 
     @Test

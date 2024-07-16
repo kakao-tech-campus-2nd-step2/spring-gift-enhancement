@@ -26,11 +26,9 @@ public class Category extends BaseTimeEntity {
     public Category() {
     }
 
-    public Category(Long id, String name, String description, boolean isActive) {
-        this.id = id;
+    public Category(String name, String description) {
         this.name = name;
         this.description = description;
-        this.isActive = isActive;
     }
 
     public Long getId() {

@@ -2,6 +2,7 @@ package gift.category.service;
 
 import gift.category.model.CategoryRepository;
 import gift.category.model.dto.Category;
+import gift.category.model.dto.CategoryRequest;
 import gift.category.model.dto.CategoryResponse;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -31,5 +32,28 @@ public class CategoryService {
         return categories.stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void addCategory(CategoryRequest categoryRequest) {
+        Category category = new Category(categoryRequest.name(), categoryRequest.description());
+        categoryRepository.save(category);
+    }
+
+    @Transactional
+    public void updateCategory(Long id, CategoryRequest categoryRequest) {
+        Optional<Category> categoryOptional = categoryRepository.findByIdAndIsActiveTrue(id);
+        Category category = categoryOptional.orElseThrow(() -> new EntityNotFoundException("Category"));
+        category.setName(categoryRequest.name());
+        category.setDescription(categoryRequest.description());
+        categoryRepository.save(category);
+    }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+        Optional<Category> categoryOptional = categoryRepository.findByIdAndIsActiveTrue(id);
+        Category category = categoryOptional.orElseThrow(() -> new EntityNotFoundException("Category"));
+        category.setActive(false);
+        categoryRepository.save(category);
     }
 }
