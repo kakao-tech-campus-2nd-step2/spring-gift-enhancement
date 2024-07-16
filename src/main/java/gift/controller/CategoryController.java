@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.CategoryDto;
 import gift.service.CategoryService;
 import gift.vo.Category;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,12 @@ public class CategoryController {
     public ResponseEntity<List<Category>> getCategories() {
         List<Category> categories = service.getCategories();
         return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
+    @PostMapping()
+    public ResponseEntity<Void> addCategory(@RequestBody CategoryDto categoryDto) {
+        service.addCategory(categoryDto.toCategory());
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

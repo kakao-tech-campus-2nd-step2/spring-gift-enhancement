@@ -23,6 +23,10 @@ public class CategoryService {
         return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택하신 카테고리를 찾을 수 없습니다."));
     }
 
+    public void addCategory(Category category) {
+        repository.save(category);
+    }
+
     public void deleteCategoryById(Long categoryId) {
         repository.deleteById(categoryId);
     }
