@@ -13,6 +13,7 @@
     <th>상품 이름</th>
     <th>가격</th>
     <th>image URL</th>
+    <th>카테고리</th>
     <th>Actions</th>
   </tr>
   </thead>
@@ -22,6 +23,7 @@
     <td class="productName" th:text="${product.name}">테스트 상품 이름</td>
     <td class="productPrice" th:text="${product.price}">12345</td>
     <td class="productImageURL" th:text="${product.imageUrl}">imageURL example</td>
+    <td class="productCategory" th:text="${product.categoryName}">category name example</td>
     <td>
       <a th:href="@{/products/edit/{id}(id=${product.id})}">
         <button type="button">Edit</button>
@@ -34,6 +36,8 @@
     <td class="productName">테스트 상품 이름</td>
     <td class="productPrice">12345</td>
     <td class="productImageURL">imageURL example</td>
+    <td class="productCategory">category name example</td>
+
     <td>
       <button type="button">Edit</button>
       <button type="button">Delete</button>
@@ -44,6 +48,7 @@
     <td class="productName">테스트 상품 이름</td>
     <td class="productPrice">12345</td>
     <td class="productImageURL">imageURL example</td>
+    <td class="productCategory">category name example</td>
     <td>
       <button type="button">Edit</button>
       <button type="button">Delete</button>
