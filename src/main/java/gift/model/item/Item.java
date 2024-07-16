@@ -1,12 +1,16 @@
 package gift.model.item;
 
+import gift.model.categories.Category;
 import gift.model.wishList.WishItem;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +27,9 @@ public class Item {
     @Column(nullable = false)
     private Long price;
     private String imgUrl;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<WishItem> wishes = new ArrayList<>();
 
@@ -75,7 +81,7 @@ public class Item {
         return Objects.hash(id, name, price, imgUrl);
     }
 
-    public ItemDTO toItemDTO() {
+    public ItemDTO toDTO() {
         return new ItemDTO(id, name, price, imgUrl);
     }
 }
