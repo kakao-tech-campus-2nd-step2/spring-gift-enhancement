@@ -2,11 +2,10 @@ package gift.wishlist;
 
 import gift.member.MemberTokenResolver;
 import gift.product.Product;
+import gift.product.ProductService;
 import gift.token.MemberTokenDTO;
 import java.util.List;
 import java.util.stream.IntStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +18,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WishlistPageController {
 
-    private static final Logger log = LoggerFactory.getLogger(WishlistPageController.class);
     private final WishlistService wishlistService;
+    private final ProductService productService;
 
-    public WishlistPageController(WishlistService wishlistService) {
+    public WishlistPageController(
+        WishlistService wishlistService,
+        ProductService productService
+    ) {
         this.wishlistService = wishlistService;
+        this.productService = productService;
     }
 
     @GetMapping("/wishlist")
@@ -39,6 +42,10 @@ public class WishlistPageController {
     ) {
         pageable = changePageable(pageable);
         Page<Product> products = wishlistService.getAllWishlists(token, pageable);
+        List<Product> allProducts = productService.getAllProducts()
+            .stream()
+            .filter(e -> !products.getContent().contains(e))
+            .toList();
 
         model.addAttribute("products", products);
         model.addAttribute("page", pageable.getPageNumber() + 1);
@@ -46,6 +53,8 @@ public class WishlistPageController {
         model.addAttribute("currentPageProductSize", products.get().toList().size());
         model.addAttribute("pageLists",
             IntStream.range(1, products.getTotalPages() + 1).boxed().toList());
+
+        model.addAttribute("allProducts", allProducts);
 
         return "/wishlist/page";
     }

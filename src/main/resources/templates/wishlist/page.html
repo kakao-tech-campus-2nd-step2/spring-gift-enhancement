@@ -27,34 +27,14 @@
       <span class="close">&times;</span>
     </div>
     <form id="product-form">
-      <div class="form-label-input">
-        <label for="productName">Name:</label>
-        <input
-            type="text"
-            id="productName"
-            name="productName"
-            autocomplete="off"
+      <select id="select-product">
+        <label for="product">Product:</label>
+        <option
+            th:each="product : ${allProducts}"
+            th:value="${product.getId()}"
+            th:text="${product.getName()}"
         />
-        <div id="product-name-error-message"></div>
-      </div>
-      <div class="form-label-input">
-        <label for="productPrice">Price:</label>
-        <input
-            type="number"
-            id="productPrice"
-            name="productPrice"
-            autocomplete="off"
-        />
-      </div>
-      <div class="form-label-input">
-        <label for="productImageUrl">Image URL:</label>
-        <input
-            type="text"
-            id="productImageUrl"
-            name="productImageUrl"
-            autocomplete="off"
-        />
-      </div>
+      </select>
       <button type="button">Submit</button>
     </form>
   </div>

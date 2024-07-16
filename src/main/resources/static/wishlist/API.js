@@ -2,15 +2,14 @@ let wishlistAPIUrl = window.location.origin + '/wishes';
 const authToken = localStorage.getItem("Authorization")
 
 export function addProduct() {
-  let id = document.getElementById("productId").value
-  alert(id)
-  fetch(`${wishlistAPIUrl}/` + document.getElementById("productId").value, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      "Authorization": authToken
-    },
-  }).then(response => responseResult(response));
+  fetch(`${wishlistAPIUrl}/` + document.getElementById("select-product").value,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": authToken
+        },
+      }).then(response => responseResult(response));
 }
 
 export function deleteProduct(id) {

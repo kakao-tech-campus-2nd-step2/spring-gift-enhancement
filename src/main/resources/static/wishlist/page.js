@@ -6,15 +6,8 @@ const mainCheckbox = document.querySelector('table th input[type="checkbox"]');
 const checkboxes = document.querySelectorAll('table td input[type="checkbox"]');
 
 export function addProductbtnOnClick() {
-  let forms = modal.getElementsByClassName("form-label-input")
-  forms[0].remove()
-  forms[0].remove()
-  forms[0].innerHTML = "<div class='form-label-input'> <label for='productId'>Id:</label><input type='number' id='productId' name='productId'/>"
-
   modal.getElementsByTagName('h1')[0].innerText = 'Add a new wishlist';
-  modal.getElementsByTagName('button')[0].onclick = addProduct.bind(
-      null,
-  );
+  modal.getElementsByTagName('button')[0].onclick = addProduct.bind(null,);
   modal.style.display = 'flex';
   document.getElementById('product-name-error-message').style.display =
       'none';
