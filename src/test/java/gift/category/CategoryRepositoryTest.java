@@ -30,7 +30,7 @@ public class CategoryRepositoryTest {
     @Test
     public void testFindActiveCategoryList() {
         List<Category> categories = categoryRepository.findByIsActiveTrue();
-        assertEquals(2, categories.size());
+        assertEquals(5, categories.size());
     }
 
     @Test
