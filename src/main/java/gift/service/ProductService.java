@@ -1,7 +1,10 @@
 package gift.service;
 
 import gift.dto.PageRequestDTO;
+import gift.dto.InputProductDTO;
+import gift.model.Category;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +17,11 @@ import java.util.NoSuchElementException;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     //전체 조회
@@ -34,7 +39,15 @@ public class ProductService {
     }
 
     //저장
-    public void saveProduct(Product product) {
+    public void saveProduct(InputProductDTO inputProductDTO) {
+        Category category = categoryRepository.findByName(inputProductDTO.getCategory())
+                .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 없습니다."));
+        Product product = new Product(
+                inputProductDTO.getName(),
+                inputProductDTO.getPrice(),
+                inputProductDTO.getImageUrl(),
+                category
+                );
         productRepository.save(product);
     }
 
@@ -43,13 +56,20 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public void updateProduct(Long id, Product newProduct) {
+    public void updateProduct(Long id, InputProductDTO inputProductDTO) {
+        System.out.println(inputProductDTO);
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품이 없습니다."));
+        Category category = null;
+        if (inputProductDTO.getCategory() != null) {
+            category = categoryRepository.findByName(inputProductDTO.getCategory())
+                    .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 없습니다."));
+        }
         Product updatedProduct = oldProduct.update(
-                newProduct.getName(),
-                newProduct.getPrice(),
-                newProduct.getImageUrl());
+                inputProductDTO.getName(),
+                inputProductDTO.getPrice(),
+                inputProductDTO.getImageUrl(),
+                category);
         productRepository.save(updatedProduct);
     }
 

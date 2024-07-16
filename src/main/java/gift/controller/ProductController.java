@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.dto.PageRequestDTO;
+import gift.dto.InputProductDTO;
 import gift.service.ProductService;
 import gift.model.Product;
 import org.springframework.data.domain.Page;
@@ -45,13 +46,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public String postProduct(@ModelAttribute Product product, Model model) {
-        try{
-            productService.saveProduct(product);
+    public String postProduct(@ModelAttribute InputProductDTO inputProductDTO, Model model) {
+        try {
+            productService.saveProduct(inputProductDTO);
             return "redirect:/products";
         } catch (IllegalArgumentException e) {
-        model.addAttribute("error", e.getMessage());
-        return "error";
+            model.addAttribute("error", e.getMessage());
+            return "error";
         }
     }
 
@@ -62,9 +63,10 @@ public class ProductController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateProduct(@PathVariable Long id, @ModelAttribute Product newProduct, Model model) {
+    public String updateProduct(@PathVariable Long id, @ModelAttribute InputProductDTO inputProductDTO, Model model) {
         try{
-            productService.updateProduct(id, newProduct);
+            System.out.println(inputProductDTO);
+            productService.updateProduct(id, inputProductDTO);
             return "redirect:/products";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
