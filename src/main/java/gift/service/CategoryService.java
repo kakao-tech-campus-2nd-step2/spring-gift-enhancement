@@ -24,12 +24,14 @@ public class CategoryService {
         return jpaCategoryRepository.save(category).getId();
     }
 
+    @Transactional(readOnly = true)
     public CategoryResponseDTO getOneCategory(Long categoryId){
         Category category = jpaCategoryRepository.findById(categoryId)
             .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
         return CategoryResponseDTO.of(category);
     }
 
+    @Transactional(readOnly = true)
     public CategoryListResponseDTO getAllCategories(){
         List<CategoryResponseDTO> categoryResponseDTOList = jpaCategoryRepository.findAll()
             .stream()
