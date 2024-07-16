@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.domain.Product;
 import gift.dto.request.ProductRequest;
+import gift.dto.response.ProductResponse;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -54,7 +55,9 @@ public class ProductController {
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable long id, Model model) {
         Product product = productService.findOne(id);
-        model.addAttribute("product", product);
+        ProductResponse productResponse = ProductResponse.EntityToResponse(product);
+        model.addAttribute("productResponse", productResponse);
+        model.addAttribute("categories", categoryService.getCategories());
         return "product-edit-form";
     }
 

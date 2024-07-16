@@ -7,7 +7,7 @@
 <body>
 <h1>Product Form</h1>
 
-<form th:action="@{/api/products/edit/{id}(id=${product.id})}" th:object="${product}" method="post">
+<form th:action="@{/api/products/edit/{id}(id=${productResponse.id})}" th:object="${productResponse}" method="post">
     <div>
         <label>Name:</label>
         <input type="text" th:field="*{name}" />
@@ -19,6 +19,15 @@
     <div>
         <label>Image URL:</label>
         <input type="text" th:field="*{imageUrl}" />
+    </div>
+    <div>
+        <label>Category:</label>
+        <select th:field="*{categoryName}">
+            <option value="">Select Category</option>
+            <option th:each="category : ${categories}" th:value="${category.name}"
+                    th:text="${category.name}" th:selected="${category.name == productResponse.categoryName}">
+            </option>
+        </select>
     </div>
     <div>
         <button type="submit">Save</button>

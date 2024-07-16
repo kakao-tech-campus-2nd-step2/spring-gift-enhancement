@@ -66,9 +66,9 @@ public class Product {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    public void setImageUrl(String imageUrl) {this.imageUrl = imageUrl;}
+
+    public Category getCategory() { return category; }
 
     public void update(ProductRequest productRequest, Category category){
         this.name = productRequest.getName();
