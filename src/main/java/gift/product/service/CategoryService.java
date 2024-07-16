@@ -14,6 +14,10 @@ public class CategoryService {
     }
 
     public Long createCategory(CategoryParam categoryParam) {
+        categoryRepository.findByName(categoryParam.name()).ifPresent(category -> {
+            throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
+        });
+        
         Category category = CategoryParam.toEntity(categoryParam);
         category = categoryRepository.save(category);
         return category.getId();
