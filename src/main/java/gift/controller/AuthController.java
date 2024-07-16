@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.exception.CustomException.CustomArgumentNotValidException;
 import gift.exception.CustomException.DuplicateEmailException;
 import gift.exception.CustomException.EmailNotFoundException;
 import gift.exception.CustomException.PassWordMissMatchException;
@@ -31,15 +32,15 @@ public class AuthController {
         BindingResult result)
         throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(null, result);
+            throw new CustomArgumentNotValidException(null, result, ErrorCode.BAD_REQUEST);
         }
         if (!userService.existsEmail(userForm.getEmail())) {
             result.rejectValue("email", "", ErrorCode.EMAIL_NOT_FOUND.getMessage());
-            throw new EmailNotFoundException(null, result);
+            throw new EmailNotFoundException(null, result, ErrorCode.EMAIL_NOT_FOUND);
         }
         if (!userService.isPasswordMatch(userForm)) {
             result.rejectValue("password", "", ErrorCode.PASSWORD_MISMATCH.getMessage());
-            throw new PassWordMissMatchException(null, result);
+            throw new PassWordMissMatchException(null, result, ErrorCode.PASSWORD_MISMATCH);
         }
         return ResponseEntity.ok(
             jwtProvider.generateToken(userService.findByEmail(userForm.getEmail())));
@@ -49,11 +50,11 @@ public class AuthController {
     public ResponseEntity<?> handleSignUpRequest(@Valid @RequestBody UserForm userForm,
         BindingResult result) throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(null, result);
+            throw new CustomArgumentNotValidException(null, result, ErrorCode.BAD_REQUEST);
         }
         if (userService.existsEmail(userForm.getEmail())) {
             result.rejectValue("email", "", ErrorCode.DUPLICATE_EMAIL.getMessage());
-            throw new DuplicateEmailException(null, result);
+            throw new DuplicateEmailException(null, result, ErrorCode.DUPLICATE_EMAIL);
         }
         Long id = userService.insertUser(userForm);
         return ResponseEntity.ok(id);

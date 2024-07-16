@@ -1,9 +1,10 @@
 package gift.controller;
 
+import gift.exception.CustomException.CustomArgumentNotValidException;
+import gift.exception.ErrorCode;
 import gift.model.item.ItemDTO;
 import gift.model.item.ItemForm;
 import gift.service.ItemService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,10 +40,10 @@ public class ItemController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Long> createItem(@Valid @RequestBody ItemForm form, BindingResult result,
-        HttpServletResponse response) throws MethodArgumentNotValidException {
+    public ResponseEntity<Long> createItem(@Valid @RequestBody ItemForm form, BindingResult result)
+        throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(null, result);
+            throw new CustomArgumentNotValidException(null, result, ErrorCode.BAD_REQUEST);
         }
         Long itemId = itemService.insertItem(form);
         return ResponseEntity.ok(itemId);
@@ -53,7 +54,7 @@ public class ItemController {
     public ResponseEntity<Long> updateItem(@PathVariable Long id, @Valid @RequestBody ItemForm form,
         BindingResult result) throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(null, result);
+            throw new CustomArgumentNotValidException(null, result, ErrorCode.BAD_REQUEST);
         }
         ItemDTO itemDTO = new ItemDTO(id, form.getName(), form.getPrice(), form.getImgUrl());
         Long itemId = itemService.updateItem(itemDTO);
