@@ -19,7 +19,11 @@ public class CategoryService {
         return repository.findAll();
     }
 
-    public Category getCategoryById(java.lang.Long id) {
+    public Category getCategoryById(Long id) {
         return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택하신 카테고리를 찾을 수 없습니다."));
+    }
+
+    public void deleteCategoryById(Long categoryId) {
+        repository.deleteById(categoryId);
     }
 }
