@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.common.exception.DuplicateDataException;
 import gift.common.exception.EntityNotFoundException;
 import gift.controller.dto.request.CreateProductRequest;
 import gift.controller.dto.request.UpdateProductRequest;
@@ -9,6 +10,7 @@ import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     @Transactional(readOnly = true)
@@ -42,9 +46,10 @@ public class ProductService {
 
     @Transactional
     public Long save(CreateProductRequest request) {
+        checkDuplicateOptionName(request.optionName());
+        Option option = new Option(request.optionName(), request.optionQuantity());
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category with id " + request.categoryId() + " not found"));
-        Option option = new Option(request.optionName(), request.optionQuantity());
         Product product = new Product(request.name(), request.price(), request.imageUrl(), category, option);
         return productRepository.save(product).getId();
     }
@@ -61,5 +66,11 @@ public class ProductService {
     @Transactional
     public void deleteById(Long id) {
         productRepository.deleteById(id);
+    }
+
+    private void checkDuplicateOptionName(String optionName) {
+        if (optionRepository.existsByName(optionName)) {
+            throw new DuplicateDataException("Option with name " + optionName + " already exists");
+        }
     }
 }
