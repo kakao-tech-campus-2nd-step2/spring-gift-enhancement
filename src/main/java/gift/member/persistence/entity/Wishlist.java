@@ -39,7 +39,7 @@ public class Wishlist extends BaseTimeEntity {
         this.count = count;
     }
 
-    public Wishlist() {}
+    protected Wishlist() {}
 
     public Integer getCount() {
         return count;

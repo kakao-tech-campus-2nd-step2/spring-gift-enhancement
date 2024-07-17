@@ -45,7 +45,7 @@ public class Product extends BaseTimeEntity {
         this.category = category;
     }
 
-    public Product() {}
+    protected Product() {}
 
     public Long getId() {
         return id;

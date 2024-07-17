@@ -18,7 +18,7 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    public Category() {
+    protected Category() {
     }
 
     public Category(String name) {
