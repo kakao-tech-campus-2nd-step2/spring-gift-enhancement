@@ -2,6 +2,7 @@ package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,12 +42,9 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-<<<<<<< HEAD
         category = new Category("상품권");
         category.setId(1L);
         given(categoryRepository.findById(1L)).willReturn(Optional.of(category));
-=======
->>>>>>> 54b1157 (chore: 파일 포매팅)
         var byId = categoryRepository.findById(1L);
         category = byId.get();
         product = new Product(1L, "productName", 10000, "image.jpg", category);
