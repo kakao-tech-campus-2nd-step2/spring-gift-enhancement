@@ -12,7 +12,7 @@ public class Category {
     private String name;
 
     @NotBlank(message = "색깔의 HEX CODE를 반드시 입력해 주세요")
-    @Pattern(regexp = "^#[0-9a-f]{3,6}$", message = "HEX CODE 형식에 맞추어 작성해 주세요")
+    @Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", message = "HEX CODE 형식에 맞추어 작성해 주세요")
     private String color;
 
     @NotBlank(message = "이미지URL을 입력해 주세요.")
