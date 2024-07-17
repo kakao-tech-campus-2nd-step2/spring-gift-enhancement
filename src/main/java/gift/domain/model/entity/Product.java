@@ -70,9 +70,14 @@ public class Product {
         return imageUrl;
     }
 
-    public void update(String name, Long price, String imageUrl) {
+    public Category getCategory() {
+        return category;
+    }
+
+    public void update(String name, Long price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 }

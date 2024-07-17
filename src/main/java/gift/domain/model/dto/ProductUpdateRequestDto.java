@@ -21,6 +21,9 @@ public class ProductUpdateRequestDto {
     @NotNull
     private String imageUrl;
 
+    @NotNull
+    private String categoryName;
+
     public Long getId() {
         return id;
     }
@@ -35,5 +38,9 @@ public class ProductUpdateRequestDto {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
     }
 }
