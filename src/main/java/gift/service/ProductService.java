@@ -1,9 +1,11 @@
 package gift.service;
 
 import gift.domain.Product;
+import gift.entity.CategoryEntity;
 import gift.entity.ProductEntity;
 import gift.error.AlreadyExistsException;
 import gift.error.NotFoundException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     //전체 상품 조회 기능
@@ -49,24 +53,35 @@ public class ProductService {
     //상품 추가 기능
     @Transactional
     public void addProduct(Product product) {
+        CategoryEntity categoryEntity = categoryRepository.findById(product.getCategoryId())
+            .orElseThrow(() -> new NotFoundException("Category Not Found"));
+
         checkAlreadyExists(product);
+
         ProductEntity productEntity = new ProductEntity();
         productEntity.setName(product.getName());
         productEntity.setPrice(product.getPrice());
         productEntity.setImageUrl(product.getImageUrl());
+        productEntity.setCategoryEntity(categoryEntity);
         productRepository.save(productEntity);
     }
 
     //상품 수정 기능
     @Transactional
     public void updateProduct(Long id, Product product) {
-        ProductEntity existingProduct = productRepository.findById(id)
+        ProductEntity productEntity = productRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Product not found"));
+
         checkAlreadyExists(product);
-        existingProduct.setName(product.getName());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setImageUrl(product.getImageUrl());
-        productRepository.save(existingProduct);
+
+        CategoryEntity categoryEntity = categoryRepository.findById(product.getCategoryId())
+            .orElseThrow(() -> new NotFoundException("Category Not Found"));
+
+        productEntity.setName(product.getName());
+        productEntity.setPrice(product.getPrice());
+        productEntity.setImageUrl(product.getImageUrl());
+        productEntity.setCategoryEntity(categoryEntity);
+        productRepository.save(productEntity);
     }
 
     //상품 삭제 기능

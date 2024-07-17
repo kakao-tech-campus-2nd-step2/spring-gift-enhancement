@@ -89,7 +89,13 @@ public class ProductEntity {
     }
 
     public static Product toDto(ProductEntity productEntity) {
-        return new Product(productEntity.getName(), productEntity.getPrice(), productEntity.getImageUrl(), productEntity.getCategoryEntity().getId());
+        return new Product(
+            productEntity.getId(),
+            productEntity.getName(),
+            productEntity.getPrice(),
+            productEntity.getImageUrl(),
+            productEntity.getCategoryEntity().getId()
+        );
     }
 
 }
