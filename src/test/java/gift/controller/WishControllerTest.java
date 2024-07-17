@@ -8,10 +8,9 @@ import gift.domain.member.dto.MemberRequest;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.ProductRepository;
 import gift.domain.wishlist.dto.ProductIdRequest;
-import gift.domain.wishlist.dto.WishRequest;
 import gift.domain.member.service.MemberService;
+import gift.domain.wishlist.entity.Wish;
 import gift.domain.wishlist.repository.WishRepository;
-import gift.domain.wishlist.service.WishService;
 import java.net.URI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,9 +40,6 @@ class WishControllerTest {
 
     @Autowired
     private MemberService memberService;
-
-    @Autowired
-    private WishService wishService;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -112,7 +108,9 @@ class WishControllerTest {
 
         Product product = new Product("name", 1000, "imageUrl", savedCategory);
         productRepository.save(product);
-        wishService.createWish(new WishRequest(1L, 1L));
+
+        Wish wish = new Wish(memberService.getMemberFromToken(token), product);
+        wishRepository.save(wish);
 
         var id = 1L;
         var url = "http://localhost:" + port + "/api/wishes/" + id;
