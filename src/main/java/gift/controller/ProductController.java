@@ -3,6 +3,7 @@ package gift.controller;
 import static gift.util.ResponseEntityUtil.responseError;
 
 import gift.constants.ResponseMsgConstants;
+import gift.dto.ProductPostRequestDTO;
 import gift.dto.ProductResponseDTO;
 import gift.dto.ProductRequestDTO;
 import gift.dto.ResponseDTO;
@@ -46,9 +47,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> addProduct(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
+    public ResponseEntity<ResponseDTO> addProduct(@RequestBody @Valid ProductPostRequestDTO productPostRequestDTO) {
         try {
-            productService.addProduct(productRequestDTO);
+            productService.addProduct(productPostRequestDTO);
         } catch (RuntimeException e) {
             return responseError(e);
         }
