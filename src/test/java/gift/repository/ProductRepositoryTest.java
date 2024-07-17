@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.common.exception.ProductNotFoundException;
+import gift.model.category.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductRequest;
 import java.util.List;
@@ -20,11 +21,16 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("상품 등록")
     void save() {
-        Product product = new Product(null, "상품1", 1000, "image1.jpg");
+        Category category = new Category(null, "차량", "brown", "www.aaa.jpg", "차량 카테고리입니다.");
+        categoryRepository.save(category);
 
+        Product product = new Product(null, "상품1", 1000, "image1.jpg", category);
         Product actual = productRepository.save(product);
 
         assertAll(
@@ -38,7 +44,10 @@ public class ProductRepositoryTest {
     @Test
     @DisplayName("상품 조회")
     void findById() {
-        Product product = productRepository.save(new Product(null, "상품1", 1000, "image1.jpg"));
+        Category category = new Category(null, "차량", "brown", "www.aaa.jpg", "차량 카테고리입니다.");
+        categoryRepository.save(category);
+
+        Product product = productRepository.save(new Product(null, "상품1", 1000, "image1.jpg", category));
 
         Product actual = productRepository.findById(product.getId())
             .orElseThrow(ProductNotFoundException::new);
@@ -49,8 +58,11 @@ public class ProductRepositoryTest {
     @Test
     @DisplayName("전체 상품 조회")
     void findAll() {
-        productRepository.save(new Product(null, "상품1", 1000, "image1.jpg"));
-        productRepository.save(new Product(null, "상품2", 2000, "image2.jpg"));
+        Category category = new Category(null, "차량", "brown", "www.aaa.jpg", "차량 카테고리입니다.");
+        categoryRepository.save(category);
+
+        productRepository.save(new Product(null, "상품1", 1000, "image1.jpg", category));
+        productRepository.save(new Product(null, "상품2", 2000, "image2.jpg", category));
 
         List<Product> products = productRepository.findAll();
 
@@ -60,9 +72,12 @@ public class ProductRepositoryTest {
     @Test
     @DisplayName("상품 수정")
     void update() {
-        Product product = productRepository.save(new Product(null, "상품1", 1000, "image1.jpg"));
+        Category category = new Category(null, "차량", "brown", "www.aaa.jpg", "차량 카테고리입니다.");
+        categoryRepository.save(category);
 
-        product.updateProduct(new ProductRequest("수정된 상품", 2000, "update.jpg"));
+        Product product = productRepository.save(new Product(null, "상품1", 1000, "image1.jpg", category));
+
+        product.updateProduct(new ProductRequest("수정된 상품", 2000, "update.jpg", null));
 
         assertAll(
             () -> assertThat(product.getName()).isEqualTo("수정된 상품"),
@@ -74,8 +89,11 @@ public class ProductRepositoryTest {
     @Test
     @DisplayName("상품 삭제")
     void delete() {
-        productRepository.save(new Product(null, "상품1", 1000, "image1.jpg"));
-        productRepository.save(new Product(null, "상품2", 2000, "image2.jpg"));
+        Category category = new Category(null, "차량", "brown", "www.aaa.jpg", "차량 카테고리입니다.");
+        categoryRepository.save(category);
+
+        productRepository.save(new Product(null, "상품1", 1000, "image1.jpg", category));
+        productRepository.save(new Product(null, "상품2", 2000, "image2.jpg", category));
 
         productRepository.deleteById(1L);
         List<Product> products = productRepository.findAll();

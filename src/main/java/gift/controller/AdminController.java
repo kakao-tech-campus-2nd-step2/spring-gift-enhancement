@@ -1,9 +1,13 @@
 package gift.controller;
 
 import gift.common.dto.PageResponse;
+import gift.model.category.CategoryResponse;
 import gift.model.product.ProductRequest;
 import gift.model.product.ProductResponse;
+import gift.service.CategoryService;
 import gift.service.ProductService;
+import java.util.List;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,20 +24,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AdminController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    AdminController(ProductService productService) {
+    AdminController(ProductService productService, CategoryService  categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/admin/product")
-    public String registerProductForm() {
+    public String registerProductForm(Model model) {
+        PageRequest pageRequest = PageRequest.of(0, 100);
+        PageResponse<CategoryResponse> categoryList = categoryService.findAllCategory(pageRequest);
+        List<CategoryResponse> categories = categoryList.responses();
+        model.addAttribute("categories", categories);
         return "addProduct";
     }
 
     @PostMapping("/admin/product")
     public String registerProduct(ProductRequest productRequest) {
-        productService.register(productRequest);
-        return "redirect:/admin/products";
+        productService.addProduct(productRequest);
+        return "redirect:/products";
     }
 
     @GetMapping("/products")
@@ -58,12 +68,12 @@ public class AdminController {
     @PutMapping("/admin/product/{id}")
     public String updateProduct(@PathVariable("id") Long id, ProductRequest productRequest) {
         productService.updateProduct(id, productRequest);
-        return "redirect:/admin/products";
+        return "redirect:/products";
     }
 
     @DeleteMapping("/admin/product/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
-        return "redirect:/admin/products";
+        return "redirect:/products";
     }
 }

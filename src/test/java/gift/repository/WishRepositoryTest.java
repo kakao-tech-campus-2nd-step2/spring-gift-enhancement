@@ -3,6 +3,7 @@ package gift.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.model.category.Category;
 import gift.model.product.Product;
 import gift.model.user.User;
 import gift.model.wish.Wish;
@@ -25,15 +26,21 @@ public class WishRepositoryTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Test
     @DisplayName("위시 리스트 등록")
     void register() {
+        Category category = new Category(null, "차량", "brown", "www.aaa.jpg", "차량 카테고리입니다.");
+        categoryRepository.save(category);
+
         User user = new User(null, "yso3865", "yso8296@gmail.com");
-        Product product = new Product(null, "product1", 1000, "image1.jpg");
+        Product product = new Product(null, "product1", 1000, "image1.jpg", category);
         userRepository.save(user);
         productRepository.save(product);
+
         Wish wish = new Wish(null, user, product, 3);
 
         Wish actual = wishRepository.save(wish);
@@ -49,11 +56,15 @@ public class WishRepositoryTest {
     @Test
     @DisplayName("위시 리스트 조회")
     void findWish() {
+        Category category = new Category(null, "차량", "brown", "www.aaa.jpg", "차량 카테고리입니다.");
+        categoryRepository.save(category);
+
         PageRequest pageRequest = PageRequest.of(1, 10, Sort.by("id").descending());
         User user = new User(null, "yso3865", "yso8296@gmail.com");
-        Product product = new Product(null, "product1", 1000, "image1.jpg");
+        Product product = new Product(null, "product1", 1000, "image1.jpg", category);
         userRepository.save(user);
         productRepository.save(product);
+
         Wish wish = new Wish(null, user, product, 3);
         wishRepository.save(wish);
 
@@ -65,10 +76,14 @@ public class WishRepositoryTest {
     @Test
     @DisplayName("위시 리스트 삭졔")
     void delete() {
+        Category category = new Category(null, "차량", "brown", "www.aaa.jpg", "차량 카테고리입니다.");
+        categoryRepository.save(category);
+
         User user = new User(null, "yso3865", "yso8296@gmail.com");
-        Product product = new Product(null, "product1", 1000, "image1.jpg");
+        Product product = new Product(null, "product1", 1000, "image1.jpg", category);
         userRepository.save(user);
         productRepository.save(product);
+
         Wish wish = new Wish(null, user, product, 3);
         wishRepository.save(wish);
 

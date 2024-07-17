@@ -37,7 +37,7 @@ public class ProductControllerTest {
 
     @Test
     void addProduct() throws JsonProcessingException {
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg");
+        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
         HttpHeaders headers = getToken();
         var url = "http://localhost:" + port + registerProductUrl;
         var requestEntity = new RequestEntity<>(productRequest, headers, HttpMethod.POST, URI.create(url));

@@ -1,10 +1,13 @@
 package gift.service;
 
 import gift.common.dto.PageResponse;
+import gift.common.exception.CategoryNotFoundException;
 import gift.common.exception.ProductNotFoundException;
+import gift.model.category.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductRequest;
 import gift.model.product.ProductResponse;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import java.util.List;
@@ -19,15 +22,19 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final WishRepository wishRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository, WishRepository wishRepository) {
+    public ProductService(ProductRepository productRepository, WishRepository wishRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.wishRepository = wishRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional
-    public ProductResponse register(ProductRequest productRequest) {
-        Product product = productRepository.save(productRequest.toEntity());
+    public ProductResponse addProduct(ProductRequest productRequest) {
+        Category category = categoryRepository.findById(productRequest.categoryId()).orElseThrow(
+            CategoryNotFoundException::new);
+        Product product = productRepository.save(productRequest.toEntity(category));
         return ProductResponse.from(product);
     }
 
@@ -56,12 +63,12 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long productId) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(ProductNotFoundException::new);
-
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException();
         }
+        Product product = productRepository.findById(productId)
+            .orElseThrow(ProductNotFoundException::new);
+
         wishRepository.deleteByProductId(productId);
         productRepository.deleteById(productId);
     }

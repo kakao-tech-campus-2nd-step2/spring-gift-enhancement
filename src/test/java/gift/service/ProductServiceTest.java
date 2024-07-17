@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.common.dto.PageResponse;
+import gift.model.category.Category;
 import gift.model.product.ProductRequest;
 import gift.model.product.ProductResponse;
+import gift.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,8 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 등록")
     void save() {
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg");
-        ProductResponse response = productService.register(productRequest);
+        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
+        ProductResponse response = productService.addProduct(productRequest);
 
         assertAll(
             () -> assertThat(response.id()).isNotNull(),
@@ -39,8 +41,8 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 조회")
     void findById() {
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg");
-        ProductResponse response = productService.register(productRequest);
+        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
+        ProductResponse response = productService.addProduct(productRequest);
         ProductResponse product = productService.findProduct(response.id());
 
         assertAll(
@@ -54,10 +56,10 @@ public class ProductServiceTest {
     @Test
     @DisplayName("전체 상품 조회")
     void findAll() {
-        ProductRequest productRequest1 = new ProductRequest("product1", 1000, "image1.jpg");
-        ProductRequest productRequest2 = new ProductRequest("product2", 2000, "image2.jpg");
-        productService.register(productRequest1);
-        productService.register(productRequest2);
+        ProductRequest productRequest1 = new ProductRequest("product1", 1000, "image1.jpg", 1L);
+        ProductRequest productRequest2 = new ProductRequest("product2", 2000, "image2.jpg", 1L);
+        productService.addProduct(productRequest1);
+        productService.addProduct(productRequest2);
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
         PageResponse<ProductResponse> products = productService.findAllProduct(pageable);
@@ -68,10 +70,10 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 수정")
     void update() {
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg");
-        productService.register(productRequest);
-        ProductRequest updateRequest = new ProductRequest("update1", 2000, "update1.jpg");
-        ProductResponse response = productService.register(productRequest);
+        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
+        productService.addProduct(productRequest);
+        ProductRequest updateRequest = new ProductRequest("update1", 2000, "update1.jpg", 1L);
+        ProductResponse response = productService.addProduct(productRequest);
 
         ProductResponse product = productService.updateProduct(response.id(), updateRequest);
 
@@ -85,10 +87,10 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 삭제")
     void delete() {
-        ProductRequest productRequest1 = new ProductRequest("product1", 1000, "image1.jpg");
-        ProductRequest productRequest2 = new ProductRequest("product2", 2000, "image2.jpg");
-        productService.register(productRequest1);
-        productService.register(productRequest2);
+        ProductRequest productRequest1 = new ProductRequest("product1", 1000, "image1.jpg", 1L);
+        ProductRequest productRequest2 = new ProductRequest("product2", 2000, "image2.jpg", 1L);
+        productService.addProduct(productRequest1);
+        productService.addProduct(productRequest2);
 
         productService.deleteProduct(1L);
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());

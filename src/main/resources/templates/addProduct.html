@@ -26,6 +26,15 @@
         <input type="text" id="imageUrl" name="imageUrl" placeholder="상품 이미지를 입력하세요" class="form-control">
       </div>
     </div>
+    <div class="row mb-3">
+      <label class="categoryId">카테고리</label>
+      <select name="categoryId" required>
+        <option>카테고리 선택</option>
+        <tr th:each="category : ${categories}">
+          <option th:text="${category.name}" th:value="${category.id}"></option>
+        </tr>
+      </select>
+    </div>
     <button type="submit" class="btn btn-primary">상품 등록</button>
   </form>
 </body>

@@ -31,7 +31,7 @@ public class ProductController {
 
     @PostMapping("/product")
     public ResponseEntity<ProductResponse> registerProduct(@Valid @RequestBody ProductRequest productRequest) {
-        ProductResponse response = productService.register(productRequest);
+        ProductResponse response = productService.addProduct(productRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
