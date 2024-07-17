@@ -31,8 +31,12 @@ public class CategoryService {
     public void updateCategory(Long id, Category category) {
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
-        Category updatedCategory = new Category(existingCategory.getId(), category.getName(), category.getColor(),
-                category.getImageUrl(), category.getDescription()
+        Category updatedCategory = new Category(
+                existingCategory.getId(),
+                category.getName(),
+                category.getColor(),
+                category.getImageUrl(),
+                category.getDescription()
         );
         categoryRepository.save(updatedCategory);
     }
