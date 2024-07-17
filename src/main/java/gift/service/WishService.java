@@ -4,10 +4,10 @@ import gift.constants.Messages;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
-import gift.dto.request.MemberRequestDto;
-import gift.dto.response.ProductResponseDto;
-import gift.dto.request.WishRequestDto;
-import gift.dto.response.WishResponseDto;
+import gift.dto.request.MemberRequest;
+import gift.dto.response.ProductResponse;
+import gift.dto.request.WishRequest;
+import gift.dto.response.WishResponse;
 import gift.exception.WishNotFoundException;
 import gift.repository.WishRepository;
 import org.springframework.data.domain.Page;
@@ -28,34 +28,34 @@ public class WishService {
     }
 
     @Transactional
-    public void save(MemberRequestDto memberRequestDto, WishRequestDto wishRequestDto){
-        ProductResponseDto productResponseDto = productService.findByName(wishRequestDto.productName());
+    public void save(MemberRequest memberRequest, WishRequest wishRequest){
+        ProductResponse productResponseDto = productService.findByName(wishRequest.productName());
 
         Product product = productResponseDto.toEntity();
-        Member member = memberRequestDto.toEntity();
+        Member member = memberRequest.toEntity();
 
         Wish newWish = new Wish.Builder()
                 .member(member)
                 .product(product)
-                .qunatity(wishRequestDto.quantity())
+                .qunatity(wishRequest.quantity())
                 .build();
 
         wishRepository.save(newWish);
     }
 
     @Transactional(readOnly = true)
-    public List<WishResponseDto> getMemberWishesByMemberId(Long memberId){
+    public List<WishResponse> getMemberWishesByMemberId(Long memberId){
         return wishRepository.findByMemberId(memberId)
                 .stream()
-                .map(WishResponseDto::from)
+                .map(WishResponse::from)
                 .toList();
 
     }
 
     @Transactional(readOnly = true)
-    public Page<WishResponseDto> getPagedMemberWishesByMemberId(Long memberId, Pageable pageable){
+    public Page<WishResponse> getPagedMemberWishesByMemberId(Long memberId, Pageable pageable){
         Page<Wish> wishPage = wishRepository.findByMemberId(memberId,pageable);
-        return wishPage.map(WishResponseDto::from);
+        return wishPage.map(WishResponse::from);
     }
 
     @Transactional
@@ -67,7 +67,7 @@ public class WishService {
     }
 
     @Transactional
-    public void updateQuantityByMemberIdAndId(Long memberId, Long id, WishRequestDto request){
+    public void updateQuantityByMemberIdAndId(Long memberId, Long id, WishRequest request){
         Wish existingWish = wishRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(()-> new WishNotFoundException(Messages.NOT_FOUND_WISH));
 

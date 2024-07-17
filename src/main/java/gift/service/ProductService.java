@@ -1,12 +1,12 @@
 package gift.service;
 
 import gift.constants.Messages;
+import gift.domain.Category;
 import gift.domain.Product;
-import gift.dto.request.ProductRequestDto;
-import gift.dto.response.ProductResponseDto;
+import gift.dto.request.ProductRequest;
+import gift.dto.response.ProductResponse;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,41 +17,43 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
-    @Autowired
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     @Transactional
-    public void save(ProductRequestDto productDto){
-        productRepository.save(productDto.toEntity());
+    public void save(ProductRequest productRequest){
+        Category category = categoryService.findById(productRequest.categoryId()).toEntity();
+        productRepository.save(productRequest.toEntity(category));
     }
 
     @Transactional(readOnly = true)
-    public ProductResponseDto findById(Long id){
+    public ProductResponse findById(Long id){
          Product product = findProductByIdOrThrow(id);
-         return ProductResponseDto.from(product);
+         return ProductResponse.from(product);
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductResponseDto> getPagedProducts(Pageable pageable){
+    public Page<ProductResponse> getPagedProducts(Pageable pageable){
         Page<Product> pagedProduct = productRepository.findAll(pageable);
-        return pagedProduct.map(ProductResponseDto::from);
+        return pagedProduct.map(ProductResponse::from);
     }
 
     @Transactional(readOnly = true)
-    public ProductResponseDto findByName(String name){
+    public ProductResponse findByName(String name){
         Product product =  productRepository.findByName(name)
                 .orElseThrow(()->  new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_BY_NAME));
-        return ProductResponseDto.from(product);
+        return ProductResponse.from(product);
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponseDto> findAll(){
+    public List<ProductResponse> findAll(){
         return productRepository.findAll()
                 .stream()
-                .map(ProductResponseDto::from)
+                .map(ProductResponse::from)
                 .toList();
     }
 
@@ -62,14 +64,15 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateById(Long id, ProductRequestDto productDto){
-        findProductByIdOrThrow(id);
-        productRepository.save(new Product.Builder()
-                .id(id)
-                .name(productDto.name())
-                .price(productDto.price())
-                .imageUrl(productDto.imageUrl())
-                .build());
+    public void updateById(Long id, ProductRequest productRequest){
+        Product foundProduct = findProductByIdOrThrow(id);
+        Category category = categoryService.findById(productRequest.categoryId()).toEntity();
+
+        foundProduct.updateName(productRequest.name());
+        foundProduct.updatePrice(productRequest.price());
+        foundProduct.updateImageUrl(productRequest.imageUrl());
+        foundProduct.updateCategory(category);
+        productRepository.save(foundProduct);
     }
 
     private Product findProductByIdOrThrow(Long id) {
