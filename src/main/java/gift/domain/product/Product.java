@@ -1,5 +1,6 @@
 package gift.domain.product;
 
+import gift.domain.category.Category;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,6 +16,11 @@ public class Product {
     @NotNull
     @Column(length = 15)
     private String imgUrl;
+
+    @JoinColumn(name = "category_id")
+    @NotNull
+    @OneToOne(fetch = FetchType.LAZY)
+    private Category category;
 
     protected Product() {
     }
