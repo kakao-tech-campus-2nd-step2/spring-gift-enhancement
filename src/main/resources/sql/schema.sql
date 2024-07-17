@@ -34,9 +34,8 @@ create table product
     name        varchar(255),
     price       int,
     imageurl    varchar(255),
-    wishlist_id BIGINT,
-    category_id bigint,
-    FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE
+    categoryid  BIGINT,
+    wishlist_id BIGINT
 );
 
 drop table if exists product_wishlist CASCADE;
