@@ -35,14 +35,9 @@
   - [ ] 엔티티 추가 (속성 : `id`, `product`, `option`, `quantity`)
   - [ ] 동일 상품 내 옵션 이름 중복 방지 로직 추가
   - [ ] Dto, 레포지토리, 서비스, 컨트롤러 추가 (기본적인 CRUD 기능)
+  - [ ] ProductOption 엔티티와 Product 엔티티 연결 (다대일)
+  - [ ] ProductOption 엔티티와 Option 엔티티 연결 (다대일)
   - [ ] 테스트코드 추가
-
-### ProductOption과 상품, PRoductOption과 옵션 연결
-- **상품-옵션을 적절한 관계로 연결**
-  - [ ] Product 엔티티와 ProductOption 엔티티 연결 (일대다)
-  - [ ] Product 서비스, 컨트롤러, 테스트 코드 업데이트
-  - [ ] Option 엔티티와 ProductOption 엔티티 연결 (일대다)
-  - [ ] Option 서비스, 컨트롤러, 테스트 코드 업데이트
 
 ### 추가적으로
 - [ ] **뷰 페이지에서 옵션을 설정할 수 있도록 함**
