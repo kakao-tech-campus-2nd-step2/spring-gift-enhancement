@@ -15,4 +15,8 @@ public class OptionResponse {
         this.name = name;
         this.quantity = quantity;
     }
+
+    public String getName() {
+        return name;
+    }
 }

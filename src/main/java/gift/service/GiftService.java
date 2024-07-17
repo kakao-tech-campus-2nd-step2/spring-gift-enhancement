@@ -25,13 +25,10 @@ public class GiftService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final OptionRepository optionRepository;
 
-    public GiftService(ProductRepository productRepository, CategoryRepository categoryRepository,
-        OptionRepository optionRepository) {
+    public GiftService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.optionRepository = optionRepository;
     }
 
 

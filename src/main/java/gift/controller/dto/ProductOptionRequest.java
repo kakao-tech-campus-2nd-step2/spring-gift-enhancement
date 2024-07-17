@@ -9,6 +9,11 @@ public class ProductOptionRequest {
     @NotEmpty(message = "Product Quantity can not be empty")
     private int quantity;
 
+    public ProductOptionRequest(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public String getName() {
         return name;
     }

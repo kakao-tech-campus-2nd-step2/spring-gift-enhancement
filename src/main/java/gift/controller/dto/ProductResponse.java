@@ -46,4 +46,40 @@ public class ProductResponse {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<Option> getOptionList() {
+        return optionList;
+    }
+
+    public void setOptionList(List<Option> optionList) {
+        this.optionList = optionList;
+    }
 }
