@@ -2,5 +2,5 @@
 
 # step 0
 
-- [ ] testcode 정상 동작 확인
+- [X] testcode 정상 동작 확인
 - 
