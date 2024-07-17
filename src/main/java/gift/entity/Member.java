@@ -21,7 +21,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Wishlist> wishlist = new ArrayList<>();
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String email, String password) {
