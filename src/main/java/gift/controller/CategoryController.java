@@ -1,7 +1,6 @@
 package gift.controller;
 
 import gift.dto.category.CategoryResponse;
-import gift.dto.product.ProductResponse;
 import gift.service.CategoryService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;

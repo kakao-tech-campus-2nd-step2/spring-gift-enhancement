@@ -1,11 +1,14 @@
 package gift.model;
 
+import static gift.util.Constants.INVALID_COLOR;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "category")
@@ -18,6 +21,7 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = INVALID_COLOR)
     private String color;
 
     private String imageUrl;
