@@ -3,6 +3,7 @@ package gift.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.domain.Category;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.WishedProduct;
@@ -20,22 +21,27 @@ import org.springframework.data.domain.Pageable;
 public class WishedProductRepositoryTest {
 
     @Autowired
-    private WishedProductRepository wishedProductRepository;
-    @Autowired
     private MemberRepository memberRepository;
     @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private WishedProductRepository wishedProductRepository;
 
     private Member member;
+    private Category category;
     private Product product;
     private WishedProduct wishedProduct;
 
     @BeforeEach
     void setup() {
         member = new Member("admin@gmail.com", "admin");
-        memberRepository.save(member);
-        product = new Product("test", 1000, "testImage");
-        productRepository.save(product);
+        member = memberRepository.save(member);
+        category = new Category("test", "#FFFFFF", "testImageUrl", "test");
+        category = categoryRepository.save(category);
+        product = new Product("test", 1000, "testImage", category);
+        product = productRepository.save(product);
         wishedProduct = new WishedProduct(member, product, 3);
     }
 

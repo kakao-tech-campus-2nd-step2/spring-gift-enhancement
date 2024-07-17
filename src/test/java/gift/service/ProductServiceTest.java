@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.ProductDTO;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ProductServiceTest {
 
     @Mock
+    private CategoryRepository categoryRepository;
+    @Mock
     private ProductRepository productRepository;
 
     @InjectMocks
@@ -28,7 +32,9 @@ public class ProductServiceTest {
     @Test
     void addProduct() {
         // given
-        Product product = new Product(1L, "test", 1234, "testImage");
+        Category category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
+        Product product = new Product(1L, "test", 1234, "testImage", category);
+        when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
         // when
@@ -43,7 +49,8 @@ public class ProductServiceTest {
     void getProduct() {
         // given
         long id = 1L;
-        Product product = new Product(id, "test", 1234, "testImage");
+        Category category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
+        Product product = new Product(id, "test", 1234, "testImage", category);
         when(productRepository.findById(id)).thenReturn(Optional.of(product));
 
         // when
@@ -58,7 +65,10 @@ public class ProductServiceTest {
     void updateProduct() {
         // given
         long id = 1L;
-        Product updatedProduct = new Product(id, "updatedTest", 12345, "updatedTestImage");
+        Category category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
+        Product updatedProduct = new Product(id, "updatedTest", 12345, "updatedTestImage",
+            category);
+        when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
         when(productRepository.findById(id)).thenReturn(Optional.of(updatedProduct));
         when(productRepository.save(any(Product.class))).thenReturn(updatedProduct);
 
