@@ -9,8 +9,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
-public record ProductDto(
-    Long id,
+public record ProductRequestDto(
 
     @NotNull(message = "카테고리를 지정해주세요.")
     Long categoryId,
@@ -26,9 +25,9 @@ public record ProductDto(
 
     @NotBlank(message = "상품 이미지 주소는 필수 입력 필드입니다.")
     @URL(message = "잘못된 URL 형식입니다.")
-    String imageUrl)
-{
+    String imageUrl
+) {
     public Product toProduct(Category category) {
-        return new Product(id, category, name, price, imageUrl);
+        return new Product(null, category, name, price, imageUrl);
     }
 }

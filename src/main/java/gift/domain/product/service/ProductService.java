@@ -1,7 +1,8 @@
 package gift.domain.product.service;
 
+import gift.domain.product.dto.ProductRequestDto;
+import gift.domain.product.dto.ProductResponseDto;
 import gift.domain.product.repository.ProductJpaRepository;
-import gift.domain.product.dto.ProductDto;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import gift.domain.wishlist.service.WishlistService;
@@ -25,28 +26,38 @@ public class ProductService {
         this.wishlistService = wishlistService;
     }
 
-    public Product create(ProductDto productDto) {
-        Category category = categoryService.readById(productDto.categoryId());
-        Product product = productDto.toProduct(category);
-        return productJpaRepository.save(product);
+    public ProductResponseDto create(ProductRequestDto productRequestDto) {
+        Category category = categoryService.readById(productRequestDto.categoryId());
+        Product product = productRequestDto.toProduct(category);
+
+        Product savedProduct = productJpaRepository.save(product);
+        return ProductResponseDto.from(savedProduct);
     }
 
-    public Page<Product> readAll(Pageable pageable) {
-        return productJpaRepository.findAll(pageable);
+    public Page<ProductResponseDto> readAll(Pageable pageable) {
+        Page<Product> foundProducts = productJpaRepository.findAll(pageable);
+
+        if (foundProducts == null) {
+            return Page.empty(pageable);
+        }
+        return foundProducts.map(ProductResponseDto::from);
     }
 
-    public Product readById(long productId) {
-        return productJpaRepository.findById(productId)
+    public ProductResponseDto readById(long productId) {
+        Product foundProduct = productJpaRepository.findById(productId)
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
+        return ProductResponseDto.from(foundProduct);
     }
 
-    public Product update(long productId, ProductDto productDto) {
+    public ProductResponseDto update(long productId, ProductRequestDto productRequestDto) {
         Product product = productJpaRepository.findById(productId)
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
+        Category category = categoryService.readById(productRequestDto.categoryId());
 
-        Category category = categoryService.readById(productDto.categoryId());
-        product.updateInfo(category, productDto.name(), productDto.price(), productDto.imageUrl());
-        return productJpaRepository.save(product);
+        product.updateInfo(category, productRequestDto.name(), productRequestDto.price(), productRequestDto.imageUrl());
+
+        Product savedProduct = productJpaRepository.save(product);
+        return ProductResponseDto.from(savedProduct);
     }
 
     public void delete(long productId) {
