@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
@@ -146,6 +147,60 @@ class ProductServiceTest {
         //when & then
         assertThrows(ProductNotFoundException.class, () -> productService.removeProduct(productId));
 
+        then(productRepository).should().findById(productId);
+    }
+
+    @DisplayName("상품에 존재하는 모든 옵션을 조회해 반환한다.")
+    @Test
+    void getOptions() throws Exception {
+        //given
+        Long productId = 1L;
+
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(new Product()));
+
+        //when
+        productService.getOptions(productId);
+
+        //then
+        then(productRepository).should().findById(anyLong());
+    }
+    
+    @DisplayName("상품에 옵션 하나를 추가한다.")
+    @Test
+    void addOption() throws Exception {
+        //given
+        Long productId = 1L;
+        OptionRequest request = new OptionRequest("옵션", 2500L);
+
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(new Product()));
+
+        //when
+        productService.addOption(productId, request);
+
+        //then
+        then(productRepository).should().findById(anyLong());
+    }
+
+    @DisplayName("상품 ID와 옵션 ID를 받아 상품(id)에 존재하는 옵션(id)을 삭제한다.")
+    @Test
+    void removeOption() throws Exception {
+        //given
+        Long productId = 1L;
+        Long optionId = 1L;
+
+        Product product = new Product();
+        product.setId(productId);
+        Option option = new Option(product, "옵션", 123L);
+        option.setId(optionId);
+
+        product.getOptions().add(option);
+
+        given(productRepository.findById(productId)).willReturn(Optional.of(product));
+
+        //when
+        productService.removeOption(productId, optionId);
+
+        //then
         then(productRepository).should().findById(productId);
     }
 
