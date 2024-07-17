@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.response.OptionResponse;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,6 +26,10 @@ public class Option {
     private Long quantity;
 
     protected Option() {
+    }
+
+    public OptionResponse toDto() {
+        return new OptionResponse(this.id, this.name, this.quantity);
     }
 
 }

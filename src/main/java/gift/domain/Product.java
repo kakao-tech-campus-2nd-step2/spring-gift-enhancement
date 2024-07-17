@@ -44,6 +44,10 @@ public class Product {
         return price;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

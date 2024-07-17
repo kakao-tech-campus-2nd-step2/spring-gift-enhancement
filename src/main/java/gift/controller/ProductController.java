@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.request.ProductRequest;
+import gift.response.OptionResponse;
 import gift.response.ProductResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -11,6 +12,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/api/products")
 @RestController
@@ -56,6 +59,14 @@ public class ProductController {
         productService.removeProduct(productId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{productId}/options")
+    public ResponseEntity<List<OptionResponse>> optionList(@PathVariable Long productId) {
+        List<OptionResponse> options = productService.getOptions(productId);
+
+        return ResponseEntity.ok()
+                .body(options);
     }
 
 }
