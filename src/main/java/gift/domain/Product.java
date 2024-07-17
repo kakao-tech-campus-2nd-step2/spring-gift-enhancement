@@ -1,17 +1,20 @@
 package gift.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import gift.util.page.PageParam;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class Product {
 
     private Product() {
     }
 
-    public static class getList extends PageParam{}
+    public static class getList extends PageParam {
+
+    }
 
     public static class CreateProduct {
 
@@ -26,23 +29,46 @@ public class Product {
         private Integer price;
         @NotNull(message = "imageUrl은 필수 입니다.")
         private String imageUrl;
+        @NotNull
+        private Long categoryId;
 
-        public CreateProduct(String name, Integer price, String imageUrl) {
+        public CreateProduct(String name, Integer price, String imageUrl, Long categoryId) {
             this.name = name;
             this.price = price;
             this.imageUrl = imageUrl;
+            this.categoryId = categoryId;
         }
 
         public String getName() {
             return name;
         }
 
+        public void setName(String name) {
+            this.name = name;
+        }
+
         public Integer getPrice() {
             return price;
         }
 
+        public void setPrice(Integer price) {
+            this.price = price;
+        }
+
         public String getImageUrl() {
             return imageUrl;
+        }
+
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+        }
+
+        public Long getCategoryId() {
+            return categoryId;
+        }
+
+        public void setCategoryId(Long categoryId) {
+            this.categoryId = categoryId;
         }
     }
 
@@ -59,11 +85,14 @@ public class Product {
         private Integer price;
         @NotNull(message = "imageUrl은 필수 입니다.")
         private String imageUrl;
+        @NotNull
+        private Long categoryId;
 
-        public UpdateProduct(String name, Integer price, String imageUrl) {
+        public UpdateProduct(String name, Integer price, String imageUrl, Long categoryId) {
             this.name = name;
             this.price = price;
             this.imageUrl = imageUrl;
+            this.categoryId = categoryId;
         }
 
         public String getName() {
@@ -76,6 +105,14 @@ public class Product {
 
         public String getImageUrl() {
             return imageUrl;
+        }
+
+        public Long getCategoryId() {
+            return categoryId;
+        }
+
+        public void setCategoryId(Long categoryId) {
+            this.categoryId = categoryId;
         }
     }
 
@@ -95,6 +132,63 @@ public class Product {
 
         public String getName() {
             return name;
+        }
+    }
+
+    public static class ProductDetail {
+
+        private Long id;
+        private String name;
+        private Integer price;
+        private String imageUrl;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+        private List<Long> wishUserId;
+        private Long categoryId;
+
+        public ProductDetail(Long id, String name, Integer price, String imageUrl,
+            LocalDateTime createdAt, LocalDateTime updatedAt, List<Long> wishUserId,
+            Long categoryId) {
+            this.id = id;
+            this.name = name;
+            this.price = price;
+            this.imageUrl = imageUrl;
+            this.createdAt = createdAt;
+            this.updatedAt = updatedAt;
+            this.wishUserId = wishUserId;
+            this.categoryId = categoryId;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Integer getPrice() {
+            return price;
+        }
+
+        public String getImageUrl() {
+            return imageUrl;
+        }
+
+        public LocalDateTime getCreatedAt() {
+            return createdAt;
+        }
+
+        public LocalDateTime getUpdatedAt() {
+            return updatedAt;
+        }
+
+        public List<Long> getWishUserId() {
+            return wishUserId;
+        }
+
+        public Long getCategoryId() {
+            return categoryId;
         }
     }
 
