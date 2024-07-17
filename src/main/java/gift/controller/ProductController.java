@@ -1,8 +1,11 @@
 package gift.controller;
 
+import gift.dto.ProductDto;
 import gift.exception.NonIntegerPriceException;
 import gift.exception.ProductNotFoundException;
+import gift.model.Category;
 import gift.model.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -27,10 +30,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService
-    ) {
+    public ProductController(ProductService productService,
+        CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
 
@@ -78,20 +83,21 @@ public class ProductController {
 
     @GetMapping("/product/add")
     public String showAddProductForm(Model model) {
-        model.addAttribute("product", new Product());
+        model.addAttribute("productDto", new ProductDto());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "addproductform";
     }
 
     @PostMapping("/product/add")
-    public String createProduct(@Valid @ModelAttribute(name = "product") Product product,
+    public String createProduct(@Valid @ModelAttribute(name = "product") ProductDto productDto,
         Model model)
         throws NonIntegerPriceException {
         try {
-            productService.createProduct(product);
+            productService.createProduct(productDto);
             return "redirect:/";
         } catch (NonIntegerPriceException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("product", product);  // 입력된 데이터 유지
+            model.addAttribute("product", productDto);  // 입력된 데이터 유지
             return "addproductform";  // 같은 페이지로 돌아감
         }
     }
