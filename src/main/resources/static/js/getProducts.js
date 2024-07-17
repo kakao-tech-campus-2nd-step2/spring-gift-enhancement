@@ -149,12 +149,16 @@ function saveAddProduct() {
   const productImage = document.getElementById('productImage').value;
   const categoryName = document.getElementById('productCategoryName').value;
 
+  let optionName = prompt("옵션 이름을 입력해주세요");
+  let optionQuantity = prompt("옵션 수량을 입력해주세요.");
 
   let requestJson = {
     "name": productName,
     "price": productPrice,
     "imageUrl": productImage,
-    "categoryName" : categoryName
+    "categoryName" : categoryName,
+    "optionName" : optionName,
+    "optionQuantity" : optionQuantity
   };
 
   console.log(JSON.stringify(requestJson));
@@ -185,6 +189,10 @@ function saveAddProduct() {
       }
     }
   });
+
+
+
+
 }
 
 function addWishList(button){
@@ -359,7 +367,9 @@ function autoAddProduct(button){
       "name": "커피" + i,
       "price": 10000 + i,
       "imageUrl": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
-      "categoryName" : "기타"
+      "categoryName" : "기타",
+      "optionName" : "옵션" + i,
+      "optionQuantity" : i
     };
 
     $.ajax({
