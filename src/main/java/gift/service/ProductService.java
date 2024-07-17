@@ -1,5 +1,7 @@
 package gift.service;
 
+import gift.dto.OptionRequestDTO;
+import gift.dto.ProductPostRequestDTO;
 import gift.dto.ProductResponseDTO;
 import gift.dto.ProductRequestDTO;
 import gift.entity.Category;
@@ -9,6 +11,7 @@ import gift.exception.BadRequestExceptions.InvalidIdException;
 import gift.exception.BadRequestExceptions.NoSuchProductIdException;
 import gift.exception.InternalServerExceptions.InternalServerException;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import gift.util.validator.databaseValidator.CategoryDatabaseValidator;
@@ -29,24 +32,30 @@ public class ProductService {
     private final WishRepository wishRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryDatabaseValidator categoryDatabaseValidator;
+    private final OptionService optionService;
+    private final OptionRepository optionRepository;
 
     @Autowired
     public ProductService(ProductRepository productRepository, WishRepository wishRepository,
             CategoryRepository categoryRepository,
-            CategoryDatabaseValidator categoryDatabaseValidator) {
+            CategoryDatabaseValidator categoryDatabaseValidator, OptionService optionService,
+            OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.wishRepository = wishRepository;
         this.categoryRepository = categoryRepository;
         this.categoryDatabaseValidator = categoryDatabaseValidator;
+        this.optionService = optionService;
+        this.optionRepository = optionRepository;
     }
 
     @Transactional
-    public void addProduct(ProductRequestDTO productRequestDTO) throws RuntimeException {
+    public void addProduct(ProductPostRequestDTO productPostRequestDTO) throws RuntimeException {
         try {
-            Category category = categoryDatabaseValidator.validate(productRequestDTO.categoryName());
-            Product product = productRequestDTO.convertToProduct(category);
+            Category category = categoryDatabaseValidator.validate(productPostRequestDTO.categoryName());
+            Product product = productPostRequestDTO.convertToProduct(category);
             categoryRepository.save(product.getCategory());
             productRepository.save(product);
+            optionService.addOption(product.getId(), new OptionRequestDTO(0L, product.getId(), productPostRequestDTO.optionName(), productPostRequestDTO.optionQuantity()));
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException("잘못된 제품 값을 입력했습니다. 입력 칸 옆의 설명을 다시 확인해주세요");
         } catch (BadRequestException e) {
@@ -87,7 +96,8 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long id) throws RuntimeException {
         try {
-            wishRepository.deleteByProductId(id); // 외래키 제약조건
+            wishRepository.deleteAllByProductId(id); // 외래키 제약조건
+            optionRepository.deleteAllByProductId(id); // 외래키 제약조건
             productRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchProductIdException("id가 %d인 상품은 존재하지 않습니다.".formatted(id));
