@@ -1,6 +1,5 @@
 package gift.model.product;
 
-import gift.model.wish.Wish;
 import jakarta.persistence.*;
 
 import java.util.List;

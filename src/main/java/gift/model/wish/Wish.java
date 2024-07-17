@@ -32,10 +32,14 @@ public class Wish {
         this.amount = amount;
     }
 
-    public void updateWish(WishDto wishDto){
-        this.product = wishDto.getProduct();
-        this.member = wishDto.getMember();
-        this.amount = wishDto.getAmount();
+    public void updateWish(Wish wish){
+        this.product = wish.getProduct();
+        this.member = wish.getMember();
+        this.amount = wish.getAmount();
+    }
+  
+    public Long getId(){
+        return id;
     }
 
     public Product getProduct(){

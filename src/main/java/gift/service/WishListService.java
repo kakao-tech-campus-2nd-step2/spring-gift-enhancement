@@ -29,8 +29,9 @@ public class WishListService {
     }
 
     public void updateWish(Long id, WishDto wishDto){
-        Wish wish = wishRepository.findById(id).get();
-        wish.updateWish(wishDto);
-        wishRepository.save(wish);
+        Wish targetWish = wishRepository.findById(id).get();
+        Wish newWish = new Wish(wishDto.getProduct(),wishDto.getMember(),wishDto.getAmount());
+        targetWish.updateWish(newWish);
+        wishRepository.save(targetWish);
     }
 }
