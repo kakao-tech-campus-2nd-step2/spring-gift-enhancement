@@ -10,7 +10,7 @@ import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.request.OptionRequest;
-import gift.request.ProductRequest;
+import gift.request.ProductCreateRequest;
 import gift.request.ProductUpdateRequest;
 import gift.response.OptionResponse;
 import gift.response.ProductResponse;
@@ -52,7 +52,7 @@ public class ProductService {
                 .toDto();
     }
 
-    public void addProduct(ProductRequest request) {
+    public void addProduct(ProductCreateRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(CategoryNotFoundException::new);
         Product product = new Product(request.getName(), request.getPrice(), request.getImageUrl(), category);
