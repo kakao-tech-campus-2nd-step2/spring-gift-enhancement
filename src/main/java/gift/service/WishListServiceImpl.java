@@ -15,8 +15,10 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class WishListServiceImpl implements WishListService {
 
     private final JpaMemberRepository jpaMemberRepository;
@@ -34,14 +36,18 @@ public class WishListServiceImpl implements WishListService {
     public void addProduct(long memberId, long productId) {
         Member member = jpaMemberRepository.findById(memberId).orElseThrow(MemberNoSuchException::new);
         Product product = jpaProductRepository.findById(productId).orElseThrow();
-        member.addProduct(product);
+        Wish wish = new Wish(member, product);
+        member.addWish(wish);
+        jpaWishRepository.save(wish);
     }
 
     @Override
     public void deleteProduct(long memberId, long productId) {
         Member member = jpaMemberRepository.findById(memberId).orElseThrow(MemberNoSuchException::new);
         Product product = jpaProductRepository.findById(productId).orElseThrow();
-        member.delProduct(product);
+        Wish wish = jpaWishRepository.findByMemberIdAndProductId(memberId,productId).orElseThrow();
+        member.delWish(wish);
+        jpaWishRepository.delete(wish);
     }
 
     @Override

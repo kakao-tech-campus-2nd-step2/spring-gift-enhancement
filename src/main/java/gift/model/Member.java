@@ -31,8 +31,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
-    private String token;
-
     @OneToMany(mappedBy = "member")
     private List<Wish> wishList = new ArrayList<>();
 
@@ -66,22 +64,12 @@ public class Member {
         return role;
     }
 
-    public String getToken() {
-        return token;
+    public void addWish(Wish wish) {
+        wishList.add(wish);
     }
 
-    public void addProduct(Product product) {
-        wishList.add(new Wish(this,product));
-    }
-
-    public void delProduct(Product product) {
-        wishList.remove(new Wish(this,product));
-    }
-
-    public void updateProductCount(Product product,int count) {
-        wishList.stream().findAny().ifPresent(wish -> {
-            wish.setValue(count);
-        });
+    public void delWish(Wish wish) {
+        wishList.remove(wish);
     }
 
     public List<Wish> getWishList() {
