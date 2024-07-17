@@ -1,22 +1,13 @@
-# spring-gift-jpa
+# spring-gift-enhancement
 ## Step1
-- 지금까지 작성한 JdbcTemplate 기반 코드를 JPA로 리팩터링하고 실제 도메인 모델을 어떻게 구성하고 객체와 테이블을 어떻게 매핑해야 하는지 알아본다.
-  - [x] Entity 클래스 작성
-  - [X] JpaRepository 작성
-  - [X] Service 리팩토링
-- @DataJpaTest를 사용하여 학습 테스트를 해본다.
-  - [X] ProductRepositoryTest
-  - [X] UserRepositoryTest
-  - [X] WishListRepositoryTest
+- 상품 정보에 카테고리를 추가한다. 상품과 카테고리 모델 간의 관계를 고려하여 설계하고 구현한다.
+  - 상품에는 항상 하나의 카테고리가 있어야 한다
+    - 상품 카테고리는 수정할 수 있다
+  - 카테고리는 1차 카테고리만 있으며 2차 카테고리는 고려하지 않는다
+  - 카테고리의 예시는 아래와 같다
+    - 교환권, 상품권, 뷰티, 패션, 식품, 리빙/도서, 레저/스포츠, 아티스트/캐릭터, 유아동/반려, 디지털/가전, 카카오프렌즈, 트렌드 선물, 백화점, ...
 
-## Step2
-- 지금까지 작성한 JdbcTemplate 기반 코드를 JPA로 리팩터링하고 실제 도메인 모델을 어떻게 구성하고 객체와 테이블을 어떻게 매핑해야 하는지 알아본다.
-  - [x] Entity로 리팩토링
-  - [x] JpaRepository로 변경 및 추가적으로 필요한 JPA 메서드 작성
-  - [X] Repository 변경으로 인한 Service, Controller 코드 수정
-  - [x] JPA Test 작성
-
-## Step3
-- 상품과 위시 리스트 보기에 페이지네이션을 구현한다.
-[x] Product 페이지네이션 구현
-[x] WishList 페이지네이션 구현
+### 구현
+- [X] Product와 Category의 연관관계 구현
+- [X] Repository, Service, Controller 구현
+- [X] 테스트 코드 작성
