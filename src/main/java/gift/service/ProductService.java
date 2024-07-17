@@ -7,6 +7,7 @@ import gift.exception.CategoryNotFoundException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
+import gift.request.OptionRequest;
 import gift.request.ProductRequest;
 import gift.response.OptionResponse;
 import gift.response.ProductResponse;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 @Service
 public class ProductService {
 
@@ -29,6 +31,7 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
+    @Transactional(readOnly = true)
     public Page<ProductResponse> getProducts(Pageable pageable) {
         List<ProductResponse> response = productRepository.findAll(pageable).stream()
                 .map(Product::toDto)
@@ -37,6 +40,7 @@ public class ProductService {
         return new PageImpl<>(response, pageable, response.size());
     }
 
+    @Transactional(readOnly = true)
     public ProductResponse getProduct(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new)
@@ -51,7 +55,6 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    @Transactional
     public void editProduct(Long productId, ProductRequest request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
@@ -71,6 +74,7 @@ public class ProductService {
         productRepository.deleteById(product.getId());
     }
 
+    @Transactional(readOnly = true)
     public List<OptionResponse> getOptions(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
@@ -78,6 +82,15 @@ public class ProductService {
         return product.getOptions().stream()
                 .map(Option::toDto)
                 .toList();
+    }
+
+    public void addOption(Long productId, OptionRequest request) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+
+        Option option = new Option(product, request.getName(), request.getQuantity());
+
+        product.getOptions().add(option);
     }
 
 }

@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.request.OptionRequest;
 import gift.request.ProductRequest;
 import gift.response.OptionResponse;
 import gift.response.ProductResponse;
@@ -67,6 +68,13 @@ public class ProductController {
 
         return ResponseEntity.ok()
                 .body(options);
+    }
+
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<Void> optionAdd(@PathVariable Long productId, @RequestBody @Valid OptionRequest request) {
+        productService.addOption(productId, request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }
