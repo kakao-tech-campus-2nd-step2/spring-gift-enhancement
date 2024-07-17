@@ -38,7 +38,7 @@ public class WishController {
     public ResponseEntity<WishResponse> createWish(@RequestBody ProductIdRequest productIdRequest,
         @LoginMember Member member) {
         WishRequest wishRequest = new WishRequest(member.getId(), productIdRequest.getProductId());
-        WishResponse wishResponse = wishService.addWish(wishRequest);
+        WishResponse wishResponse = wishService.createWish(wishRequest);
 
         return new ResponseEntity<>(wishResponse, HttpStatus.CREATED);
     }
