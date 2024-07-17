@@ -1,9 +1,7 @@
 package gift.Service;
 
 import gift.Entity.UserEntity;
-import gift.Entity.WishEntity;
 import gift.Repository.UserRepository;
-import gift.Repository.WishRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,9 +18,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private WishRepository wishRepository;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -43,9 +38,9 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        // 관련된 WishEntity들도 삭제
-        List<WishEntity> wishes = wishRepository.findByUserId(id);
-        wishRepository.deleteAll(wishes);
+        //UserEntity에서 WishEntity와의 연관 관계를
+        //cascade = CascadeType.ALL로 설정해놓았기 때문에
+        //관련 Wish는 따로 삭제할 필요가 없음.
         userRepository.deleteById(id);
     }
 
