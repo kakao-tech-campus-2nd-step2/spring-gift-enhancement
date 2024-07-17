@@ -25,7 +25,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Page<Product> getAllProducts(Pageable pageable) {
         Page<ProductEntity> productEntities = productRepository.findAll(pageable);
-        return productEntities.map(this::entityToDto);
+        return productEntities.map(ProductEntity::toDto);
     }
 
     //단일 상품 조회 기능
@@ -33,7 +33,7 @@ public class ProductService {
     public Product getProductById(Long id) {
         ProductEntity productEntity = productRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Product not found"));
-        return entityToDto(productEntity);
+        return ProductEntity.toDto(productEntity);
 
     }
 
@@ -42,7 +42,7 @@ public class ProductService {
     public List<Product> searchProduct(String name) {
         List<ProductEntity> productEntities = productRepository.findByNameContaining(name);
         return productEntities.stream()
-            .map(this::entityToDto)
+            .map(ProductEntity::toDto)
             .collect(Collectors.toList());
     }
 
@@ -50,7 +50,11 @@ public class ProductService {
     @Transactional
     public void addProduct(Product product) {
         checkAlreadyExists(product);
-        productRepository.save(dtoToEntity(product));
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setName(product.getName());
+        productEntity.setPrice(product.getPrice());
+        productEntity.setImageUrl(product.getImageUrl());
+        productRepository.save(productEntity);
     }
 
     //상품 수정 기능
@@ -81,15 +85,6 @@ public class ProductService {
         if (exists) {
             throw new AlreadyExistsException("해당 상품이 이미 존재 합니다!");
         }
-    }
-
-    private Product entityToDto(ProductEntity productEntity) {
-        return new Product(productEntity.getName(), productEntity.getPrice(),
-            productEntity.getImageUrl());
-    }
-
-    private ProductEntity dtoToEntity(Product dto) {
-        return new ProductEntity(dto.getName(), dto.getPrice(), dto.getImageUrl());
     }
 
 }

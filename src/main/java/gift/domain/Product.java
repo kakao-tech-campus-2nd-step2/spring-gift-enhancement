@@ -32,6 +32,7 @@ public class Product {
     private Long categoryId;
 
     public Product() {
+
     }
 
     public Product(String name, Long price, String imageUrl, Long categoryId) {
@@ -79,7 +80,7 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }\
+    }
 
     public Long getCategoryId() {
         return categoryId;

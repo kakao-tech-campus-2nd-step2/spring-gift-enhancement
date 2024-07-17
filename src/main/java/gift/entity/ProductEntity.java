@@ -1,6 +1,7 @@
 package gift.entity;
 
 
+import gift.domain.Product;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -85,6 +86,10 @@ public class ProductEntity {
 
     public void setCategoryEntity(CategoryEntity categoryEntity) {
         this.categoryEntity = categoryEntity;
+    }
+
+    public static Product toDto(ProductEntity productEntity) {
+        return new Product(productEntity.getName(), productEntity.getPrice(), productEntity.getImageUrl(), productEntity.getCategoryEntity().getId());
     }
 
 }
