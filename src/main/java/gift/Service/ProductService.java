@@ -7,8 +7,6 @@ import gift.Entity.ProductEntity;
 import gift.Entity.WishEntity;
 import gift.Entity.CategoryEntity;
 import gift.Repository.ProductRepository;
-import gift.Repository.WishRepository;
-import gift.Repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,11 +22,6 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private WishRepository wishRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     public List<ProductEntity> findAllProducts() {
         return productRepository.findAll();
