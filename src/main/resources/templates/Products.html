@@ -28,6 +28,9 @@
     <td th:text="${product.imageUrl}"></td>
     <td th:text="${product.categoryId}"></td>
     <td>
+      <a th:href="@{/admin/products/{id}/options(id=${product.id})}">옵션 관리</a>
+    </td>
+    <td>
       <a th:href="@{/admin/products/edit/{id}(id=${product.id})}">수정</a> |
       <form th:action="@{/admin/products/{id}(id=${product.id})}" method="post" style="display:inline;">
         <input type="hidden" name="_method" value="DELETE" />
