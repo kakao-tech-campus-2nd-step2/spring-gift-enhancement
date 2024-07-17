@@ -16,16 +16,17 @@ public class ProductDTO {
     private String imageUrl;
 
     private List<WishDTO> wishes;
+    private CategoryDTO category;
 
     public ProductDTO() {}
 
-
-    public ProductDTO(Long id, String name, int price, String imageUrl, List<WishDTO> wishes) {
+    public ProductDTO(Long id, String name, int price, String imageUrl, List<WishDTO> wishes, CategoryDTO category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.wishes = wishes;
+        this.category = category;
     }
 
     public Long getId() {
@@ -66,5 +67,13 @@ public class ProductDTO {
 
     public void setWishes(List<WishDTO> wishes) {
         this.wishes = wishes;
+    }
+
+    public CategoryDTO getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryDTO category) {
+        this.category = category;
     }
 }

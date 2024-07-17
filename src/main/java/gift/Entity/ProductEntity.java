@@ -22,7 +22,10 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishEntity> wishes;
 
-    public ProductEntity(long l, String product1, double v) {}
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
+
 
     public ProductEntity() {}
 
@@ -71,5 +74,13 @@ public class ProductEntity {
 
     public void setWishes(List<WishEntity> wishes) {
         this.wishes = wishes;
+    }
+
+    public CategoryEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
     }
 }
