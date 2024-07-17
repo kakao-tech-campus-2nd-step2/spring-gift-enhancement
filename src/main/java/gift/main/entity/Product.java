@@ -30,7 +30,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,  cascade = CascadeType.DETACH)
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = CascadeType.DETACH) //FetchType.LAZY는 객체를 getter쓸때 가져온다
     private List<WishProduct> wishProducts;
     //물건을 삭제하는 경우 -> 위시리스트 삭제...?
 
@@ -97,4 +97,15 @@ public class Product {
         return this.category.getUniNumber();
     }
 
+    public User getSeller() {
+        return seller;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public List<WishProduct> getWishProducts() {
+        return wishProducts;
+    }
 }

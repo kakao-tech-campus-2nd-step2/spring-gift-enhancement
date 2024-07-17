@@ -11,6 +11,7 @@ import gift.main.entity.User;
 import gift.main.repository.CategoryRepository;
 import gift.main.repository.ProductRepository;
 import gift.main.repository.UserRepository;
+import gift.main.repository.WishProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,13 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final WishProductRepository wishProductRepository;
 
-    public ProductService(ProductRepository productRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, UserRepository userRepository, CategoryRepository categoryRepository, WishProductRepository wishProductRepository) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.wishProductRepository = wishProductRepository;
     }
 
 
@@ -47,6 +50,14 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        product.getWishProducts().stream()
+                        .forEach((wishProduct)->{
+                            wishProduct.setProductIdToNull();
+                            wishProductRepository.save(wishProduct);
+                        });
+
         productRepository.deleteById(id);
     }
 
