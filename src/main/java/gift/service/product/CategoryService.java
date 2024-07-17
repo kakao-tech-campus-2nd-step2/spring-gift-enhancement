@@ -1,7 +1,5 @@
 package gift.service.product;
 
-import gift.controller.product.dto.CategoryResponse;
-import gift.controller.product.dto.CategoryResponse.Info;
 import gift.global.validate.NotFoundException;
 import gift.repository.product.CategoryRepository;
 import gift.service.product.dto.CategoryCommand;
