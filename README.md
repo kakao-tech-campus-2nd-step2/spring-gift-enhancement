@@ -16,7 +16,7 @@
 - test 만들기 (mock 이용)
 
 - ~~카테고리 model~~
-- 카테고리 repository
+- ~~카테고리 repository~~
 
 - 카테고리 서비스 : 목록 조회, 목록 paging
 - 카테고리 서비스 : 카테고리 추가
