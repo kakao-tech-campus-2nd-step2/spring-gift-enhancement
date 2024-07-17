@@ -2,11 +2,11 @@ package gift.product.domain;
 
 public class ProductDTO {
 
-    Long id;
-    String name;
-    Long price;
-    String imageUrl;
-    Long categoryId;
+    private Long id;
+    private String name;
+    private Long price;
+    private String imageUrl;
+    private Long categoryId;
 
     public ProductDTO() {
         id = 0L;
