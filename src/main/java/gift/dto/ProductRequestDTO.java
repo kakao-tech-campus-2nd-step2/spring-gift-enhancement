@@ -4,7 +4,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record ProductRequestDTO(
-                         Long id,
                          @Size (max=15, message = "이름이 15글자를 초과하였습니다.")
                          @Pattern(
                                  regexp = "^[a-zA-Z0-9-ㄱ-하-ㅣ()\\[\\]+\\-\\&/_\\s]*$",
@@ -12,4 +11,5 @@ public record ProductRequestDTO(
                          )
                          String name,
                          Long price,
-                         String imageUrl) { }
+                         String imageUrl,
+                         Long categoryId) { }
