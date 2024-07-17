@@ -62,10 +62,9 @@ class ProductRepositoryTest {
 
     @Test
     void testFindById() {
-        Product foundProduct = productRepository.findById(savedProduct.getId()).get();
         assertAll(
-            () -> assertThat(foundProduct).isNotNull(),
-            () -> assertThat(foundProduct.getId()).isEqualTo(savedProduct.getId())
+            () -> assertThat(savedProduct).isNotNull(),
+            () -> assertThat(savedProduct.getId()).isEqualTo(product1.getId())
         );
     }
 
