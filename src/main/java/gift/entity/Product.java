@@ -18,6 +18,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductWishlist> productWishlist = new ArrayList<>();
+    private Long categoryid;
 
     public Product() {
     }
@@ -26,43 +27,56 @@ public class Product {
         this.name = product.getName();
         this.price = product.getPrice();
         this.imageurl = product.getImageurl();
+        this.categoryid = product.getCategoryid();
     }
 
-    public Product(String name, int price, String imageurl) {
+    public Product(String name, int price, String imageurl, Long categoryid) {
         this.name = name;
         this.price = price;
         this.imageurl = imageurl;
+        this.categoryid = categoryid;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setProductWithCategory(ProductDTO product) {
+        this.name = product.getName();
+        this.price = product.getPrice();
+        this.imageurl = product.getImageurl();
+        this.categoryid = categoryid;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public String getImageurl() {
         return imageurl;
     }
 
+    public Long getCategoryid() {
+        return categoryid;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public void setImageurl(String imageurl) {
         this.imageurl = imageurl;
+    }
+
+    public void setCategoryid(Long categoryid) {
+        this.categoryid = categoryid;
     }
 }

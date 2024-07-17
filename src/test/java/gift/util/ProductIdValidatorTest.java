@@ -27,9 +27,8 @@ public class ProductIdValidatorTest {
     @Test
     public void save_existingProductId() {
         //given
-        ProductDTO product = new ProductDTO("abc", 123, "www.test.com");
-        Product savedProduct = productService.save(new Product(product));
-        System.out.println(savedProduct == null);
+        ProductDTO product = new ProductDTO("abc", 123, "www.test.com", 1L);
+        Product savedProduct = productService.save(product);
 
         WishlistDTO wishList = new WishlistDTO(savedProduct.getId());
 
@@ -43,8 +42,8 @@ public class ProductIdValidatorTest {
     @Test
     public void save_nonexistentProductId() {
         //given
-        ProductDTO product = new ProductDTO("abc", 123, "www.test.com");
-        Product savedProduct = productService.save(new Product(product));
+        ProductDTO product = new ProductDTO("abc", 123, "www.test.com", 1L);
+        Product savedProduct = productService.save(product);
 
         WishlistDTO wishList = new WishlistDTO(savedProduct.getId() + 1);
 

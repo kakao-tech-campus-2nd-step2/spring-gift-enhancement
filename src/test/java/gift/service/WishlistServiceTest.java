@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.entity.Product;
+import gift.entity.ProductDTO;
 import gift.entity.WishlistDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +27,8 @@ public class WishlistServiceTest {
     void wishlistDeleteCascadeProductTest() {
         // given
         String testEmail = "test@gmail.com";
-        Product product1 = productService.save(new Product("test1", 123, "test.com"));
-        Product product2 = productService.save(new Product("test2", 123, "test.com"));
+        Product product1 = productService.save(new ProductDTO("test1", 123, "test.com", 1L));
+        Product product2 = productService.save(new ProductDTO("test2", 123, "test.com", 1L));
         wishlistService.addWishlistProduct(testEmail, new WishlistDTO(product1.getId()));
         wishlistService.addWishlistProduct(testEmail, new WishlistDTO(product2.getId()));
 
@@ -45,9 +46,9 @@ public class WishlistServiceTest {
         // given
         String testEmail1 = "test1@gmail.com";
         String testEmail2 = "test2@gmail.com";
-        Product product1 = productService.save(new Product("test1", 123, "test.com"));
-        Product product2 = productService.save(new Product("test2", 123, "test.com"));
-        Product product3 = productService.save(new Product("test3", 123, "test.com"));
+        Product product1 = productService.save(new ProductDTO("test1", 123, "test.com", 1L));
+        Product product2 = productService.save(new ProductDTO("test2", 123, "test.com", 1L));
+        Product product3 = productService.save(new ProductDTO("test3", 123, "test.com", 1L));
 
         // when
         wishlistService.addWishlistProduct(testEmail1, new WishlistDTO(product1.getId()));

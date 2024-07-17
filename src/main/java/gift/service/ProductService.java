@@ -1,9 +1,6 @@
 package gift.service;
 
-import gift.entity.Product;
-import gift.entity.ProductDTO;
-import gift.entity.ProductWishlist;
-import gift.entity.Wishlist;
+import gift.entity.*;
 import gift.exception.ResourceNotFoundException;
 import gift.repository.ProductRepository;
 import gift.repository.ProductWishlistRepository;
@@ -20,11 +17,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductWishlistRepository productWishlistRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ProductWishlistRepository productWishlistRepository) {
+    public ProductService(ProductRepository productRepository, ProductWishlistRepository productWishlistRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
         this.productWishlistRepository = productWishlistRepository;
+        this.categoryService = categoryService;
     }
 
     public Page<Product> findAll(Pageable pageable) {
@@ -44,22 +43,23 @@ public class ProductService {
         return wishlists;
     }
 
-    public Product save(Product product) {
+    public Product save(ProductDTO productDTO) {
+        Category category = categoryService.findOne(productDTO.getCategoryid());
+        productDTO.setCategoryid(category.getId());
+        Product product = new Product(productDTO);
         return productRepository.save(product);
     }
 
-    public Product update(Long id, ProductDTO product) {
-        Product foundProduct = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
-        foundProduct.setName(product.getName());
-        foundProduct.setPrice(product.getPrice());
-        foundProduct.setImageurl(product.getImageurl());
-        return productRepository.save(foundProduct);
+    public Product update(Long id, ProductDTO productDTO) {
+        Product product = findById(id);
+        Category category = categoryService.findOne(productDTO.getCategoryid());
+        productDTO.setCategoryid(category.getId());
+        product.setProductWithCategory(productDTO);
+        return productRepository.save(product);
     }
 
     public void delete(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        Product product = findById(id);
         productRepository.delete(product);
     }
 }

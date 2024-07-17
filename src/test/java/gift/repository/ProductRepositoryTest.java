@@ -115,7 +115,7 @@ public class ProductRepositoryTest {
     public List<ProductDTO> makeProducts(int n) {
         ArrayList<ProductDTO> products = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            products.add(new ProductDTO("name" + Integer.toString(i), i, "imageUrl" + Integer.toString(i)));
+            products.add(new ProductDTO("name" + Integer.toString(i), i, "imageUrl" + Integer.toString(i), 1L));
         }
         return products;
     }

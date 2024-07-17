@@ -1,8 +1,8 @@
 package gift.service;
 
-import gift.entity.Product;
-import gift.entity.Wishlist;
-import gift.entity.WishlistDTO;
+import gift.entity.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,17 +18,25 @@ import java.util.List;
 @Transactional
 public class ProductServiceTest {
 
+    @PersistenceContext
+    private EntityManager em;
+  
     @Autowired
     private ProductService productService;
     @Autowired
     private WishlistService wishlistService;
+    @Autowired
+    private CategoryService categoryService;
 
     @Test
     @DisplayName("product가 삭제되었을 때 product_wishlist에서 해당 행이 삭제되어야 함")
     void productDeleteCascadeWishlistTest() {
         // given
         String testEmail = "test@gmail.com";
-        Product product = productService.save(new Product("test", 123, "test.com"));
+
+        Category category = categoryService.save(new CategoryDTO("test", "#test", "test.com", ""));
+        Product product = productService.save(new ProductDTO("test", 123, "test.com", category.getId()));
+
         wishlistService.addWishlistProduct(testEmail, new WishlistDTO(product.getId()));
 
         // when
@@ -45,7 +53,8 @@ public class ProductServiceTest {
         // given
         String testEmail1 = "test1@gmail.com";
         String testEmail2 = "test2@gmail.com";
-        Product product = productService.save(new Product("test", 123, "test.com"));
+        Category category = categoryService.save(new CategoryDTO("test", "#test", "test.com", ""));
+        Product product = productService.save(new ProductDTO("test", 123, "test.com", category.getId()));
 
         // when
         wishlistService.addWishlistProduct(testEmail1, new WishlistDTO(product.getId()));
