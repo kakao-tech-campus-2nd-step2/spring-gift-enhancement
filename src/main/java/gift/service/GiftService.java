@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.controller.dto.OptionResponse;
 import gift.controller.dto.ProductOptionRequest;
 import gift.controller.dto.ProductRequest;
 import gift.controller.dto.ProductResponse;
@@ -89,6 +90,7 @@ public class GiftService {
         productById.setPrice(productRequest.getPrice());
         productById.setImageUrl(productRequest.getImageUrl());
         productById.setCategory(category);
+        productById.getOptions().forEach(productById::removeOption);
 
         options.forEach( option -> {
             Option saveoption = new Option(option.getName(), option.getQuantity());
@@ -106,6 +108,17 @@ public class GiftService {
             () -> new ProductNotFoundException("Product NOT FOUND"));
         productRepository.deleteById(id);
         return id;
+    }
+
+    public List<OptionResponse> getOption(Long id){
+        Product product = productRepository.findByIdWithOption(id).orElseThrow(
+            () -> new ProductNotFoundException("Product Not Found")
+        );
+        List<OptionResponse> list = product.getOptions().stream().map(options ->
+            new OptionResponse(options.getId(),options.getName(),options.getQuantity())
+        ).toList();
+
+        return list;
     }
 
 

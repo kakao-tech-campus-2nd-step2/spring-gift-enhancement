@@ -145,6 +145,11 @@ public class Product {
         wishes.remove(wish);
         wish.setProduct(null);
     }
+
+    public void removeOption(Option option) {
+        options.remove(option);
+        option.setProduct(null);
+    }
     public void updateCategory(Category category) {
         this.category = category;
     }
