@@ -16,18 +16,19 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/web/products")
-public class ProductController {
+public class ProductWebController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
-    public ProductController(ProductService productService, CategoryService categoryService) {
+    public ProductWebController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
         this.categoryService = categoryService;
     }
 
     @GetMapping
     public String getAllProducts(Model model,
-                                 @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+                                 @PageableDefault(size = 10, sort = {"id"},
+                                 direction = Sort.Direction.ASC) Pageable pageable) {
         Page<Product> productPage = productService.getProducts(pageable);
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", productPage.getNumber());

@@ -30,8 +30,9 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public void addProduct(Product product) {
+    public Product addProduct(Product product) {
         productRepository.save(product);
+        return product;
     }
 
     public Product updateProduct(Long id, Product product) {
