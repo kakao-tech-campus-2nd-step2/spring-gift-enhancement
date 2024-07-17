@@ -1,6 +1,7 @@
 package gift.api.category;
 
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Category>> getCategories() {
-        return ResponseEntity.ok().body(categoryService.getCategories());
+    public ResponseEntity<List<Category>> getCategories(Pageable pageable) {
+        return ResponseEntity.ok().body(categoryService.getCategories(pageable));
     }
 }
