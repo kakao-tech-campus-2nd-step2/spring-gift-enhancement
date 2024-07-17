@@ -22,7 +22,7 @@ public class OptionService {
         this.giftRepository = giftRepository;
     }
 
-    public void addOption(Long giftId, OptionRequest optionRequest) {
+    public void addOptionToGift(Long giftId, OptionRequest optionRequest) {
         Gift gift = giftRepository.findById(giftId)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
         Option option = optionRequest.toEntity();
@@ -47,6 +47,30 @@ public class OptionService {
         return gift.getOptions().stream()
                 .map(OptionResponse::from)
                 .toList();
+    }
+
+    public void updateOptionToGift(Long giftId, Long optionId, OptionRequest optionRequest) {
+        Gift gift = giftRepository.findById(giftId)
+                .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new NoSuchElementException("해당 옵션을 찾을 수 없습니다 id :  " + optionId));
+
+        option.modify(optionRequest.getName(), optionRequest.getQuantity());
+
+        checkDuplicateOptionName(gift, option.getName());
+
+        optionRepository.save(option);
+    }
+
+    public void deleteOptionFromGift(Long giftId, Long optionId) {
+        Gift gift = giftRepository.findById(giftId)
+                .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new NoSuchElementException("해당 옵션을 찾을 수 없습니다 id :  " + optionId));
+
+        gift.removeOption(option);
+        giftRepository.save(gift);
+        optionRepository.delete(option);
     }
 
 

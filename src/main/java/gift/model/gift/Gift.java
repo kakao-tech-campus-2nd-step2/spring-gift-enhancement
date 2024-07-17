@@ -102,4 +102,9 @@ public class Gift {
         option.setGift(this);
         this.options.add(option);
     }
+
+    public void removeOption(Option option) {
+        option.setGift(null);
+        this.options.remove(option);
+    }
 }

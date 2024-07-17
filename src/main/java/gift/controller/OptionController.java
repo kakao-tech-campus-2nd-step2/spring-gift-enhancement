@@ -3,6 +3,7 @@ package gift.controller;
 import gift.model.option.OptionRequest;
 import gift.model.option.OptionResponse;
 import gift.service.option.OptionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,10 +30,24 @@ public class OptionController {
 
     @PostMapping("/gifts/{id}")
     public ResponseEntity<String> addOptionToGift(@PathVariable("id") Long giftId,
-                                                  @RequestBody OptionRequest optionRequest) {
-        optionService.addOption(giftId, optionRequest);
+                                                  @Valid @RequestBody OptionRequest optionRequest) {
+        optionService.addOptionToGift(giftId, optionRequest);
         return ResponseEntity.ok("옵션이 상품에 추가되었습니다!");
+    }
 
+    @PutMapping("/gifts/{giftId}/{optionId}")
+    public ResponseEntity<String> updateOptionToGift(@PathVariable("giftId") Long giftId,
+                                                     @PathVariable("optionId") Long optionId,
+                                                     @Valid @RequestBody OptionRequest optionRequest) {
+        optionService.updateOptionToGift(giftId, optionId, optionRequest);
+        return ResponseEntity.ok(giftId + "번 상품에서" + optionId + "번 옵션이 변경되었습니다!");
+    }
+
+    @DeleteMapping("/gifts/{giftId}/{optionId}")
+    public ResponseEntity<String> deleteOptionFromGift(@PathVariable("giftId") Long giftId,
+                                                       @PathVariable("optionId") Long optionId) {
+        optionService.deleteOptionFromGift(giftId, optionId);
+        return ResponseEntity.ok(giftId + "번 상품에서" + optionId + "번 옵션이 삭제되었습니다!");
     }
 
 

@@ -64,4 +64,9 @@ public class Option {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public void modify(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
 }

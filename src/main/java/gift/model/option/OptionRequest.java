@@ -6,6 +6,7 @@ public class OptionRequest {
 
     @Size(max = 50, message = "옵션의 이름은 최대 50자까지 입력할 수 있습니다.")
     @Pattern(regexp = "[\\s\\(\\)\\[\\]\\+\\-&/_a-zA-Z0-9\uAC00-\uD7AF]*", message = "특수문자 오류")
+    @NotNull
     private String name;
 
     @Max(value = 99999999, message = "옵션 수량은 1억 미만의 수만 입력가능합니다.")
