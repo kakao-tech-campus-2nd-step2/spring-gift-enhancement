@@ -26,7 +26,7 @@ public class Member {
 
     protected Member() {
     }
-
+  
     public Member(String email, String password,String role) {
         this.email = email;
         this.password = password;
