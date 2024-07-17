@@ -44,7 +44,6 @@ public class WishService {
         Product product = productService.getProduct(wishDto.productId());
 
         Member member = getMember(loginMember);
-
         Wish wish = new Wish(member, product);
         return wishRepository.save(wish);
     }

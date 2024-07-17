@@ -1,7 +1,9 @@
 package gift.product.service;
 
 import gift.product.dto.ProductDto;
+import gift.product.model.Category;
 import gift.product.model.Product;
+import gift.product.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -14,8 +16,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    private final CategoryRepository categoryRepository;
+
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Product> getProductAll() {
@@ -32,17 +38,20 @@ public class ProductService {
 
     @Transactional
     public Product insertProduct(ProductDto productDto) {
-        Product product = new Product(productDto.name(), productDto.price(), productDto.imageUrl());
+        Category category = getValidatedCategory(productDto.categoryName());
 
+        Product product = new Product(productDto.name(), productDto.price(), productDto.imageUrl(),
+            category);
         return productRepository.save(product);
     }
 
     @Transactional
-    public Product updateProduct(Long id, ProductDto productDTO) {
+    public Product updateProduct(Long id, ProductDto productDto) {
         getValidatedProduct(id);
+        Category category = getValidatedCategory(productDto.categoryName());
 
-        Product product = new Product(id, productDTO.name(), productDTO.price(),
-            productDTO.imageUrl());
+        Product product = new Product(id, productDto.name(), productDto.price(),
+            productDto.imageUrl(), category);
 
         return productRepository.save(product);
     }
@@ -56,5 +65,10 @@ public class ProductService {
     private Product getValidatedProduct(Long id) {
         return productRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("해당 ID의 상품이 존재하지 않습니다."));
+    }
+
+    private Category getValidatedCategory(String categoryName) {
+        return categoryRepository.findByName(categoryName)
+            .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 존재하지 않습니다."));
     }
 }

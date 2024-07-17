@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/bootstrap.min.css}" type="text/css">
   <title>admin - wishes</title>
 </head>
 <body>
@@ -33,6 +33,7 @@
         <th class="text-center">상품명</th>
         <th class="text-center">상품 가격</th>
         <th class="text-center">상품 이미지 주소</th>
+        <th class="text-center">카테고리</th>
         <th class="text-center"></th>
         <th class="text-center"></th>
       </tr>
@@ -58,8 +59,11 @@
           <span th:text="${wish.product.imageUrl}">상품 이미지 주소 tmp</span>
         </td>
         <td class="text-center">
-          <form th:action="@{/admin/wishes/delete/{wishId}(wishId=${wish.id})}"
-                method="post" th:method="delete">
+          <span th:text="${wish.product.category.name}">카테고리 tmp</span>
+        </td>
+        <td class="text-center">
+          <form method="post"
+                th:action="@{/admin/wishes/delete/{wishId}(wishId=${wish.id})}" th:method="delete">
             <button class="btn btn-danger" type="submit">삭제</button>
           </form>
         </td>

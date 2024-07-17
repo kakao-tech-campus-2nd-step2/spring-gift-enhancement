@@ -7,4 +7,6 @@ public interface ProductDto {
     int price();
 
     String imageUrl();
+
+    String categoryName();
 }

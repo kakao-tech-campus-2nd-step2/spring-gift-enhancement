@@ -5,7 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import gift.product.dto.ClientProductDto;
+import gift.product.model.Category;
 import gift.product.model.Product;
+import gift.product.repository.CategoryRepository;
 import gift.product.service.ProductService;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,12 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 @SuppressWarnings("NonAsciiCharacters")
 class ProductServiceTest {
 
-    final ProductService productService;
+    @Autowired
+    ProductService productService;
 
     @Autowired
-    ProductServiceTest(ProductService productService) {
-        this.productService = productService;
-    }
+    CategoryRepository categoryRepository;
 
     @AfterEach
     void 상품_초기화() {
@@ -44,9 +45,14 @@ class ProductServiceTest {
 
     @Test
     void 상품_추가() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        //given
+        categoryRepository.save(new Category("테스트카테고리1"));
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
+
+        //when
         Product product = productService.insertProduct(productDTO);
 
+        //then
         assertSoftly(softly -> {
             assertThat(product.getName()).isEqualTo("사과");
             assertThat(product.getPrice()).isEqualTo(3000);
@@ -56,11 +62,15 @@ class ProductServiceTest {
 
     @Test
     void 상품_조회() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        //given
+        categoryRepository.save(new Category("테스트카테고리1"));
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
         Product insertedProduct = productService.insertProduct(productDTO);
 
+        //when
         Product product = productService.getProduct(insertedProduct.getId());
 
+        //then
         assertSoftly(softly -> {
             assertThat(product.getName()).isEqualTo("사과");
             assertThat(product.getPrice()).isEqualTo(3000);
@@ -71,11 +81,15 @@ class ProductServiceTest {
 
     @Test
     void 상품_전체_조회() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        //given
+        categoryRepository.save(new Category("테스트카테고리1"));
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
         productService.insertProduct(productDTO);
 
+        //when
         List<Product> productAll = productService.getProductAll();
 
+        //then
         assertSoftly(softly -> {
             assertThat(productAll.get(0).getName()).isEqualTo("사과");
             assertThat(productAll.get(0).getPrice()).isEqualTo(3000);
@@ -85,19 +99,25 @@ class ProductServiceTest {
 
     @Test
     void 상품_전체_조회_페이지() {
+        //given
         int PRODUCT_COUNT = 9;
         int PAGE = 1;
         int SIZE = 4;
         String SORT = "name";
         String DIRECTION = "desc";
 
+        categoryRepository.save(new Category("테스트카테고리1"));
+
         for (int i = 1; i <= PRODUCT_COUNT; i++) {
-            productService.insertProduct(new ClientProductDto("테스트" + i, 1000 + i, "테스트주소" + i));
+            productService.insertProduct(
+                new ClientProductDto("테스트" + i, 1000 + i, "테스트주소" + i, "테스트카테고리1"));
         }
 
+        //when
         Pageable pageable = PageRequest.of(PAGE, SIZE, Sort.Direction.fromString(DIRECTION), SORT);
         Page<Product> products = productService.getProductAll(pageable);
 
+        //then
         assertSoftly(softly -> {
             assertThat(products.getTotalPages()).isEqualTo(
                 (int) Math.ceil((double) PRODUCT_COUNT / SIZE));
@@ -110,13 +130,18 @@ class ProductServiceTest {
 
     @Test
     void 상품_수정() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        //given
+        categoryRepository.save(new Category("테스트카테고리1"));
+
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
         Product product = productService.insertProduct(productDTO);
 
-        ClientProductDto productUpdatedDTO = new ClientProductDto("사과", 5500, "사진링크2");
+        ClientProductDto productUpdatedDTO = new ClientProductDto("사과", 5500, "사진링크2", "테스트카테고리1");
 
+        //when
         Product productUpdated = productService.updateProduct(product.getId(), productUpdatedDTO);
 
+        //then
         assertSoftly(softly -> {
             assertThat(productUpdated.getName()).isEqualTo("사과");
             assertThat(productUpdated.getPrice()).isEqualTo(5500);
@@ -126,15 +151,20 @@ class ProductServiceTest {
 
     @Test
     void 상품_삭제() {
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크");
+        //given
+        categoryRepository.save(new Category("테스트카테고리1"));
+
+        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
         productService.insertProduct(productDTO);
 
-        productDTO = new ClientProductDto("바나나", 1500, "사진링크2");
+        productDTO = new ClientProductDto("바나나", 1500, "사진링크2", "테스트카테고리1");
         Product product = productService.insertProduct(productDTO);
 
+        //when
         productService.deleteProduct(product.getId());
-
         List<Product> productAll = productService.getProductAll();
+
+        //then
         assertThat(productAll).hasSize(1);
     }
 
