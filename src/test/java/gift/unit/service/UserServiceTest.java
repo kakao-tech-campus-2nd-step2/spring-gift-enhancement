@@ -1,20 +1,21 @@
-package gift.service;
+package gift.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import gift.dto.user.UserLoginRequest;
-import gift.dto.user.UserRegisterRequest;
-import gift.dto.user.UserResponse;
+import gift.dto.user.request.UserLoginRequest;
+import gift.dto.user.request.UserRegisterRequest;
+import gift.dto.user.response.UserResponse;
 import gift.entity.User;
 import gift.exception.InvalidTokenException;
 import gift.exception.user.UserAlreadyExistException;
 import gift.exception.user.UserNotFoundException;
 import gift.repository.UserRepository;
+import gift.service.UserService;
 import gift.util.auth.JwtUtil;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,23 +56,23 @@ class UserServiceTest implements AutoCloseable {
     void registerUserTest() {
         //given
         UserRegisterRequest request = new UserRegisterRequest("user@email.com", "1q2w3e4r!");
-        when(userRepository.findByEmail(request.email())).thenReturn(Optional.empty());
+        given(userRepository.findByEmail(request.email())).willReturn(Optional.empty());
         User user = User.builder()
             .id(1L)
             .email(request.email())
             .password(request.password())
             .build();
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        when(jwtUtil.generateToken(user.getId(), user.getEmail())).thenReturn("token");
+        given(userRepository.save(any(User.class))).willReturn(user);
+        given(jwtUtil.generateToken(user.getId(), user.getEmail())).willReturn("token");
 
         //when
         UserResponse actual = userService.registerUser(request);
 
         //then
         assertThat(actual.token()).isEqualTo("token");
-        verify(userRepository, times(1)).findByEmail(request.email());
-        verify(userRepository, times(1)).save(any(User.class));
-        verify(jwtUtil, times(1)).generateToken(user.getId(), user.getEmail());
+        then(userRepository).should(times(1)).findByEmail(request.email());
+        then(userRepository).should(times(1)).save(any(User.class));
+        then(jwtUtil).should(times(1)).generateToken(user.getId(), user.getEmail());
     }
 
     @Test
@@ -80,13 +81,13 @@ class UserServiceTest implements AutoCloseable {
     void alreadyExistUserRegistrationTest() {
         //given
         UserRegisterRequest request = new UserRegisterRequest("user1@example.com", "password1");
-        when(userRepository.findByEmail(request.email())).thenReturn(
+        given(userRepository.findByEmail(request.email())).willReturn(
             Optional.of(User.builder().build()));
 
         //when&then
         assertThatThrownBy(() -> userService.registerUser(request))
             .isInstanceOf(UserAlreadyExistException.class);
-        verify(userRepository, times(1)).findByEmail(request.email());
+        then(userRepository).should(times(1)).findByEmail(request.email());
     }
 
     @Test
@@ -100,16 +101,16 @@ class UserServiceTest implements AutoCloseable {
             .email(loginRequest.email())
             .password(loginRequest.password())
             .build();
-        when(userRepository.findByEmailAndPassword(loginRequest.email(), loginRequest.password()))
-            .thenReturn(Optional.of(user));
-        when(jwtUtil.generateToken(user.getId(), user.getEmail())).thenReturn("token");
+        given(userRepository.findByEmailAndPassword(loginRequest.email(), loginRequest.password()))
+            .willReturn(Optional.of(user));
+        given(jwtUtil.generateToken(user.getId(), user.getEmail())).willReturn("token");
 
         //when
         UserResponse actual = userService.loginUser(loginRequest);
 
         //then
         assertThat(actual.token()).isEqualTo("token");
-        verify(userRepository, times(1)).findByEmailAndPassword(loginRequest.email(),
+        then(userRepository).should(times(1)).findByEmailAndPassword(loginRequest.email(),
             loginRequest.password());
     }
 
@@ -119,7 +120,8 @@ class UserServiceTest implements AutoCloseable {
     void unknownUserLoginTest() {
         //given
         UserLoginRequest request = new UserLoginRequest("user1@email.com", "1q2w3e4r!");
-        when(userRepository.findByEmailAndPassword(request.email(), request.password())).thenReturn(
+        given(
+            userRepository.findByEmailAndPassword(request.email(), request.password())).willReturn(
             Optional.empty());
 
         //when & then
@@ -133,13 +135,14 @@ class UserServiceTest implements AutoCloseable {
     void wrongPasswordLoginTest() {
         //given
         UserLoginRequest request = new UserLoginRequest("user1@email.com", "1234");
-        when(userRepository.findByEmailAndPassword(request.email(), request.password())).thenReturn(
+        given(
+            userRepository.findByEmailAndPassword(request.email(), request.password())).willReturn(
             Optional.empty());
 
         //when & then
         assertThatThrownBy(() -> userService.loginUser(request))
             .isInstanceOf(UserNotFoundException.class);
-        verify(userRepository, times(1)).findByEmailAndPassword(request.email(),
+        then(userRepository).should(times(1)).findByEmailAndPassword(request.email(),
             request.password());
     }
 
@@ -152,7 +155,7 @@ class UserServiceTest implements AutoCloseable {
             .email("user1@example.com")
             .password("password1")
             .build();
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
 
         // when
         User actual = userService.getUserById(1L);
@@ -160,19 +163,19 @@ class UserServiceTest implements AutoCloseable {
         // then
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isEqualTo(1L);
-        verify(userRepository, times(1)).findById(1L);
+        then(userRepository).should(times(1)).findById(1L);
     }
 
     @Test
     @DisplayName("get user by id not found test")
     void getUserByIdNotFoundTest() {
         // given
-        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        given(userRepository.findById(1L)).willReturn(Optional.empty());
 
         // when & then
         assertThatThrownBy(() -> userService.getUserById(1L))
             .isInstanceOf(UserNotFoundException.class);
-        verify(userRepository, times(1)).findById(1L);
+        then(userRepository).should(times(1)).findById(1L);
     }
 
     @Test
@@ -180,16 +183,16 @@ class UserServiceTest implements AutoCloseable {
     void getUserIdByTokenTest() {
         // given
         String token = "token";
-        when(jwtUtil.extractUserId(token)).thenReturn(1L);
-        when(userRepository.existsById(1L)).thenReturn(true);
+        given(jwtUtil.extractUserId(token)).willReturn(1L);
+        given(userRepository.existsById(1L)).willReturn(true);
 
         // when
         Long userId = userService.getUserIdByToken(token);
 
         // then
         assertThat(userId).isEqualTo(1L);
-        verify(jwtUtil, times(1)).extractUserId(token);
-        verify(userRepository, times(1)).existsById(1L);
+        then(jwtUtil).should(times(1)).extractUserId(token);
+        then(userRepository).should(times(1)).existsById(1L);
     }
 
     @Test
@@ -197,11 +200,11 @@ class UserServiceTest implements AutoCloseable {
     void invalidTokenTest() {
         // given
         String token = "invalid_token";
-        when(jwtUtil.extractUserId(token)).thenReturn(null);
+        given(jwtUtil.extractUserId(token)).willReturn(null);
 
         // when & then
         assertThatThrownBy(() -> userService.getUserIdByToken(token))
             .isInstanceOf(InvalidTokenException.class);
-        verify(jwtUtil, times(1)).extractUserId(token);
+        then(jwtUtil).should(times(1)).extractUserId(token);
     }
 }

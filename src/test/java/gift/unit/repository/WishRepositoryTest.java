@@ -1,10 +1,13 @@
-package gift.repository;
+package gift.unit.repository;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.entity.Product;
 import gift.entity.Wish;
+import gift.repository.ProductRepository;
+import gift.repository.UserRepository;
+import gift.repository.WishRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +17,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 @DataJpaTest
-@Sql(scripts = {"/sql/insert_five_products.sql", "/sql/insert_three_users.sql",
+@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_three_categories.sql",
+    "/sql/insert_five_products.sql", "/sql/insert_three_users.sql",
     "/sql/insert_four_wishes.sql"},
     executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 class WishRepositoryTest {

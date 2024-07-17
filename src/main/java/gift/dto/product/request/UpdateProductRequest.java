@@ -1,12 +1,13 @@
-package gift.dto.product;
+package gift.dto.product.request;
 
 import gift.validation.annotation.RestrictedKeyword;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public record AddProductRequest(
+public record UpdateProductRequest(
     @NotBlank(message = "상품 이름은 비워둘 수 없습니다.")
     @Size(max = 15, message = "상품 이름은 공백을 포함하여 최대 15자까지 입력할 수 있습니다.")
     @Pattern(regexp = "^[a-zA-Z가-힣0-9 ()\\[\\]+\\-&/_]*$",
@@ -16,7 +17,12 @@ public record AddProductRequest(
 
     @Positive Integer price,
 
-    String imageUrl
+    @NotNull
+    @NotBlank
+    String imageUrl,
+
+    @NotNull
+    Long categoryId
 ) {
 
 }

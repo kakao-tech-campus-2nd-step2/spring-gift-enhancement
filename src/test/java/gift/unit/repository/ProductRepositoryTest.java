@@ -1,9 +1,12 @@
-package gift.repository;
+package gift.unit.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.exception.product.ProductNotFoundException;
+import gift.repository.CategoryRepository;
+import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -13,11 +16,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
-@Sql(scripts = "/sql/insert_five_products.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_three_categories.sql",
+    "/sql/insert_five_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Test
     @DisplayName("find all test")
@@ -64,10 +70,12 @@ class ProductRepositoryTest {
     @DisplayName("create test")
     void createTest() {
         // given
+        Category category = categoryRepository.findById(1L).get();
         Product newProduct = Product.builder()
             .name("new product")
             .price(10_000)
             .imageUrl("http://example.com/images/product_new.jpg")
+            .category(category)
             .build();
 
         // when

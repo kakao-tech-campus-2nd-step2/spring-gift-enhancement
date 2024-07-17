@@ -3,6 +3,7 @@
 ## 목차
 
 0. 이번주차
+   1. [1단계(상품 카테고리)](#1단계상품-카테고리-요구사항)
 
 1. [1주차 - product](#1주차-과제-요구사항spring-gift-product)
    1. [1단계(상품 API)](#1단계상품-api-요구사항)
@@ -21,7 +22,61 @@
 
 ---
 
+## 1단계(상품 카테고리) 요구사항
 
+### 기능 요구 사항
+
+상품 정보에 카테고리를 추가한다. 상품과 카테고리 모델 간의 관계를 고려하여 설계하고 구현한다.
+
+- 카테고리는 1차 카테고리만 있으며 2차 카테고리는 고려하지 않는다.
+- 카테고리는 수정할 수 있다.
+- 관리자 화면에서 상품을 추가할 때 카테고리를 지정할 수 있다.
+- 카테고리의 예시는 아래와 같다.
+  - 교환권, 상품권, 뷰티, 패션, 식품, 리빙/도서, 레저/스포츠, 아티스트/캐릭터, 유아동/반려, 디지털/가전, 카카오프렌즈, 트렌드 선물, 백화점
+
+아래 예시와 같이 HTTP 메시지를 주고받도록 구현한다.
+
+#### Request
+
+```http
+GET /api/categories HTTP/1.1
+```
+
+#### Response
+
+```http
+HTTP/1.1 200 
+Content-Type: application/json
+
+[
+  {
+    "id": 91,
+    "name": "교환권",
+    "color": "#6c95d1",
+    "imageUrl": "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png",
+    "description": ""
+  }
+]
+```
+
+### 프로그래밍 요구 사항
+
+- 구현한 기능에 대해 적절한 테스트 전략을 생각하고 작성한다.
+
+
+
+### 1단계 기능 목록
+
+- [x] 카테고리 엔티티 추가
+- [x] 상품과 카테고리 간 관계 생성
+- [x] 카테고리 CRUD 추가
+  - [x] `GET /api/categories`: 모든 카테고리 조회
+  - [x] `GET /api/categories/{id}` 특정 id 카테고리 조회
+  - [x] `POST /api/categories`: 추가
+  - [x] `PATCH /api/categories/{id}`:수정 - id를 고정으로 name만 수정하므로 PATCH 사용
+  - [x] `DELETE /api/categories/{id}`: 삭제
+- [x] 상품 생성/수정할 때 카테고리 선택 가능
+  - [x] 어드민 페이지에서 가능하도록 수정
 
 
 
@@ -378,11 +433,11 @@ Authorization: Bearer token
 
 ##### 위시 리스트 상품 추가
 
-![위시 리스트 상품 추가 시나리오](C:/Users/JangWooseok/OneDrive/java-workspace/spring-gift-jpa/images/wishlist_add_scenario.png)
+![위시 리스트 상품 추가 시나리오](./images/wishlist_add_scenario.png)
 
 ##### 위시 리스트 상품 삭제
 
-![위시 리스트 상품 삭제 시나리오](C:/Users/JangWooseok/OneDrive/java-workspace/spring-gift-jpa/images/wishlist_delete_scenario.png)
+![위시 리스트 상품 삭제 시나리오](./images/wishlist_delete_scenario.png)
 
 #### HandlerMethodArgumentResolver
 
@@ -390,6 +445,7 @@ Authorization: Bearer token
 
 ```java
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
+
     private final MemberService memberService;
 
     public LoginMemberArgumentResolver(MemberService memberService) {
@@ -402,10 +458,13 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-    ...
-            return new LoginMember(member.getId(), member.getName(), member.getEmail(), member.getRole());
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        // ...
+        return new LoginMember(member.getId(), member.getName(), member.getEmail(),
+            member.getRole());
     }
+}
 ```
 
 ```java
@@ -641,7 +700,7 @@ alter table member
 
 ### 2단계 기능 목록
 
-![gift_ERD](C:/Users/JangWooseok/OneDrive/java-workspace/spring-gift-jpa/images/gift_ERD.png)
+![gift_ERD](./images/gift_ERD.png)
 
 - [x] users - wishes 간 관계 연결
   * wishes 기준 ManyToOne

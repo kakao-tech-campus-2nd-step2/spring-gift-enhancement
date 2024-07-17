@@ -1,10 +1,9 @@
 package gift.controller;
 
 import gift.config.PageConfig;
-import gift.dto.product.AddProductRequest;
-import gift.dto.product.ProductResponse;
-import gift.dto.product.UpdateProductRequest;
-import gift.entity.Product;
+import gift.dto.product.request.CreateProductRequest;
+import gift.dto.product.request.UpdateProductRequest;
+import gift.dto.product.response.ProductResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -42,23 +41,19 @@ public class ProductController {
             sort = PageConfig.SORT_STANDARD,
             direction = Direction.DESC
         ) Pageable pageable) {
-        try {
-            Page<ProductResponse> products = productService.getAllProducts(pageable);
-            return ResponseEntity.ok(products);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Page<ProductResponse> products = productService.getAllProducts(pageable);
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+        ProductResponse product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
 
     @PostMapping
-    public ResponseEntity<Long> addProduct(@RequestBody @Valid AddProductRequest request) {
-        Long productId = productService.addProduct(request);
+    public ResponseEntity<Long> createProduct(@RequestBody @Valid CreateProductRequest request) {
+        Long productId = productService.createProduct(request);
         return new ResponseEntity<>(productId, getProductLocationHeader(productId),
             HttpStatus.CREATED);
     }
@@ -79,7 +74,7 @@ public class ProductController {
     private HttpHeaders getProductLocationHeader(Long productId) {
         HttpHeaders headers = new HttpHeaders();
         URI location = UriComponentsBuilder.newInstance()
-            .path("api/products/{id}")
+            .path("/api/products/{id}")
             .buildAndExpand(productId)
             .toUri();
         headers.setLocation(location);

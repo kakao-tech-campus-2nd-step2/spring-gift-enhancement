@@ -1,12 +1,16 @@
 package gift.service;
 
-import gift.dto.wish.AddWishRequest;
-import gift.dto.wish.UpdateWishRequest;
-import gift.dto.wish.WishResponse;
+import gift.dto.wish.request.AddWishRequest;
+import gift.dto.wish.request.UpdateWishRequest;
+import gift.dto.wish.response.WishResponse;
 import gift.entity.Product;
 import gift.entity.User;
 import gift.entity.Wish;
+import gift.exception.product.ProductNotFoundException;
+import gift.exception.user.UserNotFoundException;
 import gift.exception.wish.WishNotFoundException;
+import gift.repository.ProductRepository;
+import gift.repository.UserRepository;
 import gift.repository.WishRepository;
 import gift.util.mapper.WishMapper;
 import java.util.List;
@@ -19,37 +23,31 @@ import org.springframework.transaction.annotation.Transactional;
 public class WishService {
 
     private final WishRepository wishRepository;
-    private final ProductService productService;
-    private final UserService userService;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    public WishService(WishRepository wishRepository, ProductService productService,
-        UserService userService) {
+    public WishService(WishRepository wishRepository, ProductRepository productRepository,
+        UserRepository userRepository) {
         this.wishRepository = wishRepository;
-        this.productService = productService;
-        this.userService = userService;
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional(readOnly = true)
     public Page<WishResponse> getWishes(Long userId, Pageable pageable) {
         Page<Wish> wishes = wishRepository.findByUserId(userId, pageable);
-
-        if (wishes == null || wishes.isEmpty()) {
-            throw new WishNotFoundException("위시리스트가 존재하지 않습니다.");
-        }
-
+        validateWishPage(wishes);
         return wishes.map(WishMapper::toResponse);
     }
 
     @Transactional
     public Long addWish(Long userId, AddWishRequest request) {
-        Product product = productService.getProductById(request.productId());
-        User user = userService.getUserById(userId);
+        Product product = productRepository.findById(request.productId())
+            .orElseThrow(ProductNotFoundException::new);
+        User user = userRepository.findById(userId)
+            .orElseThrow(UserNotFoundException::new);
 
-        Wish wish = Wish.builder()
-            .quantity(request.quantity())
-            .user(user)
-            .product(product)
-            .build();
+        Wish wish = new Wish(user, product, request.quantity());
 
         Wish savedWish = wishRepository.save(wish);
         return savedWish.getId();
@@ -79,7 +77,13 @@ public class WishService {
     @Transactional(readOnly = true)
     protected Wish getWish(Long id) {
         return wishRepository.findById(id)
-            .orElseThrow(() -> new WishNotFoundException("위시리스트를 찾을 수 없습니다."));
+            .orElseThrow(WishNotFoundException::new);
+    }
+
+    private void validateWishPage(Page<Wish> wishes) {
+        if (wishes == null || wishes.isEmpty()) {
+            throw new WishNotFoundException();
+        }
     }
 
 }

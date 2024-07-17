@@ -1,4 +1,4 @@
-package gift.dto.wish;
+package gift.dto.wish.response;
 
 import gift.entity.Product;
 

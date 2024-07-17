@@ -1,29 +1,33 @@
 package gift.util.mapper;
 
-import gift.dto.product.AddProductRequest;
-import gift.dto.product.ProductResponse;
-import gift.dto.product.UpdateProductRequest;
+import gift.dto.product.request.CreateProductRequest;
+import gift.dto.product.request.UpdateProductRequest;
+import gift.dto.product.response.ProductResponse;
+import gift.entity.Category;
 import gift.entity.Product;
 
 public class ProductMapper {
 
-    public static Product toProduct(AddProductRequest addProductRequest) {
+    public static Product toProduct(CreateProductRequest createProductRequest, Category category) {
         return Product.builder()
-            .name(addProductRequest.name())
-            .price(addProductRequest.price())
-            .imageUrl(addProductRequest.imageUrl())
+            .name(createProductRequest.name())
+            .price(createProductRequest.price())
+            .imageUrl(createProductRequest.imageUrl())
+            .category(category)
             .build();
     }
 
-    public static void updateProduct(Product product, UpdateProductRequest request) {
+    public static void updateProduct(Product product, UpdateProductRequest request,
+        Category category) {
         product.changeName(request.name());
         product.changePrice(request.price());
         product.changeImageUrl(request.imageUrl());
+        product.changeCategory(category);
     }
 
     public static ProductResponse toResponse(Product product) {
         return new ProductResponse(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl());
+            product.getImageUrl(), product.getCategoryName());
     }
 
 }

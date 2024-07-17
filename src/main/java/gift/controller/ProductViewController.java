@@ -1,9 +1,12 @@
 package gift.controller;
 
 import gift.config.PageConfig;
-import gift.dto.product.ProductResponse;
+import gift.dto.category.response.CategoryResponse;
+import gift.dto.product.response.ProductResponse;
 import gift.entity.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -19,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductViewController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductViewController(ProductService productService) {
+    public ProductViewController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -43,13 +48,21 @@ public class ProductViewController {
     @GetMapping("/new")
     public String newProduct(Model model) {
         model.addAttribute("product", Product.builder().build());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "product_add_form";
     }
 
     @GetMapping("edit/{id}")
     public String editProductPage(Model model, @PathVariable Long id) {
-        Product product = productService.getProductById(id);
+        ProductResponse product = productService.getProductById(id);
+        List<CategoryResponse> categories = categoryService.getAllCategories();
+
+        System.out.println("Product: " + product);
+        System.out.println("Categories: " + categories);
+
         model.addAttribute("product", product);
+        model.addAttribute("categories", categories);
+
         return "product_edit_form";
     }
 

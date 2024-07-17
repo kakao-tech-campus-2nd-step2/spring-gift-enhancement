@@ -1,10 +1,13 @@
 package gift.service;
 
-import gift.dto.product.AddProductRequest;
-import gift.dto.product.ProductResponse;
-import gift.dto.product.UpdateProductRequest;
+import gift.dto.product.request.CreateProductRequest;
+import gift.dto.product.request.UpdateProductRequest;
+import gift.dto.product.response.ProductResponse;
+import gift.entity.Category;
 import gift.entity.Product;
+import gift.exception.category.CategoryNotFoundException;
 import gift.exception.product.ProductNotFoundException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.util.mapper.ProductMapper;
 import org.springframework.data.domain.Page;
@@ -16,9 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional(readOnly = true)
@@ -28,20 +34,26 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-            .orElseThrow(() -> new ProductNotFoundException("해당 ID의 상품을 찾을 수 없습니다."));
+    public ProductResponse getProductById(Long id) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(ProductNotFoundException::new);
+        return ProductMapper.toResponse(product);
     }
 
     @Transactional
-    public Long addProduct(AddProductRequest request) {
-        return productRepository.save(ProductMapper.toProduct(request)).getId();
+    public Long createProduct(CreateProductRequest request) {
+        Category category = categoryRepository.findById(request.categoryId())
+            .orElseThrow(CategoryNotFoundException::new);
+        return productRepository.save(ProductMapper.toProduct(request, category)).getId();
     }
 
     @Transactional
     public void updateProduct(Long id, UpdateProductRequest request) {
-        Product product = getProductById(id);
-        ProductMapper.updateProduct(product, request);
+        Product product = productRepository.findById(id)
+            .orElseThrow(ProductNotFoundException::new);
+        Category category = categoryRepository.findById(request.categoryId())
+            .orElseThrow(CategoryNotFoundException::new);
+        ProductMapper.updateProduct(product, request, category);
     }
 
     @Transactional
@@ -53,7 +65,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public void checkProductExist(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException("해당 ID의 상품을 찾을 수 없습니다.");
+            throw new ProductNotFoundException();
         }
     }
 }
