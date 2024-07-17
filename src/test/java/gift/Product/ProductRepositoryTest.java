@@ -52,7 +52,10 @@ public class ProductRepositoryTest {
 
     @Test
     void save(){
-        Product expected = new Product("초코라떼", 3500, "example2.com");
+        Category category = new Category("교환권");
+        categoryRepository.save(category);
+        Category category1 = categoryService.getCategoryById(1L);
+        Product expected = new Product("초코라떼", 3500, "example2.com",category1);
         Product actual = productRepository.save(expected);
         assertThat(actual.getId()).isEqualTo(expected.getId());
     }
