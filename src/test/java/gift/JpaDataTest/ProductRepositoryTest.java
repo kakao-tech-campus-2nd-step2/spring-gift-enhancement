@@ -158,18 +158,20 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    @Description("상품을 참조하는 장바구니 정보 존재하면 삭제 실패")
+    @Description("상품을 참조하는 장바구니 정보 존재하면 장바구니도 함께 삭제함")
     void deleteConstraintViolationError() {
         // given
         Product savedProduct = productRepository.saveAndFlush(product1);
         User savedUser = userRepository.saveAndFlush(new User("minji@example.com", "password1"));
         CartItem savedCartItem = cartItemRepository.saveAndFlush(new CartItem(savedUser, savedProduct));
+        clear();
 
         // when
         productRepository.deleteById(savedProduct.getId());
+        flush();
 
         // then
-        assertThrows(org.hibernate.exception.ConstraintViolationException.class, () -> flush());
+        assertThat(cartItemRepository.existsById(savedCartItem.getId())).isFalse();
     }
 
     @Test
