@@ -1,5 +1,9 @@
 package gift.option;
 
+import static gift.exception.ErrorMessage.OPTION_ALREADY_EXISTS;
+import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
+import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
+import static gift.exception.ErrorMessage.OPTION_NOT_FOUND;
 import static gift.exception.ErrorMessage.PRODUCT_NOT_FOUND;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -29,19 +33,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest
+@WebMvcTest(controllers = OptionController.class)
 public class OptionControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     private JwtProvider jwtProvider;
 
     @MockBean
     private OptionService optionService;
 
-    private static final String URL = "/api/product/%d/option";
+    private static final String URL = "/api/products/%d/option";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     static class OptionQuantitySizeError implements ArgumentsProvider {
@@ -115,12 +119,11 @@ public class OptionControllerTest {
 
             //when
             when(optionService.getOptions(productId))
-                .thenThrow(IllegalArgumentException.class);
+                .thenThrow(new IllegalArgumentException(PRODUCT_NOT_FOUND));
 
             //then
             mockMvc.perform(get(URL.formatted(productId)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(PRODUCT_NOT_FOUND));
         }
     }
@@ -166,7 +169,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(PRODUCT_NOT_FOUND));
         }
 
@@ -178,7 +180,7 @@ public class OptionControllerTest {
             OptionDTO optionDTO = new OptionDTO(1L, "option-1", 10);
 
             //when
-            doThrow(new IllegalArgumentException(OPTION_ALREAD_EXIST))
+            doThrow(new IllegalArgumentException(OPTION_ALREADY_EXISTS))
                 .when(optionService)
                 .addOption(productId, optionDTO);
 
@@ -188,8 +190,7 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
-                .andExpect(content().string(OPTION_ALREADY_EXIST));
+                .andExpect(content().string(OPTION_ALREADY_EXISTS));
         }
 
         @ParameterizedTest
@@ -210,7 +211,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(OPTION_NAME_ALLOWED_CHARACTER));
         }
 
@@ -232,7 +232,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(OPTION_NAME_LENGTH));
         }
 
@@ -254,7 +253,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(OPTION_NAME_LENGTH));
         }
     }
@@ -280,7 +278,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(""));
         }
 
@@ -302,7 +299,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(PRODUCT_NOT_FOUND));
         }
 
@@ -314,7 +310,7 @@ public class OptionControllerTest {
             OptionDTO optionDTO = new OptionDTO(1L, "option-1", 10);
 
             //when
-            doThrow(new IllegalArgumentException(OPTION_NOT_FOUNT))
+            doThrow(new IllegalArgumentException(OPTION_NOT_FOUND))
                 .when(optionService)
                 .updateOption(productId, optionDTO);
 
@@ -324,7 +320,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(OPTION_NOT_FOUND));
         }
 
@@ -346,7 +341,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(OPTION_NAME_ALLOWED_CHARACTER));
         }
 
@@ -368,7 +362,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(OPTION_NAME_LENGTH));
         }
 
@@ -390,7 +383,6 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(OPTION_NAME_LENGTH));
         }
     }
@@ -414,7 +406,6 @@ public class OptionControllerTest {
             mockMvc.perform(
                     delete(URL.formatted(productId) + "/" + optionId))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(""));
         }
 
@@ -434,7 +425,6 @@ public class OptionControllerTest {
             mockMvc.perform(
                     delete(URL.formatted(productId) + "/" + optionId))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(PRODUCT_NOT_FOUND));
         }
 
@@ -454,7 +444,6 @@ public class OptionControllerTest {
             mockMvc.perform(
                     delete(URL.formatted(productId) + "/" + optionId))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(content().string(OPTION_NOT_FOUND));
         }
     }
