@@ -31,13 +31,13 @@ public class WishEntityRepositoryTest {
 
     @BeforeTestClass
     public void setup(){
-        categoryRepository.save(new CategoryEntity("test1","test2","test3","test4"));
+        categoryRepository.save(new CategoryEntity("testName","testColor","testImageUrl","testDescription"));
     }
 
     @Test
     void save(){
-        MemberEntity member = new MemberEntity("a","b", Role.CONSUMER);
-        ProductEntity product = new ProductEntity(categoryRepository.findById(1L).get(),"a",1,"b");
+        MemberEntity member = new MemberEntity("testEmail","testPassword", Role.CONSUMER);
+        ProductEntity product = new ProductEntity(categoryRepository.findById(1L).get(),"testName",1,"testImageUrl");
         memberRepository.save(member);
         productRepository.save(product);
         WishEntity expected = new WishEntity(member, product);
@@ -50,8 +50,8 @@ public class WishEntityRepositoryTest {
 
     @Test
     void findByName() {
-        MemberEntity member = new MemberEntity("a","b", Role.CONSUMER);
-        ProductEntity product = new ProductEntity(categoryRepository.findById(1L).get(),"a",1,"b");
+        MemberEntity member = new MemberEntity("testEmail","testPassword", Role.CONSUMER);
+        ProductEntity product = new ProductEntity(categoryRepository.findById(1L).get(),"testName",1,"testImageUrl");
         memberRepository.save(member);
         productRepository.save(product);
 
@@ -63,8 +63,8 @@ public class WishEntityRepositoryTest {
 
     @Test
     void deleteByProductIDAndMemberId(){
-        MemberEntity member = new MemberEntity("a","b", Role.CONSUMER);
-        ProductEntity product = new ProductEntity(categoryRepository.findById(1L).get(),"a",1,"b");
+        MemberEntity member = new MemberEntity("testEmail","testPassword", Role.CONSUMER);
+        ProductEntity product = new ProductEntity(categoryRepository.findById(1L).get(),"testName",1,"testImageUrl");
         memberRepository.save(member);
         productRepository.save(product);
         wishRepository.save(new WishEntity(member, product));
