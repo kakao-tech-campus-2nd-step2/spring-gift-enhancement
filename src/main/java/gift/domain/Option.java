@@ -28,6 +28,10 @@ public class Option {
     protected Option() {
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Option(Product product, String name, Long quantity) {
         this.product = product;
         this.name = name;
