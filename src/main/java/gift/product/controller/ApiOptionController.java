@@ -55,8 +55,7 @@ public class ApiOptionController {
             new OptionDTO(
                 id,
                 optionDTO.getName(),
-                optionDTO.getQuantity(),
-                optionDTO.getProductId()
+                optionDTO.getQuantity()
             )
         );
         return ResponseEntity.status(HttpStatus.CREATED).body("Option update successfully");
