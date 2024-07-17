@@ -1,11 +1,14 @@
 package gift.controller;
 
 import gift.dto.ApiResponse;
+import gift.dto.CategoryDto;
 import gift.model.Category;
 import gift.model.HttpResult;
 import gift.service.CategoryService;
 import java.util.Collections;
+import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +48,8 @@ public class CategoryController {
 
     @PostMapping("/add/category")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category) {
-        var addCategorySucessResponse = new ApiResponse(HttpResult.OK, categoryService.addCategory(category).toString(),
+        var savedCategory = categoryService.addCategory(category);
+        var addCategorySucessResponse = new ApiResponse(HttpResult.OK, savedCategory.toString(),
             HttpStatus.OK);
         return new ResponseEntity<>(addCategorySucessResponse,
             addCategorySucessResponse.getHttpStatus());
