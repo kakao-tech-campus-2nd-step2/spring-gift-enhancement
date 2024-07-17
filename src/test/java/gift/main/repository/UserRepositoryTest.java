@@ -7,9 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
-import static org.assertj.core.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -24,10 +27,7 @@ class UserRepositoryTest {
     private EntityManager entityManager;
 
     @Autowired
-    public UserRepositoryTest(CategoryRepository categoryRepository,
-                              UserRepository userRepository,
-                              WishProductRepository wishProductRepository,
-                              ProductRepository productRepository, EntityManager entityManager) {
+    public UserRepositoryTest(CategoryRepository categoryRepository, UserRepository userRepository, WishProductRepository wishProductRepository, ProductRepository productRepository, EntityManager entityManager) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.wishProductRepository = wishProductRepository;
@@ -72,9 +72,6 @@ class UserRepositoryTest {
         entityManager.clear();
 
 
-
-
-
         //then
         assertThat(wishProductRepository.existsAllByUserId(user.getId())).isEqualTo(false);
     }
@@ -107,21 +104,20 @@ class UserRepositoryTest {
 
 
     @Test
-    public void 이메일중복허용안함() {
+    public void saveDuplicateEmailTest() {
         //given
-        userRepository.save(new User("name", "123@123", "123", "USER"));
+        final String EMAIL = "이메일";
 
-//        //then
-//        assertThrows(DataIntegrityViolationException.class, () -> {
-//            userRepository.save(new User("name112", "123@123", "123", "USER"));
-//        });
-//        assertThat(
-//                userRepository.save(new User("name112", "123@123", "123", "USER"))).
+        User user = new User("name", EMAIL, "123", "USER");
+        userRepository.save(user);
+
+        User duplicateUser = new User("name1", EMAIL, "123", "USER");
+
+        //when
+        //then
+        assertThatThrownBy(() -> userRepository.save(duplicateUser)).isInstanceOf(DataIntegrityViolationException.class);
 
     }
-
-
-
 
 
 }
