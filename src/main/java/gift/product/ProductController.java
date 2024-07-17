@@ -1,5 +1,6 @@
 package gift.product;
 
+import gift.category.CategoryResponse;
 import gift.category.CategoryService;
 import gift.option.OptionRequest;
 import jakarta.validation.Valid;
@@ -14,6 +15,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/manager")
 public class ProductController {
@@ -26,9 +30,15 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @ModelAttribute("categories")
+    public List<CategoryResponse> categories() {
+        return categoryService.findAllCategories();
+    }
+
+
     @PostMapping("/products/add")
-    public String addProduct(@Valid @ModelAttribute("newProduct") ProductDTO newProduct, @Valid @ModelAttribute("option") OptionRequest option, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
+    public String addProduct(@Valid @ModelAttribute("newProduct") ProductDTO newProduct, BindingResult bindingResult1, @Valid @ModelAttribute("option") OptionRequest option, BindingResult bindingResult2, RedirectAttributes redirectAttributes) {
+        if (bindingResult1.hasErrors() || bindingResult2.hasErrors()) {
             return "AddProduct";
         }
 
@@ -75,14 +85,15 @@ public class ProductController {
     @GetMapping("/products/add")
     public String addProductView(Model model) {
         model.addAttribute("newProduct", new ProductDTO());
-        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("option", new OptionRequest());
+        //model.addAttribute("categories", categoryService.findAllCategories());
         return "AddProduct";
     }
 
     @GetMapping("/products/update/{id}")
     public String updateProduct(@PathVariable Long id, Model model) {
         model.addAttribute("product", new ProductDTO(productService.findByID(id)));
-        model.addAttribute("categories", categoryService.findAllCategories());
+        //model.addAttribute("categories", categoryService.findAllCategories());
 
         return "UpdateProduct";
     }
@@ -90,7 +101,7 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public String getProduct(@PathVariable long id, Model model) {
         model.addAttribute("product", new ProductDTO(productService.findByID(id)));
-        model.addAttribute("categories", categoryService.findAllCategories());
+        //model.addAttribute("categories", categoryService.findAllCategories());
 
         return "ProductInfo";
     }
