@@ -1,12 +1,14 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.exception.CategoryNotFoundException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.request.ProductRequest;
+import gift.response.OptionResponse;
 import gift.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -67,6 +69,15 @@ public class ProductService {
                 .orElseThrow(ProductNotFoundException::new);
 
         productRepository.deleteById(product.getId());
+    }
+
+    public List<OptionResponse> getOptions(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+
+        return product.getOptions().stream()
+                .map(Option::toDto)
+                .toList();
     }
 
 }
