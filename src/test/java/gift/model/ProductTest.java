@@ -9,11 +9,13 @@ class ProductTest {
 
     @Test
     void testCreateValidProduct() {
-        Product product = new Product(1L, "상품", "100", "https://kakao");
+        Category category = new Category(1L, "교환권");
+        Product product = new Product(1L, "상품", "100", category, "https://kakao");
         assertAll(
             () -> assertThat(product.getId()).isNotNull(),
             () -> assertThat(product.getName()).isEqualTo("상품"),
             () -> assertThat(product.getPrice()).isEqualTo("100"),
+            () -> assertThat(product.getCategory().getId()).isEqualTo(1L),
             () -> assertThat(product.getImageUrl()).isEqualTo("https://kakao")
         );
     }
@@ -21,7 +23,8 @@ class ProductTest {
     @Test
     void testCreateWithNullName() {
         try {
-            Product nullNameProduct = new Product(1L, null, "100", "https://kakao");
+            Category category = new Category(1L, "교환권");
+            Product nullNameProduct = new Product(1L, null, "100", category, "https://kakao");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -30,7 +33,8 @@ class ProductTest {
     @Test
     void testCreateWithEmptyName() {
         try {
-            Product emptyNameProduct = new Product(1L, "", "200", "https://kakao");
+            Category category = new Category(1L, "교환권");
+            Product emptyNameProduct = new Product(1L, "", "200", category, "https://kakao");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -39,7 +43,9 @@ class ProductTest {
     @Test
     void testCreateWithLengthName() {
         try {
-            Product lengthNameProduct = new Product(1L, "aaaa aaaa aaaa a", "200", "https://kakao");
+            Category category = new Category(1L, "교환권");
+            Product lengthNameProduct = new Product(1L, "aaaa aaaa aaaa a", "200", category,
+                "https://kakao");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -48,7 +54,8 @@ class ProductTest {
     @Test
     void testCreateWithInvalidName() {
         try {
-            Product invalidNameProduct = new Product(1L, ".", "100", "https://kakao");
+            Category category = new Category(1L, "교환권");
+            Product invalidNameProduct = new Product(1L, ".", "100", category, "https://kakao");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -57,7 +64,8 @@ class ProductTest {
     @Test
     void testCreateWithKaKaoName() {
         try {
-            Product kakaoNameProduct = new Product(1L, "카카오", "100", "https://kakao");
+            Category category = new Category(1L, "교환권");
+            Product kakaoNameProduct = new Product(1L, "카카오", "100", category, "https://kakao");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -67,7 +75,8 @@ class ProductTest {
     @Test
     void testCreateWithNullPrice() {
         try {
-            Product nullPriceProduct = new Product(1L, "상품", null, "https://kakao");
+            Category category = new Category(1L, "교환권");
+            Product nullPriceProduct = new Product(1L, "상품", null, category, "https://kakao");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -76,7 +85,8 @@ class ProductTest {
     @Test
     void testCreateWithEmptyPrice() {
         try {
-            Product emptyPriceProduct = new Product(1L, "상품", "", "https://kakao");
+            Category category = new Category(1L, "교환권");
+            Product emptyPriceProduct = new Product(1L, "상품", "", category, "https://kakao");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -86,7 +96,8 @@ class ProductTest {
     @Test
     void testCreateWithInvalidPrice() {
         try {
-            Product invalidPriceProduct = new Product(1L, "상품", "abcde", "https://kakao");
+            Category category = new Category(1L, "교환권");
+            Product invalidPriceProduct = new Product(1L, "상품", "abcde", category, "https://kakao");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -95,7 +106,8 @@ class ProductTest {
     @Test
     void testCreateWithNullImageUrl() {
         try {
-            Product nullImageUrlProduct = new Product(1L, "상품", "100", null);
+            Category category = new Category(1L, "교환권");
+            Product nullImageUrlProduct = new Product(1L, "상품", "100", category, null);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -104,7 +116,8 @@ class ProductTest {
     @Test
     void testCreateWithEmptyImageUrl() {
         try {
-            Product emptyImageUrlProduct = new Product(1L, "상품", "100", "");
+            Category category = new Category(1L, "교환권");
+            Product emptyImageUrlProduct = new Product(1L, "상품", "100", category, "");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
@@ -113,7 +126,8 @@ class ProductTest {
     @Test
     void testCreateWithInvalidImageUrl() {
         try {
-            Product invalidImageUrlProduct = new Product(1L, "상품", "100", "kbm");
+            Category category = new Category(1L, "교환권");
+            Product invalidImageUrlProduct = new Product(1L, "상품", "100", category, "kbm");
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
