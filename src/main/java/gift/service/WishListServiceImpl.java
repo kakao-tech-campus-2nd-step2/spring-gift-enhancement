@@ -54,7 +54,7 @@ public class WishListServiceImpl implements WishListService {
     public void updateProduct(long memberId, long productId, int productValue) {
         Wish wish = jpaWishRepository.findByMemberIdAndProductId(memberId,productId).orElseThrow();
 
-        wish.setValue(productValue);
+        wish.productCountUpdate(productValue);
 
     }
 

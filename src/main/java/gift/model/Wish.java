@@ -58,7 +58,7 @@ public class Wish {
         return product;
     }
 
-    public void setValue(Integer productCount) {
+    public void productCountUpdate(Integer productCount) {
         this.productCount = productCount;
     }
 
