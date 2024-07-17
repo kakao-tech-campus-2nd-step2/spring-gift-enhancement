@@ -19,7 +19,8 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    public Product() {}
+    public Product() {
+    }
 
     public Product(Long id, String name, int price, String imageUrl, Category category) {
         if (name.contains("카카오") || name.equalsIgnoreCase("kakao")) {

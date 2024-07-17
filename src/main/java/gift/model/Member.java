@@ -15,7 +15,8 @@ public class Member {
     @Column
     private String activeToken;
 
-    protected Member() {}
+    protected Member() {
+    }
 
     public Member(Member member, String activeToken) {
         this.id = member.id;

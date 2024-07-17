@@ -17,7 +17,8 @@ public class Category {
     @Column
     private String description;
 
-    protected Category() {}
+    protected Category() {
+    }
 
     public Category(Long id, String name, String color, String imageUrl, String description) {
         this.id = id;

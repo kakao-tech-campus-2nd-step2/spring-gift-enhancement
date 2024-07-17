@@ -37,8 +37,8 @@ public class CategoryService {
     public void updateCategory(Long id, Category category) {
         categoryRepository.findByName(category.getName())
                 .ifPresent(existingCategory -> {
-            throw new DuplicateKeyException("이미 존재하는 카테고리 이름입니다.");
-        });
+                    throw new DuplicateKeyException("이미 존재하는 카테고리 이름입니다.");
+                });
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
         Category updatedCategory = new Category(
