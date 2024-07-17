@@ -1,13 +1,13 @@
 package gift.dto;
 
 public class CategoryResponse {
-    private int id;
+    private Long id;
     private String name;
     private String color;
     private String imageUrl;
     private String description;
 
-    public CategoryResponse(int id, String name, String color, String imageUrl,
+    public CategoryResponse(Long id, String name, String color, String imageUrl,
         String description) {
         this.id = id;
         this.name = name;
@@ -16,7 +16,7 @@ public class CategoryResponse {
         this.description = description;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

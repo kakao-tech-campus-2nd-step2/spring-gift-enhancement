@@ -13,6 +13,10 @@ response에서 ResponseEntity를 사용해서 해보도록 하자 + 나중에 �
 
 EntityModel -> spring hateoas 이용시 (하이퍼 미디어 규약?)
 
+service 부분이 없어서 그런가 Mock가 제대로 설정되지 않는다.
+
+
+
 ### 의문
 
 1. post, put에 대해 성공적으로 200을 반환해야한다면, 컨트롤러는 void 여야하는가? 아니면, ResponseEntity로 명시적?
@@ -37,3 +41,6 @@ post, put 등에서 반환에서 특정 url로 location header를 변경해서 �
 - post, put에 대한 관리 : post는 생성, put은 일종의 업데이트로 생각하자.
 
 - post, put에 대해 반환타입 -> 기본 200, 추가 전송 데이터 있으면 204, ResponseEntity 명시적 사용
+
+- 컨트롤러에 대해서 Mock 객체를 활용한 테스트를 만들어보자.
+
