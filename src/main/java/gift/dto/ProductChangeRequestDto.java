@@ -22,6 +22,9 @@ public class ProductChangeRequestDto {
     @Min(value = 0, message = "상품의 가격은 0원 이상이어야합니다.")
     private int price;
 
+    @NotNull
+    private String category;
+
     public String getName() {
         return name;
     }
@@ -32,5 +35,9 @@ public class ProductChangeRequestDto {
 
     public int getPrice() {
         return price;
+    }
+
+    public String getCategory() {
+        return category;
     }
 }

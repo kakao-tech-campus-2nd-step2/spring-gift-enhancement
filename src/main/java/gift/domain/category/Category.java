@@ -17,4 +17,8 @@ public class Category {
     protected Category() {
 
     }
+
+    public String getName() {
+        return name;
+    }
 }

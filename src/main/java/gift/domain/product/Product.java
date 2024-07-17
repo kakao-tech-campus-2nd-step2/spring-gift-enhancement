@@ -25,18 +25,20 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, int price, String imgUrl) {
+    public Product(String name, int price, String imgUrl, Category category) {
         checkName(name);
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.category = category;
     }
 
-    public void update(String name, int price, String imgUrl) {
+    public void update(String name, int price, String imgUrl, Category category) {
         checkName(name);
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -53,6 +55,10 @@ public class Product {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     private void checkName(String name) {
