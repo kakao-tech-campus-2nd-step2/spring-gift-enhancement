@@ -7,8 +7,10 @@ import gift.domain.Product;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.utils.error.DuplicateOptionException;
+import gift.utils.error.OptionNotFoundException;
 import gift.utils.error.ProductNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -34,4 +36,13 @@ public class OptionService {
 
         return new OptionResponse(save.getId(), save.getName(), save.getQuantity());
     }
+    @Transactional
+    public Long deleteOption(Long id){
+        optionRepository.findById(id).orElseThrow(
+            () -> new OptionNotFoundException("Optrion Not Found")
+        );
+        optionRepository.deleteById(id);
+        return id;
+    }
+
 }

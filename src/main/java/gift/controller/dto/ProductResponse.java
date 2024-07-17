@@ -1,7 +1,10 @@
 package gift.controller.dto;
 
+import gift.domain.Category;
+import gift.domain.Option;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import java.util.List;
 
 public class ProductResponse {
     private Long id;
@@ -15,21 +18,21 @@ public class ProductResponse {
 
     private String imageUrl;
 
-    private Long categoryId;
+    private Category category;
 
-    private String categoryName;
+    private List<Option> optionList;
 
     public ProductResponse() {
     }
 
-    public ProductResponse(Long id, String name, Double price, String imageUrl, Long categoryId,
-        String categoryName) {
+    public ProductResponse(Long id, String name, Double price, String imageUrl, Category category,
+        List<Option> optionList) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
+        this.category = category;
+        this.optionList = optionList;
     }
 
     public String getName() {

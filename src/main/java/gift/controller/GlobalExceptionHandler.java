@@ -3,6 +3,8 @@ package gift.controller;
 import gift.utils.error.CategoryNotFoundException;
 import gift.utils.error.DuplicateOptionException;
 import gift.utils.error.NotpermitNameException;
+import gift.utils.error.OptionNameDuplicationException;
+import gift.utils.error.OptionNotFoundException;
 import gift.utils.error.ProductAlreadyExistException;
 import gift.utils.error.ProductNotFoundException;
 import gift.utils.error.TokenAuthException;
@@ -91,5 +93,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleDuplicateOptionException(DuplicateOptionException ex,
         WebRequest request){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(OptionNameDuplicationException.class)
+    public ResponseEntity<?> handleOptionNameDuplicationException(OptionNameDuplicationException ex,
+        WebRequest request){
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<?> handleOptionNotFoundException(OptionNotFoundException ex,
+        WebRequest request){
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
     }
 }

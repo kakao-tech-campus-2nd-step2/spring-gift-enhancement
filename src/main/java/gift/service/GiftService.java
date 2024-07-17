@@ -1,14 +1,19 @@
 package gift.service;
 
+import gift.controller.dto.ProductOptionRequest;
 import gift.controller.dto.ProductRequest;
 import gift.controller.dto.ProductResponse;
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.utils.error.CategoryNotFoundException;
 import gift.utils.error.NotpermitNameException;
+import gift.utils.error.OptionNameDuplicationException;
 import gift.utils.error.ProductNotFoundException;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,20 +24,24 @@ public class GiftService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
-    public GiftService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public GiftService(ProductRepository productRepository, CategoryRepository categoryRepository,
+        OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
+
     public ProductResponse getProduct(Long id) {
-        Product product = productRepository.findByIdWithCategory(id)
+        Product product = productRepository.findByIdWithCategoryAndOption(id)
             .orElseThrow(() -> new ProductNotFoundException("Product NOT FOUND"));
         return convertToProductResponse(product);
     }
 
     public Page<ProductResponse> getAllProduct(Pageable pageable) {
-        Page<Product> products = productRepository.findAllWithCategory(pageable);
+        Page<Product> products = productRepository.findAllWithCategoryAndOption(pageable);
         return products.map(this::convertToProductResponse);
     }
 
@@ -42,8 +51,19 @@ public class GiftService {
         Category category = categoryRepository.findById(productRequest.getCategoryId())
             .orElseThrow(() -> new CategoryNotFoundException("Category NOT FOUND"));
 
+        List<ProductOptionRequest> options = productRequest.getOptions();
+        if (options.stream().map(ProductOptionRequest::getName).distinct().count() < options.size()){
+            throw new OptionNameDuplicationException("Option Name Duplication");
+        }
+
         Product product = new Product(productRequest.getName(),
             productRequest.getPrice(), productRequest.getImageUrl());
+
+        options.forEach( option -> {
+            Option saveoption = new Option(option.getName(), option.getQuantity());
+            product.addOption(saveoption);
+        });
+
         product.setCategory(category);
 
         Product savedProduct = productRepository.save(product);
@@ -54,16 +74,26 @@ public class GiftService {
     public ProductResponse putProducts(ProductRequest productRequest, Long id) {
         validateProductName(productRequest.getName());
 
-        Product productById = productRepository.findById(id)
+        Product productById = productRepository.findByIdWithCategoryAndOption(id)
             .orElseThrow(() -> new ProductNotFoundException("Product NOT FOUND"));
 
         Category category = categoryRepository.findById(productRequest.getCategoryId())
             .orElseThrow(() -> new CategoryNotFoundException("Category NOT FOUND"));
 
+        List<ProductOptionRequest> options = productRequest.getOptions();
+        if (options.stream().map(ProductOptionRequest::getName).distinct().count() < options.size()){
+            throw new OptionNameDuplicationException("Option Name Duplication");
+        }
+
         productById.setName(productRequest.getName());
         productById.setPrice(productRequest.getPrice());
         productById.setImageUrl(productRequest.getImageUrl());
         productById.setCategory(category);
+
+        options.forEach( option -> {
+            Option saveoption = new Option(option.getName(), option.getQuantity());
+            productById.addOption(saveoption);
+        });
 
         Product savedProduct = productRepository.save(productById);
 
@@ -90,8 +120,10 @@ public class GiftService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategory().getId(),
-            product.getCategory().getName()
+            new Category(product.getCategory().getId(),product.getCategory().getName(),
+                product.getCategory().getColor(), product.getCategory().getImageUrl(),
+                product.getCategory().getDescription()),
+            product.getOptions().stream().toList()
         );
     }
 
