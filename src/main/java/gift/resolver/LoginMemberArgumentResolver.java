@@ -1,7 +1,8 @@
 package gift.resolver;
 
 import gift.anotation.LoginMember;
-import gift.service.MemberService;
+import gift.config.JwtConfig;
+import gift.repository.MemberRepository;
 import gift.util.JwtUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -14,11 +15,13 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final JwtUtil jwtUtil;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
+    private final JwtConfig jwtConfig;
 
-    public LoginMemberArgumentResolver(JwtUtil jwtUtil, MemberService memberService) {
+    public LoginMemberArgumentResolver(JwtUtil jwtUtil, MemberRepository memberRepository, JwtConfig jwtConfig) {
         this.jwtUtil = jwtUtil;
-        this.memberService = memberService;
+        this.memberRepository = memberRepository;
+        this.jwtConfig = jwtConfig;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         }
 
         Long userId = jwtUtil.getUserId(token);
-        return memberService.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }
 

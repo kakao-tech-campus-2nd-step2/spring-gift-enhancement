@@ -15,6 +15,7 @@
         <tr>
             <th>Name</th>
             <th>Price</th>
+            <th>Category</th>
             <th>Image</th>
             <th>Actions</th>
         </tr>
@@ -23,12 +24,14 @@
         <tr th:each="product : ${productPage.content}">
             <td th:text="${product.name}"></td>
             <td th:text="${product.price}"></td>
+            <td th:text="${product.categoryName}"></td>
             <td>
                 <img th:src="${product.imageUrl}" alt="Product Image" style="width: 100px; height: auto;">
             </td>
             <td>
                 <button class="btn btn-warning" th:onclick="'location.href=\'/api/products/edit/' + ${product.id} + '\';'">Edit</button>
                 <form th:action="@{/api/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="delete"/>
                     <button class="btn btn-danger" type="submit">Delete</button>
                 </form>
             </td>

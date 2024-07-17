@@ -3,10 +3,32 @@ package gift.dto;
 public class ProductResponseDTO {
     private Long id;
     private String name;
-    private int price; // 이 필드를 추가합니다.
+    private int price;
     private String imageUrl;
+    private String categoryName;
+    private Long categoryId;
 
-    // getters and setters
+    public ProductResponseDTO(Long id, String name, int price, String imageUrl, String categoryName, Long categoryId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.categoryName = categoryName;
+        this.categoryId = categoryId;
+    }
+
+
+
+    public ProductRequestDTO toRequestDTO() {
+        ProductRequestDTO dto = new ProductRequestDTO();
+        dto.setId(this.id);
+        dto.setName(this.name);
+        dto.setPrice(this.price);
+        dto.setImageUrl(this.imageUrl);
+        dto.setCategoryId(this.categoryId);
+        return dto;
+    }
+
     public Long getId() {
         return id;
     }
@@ -37,5 +59,21 @@ public class ProductResponseDTO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }
