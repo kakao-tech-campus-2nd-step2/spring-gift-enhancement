@@ -2,7 +2,8 @@ package gift.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
 import gift.domain.Category;
 import gift.domain.Product;
@@ -34,8 +35,8 @@ public class ProductServiceTest {
         // given
         Category category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
         Product product = new Product(1L, "test", 1234, "testImage", category);
-        when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
-        when(productRepository.save(any(Product.class))).thenReturn(product);
+        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
+        given(productRepository.save(any(Product.class))).willReturn(product);
 
         // when
         ProductDTO actual = productService.addProduct(product.toDTO());
@@ -51,7 +52,7 @@ public class ProductServiceTest {
         long id = 1L;
         Category category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
         Product product = new Product(id, "test", 1234, "testImage", category);
-        when(productRepository.findById(id)).thenReturn(Optional.of(product));
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         // when
         ProductDTO actual = productService.getProduct(id);
@@ -66,11 +67,11 @@ public class ProductServiceTest {
         // given
         long id = 1L;
         Category category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
-        Product updatedProduct = new Product(id, "updatedTest", 12345, "updatedTestImage",
-            category);
-        when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
-        when(productRepository.findById(id)).thenReturn(Optional.of(updatedProduct));
-        when(productRepository.save(any(Product.class))).thenReturn(updatedProduct);
+        Product product = new Product(id, "test", 1234, "testImage", category);
+        Product updatedProduct = new Product(id, "updatedTest", 12345, "updatedTestImage", category);
+        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(productRepository.save(any(Product.class))).willReturn(updatedProduct);
 
         // when
         ProductDTO actual = productService.updateProduct(id, updatedProduct.toDTO());
