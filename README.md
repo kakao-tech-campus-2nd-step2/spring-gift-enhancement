@@ -97,3 +97,12 @@ step-3의 구현 사항
       => Repository에 메소드 추가 -> Service 클래스 수정 -> Controller 클래스 수정 -> html 파일 수정 단계로 진행
    2. 2단계 미흡사항
       => 로그인 기능의 수정 -> 기존의 Controller 단계에서 토큰을 받아 처리하는 대신, interceptor를 통해 토큰을 검증하고 이메일을 속성에 추가
+
+4주차
+
+1. step-1의 구현사항
+   1. 상품 정보에 카테고리를 추가
+      => category Repository 추가, 가지는 값은 Long id(Product와 OneToOne 매핑), String name, String color, String imageUrl, String descripton (1)
+      => category의 Long id를 매핑 없이 하고, ProductEntity에 OneToOne으로 카테고리 추가 (2)
+   2. 테스트 코드 추가
+      => 이전의 Repository들처럼 create, read 기능에 대한 테스트 코드 작성

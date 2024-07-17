@@ -21,9 +21,6 @@ public class WishlistController {
 
     public WishlistController(WishService wishService){
         this.wishService = wishService;
-        for(int i = 0; i < 100; i++){
-            wishService.add(email, "appeach");
-        }
     }
 
     @GetMapping

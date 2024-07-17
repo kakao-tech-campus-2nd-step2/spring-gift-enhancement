@@ -21,4 +21,9 @@ public class ExceptionController {
     public ResponseEntity<?> handleProductNotFoundException(ProductNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CategoryException.class)
+    public ResponseEntity<?> handleCategoryDuplicatedException(CategoryException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
 }

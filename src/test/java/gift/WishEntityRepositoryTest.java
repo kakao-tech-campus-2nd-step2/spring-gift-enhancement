@@ -1,15 +1,18 @@
 package gift;
 
+import gift.Model.Entity.CategoryEntity;
 import gift.Model.Entity.MemberEntity;
 import gift.Model.Entity.ProductEntity;
 import gift.Model.Entity.WishEntity;
 import gift.Model.Role;
+import gift.Repository.CategoryRepository;
 import gift.Repository.MemberRepository;
 import gift.Repository.ProductRepository;
 import gift.Repository.WishRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -23,10 +26,18 @@ public class WishEntityRepositoryTest {
     @Autowired
     private WishRepository wishRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @BeforeTestClass
+    public void setup(){
+        categoryRepository.save(new CategoryEntity("testName","testColor","testImageUrl","testDescription"));
+    }
+
     @Test
     void save(){
-        MemberEntity member = new MemberEntity("a","b", Role.CONSUMER);
-        ProductEntity product = new ProductEntity("a",1,"b");
+        MemberEntity member = new MemberEntity("testEmail","testPassword", Role.CONSUMER);
+        ProductEntity product = new ProductEntity(categoryRepository.findById(1L).get(),"testName",1,"testImageUrl");
         memberRepository.save(member);
         productRepository.save(product);
         WishEntity expected = new WishEntity(member, product);
@@ -39,8 +50,8 @@ public class WishEntityRepositoryTest {
 
     @Test
     void findByName() {
-        MemberEntity member = new MemberEntity("a","b", Role.CONSUMER);
-        ProductEntity product = new ProductEntity("a",1,"b");
+        MemberEntity member = new MemberEntity("testEmail","testPassword", Role.CONSUMER);
+        ProductEntity product = new ProductEntity(categoryRepository.findById(1L).get(),"testName",1,"testImageUrl");
         memberRepository.save(member);
         productRepository.save(product);
 
@@ -52,8 +63,8 @@ public class WishEntityRepositoryTest {
 
     @Test
     void deleteByProductIDAndMemberId(){
-        MemberEntity member = new MemberEntity("a","b", Role.CONSUMER);
-        ProductEntity product = new ProductEntity("a",1,"b");
+        MemberEntity member = new MemberEntity("testEmail","testPassword", Role.CONSUMER);
+        ProductEntity product = new ProductEntity(categoryRepository.findById(1L).get(),"testName",1,"testImageUrl");
         memberRepository.save(member);
         productRepository.save(product);
         wishRepository.save(new WishEntity(member, product));

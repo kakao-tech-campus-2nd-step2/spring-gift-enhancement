@@ -1,11 +1,14 @@
 package gift.Service;
 
 import gift.Exception.AuthorizedException;
+import gift.Exception.CategoryException;
 import gift.Exception.ProductNotFoundException;
 import gift.Model.DTO.ProductDTO;
+import gift.Model.Entity.CategoryEntity;
 import gift.Model.Entity.ProductEntity;
 import gift.Model.Entity.MemberEntity;
 import gift.Model.Role;
+import gift.Repository.CategoryRepository;
 import gift.Repository.ProductRepository;
 import gift.Repository.MemberRepository;
 import org.springframework.data.domain.Page;
@@ -22,21 +25,33 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository, MemberRepository memberRepository){
+    public ProductService(ProductRepository productRepository, MemberRepository memberRepository, CategoryRepository categoryRepository){
         this.productRepository = productRepository;
         this.memberRepository = memberRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public void add(String email, ProductDTO productDTO){
         Optional<MemberEntity> memberOptional = memberRepository.findByEmail(email);
-        if(memberOptional.isEmpty()) throw new AuthorizedException();
+        if(memberOptional.isEmpty()) {
+            throw new AuthorizedException();
+        }
 
         MemberEntity memberEntity = memberOptional.get();
-        if(memberEntity.getRole() != Role.ADMIN)
+        if(memberEntity.getRole() != Role.ADMIN) {
             throw new AuthorizedException();
+        }
 
-        productRepository.save(new ProductEntity(productDTO.name(), productDTO.price(), productDTO.imageUrl()));
+        Optional<CategoryEntity> categoryEntityOptional = categoryRepository.findByName(productDTO.categoryName());
+        if(categoryEntityOptional.isEmpty()){
+            throw new CategoryException();
+        }
+
+        CategoryEntity categoryEntity = categoryEntityOptional.get();
+
+        productRepository.save(new ProductEntity(categoryEntity, productDTO.name(), productDTO.price(), productDTO.imageUrl()));
     }
 
     public void delete(String email, Long id){
@@ -57,7 +72,15 @@ public class ProductService {
         MemberEntity memberEntity = memberOptional.get();
         if(memberEntity.getRole() != Role.ADMIN)
             throw new AuthorizedException();
-        ProductEntity productEntity = new ProductEntity(productDTO.name(), productDTO.price(), productDTO.imageUrl());
+
+        Optional<CategoryEntity> categoryEntityOptional = categoryRepository.findByName(productDTO.categoryName());
+        if(categoryEntityOptional.isEmpty()){
+            throw new CategoryException();
+        }
+
+        CategoryEntity categoryEntity = categoryEntityOptional.get();
+
+        ProductEntity productEntity = new ProductEntity(categoryEntity, productDTO.name(), productDTO.price(), productDTO.imageUrl());
         productEntity.setId(id);
 
         productRepository.save(productEntity);
@@ -74,7 +97,8 @@ public class ProductService {
         List<ProductDTO> dtoList = new ArrayList<>();
 
         for(ProductEntity p: entityList){
-            dtoList.add(new ProductDTO(p.getId(), p.getName(), p.getPrice(), p.getImageUrl()));
+            CategoryEntity category = p.getCategory();
+            dtoList.add(new ProductDTO(p.getId(), category.getName(), p.getName() ,p.getPrice(), p.getImageUrl()));
         }
 
         return dtoList;
@@ -107,7 +131,18 @@ public class ProductService {
         }
         ProductEntity productEntity = productEntityOptional.get();
 
-        return new ProductDTO(productEntity.getId(), productEntity.getName(), productEntity.getPrice(), productEntity.getImageUrl());
+        return new ProductDTO(productEntity.getId(), productEntity.getCategory().getName(), productEntity.getName(),productEntity.getPrice(), productEntity.getImageUrl());
+    }
+
+    public List<String> getCategoriesName(){
+        List<CategoryEntity> categoryEntityList = categoryRepository.findAll();
+        List<String> categoriesName = new ArrayList<>();
+
+        for(CategoryEntity c: categoryEntityList){
+            categoriesName.add(c.getName());
+        }
+
+        return categoriesName;
     }
 
 
