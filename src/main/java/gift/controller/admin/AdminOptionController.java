@@ -53,7 +53,7 @@ public class AdminOptionController {
     public ResponseEntity<Void> deleteOptionById(
             @PathVariable("productId") @NotNull @Min(1) Long productId,
             @PathVariable("id") @NotNull @Min(1) Long id) {
-        optionService.deleteById(id);
+        optionService.deleteByIdAndProductId(id, productId);
         return ResponseEntity.ok().build();
     }
 }

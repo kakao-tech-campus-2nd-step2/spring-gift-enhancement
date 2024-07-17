@@ -55,7 +55,11 @@ public class OptionService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteByIdAndProductId(Long id, Long productId) {
+        List<Option> options = optionRepository.findAllByProductIdFetchJoin(productId);
+        if (options.size() <= 1) {
+            throw new IllegalArgumentException("At least 1 option is required");
+        }
         optionRepository.deleteById(id);
     }
 

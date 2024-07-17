@@ -2,6 +2,8 @@ package gift.service;
 
 import gift.common.exception.DuplicateDataException;
 import gift.common.exception.EntityNotFoundException;
+import gift.controller.dto.request.AdminCreateProductRequest;
+import gift.controller.dto.request.AdminUpdateProductRequest;
 import gift.controller.dto.request.CreateProductRequest;
 import gift.controller.dto.request.UpdateProductRequest;
 import gift.controller.dto.response.PagingResponse;
@@ -56,7 +58,26 @@ public class ProductService {
     }
 
     @Transactional
+    public Long save(AdminCreateProductRequest request) {
+        checkDuplicateOptionName(request.optionName());
+        Option option = new Option(request.optionName(), request.optionQuantity());
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category with id " + request.categoryId() + " not found"));
+        Product product = new Product(request.name(), request.price(), request.imageUrl(), category, option);
+        return productRepository.save(product).getId();
+    }
+
+    @Transactional
     public void updateById(UpdateProductRequest request) {
+        Product product = productRepository.findById(request.id())
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + request.id() + " not found"));
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category with name " + request.categoryId() + " not found"));
+        product.updateProduct(request.name(), request.price(), request.imageUrl(), category);
+    }
+
+    @Transactional
+    public void updateById(AdminUpdateProductRequest request) {
         Product product = productRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Product with id " + request.id() + " not found"));
         Category category = categoryRepository.findById(request.categoryId())
