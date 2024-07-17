@@ -41,7 +41,7 @@ public class ProductService {
         var category = categoryRepository.getReferencedCategory(productRegisterDto.categoryId());
         product.update(productRegisterDto.name(), productRegisterDto.description(),
                 productRegisterDto.price(), productRegisterDto.url());
-        product.setCategory(category);
+        product.updateCategory(category);
         return productRepository.saveProduct(product);
     }
 

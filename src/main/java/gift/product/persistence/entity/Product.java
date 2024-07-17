@@ -74,7 +74,7 @@ public class Product extends BaseTimeEntity {
         this.url = url;
     }
 
-    public void setCategory(Category category) {
+    public void updateCategory(Category category) {
         this.category = category;
     }
 }
