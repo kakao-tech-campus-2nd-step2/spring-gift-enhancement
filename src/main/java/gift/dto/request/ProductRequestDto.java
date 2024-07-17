@@ -15,14 +15,17 @@ public record ProductRequestDto(
         @NotNull(message = "가격을 입력하세요 (1 이상)")
         @Positive(message = "가격은 1 이상이어야 합니다")
         Integer price,
-        String imageUrl) {
+        String imageUrl,
 
-    public static ProductRequestDto of(String name, int price, String imageUrl) {
-        return new ProductRequestDto(name, price, imageUrl);
+        @NotNull(message = "카테고리를 등록하세요")
+        Long categoryId) {
+
+    public static ProductRequestDto of(String name, int price, String imageUrl, Long categoryId) {
+        return new ProductRequestDto(name, price, imageUrl, categoryId);
     }
 
     public static ProductRequestDto from(Product product) {
-        return new ProductRequestDto(product.getName(), product.getPrice(), product.getImageUrl());
+        return new ProductRequestDto(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getId());
     }
 
 }
