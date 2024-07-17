@@ -2,12 +2,7 @@ package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.ProductOptionRequest;
-import gift.dto.ProductRequest;
-import gift.dto.ProductResponse;
-import gift.model.MemberRole;
-import gift.service.ProductService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import gift.service.ProductOptionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +24,7 @@ class ProductOptionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private ProductService productService;
-    private ProductResponse product;
-
-    @BeforeEach
-    @DisplayName("옵션에 대한 작업을 수행하기 위한 상품 추가 작업")
-    void setBaseData() {
-        var productRequest = new ProductRequest("아이폰16pro", 1800000, "https://image.zdnet.co.kr/2024/03/21/29acda4f841885d2122750fbff5cbd9d.jpg");
-        product = productService.addProduct(productRequest, MemberRole.MEMBER);
-    }
-
-    @AfterEach
-    @DisplayName("추가한 상품에 대한 삭제 작업 수행")
-    void deleteBaseData() {
-        productService.deleteProduct(product.id());
-    }
+    private ProductOptionService productOptionService;
 
     @Test
     @DisplayName("잘못된 가격으로 된 오류 상품 옵션 생성하기")
@@ -51,7 +32,7 @@ class ProductOptionControllerTest {
         //given
         var postRequest = post("/api/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest(product.id(), "기본", -1000)));
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest(1L, "기본", -1000)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -65,7 +46,7 @@ class ProductOptionControllerTest {
         //given
         var postRequest = post("/api/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest(product.id(), "", 1000)));
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest(1L, "", 1000)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -79,11 +60,16 @@ class ProductOptionControllerTest {
         //given
         var postRequest = post("/api/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest(product.id(), "Large", 1500)));
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest(1L, "Large", 1500)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
-        result.andExpect(status().isCreated());
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        var location = createdResult.getResponse().getHeader("Location");
+        var optionId = location.replaceAll("/api/options/", "");
+
+        productOptionService.deleteOption(Long.parseLong(optionId));
     }
 
     @Test
