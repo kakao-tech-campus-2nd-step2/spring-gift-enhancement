@@ -19,6 +19,12 @@
             <p><label for="new_imageUrl">이미지</label>
               <input type="text" id="new_imageUrl" name="imageUrl" placeholder="이미지 URL을 입력하세요">
             </p>
+            <p><label for="new_category">카테고리</label>
+              <select id="new_category" th:field="*{categoryId}">
+                <option value="" disabled selected>카테고리 선택</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+              </select>
+            </p>
           </div>
           <button type="submit">상품 추가</button>
           <button type="reset">취소</button>
@@ -36,6 +42,12 @@
             </p>
             <p><label for="edit_imageUrl">이미지</label>
               <input type="text" id="edit_imageUrl" name="imageUrl" th:value="${product.imageUrl}" placeholder="이미지 URL을 입력하세요">
+            </p>
+            <p><label for="edit_category">카테고리</label>
+              <select id="edit_category" th:field="*{categoryId}">
+                <option value="" disabled selected>카테고리 선택</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+              </select>
             </p>
           </div>
           <button type="submit">상품 수정</button>
