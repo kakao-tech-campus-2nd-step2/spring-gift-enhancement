@@ -5,6 +5,7 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.exception.CategoryNotFoundException;
 import gift.exception.DuplicateOptionException;
+import gift.exception.OptionNotFoundException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -113,6 +114,19 @@ public class ProductService {
         Option option = new Option(product, request.getName(), request.getQuantity());
 
         product.getOptions().add(option);
+    }
+
+    public void removeOption(Long productId, Long optionId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+
+        List<Option> options = product.getOptions();
+
+        boolean isRemoved  = options.removeIf(option -> option.getId().equals(optionId));
+
+        if (!isRemoved) {
+            throw new OptionNotFoundException();
+        }
     }
 
 }

@@ -27,7 +27,8 @@ public enum ErrorMessage {
     CATEGORY_NAME_NOT_DUPLICATES("이미 존재하는 카테고리 이름입니다."),
 
     /* ProductService */
-    DUPLICATE_OPTION("중복된 옵션입니다.");
+    DUPLICATE_OPTION("중복된 옵션입니다."),
+    OPTION_NOT_FOUND("존재하지 않는 옵션입니다.");
 
     private final String message;
 
