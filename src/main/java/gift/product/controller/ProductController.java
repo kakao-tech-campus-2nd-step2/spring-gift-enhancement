@@ -40,14 +40,19 @@ public class ProductController {
      * 페이지 번호: 0
      * 페이지 크기: 10
      * 정렬: 이름을 기준으로 오름차순 정렬 (기본값) **/
-    @GetMapping
+    @GetMapping("/api/products")
     public Page<ProductDto> getProducts(
             @RequestParam(defaultValue = "0") int page, // 클라이언트가 특정 페이지를 요청할 때 이 파라미터를 사용
             @RequestParam(defaultValue = "10") int size, // 한 페이지에 몇 개의 항목이 표시될지를 정의
             @RequestParam(defaultValue = "name,asc") String[] sort) // 배열 형태. 순서대로 정렬 속성, 정렬 방향 표시
     {
-        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+        int maxSize = 50; // 최대 페이지 크기를 50으로 제한
+        size = Math.min(size, maxSize); // 50 초과 입력시 50으로 설정
+
+        String sortBy = sort[0]; // sort 배열의 첫 번째 요소는 정렬 기준
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]); // sort 배열의 두 번째 요소는 정렬 방향
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
         return productService.findAll(pageable);
     }

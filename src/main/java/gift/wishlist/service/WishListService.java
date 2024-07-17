@@ -27,14 +27,14 @@ public class WishListService {
     }
 
     // id로 위시리스트 찾기 (단일 객체 반환)
-    public WishList findByMemberId(Long member_id) {
-        return wishListRepository.findByMemberId(member_id);
+    public WishList findByMemberId(Long memberId) {
+        return wishListRepository.findByMemberId(memberId);
     }
 
     /** wishListRepository의 findByMemberId 메소드를 호출하여
      데이터베이스에서 페이지네이션된 결과를 가져옴. **/
-    public Page<WishList> findByMemberId(Long member_id, Pageable pageable) {
-        return wishListRepository.findByMemberId(member_id, pageable);
+    public Page<WishList> findByMemberId(Long memberId, Pageable pageable) {
+        return wishListRepository.findByMemberId(memberId, pageable);
     }
 
     // 위시리스트에 상품 추가
@@ -48,8 +48,8 @@ public class WishListService {
 
     // 위시리스트에 상품 삭제
     @Transactional
-    public void removeProductFromWishList(Long membe_id, Long produc_id) {
-        Optional<WishList> wishListOptional = wishListRepository.findByMemberIdAndProductId(membe_id, produc_id);
+    public void removeProductFromWishList(Long memberId, Long productId) {
+        Optional<WishList> wishListOptional = wishListRepository.findByMemberIdAndProductId(memberId, productId);
         if (wishListOptional.isPresent()) {
             wishListRepository.delete(wishListOptional.get());
         }
