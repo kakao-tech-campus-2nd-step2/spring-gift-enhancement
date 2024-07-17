@@ -6,6 +6,7 @@ import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public ArrayList<CategoryDto> getAllCategories() {
+    public List<CategoryDto> getAllCategories() {
         var allCategories = categoryRepository.findAll();
         var categoryDtoList = new ArrayList<CategoryDto>();
         for (Category category : allCategories) {
