@@ -1,6 +1,8 @@
 package gift.model;
 
+import static gift.util.Constants.CATEGORY_DESCRIPTION_SIZE_LIMIT;
 import static gift.util.Constants.INVALID_COLOR;
+import static gift.util.Constants.REQUIRED_FIELD_MISSING;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import jakarta.validation.ConstraintViolation;
@@ -57,10 +59,53 @@ public class CategoryTest {
 
         Set<ConstraintViolation<Category>> violations = validator.validate(category);
 
-        assertThat(violations).isEmpty();
-        assertThat(category.getName()).isEqualTo("Category");
-        assertThat(category.getColor()).isNull();
-        assertThat(category.getImageUrl()).isEqualTo("imageUrl");
-        assertThat(category.getDescription()).isEqualTo("description");
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(violation ->
+            violation.getPropertyPath().toString().equals("color") &&
+                violation.getMessage().equals(REQUIRED_FIELD_MISSING)
+        );
+    }
+
+    @Test
+    @DisplayName("이미지 URL이 없는 경우 테스트")
+    public void testNoImageUrl() {
+        Category category = new Category("Category", "#000000", null, "description");
+
+        Set<ConstraintViolation<Category>> violations = validator.validate(category);
+
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(violation ->
+            violation.getPropertyPath().toString().equals("imageUrl") &&
+                violation.getMessage().equals(REQUIRED_FIELD_MISSING)
+        );
+    }
+
+    @Test
+    @DisplayName("카테고리 이름이 없는 경우 테스트")
+    public void testNoName() {
+        Category category = new Category(null, "#000000", "imageUrl", "description");
+
+        Set<ConstraintViolation<Category>> violations = validator.validate(category);
+
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(violation ->
+            violation.getPropertyPath().toString().equals("name") &&
+                violation.getMessage().equals(REQUIRED_FIELD_MISSING)
+        );
+    }
+
+    @Test
+    @DisplayName("설명이 255자를 초과하는 경우 테스트")
+    public void testDescriptionTooLong() {
+        String longDescription = "^".repeat(256);
+        Category category = new Category("Category", "#000000", "imageUrl", longDescription);
+
+        Set<ConstraintViolation<Category>> violations = validator.validate(category);
+
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(violation ->
+            violation.getPropertyPath().toString().equals("description") &&
+                violation.getMessage().equals(CATEGORY_DESCRIPTION_SIZE_LIMIT)
+        );
     }
 }

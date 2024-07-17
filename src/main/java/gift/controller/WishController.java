@@ -26,7 +26,7 @@ public class WishController {
     private final WishService wishService;
 
     public WishController(WishService wishService) {
-        this.wishService git = wishService;
+        this.wishService = wishService;
     }
 
     @GetMapping

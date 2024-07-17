@@ -2,9 +2,9 @@
 CREATE TABLE IF NOT EXISTS category (
     id          BIGINT auto_increment PRIMARY KEY,
     name        VARCHAR (255) NOT NULL,
-    color       VARCHAR (7),
-    image_url   VARCHAR (255),
-    description TEXT
+    color       VARCHAR (7) NOT NULL,
+    image_url   VARCHAR (255) NOT NULL,
+    description VARCHAR (255)
 );
 
 -- 상품(PRODUCTS) 스키마
