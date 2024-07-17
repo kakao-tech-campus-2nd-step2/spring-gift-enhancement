@@ -23,15 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiOptionController {
 
     private final OptionService optionService;
-    private final ProductService productService;
 
     @Autowired
-    public ApiOptionController(
-        OptionService optionService,
-        ProductService productService
-    ) {
+    public ApiOptionController(OptionService optionService) {
         this.optionService = optionService;
-        this.productService = productService;
     }
 
     @GetMapping("/{productId}")
@@ -40,7 +35,7 @@ public class ApiOptionController {
         return optionService.getAllOptions(productId, pageable);
     }
 
-    @PostMapping("/{productId}")
+    @PostMapping("/{productId}/option")
     public ResponseEntity<String> registerOption(@PathVariable Long productId, @RequestBody OptionDTO optionDTO) {
         System.out.println("[ApiOptionController] getAllOptions()");
         optionService.registerOption(
