@@ -53,7 +53,10 @@ public class AdminController {
 
     @PostMapping("/admin/gift/create")
     public String giftCreate(@Valid @ModelAttribute GiftRequest giftRequest) {
-        giftService.addGift(giftRequest);
+        GiftResponse giftResponse = giftService.addGift(giftRequest);
+        for (OptionRequest optionRequest : giftRequest.getOptions()) {
+            optionService.addOptionToGift(giftResponse.getId(), optionRequest);
+        }
         return "redirect:/admin";
     }
 

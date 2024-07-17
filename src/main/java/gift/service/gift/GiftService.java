@@ -47,11 +47,11 @@ public class GiftService {
         return GiftResponse.from(gift);
     }
 
-    public void addGift(GiftRequest giftRequest) {
+    public GiftResponse addGift(GiftRequest giftRequest) {
         Category category = categoryRepository.findById(giftRequest.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("해당 카테고리 id가 없습니다."));
         Gift gift = new Gift(giftRequest.getName(), giftRequest.getPrice(), giftRequest.getImageUrl(), category);
-        giftRepository.save(gift);
+        return GiftResponse.from(giftRepository.save(gift));
     }
 
     @Transactional
