@@ -3,6 +3,7 @@ package gift.service;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,10 +27,18 @@ public class CategoryService {
     }
 
     public void addCategory(Category category) {
+        categoryRepository.findByName(category.getName())
+                .ifPresent(existingCategory -> {
+                    throw new DuplicateKeyException("이미 존재하는 카테고리 이름입니다.");
+                });
         categoryRepository.save(category);
     }
 
     public void updateCategory(Long id, Category category) {
+        categoryRepository.findByName(category.getName())
+                .ifPresent(existingCategory -> {
+            throw new DuplicateKeyException("이미 존재하는 카테고리 이름입니다.");
+        });
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
         Category updatedCategory = new Category(
