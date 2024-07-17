@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.exception.customException.CustomArgumentNotValidException;
 import gift.exception.ErrorCode;
+import gift.exception.customException.CustomArgumentNotValidException;
 import gift.model.item.ItemDTO;
 import gift.model.item.ItemForm;
 import gift.service.ItemService;
@@ -51,7 +51,7 @@ public class ItemController {
     public ResponseEntity<Long> createItem(@Valid @RequestBody ItemForm form, BindingResult result)
         throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new CustomArgumentNotValidException(null, result, ErrorCode.BAD_REQUEST);
+            throw new CustomArgumentNotValidException(result, ErrorCode.BAD_REQUEST);
         }
         return ResponseEntity.ok(itemService.insertItem(form));
     }
@@ -61,7 +61,7 @@ public class ItemController {
     public ResponseEntity<Long> updateItem(@PathVariable Long id, @Valid @RequestBody ItemForm form,
         BindingResult result) throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new CustomArgumentNotValidException(null, result, ErrorCode.BAD_REQUEST);
+            throw new CustomArgumentNotValidException(result, ErrorCode.BAD_REQUEST);
         }
         ItemDTO itemDTO = new ItemDTO(id, form.getName(), form.getPrice(), form.getImgUrl(),
             form.getCategoryId());

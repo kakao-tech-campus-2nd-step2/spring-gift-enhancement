@@ -3,6 +3,7 @@ package gift.exception;
 import gift.exception.customException.CustomArgumentNotValidException;
 import gift.exception.customException.CustomException;
 import io.jsonwebtoken.JwtException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,7 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponseDTO> handleCustomException(
         CustomException e) {
-        return handleException(e.getErrorCode(), null);
+        return handleException(e.getErrorCode(), Collections.emptyMap());
     }
 
     @ExceptionHandler(CustomArgumentNotValidException.class)

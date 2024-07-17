@@ -15,6 +15,11 @@ public class CustomArgumentNotValidException extends MethodArgumentNotValidExcep
         this.errorCode = errorCode;
     }
 
+    public CustomArgumentNotValidException(BindingResult bindingResult, ErrorCode errorCode) {
+        super(null, bindingResult);
+        this.errorCode = errorCode;
+    }
+
     public ErrorCode getErrorCode() {
         return errorCode;
     }

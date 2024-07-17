@@ -1,8 +1,7 @@
 package gift.service;
 
-import gift.exception.customException.CategoryNotFoundException;
-import gift.exception.customException.ItemNotFoundException;
 import gift.exception.ErrorCode;
+import gift.exception.customException.CustomNotFoundException;
 import gift.model.categories.Category;
 import gift.model.item.Item;
 import gift.model.item.ItemDTO;
@@ -28,14 +27,14 @@ public class ItemService {
     @Transactional
     public Long insertItem(ItemForm form) {
         Category category = categoryRepository.findById(form.getCategoryId())
-            .orElseThrow(() -> new CategoryNotFoundException(ErrorCode.CATEGORY_NOT_FOUND));
+            .orElseThrow(() -> new CustomNotFoundException(ErrorCode.CATEGORY_NOT_FOUND));
         Item item = new Item(0L, form.getName(), form.getPrice(), form.getImgUrl(), category);
         return itemRepository.save(item).getId();
     }
 
     @Transactional(readOnly = true)
     public ItemDTO findItem(Long id) {
-        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(
+        Item item = itemRepository.findById(id).orElseThrow(() -> new CustomNotFoundException(
             ErrorCode.ITEM_NOT_FOUND));
         return item.toDTO();
     }
@@ -49,7 +48,7 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<ItemDTO> getListByCategoryId(Long categoryId, Pageable pageable) {
         if (!categoryRepository.existsById(categoryId)) {
-            throw new CategoryNotFoundException(ErrorCode.CATEGORY_NOT_FOUND);
+            throw new CustomNotFoundException(ErrorCode.CATEGORY_NOT_FOUND);
         }
         Page<Item> list = itemRepository.findAllByCategoryId(categoryId, pageable);
         return list.map(Item::toDTO);
@@ -59,7 +58,7 @@ public class ItemService {
     @Transactional
     public Long updateItem(ItemDTO itemDTO) {
         Category category = categoryRepository.findById(itemDTO.getCategoryId())
-            .orElseThrow(() -> new CategoryNotFoundException(ErrorCode.CATEGORY_NOT_FOUND));
+            .orElseThrow(() -> new CustomNotFoundException(ErrorCode.CATEGORY_NOT_FOUND));
         Item item = new Item(itemDTO.getId(), itemDTO.getName(), itemDTO.getPrice(),
             itemDTO.getImgUrl(), category);
         return itemRepository.save(item).getId();

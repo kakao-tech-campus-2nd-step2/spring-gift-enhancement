@@ -1,7 +1,7 @@
 package gift.service;
 
-import gift.exception.customException.CategoryNotFoundException;
 import gift.exception.ErrorCode;
+import gift.exception.customException.CustomNotFoundException;
 import gift.model.categories.Category;
 import gift.model.categories.CategoryDTO;
 import gift.repository.CategoryRepository;
@@ -26,7 +26,7 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public CategoryDTO findCategoryByName(String name) {
-        return categoryRepository.findByName(name).orElseThrow(() -> new CategoryNotFoundException(
+        return categoryRepository.findByName(name).orElseThrow(() -> new CustomNotFoundException(
             ErrorCode.CATEGORY_NOT_FOUND)).toDTO();
     }
 

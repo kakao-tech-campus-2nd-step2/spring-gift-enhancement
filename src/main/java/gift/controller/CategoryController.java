@@ -1,8 +1,8 @@
 package gift.controller;
 
-import gift.exception.customException.CustomArgumentNotValidException;
-import gift.exception.customException.DuplicateCategoryException;
 import gift.exception.ErrorCode;
+import gift.exception.customException.CustomArgumentNotValidException;
+import gift.exception.customException.CustomDuplicateException;
 import gift.model.categories.CategoryDTO;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
@@ -32,11 +32,11 @@ public class CategoryController {
         BindingResult result)
         throws CustomArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new CustomArgumentNotValidException(null, result, ErrorCode.INVALID_INPUT);
+            throw new CustomArgumentNotValidException(result, ErrorCode.INVALID_INPUT);
         }
         if (categoryService.isDuplicateName(categoryForm.getName())) {
             result.rejectValue("name", "", ErrorCode.DUPLICATE_CATEGORY.getMessage());
-            throw new DuplicateCategoryException(null, result, ErrorCode.DUPLICATE_CATEGORY);
+            throw new CustomDuplicateException(result, ErrorCode.DUPLICATE_CATEGORY);
         }
         return ResponseEntity.ok(categoryService.insertCategory(categoryForm));
     }
@@ -51,11 +51,11 @@ public class CategoryController {
         @Valid @RequestBody CategoryDTO categoryForm, BindingResult result)
         throws CustomArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new CustomArgumentNotValidException(null, result, ErrorCode.INVALID_INPUT);
+            throw new CustomArgumentNotValidException(result, ErrorCode.INVALID_INPUT);
         }
         if (categoryService.isDuplicateName(categoryForm.getName())) {
             result.rejectValue("name", "", ErrorCode.DUPLICATE_CATEGORY.getMessage());
-            throw new DuplicateCategoryException(null, result, ErrorCode.DUPLICATE_CATEGORY);
+            throw new CustomDuplicateException(result, ErrorCode.DUPLICATE_CATEGORY);
         }
         CategoryDTO updated = categoryService.updateCategory(
             new CategoryDTO(id, categoryForm.getName(), categoryForm.getImgUrl()));
