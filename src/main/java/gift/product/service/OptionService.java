@@ -42,4 +42,17 @@ public class OptionService {
             )
         );
     }
+
+    public void updateOption(OptionDTO optionDTO) {
+        System.out.println("[OptionService] updateOption()");
+        optionRepository.save(
+            new Option(
+                optionDTO.getId(),
+                optionDTO.getName(),
+                optionDTO.getQuantity(),
+                productRepository.findById(optionDTO.getProductId())
+                    .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
+            )
+        );
+    }
 }
