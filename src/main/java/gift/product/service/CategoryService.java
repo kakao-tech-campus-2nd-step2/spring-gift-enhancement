@@ -2,7 +2,9 @@ package gift.product.service;
 
 import gift.product.domain.Category;
 import gift.product.persistence.CategoryRepository;
+import gift.product.service.dto.CategoryInfo;
 import gift.product.service.dto.CategoryParam;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,5 +37,19 @@ public class CategoryService {
         categoryRepository.findByName(name).ifPresent(category -> {
             throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
         });
+    }
+
+    public CategoryInfo getCategoryInfo(final Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
+
+        return CategoryInfo.from(category);
+    }
+
+    public List<CategoryInfo> getCategoryList() {
+        List<Category> categories = categoryRepository.findAll();
+
+        var response = categories.stream().map(CategoryInfo::from).toList();
+        return response;
     }
 }
