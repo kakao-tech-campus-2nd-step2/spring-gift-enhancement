@@ -1,6 +1,5 @@
 package gift.service;
 
-import gift.entity.Category;
 import gift.entity.Product;
 import gift.domain.ProductDTO;
 import gift.repository.CategoryRepository;
@@ -51,7 +50,7 @@ public class ProductService {
     public Product addProduct(ProductDTO productDTO) {
         try {
             var category = categoryRepository.findById(productDTO.categoryId());
-            Product product = new Product(category, productDTO.price(), productDTO.name(), productDTO.imgURL());
+            Product product = new Product(category, productDTO.price(), productDTO.name(), productDTO.imageUrl());
 
             return productRepository.save(product);
         }
@@ -63,7 +62,7 @@ public class ProductService {
     public Product updateProduct(int id, ProductDTO productDTO) {
         try {
             var category = categoryRepository.findById(productDTO.categoryId());
-            Product product = new Product(id, category, productDTO.price(), productDTO.name(), productDTO.imgURL());
+            Product product = new Product(id, category, productDTO.price(), productDTO.name(), productDTO.imageUrl());
 
             return productRepository.save(product);
         }
