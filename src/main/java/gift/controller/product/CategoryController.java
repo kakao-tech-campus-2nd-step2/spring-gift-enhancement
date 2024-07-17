@@ -6,6 +6,7 @@ import gift.global.auth.Authorization;
 import gift.model.member.Role;
 import gift.service.product.CategoryService;
 import gift.service.product.dto.CategoryModel;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +35,7 @@ public class CategoryController {
     @Authorization(role = Role.ADMIN)
     @PostMapping("/categories")
     public ResponseEntity<CategoryResponse.Info> createCategory(
-        @RequestBody CategoryRequest.Register request
+        @RequestBody @Valid CategoryRequest.Register request
     ) {
         CategoryModel.Info model = categoryService.createCategory(request.toCommand());
         return ResponseEntity.ok().body(CategoryResponse.Info.from(model));
@@ -52,7 +53,7 @@ public class CategoryController {
     @PutMapping("/categories/{id}")
     public ResponseEntity<CategoryResponse.Info> updateCategory(
         @PathVariable("id") Long id,
-        @RequestBody CategoryRequest.Update request
+        @RequestBody @Valid CategoryRequest.Update request
     ) {
         CategoryModel.Info model = categoryService.updateCategory(id, request.toCommand());
         return ResponseEntity.ok().body(CategoryResponse.Info.from(model));

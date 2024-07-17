@@ -1,13 +1,17 @@
 package gift.controller.product.dto;
 
 import gift.service.product.dto.CategoryCommand;
+import jakarta.validation.constraints.NotBlank;
 
 public class CategoryRequest {
 
     public record Register(
+        @NotBlank
         String name,
+        @NotBlank
         String color,
         String description,
+        @NotBlank
         String imageUrl
     ) {
 
@@ -17,9 +21,12 @@ public class CategoryRequest {
     }
 
     public record Update(
+        @NotBlank
         String name,
+        @NotBlank
         String color,
         String description,
+        @NotBlank
         String imageUrl
     ) {
 
