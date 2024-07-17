@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.domain.model.dto.CategoryAddRequestDto;
 import gift.domain.model.dto.CategoryResponseDto;
+import gift.domain.model.dto.CategoryUpdateRequestDto;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -33,7 +35,15 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryResponseDto addCategory(@Valid @RequestBody CategoryAddRequestDto categoryAddRequestDto) {
+    public CategoryResponseDto addCategory(
+        @Valid @RequestBody CategoryAddRequestDto categoryAddRequestDto) {
         return categoryService.addCategory(categoryAddRequestDto);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryResponseDto updateCategory(
+        @Valid @RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto) {
+        return categoryService.updateCategory(categoryUpdateRequestDto);
     }
 }
