@@ -3,6 +3,9 @@ package gift.domain;
 import gift.response.ProductResponse;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Product {
 
@@ -22,6 +25,9 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
 
     public Product() {
     }
