@@ -1,11 +1,6 @@
 package gift.Model.Entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import java.util.List;
 
 @Entity
 @Table(name="product")
@@ -14,7 +9,7 @@ public class ProductEntity {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        @OneToOne
+        @ManyToOne
         @JoinColumn(name="category_id")
         private CategoryEntity category;
 
