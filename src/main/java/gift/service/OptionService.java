@@ -1,2 +1,83 @@
-package gift.service;public class OptionService {
+package gift.service;
+
+import gift.converter.OptionConverter;
+import gift.dto.OptionDTO;
+import gift.dto.PageRequestDTO;
+import gift.model.Option;
+import gift.model.Product;
+import gift.repository.OptionRepository;
+import gift.repository.ProductRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class OptionService {
+
+    private final OptionRepository optionRepository;
+    private final ProductRepository productRepository;
+
+    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
+        this.optionRepository = optionRepository;
+        this.productRepository = productRepository;
+    }
+
+
+    public Page<OptionDTO> findAllOptions(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.toPageRequest();
+        Page<Option> options = optionRepository.findAll(pageable);
+        return options.map(OptionConverter::convertToDTO);
+    }
+
+    public List<OptionDTO> findOptionsByProductId(Long productId) {
+        List<Option> options = optionRepository.findByProductId(productId);
+        return options.stream()
+            .map(OptionConverter::convertToDTO)
+            .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Long addOption(OptionDTO optionDTO) {
+        Product product = productRepository.findById(optionDTO.getProductId())
+            .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        Option option = new Option(
+            optionDTO.getId(),
+            optionDTO.getName(),
+            optionDTO.getQuantity(),
+            product
+        );
+
+        optionRepository.save(option);
+        return option.getId();
+    }
+
+    public Optional<OptionDTO> findOptionById(Long id) {
+        return optionRepository.findById(id)
+            .map(OptionConverter::convertToDTO);
+    }
+
+    @Transactional
+    public void updateOption(OptionDTO optionDTO) {
+        Option existingOption = optionRepository.findById(optionDTO.getId())
+            .orElseThrow(() -> new IllegalArgumentException("옵션을 찾을 수 없습니다."));
+
+        existingOption.update(optionDTO.getName(), optionDTO.getQuantity());
+        optionRepository.save(existingOption);
+    }
+
+    public List<OptionDTO> findAllOptions() {
+        List<Option> options = optionRepository.findAll();
+        return options.stream()
+            .map(OptionConverter::convertToDTO)
+            .collect(Collectors.toList());
+    }
+
+    public void deleteOption(Long id) {
+        optionRepository.deleteById(id);
+    }
 }
