@@ -53,7 +53,7 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Long getUserIdByToken(String token) {
         Long userId = jwtUtil.extractUserId(token);
         if (userId == null || !userRepository.existsById(userId)) {

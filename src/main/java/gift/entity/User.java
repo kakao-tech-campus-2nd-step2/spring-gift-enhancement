@@ -58,6 +58,10 @@ public class User {
         return email;
     }
 
+    public Set<UserRole> getRoles() {
+        return userRoles;
+    }
+
     public void changePassword(String password) {
         this.password = password;
     }
