@@ -2,6 +2,7 @@ package gift.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.domain.Category;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Role;
@@ -27,6 +28,9 @@ class WishRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Pageable pageable = PageRequest.of(0, 10);
 
     @Test
@@ -36,10 +40,13 @@ class WishRepositoryTest {
         Member member = new Member(null, "test@example.com", "password", Role.USER);
         memberRepository.save(member);
 
-        Product product1 = new Product(null, "testProdut1", 300, "imageUrl");
+        Category category = new Category("Test Category", "Blue", "abcd", "Test");
+        categoryRepository.save(category);
+
+        Product product1 = new Product(null, "testProdut1", 300, "imageUrl", category);
         productRepository.save(product1);
 
-        Product product2 = new Product(null, "testProdut2", 300, "imageUrl");
+        Product product2 = new Product(null, "testProdut2", 300, "imageUrl", category);
         productRepository.save(product2);
 
         Wish wish1 = new Wish(member, product1);
@@ -65,7 +72,10 @@ class WishRepositoryTest {
         Member member = new Member(null, "test2@example.com", "password", Role.USER);
         memberRepository.save(member);
 
-        Product product = new Product(null, "testProdut3", 300, "imageUrl");
+        Category category = new Category("Test Category", "Blue", "abcd", "Test");
+        categoryRepository.save(category);
+
+        Product product = new Product(null, "testProdut3", 300, "imageUrl", category);
         productRepository.save(product);
 
         Wish wish = new Wish(member, product);
@@ -87,7 +97,10 @@ class WishRepositoryTest {
         Member member = new Member(null, "test3@example.com", "password", Role.USER);
         memberRepository.save(member);
 
-        Product product = new Product(null, "testProdut4", 300, "imageUrl");
+        Category category = new Category("Test Category", "Blue", "abcd", "Test");
+        categoryRepository.save(category);
+
+        Product product = new Product(null, "testProdut4", 300, "imageUrl", category);
         productRepository.save(product);
 
         Wish wish = new Wish(member, product);
