@@ -40,8 +40,8 @@ public class ProductService {
 
     @Transactional
     public Long save(ProductRequest request) {
-        Category category = categoryRepository.findByName(request.categoryName())
-                .orElseThrow(() -> new EntityNotFoundException("Category with name " + request.categoryName() + " not found"));
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category with id " + request.categoryId() + " not found"));
         Product product = new Product(request.name(), request.price(), request.imageUrl(), category);
         return productRepository.save(product).getId();
     }
@@ -50,8 +50,8 @@ public class ProductService {
     public void updateById(Long id, ProductRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
-        Category category = categoryRepository.findByName(request.categoryName())
-                .orElseThrow(() -> new EntityNotFoundException("Category with name " + request.categoryName() + " not found"));
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category with name " + request.categoryId() + " not found"));
         product.updateProduct(request.name(), request.price(), request.imageUrl(), category);
     }
 

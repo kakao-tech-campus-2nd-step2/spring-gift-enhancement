@@ -18,7 +18,7 @@ public record ProductRequest(
         @NotBlank
         String imageUrl,
         @NotBlank
-        String categoryName
+        Long categoryId
 ) {
 }
 
