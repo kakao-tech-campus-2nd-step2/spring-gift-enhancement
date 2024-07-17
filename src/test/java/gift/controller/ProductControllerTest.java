@@ -2,7 +2,9 @@ package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constant.ErrorMessage;
+import gift.request.OptionRequest;
 import gift.request.ProductCreateRequest;
+import gift.request.ProductUpdateRequest;
 import gift.response.ProductResponse;
 import gift.service.ProductService;
 import org.junit.jupiter.api.DisplayName;
@@ -79,7 +81,7 @@ class ProductControllerTest {
     void productAdd() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("아이스티", 2500, "https://example.com", categoryId);
+        ProductCreateRequest request = new ProductCreateRequest("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionRequest("옵션", 12L)));
 
         willDoNothing().given(productService).addProduct(any(ProductCreateRequest.class));
 
@@ -117,7 +119,7 @@ class ProductControllerTest {
     void productAddWithNameExceedingMaxLength() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("프리미엄 오가닉 그린티 블렌드", 2500, "https://example.com", categoryId);
+        ProductCreateRequest request = new ProductCreateRequest("프리미엄 오가닉 그린티 블렌드", 2500, "https://example.com", categoryId, List.of());
 
         //when
         ResultActions result = mvc.perform(post("/api/products")
@@ -135,7 +137,7 @@ class ProductControllerTest {
     void productAddWithInvalidCharactersInName() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("그린티 *", 2500, "https://example.com", categoryId);
+        ProductCreateRequest request = new ProductCreateRequest("그린티 *", 2500, "https://example.com", categoryId, List.of());
 
         //when
         ResultActions result = mvc.perform(post("/api/products")
@@ -153,7 +155,7 @@ class ProductControllerTest {
     void productAddWithNameContainingKakao() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("카카오 굿즈", 2500, "https://example.com", categoryId);
+        ProductCreateRequest request = new ProductCreateRequest("카카오 굿즈", 2500, "https://example.com", categoryId, List.of());
 
         //when
         ResultActions result = mvc.perform(post("/api/products")
@@ -189,9 +191,9 @@ class ProductControllerTest {
         //given
         Long productId = 1L;
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("아이스티", 2500, "https://example.com", categoryId);
+        ProductUpdateRequest request = new ProductUpdateRequest("아이스티", 2500, "https://example.com", categoryId);
 
-        willDoNothing().given(productService).editProduct(anyLong(), any(ProductCreateRequest.class));
+        willDoNothing().given(productService).editProduct(anyLong(), any(ProductUpdateRequest.class));
 
         //when
         ResultActions result = mvc.perform(put("/api/products/{productId}", productId)
@@ -202,7 +204,7 @@ class ProductControllerTest {
         result
                 .andExpect(status().isOk());
 
-        then(productService).should().editProduct(anyLong(), any(ProductCreateRequest.class));
+        then(productService).should().editProduct(anyLong(), any(ProductUpdateRequest.class));
     }
 
 
@@ -229,7 +231,7 @@ class ProductControllerTest {
     void productEditWithNameExceedingMaxLength() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("프리미엄 오가닉 그린티 블렌드", 2500, "https://example.com", categoryId);
+        ProductUpdateRequest request = new ProductUpdateRequest("프리미엄 오가닉 그린티 블렌드", 2500, "https://example.com", categoryId);
         Long productId = 1L;
 
         //when
@@ -249,7 +251,7 @@ class ProductControllerTest {
         //given
         Long productId = 1L;
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("그린티 *", 2500, "https://example.com", categoryId);
+        ProductUpdateRequest request = new ProductUpdateRequest("그린티 *", 2500, "https://example.com", categoryId);
 
         //when
         ResultActions result = mvc.perform(put("/api/products/{productId}", productId)
@@ -268,7 +270,7 @@ class ProductControllerTest {
         //given
         Long productId = 1L;
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("카카오 굿즈", 2500, "https://example.com", categoryId);
+        ProductUpdateRequest request = new ProductUpdateRequest("카카오 굿즈", 2500, "https://example.com", categoryId);
 
         //when
         ResultActions result = mvc.perform(put("/api/products/{productId}", productId)

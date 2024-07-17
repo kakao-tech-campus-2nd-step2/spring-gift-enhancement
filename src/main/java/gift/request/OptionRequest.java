@@ -17,6 +17,11 @@ public class OptionRequest {
     public OptionRequest() {
     }
 
+    public OptionRequest(String name, Long quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public String getName() {
         return name;
     }
