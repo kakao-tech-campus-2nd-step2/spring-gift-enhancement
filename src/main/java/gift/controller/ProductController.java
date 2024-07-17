@@ -1,7 +1,9 @@
 package gift.controller;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.error.NotFoundException;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
@@ -20,9 +22,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     //상품 전체 조회 페이지
@@ -47,7 +51,9 @@ public class ProductController {
 
     //상품 추가 폼 페이지
     @GetMapping("/new")
-    public String createProductForm() {
+    public String createProductForm(Model model) {
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "form";
     }
 
@@ -79,9 +85,6 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable("id") Long id, Model model) {
         Product product = productService.getProductById(id);
-        if (product == null) {
-            throw new NotFoundException("해당 상품이 존재하지 않습니다.");
-        }
         productService.deleteProduct(id);
         return "redirect:/products";
     }
@@ -90,10 +93,10 @@ public class ProductController {
     @GetMapping("/update/{id}")
     public String updateProductForm(@PathVariable("id") Long id, Model model) {
         Product product = productService.getProductById(id);
-        if (product == null) {
-            throw new NotFoundException("해당 상품이 존재하지 않습니다.");
-        }
         model.addAttribute("product", product);
+
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "form";
     }
 
