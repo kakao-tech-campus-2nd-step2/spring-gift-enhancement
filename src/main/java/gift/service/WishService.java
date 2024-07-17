@@ -16,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static gift.exception.exceptionMessage.ExceptionMessage.PRODUCT_NOT_FOUND;
-import static gift.exception.exceptionMessage.ExceptionMessage.WISH_NOT_FOUND;
+import static gift.exception.exceptionMessage.ExceptionMessage.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -51,7 +50,7 @@ public class WishService {
     public WishResponseDto addWish(Long productId, String email, int count){
         Product findProduct = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException(PRODUCT_NOT_FOUND));
 
-        Member findMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new EntityNotFoundException(PRODUCT_NOT_FOUND));
+        Member findMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new EntityNotFoundException(NOT_EXISTS_MEMBER));
 
         Wish wish = new Wish.Builder()
                 .product(findProduct)
