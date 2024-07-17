@@ -14,3 +14,7 @@ INSERT INTO wish_lists (id, product_id, member_id) VALUES (2, 2, 1);
 INSERT INTO wish_lists (id, product_id, member_id) VALUES (3, 1, 2);
 INSERT INTO wish_lists (id, product_id, member_id) VALUES (4, 3, 2);
 ALTER TABLE wish_lists ALTER COLUMN id RESTART WITH 5;
+
+INSERT INTO categories (id, name, color, image_url, description) VALUES (1, '식품', '#3EE715', 'https://category1.jpg', '식품 카테고리');
+INSERT INTO categories (id, name, color, image_url, description) VALUES (2, '도서', '#8A691C', 'https://category2.jpg', '도서 카테고리');
+ALTER TABLE categories ALTER COLUMN id RESTART WITH 3;
