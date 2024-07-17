@@ -84,23 +84,12 @@ public class ProductService {
 
     // 제품 수정
     public ProductDto updateProduct(@Valid ProductDto productDto) {
-        Optional<Product> existingProduct = productRepository.findById(productDto.getId());
-        if (existingProduct.isEmpty()) {
-            throw new NoSuchElementException("Product not found with id " + productDto.getId());
-        }
-
-        Product product = new Product(
-            productDto.getId(),
-            productDto.getName(),
-            productDto.getPrice(),
-            productDto.getImageUrl()
-        );
-
-        productRepository.save(product);
-        ProductDto updatedProductDto = new ProductDto(product.getId(), product.getName(),
-            product.getPrice(), product.getImageUrl());
-
-        return updatedProductDto;
+        Product product = productRepository.findById(productDto.getId())
+            .orElseThrow(() -> new NoSuchElementException(
+                "Product not found with id " + productDto.getId()));
+        product.update(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
+        return new ProductDto(product.getId(), product.getName(), product.getPrice(),
+            product.getImageUrl());
     }
 
     // 제품 삭제
