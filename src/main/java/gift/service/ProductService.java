@@ -4,6 +4,8 @@ import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
+import gift.repository.WishlistRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final WishlistRepository wishlistRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository,WishlistRepository wishlistRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.wishlistRepository = wishlistRepository;
     }
 
     public Page<Product> getProducts(Pageable pageable) {
@@ -43,7 +47,9 @@ public class ProductService {
         return productRepository.save(updateProduct);
     }
 
+    @Transactional
     public void deleteProduct(Long id) {
+        wishlistRepository.deleteByProductId(id);
         productRepository.deleteById(id);
     }
 
