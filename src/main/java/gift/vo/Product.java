@@ -56,7 +56,7 @@ public class Product {
         }
     }
 
-    public java.lang.Long getId() {
+    public Long getId() {
         return id;
     }
 
