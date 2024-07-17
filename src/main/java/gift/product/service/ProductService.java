@@ -1,6 +1,8 @@
 package gift.product.service;
 
 import static gift.util.Utils.DEFAULT_CATEGORY_ID;
+import static gift.util.Utils.TUPLE_PRODUCT_KEY;
+import static gift.util.Utils.TUPLE_WISH_COUNT_KEY;
 
 import gift.category.model.dto.Category;
 import gift.category.service.CategoryService;
@@ -39,7 +41,8 @@ public class ProductService {
     public ProductResponse findProductWithWishCount(Long id) {
         Optional<Tuple> result = productRepository.findProductByIdWithWishCount(id);
         return result.map(
-                        tuple -> new ProductResponse(tuple.get("product", Product.class), tuple.get("wishCount", Long.class)))
+                        tuple -> new ProductResponse(tuple.get(TUPLE_PRODUCT_KEY, Product.class),
+                                tuple.get(TUPLE_WISH_COUNT_KEY, Long.class)))
                 .orElseThrow(() -> new EntityNotFoundException("Product"));
     }
 
@@ -47,8 +50,8 @@ public class ProductService {
     public Page<ProductResponse> findAllProductWithWishCountPageable(Pageable pageable) {
         Page<Tuple> results = productRepository.findAllActiveProductsWithWishCountPageable(pageable);
         return results.map(tuple -> new ProductResponse(
-                tuple.get("product", Product.class),
-                tuple.get("wishCount", Long.class))
+                tuple.get(TUPLE_PRODUCT_KEY, Product.class),
+                tuple.get(TUPLE_WISH_COUNT_KEY, Long.class))
         );
     }
 
@@ -56,8 +59,8 @@ public class ProductService {
     public Page<ProductResponse> findActiveProductsByCategoryWithWishCount(Long categoryId, Pageable pageable) {
         Page<Tuple> results = productRepository.findActiveProductsByCategoryWithWishCount(categoryId, pageable);
         return results.map(tuple -> new ProductResponse(
-                tuple.get("product", Product.class),
-                tuple.get("wishCount", Long.class))
+                tuple.get(TUPLE_PRODUCT_KEY, Product.class),
+                tuple.get(TUPLE_WISH_COUNT_KEY, Long.class))
         );
     }
 

@@ -1,6 +1,8 @@
 package gift.product;
 
 import static gift.util.Utils.DEFAULT_PAGE_SIZE;
+import static gift.util.Utils.TUPLE_PRODUCT_KEY;
+import static gift.util.Utils.TUPLE_WISH_COUNT_KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -77,8 +79,8 @@ public class ProductRepositoryTest {
         optionalResult.isPresent();
         Tuple result = optionalResult.get();
 
-        Product foundProduct = result.get("product", Product.class);
-        Long wishCount = result.get("wishCount", Long.class);
+        Product foundProduct = result.get(TUPLE_PRODUCT_KEY, Product.class);
+        Long wishCount = result.get(TUPLE_WISH_COUNT_KEY, Long.class);
 
         assertEquals(product.getName(), foundProduct.getName());
         assertEquals(1L, wishCount);
@@ -92,8 +94,8 @@ public class ProductRepositoryTest {
 
         assertEquals(1, resultPage.getTotalElements());
         Tuple result = resultPage.getContent().get(0);
-        Product foundProduct = result.get("product", Product.class);
-        Long wishCount = result.get("wishCount", Long.class);
+        Product foundProduct = result.get(TUPLE_PRODUCT_KEY, Product.class);
+        Long wishCount = result.get(TUPLE_WISH_COUNT_KEY, Long.class);
 
         assertEquals(product.getName(), foundProduct.getName());
         assertEquals(Long.valueOf(1), wishCount);
