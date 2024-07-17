@@ -1,9 +1,9 @@
 package gift.controller;
 
-import gift.exception.CustomException.CustomArgumentNotValidException;
-import gift.exception.CustomException.DuplicateEmailException;
-import gift.exception.CustomException.EmailNotFoundException;
-import gift.exception.CustomException.PassWordMissMatchException;
+import gift.exception.customException.CustomArgumentNotValidException;
+import gift.exception.customException.DuplicateEmailException;
+import gift.exception.customException.EmailNotFoundException;
+import gift.exception.customException.PassWordMissMatchException;
 import gift.exception.ErrorCode;
 import gift.model.user.UserForm;
 import gift.service.JwtProvider;

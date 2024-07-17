@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.exception.CustomException.CustomArgumentNotValidException;
+import gift.exception.customException.CustomArgumentNotValidException;
 import gift.exception.ErrorCode;
 import gift.model.item.ItemDTO;
 import gift.model.item.ItemForm;

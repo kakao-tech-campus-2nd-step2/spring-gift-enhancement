@@ -1,4 +1,4 @@
-package gift.exception.CustomException;
+package gift.exception.customException;
 
 import gift.exception.ErrorCode;
 import org.springframework.core.MethodParameter;

@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.exception.CustomException.CategoryNotFoundException;
+import gift.exception.customException.CategoryNotFoundException;
 import gift.exception.ErrorCode;
 import gift.model.categories.Category;
 import gift.model.categories.CategoryDTO;

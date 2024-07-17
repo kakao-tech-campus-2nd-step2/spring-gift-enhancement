@@ -1,7 +1,7 @@
 package gift.exception;
 
-import gift.exception.CustomException.CustomArgumentNotValidException;
-import gift.exception.CustomException.CustomException;
+import gift.exception.customException.CustomArgumentNotValidException;
+import gift.exception.customException.CustomException;
 import io.jsonwebtoken.JwtException;
 import java.util.HashMap;
 import java.util.Map;

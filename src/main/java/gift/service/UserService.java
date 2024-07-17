@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.exception.CustomException.UserNotFoundException;
+import gift.exception.customException.UserNotFoundException;
 import gift.exception.ErrorCode;
 import gift.model.user.User;
 import gift.model.user.UserDTO;

@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.exception.CustomException.CustomArgumentNotValidException;
-import gift.exception.CustomException.DuplicateCategoryException;
+import gift.exception.customException.CustomArgumentNotValidException;
+import gift.exception.customException.DuplicateCategoryException;
 import gift.exception.ErrorCode;
 import gift.model.categories.CategoryDTO;
 import gift.service.CategoryService;
