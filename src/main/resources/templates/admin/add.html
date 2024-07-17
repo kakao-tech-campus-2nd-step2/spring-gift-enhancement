@@ -14,7 +14,8 @@
                     name: $('#name').val(),
                     price: $('#price').val(),
                     imageUrl: $('#imageUrl').val(),
-                    option: $('#options').val()
+                    option: $('#options').val(),
+                    categoryId:$('#category').val()
                 };
 
                 // AJAX 호출
@@ -51,6 +52,10 @@
     <label for="options">Options:</label>
     <input type="text" id="options" name="options" required>
     <br>
+    <label for="category">CategoryID:</label>
+    <input type="text" id="category" name="category" required>
+    <br>
+
     <button type="submit">Add Product</button>
 </form>
 
