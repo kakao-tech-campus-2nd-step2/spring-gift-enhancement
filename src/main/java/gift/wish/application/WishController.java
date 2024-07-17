@@ -1,6 +1,8 @@
 package gift.wish.application;
 
+import gift.auth.Authorized;
 import gift.auth.LoginMember;
+import gift.member.domain.Role;
 import gift.wish.application.dto.request.WishRequest;
 import gift.wish.application.dto.response.WishPageResponse;
 import gift.wish.application.dto.response.WishResponse;
@@ -38,6 +40,7 @@ public class WishController {
             @ApiResponse(responseCode = "201", description = "위시리스트 추가 성공"),
             @ApiResponse(responseCode = "404", description = "일치하는 위시리스트를 찾을 수 없음")
     })
+    @Authorized(Role.USER)
     @PostMapping()
     public ResponseEntity<Void> saveWish(@RequestBody WishRequest wishRequest,
                                          @LoginMember Long loginMemberId
@@ -54,6 +57,7 @@ public class WishController {
             @ApiResponse(responseCode = "404", description = "일치하는 위시리스트를 찾을 수 없음")
     })
     @PutMapping("/{wishId}")
+    @Authorized(Role.USER)
     @ResponseStatus(HttpStatus.OK)
     public void modifyWish(@PathVariable("wishId") Long wishId,
                            @RequestBody WishRequest wishRequest,
@@ -67,6 +71,7 @@ public class WishController {
             @ApiResponse(responseCode = "200", description = "위시리스트 목록 조회 성공"),
     })
     @GetMapping()
+    @Authorized(Role.USER)
     public ResponseEntity<WishPageResponse> getWishList(Pageable pageable,
                                                         @LoginMember Long loginMemberId
     ) {
@@ -83,6 +88,7 @@ public class WishController {
             @ApiResponse(responseCode = "404", description = "위시리스트를 찾을 수 없음")
     })
     @GetMapping("/{wishId}")
+    @Authorized(Role.USER)
     public ResponseEntity<WishResponse> getWishDetail(@PathVariable("wishId") Long wishId,
                                                       @LoginMember Long loginMemberId
     ) {
@@ -99,6 +105,7 @@ public class WishController {
             @ApiResponse(responseCode = "404", description = "위시리스트를 찾을 수 없음")
     })
     @DeleteMapping("/{wishId}")
+    @Authorized(Role.USER)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteWish(@PathVariable("wishId") Long wishId,
                            @LoginMember Long loginMemberId

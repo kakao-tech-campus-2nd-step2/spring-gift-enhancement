@@ -1,5 +1,7 @@
 package gift.product.application;
 
+import gift.auth.Authorized;
+import gift.member.domain.Role;
 import gift.product.application.dto.request.CategoryRequest;
 import gift.product.application.dto.response.CategoryResponse;
 import gift.product.service.CategoryService;
@@ -27,6 +29,7 @@ public class CategoryController {
     }
 
     @PostMapping()
+    @Authorized(Role.USER)
     public ResponseEntity<Void> createCategory(@RequestBody CategoryRequest request) {
         var savedCategoryId = categoryService.createCategory(request.toCategoryParam());
 
@@ -35,12 +38,14 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
+    @Authorized(Role.USER)
     @ResponseStatus(HttpStatus.OK)
     public void modifyCategory(@PathVariable Long id, @RequestBody CategoryRequest request) {
         categoryService.modifyCategory(id, request.toCategoryParam());
     }
 
     @GetMapping("/{id}")
+    @Authorized(Role.USER)
     public ResponseEntity<CategoryResponse> getCategory(@PathVariable Long id) {
         var categoryInfo = categoryService.getCategoryInfo(id);
 
@@ -50,6 +55,7 @@ public class CategoryController {
     }
 
     @GetMapping()
+    @Authorized(Role.USER)
     public ResponseEntity<List<CategoryResponse>> getCategoryList() {
         var categoryList = categoryService.getCategoryList();
 
@@ -61,6 +67,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @Authorized(Role.USER)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);

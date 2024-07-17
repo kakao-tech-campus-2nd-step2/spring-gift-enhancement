@@ -1,5 +1,7 @@
 package gift.product.application;
 
+import gift.auth.Authorized;
+import gift.member.domain.Role;
 import gift.product.application.dto.request.ProductRequest;
 import gift.product.application.dto.response.ProductPageResponse;
 import gift.product.application.dto.response.ProductResponse;
@@ -41,6 +43,7 @@ public class ProductController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "상품 등록 성공"),
     })
+    @Authorized(Role.USER)
     @PostMapping
     public ResponseEntity<Void> saveProduct(@RequestBody @Valid ProductRequest newProduct) {
         var createdProductId = productService.saveProduct(newProduct.toProductParam());
@@ -54,6 +57,7 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "상품 수정 성공"),
             @ApiResponse(responseCode = "404", description = "상품을 찾을 수 없음")
     })
+    @Authorized(Role.USER)
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void modifyProduct(@PathVariable("id") Long id, @RequestBody @Valid ProductRequest modifyProduct) {
@@ -65,6 +69,7 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "상품 상세 조회 성공"),
             @ApiResponse(responseCode = "404", description = "상품을 찾을 수 없음")
     })
+    @Authorized(Role.USER)
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProductDetails(@PathVariable("id") Long id) {
         var productInfo = productService.getProductDetails(id);
@@ -78,6 +83,7 @@ public class ProductController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "상품 목록 조회 성공"),
     })
+    @Authorized(Role.USER)
     @GetMapping()
     public ResponseEntity<ProductPageResponse> getProductList(@PageableDefault Pageable pageable) {
         var productInfo = productService.getProducts(pageable);
@@ -92,6 +98,7 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "상품 삭제 성공"),
             @ApiResponse(responseCode = "404", description = "상품을 찾을 수 없음")
     })
+    @Authorized(Role.USER)
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteProduct(@PathVariable("id") Long id) {
