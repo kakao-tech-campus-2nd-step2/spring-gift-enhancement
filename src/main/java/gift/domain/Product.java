@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.exception.NoOptionsInProductException;
 import gift.response.ProductResponse;
 import jakarta.persistence.*;
 
@@ -28,6 +29,12 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
+
+    public void validateOptionsNotEmpty() {
+        if (options.isEmpty()) {
+            throw new NoOptionsInProductException();
+        }
+    }
 
     public Product() {
     }
