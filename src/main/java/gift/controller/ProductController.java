@@ -49,6 +49,7 @@ public class ProductController {
         @RequestParam Long categoryId, RedirectAttributes redirectAttributes) {
         Category category = categoryService.getCategoryById(categoryId);
         Product product = new Product(name, price, imageUrl, category);
+
         productService.addProduct(product);
         redirectAttributes.addFlashAttribute("message", "Product added successfully!");
         return "redirect:/products";

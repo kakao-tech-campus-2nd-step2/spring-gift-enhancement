@@ -1,5 +1,6 @@
 package gift.model;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
@@ -45,6 +46,7 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+
     }
 
     // Getter와 Setter 메서드
@@ -80,6 +82,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+
     public Category getCategory() {
         return category;
     }
@@ -87,4 +90,5 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
 }
