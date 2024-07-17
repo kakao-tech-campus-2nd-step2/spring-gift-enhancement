@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.dto.ProductDto;
 import gift.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ public class ProductController {
 
   private final ProductService productService;
 
+  @Autowired
   public ProductController(ProductService productService) {
     this.productService = productService;
   }
@@ -34,8 +36,8 @@ public class ProductController {
 
   @PostMapping
   public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto) {
-    ProductDto savedProductDto = productService.save(productDto);
-    return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
+    ProductDto createdProduct = productService.createProduct(productDto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
   }
 
   @PutMapping("/{id}")

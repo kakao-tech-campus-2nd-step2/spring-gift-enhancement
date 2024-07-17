@@ -1,9 +1,6 @@
 package gift.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Category {
@@ -11,14 +8,24 @@ public class Category {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @Column(name = "name", nullable = false, length = 255)
   private String name;
+
+  @Column(name = "color", nullable = false, length = 7)
   private String color;
+
+  @Column(name = "image_url", length = 255)
   private String imageUrl;
+
+  @Column(name = "description", length = 255)
   private String description;
 
-  public Category() {
+  // Default constructor for JPA
+  protected Category() {
   }
 
+  // All-arguments constructor
   public Category(String name, String color, String imageUrl, String description) {
     this.name = name;
     this.color = color;
@@ -26,43 +33,24 @@ public class Category {
     this.description = description;
   }
 
+  // Getters only, no setters
   public Long getId() {
     return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getName() {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public String getColor() {
     return color;
-  }
-
-  public void setColor(String color) {
-    this.color = color;
   }
 
   public String getImageUrl() {
     return imageUrl;
   }
 
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
-  }
-
   public String getDescription() {
     return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
   }
 }

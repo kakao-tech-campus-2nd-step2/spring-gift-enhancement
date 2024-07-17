@@ -1,8 +1,8 @@
 package gift;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-
 
 import gift.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import gift.model.Member;
-
 import gift.service.MemberService;
 import gift.util.JwtUtil;
 
@@ -33,17 +32,14 @@ public class MemberServiceTest {
 
   @Test
   public void testRegister() {
-    Member member = new Member();
-    member.setEmail("test@example.com");
-    member.setPassword("password");
+    // Adjusted to use the correct constructor
+    Member member = new Member(null, "test@example.com", "password", "Test User");
     Long expectedMemberId = 1L;
     String expectedToken = "generated_token";
-    Member savedMember = new Member();
-    savedMember.setId(expectedMemberId);
-    savedMember.setEmail(member.getEmail());
-    savedMember.setPassword(member.getPassword());
+    // Adjusted to use the correct constructor
+    Member savedMember = new Member(expectedMemberId, "test@example.com", "password", "Test User");
 
-    when(memberRepositoryMock.save(member)).thenReturn(savedMember);
+    when(memberRepositoryMock.save(any(Member.class))).thenReturn(savedMember);
     when(jwtUtilMock.generateToken(expectedMemberId, member.getEmail())).thenReturn(expectedToken);
     String token = memberService.register(member);
 
@@ -56,11 +52,8 @@ public class MemberServiceTest {
     String password = "password";
     Long memberId = 1L;
     String expectedToken = "generated_token";
-
-    Member member = new Member();
-    member.setId(memberId);
-    member.setEmail(email);
-    member.setPassword(password);
+    // Adjusted to use the correct constructor
+    Member member = new Member(memberId, email, password, "Test User");
 
     when(memberRepositoryMock.findByEmail(email)).thenReturn(java.util.Optional.of(member));
     when(jwtUtilMock.generateToken(memberId, email)).thenReturn(expectedToken);
@@ -75,11 +68,8 @@ public class MemberServiceTest {
     String email = "test@example.com";
     String wrongPassword = "Wrong_password";
     Long memberId = 1L;
-
-    Member member = new Member();
-    member.setId(memberId);
-    member.setEmail(email);
-    member.setPassword(wrongPassword);
+    // Adjusted to use the correct constructor
+    Member member = new Member(memberId, email, wrongPassword, "Test User");
 
     when(memberRepositoryMock.findByEmail(email)).thenReturn(java.util.Optional.of(member));
 
