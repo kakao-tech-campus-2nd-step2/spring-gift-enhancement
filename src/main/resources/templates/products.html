@@ -25,6 +25,7 @@
         <td><span th:text="${product.name}"></span></td>
         <td><span th:text="${product.price}"></span></td>
         <td><img th:text="${product.imageUrl}" alt="no image"></img></td>
+        <td><span th:text="${product.categoryId}"></span>></td>
         <td>
             <a th:href="@{/admin/products/edit/{id}(id = ${product.id})}">수정</a>
             <a th:href="@{/admin/products/delete/{id}(id = ${product.id})}">삭제</a>
