@@ -9,7 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -34,13 +36,13 @@ public class ProductController {
         return ResponseEntity.ok().body(product);
     }
 
-    @PostMapping(consumes = "application/json")
+    @PostMapping()
     public ResponseEntity<Product> postProduct(@RequestBody @Valid ProductDTO form) {
         Product result = productService.save(form);
         return ResponseEntity.ok().body(result);
     }
 
-    @PutMapping(path = "/{id}", consumes = "application/json")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<Product> putProduct(@RequestBody @Valid ProductDTO form,
                                               @PathVariable("id") Long id) {
         Product result = productService.update(id, form);
@@ -48,8 +50,10 @@ public class ProductController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable("id") Long id) {
         productService.delete(id);
-        return ResponseEntity.ok().body("deleted successfully");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Product deleted");
+        return ResponseEntity.ok().body(response);
     }
 }

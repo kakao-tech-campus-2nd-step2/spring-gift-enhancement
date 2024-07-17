@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/wishlists")
@@ -31,16 +33,20 @@ public class WishlistController {
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<String> postWishlist(HttpServletRequest request, @RequestBody @Valid WishlistDTO form) {
+    public ResponseEntity<Map<String, String>> postWishlist(HttpServletRequest request, @RequestBody @Valid WishlistDTO form) {
         String email = (String) request.getAttribute("email");
         wishlistService.addWishlistProduct(email, form);
-        return ResponseEntity.status(HttpStatus.OK).body("Wishlist created");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Product added to wishlist");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteWishlist(@PathVariable("id") Long id, HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> deleteWishlist(@PathVariable("id") Long id, HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         wishlistService.deleteWishlist(email, id);
-        return ResponseEntity.status(HttpStatus.OK).body("Wishlist deleted");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Wishlist deleted");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
