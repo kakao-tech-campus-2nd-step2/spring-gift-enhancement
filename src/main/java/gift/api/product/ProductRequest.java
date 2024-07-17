@@ -4,11 +4,14 @@ import gift.api.product.validator.NoKakao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public class ProductRequest {
 
-    @NotNull
+    @NotNull(message = "Category id is mandatory")
+    @Positive(message = "Category id must be greater than zero")
     private Long categoryId;
     @NotBlank(message = "Name is mandatory")
     @Size(min = 1, max = 15, message = "Must be at least 1 character, no more than 15 characters long")
@@ -16,7 +19,9 @@ public class ProductRequest {
     @NoKakao
     private String name;
     @NotNull(message = "Price is mandatory")
+    @PositiveOrZero(message = "Price must be greater than or equal to 0")
     private Integer price;
+    @NotBlank(message = "Image url is mandatory")
     private String imageUrl;
 
     public ProductRequest() {
