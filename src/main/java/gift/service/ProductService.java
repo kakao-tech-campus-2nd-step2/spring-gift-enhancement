@@ -72,4 +72,12 @@ public class ProductService {
     public void deleteProducts(List<Long> ids) {
         productRepository.deleteAllById(ids);
     }
+
+    public List<OptionResponse> getOptionResponses(Long productId) {
+        return getProduct(productId)
+                .getOptions()
+                .stream()
+                .map(option -> new OptionResponse(option.getId(), option.getName(), option.getQuantity()))
+                .toList();
+    }
 }
