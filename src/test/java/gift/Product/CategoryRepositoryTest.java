@@ -23,4 +23,12 @@ public class CategoryRepositoryTest {
         Category actual = categoryRepository.findById(expected.getId()).get();
         assertThat(expected.getCategoryName()).isEqualTo(actual.getCategoryName());
     }
+
+    @Test
+    public void save() {
+        Category expected = new Category("교환권");
+        Category actual = categoryRepository.save(expected);
+        assertThat(expected.getCategoryName()).isEqualTo(actual.getCategoryName());
+    }
+
 }
