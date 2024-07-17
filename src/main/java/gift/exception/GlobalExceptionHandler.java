@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleEmailValidException(MethodArgumentNotValidException e) {
+    public ResponseEntity<String> handleValidException(MethodArgumentNotValidException e) {
         String errorMessage = e.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getDefaultMessage())
                 .findFirst()
