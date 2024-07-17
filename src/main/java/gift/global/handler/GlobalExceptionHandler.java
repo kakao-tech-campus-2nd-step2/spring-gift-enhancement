@@ -6,6 +6,8 @@ import gift.global.response.ResponseMaker;
 import io.jsonwebtoken.JwtException;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,5 +47,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ErrorResponseDto> JwtException(JwtException e) {
         return ResponseMaker.createErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    /**
+     * DB 참조 무결성 에러 핸들러
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDto> handleJdbcSQLIntegrityConstraintViolationException(
+       DataIntegrityViolationException e
+    ){
+        return ResponseMaker.createErrorResponse(HttpStatus.BAD_REQUEST, "해당 카테고리를 사용하는 상품 존재");
     }
 }

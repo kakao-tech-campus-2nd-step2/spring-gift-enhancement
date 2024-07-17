@@ -1,5 +1,8 @@
 package gift.domain.product;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +17,8 @@ public class ProductDTO {
     @Pattern(regexp = "^[a-zA-Z0-9 ()\\[\\]+\\-&/_ㄱ-ㅎㅏ-ㅣ가-힣]*$", message = "특수문자는 ( ), [ ], +, -, &, /, _ 만 사용 가능합니다.")
     private String name;
 
+    @NotNull
+    private Long categoryId;
     @NotNull(message = "상품 가격이 입력되지 않았습니다.")
     @Min(value = 0, message = "상품 가격은 0원 이상이어야 합니다.")
     private Integer price;
@@ -25,18 +30,20 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(String name, Integer price, String imageUrl) {
+    @JsonCreator
+    public ProductDTO(
+        @JsonProperty("name") String name,
+        @JsonProperty("categoryId") Long categoryId,
+        @JsonProperty("price") Integer price,
+        @JsonProperty("imageUrl") String imageUrl) {
         this.name = name;
+        this.categoryId = categoryId;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getPrice() {
@@ -47,12 +54,7 @@ public class ProductDTO {
         return imageUrl;
     }
 
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public Long getCategoryId() {
+        return categoryId;
     }
 }

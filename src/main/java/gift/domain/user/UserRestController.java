@@ -6,7 +6,6 @@ import gift.global.response.SimpleResultResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,7 @@ public class UserRestController {
      * 회원 가입
      */
     @PostMapping
-    public ResponseEntity<SimpleResultResponseDto> join(@Valid @ModelAttribute UserDTO userDTO) {
+    public ResponseEntity<SimpleResultResponseDto> join(@Valid @RequestBody UserDTO userDTO) {
         userService.join(userDTO);
 
         return ResponseMaker.createSimpleResponse(HttpStatus.OK, "회원 가입에 성공했습니다");

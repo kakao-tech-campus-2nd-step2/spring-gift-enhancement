@@ -44,7 +44,7 @@ public class ProductTest {
         int price = 4500;
         String imageUrl = "testImageUrl.com";
 
-        ProductDTO productDTO = new ProductDTO(name, price, imageUrl);
+        ProductDTO productDTO = new ProductDTO(name, 1L, price, imageUrl);
         String url = "http://localhost:" + port + "/api/products";
 
         //when
@@ -70,7 +70,7 @@ public class ProductTest {
         int price = 4500;
         String imageUrl = "testImageUrl.com";
 
-        ProductDTO productDTO = new ProductDTO(name, price, imageUrl);
+        ProductDTO productDTO = new ProductDTO(name, 1L, price, imageUrl);
         String url = "http://localhost:" + port + "/api/products";
         ResponseEntity<Object> postResponseEntity = restTemplate.postForEntity(url, productDTO,
             Object.class);
@@ -101,10 +101,11 @@ public class ProductTest {
     void updateProductTest() {
         //given
         String name = "아이스 아메리카노 T";
+        Long categoryId = 1L;
         int price = 4500;
         String imageUrl = "testImageUrl.com";
 
-        ProductDTO productDTO = new ProductDTO(name, price, imageUrl);
+        ProductDTO productDTO = new ProductDTO(name, categoryId, price, imageUrl);
         String url = "http://localhost:" + port + "/api/products";
         ResponseEntity<Object> postResponseEntity = restTemplate.postForEntity(url, productDTO,
             Object.class);
@@ -113,7 +114,7 @@ public class ProductTest {
         Long postId = postProduct.getId();
 
         //when
-        ProductDTO updateProductDTO = new ProductDTO(postProduct.getName(), 4700,
+        ProductDTO updateProductDTO = new ProductDTO(postProduct.getName(), postProduct.getCategory().getId(), 4700,
             postProduct.getImageUrl());
         String updateUrl = "http://localhost:" + port + "/api/products/" + postId;
         restTemplate.put(updateUrl, updateProductDTO, Object.class);
@@ -136,10 +137,11 @@ public class ProductTest {
     void deleteProduct() {
         //given
         String name = "아이스 아메리카노 T";
+        Long categoryId = 1L;
         int price = 4500;
         String imageUrl = "testImageUrl.com";
 
-        ProductDTO productDTO = new ProductDTO(name, price, imageUrl);
+        ProductDTO productDTO = new ProductDTO(name, 1L, price, imageUrl);
         String url = "http://localhost:" + port + "/api/products";
         ResponseEntity<Object> postResponseEntity = restTemplate.postForEntity(url, productDTO,
             Object.class);

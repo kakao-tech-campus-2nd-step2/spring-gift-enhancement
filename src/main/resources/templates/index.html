@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Product Management System</title>
   <!-- Bootstrap CSS 추가 -->
-  <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        rel="stylesheet">
   <style>
     .table-container {
       max-height: 400px;
@@ -17,14 +17,14 @@
 
 <div class="container">
   <h1>Products List</h1>
-  <button class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Add Product
+  <button class="btn btn-primary" data-target="#addProductModal" data-toggle="modal">Add Product
   </button>
   <button class="btn btn-danger ml-2" onclick="showDeleteSelectedModal()">Delete Selected</button>
-  <button type="button" id="loginButton" class="btn btn-success ml-2"
-          onclick="location.href='/users/login'">Login
+  <button class="btn btn-success ml-2" id="loginButton" onclick="location.href='/users/login'"
+          type="button">Login
   </button>
-  <button type="button" id="logoutButton" class="btn btn-success ml-2" onclick="logout()"
-          style="display: none;">Logout
+  <button class="btn btn-success ml-2" id="logoutButton" onclick="logout()" style="display: none;"
+          type="button">Logout
   </button>
   <div class="table-container">
     <table class="table">
@@ -40,7 +40,7 @@
       <tbody>
       <tr th:each="product : ${products.content}">
         <td>
-          <input type="checkbox" th:id="${product.id}" th:value="${product.id}">
+          <input th:id="${product.id}" th:value="${product.id}" type="checkbox">
         </td>
         <td th:text="${product.id}"></td>
         <td th:text="${product.name}"></td>
@@ -68,13 +68,14 @@
 </div>
 
 <!-- 상품 추가 모달 -->
-<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog"
-     aria-labelledby="addProductModalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="addProductModalLabel" class="modal fade"
+     id="addProductModal"
+     role="dialog" tabindex="-1">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -82,17 +83,17 @@
         <form id="addProductForm">
           <div class="form-group">
             <label for="productName">Name</label>
-            <input type="text" class="form-control" id="productName" name="name" required>
+            <input class="form-control" id="productName" name="name" required type="text">
           </div>
           <div class="form-group">
             <label for="productPrice">Price</label>
-            <input type="number" class="form-control" id="productPrice" name="price" required>
+            <input class="form-control" id="productPrice" name="price" required type="number">
           </div>
           <div class="form-group">
             <label for="productImageUrl">Image URL</label>
-            <input type="url" class="form-control" id="productImageUrl" name="imageUrl" required>
+            <input class="form-control" id="productImageUrl" name="imageUrl" required type="url">
           </div>
-          <button type="button" class="btn btn-primary" onclick="submitProduct()">Submit</button>
+          <button class="btn btn-primary" onclick="submitProduct()" type="button">Submit</button>
         </form>
       </div>
     </div>
@@ -100,13 +101,14 @@
 </div>
 
 <!-- 상품 삭제 모달 -->
-<div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog"
-     aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="deleteProductModalLabel" class="modal fade"
+     id="deleteProductModal"
+     role="dialog" tabindex="-1">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -115,21 +117,22 @@
         <p>해당 아이템을 정말 삭제하시겠습니까?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" onclick="deleteConfirmed()">Delete</button>
+        <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-danger" onclick="deleteConfirmed()" type="button">Delete</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- 선택된 상품들 삭제 모달 -->
-<div class="modal fade" id="deleteSelectedProductModal" tabindex="-1" role="dialog"
-     aria-labelledby="deleteSelectedProductModalLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="deleteSelectedProductModalLabel" class="modal fade"
+     id="deleteSelectedProductModal"
+     role="dialog" tabindex="-1">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deleteSelectedProductModalLabel">Delete Selected Products</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -138,8 +141,8 @@
         <p>선택된 모든 상품을 정말 삭제하시겠습니까?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" onclick="deleteSelectedConfirmed()">Delete
+        <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-danger" onclick="deleteSelectedConfirmed()" type="button">Delete
           Selected
         </button>
       </div>
@@ -149,38 +152,42 @@
 
 <!-- 상품 수정 모달 -->
 <div th:each="product : ${products}">
-  <div class="modal fade" th:id="'editProductModal_' + ${product.id}" tabindex="-1" role="dialog"
-       aria-labelledby="'editProductModalLabel_' + ${product.value.id}" aria-hidden="true">
+  <div aria-hidden="true" aria-labelledby="'editProductModalLabel_' + ${product.value.id}"
+       class="modal fade" role="dialog"
+       tabindex="-1" th:id="'editProductModal_' + ${product.id}">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" th:id="'editProductModalLabel_' + ${product.id}">Edit Product</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <form th:id="'editProductForm_' + ${product.id}">
-            <input type="hidden" th:id="'editProductId_' + ${product.id}" th:value="${product.id}">
+            <input th:id="'editProductId_' + ${product.id}" th:value="${product.id}" type="hidden">
             <div class="form-group">
               <label th:for="'editProductName_' + ${product.id}">Name</label>
-              <input type="text" class="form-control" th:id="'editProductName_' + ${product.id}"
-                     th:value="${product.name}" th:required="${true}">
+              <input class="form-control" th:id="'editProductName_' + ${product.id}"
+                     th:required="${true}"
+                     th:value="${product.name}" type="text">
             </div>
             <div class="form-group">
               <label th:for="'editProductPrice_' + ${product.id}">Price</label>
-              <input type="number" class="form-control" th:id="'editProductPrice_' + ${product.id}"
-                     th:value="${product.price}" th:required="${true}">
+              <input class="form-control" th:id="'editProductPrice_' + ${product.id}"
+                     th:required="${true}"
+                     th:value="${product.price}" type="number">
             </div>
             <div class="form-group">
               <label th:for="'editProductImageUrl_' + ${product.id}">Image URL</label>
-              <input type="url" class="form-control" th:id="'editProductImageUrl_' + ${product.id}"
-                     th:value="${product.imageUrl}" th:required="${true}">
+              <input class="form-control" th:id="'editProductImageUrl_' + ${product.id}"
+                     th:required="${true}"
+                     th:value="${product.imageUrl}" type="url">
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
           <button class="btn btn-primary"
                   th:attr="onclick='updateProduct(\'' + ${product.id} + '\')'">Update
           </button>
@@ -199,11 +206,15 @@
 <!-- JavaScript 함수 추가 -->
 <script>
   function submitProduct() {
-    var form = document.getElementById('addProductForm');
-    var formData = new FormData(form);
-    console.log("submitProduct method");
+    var productName = document.getElementById('productName').value;
+    var productPrice = document.getElementById('productPrice').value;
+    var productImageUrl = document.getElementById('productImageUrl').value;
 
-    axios.post('/api/products', formData)
+    axios.post('/api/products', {
+      name: productName,
+      price: productPrice,
+      imageUrl: productImageUrl
+    })
     .then(function (response) {
       alert(response.data.message);
       // 모달 닫기

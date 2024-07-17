@@ -1,10 +1,9 @@
-package gift.domain.cart;
+package gift.domain.cartItem;
 
 import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
 import gift.domain.user.JpaUserRepository;
 import gift.domain.user.User;
-
 import gift.global.exception.BusinessException;
 import java.util.List;
 import java.util.Optional;
@@ -45,15 +44,15 @@ public class CartItemService {
             .orElseThrow(() -> new BusinessException(HttpStatus.BAD_REQUEST, "상품을 찾을 수 없습니다"));
 
         // 기존에 존재하면 update
-        if (cartItemRepository.existsByUserAndProduct(user, product)) {
-            CartItem existsCartItem = cartItemRepository.findByUserIdAndProductId(userId, productId).get();
-            existsCartItem.addOneMore();
-            return existsCartItem.getCount();
+        Optional<CartItem> findCartItem = cartItemRepository.findByUserIdAndProductId(userId,
+            productId);
+        if (findCartItem.isPresent()) {
+            return findCartItem.get().addOneMore();
         }
         // 기존에 없었으면 new
-        CartItem cartItem = new CartItem(user, product);
-        cartItemRepository.save(cartItem);
-        return cartItem.getCount();
+        CartItem newCartItem = new CartItem(user, product);
+        cartItemRepository.save(newCartItem);
+        return newCartItem.getCount();
     }
 
     /**
@@ -92,7 +91,8 @@ public class CartItemService {
      */
     @Transactional
     public int updateCartItem(Long userId, Long productId, int count) {
-        CartItem findCartItem = cartItemRepository.findByUserIdAndProductId(userId, productId).orElseThrow(() -> new BusinessException(HttpStatus.BAD_REQUEST, "해당 상품이 존재하지 않습니다."));
+        CartItem findCartItem = cartItemRepository.findByUserIdAndProductId(userId, productId)
+            .orElseThrow(() -> new BusinessException(HttpStatus.BAD_REQUEST, "해당 상품이 존재하지 않습니다."));
         findCartItem.updateCount(count); // 수량 수정
         return count;
     }

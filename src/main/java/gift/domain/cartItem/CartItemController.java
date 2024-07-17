@@ -1,10 +1,11 @@
-package gift.domain.cart;
+package gift.domain.cartItem;
 
 import gift.domain.product.Product;
 import gift.domain.user.dto.UserInfo;
 import gift.global.resolver.LoginInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ public class CartItemController {
     @GetMapping
     public String cartPage(
         Model model,
+        @PageableDefault(page = 0, sort = "id_asc")
         @RequestParam(value = "page", defaultValue = "0") int page,
         @RequestParam(value = "sort", defaultValue = "id_asc") String sort,
         @LoginInfo UserInfo userInfo) {
