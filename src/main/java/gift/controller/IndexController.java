@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.OptionDTO;
 import gift.dto.ProductDTO;
 import gift.model.CategoryName;
 import gift.service.ProductService;
@@ -36,5 +37,14 @@ public class IndexController {
         List<String> categoryList = CategoryName.getCategoryList();
         model.addAttribute("categoryList", categoryList);
         return "editform";
+    }
+
+    @PostMapping("/option/{productId}")
+    public String option(@PathVariable Long productId, Model model){
+        OptionDTO options = productService.getOptions(productId);
+        List<String> optionList = options.getOption();
+        model.addAttribute("optionList", optionList);
+        model.addAttribute("optionId", options.getId());
+        return "option";
     }
 }

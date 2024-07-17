@@ -3,6 +3,7 @@ package gift.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -25,19 +26,26 @@ public class Product {
     @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "category_id"), nullable = false)
     private Category category;
 
-    public Product(long id, String name, int price, String imageUrl, Category category) {
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "option_id", foreignKey = @ForeignKey(name = "option_id"), nullable = false)
+    private Option option;
+
+
+    public Product(long id, String name, int price, String imageUrl, Category category, Option option) {
         this.id = id;
         this.updateName(name);
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.option = option;
     }
 
-    public Product(String name, int price, String imageUrl, Category category) {
+    public Product(String name, int price, String imageUrl, Category category, Option option) {
         this.updateName(name);
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.option = option;
     }
 
     protected Product() {
@@ -73,6 +81,10 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public Option getOption() {
+        return option;
     }
 
     public long getId() {

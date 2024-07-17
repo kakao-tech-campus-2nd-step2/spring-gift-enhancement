@@ -3,17 +3,21 @@ package gift.dto;
 import gift.model.CategoryName;
 import gift.model.ProductName;
 
+import java.util.List;
+
 public class InputProductDTO {
     private String name;
     private Integer price;
     private String imageUrl;
     private String category;
+    private String option;
 
-    public InputProductDTO(String name, int price, String imageUrl, String category) {
+    public InputProductDTO(String name, int price, String imageUrl, String category, String option) {
         this.setName(name);
         this.price = price;
         this.imageUrl = imageUrl;
         this.setCategory(category);
+        this.setOption(option);
     }
 
     public void setName(String name) {
@@ -31,6 +35,14 @@ public class InputProductDTO {
         } catch (Exception e) {
             this.category = null;
         }
+    }
+
+    public void setOption(String option){
+        System.out.println(option);
+        if(option == null){
+            throw new IllegalArgumentException("옵션은 한 개 이상 등록해야 합니다.");
+        }
+        this.option = option;
     }
 
     public void setPrice(Integer price) {
@@ -65,5 +77,9 @@ public class InputProductDTO {
 
     public String getCategory() {
         return category;
+    }
+
+    public String getOption() {
+        return option;
     }
 }
