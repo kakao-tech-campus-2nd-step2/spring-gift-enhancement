@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.dto.ProductDTO;
 import gift.model.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -23,9 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public AdminController(ProductService productService) {
+    public AdminController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -37,7 +40,8 @@ public class AdminController {
 
     @GetMapping("/add")
     public String showAddProductForm(Model model) {
-        model.addAttribute("productDTO", new ProductDTO("", "0", ""));
+        model.addAttribute("productDTO", new ProductDTO("", "0", null, ""));
+        model.addAttribute("categories", categoryService.findAllCategories());
         return "add_product_form";
     }
 
@@ -46,6 +50,7 @@ public class AdminController {
         Model model) {
         if (result.hasErrors()) {
             model.addAttribute("productDTO", productDTO);
+            model.addAttribute("categories", categoryService.findAllCategories());
             return "add_product_form";
         }
         productService.saveProduct(productDTO);
@@ -57,6 +62,7 @@ public class AdminController {
         Product product = productService.findProductsById(id);
         model.addAttribute("productDTO", ProductService.toDTO(product));
         model.addAttribute("productID", id);
+        model.addAttribute("categories", categoryService.findAllCategories());
         return "edit_product_form";
     }
 
@@ -66,6 +72,7 @@ public class AdminController {
         BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("productID", id);
+            model.addAttribute("categories", categoryService.findAllCategories());
             return "edit_product_form";
         }
         productService.updateProduct(updatedProductDTO, id);
