@@ -61,17 +61,17 @@ class WishListServiceImplTest {
         product3 = jpaProductRepository.save(product3);
 
         //when
+        Wish wish1 = new Wish(member,product);
+        Wish wish2 = new Wish(member,product2);
+        Wish wish3 = new Wish(member,product3);
+        wish1 = jpaWishRepository.save(wish1);
+        wish2 = jpaWishRepository.save(wish2);
+        wish3 = jpaWishRepository.save(wish3);
 
-        member.addProduct(product);
-        member.addProduct(product2);
-        member.addProduct(product3);
-
-        jpaMemberRepository.save(member);
         //then
 
-        assertThat(jpaWishRepository.findAllByMemberId(member.getId())).isNotNull();
-        assertThat(jpaWishRepository.findAllByMemberId(member.getId()).stream().anyMatch(wish -> Objects.equals(
-            wish.getProduct().getName(), "tuna2"))).isTrue();
+        assertThat(jpaWishRepository.findAllByMemberId(member.getId())).hasSize(3);
+
 
 
 
