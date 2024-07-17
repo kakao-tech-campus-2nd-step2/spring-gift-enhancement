@@ -5,8 +5,10 @@ import gift.controller.dto.request.UpdateProductRequest;
 import gift.controller.dto.response.CategoryResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
+import gift.controller.dto.response.ProductWithOptionResponse;
 import gift.service.CategoryService;
 import gift.service.ProductService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +48,7 @@ public class AdminProductController {
 
     @GetMapping("/{id}")
     public String updateProduct(@PathVariable("id") @NotNull @Min(1) Long id, Model model) {
-        ProductResponse product = productService.findById(id);
+        ProductWithOptionResponse product = productService.findById(id);
         List<CategoryResponse> categories = categoryService.getAllCategories();
         model.addAttribute("product", product);
         model.addAttribute("categories", categories);
@@ -54,14 +56,13 @@ public class AdminProductController {
     }
 
     @PostMapping("")
-    public String newProduct(@ModelAttribute CreateProductRequest request) {
+    public String createProduct(@Valid @ModelAttribute CreateProductRequest request) {
         productService.save(request);
         return "redirect:/admin/product";
     }
 
     @PutMapping("/{id}")
-    public String updateProduct(
-            @ModelAttribute UpdateProductRequest request) {
+    public String updateProduct(@Valid @ModelAttribute UpdateProductRequest request) {
         productService.updateById(request);
         return "redirect:/admin/product";
     }

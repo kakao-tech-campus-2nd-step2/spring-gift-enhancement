@@ -5,6 +5,7 @@ import gift.controller.dto.request.UpdateProductRequest;
 import gift.controller.dto.response.OptionResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
+import gift.controller.dto.response.ProductWithOptionResponse;
 import gift.service.OptionService;
 import gift.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,10 +47,10 @@ public class ProductRestController {
 
     @GetMapping("/product/{id}")
     @Operation(summary = "상품 조회", description = "특정 상품을 조회합니다.")
-    public ResponseEntity<ProductResponse> getProduct(
+    public ResponseEntity<ProductWithOptionResponse> getProduct(
             @PathVariable("id") @NotNull @Min(1) Long id
     ) {
-        ProductResponse response = productService.findById(id);
+        ProductWithOptionResponse response = productService.findById(id);
         return ResponseEntity.ok().body(response);
     }
 

@@ -24,7 +24,7 @@
     <label for="categoryName">카테고리:</label>
     <select id="categoryName" name="categoryId" required>
         <option th:each="category : ${categories}" th:value="${category.id}"
-                th:text="${category.name}" th:selected="${category.name.equals(product.category)}"></option>
+                th:text="${category.name}" th:selected="${category.id == product.category.id}"></option>
     </select>
 
     <h2>옵션</h2>
@@ -46,10 +46,7 @@
             <td th:text="${option.quantity}"/>
             <td><button><a th:href="@{/admin/option/{id}(id=${option.id})}">수정</a></button></td>
             <td>
-                <form th:action="@{/admin/option/{id}(id=${option.id})}" method="post">
-                    <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit">삭제</button>
-                </form>
+                <button type="button" class="delete-option" th:data-option-id="${option.id}" th:data-product-id="${product.id}">삭제</button>
             </td>
         </tr>
         </tbody>
@@ -57,5 +54,35 @@
     <p><input type="submit" value="저장"/></p>
 </form>
 <a th:href="@{/admin/product}">뒤로가기</a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.delete-option').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const optionId = event.target.getAttribute('data-option-id');
+                const productId = event.target.getAttribute('data-product-id');
+
+                fetch(`/admin/option/${optionId}/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('삭제에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('삭제 중 오류가 발생했습니다.');
+                    });
+
+            });
+        });
+    });
+</script>
 </body>
 </html>

@@ -6,6 +6,7 @@ import gift.controller.dto.request.CreateProductRequest;
 import gift.controller.dto.request.UpdateProductRequest;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
+import gift.controller.dto.response.ProductWithOptionResponse;
 import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
@@ -37,11 +38,11 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductResponse findById(Long id) {
+    public ProductWithOptionResponse findById(Long id) {
         Product product = productRepository.findByIdFetchJoin(id)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Product with id " + id + " not found"));
-        return ProductResponse.from(product);
+        return ProductWithOptionResponse.from(product);
     }
 
     @Transactional

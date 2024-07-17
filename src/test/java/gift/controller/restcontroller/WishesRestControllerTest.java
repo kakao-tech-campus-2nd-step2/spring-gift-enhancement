@@ -97,7 +97,7 @@ class WishesRestControllerTest {
         for (int i = 1; i <= count; i++) {
             wishList.add(new WishResponse((long) i, i + 1,
                     new ProductResponse((long)i, "testProduct", i * 1000,
-                            "URL", " ", null, null, null),
+                            "URL", " ", null, null),
                     null, null));
         }
         Page<WishResponse> pages = new PageImpl<>(wishList, PageRequest.of(0, 10), count);

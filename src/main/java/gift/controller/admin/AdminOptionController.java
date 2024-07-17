@@ -4,8 +4,10 @@ import gift.controller.dto.request.CreateOptionRequest;
 import gift.controller.dto.request.UpdateOptionRequest;
 import gift.controller.dto.response.OptionResponse;
 import gift.service.OptionService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,21 +38,22 @@ public class AdminOptionController {
     }
 
     @PostMapping("")
-    public String createOption(@ModelAttribute CreateOptionRequest request) {
+    public String createOption(@Valid @ModelAttribute CreateOptionRequest request) {
         optionService.save(request);
         return "redirect:/admin/product/" + request.productId();
     }
 
     @PutMapping("")
-    public String updateOption(@ModelAttribute UpdateOptionRequest request) {
+    public String updateOption(@Valid @ModelAttribute UpdateOptionRequest request) {
         optionService.updateById(request);
         return "redirect:/admin/product/" + request.productId();
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteOptionById(
+    @DeleteMapping("/{id}/{productId}")
+    public ResponseEntity<Void> deleteOptionById(
+            @PathVariable("productId") @NotNull @Min(1) Long productId,
             @PathVariable("id") @NotNull @Min(1) Long id) {
         optionService.deleteById(id);
-        return "redirect:/admin/product";
+        return ResponseEntity.ok().build();
     }
 }
