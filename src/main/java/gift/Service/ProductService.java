@@ -1,6 +1,8 @@
 package gift.Service;
 
+import gift.Model.Category;
 import gift.Model.Product;
+import gift.Repository.CategoryRepository;
 import gift.Repository.ProductRepository;
 
 import java.util.List;
@@ -13,9 +15,11 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository){
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public Page<Product> findAll(Pageable pageable){
@@ -38,4 +42,7 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
+    public List<Category> getAllCategory(){
+        return categoryRepository.findAll();
+    }
 }

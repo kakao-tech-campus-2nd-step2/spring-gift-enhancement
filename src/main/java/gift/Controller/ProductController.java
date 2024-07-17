@@ -1,6 +1,7 @@
 package gift.Controller;
 
 
+import gift.Model.Category;
 import gift.Model.Product;
 import gift.Service.ProductService;
 
@@ -36,13 +37,14 @@ public class ProductController {
 
     @GetMapping("/api/products/add")
     public String newProductForm(Model model) {
-        model.addAttribute("product", new Product(0L,"",0,""));
+        model.addAttribute("product", new Product(0L,"",0,"",new Category(0L,"","","","")));
+        model.addAttribute("categories", productService.getAllCategory());
         return "post";
     }
 
     @PostMapping("/api/products")
     public String createProduct(@Valid @ModelAttribute Product product) {
-
+        System.out.println(product.getCategory().getName());
         productService.addProduct(product);
         return "redirect:/api/products";
     }
@@ -51,6 +53,7 @@ public class ProductController {
     public String editProductForm(@PathVariable(value = "id") Long id, Model model) {
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
+        model.addAttribute("categories", productService.getAllCategory());
         return "update";
     }
 

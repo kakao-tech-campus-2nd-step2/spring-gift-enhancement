@@ -1,10 +1,14 @@
 package gift.Model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +25,6 @@ public class Product {
     private Long id;
 
     @Column(name = "name", nullable = false)
-
     @NotBlank(message = "입력은 공백일 수 없습니다.")
     @Size(max = 15, message = "길이가 15를 넘을 수 없습니다.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ()\\[\\]+&/_ ]*$", message = "( ), [ ], +, -, &, /, _ 외의 특수 문자는 사용이 불가합니다.")
@@ -33,21 +36,24 @@ public class Product {
     private int price;
 
     @Column(name = "imageUrl", nullable = false)
-
     private String imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     protected Product(){
-        
+
     }
 
-    @ConstructorProperties({"id","name","price","imageUrl"})
-    public Product(Long id, String name, int price, String imageUrl) {
+    @ConstructorProperties({"id","name","price","imageUrl","category"})
+    public Product(Long id, String name, int price, String imageUrl,Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
-
 
     public Long getId() {
         return id;
@@ -65,4 +71,7 @@ public class Product {
         return imageUrl;
     }
 
+    public Category getCategory() {
+        return category;
+    }
 }
