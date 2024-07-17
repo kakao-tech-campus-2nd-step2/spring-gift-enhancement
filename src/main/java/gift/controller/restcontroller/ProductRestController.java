@@ -1,6 +1,7 @@
 package gift.controller.restcontroller;
 
-import gift.controller.dto.request.ProductRequest;
+import gift.controller.dto.request.CreateProductRequest;
+import gift.controller.dto.request.UpdateProductRequest;
 import gift.controller.dto.response.OptionResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
@@ -56,7 +57,7 @@ public class ProductRestController {
     @Operation(summary = "상품 추가", description = "상품을 추가합니다.")
     public ResponseEntity<Long> createProduct(
             UriComponentsBuilder uriBuilder,
-            @Valid @RequestBody ProductRequest request
+            @Valid @RequestBody CreateProductRequest request
     ) {
         Long id = productService.save(request);
         HttpHeaders headers = new HttpHeaders();
@@ -68,14 +69,13 @@ public class ProductRestController {
         return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(id);
     }
 
-    @PutMapping("/product/{id}")
+    @PutMapping("/product")
     @Operation(summary = "상품 수정", description = "상품을 수정합니다.")
-    public ResponseEntity<Long> updateProduct(
-            @PathVariable("id") @NotNull @Min(1) Long id,
-            @Valid @RequestBody ProductRequest request
+    public ResponseEntity<Void> updateProduct(
+            @Valid @RequestBody UpdateProductRequest request
     ) {
-        productService.updateById(id, request);
-        return ResponseEntity.ok().body(id);
+        productService.updateById(request);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/product/{id}")

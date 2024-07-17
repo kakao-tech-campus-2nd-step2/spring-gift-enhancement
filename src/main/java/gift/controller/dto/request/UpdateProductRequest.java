@@ -6,7 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
-public record ProductRequest(
+public record UpdateProductRequest(
+        @NotBlank
+        @Min(1)
+        Long id,
         @NotBlank
         @Length(max = 15)
         @Pattern(regexp = "^[()\\[\\]+\\-&/_ㄱ-하-ㅣ가-힣a-zA-Z0-9]*$",

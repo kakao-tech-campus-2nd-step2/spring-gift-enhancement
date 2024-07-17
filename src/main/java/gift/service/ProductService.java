@@ -1,7 +1,8 @@
 package gift.service;
 
 import gift.common.exception.EntityNotFoundException;
-import gift.controller.dto.request.ProductRequest;
+import gift.controller.dto.request.CreateProductRequest;
+import gift.controller.dto.request.UpdateProductRequest;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
 import gift.model.Category;
@@ -39,7 +40,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Long save(ProductRequest request) {
+    public Long save(CreateProductRequest request) {
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category with id " + request.categoryId() + " not found"));
         Product product = new Product(request.name(), request.price(), request.imageUrl(), category);
@@ -47,9 +48,9 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateById(Long id, ProductRequest request) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+    public void updateById(UpdateProductRequest request) {
+        Product product = productRepository.findById(request.id())
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + request.id() + " not found"));
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category with name " + request.categoryId() + " not found"));
         product.updateProduct(request.name(), request.price(), request.imageUrl(), category);

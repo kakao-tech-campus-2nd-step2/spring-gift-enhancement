@@ -1,6 +1,7 @@
 package gift.controller.admin;
 
-import gift.controller.dto.request.ProductRequest;
+import gift.controller.dto.request.CreateProductRequest;
+import gift.controller.dto.request.UpdateProductRequest;
 import gift.controller.dto.response.CategoryResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
@@ -53,16 +54,15 @@ public class AdminProductController {
     }
 
     @PostMapping("")
-    public String newProduct(@ModelAttribute ProductRequest request) {
+    public String newProduct(@ModelAttribute CreateProductRequest request) {
         productService.save(request);
         return "redirect:/admin/product";
     }
 
     @PutMapping("/{id}")
     public String updateProduct(
-            @PathVariable("id") @NotNull @Min(1) Long id,
-            @ModelAttribute ProductRequest request) {
-        productService.updateById(id, request);
+            @ModelAttribute UpdateProductRequest request) {
+        productService.updateById(request);
         return "redirect:/admin/product";
     }
 

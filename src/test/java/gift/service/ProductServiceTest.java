@@ -1,7 +1,8 @@
 package gift.service;
 
 import gift.config.JpaConfig;
-import gift.controller.dto.request.ProductRequest;
+import gift.controller.dto.request.CreateProductRequest;
+import gift.controller.dto.request.UpdateProductRequest;
 import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
@@ -40,10 +41,10 @@ class ProductServiceTest {
         Category category = categoryRepository.save(new Category(name, color, imageUrl, description));
         Category category2 = categoryRepository.save(new Category(name2, color, imageUrl, description));
         Product saved = productRepository.save(new Product("pname", 1000, "purl", category));
-        ProductRequest request = new ProductRequest(saved.getName(), saved.getPrice(), saved.getImageUrl(), category2.getName());
+        UpdateProductRequest request = new UpdateProductRequest(saved.getId(), saved.getName(), saved.getPrice(), saved.getImageUrl(), category2.getId());
 
         // when
-        productService.updateById(saved.getId(), request);
+        productService.updateById(request);
         Product actual = productRepository.findByIdFetchJoin(saved.getId()).get();
 
         // then
