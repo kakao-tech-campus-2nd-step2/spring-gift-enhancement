@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("/api/options")
+@RequestMapping("/api")
 public class OptionController {
 
   private final OptionService optionService;
@@ -26,7 +26,7 @@ public class OptionController {
   }
 
 
-  @PostMapping
+  @PostMapping("/options")
   public ResponseEntity<OptionDto> addOption(@RequestBody OptionDto optionDto) {
     OptionDto addedOptionDto = optionService.addOption(optionDto);
 
@@ -36,21 +36,21 @@ public class OptionController {
     return ResponseEntity.created(location).body(addedOptionDto);
   }
 
-  @GetMapping
+  @GetMapping("/options")
   public ResponseEntity<List<OptionDto>> getAllOptions() {
     List<OptionDto> optionDtos = optionService.getAllOptions();
 
     return ResponseEntity.ok(optionDtos);
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("products/{id}/options")
   public ResponseEntity<OptionDto> getOptionById(@PathVariable Long id) {
     OptionDto optionDto = optionService.getOptionById(id);
 
     return ResponseEntity.ok(optionDto);
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("products/{id}/options")
   public ResponseEntity<OptionDto> deleteOption(@PathVariable Long id) {
     OptionDto optionDto = optionService.deleteOption(id);
 

@@ -38,7 +38,8 @@ public class ConverterToDto {
   }
 
   public static OptionDto convertToOptionDto(Option option) {
-    OptionDto optionDto = new OptionDto(option.getId(), option.getName(),option.getQuantity());
+    ProductDto productDto = convertToProductDto(option.getProduct());
+    OptionDto optionDto = new OptionDto(option.getId(), option.getName(),option.getQuantity(), productDto);
     return optionDto;
   }
 }
