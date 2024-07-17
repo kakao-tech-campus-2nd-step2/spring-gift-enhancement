@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import gift.entity.Category;
 import gift.entity.Option;
 import gift.entity.Product;
-import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
