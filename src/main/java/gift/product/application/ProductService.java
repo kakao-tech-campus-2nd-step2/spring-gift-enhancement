@@ -73,6 +73,11 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
+    @Transactional
+    public void deleteOptionFromProduct(Long id, OptionRequest request) {
+        optionRepository.deleteByProduct_IdAndName(id, request.name());
+    }
+
     public void deleteAllProducts() {
         productRepository.deleteAll();
     }

@@ -81,4 +81,11 @@ public class ProductController {
         return productService.addOptionToProduct(id, request);
     }
 
+    // 상품 옵션 삭제
+    @DeleteMapping("/{id}/options")
+    public void deleteOptionFromProduct(@PathVariable("id") Long id,
+                                        @RequestBody @Valid OptionRequest request) {
+        productService.deleteOptionFromProduct(id, request);
+    }
+
 }
