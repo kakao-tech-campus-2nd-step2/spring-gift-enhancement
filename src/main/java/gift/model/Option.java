@@ -25,6 +25,11 @@ public class Option extends BasicEntity{
         this.product = product;
     }
 
+    public void updateOption(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public String getName() {
         return name;
     }

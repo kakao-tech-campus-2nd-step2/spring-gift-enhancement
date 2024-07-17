@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("SELECT p FROM Product p JOIN FETCH p.category")
+    @Query("SELECT p FROM Product p JOIN FETCH p.category JOIN FETCH p.options")
     Page<Product> findAllFetchJoin(Pageable pageable);
 
 
-    @Query("SELECT p FROM Product p JOIN FETCH p.category WHERE p.id= :id")
+    @Query("SELECT p FROM Product p JOIN FETCH p.category JOIN FETCH p.options WHERE p.id= :id")
     Optional<Product> findByIdFetchJoin(Long id);
 }
