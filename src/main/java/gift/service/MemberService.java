@@ -18,11 +18,10 @@ public class MemberService {
     }
 
     @Transactional
-    public Long registerMember(MemberRequest request) {
-        memberRepository.findByEmail(request.email())
-                .ifPresent(member -> {
-                    throw new EmailDuplicateException(member);
-                });
+    public Long register(MemberRequest request) {
+        if (memberRepository.existsByEmail(request.email())) {
+            throw new EmailDuplicateException(request.email());
+        }
         Member member = new Member(request.email(), request.password());
         return memberRepository.save(member).getId();
     }
@@ -34,7 +33,7 @@ public class MemberService {
         return registeredMember.getId();
     }
 
-    public Member getMemberById(Long memberId) {
+    public Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
     }

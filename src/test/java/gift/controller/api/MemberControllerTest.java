@@ -41,7 +41,7 @@ class MemberControllerTest {
         //Given
         MemberRequest registerRequest = new MemberRequest("member1@gmail.com", "1234");
 
-        when(memberService.registerMember(registerRequest)).thenReturn(1L);
+        when(memberService.register(registerRequest)).thenReturn(1L);
         when(tokenService.generateToken(1L)).thenReturn(new TokenResponse("JSH"));
 
         //When

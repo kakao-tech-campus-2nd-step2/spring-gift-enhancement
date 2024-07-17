@@ -52,7 +52,7 @@ class WishListServiceTest {
         PageRequest pageable = PageRequest.of(0, 10);
         Page<Wish> wishPage = new PageImpl<>(List.of(wish), pageable, 1);
 
-        when(memberService.getMemberById(memberId)).thenReturn(member);
+        when(memberService.getMember(memberId)).thenReturn(member);
         when(wishRepository.findAllByMember(member, pageable)).thenReturn(wishPage);
 
         //When
@@ -78,7 +78,7 @@ class WishListServiceTest {
             Member member = new Member("test@email.com", "password");
             Product product = new Product("name", 1000, "imageUrl", null);
 
-            when(memberService.getMemberById(memberId)).thenReturn(member);
+            when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(request.productId())).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.empty());
 
@@ -99,7 +99,7 @@ class WishListServiceTest {
             Product product = new Product("name", 1000, "imageUrl", null);
             Wish existingWish = new Wish(member, 1, product);
 
-            when(memberService.getMemberById(memberId)).thenReturn(member);
+            when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(request.productId())).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.of(existingWish));
 
@@ -122,7 +122,7 @@ class WishListServiceTest {
             Product product = new Product("name", 1000, "imageUrl", null);
             Wish wish = new Wish(member, 1, product);
 
-            when(memberService.getMemberById(memberId)).thenReturn(member);
+            when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(productId)).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.of(wish));
 
@@ -142,7 +142,7 @@ class WishListServiceTest {
             Member member = new Member("test@email.com", "password");
             Product product = new Product("name", 1000, "imageUrl", null);
 
-            when(memberService.getMemberById(memberId)).thenReturn(member);
+            when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(productId)).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.empty());
 
@@ -165,7 +165,7 @@ class WishListServiceTest {
             Product product = new Product("name", 1000, "imageUrl", null);
             Wish wish = new Wish(member, 1, product);
 
-            when(memberService.getMemberById(memberId)).thenReturn(member);
+            when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(request.productId())).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.of(wish));
 
@@ -185,7 +185,7 @@ class WishListServiceTest {
             Member member = new Member("test@email.com", "password");
             Product product = new Product("name", 1000, "imageUrl", null);
 
-            when(memberService.getMemberById(memberId)).thenReturn(member);
+            when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(request.productId())).thenReturn(product);
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.empty());
 
