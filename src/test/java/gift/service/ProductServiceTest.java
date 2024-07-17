@@ -1,7 +1,6 @@
 package gift.service;
 
 import gift.config.JpaConfig;
-import gift.controller.dto.request.CreateProductRequest;
 import gift.controller.dto.request.UpdateProductRequest;
 import gift.model.Category;
 import gift.model.Product;
