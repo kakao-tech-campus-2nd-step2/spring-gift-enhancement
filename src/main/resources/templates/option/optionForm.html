@@ -22,7 +22,7 @@
             <td th:text="${option.name}">Option Name</td>
             <td th:text="${option.quantity}">Option Quantity</td>
             <td>
-            <form th:action="@{/option/delete/{id}(id=${option.id})}" method="post" class="d-inline">
+            <form th:action="@{/products/{product_id}/delete/{option_id}(product_id=${productId}, option_id=${option.id})}" method="post" class="d-inline">
                 <button type="submit" class="btn btn-success btn-sm">상품 옵션 삭제</button>
             </form>
             </td>
