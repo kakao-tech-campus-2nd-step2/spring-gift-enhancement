@@ -21,7 +21,6 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-
     public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
