@@ -72,7 +72,6 @@ public class ProductService {
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
-
     private ProductDTO convertToDTO(Product product) {
         return new ProductDTO(
             product.getId(),

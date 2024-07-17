@@ -38,7 +38,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
     public Product() {}
 
     public Product(long id, String name, long price, String imageUrl) {
