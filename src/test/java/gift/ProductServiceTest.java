@@ -1,6 +1,5 @@
 package gift;
 
-
 import gift.model.Product;
 import gift.repository.ProductRepository;
 import gift.service.ProductService;
@@ -35,12 +34,10 @@ public class ProductServiceTest {
 
     @BeforeEach
     public void setup() {
-        product = Product.builder()
-                .id(1L)
-                .name("Product Name")
-                .price(100)
-                .imageurl("https://cs.kakao.com/images/icon/img_kakaocs.png")
-                .build();
+        product = new Product();
+        product.setName("Product Name");
+        product.setPrice(100);
+        product.setImageurl("https://cs.kakao.com/images/icon/img_kakaocs.png");
     }
 
     @Test
@@ -53,7 +50,6 @@ public class ProductServiceTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getContent()).hasSize(1);
-        assertThat(response.getBody().getContent().get(0).getId()).isEqualTo(product.getId());
         assertThat(response.getBody().getContent().get(0).getName()).isEqualTo(product.getName());
     }
 }

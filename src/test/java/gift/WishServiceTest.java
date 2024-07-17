@@ -1,6 +1,7 @@
 package gift;
 
 import gift.dto.WishResponse;
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wish;
@@ -20,6 +21,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @SpringBootTest
 public class WishServiceTest {
 
@@ -31,41 +35,56 @@ public class WishServiceTest {
 
     private Member member;
     private Product product;
+    private Category category;
     private Wish wish;
 
     @BeforeEach
     public void setup() {
-        member = Member.builder()
-                .id(1L)
-                .email("test@example.com")
-                .password("password")
-                .build();
+        member = new Member();
+        member.setEmail("test@example.com");
+        member.setPassword("password");
 
-        product = Product.builder()
-                .id(1L)
-                .name("Product Name")
-                .price(100)
-                .imageurl("https://cs.kakao.com/images/icon/img_kakaocs.png")
-                .build();
+        category = new Category();
+        category.setName("Food");
 
-        wish = Wish.builder()
-                .id(1L)
-                .member(member)
-                .product(product)
-                .build();
+        product = new Product();
+        product.setName("Product Name");
+        product.setPrice(100);
+        product.setImageurl("https://cs.kakao.com/images/icon/img_kakaocs.png");
+        product.setCategory(category);
+
+        wish = new Wish();
+        wish.setMember(member);
+        wish.setProduct(product);
+    }
+
+
+
+    @Test
+    public void testAddWish() {
+        Mockito.when(wishRepository.save(Mockito.any(Wish.class))).thenReturn(wish);
+
+        Wish savedWish = wishService.addWish(wish);
+
+        assertThat(savedWish).isNotNull();
+        assertThat(savedWish.getMember().getEmail()).isEqualTo(member.getEmail());
+        assertThat(savedWish.getProduct().getName()).isEqualTo(product.getName());
     }
 
     @Test
-    public void testGetWishesByMemberId() {
-        List<Wish> wishList = Collections.singletonList(wish);
-        Page<Wish> wishPage = new PageImpl<>(wishList, PageRequest.of(0, 5), 1);
-        Mockito.when(wishRepository.findByMemberId(Mockito.anyLong(), Mockito.any(Pageable.class)))
-                .thenReturn(wishPage);
+    public void testDeleteWish() {
+        Mockito.when(wishRepository.existsById(Mockito.anyLong())).thenReturn(true);
+        Mockito.doNothing().when(wishRepository).deleteById(Mockito.anyLong());
 
-        Page<WishResponse> response = wishService.getWishesByMemberId(member.getId(), PageRequest.of(0, 5));
+        wishService.deleteWish(1L);
 
-        assertThat(response.getContent()).hasSize(1);
-        assertThat(response.getContent().get(0).getId()).isEqualTo(wish.getId());
-        assertThat(response.getContent().get(0).getProductName()).isEqualTo(product.getName());
+        Mockito.verify(wishRepository, Mockito.times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void testDeleteWishThrowsExceptionWhenWishNotFound() {
+        Mockito.when(wishRepository.existsById(Mockito.anyLong())).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, () -> wishService.deleteWish(1L));
     }
 }

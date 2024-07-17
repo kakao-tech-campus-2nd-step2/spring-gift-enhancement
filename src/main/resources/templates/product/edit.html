@@ -32,7 +32,13 @@
         <div class="form-group">
             <label>Image URL:</label>
             <input type="url" class="form-control" th:field="*{imageurl}" required/>
-            <div class="error" th:if="${valid_imageUrl}" th:text="${valid_imageurl}"></div>
+            <div class="error" th:if="${valid_imageurl}" th:text="${valid_imageurl}"></div>
+        </div>
+        <div class="form-group">
+            <label>Category:</label>
+            <select class="form-control" th:field="*{category.id}" required>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == product.category.id}"></option>
+            </select>
         </div>
         <button type="submit" class="btn btn-success btn-update">Update</button>
     </form>

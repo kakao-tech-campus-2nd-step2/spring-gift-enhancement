@@ -1,8 +1,10 @@
 package gift;
 
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wish;
+import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
@@ -29,26 +31,30 @@ class WishRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     void save() {
-        Member member = Member.builder()
-                .email("test@example.com")
-                .password("password123")
-                .build();
+        Member member = new Member();
+        member.setEmail("test@example.com");
+        member.setPassword("password123");
         memberRepository.save(member);
 
-        Product product = Product.builder()
-                .name("열라면")
-                .price(1600)
-                .imageurl("https://i.namu.wiki/i/fuvd7qkb8P6PA_sD5ufjgpKUhRgxxTrIWnkPIg5H_UAPMUaArn1U1DweD7T_f_8RVxTDjqaiFwKr-quURwc_eQ.webp")
-                .build();
+        Category category = new Category();
+        category.setName("Food");
+        categoryRepository.save(category);
+
+        Product product = new Product();
+        product.setName("열라면");
+        product.setPrice(1600);
+        product.setImageurl("https://i.namu.wiki/i/fuvd7qkb8P6PA_sD5ufjgpKUhRgxxTrIWnkPIg5H_UAPMUaArn1U1DweD7T_f_8RVxTDjqaiFwKr-quURwc_eQ.webp");
+        product.setCategory(category);
         productRepository.save(product);
 
-        Wish wish = Wish.builder()
-                .member(member)
-                .product(product)
-                .build();
-
+        Wish wish = new Wish();
+        wish.setMember(member);
+        wish.setProduct(product);
         Wish savedWish = wishRepository.save(wish);
 
         assertThat(savedWish.getId()).isNotNull();
@@ -57,27 +63,29 @@ class WishRepositoryTest {
 
     @Test
     void findByMemberId() {
-        Member member = Member.builder()
-                .email("test@example.com")
-                .password("password123")
-                .build();
-        Member savedMember = memberRepository.save(member);
+        Member member = new Member();
+        member.setEmail("test@example.com");
+        member.setPassword("password123");
+        memberRepository.save(member);
 
-        Product product = Product.builder()
-                .name("열라면")
-                .price(1600)
-                .imageurl("https://i.namu.wiki/i/fuvd7qkb8P6PA_sD5ufjgpKUhRgxxTrIWnkPIg5H_UAPMUaArn1U1DweD7T_f_8RVxTDjqaiFwKr-quURwc_eQ.webp")
-                .build();
+        Category category = new Category();
+        category.setName("Food");
+        categoryRepository.save(category);
+
+        Product product = new Product();
+        product.setName("열라면");
+        product.setPrice(1600);
+        product.setImageurl("https://i.namu.wiki/i/fuvd7qkb8P6PA_sD5ufjgpKUhRgxxTrIWnkPIg5H_UAPMUaArn1U1DweD7T_f_8RVxTDjqaiFwKr-quURwc_eQ.webp");
+        product.setCategory(category);
         productRepository.save(product);
 
-        Wish wish = Wish.builder()
-                .member(savedMember)
-                .product(product)
-                .build();
+        Wish wish = new Wish();
+        wish.setMember(member);
+        wish.setProduct(product);
         wishRepository.save(wish);
 
         Pageable pageable = PageRequest.of(0, 5);
-        Page<Wish> wishesPage = wishRepository.findByMemberId(savedMember.getId(), pageable);
+        Page<Wish> wishesPage = wishRepository.findByMemberId(member.getId(), pageable);
         List<Wish> wishes = wishesPage.getContent();
 
         assertThat(wishes).isNotEmpty();

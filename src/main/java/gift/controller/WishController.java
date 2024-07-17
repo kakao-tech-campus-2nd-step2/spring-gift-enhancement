@@ -1,4 +1,3 @@
-
 package gift.controller;
 
 import gift.annotation.LoginMember;
@@ -32,7 +31,10 @@ public class WishController {
     @PostMapping
     public Wish addWish(@RequestBody WishRequest wishRequest, @LoginMember Member member) {
         Product product = productService.findById(wishRequest.getProductId());
-        return wishService.addWish(member, product);
+        Wish wish = new Wish();
+        wish.setMember(member);
+        wish.setProduct(product);
+        return wishService.addWish(wish);
     }
 
     @DeleteMapping("/{wishId}")

@@ -5,68 +5,56 @@ public class WishResponse {
     private String productName;
     private int productPrice;
     private String productImageurl;
+    private String productCategory;
 
     public WishResponse() {
     }
 
-    private WishResponse(Builder builder) {
-        this.id = builder.id;
-        this.productName = builder.productName;
-        this.productPrice = builder.productPrice;
-        this.productImageurl = builder.productImageurl;
+    public WishResponse(Long id, String productName, int productPrice, String productImageurl, String productCategory) {
+        this.id = id;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productImageurl = productImageurl;
+        this.productCategory = productCategory;
     }
-
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getProductName() {
         return productName;
     }
 
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public int getProductPrice() {
         return productPrice;
+    }
+
+    public void setProductPrice(int productPrice) {
+        this.productPrice = productPrice;
     }
 
     public String getProductImageurl() {
         return productImageurl;
     }
 
-
-    public static class Builder {
-        private Long id;
-        private String productName;
-        private int productPrice;
-        private String productImageurl;
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder productName(String productName) {
-            this.productName = productName;
-            return this;
-        }
-
-        public Builder productPrice(int productPrice) {
-            this.productPrice = productPrice;
-            return this;
-        }
-
-        public Builder productImageurl(String productImageurl) {
-            this.productImageurl = productImageurl;
-            return this;
-        }
-
-        public WishResponse build() {
-            return new WishResponse(this);
-        }
+    public void setProductImageurl(String productImageurl) {
+        this.productImageurl = productImageurl;
     }
 
+    public String getProductCategory() {
+        return productCategory;
+    }
 
-    public static Builder builder() {
-        return new Builder();
+    public void setProductCategory(String productCategory) {
+        this.productCategory = productCategory;
     }
 }
