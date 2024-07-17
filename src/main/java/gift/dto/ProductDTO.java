@@ -2,6 +2,8 @@ package gift.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDTO {
 
@@ -20,16 +22,20 @@ public class ProductDTO {
     @NotNull(message = "카테고리를 선택해주세요.")
     private Long categoryId;
 
+    private List<OptionDTO> options = new ArrayList<>();
+
     public ProductDTO() {}
 
-    public ProductDTO(Long id, NameDTO name, Integer price, String imageUrl, Long categoryId) {
+    public ProductDTO(Long id, NameDTO name, Integer price, String imageUrl, Long categoryId, List<OptionDTO> options) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+        this.options = options;
     }
 
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -68,5 +74,13 @@ public class ProductDTO {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<OptionDTO> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<OptionDTO> options) {
+        this.options = options;
     }
 }
