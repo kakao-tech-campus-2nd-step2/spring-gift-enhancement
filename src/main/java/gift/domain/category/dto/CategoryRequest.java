@@ -10,7 +10,7 @@ public class CategoryRequest {
 
     private String description;
 
-    public CategoryRequest(){}
+    private CategoryRequest(){}
 
     public CategoryRequest(String name, String color, String imageUrl, String description) {
         this.name = name;

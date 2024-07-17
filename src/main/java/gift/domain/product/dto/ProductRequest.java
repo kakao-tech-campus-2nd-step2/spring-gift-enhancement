@@ -22,7 +22,7 @@ public class ProductRequest {
 
     private Long categoryId;
 
-    public ProductRequest() {
+    private ProductRequest() {
     }
 
     public ProductRequest(String name, int price, String imageUrl, Long categoryId) {

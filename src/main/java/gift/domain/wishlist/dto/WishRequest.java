@@ -6,7 +6,7 @@ public class WishRequest {
 
     private Long productId;
 
-    public WishRequest() {
+    private WishRequest() {
     }
 
     public WishRequest(Long memberId, Long productId) {

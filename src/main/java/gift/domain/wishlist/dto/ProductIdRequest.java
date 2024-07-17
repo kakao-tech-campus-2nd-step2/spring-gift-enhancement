@@ -4,7 +4,7 @@ public class ProductIdRequest {
 
     private Long productId;
 
-    public ProductIdRequest() {
+    private ProductIdRequest() {
     }
 
     public ProductIdRequest(Long productId) {
