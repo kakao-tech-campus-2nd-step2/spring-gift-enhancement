@@ -6,8 +6,10 @@ import gift.dto.PagingResponse;
 import gift.model.category.CategoryResponse;
 import gift.model.gift.GiftRequest;
 import gift.model.gift.GiftResponse;
+import gift.model.option.OptionRequest;
 import gift.service.category.CategoryService;
 import gift.service.gift.GiftService;
+import gift.service.option.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +23,13 @@ public class AdminController {
 
     private final GiftService giftService;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
     @Autowired
-    public AdminController(GiftService giftService, CategoryService categoryService) {
+    public AdminController(GiftService giftService, CategoryService categoryService, OptionService optionService) {
         this.giftService = giftService;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     @GetMapping
@@ -79,6 +83,18 @@ public class AdminController {
     public String giftDelete(@PathVariable("id") Long id) {
         giftService.deleteGift(id);
         return "redirect:/admin";
+    }
+
+    @GetMapping("/admin/gift/{giftId}/option/create")
+    public String showCreateOptionForm(Model model, @PathVariable Long giftId) {
+        model.addAttribute("giftId", giftId);
+        return "create_option_form";
+    }
+
+    @PostMapping("/admin/gift/{giftId}/option/create")
+    public String createOption(@PathVariable Long giftId, @Valid @ModelAttribute OptionRequest optionRequest) {
+        optionService.addOptionToGift(giftId, optionRequest);
+        return "redirect:/admin/gift/detail/" + giftId;
     }
 }
 

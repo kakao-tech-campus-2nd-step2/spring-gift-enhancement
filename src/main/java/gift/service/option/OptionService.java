@@ -6,6 +6,7 @@ import gift.repository.gift.GiftRepository;
 import gift.repository.option.OptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,6 +23,7 @@ public class OptionService {
         this.giftRepository = giftRepository;
     }
 
+    @Transactional
     public void addOptionToGift(Long giftId, OptionRequest optionRequest) {
         Gift gift = giftRepository.findById(giftId)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
@@ -33,6 +35,7 @@ public class OptionService {
         giftRepository.save(gift);
     }
 
+    @Transactional(readOnly = true)
     public List<OptionResponse> getAllOptions() {
         List<OptionResponse> options = optionRepository.findAll().stream()
                 .map(OptionResponse::from)
@@ -40,6 +43,7 @@ public class OptionService {
         return options;
     }
 
+    @Transactional(readOnly = true)
     public List<OptionResponse> getOptionsByGiftId(Long giftId) {
         Gift gift = giftRepository.findById(giftId)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
@@ -49,19 +53,20 @@ public class OptionService {
                 .toList();
     }
 
+    @Transactional
     public void updateOptionToGift(Long giftId, Long optionId, OptionRequest optionRequest) {
         Gift gift = giftRepository.findById(giftId)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
         Option option = optionRepository.findById(optionId)
                 .orElseThrow(() -> new NoSuchElementException("해당 옵션을 찾을 수 없습니다 id :  " + optionId));
 
-        option.modify(optionRequest.getName(), optionRequest.getQuantity());
-
         checkDuplicateOptionName(gift, option.getName());
 
-        optionRepository.save(option);
+        option.modify(optionRequest.getName(), optionRequest.getQuantity());
+
     }
 
+    @Transactional
     public void deleteOptionFromGift(Long giftId, Long optionId) {
         Gift gift = giftRepository.findById(giftId)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
