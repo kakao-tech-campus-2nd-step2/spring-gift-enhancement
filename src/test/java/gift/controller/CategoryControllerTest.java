@@ -2,11 +2,16 @@ package gift.controller;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import gift.dto.category.CategoryRequest;
 import gift.dto.category.CategoryResponse;
+import gift.exception.category.CategoryNotFoundException;
 import gift.service.CategoryService;
+import gift.util.Constants;
 import gift.util.TokenValidator;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(CategoryController.class)
@@ -33,7 +39,7 @@ public class CategoryControllerTest {
 
     @BeforeEach
     public void setUp() {
-        categoryResponse = new CategoryResponse(1L, "Category", "color", "imageUrl", "description");
+        categoryResponse = new CategoryResponse(1L, "Category", "#000000", "imageUrl", "description");
     }
 
     @Test
@@ -44,5 +50,68 @@ public class CategoryControllerTest {
         mockMvc.perform(get("/api/categories"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].name").value("Category"));
+    }
+
+    @Test
+    @DisplayName("카테고리 ID로 조회")
+    public void testGetCategoryById() throws Exception {
+        when(categoryService.getCategoryById(1L)).thenReturn(categoryResponse);
+
+        mockMvc.perform(get("/api/categories/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Category"));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 카테고리 ID로 조회")
+    public void testGetCategoryByIdNotFound() throws Exception {
+        when(categoryService.getCategoryById(1L)).thenThrow(new CategoryNotFoundException(Constants.CATEGORY_NOT_FOUND + 1));
+
+        mockMvc.perform(get("/api/categories/1"))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.error").value(Constants.CATEGORY_NOT_FOUND + 1));
+    }
+
+    @Test
+    @DisplayName("카테고리 추가")
+    public void testAddCategory() throws Exception {
+        CategoryRequest categoryRequest = new CategoryRequest(null, "Category", "#000000", "imageUrl", "description");
+        when(categoryService.addCategory(categoryRequest)).thenReturn(categoryResponse);
+
+        mockMvc.perform(post("/api/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\": \"Category\", \"color\": \"#000000\", \"imageUrl\": \"imageUrl\", \"description\": \"description\"}"))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.name").value("Category"));
+    }
+
+    @Test
+    @DisplayName("카테고리 수정")
+    public void testUpdateCategory() throws Exception {
+        CategoryRequest categoryRequest = new CategoryRequest(null, "Updated Category", "#FFFFFF", "newImageUrl", "newDescription");
+        CategoryResponse updatedCategoryResponse = new CategoryResponse(1L, "Updated Category", "#FFFFFF", "newImageUrl", "newDescription");
+        when(categoryService.updateCategory(1L, categoryRequest)).thenReturn(updatedCategoryResponse);
+
+        mockMvc.perform(put("/api/categories/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\": \"Updated Category\", \"color\": \"#FFFFFF\", \"imageUrl\": \"newImageUrl\", \"description\": \"newDescription\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Updated Category"))
+            .andExpect(jsonPath("$.color").value("#FFFFFF"))
+            .andExpect(jsonPath("$.imageUrl").value("newImageUrl"))
+            .andExpect(jsonPath("$.description").value("newDescription"));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 카테고리 ID로 수정")
+    public void testUpdateCategoryNotFound() throws Exception {
+        CategoryRequest categoryRequest = new CategoryRequest(null, "Updated Category", "#FFFFFF", "newImageUrl", "newDescription");
+        when(categoryService.updateCategory(1L, categoryRequest)).thenThrow(new CategoryNotFoundException(Constants.CATEGORY_NOT_FOUND + 1));
+
+        mockMvc.perform(put("/api/categories/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\": \"Updated Category\", \"color\": \"#FFFFFF\", \"imageUrl\": \"newImageUrl\", \"description\": \"newDescription\"}"))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.error").value(Constants.CATEGORY_NOT_FOUND + 1));
     }
 }

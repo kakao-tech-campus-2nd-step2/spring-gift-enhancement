@@ -5,7 +5,6 @@ import static gift.util.Constants.CATEGORY_NOT_FOUND;
 import gift.dto.category.CategoryRequest;
 import gift.dto.category.CategoryResponse;
 import gift.exception.category.CategoryNotFoundException;
-import gift.exception.product.ProductNotFoundException;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
 import java.util.List;
@@ -32,7 +31,7 @@ public class CategoryService {
     public CategoryResponse getCategoryById(Long id) {
         return categoryRepository.findById(id)
             .map(CategoryService::convertToDTO)
-            .orElseThrow(() -> new ProductNotFoundException(CATEGORY_NOT_FOUND + id));
+            .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND + id));
     }
 
     // 카테고리 추가
@@ -47,7 +46,8 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND + id));
 
-        category.update(categoryRequest.name(), categoryRequest.color(), categoryRequest.imageUrl(), categoryRequest.description());
+        category.update(categoryRequest.name(), categoryRequest.color(), categoryRequest.imageUrl(),
+            categoryRequest.description());
         Category updatedCategory = categoryRepository.save(category);
         return convertToDTO(updatedCategory);
     }
