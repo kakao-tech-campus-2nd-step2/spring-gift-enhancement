@@ -86,7 +86,7 @@ public class CategoryRepositoryTest {
     }
 
     @Test
-    @Description("카테고리를 참조하는 상품 존재하면 삭제 실패")
+    @Description("카테고리를 참조하는 상품 존재하면 삭제 실패") // 상품은 그냥 삭제해도 상관없음
     void testCategoryDeleteFailed() {
         // given
         Category savedCategory = categoryRepository.saveAndFlush(category1);

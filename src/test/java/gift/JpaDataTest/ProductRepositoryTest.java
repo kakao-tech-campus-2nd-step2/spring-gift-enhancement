@@ -6,10 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import gift.domain.Category.Category;
 import gift.domain.Category.JpaCategoryRepository;
-
+import gift.domain.cartItem.CartItem;
+import gift.domain.cartItem.JpaCartItemRepository;
 import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
 import gift.domain.product.ProductService;
+import gift.domain.user.JpaUserRepository;
+import gift.domain.user.User;
 import gift.global.exception.BusinessException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import jdk.jfr.Description;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +45,10 @@ public class ProductRepositoryTest {
     private ProductService productService;
     @Autowired
     private JpaCategoryRepository categoryRepository;
+    @Autowired
+    private JpaUserRepository userRepository;
+    @Autowired
+    private JpaCartItemRepository cartItemRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -58,9 +66,11 @@ public class ProductRepositoryTest {
         ethiopia = categoryRepository.saveAndFlush(new Category("에티오피아산", "에티오피아 산 원두를 사용했습니다."));
         jamaica = categoryRepository.saveAndFlush(new Category("자메이카산", "자메이카산 원두를 사용했습니다."));
 
-        Product product1 = new Product("아이스 아메리카노 T", ethiopia, 4500, "https://example.com/image.jpg");
+        Product product1 = new Product("아이스 아메리카노 T", ethiopia, 4500,
+            "https://example.com/image.jpg");
         this.product1 = product1;
-        Product product2 = new Product("아이스 말차라떼 T", jamaica, 4500, "https://example.com/image.jpg");
+        Product product2 = new Product("아이스 말차라떼 T", jamaica, 4500,
+            "https://example.com/image.jpg");
         this.product2 = product2;
     }
 
@@ -80,7 +90,8 @@ public class ProductRepositoryTest {
     @Description("카카오 문구 포함 상품 저장 실패")
     void kakaoPersistFailed() {
         // given
-        Product product = new Product("아이스 카카오 라떼 T", ethiopia, 4500, "https://example.com/image.jpg");
+        Product product = new Product("아이스 카카오 라떼 T", ethiopia, 4500,
+            "https://example.com/image.jpg");
 
         // when, then
         assertThrows(ConstraintViolationException.class,
@@ -91,7 +102,8 @@ public class ProductRepositoryTest {
     @Description("카카오 문구 포함 상품 검증 메서드")
     void kakaoValidation() {
         // given
-        Product product = new Product("아이스 카카오 라떼 T", ethiopia, 4500, "https://example.com/image.jpg");
+        Product product = new Product("아이스 카카오 라떼 T", ethiopia, 4500,
+            "https://example.com/image.jpg");
 
         // when, then
         assertThrows(BusinessException.class, () -> productService.validateProduct(product));
@@ -101,8 +113,10 @@ public class ProductRepositoryTest {
     @Description("상품 저장 시 이름 중복 검증")
     void saveWithSameName() {
         // given
-        Product product1 = new Product("아이스 아메리카노 T", ethiopia, 4500, "https://example.com/image.jpg");
-        Product product2 = new Product("아이스 아메리카노 T", jamaica, 4700, "https://example.com/image.jpg");
+        Product product1 = new Product("아이스 아메리카노 T", ethiopia, 4500,
+            "https://example.com/image.jpg");
+        Product product2 = new Product("아이스 아메리카노 T", jamaica, 4700,
+            "https://example.com/image.jpg");
 
         // when
         productRepository.save(product1);
@@ -144,6 +158,21 @@ public class ProductRepositoryTest {
     }
 
     @Test
+    @Description("상품을 참조하는 장바구니 정보 존재하면 삭제 실패")
+    void deleteConstraintViolationError() {
+        // given
+        Product savedProduct = productRepository.saveAndFlush(product1);
+        User savedUser = userRepository.saveAndFlush(new User("minji@example.com", "password1"));
+        CartItem savedCartItem = cartItemRepository.saveAndFlush(new CartItem(savedUser, savedProduct));
+
+        // when
+        productRepository.deleteById(savedProduct.getId());
+
+        // then
+        assertThrows(org.hibernate.exception.ConstraintViolationException.class, () -> flush());
+    }
+
+    @Test
     @Description("상품들 삭제")
     void deleteAllByIdsIn() {
         // given
@@ -177,8 +206,10 @@ public class ProductRepositoryTest {
         assertAll(
             () -> assertThat(products.getTotalElements()).isEqualTo(2), // 전체 Product 개수
             () -> assertThat(products.getTotalPages()).isEqualTo(1), // 전체 페이지 개수
-            () -> assertThat(products.getNumber()).isEqualTo(pageRequest.getPageNumber()), // 현재 페이지 번호
-            () -> assertThat(products.getSize()).isEqualTo(pageRequest.getPageSize()) // 페이지당 보여지는 Product 개수
+            () -> assertThat(products.getNumber()).isEqualTo(pageRequest.getPageNumber()),
+            // 현재 페이지 번호
+            () -> assertThat(products.getSize()).isEqualTo(pageRequest.getPageSize())
+            // 페이지당 보여지는 Product 개수
         );
     }
 
