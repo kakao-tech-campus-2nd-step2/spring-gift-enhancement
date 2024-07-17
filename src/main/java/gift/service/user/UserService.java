@@ -1,9 +1,9 @@
-package gift.service;
+package gift.service.user;
 
 import gift.exception.InvalidUserException;
 import gift.exception.UserAlreadyExistException;
 import gift.model.user.User;
-import gift.repository.UserRepository;
+import gift.repository.user.UserRepository;
 import gift.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

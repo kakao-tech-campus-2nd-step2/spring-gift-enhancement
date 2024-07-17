@@ -1,4 +1,4 @@
-package gift.repository;
+package gift.repository.wish;
 
 import gift.model.gift.Gift;
 import gift.model.user.User;

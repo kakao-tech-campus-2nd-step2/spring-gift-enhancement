@@ -1,7 +1,8 @@
 package gift.service;
 
 import gift.model.category.*;
-import gift.repository.CategoryRepository;
+import gift.repository.category.CategoryRepository;
+import gift.service.category.CategoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

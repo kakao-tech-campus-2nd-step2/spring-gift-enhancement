@@ -1,7 +1,7 @@
 package gift.config;
 
 import gift.model.user.User;
-import gift.service.UserService;
+import gift.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

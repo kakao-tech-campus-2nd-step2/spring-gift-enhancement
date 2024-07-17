@@ -2,7 +2,7 @@ package gift.controller;
 
 import gift.model.category.CategoryRequest;
 import gift.model.category.CategoryResponse;
-import gift.service.CategoryService;
+import gift.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

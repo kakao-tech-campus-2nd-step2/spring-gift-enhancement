@@ -1,11 +1,13 @@
-package gift.service;
+package gift.service.gift;
 
 
 import gift.dto.PagingResponse;
 import gift.model.category.Category;
 import gift.model.gift.*;
 import gift.model.option.OptionResponse;
-import gift.repository.*;
+import gift.repository.category.CategoryRepository;
+import gift.repository.gift.GiftRepository;
+import gift.repository.option.OptionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;

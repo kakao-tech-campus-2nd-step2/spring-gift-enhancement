@@ -5,7 +5,7 @@ import gift.dto.PagingResponse;
 import gift.model.gift.GiftRequest;
 import gift.model.gift.GiftResponse;
 import gift.model.option.OptionResponse;
-import gift.service.GiftService;
+import gift.service.gift.GiftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

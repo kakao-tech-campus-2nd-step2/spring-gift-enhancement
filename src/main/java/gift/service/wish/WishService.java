@@ -1,11 +1,13 @@
-package gift.service;
+package gift.service.wish;
 
 import gift.dto.PagingResponse;
 import gift.exception.WishItemNotFoundException;
 import gift.model.gift.Gift;
 import gift.model.user.User;
 import gift.model.wish.Wish;
-import gift.repository.*;
+import gift.repository.gift.GiftRepository;
+import gift.repository.user.UserRepository;
+import gift.repository.wish.WishRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;

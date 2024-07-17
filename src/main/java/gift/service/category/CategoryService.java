@@ -1,7 +1,7 @@
-package gift.service;
+package gift.service.category;
 
 import gift.model.category.*;
-import gift.repository.CategoryRepository;
+import gift.repository.category.CategoryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
