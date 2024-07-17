@@ -40,7 +40,7 @@ public class CategoryServiceTest {
 
         categoryService.getAllCategories(pageable);
 
-        then(categoryRepository).should().findAll((Pageable) any());
+        then(categoryRepository).should().findAll(pageable);
     }
 
     @Test
@@ -55,9 +55,11 @@ public class CategoryServiceTest {
 
     @Test
     void insertCategoryTest() {
-        given(categoryRepository.save(any())).willReturn(new Category(1L, "test", "##test", "test.jpg", "test"));
+        given(categoryRepository.save(any())).willReturn(
+            new Category(1L, "test", "##test", "test.jpg", "test"));
 
-        categoryService.insertCategory(new CategoryRequestDto("test", "##test", "test.jpg", "test"));
+        categoryService.insertCategory(
+            new CategoryRequestDto("test", "##test", "test.jpg", "test"));
 
         then(categoryRepository).should().save(any());
     }

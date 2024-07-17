@@ -33,6 +33,14 @@ public class Product extends BaseEntity {
         this.category = category;
     }
 
+    public Product(Long id, String name, int price, String imageUrl, Category category) {
+        this.setId(id);
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
     public String getName() {
         return name;
     }
