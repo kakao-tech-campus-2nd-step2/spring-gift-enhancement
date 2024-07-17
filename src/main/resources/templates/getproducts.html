@@ -18,6 +18,7 @@
     <span class="product-name" th:text="${product.name}">Product Name</span>
     <span class="product-price" th:text="${product.price}">Price</span>
     <span class="product-image" th:text="${product.imageUrl}">imageUrl</span>
+    <span class="product-category" th:text="${product.category.name}">category</span>
     <a th:href="@{/product/update/{id}(id=${product.id})}" class="btn update-btn">Update</a>
     <a th:href="@{/product/delete/{id}(id=${product.id})}" class="btn delete-btn">Delete</a>
   </li>
