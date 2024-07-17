@@ -34,6 +34,14 @@ public class Category {
         this.description = description;
     }
 
+    public Category(Long id, String name, String color, String imageUrl, String description) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }
