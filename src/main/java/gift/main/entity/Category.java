@@ -12,13 +12,13 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private int uniNumber;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY,  cascade = CascadeType.DETACH)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private List<Product> Products;
     //카테고리내에 상품이 존재하는 경우 -> 삭제 불가능
 
@@ -35,7 +35,6 @@ public class Category {
         this.name = categoryRequest.name();
         this.uniNumber = categoryRequest.uniNumber();
     }
-
 
 
     public long getId() {

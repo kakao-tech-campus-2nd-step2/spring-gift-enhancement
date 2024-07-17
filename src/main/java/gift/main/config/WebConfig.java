@@ -3,7 +3,6 @@ package gift.main.config;
 import gift.main.interceptor.AuthInterceptor;
 import gift.main.resolver.SessionUserArgumentResolver;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class WebConfig implements WebMvcConfigurer {
 
     private final AuthInterceptor authLoginInterceptor;

@@ -43,7 +43,7 @@ public class ProductService {
         User seller = userRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Category category = categoryRepository.findByUniNumber(productRequest.categoryUniNumber())
-                .orElseThrow(()-> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         Product product = new Product(productRequest, seller, category);
         productRepository.save(product);
     }
@@ -53,10 +53,10 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         product.getWishProducts().stream()
-                        .forEach((wishProduct)->{
-                            wishProduct.setProductIdToNull();
-                            wishProductRepository.save(wishProduct);
-                        });
+                .forEach((wishProduct) -> {
+                    wishProduct.setProductIdToNull();
+                    wishProductRepository.save(wishProduct);
+                });
 
         productRepository.deleteById(id);
     }
@@ -67,7 +67,7 @@ public class ProductService {
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Category category = categoryRepository.findByUniNumber(productRequest.categoryUniNumber())
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
-        product.updateValue(productRequest,category);
+        product.updateValue(productRequest, category);
         productRepository.save(product);
     }
 

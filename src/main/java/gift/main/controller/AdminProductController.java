@@ -42,7 +42,6 @@ public class AdminProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Long id) {
-        System.out.println("id = " + id);
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");
     }

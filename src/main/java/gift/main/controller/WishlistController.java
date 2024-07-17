@@ -3,16 +3,12 @@ package gift.main.controller;
 import gift.main.annotation.SessionUser;
 import gift.main.dto.UserVo;
 import gift.main.dto.WishProductResponce;
-import gift.main.service.ProductService;
 import gift.main.service.WishProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class WishlistController {
@@ -32,7 +28,7 @@ public class WishlistController {
 
     @GetMapping("/wishlists")
     public ResponseEntity<?> getWishProductPage(@SessionUser UserVo sessionUserVo, Pageable pageable) {
-        Page<WishProductResponce> wishProductPage = wishProductService.getWishProductPage(sessionUserVo,pageable);
+        Page<WishProductResponce> wishProductPage = wishProductService.getWishProductPage(sessionUserVo, pageable);
         return ResponseEntity.ok(wishProductPage);
     }
 

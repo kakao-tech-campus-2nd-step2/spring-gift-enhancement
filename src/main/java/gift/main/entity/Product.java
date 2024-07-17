@@ -2,7 +2,6 @@ package gift.main.entity;
 
 import gift.main.dto.ProductRequest;
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
 
 import java.util.List;
 
@@ -30,7 +29,8 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = CascadeType.DETACH) //FetchType.LAZY는 객체를 getter쓸때 가져온다
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    //FetchType.LAZY는 객체를 getter쓸때 가져온다
     private List<WishProduct> wishProducts;
     //물건을 삭제하는 경우 -> 위시리스트 삭제...?
 
@@ -39,7 +39,7 @@ public class Product {
 
     }
 
-    public Product(ProductRequest productRequest, User seller,Category category) {
+    public Product(ProductRequest productRequest, User seller, Category category) {
         this.name = productRequest.name();
         this.price = productRequest.price();
         this.imageUrl = productRequest.imageUrl();
@@ -47,7 +47,7 @@ public class Product {
         this.category = category;
     }
 
-    public Product(String name, int price, String imageUrl, User seller ,Category category) {
+    public Product(String name, int price, String imageUrl, User seller, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -55,14 +55,14 @@ public class Product {
         this.category = category;
     }
 
-    public void updateValue(ProductRequest productRequest,Category category) {
+    public void updateValue(ProductRequest productRequest, Category category) {
         this.name = productRequest.name();
         this.price = productRequest.price();
         this.imageUrl = productRequest.imageUrl();
         this.category = category;
     }
 
-    public void updateValue(String name, int price, String imageUrl,Category category) {
+    public void updateValue(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;

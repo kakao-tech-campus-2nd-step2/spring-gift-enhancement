@@ -25,7 +25,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "user",fetch = FetchType.LAZY,  cascade = CascadeType.REMOVE)
+    @OneToMany(orphanRemoval = true, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<WishProduct> wishProducts;
     //유저가 사라진 경우 -> 위시리스트 무조건 삭제
 

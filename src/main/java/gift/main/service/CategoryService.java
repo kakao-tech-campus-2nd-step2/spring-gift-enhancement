@@ -24,10 +24,10 @@ public class CategoryService {
 
     @Transactional
     public void addCategory(CategoryRequest categoryRequest) {
-        if(categoryRepository.existsByName(categoryRequest.name())){
+        if (categoryRepository.existsByName(categoryRequest.name())) {
             throw new CustomException(ErrorCode.ALREADY_CATEGORY_NAME);
         }
-        if(categoryRepository.existsByUniNumber(categoryRequest.uniNumber())){
+        if (categoryRepository.existsByUniNumber(categoryRequest.uniNumber())) {
             throw new CustomException(ErrorCode.ALREADY_CATEGORY_UNI_NUMBER);
         }
         Category category = new Category(categoryRequest);
@@ -41,10 +41,10 @@ public class CategoryService {
 
     @Transactional
     public void updateCategory(Long categoryid, CategoryRequest categoryRequest) {
-        if(categoryRepository.existsByName(categoryRequest.name())){
+        if (categoryRepository.existsByName(categoryRequest.name())) {
             throw new CustomException(ErrorCode.ALREADY_CATEGORY_NAME);
         }
-        if(categoryRepository.existsByUniNumber(categoryRequest.uniNumber())){
+        if (categoryRepository.existsByUniNumber(categoryRequest.uniNumber())) {
             throw new CustomException(ErrorCode.ALREADY_CATEGORY_UNI_NUMBER);
         }
         Category category = categoryRepository.findById(categoryid)

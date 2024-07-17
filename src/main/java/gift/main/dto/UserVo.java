@@ -1,4 +1,5 @@
 package gift.main.dto;
+
 import gift.main.entity.Role;
 
 public class UserVo {
