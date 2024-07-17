@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.domain.product.dto.CategoryResponseDto;
 import gift.domain.product.entity.Category;
 import gift.domain.product.service.CategoryService;
 import java.util.List;
@@ -43,7 +44,7 @@ class CategoryRestControllerTest {
             new Category(3L, "뷰티", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test"),
             new Category(4L, "패션", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test")
         );
-        given(categoryService.readAll()).willReturn(expected);
+        given(categoryService.readAll()).willReturn(expected.stream().map(CategoryResponseDto::from).toList());
         String expectedResult = objectMapper.writeValueAsString(expected);
 
         // when & then
