@@ -44,6 +44,11 @@ public class CategoryService {
         return CategoryResponseDto.toDto(savedCategory);
     }
 
+    public void deleteCategory(Long id) {
+        validateCategoryId(id);
+        categoryRepository.deleteById(id);
+    }
+
     private void validateCategoryId(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new IllegalArgumentException("해당 카테고리가 존재하지 않습니다.");
@@ -55,5 +60,4 @@ public class CategoryService {
             throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
         }
     }
-
 }
