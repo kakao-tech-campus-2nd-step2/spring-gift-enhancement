@@ -4,8 +4,8 @@ package gift.service;
 import gift.dto.PagingResponse;
 import gift.model.category.Category;
 import gift.model.gift.*;
-import gift.repository.CategoryRepository;
-import gift.repository.GiftRepository;
+import gift.model.option.OptionResponse;
+import gift.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -19,12 +19,16 @@ import java.util.stream.Collectors;
 public class GiftService {
 
     private final GiftRepository giftRepository;
+
     private final CategoryRepository categoryRepository;
 
+    private final OptionRepository optionRepository;
+
     @Autowired
-    public GiftService(GiftRepository giftRepository, CategoryRepository categoryRepository) {
+    public GiftService(GiftRepository giftRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.giftRepository = giftRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
 
@@ -39,10 +43,18 @@ public class GiftService {
 
     public GiftResponse getGift(Long id) {
         Gift gift = giftRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Gift not found with id " + id));
+                .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + id));
         return GiftResponse.from(gift);
     }
 
+    public List<OptionResponse> getOptionsByGiftId(Long giftId) {
+        Gift gift = giftRepository.findById(giftId)
+                .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
+
+        return gift.getOptions().stream()
+                .map(OptionResponse::from)
+                .toList();
+    }
 
     public void addGift(GiftRequest giftRequest) {
         Category category = categoryRepository.findById(giftRequest.getCategoryId())
