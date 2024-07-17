@@ -14,12 +14,26 @@ public class CategoryService {
     }
 
     public Long createCategory(CategoryParam categoryParam) {
-        categoryRepository.findByName(categoryParam.name()).ifPresent(category -> {
-            throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
-        });
-        
+        checkDuplicatedCategoryName(categoryParam.name());
+
         Category category = CategoryParam.toEntity(categoryParam);
         category = categoryRepository.save(category);
         return category.getId();
+    }
+
+    public void modifyCategory(Long categoryId, CategoryParam categoryParam) {
+        checkDuplicatedCategoryName(categoryParam.name());
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
+
+        category.modify(categoryParam.name(), categoryParam.color(), categoryParam.imgUrl(),
+                categoryParam.description());
+    }
+
+    private void checkDuplicatedCategoryName(String name) {
+        categoryRepository.findByName(name).ifPresent(category -> {
+            throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
+        });
     }
 }
