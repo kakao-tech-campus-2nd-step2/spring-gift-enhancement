@@ -1,9 +1,11 @@
 package gift.controller;
 
+import gift.dto.ApiResponse;
 import gift.dto.ProductDto;
 import gift.exception.NonIntegerPriceException;
 import gift.exception.ProductNotFoundException;
 import gift.model.Category;
+import gift.model.HttpResult;
 import gift.model.Product;
 import gift.service.CategoryService;
 import gift.service.ProductService;
@@ -58,13 +60,14 @@ public class ProductController {
         return "getproducts";
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<Map<String, Object>> getAllProducts() {
+    @GetMapping("/products/all")
+    public ResponseEntity<ApiResponse> getAllProducts() {
         List<Product> products = productService.getAllProducts();
         Map<String, Object> response = new HashMap<>();
         response.put("message", "All products retrieved successfully.");
         response.put("products", products);
-        return ResponseEntity.ok(response);
+        var productsRetreiveSucess = new ApiResponse(HttpResult.OK, "상품 전체 조회 성공", HttpStatus.OK);
+        return new ResponseEntity<>(productsRetreiveSucess, productsRetreiveSucess.getHttpStatus());
     }
 
     @GetMapping("/product/{id}")
