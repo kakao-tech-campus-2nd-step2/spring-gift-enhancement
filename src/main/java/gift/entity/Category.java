@@ -1,6 +1,5 @@
 package gift.entity;
 
-import gift.dto.request.AddCategoryRequest;
 import gift.dto.request.UpdateCategoryRequest;
 import jakarta.persistence.*;
 
@@ -25,13 +24,6 @@ public class Category {
     protected Category() {
     }
 
-    public Category(String name, String color, String imageUrl, String description) {
-        this.name = name;
-        this.color = color;
-        this.imageUrl = imageUrl;
-        this.description = description;
-    }
-
     public Category(Long id, String name, String color, String imageUrl, String description) {
         this.id = id;
         this.name = name;
@@ -40,11 +32,11 @@ public class Category {
         this.description = description;
     }
 
-    public Category(AddCategoryRequest request) {
-        this.name = request.name();
-        this.color = request.color();
-        this.imageUrl = request.imageUrl();
-        this.description = request.description();
+    public Category(String name, String color, String imageUrl, String description) {
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
 
     public void update(UpdateCategoryRequest request) {

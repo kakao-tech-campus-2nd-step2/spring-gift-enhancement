@@ -34,7 +34,13 @@ public class CategoryService {
             throw new CategoryNameDuplicateException(request.name());
         }
 
-        Category newCategory = new Category(request);
+        Category newCategory = new Category(
+                request.name(),
+                request.color(),
+                request.imageUrl(),
+                request.description()
+        );
+
         return new CategoryIdResponse(categoryRepository.save(newCategory).getId());
     }
 
