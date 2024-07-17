@@ -59,9 +59,7 @@ public class WishService {
             .orElseThrow(() -> new ProductException("Product with ID " + productId + " not found"));
         ;
 
-        Wish wish = new Wish();
-        wish.setMember(member);
-        wish.setProduct(product);
+        Wish wish = new Wish(member, product);
         wishRepository.save(wish);
 
     }
