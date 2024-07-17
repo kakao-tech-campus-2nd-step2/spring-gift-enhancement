@@ -67,4 +67,11 @@ public class ApiOptionController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Option update successfully");
     }
 
+    @DeleteMapping("/option/{id}")
+    public ResponseEntity<String> deleteOption(@PathVariable Long id) {
+        System.out.println("[ApiOptionController] getAllOptions()");
+        optionService.deleteOption(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Option delete successfully");
+    }
+
 }

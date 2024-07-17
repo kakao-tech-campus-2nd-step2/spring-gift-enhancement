@@ -9,7 +9,6 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
     private Long id;
 
     @Column(nullable = false, length = 15)
@@ -24,7 +23,7 @@ public class Product {
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name="category_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Category category;
 
     public Product() {}

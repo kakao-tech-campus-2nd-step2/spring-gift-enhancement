@@ -11,11 +11,11 @@ public class Wish {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="member_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name="product_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Product product;
 
     public Wish() {}

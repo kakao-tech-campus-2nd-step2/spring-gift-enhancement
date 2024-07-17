@@ -2,7 +2,6 @@ package gift.product.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
@@ -10,7 +9,6 @@ public class Option {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "option_id")
     private Long id;
 
     @Column(nullable = false, length = 50, unique = true)
@@ -22,7 +20,7 @@ public class Option {
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name="product_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Product product;
 
     public Option() {
