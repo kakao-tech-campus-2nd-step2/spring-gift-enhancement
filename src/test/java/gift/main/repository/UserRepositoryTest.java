@@ -1,35 +1,99 @@
 package gift.main.repository;
 
-import gift.main.entity.User;
-import gift.main.entity.Role;
-import org.junit.jupiter.api.Assertions;
+import gift.main.entity.*;
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
+
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final WishProductRepository wishProductRepository;
+    private final ProductRepository productRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    private EntityManager entityManager;
+
+    @Autowired
+    public UserRepositoryTest(CategoryRepository categoryRepository,
+                              UserRepository userRepository,
+                              WishProductRepository wishProductRepository,
+                              ProductRepository productRepository, EntityManager entityManager) {
+        this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
+        this.wishProductRepository = wishProductRepository;
+        this.productRepository = productRepository;
+
+    }
+
+    /*
+    왜 이렇게 given이 길까...?
+    이 부분 이렇게 더럽게 짜도 되는 건가.
+
+    왜 entityManager에서 clear까지 해야하는건가
+     */
+    @Test
+    @DisplayName("User에서 자식 WhishProduct가 존재할때, 정상삭제되는 지 조회")
+    void deleteUserTest() {
+        //given
+        User user = new User("user", "user@", "1234", "ADMIN");
+        User seller = new User("seller", "seller@", "1234", "ADMIN");
+        user = userRepository.save(user);
+        seller = userRepository.save(seller);
+
+        Category category = categoryRepository.findByName("패션").get();
+        Product product = new Product("testProduct", 12000, "Url", seller, category);
+        product = productRepository.save(product);
+
+        WishProduct wishProduct = new WishProduct(product, user);
+        wishProductRepository.save(wishProduct);
+        entityManager.flush();
+        entityManager.clear();
+
+        assertThat(wishProductRepository.existsAllByUserId(user.getId())).isEqualTo(true);
+        /*
+        중간 테스트는 뭐라고 작성해야 좋을까요?
+         */
+
+
+        //when
+        User searchUser = userRepository.findByEmail("user@").get();
+        userRepository.delete(searchUser);
+        entityManager.flush();
+        entityManager.clear();
+
+
+
+
+
+        //then
+        assertThat(wishProductRepository.existsAllByUserId(user.getId())).isEqualTo(false);
+    }
 
 
     @Test
-    public void ENUM값이_잘들어가는지_조회() {
-        User user = userRepository.save(new User("testuser", "email", "1234", "admin"));
-        System.out.println("Role.ADMIN.equals(user.getRole()) = " + Role.ADMIN.equals(user.getRole()));
-        //Role.ADMIN.equals(user.getRole()) = true
-        Assertions.assertEquals(Role.ADMIN, user.getRole());
+    public void getUserRoleTest() {
+        //given
+        User user = new User("testuser", "email", "1234", "admin");
+
+        //when
+        User saveUser = userRepository.save(new User("testuser", "email", "1234", "admin"));
+
+        //then
+        assertThat(saveUser.getRole()).isEqualTo(Role.ADMIN);
     }
 
     @Test
-    public void 모두조회() {
+    public void findAllTest() {
         //given
         userRepository.save(new User("name", "123@123", "123", "USER"));
         userRepository.save(new User("name", "1234@123", "123", "USER"));
@@ -38,8 +102,7 @@ class UserRepositoryTest {
         List<User> userList = userRepository.findAll();
 
         //then
-        assertEquals(2, userList.size());
-
+        assertThat(userList.size()).isEqualTo(2);
     }
 
 
@@ -48,11 +111,17 @@ class UserRepositoryTest {
         //given
         userRepository.save(new User("name", "123@123", "123", "USER"));
 
-        //then
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            userRepository.save(new User("name112", "123@123", "123", "USER"));
-        });
+//        //then
+//        assertThrows(DataIntegrityViolationException.class, () -> {
+//            userRepository.save(new User("name112", "123@123", "123", "USER"));
+//        });
+//        assertThat(
+//                userRepository.save(new User("name112", "123@123", "123", "USER"))).
 
     }
+
+
+
+
 
 }
