@@ -12,17 +12,16 @@
 
 아래 예시와 같이 HTTP 메시지를 주고받도록 구현한다.
 
-```agsl
+### Request
+```http request
 Request
 GET /api/categories HTTP/1.1
-Response
+```
+### Response
+```json
 HTTP/1.1 200
 Content-Type: application/json
-```
 
-
-
-```json
 [
   {
      "id": 91,
