@@ -5,9 +5,8 @@ import gift.member.application.command.MemberPasswordUpdateCommand;
 public record MemberPasswordUpdateRequest(
         String password
 ) {
-    public MemberPasswordUpdateCommand toCommand(Long id) {
+    public MemberPasswordUpdateCommand toCommand() {
         return new MemberPasswordUpdateCommand(
-                id,
                 password
         );
     }
