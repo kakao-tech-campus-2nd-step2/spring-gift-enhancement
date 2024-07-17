@@ -17,6 +17,8 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
+
+
     // 활용 메서드들
     public void addProduct(Product product) {
         this.products.add(product);
@@ -26,6 +28,14 @@ public class Category {
     public void removeWish(Product product) {
         products.remove(product);
         product.setCategory(null);
+    }
+
+    // 생성자
+    public Category() {
+
+    }
+    public Category(String name) {
+        this.name = name;
     }
 
     // getter & setter
