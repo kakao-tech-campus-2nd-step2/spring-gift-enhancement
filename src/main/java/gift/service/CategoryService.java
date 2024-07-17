@@ -2,12 +2,11 @@ package gift.service;
 
 import gift.entity.Category;
 import gift.entity.CategoryDTO;
-import gift.entity.Product;
-import gift.exception.ResourceNotFoundException;
 import gift.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -30,27 +29,21 @@ public class CategoryService {
     }
 
     public Category findOne(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isEmpty()) {
+            return categoryRepository.findById(1L).get(); // return defaultCategory
+        }
+        return category.get();
     }
 
     public Category update(Long id, CategoryDTO categoryDTO) {
         Category category = findOne(id);
-        category.setName(categoryDTO.getName());
-        category.setColor(categoryDTO.getColor());
-        category.setImageurl(categoryDTO.getImageurl());
-        category.setDescription(categoryDTO.getDescription());
+        category.setCategory(categoryDTO);
         return categoryRepository.save(category);
     }
 
     public void delete(Long id) {
         Category category = findOne(id);
-        Category defaultCategory = findOne(defaultCategoryId);
-
-        for (Product product : category.getProducts()) {
-            product.setCategory(defaultCategory);
-        }
-
         categoryRepository.delete(category);
     }
 }
