@@ -4,9 +4,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class ProductTest {
 
@@ -30,13 +31,11 @@ public class ProductTest {
         );
     }
 
-    @Test
+    @ParameterizedTest
     @DisplayName("Product 실패 이름 유효성 테스트")
-    void product_실패_이름_유효성() {
+    @ValueSource(strings = {"카카오를 포함하면 안됨", "15를_넘으면_제작에_실패해야_합니다", "특수문자()[]+-&/_만가능!"})
+    void product_실패_이름_유효성(String testName) {
         //given
-        String testName1 = "카카오를 포함하면 안됨";
-        String testName2 = "15를_넘으면_제작에_실패해야_합니다";
-        String testName3 = "특수문자()[]+-&/_만가능!";
 
         Integer price = 10000;
         String imageUrl = "test.jpg";
@@ -45,15 +44,7 @@ public class ProductTest {
         //when
         // then
         assertThrows(IllegalArgumentException.class, () -> {
-            Product.create(null, testName1, price, imageUrl, category);
-        });
-        // then
-        assertThrows(IllegalArgumentException.class, () -> {
-            Product.create(null, testName2, price, imageUrl, category);
-        });
-        // then
-        assertThrows(IllegalArgumentException.class, () -> {
-            Product.create(null, testName3, price, imageUrl, category);
+            Product.create(null, testName, price, imageUrl, category);
         });
     }
 
