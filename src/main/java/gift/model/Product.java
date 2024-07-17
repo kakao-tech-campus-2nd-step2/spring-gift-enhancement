@@ -15,7 +15,7 @@ import jakarta.validation.constraints.Size;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false )
     private Long id;
     @Column(nullable = false , length = 20)
     @NotNull(message = "이름에 NULL 불가능")
