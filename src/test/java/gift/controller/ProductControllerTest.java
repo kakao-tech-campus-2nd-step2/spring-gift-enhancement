@@ -3,12 +3,12 @@ package gift.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.domain.category.entity.Category;
+import gift.domain.category.repository.CategoryRepository;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.ProductRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.net.URI;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,12 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 class ProductControllerTest {
 
     @LocalServerPort
@@ -32,10 +36,15 @@ class ProductControllerTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
+    @BeforeEach
+    void beforeEach(){
+
+    }
     @Test
+    @DisplayName("상품 전체 조회 테스트")
     void readAll() {
         var url = "http://localhost:" + port + "/api/products";
         var request = new RequestEntity<>(HttpMethod.GET, URI.create(url));
@@ -45,10 +54,13 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("특정 상품 전체 조회 테스트")
     void read() {
-        Category savedCategory = new Category(1L, "test", "color", "image", "description");
-        Product product = productRepository.save(new Product("test", 1000, "test.jpg", savedCategory));
-        System.out.println("테스트" + product.getName() + "id 값" + product.getId());
+        Category category = new Category("test", "color", "image", "description");
+        Category savedCategory = categoryRepository.save(category);
+
+        Product product = new Product("test", 1000, "test.jpg", savedCategory);
+        productRepository.save(product);
 
         var url = "http://localhost:" + port + "/api/products/1";
         var request = new RequestEntity<>(HttpMethod.GET, URI.create(url));
@@ -58,9 +70,13 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("Product 생성 API 테스트")
+    @DisplayName("상품 생성 테스트")
     void create() {
+        Category category = new Category("test", "color", "image", "description");
+        categoryRepository.save(category);
+
         var request = new ProductRequest("product", 1000, "image.jpg", 1L);
+
         var url = "http://localhost:" + port + "/api/products";
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
 
@@ -69,11 +85,16 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("상품 업데이트 테스트")
     void update() {
-        Category savedCategory = new Category(1L, "test", "color", "image", "description");
-        Product product = productRepository.save(new Product("test", 1000, "test.jpg", savedCategory));
+        Category category = new Category("test", "color", "image", "description");
+        Category savedCategory = categoryRepository.save(category);
+
+        Product product = new Product("test", 1000, "test.jpg", savedCategory);
+        productRepository.save(product);
+
         var id = 1L;
-        var request = new ProductRequest("product", 1000, "image.jpg", 1L);
+        var request = new ProductRequest("update", 1000, "image.jpg", 1L);
         var url = "http://localhost:" + port + "/api/products/" + id;
         var requestEntity = new RequestEntity<>(request, HttpMethod.PUT, URI.create(url));
 
@@ -82,9 +103,13 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("상품 삭제 테스트")
     void delete() {
-        Category savedCategory = new Category(1L, "test", "color", "image", "description");
-        Product product = productRepository.save(new Product("test", 1000, "test.jpg", savedCategory));
+        Category request = new Category("test", "color", "image", "description");
+        Category savedCategory = categoryRepository.save(request);
+
+        productRepository.save(new Product("test", 1000, "test.jpg", savedCategory));
+
         var id = 1L;
         var url = "http://localhost:" + port + "/api/products/" + id;
 

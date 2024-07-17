@@ -2,14 +2,19 @@ package gift.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.domain.category.entity.Category;
+import gift.domain.category.repository.CategoryRepository;
 import gift.domain.member.dto.MemberRequest;
-import gift.domain.member.entity.Member;
+import gift.domain.product.entity.Product;
+import gift.domain.product.repository.ProductRepository;
 import gift.domain.wishlist.dto.ProductIdRequest;
 import gift.domain.wishlist.dto.WishRequest;
 import gift.domain.member.service.MemberService;
+import gift.domain.wishlist.repository.WishRepository;
 import gift.domain.wishlist.service.WishService;
 import java.net.URI;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +25,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 class WishControllerTest {
 
     @LocalServerPort
@@ -37,6 +45,15 @@ class WishControllerTest {
     @Autowired
     private WishService wishService;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private WishRepository wishRepository;
+
     private String token;
 
     @BeforeEach
@@ -47,6 +64,7 @@ class WishControllerTest {
     }
 
     @Test
+    @DisplayName("위시리스트 전체 조회 테스트")
     void getWishesTest() {
         // given
         var url = "http://localhost:" + port + "/api/wishes";
@@ -59,13 +77,16 @@ class WishControllerTest {
 
         // then
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-        Member member = memberService.getMemberFromToken(token);
-        memberService.deleteMember(member.getId());
     }
 
     @Test
+    @DisplayName("위시리스트 생성 테스트")
     void createWishTest() {
+        Category category = new Category("name", "color", "imageUrl", "description");
+        Category savedCategory = categoryRepository.save(category);
+
+        Product product = new Product("name", 1000, "imageUrl", savedCategory);
+        productRepository.save(product);
         // given
         var request = new ProductIdRequest(1L);
 
@@ -79,18 +100,19 @@ class WishControllerTest {
 
         // then
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-
-        wishService.deleteWish(1L, memberService.getMemberFromToken(token));
-        Member member = memberService.getMemberFromToken(token);
-        memberService.deleteMember(member.getId());
     }
 
     @Test
+    @DisplayName("위시리스트 삭제 테스트")
     void deleteWishTest() {
+
         // given
-        // 테스트를 위한 wish 1개 생성
-        var request = new WishRequest(memberService.getMemberFromToken(token).getId(), 1L);
-        wishService.addWish(request);
+        Category category = new Category("name", "color", "imageUrl", "description");
+        Category savedCategory = categoryRepository.save(category);
+
+        Product product = new Product("name", 1000, "imageUrl", savedCategory);
+        productRepository.save(product);
+        wishService.createWish(new WishRequest(1L, 1L));
 
         var id = 1L;
         var url = "http://localhost:" + port + "/api/wishes/" + id;
