@@ -1,5 +1,6 @@
 package gift.product;
 
+import static gift.util.Utils.DEFAULT_PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -20,6 +21,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -78,5 +82,20 @@ public class ProductRepositoryTest {
 
         assertEquals(product.getName(), foundProduct.getName());
         assertEquals(1L, wishCount);
+    }
+
+    @Test
+    public void testFindActiveProductsByCategoryWithWishCount() {
+        Pageable pageable = PageRequest.of(0, DEFAULT_PAGE_SIZE);
+        Page<Tuple> resultPage = productRepository.findActiveProductsByCategoryWithWishCount(category.getId(),
+                pageable);
+
+        assertEquals(1, resultPage.getTotalElements());
+        Tuple result = resultPage.getContent().get(0);
+        Product foundProduct = result.get("product", Product.class);
+        Long wishCount = result.get("wishCount", Long.class);
+
+        assertEquals(product.getName(), foundProduct.getName());
+        assertEquals(Long.valueOf(1), wishCount);
     }
 }
