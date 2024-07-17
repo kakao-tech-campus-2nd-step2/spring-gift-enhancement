@@ -32,9 +32,9 @@ public class ProductController {
      */
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getAllProducts(
-            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize) {
-        Page<Product> allProductsPaged = service.getAllProducts(pageNumber, pageSize);
+        Page<Product> allProductsPaged = service.getAllProducts(pageNumber-1, pageSize);
 
         Map<String, Object> response = new HashMap<>();
         response.put("content", allProductsPaged.getContent());

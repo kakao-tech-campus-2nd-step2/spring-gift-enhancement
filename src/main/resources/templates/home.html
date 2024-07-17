@@ -63,7 +63,7 @@
     const pageSize = 5;  // pageNation 페이지 size 설정 content 개수 설정
     const buttonsPerPage = 5;
 
-    function fetchProducts(pageNumber = 0) {
+    function fetchProducts(pageNumber = 1) {
         $.get(`/api/products?pageNumber=${pageNumber}&pageSize=${pageSize}`, function(response) {
             const products = response.content;
             const totalPages = response.totalPages;
@@ -93,15 +93,15 @@
         pagination.empty();
 
         const currentGroup = Math.floor(currentPage / buttonsPerPage);
-        const startPage = currentGroup * buttonsPerPage;
+        const startPage = currentGroup * buttonsPerPage + 1;
         const endPage = Math.min(startPage + buttonsPerPage, totalPages);
 
         if (currentGroup > 0) {
-            pagination.append(`<button onclick="fetchProducts(${startPage - 1})"><</button>`);
+            pagination.append(`<button onclick="fetchProducts(${startPage})"><</button>`);
         }
 
         for (let i = startPage; i < endPage; i++) {
-            pagination.append(`<button onclick="fetchProducts(${i})" class="${i === currentPage ? 'active' : ''}">${i + 1}</button>`);
+            pagination.append(`<button onclick="fetchProducts(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`);
         }
 
         if (endPage < totalPages) {
