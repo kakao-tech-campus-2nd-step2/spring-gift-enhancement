@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
 import org.springframework.stereotype.Component;
@@ -20,12 +21,13 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(jwtConfig.getSecretKey().getBytes());
     }
 
-    public String generateToken(Long userId, String email) {
+    public String generateToken(Long userId, String email, List<String> roles) {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         return Jwts.builder()
             .claim("email", email)
             .claim("user_id", userId)
+            .claim("roles", roles)
             .issuedAt(now)
             .expiration(new Date(nowMillis + jwtConfig.getExpiration()))
             .signWith(key)
@@ -39,6 +41,10 @@ public class JwtUtil {
 
     public Long extractUserId(String token) {
         return extractClaim(token, claims -> claims.get("user_id", Long.class));
+    }
+
+    public List<String> extractRoles(String token) {
+        return extractClaim(token, claims -> claims.get("roles", List.class));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

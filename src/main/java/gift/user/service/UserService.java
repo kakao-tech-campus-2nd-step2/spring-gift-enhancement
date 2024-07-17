@@ -6,10 +6,13 @@ import gift.exception.user.UserNotFoundException;
 import gift.user.dto.request.UserLoginRequest;
 import gift.user.dto.request.UserRegisterRequest;
 import gift.user.dto.response.UserResponse;
+import gift.user.entity.Role;
 import gift.user.entity.User;
+import gift.user.repository.RoleRepository;
 import gift.user.repository.UserRepository;
 import gift.util.auth.JwtUtil;
 import gift.util.mapper.UserMapper;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +21,13 @@ public class UserService {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(JwtUtil jwtUtil, UserRepository userRepository) {
+    public UserService(JwtUtil jwtUtil, UserRepository userRepository,
+        RoleRepository roleRepository) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Transactional
@@ -33,7 +39,7 @@ public class UserService {
         User registeredUser = userRepository.save(UserMapper.toUser(request));
 
         return UserMapper.toResponse(jwtUtil.generateToken(registeredUser.getId(),
-            registeredUser.getEmail()));
+            registeredUser.getEmail(), null));
     }
 
     @Transactional(readOnly = true)
@@ -41,8 +47,17 @@ public class UserService {
         User user = userRepository.findByEmailAndPassword(userRequest.email(),
                 userRequest.password())
             .orElseThrow(() -> new UserNotFoundException("로그인할 수 없습니다."));
+        List<Long> roleIds = user.getRoles()
+            .stream()
+            .map(userRole -> userRole.getRole().getId())
+            .toList();
 
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail());
+        List<String> roles = roleRepository.findAllById(roleIds)
+            .stream()
+            .map(Role::getName)
+            .toList();
+
+        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), roles);
 
         return UserMapper.toResponse(token);
     }
