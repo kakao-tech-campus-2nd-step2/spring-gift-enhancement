@@ -39,43 +39,22 @@ public class CategoryService {
         return categoryJpaDao.findAll().stream().map(CategoryDto::new).toList();
     }
 
-    /**
-     * id로 카테고리 조회하여 반환
-     *
-     * @param id
-     * @return CategoryDto
-     */
     public CategoryDto getCategory(Long id) {
         Category category = checkCategoryExistsById(id);
         return new CategoryDto(category);
     }
 
-    /**
-     * 새 카테고리 추가
-     *
-     * @param categoryDto
-     */
     public void addCategory(CategoryDto categoryDto) {
         checkCategoryDuplicationByName(categoryDto.getName());
         categoryJpaDao.save(new Category(categoryDto));
     }
 
-    /**
-     * 수정한 카테고리 정보로 수정
-     *
-     * @param categoryDto
-     */
     @Transactional
     public void editCategory(CategoryDto categoryDto) {
         Category category = checkCategoryExistsById(categoryDto.getId());
         category.updateCategory(categoryDto);
     }
 
-    /**
-     * id에 해당하는 카테고리 삭제
-     *
-     * @param id
-     */
     public void deleteCategory(Long id) {
         checkCategoryExistsById(id);
         categoryJpaDao.deleteById(id);

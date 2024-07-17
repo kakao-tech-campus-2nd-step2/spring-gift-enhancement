@@ -23,27 +23,18 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    /**
-     * 카테고리 추가 엔드포인트
-     */
     @PostMapping
     public ResponseEntity<String> addCategory(@RequestBody @Valid CategoryDto categoryDto) {
         categoryService.addCategory(categoryDto);
         return ResponseEntity.ok(SuccessMessage.ADD_CATEGORY_SUCCESS_MSG);
     }
 
-    /**
-     * 카테고리 수정 엔드포인트
-     */
     @PutMapping
     public ResponseEntity<String> editCategory(@RequestBody @Valid CategoryDto categoryDto) {
         categoryService.editCategory(categoryDto);
         return ResponseEntity.ok(SuccessMessage.EDIT_CATEGORY_SUCCESS_MSG);
     }
 
-    /**
-     * 카테고리 삭제 엔드포인트
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable("id") Long id) {
         categoryService.deleteCategory(id);

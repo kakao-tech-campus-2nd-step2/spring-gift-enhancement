@@ -22,9 +22,6 @@ public class CategoryViewController {
         this.categoryService = categoryService;
     }
 
-    /**
-     * 카테고리 전체 목록을 페이지네이션해서 뷰를 반환
-     */
     @GetMapping
     public String getAllCategoriesView(Model model, @PageableDefault(size = 5) Pageable pageable) {
         Page<CategoryDto> categories = categoryService.getCategoryPage(pageable);
@@ -35,17 +32,11 @@ public class CategoryViewController {
         return "category";
     }
 
-    /**
-     * 카테고리를 추가하는 폼 뷰를 반환
-     */
     @GetMapping("/addForm")
     public String getCategoryAddForm(Model model) {
         return "categoryAddForm";
     }
 
-    /**
-     * 카테고리를 수정하는 폼 뷰를 반환
-     */
     @GetMapping("/{id}")
     public String getCategoryEditForm(Model model, @PathVariable("id") Long id) {
         model.addAttribute("category", categoryService.getCategory(id));

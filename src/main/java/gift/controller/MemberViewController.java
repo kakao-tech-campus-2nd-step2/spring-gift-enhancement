@@ -22,9 +22,6 @@ public class MemberViewController {
         this.memberService = memberService;
     }
 
-    /**
-     * 회원가입 폼을 반환
-     */
     @GetMapping("/register")
     public String registerMemberForm() {
         return "memberRegister";
@@ -35,14 +32,6 @@ public class MemberViewController {
         return "login";
     }
 
-    /**
-     * 위시리스트 페이지를 반환
-     *
-     * @param model
-     * @param pageable
-     * @param httpServletRequest
-     * @return view
-     */
     @GetMapping("/wishlist")
     public String getWishlist(Model model, @PageableDefault(size = 5) Pageable pageable,
         HttpServletRequest httpServletRequest) {

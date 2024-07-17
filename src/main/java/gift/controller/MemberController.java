@@ -46,9 +46,6 @@ public class MemberController {
             .body(SuccessMessage.LOGIN_MEMBER_SUCCESS_MSG);
     }
 
-    /**
-     * 위시 리스트에 상품을 추가.
-     */
     @PostMapping("/wishlist/{productId}")
     public ResponseEntity<String> addWishlist(@PathVariable("productId") Long productId,
         HttpServletRequest request) {
@@ -58,10 +55,6 @@ public class MemberController {
         return ResponseEntity.ok(SuccessMessage.ADD_WISHLIST_SUCCESS_MSG);
     }
 
-
-    /**
-     * 위시 리스트에서 삭제
-     */
     @DeleteMapping("/wishlist/{productId}")
     public ResponseEntity<String> deleteWishlist(@PathVariable("productId") Long productId,
         HttpServletRequest request) {
