@@ -1,11 +1,15 @@
 package gift.domain;
 
 
+import static jakarta.persistence.FetchType.*;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +27,24 @@ public class Product {
     private String imageUrl;
     @OneToMany(mappedBy = "product")
     private List<Wish> wishList = new ArrayList<>();
+    @ManyToOne(fetch = LAZY)
+    private Category category;
+
     protected Product() {
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public void update(String name, int price, String imageUrl) {
+    public void update(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -56,5 +65,9 @@ public class Product {
 
     public List<Wish> getWishList() {
         return wishList;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

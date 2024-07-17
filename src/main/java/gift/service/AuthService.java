@@ -44,6 +44,7 @@ public class AuthService {
         }
     }
 
+    @Deprecated
     public void authorizeAdminUser(User user, String productName) {
         boolean isContainKakao = productName.contains("카카오");
         if (!user.getRole().equals(Role.ADMIN.getRole()) && isContainKakao) {

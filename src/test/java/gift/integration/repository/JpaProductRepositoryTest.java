@@ -1,10 +1,13 @@
-package gift.repository;
+package gift.integration.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import gift.domain.Category;
 import gift.domain.Product;
+import gift.repository.JpaCategoryRepository;
+import gift.repository.JpaProductRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +21,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 class JpaProductRepositoryTest {
     @Autowired
     private JpaProductRepository jpaProductRepository;
+    @Autowired
+    private JpaCategoryRepository jpaCategoryRepository;
 
     private Product product;
+    private Category category;
 
     private Long insertProduct(Product product) {
         return jpaProductRepository.save(product).getId();
@@ -27,7 +33,10 @@ class JpaProductRepositoryTest {
 
     @BeforeEach
     void setProduct() {
-        product = new Product("사과", 12000, "www.naver.com");
+        category = new Category("교환권", "#6c95d1", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "");
+        jpaCategoryRepository.save(category);
+
+        product = new Product("사과", 12000, "www.naver.com", category);
     }
 
     @Test
@@ -64,8 +73,8 @@ class JpaProductRepositoryTest {
     @Test
     void 상품_전체_조회() {
         //given
-        Product product1 = new Product("사과", 12000, "www.naver.com");
-        Product product2 = new Product("바나나", 15000, "www.daum.net");
+        Product product1 = new Product("사과", 12000, "www.naver.com", category);
+        Product product2 = new Product("바나나", 15000, "www.daum.net", category);
         insertProduct(product1);
         insertProduct(product2);
         //when
@@ -81,7 +90,7 @@ class JpaProductRepositoryTest {
         //given
         insertProduct(product);
         //when
-        product.update("바나나", 15000, "www.daum.net");
+        product.update("바나나", 15000, "www.daum.net", category);
         //then
         assertAll(
             () -> assertThat(product.getName()).isEqualTo("바나나"),

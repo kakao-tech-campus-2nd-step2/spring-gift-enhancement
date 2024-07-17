@@ -53,8 +53,7 @@ public class WishService {
 
     @Transactional(readOnly = true)
     public WishResponseDTO getOneWish(Long wishId) {
-        Wish wish = jpaWishRepository.findById(wishId)
-            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        Wish wish = getWish(wishId);
         return WishResponseDTO.of(wish);
     }
 
@@ -69,9 +68,14 @@ public class WishService {
     }
 
     public Long deleteWish(Long wishId) {
-        Wish wish = jpaWishRepository.findById(wishId)
-            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        Wish wish = getWish(wishId);
         jpaWishRepository.delete(wish);
         return wish.getId();
+    }
+
+    private Wish getWish(Long wishId) {
+        Wish wish = jpaWishRepository.findById(wishId)
+            .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
+        return wish;
     }
 }
