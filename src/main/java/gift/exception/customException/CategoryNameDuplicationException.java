@@ -1,13 +1,13 @@
-package gift.exception;
+package gift.exception.customException;
+
+import static gift.exception.exceptionMessage.ExceptionMessage.CATEGORY_NAME_DUPLICATION;
 
 public class CategoryNameDuplicationException extends RuntimeException{
 
-    private static final String MESSAGE = "중복된 카테고리 이름 입니다.";
 
     public CategoryNameDuplicationException(){
-        super(MESSAGE);
+        super(CATEGORY_NAME_DUPLICATION);
     }
-
 
     public CategoryNameDuplicationException(String message) {
         super(message);

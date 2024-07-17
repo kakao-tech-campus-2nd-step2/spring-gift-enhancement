@@ -1,5 +1,6 @@
 package gift.exception;
 
+import gift.exception.customException.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

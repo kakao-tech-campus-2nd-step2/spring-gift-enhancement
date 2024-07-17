@@ -4,8 +4,8 @@ import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
 import gift.dto.response.WishResponseDto;
-import gift.exception.EntityNotFoundException;
-import gift.exception.ForbiddenException;
+import gift.exception.customException.EntityNotFoundException;
+import gift.exception.customException.ForbiddenException;
 import gift.repository.member.MemberRepository;
 import gift.repository.product.ProductRepository;
 import gift.repository.wish.WishRepository;
@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static gift.exception.exceptionMessage.ExceptionMessage.PRODUCT_NOT_FOUND;
+import static gift.exception.exceptionMessage.ExceptionMessage.WISH_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,9 +49,9 @@ public class WishService {
 
     @Transactional
     public WishResponseDto addWish(Long productId, String email, int count){
-        Product findProduct = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("존재 하지 않는 상품입니다."));
+        Product findProduct = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException(PRODUCT_NOT_FOUND));
 
-        Member findMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new EntityNotFoundException("존재 하지 않는 회원 입니다."));
+        Member findMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new EntityNotFoundException(PRODUCT_NOT_FOUND));
 
         Wish wish = new Wish.Builder()
                 .product(findProduct)
@@ -63,7 +66,7 @@ public class WishService {
 
     @Transactional
     public WishResponseDto editWish(Long wishId, String email, int count){
-        wishRepository.findById(wishId).orElseThrow(() -> new EntityNotFoundException("해당 WISH가 존재하지 않습니다"));
+        wishRepository.findById(wishId).orElseThrow(() -> new EntityNotFoundException(WISH_NOT_FOUND));
 
         Wish findWish = wishRepository.findWishByIdAndMemberEmail(wishId, email).orElseThrow(ForbiddenException::new);
 
@@ -74,7 +77,7 @@ public class WishService {
 
     @Transactional
     public WishResponseDto deleteWish(Long wishId, String email){
-        wishRepository.findById(wishId).orElseThrow(() -> new EntityNotFoundException("해당 WISH가 존재하지 않습니다"));
+        wishRepository.findById(wishId).orElseThrow(() -> new EntityNotFoundException(WISH_NOT_FOUND));
 
         Wish findWish = wishRepository.findWishByIdAndMemberEmail(wishId, email).orElseThrow(ForbiddenException::new);
 

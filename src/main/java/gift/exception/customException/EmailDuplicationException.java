@@ -1,13 +1,12 @@
-package gift.exception;
+package gift.exception.customException;
+
+import static gift.exception.exceptionMessage.ExceptionMessage.EMAIL_DUPLICATION;
 
 public class EmailDuplicationException extends RuntimeException{
 
-    private static final String MESSAGE = "중복된 Email 입니다.";
-
     public EmailDuplicationException(){
-        super(MESSAGE);
+        super(EMAIL_DUPLICATION);
     }
-
 
     public EmailDuplicationException(String message) {
         super(message);
