@@ -36,7 +36,7 @@ public class Gift {
     @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
     protected List<Wish> wishes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "gift", cascade = CascadeType.ALL)
     protected List<Option> options = new ArrayList<>();
 
     public Gift() {
@@ -96,5 +96,10 @@ public class Gift {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public void addOption(Option option) {
+        option.setGift(this);
+        this.options.add(option);
     }
 }

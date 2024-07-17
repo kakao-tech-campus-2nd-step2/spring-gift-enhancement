@@ -24,13 +24,11 @@ public class GiftService {
 
     private final CategoryRepository categoryRepository;
 
-    private final OptionRepository optionRepository;
 
     @Autowired
     public GiftService(GiftRepository giftRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.giftRepository = giftRepository;
         this.categoryRepository = categoryRepository;
-        this.optionRepository = optionRepository;
     }
 
 
@@ -47,15 +45,6 @@ public class GiftService {
         Gift gift = giftRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + id));
         return GiftResponse.from(gift);
-    }
-
-    public List<OptionResponse> getOptionsByGiftId(Long giftId) {
-        Gift gift = giftRepository.findById(giftId)
-                .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
-
-        return gift.getOptions().stream()
-                .map(OptionResponse::from)
-                .toList();
     }
 
     public void addGift(GiftRequest giftRequest) {

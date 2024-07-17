@@ -6,6 +6,7 @@ import gift.model.gift.GiftRequest;
 import gift.model.gift.GiftResponse;
 import gift.model.option.OptionResponse;
 import gift.service.gift.GiftService;
+import gift.service.option.OptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,14 @@ import java.util.List;
 public class GiftController {
 
     private GiftService giftService;
+    private OptionService optionService;
 
     @Autowired
-    public GiftController(GiftService giftService) {
+    public GiftController(GiftService giftService, OptionService optionService) {
         this.giftService = giftService;
+        this.optionService = optionService;
     }
+
 
     @PostMapping
     public ResponseEntity<String> addGift(@RequestBody GiftRequest giftReq) {
@@ -44,7 +48,7 @@ public class GiftController {
 
     @GetMapping("/{id}/options")
     public ResponseEntity<List<OptionResponse>> getOptions(@PathVariable Long id) {
-        List<OptionResponse> options = giftService.getOptionsByGiftId(id);
+        List<OptionResponse> options = optionService.getOptionsByGiftId(id);
         return ResponseEntity.ok(options);
     }
 

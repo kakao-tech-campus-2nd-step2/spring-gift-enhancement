@@ -32,6 +32,11 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public Option(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public Long getId() {
         return id;
     }
@@ -50,6 +55,10 @@ public class Option {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setGift(Gift gift) {
+        this.gift = gift;
     }
 
     public void setQuantity(int quantity) {
