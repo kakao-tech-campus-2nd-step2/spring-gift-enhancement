@@ -1,6 +1,6 @@
 package gift.DTO.Product;
 
-import gift.domain.Category;
+import gift.DTO.Category.CategoryResponse;
 import gift.domain.Product;
 
 public class ProductResponse {
@@ -8,14 +8,14 @@ public class ProductResponse {
     String name;
     int price;
     String imageUrl;
-    Category category;
+    CategoryResponse category;
 
     public ProductResponse(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
-        this.category = product.getCategory();
+        this.category = new CategoryResponse(product.getCategory());
     }
 
     public Long getId() {
@@ -34,7 +34,7 @@ public class ProductResponse {
         return imageUrl;
     }
   
-    public Category getCategory(){
+    public CategoryResponse getCategory(){
         return category;
     }
 }
