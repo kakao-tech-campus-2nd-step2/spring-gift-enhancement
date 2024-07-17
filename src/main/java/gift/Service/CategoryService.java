@@ -15,4 +15,20 @@ public class CategoryService {
     public List<Category> getAllCategory(){
         return categoryRepository.findAll();
     }
+
+    public Category addCategory(Category category){
+        return categoryRepository.save(category);
+    }
+
+    public Category getCategoryById(Long id){
+        return categoryRepository.findCategoryById(id);
+    }
+
+    public Category updateCategory(Category category){
+        return categoryRepository.save(category);
+    }
+
+    public void deleteCategory(Long id){
+        categoryRepository.deleteById(id);
+    }
 }
