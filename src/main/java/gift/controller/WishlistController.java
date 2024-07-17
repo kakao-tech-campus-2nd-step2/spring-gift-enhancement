@@ -27,12 +27,12 @@ public class WishlistController {
     @GetMapping("/wishlist")
     public ResponseEntity<Map<String, Object>> getWishProductList(
             @RequestHeader("Authorization") String authorizationHeader,
-            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize) {
         String token = getBearerToken(authorizationHeader);
         Long memberId = jwtUtil.getMemberIdFromToken(token);
 
-        Page<Wish> allWishlistsPaged = service.getWishProductList(memberId, pageNumber, pageSize);
+        Page<Wish> allWishlistsPaged = service.getWishProductList(memberId, pageNumber-1, pageSize);
 
         Map<String, Object> response = new HashMap<>();
         response.put("content", allWishlistsPaged.getContent());

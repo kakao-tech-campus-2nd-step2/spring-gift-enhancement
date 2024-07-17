@@ -63,7 +63,7 @@
         fetchWishlist();
     });
 
-    function fetchWishlist(pageNumber = 0) {
+    function fetchWishlist(pageNumber = 1) {
         $.ajax({
             url: `/wishlist?pageNumber=${pageNumber}&pageSize=${pageSize}`,
             headers: {
@@ -107,15 +107,15 @@
         pagination.empty();
 
         const currentGroup = Math.floor(currentPage / buttonsPerPage);
-        const startPage = currentGroup * buttonsPerPage;
+        const startPage = currentGroup * buttonsPerPage + 1;
         const endPage = Math.min(startPage + buttonsPerPage, totalPages);
 
         if (currentGroup > 0) {
             pagination.append(`<button onclick="fetchWishlist(${startPage - 1})"><</button>`);
         }
 
-        for (let i = startPage; i < endPage; i++) {
-            pagination.append(`<button onclick="fetchWishlist(${i})" class="${i === currentPage ? 'active' : ''}">${i + 1}</button>`);
+        for (let i = startPage; i <= endPage; i++) {
+            pagination.append(`<button onclick="fetchWishlist(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`);
         }
 
         if (endPage < totalPages) {
