@@ -1,5 +1,6 @@
 package gift.product.domain;
 
+import gift.category.domain.Category;
 import gift.exception.type.KakaoInNameException;
 import gift.product.application.command.ProductUpdateCommand;
 import jakarta.persistence.*;
@@ -20,18 +21,23 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     public Product() {
     }
 
-    public Product(String name, Integer price, String imageUrl) {
-        this(null, name, price, imageUrl);
+    public Product(String name, Integer price, String imageUrl, Category category) {
+        this(null, name, price, imageUrl, category);
     }
 
-    public Product(Long id, String name, Integer price, String imageUrl) {
+    public Product(Long id, String name, Integer price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -50,10 +56,15 @@ public class Product {
         return imageUrl;
     }
 
-    public void update(ProductUpdateCommand command) {
+    public Category getCategory() {
+        return category;
+    }
+
+    public void update(ProductUpdateCommand command, Category category) {
         this.name = command.name();
         this.price = command.price();
         this.imageUrl = command.imageUrl();
+        this.category = category;
     }
 
     public void validateKakaoInName() {
