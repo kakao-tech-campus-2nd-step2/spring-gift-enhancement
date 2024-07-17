@@ -79,11 +79,20 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
     public List<WishlistItem> getWishlistItemList() {
         return wishlistItemList;
     }
 
     public void setWishlistItemList(List<WishlistItem> wishlistItemList) {
         this.wishlistItemList = wishlistItemList;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
