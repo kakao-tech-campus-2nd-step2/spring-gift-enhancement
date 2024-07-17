@@ -33,14 +33,6 @@ public class ProductJpaRepositoryTest {
     private CategoryRepository categoryRepository;
 
     @Test
-    @DisplayName("test")
-    void test() {
-        // given
-        Category category = new Category("category", "ABCD", "test", "test");
-        categoryRepository.save(category);
-    }
-
-    @Test
     @DisplayName("상품 저장")
     void save() {
         // given
