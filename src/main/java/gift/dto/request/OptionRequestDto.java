@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Pattern;
 public record OptionRequestDto(
 
         @Pattern(
-                regexp = "^[a-zA-Z0-9\\s()\\[\\]+\\-&/_]{1,50}$",
+                regexp = "^[0-9가-힣a-zA-Z()\\[\\]+\\-&/_\\s]{1,50}$",
                 message = "옵션 이름이 잘못 되었습니다."
         )
         String optionName,
