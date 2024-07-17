@@ -6,6 +6,7 @@ import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,16 +14,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-    }
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryService categoryService;
 
     public void createProduct(ProductRequestDTO productRequestDTO) {
-        Category category = categoryRepository.findById(productRequestDTO.categoryId()).orElse(null);
+        Category category = categoryService.getCategoryById(productRequestDTO.categoryId());
         Product product = new Product(productRequestDTO.name(),
                                       productRequestDTO.price(),
                                       productRequestDTO.imageUrl(),
@@ -41,7 +41,7 @@ public class ProductService {
 
 
     public void updateProduct(Long id, ProductRequestDTO productRequestDTO) {
-        Category category = categoryRepository.findById(productRequestDTO.categoryId()).orElse(null);
+        Category category = categoryService.getCategoryById(productRequestDTO.categoryId());
         productRepository.findById(id).ifPresent(product -> {
             Product updatedProduct = new Product(id,
                                                  productRequestDTO.name(),
