@@ -18,6 +18,8 @@ public enum ErrorCode {
     INVALID_PASSWORD("비밀번호는 null이거나 빈 문자열일 수 없습니다.", HttpStatus.BAD_REQUEST),
     INVALID_CATEGORY_NAME("카테고리는 null이거나 빈 문자열일 수 없습니다.", HttpStatus.BAD_REQUEST),
     INVALID_CATEGORY_COLOR("Color은 null이거나 빈 문자열일 수 없습니다.", HttpStatus.BAD_REQUEST),
+    INVALID_OPTION_NAME("옵션은 null이거나 빈 문자열일 수 없습니다.", HttpStatus.BAD_REQUEST),
+    OPTION_NOT_FOUND("해당 옵션이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     CATEGORY_NOT_FOUND("해당 카테고리가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
     private final String message;
