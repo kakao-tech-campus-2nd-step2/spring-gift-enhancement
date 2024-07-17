@@ -3,8 +3,12 @@ package gift.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.constants.ErrorMessage;
+import gift.dto.MemberDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +29,7 @@ class MemberControllerTest {
     private @Autowired MockMvc mockMvc;
 
     private final String member = """
-        {"email": "sgoh", "password": "sgohpass"}
+        {"email": "sgoh@naver.com", "password": "sgohpass"}
         """;
     private final String product = """
         {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
@@ -116,5 +120,70 @@ class MemberControllerTest {
         mockMvc.perform(delete("/api/members/wishlist/1")
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("이메일 형식 패턴 검증 테스트")
+    void invalidEmailFormat() throws Exception {
+        MemberDto memberDto = new MemberDto(null, "sgoh", "sgoh");
+        String inputJson = new ObjectMapper().writeValueAsString(memberDto);
+
+        mockMvc.perform(post("/api/members/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(ErrorMessage.MEMBER_NOT_EMAIL_FORMAT_MSG));
+    }
+
+    @Test
+    @DisplayName("이메일 Not Blank 검증 테스트")
+    void blankEmail() throws Exception {
+        MemberDto memberDto = new MemberDto(null, "", "sgoh");
+        String inputJson = new ObjectMapper().writeValueAsString(memberDto);
+
+        mockMvc.perform(post("/api/members/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(ErrorMessage.MEMBER_EMAIL_NOT_BLANK_MSG));
+    }
+
+    @Test
+    @DisplayName("비밀번호 패턴 검증 테스트")
+    void invalidPasswordPattern() throws Exception {
+        MemberDto memberDto = new MemberDto(null, "sgoh@naver.com", "비밀번호");
+        String inputJson = new ObjectMapper().writeValueAsString(memberDto);
+
+        mockMvc.perform(post("/api/members/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(ErrorMessage.MEMBER_PASSWORD_INVALID_PATTERN_MSG));
+    }
+
+    @Test
+    @DisplayName("비밀번호 길이 검증 테스트")
+    void passwordLength() throws Exception {
+        MemberDto memberDto = new MemberDto(null, "sgoh@naver.com", "0123456789012345");
+        String inputJson = new ObjectMapper().writeValueAsString(memberDto);
+
+        mockMvc.perform(post("/api/members/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(ErrorMessage.MEMBER_PASSWORD_INVALID_LENGTH_MSG));
+    }
+
+    @Test
+    @DisplayName("비밀번호 null 검증 테스트")
+    void blankPassword() throws Exception {
+        MemberDto memberDto = new MemberDto(null, "sgoh@naver.com", null);
+        String inputJson = new ObjectMapper().writeValueAsString(memberDto);
+
+        mockMvc.perform(post("/api/members/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(ErrorMessage.MEMBER_PASSWORD_NOT_BLANK_MSG));
     }
 }

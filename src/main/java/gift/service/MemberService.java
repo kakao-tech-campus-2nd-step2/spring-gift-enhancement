@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.constants.ErrorMessage;
+import gift.dto.MemberDto;
 import gift.dto.ProductDto;
 import gift.entity.Member;
 import gift.entity.Product;
@@ -30,7 +31,8 @@ public class MemberService {
         this.jwtUtil = jwtUtil;
     }
 
-    public void registerMember(Member member) {
+    public void registerMember(MemberDto memberDto) {
+        Member member = new Member(memberDto);
         memberJpaDao.findByEmail(member.getEmail())
             .ifPresent(user -> {
                 throw new IllegalArgumentException(ErrorMessage.EMAIL_ALREADY_EXISTS_MSG);
@@ -38,7 +40,8 @@ public class MemberService {
         memberJpaDao.save(member);
     }
 
-    public String login(Member member) {
+    public String login(MemberDto memberDto) {
+        Member member = new Member(memberDto);
         Member queriedMember = memberJpaDao.findByEmail(member.getEmail())
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.MEMBER_NOT_EXISTS_MSG));
         if (!queriedMember.isCorrectPassword(member.getPassword())) {

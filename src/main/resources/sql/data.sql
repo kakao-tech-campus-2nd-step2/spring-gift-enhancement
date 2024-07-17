@@ -81,7 +81,7 @@ INSERT INTO Product(name, price, image_url, category) VALUES(
 );
 
 
-INSERT INTO Member(email, password) VALUES('admin', 'admin');
-INSERT INTO Member(email, password) VALUES('root', 'root');
+INSERT INTO Member(email, password) VALUES('admin@admin', 'admin');
+INSERT INTO Member(email, password) VALUES('root@admin', 'root');
 
 

@@ -1,6 +1,7 @@
 package gift.entity;
 
 import gift.constants.ErrorMessage;
+import gift.dto.MemberDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +23,10 @@ public class Member extends BaseEntity {
     private List<Wishlist> wishlist = new ArrayList<>();
 
     protected Member() {
+    }
+
+    public Member(MemberDto memberDto) {
+        this(memberDto.getEmail(), memberDto.getPassword());
     }
 
     public Member(String email, String password) {
