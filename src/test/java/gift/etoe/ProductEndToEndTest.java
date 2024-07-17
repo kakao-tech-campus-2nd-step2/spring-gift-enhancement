@@ -4,9 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.category.model.Category;
+import gift.category.model.CategoryRequestDto;
+import gift.common.model.PageResponseDto;
 import gift.member.model.MemberRequestDto;
 import gift.product.model.ProductRequestDto;
+import gift.product.model.ProductResponseDto;
 import java.net.URI;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,15 +37,16 @@ class ProductEndToEndTest {
     @Test
     void getAllProducts() throws JsonProcessingException {
         var headers = getToken();
+        saveCategory(headers);
         var url = "http://localhost:" + port + "/api/products";
-        var expected1 = addProduct("gamza", 500, "gamza.jpg", url, headers);
-        var expected2 = addProduct("goguma", 1000, "goguma.jpg", url, headers);
+        addProduct("gamza", 500, "gamza.jpg", url, headers);
+        addProduct("goguma", 1000, "goguma.jpg", url, headers);
 
         var requestEntity = new RequestEntity<>(headers, HttpMethod.GET, URI.create(url));
         var actual = restTemplate.exchange(requestEntity, String.class);
-        System.out.println(actual);
         assertThat(actual.getBody()).isEqualTo(
-            "{\"response\":[{\"id\":1,\"name\":\"gamza\",\"price\":500,\"imageUrl\":\"gamza.jpg\"},{\"id\":2,\"name\":\"goguma\",\"price\":1000,\"imageUrl\":\"goguma.jpg\"}],\"pageNumber\":0,\"pageSize\":10}");
+            "{\"response\":[{\"id\":1,\"name\":\"gamza\",\"price\":500,\"imageUrl\":\"gamza.jpg\",\"categoryId\":1},{\"id\":2,\"name\":\"goguma\",\"price\":1000,\"imageUrl\":\"goguma.jpg\",\"categoryId\":1}],\"pageNumber\":0,\"pageSize\":10}"
+        );
     }
 
     private HttpHeaders getToken() throws JsonProcessingException {
@@ -57,12 +63,18 @@ class ProductEndToEndTest {
         return headers;
     }
 
-    private ProductRequestDto addProduct(String name, Integer price, String imageUrl, String url,
+    private void addProduct(String name, Integer price, String imageUrl, String url,
         HttpHeaders headers) {
-        var expected = new ProductRequestDto(name, price, imageUrl);
+        var expected = new ProductRequestDto(name, price, imageUrl, 1L);
         var expected1RequestEntity = new RequestEntity<>(expected, headers, HttpMethod.POST,
             URI.create(url));
         restTemplate.exchange(expected1RequestEntity, String.class);
-        return expected;
+    }
+
+    private void saveCategory(HttpHeaders headers) {
+        var categoryUrl = "http://localhost:" + port + "/api/categories";
+        var categoryRequest = new CategoryRequestDto("test", "##test", "test.jpg", "test");
+        var categoryRequestEntity = new RequestEntity<>(categoryRequest, headers, HttpMethod.POST, URI.create(categoryUrl));
+        var categoryResponseEntity = restTemplate.exchange(categoryRequestEntity, String.class);
     }
 }
