@@ -11,13 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-record ErrorResponseDto(
-    String message,
-    Map<String, String> details
-) {
-
-}
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -80,4 +73,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponseDto(errorCode.getMessage(), details),
             errorCode.getHttpStatus());
     }
+
+    record ErrorResponseDto(
+        String message,
+        Map<String, String> details
+    ) {}
 }
