@@ -15,7 +15,7 @@ public class Option {
     @Column(nullable = false)
     private Integer quantity;
 
-    public Option() {
+    protected Option() {
     }
 
     public Option(String name, Integer quantity) {
