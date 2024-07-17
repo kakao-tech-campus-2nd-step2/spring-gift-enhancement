@@ -16,9 +16,10 @@ class ProductTest {
         String name = "테스트 상품";
         Integer price = 10000;
         String imgUrl = "http://test.com\"";
+        Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
 
         // when
-        Product product = new Product(id, name, price, imgUrl);
+        Product product = new Product(id, name, price, imgUrl, category);
 
         // then
         assertThat(product.getId()).isEqualTo(id);
@@ -35,9 +36,10 @@ class ProductTest {
         String name = "카카오 상품";
         Integer price = 10000;
         String imgUrl = "http://test.com";
+        Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
 
         // when & then
-        assertThatThrownBy(() -> new Product(id, name, price, imgUrl))
+        assertThatThrownBy(() -> new Product(id, name, price, imgUrl, category))
                 .isInstanceOf(ProductNoConferredException.class);
     }
 }

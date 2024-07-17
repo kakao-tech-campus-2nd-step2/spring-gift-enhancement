@@ -2,6 +2,7 @@ package gift.product.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.product.domain.Category;
 import gift.product.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,8 @@ class ProductRepositoryTest {
     @DisplayName("[ProductRepository] Product 저장")
     void saveProductTest() {
         // given
-        Product product = new Product("테스트 상품", 10000, "https://test.com");
+        Category category = new Category("카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
+        Product product = new Product("테스트 상품", 10000, "https://test.com", category);
 
         // when
         Product savedProduct = productRepository.save(product);

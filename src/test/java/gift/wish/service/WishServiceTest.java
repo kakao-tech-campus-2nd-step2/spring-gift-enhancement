@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 
 import gift.member.domain.Member;
 import gift.member.persistence.MemberRepository;
+import gift.product.domain.Category;
 import gift.product.domain.Product;
 import gift.product.exception.ProductNotFoundException;
 import gift.product.persistence.ProductRepository;
@@ -41,7 +42,8 @@ class WishServiceTest {
     void saveWishTest() {
         //given
         WishParam wishParam = new WishParam(1L, 1L, 10);
-        Product product = new Product("테스트 상품", 1000, "http://test.com");
+        Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
+        Product product = new Product("테스트 상품", 1000, "http://test.com", category);
         Member memeber = new Member("test@test.com", "test");
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(memberRepository.getReferenceById(any())).willReturn(memeber);
