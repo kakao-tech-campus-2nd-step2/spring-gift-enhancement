@@ -2,7 +2,6 @@ package gift.member.service;
 
 import gift.member.model.Member;
 import gift.member.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +39,8 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("옳지 않은 이메일이나 비밀번호 입니다."));
 
-        if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new IllegalArgumentException("옳지 않은 이메일이나 비밀번호 입니다.");
-        }
+        // 비밀번호 검증은 Member 엔티티에서 수행
+        member.validateLogin(password, passwordEncoder);
 
         return member;
     }

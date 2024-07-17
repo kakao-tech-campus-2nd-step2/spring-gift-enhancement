@@ -4,13 +4,13 @@ import gift.wishlist.model.WishList;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Member {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
     @SequenceGenerator(name = "member_seq", sequenceName = "member_seq", allocationSize = 1)
@@ -23,14 +23,32 @@ public class Member {
     private String password;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WishList> wishLists = new ArrayList<>();
+    private final List<WishList> wishLists = new ArrayList<>();
 
+    // 기본 생성자
+    public Member() {
+    }
+
+    // 매개변수가 있는 생성자
     public Member(String email, String password) {
         this.email = email;
         this.password = password;
     }
+
     public Long getMemberId() {
         return memberId;
+    }
+
+    public List<WishList> getWishLists() {
+        return wishLists;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void updateEmail(@NotNull @NotBlank String newEmail) {
@@ -47,12 +65,15 @@ public class Member {
         this.password = newPassword; // 현재 인스턴스의 비밀번호를 업데이트
     }
 
-    public String getPassword() {
-        return password;
+    // 비밀번호 검증 메소드
+    public boolean checkPassword(String rawPassword, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(rawPassword, this.password);
     }
 
-    public String getEmail() {
-        return email;
+    // 로그인 검증 메소드
+    public void validateLogin(String rawPassword, PasswordEncoder passwordEncoder) {
+        if (!checkPassword(rawPassword, passwordEncoder)) {
+            throw new IllegalArgumentException("옳지 않은 이메일이나 비밀번호 입니다.");
+        }
     }
-
 }
