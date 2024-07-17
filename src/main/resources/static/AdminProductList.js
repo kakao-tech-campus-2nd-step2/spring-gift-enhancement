@@ -1,13 +1,13 @@
 // scripts.js
 
-$(document).ready(function() {
+$(document).ready(function () {
   loadProducts();
 
   function loadProducts() {
     $.ajax({
       url: '/api/products',
       type: 'GET',
-      success: function(data) {
+      success: function (data) {
         var table = '<table border="1">' +
             '<tr>' +
             '<th>No</th>' +
@@ -18,21 +18,23 @@ $(document).ready(function() {
             '<th>Edit</th>' +
             '<th>Delete</th>' +
             '</tr>';
-        $.each(data, function(index, item) {
+        $.each(data, function (index, item) {
           table += '<tr>';
           table += '<td>' + (index + 1) + '</td>';
           table += '<td>' + item.id + '</td>';
           table += '<td>' + item.name + '</td>';
           table += '<td>' + item.price + '</td>';
           table += '<td>' + item.imageUrl + '</td>';
-          table += '<td><button class="update-button" data-id="' + item.id + '">Update</button></td>';
-          table += '<td><button class="delete-button" data-id="' + item.id + '">Delete</button></td>';
+          table += '<td><button class="update-button" data-id="' + item.id
+              + '">Update</button></td>';
+          table += '<td><button class="delete-button" data-id="' + item.id
+              + '">Delete</button></td>';
           table += '</tr>';
         });
         table += '</table>';
         $('#table-container').html(table);
 
-        $('.update-button').click(function() {
+        $('.update-button').click(function () {
           var id = $(this).data('id');
           var row = $(this).closest('tr');
           var name = row.find('td:nth-child(3)').text();
@@ -49,19 +51,19 @@ $(document).ready(function() {
           $('#myModal').css('display', 'block');
         });
 
-        $('.delete-button').click(function() {
+        $('.delete-button').click(function () {
           var id = $(this).data('id');
           deleteProduct(id);
         });
       },
-      error: function(error) {
+      error: function (error) {
         console.log('Error:', error);
       }
     });
   }
 
   // 모달 확인 버튼 클릭 시
-  $('#modal-submit').click(function() {
+  $('#modal-submit').click(function () {
     var id = $('#modal-id').val();
     var name = $('#modal-name').val();
     var price = $('#modal-price').val();
@@ -70,12 +72,12 @@ $(document).ready(function() {
   });
 
   // 모달 닫기 버튼 클릭 시
-  $('#modal-close').click(function() {
+  $('#modal-close').click(function () {
     $('#myModal').css('display', 'none');
   });
 
   // 추가 버튼 클릭 시
-  $('#add-button').click(function() {
+  $('#add-button').click(function () {
     var name = $('#new-name').val();
     var price = $('#new-price').val();
     var imageUrl = $('#new-imageUrl').val();
@@ -87,12 +89,12 @@ $(document).ready(function() {
       url: '/api/products/' + id,
       type: 'PUT',
       contentType: 'application/json',
-      data: JSON.stringify({name: name, price: price, imageUrl:imageUrl}),
-      success: function() {
+      data: JSON.stringify({name: name, price: price, imageUrl: imageUrl}),
+      success: function () {
         loadProducts();
         $('#myModal').css('display', 'none'); // 모달 닫기
       },
-      error: function(error) {
+      error: function (error) {
         console.log('Error:', error);
       }
     });
@@ -102,10 +104,10 @@ $(document).ready(function() {
     $.ajax({
       url: '/api/products/' + id,
       type: 'DELETE',
-      success: function() {
+      success: function () {
         loadProducts();
       },
-      error: function(error) {
+      error: function (error) {
         console.log('Error:', error);
       }
     });
@@ -116,14 +118,14 @@ $(document).ready(function() {
       url: '/api/products',
       type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({name: name, price: price, imageUrl:imageUrl}),
-      success: function() {
+      data: JSON.stringify({name: name, price: price, imageUrl: imageUrl}),
+      success: function () {
         loadProducts();
         $('#new-name').val('');
         $('#new-price').val('');
         $('#new-imageUrl').val('');
       },
-      error: function(error) {
+      error: function (error) {
         console.log('Error:', error);
       }
     });

@@ -49,9 +49,9 @@ public class ProductService {
 
     public Long createProduct(Product.CreateProduct create) {
         CategoryEntity category = categoryRepository.findById(create.getCategoryId())
-        .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 카테고리가 존재하지 않습니다."));
+            .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 카테고리가 존재하지 않습니다."));
 
-        ProductEntity productEntity = productMapper.toEntity(create,category);
+        ProductEntity productEntity = productMapper.toEntity(create, category);
 
         productRepository.save(productEntity);
         return productEntity.getId();
@@ -66,7 +66,7 @@ public class ProductService {
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 카테고리가 존재하지 않습니다."));
 
 //        productRepository.save(productMapper.toUpdate(update, productEntity));
-        productMapper.toUpdate(update, productEntity,category);
+        productMapper.toUpdate(update, productEntity, category);
         return productEntity.getId();
     }
 

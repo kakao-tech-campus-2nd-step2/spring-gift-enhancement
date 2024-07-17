@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 public class PageParam {
+
     private Integer page = 0;
     private Integer size = 10;
     private String sort = "";

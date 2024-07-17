@@ -31,18 +31,18 @@ public class CategoryMapper {
                 .stream()
                 .map(ProductEntity::getId)
                 .collect(
-                Collectors.toList()),
+                    Collectors.toList()),
             entity.getId(),
             entity.getName(),
             entity.getCreatedAt(),
             entity.getUpdatedAt());
     }
 
-    public CategoryEntity toEntity(String name){
+    public CategoryEntity toEntity(String name) {
         return new CategoryEntity(name);
     }
 
-    public CategoryEntity toUpdate(String name, CategoryEntity entity){
+    public CategoryEntity toUpdate(String name, CategoryEntity entity) {
         entity.setName(name);
         return entity;
     }

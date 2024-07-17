@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotNull;
 
 public class Wish {
 
-    public static class getList extends PageParam{}
+    public static class getList extends PageParam {
+
+    }
 
     public static class getWish {
 

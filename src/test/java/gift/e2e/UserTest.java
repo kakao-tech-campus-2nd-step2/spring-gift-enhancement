@@ -106,7 +106,7 @@ class UserTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
-//    병렬로 수행하면 오류나지만, 단독으로 수행하면 수행 됨
+    //    병렬로 수행하면 오류나지만, 단독으로 수행하면 수행 됨
     @Test
     @DisplayName("유저 생성(유저 중복)")
     public void DuplicateCreateUser() {

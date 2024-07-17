@@ -26,6 +26,7 @@ public class ProductMapper {
 
         return new PageImpl<>(simpleList, all.getPageable(), all.getTotalElements());
     }
+
     public Page<ProductDetail> toDetailList(Page<ProductEntity> all) {
         List<ProductDetail> simpleList = all.stream()
             .map(entity -> new ProductDetail(
@@ -43,7 +44,7 @@ public class ProductMapper {
         return new PageImpl<>(simpleList, all.getPageable(), all.getTotalElements());
     }
 
-    public ProductDetail toDetail(ProductEntity entity){
+    public ProductDetail toDetail(ProductEntity entity) {
         return new ProductDetail(
             entity.getId(),
             entity.getName(),
@@ -56,10 +57,12 @@ public class ProductMapper {
     }
 
     public ProductEntity toEntity(CreateProduct create, CategoryEntity category) {
-        return new ProductEntity(create.getName(), create.getPrice(), create.getImageUrl(), category);
+        return new ProductEntity(create.getName(), create.getPrice(), create.getImageUrl(),
+            category);
     }
 
-    public ProductEntity toUpdate(UpdateProduct update, ProductEntity entity, CategoryEntity category) {
+    public ProductEntity toUpdate(UpdateProduct update, ProductEntity entity,
+        CategoryEntity category) {
         entity.setPrice(update.getPrice());
         entity.setName(update.getName());
         entity.setImageUrl(update.getImageUrl());

@@ -30,7 +30,8 @@ public class UserMapper {
     }
 
     public UserEntity toEntity(CreateUser create) {
-        return new UserEntity(create.getEmail(), passwordCrypto.encodePassword(create.getPassword()));
+        return new UserEntity(create.getEmail(),
+            passwordCrypto.encodePassword(create.getPassword()));
     }
 
     public UserEntity toUpdate(UpdateUser update, UserEntity entity) {

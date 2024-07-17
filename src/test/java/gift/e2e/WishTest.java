@@ -44,7 +44,8 @@ class WishTest {
         Login login = new Login("kakao1@kakao.com", "1234");
 
         HttpEntity<Login> requestEntity = new HttpEntity<>(login);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/login", POST,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/login",
+            POST,
             requestEntity, String.class);
 
         int startIndex = responseEntity.getBody().indexOf("\"token\":\"") + "\"token\":\"".length();
@@ -63,7 +64,8 @@ class WishTest {
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish/9999", GET,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish/9999",
+            GET,
             requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -80,7 +82,8 @@ class WishTest {
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish", POST,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish",
+            POST,
             requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -97,7 +100,8 @@ class WishTest {
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish", POST,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish",
+            POST,
             requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -114,7 +118,8 @@ class WishTest {
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish", POST,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish",
+            POST,
             requestEntity, String.class);
 
         System.out.println(responseEntity);

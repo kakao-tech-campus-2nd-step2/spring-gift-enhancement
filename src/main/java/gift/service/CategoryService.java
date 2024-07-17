@@ -65,7 +65,7 @@ public class CategoryService {
         CategoryEntity category = categoryRepository.findById(id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 카테고리가 존재하지 않습니다."));
 
-        if (category.getProductEntities().size()!=0){
+        if (category.getProductEntities().size() != 0) {
             throw new BaseHandler(HttpStatus.FORBIDDEN, "상품이 없는 카테고리만 삭제가 가능합니다.");
         }
 

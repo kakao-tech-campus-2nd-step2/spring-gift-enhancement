@@ -4,6 +4,7 @@ package gift.util.page;
 import java.util.Collection;
 
 public class PageResult<T> extends ListResult<T> {
+
     private final Integer size;
     private final Integer page;
     private final Integer pages;

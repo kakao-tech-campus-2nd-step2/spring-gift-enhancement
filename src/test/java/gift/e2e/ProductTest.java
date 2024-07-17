@@ -43,7 +43,8 @@ class ProductTest {
         Login login = new Login("kakao1@kakao.com", "1234");
 
         HttpEntity<Login> requestEntity = new HttpEntity<>(login);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/login", POST,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/login",
+            POST,
             requestEntity, String.class);
 
         int startIndex = responseEntity.getBody().indexOf("\"token\":\"") + "\"token\":\"".length();
@@ -57,14 +58,15 @@ class ProductTest {
     @Test
     @DisplayName("상품 생성")
     public void CreateProduct() {
-        CreateProduct body = new CreateProduct("test1", 1000, "test1",1L);
+        CreateProduct body = new CreateProduct("test1", 1000, "test1", 1L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/products", POST,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/products",
+            POST,
             requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -74,14 +76,15 @@ class ProductTest {
     @Test
     @DisplayName("상품 수정(유저 없음)")
     public void NotFoundUpdateProduct() {
-        UpdateProduct body = new UpdateProduct("test2", 1000, "test1",1L);
+        UpdateProduct body = new UpdateProduct("test2", 1000, "test1", 1L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/products/9999", PUT,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            url + port + "/api/products/9999", PUT,
             requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -91,14 +94,15 @@ class ProductTest {
     @Test
     @DisplayName("상품 수정")
     public void UpdateProduct() {
-        UpdateProduct body = new UpdateProduct("test2", 1000, "test1",1L);
+        UpdateProduct body = new UpdateProduct("test2", 1000, "test1", 1L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/products/1", PUT,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            url + port + "/api/products/1", PUT,
             requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -113,7 +117,8 @@ class ProductTest {
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/products/9999",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            url + port + "/api/products/9999",
             DELETE, requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -128,7 +133,8 @@ class ProductTest {
         headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/products/1",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            url + port + "/api/products/1",
             DELETE, requestEntity, String.class);
 
         System.out.println(responseEntity);

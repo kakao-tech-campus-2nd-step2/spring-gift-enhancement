@@ -43,8 +43,9 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public SingleResult<Long> updateCategory(@PathVariable long id, @Valid @RequestBody UpdateCategory update) {
-        return new SingleResult(categoryService.updateCategory(id,update));
+    public SingleResult<Long> updateCategory(@PathVariable long id,
+        @Valid @RequestBody UpdateCategory update) {
+        return new SingleResult(categoryService.updateCategory(id, update));
     }
 
     @DeleteMapping("/{id}")

@@ -43,7 +43,8 @@ public class WishService {
     }
 
     public Page<wishSimple> getWishList(Long userId, Wish.getList param) {
-        Page<WishEntity> wishEntities = wishRepository.findByUserEntityId(userId, param.toPageable());
+        Page<WishEntity> wishEntities = wishRepository.findByUserEntityId(userId,
+            param.toPageable());
 
         return wishMapper.toSimpleList(wishEntities);
     }

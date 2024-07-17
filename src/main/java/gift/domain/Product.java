@@ -147,7 +147,8 @@ public class Product {
         private Long categoryId;
 
         public ProductDetail(Long id, String name, Integer price, String imageUrl,
-            LocalDateTime createdAt, LocalDateTime updatedAt, List<Long> wishUserId, Long categoryId) {
+            LocalDateTime createdAt, LocalDateTime updatedAt, List<Long> wishUserId,
+            Long categoryId) {
             this.id = id;
             this.name = name;
             this.price = price;
