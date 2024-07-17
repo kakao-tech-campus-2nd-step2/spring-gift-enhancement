@@ -38,15 +38,14 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        //UserEntity에서 WishEntity와의 연관 관계를
-        //cascade = CascadeType.ALL로 설정해놓았기 때문에
-        //관련 Wish는 따로 삭제할 필요가 없음.
+        // UserEntity에서 WishEntity와의 연관 관계를
+        // cascade = CascadeType.ALL로 설정해놓았기 때문에
+        // 관련 Wish는 따로 삭제할 필요가 없음.
         userRepository.deleteById(id);
     }
 
     public String generateToken(UserEntity userEntity) {
-        Claims claims = Jwts.claims().setSubject(userEntity.getEmail());
-        claims.put("userId", userEntity.getId());
+        Claims claims = createClaims(userEntity);
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + expiration);
 
@@ -60,11 +59,8 @@ public class UserService {
 
     public boolean validateToken(String token) {
         try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(token)
-                    .getBody();
-            return claims.getSubject() != null && !claims.getExpiration().before(new Date());
+            Claims claims = getClaimsFromToken(token);
+            return claims != null && claims.getSubject() != null && !claims.getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }
@@ -72,14 +68,32 @@ public class UserService {
 
     public Optional<UserEntity> getUserFromToken(String token) {
         try {
-            Claims claims = Jwts.parser()
+            Claims claims = getClaimsFromToken(token);
+            if (claims != null) {
+                Long userId = claims.get("userId", Long.class);
+                return userRepository.findById(userId);
+            }
+        } catch (Exception e) {
+            // Log exception if necessary
+        }
+        return Optional.empty();
+    }
+
+    private Claims createClaims(UserEntity userEntity) {
+        Claims claims = Jwts.claims().setSubject(userEntity.getEmail());
+        claims.put("userId", userEntity.getId());
+        return claims;
+    }
+
+    private Claims getClaimsFromToken(String token) {
+        try {
+            return Jwts.parser()
                     .setSigningKey(secretKey)
                     .parseClaimsJws(token)
                     .getBody();
-            Long userId = claims.get("userId", Long.class);
-            return userRepository.findById(userId);
         } catch (Exception e) {
-            return Optional.empty();
+            // Log exception if necessary
+            return null;
         }
     }
 }
