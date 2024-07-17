@@ -15,13 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Controller
 @RequestMapping("/web/products")
 public class ProductWebController {
 
     private final ProductService productService;
+
+    @Autowired
     public ProductWebController(ProductService productService) {
         this.productService = productService;
     }
@@ -29,19 +30,27 @@ public class ProductWebController {
     @GetMapping("/list")
     public String getAllProducts(Model model,
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "3") int size,
+        @RequestParam(defaultValue = "10") int size,
         @RequestParam(defaultValue = "id") String sort,
-        @RequestParam(defaultValue = "asc") String direction) {
+        @RequestParam(defaultValue = "asc") String direction,
+        @RequestParam(required = false) Integer categoryId) {
 
         Sort sortOrder = Sort.by(Sort.Direction.fromString(direction), sort);
         Pageable pageable = PageRequest.of(page, size, sortOrder);
-        Page<ProductDTO> productPage = productService.getProducts(pageable);
+        Page<ProductDTO> productPage;
+
+        if (categoryId != null) {
+            productPage = productService.getProductsByCategoryId(pageable, categoryId);
+        } else {
+            productPage = productService.getProducts(pageable);
+        }
 
         model.addAttribute("productPage", productPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
         model.addAttribute("sort", sort);
         model.addAttribute("direction", direction);
+        model.addAttribute("categoryId", categoryId);
 
         return "productList";
     }

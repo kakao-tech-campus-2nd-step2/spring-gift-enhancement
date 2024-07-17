@@ -27,7 +27,7 @@ public class ProductRepositoryTest {
     @DisplayName("상품 추가할때 성공적으로 작동되는 경우")
     void addProductPrice() {
         // Given
-        Product product = new Product(1234L,"Test Product", 1000, "test.jpg");
+        Product product = new Product(1234L,"Test Product", 1000, "test.jpg" , 1;
 
         // When
         Product savedProduct = productRepository.save(product);
@@ -46,7 +46,7 @@ public class ProductRepositoryTest {
     @DisplayName("상품 수정할때 성공적으로 작동되는 경우")
     void updateProductPrice() {
         // Given
-        Product product = new Product(1234L,"Test Product", 1000, "test.jpg");
+        Product product = new Product(1234L,"Test Product", 1000, "test.jpg" ,1);
         Product savedProduct = productRepository.save(product);
         Long productId = savedProduct.getId();
 
@@ -66,7 +66,7 @@ public class ProductRepositoryTest {
     @DisplayName("상품 삭제할때 성공적으로 작동되는 경우")
     void deleteProductPrice() {
         // Given
-        Product product = new Product(1234L,"Test Product", 1000, "test.jpg");
+        Product product = new Product(1234L,"Test Product", 1000, "test.jpg" ,1);
         Product savedProduct = productRepository.save(product);
 
         // When

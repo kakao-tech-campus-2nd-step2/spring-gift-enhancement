@@ -32,7 +32,7 @@ public class WishlistController {
     @GetMapping
     public String getWishlist(Principal principal, Model model,
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "3") int size,
+        @RequestParam(defaultValue = "10") int size,
         @RequestParam(defaultValue = "productName") String sort,
         @RequestParam(defaultValue = "asc") String direction) {
 
