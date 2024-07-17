@@ -7,8 +7,9 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 
+import gift.domain.product.dto.ProductRequestDto;
+import gift.domain.product.dto.ProductResponseDto;
 import gift.domain.product.repository.ProductJpaRepository;
-import gift.domain.product.dto.ProductDto;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import java.util.List;
@@ -34,26 +35,26 @@ class ProductServiceTest {
     @MockBean
     private ProductJpaRepository productJpaRepository;
 
-    private static final ProductDto productDto = new ProductDto(null, 1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+    private static final ProductRequestDto PRODUCT_REQUEST_DTO = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
     private static final Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
 
     @Test
     @DisplayName("상품 생성 서비스 테스트")
     void create() {
         // given
-        Product expected = productDto.toProduct(category);
+        Product expected = PRODUCT_REQUEST_DTO.toProduct(category);
         expected.setId(1L);
         given(productJpaRepository.save(any(Product.class))).willReturn(expected);
 
         // when
-        Product actual = productService.create(productDto);
+        ProductResponseDto actual = productService.create(PRODUCT_REQUEST_DTO);
 
         // then
         assertAll(
-            () -> assertThat(actual.getId()).isEqualTo(expected.getId()),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl())
+            () -> assertThat(actual.id()).isEqualTo(expected.getId()),
+            () -> assertThat(actual.name()).isEqualTo(expected.getName()),
+            () -> assertThat(actual.price()).isEqualTo(expected.getPrice()),
+            () -> assertThat(actual.imageUrl()).isEqualTo(expected.getImageUrl())
         );
     }
 
@@ -105,8 +106,8 @@ class ProductServiceTest {
             new PageImpl<>(products, PageRequest.of(0, 5), products.size()));
 
         // when
-        Page<Product> actual = productService.readAll(PageRequest.of(0, 5));
-        List<String> actualNames = actual.getContent().stream().map(Product::getName).toList();
+        Page<ProductResponseDto> actual = productService.readAll(PageRequest.of(0, 5));
+        List<String> actualNames = actual.getContent().stream().map(ProductResponseDto::name).toList();
 
         // then
         assertAll(
@@ -121,19 +122,19 @@ class ProductServiceTest {
     @DisplayName("상품 조회 서비스 테스트")
     void readById() {
         // given
-        Product expected = productDto.toProduct(category);
+        Product expected = PRODUCT_REQUEST_DTO.toProduct(category);
         expected.setId(1L);
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(expected));
 
         // when
-        Product actual = productService.readById(1L);
+        ProductResponseDto actual = productService.readById(1L);
 
         // then
         assertAll(
-            () -> assertThat(actual.getId()).isEqualTo(expected.getId()),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl())
+            () -> assertThat(actual.id()).isEqualTo(expected.getId()),
+            () -> assertThat(actual.name()).isEqualTo(expected.getName()),
+            () -> assertThat(actual.price()).isEqualTo(expected.getPrice()),
+            () -> assertThat(actual.imageUrl()).isEqualTo(expected.getImageUrl())
         );
     }
 
@@ -141,22 +142,22 @@ class ProductServiceTest {
     @DisplayName("상품 수정 서비스 테스트")
     void update() {
         // given
-        Product product = productDto.toProduct(category);
+        Product product = PRODUCT_REQUEST_DTO.toProduct(category);
         product.setId(1L);
-        ProductDto productDto = new ProductDto(null, 1L, "아이스 카페 라떼 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
+        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "아이스 카페 라떼 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
 
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
         given(productJpaRepository.save(any(Product.class))).willReturn(product);
 
         // when
-        Product actual = productService.update(1L, productDto);
+        ProductResponseDto actual = productService.update(1L, productRequestDto);
 
         // then
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(productDto.name()),
-            () -> assertThat(actual.getPrice()).isEqualTo(productDto.price()),
-            () -> assertThat(actual.getImageUrl()).isEqualTo(productDto.imageUrl())
+            () -> assertThat(actual.id()).isNotNull(),
+            () -> assertThat(actual.name()).isEqualTo(productRequestDto.name()),
+            () -> assertThat(actual.price()).isEqualTo(productRequestDto.price()),
+            () -> assertThat(actual.imageUrl()).isEqualTo(productRequestDto.imageUrl())
         );
     }
 
@@ -164,7 +165,7 @@ class ProductServiceTest {
     @DisplayName("상품 삭제 서비스 테스트")
     void delete() {
         // given
-        Product product = productDto.toProduct(category);
+        Product product = PRODUCT_REQUEST_DTO.toProduct(category);
         product.setId(1L);
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
         willDoNothing().given(productJpaRepository).delete(any(Product.class));
@@ -173,7 +174,7 @@ class ProductServiceTest {
         productService.delete(1L);
 
         // then
-        Page<Product> productList = productService.readAll(PageRequest.of(0, 10));
-        assertThat(productList).isNull();
+        Page<ProductResponseDto> productList = productService.readAll(PageRequest.of(0, 10));
+        assertThat(productList).isEmpty();
     }
 }

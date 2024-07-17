@@ -14,7 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.domain.product.dto.ProductDto;
+import gift.domain.product.dto.ProductRequestDto;
+import gift.domain.product.dto.ProductResponseDto;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import gift.domain.product.service.CategoryService;
@@ -60,14 +61,16 @@ class ProductRestControllerTest {
     @DisplayName("상품 생성에 성공하는 경우")
     void create_success() throws Exception {
         // given
-        ProductDto productDto = new ProductDto(null, 1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
         Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
-        String jsonContent = objectMapper.writeValueAsString(productDto);
+        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
 
-        Product product = productDto.toProduct(category);
+        Product product = productRequestDto.toProduct(category);
         product.setId(1L);
 
-        given(productService.create(any(ProductDto.class))).willReturn(product);
+        ProductResponseDto productResponseDto = ProductResponseDto.from(product);
+
+        given(productService.create(any(ProductRequestDto.class))).willReturn(productResponseDto);
         String expectedResult = objectMapper.writeValueAsString(product);
 
         // when & then
@@ -83,8 +86,8 @@ class ProductRestControllerTest {
     @DisplayName("상품 생성에 실패하는 경우 - 상품 이름이 NULL인 경우")
     void create_fail_null_name_error() throws Exception {
         // given
-        ProductDto productDto = new ProductDto(null, 1L, null, 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
-        String jsonContent = objectMapper.writeValueAsString(productDto);
+        ProductRequestDto productRequestDto = new ProductRequestDto(1L, null, 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -119,7 +122,7 @@ class ProductRestControllerTest {
         );
         Page<Product> expectedPage = new PageImpl<>(productList, PageRequest.of(0, 5), productList.size());
 
-        given(productService.readAll(any(Pageable.class))).willReturn(expectedPage);
+        given(productService.readAll(any(Pageable.class))).willReturn(expectedPage.map(ProductResponseDto::from));
         String expectedResult = objectMapper.writeValueAsString(expectedPage);
 
         // when & then
@@ -137,7 +140,7 @@ class ProductRestControllerTest {
         Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
         Product product = new Product(1L, category, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
 
-        given(productService.readById(anyLong())).willReturn(product);
+        given(productService.readById(anyLong())).willReturn(ProductResponseDto.from(product));
         String expectedResult = objectMapper.writeValueAsString(product);
 
         // when & then
@@ -165,14 +168,14 @@ class ProductRestControllerTest {
     @DisplayName("상품 수정에 성공하는 경우")
     void update_success() throws Exception {
         // given
-        ProductDto productDto = new ProductDto(null, 1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
         Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
-        String jsonContent = objectMapper.writeValueAsString(productDto);
+        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
 
-        Product product = productDto.toProduct(category);
+        Product product = productRequestDto.toProduct(category);
         product.setId(1L);
 
-        given(productService.update(anyLong(), any(ProductDto.class))).willReturn(product);
+        given(productService.update(anyLong(), any(ProductRequestDto.class))).willReturn(ProductResponseDto.from(product));
         String expectedResult = objectMapper.writeValueAsString(product);
 
         // when & then
@@ -187,10 +190,10 @@ class ProductRestControllerTest {
     @DisplayName("상품 수정에 실패하는 경우 - 존재하지 않는 ID")
     void update_fail_id_error() throws Exception {
         // given
-        ProductDto productDto = new ProductDto(null, 1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
-        String jsonContent = objectMapper.writeValueAsString(productDto);
+        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
 
-        given(productService.update(anyLong(), any(ProductDto.class)))
+        given(productService.update(anyLong(), any(ProductRequestDto.class)))
             .willThrow(new InvalidProductInfoException("error.invalid.product.id"));
 
         // when & then
@@ -206,8 +209,8 @@ class ProductRestControllerTest {
     @DisplayName("상품 수정에 실패하는 경우 - 이름에 \"카카오\"가 포함")
     void update_fail_kakao_name_error() throws Exception {
         // given
-        ProductDto productDto = new ProductDto(null, 1L, "카카오빵", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
-        String jsonContent = objectMapper.writeValueAsString(productDto);
+        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "카카오빵", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
+        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
 
         // when & then
         mockMvc.perform(put(PATH_VAR_URL, 1L)
