@@ -12,4 +12,8 @@ public class ErrorMessage {
     public static final String WISHLIST_ALREADY_EXISTS = "Wishlist already exists";
     public static final String WISHLIST_NOT_FOUND = "Wishlist not found";
     public static final String CATEGORY_NOT_FOUND = "Category not found";
+    public static final String OPTION_ALREADY_EXISTS = "Option already exists";
+    public static final String OPTION_NOT_FOUND = "Option not found";
+    public static final String OPTION_NAME_LENGTH = "Option name length must be between 1 and 50 include blank";
+    public static final String OPTION_NAME_ALLOWED_CHARACTER = "Option name must consist of English, Korean, numbers, blank and special symbols (, ), [, ], +, -, &, /, _";
 }
