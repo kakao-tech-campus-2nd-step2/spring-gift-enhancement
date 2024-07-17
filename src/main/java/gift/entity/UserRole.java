@@ -27,4 +27,7 @@ public class UserRole {
         foreignKey = @ForeignKey(name = "fk_user_role_role_id_ref_roles_id"))
     private Role role;
 
+    public Role getRole() {
+        return role;
+    }
 }
