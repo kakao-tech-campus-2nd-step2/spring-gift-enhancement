@@ -54,7 +54,7 @@ public class WishListTest {
     @DisplayName("위시리스트 추가")
     @DirtiesContext
     void addWishList() {
-        Product product = new Product(3L,"Sample3", 3000L, "http://image3.jpg");
+        Product product = new Product(3L,"Sample3", 3000L, "http://image3.jpg", 1L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
