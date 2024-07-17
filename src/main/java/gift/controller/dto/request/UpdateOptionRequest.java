@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record UpdateOptionRequest(
-        @NotBlank
         @Min(1)
         Long id,
         @NotBlank
@@ -15,7 +14,7 @@ public record UpdateOptionRequest(
         String name,
         @Min(1) @Max(100_000_000)
         int quantity,
-        @NotBlank
+        @Min(1)
         Long productId
 ) {
 }

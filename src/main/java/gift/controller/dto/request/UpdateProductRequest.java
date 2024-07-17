@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
 public record UpdateProductRequest(
-        @NotBlank
         @Min(1)
         Long id,
         @NotBlank
@@ -20,7 +19,7 @@ public record UpdateProductRequest(
         int price,
         @NotBlank
         String imageUrl,
-        @NotBlank
+        @Min(1)
         Long categoryId
 ) {
 }

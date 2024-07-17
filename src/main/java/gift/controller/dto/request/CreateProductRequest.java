@@ -18,7 +18,7 @@ public record CreateProductRequest(
         int price,
         @NotBlank
         String imageUrl,
-        @NotBlank
+        @Min(1)
         Long categoryId,
 
         @NotBlank

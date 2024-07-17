@@ -12,7 +12,7 @@ public record CreateOptionRequest(
         String name,
         @Min(1) @Max(100_000_000)
         int quantity,
-        @NotBlank
+        @Min(1)
         Long productId
 ) {
 }
