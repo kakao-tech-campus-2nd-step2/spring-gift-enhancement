@@ -233,7 +233,7 @@ Content-Type: application/json
 
 #### 모델 설계
 
-- [x] 상품을 표현하는 도메인 객체
+- [ ] 상품을 표현하는 도메인 객체
   - 상품의 구성요소
     - id: int (pk, unique)
     - name: string
@@ -250,6 +250,7 @@ Content-Type: application/json
 - [x] 상품 리스트를 조회하는 API
 - [x] 상품을 수정하는 API
 - [x] 상품을 삭제하는 API
+- [ ] 상품 카테고리를 수정하는 API
 
 #### 예외, 검증 설계
 
@@ -365,7 +366,7 @@ Content-Type: application/json
 
 #### 모델 설계
 
-- [x] 카테고리를 표현하는 도메인 객체
+- [ ] 카테고리를 표현하는 도메인 객체
   - 카테고리의 구성요소
     - id: int (pk)
     - name: string (not null, unique)
@@ -373,27 +374,23 @@ Content-Type: application/json
     - image_url: string
     - color: string(length 7)
 
-- [x] 카테고리를 저장하는 데이터베이스 연동
-  - [x] Jpa Repository
-  - [x] 엔티티 클래스 및 예제 데이터 구비
+- [ ] 카테고리를 저장하는 데이터베이스 연동
+  - [ ] Jpa Repository
+  - [ ] 엔티티 클래스 및 예제 데이터 구비
 
 #### 기능 설계(컨트롤러 및 서비스 설계)
 
 - [x] 카테고리 추가 API
 - [x] 카테고리 리스트 조회 API
-- [x] 특정 id 카테고리 조회 API
-- [x] 카테고리 수정 API
-- [x] 카테고리 삭제 API
+- [ ] 특정 id 카테고리 조회 API
+- [ ] 카테고리 수정 API
+- [ ] 카테고리 삭제 API
 
 #### 예외, 검증 설계
 
-- [x] 커스텀 예외 및 예외 핸들링
+- [ ] 커스텀 예외 및 예외 핸들링
 
 #### Server-side Renderings
-
-- [ ] 상품 조회 화면에서 카테고리를 볼 수 있음
-- [ ] 상품 추가 화면에서 카테고리도 추가할 수 있음
-- [ ] 상품 수정 화면에서 카테고리를 수정할 수 있음
 
 </details>
 
@@ -434,27 +431,13 @@ Content-Type: application/json
         "id": 8146027,
         "name": "아이스 카페 아메리카노 T",
         "price": 4500,
-        "image-url": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
-        "category": {
-          "id": 1,
-          "name": "교환권",
-          "color": "#ff0000",
-          "image-url": "red.png",
-          "description": ""
-        }
+        "image-url": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"
       },
       {
         "id": 1,
         "name": "name",
         "price": 2000,
-        "image-url": "url",
-        "category": {
-          "id": 1,
-          "name": "교환권",
-          "color": "#ff0000",
-          "image-url": "red.png",
-          "description": ""
-        }
+        "image-url": "url"
       },
       {},
       {}
@@ -482,8 +465,7 @@ Content-Type: application/json
 {
   "name": "Product name",
   "price": 10000,
-  "image-url": "http://~",
-  "category-id": 1
+  "image-url": "http://~"
 }
 ```
 
@@ -513,14 +495,7 @@ Content-Type: application/json
       "id": 23,
       "name": "Product name",
       "price": 10000,
-      "image-url": "image.png",
-      "category": {
-        "id": 1,
-        "name": "교환권",
-        "color": "#ff0000",
-        "image-url": "red.png",
-        "description": ""
-      }
+      "image-url": "image.png"
     }
   }
   ```
@@ -556,21 +531,6 @@ Content-Type: application/json
     "message": "이름 형식이 올바르지 않습니다."
   }
   ```
-
-#### 상품 추가 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
-  }
-  ```
   
 </details>
 
@@ -591,8 +551,7 @@ Content-Type: application/json
 {
   "name": "Product name",
   "price": 10000,
-  "image-url": "http://~",
-  "category-id": 5
+  "image-url": "http://~"
 }
 ```
 
@@ -645,21 +604,6 @@ Content-Type: application/json
     "timestamp": "2024-01-01T00:00:00.0000000",
     "status": 400,
     "message": "이름 형식이 올바르지 않습니다."
-  }
-  ```
-
-#### 상품 수정 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
   }
   ```
   
@@ -1365,368 +1309,5 @@ Authorization: Bearer your-token-string
   ```
   
 </details>
-
----
-
-
-
-### API 명세서/카테고리 도메인
-
-<details>
-<summary><span style="font-size:1.3em;font-weight:bold">카테고리 추가 API</span></summary>
-
-#### 카테고리 추가 API/Request
-
-| Method | URL             | Path param | Path variable | Body |
-|--------|-----------------|------------|---------------|------|
-| POST   | /api/categories | -          | -             | yes  |
-
-#### 카테고리 추가 API/Request/Body
-
-```json
-{
-  "name": "교환권",
-  "color": "#6c95d1",
-  "image-url": "http://example.com/image.png",
-  "description": ""
-}
-```
-
-#### 카테고리 추가 API/Response(Success)
-
-- Status
-  - 201 Created
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 201,
-    "created-category": {
-      "id": 5,
-      "name": "교환권",
-      "color": "#6c95d1",
-      "image-url": "http://example.com/image.png",
-      "description": ""
-    }
-  }
-  ```
-
-#### 카테고리 추가 API/Response(Fail)
-
-- 이름이 기존 카테고리와 중복되어있을 경우 발생
-- Status
-  - 409 Conflict
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 409,
-    "message": "This category name already exists. Try other one."
-  
-  }
-  ```
-
-</details>
-
----
-
-<details>
-<summary><span style="font-size:1.3em;font-weight:bold">카테고리 리스트 조회 API</span></summary>
-
-#### 카테고리 리스트 조회 API/Request
-
-| Method | URL             | Path param | Path variable | Body |
-|--------|-----------------|------------|---------------|------|
-| GET    | /api/categories | -          | -             | -    |
-
-#### 카테고리 리스트 조회 API/Response
-
-- Status
-  - 200 OK
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "categories": [
-      {
-        "id": 5,
-        "name": "교환권",
-        "color": "#6c95d1",
-        "image-url": "http://example.com/image.png",
-        "description": ""
-      },   
-      {
-        "id": 7,
-        "name": "뷰티",
-        "color": "#205D2A",
-        "image-url": "http://example.com/image.png",
-        "description": ""
-      }   
-    ]
-  }
-  ```
-
-</details>
-
----
-
-<details>
-<summary><span style="font-size:1.3em;font-weight:bold">특정 id 카테고리 조회 API</span></summary>
-
-#### 특정 id 카테고리 조회 API/Request
-
-| Method | URL                  | Path param | Path variable | Body |
-|--------|----------------------|------------|---------------|------|
-| GET    | /api/categories/{id} | -          | {id: int}     | -    |
-
-#### 특정 id 카테고리 조회 API/Response(success)
-
-- Status
-  - 200 OK
-- Body
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "category": {
-      "id": 5,
-      "name": "교환권",
-      "color": "#6c95d1",
-      "image-url": "http://example.com/image.png",
-      "description": ""
-    }
-  }
-  ```
-
-#### 특정 id 카테고리 조회 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
-  }
-  ```
-
-</details>
-
----
-
-<details>
-<summary><span style="font-size:1.3em;font-weight:bold">카테고리 수정 API</span></summary>
-
-#### 카테고리 수정 API/Request
-
-| Method | URL                  | Path param | Path variable | Body |
-|--------|----------------------|------------|---------------|------|
-| PUT    | /api/categories/{id} | -          | {id: int}     | yes  |
-
-#### 카테고리 수정 API/Request/Body
-
-```json
-{
-  "name": "뷰티",
-  "color": "#205D2A",
-  "image-url": "http://example.com/image.png",
-  "description": ""
-}
-```
-
-#### 카테고리 수정 API/Response(success)
-
-- Status
-  - 200 OK
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200
-  }
-  ```
-
-#### 카테고리 수정 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
-  }
-  ```
-
-#### 카테고리 수정 API/Response(Fail)
-
-- 이름이 기존 카테고리와 중복되어있을 경우 발생
-- Status
-  - 409 Conflict
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 409,
-    "message": "This category name already exists. Try other one."
-  
-  }
-  ```
-
-</details>
-
----
-
-<details>
-<summary><span style="font-size:1.3em;font-weight:bold">카테고리 삭제 API</span></summary>
-
-#### 카테고리 삭제 API/Request
-
-| Method | URL                  | Path param | Path variable | Body |
-|--------|----------------------|------------|---------------|------|
-| DELETE | /api/categories/{id} | -          | {id}          | -    |
-
-#### 카테고리 삭제 API/Response(success)
-
-- Status
-  - 204 NO CONTENT
-
-#### 카테고리 삭제 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
-  }
-  ```
-
-#### 카테고리 삭제 API/Response(fail)
-
-- 삭제하려는 카테고리에 속한 상품이 존재하는 경우 발생
-- Status
-  - 409 Conflict
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "This category cannot be deleted because some products are included in it."
-  }
-  ```
-
-</details>
-
-[//]: # ()
-[//]: # (---)
-
-[//]: # ()
-[//]: # (<details>)
-
-[//]: # (<summary><span style="font-size:1.3em;font-weight:bold">~ API</span></summary>)
-
-[//]: # ()
-[//]: # (#### ~ API/Request)
-
-[//]: # ()
-[//]: # (| Method | URL    | Path param | Path variable | Body |)
-
-[//]: # (|--------|--------|------------|---------------|------|)
-
-[//]: # (| ~      | /api/~ | -          | -             | yes  |)
-
-[//]: # ()
-[//]: # (#### ~ API/Request/Body)
-
-[//]: # ()
-[//]: # (```json)
-
-[//]: # ({)
-
-[//]: # (  "product-id": 5,)
-
-[//]: # (  "quantity": 2)
-
-[//]: # (})
-
-[//]: # (```)
-
-[//]: # ()
-[//]: # (#### ~ API/Response&#40;success&#41;)
-
-[//]: # ()
-[//]: # (- Status)
-
-[//]: # (  - 200 OK)
-
-[//]: # (- Body)
-
-[//]: # (  - ~ 경우)
-
-[//]: # ()
-[//]: # (    ```json)
-
-[//]: # (    {)
-
-[//]: # (      "timestamp": "2024-01-01T00:00:00.0000000",)
-
-[//]: # (      "status": 200)
-
-[//]: # (      )
-[//]: # (    })
-
-[//]: # (    ```)
-
-[//]: # (- Body)
-
-[//]: # (  - ~ 경우)
-
-[//]: # ()
-[//]: # (#### ~ API/Response&#40;fail&#41;)
-
-[//]: # ()
-[//]: # (- ~ 경우 발생)
-
-[//]: # (- Status)
-
-[//]: # (  - 404 Not found)
-
-[//]: # (- Body)
-
-[//]: # ()
-[//]: # (  ```json)
-
-[//]: # (  {)
-
-[//]: # (    "timestamp": "2024-01-01T00:00:00.0000000",)
-
-[//]: # (    "status": 404,)
-
-[//]: # (    "message": "~")
-
-[//]: # (  })
-
-[//]: # (  ```)
-
-[//]: # ()
-[//]: # (</details>)
 
 <br>
