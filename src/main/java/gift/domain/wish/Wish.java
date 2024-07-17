@@ -1,15 +1,24 @@
 package gift.domain.wish;
 
-import lombok.Data;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "wishes")
 public class Wish {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /*
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
+    private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
+     */
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
@@ -19,10 +28,10 @@ public class Wish {
     @Column(nullable = false)
     private int amount;
 
-    @Column(name = "is_deleted", nullable = false) // 이 부분을 추가하여 매핑 수정
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 
-    public Wish() {}
+    protected Wish() {}
 
     public Wish(Long productId, Long userId, int amount) {
         this.productId = productId;
@@ -35,32 +44,16 @@ public class Wish {
         return id;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public boolean getIsDeleted() {
-        return isDeleted;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public int getAmount() {
+        return amount;
     }
 
     public void setAmount(int amount) {

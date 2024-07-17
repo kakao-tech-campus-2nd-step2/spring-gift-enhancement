@@ -1,7 +1,6 @@
 package gift.domain.product;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
 @Table(name = "product")
@@ -22,7 +21,7 @@ public class Product {
     @Column(name = "image_url")
     private String imageUrl;
 
-    public Product() {}
+    protected Product() {}
 
     public Product(String name, Long price, String description, String imageUrl) {
         this.name = name;
@@ -31,37 +30,44 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public Long getPrice() { return price; }
-    public void setPrice(Long price) { this.price = price; }
+    public Long getPrice() {
+        return price;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-    public void updateAdmin(ProductRequestDTO productRequestDTO, String imageUrl) {
-        if (productRequestDTO != null) {
-            this.name = productRequestDTO.getName();
-            this.price = productRequestDTO.getPrice();
-            this.description = productRequestDTO.getDescription();
+    public void update(String name, Long price, String description, String imageUrl) {
+        if (name != null && !name.isEmpty()) {
+            this.name = name;
         }
-        if (imageUrl != null) {
+        if (price != null && price > 0) {
+            this.price = price;
+        }
+        if (description != null && !description.isEmpty()) {
+            this.description = description;
+        }
+        if (imageUrl != null && !imageUrl.isEmpty()) {
             this.imageUrl = imageUrl;
         }
     }
 
-    public void update(ProductRequestDTO productRequestDTO) {
-        if (productRequestDTO != null) {
-            this.name = productRequestDTO.getName();
-            this.price = productRequestDTO.getPrice();
-            this.description = productRequestDTO.getDescription();
+    public void updateImage(String imageUrl) {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            this.imageUrl = imageUrl;
         }
     }
 }

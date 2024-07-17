@@ -1,7 +1,6 @@
 package gift.domain.user;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +16,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    protected User() {}
 
     public User(Long id, String email, String password) {
         this.id = id;
@@ -29,30 +29,27 @@ public class User {
         this.password = password;
     }
 
-    public User() {
-
-    }
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void changePassword(String newPassword) {
+        if (newPassword != null && !newPassword.isEmpty()) {
+            this.password = newPassword;
+        }
+    }
+
+    public void updateEmail(String newEmail) {
+        if (newEmail != null && !newEmail.isEmpty()) {
+            this.email = newEmail;
+        }
     }
 }

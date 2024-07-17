@@ -8,21 +8,15 @@ public class WishResponse {
     private Long productId;
     private int amount;
 
-    public static WishResponse fromModel(Wish wish) {
-        WishResponse response = new WishResponse();
-        response.setId(wish.getId());
-        response.setProductId(wish.getProductId());
-        response.setAmount(wish.getAmount());
-        return response;
-    }
-/*
-    public static List<WishResponse> fromModelList(List<Wish> wishes) {
-        return wishes.stream()
-                .map(WishResponse::fromModel)
-                .collect(Collectors.toList());
+    public WishResponse(Long id, Long productId, int amount) {
+        this.id = id;
+        this.productId = productId;
+        this.amount = amount;
     }
 
- */
+    public static WishResponse fromModel(Wish wish) {
+        return new WishResponse(wish.getId(), wish.getProductId(), wish.getAmount());
+    }
 
     public static List<WishResponse> fromModelList(List<Wish> wishes) {
         return wishes.stream().map(WishResponse::fromModel).collect(Collectors.toList());

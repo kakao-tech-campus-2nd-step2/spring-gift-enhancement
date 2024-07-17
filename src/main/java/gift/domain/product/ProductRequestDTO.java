@@ -28,6 +28,10 @@ public class ProductRequestDTO {
         this.imageUrl = imageUrl;
     }
 
+    public Product toProduct() {
+        return new Product(this.name, this.price, this.description, this.imageUrl);
+    }
+
     // Getters and Setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

@@ -1,6 +1,5 @@
 package gift.controller.admin;
 
-
 import gift.domain.product.Product;
 import gift.domain.product.ProductRequestDTO;
 import gift.service.product.ProductService;
@@ -23,7 +22,6 @@ public class AdminProductController {
     public AdminProductController(ProductService productService) {
         this.productService = productService;
     }
-
 
     @GetMapping
     public String getAllProducts(Model model, Pageable pageable) {
@@ -60,8 +58,9 @@ public class AdminProductController {
         String imagePath = ImageStorageUtil.saveImage(imageFile);
         String imageUrl = ImageStorageUtil.encodeImagePathToBase64(imagePath);
 
+        product.update(productRequestDTO.getName(), productRequestDTO.getPrice(),
+                productRequestDTO.getDescription(), imageUrl);
 
-        product.updateAdmin(productRequestDTO, imageUrl);
         productService.updateProduct(product);
 
         return "redirect:/admin/products";
