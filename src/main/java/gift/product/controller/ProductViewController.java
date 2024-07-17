@@ -33,13 +33,6 @@ public class ProductViewController
         return "products";
     }
 
-    @GetMapping("/{id}")
-    public String findById(@PathVariable Long id, Model model) {
-        Product product = productService.getProductById(id).get();
-        model.addAttribute("product", product);
-        return "product_detail";
-    }
-
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("product", new Product(0, "", 0, ""));
