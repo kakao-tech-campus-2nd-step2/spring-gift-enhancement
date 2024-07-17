@@ -3,7 +3,7 @@ package gift.service;
 import gift.domain.Category;
 import gift.dto.request.CategoryRequestDto;
 import gift.dto.response.CategoryResponseDto;
-import gift.exception.customException.CategoryNameDuplicationException;
+import gift.exception.customException.NameDuplicationException;
 import gift.exception.customException.EntityNotFoundException;
 import gift.repository.category.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class CategoryService {
     public CategoryResponseDto saveCategory(CategoryRequestDto categoryRequestDto){
         categoryRepository.findCategoryByName(categoryRequestDto.name())
                 .ifPresent(e -> {
-                    throw new CategoryNameDuplicationException();
+                    throw new NameDuplicationException();
                 });
 
         Category category = new Category(categoryRequestDto.name(), categoryRequestDto.color());
@@ -58,7 +58,7 @@ public class CategoryService {
 
         categoryRepository.findCategoryByName(categoryRequestDto.name())
                 .ifPresent(e -> {
-                    throw new CategoryNameDuplicationException();
+                    throw new NameDuplicationException();
                 });
 
         category.update(categoryRequestDto);

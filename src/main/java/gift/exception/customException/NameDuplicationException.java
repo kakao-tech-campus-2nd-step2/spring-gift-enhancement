@@ -2,14 +2,14 @@ package gift.exception.customException;
 
 import static gift.exception.exceptionMessage.ExceptionMessage.CATEGORY_NAME_DUPLICATION;
 
-public class CategoryNameDuplicationException extends RuntimeException{
+public class NameDuplicationException extends RuntimeException{
 
 
-    public CategoryNameDuplicationException(){
+    public NameDuplicationException(){
         super(CATEGORY_NAME_DUPLICATION);
     }
 
-    public CategoryNameDuplicationException(String message) {
+    public NameDuplicationException(String message) {
         super(message);
     }
 

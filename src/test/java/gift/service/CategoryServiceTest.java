@@ -3,7 +3,7 @@ package gift.service;
 import gift.domain.Category;
 import gift.dto.request.CategoryRequestDto;
 import gift.dto.response.CategoryResponseDto;
-import gift.exception.customException.CategoryNameDuplicationException;
+import gift.exception.customException.NameDuplicationException;
 import gift.exception.customException.EntityNotFoundException;
 import gift.repository.category.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +50,7 @@ class CategoryServiceTest {
                 () -> assertThat(categoryResponseDto.name()).isEqualTo(categoryRequestDto.name()),
                 () -> assertThat(categoryResponseDto.color()).isEqualTo(categoryRequestDto.color()),
                 () -> assertThatThrownBy(() -> categoryService.saveCategory(inValidCategoryDto))
-                        .isInstanceOf(CategoryNameDuplicationException.class)
+                        .isInstanceOf(NameDuplicationException.class)
         );
 
     }
@@ -123,7 +123,7 @@ class CategoryServiceTest {
                         .isInstanceOf(EntityNotFoundException.class)
                         .hasMessage("해당 카테고리는 존재하지 않습니다."),
                 () -> assertThatThrownBy(() -> categoryService.updateCategory(1L, inValidCategoryRequestDto))
-                        .isInstanceOf(CategoryNameDuplicationException.class)
+                        .isInstanceOf(NameDuplicationException.class)
         );
     }
 

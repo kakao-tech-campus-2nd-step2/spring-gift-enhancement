@@ -74,8 +74,8 @@ public class ExceptionController {
     }
 
     @ResponseBody
-    @ExceptionHandler(CategoryNameDuplicationException.class)
-    public ResponseEntity<ErrorResult> categoryNameExceptionHandler(CategoryNameDuplicationException e) {
+    @ExceptionHandler(NameDuplicationException.class)
+    public ResponseEntity<ErrorResult> categoryNameExceptionHandler(NameDuplicationException e) {
         ErrorResult errorResult = new ErrorResult("400", e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.FORBIDDEN);
     }
