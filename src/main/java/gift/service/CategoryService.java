@@ -40,23 +40,23 @@ public class CategoryService {
     }
 
     public CategoryDto getCategory(Long id) {
-        Category category = checkCategoryExistsById(id);
+        Category category = findCategoryByIdOrElseThrow(id);
         return new CategoryDto(category);
     }
 
     public void addCategory(CategoryDto categoryDto) {
-        checkCategoryDuplicationByName(categoryDto.getName());
+        assertCategoryNotDuplicate(categoryDto.getName());
         categoryJpaDao.save(new Category(categoryDto));
     }
 
     @Transactional
     public void editCategory(CategoryDto categoryDto) {
-        Category category = checkCategoryExistsById(categoryDto.getId());
+        Category category = findCategoryByIdOrElseThrow(categoryDto.getId());
         category.updateCategory(categoryDto);
     }
 
     public void deleteCategory(Long id) {
-        checkCategoryExistsById(id);
+        findCategoryByIdOrElseThrow(id);
         categoryJpaDao.deleteById(id);
     }
 
@@ -66,7 +66,7 @@ public class CategoryService {
      * @param id
      * @return Category 객체
      */
-    private Category checkCategoryExistsById(Long id) {
+    private Category findCategoryByIdOrElseThrow(Long id) {
         return categoryJpaDao.findById(id)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
     }
@@ -76,7 +76,7 @@ public class CategoryService {
      *
      * @param name
      */
-    private void checkCategoryDuplicationByName(String name) {
+    private void assertCategoryNotDuplicate(String name) {
         categoryJpaDao.findByName(name)
             .ifPresent(v -> {
                 throw new IllegalArgumentException(ErrorMessage.CATEGORY_ALREADY_EXISTS_MSG);
