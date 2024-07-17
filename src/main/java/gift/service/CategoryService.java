@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -24,16 +23,14 @@ public class CategoryService {
 
     @Transactional
     public Category update(CategoryRequest request) {
-        Optional<Category> category = categoryRepository.findById(request.id());
-        if (category.isPresent()) {
-            category.get().updateCategory(
-                    request.name(),
-                    request.color(),
-                    request.imageUrl(),
-                    request.description()
-            );
-            return category.get();
-        }
-        throw new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다.");
+        Category category = categoryRepository.findById(request.id())
+                .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다."));
+        category.updateCategory(
+                request.name(),
+                request.color(),
+                request.imageUrl(),
+                request.description()
+        );
+        return category;
     }
 }
