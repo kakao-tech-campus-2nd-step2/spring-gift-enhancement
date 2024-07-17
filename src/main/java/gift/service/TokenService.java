@@ -25,7 +25,7 @@ public class TokenService {
         return new TokenResponse(tokenValue);
     }
 
-    public Long getMemberIdByToken(String tokenValue) {
+    public Long getMemberId(String tokenValue) {
         String resultOfString = Jwts.parser()
                 .verifyWith(KEY)
                 .build()
@@ -47,5 +47,4 @@ public class TokenService {
             return false;
         }
     }
-
 }
