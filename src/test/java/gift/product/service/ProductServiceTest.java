@@ -1,4 +1,4 @@
-package gift.product.service;
+package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,9 +7,7 @@ import gift.entity.Category;
 import gift.entity.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import gift.service.CategoryService;
 import gift.validator.ProductNameValidator;
-import gift.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
