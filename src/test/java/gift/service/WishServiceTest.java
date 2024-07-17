@@ -103,7 +103,7 @@ class WishServiceTest {
         doReturn(saveWish).when(wishRepository).save(any(Wish.class));
 
         // when
-        WishResponse actual = wishService.addWish(wishRequest);
+        WishResponse actual = wishService.createWish(wishRequest);
 
         // then
         assertThat(actual.getMemberId()).isEqualTo(expected.getMemberId());
