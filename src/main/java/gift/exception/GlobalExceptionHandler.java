@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
-        return buildResponseEntity("서버 오류 발생."+ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildResponseEntity("서버 오류 발생", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
-        return buildResponseEntity("인증 실패: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        return buildResponseEntity("실행 중 오류 발생. \n " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     /**

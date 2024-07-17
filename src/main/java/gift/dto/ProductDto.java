@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.validation.ValidName;
 import gift.vo.Category;
 import gift.vo.Product;
 import jakarta.validation.constraints.*;
@@ -9,6 +10,7 @@ public record ProductDto(
 
         Long categoryId,
 
+        @ValidName
         @NotEmpty(message = "상품명을 입력해 주세요.")
         String name,
 
