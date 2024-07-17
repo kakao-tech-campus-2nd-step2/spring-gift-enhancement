@@ -2,8 +2,8 @@ package gift.service;
 
 import gift.common.enums.Role;
 import gift.config.JpaConfig;
-import gift.controller.dto.request.WishInsertRequest;
-import gift.controller.dto.request.WishPatchRequest;
+import gift.controller.dto.request.CreateWishRequest;
+import gift.controller.dto.request.UpdateWishRequest;
 import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
@@ -45,7 +45,7 @@ class WishServiceTest {
         Product product = productRepository.save(new Product("pname", 1_000, "pimage", category));
         Wish wish = wishRepository.save(new Wish(member, 1, product));
         int productCount = 10;
-        WishPatchRequest request = new WishPatchRequest(product.getId(), productCount);
+        UpdateWishRequest request = new UpdateWishRequest(product.getId(), productCount);
 
         // when
         wishService.update(wish.getId(), request, member.getId());
@@ -63,7 +63,7 @@ class WishServiceTest {
         Category category = categoryRepository.save(new Category("cname", "color", "imageUrl", "description"));
         Member member = memberRepository.save(new Member("mname", "mage", Role.USER));
         Product product = productRepository.save(new Product("pname", 1_000, "pimage", category));
-        WishInsertRequest request = new WishInsertRequest(product.getId());
+        CreateWishRequest request = new CreateWishRequest(product.getId());
 
         // when
         wishService.save(request, 1, member.getId());

@@ -1,6 +1,7 @@
 package gift.service;
 
-import gift.controller.dto.request.CategoryRequest;
+import gift.controller.dto.request.CreateCategoryRequest;
+import gift.controller.dto.request.UpdateCategoryRequest;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -29,12 +30,12 @@ class CategoryServiceTest {
         String imageUrl = "이미지url";
         String description = "설명";
         String description2 = "설명2";
-        CategoryRequest request = new CategoryRequest(name, color, imageUrl, description);
+        CreateCategoryRequest request = new CreateCategoryRequest(name, color, imageUrl, description);
         Long id = categoryService.save(request);
-        CategoryRequest request2 = new CategoryRequest(name, color, imageUrl, description2);
+        UpdateCategoryRequest request2 = new UpdateCategoryRequest(id, name, color, imageUrl, description2);
 
         // when
-        categoryService.updateById(id, request2);
+        categoryService.updateById(request2);
         Category category = categoryRepository.findById(id).get();
 
         // then

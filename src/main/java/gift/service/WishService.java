@@ -2,8 +2,8 @@ package gift.service;
 
 import gift.common.exception.DuplicateDataException;
 import gift.common.exception.EntityNotFoundException;
-import gift.controller.dto.request.WishInsertRequest;
-import gift.controller.dto.request.WishPatchRequest;
+import gift.controller.dto.request.CreateWishRequest;
+import gift.controller.dto.request.UpdateWishRequest;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.WishResponse;
 import gift.model.Member;
@@ -30,7 +30,7 @@ public class WishService {
     }
 
     @Transactional
-    public void update(Long id, WishPatchRequest request, Long memberId) {
+    public void update(Long id, UpdateWishRequest request, Long memberId) {
         Wish wish = wishRepository.findByIdFetchJoin(id)
                 .orElseThrow(() -> new EntityNotFoundException("Wish with id " + id + " Does not exist"));
         wish.checkWishByProductIdAndMemberId(request.productId(), memberId);
@@ -42,7 +42,7 @@ public class WishService {
     }
 
     @Transactional
-    public void save(WishInsertRequest request, int productCount, Long memberId) {
+    public void save(CreateWishRequest request, int productCount, Long memberId) {
         checkProductByProductId(request.productId());
         checkDuplicateWish(request.productId(), memberId);
         Member member = memberRepository.getReferenceById(memberId);

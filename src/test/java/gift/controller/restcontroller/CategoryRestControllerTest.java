@@ -1,6 +1,6 @@
 package gift.controller.restcontroller;
 
-import gift.controller.dto.request.CategoryRequest;
+import gift.controller.dto.request.CreateCategoryRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +33,7 @@ class CategoryRestControllerTest {
     void createCategory() {
         // given
         var url = "http://localhost:" + port + "/api/v1/category";
-        var request = new CategoryRequest("category1", "#1", "image1", "");
+        var request = new CreateCategoryRequest("category1", "#1", "image1", "");
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
 
         // when

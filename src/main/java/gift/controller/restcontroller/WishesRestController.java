@@ -1,8 +1,8 @@
 package gift.controller.restcontroller;
 
 import gift.common.annotation.LoginMember;
-import gift.controller.dto.request.WishInsertRequest;
-import gift.controller.dto.request.WishPatchRequest;
+import gift.controller.dto.request.CreateWishRequest;
+import gift.controller.dto.request.UpdateWishRequest;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.WishResponse;
 import gift.service.WishService;
@@ -34,7 +34,7 @@ public class WishesRestController {
     @Operation(summary = "위시리스트 추가", description = "위시리스트를 추가합니다.")
     @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Void> insertWish(
-            @Valid @RequestBody WishInsertRequest request,
+            @Valid @RequestBody CreateWishRequest request,
             @Parameter(hidden = true) @NotNull @LoginMember Long memberId) {
         wishService.save(request, 1, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -56,7 +56,7 @@ public class WishesRestController {
     @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Integer> updateWish(
             @PathVariable("id") Long id,
-            @Valid @RequestBody WishPatchRequest request,
+            @Valid @RequestBody UpdateWishRequest request,
             @Parameter(hidden = true) @NotNull @LoginMember Long memberId
     ) {
         wishService.update(id, request, memberId);

@@ -1,8 +1,12 @@
 package gift.controller.dto.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
-public record CategoryRequest(
+public record UpdateCategoryRequest(
+        @NotBlank
+        @Min(1)
+        Long id,
         @NotBlank
         String name,
         @NotBlank
