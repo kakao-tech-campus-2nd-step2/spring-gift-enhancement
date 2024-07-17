@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("/api")
+@RequestMapping("/api/categories/")
 @RestController
 public class CategoryController {
     private final CategoryService categoryService;
@@ -21,15 +21,15 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/categories")
-    public ResponseEntity findAllCategories() {
-        List<Category> categoryList = categoryService.findAllCategories();
-        return ResponseEntity.ok().body(categoryList);
+    @GetMapping
+    public ResponseEntity<List<Category>> findAllCategories() {
+        List<Category> categories = categoryService.findAllCategories();
+        return ResponseEntity.ok().body(categories);
     }
 
-    @PutMapping("/categories")
-    public ResponseEntity updateCategory(CategoryRequest request) {
-        categoryService.updateCategory(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @PutMapping
+    public ResponseEntity<Void> update(CategoryRequest request) {
+        categoryService.update(request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

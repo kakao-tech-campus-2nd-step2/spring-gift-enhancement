@@ -23,7 +23,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category updateCategory(CategoryRequest request) {
+    public Category update(CategoryRequest request) {
         Optional<Category> category = categoryRepository.findById(request.id());
         if (category.isPresent()) {
             category.get().updateCategory(
