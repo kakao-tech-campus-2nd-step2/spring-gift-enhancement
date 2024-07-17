@@ -23,7 +23,12 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(CategoryException.class)
-    public ResponseEntity<?> handleCategoryDuplicatedException(CategoryException e) {
+    public ResponseEntity<?> handleCategoryException(CategoryException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(OptionException.class)
+    public ResponseEntity<?> handleOptionException(OptionException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 }
