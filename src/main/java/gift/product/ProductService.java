@@ -83,8 +83,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void existsByNamePutResult(String name, BindingResult result)
-        throws NotFoundException {
+    public void existsByNamePutResult(String name, BindingResult result){
         if (existsByName(name)) {
             result.addError(new FieldError("productDTO", "name", "존재하는 이름입니다."));
         }

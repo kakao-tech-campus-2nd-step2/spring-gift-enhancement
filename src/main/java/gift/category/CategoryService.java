@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 @Service
 public class CategoryService {
@@ -26,7 +28,7 @@ public class CategoryService {
     }
 
     public void addCategory(CategoryDTO categoryDTO) {
-        if (categoryRepository.existsByName(categoryDTO.getName())) {
+        if (existsByName(categoryDTO.getName())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
         categoryRepository.save(categoryDTO.toCategory());
@@ -35,7 +37,7 @@ public class CategoryService {
     public void updateCategory(CategoryDTO categoryDTO) throws NotFoundException {
         Category category = categoryRepository.findById(categoryDTO.getId())
             .orElseThrow(NotFoundException::new);
-        if (categoryRepository.existsByName(categoryDTO.getName())
+        if (existsByName(categoryDTO.getName())
             && !Objects.equals(category.getId(),
             categoryRepository.findByName(categoryDTO.getName()).getId())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
@@ -48,5 +50,22 @@ public class CategoryService {
     public void deleteCategory(long id) throws NotFoundException {
         categoryRepository.findById(id).orElseThrow(NotFoundException::new);
         categoryRepository.deleteById(id);
+    }
+
+    public boolean existsByName(String name){
+        return categoryRepository.existsByName(name);
+    }
+
+    public void existsByNamePutResult(String name, BindingResult result){
+        if (existsByName(name)) {
+            result.addError(new FieldError("category", "name", "존재하는 이름입니다."));
+        }
+    }
+
+    public void existsByNameAndIdPutResult(String name, long id, BindingResult result)
+        throws NotFoundException {
+        if (existsByName(name) && !Objects.equals(getCategoryById(id).getName(), name)) {
+            result.addError(new FieldError("category", "name", "존재하는 이름입니다."));
+        }
     }
 }

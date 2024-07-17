@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 
 public class CategoryDTO {
 
-    long id;
+    Long id;
     @NotBlank(message = "이름을 입력하지 않았습니다.")
     String name;
     @Pattern(regexp = "(^#(([0-9a-fA-F]{2}){3}|([0-9a-fA-F]){3})$)"
@@ -26,7 +26,14 @@ public class CategoryDTO {
         this.description = description;
     }
 
-    public long getId() {
+    public CategoryDTO(String name, String color, String imageUrl, String description) {
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
+
+    public Long getId() {
         return id;
     }
 

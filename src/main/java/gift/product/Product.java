@@ -27,10 +27,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.price = price;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Product(long id, String name, int price, String imageUrl, Category category) {

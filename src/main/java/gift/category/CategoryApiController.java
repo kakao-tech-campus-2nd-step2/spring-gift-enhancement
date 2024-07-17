@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping(value = "/api/categories", produces = "application/json;UTF-8")
 public class CategoryApiController {
 
     private final CategoryService categoryService;
@@ -40,6 +40,7 @@ public class CategoryApiController {
     @PostMapping
     public ResponseEntity<String> addCategory(@Valid @RequestBody CategoryDTO categoryDTO,
         BindingResult result) {
+        categoryService.existsByNamePutResult(categoryDTO.getName(), result);
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(result.getAllErrors().toString());
@@ -52,11 +53,12 @@ public class CategoryApiController {
     public ResponseEntity<String> updateCategory(@PathVariable("id") Long id,
         @Valid @RequestBody CategoryDTO categoryDTO, BindingResult result)
         throws NotFoundException {
+        categoryDTO.setId(id);
+        categoryService.existsByNameAndIdPutResult(categoryDTO.getName(), categoryDTO.getId(), result);
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(result.getAllErrors().toString());
         }
-        categoryDTO.setId(id);
         categoryService.updateCategory(categoryDTO);
         return ResponseEntity.ok("업데이트에 성공했습니다.");
     }
