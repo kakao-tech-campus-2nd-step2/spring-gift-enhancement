@@ -4,6 +4,7 @@ import gift.DTO.OptionDto;
 import gift.Service.OptionService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,13 @@ public class OptionController {
   @GetMapping("/{id}")
   public ResponseEntity<OptionDto> getOptionById(@PathVariable Long id){
     OptionDto optionDto = optionService.getOptionById(id);
+
+    return ResponseEntity.ok(optionDto);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<OptionDto> deleteOption(@PathVariable Long id){
+    OptionDto optionDto = optionService.deleteOption(id);
 
     return ResponseEntity.ok(optionDto);
   }

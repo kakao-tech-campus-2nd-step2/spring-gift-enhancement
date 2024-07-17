@@ -7,6 +7,7 @@ import gift.Repository.OptionRepository;
 import java.util.List;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 @Service
 public class OptionService {
@@ -33,6 +34,13 @@ public class OptionService {
 
   public OptionDto getOptionById(Long id) {
     Option option = optionRepository.findById(id).orElseThrow(()->new EmptyResultDataAccessException("해당 데이터가 없습니다",1));
+
+    return ConverterToDto.convertToOptionDto(option);
+  }
+
+  public OptionDto deleteOption(Long id) {
+    Option option = optionRepository.findById(id).orElseThrow(()->new EmptyResultDataAccessException("해당 데이터가 없습니다",1));
+    optionRepository.deleteById(id);
 
     return ConverterToDto.convertToOptionDto(option);
   }
