@@ -6,7 +6,7 @@ import gift.global.auth.Authenticate;
 import gift.global.auth.Authorization;
 import gift.global.auth.LoginInfo;
 import gift.model.member.Role;
-import gift.service.MemberService;
+import gift.service.member.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +29,7 @@ public class MemberController {
     public ResponseEntity<String> register(
         @RequestBody @Valid MemberRequest.Register request
     ) {
-        memberService.register(request);
+        memberService.register(request.toCommand());
         return ResponseEntity.ok().body("User created successfully.");
     }
 
@@ -37,7 +37,7 @@ public class MemberController {
     public ResponseEntity<MemberResponse.Login> login(
         @RequestBody @Valid MemberRequest.Login request
     ) {
-        var response = memberService.login(request);
+        var response = memberService.login(request.toCommand());
         return ResponseEntity.ok().body(MemberResponse.Login.from(response));
     }
 
@@ -50,7 +50,7 @@ public class MemberController {
     @GetMapping("")
     public ResponseEntity<MemberResponse.Info> getUser(@Authenticate LoginInfo loginInfo) {
         var response = memberService.getUser(loginInfo.memberId());
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(MemberResponse.Info.from(response));
     }
 
 }

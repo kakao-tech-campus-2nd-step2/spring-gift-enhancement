@@ -7,9 +7,11 @@ import gift.global.auth.Authorization;
 import gift.global.auth.LoginInfo;
 import gift.global.dto.PageResponse;
 import gift.model.member.Role;
-import gift.service.WishService;
+import gift.service.wish.WishService;
+import gift.service.wish.dto.WishModel;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +41,7 @@ public class WishController {
         @Authenticate LoginInfo loginInfo,
         @Valid @RequestBody WishRequest.Register request
     ) {
-        wishService.addWish(loginInfo.memberId(), request);
+        wishService.addWish(loginInfo.memberId(), request.toCommand());
         return ResponseEntity.ok().body("Wish insert successfully.");
     }
 
@@ -59,7 +61,8 @@ public class WishController {
         @Authenticate LoginInfo loginInfo,
         @PageableDefault(size = 5) Pageable pageable
     ) {
-        var response = wishService.getWishesPaging(loginInfo.memberId(), pageable);
+        Page<WishModel.Info> page = wishService.getWishesPaging(loginInfo.memberId(), pageable);
+        var response = PageResponse.from(page, WishResponse.Info::from);
         return ResponseEntity.ok().body(response);
     }
 
@@ -69,7 +72,7 @@ public class WishController {
         @Authenticate LoginInfo loginInfo,
         @Valid @RequestBody WishRequest.Update request
     ) {
-        wishService.updateWish(loginInfo.memberId(), request);
+        wishService.updateWish(loginInfo.memberId(), request.toCommand());
         return ResponseEntity.ok().body("Wish updated successfully.");
     }
 }

@@ -1,9 +1,10 @@
 package gift.controller.product.dto;
 
 
-import gift.model.product.Product;
+import gift.service.product.dto.ProductCommand;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductRequest {
 
@@ -13,11 +14,13 @@ public class ProductRequest {
         @Min(0)
         Integer price,
         @NotBlank
-        String imageUrl
+        String imageUrl,
+        @NotNull
+        Long categoryId
     ) {
 
-        public Product toEntity() {
-            return Product.create(null, name(), price(), imageUrl());
+        public ProductCommand.Register toCommand() {
+            return new ProductCommand.Register(name, price, imageUrl, categoryId);
         }
     }
 
@@ -27,8 +30,13 @@ public class ProductRequest {
         @Min(0)
         Integer price,
         @NotBlank
-        String imageUrl
+        String imageUrl,
+        @NotNull
+        Long categoryId
     ) {
 
+        public ProductCommand.Update toCommand() {
+            return new ProductCommand.Update(name, price, imageUrl, categoryId);
+        }
     }
 }

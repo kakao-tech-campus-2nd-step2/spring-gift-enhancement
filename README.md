@@ -1,12 +1,28 @@
-# spring-gift-product
+# spring-gift-enhancement
 
-## 리팩토링 기능 목록
+## step1 기능 구현 목록
 
-- [x] createdAt, updatedAt 을 위한 baseEntity 제작
-- [x] product에 대한 단위테스트
-- [x] Role @Enumerated(EnumType.STRING) 붙이기
-- [x] repository 확장성 있게 리팩토링
-- [x] repository 테스트코드 작성
-- [x] 페이징 옵션 enum 생성
+기능 요구 사항
+상품 정보에 카테고리를 추가한다. 상품과 카테고리 모델 간의 관계를 고려하여 설계하고 구현한다.
+
+- 상품에는 항상 하나의 카테고리가 있어야 한다.
+    - 상품 카테고리는 수정할 수 있다.
+    - 관리자 화면에서 상품을 추가할 때 카테고리를 지정할 수 있다.
+- 카테고리는 1차 카테고리만 있으며 2차 카테고리는 고려하지 않는다.
+- 카테고리의 예시는 아래와 같다.
+    - 교환권, 상품권, 뷰티, 패션, 식품, 리빙/도서, 레저/스포츠, 아티스트/캐릭터, 유아동/반려, 디지털/가전, 카카오프렌즈, 트렌드 선물, 백화점, ...
+
+- [x] 상품 정보의 카테고리 추가
+- [x] 카테고리 관련 crud 구현
+
+## step1으로 넘어오면서 리팩토링 해야할 목록
+
+- [ ] 테스트 코드 전체적인 리팩토링 (@ParameterizedTest를 이용)
+    - [x] 테스트 환경 분리
+    - [ ] service 단위 테스트
+    - [ ] controller 복합 테스트
+- [ ] pageRequest 작성
+- [x] service layer를 위한 command 계층 제작
 - [ ] n+1 문제 해결
-- [ ] controller와 service 분리를 위한 중간 계층 제작
+- [x] 객체로 repository 호출하는 부분 id로 수정
+- [ ] pageResponse 함수형 인터페이스 사용하는 부분 수정

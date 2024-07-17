@@ -25,7 +25,6 @@ public class ProductJdbcTemplateRepository implements ProductRepository {
 
 
     private final JdbcTemplate jdbcTemplate;
-    private final RowMapper<Product> productRowMapper = new ProductRowMapper();
 
     public ProductJdbcTemplateRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -34,19 +33,12 @@ public class ProductJdbcTemplateRepository implements ProductRepository {
 
     @Override
     public Optional<Product> findById(Long id) {
-        try {
-            Product product = jdbcTemplate.queryForObject(SQL_SELECT_BY_ID,
-                productRowMapper, id);
-            return Optional.of(product);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+        return null;
     }
 
     @Override
     public List<Product> findAll() {
-        return jdbcTemplate.query(SQL_SELECT_ALL,
-            productRowMapper);
+        return null;
     }
 
     @Override
@@ -55,8 +47,7 @@ public class ProductJdbcTemplateRepository implements ProductRepository {
     }
 
     public List<Product> findPaging(int page, int size) {
-        int offset = (page) * size;
-        return jdbcTemplate.query(SQL_SELECT_PAGING, productRowMapper, size, offset);
+        return null;
     }
 
     @Override
