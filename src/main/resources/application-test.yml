@@ -1,8 +1,10 @@
 spring:
-  application:
-    name: spring-gift
+  config:
+    activate:
+      on-profile: test
+
   datasource:
-    url: jdbc:h2:mem:dev;MODE=MYSQL;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:test;MODE=MYSQL;DB_CLOSE_DELAY=-1
 
   h2:
     console:
@@ -10,7 +12,7 @@ spring:
 
   sql:
     init:
-      data-locations: classpath:/static/sql/data.sql
+      data-locations: classpath:/static/sql/test.sql
       mode: always
 
   jpa:
