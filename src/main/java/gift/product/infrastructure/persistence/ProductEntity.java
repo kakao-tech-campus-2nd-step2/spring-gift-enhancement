@@ -1,16 +1,12 @@
 package gift.product.infrastructure.persistence;
 
+import gift.core.BaseEntity;
 import gift.core.domain.product.Product;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "product")
-public class ProductEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
+public class ProductEntity extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -20,25 +16,37 @@ public class ProductEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private ProductCategoryEntity category;
+
     public ProductEntity() {
     }
 
-    public ProductEntity(Long id, String name, Integer price, String imageUrl) {
-        this.id = id;
+    public ProductEntity(
+            Long id,
+            String name,
+            Integer price,
+            String imageUrl,
+            ProductCategoryEntity category
+    ) {
+        super(id);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public ProductEntity(String name, Integer price, String imageUrl) {
-        this.id = 0L;
+    public ProductEntity(
+            String name,
+            Integer price,
+            String imageUrl,
+            ProductCategoryEntity category
+    ) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-    }
-
-    public Long getId() {
-        return id;
+        this.category = category;
     }
 
     public String getName() {
@@ -54,6 +62,6 @@ public class ProductEntity {
     }
 
     public Product toDomain() {
-        return new Product(id, name, price, imageUrl);
+        return new Product(getId(), name, price, imageUrl, category.toDomain());
     }
 }

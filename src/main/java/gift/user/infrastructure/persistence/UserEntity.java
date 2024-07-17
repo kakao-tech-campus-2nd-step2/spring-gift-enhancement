@@ -1,15 +1,12 @@
 package gift.user.infrastructure.persistence;
 
+import gift.core.BaseEntity;
 import gift.core.domain.user.User;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "`user`")
-public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
@@ -17,16 +14,12 @@ public class UserEntity {
     }
 
     public UserEntity(Long id, String name) {
-        this.id = id;
+        super(id);
         this.name = name;
     }
 
     public UserEntity(String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

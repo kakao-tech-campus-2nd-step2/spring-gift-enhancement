@@ -2,6 +2,7 @@ package gift.product.infrastructure.persistence;
 
 import gift.core.PagedDto;
 import gift.core.domain.product.Product;
+import gift.core.domain.product.ProductCategory;
 import gift.core.domain.product.ProductRepository;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     private ProductEntity mapToProductEntity(Product product) {
-        return new ProductEntity(product.id(), product.name(), product.price(), product.imageUrl());
+        return new ProductEntity(
+                product.id(),
+                product.name(),
+                product.price(),
+                product.imageUrl(),
+                ProductCategoryEntity.toEntity(ProductCategory.of(product.category()))
+        );
     }
 }

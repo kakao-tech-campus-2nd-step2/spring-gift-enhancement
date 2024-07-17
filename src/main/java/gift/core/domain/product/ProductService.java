@@ -3,7 +3,6 @@ package gift.core.domain.product;
 import gift.core.PagedDto;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public interface ProductService {
 
     boolean exists(Long id);
 
-    void createProduct(@Nonnull Product product);
+    void createProductWithCategory(@Nonnull Product product);
 
     void updateProduct(@Nonnull Product product);
 

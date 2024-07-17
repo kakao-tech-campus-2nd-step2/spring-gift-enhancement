@@ -1,18 +1,13 @@
 package gift.wishes.infrastructure.persistence;
 
+import gift.core.BaseEntity;
 import gift.product.infrastructure.persistence.ProductEntity;
 import gift.user.infrastructure.persistence.UserEntity;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "wish")
-public class WishEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
+public class WishEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
@@ -25,19 +20,14 @@ public class WishEntity {
     }
 
     public WishEntity(Long id, UserEntity user, ProductEntity product) {
-        this.id = id;
+        super(id);
         this.user = user;
         this.product = product;
     }
 
     public WishEntity(UserEntity user, ProductEntity product) {
-        this.id = 0L;
         this.user = user;
         this.product = product;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public UserEntity getUser() {

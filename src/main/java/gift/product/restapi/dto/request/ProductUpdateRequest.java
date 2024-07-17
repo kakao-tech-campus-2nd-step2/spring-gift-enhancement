@@ -1,10 +1,7 @@
 package gift.product.restapi.dto.request;
 
 import gift.product.restapi.validator.NotContainingKaKao;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record ProductUpdateRequest(
         @NotBlank
@@ -13,7 +10,8 @@ public record ProductUpdateRequest(
         @NotContainingKaKao
         String name,
 
-        @NotNull Integer price,
-        @NotBlank String imageUrl
+        @NotNull @Positive Integer price,
+        @NotBlank String imageUrl,
+        @NotBlank String category
 ) {
 }

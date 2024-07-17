@@ -1,12 +1,11 @@
 package gift.product.service;
 
 import gift.core.PagedDto;
-import gift.core.domain.product.Product;
-import gift.core.domain.product.ProductRepository;
-import gift.core.domain.product.ProductService;
+import gift.core.domain.product.*;
 import gift.core.domain.product.exception.ProductAlreadyExistsException;
 import gift.core.domain.product.exception.ProductNotFoundException;
 import jakarta.annotation.Nonnull;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,10 +15,15 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(
+            ProductRepository productRepository,
+            ProductCategoryRepository productCategoryRepository
+    ) {
         this.productRepository = productRepository;
+        this.productCategoryRepository = productCategoryRepository;
     }
 
     @Override
@@ -36,19 +40,31 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void createProduct(@Nonnull Product product) {
+    @Transactional
+    public void createProductWithCategory(@Nonnull Product product) {
         if (productRepository.exists(product.id())) {
             throw new ProductAlreadyExistsException();
         }
-        productRepository.save(product);
+        ProductCategory category = productCategoryRepository
+                .findByName(product.category())
+                .orElseGet(
+                        () -> productCategoryRepository.save(ProductCategory.of(product.category()))
+                );
+        productRepository.save(product.withCategory(category));
     }
 
     @Override
+    @Transactional
     public void updateProduct(@Nonnull Product product) {
         if (!productRepository.exists(product.id())) {
             throw new ProductNotFoundException();
         }
-        productRepository.save(product);
+        ProductCategory category = productCategoryRepository
+                .findByName(product.category())
+                .orElseGet(
+                        () -> productCategoryRepository.save(ProductCategory.of(product.category()))
+                );
+        productRepository.save(product.withCategory(category));
     }
 
     @Override
