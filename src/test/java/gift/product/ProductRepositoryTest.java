@@ -2,9 +2,11 @@ package gift.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.entity.CategoryEntity;
 import gift.entity.ProductEntity;
 import gift.repository.ProductRepository;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +19,18 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-//    @BeforeEach
-//    public void setUp() {
-//        productRepository.save(new ProductEntity("콜라", 1500L, "https://image1.jpg"));
-//        productRepository.save(new ProductEntity("레모네이드", 2500L, "https://image2.jpg"));
-//        productRepository.save(new ProductEntity("밀크쉐이크", 3000L, "https://image3.jpg"));
-//    }
+    private CategoryEntity categoryEntity;
+
+    @BeforeEach
+    public void setUp() {
+        categoryEntity = new CategoryEntity(1L,"식품", "#3EE715", "https://category1.jpg", "식품 카테고리");
+    }
 
     @Test
     @DisplayName("상품 추가 기능 확인")
     void save() {
         //given
-        ProductEntity expectedEntity = new ProductEntity("아이스 아메리카노", 4500L, "https://image1.jpg");
+        ProductEntity expectedEntity = new ProductEntity("아이스 아메리카노", 4500L, "https://image1.jpg",categoryEntity);
 
         //when
         ProductEntity actualEntity = productRepository.save(expectedEntity);
@@ -44,8 +46,8 @@ public class ProductRepositoryTest {
     @DisplayName("상품 이름으로 검색")
     void findByNameContaining() {
         //given
-        ProductEntity productEntity1 = new ProductEntity("아이스 아메리카노", 4500L, "https://image4.jpg");
-        ProductEntity productEntity2 = new ProductEntity("핫 아메리카노", 4500L, "https://image5.jpg");
+        ProductEntity productEntity1 = new ProductEntity("아이스 아메리카노", 4500L, "https://image4.jpg", categoryEntity);
+        ProductEntity productEntity2 = new ProductEntity("핫 아메리카노", 4500L, "https://image5.jpg", categoryEntity);
         String name = "아메리카노";
 
         //when
@@ -64,9 +66,9 @@ public class ProductRepositoryTest {
     @DisplayName("상품 전체 조회 기능 확인")
     void findAll() {
         //given
-        ProductEntity productEntity1 = new ProductEntity("아이스 아메리카노", 4500L, "https://image4.jpg");
-        ProductEntity productEntity2 = new ProductEntity("핫 아메리카노", 4500L, "https://image5.jpg");
-        ProductEntity productEntity3 = new ProductEntity("밀크쉐이크", 3000L, "https://image3.jpg");
+        ProductEntity productEntity1 = new ProductEntity("아이스 아메리카노", 4500L, "https://image4.jpg", categoryEntity);
+        ProductEntity productEntity2 = new ProductEntity("핫 아메리카노", 4500L, "https://image5.jpg", categoryEntity);
+        ProductEntity productEntity3 = new ProductEntity("밀크쉐이크", 3000L, "https://image3.jpg",categoryEntity);
 
         //when
         productRepository.save(productEntity1);
