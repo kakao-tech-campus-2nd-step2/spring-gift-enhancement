@@ -28,7 +28,7 @@ public class Option {
 
     @NotBlank(message = "옵션 이름을 입력해주세요.")
     @Size(max = 50, message = "옵션 이름은 최대 50자까지 입력할 수 있습니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9\\(\\)\\[\\]\\+\\-\\&\\/\\_ ]+$", message = "옵션 이름에 허용되지 않는 문자가 포함되어 있습니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣\\(\\)\\[\\]\\+\\-\\&\\/\\_ ]+$", message = "옵션 이름에 허용되지 않는 문자가 포함되어 있습니다.") // 공백을 허용
     @Column(nullable = false, columnDefinition = "VARCHAR(50) COMMENT '옵션 이름'")
     private String name;
 
@@ -73,6 +73,7 @@ public class Option {
         return product;
     }
 
+    // Option management methods
     public void assignProduct(Product product) {
         this.product = product;
     }

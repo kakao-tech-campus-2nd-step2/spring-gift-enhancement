@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.OptionDTO;
 import gift.dto.PageRequestDTO;
 import gift.dto.ProductDTO;
 import gift.service.CategoryService;
@@ -8,6 +9,7 @@ import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import org.springframework.data.domain.Page;
@@ -105,12 +107,17 @@ public class ProductController {
 
     @GetMapping("/{id}/options")
     public String manageProductOptions(@PathVariable Long id, Model model) {
-        Optional<ProductDTO> productDTO = productService.findProductById(id);
-        if (productDTO.isEmpty()) {
-            return "redirect:/admin/products";
-        }
-        model.addAttribute("product", productDTO.get());
-        model.addAttribute("options", optionService.findAllOptions());
+        ProductDTO productDTO = productService.findProductById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        List<OptionDTO> productOptions = productDTO.getOptions();
+        List<OptionDTO> allOptions = optionService.findAllOptions();
+
+        model.addAttribute("product", productDTO);
+        model.addAttribute("options", allOptions.stream()
+            .filter(option -> productOptions.stream().anyMatch(productOption -> productOption.getId().equals(option.getId())))
+            .collect(Collectors.toList()));
+
         return "Manage_product_options";
     }
 

@@ -42,6 +42,11 @@ public class ProductService {
         categoryRepository.findById(productDTO.getCategoryId())
             .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
         Product product = ProductConverter.convertToEntity(productDTO);
+
+        // 기본 옵션 추가
+        Option defaultOption = new Option(null, "기본 옵션", 1, product);
+        product.addOption(defaultOption);
+
         productRepository.save(product);
         return product.getId();
     }
@@ -103,10 +108,7 @@ public class ProductService {
         productRepository.save(existingProduct);
     }
 
-
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
-
-
 }
