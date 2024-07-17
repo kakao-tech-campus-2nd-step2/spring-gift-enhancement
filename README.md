@@ -161,7 +161,55 @@ create table wish
 
 - 객체의 참조와 테이블의 외래 키를 매핑해서 객체에서는 참조를 사용하고 테이블에서는 외래 키를 사용할 수 있도록 한다.
 
-### week2/step3
+### week3/step3
+
+</details>
+
+---
+
+<details>
+<summary><span style="font-size:1.3em;font-weight:bold">Week4</span></summary>
+
+### week4/step1
+
+상품 정보에 카테고리를 추가한다. 상품과 카테고리 모델 간의 관계를 고려하여 설계하고 구현한다.
+
+- 상품에는 항상 하나의 카테고리가 있어야 한다.
+  - 상품 카테고리는 수정할 수 있다.
+  - 관리자 화면에서 상품을 추가할 때 카테고리를 지정할 수 있다.
+- 카테고리는 1차 카테고리만 있으며 2차 카테고리는 고려하지 않는다.
+- 카테고리의 예시는 아래와 같다.
+  - 교환권, 상품권, 뷰티, 패션, 식품, 리빙/도서, 레저/스포츠, 아티스트/캐릭터, 유아동/반려, 디지털/가전, 카카오프렌즈, 트렌드 선물, 백화점, ...
+
+아래 예시와 같이 HTTP 메시지를 주고받도록 구현한다.
+
+#### Request
+
+```http request
+GET /api/categories HTTP/1.1
+```
+
+#### Response
+
+```http request
+HTTP/1.1 200 
+Content-Type: application/json
+
+[
+  {
+    "id": 91,
+    "name": "교환권",
+    "color": "#6c95d1",
+    "imageUrl": "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png",
+    "description": ""
+  }
+]
+```
+
+### week4/step2
+
+### week4/step3
+
 </details>
 
 ---
@@ -185,15 +233,16 @@ create table wish
 
 #### 모델 설계
 
-- [x] 상품을 표현하는 도메인 객체
+- [ ] 상품을 표현하는 도메인 객체
   - 상품의 구성요소
-    - id: int
+    - id: int (pk, unique)
     - name: string
     - price: int
-    - imageUrl: string
+    - image_url: string
+    - category_id: int (fk, unique, not null)
 - [x] 상품을 저장하는 데이터베이스 연동
-  - [x] 데이터베이스 접근 Repository
-  - [x] 스키마 SQL 및 예제 데이터 삽입 SQL 구비
+  - [x] Jpa Repository
+  - [x] 엔티티 클래스 및 예제 데이터 구비
 
 #### 기능 설계(컨트롤러 설계)
 
@@ -201,6 +250,7 @@ create table wish
 - [x] 상품 리스트를 조회하는 API
 - [x] 상품을 수정하는 API
 - [x] 상품을 삭제하는 API
+- [ ] 상품 카테고리를 수정하는 API
 
 #### 예외, 검증 설계
 
@@ -221,30 +271,32 @@ create table wish
 ---
 
 <details>
-<summary><span style="font-size:1.3em;font-weight:bold">유저 도메인</span></summary>
+<summary><span style="font-size:1.3em;font-weight:bold">멤버 도메인</span></summary>
 
-### 유저 도메인
+### 멤버 도메인
 
 #### 모델 설계
 
-- [x] 유저를 표현하는 도메인 객체
-  - 유저의 구성요소
-    - email: string (primary key)
+- [x] 멤버를 표현하는 도메인 객체
+  - 멤버의 구성요소
+    - id: int (primary key, unique, not null)
+      - 멤버를 구분하는 pk로, 내부적으로만 사용됨
+    - email: string (unique, not null)
     - password: string
       - 해시함수를 한번 거친다.
     - permission: string
-      - `member`, `admin` 중 하나가 가능
-- [x] 유저를 저장하는 데이터베이스 연동
-  - [x] 데이터베이스 접근 Repository
-  - [x] 스키마 SQL 및 예제 데이터 삽입 SQL 구비
+      - `user`, `admin` 중 하나가 가능
+- [x] 멤버를 저장하는 데이터베이스 연동
+  - [x] Jpa Repository
+  - [x] 엔티티 클래스 및 예제 데이터 구비
 
 #### 기능 설계(컨트롤러 및 서비스 설계)
 
 - [x] 회원가입을 하는 API
 - [x] 로그인하는 API
-- [ ] 유저 리스트 조회 API
-- [ ] 유저 비밀번호 변경 API
-- [ ] 유저 권한 변경 API
+- [ ] 멤버 리스트 조회 API
+- [ ] 멤버 비밀번호 변경 API
+- [ ] 멤버 권한 변경 API
 - [ ] 회원 탈퇴 API
 
 #### 예외, 검증 설계
@@ -255,8 +307,8 @@ create table wish
 
 - [ ] 회원가입하는 홈페이지
 - [ ] 로그인하는 홈페이지
-- [ ] 유저 리스트 조회 홈페이지
-  - [ ] 유저 권한 변경 기능
+- [ ] 멤버 리스트 조회 홈페이지
+  - [ ] 멤버 권한 변경 기능
 - [ ] 비밀번호 변경 홈페이지
 - [ ] 회원 탈퇴 홈페이지
 
@@ -282,8 +334,8 @@ create table wish
     - quantity: Long
       - 상품의 수량
 - [x] 위시리스트를 저장하는 데이터베이스 연동
-  - [x] 데이터베이스(H2 사용) 접근 Repository
-  - [x] 스키마 SQL 및 예제 데이터 삽입 SQL 구비
+  - [x] Jpa Repository
+  - [x] 엔티티 클래스 및 예제 데이터 구비
 
 #### 기능 설계
 
@@ -302,6 +354,43 @@ create table wish
 - [ ] 위시리스트 추가 기능
 - [ ] 위시리스트 수정 기능
 - [ ] 위시리스트 삭제 기능
+
+</details>
+
+---
+
+<details>
+<summary><span style="font-size:1.3em;font-weight:bold">카테고리 도메인</span></summary>
+
+### 카테고리 도메인
+
+#### 모델 설계
+
+- [ ] 카테고리를 표현하는 도메인 객체
+  - 카테고리의 구성요소
+    - id: int (pk)
+    - name: string (not null, unique)
+    - description: string
+    - image_url: string
+    - color: string(length 7)
+
+- [ ] 카테고리를 저장하는 데이터베이스 연동
+  - [ ] Jpa Repository
+  - [ ] 엔티티 클래스 및 예제 데이터 구비
+
+#### 기능 설계(컨트롤러 및 서비스 설계)
+
+- [x] 카테고리 추가 API
+- [x] 카테고리 리스트 조회 API
+- [ ] 특정 id 카테고리 조회 API
+- [ ] 카테고리 수정 API
+- [ ] 카테고리 삭제 API
+
+#### 예외, 검증 설계
+
+- [ ] 커스텀 예외 및 예외 핸들링
+
+#### Server-side Renderings
 
 </details>
 
@@ -565,7 +654,7 @@ create table wish
 
 
 
-### API 명세서/유저 도메인
+### API 명세서/멤버 도메인
 
 <details>
 <summary><span style="font-size:1.3em;font-weight:bold">회원가입 API</span></summary>
@@ -668,18 +757,18 @@ create table wish
 ---
 
 <details>
-<summary><span style="font-size:1.3em;font-weight:bold">유저 리스트 조회 API</span></summary>
+<summary><span style="font-size:1.3em;font-weight:bold">멤버 리스트 조회 API</span></summary>
 
-#### 유저 리스트 조회 API/Request
+#### 멤버 리스트 조회 API/Request
 
 | Method | URL          | Path param | Path variable | Header        | Body |
 |--------|--------------|------------|---------------|---------------|------|
 | GET    | /api/members | -          | -             | Authorization | -    |
 
 
-#### 유저 리스트 조회 API/Request/Header
+#### 멤버 리스트 조회 API/Request/Header
 
-- 유저 리스트 조회 API는 관리자 권한이 필요하며, Header에 로그인 또는 회원가입으로 발급받은 토큰을 아래와 같이 `Authorization` 키와 같이 명시한다.
+- 멤버 리스트 조회 API는 관리자 권한이 필요하며, Header에 로그인 또는 회원가입으로 발급받은 토큰을 아래와 같이 `Authorization` 키와 같이 명시한다.
 
   ```http request
   GET /api/wishes HTTP/1.1
@@ -688,7 +777,7 @@ create table wish
   Authorization: Bearer your-token-string
   ```
 
-#### 유저 리스트 조회 API/Response(sucess)
+#### 멤버 리스트 조회 API/Response(sucess)
 
 - Status
   - 200 OK
@@ -707,7 +796,7 @@ create table wish
   }
   ```
 
-#### 유저 리스트 조회 API/Response(fail)
+#### 멤버 리스트 조회 API/Response(fail)
 
 - 로그인하지 않았거나 권한이 부족한 경우 응답함
 - Status
@@ -727,18 +816,18 @@ create table wish
 ---
 
 <details>
-<summary><span style="font-size:1.3em;font-weight:bold">유저 비밀번호 변경 API</span></summary>
+<summary><span style="font-size:1.3em;font-weight:bold">멤버 비밀번호 변경 API</span></summary>
 
-#### 유저 비밀번호 변경 API/Request
+#### 멤버 비밀번호 변경 API/Request
 
 | Method | URL                   | Path param | Path variable | Header        | Body |
 |--------|-----------------------|------------|---------------|---------------|------|
 | PUT    | /api/members/password | -          | -             | Authorization | yes  |
 
 
-#### 유저 비밀번호 변경 API/Request/Header
+#### 멤버 비밀번호 변경 API/Request/Header
 
-- 유저 비밀번호 변경 API는 로그인이 필요하며, Header에 로그인 또는 회원가입으로 발급받은 토큰을 아래와 같이 `Authorization` 키와 같이 명시한다.
+- 멤버 비밀번호 변경 API는 로그인이 필요하며, Header에 로그인 또는 회원가입으로 발급받은 토큰을 아래와 같이 `Authorization` 키와 같이 명시한다.
 
   ```http request
   GET /api/wishes HTTP/1.1
@@ -747,7 +836,7 @@ create table wish
   Authorization: Bearer your-token-string
   ```
 
-#### 유저 비밀번호 변경 API/Request/Body
+#### 멤버 비밀번호 변경 API/Request/Body
 
 ```json
 {
@@ -756,7 +845,7 @@ create table wish
 }
 ```
 
-#### 유저 비밀번호 변경 API/Response(sucess)
+#### 멤버 비밀번호 변경 API/Response(sucess)
 
 - Status
   - 200 OK
@@ -769,7 +858,7 @@ create table wish
   }
   ```
 
-#### 유저 비밀번호 변경 API/Response(fail)
+#### 멤버 비밀번호 변경 API/Response(fail)
 
 - 로그인하지 않을 경우 응답한다.
 - Status
@@ -789,17 +878,17 @@ create table wish
 ---
 
 <details>
-<summary><span style="font-size:1.3em;font-weight:bold">유저 권한 변경 API</span></summary>
+<summary><span style="font-size:1.3em;font-weight:bold">멤버 권한 변경 API</span></summary>
 
-#### 유저 권한 변경 API/Request
+#### 멤버 권한 변경 API/Request
 
 | Method | URL                     | Path param | Path variable | Header        | Body |
 |--------|-------------------------|------------|---------------|---------------|------|
 | POST   | /api/members/permission | -          | -             | Authorization | yes  |
 
-#### 유저 권한 변경 API/Request/Header
+#### 멤버 권한 변경 API/Request/Header
 
-- 유저 권한 변경 API는 관리자 권한이 필요하며, Header에 로그인 또는 회원가입으로 발급받은 토큰을 아래와 같이 `Authorization` 키와 같이 명시한다.
+- 멤버 권한 변경 API는 관리자 권한이 필요하며, Header에 로그인 또는 회원가입으로 발급받은 토큰을 아래와 같이 `Authorization` 키와 같이 명시한다.
 
   ```http request
   GET /api/wishes HTTP/1.1
@@ -808,7 +897,7 @@ create table wish
   Authorization: Bearer your-token-string
   ```
 
-#### 유저 권한 변경 API/Request/Body
+#### 멤버 권한 변경 API/Request/Body
 
 ```json
 {
@@ -817,7 +906,7 @@ create table wish
 }
 ```
 
-#### 유저 권한 변경 API/Response(sucess)
+#### 멤버 권한 변경 API/Response(sucess)
 
 - Status
   - 200 OK
@@ -830,7 +919,7 @@ create table wish
   }
   ```
 
-#### 유저 권한 변경 API/Response(fail)
+#### 멤버 권한 변경 API/Response(fail)
 
 - 로그인하지 않았거나 권한이 부족한 경우 응답함
 - Status
