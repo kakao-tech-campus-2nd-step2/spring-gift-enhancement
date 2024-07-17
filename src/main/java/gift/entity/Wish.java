@@ -15,14 +15,14 @@ public class Wish {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "memberId", nullable = false, foreignKey = @ForeignKey(name = "fk_wish_member_id_ref_member_id"))
+    @JoinColumn(name = "member_id", nullable = false, foreignKey = @ForeignKey(name = "fk_wish_member_id_ref_member_id"))
     private Member member;
 
     @Column(nullable = false)
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "productId", nullable = false, foreignKey = @ForeignKey(name = "fk_wish_product_id_ref_product_id"))
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "fk_wish_product_id_ref_product_id"))
     private Product product;
 
     @CreatedDate
