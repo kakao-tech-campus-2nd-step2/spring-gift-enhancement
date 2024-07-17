@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.viewcontroller;
 
 import gift.config.PageConfig;
 import gift.dto.category.response.CategoryResponse;
