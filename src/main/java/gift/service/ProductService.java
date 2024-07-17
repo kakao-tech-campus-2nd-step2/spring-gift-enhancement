@@ -22,7 +22,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final WishRepository wishRepository;
-
     private final CategoryRepository categoryRepository;
 
     public ProductService(ProductRepository productRepository, WishRepository wishRepository, CategoryRepository categoryRepository) {

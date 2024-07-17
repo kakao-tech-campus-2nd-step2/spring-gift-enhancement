@@ -26,7 +26,8 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
 
-    public CategoryService(CategoryRepository categoryRepository, ProductRepository productRepository) {
+    public CategoryService(CategoryRepository categoryRepository,
+        ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
     }
@@ -60,7 +61,6 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long categoryId) {
-
         if (categoryId == defaultId) {
             throw new IllegalArgumentException("삭제할 수 없는 카테고리입니다.");
         }

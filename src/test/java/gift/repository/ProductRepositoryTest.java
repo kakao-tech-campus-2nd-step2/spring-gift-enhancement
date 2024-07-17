@@ -77,7 +77,7 @@ public class ProductRepositoryTest {
 
         Product product = productRepository.save(new Product(null, "상품1", 1000, "image1.jpg", category));
 
-        product.updateProduct(new ProductRequest("수정된 상품", 2000, "update.jpg"));
+        product.updateProduct(new ProductRequest("수정된 상품", 2000, "update.jpg", null));
 
         assertAll(
             () -> assertThat(product.getName()).isEqualTo("수정된 상품"),
