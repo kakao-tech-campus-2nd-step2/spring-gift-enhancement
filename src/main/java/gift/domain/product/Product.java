@@ -109,11 +109,16 @@ public class Product extends BaseTimeEntity {
             return false;
         }
         Product product = (Product) o;
+
+//        // 프록시 객체 초기화
+//        Hibernate.initialize(product.getCategory());
+//        Hibernate.initialize(category);
+
         return id == product.id &&
                price == product.price &&
                Objects.equals(name, product.name) &&
                Objects.equals(imageUrl, product.imageUrl) &&
-               Objects.equals(category, product.category);
+               Objects.equals(category.getId(), product.category.getId());
     }
 
     @Override

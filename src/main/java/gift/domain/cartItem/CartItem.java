@@ -74,8 +74,9 @@ public class CartItem {
                '}';
     }
 
-    public void addOneMore() {
+    public int addOneMore() {
         this.count += 1;
+        return count;
     }
 
     public void updateCount(int count) {
@@ -92,13 +93,14 @@ public class CartItem {
         }
         CartItem cartItem = (CartItem) o;
 
-        Hibernate.initialize(cartItem.getUser());
-        Hibernate.initialize(user);
+//        // 프록시 객체 초기화
+//        Hibernate.initialize(cartItem.getUser());
+//        Hibernate.initialize(user);
 
         return count == cartItem.count &&
                Objects.equals(id, cartItem.id) &&
                Objects.equals(user, cartItem.user) &&
-               Objects.equals(product, cartItem.product);
+               Objects.equals(product.getId(), cartItem.product.getId());
     }
 
     @Override
