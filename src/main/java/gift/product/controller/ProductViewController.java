@@ -1,6 +1,7 @@
 package gift.product.controller;
 
 import gift.product.domain.Product;
+import gift.product.domain.ProductDTO;
 import gift.product.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,33 +29,33 @@ public class ProductViewController
     public String getAllProducts(Model model, @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> products = productService.getAllProducts(pageable);
-        model.addAttribute("products", products);
+        Page<ProductDTO> productPages = productService.getAllProducts(pageable);
+        model.addAttribute("products", productPages);
         return "products";
     }
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
-        model.addAttribute("product", new Product(0, "", 0, ""));
+        model.addAttribute("product", new ProductDTO());
         return "add_product";
     }
 
     @PostMapping("")
-    public String createProduct(@ModelAttribute Product product) {
-        productService.createProduct(product);
+    public String createProduct(@ModelAttribute ProductDTO productDTO) {
+        productService.createProduct(productDTO);
         return "redirect:/admin/products";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Product product = productService.getProductById(id).get();
-        model.addAttribute("product", product);
+        ProductDTO productDTO = productService.getProductDTOById(id).get();
+        model.addAttribute("product", productDTO);
         return "add_product";
     }
 
     @PostMapping("/edit/{id}")
-    public String updateProduct(@PathVariable Long id, @ModelAttribute Product product) {
-        productService.updateProduct(id, product);
+    public String updateProduct(@PathVariable Long id, @ModelAttribute ProductDTO productDTO) {
+        productService.updateProduct(id, productDTO);
         return "redirect:/admin/products";
     }
 

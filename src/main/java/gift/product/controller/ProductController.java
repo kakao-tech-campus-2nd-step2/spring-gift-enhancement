@@ -1,6 +1,7 @@
 package gift.product.controller;
 
 import gift.product.domain.Product;
+import gift.product.domain.ProductDTO;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.Optional;
@@ -30,39 +31,39 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<Product>> getAllProducts(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(@RequestParam(defaultValue = "0") int page,
                                                         @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> productPage = productService.getAllProducts(pageable);
-        return new ResponseEntity<>(productPage, HttpStatus.OK);
+        Page<ProductDTO> productPages = productService.getAllProducts(pageable);
+        return new ResponseEntity<>(productPages, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> findById(@PathVariable Long id) {
-        Optional<Product> product = productService.getProductById(id);
-        return product.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+    public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
+        Optional<ProductDTO> productDTO = productService.getProductDTOById(id);
+        return productDTO.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("")
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody Product product) {
-        productService.createProduct(product);
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductDTO productDTO) {
+        productService.createProduct(productDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @Valid @RequestBody Product product) {
-        Optional<Product> existingProduct = productService.getProductById(id);
-        if (existingProduct.isEmpty()) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("id") Long id, @Valid @RequestBody ProductDTO productDTO) {
+        Optional<ProductDTO> existingProductDTO = productService.getProductDTOById(id);
+        if (existingProductDTO.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        productService.updateProduct(id, product);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        productService.updateProduct(id, productDTO);
+        return new ResponseEntity<>(productService.getProductDTOById(id).get(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        if (productService.getProductById(id).isEmpty()) {
+        if (productService.getProductDTOById(id).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         productService.deleteProduct(id);
