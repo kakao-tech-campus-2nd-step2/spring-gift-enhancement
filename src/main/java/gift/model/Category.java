@@ -16,7 +16,7 @@ public class Category {
     }
 
     public Category(String name) {
-        this.setName(name);
+        this.updateName(name);
     }
 
     public Long getId() {
@@ -27,7 +27,7 @@ public class Category {
         return name;
     }
 
-    public void setName(String name) {
+    public void updateName(String name) {
         CategoryName categoryName = new CategoryName(name);
         this.name = categoryName.getName();
     }
