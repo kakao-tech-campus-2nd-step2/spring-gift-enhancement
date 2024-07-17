@@ -31,6 +31,14 @@ public class Category {
     public Category() {
     }
 
+    public Category(Long id, String name, String color, String description, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
+
     //getter
     public Long getId() {
         return id;

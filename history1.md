@@ -44,3 +44,5 @@ post, put 등에서 반환에서 특정 url로 location header를 변경해서 �
 
 - 컨트롤러에 대해서 Mock 객체를 활용한 테스트를 만들어보자.
 
+- product update를 jpa save로 변환하기
+  (jpa에서 id값이 null이 아니면 이미 존재한다고 판단하고 merge 한다.)
