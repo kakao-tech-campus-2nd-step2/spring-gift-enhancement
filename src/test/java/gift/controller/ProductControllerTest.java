@@ -319,4 +319,62 @@ class ProductControllerTest {
         then(productService).should().removeProduct(productId);
     }
 
+    @DisplayName("[GET] 상품에 존재하는 모든 옵션을 조회한다.")
+    @Test
+    void optionList() throws Exception {
+        //given
+        Long productId = 1L;
+
+        given(productService.getOptions(productId)).willReturn(List.of());
+
+        //when
+        ResultActions result = mvc.perform(get("/api/products/{productId}/options", productId));
+
+        //then
+        result
+                .andExpect(status().isOk());
+
+        then(productService).should().getOptions(productId);
+    }
+
+    @DisplayName("[POST] 상품에 옵션 하나를 추가한다.")
+    @Test
+    void optionAdd() throws Exception {
+        //given
+        Long productId = 1L;
+        OptionRequest request = new OptionRequest("옵션", 2500L);
+
+        willDoNothing().given(productService).addOption(anyLong(), any(OptionRequest.class));
+
+        //when
+        ResultActions result = mvc.perform(post("/api/products/{productId}/options", productId)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(request)));
+
+        //then
+        result
+                .andExpect(status().isCreated());
+
+        then(productService).should().addOption(anyLong(), any(OptionRequest.class));
+    }
+
+    @DisplayName("[DELETE] 상품에 존재하는 옵션 하나를 삭제한다.")
+    @Test
+    void optionRemove() throws Exception {
+        //given
+        Long productId = 1L;
+        Long optionId = 1L;
+
+        willDoNothing().given(productService).removeOption(productId, optionId);
+
+        //when
+        ResultActions result = mvc.perform(delete("/api/products/{productId}/options/{optionId}", productId, optionId));
+
+        //then
+        result
+                .andExpect(status().isOk());
+
+        then(productService).should().removeOption(productId, optionId);
+    }
+
 }
