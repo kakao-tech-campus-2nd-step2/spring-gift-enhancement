@@ -1,6 +1,5 @@
 package gift.category;
 
-import gift.product.ProductDTO;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;

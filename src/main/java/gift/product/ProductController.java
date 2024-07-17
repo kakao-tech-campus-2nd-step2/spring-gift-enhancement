@@ -1,5 +1,6 @@
 package gift.product;
 
+import gift.category.CategoryService;
 import gift.util.PageUtil;
 import jakarta.validation.Valid;
 import java.util.Arrays;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -35,12 +38,14 @@ public class ProductController {
         model.addAttribute("currentPage", paging.getNumber());
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("sortDirection", direction.toString());
+        model.addAttribute("categories",productService.getAllCategory());
         return "products";
     }
 
     @GetMapping("/add")
     public String showPostProduct(Model model) {
         model.addAttribute("productDTO", new ProductDTO());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "add";
     }
 
@@ -49,6 +54,7 @@ public class ProductController {
         throws NotFoundException {
         ProductDTO product = productService.getProductById(id);
         model.addAttribute("productDTO", product);
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "update";
     }
 
@@ -60,26 +66,30 @@ public class ProductController {
 
     @PostMapping("/add")
     public String postProduct(@Valid @ModelAttribute("productDTO") ProductDTO product,
-        BindingResult result, Model model) {
+        BindingResult result, Model model) throws NotFoundException {
         productService.existsByNamePutResult(product.getName(), result);
         if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "add";
         }
         productService.addProduct(product);
         model.addAttribute("productDTO", product);
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "redirect:/products";
     }
 
     @PostMapping("/update/{id}")
     public String putProduct(@PathVariable("id") Long id,
-        @Valid @ModelAttribute("productDTO") ProductDTO product, BindingResult result)
+        @Valid @ModelAttribute("productDTO") ProductDTO product, BindingResult result,
+        Model model)
         throws NotFoundException {
-        productService.existsByNamePutResult(product.getName(), result);
+        ProductDTO product1 = new ProductDTO(id, product.getName(), product.getPrice(),
+            product.getImageUrl(), product.getCategoryId());
+        productService.existsByNameAndIdPutResult(product1.getName(), product1.getId(), result);
         if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "update";
         }
-        ProductDTO product1 = new ProductDTO(id, product.getName(), product.getPrice(),
-            product.getImageUrl());
         productService.updateProduct(product1);
         return "redirect:/products";
     }

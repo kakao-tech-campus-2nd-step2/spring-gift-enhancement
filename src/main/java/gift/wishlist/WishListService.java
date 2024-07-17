@@ -69,7 +69,7 @@ public class WishListService {
             throw new IllegalArgumentException(email + "의 위시리스트에 존재하는 상품입니다.");
         }
         ProductDTO productDTO = productService.getProductById(wishList.getProductId());
-        Product product = productDTO.toProduct();
+        Product product = productService.toProduct(productDTO);
         WishList wishList1 = new WishList(user, product, wishList.getNum());
         user.addWishList(wishList1);
         product.addWishList(wishList1);

@@ -1,10 +1,11 @@
 package gift.category;
 
 import java.util.List;
+import java.util.Objects;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -24,10 +25,6 @@ public class CategoryService {
         return CategoryDTO.fromCategory(category);
     }
 
-    public boolean existsByName(String name) {
-        return categoryRepository.existsByName(name);
-    }
-
     public void addCategory(CategoryDTO categoryDTO) {
         if (categoryRepository.existsByName(categoryDTO.getName())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
@@ -39,17 +36,13 @@ public class CategoryService {
         Category category = categoryRepository.findById(categoryDTO.getId())
             .orElseThrow(NotFoundException::new);
         if (categoryRepository.existsByName(categoryDTO.getName())
-            && category.getId() != categoryDTO.getId()) {
+            && !Objects.equals(category.getId(),
+            categoryRepository.findByName(categoryDTO.getName()).getId())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
-        category.update(categoryDTO.getName());
+        category.update(categoryDTO.getName(), categoryDTO.getColor(), categoryDTO.getImageUrl(),
+            categoryDTO.getDescription());
         categoryRepository.save(category);
-    }
-
-    public void existsByNamePutResult(String name, BindingResult result) {
-        if (existsByName(name)) {
-            result.addError(new FieldError("categoryDTO", "name", "존재하는 이름입니다."));
-        }
     }
 
     public void deleteCategory(long id) throws NotFoundException {

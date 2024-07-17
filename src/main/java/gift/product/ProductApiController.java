@@ -52,7 +52,8 @@ public class ProductApiController {
 
     @PostMapping
     public ResponseEntity<String> addProduct(@Valid @RequestBody ProductDTO productDTO,
-        BindingResult result) {
+        BindingResult result) throws NotFoundException {
+        productService.existsByNamePutResult(productDTO.getName(), result);
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(result.getAllErrors().toString());
@@ -64,11 +65,12 @@ public class ProductApiController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateProduct(@PathVariable("id") Long id,
         @Valid @RequestBody ProductDTO productDTO, BindingResult result) throws NotFoundException {
+        productDTO.setId(id);
+        productService.existsByNameAndIdPutResult(productDTO.getName(), productDTO.getId(), result);
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(result.getAllErrors().toString());
         }
-        productDTO.setId(id);
         productService.updateProduct(productDTO);
         return ResponseEntity.ok().body("업데이트에 성공했습니다.");
     }

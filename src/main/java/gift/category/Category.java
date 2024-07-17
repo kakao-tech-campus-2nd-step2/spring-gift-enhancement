@@ -13,28 +13,34 @@ import java.util.List;
 
 @Entity
 public class Category {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     @Column(nullable = false, unique = true)
     private String name;
+    private String color;
+    private String imageUrl;
+    private String description;
     @OneToMany(mappedBy = "category", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 
     public Category() {
     }
 
-    public Category(String name) {
-        this.name = name;
-    }
-
-    public Category(long id, String name) {
+    public Category(long id, String name, String color, String imageUrl, String description) {
         this.id = id;
         this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
 
-    public void update(String name) {
+    public void update(String name, String color, String imageUrl, String description) {
         this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
 
     public Long getId() {
@@ -43,6 +49,18 @@ public class Category {
 
     public String getName() {
         return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public List<Product> getProducts() {
@@ -56,6 +74,6 @@ public class Category {
 
     public void removeProducts(Product product) {
         products.remove(product);
-        products.setCategory(null);
+        product.setCategory(null);
     }
 }
