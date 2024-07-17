@@ -80,3 +80,4 @@ public class ProductDTO {
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory(), categoryName);
     }
 }
+
