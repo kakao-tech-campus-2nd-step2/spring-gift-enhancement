@@ -44,7 +44,6 @@ public class ProductServiceTest {
     public void setUp() {
         mockCategories = new ArrayList<>();
         mockCategories.add(new Category(1L, "패션"));
-        mockCategories.add(new Category(2L, "뷰티"));
     }
 
     @Test
