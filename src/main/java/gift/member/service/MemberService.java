@@ -26,10 +26,10 @@ public class MemberService {
 
     // 회원 등록
     public Member register(String email, String password) {
-        Optional<Member> existingMember = memberRepository.findByEmail(email);
-        if (existingMember.isPresent()) {
+        memberRepository.findByEmail(email).ifPresent(existingMember -> {
             throw new IllegalArgumentException("이미 존재하는 이메일 입니다.");
-        }
+        });
+
         Member member = new Member(email, passwordEncoder.encode(password));
         return memberRepository.save(member);
     }
