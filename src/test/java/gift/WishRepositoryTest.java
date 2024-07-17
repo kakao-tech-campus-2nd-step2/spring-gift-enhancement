@@ -3,9 +3,11 @@ package gift;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.entity.Category;
 import gift.entity.Member;
 import gift.entity.Product;
 import gift.entity.Wish;
+import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
@@ -29,13 +31,19 @@ public class WishRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("위시리스트 추가 태스트")
     public void addWishListTest() {
         Member member = new Member("admin@gmail.com", "password");
         memberRepository.save(member);
 
-        Product product = new Product("치킨", 20000, "chicken.com");
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
+        Product product = new Product("치킨", 20000, "chicken.com", category);
         productRepository.save(product);
 
         Wish wish = new Wish(member, product);
@@ -51,7 +59,10 @@ public class WishRepositoryTest {
         Member member = new Member("admin@gmail.com", "password");
         memberRepository.save(member);
 
-        Product product = new Product("치킨", 20000, "chicken.com");
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
+        Product product = new Product("치킨", 20000, "chicken.com", category);
         productRepository.save(product);
 
         Wish wish = new Wish(member, product);
@@ -69,7 +80,10 @@ public class WishRepositoryTest {
         Member member = new Member("admin@gmail.com", "password");
         memberRepository.save(member);
 
-        Product product = new Product("치킨", 20000, "chicken.com");
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
+        Product product = new Product("치킨", 20000, "chicken.com", category);
         productRepository.save(product);
 
         Wish expected = new Wish(member, product);
@@ -87,10 +101,13 @@ public class WishRepositoryTest {
         Member member = new Member("admin@gmail.com", "password");
         memberRepository.save(member);
 
-        Product product = new Product("치킨", 20000, "chicken.com");
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
+        Product product = new Product("치킨", 20000, "chicken.com", category);
         productRepository.save(product);
 
-        Product product2 = new Product("피자", 30000, "pizza.com");
+        Product product2 = new Product("피자", 30000, "pizza.com", category);
         productRepository.save(product2);
 
         wishRepository.save(new Wish(member, product));
@@ -106,8 +123,11 @@ public class WishRepositoryTest {
         memberRepository.save(member);
         Long memberId = member.getId();
 
+        Category category = new Category("기프티콘");
+        categoryRepository.save(category);
+
         for(int i=0; i<50; i++){
-            Product product = new Product("name"+i,1000*i, i+".com");
+            Product product = new Product("name"+i,1000*i, i+".com",category);
             productRepository.save(product);
 
             Wish wish = new Wish(member, product);
