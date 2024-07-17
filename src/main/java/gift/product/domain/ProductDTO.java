@@ -1,7 +1,7 @@
 package gift.product.domain;
 
 public class ProductDTO {
-    Long id;
+    Long id=0L;
     String name;
     Long price;
     String imageUrl;
