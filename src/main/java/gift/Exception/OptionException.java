@@ -1,25 +1,25 @@
 package gift.Exception;
 
-public class CategoryException extends RuntimeException {
+public class OptionException extends RuntimeException {
 
-    public CategoryException() {
+    public OptionException() {
         super();
     }
 
-    public CategoryException(String message) {
+    public OptionException(String message) {
         super(message);
     }
 
-    public CategoryException(String message, Throwable cause) {
+    public OptionException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CategoryException(Throwable cause) {
+    public OptionException(Throwable cause) {
         super(cause);
     }
 
-    protected CategoryException(String message, Throwable cause, boolean enableSuppression,
-                                boolean writableStackTrace) {
+    protected OptionException(String message, Throwable cause, boolean enableSuppression,
+                              boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
