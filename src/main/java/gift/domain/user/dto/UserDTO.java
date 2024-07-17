@@ -1,5 +1,7 @@
 package gift.domain.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gift.domain.user.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +13,8 @@ public class UserDTO {
     @NotBlank
     private String password;
 
-    public UserDTO(String email, String password) {
+    @JsonCreator
+    public UserDTO(@JsonProperty("email") String email, @JsonProperty("password") String password) {
         this.email = email;
         this.password = password;
     }
@@ -23,16 +26,8 @@ public class UserDTO {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public User toUser() {

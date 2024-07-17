@@ -1,5 +1,7 @@
 package gift.domain.product;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,7 +30,12 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(String name, Long categoryId, Integer price, String imageUrl) {
+    @JsonCreator
+    public ProductDTO(
+        @JsonProperty("name") String name,
+        @JsonProperty("categoryId") Long categoryId,
+        @JsonProperty("price") Integer price,
+        @JsonProperty("imageUrl") String imageUrl) {
         this.name = name;
         this.categoryId = categoryId;
         this.price = price;
@@ -39,31 +46,16 @@ public class ProductDTO {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Integer getPrice() {
         return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
 }

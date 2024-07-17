@@ -40,7 +40,7 @@ public class ProductService {
         if (productRepository.existsByName(productDTO.getName())) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 이름의 상품이 이미 존재합니다.");
         }
-        if (categoryRepository.findById(productDTO.getCategoryId()) == null) {
+        if (categoryRepository.findById(productDTO.getCategoryId()).isEmpty()) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 카테고리가 존재하지 않습니다.");
         }
 
