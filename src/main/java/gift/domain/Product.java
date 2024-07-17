@@ -74,6 +74,10 @@ public class Product {
         return imageUrl;
     }
 
+    public String getCategory() {
+        return category.getName();
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
