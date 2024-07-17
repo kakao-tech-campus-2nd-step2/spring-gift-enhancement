@@ -3,8 +3,10 @@ package gift.service;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.UpdateProductRequest;
 import gift.dto.response.AddedProductIdResponse;
+import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
 import gift.entity.Category;
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
@@ -20,16 +22,20 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     @Transactional
     public AddedProductIdResponse addProduct(AddProductRequest request) {
         Category category = categoryService.getCategory(request.categoryId());
-        Product product = new Product(request, category);
+        List<Option> options = optionService.getOptions(request.optionRequests());
+
+        Product product = new Product(request, category, options);
 
         Long addedProductId = productRepository.save(product).getId();
         return new AddedProductIdResponse(addedProductId);
