@@ -32,7 +32,7 @@ h1 {
 }
 
 
-#addButton{
+#addButton {
     background-color: forestgreen;
     color: #fff;
     border: none;
@@ -41,7 +41,8 @@ h1 {
     cursor: pointer;
     font-size: 19px;
 }
-#addButton:hover{
+
+#addButton:hover {
     background-color: darkgreen;
     color: #fff;
     border: none;
@@ -50,7 +51,8 @@ h1 {
     cursor: pointer;
     font-size: 19px;
 }
-#selectDeleteButton{
+
+#selectDeleteButton {
     background-color: darkred;
     color: #fff;
     border: none;
@@ -59,6 +61,7 @@ h1 {
     cursor: pointer;
     font-size: 19px;
 }
+
 #selectDeleteButton:hover {
     background-color: orangered;
     color: #fff;
@@ -68,7 +71,8 @@ h1 {
     cursor: pointer;
     font-size: 19px;
 }
-#deleteButton{
+
+#deleteButton {
     background-color: darkred;
     color: #fff;
     border: none;
@@ -77,6 +81,7 @@ h1 {
     cursor: pointer;
     font-size: 19px;
 }
+
 #deleteButton:hover {
     background-color: orangered;
     color: #fff;
@@ -86,7 +91,8 @@ h1 {
     cursor: pointer;
     font-size: 19px;
 }
-#editButton{
+
+#editButton {
     background-color: blue;
     color: #fff;
     border: none;
@@ -95,6 +101,7 @@ h1 {
     cursor: pointer;
     font-size: 19px;
 }
+
 #editButton:hover {
     background-color: cornflowerblue;
     color: #fff;
