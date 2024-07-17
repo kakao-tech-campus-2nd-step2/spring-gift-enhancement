@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +18,7 @@ import jakarta.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
-@Table(name = "options")
+@Table(name = "options", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "product_id"}))
 public class Option {
 
     @Id
@@ -72,7 +73,6 @@ public class Option {
         return product;
     }
 
-    // Option management methods
     public void assignProduct(Product product) {
         this.product = product;
     }
