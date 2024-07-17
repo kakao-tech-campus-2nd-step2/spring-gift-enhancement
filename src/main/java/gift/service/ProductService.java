@@ -29,7 +29,9 @@ public class ProductService {
     @Transactional
     public AddedProductIdResponse addProduct(AddProductRequest request) {
         Category category = categoryService.getCategory(request.categoryId());
-        Long addedProductId = productRepository.save(new Product(request.name(), request.price(), request.imageUrl(), category)).getId();
+        Product product = new Product(request.name(), request.price(), request.imageUrl(), category);
+
+        Long addedProductId = productRepository.save(product).getId();
         return new AddedProductIdResponse(addedProductId);
     }
 
@@ -41,7 +43,6 @@ public class ProductService {
     public Page<ProductResponse> getProductResponses(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(ProductResponse::fromProduct);
-
     }
 
     @Transactional
@@ -51,7 +52,7 @@ public class ProductService {
 
         Category category = categoryService.getCategory(request.categoryId());
 
-        product.change(request.name(), request.price(), request.imageUrl(), category);
+        product.update(request.name(), request.price(), request.imageUrl(), category);
     }
 
     @Transactional
@@ -65,5 +66,4 @@ public class ProductService {
     public void deleteProducts(List<Long> ids) {
         productRepository.deleteAllById(ids);
     }
-
 }

@@ -52,7 +52,7 @@ public class Product {
         return category;
     }
 
-    public void change(String name, int price, String imageUrl, Category category) {
+    public void update(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
