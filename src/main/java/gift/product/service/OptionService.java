@@ -43,17 +43,19 @@ public class OptionService {
         );
     }
 
-    public void updateOption(OptionDTO optionDTO) {
+    public void updateOption(Long id, OptionDTO optionDTO) {
         System.out.println("[OptionService] updateOption()");
-        Long id = optionDTO.getId();
-        Option option = optionRepository.findById(id)
-            .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
+
+        Product product = optionRepository.findById(id)
+            .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
+            .getProduct();
+
         optionRepository.save(
             new Option(
                 id,
                 optionDTO.getName(),
                 optionDTO.getQuantity(),
-                option.getProduct()
+                product
             )
         );
     }

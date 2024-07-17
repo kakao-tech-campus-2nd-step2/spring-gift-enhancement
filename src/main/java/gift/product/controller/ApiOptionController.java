@@ -51,13 +51,7 @@ public class ApiOptionController {
     @PutMapping("/option/{id}")
     public ResponseEntity<String> updateOption(@PathVariable Long id, @RequestBody OptionDTO optionDTO) {
         System.out.println("[ApiOptionController] getAllOptions()");
-        optionService.updateOption(
-            new OptionDTO(
-                id,
-                optionDTO.getName(),
-                optionDTO.getQuantity()
-            )
-        );
+        optionService.updateOption(id, optionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("Option update successfully");
     }
 
