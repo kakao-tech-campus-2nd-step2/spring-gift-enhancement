@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -38,13 +39,12 @@ public class ProductService {
         return PageRequest.of(page, size);
     }
 
-    public Product getProductById(int id) {
-        try {
-            return productRepository.findById(id);
+    public Optional<Product> getProductById(int id) {
+        var product = productRepository.findById(id);
+        if (product == null) {
+            return Optional.empty();
         }
-        catch (NoSuchElementException e) {
-            throw new NoSuchElementException();
-        }
+        return Optional.of(product);
     }
 
     public Product addProduct(ProductDTO productDTO) {
