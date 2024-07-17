@@ -1,5 +1,6 @@
 package gift.wishlist.application;
 
+import gift.category.domain.Category;
 import gift.exception.type.NotFoundException;
 import gift.member.domain.Member;
 import gift.member.domain.MemberRepository;
@@ -55,7 +56,7 @@ public class WishlistServiceTest {
         wishlistId = 1L;
         memberEmail = "test@example.com";
         member = new Member(memberId, memberEmail, "password");
-        product = new Product(productId, "Product", 1000, "image");
+        product = new Product(productId, "Product", 1000, "image", new Category("name", "color", "description", "imageUrl"));
         wishlist = new Wishlist(wishlistId, member, product);
     }
 
@@ -98,7 +99,7 @@ public class WishlistServiceTest {
     @Test
     public void 사용자의_위시리스트_페이징_조회() {
         // Given
-        Wishlist wishlist2 = new Wishlist(2L, member, new Product(2L, "Product2", 2000, "image2"));
+        Wishlist wishlist2 = new Wishlist(2L, member, new Product(2L, "Product2", 2000, "image2", new Category("Category", "color", "description", "imageUrl")));
         Page<Wishlist> page = new PageImpl<>(List.of(wishlist, wishlist2), PageRequest.of(0, 2), 2);
         when(wishlistRepository.findAllByMemberId(eq(memberId), any(Pageable.class))).thenReturn(page);
 
