@@ -1,6 +1,7 @@
 package gift.wishlist.presentation;
 
 import gift.auth.TokenService;
+import gift.member.application.MemberService;
 import gift.wishlist.application.WishlistResponse;
 import gift.wishlist.application.WishlistService;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,12 +36,17 @@ public class WishlistControllerTest {
     @MockBean
     private TokenService tokenService;
 
+    @MockBean
+    private MemberService memberService;
+
     private String token;
+    private Long memberId;
 
     @BeforeEach
     public void setUp() {
-        token = "valid_token";
-        when(tokenService.extractMemberId(anyString())).thenReturn(1L);
+        memberId = 1L;
+        token = "testToken";
+        when(tokenService.extractMemberId(eq(token))).thenReturn(memberId);
     }
 
     @Test
@@ -52,7 +58,7 @@ public class WishlistControllerTest {
         mockMvc.perform(post("/api/wishlist")
                         .header("Authorization", "Bearer " + token)
                         .param("productId", "1")
-                        .requestAttr("memberId", 1L))
+                        .requestAttr("memberId", memberId))
                 .andExpect(status().isOk());
 
         verify(wishlistService, times(1)).save(1L, 1L);
