@@ -1,4 +1,5 @@
 package gift.wish.service;
+
 import gift.product.dto.ProductDto;
 import gift.user.dto.UserDto;
 import gift.product.entity.Product;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class WishService {
@@ -41,12 +41,7 @@ public class WishService {
             wish.getUser().getPassword(),
             wish.getUser().getRole()
         ),
-        new ProductDto(
-            wish.getProduct().getId(),
-            wish.getProduct().getName(),
-            wish.getProduct().getPrice(),
-            wish.getProduct().getImageUrl()
-        )
+        ProductDto.toDto(wish.getProduct())
     ));
   }
 
@@ -73,12 +68,7 @@ public class WishService {
             savedWish.getUser().getPassword(),
             savedWish.getUser().getRole()
         ),
-        new ProductDto(
-            savedWish.getProduct().getId(),
-            savedWish.getProduct().getName(),
-            savedWish.getProduct().getPrice(),
-            savedWish.getProduct().getImageUrl()
-        )
+        ProductDto.toDto(savedWish.getProduct())
     );
   }
 

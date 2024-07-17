@@ -62,7 +62,6 @@ public class AdminController {
       model.addAttribute("product", productDto);
       return "product-form";
     } catch (RuntimeException e) {
-      /**/
       return "redirect:/admin";
     }
   }
@@ -72,6 +71,7 @@ public class AdminController {
   public String saveProduct(@Valid @ModelAttribute ProductDto productDto,
       BindingResult bindingResult, Model model) {
     if (bindingResult.hasErrors()) {
+      model.addAttribute("product", productDto);
       return "product-form";
     }
     if (productDto.getId() == null) {
@@ -81,6 +81,7 @@ public class AdminController {
     }
     return "redirect:/admin";
   }
+
 
   @GetMapping("/delete/{id}")
   public String deleteProduct(@PathVariable("id") Long id) {

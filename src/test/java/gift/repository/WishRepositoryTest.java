@@ -1,5 +1,9 @@
 package gift.repository;
+
 import static org.assertj.core.api.Assertions.assertThat;
+
+import gift.category.entity.Category;
+import gift.category.repository.CategoryRepository;
 import gift.product.entity.Product;
 import gift.product.repository.ProductRepository;
 import gift.user.entity.User;
@@ -16,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-
 @DataJpaTest
 public class WishRepositoryTest {
 
@@ -26,15 +29,33 @@ public class WishRepositoryTest {
   @Autowired
   private UserRepository userRepository;
 
-
   @Autowired
   private ProductRepository productRepository;
+
+  @Autowired
+  private CategoryRepository categoryRepository;
+
+  private Category createAndSaveCategory(String name) {
+    Category category = new Category();
+    category.setName(name);
+    return categoryRepository.save(category);
+  }
 
   @BeforeEach
   public void setUp() {
     wishRepository.deleteAll();
     userRepository.deleteAll();
     productRepository.deleteAll();
+    categoryRepository.deleteAll();
+  }
+
+  private Product createAndSaveProduct(String name, int price, String imageUrl, Category category) {
+    Product product = new Product();
+    product.setName(name);
+    product.setPrice(price);
+    product.setImageUrl(imageUrl);
+    product.setCategory(category);
+    return productRepository.save(product);
   }
 
   private User createAndSaveUser(String email, String password) {
@@ -42,14 +63,6 @@ public class WishRepositoryTest {
     user.setEmail(email);
     user.setPassword(password);
     return userRepository.save(user);
-  }
-
-  private Product createAndSaveProduct(String name, int price, String imageUrl) {
-    Product product = new Product();
-    product.setName(name);
-    product.setPrice(price);
-    product.setImageUrl(imageUrl);
-    return productRepository.save(product);
   }
 
   private Wish createAndSaveWish(User user, Product product) {
@@ -62,8 +75,9 @@ public class WishRepositoryTest {
   @Test
   public void testSaveAndFindById() {
     // given
+    Category category = createAndSaveCategory("Beverages");
     User user = createAndSaveUser("test@example.com", "password");
-    Product product = createAndSaveProduct("Test Product", 100, "http://example.com/image.jpg");
+    Product product = createAndSaveProduct("Test Product", 100, "http://example.com/image.jpg", category);
     Wish wish = createAndSaveWish(user, product);
 
     // when
@@ -78,9 +92,10 @@ public class WishRepositoryTest {
   @Test
   public void testFindByUserId() {
     // given
+    Category category = createAndSaveCategory("Beverages");
     User user = createAndSaveUser("test@example.com", "password");
-    Product product1 = createAndSaveProduct("Test Product 1", 100, "http://example.com/image1.jpg");
-    Product product2 = createAndSaveProduct("Test Product 2", 200, "http://example.com/image2.jpg");
+    Product product1 = createAndSaveProduct("Test Product 1", 100, "http://example.com/image1.jpg", category);
+    Product product2 = createAndSaveProduct("Test Product 2", 200, "http://example.com/image2.jpg", category);
     createAndSaveWish(user, product1);
     createAndSaveWish(user, product2);
 
@@ -95,8 +110,9 @@ public class WishRepositoryTest {
   @Test
   public void testFindByProductId() {
     // given
+    Category category = createAndSaveCategory("Beverages");
     User user = createAndSaveUser("test2@example.com", "password");
-    Product product = createAndSaveProduct("Test Product", 100, "http://example.com/image.jpg");
+    Product product = createAndSaveProduct("Test Product", 100, "http://example.com/image.jpg", category);
     createAndSaveWish(user, product);
 
     // when
@@ -110,8 +126,9 @@ public class WishRepositoryTest {
   @Test
   public void testDeleteWish() {
     // given
+    Category category = createAndSaveCategory("Beverages");
     User user = createAndSaveUser("delete@example.com", "password");
-    Product product = createAndSaveProduct("Test Product", 100, "http://example.com/image.jpg");
+    Product product = createAndSaveProduct("Test Product", 100, "http://example.com/image.jpg", category);
     Wish wish = createAndSaveWish(user, product);
     Long wishId = wish.getId();
 
@@ -126,9 +143,10 @@ public class WishRepositoryTest {
   @Test
   public void testFindByUserIdWithPagination() {
     // given
+    Category category = createAndSaveCategory("Beverages");
     User user = createAndSaveUser("pagination@example.com", "password");
     for (int i = 1; i <= 15; i++) {
-      Product product = createAndSaveProduct("Test Product " + i, 100 * i, "http://example.com/image" + i + ".jpg");
+      Product product = createAndSaveProduct("Test Product " + i, 100 * i, "http://example.com/image" + i + ".jpg", category);
       createAndSaveWish(user, product);
     }
 
