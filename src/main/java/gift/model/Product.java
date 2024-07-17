@@ -3,6 +3,8 @@ package gift.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(indexes = @Index(name = "idx_product_created_at", columnList = "created_at"))
@@ -19,6 +21,9 @@ public class Product extends BasicEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<Option> options = new ArrayList<>();
 
     protected Product() {}
 
@@ -58,5 +63,9 @@ public class Product extends BasicEntity{
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 }
