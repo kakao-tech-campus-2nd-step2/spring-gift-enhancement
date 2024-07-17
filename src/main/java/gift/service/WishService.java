@@ -60,5 +60,5 @@ public class WishService {
 
         wishRepository.delete(wish);
     }
-    
+
 }

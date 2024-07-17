@@ -122,7 +122,7 @@ public class ProductService {
 
         List<Option> options = product.getOptions();
 
-        boolean isRemoved  = options.removeIf(option -> option.getId().equals(optionId));
+        boolean isRemoved = options.removeIf(option -> option.getId().equals(optionId));
 
         if (!isRemoved) {
             throw new OptionNotFoundException();
