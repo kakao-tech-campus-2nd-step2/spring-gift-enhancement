@@ -42,7 +42,7 @@
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.userId);
         alert("로그인 되었습니다.");
-        window.location.href = /*[[@{/products}]]*/ 'product_list.html';
+        window.location.href = /*[[@{/}]]*/ 'product_list.html';
       } else {
         const errorData = await response.json();
         alert(errorData.detail);
