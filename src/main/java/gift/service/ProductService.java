@@ -29,7 +29,7 @@ public class ProductService {
     @Transactional
     public AddedProductIdResponse addProduct(AddProductRequest request) {
         Category category = categoryService.getCategory(request.categoryId());
-        Product product = new Product(request.name(), request.price(), request.imageUrl(), category);
+        Product product = new Product(request, category);
 
         Long addedProductId = productRepository.save(product).getId();
         return new AddedProductIdResponse(addedProductId);

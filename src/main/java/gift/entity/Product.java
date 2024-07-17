@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.dto.request.AddProductRequest;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,6 +23,9 @@ public class Product {
     @JoinColumn(name = "categoryId", nullable = false, foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"))
     private Category category;
 
+    protected Product() {
+    }
+
     public Product(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
@@ -29,7 +33,11 @@ public class Product {
         this.category = category;
     }
 
-    protected Product() {
+    public Product(AddProductRequest request, Category category) {
+        this.name = request.name();
+        this.price = request.price();
+        this.imageUrl = request.imageUrl();
+        this.category = category;
     }
 
     public Long getId() {
