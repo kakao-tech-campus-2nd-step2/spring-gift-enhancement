@@ -29,7 +29,6 @@ public class ProductIdValidatorTest {
         //given
         ProductDTO product = new ProductDTO("abc", 123, "www.test.com", 1L);
         Product savedProduct = productService.save(product);
-        System.out.println(savedProduct == null);
 
         WishlistDTO wishList = new WishlistDTO(savedProduct.getId());
 

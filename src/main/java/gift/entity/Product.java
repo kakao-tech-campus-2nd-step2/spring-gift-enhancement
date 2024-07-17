@@ -18,7 +18,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductWishlist> productWishlist = new ArrayList<>();
-
     private Long categoryid;
 
     public Product() {

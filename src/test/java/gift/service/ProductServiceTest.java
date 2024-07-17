@@ -20,7 +20,7 @@ public class ProductServiceTest {
 
     @PersistenceContext
     private EntityManager em;
-
+  
     @Autowired
     private ProductService productService;
     @Autowired
@@ -33,8 +33,10 @@ public class ProductServiceTest {
     void productDeleteCascadeWishlistTest() {
         // given
         String testEmail = "test@gmail.com";
+
         Category category = categoryService.save(new CategoryDTO("test", "#test", "test.com", ""));
         Product product = productService.save(new ProductDTO("test", 123, "test.com", category.getId()));
+
         wishlistService.addWishlistProduct(testEmail, new WishlistDTO(product.getId()));
 
         // when
