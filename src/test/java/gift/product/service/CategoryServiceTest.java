@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import gift.product.domain.Category;
 import gift.product.persistence.CategoryRepository;
 import gift.product.service.dto.CategoryParam;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,6 +54,53 @@ class CategoryServiceTest {
 
         //then
         assertThatThrownBy(() -> categoryService.createCategory(categoryParam))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("Category 수정 테스트[성공]")
+    void modifyCategoryTest() {
+        // given
+        CategoryParam categoryParam = new CategoryParam("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
+        Category existCategory = new Category(1L, "카테고리", "색상", "이미지 URL", "설명");
+
+        // when
+        when(categoryRepository.findById(1L)).thenReturn(of(existCategory));
+        when(categoryRepository.findByName(any())).thenReturn(Optional.empty());
+
+        // then
+        categoryService.modifyCategory(1L, categoryParam);
+        assertThat(existCategory).extracting("name", "color", "imgUrl", "description")
+                .containsExactly("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
+    }
+
+    @Test
+    @DisplayName("Category 수정 테스트[실패] 이미 존재하는 이름")
+    void modifyCategoryWithDuplicatedNameTest() {
+        // given
+        CategoryParam categoryParam = new CategoryParam("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
+        Category existCategory = new Category(1L, "카테고리", "색상", "이미지 URL", "설명");
+        Category existCategory2 = new Category(2L, "새 카테고리", "색상", "이미지 URL", "설명");
+
+        // when
+        when(categoryRepository.findByName(any())).thenReturn(of(existCategory2));
+
+        // then
+        assertThatThrownBy(() -> categoryService.modifyCategory(1L, categoryParam))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("Category 수정 테스트[실패] 존재하지 않는 카테고리의 Id")
+    void modifyCategoryWithNotExistIdTest() {
+        // given
+        CategoryParam categoryParam = new CategoryParam("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
+
+        // when
+        when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> categoryService.modifyCategory(1L, categoryParam))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
