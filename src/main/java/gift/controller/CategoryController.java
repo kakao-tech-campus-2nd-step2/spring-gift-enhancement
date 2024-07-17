@@ -3,6 +3,8 @@ package gift.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,5 +27,11 @@ public class CategoryController {
     public ResponseEntity<List<CategoryDto>> getCategories(){
         List<CategoryDto> categories = categoryService.getCategories();
         return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> addCategory(@RequestBody CategoryDto categoryDto){
+        categoryService.addCategory(categoryDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

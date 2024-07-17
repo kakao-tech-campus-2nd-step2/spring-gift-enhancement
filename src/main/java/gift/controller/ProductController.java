@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import gift.dto.ProductDto;
 import gift.dto.response.ProductPageResponse;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 
@@ -21,9 +22,11 @@ import org.springframework.validation.BindingResult;
 public class ProductController {
 
     private ProductService productService;
+    private CategoryService categoryService;
 
-    public ProductController(ProductService productService){
+    public ProductController(ProductService productService, CategoryService categoryService){
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -36,6 +39,7 @@ public class ProductController {
     @GetMapping("/new")
     public String showProductForm(Model model){
         model.addAttribute("product", new ProductDto(0, "", 0, "", ""));
+        model.addAttribute("categories", categoryService.getCategories());
         return "product_form";
     }
 
@@ -44,6 +48,7 @@ public class ProductController {
         
         if(bindingResult.hasErrors()){
             model.addAttribute("product", productDto);
+            model.addAttribute("categories", categoryService.getCategories());
             return "product_form";
         }
 
@@ -53,7 +58,8 @@ public class ProductController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        model.addAttribute("product", productService.findById(id));       
+        model.addAttribute("product", productService.findById(id)); 
+        model.addAttribute("categories", categoryService.getCategories());
         return "edit_product_form";
     }
 
@@ -62,6 +68,7 @@ public class ProductController {
         
         if(bindingResult.hasErrors()){
             model.addAttribute("product", productDto);
+            model.addAttribute("categories", categoryService.getCategories());
             return "product_form";
         }
 

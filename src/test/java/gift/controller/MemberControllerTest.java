@@ -53,10 +53,6 @@ public class MemberControllerTest {
         ResponseEntity<String> failResponse =restTemplate.postForEntity(loginUrl, failRequestEntity, String.class);
         assertThat(failResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 
-        // assertThatThrownBy(() -> restTemplate.postForEntity(loginUrl, failRequestEntity, String.class))
-        //         .isInstanceOf(HttpClientErrorException.class)
-        //         .hasMessageContaining("User with Request not found");
-
     }
 
 }

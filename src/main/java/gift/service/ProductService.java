@@ -51,10 +51,7 @@ public class ProductService{
     @Transactional
     public void addProduct(ProductDto productDto) {
         Category category = categoryRepository.findByName(productDto.getCategory())
-                .orElseGet(() -> {
-                    Category addCategory = new Category(productDto.getCategory());
-                    return categoryRepository.save(addCategory);
-                });
+                .orElseThrow(() -> new CustomException("Category with name " + productDto.getCategory() + " not found", HttpStatus.NOT_FOUND));
             
         if(productRepository.findById(productDto.getId()).isEmpty()){
             Product product = productDto.toEntity(category);
@@ -70,11 +67,8 @@ public class ProductService{
         Optional<Product> optionalProduct = productRepository.findById(productDto.getId());
 
         Category category = categoryRepository.findByName(productDto.getCategory())
-                .orElseGet(() -> {
-                    Category addCategory = new Category(productDto.getCategory());
-                    return categoryRepository.save(addCategory);
-                });
-
+                .orElseThrow(() -> new CustomException("Category with name " + productDto.getCategory() + " not found", HttpStatus.NOT_FOUND));
+                
         if (optionalProduct.isPresent()) {
             Product product = productDto.toEntity(category);
             productRepository.delete(optionalProduct.get());
