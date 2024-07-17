@@ -30,7 +30,7 @@ public class ProductService {
     public Product register(ProductRequest productRequest) {
         Category category = categoryRepository.findByName(productRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("해당 카테고리는 존재하지 않습니다."));
 
-        Product product = new Product(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category);
+        Product product = new Product(productRequest, category);
         try {
             return productRepository.save(product);
         } catch (DataIntegrityViolationException e) {

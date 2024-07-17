@@ -44,19 +44,8 @@ public class Member {
         return email;
     }
 
-
     public String getPassword() {
         return password;
-    }
-
-
-    public List<WishlistItem> getWishlistItems() {
-        return wishlistItems;
-    }
-
-
-    public List<TokenAuth> getTokenAuths() {
-        return tokenAuths;
     }
 
 }

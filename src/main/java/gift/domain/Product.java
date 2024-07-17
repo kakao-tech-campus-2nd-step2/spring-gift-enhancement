@@ -2,6 +2,7 @@ package gift.domain;
 
 
 import gift.dto.request.ProductRequest;
+import gift.dto.response.ProductResponse;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -38,6 +39,13 @@ public class Product {
         this.category = category;
     }
 
+    public Product(ProductRequest productRequest, Category category){
+        this.name = productRequest.getName();
+        this.price = productRequest.getPrice();
+        this.imageUrl = productRequest.getImageUrl();
+        this.category = category;
+    }
+
     public Product(long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
@@ -66,15 +74,10 @@ public class Product {
         return price;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {this.imageUrl = imageUrl;}
 
     public Category getCategory() { return category; }
 
