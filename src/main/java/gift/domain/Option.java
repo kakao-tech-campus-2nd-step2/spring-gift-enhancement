@@ -28,6 +28,12 @@ public class Option {
     protected Option() {
     }
 
+    public Option(Product product, String name, Long quantity) {
+        this.product = product;
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public OptionResponse toDto() {
         return new OptionResponse(this.id, this.name, this.quantity);
     }
