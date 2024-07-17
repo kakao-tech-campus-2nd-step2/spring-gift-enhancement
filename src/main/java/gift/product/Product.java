@@ -1,10 +1,13 @@
 package gift.product;
 
+import gift.category.Cateogory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,19 +27,28 @@ public class Product {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Cateogory cateogory;
+
     protected Product() {
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Cateogory cateogory) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.cateogory = cateogory;
     }
 
     public void update(String name, int price, String imageUrl) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public void changeCategory(Cateogory cateogory) {
+        this.cateogory = cateogory;
     }
 
     public Long getId() {
@@ -53,6 +65,10 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Cateogory getCateogory() {
+        return cateogory;
     }
 }
 
