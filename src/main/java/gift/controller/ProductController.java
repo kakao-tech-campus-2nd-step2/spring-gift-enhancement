@@ -58,7 +58,7 @@ public class ProductController {
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setPrice(updatedProduct.getPrice());
         existingProduct.setImageurl(updatedProduct.getImageurl());
-        existingProduct.setWishes(updatedProduct.getWishes());
+        existingProduct.setOptions(updatedProduct.getOptions());
 
         productService.update(existingProduct);
         return new ResponseEntity<>(existingProduct, HttpStatus.OK);

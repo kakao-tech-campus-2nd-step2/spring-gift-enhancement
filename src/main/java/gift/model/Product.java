@@ -31,6 +31,9 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Wish> wishes;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductOption> options;
+
     public Product() {
     }
 
@@ -66,6 +69,7 @@ public class Product {
         return wishes;
     }
 
+
     public void setWishes(List<Wish> wishes) {
         this.wishes = wishes;
     }
@@ -76,5 +80,17 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+    public List<ProductOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<ProductOption> options) {
+        this.options = options;
+        if (options != null) {
+            for (ProductOption option : options) {
+                option.setProduct(this);
+            }
+        }
     }
 }
