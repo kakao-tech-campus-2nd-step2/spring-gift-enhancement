@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.request.OptionRequest;
 import gift.request.ProductRequest;
+import gift.request.ProductUpdateRequest;
 import gift.response.OptionResponse;
 import gift.response.ProductResponse;
 import gift.service.ProductService;
@@ -49,7 +50,7 @@ public class ProductController {
 
     @PutMapping("/{productId}")
     public ResponseEntity<Void> productEdit(@PathVariable Long productId,
-                                            @RequestBody @Valid ProductRequest request) {
+                                            @RequestBody @Valid ProductUpdateRequest request) {
         productService.editProduct(productId, request);
 
         return ResponseEntity.ok().build();

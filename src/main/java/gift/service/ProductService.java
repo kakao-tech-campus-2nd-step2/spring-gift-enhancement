@@ -11,6 +11,7 @@ import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.request.OptionRequest;
 import gift.request.ProductRequest;
+import gift.request.ProductUpdateRequest;
 import gift.response.OptionResponse;
 import gift.response.ProductResponse;
 import org.springframework.data.domain.Page;
@@ -71,7 +72,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void editProduct(Long productId, ProductRequest request) {
+    public void editProduct(Long productId, ProductUpdateRequest request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
         Category category = categoryRepository.findById(request.getCategoryId())
