@@ -19,8 +19,7 @@ public class Wish {
     private Member member;
 
     @Column(nullable = false)
-    private Integer amount;
-
+    private Integer quantity;
 
     @ManyToOne
     @JoinColumn(name = "productId", nullable = false, foreignKey = @ForeignKey(name = "fk_wish_product_id_ref_product_id"))
@@ -30,9 +29,9 @@ public class Wish {
     @Column(updatable = false)
     private LocalDateTime createdTime;
 
-    public Wish(Member member, Integer amount, Product product) {
+    public Wish(Member member, Integer quantity, Product product) {
         this.member = member;
-        this.amount = amount;
+        this.quantity = quantity;
         this.product = product;
     }
 
@@ -43,8 +42,8 @@ public class Wish {
         return id;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public Integer getQuantity() {
+        return quantity;
     }
 
     public Product getProduct() {
@@ -55,8 +54,7 @@ public class Wish {
         return member;
     }
 
-    public void changeAmount(Integer amount) {
-        this.amount = amount;
+    public void updateQuantity(Integer amount) {
+        this.quantity = amount;
     }
-
 }

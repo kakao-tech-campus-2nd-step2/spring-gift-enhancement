@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.request.WishListRequest;
+import gift.dto.request.WishRequest;
 import gift.dto.response.WishProductResponse;
 import gift.entity.Member;
 import gift.entity.Product;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("위시리스트 서비스 단위테스트")
-class WishListServiceTest {
+class WishServiceTest {
 
     @Mock
     private WishRepository wishRepository;
@@ -39,7 +39,7 @@ class WishListServiceTest {
     @Mock
     private MemberService memberService;
     @InjectMocks
-    private WishListService wishListService;
+    private WishService wishService;
 
     @Test
     @DisplayName("멤버의 모든 위시리스트 상품 조회")
@@ -56,7 +56,7 @@ class WishListServiceTest {
         when(wishRepository.findAllByMember(member, pageable)).thenReturn(wishPage);
 
         //When
-        Page<WishProductResponse> responsePage = wishListService.getWishProductsByMemberId(memberId, pageable);
+        Page<WishProductResponse> responsePage = wishService.getWishProductResponses(memberId, pageable);
 
         //Then
         assertThat(responsePage.getContent()).hasSize(1);
@@ -74,7 +74,7 @@ class WishListServiceTest {
         void success() {
             //Given
             Long memberId = 1L;
-            WishListRequest request = new WishListRequest(1L, 1);
+            WishRequest request = new WishRequest(1L, 1);
             Member member = new Member("test@email.com", "password");
             Product product = new Product("name", 1000, "imageUrl", null);
 
@@ -83,7 +83,7 @@ class WishListServiceTest {
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.empty());
 
             //When
-            wishListService.addProductToWishList(memberId, request);
+            wishService.addProductToWish(memberId, request);
 
             //Then
             verify(wishRepository).save(any(Wish.class));
@@ -94,7 +94,7 @@ class WishListServiceTest {
         void fail() {
             // Given
             Long memberId = 1L;
-            WishListRequest request = new WishListRequest(1L, 1);
+            WishRequest request = new WishRequest(1L, 1);
             Member member = new Member("test@email.com", "password");
             Product product = new Product("name", 1000, "imageUrl", null);
             Wish existingWish = new Wish(member, 1, product);
@@ -104,7 +104,7 @@ class WishListServiceTest {
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.of(existingWish));
 
             //  When Then
-            assertThatThrownBy(() -> wishListService.addProductToWishList(memberId, request))
+            assertThatThrownBy(() -> wishService.addProductToWish(memberId, request))
                     .isInstanceOf(WishAlreadyExistsException.class);
         }
     }
@@ -127,7 +127,7 @@ class WishListServiceTest {
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.of(wish));
 
             //When
-            wishListService.deleteProductInWishList(memberId, productId);
+            wishService.deleteProductInWish(memberId, productId);
 
             //Then
             verify(wishRepository).delete(wish);
@@ -147,7 +147,7 @@ class WishListServiceTest {
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.empty());
 
             //When Then
-            assertThatThrownBy(() -> wishListService.deleteProductInWishList(memberId, productId))
+            assertThatThrownBy(() -> wishService.deleteProductInWish(memberId, productId))
                     .isInstanceOf(WishNotFoundException.class);
         }
     }
@@ -160,7 +160,7 @@ class WishListServiceTest {
         void success() {
             //Given
             Long memberId = 1L;
-            WishListRequest request = new WishListRequest(1L, 10);
+            WishRequest request = new WishRequest(1L, 10);
             Member member = new Member("test@email.com", "password");
             Product product = new Product("name", 1000, "imageUrl", null);
             Wish wish = new Wish(member, 1, product);
@@ -170,10 +170,10 @@ class WishListServiceTest {
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.of(wish));
 
             //When
-            wishListService.updateWishProductAmount(memberId, request);
+            wishService.updateWishProductQuantity(memberId, request);
 
             //Then
-            assertThat(wish.getAmount()).isEqualTo(10);
+            assertThat(wish.getQuantity()).isEqualTo(10);
         }
 
         @Test
@@ -181,7 +181,7 @@ class WishListServiceTest {
         void fail() {
             //Given
             Long memberId = 1L;
-            WishListRequest request = new WishListRequest(1L, 10);
+            WishRequest request = new WishRequest(1L, 10);
             Member member = new Member("test@email.com", "password");
             Product product = new Product("name", 1000, "imageUrl", null);
 
@@ -190,7 +190,7 @@ class WishListServiceTest {
             when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.empty());
 
             //When Then
-            assertThatThrownBy(() -> wishListService.updateWishProductAmount(memberId, request))
+            assertThatThrownBy(() -> wishService.updateWishProductQuantity(memberId, request))
                     .isInstanceOf(WishNotFoundException.class);
         }
     }

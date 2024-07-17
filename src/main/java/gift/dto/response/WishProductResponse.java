@@ -15,7 +15,7 @@ public record WishProductResponse(
                 wish.getProduct().getName(),
                 wish.getProduct().getPrice(),
                 wish.getProduct().getImageUrl(),
-                wish.getAmount()
+                wish.getQuantity()
         );
     }
 }

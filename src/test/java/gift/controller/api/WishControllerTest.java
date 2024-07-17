@@ -1,11 +1,11 @@
 package gift.controller.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.dto.request.WishListRequest;
+import gift.dto.request.WishRequest;
 import gift.dto.response.WishProductResponse;
 import gift.interceptor.AuthInterceptor;
 import gift.service.TokenService;
-import gift.service.WishListService;
+import gift.service.WishService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = WishListController.class)
+@WebMvcTest(controllers = WishController.class)
 @DisplayName("위시 컨트롤러 단위테스트")
-class WishListControllerTest {
+class WishControllerTest {
 
     private static final String URL = "/api/wishlist";
     @MockBean
@@ -42,14 +42,14 @@ class WishListControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private WishListService wishListService;
+    private WishService wishService;
 
     @Test
     @DisplayName("위시리스트 상품 추가")
     void addProductToWishList() throws Exception {
         //Given
         when(authInterceptor.preHandle(any(), any(), any())).thenReturn(true);
-        WishListRequest request = new WishListRequest(1L, 100);
+        WishRequest request = new WishRequest(1L, 100);
 
         //When
         mockMvc.perform(MockMvcRequestBuilders.post(URL)
@@ -71,7 +71,7 @@ class WishListControllerTest {
                 new WishProductResponse(1L, "product1", 100, "img", 1000),
                 new WishProductResponse(2L, "product2", 400, "img", 2000)
         ));
-        when(wishListService.getWishProductsByMemberId(any(), any())).thenReturn(page);
+        when(wishService.getWishProductResponses(any(), any())).thenReturn(page);
 
         //When
         mockMvc.perform(MockMvcRequestBuilders
@@ -89,7 +89,7 @@ class WishListControllerTest {
     void updateWishProductAmount() throws Exception {
         //Given
         when(authInterceptor.preHandle(any(), any(), any())).thenReturn(true);
-        WishListRequest updateRequest = new WishListRequest(1L, 1000);
+        WishRequest updateRequest = new WishRequest(1L, 1000);
 
         //When
         mockMvc.perform(MockMvcRequestBuilders
