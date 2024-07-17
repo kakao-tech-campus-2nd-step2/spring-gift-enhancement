@@ -18,15 +18,19 @@ public class Member {
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String password;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
+    private String role;
+
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Wish> wishes;
 
     protected Member() {
     }
 
-    public Member(String email, String password) {
+    public Member(String email, String password,String role) {
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -39,6 +43,10 @@ public class Member {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     public boolean isPasswordEqual(String inputPassword) {
