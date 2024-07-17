@@ -52,4 +52,8 @@ public class ProductDTO {
     public Long getCategoryid() {
         return categoryid;
     }
+
+    public void setCategoryid(Long categoryid) {
+        this.categoryid = categoryid;
+    }
 }

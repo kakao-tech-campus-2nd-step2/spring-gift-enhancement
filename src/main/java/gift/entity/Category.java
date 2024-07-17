@@ -1,10 +1,6 @@
 package gift.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -16,20 +12,6 @@ public class Category {
     private String color;
     private String imageurl;
     private String description;
-
-    @OneToMany(mappedBy = "category")
-    @JsonIgnore
-    private List<Product> products = new ArrayList<>();
-
-    public void addProduct(Product product) {
-        products.add(product);
-        product.setCategory(this);
-    }
-
-    public void removeProduct(Product product) {
-        products.remove(product);
-    }
-
 
     public Category() {
     }
@@ -43,6 +25,13 @@ public class Category {
     }
 
     public Category(CategoryDTO categoryDTO) {
+        this.name = categoryDTO.getName();
+        this.color = categoryDTO.getColor();
+        this.imageurl = categoryDTO.getImageurl();
+        this.description = categoryDTO.getDescription();
+    }
+
+    public void setCategory(CategoryDTO categoryDTO) {
         this.name = categoryDTO.getName();
         this.color = categoryDTO.getColor();
         this.imageurl = categoryDTO.getImageurl();
@@ -87,9 +76,5 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Product> getProducts() {
-        return products;
     }
 }
