@@ -1,8 +1,10 @@
 package gift.controller.restcontroller;
 
 import gift.controller.dto.request.ProductRequest;
+import gift.controller.dto.response.OptionResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,14 +20,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
 @Tag(name = "Product", description = "상품 API")
 @RestController
 @RequestMapping("/api/v1")
 public class ProductRestController {
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public ProductRestController(ProductService productService) {
+    public ProductRestController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @GetMapping("/products")
@@ -81,4 +87,12 @@ public class ProductRestController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/product/{id}/options")
+    @Operation(summary = "상품 옵션 조회", description = "상품의 옵션을 조회합니다.")
+    public ResponseEntity<List<OptionResponse>> getOptions(
+            @PathVariable("id") @NotNull @Min(1) Long id
+    ) {
+        List<OptionResponse> options = optionService.getAllOptions(id);
+        return ResponseEntity.ok().body(options);
+    }
 }
