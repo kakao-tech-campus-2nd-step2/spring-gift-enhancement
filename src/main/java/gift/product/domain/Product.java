@@ -1,10 +1,13 @@
 package gift.product.domain;
 
+import gift.category.domain.Category;
 import gift.wish.domain.WishlistItem;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +34,10 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<WishlistItem> wishlistItemList;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     public Product() {}
 
