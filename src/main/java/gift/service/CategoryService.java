@@ -32,4 +32,12 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+    public Category getCategoryById(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ProductNotFoundException("Category not found");
+        }
+        Category category = new Category(categoryRepository.findById(id).get().getCategoryName());
+        category.setId(id);
+        return category;
+    }
 }
