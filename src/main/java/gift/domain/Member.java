@@ -24,12 +24,14 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     protected Member() {
     }
 
-    public Member(Long id, String email, String password, String role) {
+    public Member(Long id, String email, String password, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -48,8 +50,5 @@ public class Member {
         return password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
+    public Role getRole() { return role; }
 }
