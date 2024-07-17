@@ -28,7 +28,7 @@ class WishRepositoryTest {
 
     @Test
     void save(){
-        Member expectedMember = new Member("qwer@gmail.com","1234");
+        Member expectedMember = new Member("qwer@gmail.com","1234","root");
         Product expectedProduct = new Product(new ProductName("product1"),1000,"qwer.com",1000);
         memberRepository.save(expectedMember);
         productRepository.save(expectedProduct);
@@ -43,7 +43,7 @@ class WishRepositoryTest {
 
     @Test
     void delete(){
-        Member expectedMember = new Member("qwer@gmail.com","1234");
+        Member expectedMember = new Member("qwer@gmail.com","1234","root");
         Product expectedProduct = new Product(new ProductName("product1"),1000,"qwer.com",1000);
         memberRepository.save(expectedMember);
         productRepository.save(expectedProduct);

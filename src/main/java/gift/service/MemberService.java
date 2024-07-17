@@ -22,7 +22,7 @@ public class MemberService {
     }
 
     public boolean registerNewMember(MemberDto memberDto) {
-        Member member = new Member(memberDto.email(),memberDto.password());
+        Member member = new Member(memberDto.email(),memberDto.password(), memberDto.role());
         if(memberRepository.findByEmail(member.getEmail()).isEmpty()){
             memberRepository.save(member);
             return true;
@@ -31,12 +31,12 @@ public class MemberService {
     }
 
     public String returnToken(MemberDto memberDto){
-        Member member = new Member(memberDto.email(),memberDto.password());
+        Member member = new Member(memberDto.email(),memberDto.password(), memberDto.role());
         return jwtTokenProvider.generateToken(member);
     }
 
     public LoginResultDto loginMember(MemberDto memberDto) {
-        Member member = new Member(memberDto.email(),memberDto.password());
+        Member member = new Member(memberDto.email(),memberDto.password(), memberDto.role());
         Optional<Member> registeredMember = memberRepository.findByEmail(member.getEmail());
         if (registeredMember.isPresent() && member.isPasswordEqual(registeredMember.get().getPassword())) {
             String token = jwtTokenProvider.generateToken(member);

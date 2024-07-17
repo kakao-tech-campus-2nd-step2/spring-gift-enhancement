@@ -16,7 +16,7 @@ public class WishTest {
 
     @BeforeEach
     public void setUp() {
-        expectedMember = new Member("qwer@gmail.com","1234");
+        expectedMember = new Member("qwer@gmail.com","1234","root");
         expectedProduct = new Product(new ProductName("product1"),1000,"qwer.com",1000);
         originWish = new Wish(expectedProduct,expectedMember,1000 );
     }
