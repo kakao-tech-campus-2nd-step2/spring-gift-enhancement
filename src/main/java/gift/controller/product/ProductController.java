@@ -59,6 +59,13 @@ public class ProductController {
         return "redirect:/products/{id}/options";
     }
 
+    @PostMapping("/{product_id}/delete/{option_id}")
+    public String deleteOption(@PathVariable("product_id") Long productId,
+                               @PathVariable("option_id") Long optionId){
+        optionService.deleteOneOption(productId, optionId);
+        return "redirect:/products";
+    }
+
     @GetMapping("/new/{id}/options")
     public String addOptionForm(@PathVariable("id") Long productId,
                                 Model model){
