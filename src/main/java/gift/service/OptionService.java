@@ -4,6 +4,7 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.OptionRequestDto;
 import gift.dto.response.OptionResponseDto;
+import gift.exception.customException.DenyDeleteException;
 import gift.exception.customException.EntityNotFoundException;
 import gift.exception.customException.NameDuplicationException;
 import gift.repository.option.OptionRepository;
@@ -56,8 +57,14 @@ public class OptionService {
     }
 
     @Transactional
-    public OptionResponseDto deleteOneOption(Long optionId){
+    public OptionResponseDto deleteOneOption(Long productId, Long optionId){
         Option option = optionRepository.findById(optionId).orElseThrow(() -> new EntityNotFoundException(OPTION_NOT_FOUND));
+
+        Long count = optionRepository.countOptionByProductId(productId);
+
+        if(count == 1){
+            throw new DenyDeleteException();
+        }
 
         optionRepository.delete(option);
 
