@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -43,7 +44,8 @@ public class CategoryServiceTest {
 
     /* 테스트 네이밍 : 메소드명_기대결과_테스트상태 */
     @Test
-    void findCategoryById_ReturnCategoryResponse_categoryExists() {
+    @DisplayName("카테고리가 존재할 때 categoryResponse를 반환한다.")
+    void findCategoryById_shouldReturnCategoryResponse_whenCategoryExists() {
         // given
         when(categoryRepository.findByIdAndIsActiveTrue(defaultCategory.getId())).thenReturn(
                 Optional.of(defaultCategory));
@@ -58,7 +60,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void findCategoryById_ThrowEntityNotFoundException_CategoryDoesNotExist() {
+    @DisplayName("카테고리가 존재하지 않을 때 EntityNotFoundException을 던진다.")
+    void findCategoryById_shouldThrowEntityNotFoundException_whenCategoryDoesNotExist() {
         // given
         Long missingId = 99L;
         when(categoryRepository.findByIdAndIsActiveTrue(missingId)).thenReturn(Optional.empty());
@@ -69,7 +72,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void findAllCategories_ReturnListOfCategoryResponses() {
+    @DisplayName("모든 카테고리를 반환한다. 카테고리가 없을 경우에도 오류를 던지지 않는다.")
+    void findAllCategories_shouldReturnListOfCategoryResponses() {
         // given
         Category anotherCategory = new Category("2번 카테고리", "2번입니다");
         when(categoryRepository.findAll()).thenReturn(Arrays.asList(defaultCategory, anotherCategory));
@@ -85,7 +89,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void addCategory_SaveDB() {
+    @DisplayName("새 카테고리를 추가한다.")
+    void addCategory_shouldSaveDB() {
         // given, when
         categoryService.addCategory(defaultRequest);
 
@@ -94,7 +99,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void updateCategory_CategoryExists() {
+    @DisplayName("해당 Id의 카테고리가 존재할 경우 기존 카테고리를 수정한다.")
+    void updateCategory_shouldUpdateExistingCategory() {
         // given
         when(categoryRepository.findByIdAndIsActiveTrue(defaultCategory.getId())).thenReturn(
                 Optional.of(defaultCategory));
@@ -109,7 +115,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void updateCategory_ThrowEntityNotFoundException_CategoryDoesNotExist() {
+    @DisplayName("해당 Id의 카테고리가 존재하지 않을 경우 EntityNotFoundException을 던진다.")
+    void updateCategory_shouldThrowEntityNotFoundException_whenCategoryDoesNotExist() {
         // given
         Long missingId = 99L;
         when(categoryRepository.findByIdAndIsActiveTrue(missingId)).thenReturn(Optional.empty());
@@ -120,7 +127,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void deleteCategory_UpdateCategoryAsInactive() {
+    @DisplayName("해당 Id의 카테고리를 삭제한다.")
+    void deleteCategory_shouldMarkCategoryAsInactive() {
         // given
         when(categoryRepository.findByIdAndIsActiveTrue(defaultCategory.getId())).thenReturn(
                 Optional.of(defaultCategory));
@@ -134,7 +142,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void deleteCategory_ThrowEntityNotFoundException_CategoryDoesNotExist() {
+    @DisplayName("해당 Id의 카테고리가 존재하지 않을 경우 EntityNotFoundException을 던진다.")
+    void deleteCategory_shouldThrowEntityNotFoundException_whenCategoryDoesNotExist() {
         // given
         Long missingId = 99L;
         when(categoryRepository.findByIdAndIsActiveTrue(missingId)).thenReturn(Optional.empty());
