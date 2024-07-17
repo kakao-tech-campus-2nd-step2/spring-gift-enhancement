@@ -3,6 +3,7 @@ package gift.controller.api;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.UpdateProductRequest;
 import gift.dto.response.AddedProductIdResponse;
+import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -12,6 +13,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -46,4 +49,8 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("api/products/{id}/options")
+    public ResponseEntity<List<OptionResponse>> getOptionResponses(@PathVariable("id") Long productId) {
+        return ResponseEntity.ok(productService.getOptionResponses(productId));
+    }
 }
