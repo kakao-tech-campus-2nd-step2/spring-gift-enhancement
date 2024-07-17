@@ -24,6 +24,10 @@ public class Option {
   @Column(nullable = false)
   private int quantity;
 
+  @ManyToOne
+  @JoinColumn(name = "product_id",nullable = false)
+  private Product product;
+
   public Option(Long id, String name, int quantity){
     this.id=id;
     this.name=name;
