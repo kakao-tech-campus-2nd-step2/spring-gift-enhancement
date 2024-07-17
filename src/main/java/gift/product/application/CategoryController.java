@@ -1,10 +1,13 @@
 package gift.product.application;
 
 import gift.product.application.dto.request.CategoryRequest;
+import gift.product.application.dto.response.CategoryResponse;
 import gift.product.service.CategoryService;
 import java.net.URI;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,5 +37,25 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.OK)
     public void modifyCategory(@PathVariable Long id, @RequestBody CategoryRequest request) {
         categoryService.modifyCategory(id, request.toCategoryParam());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponse> getCategory(@PathVariable Long id) {
+        var categoryInfo = categoryService.getCategoryInfo(id);
+
+        var response = CategoryResponse.from(categoryInfo);
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<CategoryResponse>> getCategoryList() {
+        var categoryList = categoryService.getCategoryList();
+
+        var response = categoryList.stream()
+                .map(CategoryResponse::from)
+                .toList();
+        return ResponseEntity.ok()
+                .body(response);
     }
 }
