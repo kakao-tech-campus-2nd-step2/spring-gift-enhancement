@@ -1,18 +1,21 @@
 package gift.product.application;
 
-import gift.product.dao.CategoryRepository;
-import gift.product.entity.Category;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
+import gift.product.dao.CategoryRepository;
 import gift.product.dao.ProductRepository;
+import gift.product.dto.OptionResponse;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
+import gift.product.entity.Category;
 import gift.product.entity.Product;
 import gift.product.util.ProductMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 @Service
 public class ProductService {
@@ -34,6 +37,10 @@ public class ProductService {
         return productRepository.findById(id)
                 .map(ProductMapper::toResponseDto)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
+
+    public Set<OptionResponse> getProductOptionsByIdOrThrow(Long id) {
+        return getProductByIdOrThrow(id).options();
     }
 
     public ProductResponse createProduct(ProductRequest request) {

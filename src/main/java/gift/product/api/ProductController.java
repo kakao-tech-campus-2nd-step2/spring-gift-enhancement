@@ -1,6 +1,7 @@
 package gift.product.api;
 
 import gift.product.application.ProductService;
+import gift.product.dto.OptionResponse;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
 import jakarta.validation.Valid;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/products")
@@ -37,6 +40,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ProductResponse getProduct(@PathVariable("id") Long id) {
         return productService.getProductByIdOrThrow(id);
+    }
+
+    // 상품 옵션 조회
+    @GetMapping("/{id}/options")
+    public Set<OptionResponse> getProductOptions(@PathVariable("id") Long id) {
+        return productService.getProductOptionsByIdOrThrow(id);
     }
 
     // 상품 추가

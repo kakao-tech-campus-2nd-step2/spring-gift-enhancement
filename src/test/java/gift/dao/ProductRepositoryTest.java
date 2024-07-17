@@ -129,7 +129,8 @@ class ProductRepositoryTest {
                 "updateproduct",
                 12345,
                 "updateproduct.jpg",
-                category.getName()
+                category.getName(),
+                "옵션"
         );
         Product savedProduct = productRepository.save(product);
         savedProduct.update(request, category);

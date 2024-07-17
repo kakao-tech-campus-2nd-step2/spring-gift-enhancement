@@ -8,6 +8,7 @@ import gift.product.application.ProductService;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
+import gift.product.entity.Option;
 import gift.product.entity.Product;
 import gift.product.util.ProductMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +48,8 @@ class ProductServiceTest {
             .setImageUrl("https://product-shop.com")
             .setDescription("")
             .build();
+
+    private final Option option = new Option("옵션", 10);
 
     @Test
     @DisplayName("상품 전체 조회 서비스 테스트")
@@ -109,7 +112,8 @@ class ProductServiceTest {
                 "product1",
                 1000,
                 "https://testshop.com",
-                category.getName());
+                category.getName(),
+                option.getName());
         Product product = ProductMapper.toEntity(request, category);
         given(productRepository.save(any())).willReturn(product);
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
@@ -150,7 +154,8 @@ class ProductServiceTest {
                 "product2",
                 product.getPrice(),
                 product.getImageUrl(),
-                category.getName());
+                category.getName(),
+                option.getName());
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
 
@@ -167,7 +172,8 @@ class ProductServiceTest {
                 "product",
                 3000,
                 "https://testshop.io",
-                category.getName());
+                category.getName(),
+                option.getName());
         given(productRepository.findById(anyLong())).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> productService.updateProduct(productId, request))

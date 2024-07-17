@@ -5,6 +5,8 @@ import gift.product.entity.Product;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
 
+import java.util.stream.Collectors;
+
 public class ProductMapper {
 
     public static ProductResponse toResponseDto(Product product) {
@@ -14,7 +16,11 @@ public class ProductMapper {
                 product.getPrice(),
                 product.getImageUrl(),
                 product.getCategory()
-                       .getName()
+                       .getName(),
+                product.getOptions()
+                       .stream()
+                       .map(OptionMapper::toResponseDto)
+                       .collect(Collectors.toUnmodifiableSet())
         );
     }
 

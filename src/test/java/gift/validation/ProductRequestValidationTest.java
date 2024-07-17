@@ -36,7 +36,8 @@ public class ProductRequestValidationTest {
                 "product",
                 1000,
                 "https://shop.com",
-                "상품권");
+                "상품권",
+                "옵션");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -50,7 +51,8 @@ public class ProductRequestValidationTest {
                 "productproductproduct",
                 1000,
                 "https://shop.com",
-                "상품권");
+                "상품권",
+                "옵션");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -64,7 +66,8 @@ public class ProductRequestValidationTest {
                 "pr@duct",
                 1000,
                 "https://shop.com",
-                "상품권");
+                "상품권",
+                "옵션");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -78,7 +81,8 @@ public class ProductRequestValidationTest {
                 "[(+-_&/)]",
                 1000,
                 "https://shop.com",
-                "상품권");
+                "상품권",
+                "옵션");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -92,7 +96,8 @@ public class ProductRequestValidationTest {
                 "카카오 product",
                 1000,
                 "https://shop.com",
-                "상품권");
+                "상품권",
+                "옵션");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -106,7 +111,8 @@ public class ProductRequestValidationTest {
                 "product",
                 -1000,
                 "https://shop.com",
-                "상품권");
+                "상품권",
+                "옵션");
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
