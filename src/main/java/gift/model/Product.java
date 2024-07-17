@@ -72,7 +72,7 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    public  void  setCategory(int category) { this.category=category;}
+    public  void  setCategory(int category) { this.category=category; }
 
     public Product(ProductDTO productDTO) {
         this.id = productDTO.getId();

@@ -22,17 +22,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductDTO> getProducts(Pageable pageable) {
-        return productRepository.findAll(pageable).map(this::convertToDTO);
+        return productRepository.findAll(pageable).map(product -> ProductDTO.convertToDTO(product, categoryService));
     }
 
     @Override
     public Page<ProductDTO> getProductsByCategoryId(Pageable pageable, int categoryId) {
-        return productRepository.findByCategory(pageable, categoryId).map(this::convertToDTO);
+        return productRepository.findByCategory(pageable, categoryId).map(product -> ProductDTO.convertToDTO(product, categoryService));
     }
 
     @Override
     public ProductDTO getProductById(Long id) {
-        return productRepository.findById(id).map(this::convertToDTO).orElse(null);
+        return productRepository.findById(id).map(product -> ProductDTO.convertToDTO(product, categoryService)).orElse(null);
     }
 
     @Override
@@ -51,10 +51,5 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
-    }
-
-    private ProductDTO convertToDTO(Product product) {
-        String categoryName = categoryService.getCategoryById(product.getCategory()).getName();
-        return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory(), categoryName);
     }
 }

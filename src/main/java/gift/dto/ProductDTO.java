@@ -1,6 +1,7 @@
 package gift.dto;
 
-import jakarta.validation.constraints.Size;
+import gift.model.Product;
+import gift.service.CategoryService;
 
 public class ProductDTO {
 
@@ -14,8 +15,7 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String name, int price, String imageUrl, int category,
-        String categoryName) {
+    public ProductDTO(Long id, String name, int price, String imageUrl, int category, String categoryName) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -23,6 +23,8 @@ public class ProductDTO {
         this.category = category;
         this.categoryName = categoryName;
     }
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -71,5 +73,10 @@ public class ProductDTO {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-}
 
+    // Static method to convert Product to ProductDTO
+    public static ProductDTO convertToDTO(Product product, CategoryService categoryService) {
+        String categoryName = categoryService.getCategoryById(product.getCategory()).getName();
+        return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory(), categoryName);
+    }
+}
