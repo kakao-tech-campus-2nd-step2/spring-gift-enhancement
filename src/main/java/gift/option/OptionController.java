@@ -25,7 +25,7 @@ public class OptionController {
     }
 
     @PutMapping("/{id}/options/{optionId}")
-    public OptionResponse updateProductOption(@PathVariable Long id, @PathVariable Long optionId, @RequestBody OptionRequest optionRequest){
+    public OptionResponse updateProductOption(@PathVariable Long id, @PathVariable Long optionId, @Valid @RequestBody OptionRequest optionRequest){
         return optionService.updateOption(id, optionId, optionRequest);
     }
 
