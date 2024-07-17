@@ -7,7 +7,7 @@
 <body>
 <div class="container">
   <h1>Add Product</h1>
-  <form th:action="@{/api/products/add}" th:object="${product}" method="post">
+  <form th:action="@{/web/products/add}" th:object="${product}" method="post">
     <div class="form-group">
       <label>Name</label>
       <input type="text" class="form-control" th:field="*{name}">

@@ -7,7 +7,7 @@
 <body>
 <div class="container">
   <h1>Edit Product</h1>
-  <form th:action="@{/api/products/edit/{id}(id=${product.id})}" th:object="${product}" method="post">
+  <form th:action="@{/web/products/edit/{id}(id=${product.id})}" th:object="${product}" method="post">
     <input type="hidden" th:field="*{id}">
     <div class="form-group">
       <label>Name</label>

@@ -15,7 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/products")
+@RequestMapping("/web/products")
 public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
@@ -42,6 +42,7 @@ public class ProductController {
     @GetMapping("/add")
     public String addProductForm(Model model) {
         model.addAttribute("product", new Product());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "addProduct";
     }
 
@@ -50,13 +51,14 @@ public class ProductController {
         Category category = categoryService.getCategoryById(categoryId);
         Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category);
         productService.addProduct(product);
-        return "redirect:/api/products";
+        return "redirect:/web/products";
     }
 
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "editProduct";
     }
 
@@ -65,12 +67,12 @@ public class ProductController {
         Category category = categoryService.getCategoryById(categoryId);
         Product updatedProduct = new Product(id, productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category);
         productService.updateProduct(id, updatedProduct);
-        return "redirect:/api/products";
+        return "redirect:/web/products";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return "redirect:/api/products";
+        return "redirect:/web/products";
     }
 }

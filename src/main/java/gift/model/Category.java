@@ -8,16 +8,12 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false, unique = true)
     private String name;
-
     @Column
     private String color;
-
     @Column
     private String imageUrl;
-
     @Column
     private String description;
 
@@ -49,5 +45,10 @@ public class Category {
 
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

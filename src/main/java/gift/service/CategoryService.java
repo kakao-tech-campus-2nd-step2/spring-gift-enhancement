@@ -1,8 +1,8 @@
 package gift.service;
 
+import gift.model.Category;
 import gift.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
-import gift.model.Category;
 
 import java.util.List;
 import java.util.NoSuchElementException;
