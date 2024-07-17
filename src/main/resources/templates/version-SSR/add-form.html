@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>상품 추가</title>
-    <link th:href="@{/add.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/add.css}"/>
 </head>
 <body>
 
-<form class="container" th:action="@{/add}" th:object="${addProductRequest}" method="post">
+<form class="container" method="post" th:action="@{/add}" th:object="${addProductRequest}">
     <h1>상품 추가</h1>
     <label for="category">Category:</label>
     <select id="category" th:field="*{categoryId}">
-        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+        <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}"></option>
     </select>
 
     <label for="name">Name:</label>
-    <input type="text" id="name" th:field="*{name}" required/><br/>
+    <input id="name" required th:field="*{name}" type="text"/><br/>
 
     <label for="price">Price:</label>
-    <input type="text" id="price" th:field="*{price}" required/><br/>
+    <input id="price" required th:field="*{price}" type="text"/><br/>
 
     <label for="imageUrl">Image URL:</label>
-    <input type="text" id="imageUrl" th:field="*{imageUrl}" required/><br/>
+    <input id="imageUrl" required th:field="*{imageUrl}" type="text"/><br/>
 
     <button type="submit">추가</button>
 </form>
