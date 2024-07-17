@@ -22,7 +22,5 @@
 - [x] 관리자 화면에서 상품을 추가할 때 상품 카테고리 추가 가능 구현
 - [ ] 관리자 화면에서 상품을 수정할 때 상품 카테고리 수정 가능 구현 
 
-### 4. ResponseEntity
-
-### 5. productCrudTest 리팩토링
+### 4. productCrudTest 리팩토링
 

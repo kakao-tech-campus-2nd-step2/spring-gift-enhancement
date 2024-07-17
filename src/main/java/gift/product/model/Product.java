@@ -1,12 +1,12 @@
 package gift.product.model;
 
 import gift.category.model.Category;
-import gift.member.model.Member;
 import gift.wish.model.Wish;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "product")
@@ -49,6 +49,8 @@ public class Product {
                 name.equals(comparingProduct.name) &&
                 imageUrl.equals(comparingProduct.imageUrl);
     }
+
+
     public void addWish(Wish wish) {
         this.wishes.add(wish);
         wish.setProduct(this);

@@ -36,7 +36,7 @@ public class ProductController {
 
     @PostMapping("/update/{id}")
     public String updateProduct(@PathVariable("id") Long id, @ModelAttribute Product product) {
-        productService.updateProduct(id, product);
+        productService.updateProduct(id, product, product.getCategory().getId());
         return "redirect:/products";
     }
 
