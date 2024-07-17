@@ -27,24 +27,31 @@ public class ProductService {
     }
 
     public Long add(ProductRequest productRequest) {
-        Category category = categoryRepository.findById(productRequest.getCategoryId())
-                                .orElseThrow(() -> new NoSuchEntityException("category"));
-        Product product = new Product(category, productRequest.getName(),
-                                productRequest.getPrice(), productRequest.getImageUrl());
+        Category category = findCategoryById(productRequest.getCategoryId());
+        Product product = new Product(category,
+                                    productRequest.getName(),
+                                    productRequest.getPrice(),
+                                    productRequest.getImageUrl());
         return productRepository.save(product).getId();
     }
 
     @Transactional
     public void update(Long id, ProductRequest productRequest) {
+        Category category = findCategoryById(productRequest.getCategoryId());
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchEntityException("product"));
-        Category category = categoryRepository.findById(productRequest.getCategoryId())
-                .orElseThrow(() -> new NoSuchEntityException("category"));
-        product.update(category, productRequest.getName(), productRequest.getPrice(),
+        product.update(category,
+                productRequest.getName(),
+                productRequest.getPrice(),
                 productRequest.getImageUrl());
     }
 
     public void delete(Long id) {
         productRepository.deleteById(id);
+    }
+
+    private Category findCategoryById(Long id) {
+        return categoryRepository.findById(id)
+            .orElseThrow(() -> new NoSuchEntityException("category"));
     }
 }
