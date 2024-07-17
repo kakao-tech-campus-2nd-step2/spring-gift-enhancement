@@ -31,13 +31,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserAlreadyExistException.class)
-    public ResponseEntity<ProblemDetail> handleUserAlreadyExistException(UserAlreadyExistException ex){
+    public ResponseEntity<ProblemDetail> handleUserAlreadyExistException(UserAlreadyExistException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(ex.getStatus());
         problemDetail.setDetail(ex.getMessage());
         return ResponseEntity.status(ex.getStatus()).body(problemDetail);
     }
+
     @ExceptionHandler(InvalidUserException.class)
-    public ResponseEntity<ProblemDetail> handleInvalidUserException(InvalidUserException ex){
+    public ResponseEntity<ProblemDetail> handleInvalidUserException(InvalidUserException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(ex.getStatus());
         problemDetail.setDetail(ex.getMessage());
         return ResponseEntity.status(ex.getStatus()).body(problemDetail);

@@ -8,8 +8,6 @@ import gift.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class UserService {
 
@@ -24,7 +22,7 @@ public class UserService {
 
     public void register(User user) {
         userRepository.findByEmail(user.getEmail()).ifPresent(existUser -> {
-            throw new UserAlreadyExistException(existUser.getEmail()+"은 이미 존재하는 이메일입니다.");
+            throw new UserAlreadyExistException(existUser.getEmail() + "은 이미 존재하는 이메일입니다.");
         });
         userRepository.save(user);
     }
@@ -37,15 +35,15 @@ public class UserService {
 
     public boolean validateToken(String token) {
         boolean isValidToken = jwtUtil.checkValidateToken(token);
-        if(isValidToken){
+        if (isValidToken) {
             return true;
         }
         throw new InvalidUserException("유효하지 않은 사용자입니다.");
     }
 
     public User getUserByToken(String token) {
-            String email = jwtUtil.getUserEmail(token);
-            return userRepository.findByEmail(email).orElseThrow(()->new InvalidUserException("유효하지 않은 사용자입니다."));
+        String email = jwtUtil.getUserEmail(token);
+        return userRepository.findByEmail(email).orElseThrow(() -> new InvalidUserException("유효하지 않은 사용자입니다."));
 
     }
 }
