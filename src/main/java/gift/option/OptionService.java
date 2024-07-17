@@ -22,6 +22,7 @@ public class OptionService {
     }
 
     public OptionResponse insertProductNewOption(Long id, OptionRequest optionRequest) {
+        if(checkIfDuplicatedOption(id, optionRequest)) throw new IllegalArgumentException("이미 존재하는 옵션명입니다.");
         Product product = productRepository.findById(id).orElseThrow();
         Option option = new Option(optionRequest, product);
         product.addOptions(option);
@@ -43,5 +44,9 @@ public class OptionService {
         product.removeOption(optionRepository.findById(optionId).orElseThrow());
         optionRepository.deleteById(optionId);
 
+    }
+
+    public boolean checkIfDuplicatedOption(Long id, OptionRequest option){
+        return optionRepository.findByNameAndProductId(option.getOptionName(), id).isPresent();
     }
 }
