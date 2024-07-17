@@ -19,11 +19,11 @@ public class Wish {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -40,7 +40,6 @@ public class Wish {
         this.product = product;
 
         member.getWishList().add(this);
-        product.getWishList().add(this);
     }
 
     public Long getId() {
@@ -60,12 +59,5 @@ public class Wish {
         this.member.getWishList().remove(this);
         this.member = member;
         member.getWishList().add(this);
-    }
-
-    public void updateProduct(Product product) {
-        // 기존 productEntity에서 wishEntity 삭제
-        this.product.getWishList().remove(this);
-        this.product = product;
-        product.getWishList().add(this);
     }
 }
