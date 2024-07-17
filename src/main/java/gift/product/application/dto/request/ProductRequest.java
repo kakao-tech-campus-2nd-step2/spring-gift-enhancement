@@ -14,14 +14,19 @@ public record ProductRequest(
         @NotBlank(message = ValidateErrorMessage.INVALID_PRODUCT_NAME_NULL)
         @Length(max = 15, message = ValidateErrorMessage.INVALID_PRODUCT_NAME_LENGTH)
         String name,
+
         @NotNull(message = ValidateErrorMessage.INVALID_PRODUCT_PRICE_NULL)
         @Range(min = 1, max = 2_100_000_000, message = ValidateErrorMessage.INVALID_PRODUCT_PRICE_RANGE)
         Integer price,
+
         @NotBlank(message = ValidateErrorMessage.INVALID_PRODUCT_IMG_URL_NULL)
         @URL(message = ValidateErrorMessage.INVALID_PRODUCT_IMG_URL_FORMAT)
-        String imgUrl
+        String imgUrl,
+
+        @NotBlank(message = ValidateErrorMessage.INVALID_CATEGORY_NAME_NULL)
+        String categoryId
 ) {
     public ProductParam toProductParam() {
-        return new ProductParam(name(), price(), imgUrl());
+        return new ProductParam(name(), price(), imgUrl(), categoryId());
     }
 }
