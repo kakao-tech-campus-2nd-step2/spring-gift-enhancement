@@ -62,10 +62,6 @@ public class OptionService {
 
     public void deleteOption(Long id) {
         System.out.println("[OptionService] deleteOption()");
-        try {
-            optionRepository.deleteById(id);
-        }catch(Exception e) {
-            System.out.println("[OptionService] deleteOption(): " + e.getMessage());
-        }
+        optionRepository.deleteById(id);
     }
 }
