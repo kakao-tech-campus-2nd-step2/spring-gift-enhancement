@@ -38,7 +38,7 @@ public class Product {
     @Column(name = "imageUrl", nullable = false)
     private String imageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "category_id")
     private Category category;
 
