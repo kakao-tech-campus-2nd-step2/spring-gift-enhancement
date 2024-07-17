@@ -2,7 +2,9 @@ package gift.service;
 
 import static gift.util.Constants.CATEGORY_NOT_FOUND;
 
+import gift.dto.category.CategoryRequest;
 import gift.dto.category.CategoryResponse;
+import gift.exception.category.CategoryNotFoundException;
 import gift.exception.product.ProductNotFoundException;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
@@ -19,18 +21,35 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    // 모든 상품 조회
+    // 모든 카테고리 조회
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
             .map(CategoryService::convertToDTO)
             .collect(Collectors.toList());
     }
 
-    // ID로 상품 조회
+    // ID로 카테고리 조회
     public CategoryResponse getCategoryById(Long id) {
         return categoryRepository.findById(id)
             .map(CategoryService::convertToDTO)
             .orElseThrow(() -> new ProductNotFoundException(CATEGORY_NOT_FOUND + id));
+    }
+
+    // 카테고리 추가
+    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
+        Category category = convertToEntity(categoryRequest);
+        Category addedCategory = categoryRepository.save(category);
+        return convertToDTO(addedCategory);
+    }
+
+    // 카테고리 수정
+    public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND + id));
+
+        category.update(categoryRequest.name(), categoryRequest.color(), categoryRequest.imageUrl(), categoryRequest.description());
+        Category updatedCategory = categoryRepository.save(category);
+        return convertToDTO(updatedCategory);
     }
 
     // Mapper methods
@@ -41,6 +60,15 @@ public class CategoryService {
             category.getColor(),
             category.getImageUrl(),
             category.getDescription()
+        );
+    }
+
+    private static Category convertToEntity(CategoryRequest categoryRequest) {
+        return new Category(
+            categoryRequest.name(),
+            categoryRequest.color(),
+            categoryRequest.imageUrl(),
+            categoryRequest.description()
         );
     }
 }
