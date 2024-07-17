@@ -49,17 +49,19 @@ class CategoryRepositoryTest {
 
     @Test
     void testFindById() {
+        Category foundCategory = categoryRepository.findById(savedCategory.getId()).get();
         assertAll(
-            () -> assertThat(savedCategory).isNotNull(),
-            () -> assertThat(savedCategory.getId()).isEqualTo(category1.getId())
+            () -> assertThat(foundCategory).isNotNull(),
+            () -> assertThat(foundCategory.getId()).isEqualTo(savedCategory.getId())
         );
     }
 
     @Test
     void testFindByName() {
+        Category foundCategory = categoryRepository.findByName(savedCategory.getName());
         assertAll(
-            () -> assertThat(savedCategory).isNotNull(),
-            () -> assertThat(savedCategory.getName()).isEqualTo(category1.getName())
+            () -> assertThat(foundCategory).isNotNull(),
+            () -> assertThat(foundCategory.getName()).isEqualTo(savedCategory.getName())
         );
     }
 
