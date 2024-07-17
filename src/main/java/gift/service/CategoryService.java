@@ -24,4 +24,12 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    public void updateCategory(Long id, Category category) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ProductNotFoundException("Category not found");
+        }
+        category.setId(id);
+        categoryRepository.save(category);
+    }
+
 }
