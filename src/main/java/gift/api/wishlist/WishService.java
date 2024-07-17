@@ -30,23 +30,13 @@ public class WishService {
     }
 
     public List<Wish> getItems(Long memberId, Pageable pageable) {
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new NoSuchEntityException("member"));
+        Member member = findMemberById(memberId);
         Page<Wish> allWishes = wishRepository.findAllByMember(member, createPageableWithProduct(pageable));
         return allWishes.hasContent() ? allWishes.getContent() : Collections.emptyList();
     }
 
-    private Pageable createPageableWithProduct(Pageable pageable) {
-        Sort sort = Sort.by(pageable.getSort()
-                        .get()
-                        .map(order -> order.withProperty("product." + order.getProperty()))
-                        .collect(Collectors.toList()));
-        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-    }
-
     public void add(Long memberId, WishRequest wishRequest) {
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new NoSuchEntityException("member"));
+        Member member = findMemberById(memberId);
         Product product = productRepository.findById(wishRequest.productId())
             .orElseThrow(() -> new NoSuchEntityException("product"));
         wishRepository.save(wishRequest.toEntity(member, product));
@@ -61,5 +51,18 @@ public class WishService {
 
     public void delete(Long memberId, WishRequest wishRequest) {
         wishRepository.deleteById(new WishId(memberId, wishRequest.productId()));
+    }
+
+    private Pageable createPageableWithProduct(Pageable pageable) {
+        Sort sort = Sort.by(pageable.getSort()
+            .get()
+            .map(order -> order.withProperty("product." + order.getProperty()))
+            .collect(Collectors.toList()));
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+    }
+
+    private Member findMemberById(Long id) {
+        return memberRepository.findById(id)
+            .orElseThrow(() -> new NoSuchEntityException("member"));
     }
 }
