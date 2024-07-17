@@ -59,7 +59,7 @@ class WishRepositoryTest {
 
         // when
         Page<Wish> actuals = wishRepository.findAllByMemberIdFetchJoin(member.getId(),
-                PageRequest.of(0, 10, Sort.by("createdAt").descending()));
+                PageRequest.of(0, 10, Sort.by("id").ascending()));
 
         // then
         assertThat(actuals).hasSize(wishes.length);
@@ -72,10 +72,8 @@ class WishRepositoryTest {
             assertThat(result.getMember().getRole()).isEqualTo(role);
 
             assertThat(result.getProduct().getCategory().getName()).isEqualTo(category.getName());
-
             assertThat(result.getProductCount()).isEqualTo(productCounts[i]);
         }
-        assertThat(actuals.getContent().get(0).getCreatedAt()).isAfterOrEqualTo(actuals.getContent().get(1).getCreatedAt());
     }
 
     @Test

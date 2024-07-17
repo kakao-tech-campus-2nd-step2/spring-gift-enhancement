@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.common.enums.Role;
+import gift.config.JpaConfig;
 import gift.controller.dto.request.WishInsertRequest;
 import gift.controller.dto.request.WishPatchRequest;
 import gift.model.Category;
@@ -15,12 +16,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(JpaConfig.class)
 class WishServiceTest {
     @Autowired
     private WishService wishService;
