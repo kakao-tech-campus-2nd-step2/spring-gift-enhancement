@@ -32,4 +32,14 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
 
+
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCategory(@RequestBody Category category) {
+        if (!categoryService.existsCategory(category.getCategoryName())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Category does not exist");
+        }
+        categoryService.deleteCategory(category.getId());
+        return ResponseEntity.ok().body("Category deleted successfully");
+    }
+
 }
