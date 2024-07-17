@@ -1,15 +1,11 @@
-package gift.wishlist.repository;
+package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.entity.Category;
 import gift.entity.Member;
-import gift.repository.CategoryRepository;
-import gift.repository.MemberRepository;
 import gift.entity.Product;
-import gift.repository.ProductRepository;
 import gift.entity.Wish;
-import gift.repository.WishRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;

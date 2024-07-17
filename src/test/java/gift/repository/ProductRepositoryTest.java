@@ -1,11 +1,9 @@
-package gift.product.repository;
+package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.entity.Category;
 import gift.entity.Product;
-import gift.repository.CategoryRepository;
-import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +65,7 @@ class ProductRepositoryTest {
 
     @Test
     void testSaveUpdateProduct() {
-        product1.setName("UpdateProduct");
+        product1.updateName("UpdateProduct");
         productRepository.save(product1);
 
         Optional<Product> updateProduct = productRepository.findById(product1.getId());

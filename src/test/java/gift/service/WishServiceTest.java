@@ -1,4 +1,4 @@
-package gift.wishlist.service;
+package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,8 +12,6 @@ import gift.repository.ProductRepository;
 import gift.dto.WishResponse;
 import gift.entity.Wish;
 import gift.repository.WishRepository;
-import gift.service.CategoryService;
-import gift.service.WishService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
