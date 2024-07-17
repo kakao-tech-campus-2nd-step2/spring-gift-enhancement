@@ -57,11 +57,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<String> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+    public ResponseEntity<String> handleMethodArgumentTypeMismatch(
+        MethodArgumentTypeMismatchException ex) {
         String name = ex.getName();
         String type = ex.getRequiredType().getSimpleName();
         Object value = ex.getValue();
-        String message = String.format("'%s' should be a valid '%s' and '%s' isn't", name, type, value);
+        String message = String.format("'%s' should be a valid '%s' and '%s' isn't", name, type,
+            value);
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 }
