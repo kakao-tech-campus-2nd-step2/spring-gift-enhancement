@@ -2,8 +2,8 @@ package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.product.request.CreateProductRequest;
-import gift.dto.product.response.ProductResponse;
+import gift.product.dto.request.CreateProductRequest;
+import gift.product.dto.response.ProductResponse;
 import java.net.URI;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

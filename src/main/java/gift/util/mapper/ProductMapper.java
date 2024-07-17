@@ -1,10 +1,10 @@
 package gift.util.mapper;
 
-import gift.dto.product.request.CreateProductRequest;
-import gift.dto.product.request.UpdateProductRequest;
-import gift.dto.product.response.ProductResponse;
-import gift.entity.Category;
-import gift.entity.Product;
+import gift.product.dto.request.CreateProductRequest;
+import gift.product.dto.request.UpdateProductRequest;
+import gift.product.dto.response.ProductResponse;
+import gift.product.entity.Category;
+import gift.product.entity.Product;
 
 public class ProductMapper {
 
