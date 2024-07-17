@@ -18,11 +18,9 @@ import java.util.Optional;
 public class WishlistController {
 
     private final WishProductService wishProductService;
-    private final ProductService productService;
 
-    public WishlistController(WishProductService wishProductService, ProductService productService) {
+    public WishlistController(WishProductService wishProductService) {
         this.wishProductService = wishProductService;
-        this.productService = productService;
     }
 
     @DeleteMapping("/wishlist/{productId}")

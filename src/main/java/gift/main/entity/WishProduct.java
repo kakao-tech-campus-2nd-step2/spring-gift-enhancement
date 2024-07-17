@@ -3,7 +3,7 @@ package gift.main.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "`wish-products`")
+@Table(name = "wish-products")
 public class WishProduct {
 
     @Id
@@ -11,11 +11,11 @@ public class WishProduct {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "prduct_id")
+    @JoinColumn(name = "product_id")
     public Product product;
 
     @ManyToOne
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id",nullable = true)
     public User user;
 
 

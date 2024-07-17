@@ -1,28 +1,39 @@
 package gift.main.controller;
 
+import gift.main.dto.CategoryRequest;
 import gift.main.entity.Category;
-import gift.main.repository.CategoryRepository;
+import gift.main.service.CategoryService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 public class CategoryController {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
-    @GetMapping("/category")
+    @GetMapping("/categories")
     public ResponseEntity<?> getCategorylist() {
-        List<Category> categoryList = categoryRepository.findAll();
-        System.out.println("categoryList = " + categoryList);
+        List<Category> categoryList = categoryService.getCategoryAll();
         return ResponseEntity.ok(categoryList);
     }
+
+    @PostMapping("/category")
+    public ResponseEntity<?> addCategorylist(@RequestBody CategoryRequest categoryRequest) {
+        categoryService.addCategory(categoryRequest);
+        return ResponseEntity.ok("Category added successfully");
+    }
+
+    @PutMapping("/category/{id}")
+    public ResponseEntity<?> updateCategorylist(@PathVariable(name = "id") Long id, @RequestBody CategoryRequest categoryRequest) {
+        categoryService.updateCategory(id, categoryRequest);
+        return ResponseEntity.ok("Category updated successfully");
+    }
+
 
 }

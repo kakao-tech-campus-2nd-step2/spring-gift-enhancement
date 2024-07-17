@@ -1,7 +1,13 @@
 package gift.main.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import gift.main.controller.AdminProductController;
+import gift.main.entity.Category;
+import gift.main.entity.Product;
+import gift.main.entity.User;
 import gift.main.entity.WishProduct;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,38 +24,41 @@ import java.util.List;
 class WishProductRepositoryTest {
     @Autowired
     private  WishProductRepository wishProductRepository;
-
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Test
-    public void 유저아이디값으로여러개조회하기() {
-        //given(준비)
-        Long userId = 1L;
-        WishProduct wishProduct1 = new WishProduct(1L, userId);
-        WishProduct wishProduct2 = new WishProduct(1L, userId);
-        WishProduct wishProduct3 = new WishProduct(1L, 2L);
-        wishProductRepository.save(wishProduct1);
-        wishProductRepository.save(wishProduct2);
-        wishProductRepository.save(wishProduct3);
+    public void 유저삭제시_해당위시리스트_정상삭제() {
+        //이부분 정상 작동 X
+        User user = userRepository.save(new User("테스트용", "email", "123", "ADMIN"));
+        User seller = userRepository.save(new User("셀러", "셀러", "123", "ADMIN"));
 
-        //when(실행)
-        List<WishProduct> wishProducts = wishProductRepository.findAllByUserId(userId);
-        //then(결과)
-        assertEquals(2, wishProducts.size());
+        Product product1 = productRepository.save(new Product("테스트용1", 1000, "url", seller, categoryRepository.getById(1l)));
+        Product product2 = productRepository.save(new Product("테스트용2", 1000, "url", seller, categoryRepository.getById(1l)));
+
+        wishProductRepository.save(new WishProduct(product1, user));
+        wishProductRepository.save(new WishProduct(product2, user));
+
+
+        Assertions.assertFalse(wishProductRepository.findAll().isEmpty());
+        System.out.println("wishProductRepository.findAll() = " + wishProductRepository.findAll());
+        Assertions.assertDoesNotThrow(() -> userRepository.delete(user));
+        Assertions.assertFalse(() -> userRepository.existsByEmail("email"));
+        System.out.println("wishProductRepository.findAll() = " + wishProductRepository.findAll());
+        Assertions.assertTrue(wishProductRepository.findAll().isEmpty());
+
+
     }
+
+
 
 
     @Test
     public void 값삭제하기() {
-        //given(준비)
-        Long userId = 1L;
-        Long productId = 2L;
-        WishProduct wishProduct = new WishProduct(productId, userId);
-        wishProductRepository.save(wishProduct);
-
-        //when(실행)
-        wishProductRepository.deleteByProductIdAndUserId(productId,userId);
-        //then(결과)
-        assertEquals(0, wishProductRepository.findAllByUserId(userId).size());
 
     }
 

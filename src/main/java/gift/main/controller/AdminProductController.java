@@ -36,13 +36,13 @@ public class AdminProductController {
             @PathVariable(value = "id") long id,
             @Valid @RequestBody ProductRequest productRequest,
             @SessionUser UserVo sessionUserVo) {
-        System.out.println("productRequest = " + productRequest);
         productService.updateProduct(id, productRequest);
-        return ResponseEntity.ok("Product added successfully");
+        return ResponseEntity.ok("Product updated successfully");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Long id) {
+        System.out.println("id = " + id);
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");
     }

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "`users`")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -25,8 +25,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,  cascade = CascadeType.DETACH)
+    @OneToMany(orphanRemoval = true, mappedBy = "user",fetch = FetchType.LAZY,  cascade = CascadeType.REMOVE)
     private List<WishProduct> wishProducts;
+    //유저가 사라진 경우 -> 위시리스트 무조건 삭제
 
     public User() {
 

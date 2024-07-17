@@ -19,6 +19,7 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+
     @Test
     public void ENUM값이_잘들어가는지_조회() {
         User user = userRepository.save(new User("testuser", "email", "1234", "admin"));
