@@ -3,10 +3,14 @@ package gift.product.application;
 import gift.product.application.dto.request.CategoryRequest;
 import gift.product.service.CategoryService;
 import java.net.URI;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,5 +28,11 @@ public class CategoryController {
 
         return ResponseEntity.created(URI.create("/api/categories/" + savedCategoryId))
                 .build();
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void modifyCategory(@PathVariable Long id, @RequestBody CategoryRequest request) {
+        categoryService.modifyCategory(id, request.toCategoryParam());
     }
 }
