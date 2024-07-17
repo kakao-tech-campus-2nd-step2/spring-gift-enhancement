@@ -20,7 +20,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         if (request == null) {
             throw new IllegalArgumentException("Request 정보가 존재하지 않습니다.");
         }
-
-        return request.getAttribute("id");
+        
+        return Long.parseLong(String.valueOf(request.getAttribute("id")));
     }
 }
