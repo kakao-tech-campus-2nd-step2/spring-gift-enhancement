@@ -6,6 +6,7 @@ import gift.domain.model.entity.User;
 public class UserResponseDto {
 
     private User user;
+  
     @JsonIgnore
     private String token;
 
