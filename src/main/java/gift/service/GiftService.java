@@ -14,7 +14,9 @@ import gift.utils.error.CategoryNotFoundException;
 import gift.utils.error.NotpermitNameException;
 import gift.utils.error.OptionNameDuplicationException;
 import gift.utils.error.ProductNotFoundException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,9 +52,7 @@ public class GiftService {
             .orElseThrow(() -> new CategoryNotFoundException("Category NOT FOUND"));
 
         List<ProductOptionRequest> options = productRequest.getOptions();
-        if (options.stream().map(ProductOptionRequest::getName).distinct().count() < options.size()){
-            throw new OptionNameDuplicationException("Option Name Duplication");
-        }
+        validateUniqueOptionNames(options);
 
         Product product = new Product(productRequest.getName(),
             productRequest.getPrice(), productRequest.getImageUrl());
@@ -79,13 +79,9 @@ public class GiftService {
             .orElseThrow(() -> new CategoryNotFoundException("Category NOT FOUND"));
 
         List<ProductOptionRequest> options = productRequest.getOptions();
-        if (options.stream().map(ProductOptionRequest::getName).distinct().count() < options.size()){
-            throw new OptionNameDuplicationException("Option Name Duplication");
-        }
+        validateUniqueOptionNames(options);
 
-        productById.setName(productRequest.getName());
-        productById.setPrice(productRequest.getPrice());
-        productById.setImageUrl(productRequest.getImageUrl());
+        productById.updateProduct(productRequest.getName(),productRequest.getPrice(),productRequest.getImageUrl());
         productById.setCategory(category);
         productById.getOptions().forEach(productById::removeOption);
 
@@ -135,6 +131,13 @@ public class GiftService {
                 product.getCategory().getDescription()),
             product.getOptions().stream().toList()
         );
+    }
+
+    private void validateUniqueOptionNames(List<ProductOptionRequest> options) {
+        Set<String> optionNames = new HashSet<>();
+        if (!options.stream().allMatch(option -> optionNames.add(option.getName()))) {
+            throw new OptionNameDuplicationException("Option Name Duplication");
+        }
     }
 
 }

@@ -27,6 +27,9 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public Option() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -45,10 +48,6 @@ public class Option {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public Product getProduct() {

@@ -4,6 +4,7 @@ import gift.domain.Category;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 
 public class ProductRequest {
@@ -23,7 +24,8 @@ public class ProductRequest {
     @NotEmpty(message = "Category ID cannot be empty")
     private Long categoryId;
 
-    @NotEmpty(message = "Product must have at least one option")
+    @NotEmpty(message = "상품에는 최소 하나 이상의 옵션이 있어야 합니다.")
+    @Size(min = 1, message = "상품에는 최소 하나 이상의 옵션이 있어야 합니다.")
     private List<ProductOptionRequest> options;
 
 

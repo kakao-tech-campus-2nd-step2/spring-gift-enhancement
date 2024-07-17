@@ -163,4 +163,10 @@ public class Product {
             category.getProducts().add(this);
         }
     }
+
+    public void updateProduct(String name,double price,String imageUrl){
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 }

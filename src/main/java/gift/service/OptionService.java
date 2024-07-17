@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OptionService {
 
-    OptionRepository optionRepository;
-    ProductRepository productRepository;
+    private final OptionRepository optionRepository;
+    private final ProductRepository productRepository;
 
     public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
         this.optionRepository = optionRepository;
@@ -42,10 +42,11 @@ public class OptionService {
     @Transactional
     public Long deleteOption(Long id) {
         optionRepository.findById(id).orElseThrow(
-            () -> new OptionNotFoundException("Optrion Not Found")
+            () -> new OptionNotFoundException("Option Not Found")
         );
         optionRepository.deleteById(id);
         return id;
     }
+
 
 }

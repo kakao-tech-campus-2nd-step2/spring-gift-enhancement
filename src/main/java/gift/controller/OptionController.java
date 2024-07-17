@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/products/option")
+@RequestMapping("api/products/options")
 public class OptionController {
     OptionService optionService;
 
@@ -27,8 +27,8 @@ public class OptionController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Long> deleteOption(@Valid @RequestBody Long id){
-        Long deletId = optionService.deleteOption(id);
-        return ResponseEntity.ok(deletId);
+    public ResponseEntity<Long> delete(@Valid @RequestBody Long id){
+        Long deleteId = optionService.deleteOption(id);
+        return ResponseEntity.ok(deleteId);
     }
 }
