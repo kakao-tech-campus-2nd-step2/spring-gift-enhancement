@@ -34,7 +34,7 @@
   - [x] 상품 수정 시, 카테고리 업데이트하도록 수정
 
 ## 피드백
-- [ ] JwtConfig를 Component로 변경하고 autowired사용하여 호출하도록 수정
+- [x] JwtConfig를 Component로 변경하고 autowired사용하여 호출하도록 수정
 - [ ] WebConfig의 addArgumentResolvers가 없었을 땐 어떻게 동작했을까?
 - [ ] ProductController의 pagenation 관련 내용 requestParam 말고 pageable 객체 받아서 사용하도록 수정
 - [ ] webConfigTest 목적 설명

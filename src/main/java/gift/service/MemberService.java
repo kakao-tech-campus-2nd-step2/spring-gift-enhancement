@@ -9,15 +9,19 @@ import gift.dto.MemberResponse;
 import gift.exception.ErrorMessage;
 import gift.repository.MemberRepository;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final JwtConfig jwtConfig;
 
-    public MemberService(MemberRepository memberRepository) {
+    @Autowired
+    public MemberService(MemberRepository memberRepository, JwtConfig jwtConfig) {
         this.memberRepository = memberRepository;
-}
+        this.jwtConfig = jwtConfig;
+    }
 
     public MemberResponse registerMember(MemberRequest requestDto) {
         if (memberRepository.existsByEmail(requestDto.getEmail())) {
@@ -27,7 +31,7 @@ public class MemberService {
         Member member = new Member(requestDto.getEmail(), requestDto.getPassword());
         memberRepository.save(member);
 
-        String token = JwtConfig.generateToken(requestDto.getEmail());
+        String token = jwtConfig.generateToken(requestDto.getEmail());
         return new MemberResponse(token);
     }
 
@@ -35,7 +39,7 @@ public class MemberService {
         Member member = memberRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException(ErrorMessage.EMAIL_NOT_FOUND));
         if (member != null && member.getPassword().equals(loginRequest.getPassword())) {
-            String token = JwtConfig.generateToken(loginRequest.getEmail());
+            String token = jwtConfig.generateToken(loginRequest.getEmail());
             return new LoginResponse(token);
         } else {
             throw new IllegalArgumentException(ErrorMessage.INVALID_LOGIN_CREDENTIALS);

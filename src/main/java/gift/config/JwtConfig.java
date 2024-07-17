@@ -1,19 +1,16 @@
 package gift.config;
 
-
 import gift.constant.Constants;
-import gift.domain.Member;
-import io.jsonwebtoken.Claims;
+import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.context.annotation.Configuration;
-
+import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 
-@Configuration
+@Component
 public class JwtConfig {
-    public static String generateToken(String email) {
+    public String generateToken(String email) {
         Claims claims = (Claims) Jwts.claims();
         claims.put("email", email);
         return Jwts.builder()
