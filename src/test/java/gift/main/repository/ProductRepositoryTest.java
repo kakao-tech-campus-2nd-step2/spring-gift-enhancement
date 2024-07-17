@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @DataJpaTest
@@ -47,7 +44,7 @@ class ProductRepositoryTest {
         Product foundProduct = productRepository.findById(product.getId()).orElseThrow();
 
         // Then
-        System.out.println("foundProduct = " +foundProduct.getWishProducts());
+        assertThat(foundProduct.getWishProducts().size()).isEqualTo(1);
 
     }
 
