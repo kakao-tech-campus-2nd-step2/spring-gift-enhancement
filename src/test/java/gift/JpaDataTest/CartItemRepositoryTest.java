@@ -44,20 +44,20 @@ public class CartItemRepositoryTest {
     private User user;
     private Product product1;
     private Product product2;
-    private Category savedCategory1;
-    private Category savedCategory2;
+    private Category ethiopia;
+    private Category jamaica;
 
     @BeforeEach
     void setUp() {
-        savedCategory1 = categoryRepository.saveAndFlush(new Category("리빙/주방", "리빙/주방 관련 카테고리"));
-        savedCategory2 = categoryRepository.saveAndFlush(new Category("스포츠", "스포츠 관련 카테고리"));
+        ethiopia = categoryRepository.saveAndFlush(new Category("에티오피아산", "에티오피아 산 원두를 사용했습니다."));
+        jamaica = categoryRepository.saveAndFlush(new Category("자메이카산", "자메이카산 원두를 사용했습니다."));
 
         User user = new User("minji@example.com", "password1");
         User savedUser = userRepository.saveAndFlush(user);
         this.user = savedUser;
 
-        Product product1 = new Product("아이스 아메리카노 T",  savedCategory1, 4500, "https://example.com/image.jpg");
-        Product product2 = new Product("아이스 카페모카 M", savedCategory2, 6300, "https://example.com/image.jpg");
+        Product product1 = new Product("아이스 아메리카노 T",  ethiopia, 4500, "https://example.com/image.jpg");
+        Product product2 = new Product("아이스 카페모카 M", jamaica, 6300, "https://example.com/image.jpg");
         Product savedProduct1 = productRepository.save(product1);
         Product savedProduct2 = productRepository.save(product2);
         this.product1 = savedProduct1;

@@ -1,18 +1,15 @@
 package gift.JpaDataTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
+import gift.domain.user.JpaUserRepository;
 import gift.domain.user.User;
 import gift.domain.user.UserService;
 import gift.domain.user.dto.UserDTO;
 import gift.domain.user.dto.UserInfo;
-import gift.domain.user.JpaUserRepository;
 import gift.global.jwt.JwtProvider;
-
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,11 +33,10 @@ public class UserRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        User user = new User("minji@example.com", "password1");
-        this.user = user;
-        UserDTO userDTO = new UserDTO("minji@example.com", "password1");
-        this.userDTO = userDTO;
+        user = new User("minji@example.com", "password1");
+        userDTO = new UserDTO("minji@example.com", "password1");
     }
+
     @Test
     @Description("회원 가입")
     public void join() {

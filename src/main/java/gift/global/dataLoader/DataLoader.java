@@ -38,18 +38,17 @@ public class DataLoader {
     @PostConstruct
     public void init() {
         // Category
-        Category savedCategory1 = jpaCategoryRepository.saveAndFlush(
-            new Category("리빙/주방", "리빙/주방 관련 카테고리"));
-        Category savedCategory2 = jpaCategoryRepository.saveAndFlush(
-            new Category("스포츠", "스포츠 관련 카테고리"));
-        System.out.println("savedCategory1 = " + savedCategory1);
-        System.out.println("savedCategory2 = " + savedCategory2);
+        Category ethiopia = jpaCategoryRepository.saveAndFlush(new Category("에티오피아산", "에티오피아 산 원두를 사용했습니다."));
+        Category jamaica = jpaCategoryRepository.saveAndFlush(new Category("자메이카산", "자메이카산 원두를 사용했습니다."));
+        System.out.println("ethiopia = " + ethiopia);
+        System.out.println("jamaica = " + jamaica);
+
         // Product
-        Product americano = new Product("아이스 아메리카노 T", savedCategory1, 4500,
+        Product americano = new Product("아이스 아메리카노 T", ethiopia, 4500,
             "https://example.com/image.jpg");
-        Product cafuchino = new Product("아이스 카푸치노 M", savedCategory1, 4700,
+        Product cafuchino = new Product("아이스 카푸치노 M", jamaica, 4700,
             "https://example.com/image.jpg");
-        Product malcha = new Product("핫 말차라떼 L", savedCategory2, 6800,
+        Product malcha = new Product("핫 말차라떼 L", ethiopia, 6800,
             "https://example.com/image.jpg");
         jpaProductRepository.save(americano);
         jpaProductRepository.save(cafuchino);
@@ -58,8 +57,8 @@ public class DataLoader {
         // dummy Product data
         for (int i = 0; i < 100; i++) {
             Product dummyProduct = new Product(
-                "더미 제품 " + (i + 1),
-                savedCategory1,
+                "더미 커피 " + (i + 1),
+                ethiopia,
                 1000 + (i * 10),
                 "https://example.com/dummy" + (i + 1) + ".jpg"
             );

@@ -45,20 +45,20 @@ public class ProductRepositoryTest {
 
     private Product product1;
     private Product product2;
-    private Category savedCategory1;
-    private Category savedCategory2;
+    private Category ethiopia;
+    private Category jamaica;
 
     public ProductRepositoryTest() {
     }
 
     @BeforeEach
     void setUp() {
-        savedCategory1 = categoryRepository.saveAndFlush(new Category("리빙/주방", "리빙/주방 관련 카테고리"));
-        savedCategory2 = categoryRepository.saveAndFlush(new Category("스포츠", "스포츠 관련 카테고리"));
+        ethiopia = categoryRepository.saveAndFlush(new Category("에티오피아산", "에티오피아 산 원두를 사용했습니다."));
+        jamaica = categoryRepository.saveAndFlush(new Category("자메이카산", "자메이카산 원두를 사용했습니다."));
 
-        Product product1 = new Product("아이스 아메리카노 T", savedCategory1, 4500, "https://example.com/image.jpg");
+        Product product1 = new Product("아이스 아메리카노 T", ethiopia, 4500, "https://example.com/image.jpg");
         this.product1 = product1;
-        Product product2 = new Product("아이스 말차라떼 T", savedCategory2, 4500, "https://example.com/image.jpg");
+        Product product2 = new Product("아이스 말차라떼 T", jamaica, 4500, "https://example.com/image.jpg");
         this.product2 = product2;
     }
 
@@ -78,7 +78,7 @@ public class ProductRepositoryTest {
     @Description("카카오 문구 포함 상품 저장 실패")
     void kakaoPersistFailed() {
         // given
-        Product product = new Product("아이스 카카오 라떼 T", savedCategory1, 4500, "https://example.com/image.jpg");
+        Product product = new Product("아이스 카카오 라떼 T", ethiopia, 4500, "https://example.com/image.jpg");
 
         // when, then
         assertThrows(ConstraintViolationException.class,
@@ -89,7 +89,7 @@ public class ProductRepositoryTest {
     @Description("카카오 문구 포함 상품 검증 메서드")
     void kakaoValidation() {
         // given
-        Product product = new Product("아이스 카카오 라떼 T", savedCategory1, 4500, "https://example.com/image.jpg");
+        Product product = new Product("아이스 카카오 라떼 T", ethiopia, 4500, "https://example.com/image.jpg");
 
         // when, then
         assertThrows(BusinessException.class, () -> productService.validateProduct(product));
@@ -99,8 +99,8 @@ public class ProductRepositoryTest {
     @Description("상품 저장 시 이름 중복 검증")
     void saveWithSameName() {
         // given
-        Product product1 = new Product("아이스 아메리카노 T", savedCategory1, 4500, "https://example.com/image.jpg");
-        Product product2 = new Product("아이스 아메리카노 T", savedCategory2, 4700, "https://example.com/image.jpg");
+        Product product1 = new Product("아이스 아메리카노 T", ethiopia, 4500, "https://example.com/image.jpg");
+        Product product2 = new Product("아이스 아메리카노 T", jamaica, 4700, "https://example.com/image.jpg");
 
         // when
         productRepository.save(product1);
