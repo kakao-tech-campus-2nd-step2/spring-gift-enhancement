@@ -48,8 +48,7 @@ public class CategoryController {
 
     @PostMapping("/add/category")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category) {
-        var savedCategory = categoryService.addCategory(category);
-        var addCategorySucessResponse = new ApiResponse(HttpResult.OK, savedCategory.toString(),
+        var addCategorySucessResponse = new ApiResponse(HttpResult.OK, categoryService.addCategory(category).toString(),
             HttpStatus.OK);
         return new ResponseEntity<>(addCategorySucessResponse,
             addCategorySucessResponse.getHttpStatus());
