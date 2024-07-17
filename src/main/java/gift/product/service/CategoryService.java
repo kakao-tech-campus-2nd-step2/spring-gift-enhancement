@@ -49,7 +49,13 @@ public class CategoryService {
     public List<CategoryInfo> getCategoryList() {
         List<Category> categories = categoryRepository.findAll();
 
-        var response = categories.stream().map(CategoryInfo::from).toList();
-        return response;
+        return categories.stream().map(CategoryInfo::from).toList();
+    }
+
+    public void deleteCategory(final Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
+
+        categoryRepository.delete(category);
     }
 }
