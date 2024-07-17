@@ -62,7 +62,10 @@ public class ProductRepositoryTest {
 
     @Test
     void delete(){
-        Product expected = new Product("그린티라떼", 3500, "example3.com");
+        Category category = new Category("교환권");
+        categoryRepository.save(category);
+        Category category1 = categoryService.getCategoryById(1L);
+        Product expected = new Product("그린티라떼", 3500, "example3.com",category1);
         productRepository.save(expected);
         productRepository.deleteById(expected.getId());
         Optional<Product> actual = productRepository.findById(expected.getId());
