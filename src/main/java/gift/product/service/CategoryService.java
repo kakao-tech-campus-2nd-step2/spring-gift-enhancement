@@ -1,12 +1,12 @@
-package gift.service;
+package gift.product.service;
 
-import gift.dto.category.request.CreateCategoryRequest;
-import gift.dto.category.request.UpdateCategoryRequest;
-import gift.dto.category.response.CategoryResponse;
-import gift.entity.Category;
 import gift.exception.category.CategoryAlreadyExistException;
 import gift.exception.category.CategoryNotFoundException;
-import gift.repository.CategoryRepository;
+import gift.product.dto.category.request.CreateCategoryRequest;
+import gift.product.dto.category.request.UpdateCategoryRequest;
+import gift.product.dto.category.response.CategoryResponse;
+import gift.product.entity.Category;
+import gift.product.repository.CategoryRepository;
 import gift.util.mapper.CategoryMapper;
 import java.util.List;
 import org.springframework.stereotype.Service;

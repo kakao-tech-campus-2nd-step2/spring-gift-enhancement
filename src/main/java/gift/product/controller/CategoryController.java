@@ -1,9 +1,9 @@
-package gift.controller;
+package gift.product.controller;
 
-import gift.dto.category.request.CreateCategoryRequest;
-import gift.dto.category.request.UpdateCategoryRequest;
-import gift.dto.category.response.CategoryResponse;
-import gift.service.CategoryService;
+import gift.product.dto.category.request.CreateCategoryRequest;
+import gift.product.dto.category.request.UpdateCategoryRequest;
+import gift.product.dto.category.response.CategoryResponse;
+import gift.product.service.CategoryService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
