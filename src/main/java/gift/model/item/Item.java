@@ -34,7 +34,7 @@ public class Item {
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private final List<WishItem> wishes = new ArrayList<>();
 
-    public Item() {
+    protected Item() {
     }
 
     public Item(Long id, String name, Long price, String imgUrl, Category category) {

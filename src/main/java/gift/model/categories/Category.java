@@ -17,7 +17,7 @@ public class Category {
     @Column
     private String imgUrl;
 
-    public Category() {
+    protected Category() {
     }
 
     public Long getId() {

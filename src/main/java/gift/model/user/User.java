@@ -29,7 +29,7 @@ public class User {
     private List<WishItem> wishItemList = new ArrayList<>();
 
 
-    public User() {
+    protected User() {
     }
 
     public User(Long id, String email, String password) {

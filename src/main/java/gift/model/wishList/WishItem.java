@@ -46,7 +46,7 @@ public class WishItem {
         return item;
     }
 
-    public WishItem() {
+    protected WishItem() {
     }
 
     public WishListResponse toResponse() {
