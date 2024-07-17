@@ -2,7 +2,6 @@ package gift.service;
 
 import gift.entity.*;
 import gift.exception.ResourceNotFoundException;
-import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.repository.ProductWishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +17,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductWishlistRepository productWishlistRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ProductWishlistRepository productWishlistRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, ProductWishlistRepository productWishlistRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
         this.productWishlistRepository = productWishlistRepository;
-        this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
 
     public Page<Product> findAll(Pageable pageable) {
@@ -45,30 +44,17 @@ public class ProductService {
     }
 
     public Product save(ProductDTO productDTO) {
-        Category category = categoryRepository.findById(productDTO.getCategoryid())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + productDTO.getCategoryid()));
+        Category category = categoryService.findOne(productDTO.getCategoryid());
+        productDTO.setCategoryid(category.getId());
         Product product = new Product(productDTO);
-        product.setCategory(category);
-        category.addProduct(product);
         return productRepository.save(product);
     }
 
     public Product update(Long id, ProductDTO productDTO) {
         Product product = findById(id);
-        Category category = categoryRepository.findById(productDTO.getCategoryid())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
-
-        if (product.getCategory().getId() != productDTO.getCategoryid()) {
-            category.removeProduct(product);
-        }
-
-        product.setName(product.getName());
-        product.setPrice(product.getPrice());
-        product.setImageurl(product.getImageurl());
-        product.setCategory(category);
-
-        categoryRepository.save(category);
-
+        Category category = categoryService.findOne(productDTO.getCategoryid());
+        productDTO.setCategoryid(category.getId());
+        product.setProductWithCategory(productDTO);
         return productRepository.save(product);
     }
 
