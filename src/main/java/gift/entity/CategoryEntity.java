@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.domain.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -74,6 +75,15 @@ public class CategoryEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public static Category toDto(CategoryEntity categoryEntity) {
+        return new Category(
+            categoryEntity.getId(),
+            categoryEntity.getName(),
+            categoryEntity.getColor(),
+            categoryEntity.getImageUrl(),
+            categoryEntity.getDescription());
     }
 
 }
