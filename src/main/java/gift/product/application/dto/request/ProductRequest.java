@@ -24,9 +24,9 @@ public record ProductRequest(
         String imgUrl,
 
         @NotBlank(message = ValidateErrorMessage.INVALID_CATEGORY_NAME_NULL)
-        String categoryId
+        String categoryName
 ) {
     public ProductParam toProductParam() {
-        return new ProductParam(name(), price(), imgUrl(), categoryId());
+        return new ProductParam(name(), price(), imgUrl(), categoryName());
     }
 }

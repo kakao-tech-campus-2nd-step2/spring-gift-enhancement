@@ -8,10 +8,10 @@ public record CategoryRequest(
         String name,
         @NotNull
         String color,
-        String imageUrl,
+        String imgUrl,
         String description
 ) {
     public CategoryParam toCategoryParam() {
-        return new CategoryParam(name, color, imageUrl, description);
+        return new CategoryParam(name, color, imgUrl, description);
     }
 }

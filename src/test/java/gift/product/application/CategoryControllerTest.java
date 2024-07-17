@@ -41,7 +41,7 @@ class CategoryControllerTest {
         // given
         given(categoryService.createCategory(any())).willReturn(1L);
         String requestURL = "/api/categories";
-        String requestBody = "{\"name\":\"카테고리\", \"color\":\"색상\", \"imageUrl\":\"이미지 URL\", \"description\":\"설명\"}";
+        String requestBody = "{\"name\":\"카테고리\", \"color\":\"색상\", \"imgUrl\":\"이미지 URL\", \"description\":\"설명\"}";
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", "ADMIN");
         given(authorizationInterceptor.preHandle(any(), any(), any())).willReturn(true);
