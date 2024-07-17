@@ -27,11 +27,12 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, Integer price, String imageUrl, Category category) {
+    public Product(String name, Integer price, String imageUrl, Category category,List<Option> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options.addAll(options);
     }
 
     public Product(AddProductRequest request, Category category, List<Option> options) {
