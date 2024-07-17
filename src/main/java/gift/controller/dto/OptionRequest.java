@@ -12,6 +12,12 @@ public class OptionRequest {
     @NotEmpty(message = "Product Quantity can not be empty")
     private int quantity;
 
+    public OptionRequest(Long productId, String name, int quantity) {
+        this.productId = productId;
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public Long getProductId() {
         return productId;
     }

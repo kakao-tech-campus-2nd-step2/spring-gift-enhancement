@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
+
     OptionRepository optionRepository;
     ProductRepository productRepository;
 
@@ -22,11 +23,12 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
-    public OptionResponse addOption(OptionRequest optionRequest){
+    public OptionResponse addOption(OptionRequest optionRequest) {
         Product product = productRepository.findById(optionRequest.getProductId()).orElseThrow(
             () -> new ProductNotFoundException("Product Not Found")
         );
-        if (product.getOptions().stream().anyMatch(o -> o.getName().equals(optionRequest.getName()))) {
+        if (product.getOptions().stream()
+            .anyMatch(o -> o.getName().equals(optionRequest.getName()))) {
             throw new DuplicateOptionException("Option name already exists for this product");
         }
         Option option = new Option(optionRequest.getName(), optionRequest.getQuantity());
@@ -36,8 +38,9 @@ public class OptionService {
 
         return new OptionResponse(save.getId(), save.getName(), save.getQuantity());
     }
+
     @Transactional
-    public Long deleteOption(Long id){
+    public Long deleteOption(Long id) {
         optionRepository.findById(id).orElseThrow(
             () -> new OptionNotFoundException("Optrion Not Found")
         );
