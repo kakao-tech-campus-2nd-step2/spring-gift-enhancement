@@ -18,7 +18,7 @@
 ## step1으로 넘어오면서 리팩토링 해야할 목록
 
 - [ ] 테스트 코드 전체적인 리팩토링 (@ParameterizedTest를 이용)
-    - [ ] 테스트 환경 분리
+    - [x] 테스트 환경 분리
     - [ ] service 단위 테스트
     - [ ] controller 복합 테스트
 - [ ] pageRequest 작성
