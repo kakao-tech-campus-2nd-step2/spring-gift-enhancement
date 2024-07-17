@@ -4,6 +4,7 @@ import gift.database.JpaProductRepository;
 import gift.dto.ProductDTO;
 import gift.exceptionAdvisor.ProductServiceException;
 import gift.model.Product;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private JpaProductRepository jpaProductRepository;

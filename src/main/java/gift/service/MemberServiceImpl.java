@@ -5,10 +5,12 @@ import gift.dto.LoginMemberToken;
 import gift.dto.MemberDTO;
 import gift.exceptionAdvisor.MemberAuthenticationException;
 import gift.model.Member;
+import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class MemberServiceImpl implements MemberService {
 
     private JpaMemberRepository jpaMemberRepository;
