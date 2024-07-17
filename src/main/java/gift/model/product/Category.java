@@ -19,11 +19,24 @@ public class Category extends BaseTimeEntity {
     @Column(unique = true)
     private String name;
 
+    @NotNull
+    private String color;
+
+    @NotNull
+    private String description;
+
+    @NotNull
+    private String imageUrl;
+
+
     protected Category() {
     }
 
-    public Category(String name) {
+    public Category(String name, String color, String description, String imageUrl) {
         this.name = name;
+        this.color = color;
+        this.description = description;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -34,7 +47,22 @@ public class Category extends BaseTimeEntity {
         return name;
     }
 
-    public void update(String name) {
+    public String getColor() {
+        return color;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void update(String name, String color, String description, String imageUrl) {
         this.name = name;
+        this.color = color;
+        this.description = description;
+        this.imageUrl = imageUrl;
     }
 }

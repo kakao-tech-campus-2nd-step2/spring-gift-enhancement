@@ -1,6 +1,6 @@
-insert into category (name, created_at, last_modified_at)
+insert into category (name, created_at, last_modified_at, color, description, image_url)
 values ('wish', '2023-05-31 10:00:00',
-        '2023-05-31 12:00:00');
+        '2023-05-31 12:00:00', 'red', 'asd', 'asd');
 
 insert into product (name, price, image_url, created_at, last_modified_at, category_id)
 values ('Jarred', 4750, 'http://dummyimage.com/165x100.png/dddddd/000000', '2023-05-31 10:00:00',

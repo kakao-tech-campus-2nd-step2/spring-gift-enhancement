@@ -29,7 +29,7 @@ public class CategoryService {
     public CategoryModel.Info updateCategory(Long id, CategoryCommand.Update command) {
         var category = categoryRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Category not found"));
-        category.update(command.name());
+        category.update(command.name(), command.imageUrl(), command.description(), command.color());
         return CategoryModel.Info.from(category);
     }
 
