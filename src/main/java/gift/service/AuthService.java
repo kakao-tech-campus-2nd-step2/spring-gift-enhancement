@@ -3,7 +3,7 @@ package gift.service;
 import gift.dto.LoginRequest;
 import gift.dto.LoginResponse;
 import gift.dto.MemberRequest;
-import gift.exception.user.MemberAlreadyExistsException;
+import gift.exception.AlreadyExistsException;
 import gift.exception.user.MemberNotFoundException;
 import gift.jwt.JwtUtil;
 import gift.model.Member;
@@ -32,7 +32,7 @@ public class AuthService {
             LoginResponse response = new LoginResponse("");
             return response;
         }
-        throw new MemberAlreadyExistsException("해당 email의 계정이 이미 존재하는 계정입니다.");
+        throw new AlreadyExistsException("해당 email의 계정이 이미 존재하는 계정입니다.");
     }
 
     public LoginResponse login(LoginRequest request) {

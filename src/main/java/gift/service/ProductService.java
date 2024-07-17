@@ -2,10 +2,9 @@ package gift.service;
 
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
-import gift.exception.category.CategoryNotFoundException;
+import gift.exception.NotFoundException;
 import gift.model.Category;
 import gift.model.Product;
-import gift.exception.product.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -38,7 +37,7 @@ public class ProductService {
             productRepository.save(product);
             return product;
         }
-        throw new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다.");
+        throw new NotFoundException("해당 카테고리가 존재하지 않습니다.");
     }
 
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
@@ -55,7 +54,7 @@ public class ProductService {
 
     public ProductResponse getProduct(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("해당 id의 상품이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 id의 상품이 존재하지 않습니다."));
         ProductResponse response = new ProductResponse(
                 product.getId(),
                 product.getName(),
@@ -72,10 +71,10 @@ public class ProductService {
         Optional<Category> optionalCategory = categoryRepository.findById(request.categoryId());
 
         if (!optionalProduct.isPresent()) {
-            throw new ProductNotFoundException("수정하려는 해당 id의 상품이 존재하지 않습니다.");
+            throw new NotFoundException("수정하려는 해당 id의 상품이 존재하지 않습니다.");
         }
         if (!optionalCategory.isPresent()) {
-            throw new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다.");
+            throw new NotFoundException("해당 카테고리가 존재하지 않습니다.");
         }
         Product updateProduct = optionalProduct.get().update(
                 request.name(),
@@ -89,7 +88,7 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("삭제하려는 해당 id의 상품이 존재하지 않습니디."));
+                .orElseThrow(() -> new NotFoundException("삭제하려는 해당 id의 상품이 존재하지 않습니디."));
         productRepository.deleteById(id);
     }
 }

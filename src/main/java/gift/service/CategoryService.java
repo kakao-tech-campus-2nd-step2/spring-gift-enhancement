@@ -1,7 +1,7 @@
 package gift.service;
 
 import gift.dto.CategoryRequest;
-import gift.exception.category.CategoryNotFoundException;
+import gift.exception.NotFoundException;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
@@ -24,7 +24,7 @@ public class CategoryService {
     @Transactional
     public Category update(CategoryRequest request) {
         Category category = categoryRepository.findById(request.id())
-                .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 카테고리가 존재하지 않습니다."));
         category.updateCategory(
                 request.name(),
                 request.color(),
