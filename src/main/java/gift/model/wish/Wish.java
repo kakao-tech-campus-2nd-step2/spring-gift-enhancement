@@ -37,6 +37,9 @@ public class Wish {
         this.member = wish.getMember();
         this.amount = wish.getAmount();
     }
+    public Long getId(){
+        return id;
+    }
 
     public Product getProduct(){
         return product;
