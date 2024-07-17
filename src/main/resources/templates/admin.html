@@ -108,7 +108,7 @@
             pagination.append(`<button onclick="fetchProducts(${startPage-1})"><</button>`);
         }
 
-        for (let i = startPage; i < endPage; i++) {
+        for (let i = startPage; i <= endPage; i++) {
             pagination.append(`<button onclick="fetchProducts(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`);
         }
 
