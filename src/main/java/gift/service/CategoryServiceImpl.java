@@ -1,7 +1,6 @@
 package gift.service;
 
 import gift.dto.CategoryDTO;
-import gift.model.Category;
 import gift.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,18 +21,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
-            .map(this::convertToDTO)
+            .map(CategoryDTO::fromCategory)
             .collect(Collectors.toList());
     }
 
     @Override
     public CategoryDTO getCategoryById(int id) {
         return categoryRepository.findById(id)
-            .map(this::convertToDTO)
+            .map(CategoryDTO::fromCategory)
             .orElse(null);
-    }
-
-    private CategoryDTO convertToDTO(Category category) {
-        return new CategoryDTO(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
     }
 }

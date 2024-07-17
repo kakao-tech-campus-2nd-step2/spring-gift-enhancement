@@ -1,6 +1,8 @@
 package gift.dto;
 
 
+import gift.model.Category;
+
 public class CategoryDTO {
     private int id;
     private String name;
@@ -14,6 +16,10 @@ public class CategoryDTO {
         this.color = color;
         this.imageUrl = imageUrl;
         this.description = description;
+    }
+
+    public static CategoryDTO fromCategory(Category category) {
+        return new CategoryDTO(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
     }
 
     public int getId() {
