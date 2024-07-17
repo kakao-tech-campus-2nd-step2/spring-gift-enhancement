@@ -1,6 +1,7 @@
 package gift.product.dto;
 
 import gift.product.validator.KakaoValidator;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,6 @@ public record ProductRequest(
         String imageUrl,
         @NotNull
         String categoryName,
-        @NotEmpty(message = "반드시 값이 존재해야 합니다.")
-        @Pattern(regexp = "[\\w\\d\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_\\uAC00-\\uD7A3]*", message = "특수 문자를 제외한 문자열을 입력해야 합니다.")
-        @Size(max = 50, message = "길이가 50 이하여야 합니다.")
-        String optionName) { }
+        @NotNull
+        @Valid
+        OptionRequest option) { }

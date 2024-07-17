@@ -23,6 +23,7 @@
         <th>Price</th>
         <th>Image</th>
         <th>Category</th>
+        <th>Option</th>
         <th>Actions</th>
       </tr>
       </thead>
@@ -34,9 +35,20 @@
         <td><img th:src="${product.imageUrl}" alt="img" width="100px"></td>
         <td th:text="${product.categoryName}"></td>
         <td>
+          <select id="option">
+            <option th:each="option : ${product.options}"
+                    th:text="${option.name}"
+                    th:value="${option}"></option>
+          </select>
+          <form>
+            <button type="button" th:onclick="|location.href='@{/admin/options/add/{id}(id=${product.id})}'|">+</button>
+            <button type="button" th:onclick="|deleteProductOption(${product.id})|">-</button>
+          </form>
+        </td>
+        <td>
           <form>
             <button type="button" th:onclick="|location.href='@{/admin/edit/{id}(id=${product.id})}'|">Edit</button>
-            <button type="button" th:onclick="|deleteProductById([[${product.id}]])|">Delete</button>
+            <button type="button" th:onclick="|deleteProductById(${product.id})|">Delete</button>
           </form>
         </td>
       </tr>
@@ -76,6 +88,50 @@
           });
   }
 
+  function parseOption(optionStr) {
+      let jsonString = optionStr.replace('OptionResponse[', '{').replace(']', '}');
+
+      jsonString = jsonString.replace(/(\w+)=([^,}]+)/g, function(match, key, value) {
+          if (isNaN(value)) {
+              return `"${key}":"${value}"`;
+          } else {
+              return `"${key}":${value}`;
+          }
+      });
+
+      return JSON.parse(jsonString);
+  }
+
+  function deleteProductOption(productId) {
+      const option = parseOption(document.getElementById('option').value);
+      const name = option['name'];
+      const quantity = parseInt(option['quantity']);
+      const token = localStorage.getItem('token');
+
+      fetch(`/api/products/${productId}/options`, {
+          method: 'DELETE',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+                  name: name,
+                  quantity: quantity
+          })
+      })
+          .then(response => {
+              if (!response.ok) {
+                  return response.text().then(text => {
+                      throw new Error(text)
+                  });
+              }
+              alert("상품 옵션이 삭제되었습니다.");
+              window.location.href = "admin";
+          })
+          .catch(error => {
+              alert(error);
+          });
+  }
 </script>
 </body>
 </html>

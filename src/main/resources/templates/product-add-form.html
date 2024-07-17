@@ -29,6 +29,12 @@
       </select>
     </div>
     <div>
+      <label for="optionName">Option Name</label>
+      <input type="text" id="optionName" required/>
+      <label for="optionQuantity">Option Quantity</label>
+      <input type="number" id="optionQuantity" required/>
+    </div>
+    <div>
       <button type="submit">Save</button>
       <a th:href="@{/admin}">Cancel</a>
     </div>
@@ -39,6 +45,8 @@
         const price = parseInt(document.getElementById('price').value);
         const imageUrl = document.getElementById('imageUrl').value;
         const categoryName = document.getElementById('categoryName').value;
+        const optionName = document.getElementById('optionName').value;
+        const optionQuantity = document.getElementById('optionQuantity').value;
 
         const token = localStorage.getItem('token');
 
@@ -52,7 +60,11 @@
                 name: name,
                 price: price,
                 imageUrl: imageUrl,
-                categoryName: categoryName
+                categoryName: categoryName,
+                option: {
+                    name: optionName,
+                    quantity: optionQuantity
+                }
             })
         })
             .then(response => {
