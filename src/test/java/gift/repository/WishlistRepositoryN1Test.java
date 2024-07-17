@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wishlist;
@@ -28,11 +29,20 @@ public class WishlistRepositoryN1Test {
     @Autowired
     private WishlistRepository wishlistRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private final Pageable pageable = PageRequest.of(0, 10);
 
     @Test
     @Transactional
     void testNPlusOneFindAll() {
+        List<Category> categories = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            categories.add(new Category(null, "카테고리" + i));
+        }
+        categoryRepository.saveAll(categories);
+
         List<Member> members = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             members.add(new Member(null, "kbm" + i, "kbm" + i + "@email.com", "mbk", "user"));
@@ -41,7 +51,7 @@ public class WishlistRepositoryN1Test {
 
         List<Product> products = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            products.add(new Product(null, "상품" + i, "100", "https://test"));
+            products.add(new Product(null, "상품" + i, "100", categories.get(i), "https://test"));
         }
         productRepository.saveAll(products);
 
@@ -62,9 +72,15 @@ public class WishlistRepositoryN1Test {
         Member member = new Member(null, "kbm", "kbm@email.com", "mbk", "user");
         memberRepository.save(member);
 
+        List<Category> categories = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            categories.add(new Category(null, "카테고리" + i));
+        }
+        categoryRepository.saveAll(categories);
+
         List<Product> products = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            products.add(new Product(null, "상품" + i, "100", "https://test"));
+            products.add(new Product(null, "상품" + i, "100", categories.get(i), "https://test"));
         }
         productRepository.saveAll(products);
 
