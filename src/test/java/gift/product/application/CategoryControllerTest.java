@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import gift.common.validation.AuthInterceptor;
+import gift.auth.AuthorizationInterceptor;
 import gift.member.persistence.MemberRepository;
 import gift.member.service.JwtProvider;
 import gift.product.service.CategoryService;
@@ -26,7 +26,7 @@ class CategoryControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private AuthInterceptor authInterceptor;
+    private AuthorizationInterceptor authorizationInterceptor;
     @MockBean
     private JwtProvider jwtProvider;
     @MockBean
@@ -39,7 +39,7 @@ class CategoryControllerTest {
         given(categoryService.createCategory(any())).willReturn(1L);
         String requestURL = "/api/categories";
         String requestBody = "{\"name\":\"카테고리\", \"color\":\"색상\", \"imageUrl\":\"이미지 URL\", \"description\":\"설명\"}";
-        given(authInterceptor.preHandle(any(), any(), any())).willReturn(true);
+        given(authorizationInterceptor.preHandle(any(), any(), any())).willReturn(true);
 
         // when
         // then
