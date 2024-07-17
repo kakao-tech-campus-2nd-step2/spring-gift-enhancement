@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import gift.domain.Category;
 import gift.domain.Product;
@@ -11,6 +12,7 @@ import gift.dto.ProductDTO;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,11 +31,17 @@ public class ProductServiceTest {
     @InjectMocks
     private ProductService productService;
 
+    private Category category;
+
+    @BeforeEach
+    void setup() {
+        category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
+    }
+
     @DisplayName("상품 추가")
     @Test
     void addProduct() {
         // given
-        Category category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
         Product product = new Product(1L, "test", 1234, "testImage", category);
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
         given(productRepository.save(any(Product.class))).willReturn(product);
@@ -50,7 +58,6 @@ public class ProductServiceTest {
     void getProduct() {
         // given
         long id = 1L;
-        Category category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
         Product product = new Product(id, "test", 1234, "testImage", category);
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
@@ -66,7 +73,6 @@ public class ProductServiceTest {
     void updateProduct() {
         // given
         long id = 1L;
-        Category category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
         Product product = new Product(id, "test", 1234, "testImage", category);
         Product updatedProduct = new Product(id, "updatedTest", 12345, "updatedTestImage", category);
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
@@ -78,5 +84,20 @@ public class ProductServiceTest {
 
         // then
         assertThat(actual).isEqualTo(updatedProduct.toDTO());
+    }
+
+    @DisplayName("상품 삭제")
+    @Test
+    void deleteProduct() {
+        // given
+        long id = 1L;
+        Product product = new Product(id, "test", 1234, "testImage", category);
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+
+        // when
+        productService.deleteProduct(id);
+
+        // then
+        then(productRepository).should().delete(any(Product.class));
     }
 }
