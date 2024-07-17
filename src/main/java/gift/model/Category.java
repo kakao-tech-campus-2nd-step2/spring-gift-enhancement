@@ -24,6 +24,7 @@ public class Category {
     private String imageUrl;
     @NotNull
     @NotBlank
+    @Lob
     private String description;
 
     public Category() {
