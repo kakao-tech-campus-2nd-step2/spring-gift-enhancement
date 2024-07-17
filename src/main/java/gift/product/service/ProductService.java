@@ -28,7 +28,7 @@ public class ProductService {
     public Page<ProductDto> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(product -> new ProductDto(
-                        product.product_id(),
+                        product.getProductId(),
                         product.name(),
                         product.getPrice(),
                         product.getImgUrl()));
@@ -37,15 +37,15 @@ public class ProductService {
     public ProductDto findById(Long id) {
         return productRepository.findById(id)
                 .map(product -> new ProductDto(
-                        product.product_id(),
+                        product.getProductId(),
                         product.name(),
                         product.getPrice(),
                         product.getImgUrl()))
                 .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
     }
 
-    public void update(Long id, ProductDto productDto) {
-        Product product = productRepository.findById(id)
+    public void update(Long productId, ProductDto productDto) {
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
         product.update(productDto.name(), productDto.price(), productDto.imgUrl());
         productRepository.save(product);

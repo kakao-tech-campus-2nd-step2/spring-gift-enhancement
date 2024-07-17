@@ -20,7 +20,7 @@ public class WishList {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "getProductId", nullable = false)
     private Product product;
 
     protected WishList() {

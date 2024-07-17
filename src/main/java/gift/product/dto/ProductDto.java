@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.URL;
 
 public class ProductDto {
-    private Long product_id;
+    private Long productId;
 
     @NotBlank(message = "상품명을 입력하세요.")
     private String name;
@@ -20,14 +20,14 @@ public class ProductDto {
 
     public ProductDto() {}
 
-    public ProductDto(Long product_id, String name, int price, String imgUrl) {
-        this.product_id = product_id;
+    public ProductDto(Long productId, String name, int price, String imgUrl) {
+        this.productId = productId;
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
     }
 
-    public void product_id() {
+    public void productId() {
     }
 
     public String name() {

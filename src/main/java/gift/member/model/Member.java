@@ -12,10 +12,11 @@ import java.util.List;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long member_id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
+    @SequenceGenerator(name = "member_seq", sequenceName = "member_seq", allocationSize = 1)
+    private Long memberId;
 
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String email;
 
     @Column(nullable = false, columnDefinition = "BINARY(16)")
@@ -29,7 +30,7 @@ public class Member {
         this.password = password;
     }
     public Long getMemberId() {
-        return member_id;
+        return memberId;
     }
 
     public void updateEmail(@NotNull @NotBlank String newEmail) {

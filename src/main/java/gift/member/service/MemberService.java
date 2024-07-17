@@ -48,28 +48,28 @@ public class MemberService {
     }
 
     // 회원 id로 조회
-    public Optional<Member> findById(Long member_id) {
-        return memberRepository.findById(member_id);
+    public Optional<Member> findById(Long memberId) {
+        return memberRepository.findById(memberId);
     }
 
     // 이메일 수정
-    public Member updateEmail(Long member_id, String newEmail) {
-        Member member = memberRepository.findById(member_id)
+    public Member updateEmail(Long memberId, String newEmail) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
         member.updateEmail(newEmail);
         return memberRepository.save(member);
     }
 
     // 패스워드 수정
-    public Member updatePassword(Long member_id, String newPassword) {
-        Member member = memberRepository.findById(member_id)
+    public Member updatePassword(Long memberId, String newPassword) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
         member.updatePassword(passwordEncoder.encode(newPassword));
         return memberRepository.save(member);
     }
 
     // 회원 삭제
-    public void deleteMember(Long member_id) {
-        memberRepository.deleteById(member_id);
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteById(memberId);
     }
 }

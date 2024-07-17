@@ -11,7 +11,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long product_id;
+    private Long productId;
 
     @Column(nullable = false)
     private String name;
@@ -39,9 +39,8 @@ public class Product {
         this.imgUrl = imgUrl;
     }
 
-    // getter 메서드
-    public Long product_id() {
-        return product_id;
+    public Long getProductId() {
+        return productId;
     }
 
     public String name() {

@@ -25,14 +25,14 @@ public class ProductController {
         productService.save(productDto);
     }
 
-    @PutMapping("/{product_id}")
-    public void editProduct(@PathVariable Long product_id, @Valid @RequestBody ProductDto productDto) {
-        productService.update(product_id, productDto);
+    @PutMapping("/{productId}")
+    public void editProduct(@PathVariable Long productId, @Valid @RequestBody ProductDto productDto) {
+        productService.update(productId, productDto);
     }
 
-    @DeleteMapping("/{product_id}")
-    public void deleteProduct(@PathVariable Long product_id) {
-        productService.deleteById(product_id);
+    @DeleteMapping("/{productId}")
+    public void deleteProduct(@PathVariable Long productId) {
+        productService.deleteById(productId);
     }
 
     /** 페이지네이션을 위한 새로운 엔드포인트
@@ -52,8 +52,8 @@ public class ProductController {
         return productService.findAll(pageable);
     }
 
-    @GetMapping("/{id}")
-    public ProductDto getProductById(@PathVariable Long id) {
-        return productService.findById(id);
+    @GetMapping("/{productId}")
+    public ProductDto getProductById(@PathVariable Long productId) {
+        return productService.findById(productId);
     }
 }
