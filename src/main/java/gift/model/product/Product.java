@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Product {
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(nullable = false, name = "category_id")
     private Category category;
 
     @Id
@@ -30,7 +30,8 @@ public class Product {
     protected Product(){
     }
 
-    public Product(ProductName name, int price, String imageUrl, int amount){
+    public Product(Category category, ProductName name, int price, String imageUrl, int amount){
+        this.category = category;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;

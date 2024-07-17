@@ -21,7 +21,7 @@ public class ProductService {
     }
 
     public boolean addNewProduct(ProductDto productDto){
-        Product product = new Product(new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
+        Product product = new Product(productDto.category(),new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
         if (productRepository.existsByName(product.getName())) {
             return false;
         }
@@ -33,7 +33,7 @@ public class ProductService {
         Optional<Product> product = productRepository.findById(id);
         if(product.isPresent()){
             Product updateProduct = product.get();
-            Product newProduct = new Product(new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
+            Product newProduct = new Product(productDto.category(),new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
             updateProduct.updateProduct(newProduct);
             productRepository.save(updateProduct);
             return true;
