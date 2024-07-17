@@ -77,7 +77,7 @@ public class WishListService {
      */
     @Transactional
     public void deleteWishProduct(Long wishId){
-        WishProduct wish = wishListRepository.findById(wishId).orElseThrow();
+        WishProduct wish = wishListRepository.findById(wishId).orElseThrow(NullPointerException::new);
         if(wish.getCount() == 1) {
             wishListRepository.deleteById(wishId);
             return;

@@ -46,13 +46,13 @@ public class ProductService {
      * 객체를 전달받아 DB에 저장
      */
     @Transactional
-    public void createProduct(ProductRequest product){
-        Category category = categoryRepository.findByName(product.getCategoryName());
+    public void createProduct(ProductRequest productRequest){
+        Category category = categoryRepository.findByName(productRequest.getCategoryName());
 
         Product productEntity = new Product(
-                product.getName(),
-                product.getPrice(),
-                product.getImageUrl(),
+                productRequest.getName(),
+                productRequest.getPrice(),
+                productRequest.getImageUrl(),
                 category
         );
         productRepository.save(productEntity);
@@ -68,12 +68,12 @@ public class ProductService {
      * 현재 DB에 존재하는 Product를 새로운 Product로 대체하는 로직
      */
     @Transactional
-    public void updateProduct(ProductRequest product, Long id){
+    public void updateProduct(ProductRequest productRequest, Long id){
         Product savedProduct = productRepository.findById(id).orElseThrow(NullPointerException::new);
-        Category category = categoryRepository.findByName(product.getCategoryName());
+        Category category = categoryRepository.findByName(productRequest.getCategoryName());
 
         savedProduct.updateEntity(
-                product.getName(), product.getPrice(), product.getImageUrl(), category
+                productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category
         );;
     }
     /*
