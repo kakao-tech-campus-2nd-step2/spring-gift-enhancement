@@ -33,7 +33,7 @@ public class WishService {
     public void update(Long id, WishPatchRequest request, Long memberId) {
         Wish wish = wishRepository.findByIdFetchJoin(id)
                 .orElseThrow(() -> new EntityNotFoundException("Wish with id " + id + " Does not exist"));
-        checkWishByProductIdAndMemberId(wish, request.productId(), memberId);
+        wish.checkWishByProductIdAndMemberId(request.productId(), memberId);
         if (request.productCount() == 0) {
             deleteByProductId(request.productId(), memberId);
             return;
@@ -60,12 +60,6 @@ public class WishService {
     @Transactional
     public void deleteByProductId(Long productId, Long memberId) {
         wishRepository.deleteByProductIdAndMemberId(productId, memberId);
-    }
-
-    private void checkWishByProductIdAndMemberId(Wish wish, Long productId, Long memberId) {
-        if ( !wish.containsProduct(productId)|| !wish.isOwner(memberId)) {
-            throw new EntityNotFoundException("Product with id " + productId + " does not exist in " + memberId +"'s wish");
-        }
     }
 
     private void checkProductByProductId(Long productId) {

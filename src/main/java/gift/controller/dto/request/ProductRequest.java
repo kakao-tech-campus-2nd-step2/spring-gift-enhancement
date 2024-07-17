@@ -16,6 +16,9 @@ public record ProductRequest(
         @Min(-1)
         int price,
         @NotBlank
-        String imageUrl) {
+        String imageUrl,
+        @NotBlank
+        String categoryName
+) {
 }
 

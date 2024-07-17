@@ -1,11 +1,12 @@
 package gift.model;
 
+import gift.common.exception.EntityNotFoundException;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(indexes = @Index(name = "idx_member_id", columnList = "member_id"))
+@Table(indexes = @Index(name = "idx_wish_created_at", columnList = "created_at"))
 public class Wish extends BasicEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,6 +40,12 @@ public class Wish extends BasicEntity{
         this.member = member;
         this.productCount = productCount;
         this.product = product;
+    }
+
+    public void checkWishByProductIdAndMemberId(Long productId, Long memberId) {
+        if (!isOwner(memberId) || !containsProduct(productId)) {
+            throw new EntityNotFoundException("Product with id " + productId + " does not exist in " + memberId +"'s wish");
+        }
     }
 
     public boolean isOwner(Long memberId) {
