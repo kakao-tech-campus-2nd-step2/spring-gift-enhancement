@@ -97,7 +97,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 수정 테스트")
-    void updateCategory(){
+    void updateCategoryTest(){
         // given
         Long id = 1L;
         CategoryRequest request = new CategoryRequest("update", "color", "imageUrl", "description");
@@ -126,7 +126,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 삭제 테스트")
-    void deleteCategory(){
+    void deleteCategoryTest(){
         Long id = 1L;
         Category savedCategory = new Category(1L, "name", "color", "imageUrl", "description");
 

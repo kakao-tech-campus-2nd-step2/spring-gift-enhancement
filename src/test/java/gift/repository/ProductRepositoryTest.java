@@ -24,7 +24,7 @@ class ProductRepositoryTest {
 
     @Test
     @DisplayName("findById 테스트")
-    void findById() {
+    void findByIdTest() {
         // given
         ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L);
         Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
@@ -39,7 +39,7 @@ class ProductRepositoryTest {
 
     @Test
     @DisplayName("save 테스트")
-    void save() {
+    void saveTest() {
         // given
         ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L);
         Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
@@ -62,7 +62,7 @@ class ProductRepositoryTest {
 
     @Test
     @DisplayName("delete 테스트")
-    void delete() {
+    void deleteTest() {
         // given
         ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L);
         Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));

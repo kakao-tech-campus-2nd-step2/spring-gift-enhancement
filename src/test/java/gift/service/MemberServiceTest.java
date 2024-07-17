@@ -33,7 +33,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원가입 테스트")
-    void register() {
+    void registerTest() {
         //given
         MemberRequest memberRequest = new MemberRequest("test@email.com", "password");
         Member savedMember = new Member(memberRequest.getEmail(), memberRequest.getPassword());
@@ -50,7 +50,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("로그인 성공 테스트")
-    void loginSuccess() {
+    void loginSuccessTest() {
         // given
         MemberRequest memberRequest = new MemberRequest("test@google.co.kr", "password");
         Member savedMember = new Member(memberRequest.getEmail(), memberRequest.getPassword());
@@ -67,7 +67,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("비밀번호 불일치 시 로그인 실패 테스트")
-    void loginFail() {
+    void loginFailTest() {
         // given
         MemberRequest memberRequest = new MemberRequest("test@google.co.kr", "wrongPassword");
         Member savedMember = new Member(memberRequest.getEmail(), "password");
@@ -81,15 +81,9 @@ class MemberServiceTest {
         assertThat(responseToken).isNull();
     }
 
-    public void deleteMember(Long id) {
-        Member member = memberRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("not found Entity"));
-        memberRepository.delete(member);
-    }
-
     @Test
     @DisplayName("멤버 삭제 테스트")
-    void deleteMember() {
+    void deleteMemberTest() {
         // given
         Long id = 1L;
         Member savedMember = new Member(1L, "test@gmail.co.kr", "password");
@@ -103,7 +97,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("토큰으로 저장된 멤버 가져오기 테스트")
-    void getMemberFromToken() {
+    void getMemberFromTokenTest() {
         // given
         String RequestToken = "jwtToken";
         Member savedMember = new Member("test@google.co.kr", "password");

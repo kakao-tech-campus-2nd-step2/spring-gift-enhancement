@@ -46,7 +46,7 @@ class WishServiceTest {
 
     @Test
     @DisplayName("getWishesByMember 테스트")
-    void getWishesByMember() {
+    void getWishesByMemberTest() {
         // given
         Member savedMember = new Member(1L, "email@google.co.kr", "password");
 
@@ -85,7 +85,7 @@ class WishServiceTest {
 
     @Test
     @DisplayName("위시 리스트 추가 테스트")
-    void addWish() {
+    void createWishTest() {
         // given
         WishRequest wishRequest = new WishRequest(1L, 1L);
 
@@ -113,7 +113,7 @@ class WishServiceTest {
 
     @Test
     @DisplayName("위시 리시트 삭제 테스트")
-    void deleteWish() {
+    void deleteWishTest() {
         Long id = 1L;
         Member savedMember = new Member(1L, "email@google.co.kr", "password");
         Category savedCategory = new Category(1L, "test", "color", "image", "description");

@@ -39,13 +39,9 @@ class ProductControllerTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @BeforeEach
-    void beforeEach(){
-
-    }
     @Test
     @DisplayName("상품 전체 조회 테스트")
-    void readAll() {
+    void getAllProductsTest() {
         var url = "http://localhost:" + port + "/api/products";
         var request = new RequestEntity<>(HttpMethod.GET, URI.create(url));
 
@@ -55,7 +51,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("특정 상품 전체 조회 테스트")
-    void read() {
+    void getProductTest() {
         Category category = new Category("test", "color", "image", "description");
         Category savedCategory = categoryRepository.save(category);
 
@@ -71,7 +67,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("상품 생성 테스트")
-    void create() {
+    void createProductTest() {
         Category category = new Category("test", "color", "image", "description");
         categoryRepository.save(category);
 
@@ -86,7 +82,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("상품 업데이트 테스트")
-    void update() {
+    void updateProductTest() {
         Category category = new Category("test", "color", "image", "description");
         Category savedCategory = categoryRepository.save(category);
 
@@ -104,7 +100,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("상품 삭제 테스트")
-    void delete() {
+    void deleteProductTest() {
         Category request = new Category("test", "color", "image", "description");
         Category savedCategory = categoryRepository.save(request);
 

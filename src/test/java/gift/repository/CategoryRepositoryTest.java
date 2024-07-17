@@ -21,7 +21,7 @@ public class CategoryRepositoryTest {
     
     @Test
     @DisplayName("findById 테스트")
-    void findById() {
+    void findByIdTest() {
         // given
         CategoryRequest request = new CategoryRequest("test", "color", "imageUrl", "description");
         
@@ -36,7 +36,7 @@ public class CategoryRepositoryTest {
 
     @Test
     @DisplayName("save 테스트")
-    void save() {
+    void saveTest() {
         // given
         CategoryRequest request = new CategoryRequest("test", "color", "imageUrl", "description");
         
@@ -57,7 +57,7 @@ public class CategoryRepositoryTest {
 
     @Test
     @DisplayName("delete 테스트")
-    void delete() {
+    void deleteTest() {
         // given
         CategoryRequest request = new CategoryRequest("test", "color", "imageUrl", "description");
         Category savedCategory = categoryRepository.save(dtoToEntity(request));
@@ -67,10 +67,6 @@ public class CategoryRepositoryTest {
 
         // then
         assertTrue(categoryRepository.findById(savedCategory.getId()).isEmpty());
-    }
-
-    private CategoryResponse entityToDto(Category category) {
-        return new CategoryResponse(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
     }
 
     private Category dtoToEntity(CategoryRequest request) {

@@ -19,7 +19,7 @@ class MemberRepositoryTest {
 
     @Test
     @DisplayName("findByEmail 테스트")
-    void findByEmail() {
+    void findByEmailTest() {
         // given
         MemberRequest request = new MemberRequest("test@google.co.kr", "password");
         Member expected = memberRepository.save(
@@ -34,7 +34,7 @@ class MemberRepositoryTest {
 
     @Test
     @DisplayName("findById 테스트")
-    void findById() {
+    void findByIdTest() {
         // given
         MemberRequest request = new MemberRequest("test@google.co.kr", "password");
         Member expected = memberRepository.save(
@@ -49,7 +49,7 @@ class MemberRepositoryTest {
 
     @Test
     @DisplayName("save 테스트")
-    void save() {
+    void saveTest() {
         // given
         MemberRequest request = new MemberRequest("test@google.co.kr", "password");
         Member expected = new Member(request.getEmail(), request.getPassword());
@@ -67,7 +67,7 @@ class MemberRepositoryTest {
 
     @Test
     @DisplayName("delete 테스트")
-    void delete() {
+    void deleteTest() {
         // given
         MemberRequest request = new MemberRequest("test@google.co.kr", "password");
         Member savedMember = memberRepository.save(

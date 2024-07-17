@@ -45,7 +45,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("Id로 Product 조회 테스트")
-    void getProduct() {
+    void getProductTest() {
         // given
         Long id = 1L;
         Category category = new Category(1L, "test", "color", "image", "description");
@@ -68,7 +68,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("모든 Product 조회 테스트")
-    void getAllProducts() {
+    void getAllProductsTest() {
         // given
         Category category1 = new Category(1L, "test", "color", "image", "description");
         Category category2 = new Category(2L, "test", "color", "image", "description");
@@ -106,7 +106,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("product 저장 테스트")
-    void create() {
+    void createProductTest() {
         // given
         ProductRequest productRequest = new ProductRequest("test", 1000, "test.jpg", 1L);
         Category savedCategory = new Category(1L, "test", "color", "image", "description");
@@ -132,7 +132,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("product 업데이트 테스트")
-    void updateProduct() {
+    void updateProductTest() {
         // given
         Long id = 1L;
         Category savedCategory = new Category(1L, "test", "color", "image", "description");
@@ -162,7 +162,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("product 삭제 테스트")
-    void delete() {
+    void deleteProductTest0() {
         // given
         Long id = 1L;
         Category savedCategory = new Category(1L, "test", "color", "image", "description");
