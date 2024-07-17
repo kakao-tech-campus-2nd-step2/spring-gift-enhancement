@@ -40,4 +40,13 @@ public class CategoryService {
         category.setId(id);
         return category;
     }
+
+
+    public void deleteCategory(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ProductNotFoundException("Category not found");
+        }
+        categoryRepository.deleteById(id);
+    }
+
 }
