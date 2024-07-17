@@ -1,5 +1,6 @@
 package gift.domain.product;
 
+import gift.domain.BaseTimeEntity;
 import gift.domain.Category.Category;
 import gift.global.annotation.NotContainsValue;
 import jakarta.persistence.Column;
@@ -13,7 +14,7 @@ import java.util.Objects;
 
 
 @Entity
-public class Product {
+public class Product extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -120,8 +121,9 @@ public class Product {
         return Objects.hash(id, name, category, price, imageUrl);
     }
 
-    public void update(String name, int price, String imageUrl) {
+    public void update(String name, Category category, int price, String imageUrl) {
         this.name = name;
+        this.category = category;
         this.price = price;
         this.imageUrl = imageUrl;
     }
