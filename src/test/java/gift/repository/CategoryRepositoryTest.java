@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.domain.category.dto.CategoryRequest;
-import gift.domain.category.dto.CategoryResponse;
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
