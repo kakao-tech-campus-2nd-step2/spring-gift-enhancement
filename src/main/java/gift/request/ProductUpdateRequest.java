@@ -1,16 +1,12 @@
 package gift.request;
 
 import gift.validation.product.KakaoNotAllowed;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.List;
-
-public class ProductRequest {
+public class ProductUpdateRequest {
 
     @NotBlank
     @Length(max = 15)
@@ -27,17 +23,11 @@ public class ProductRequest {
     @NotNull
     private Long categoryId;
 
-    @NotNull
-    @Size(min = 1, message = "하나 이상의 옵션을 입력해야 합니다.")
-    @Valid
-    private List<OptionRequest> options;
-
-    public ProductRequest(String name, Integer price, String imageUrl, Long categoryId, List<OptionRequest> options) {
+    public ProductUpdateRequest(String name, Integer price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
-        this.options = options;
     }
 
     public String getName() {
@@ -54,10 +44,6 @@ public class ProductRequest {
 
     public Long getCategoryId() {
         return categoryId;
-    }
-
-    public List<OptionRequest> getOptions() {
-        return options;
     }
 
 }
