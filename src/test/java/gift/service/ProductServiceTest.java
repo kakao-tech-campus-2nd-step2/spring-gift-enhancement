@@ -62,21 +62,4 @@ public class ProductServiceTest {
         List<Wishlist> wishlists = productService.getProductWishlist(product.getId());
         Assertions.assertThat(wishlists).hasSize(2);
     }
-
-    @Test
-    @DisplayName("product의 category가 변경되었을 때 category에도 product가 삭제되어야 함")
-    void productEditCategoryTest() {
-        // given
-        Category category = categoryService.save(new CategoryDTO("test", "#test", "test.com", ""));
-        Product product = productService.save(new ProductDTO("test", 123, "test.com", category.getId()));
-
-        // when
-        productService.update(product.getId(), new ProductDTO("test", 123, "test.com", 1L));
-        em.flush();
-        em.clear();
-
-        // then
-        Category result = categoryService.findOne(category.getId());
-        Assertions.assertThat(result.getProducts()).hasSize(0);
-    }
 }

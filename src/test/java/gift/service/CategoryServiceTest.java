@@ -4,9 +4,9 @@ import gift.entity.Category;
 import gift.entity.CategoryDTO;
 import gift.entity.Product;
 import gift.entity.ProductDTO;
-import gift.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -76,11 +75,12 @@ public class CategoryServiceTest {
         categoryService.delete(category.getId());
 
         // then
-        assertThrows(ResourceNotFoundException.class, () -> categoryService.findOne(category.getId()));
+        Category expect = categoryService.findOne(category.getId());
+        Assertions.assertThat(expect.getName()).isEqualTo("DefaultCategory");
     }
 
     @Test
-    @DisplayName("상품에 매핑된 카테고리가 삭제될 시 해당 상품의 category가 [DefaultCategory]로 변함")
+    @DisplayName("상품에 매핑된 카테고리가 삭제될 시 해당 상품의 category가 [DefaultCategory]로 리턴됨")
     void deleteCategoryTest() {
         // given
         Category category = categoryService.save(new CategoryDTO("test", "#test", "test.com", ""));
@@ -92,7 +92,8 @@ public class CategoryServiceTest {
         em.clear();
 
         // then
-        Product result = productService.findById(product.getId());
-        assertThat(result.getCategory().getName()).isEqualTo("DefaultCategory");
+        Product expectProduct = productService.findById(product.getId());
+        Category expectCategory = categoryService.findOne(expectProduct.getCategoryid());
+        assertThat(expectCategory.getId()).isEqualTo(1L); // defaultCategory
     }
 }
