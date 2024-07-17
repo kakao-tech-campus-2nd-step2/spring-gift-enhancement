@@ -1,12 +1,14 @@
 package gift.entity;
 
+import groovy.transform.builder.Builder;
 import jakarta.persistence.*;
 
+@Builder
 @Entity
 @Table(name = "category")
 public class Category {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name", nullable = false)
@@ -15,30 +17,32 @@ public class Category {
     @Column(name = "color", nullable = false)
     private String color;
 
-    @Column(name = "imgeUrl", nullable = false)
-    private String imgUrl;
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
 
     @Column(name = "description", nullable = false)
     private String description;
 
     protected Category() {}
 
-    public Category(String name, String color, String imgUrl, String description) {
+    public Category(String name, String color, String imageUrl, String description) {
         this.name = name;
         this.color = color;
-        this.imgUrl = imgUrl;
+        this.imageUrl = imageUrl;
         this.description = description;
     }
 
-    public Category(int id, String name, String color, String imgUrl, String description) {
+    public Category(int id, String name, String color, String imageUrl, String description) {
         this.id = id;
         this.name = name;
         this.color = color;
-        this.imgUrl = imgUrl;
+        this.imageUrl = imageUrl;
         this.description = description;
     }
 
     public int getId() {
         return id;
     }
+
+    public String getName() { return name; }
 }
