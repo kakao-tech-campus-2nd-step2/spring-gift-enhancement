@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AdminController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public AdminController(ProductService productService) {
+    public AdminController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -34,7 +37,8 @@ public class AdminController {
     }
 
     @GetMapping("/new")
-    public String addProduct() {
+    public String addProduct(Model model) {
+        model.addAttribute("categories", categoryService.getCategories());
         return "new-product";
     }
 
