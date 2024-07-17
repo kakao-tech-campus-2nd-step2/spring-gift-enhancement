@@ -25,6 +25,7 @@
       <th>Name</th>
       <th>Price</th>
       <th>Image</th>
+      <th>Category</th>
       <th>Actions</th>
     </tr>
     </thead>
@@ -34,6 +35,7 @@
       <td th:text="${product.name}"></td>
       <td th:text="${product.price}"></td>
       <td><img th:src="${product.imageUrl}" alt="Product Image" style="width:100px;height:auto;"/></td>
+      <td th:text="${product.category.categoryName}">Product Category</td>
       <td>
         <button class="btn btn-warning" th:onclick="'editProduct(' + ${product.id} + ')'">수정</button>
         <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
@@ -85,6 +87,15 @@
               <label for="imageUrl">Image URL</label>
               <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" />
             </div>
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select class="form-control" id="category" name="categoryId" required>
+                <option value="" disabled selected>Select a category</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.categoryName}"></option>
+              </select>
+            </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save</button>
@@ -113,6 +124,7 @@
       document.getElementById('name').value = product.name;
       document.getElementById('price').value = product.price;
       document.getElementById('imageUrl').value = product.imageUrl;
+      document.getElementById('category').value = product.category.id;
       document.getElementById('productForm').action = `/products/update`;
       $('#productModal').modal('show');
     })
