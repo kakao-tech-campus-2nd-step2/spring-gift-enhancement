@@ -1,6 +1,10 @@
-INSERT INTO product (name, price, image_url)
-VALUES ('예시1', '100', '예시1 Image Url'),
-       ('예시2', '200', '예시2 Image Url');
+INSERT INTO category (name)
+VALUES ('교환권'),
+       ('백화점');
+
+INSERT INTO product (name, price, category_id, image_url)
+VALUES ('예시1', '100', 1, '예시1 Image Url'),
+       ('예시2', '200', 2, '예시2 Image Url');
 
 INSERT INTO member (name, email, password, role)
 VALUES ('관리자', 'admin@email.com', 'password', 'admin');
