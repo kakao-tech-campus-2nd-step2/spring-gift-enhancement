@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.controller.product.ProductController;
 import gift.dto.request.OptionRequestDto;
 import gift.dto.request.ProductRequestDto;
 import gift.dto.response.CategoryResponseDto;
