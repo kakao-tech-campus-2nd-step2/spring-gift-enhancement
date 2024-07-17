@@ -5,6 +5,7 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.OptionRequestDto;
 import gift.dto.response.OptionResponseDto;
+import gift.exception.customException.DenyDeleteException;
 import gift.exception.customException.EntityNotFoundException;
 import gift.exception.customException.NameDuplicationException;
 import gift.repository.option.OptionRepository;
@@ -20,8 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static gift.exception.exceptionMessage.ExceptionMessage.OPTION_NAME_DUPLICATION;
-import static gift.exception.exceptionMessage.ExceptionMessage.PRODUCT_NOT_FOUND;
+import static gift.exception.exceptionMessage.ExceptionMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -110,21 +110,29 @@ class OptionServiceTest {
         Long validOptionId = 1L;
         Long inValidOptionId = 2L;
 
+        Long validProductId = 1L;
+        Long inValidProductId = 2L;
+
         Option option = new Option("TEST", 1);
 
         given(optionRepository.findById(validOptionId)).willReturn(Optional.of(option));
         given(optionRepository.findById(inValidOptionId)).willReturn(Optional.empty());
+        given(optionRepository.countOptionByProductId(validProductId)).willReturn(2L);
+        given(optionRepository.countOptionByProductId(inValidProductId)).willReturn(1L);
 
         //when
-        OptionResponseDto optionResponseDto = optionService.deleteOneOption(validOptionId);
+        OptionResponseDto optionResponseDto = optionService.deleteOneOption(validProductId, validOptionId);
 
         //then
         assertAll(
                 () -> assertThat(optionResponseDto.name()).isEqualTo(option.getName()),
                 () -> assertThat(optionResponseDto.quantity()).isEqualTo(option.getQuantity()),
-                () -> assertThatThrownBy(() -> optionService.deleteOneOption(inValidOptionId))
+                () -> assertThatThrownBy(() -> optionService.deleteOneOption(validProductId, inValidOptionId))
                         .isInstanceOf(EntityNotFoundException.class)
-                        .hasMessage("해당 옵션은 존재하지 않습니다.")
+                        .hasMessage(OPTION_NOT_FOUND),
+        () -> assertThatThrownBy(() -> optionService.deleteOneOption(inValidProductId, validOptionId))
+                .isInstanceOf(DenyDeleteException.class)
+                .hasMessage(DENY_OPTION_DELETE)
         );
     }
 
