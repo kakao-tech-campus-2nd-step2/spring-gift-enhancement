@@ -2,7 +2,9 @@ package gift.controller;
 
 import gift.exception.InvalidProductException;
 import gift.exception.ProductNotFoundException;
+import gift.model.Category;
 import gift.model.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -22,17 +24,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController( ProductService productService) {
+    public ProductController( ProductService productService, CategoryService categoryService ) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
     public String getProducts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productService.getAllProducts(pageable);
+        List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("productPage", productPage);
         model.addAttribute("product", new Product());
+        model.addAttribute("categories", categories);
         return "product-list";
     }
 
