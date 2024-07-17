@@ -1,9 +1,6 @@
 package gift.repository;
 
-import gift.entity.Category;
-import gift.entity.Member;
-import gift.entity.Product;
-import gift.entity.Wish;
+import gift.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,8 +35,8 @@ class WishRepositoryTest {
         Category testCategory = new Category("음식", "테스트", "테스트", "테스트");
         testEntityManager.persist(testCategory);
 
-        testProduct1 = new Product("almond", 500, "almond.jpg", testCategory);
-        testProduct2 = new Product("ice", 900, "ice.jpg", testCategory);
+        testProduct1 = new Product("almond", 500, "almond.jpg", testCategory,List.of(new Option("optoin1",1)));
+        testProduct2 = new Product("ice", 900, "ice.jpg", testCategory,List.of(new Option("optoin1",1)));
         testEntityManager.persist(testProduct1);
         testEntityManager.persist(testProduct2);
     }
