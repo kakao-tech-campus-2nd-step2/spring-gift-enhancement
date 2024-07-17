@@ -22,13 +22,17 @@ public class ProductRequestDto {
     @NotBlank
     private String imageUrl;
 
+    @NotNull
+    private Long categoryId;
+
     public ProductRequestDto() {
     }
 
-    public ProductRequestDto(String name, int price, String imageUrl) {
+    public ProductRequestDto(String name, int price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     private ProductRequestDto(Long id, String name, int price, String imageUrl) {
@@ -50,6 +54,10 @@ public class ProductRequestDto {
         this.imageUrl = imageUrl;
     }
 
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public Long getId() {
         return id;
     }
@@ -66,12 +74,8 @@ public class ProductRequestDto {
         return imageUrl;
     }
 
-    public Product toEntity() {
-        return new Product(
-            name,
-            price,
-            imageUrl
-        );
+    public Long getCategoryId() {
+        return categoryId;
     }
 
     public static ProductRequestDto from(ProductResponseDto productResponseDto) {

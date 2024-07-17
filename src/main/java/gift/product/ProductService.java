@@ -1,5 +1,7 @@
 package gift.product;
 
+import gift.category.CategoryRepository;
+import gift.category.model.Category;
 import gift.common.exception.ProductException;
 import gift.product.model.Product;
 import gift.product.model.ProductRequestDto;
@@ -13,9 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional(readOnly = true)
@@ -32,16 +37,22 @@ public class ProductService {
 
     @Transactional
     public Long insertProduct(ProductRequestDto productRequestDto) throws ProductException {
-        Product product = productRepository.save(productRequestDto.toEntity());
+        Category category = categoryRepository.findById(productRequestDto.getId())
+            .orElseThrow(() -> new IllegalArgumentException("wish 가 잘못되었습니다."));
+        Product product = productRepository.save(
+            new Product(productRequestDto.getName(), productRequestDto.getPrice(),
+                productRequestDto.getImageUrl(), category));
         return product.getId();
     }
 
     @Transactional
     public void updateProductById(Long id, ProductRequestDto productRequestDto)
         throws ProductException {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Category 값이 잘못되었습니다."));
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Product 값이 잘못되었습니다."));
-        product.updateInfo(productRequestDto.toEntity());
+        product.updateInfo(productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getImageUrl(), category);
     }
 
     public void deleteProductById(Long id) {

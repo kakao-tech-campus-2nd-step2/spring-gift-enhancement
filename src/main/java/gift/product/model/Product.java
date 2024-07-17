@@ -25,11 +25,12 @@ public class Product extends BaseEntity {
     protected Product() {
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         validateKakaoWord(name);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public String getName() {
@@ -44,10 +45,15 @@ public class Product extends BaseEntity {
         return imageUrl;
     }
 
-    public void updateInfo(Product product) {
-        this.name = product.getName();
-        this.price = product.getPrice();
-        this.imageUrl = product.getImageUrl();
+    public Category getCategory() {
+        return category;
+    }
+
+    public void updateInfo(String name, Integer price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     private void validateKakaoWord(String name) throws ProductException {
