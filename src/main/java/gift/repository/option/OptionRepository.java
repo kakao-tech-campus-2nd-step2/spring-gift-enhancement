@@ -11,4 +11,6 @@ public interface OptionRepository extends JpaRepository<Option, Long> {
     Optional<Option> findOptionByNameAndProductId(String name, Long productId);
 
     List<Option> findOptionsByProductId(Long productId);
+
+    Long countOptionByProductId(Long productId);
 }
