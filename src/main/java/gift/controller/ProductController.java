@@ -49,7 +49,7 @@ public class ProductController {
         List<OptionResponseDto> optionDtos = optionService.findOptionsByProduct(productId);
         model.addAttribute("options", optionDtos);
         model.addAttribute("productId",productId);
-        return "optionForm";
+        return "option/optionForm";
     }
 
     @PostMapping("/{id}/options")
@@ -63,7 +63,7 @@ public class ProductController {
     public String addOptionForm(@PathVariable("id") Long productId,
                                 Model model){
         model.addAttribute("productId", productId);
-        return "addOptionForm";
+        return "option/addOptionForm";
     }
 
     @GetMapping("/new")
