@@ -4,13 +4,15 @@ import gift.domain.model.entity.Product;
 import gift.domain.model.entity.User;
 import gift.domain.model.entity.Wish;
 import gift.domain.repository.WishRepository;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -102,15 +104,16 @@ public class WishTest {
         wishRepository.save(wish);
 
         // when
-        List<Wish> found = wishRepository.findByUserEmail(user.getEmail());
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Wish> foundPage = wishRepository.findByUserEmail(user.getEmail(), pageable);
 
         // then
-        assertThat(found).isNotNull();
-        assertThat(found).isNotEmpty();
-        assertThat(found.size()).isEqualTo(1);
+        assertThat(foundPage).isNotNull();
+        assertThat(foundPage.getContent()).isNotEmpty();
+        assertThat(foundPage.getTotalElements()).isEqualTo(1);
 
-        Wish foundWish = found.getFirst();
-        assertThat(foundWish.getUser().getId()).isEqualTo(user.getId());
+        Wish foundWish = foundPage.getContent().getFirst();
+        assertThat(foundWish.getUser().getEmail()).isEqualTo(user.getEmail());
         assertThat(foundWish.getProduct().getId()).isEqualTo(product.getId());
     }
 
@@ -166,7 +169,9 @@ public class WishTest {
         assertThat(wishRepository.existsByUserEmailAndProductId(user.getEmail(),
             product.getId())).isFalse();
 
-        List<Wish> remainingWishes = wishRepository.findByUserEmail(user.getEmail());
-        assertThat(remainingWishes).isEmpty();
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Wish> remainingWishes = wishRepository.findByUserEmail(user.getEmail(), pageable);
+        assertThat(remainingWishes.getContent()).isEmpty();
+        assertThat(remainingWishes.getTotalElements()).isZero();
     }
 }
