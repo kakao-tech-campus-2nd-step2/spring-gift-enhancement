@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -26,7 +27,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable int id) {
+    public ResponseEntity<Optional<Category>> getCategoryById(@PathVariable int id) {
         var category = categoryService.findById(id);
         return ResponseEntity.ok(category);
     }
@@ -39,6 +40,12 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody CategoryDTO categoryDTO) {
+        categoryService.update(id, categoryDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<Category> patchCategory(@PathVariable Integer id, @RequestBody CategoryDTO categoryDTO) {
         categoryService.update(id, categoryDTO);
         return ResponseEntity.ok().build();
     }
