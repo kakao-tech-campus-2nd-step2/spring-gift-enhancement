@@ -11,19 +11,21 @@ import java.util.Optional;
 @Service
 public class MemberService {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    // 생성자를 통해 의존성 주입
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+        this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    // CREATE
     public Member createMember(String email, String password) {
         Member member = new Member(email, passwordEncoder.encode(password));
         return memberRepository.save(member);
     }
 
-    // REGISTER
+    // 회원 등록
     public Member register(String email, String password) {
         Optional<Member> existingMember = memberRepository.findByEmail(email);
         if (existingMember.isPresent()) {
@@ -33,7 +35,7 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    // READ (LOGIN)
+    // 로그인 조회
     public Member login(String email, String password) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("옳지 않은 이메일이나 비밀번호 입니다."));
@@ -45,12 +47,12 @@ public class MemberService {
         return member;
     }
 
-    // READ (FIND BY ID)
+    // 회원 id로 조회
     public Optional<Member> findById(Long member_id) {
         return memberRepository.findById(member_id);
     }
 
-    // UPDATE EMAIL
+    // 이메일 수정
     public Member updateEmail(Long member_id, String newEmail) {
         Member member = memberRepository.findById(member_id)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
@@ -58,7 +60,7 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    // 패스워드 update
+    // 패스워드 수정
     public Member updatePassword(Long member_id, String newPassword) {
         Member member = memberRepository.findById(member_id)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));

@@ -1,6 +1,7 @@
 package gift.admin;
 
 import gift.product.dto.ProductDto;
+import gift.product.model.Product;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,20 @@ public class AdminController {
             @RequestParam(defaultValue = "10") int size, // 쿼리 파라미터 size를 받아 페이지 크기 설정, 기본값은 10
             @RequestParam(defaultValue = "name,asc") String[] sort, Model model) // 뷰에 데이터를 전달하기 위한 모델 객체
     {
+        // page와 size의 최대값 설정
+        int maxPage = 100;
+        int maxSize = 50;
+
+        // 제한값 적용
+        int limitedPage = Math.min(page, maxPage);
+        int limitedSize = Math.min(size, maxSize);
+
         Sort.Direction direction = Sort.Direction.fromString(sort[1]); // sort 배열의 두 번째 요소 정렬 방향을 Sort.Direction 객체로 변환
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0])); // 페이지 번호, 페이지 크기, 정렬 기준 및 방향 -> Pageable 객체 생성
+        Pageable pageable = PageRequest.of(limitedPage, limitedSize, Sort.by(direction, sort[0])); // 제한된 페이지 번호와 페이지 크기, 정렬 기준 및 방향으로 Pageable 객체 생성
 
         Page<ProductDto> productPage = productService.findAll(pageable);
         model.addAttribute("상품 목록", productPage.getContent()); // 현재 페이지의 상품 목록을 모델에 추가
-        model.addAttribute("현재 페이지", page); // 현재 페이지 번호를 모델에 추가
+        model.addAttribute("현재 페이지", limitedPage); // 현재 페이지 번호를 모델에 추가
         model.addAttribute("전체 페이지", productPage.getTotalPages()); // 총 페이지 수를 모델에 추가
         model.addAttribute("전체 항목", productPage.getTotalElements()); // 총 항목 수를 모델에 추가
 

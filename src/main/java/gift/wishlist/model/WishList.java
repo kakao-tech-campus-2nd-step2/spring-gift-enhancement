@@ -9,7 +9,7 @@ public class WishList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "wishlist_seq")
-    @SequenceGenerator(name = "wishlist_seq", sequenceName = "wishlist_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "wishlist_seq", sequenceName = "wishlist_sequence", allocationSize = 100)
     private Long wishlist_id;
 
     /** fetch = FetchType.LAZY를 사용하여 WishList가 로드될 때 Member와 Product는 즉시 로드되지 않음.

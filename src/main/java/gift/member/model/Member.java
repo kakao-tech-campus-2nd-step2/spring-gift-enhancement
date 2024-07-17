@@ -1,11 +1,11 @@
 package gift.member.model;
 
-import gift.product.model.Product;
 import gift.wishlist.model.WishList;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -23,7 +23,6 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishList> wishLists = new ArrayList<>();
-    private WishList wishList;
 
     public Member(String email, String password) {
         this.email = email;
@@ -34,13 +33,18 @@ public class Member {
         return member_id;
     }
 
-    /* (동사로 시작) 컨벤션에 맞게 메소드명 수정 */
-    public Member updateEmail(String newEmail) {
-        return new Member(newEmail, this.password); // 새 이메일로 업데이트된 Member 인스턴스를 반환
+    public void updateEmail(@NotNull @NotBlank String newEmail) {
+        if (newEmail == null || newEmail.trim().isEmpty()) {
+            throw new IllegalArgumentException("이메일은 비어있을 수 없습니다.");
+        }
+        this.email = newEmail; // 현재 인스턴스의 이메일을 업데이트
     }
 
-    public Member updatePassword(String newPassword) {
-        return new Member(this.email, newPassword); // 새 비밀번호로 업데이트된 Member 인스턴스를 반환
+    public void updatePassword(@NotNull @NotBlank String newPassword) {
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("비밀번호는 비어있을 수 없습니다.");
+        }
+        this.password = newPassword; // 현재 인스턴스의 비밀번호를 업데이트
     }
 
     public String getPassword() {
@@ -49,10 +53,6 @@ public class Member {
 
     public String getEmail() {
         return email;
-    }
-
-    public void setWishList(WishList wishList) {
-        this.wishList = wishList;
     }
 
 }
