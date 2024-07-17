@@ -80,7 +80,7 @@ class WishServiceTest {
 
             when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(request.productId())).thenReturn(product);
-            when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.empty());
+            when(wishRepository.existsByMemberAndProduct(member, product)).thenReturn(false);
 
             //When
             wishService.addProductToWish(memberId, request);
@@ -97,11 +97,10 @@ class WishServiceTest {
             WishRequest request = new WishRequest(1L, 1);
             Member member = new Member("test@email.com", "password");
             Product product = new Product("name", 1000, "imageUrl", null);
-            Wish existingWish = new Wish(member, 1, product);
 
             when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(request.productId())).thenReturn(product);
-            when(wishRepository.findByMemberAndProduct(member, product)).thenReturn(Optional.of(existingWish));
+            when(wishRepository.existsByMemberAndProduct(member, product)).thenReturn(true);
 
             //  When Then
             assertThatThrownBy(() -> wishService.addProductToWish(memberId, request))
