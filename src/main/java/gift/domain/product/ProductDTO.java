@@ -14,6 +14,9 @@ public class ProductDTO {
     @Pattern(regexp = "^[a-zA-Z0-9 ()\\[\\]+\\-&/_ㄱ-ㅎㅏ-ㅣ가-힣]*$", message = "특수문자는 ( ), [ ], +, -, &, /, _ 만 사용 가능합니다.")
     private String name;
 
+    @NotNull
+    private Long categoryId;
+
     @NotNull(message = "상품 가격이 입력되지 않았습니다.")
     @Min(value = 0, message = "상품 가격은 0원 이상이어야 합니다.")
     private Integer price;
@@ -25,8 +28,9 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(String name, Integer price, String imageUrl) {
+    public ProductDTO(String name, Long categoryId, Integer price, String imageUrl) {
         this.name = name;
+        this.categoryId = categoryId;
         this.price = price;
         this.imageUrl = imageUrl;
     }
@@ -43,16 +47,23 @@ public class ProductDTO {
         return price;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-
     public void setPrice(Integer price) {
         this.price = price;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }

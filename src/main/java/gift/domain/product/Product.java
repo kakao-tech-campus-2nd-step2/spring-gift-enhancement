@@ -1,15 +1,14 @@
 package gift.domain.product;
 
-import gift.domain.cart.CartItem;
+import gift.domain.Category.Category;
 import gift.global.annotation.NotContainsValue;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import java.util.List;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 
 
@@ -23,32 +22,38 @@ public class Product {
     @Column(unique = true)
     @NotContainsValue(value = "카카오", message = "'{value}' 가 포함된 문구는 담당 MD 와 협의 후 사용 가능합니다.")
     private String name;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
     private int price;
     private String imageUrl;
-
-    public static Product createProductFromProxy(Product proxyProduct) {
-        return new Product(
-            proxyProduct.getId(),
-            proxyProduct.getName(),
-            proxyProduct.getPrice(),
-            proxyProduct.getImageUrl());
-    }
 
     protected Product() {
 
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, Category category, int price, String imageUrl) {
         this.name = name;
+        this.category = category;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, String name, Category category, int price, String imageUrl) {
         this.id = id;
         this.name = name;
+        this.category = category;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public static Product createProductFromProxy(Product proxyProduct) {
+        return new Product(
+            proxyProduct.getId(),
+            proxyProduct.getName(),
+            proxyProduct.getCategory(),
+            proxyProduct.getPrice(),
+            proxyProduct.getImageUrl());
     }
 
     public Long getId() {
@@ -59,12 +64,28 @@ public class Product {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getPrice() {
         return price;
     }
 
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     @Override
@@ -74,6 +95,7 @@ public class Product {
                ", name='" + name + '\'' +
                ", price=" + price +
                ", imageUrl='" + imageUrl + '\'' +
+               ", category=" + category +
                '}';
     }
 
@@ -89,12 +111,13 @@ public class Product {
         return id == product.id &&
                price == product.price &&
                Objects.equals(name, product.name) &&
-               Objects.equals(imageUrl, product.imageUrl);
+               Objects.equals(imageUrl, product.imageUrl) &&
+               Objects.equals(category, product.category);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, imageUrl);
+        return Objects.hash(id, name, category, price, imageUrl);
     }
 
     public void update(String name, int price, String imageUrl) {
@@ -106,18 +129,6 @@ public class Product {
     public void proxyInitialize(String name, int price, String imageUrl) {
         this.name = name;
         this.price = price;
-        this.imageUrl = imageUrl;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 

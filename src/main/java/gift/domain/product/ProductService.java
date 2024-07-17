@@ -1,7 +1,9 @@
 package gift.domain.product;
 
+import gift.domain.Category.JpaCategoryRepository;
 import gift.global.exception.BusinessException;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import java.util.List;
 import java.util.Set;
@@ -11,34 +13,43 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
 
-    private final JdbcTemplate jdbcTemplate; // h2 DB 사용한 메모리 저장 방식
     private final JpaProductRepository productRepository;
+    private final JpaCategoryRepository categoryRepository;
     private final Validator validator;
 
     @Autowired
-    public ProductService(JdbcTemplate jdbcTemplate, JpaProductRepository jpaProductRepository,
-        Validator validator) {
-        this.jdbcTemplate = jdbcTemplate;
+    public ProductService(
+        JpaProductRepository jpaProductRepository,
+        JpaCategoryRepository jpaCategoryRepository,
+        Validator validator
+    ) {
         this.productRepository = jpaProductRepository;
+        this.categoryRepository = jpaCategoryRepository;
         this.validator = validator;
     }
 
     /**
      * 상품 추가
      */
-    public void createProduct(ProductDTO productDTO) {
+    public void createProduct(@Valid ProductDTO productDTO) {
         if (productRepository.existsByName(productDTO.getName())) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 이름의 상품이 이미 존재합니다.");
         }
+        if (categoryRepository.findById(productDTO.getCategoryId()) == null) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 카테고리가 존재하지 않습니다.");
+        }
 
-        Product product = new Product(productDTO.getName(), productDTO.getPrice(),
-            productDTO.getImageUrl());
+        Product product = new Product(
+            productDTO.getName(),
+            categoryRepository.findById(productDTO.getCategoryId()).get(),
+            productDTO.getPrice(),
+            productDTO.getImageUrl()
+        );
 
         validateProduct(product);
 
