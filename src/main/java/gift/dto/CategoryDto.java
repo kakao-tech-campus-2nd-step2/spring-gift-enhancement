@@ -3,11 +3,13 @@ package gift.dto;
 import gift.constants.ErrorMessage;
 import gift.entity.Category;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class CategoryDto {
 
     private Long id;
     @NotBlank(message = ErrorMessage.CATEGORY_NAME_NOT_BLANK_MSG)
+    @Size(min = 1, max = 15, message = ErrorMessage.CATEGORY_NAME_INVALID_LENGTH_MSG)
     private String name;
     private String color;
     private String imageUrl;

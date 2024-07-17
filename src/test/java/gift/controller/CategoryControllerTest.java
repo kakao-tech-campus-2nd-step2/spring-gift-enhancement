@@ -83,4 +83,18 @@ class CategoryControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().string(ErrorMessage.CATEGORY_NAME_NOT_BLANK_MSG));
     }
+
+    @Test
+    @DisplayName("카테고리명 15글자 초과 시, 실패 테스트")
+    void categoryNameLength() throws Exception {
+        CategoryDto editedCategory = new CategoryDto(null, "0123456789012345", "빨강", "https",
+            "크리스마스 카테고리");
+        String inputJson = new ObjectMapper().writeValueAsString(editedCategory);
+
+        mockMvc.perform(post("/api/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(ErrorMessage.CATEGORY_NAME_INVALID_LENGTH_MSG));
+    }
 }
