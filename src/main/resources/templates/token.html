@@ -30,14 +30,12 @@
   </script>
 </head>
 <body>
-<!--토큰 전달되는지 확인-->
-<!--<td th:text="${token.accessToken}"></td>-->
-  <script>
-    /*<![CDATA[*/
-    var accessToken = "[[${token.accessToken}]]";
-    localStorage.setItem('jwt', accessToken);
-    location.href = '/api/wishlist'
-  </script>
+<script>
+  /*<![CDATA[*/
+  var accessToken = "[[${token.accessToken}]]";
+  localStorage.setItem('jwt', accessToken);
+  location.href = '/api/wishlist'
+</script>
 
 </body>
 </html>
