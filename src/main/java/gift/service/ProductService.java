@@ -61,12 +61,6 @@ public class ProductService {
         return convertToResponseDto(savedProduct);
     }
 
-    private void validateDuplicateProductId(Long id) {
-        if (productRepository.existsById(id)) {
-            throw new IllegalArgumentException("이미 존재하는 상품 ID입니다.");
-        }
-    }
-
     private void validateDuplicateProduct(String name) {
         if (productRepository.existsByName(name)) {
             throw new IllegalArgumentException("이미 존재하는 상품명입니다.");
