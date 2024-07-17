@@ -43,6 +43,13 @@ public class ProductController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "상품 조회", description = "ID로 상품을 조회합니다.")
+    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
+        ProductResponseDto productResponseDto = productService.getProductById(id);
+        return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "상품 삭제", description = "기존 상품을 삭제합니다.")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
