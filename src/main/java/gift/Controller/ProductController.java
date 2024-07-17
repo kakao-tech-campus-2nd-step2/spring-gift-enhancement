@@ -44,7 +44,6 @@ public class ProductController {
 
     @PostMapping("/api/products")
     public String createProduct(@Valid @ModelAttribute Product product) {
-        System.out.println(product.getCategory().getName());
         productService.addProduct(product);
         return "redirect:/api/products";
     }
