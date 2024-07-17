@@ -31,6 +31,7 @@ public class OptionService {
 
     @Transactional
     public OptionResponse updateOption(Long id, Long optionId, OptionRequest optionRequest) {
+        if(checkIfDuplicatedOption(id, optionRequest)) throw new IllegalArgumentException("이미 존재하는 옵션명입니다.");
         Product product = productRepository.findById(id).orElseThrow();
         Option option = optionRepository.findById(optionId).orElseThrow();
         product.removeOption(option);
