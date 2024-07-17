@@ -52,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
         long id = authenticationTool.parseToken(token);
         Member member = jpaMemberRepository.findById(id).orElseThrow(MemberAuthenticationException::new);
 
-        return new MemberDTO(member.getEmail(), member.getPassword(), member.getRole());
+        return new MemberDTO(id,member.getEmail(), member.getPassword(), member.getRole());
     }
 
 
@@ -67,7 +67,7 @@ public class MemberServiceImpl implements MemberService {
 
     private Member findByEmail(String email) {
         try {
-            return jpaMemberRepository.findByEmail(email).orElseThrow();
+            return jpaMemberRepository.findByEmail(email).orElseThrow(NoSuchElementException::new);
         } catch (NoSuchElementException e) {
             throw new MemberAuthenticationException();
         }

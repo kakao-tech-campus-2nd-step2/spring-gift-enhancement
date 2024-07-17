@@ -5,6 +5,7 @@ import gift.dto.MemberDTO;
 import gift.dto.ProductDTO;
 import gift.dto.WishListRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,11 +39,16 @@ class WishListControllerTest {
         //상품 추가
         webClient.post("api/products",new ProductDTO(null,"test",123,"abc"));
 
+        ProductDTO dto =  webClient.get("api/products").expectBodyList(ProductDTO.class).returnResult().getResponseBody()
+            .get(0);
+
         webClient.moreAction().post().uri("api/wishlist")
             .header("Authorization", loginMemberToken.getToken())
             .accept(MediaType.APPLICATION_JSON)
-            .body(BodyInserters.fromValue(new WishListRequest(0L,1)))
+            .body(BodyInserters.fromValue(new WishListRequest(dto.getId(),1)))
             .exchange().expectStatus().isOk();
+
+
     }
 
 
