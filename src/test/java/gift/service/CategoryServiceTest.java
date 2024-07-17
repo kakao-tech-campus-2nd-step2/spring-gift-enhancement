@@ -65,7 +65,8 @@ public class CategoryServiceTest {
     @DisplayName("카테고리 추가")
     public void testAddCategory() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        CategoryRequest categoryRequest = new CategoryRequest(null, "Category", "#000000", "imageUrl", "description");
+        CategoryRequest categoryRequest = new CategoryRequest(null, "Category", "#000000",
+            "imageUrl", "description");
         when(categoryRepository.save(Mockito.any(Category.class))).thenReturn(category);
 
         CategoryResponse createdCategory = categoryService.addCategory(categoryRequest);
@@ -75,21 +76,26 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("카테고리 수정")
     public void testUpdateCategory() {
-        Category existingCategory = new Category("Old Category", "#111111", "oldImageUrl", "oldDescription");
-        Category updatedCategory = new Category("Updated Category", "#000000", "newImageUrl", "newDescription");
-        CategoryRequest categoryRequest = new CategoryRequest(1L, "Updated Category", "#000000", "newImageUrl", "newDescription");
+        Category existingCategory = new Category("Old Category", "#111111", "oldImageUrl",
+            "oldDescription");
+        Category updatedCategory = new Category("Updated Category", "#000000", "newImageUrl",
+            "newDescription");
+        CategoryRequest categoryRequest = new CategoryRequest(1L, "Updated Category", "#000000",
+            "newImageUrl", "newDescription");
 
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(existingCategory));
         when(categoryRepository.save(Mockito.any(Category.class))).thenReturn(updatedCategory);
 
-        CategoryResponse updatedCategoryResponse = categoryService.updateCategory(1L, categoryRequest);
+        CategoryResponse updatedCategoryResponse = categoryService.updateCategory(1L,
+            categoryRequest);
         assertEquals("Updated Category", updatedCategoryResponse.name());
     }
 
     @Test
     @DisplayName("존재하지 않는 카테고리 ID로 수정")
     public void testUpdateCategoryNotFound() {
-        CategoryRequest categoryRequest = new CategoryRequest(1L, "Updated Category", "#000000", "newImageUrl", "newDescription");
+        CategoryRequest categoryRequest = new CategoryRequest(1L, "Updated Category", "#000000",
+            "newImageUrl", "newDescription");
 
         when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
 
