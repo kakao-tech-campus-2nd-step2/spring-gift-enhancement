@@ -31,4 +31,14 @@ public class CategoryRepositoryTest {
         assertThat(expected.getCategoryName()).isEqualTo(actual.getCategoryName());
     }
 
+    @Test
+    public void delete() {
+        Category category = new Category("교환권");
+        Category excepted = categoryRepository.save(category);
+        categoryRepository.delete(excepted);
+        Optional<Category> actual = categoryRepository.findById(excepted.getId());
+        assertThat(actual).isNotPresent();
+    }
+
+
 }
