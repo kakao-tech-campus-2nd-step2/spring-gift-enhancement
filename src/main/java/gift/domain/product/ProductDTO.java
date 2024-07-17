@@ -2,6 +2,7 @@ package gift.domain.product;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +19,6 @@ public class ProductDTO {
 
     @NotNull
     private Long categoryId;
-
     @NotNull(message = "상품 가격이 입력되지 않았습니다.")
     @Min(value = 0, message = "상품 가격은 0원 이상이어야 합니다.")
     private Integer price;
@@ -57,5 +57,4 @@ public class ProductDTO {
     public Long getCategoryId() {
         return categoryId;
     }
-
 }

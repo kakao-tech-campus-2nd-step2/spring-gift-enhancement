@@ -3,6 +3,7 @@ package gift.domain.product;
 import gift.domain.BaseTimeEntity;
 import gift.domain.Category.Category;
 import gift.global.annotation.NotContainsValue;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 import java.util.Objects;
 
 
@@ -23,12 +25,12 @@ public class Product extends BaseTimeEntity {
     @Column(unique = true)
     @NotContainsValue(value = "카카오", message = "'{value}' 가 포함된 문구는 담당 MD 와 협의 후 사용 가능합니다.")
     private String name;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
     private int price;
     private String imageUrl;
-
     protected Product() {
 
     }
@@ -36,6 +38,7 @@ public class Product extends BaseTimeEntity {
     public Product(String name, Category category, int price, String imageUrl) {
         this.name = name;
         this.category = category;
+
         this.price = price;
         this.imageUrl = imageUrl;
     }
@@ -44,6 +47,7 @@ public class Product extends BaseTimeEntity {
         this.id = id;
         this.name = name;
         this.category = category;
+
         this.price = price;
         this.imageUrl = imageUrl;
     }
@@ -96,7 +100,6 @@ public class Product extends BaseTimeEntity {
                ", name='" + name + '\'' +
                ", price=" + price +
                ", imageUrl='" + imageUrl + '\'' +
-               ", category=" + category +
                '}';
     }
 

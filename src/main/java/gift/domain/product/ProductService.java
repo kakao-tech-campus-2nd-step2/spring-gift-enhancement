@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import java.util.List;
 import java.util.Optional;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -74,7 +76,6 @@ public class ProductService {
     public void updateProduct(Long id, ProductDTO productDTO) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "수정할 상품이 존재하지 않습니다."));
-
         if (productRepository.existsByName(productDTO.getName())) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 이름의 상품이 이미 존재합니다.");
         }

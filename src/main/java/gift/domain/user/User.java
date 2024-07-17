@@ -1,6 +1,5 @@
 package gift.domain.user;
 
-
 import gift.domain.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

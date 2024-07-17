@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import gift.domain.Category.Category;
 import gift.domain.Category.JpaCategoryRepository;
+
 import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
 import gift.domain.product.ProductService;
@@ -40,6 +41,7 @@ public class ProductRepositoryTest {
     private ProductService productService;
     @Autowired
     private JpaCategoryRepository categoryRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
