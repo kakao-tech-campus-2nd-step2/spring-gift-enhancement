@@ -51,14 +51,14 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ResponseDTO> handleValidationExceptions(
             HttpMessageNotReadableException ex) {
-        return new ResponseEntity<>(new ResponseDTO(true, "가격은 숫자여야 합니다."), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseDTO(true, "가격이나 개수는 숫자로 입력해야 합니다."), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ResponseDTO> handleValidationExceptions(
             MethodArgumentTypeMismatchException ex) {
-        return new ResponseEntity<>(new ResponseDTO(true, "상품의 개수는 숫자로 입력해야 합니다."),
+        return new ResponseEntity<>(new ResponseDTO(true, "가격이나 개수는 숫자로 입력해야 합니다."),
                 HttpStatus.BAD_REQUEST);
     }
 
