@@ -65,10 +65,7 @@ public class MemberService {
             .ifPresent(v -> {
                 throw new IllegalArgumentException(ErrorMessage.WISHLIST_ALREADY_EXISTS_MSG);
             });
-
         Wishlist wishlist = new Wishlist(member, product);
-        member.addWishlist(wishlist);
-        product.addWishlist(wishlist);
 
         wishlistJpaDao.save(wishlist);
     }
