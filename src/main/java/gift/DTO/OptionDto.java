@@ -17,28 +17,29 @@ public class OptionDto {
   @Max(value = 99999999, message = "옵션 수량은 1억 개 미만이어야 합니다.")
   private int quantity;
 
-  public OptionDto(){}
-
-  public OptionDto(Long id, String name, int quantity){
-    this.id=id;
-    this.name=name;
-    this.quantity=quantity;
+  public OptionDto() {
   }
 
-  public OptionDto(String name, int quantity){
-    this.name=name;
-    this.quantity=quantity;
+  public OptionDto(Long id, String name, int quantity) {
+    this.id = id;
+    this.name = name;
+    this.quantity = quantity;
   }
 
-  public Long getId(){
-    return this.getId();
+  public OptionDto(String name, int quantity) {
+    this.name = name;
+    this.quantity = quantity;
   }
 
-  public String getName(){
-    return this.getName();
+  public Long getId() {
+    return this.id;
   }
 
-  public int getQuantity(){
-    return this.getQuantity();
+  public String getName() {
+    return this.name;
+  }
+
+  public int getQuantity() {
+    return this.quantity;
   }
 }
