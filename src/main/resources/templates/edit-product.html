@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="kr">
 <head>
   <meta charset="UTF-8">
@@ -15,6 +16,14 @@
     <div class="container">
         <form id="product-edit-form">
             <table class="product-info">
+                <tr>
+                    <th>Category</th>
+                    <td>
+                        <select id="categoryId" required>
+                            <option th:each="category: ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == product.categoryId}"}></option>
+                        </select>
+                    </td>
+                </tr>
                 <tr>
                     <th>Name</th>
                     <td>
