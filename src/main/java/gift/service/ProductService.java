@@ -3,7 +3,9 @@ package gift.service;
 import gift.domain.model.dto.ProductAddRequestDto;
 import gift.domain.model.dto.ProductResponseDto;
 import gift.domain.model.dto.ProductUpdateRequestDto;
+import gift.domain.model.entity.Category;
 import gift.domain.model.enums.ProductSortBy;
+import gift.domain.repository.CategoryRepository;
 import gift.domain.repository.ProductRepository;
 import gift.domain.model.entity.Product;
 import jakarta.validation.Valid;
@@ -20,10 +22,13 @@ import java.util.NoSuchElementException;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
     private static final int PAGE_SIZE = 10;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional(readOnly = true)
@@ -47,7 +52,11 @@ public class ProductService {
     public ProductResponseDto addProduct(@Valid ProductAddRequestDto productAddRequestDto) {
         validateProductName(productAddRequestDto.getName());
         validateDuplicateProduct(productAddRequestDto.getName());
-        Product product = convertAddRequestToEntity(productAddRequestDto);
+
+        Category category = categoryRepository.findByName(productAddRequestDto.getCategoryName())
+            .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+
+        Product product = convertAddRequestToEntity(productAddRequestDto, category);
         Product savedProduct = productRepository.save(product);
         return convertToResponseDto(savedProduct);
     }
@@ -74,11 +83,15 @@ public class ProductService {
     public ProductResponseDto updateProduct(@Valid ProductUpdateRequestDto productAddRequestDto) {
         Product product = productRepository.findById(productAddRequestDto.getId())
             .orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다."));
+
+        Category category = categoryRepository.findByName(productAddRequestDto.getCategoryName())
+            .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+
         if (productRepository.existsByName(productAddRequestDto.getName())) {
             throw new IllegalArgumentException("이미 존재하는 상품명입니다.");
         }
         product.update(productAddRequestDto.getName(), productAddRequestDto.getPrice(),
-            productAddRequestDto.getImageUrl());
+            productAddRequestDto.getImageUrl(), category);
         return convertToResponseDto(productRepository.save(product));
     }
 
@@ -95,11 +108,12 @@ public class ProductService {
         }
     }
 
-    private Product convertAddRequestToEntity(ProductAddRequestDto productAddRequestDto) {
+    private Product convertAddRequestToEntity(ProductAddRequestDto productAddRequestDto, Category category) {
         return new Product(
             productAddRequestDto.getName(),
             productAddRequestDto.getPrice(),
-            productAddRequestDto.getImageUrl()
+            productAddRequestDto.getImageUrl(),
+            category
         );
     }
 
@@ -108,7 +122,8 @@ public class ProductService {
             product.getId(),
             product.getName(),
             product.getPrice(),
-            product.getImageUrl()
+            product.getImageUrl(),
+            product.getCategory().getName()
         );
     }
 

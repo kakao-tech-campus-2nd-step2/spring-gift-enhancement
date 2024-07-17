@@ -2,16 +2,18 @@ package gift.domain.model.dto;
 
 public class ProductResponseDto {
 
-    private Long id;
-    private String name;
-    private Long price;
-    private String imageUrl;
+    private final Long id;
+    private final String name;
+    private final Long price;
+    private final String imageUrl;
+    private final String categoryName;
 
-    public ProductResponseDto(Long id, String name, Long price, String imageUrl) {
+    public ProductResponseDto(Long id, String name, Long price, String imageUrl, String categoryName) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryName = categoryName;
     }
 
     public Long getId() {
@@ -28,5 +30,9 @@ public class ProductResponseDto {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
     }
 }
