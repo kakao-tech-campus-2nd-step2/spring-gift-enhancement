@@ -2,8 +2,10 @@ package gift.service;
 
 
 import gift.dto.ProductDto;
+import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductName;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,14 +16,18 @@ import java.util.Optional;
 @Service
 public class ProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public boolean addNewProduct(ProductDto productDto){
-        Product product = new Product(productDto.category(),new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
+        Category category = findCategory(productDto.categoryName());
+
+        Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
         if (productRepository.existsByName(product.getName())) {
             return false;
         }
@@ -33,7 +39,9 @@ public class ProductService {
         Optional<Product> product = productRepository.findById(id);
         if(product.isPresent()){
             Product updateProduct = product.get();
-            Product newProduct = new Product(productDto.category(),new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
+            Category category = findCategory(productDto.categoryName());
+
+            Product newProduct = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
             updateProduct.updateProduct(newProduct);
             productRepository.save(updateProduct);
             return true;
@@ -60,5 +68,13 @@ public class ProductService {
 
     public void DeleteProduct(Long id){
         productRepository.deleteById(id);
+    }
+
+    public Category findCategory(String categoryName) {
+        Optional<Category> category = categoryRepository.findByCategoryName(categoryName);
+        if (category.isPresent()) {
+            return category.get();
+        }
+        return categoryRepository.save(new Category(categoryName));
     }
 }
