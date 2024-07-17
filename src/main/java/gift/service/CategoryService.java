@@ -48,7 +48,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public Long removeCategory(Long id) {
+    public Long deleteCategory(Long id) {
         return categoryRepository.findById(id)
             .map(category -> {
                 categoryRepository.delete(category);

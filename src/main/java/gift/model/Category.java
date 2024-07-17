@@ -45,12 +45,12 @@ public class Category extends BaseEntity {
         return name;
     }
 
-    public void updateCategory(String name) {
-        validateName(name);
-        this.name = name;
+    public void updateCategory(String newName) {
+        validateName(newName);
+        this.name = newName;
     }
 
-    public static void validateName(String name) {
+    public void validateName(String name) {
         if (name == null || name.isEmpty() || name.length() > 20) {
             throw new InputException("이름을 1~20자 사이로 입력해주세요");
         }

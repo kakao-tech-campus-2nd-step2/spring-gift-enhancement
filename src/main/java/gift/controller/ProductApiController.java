@@ -74,7 +74,7 @@ public class ProductApiController {
             throw new InputException(bindingResult.getAllErrors());
         }
 
-        productService.editProduct(dto.id(), dto.name(), dto.price(), dto.imageUrl(),
+        productService.updateProduct(dto.id(), dto.name(), dto.price(), dto.imageUrl(),
             dto.categoryName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -82,7 +82,7 @@ public class ProductApiController {
     @CheckRole("ROLE_ADMIN")
     @DeleteMapping("/api/products")
     public ResponseEntity<Void> deleteProduct(@RequestParam("id") Long id) {
-        productService.removeProduct(id);
+        productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

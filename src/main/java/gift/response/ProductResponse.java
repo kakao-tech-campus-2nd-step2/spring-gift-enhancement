@@ -14,7 +14,7 @@ public record ProductResponse(Long id,
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategory().getName()
+            product.getCategoryName()
         );
     }
 }

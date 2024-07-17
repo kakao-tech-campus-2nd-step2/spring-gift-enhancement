@@ -68,7 +68,7 @@ public class CategoryApiController {
     @CheckRole("ROLE_ADMIN")
     @DeleteMapping("/api/categories")
     public ResponseEntity<Void> deleteCategory(@RequestParam("id") Long id) {
-        categoryService.removeCategory(id);
+        categoryService.deleteCategory(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

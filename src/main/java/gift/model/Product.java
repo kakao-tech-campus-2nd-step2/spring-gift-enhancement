@@ -75,16 +75,18 @@ public class Product extends BaseEntity {
         return category;
     }
 
-    public void updateProduct(String newName, Integer newPrice, String newImageUrl, Category newCategory) {
+    public String getCategoryName() {
+        return category.getName();
+    }
+
+    public void updateProduct(String newName, Integer newPrice, String newImageUrl, String newCategoryName) {
         validateName(newName);
         validatePrice(newPrice);
         validateImageUrl(newImageUrl);
-        Category.validateName(category.getName());
-
         this.name = newName;
         this.price = newPrice;
         this.imageUrl = newImageUrl;
-        this.category = newCategory;
+        category.updateCategory(newCategoryName);
     }
 
     public static void validateName(String name) {

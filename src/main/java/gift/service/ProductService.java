@@ -2,7 +2,6 @@ package gift.service;
 
 import gift.exception.category.NotFoundCategoryException;
 import gift.exception.product.NotFoundProductException;
-import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -50,21 +49,21 @@ public class ProductService {
     }
 
     @Transactional
-    public void editProduct(Long id, String name, Integer price, String imageUrl,
+    public void updateProduct(Long id, String name, Integer price, String imageUrl,
         String categoryName) {
-        Category category = categoryRepository.findByName(categoryName)
-            .orElseThrow(NotFoundCategoryException::new);
-
         productRepository.findById(id)
-            .ifPresentOrElse(p -> p.updateProduct(name, price, imageUrl, category),
-                () -> {
-                    throw new NotFoundProductException();
+            .map(product -> {
+                if (product.getCategory() == null) {
+                    throw new NotFoundCategoryException();
                 }
-            );
+                product.updateProduct(name, price, imageUrl, categoryName);
+                return product;
+            })
+            .orElseThrow(NotFoundProductException::new);
     }
 
     @Transactional
-    public void removeProduct(Long id) {
+    public void deleteProduct(Long id) {
         productRepository.findById(id)
             .ifPresentOrElse(productRepository::delete
                 , () -> {

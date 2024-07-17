@@ -113,6 +113,7 @@ class ProductApiTest {
                 assertThat(pr.name()).isEqualTo(savedProducts.get(i).getName());
                 assertThat(pr.price()).isEqualTo(savedProducts.get(i).getPrice());
                 assertThat(pr.imageUrl()).isEqualTo(savedProducts.get(i).getImageUrl());
+                assertThat(pr.categoryName()).isEqualTo(savedProducts.get(i).getCategoryName());
             });
     }
 

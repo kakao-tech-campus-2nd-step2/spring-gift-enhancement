@@ -2,12 +2,10 @@ package gift.controller;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -18,12 +16,10 @@ import gift.exception.category.NotFoundCategoryException;
 import gift.model.Category;
 import gift.model.Member;
 import gift.model.Role;
-import gift.repository.CategoryRepository;
 import gift.request.CategoryUpdateRequest;
 import gift.service.CategoryService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -204,7 +200,7 @@ class CategoryApiControllerTest {
     void remove() throws Exception {
         //given
         Long categoryId = 1L;
-        given(categoryService.removeCategory(categoryId))
+        given(categoryService.deleteCategory(categoryId))
             .willReturn(categoryId);
 
         //when //then

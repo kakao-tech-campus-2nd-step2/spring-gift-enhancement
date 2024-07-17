@@ -1,7 +1,7 @@
 package gift.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.mock;
 
@@ -11,39 +11,40 @@ import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 class ProductServiceTest {
 
+    @Autowired
     private ProductService productService;
-    private ProductRepository productRepository = mock(ProductRepository.class);
-    private CategoryRepository categoryRepository = mock(CategoryRepository.class);
+    @MockBean
+    private ProductRepository productRepository;
+    @MockBean
+    private CategoryRepository categoryRepository;
 
-    @BeforeEach
-    void setUp() {
-        productService = new ProductService(productRepository, categoryRepository);
-    }
 
     @DisplayName("상품+카테고리 저장 테스트")
     @Test
     void save() {
         //given
-        Category category = new Category("카테고리");
-        given(categoryRepository.findByName(any(String.class)))
-            .will(invocationOnMock -> {
-                String name = invocationOnMock.getArgument(0, String.class);
-                return Optional.of(new Category(name));
-            });
+        String name = "카테고리";
+        Category category = new Category(1L, name);
+        given(categoryRepository.findByName(name))
+            .willReturn(Optional.of(category));
         given(productRepository.save(any(Product.class))).
             willReturn(new Product(1L, "name", 1000, "http://a.com", category));
         //when
         productService.addProduct("name", 1000, "http://a.com", category.getName());
-
         //then
         then(categoryRepository).should().findByName(any(String.class));
         then(productRepository).should().save(any(Product.class));
@@ -53,11 +54,10 @@ class ProductServiceTest {
     @Test
     void failSave() {
         //given
-        Category category = new Category("카테고리");
-        given(categoryRepository.findByName(category.getName()))
+        String name = "카테고리";
+        Category category = new Category(name);
+        given(categoryRepository.findByName(name))
             .willThrow(NotFoundCategoryException.class);
-        given(productRepository.save(any(Product.class))).
-            willReturn(new Product(1L, "name", 1000, "http://a.com", category));
         //when //then
         assertThatThrownBy(
             () -> productService.addProduct("name", 1000, "http://", category.getName()))
@@ -68,38 +68,35 @@ class ProductServiceTest {
     @Test
     void update() {
         //given
-        Category oldCategory = new Category("카테고리");
-        Category newCategory = new Category("새로운 카테고리");
-        Product product = new Product(1L, "name", 1000, "http://a.com", oldCategory);
+        Long id = 1L; String newName = "name"; Integer newPrice = 1000;
+        String newUrl = "http://a.com"; String newCategoryName = "name";
 
-        given(categoryRepository.findByName(any(String.class)))
-            .will(invocationOnMock -> {
-                String name = invocationOnMock.getArgument(0, String.class);
-                return Optional.of(new Category(name));
-            });
+        Product savedProduct = mock(Product.class);
+        Category savedCategory = new Category("새로운 카테고리");
+
+        given(savedProduct.getCategory())
+            .willReturn(savedCategory);
         given(productRepository.findById(any(Long.class)))
-            .willReturn(Optional.of(product));
+            .willReturn(Optional.of(savedProduct));
 
         //when
-        productService.editProduct(product.getId(), product.getName(), 1000, "http://a.com",
-            newCategory.getName());
+        productService.updateProduct(id, newName, newPrice, newUrl, newCategoryName);
         //then
-        then(categoryRepository).should().findByName(any(String.class));
         then(productRepository).should().findById(any(Long.class));
+        then(savedProduct).should().updateProduct(newName, newPrice, newUrl, newCategoryName);
     }
 
     @DisplayName("상품+카테고리 변경 실패 테스트")
     @Test
     void failUpdate() {
         //given
-        Category oldCategory = new Category("카테고리");
         Category newCategory = new Category("변경된 카테고리");
-        Product product = new Product(1L, "name", 1000, "http://a.com", oldCategory);
+        Product product = new Product(1L, "name", 1000, "http://a.com", null);
 
-        given(categoryRepository.findByName(newCategory.getName()))
-            .willReturn(Optional.empty());
+        given(productRepository.findById(any(Long.class)))
+            .willReturn(Optional.of(product));
         //when //then
-        assertThatThrownBy(() -> productService.editProduct(product.getId(), product.getName(),
+        assertThatThrownBy(() -> productService.updateProduct(product.getId(), product.getName(),
             product.getPrice(), product.getImageUrl(), newCategory.getName()))
             .isInstanceOf(NotFoundCategoryException.class);
     }
