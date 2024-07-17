@@ -9,7 +9,6 @@ import static org.mockito.BDDMockito.then;
 import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.ProductDTO;
-import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ProductServiceTest {
 
     @Mock
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
     @Mock
     private ProductRepository productRepository;
 
@@ -43,7 +42,7 @@ public class ProductServiceTest {
     void addProduct() {
         // given
         Product product = new Product(1L, "test", 1234, "testImage", category);
-        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
+        given(categoryService.getCategory(anyLong())).willReturn(category.toDTO());
         given(productRepository.save(any(Product.class))).willReturn(product);
 
         // when
@@ -75,7 +74,7 @@ public class ProductServiceTest {
         long id = 1L;
         Product product = new Product(id, "test", 1234, "testImage", category);
         Product updatedProduct = new Product(id, "updatedTest", 12345, "updatedTestImage", category);
-        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
+        given(categoryService.getCategory(anyLong())).willReturn(category.toDTO());
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
         given(productRepository.save(any(Product.class))).willReturn(updatedProduct);
 

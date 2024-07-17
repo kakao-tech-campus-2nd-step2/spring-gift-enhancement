@@ -2,8 +2,6 @@ package gift.service;
 
 import gift.domain.Category;
 import gift.domain.Product;
-import gift.exception.NoSuchCategoryException;
-import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.dto.ProductDTO;
 import gift.exception.NoSuchProductException;
@@ -16,12 +14,12 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
 
     public Page<ProductDTO> getProducts(Pageable pageable) {
@@ -36,15 +34,13 @@ public class ProductService {
     }
 
     public ProductDTO addProduct(ProductDTO productDTO) {
-        Category category = categoryRepository.findById(productDTO.categoryId())
-            .orElseThrow(NoSuchCategoryException::new);
+        Category category = categoryService.getCategory(productDTO.categoryId()).toEntity();
         return productRepository.save(productDTO.toEntity(category)).toDTO();
     }
 
     public ProductDTO updateProduct(long id, ProductDTO productDTO) {
         getProduct(id);
-        Category category = categoryRepository.findById(productDTO.categoryId())
-            .orElseThrow(NoSuchCategoryException::new);
+        Category category = categoryService.getCategory(productDTO.categoryId()).toEntity();
         Product product = new Product(id, productDTO.name(), productDTO.price(), productDTO.imageUrl(), category);
         return productRepository.save(product).toDTO();
     }
