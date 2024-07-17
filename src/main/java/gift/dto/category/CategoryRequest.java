@@ -1,23 +1,22 @@
-package gift.dto.product;
+package gift.dto.category;
 
 import static gift.util.Constants.REQUIRED_FIELD_MISSING;
 
 import jakarta.validation.constraints.NotNull;
 
-public record ProductRequest(
+public record CategoryRequest(
     Long id,
 
     @NotNull(message = REQUIRED_FIELD_MISSING)
     String name,
 
     @NotNull(message = REQUIRED_FIELD_MISSING)
-    Integer price,
+    String color,
 
     @NotNull(message = REQUIRED_FIELD_MISSING)
     String imageUrl,
 
-    @NotNull(message = REQUIRED_FIELD_MISSING)
-    Long categoryId
+    String description
 ) {
 
 }

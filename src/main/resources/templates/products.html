@@ -31,6 +31,7 @@
       <th>ID</th>
       <th>이름</th>
       <th>가격</th>
+      <th>카테고리</th>
       <th>이미지</th>
       <th>수정/삭제</th>
     </tr>
@@ -40,6 +41,7 @@
       <td th:text="${product.id}">ID</td>
       <td th:text="${product.name}">Name</td>
       <td th:text="${product.price}">Price</td>
+      <td th:text="${product.categoryName}">Category</td>
       <td>
         <img th:src="${product.imageUrl}" th:alt="|${product.name} 이미지|" class="img-thumbnail">
       </td>

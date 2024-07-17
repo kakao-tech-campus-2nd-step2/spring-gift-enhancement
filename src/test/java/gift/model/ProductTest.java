@@ -27,7 +27,8 @@ public class ProductTest {
     @Test
     @DisplayName("Product 모델 생성 테스트")
     public void testCreateProduct() {
-        Product product = new Product(1L, "Product1", 100, "imageUrl1");
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
 
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
 
@@ -36,13 +37,18 @@ public class ProductTest {
         assertThat(product.getName()).isEqualTo("Product1");
         assertThat(product.getPrice()).isEqualTo(100);
         assertThat(product.getImageUrl()).isEqualTo("imageUrl1");
+        assertThat(product.getCategoryName()).isEqualTo("Category");
     }
+
 
     @Test
     @DisplayName("Product 모델 업데이트 테스트")
     public void testUpdateProduct() {
-        Product product = new Product(1L, "Product1", 100, "imageUrl1");
-        product.update("Product2", 200, "imageUrl2");
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
+        Category newCategory = new Category("New Category", "#111111", "newImageUrl",
+            "newDescription");
+        product.update("Product2", 200, "imageUrl2", newCategory);
 
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
 
@@ -50,12 +56,15 @@ public class ProductTest {
         assertThat(product.getName()).isEqualTo("Product2");
         assertThat(product.getPrice()).isEqualTo(200);
         assertThat(product.getImageUrl()).isEqualTo("imageUrl2");
+        assertThat(product.getCategoryName()).isEqualTo("New Category");
     }
 
     @Test
     @DisplayName("유효하지 않은 상품 이름 - 길이 초과")
     public void testInvalidProductNameSize() {
-        Product product = new Product(1L, "This name is definitely too long", 100, "imageUrl1");
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "가나다라마바사아자차카타파하가나다라마바사아자차카타파하", 100, "imageUrl1",
+            category);
 
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
 
@@ -69,7 +78,8 @@ public class ProductTest {
     @Test
     @DisplayName("유효하지 않은 상품 이름 - 특수 문자 포함")
     public void testInvalidProductNamePattern() {
-        Product product = new Product(1L, "Invalid@Name!", 100, "imageUrl1");
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Invalid@Name!", 100, "imageUrl1", category);
 
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
 
@@ -83,7 +93,8 @@ public class ProductTest {
     @Test
     @DisplayName("유효하지 않은 상품 이름 - '카카오' 포함")
     public void testInvalidProductNameContainsKakao() {
-        Product product = new Product(1L, "카카오톡", 100, "imageUrl1");
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "카카오톡", 100, "imageUrl1", category);
 
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
 

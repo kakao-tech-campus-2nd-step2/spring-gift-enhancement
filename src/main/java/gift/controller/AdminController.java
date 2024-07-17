@@ -1,13 +1,16 @@
 package gift.controller;
 
+import gift.dto.category.CategoryResponse;
 import gift.dto.member.MemberRequest;
 import gift.dto.member.MemberResponse;
 import gift.dto.product.ProductRequest;
 import gift.dto.product.ProductResponse;
 import gift.model.Member;
+import gift.service.CategoryService;
 import gift.service.MemberService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,10 +32,13 @@ public class AdminController {
 
     private final ProductService productService;
     private final MemberService memberService;
+    private final CategoryService categoryService;
 
-    public AdminController(ProductService productService, MemberService memberService) {
+    public AdminController(ProductService productService, MemberService memberService,
+        CategoryService categoryService) {
         this.productService = productService;
         this.memberService = memberService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("")
@@ -54,14 +60,18 @@ public class AdminController {
 
     @GetMapping("/products/new")
     public String showAddProductForm(Model model) {
-        model.addAttribute("product", new ProductResponse(null, "", 0, ""));
+        List<CategoryResponse> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+        model.addAttribute("product", new ProductRequest(null, "", 0, "", null));
         return "product_form";
     }
 
     @PostMapping("/products")
     public String addProduct(@Valid @ModelAttribute("product") ProductRequest productRequest,
-        BindingResult result) {
+        BindingResult result, Model model) {
         if (result.hasErrors()) {
+            List<CategoryResponse> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
             return "product_form";
         }
         productService.addProduct(productRequest);
@@ -71,6 +81,8 @@ public class AdminController {
     @GetMapping("/products/{id}/edit")
     public String showEditProductForm(@PathVariable("id") Long id, Model model) {
         ProductResponse productResponse = productService.getProductById(id);
+        List<CategoryResponse> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("product", productResponse);
         return "product_edit";
     }
@@ -79,6 +91,8 @@ public class AdminController {
     public String updateProduct(@PathVariable("id") Long id,
         @Valid @ModelAttribute ProductRequest productRequest, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            List<CategoryResponse> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
             model.addAttribute("product", productRequest);
             model.addAttribute("org.springframework.validation.BindingResult.product", result);
             return "product_edit";

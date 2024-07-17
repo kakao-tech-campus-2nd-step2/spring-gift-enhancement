@@ -3,7 +3,7 @@ package gift.dto;
 import static gift.util.Constants.REQUIRED_FIELD_MISSING;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.product.ProductRequest;
+import gift.dto.category.CategoryRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ProductRequestTest {
+public class CategoryRequestTest {
 
     private static Validator validator;
 
@@ -24,21 +24,23 @@ public class ProductRequestTest {
     }
 
     @Test
-    @DisplayName("유효한 상품 추가")
-    public void testAddProductValid() {
-        ProductRequest productDTO = new ProductRequest(null, "Valid Name", 100, "valid.jpg", 1L);
+    @DisplayName("유효한 카테고리 추가")
+    public void testValidCategoryRequest() {
+        CategoryRequest categoryRequest = new CategoryRequest(null, "Category", "#000000",
+            "imageUrl", "description");
 
-        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(productDTO);
+        Set<ConstraintViolation<CategoryRequest>> violations = validator.validate(categoryRequest);
 
         assertThat(violations).isEmpty();
     }
 
     @Test
     @DisplayName("필수 필드 누락 - 이름")
-    public void testAddProductNameMissing() {
-        ProductRequest productDTO = new ProductRequest(null, null, 100, "valid.jpg", 1L);
+    public void testNoName() {
+        CategoryRequest categoryRequest = new CategoryRequest(null, null, "#000000", "imageUrl",
+            "description");
 
-        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(productDTO);
+        Set<ConstraintViolation<CategoryRequest>> violations = validator.validate(categoryRequest);
 
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
@@ -48,25 +50,27 @@ public class ProductRequestTest {
     }
 
     @Test
-    @DisplayName("필수 필드 누락 - 가격")
-    public void testAddProductPriceMissing() {
-        ProductRequest productDTO = new ProductRequest(null, "Valid Name", null, "valid.jpg", 1L);
+    @DisplayName("필수 필드 누락 - 색상 코드")
+    public void testNoColor() {
+        CategoryRequest categoryRequest = new CategoryRequest(null, "Category", null, "imageUrl",
+            "description");
 
-        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(productDTO);
+        Set<ConstraintViolation<CategoryRequest>> violations = validator.validate(categoryRequest);
 
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
-            violation.getPropertyPath().toString().equals("price") &&
+            violation.getPropertyPath().toString().equals("color") &&
                 violation.getMessage().equals(REQUIRED_FIELD_MISSING)
         );
     }
 
     @Test
     @DisplayName("필수 필드 누락 - 이미지 URL")
-    public void testAddProductImageUrlMissing() {
-        ProductRequest productDTO = new ProductRequest(null, "Valid Name", 100, null, 1L);
+    public void testNoImageUrl() {
+        CategoryRequest categoryRequest = new CategoryRequest(null, "Category", "#000000", null,
+            "description");
 
-        Set<ConstraintViolation<ProductRequest>> violations = validator.validate(productDTO);
+        Set<ConstraintViolation<CategoryRequest>> violations = validator.validate(categoryRequest);
 
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
