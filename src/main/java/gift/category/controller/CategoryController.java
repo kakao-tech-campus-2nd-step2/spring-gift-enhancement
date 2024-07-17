@@ -18,13 +18,13 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/search/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> findCategoryById(@PathVariable Long id) {
         CategoryResponse response = categoryService.findCategoryById(id);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<List<CategoryResponse>> findAllCategories() {
         List<CategoryResponse> response = categoryService.findAllCategories();
         return ResponseEntity.ok().body(response);
