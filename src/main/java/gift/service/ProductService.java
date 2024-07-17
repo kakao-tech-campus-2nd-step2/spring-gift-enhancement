@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.domain.Category;
 import gift.domain.Product;
+import gift.dto.request.OptionRequestDto;
 import gift.dto.request.ProductRequestDto;
 import gift.dto.response.ProductResponseDto;
 import gift.exception.customException.EntityNotFoundException;
@@ -25,18 +26,21 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
+    private final OptionService optionService;
+
     public ProductService(ProductRepository productRepository,
-                          CategoryRepository categoryRepository
-    ){
+                          CategoryRepository categoryRepository,
+                          OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionService = optionService;
     }
 
     @Transactional
-    public ProductResponseDto addProduct(ProductRequestDto productDto){
+    public ProductResponseDto addProduct(ProductRequestDto productDto, OptionRequestDto optionRequestDto){
         checkNameInKakao(productDto);
 
-        Category category = categoryRepository.findById(productDto.categoryId()).orElseThrow(() -> new EntityNotFoundException(CATEGORY_NOT_FOUND));
+        Category category = categoryRepository.findById(productDto.categoryId()).orElseThrow(() -> new EntityNotFoundException("해당 카테고리는 존재하지 않습니다."));
 
         Product product = new Product.Builder()
                 .name(productDto.name())
@@ -48,6 +52,8 @@ public class ProductService {
         product.addCategory(category);
 
         Product savedProduct = productRepository.save(product);
+
+        optionService.saveOption(optionRequestDto, savedProduct.getId());
 
         return ProductResponseDto.from(savedProduct);
     }
