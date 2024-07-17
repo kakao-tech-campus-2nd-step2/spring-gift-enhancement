@@ -1,6 +1,8 @@
 package gift.service;
 
 
+import gift.category.domain.Category;
+import gift.category.repository.CategoryRepository;
 import gift.product.domain.Product;
 import gift.user.domain.User;
 import gift.wish.domain.WishlistItem;
@@ -31,6 +33,8 @@ class WishlistServiceTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
     private WishlistService wishlistService;
 
     @BeforeEach
@@ -38,9 +42,14 @@ class WishlistServiceTest {
         User user1 = new User(1L, "user1@naver.com", "pass1");
         userRepository.save(user1);
 
+        categoryRepository.save(new Category("name"));
+
         Product product1 = new Product(1L, "water", 1000L, "www.naver.com");
+        product1.setCategory(categoryRepository.findById(1L).get());
         Product product2 = new Product(2L, "cola", 3000L, "www.coke.com");
+        product2.setCategory(categoryRepository.findById(1L).get());
         Product product3 = new Product(3L, "bread", 5000L, "www.bread.com");
+        product3.setCategory(categoryRepository.findById(1L).get());
         productRepository.save(product1);
         productRepository.save(product2);
         productRepository.save(product3);

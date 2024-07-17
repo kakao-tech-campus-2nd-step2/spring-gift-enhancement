@@ -1,6 +1,8 @@
 package gift.repository;
 
 
+import gift.category.domain.Category;
+import gift.category.repository.CategoryRepository;
 import gift.product.domain.Product;
 import gift.product.repository.ProductRepository;
 import java.util.Optional;
@@ -14,7 +16,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    private CategoryRepository categoryRepository;
     @Test
     @DisplayName("save()")
     void save(){
@@ -23,6 +26,8 @@ class ProductRepositoryTest {
         expected.setName("물병");
         expected.setPrice(1000);
         expected.setImageUrl("https://www.water.com");
+        categoryRepository.save(new Category("name"));
+        expected.setCategory(categoryRepository.findById(1L).get());
         //when
         Product actual = productRepository.save(expected);
         //then
@@ -37,10 +42,11 @@ class ProductRepositoryTest {
         expected.setName("물병");
         expected.setPrice(1000);
         expected.setImageUrl("https://www.water.com");
+        categoryRepository.save(new Category("name"));
+        expected.setCategory(categoryRepository.findById(1L).get());
 
         Product savedProduct = productRepository.save(expected);
         Long expectedId = savedProduct.getId();
-
         //when
         Optional<Product> actualOptional = productRepository.findById(expectedId);
 
