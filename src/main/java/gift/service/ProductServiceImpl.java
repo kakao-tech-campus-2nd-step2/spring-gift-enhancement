@@ -1,8 +1,11 @@
 package gift.service;
 
+import gift.database.JpaCategoryRepository;
 import gift.database.JpaProductRepository;
 import gift.dto.ProductDTO;
+import gift.exceptionAdvisor.CategoryServiceException;
 import gift.exceptionAdvisor.ProductServiceException;
+import gift.model.Category;
 import gift.model.Product;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -17,8 +20,12 @@ public class ProductServiceImpl implements ProductService {
 
     private JpaProductRepository jpaProductRepository;
 
-    public ProductServiceImpl(JpaProductRepository jpaProductRepository) {
+    private JpaCategoryRepository jpaCategoryRepository;
+
+    public ProductServiceImpl(JpaProductRepository jpaProductRepository,
+        JpaCategoryRepository jpaCategoryRepository) {
         this.jpaProductRepository = jpaProductRepository;
+        this.jpaCategoryRepository = jpaCategoryRepository;
     }
 
     @Override
@@ -34,6 +41,9 @@ public class ProductServiceImpl implements ProductService {
         checkKakao(dto.getName());
         Product product = new Product(null, dto.getName(), dto.getPrice(), dto.getImageUrl());
         jpaProductRepository.save(product);
+
+        Category category = checkCategory(dto.getCategoryId());
+        product.setCategory(category);
     }
 
 
@@ -71,6 +81,16 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
+    public List<ProductDTO> readProduct(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return jpaProductRepository.findAll(pageable).stream().map(product ->
+            new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl()))
+            .toList();
+    }
+
+    // private //
+
     private Product getProduct(long id) {
         var prod = jpaProductRepository.findById(id).orElseThrow(
             () -> new ProductServiceException("상품이 존재하지 않습니다", HttpStatus.BAD_REQUEST));
@@ -78,11 +98,7 @@ public class ProductServiceImpl implements ProductService {
         return prod;
     }
 
-    @Override
-    public List<ProductDTO> readProduct(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return jpaProductRepository.findAll(pageable).stream().map(product ->
-            new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl()))
-            .toList();
+    private Category checkCategory(long id) {
+        return jpaCategoryRepository.findById(id).orElseThrow(CategoryServiceException::new);
     }
 }

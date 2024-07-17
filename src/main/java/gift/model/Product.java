@@ -63,6 +63,10 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     //getter
     public Long getId() {
         return id;

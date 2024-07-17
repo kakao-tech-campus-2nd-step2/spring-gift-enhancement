@@ -71,6 +71,8 @@ public class ProductDTO {
         return imageUrl;
     }
 
+    public Long getCategoryId() { return categoryId; }
+
     public void setId(Long id) {
         this.id = id;
     }
