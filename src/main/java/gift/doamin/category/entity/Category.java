@@ -1,5 +1,6 @@
 package gift.doamin.category.entity;
 
+import gift.doamin.category.dto.CategoryForm;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class Category {
         return name;
     }
 
-    public void changeName(String name) {
-        this.name = name;
+    public void update(CategoryForm categoryForm) {
+        this.name = categoryForm.getName();
     }
 }

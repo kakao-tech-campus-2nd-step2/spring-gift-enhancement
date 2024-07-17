@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -39,5 +40,13 @@ public class CategoryController {
     @GetMapping("/{id}")
     public CategoryParam getOneCategory(@PathVariable Long id) {
         return categoryService.getCategory(id);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void changeCategoryName(@RequestBody CategoryForm categoryForm, @PathVariable Long id) {
+        categoryForm.setId(id);
+        categoryService.updateCategory(categoryForm);
     }
 }

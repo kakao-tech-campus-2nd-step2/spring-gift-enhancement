@@ -29,4 +29,14 @@ public class CategoryService {
         return categoryRepository.findById(id).map(CategoryParam::new)
             .orElseThrow(CategoryNotFoundException::new);
     }
+
+    public void updateCategory(CategoryForm categoryForm) {
+
+        Category category = categoryRepository.findById(categoryForm.getId())
+            .orElseThrow(CategoryNotFoundException::new);
+
+        category.update(categoryForm);
+
+        categoryRepository.save(category);
+    }
 }
