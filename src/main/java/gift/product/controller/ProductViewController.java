@@ -1,5 +1,6 @@
 package gift.product.controller;
 
+import gift.category.service.CategoryService;
 import gift.product.domain.Product;
 import gift.product.domain.ProductDTO;
 import gift.product.service.ProductService;
@@ -20,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProductViewController
 {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductViewController(ProductService productService) {
+    public ProductViewController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("")
@@ -37,6 +40,7 @@ public class ProductViewController
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("product", new ProductDTO());
+        model.addAttribute("categories", categoryService.findAll());
         return "add_product";
     }
 
@@ -50,6 +54,7 @@ public class ProductViewController
     public String showEditForm(@PathVariable Long id, Model model) {
         ProductDTO productDTO = productService.getProductDTOById(id).get();
         model.addAttribute("product", productDTO);
+        model.addAttribute("categories", categoryService.findAll());
         return "add_product";
     }
 
