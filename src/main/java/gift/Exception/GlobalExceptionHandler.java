@@ -27,4 +27,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorDTO> handleUnauthorizedException(UnauthorizedException ex) {
+        ErrorDTO errorDTO = new ErrorDTO("Unauthorized", ex.getMessage());
+        return new ResponseEntity<>(errorDTO, HttpStatus.UNAUTHORIZED);
+    }
+
 }

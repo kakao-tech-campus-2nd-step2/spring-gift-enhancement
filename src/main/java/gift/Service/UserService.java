@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import gift.Exception.UnauthorizedException; // 추가된 import
 
 import java.util.Date;
 import java.util.List;
@@ -74,7 +75,7 @@ public class UserService {
                 return userRepository.findById(userId);
             }
         } catch (Exception e) {
-            // Log exception if necessary
+            throw new UnauthorizedException("Invalid token", e);
         }
         return Optional.empty();
     }
@@ -92,8 +93,7 @@ public class UserService {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            // Log exception if necessary
-            return null;
+            throw new UnauthorizedException("Invalid token", e);
         }
     }
 }
