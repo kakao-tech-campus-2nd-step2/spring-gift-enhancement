@@ -1,5 +1,8 @@
 package gift.doamin.product.service;
 
+import gift.doamin.category.entity.Category;
+import gift.doamin.category.exception.CategoryNotFoundException;
+import gift.doamin.category.repository.JpaCategoryRepository;
 import gift.doamin.product.dto.ProductForm;
 import gift.doamin.product.dto.ProductParam;
 import gift.doamin.product.entity.Product;
@@ -20,11 +23,13 @@ public class ProductService {
 
     private final JpaProductRepository productRepository;
     private final JpaUserRepository userRepository;
+    private final JpaCategoryRepository categoryRepository;
 
     public ProductService(JpaProductRepository productRepository,
-        JpaUserRepository userRepository) {
+        JpaUserRepository userRepository, JpaCategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public ProductParam create(ProductForm productForm) {
@@ -32,12 +37,15 @@ public class ProductService {
             throw new NotEnoughAutorityException("'카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.");
         }
 
-        User user = userRepository.findById(productForm.getUserId()).orElseThrow(
-            UserNotFoundException::new);
+        User user = userRepository.findById(productForm.getUserId())
+            .orElseThrow(UserNotFoundException::new);
+
+        Category category = categoryRepository.findById(productForm.getCategory_id())
+            .orElseThrow(CategoryNotFoundException::new);
 
         Product product = productRepository.save(
-            new Product(user, productForm.getName(), productForm.getPrice(),
-                productForm.getImageUrl()));
+            new Product(user, category, productForm.getName(),
+                productForm.getPrice(), productForm.getImageUrl()));
 
         return new ProductParam(product);
     }
@@ -66,7 +74,9 @@ public class ProductService {
 
         checkAuthority(productForm.getUserId(), product, isSeller);
 
-        product.updateAll(productForm);
+        Category category = categoryRepository.findById(productForm.getCategory_id())
+            .orElseThrow(CategoryNotFoundException::new);
+        product.updateAll(productForm, category);
         return new ProductParam(productRepository.save(product));
     }
 
