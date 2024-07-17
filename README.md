@@ -106,7 +106,7 @@ step-3의 구현 사항
       => category의 Long id를 매핑 없이 하고, ProductEntity에 OneToOne으로 카테고리 추가 (2)
    2. 테스트 코드 추가
       => 이전의 Repository들처럼 create, read 기능에 대한 테스트 코드 작성
-
+      
 2. step-2의 구현사항
    1. 상품 정보에 옵션 추가
       1. 상품에는 항상 하나 이상의 옵션이 있어야 한다.
