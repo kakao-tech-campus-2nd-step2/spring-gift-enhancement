@@ -52,6 +52,15 @@ public class ProductService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public Page<ProductResponse> findActiveProductsByCategoryWithWishCount(Long categoryId, Pageable pageable) {
+        Page<Tuple> results = productRepository.findActiveProductsByCategoryWithWishCount(categoryId, pageable);
+        return results.map(tuple -> new ProductResponse(
+                tuple.get("product", Product.class),
+                tuple.get("wishCount", Long.class))
+        );
+    }
+
     @Transactional
     public void addProduct(AppUser appUser, CreateProductRequest createProductRequest) {
         Category category = categoryService.getCategory(DEFAULT_CATEGORY_ID);
