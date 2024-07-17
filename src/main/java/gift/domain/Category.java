@@ -4,14 +4,12 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="categories")
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class Category extends BaseEntity{
     @Column(name = "name", nullable = false)
     String name;
 
     protected Category() {
+        super();
     }
 
     public Category(String name) {
@@ -19,7 +17,7 @@ public class Category {
     }
 
     public Long getId() {
-        return id;
+        return super.getId();
     }
 
     public String getName() {

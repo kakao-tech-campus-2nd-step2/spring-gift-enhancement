@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Product extends BaseEntity{
     @Column(name = "name", nullable = false, length = 15)
     private String name;
     @Column(name = "price", nullable = false)
@@ -22,7 +19,7 @@ public class Product {
     private Category category;
   
     protected Product(){
-
+        super();
     }
 
     public Product(String name, int price, String imageUrl, Category category) {
@@ -33,7 +30,7 @@ public class Product {
     }
 
     public Long getId() {
-        return id;
+        return super.getId();
     }
 
     public String getName() {

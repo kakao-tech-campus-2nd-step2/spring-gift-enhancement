@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "wishList")
-public class WishProduct {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class WishProduct extends BaseEntity{
     @ManyToOne
     @JoinColumn(
             name = "user_id",
@@ -25,7 +22,7 @@ public class WishProduct {
 
 
     protected WishProduct(){
-
+        super();
     }
 
     public WishProduct(User user, Product product) {
@@ -36,7 +33,7 @@ public class WishProduct {
     }
 
     public Long getId(){
-        return id;
+        return super.getId();
     }
     public User getUser() {
         return user;

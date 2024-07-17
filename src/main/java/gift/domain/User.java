@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BaseEntity{
     @Column(nullable = false, unique = true)
     private String userId;
     @Column(nullable = false, unique = true)
@@ -18,7 +15,7 @@ public class User {
     private Boolean admin;
 
     protected User(){
-
+        super();
     }
 
     public User(String userId, String email, String password) {
@@ -28,7 +25,7 @@ public class User {
         this.admin = false;
     }
     public Long getId() {
-        return id;
+        return super.getId();
     }
     public String getUserId(){
         return userId;
