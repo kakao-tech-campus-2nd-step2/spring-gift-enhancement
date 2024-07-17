@@ -3,7 +3,7 @@ import {
   deleteProduct,
   editProduct,
   pagination
-} from './productAPI.js';
+} from './API.js';
 
 const modal = document.getElementById('productModal');
 const closeButton = document.getElementsByClassName('close')[0];

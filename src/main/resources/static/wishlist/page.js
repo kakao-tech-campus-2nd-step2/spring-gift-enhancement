@@ -1,4 +1,4 @@
-import {addProduct, deleteProduct, pagination} from './wishlistAPI.js';
+import {addProduct, deleteProduct, pagination} from './API.js';
 
 const modal = document.getElementById('productModal');
 const closeButton = document.getElementsByClassName('close')[0];
@@ -6,15 +6,8 @@ const mainCheckbox = document.querySelector('table th input[type="checkbox"]');
 const checkboxes = document.querySelectorAll('table td input[type="checkbox"]');
 
 export function addProductbtnOnClick() {
-  let forms = modal.getElementsByClassName("form-label-input")
-  forms[0].remove()
-  forms[0].remove()
-  forms[0].innerHTML = "<div class='form-label-input'> <label for='productId'>Id:</label><input type='number' id='productId' name='productId'/>"
-
   modal.getElementsByTagName('h1')[0].innerText = 'Add a new wishlist';
-  modal.getElementsByTagName('button')[0].onclick = addProduct.bind(
-      null,
-  );
+  modal.getElementsByTagName('button')[0].onclick = addProduct.bind(null,);
   modal.style.display = 'flex';
   document.getElementById('product-name-error-message').style.display =
       'none';
@@ -82,11 +75,11 @@ export function idColumnPageSort() {
   const currentOrder = document.getElementById("page-sort-by-id")
   .getAttribute("data-sort-order")
 
-  if (currentOrder === "id: ASC" || currentOrder === null) {
+  if (currentOrder === "product.id: ASC" || currentOrder === null) {
     pagination(null, null, "id,desc")
   }
 
-  if (currentOrder === "id: DESC") {
+  if (currentOrder === "product.id: DESC") {
     pagination(null, null, "id,asc")
   }
 }
@@ -97,11 +90,11 @@ export function priceColumnPageSort() {
   const currentOrder = document.getElementById("page-sort-by-price")
   .getAttribute("data-sort-order")
 
-  if (currentOrder === "price: ASC" || currentOrder === null) {
+  if (currentOrder === "product.price: ASC" || currentOrder === null) {
     pagination(null, null, "price,desc")
   }
 
-  if (currentOrder === "price: DESC") {
+  if (currentOrder === "product.price: DESC") {
     pagination(null, null, "price,asc")
   }
 }

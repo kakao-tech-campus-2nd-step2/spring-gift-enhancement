@@ -3,6 +3,8 @@ package gift.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.category.Category;
+import gift.category.CategoryRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,20 +27,31 @@ class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setup() {
         jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY FALSE");
         jdbcTemplate.execute("TRUNCATE TABLE product RESTART IDENTITY");
+        jdbcTemplate.execute("TRUNCATE TABLE category RESTART IDENTITY");
         jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY TRUE");
+        categoryRepository.save(new Category(1L, "category-1"));
     }
 
     @Test
     @DisplayName("[Unit] addProduct test")
     void addProduct() {
         // given
-        Product expected = new Product(1L, "product-1", 100, "product-image-url-1");
+        Product expected = new Product(
+            1L,
+            "product-1",
+            100,
+            "product-image-url-1",
+            new Category(1L, "category-1")
+        );
 
         //when
         productRepository.save(expected);
@@ -54,7 +67,13 @@ class ProductRepositoryTest {
         //given
         List<Product> expected = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
-            Product product = new Product(i, "product-" + i, i * 100, "product-image-url-" + i);
+            Product product = new Product(
+                i,
+                "product-" + i,
+                i * 100,
+                "product-image-url-" + i,
+                new Category(1L, "category-1")
+            );
             productRepository.save(product);
             expected.add(product);
         }
@@ -74,8 +93,20 @@ class ProductRepositoryTest {
     @DisplayName("[Unit] updateProduct test")
     void updateProductTest() {
         //given
-        productRepository.save(new Product(-1L, "product-1", 100, "product-image-url-1"));
-        Product expected = new Product(1, "product-2", 200, "product-image-url-2");
+        productRepository.save(new Product(
+            -1L,
+            "product-1",
+            100,
+            "product-image-url-1",
+            new Category(1L, "category-1")
+        ));
+        Product expected = new Product(
+            1,
+            "product-2",
+            200,
+            "product-image-url-2",
+            new Category(1L, "category-1")
+        );
 
         //when
         productRepository.save(expected);
@@ -89,7 +120,13 @@ class ProductRepositoryTest {
     @DisplayName("[Unit] deleteProduct test")
     void deleteProductTest() {
         //given
-        productRepository.save(new Product(-1L, "product-1", 100, "product-image-url-1"));
+        productRepository.save(new Product(
+            -1L,
+            "product-1",
+            100,
+            "product-image-url-1",
+            new Category(1L, "category-1")
+        ));
 
         //when
         productRepository.deleteById(1L);
@@ -103,7 +140,13 @@ class ProductRepositoryTest {
     @DisplayName("[Unit] existProduct test")
     void existProduct() {
         //given
-        Product expect = new Product(1L, "product-1", 100, "product-image-url-1");
+        Product expect = new Product(
+            1L,
+            "product-1",
+            100,
+            "product-image-url-1",
+            new Category(1L, "category-1")
+        );
         productRepository.save(expect);
 
         //when

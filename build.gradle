@@ -33,10 +33,6 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-    // E2E 테스트를 위한 selenium 의존성 추가
-    implementation 'org.seleniumhq.selenium:selenium-java:4.22.0'
-    implementation 'io.github.bonigarcia:webdrivermanager:5.9.1'
-
     // Validation 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 

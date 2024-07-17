@@ -5,6 +5,9 @@ export function addProduct() {
     name: document.getElementById('productName').value,
     price: document.getElementById('productPrice').value,
     imageUrl: document.getElementById('productImageUrl').value,
+    category: {
+      name: document.getElementById("category").value
+    }
   };
 
   fetch(`${productAPIUrl}`, {
@@ -33,6 +36,9 @@ export function editProduct(id) {
     name: document.getElementById('productName').value,
     price: document.getElementById('productPrice').value,
     imageUrl: document.getElementById('productImageUrl').value,
+    category: {
+      name: document.getElementById("category").value
+    }
   };
 
   fetch(`${productAPIUrl}/${id}`, {

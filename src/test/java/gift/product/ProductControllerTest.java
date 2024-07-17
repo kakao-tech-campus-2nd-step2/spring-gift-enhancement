@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.category.Category;
+import gift.category.CategoryDTO;
 import gift.token.JwtProvider;
 import java.util.Arrays;
 import java.util.List;
@@ -50,8 +52,20 @@ class ProductControllerTest {
     @DisplayName("[Unit] getAllProduct method test")
     void getAllProductsTest() throws Exception {
         // given
-        Product product1 = new Product(1L, "Product1", 100, "product1-image-url");
-        Product product2 = new Product(2L, "Product2", 200, "product2-image-url");
+        Product product1 = new Product(
+            1L,
+            "Product1",
+            100,
+            "product1-image-url",
+            new Category(1L, "category-1")
+        );
+        Product product2 = new Product(
+            2L,
+            "Product2",
+            200,
+            "product2-image-url",
+            new Category(2L, "category-2")
+        );
         List<Product> products = Arrays.asList(product1, product2);
 
         //when
@@ -82,17 +96,32 @@ class ProductControllerTest {
     private static Stream<Arguments> addProductTestValues() {
         return Stream.of(
             Arguments.of(
-                new ProductDTO("product1", 100, "product1-image-url"),
+                new ProductDTO(
+                    "product1",
+                    100,
+                    "product1-image-url",
+                    new CategoryDTO("category-1")
+                ),
                 "",
                 HttpStatus.OK
             ),
             Arguments.of(
-                new ProductDTO("kakaoProduct", 100, "kakaoProduct-image-url"),
+                new ProductDTO(
+                    "kakaoProduct",
+                    100,
+                    "kakaoProduct-image-url",
+                    new CategoryDTO("category-1")
+                ),
                 PRODUCT_NAME_KAKAO_STRING,
                 HttpStatus.BAD_REQUEST
             ),
             Arguments.of(
-                new ProductDTO("Special😀", 200, "SpecialCharacter-image-url"),
+                new ProductDTO(
+                    "Special😀",
+                    200,
+                    "SpecialCharacter-image-url",
+                    new CategoryDTO("category-1")
+                ),
                 PRODUCT_NAME_ALLOWED_CHARACTER,
                 HttpStatus.BAD_REQUEST
             ),
@@ -100,7 +129,8 @@ class ProductControllerTest {
                 new ProductDTO(
                     "ThisSequenceIsTooLongForProductName",
                     300,
-                    "ThisSequenceIsTooLongForProductName-image-url"
+                    "ThisSequenceIsTooLongForProductName-image-url",
+                    new CategoryDTO("category-1")
                 ),
                 PRODUCT_NAME_LENGTH,
                 HttpStatus.BAD_REQUEST
@@ -128,19 +158,34 @@ class ProductControllerTest {
         return Stream.of(
             Arguments.of(
                 1L,
-                new ProductDTO("product1", 100, "product1-image-url"),
+                new ProductDTO(
+                    "product1",
+                    100,
+                    "product1-image-url",
+                    new CategoryDTO("category-1")
+                ),
                 "",
                 HttpStatus.OK
             ),
             Arguments.of(
                 2L,
-                new ProductDTO("kakaoProduct", 100, "kakaoProduct-image-url"),
+                new ProductDTO(
+                    "kakaoProduct",
+                    100,
+                    "kakaoProduct-image-url",
+                    new CategoryDTO("category-1")
+                ),
                 PRODUCT_NAME_KAKAO_STRING,
                 HttpStatus.BAD_REQUEST
             ),
             Arguments.of(
                 3L,
-                new ProductDTO("Special😀", 200, "SpecialCharacter-image-url"),
+                new ProductDTO(
+                    "Special😀",
+                    200,
+                    "SpecialCharacter-image-url",
+                    new CategoryDTO("category-1")
+                ),
                 PRODUCT_NAME_ALLOWED_CHARACTER,
                 HttpStatus.BAD_REQUEST
             ),
@@ -149,7 +194,8 @@ class ProductControllerTest {
                 new ProductDTO(
                     "ThisSequenceIsTooLongForProductName",
                     300,
-                    "ThisSequenceIsTooLongForProductName-image-url"
+                    "ThisSequenceIsTooLongForProductName-image-url",
+                    new CategoryDTO("category-1")
                 ),
                 PRODUCT_NAME_LENGTH,
                 HttpStatus.BAD_REQUEST

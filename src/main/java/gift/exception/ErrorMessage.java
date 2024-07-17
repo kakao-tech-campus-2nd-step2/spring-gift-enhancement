@@ -11,4 +11,5 @@ public class ErrorMessage {
     public static final String PRODUCT_NOT_FOUND = "Product not found";
     public static final String WISHLIST_ALREADY_EXISTS = "Wishlist already exists";
     public static final String WISHLIST_NOT_FOUND = "Wishlist not found";
+    public static final String CATEGORY_NOT_FOUND = "Category not found";
 }

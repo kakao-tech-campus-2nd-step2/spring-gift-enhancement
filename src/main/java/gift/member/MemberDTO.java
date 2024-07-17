@@ -16,10 +16,6 @@ public class MemberDTO {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public Member toEntity() {
         return new Member(email, password);
     }

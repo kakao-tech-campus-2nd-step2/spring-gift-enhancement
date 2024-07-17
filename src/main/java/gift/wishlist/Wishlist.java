@@ -16,11 +16,11 @@ public class Wishlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JoinColumn(name = "memberEmail", nullable = false)
+    @JoinColumn(name = "member_email", nullable = false)
     @ManyToOne
     private Member member;
 
-    @JoinColumn(name = "productId", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     @ManyToOne
     private Product product;
 

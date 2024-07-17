@@ -3,6 +3,8 @@ package gift.wishlist;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.category.Category;
+import gift.category.CategoryRepository;
 import gift.member.Member;
 import gift.member.MemberRepository;
 import gift.product.Product;
@@ -36,6 +38,9 @@ class WishlistRepositoryTest {
     private MemberRepository memberRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
@@ -44,14 +49,17 @@ class WishlistRepositoryTest {
         jdbcTemplate.execute("TRUNCATE TABLE product RESTART IDENTITY");
         jdbcTemplate.execute("TRUNCATE TABLE member");
         jdbcTemplate.execute("TRUNCATE TABLE wishlist RESTART IDENTITY");
+        jdbcTemplate.execute("TRUNCATE TABLE category RESTART IDENTITY");
         jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY TRUE");
 
         memberRepository.save(new Member("aaa@email.com", "password"));
         memberRepository.save(new Member("bbb@email.com", "password"));
 
         for (int i = 1; i < 4; i++) {
+            categoryRepository.save(new Category(i, "category" + i));
             productRepository.save(
-                new Product(i, "product-" + i, i * 100, "image-url-" + i));
+                new Product(i, "product-" + i, i * 100, "image-url-" + i,
+                    new Category(1L, "category-1")));
         }
     }
 
@@ -71,7 +79,7 @@ class WishlistRepositoryTest {
         wishlistRepository.saveAll(expect);
 
         Product product = productRepository.save(
-            new Product(4L, "product-4", 400, "product-4-image")
+            new Product(4L, "product-4", 400, "product-4-image", new Category(1L, "category-1"))
         );
 
         wishlistRepository.save(
@@ -79,7 +87,7 @@ class WishlistRepositoryTest {
         );
 
         //when
-        List<Wishlist> actual = wishlistRepository.findAllByMemberEmail("aaa@email.com");
+        List<Wishlist> actual = wishlistRepository.findAllByMember(member);
 
         //then
         assertAll(
