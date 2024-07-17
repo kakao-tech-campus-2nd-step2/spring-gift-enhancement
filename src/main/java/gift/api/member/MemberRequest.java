@@ -14,4 +14,8 @@ public record MemberRequest(
     String password,
     @NotNull(message = "Role is mandatory")
     Role role
-) {}
+) {
+    public Member toEntity() {
+        return new Member(email, password, role);
+    }
+}

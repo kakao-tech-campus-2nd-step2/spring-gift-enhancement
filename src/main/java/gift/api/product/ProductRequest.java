@@ -1,5 +1,6 @@
 package gift.api.product;
 
+import gift.api.category.Category;
 import gift.api.product.validator.NoKakao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,6 +33,10 @@ public class ProductRequest {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Product toEntity(Category category) {
+        return new Product(category, name, price, imageUrl);
     }
 
     public Long getCategoryId() {

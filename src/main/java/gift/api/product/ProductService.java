@@ -28,10 +28,7 @@ public class ProductService {
 
     public Long add(ProductRequest productRequest) {
         Category category = findCategoryById(productRequest.getCategoryId());
-        Product product = new Product(category,
-                                    productRequest.getName(),
-                                    productRequest.getPrice(),
-                                    productRequest.getImageUrl());
+        Product product = productRequest.toEntity(category);
         return productRepository.save(product).getId();
     }
 

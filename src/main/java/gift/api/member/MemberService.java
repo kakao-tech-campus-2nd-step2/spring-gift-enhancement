@@ -18,8 +18,7 @@ public class MemberService {
         if (memberRepository.existsByEmail(memberRequest.email())) {
             throw new EmailAlreadyExistsException();
         }
-        return memberRepository.save(new Member(
-            memberRequest.email(), memberRequest.password(), memberRequest.role())).getId();
+        return memberRepository.save(memberRequest.toEntity()).getId();
     }
 
     public void login(MemberRequest memberRequest, String token) {

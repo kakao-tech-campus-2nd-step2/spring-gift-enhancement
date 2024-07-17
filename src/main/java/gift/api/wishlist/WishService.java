@@ -49,7 +49,7 @@ public class WishService {
             .orElseThrow(() -> new NoSuchEntityException("member"));
         Product product = productRepository.findById(wishRequest.productId())
             .orElseThrow(() -> new NoSuchEntityException("product"));
-        wishRepository.save(new Wish(member, product, wishRequest.quantity()));
+        wishRepository.save(wishRequest.toEntity(member, product));
     }
 
     @Transactional
