@@ -77,7 +77,7 @@ public class ProductService {
         return getProduct(productId)
                 .getOptions()
                 .stream()
-                .map(option -> new OptionResponse(option.getId(), option.getName(), option.getQuantity()))
+                .map(OptionResponse::fromOption)
                 .toList();
     }
 }
