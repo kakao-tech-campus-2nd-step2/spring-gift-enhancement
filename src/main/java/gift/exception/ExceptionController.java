@@ -26,7 +26,7 @@ public class ExceptionController {
 
     @ResponseBody
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResult> productNotFoundHandler(EntityNotFoundException e){
+    public ResponseEntity<ErrorResult> entityNotFoundExceptionHandler(EntityNotFoundException e){
         ErrorResult errorResult = new ErrorResult("400", e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
@@ -38,18 +38,12 @@ public class ExceptionController {
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseBody
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResult> errorHandler(Exception e) {
-        ErrorResult errorResult = new ErrorResult("500", e.getMessage());
-        return new ResponseEntity<>(errorResult, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
     @ResponseBody
     @ExceptionHandler(MemberNotFoundException.class)
-    public ResponseEntity<ErrorResult> KeyNotFoundExceptionHandler(MemberNotFoundException e) {
-        ErrorResult errorResult = new ErrorResult("403", e.getMessage());
-        return new ResponseEntity<>(errorResult, HttpStatus.FORBIDDEN);
+    public ResponseEntity<ErrorResult> memberNotFoundExceptionHandler(MemberNotFoundException e) {
+        ErrorResult errorResult = new ErrorResult("400", e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
 
     @ResponseBody
@@ -61,7 +55,7 @@ public class ExceptionController {
 
     @ResponseBody
     @ExceptionHandler(UnAuthorizationException.class)
-    public ResponseEntity<ErrorResult> KeyNotFoundExceptionHandler(UnAuthorizationException e) {
+    public ResponseEntity<ErrorResult> unAuthorizationExceptionHandler(UnAuthorizationException e) {
         ErrorResult errorResult = new ErrorResult("401", e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.UNAUTHORIZED);
     }
@@ -75,9 +69,23 @@ public class ExceptionController {
 
     @ResponseBody
     @ExceptionHandler(NameDuplicationException.class)
-    public ResponseEntity<ErrorResult> categoryNameExceptionHandler(NameDuplicationException e) {
+    public ResponseEntity<ErrorResult> nameExceptionHandler(NameDuplicationException e) {
         ErrorResult errorResult = new ErrorResult("400", e.getMessage());
-        return new ResponseEntity<>(errorResult, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(DenyDeleteException.class)
+    public ResponseEntity<ErrorResult> denyDeleteExceptionHandler(DenyDeleteException e) {
+        ErrorResult errorResult = new ErrorResult("400", e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResult> errorHandler(Exception e) {
+        ErrorResult errorResult = new ErrorResult("500", e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
