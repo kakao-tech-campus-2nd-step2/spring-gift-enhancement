@@ -1,11 +1,16 @@
 package gift.repository;
 
+import static org.assertj.core.api.Assertions.*;
+
+import gift.category.domain.Category;
+import gift.category.repository.CategoryRepository;
 import gift.product.domain.Product;
 import gift.product.repository.ProductRepository;
 import gift.user.domain.User;
 import gift.user.repository.UserRepository;
 import gift.wish.domain.WishlistItem;
 import gift.wish.repository.WishlistRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +28,8 @@ class WishlistRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired CategoryRepository categoryRepository;
+
     @Autowired
     private WishlistRepository wishlistRepository;
     @BeforeEach
@@ -31,16 +38,21 @@ class WishlistRepositoryTest {
         userRepository.deleteAll();
         productRepository.deleteAll();
         wishlistRepository.deleteAll();
+        categoryRepository.deleteAll();
 
         //User
         User user1 = new User(1L, "abc", "123");
         User user2 = new User(2L, "qwer", "5678");
         userRepository.save(user1);
         userRepository.save(user2);
-
+        //Category
+        Category category1 = new Category("name");
+        categoryRepository.save(category1);
         //Product
         Product product1 = new Product(1L, "water", 1000L, "www.naver.com");
+        product1.setCategory(categoryRepository.findById(1L).get());
         Product product2 = new Product(2L, "cola", 3000L, "www.coke.com");
+        product2.setCategory(categoryRepository.findById(1L).get());
         productRepository.save(product1);
         productRepository.save(product2);
 

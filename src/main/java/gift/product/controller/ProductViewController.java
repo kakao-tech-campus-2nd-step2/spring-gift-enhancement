@@ -1,6 +1,8 @@
 package gift.product.controller;
 
+import gift.category.service.CategoryService;
 import gift.product.domain.Product;
+import gift.product.domain.ProductDTO;
 import gift.product.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,49 +21,46 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProductViewController
 {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductViewController(ProductService productService) {
+    public ProductViewController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("")
     public String getAllProducts(Model model, @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> products = productService.getAllProducts(pageable);
-        model.addAttribute("products", products);
+        Page<ProductDTO> productPages = productService.getAllProducts(pageable);
+        model.addAttribute("products", productPages);
         return "products";
-    }
-
-    @GetMapping("/{id}")
-    public String findById(@PathVariable Long id, Model model) {
-        Product product = productService.getProductById(id).get();
-        model.addAttribute("product", product);
-        return "product_detail";
     }
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
-        model.addAttribute("product", new Product(0, "", 0, ""));
+        model.addAttribute("product", new ProductDTO());
+        model.addAttribute("categories", categoryService.findAll());
         return "add_product";
     }
 
     @PostMapping("")
-    public String createProduct(@ModelAttribute Product product) {
-        productService.createProduct(product);
+    public String createProduct(@ModelAttribute ProductDTO productDTO) {
+        productService.createProduct(productDTO);
         return "redirect:/admin/products";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Product product = productService.getProductById(id).get();
-        model.addAttribute("product", product);
+        ProductDTO productDTO = productService.getProductDTOById(id).get();
+        model.addAttribute("product", productDTO);
+        model.addAttribute("categories", categoryService.findAll());
         return "add_product";
     }
 
     @PostMapping("/edit/{id}")
-    public String updateProduct(@PathVariable Long id, @ModelAttribute Product product) {
-        productService.updateProduct(id, product);
+    public String updateProduct(@PathVariable Long id, @ModelAttribute ProductDTO productDTO) {
+        productService.updateProduct(id, productDTO);
         return "redirect:/admin/products";
     }
 

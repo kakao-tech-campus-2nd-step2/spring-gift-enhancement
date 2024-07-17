@@ -7,10 +7,6 @@
 <h1 th:text="${product == null || product.getId() == 0} ? 'Create Product' : 'Edit Product'"></h1>
 <form th:action="@{${product == null || product.getId() == 0} ? '/admin/products' : '/admin/products/edit/' + ${product.getId()}}" th:object="${product}" method="post">
   <div>
-    <label for="id">Id</label>
-    <input type="text" id="id" th:field="*{id}" readonly />
-  </div>
-  <div>
     <label for="name">Name</label>
     <input type="text" id="name" th:field="*{name}" required/>
   </div>
@@ -21,6 +17,13 @@
   <div>
     <label for="imageUrl">Image URL</label>
     <input type="text" id="imageUrl" th:field="*{imageUrl}" required/>
+  </div>
+  <div>
+    <label for="category">Category</label>
+    <select id="category" th:field="*{categoryId}" required>
+      <option value="" disabled selected>Select a category</option>
+      <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+    </select>
   </div>
   <div th:if="${errorMessage}" style="color: red;">
     <p th:text="${errorMessage}"></p>

@@ -1,6 +1,7 @@
 package gift.wish.controller;
 
 import gift.product.domain.Product;
+import gift.product.domain.ProductDTO;
 import gift.wish.domain.WishlistDTO;
 import gift.wish.domain.WishlistItem;
 import gift.product.service.ProductService;
@@ -50,8 +51,8 @@ public class WishlistViewController {
                                 @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> products = productService.getAllProducts(pageable);
-        model.addAttribute("products", products);
+        Page<ProductDTO> productPages = productService.getAllProducts(pageable);
+        model.addAttribute("products", productPages);
         model.addAttribute("userId", userId);
         return "add_wishlist";
     }
