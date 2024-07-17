@@ -1,13 +1,12 @@
 package gift.controller;
 
-import gift.converter.ProductConverter;
 import gift.dto.PageRequestDTO;
 import gift.dto.ProductDTO;
-import gift.model.Product;
 import gift.service.CategoryService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -32,10 +31,12 @@ public class ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
-    public ProductController(ProductService productService, CategoryService categoryService) {
+    public ProductController(ProductService productService, CategoryService categoryService, OptionService optionService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     @GetMapping
@@ -66,12 +67,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult, Model model) {
+    public String addProduct(@Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.findAllCategories());
             return "Add_product";
         }
-        productService.addProduct(ProductConverter.convertToDTO(product));
+        productService.addProduct(productDTO);
         return "redirect:/admin/products";
     }
 
@@ -99,6 +100,23 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
+        return "redirect:/admin/products";
+    }
+
+    @GetMapping("/{id}/options")
+    public String manageProductOptions(@PathVariable Long id, Model model) {
+        Optional<ProductDTO> productDTO = productService.findProductById(id);
+        if (productDTO.isEmpty()) {
+            return "redirect:/admin/products";
+        }
+        model.addAttribute("product", productDTO.get());
+        model.addAttribute("options", optionService.findAllOptions());
+        return "Manage_product_options";
+    }
+
+    @PostMapping("/{id}/options")
+    public String updateProductOptions(@PathVariable Long id, @RequestParam List<Long> optionIds) {
+        productService.updateProductOptions(id, optionIds);
         return "redirect:/admin/products";
     }
 }
