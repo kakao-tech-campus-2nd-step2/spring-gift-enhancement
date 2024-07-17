@@ -22,8 +22,8 @@
         <input type="text" id="imageUrl_edit" name="imageUrl" th:field="*{imageUrl}" required/>
     </div>
     <label for="categoryName">카테고리:</label>
-    <select id="categoryName" name="categoryName" required>
-        <option th:each="category : ${categories}" th:value="${category.name}"
+    <select id="categoryName" name="categoryId" required>
+        <option th:each="category : ${categories}" th:value="${category.id}"
                 th:text="${category.name}" th:selected="${category.name.equals(product.category)}"></option>
     </select>
 

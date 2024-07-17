@@ -6,6 +6,7 @@ import gift.controller.dto.request.UpdateProductRequest;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -43,7 +44,8 @@ public class ProductService {
     public Long save(CreateProductRequest request) {
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category with id " + request.categoryId() + " not found"));
-        Product product = new Product(request.name(), request.price(), request.imageUrl(), category);
+        Option option = new Option(request.optionName(), request.optionQuantity());
+        Product product = new Product(request.name(), request.price(), request.imageUrl(), category, option);
         return productRepository.save(product).getId();
     }
 

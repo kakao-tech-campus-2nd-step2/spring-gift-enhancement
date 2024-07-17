@@ -4,10 +4,7 @@ import gift.common.enums.Role;
 import gift.config.JpaConfig;
 import gift.controller.dto.request.CreateWishRequest;
 import gift.controller.dto.request.UpdateWishRequest;
-import gift.model.Category;
-import gift.model.Member;
-import gift.model.Product;
-import gift.model.Wish;
+import gift.model.*;
 import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
@@ -42,7 +39,8 @@ class WishServiceTest {
         // given
         Category category = categoryRepository.save(new Category("cname", "color", "imageUrl", "description"));
         Member member = memberRepository.save(new Member("mname", "mage", Role.USER));
-        Product product = productRepository.save(new Product("pname", 1_000, "pimage", category));
+        Option option = new Option("oName", 123);
+        Product product = productRepository.save(new Product("pname", 1_000, "pimage", category, option));
         Wish wish = wishRepository.save(new Wish(member, 1, product));
         int productCount = 10;
         UpdateWishRequest request = new UpdateWishRequest(product.getId(), productCount);
@@ -62,7 +60,8 @@ class WishServiceTest {
         // given
         Category category = categoryRepository.save(new Category("cname", "color", "imageUrl", "description"));
         Member member = memberRepository.save(new Member("mname", "mage", Role.USER));
-        Product product = productRepository.save(new Product("pname", 1_000, "pimage", category));
+        Option option = new Option("oName", 123);
+        Product product = productRepository.save(new Product("pname", 1_000, "pimage", category, option));
         CreateWishRequest request = new CreateWishRequest(product.getId());
 
         // when

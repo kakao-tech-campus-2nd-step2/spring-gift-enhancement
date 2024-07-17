@@ -3,6 +3,7 @@ package gift.service;
 import gift.config.JpaConfig;
 import gift.controller.dto.request.UpdateProductRequest;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -21,10 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProductServiceTest {
     @Autowired
     private ProductService productService;
-
     @Autowired
     private ProductRepository productRepository;
-
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -37,9 +36,10 @@ class ProductServiceTest {
         String color = "#123456";
         String imageUrl = "이미지url";
         String description = "설명";
+        Option option = new Option("oName", 100);
         Category category = categoryRepository.save(new Category(name, color, imageUrl, description));
         Category category2 = categoryRepository.save(new Category(name2, color, imageUrl, description));
-        Product saved = productRepository.save(new Product("pname", 1000, "purl", category));
+        Product saved = productRepository.save(new Product("pname", 1000, "purl", category, option));
         UpdateProductRequest request = new UpdateProductRequest(saved.getId(), saved.getName(), saved.getPrice(), saved.getImageUrl(), category2.getId());
 
         // when

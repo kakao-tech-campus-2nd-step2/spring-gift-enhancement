@@ -2,10 +2,7 @@ package gift.repository;
 
 import gift.common.enums.Role;
 import gift.config.JpaConfig;
-import gift.model.Category;
-import gift.model.Member;
-import gift.model.Product;
-import gift.model.Wish;
+import gift.model.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -49,9 +46,10 @@ class WishRepositoryTest {
         int[] prices = {10, 20};
         String[] imageUrls = {"test1", "test2"};
         Category category = categoryRepository.save(new Category("가전", "#123", "url", ""));
+        Option option = new Option("oName", 123);
         Product[] products = {
-                productRepository.save(new Product(names[0], prices[0], imageUrls[0], category)),
-                productRepository.save(new Product(names[1], prices[1], imageUrls[1], category))};
+                productRepository.save(new Product(names[0], prices[0], imageUrls[0], category, option)),
+                productRepository.save(new Product(names[1], prices[1], imageUrls[1], category, option))};
         int[] productCounts = {1, 2};
         Wish[] wishes = {
                 wishRepository.save(new Wish(member, productCounts[0], products[0])),
@@ -88,12 +86,10 @@ class WishRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl";
         Category category = categoryRepository.save(new Category("가전", "#123", "url", ""));
-        Product product = productRepository.save(new Product(name, price, imageUrl, category));
+        Option option = new Option("oName", 123);
+        Product product = productRepository.save(new Product(name, price, imageUrl, category, option));
         int productCount = 10;
-        Wish wish = new Wish(
-                new Member(member.getId(), null, null, null, null, null),
-                productCount,
-                new Product(product.getId(), null, 0, null, null, null, null));
+        Wish wish = new Wish(member, productCount, product);
 
         // when
         Long wishId = wishRepository.save(wish).getId();
@@ -129,7 +125,8 @@ class WishRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl";
         Category category = categoryRepository.save(new Category("가전", "#123", "url", ""));
-        Product product = productRepository.save(new Product(name, price, imageUrl, category));
+        Option option = new Option("oName", 123);
+        Product product = productRepository.save(new Product(name, price, imageUrl, category, option));
         int productCount = 10;
         wishRepository.save(new Wish(member, productCount, product));
 
@@ -152,7 +149,8 @@ class WishRepositoryTest {
         Category category = categoryRepository.save(new Category("가전", "#123", "url", ""));
         int price = 1000;
         String imageUrl = "imageUrl";
-        Product product = productRepository.save(new Product(name, price, imageUrl, category));
+        Option option = new Option("oName", 123);
+        Product product = productRepository.save(new Product(name, price, imageUrl, category, option));
         int productCount = 10;
         wishRepository.save(new Wish(member, productCount, product));
 

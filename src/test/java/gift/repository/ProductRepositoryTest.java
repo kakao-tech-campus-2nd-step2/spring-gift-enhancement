@@ -2,6 +2,7 @@ package gift.repository;
 
 import gift.config.JpaConfig;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,8 @@ class ProductRepositoryTest {
         String imageUrl = "imageUrl1";
         String imageUrl2 = "imageUrl2";
         Category category = categoryRepository.save(new Category("name", "#123", "url", ""));
-        Product product = new Product(name, price, imageUrl, category);
+        Option option = new Option("oName", 123);
+        Product product = new Product(name, price, imageUrl, category, option);
         Product original = productRepository.save(product);
 
         // when
@@ -49,6 +51,7 @@ class ProductRepositoryTest {
         assertThat(actual.getImageUrl()).isEqualTo(imageUrl2);
         assertThat(actual.getCreatedAt()).isNotNull();
         assertThat(actual.getUpdatedAt()).isNotNull();
+        assertThat(actual.getOptions()).isEqualTo(option);
     }
 
     @Test
@@ -59,7 +62,8 @@ class ProductRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl1";
         Category category = categoryRepository.save(new Category("name", "#123", "url", ""));
-        Product product = new Product(name, price, imageUrl, category);
+        Option option = new Option("oName", 123);
+        Product product = new Product(name, price, imageUrl, category, option);
 
         // when
         Product actual = productRepository.save(product);
@@ -71,6 +75,8 @@ class ProductRepositoryTest {
         assertThat(actual.getImageUrl()).isEqualTo(imageUrl);
         assertThat(actual.getCreatedAt()).isNotNull();
         assertThat(actual.getUpdatedAt()).isNotNull();
+        assertThat(actual.getOptions()).hasSize(1);
+        assertThat(actual.getOptions().get((0))).isEqualTo(option);
     }
 
     @Test
@@ -81,9 +87,13 @@ class ProductRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl1";
         Category category = categoryRepository.save(new Category("name", "#123", "url", ""));
+        Option[] option = {
+                new Option("oName1", 123),
+                new Option("oName2", 123)
+        };
         Product[] product = {
-                new Product(name[0], price, imageUrl, category),
-                new Product(name[1], price, imageUrl, category)
+                new Product(name[0], price, imageUrl, category, option[0]),
+                new Product(name[1], price, imageUrl, category, option[1])
         };
         Pageable pageable = PageRequest.of(0, 10);
         productRepository.save(product[0]);

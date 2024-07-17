@@ -1,6 +1,7 @@
 package gift.controller.dto.request;
 
 import gift.common.annotation.InvalidWord;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -18,7 +19,12 @@ public record CreateProductRequest(
         @NotBlank
         String imageUrl,
         @NotBlank
-        Long categoryId
+        Long categoryId,
+
+        @NotBlank
+        String optionName,
+        @Min(1) @Max(100_000_000)
+        int optionQuantity
 ) {
 }
 

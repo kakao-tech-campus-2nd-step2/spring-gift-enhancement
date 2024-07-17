@@ -19,6 +19,11 @@ public class Option extends BasicEntity{
 
     protected Option() {}
 
+    public Option(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public Option(String name, int quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
@@ -28,6 +33,10 @@ public class Option extends BasicEntity{
     public void updateOption(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public String getName() {

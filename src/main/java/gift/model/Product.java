@@ -2,7 +2,6 @@ package gift.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,19 +26,12 @@ public class Product extends BasicEntity{
 
     protected Product() {}
 
-    public Product(Long id, String name, int price, String imageUrl, Category category, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(id, createdAt, updatedAt);
+    public Product(String name, int price, String imageUrl, Category category, Option option) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-    }
-
-    public Product(String name, int price, String imageUrl, Category category) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.category = category;
+        addOption(option);
     }
 
     public void updateProduct(String name, int price, String imageUrl, Category category) {
@@ -47,6 +39,14 @@ public class Product extends BasicEntity{
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public void addOption(Option entity) {
+        if (entity == null) {
+            return;
+        }
+        options.add(entity);
+        entity.setProduct(this);
     }
 
     public String getName() {
