@@ -2,6 +2,7 @@ package gift.controller.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.request.AddProductRequest;
+import gift.dto.request.OptionRequest;
 import gift.dto.request.UpdateProductRequest;
 import gift.dto.response.AddedProductIdResponse;
 import gift.dto.response.ProductResponse;
@@ -20,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -71,7 +71,7 @@ class ProductControllerTest {
     @DisplayName("상품 추가")
     void addProduct() throws Exception {
         // Given
-        AddProductRequest addProductRequest = new AddProductRequest("Product1", 110, "img", 1L,new ArrayList<>());
+        AddProductRequest addProductRequest = new AddProductRequest("Product1", 110, "img", 1L, List.of(new OptionRequest("option1", 100)));
         AddedProductIdResponse addedProductIdResponse = new AddedProductIdResponse(1L);
 
         when(productService.addProduct(addProductRequest)).thenReturn(addedProductIdResponse);

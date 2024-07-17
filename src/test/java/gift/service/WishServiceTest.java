@@ -3,6 +3,7 @@ package gift.service;
 import gift.dto.request.WishRequest;
 import gift.dto.response.WishProductResponse;
 import gift.entity.Member;
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.entity.Wish;
 import gift.exception.WishAlreadyExistsException;
@@ -47,7 +48,7 @@ class WishServiceTest {
         //Given
         Long memberId = 1L;
         Member member = new Member("test@email.com", "password");
-        Product product = new Product("name", 1000, "imageUrl", null);
+        Product product = new Product("name", 1000, "imageUrl", null, List.of(new Option("option1", 100)));
         Wish wish = new Wish(member, 1, product);
         PageRequest pageable = PageRequest.of(0, 10);
         Page<Wish> wishPage = new PageImpl<>(List.of(wish), pageable, 1);
@@ -76,7 +77,7 @@ class WishServiceTest {
             Long memberId = 1L;
             WishRequest request = new WishRequest(1L, 1);
             Member member = new Member("test@email.com", "password");
-            Product product = new Product("name", 1000, "imageUrl", null);
+            Product product = new Product("name", 1000, "imageUrl", null, List.of(new Option("option1", 100)));
 
             when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(request.productId())).thenReturn(product);
@@ -96,7 +97,7 @@ class WishServiceTest {
             Long memberId = 1L;
             WishRequest request = new WishRequest(1L, 1);
             Member member = new Member("test@email.com", "password");
-            Product product = new Product("name", 1000, "imageUrl", null);
+            Product product = new Product("name", 1000, "imageUrl", null, List.of(new Option("option1", 100)));
 
             when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(request.productId())).thenReturn(product);
@@ -118,7 +119,7 @@ class WishServiceTest {
             Long memberId = 1L;
             Long productId = 1L;
             Member member = new Member("test@email.com", "password");
-            Product product = new Product("name", 1000, "imageUrl", null);
+            Product product = new Product("name", 1000, "imageUrl", null, List.of(new Option("option1", 100)));
             Wish wish = new Wish(member, 1, product);
 
             when(memberService.getMember(memberId)).thenReturn(member);
@@ -139,7 +140,7 @@ class WishServiceTest {
             Long memberId = 1L;
             Long productId = 1L;
             Member member = new Member("test@email.com", "password");
-            Product product = new Product("name", 1000, "imageUrl", null);
+            Product product = new Product("name", 1000, "imageUrl", null, List.of(new Option("option1", 100)));
 
             when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(productId)).thenReturn(product);
@@ -161,7 +162,7 @@ class WishServiceTest {
             Long memberId = 1L;
             WishRequest request = new WishRequest(1L, 10);
             Member member = new Member("test@email.com", "password");
-            Product product = new Product("name", 1000, "imageUrl", null);
+            Product product = new Product("name", 1000, "imageUrl", null, List.of(new Option("option1", 100)));
             Wish wish = new Wish(member, 1, product);
 
             when(memberService.getMember(memberId)).thenReturn(member);
@@ -182,7 +183,7 @@ class WishServiceTest {
             Long memberId = 1L;
             WishRequest request = new WishRequest(1L, 10);
             Member member = new Member("test@email.com", "password");
-            Product product = new Product("name", 1000, "imageUrl", null);
+            Product product = new Product("name", 1000, "imageUrl", null, List.of(new Option("option1", 100)));
 
             when(memberService.getMember(memberId)).thenReturn(member);
             when(productService.getProduct(request.productId())).thenReturn(product);
