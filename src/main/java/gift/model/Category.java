@@ -27,6 +27,11 @@ public class Category {
         this.description = description;
     }
 
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

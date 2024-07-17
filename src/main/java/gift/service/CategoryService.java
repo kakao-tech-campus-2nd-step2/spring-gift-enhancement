@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.model.Category;
 import gift.repository.CategoryRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class CategoryService {
 
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+                .orElse(null);
     }
 
     public void addCategory(Category category) {
@@ -43,5 +44,11 @@ public class CategoryService {
 
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    @PostConstruct
+    public void init() {
+        Category noneCategory = new Category(1L, "없음");
+        categoryRepository.save(noneCategory);
     }
 }
