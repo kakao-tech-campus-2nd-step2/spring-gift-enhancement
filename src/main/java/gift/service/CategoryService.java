@@ -10,6 +10,7 @@ import gift.model.product.Product;
 import gift.model.product.ProductRequest;
 import gift.model.product.ProductResponse;
 import gift.repository.CategoryRepository;
+import gift.repository.ProductRepository;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CategoryService {
 
-    private final CategoryRepository categoryRepository;
+    private static final Long defaultId = 1L;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
+
+    public CategoryService(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     }
 
     @Transactional
@@ -55,12 +60,18 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-            .orElseThrow(CategoryNotFoundException::new);
+
+        if (categoryId == defaultId) {
+            throw new IllegalArgumentException("삭제할 수 없는 카테고리입니다.");
+        }
 
         if (!categoryRepository.existsById(categoryId)) {
             throw new CategoryNotFoundException();
         }
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(CategoryNotFoundException::new);
+
+        productRepository.updateCategory(categoryId, defaultId);
         categoryRepository.deleteById(categoryId);
     }
 }

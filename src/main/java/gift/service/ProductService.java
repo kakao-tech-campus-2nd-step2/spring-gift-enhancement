@@ -64,12 +64,12 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long productId) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(ProductNotFoundException::new);
-
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException();
         }
+        Product product = productRepository.findById(productId)
+            .orElseThrow(ProductNotFoundException::new);
+
         wishRepository.deleteByProductId(productId);
         productRepository.deleteById(productId);
     }
