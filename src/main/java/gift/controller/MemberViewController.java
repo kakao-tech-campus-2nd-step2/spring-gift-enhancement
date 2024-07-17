@@ -2,9 +2,8 @@ package gift.controller;
 
 import gift.dto.ProductDto;
 import gift.service.MemberService;
+import gift.utils.PageNumberListGenerator;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.stream.IntStream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,9 +22,6 @@ public class MemberViewController {
         this.memberService = memberService;
     }
 
-    /**
-     * 회원가입 폼을 반환
-     */
     @GetMapping("/register")
     public String registerMemberForm() {
         return "memberRegister";
@@ -36,25 +32,13 @@ public class MemberViewController {
         return "login";
     }
 
-    /**
-     * 위시리스트 페이지를 반환
-     *
-     * @param model
-     * @param pageable
-     * @param httpServletRequest
-     * @return view
-     */
     @GetMapping("/wishlist")
     public String getWishlist(Model model, @PageableDefault(size = 5) Pageable pageable,
         HttpServletRequest httpServletRequest) {
         String email = (String) httpServletRequest.getAttribute("email");
         Page<ProductDto> wishlist = memberService.getAllWishlist(email, pageable);
 
-        int totalPage = wishlist.getTotalPages();
-        if (totalPage > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPage).boxed().toList();
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+        model.addAttribute("pageNumbers", PageNumberListGenerator.generatePageNumberList(wishlist));
         model.addAttribute("wishlist", wishlist);
 
         return "wishlist";

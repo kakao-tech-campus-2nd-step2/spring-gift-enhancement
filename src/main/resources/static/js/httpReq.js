@@ -6,7 +6,9 @@ function addOne() {
     var formData = {
         'name' : $('#name').val(),
         'price' : $('#price').val(),
-        'imageUrl' : $('#imageUrl').val()
+        'imageUrl' : $('#imageUrl').val(),
+        'categoryId' : $('#category > option:selected').val(),
+        'categoryName' : $('#category > option:selected').text()
     };
 
     $.ajax({
@@ -47,7 +49,9 @@ function editOne() {
         'id' : $('#id').val(),
         'name' : $('#name').val(),
         'price' : $('#price').val(),
-        'imageUrl' : $('#imageUrl').val()
+        'imageUrl' : $('#imageUrl').val(),
+        'categoryId' : $('#category > option:selected').val(),
+        'categoryName' : $('#category > option:selected').text()
     };
 
     $.ajax({

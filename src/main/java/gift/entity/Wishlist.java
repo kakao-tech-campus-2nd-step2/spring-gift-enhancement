@@ -16,7 +16,7 @@ public class Wishlist extends BaseEntity {
     @JoinColumn(name = "productid", nullable = false)
     private Product product;
 
-    public Wishlist() {
+    protected Wishlist() {
     }
 
     public Wishlist(Member member, Product product) {

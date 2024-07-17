@@ -45,6 +45,11 @@
         상품 목록
     </button>
     <button class="btn btn-success"
+            th:onclick="|location.href='@{/api/categories(page=0, size=5)}'|"
+            type="button">
+        카테고리 목록
+    </button>
+    <button class="btn btn-success"
             id="wishlist-btn"
             th:onclick="getWishlist()"
             type="button">

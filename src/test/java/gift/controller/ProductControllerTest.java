@@ -28,13 +28,24 @@ class ProductControllerTest {
 
     private @Autowired MockMvc mockMvc;
 
+
+    void addCategory() throws Exception {
+        String category = """ 
+            {"name": "음식", "color": "Red", "imageUrl": "http", "description": "description"}
+            """;
+        mockMvc.perform(post("/api/categories")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(category));
+    }
+
     @Test
     @DisplayName("상품 추가 테스트")
     void addProduct() throws Exception {
         String requestJson = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://..."}
+            {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(post("/api/products/product")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
@@ -45,12 +56,13 @@ class ProductControllerTest {
     @DisplayName("상품 수정 테스트")
     void editProduct() throws Exception {
         String requestJson1 = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://..."}
+            {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
         String requestJson2 = """
-            {"id": 1, "name": "달다구리 커피", "price": 6500,"imageUrl": "https://..."}
+            {"id": 1, "name": "달다구리 커피", "price": 6500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(post("/api/products/product")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestJson1));
@@ -65,9 +77,10 @@ class ProductControllerTest {
     @DisplayName("상품 삭제 테스트")
     void deleteProduct() throws Exception {
         String requestJson = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://..."}
+            {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(post("/api/products/product")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestJson));
@@ -82,8 +95,9 @@ class ProductControllerTest {
         "커+ffee", "012345678901234", "커&피", "(커/피]", "(커][[fee))()", "+-&커__()fe&/_"})
     void addProductSuccess(String name) throws Exception {
         String requestJson = String.format("""
-            {"name": "%s", "price": 5500,"imageUrl": "https://..."}
+            {"name": "%s", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """, name);
+        addCategory();
         mockMvc.perform(post("/api/products/product")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
@@ -97,8 +111,9 @@ class ProductControllerTest {
         "카카오 선물", "이건카카오커피", "커피😀", "커피커피커피커피커피커피커피커피커피"})
     void addProductError(String name) throws Exception {
         String requestJson = String.format("""
-            {"name": "%s", "price": 5500,"imageUrl": "https://..."}
+            {"name": "%s", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """, name);
+        addCategory();
         mockMvc.perform(post("/api/products/product")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
@@ -110,9 +125,10 @@ class ProductControllerTest {
     @DisplayName("비어있는 상품명 입력 시 에러 메시지 테스트")
     void productNameNotBlankErrorMsg() throws Exception {
         String requestJson = """
-            {"name": null, "price": 5500,"imageUrl": "https://..."}
+            {"name": null, "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(post("/api/products/product")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
@@ -123,9 +139,10 @@ class ProductControllerTest {
     @DisplayName("15자를 초과하는 상품명 입력 시 에러 메시지 테스트")
     void productNameSizeErrorMsg() throws Exception {
         String requestJson = """
-            {"name": "0123456789012345", "price": 5500,"imageUrl": "https://..."}
+            {"name": "0123456789012345", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(post("/api/products/product")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
@@ -136,9 +153,10 @@ class ProductControllerTest {
     @DisplayName("상품명에 허용되지 않는 특수문자 입력 시 에러 메시지 테스트")
     void productNameNotAllowCharErrorMsg() throws Exception {
         String requestJson = """
-            {"name": "{커피}", "price": 5500,"imageUrl": "https://..."}
+            {"name": "{커피}", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(post("/api/products/product")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
@@ -149,9 +167,10 @@ class ProductControllerTest {
     @DisplayName("상품명에 카카오 문구 입력 시 에러 메시지 테스트")
     void productNameIncludeKakaoErrorMsg() throws Exception {
         String requestJson = """
-            {"name": "카카오 커피", "price": 5500,"imageUrl": "https://..."}
+            {"name": "카카오 커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(post("/api/products/product")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
@@ -162,12 +181,13 @@ class ProductControllerTest {
     @DisplayName("중복된 이름의 상품을 추가하는 실패 테스트")
     void addDuplicateProduct() throws Exception {
         String requestJson1 = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://..."}
+            {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
         String requestJson2 = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://..."}
+            {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(post("/api/products/product")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestJson1));
@@ -192,9 +212,10 @@ class ProductControllerTest {
     @DisplayName("해당하는 ID가 없는 상품을 수정하는 실패 테스트")
     void editNotExistProduct() throws Exception {
         String requestJson = """
-            {"id": 11, "name": "커피", "price": 5500,"imageUrl": "https://..."}
+            {"id": 11, "name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(put("/api/products/product")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))

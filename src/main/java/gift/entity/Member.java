@@ -1,5 +1,7 @@
 package gift.entity;
 
+import gift.constants.ErrorMessage;
+import gift.dto.MemberDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +22,11 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Wishlist> wishlist = new ArrayList<>();
 
-    public Member() {
+    protected Member() {
+    }
+
+    public Member(MemberDto memberDto) {
+        this(memberDto.getEmail(), memberDto.getPassword());
     }
 
     public Member(String email, String password) {
@@ -42,5 +48,12 @@ public class Member extends BaseEntity {
 
     public boolean isCorrectPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public void addWishlist(Wishlist wishlist) {
+        if (wishlist == null) {
+            throw new NullPointerException(ErrorMessage.NULL_POINTER_EXCEPTION_MSG);
+        }
+        this.wishlist.add(wishlist);
     }
 }

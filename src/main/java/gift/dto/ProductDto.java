@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 
 public class ProductDto {
 
-    private final Long id;
+    private Long id;
 
     @NotBlank(message = ErrorMessage.PRODUCT_NAME_VALID_NOT_BLANK_MSG)
     @Size(min = 1, max = 15, message = ErrorMessage.PRODUCT_NAME_VALID_SIZE_MSG)
@@ -20,22 +20,35 @@ public class ProductDto {
     @Pattern(
         regexp = RegularExpression.PRODUCT_NAME_FIND_KAKAO_REGEX,
         message = ErrorMessage.PRODUCT_NAME_VALID_KAKAO_MSG)
-    private final String name;
+    private String name;
 
     @NotNull
-    private final long price;
+    private long price;
 
-    private final String imageUrl;
+    private String imageUrl;
 
-    public ProductDto(Long id, String name, long price, String imageUrl) {
+    @NotNull
+    private Long categoryId;
+
+    @NotBlank
+    private String categoryName;
+
+    protected ProductDto() {
+    }
+
+    public ProductDto(Long id, String name, long price, String imageUrl, Long categoryId,
+        String categoryName) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 
     public ProductDto(Product p) {
-        this(p.getId(), p.getName(), p.getPrice(), p.getImageUrl());
+        this(p.getId(), p.getName(), p.getPrice(), p.getImageUrl(), p.getCategory().getId(),
+            p.getCategory().getName());
     }
 
     public Long getId() {
@@ -52,5 +65,13 @@ public class ProductDto {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
     }
 }

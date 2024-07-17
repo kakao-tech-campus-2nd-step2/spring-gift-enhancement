@@ -20,6 +20,15 @@ class ProductViewControllerTest {
 
     private @Autowired MockMvc mockMvc;
 
+    void addCategory() throws Exception {
+        String category = """ 
+            {"name": "음식", "color": "Red", "imageUrl": "http", "description": "description"}
+            """;
+        mockMvc.perform(post("/api/categories")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(category));
+    }
+
     @Test
     @DisplayName("상품 목록 가져오기 테스트")
     void getProducts() throws Exception {
@@ -38,9 +47,10 @@ class ProductViewControllerTest {
     @DisplayName("상품 수정 폼 페이지 테스트")
     void editProductForm() throws Exception {
         String requestJson = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://..."}
+            {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
             """;
 
+        addCategory();
         mockMvc.perform(post("/api/products/product")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestJson));
