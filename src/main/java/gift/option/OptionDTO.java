@@ -12,7 +12,7 @@ public class OptionDTO {
 
     private long id;
 
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣()\\[\\]+\\-&/_]*$", message = OPTION_NAME_ALLOWED_CHARACTER)
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣\s()\\[\\]+\\-&/_]*$", message = OPTION_NAME_ALLOWED_CHARACTER)
     @Length(min = 1, max = 50, message = OPTION_NAME_LENGTH)
     private String name;
 

@@ -2,6 +2,7 @@ package gift.option;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,5 +40,13 @@ public class OptionController {
         @Valid @RequestBody OptionDTO optionDTO
     ) {
         optionService.updateOption(productId, optionDTO);
+    }
+
+    @DeleteMapping("/{productId}/option/{optionId}")
+    public void deleteOption(
+        @PathVariable("productId") long productId,
+        @PathVariable("optionId") long optionId
+    ) {
+        optionService.deleteOption(productId, optionId);
     }
 }
