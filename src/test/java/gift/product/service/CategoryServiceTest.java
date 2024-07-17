@@ -4,6 +4,7 @@ import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 
@@ -102,5 +103,31 @@ class CategoryServiceTest {
         // then
         assertThatThrownBy(() -> categoryService.modifyCategory(1L, categoryParam))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("Category 조회 테스트[성공]")
+    void getCategoryInfoTest() {
+        // given
+        Category existCategory = new Category(1L, "카테고리", "색상", "이미지 URL", "설명");
+        given(categoryRepository.findById(any())).willReturn(of(existCategory));
+
+        // when
+        var response = categoryService.getCategoryInfo(1L);
+
+        //then
+        assertThat(response).extracting(
+                "id",
+                "name",
+                "color",
+                "imgUrl",
+                "description"
+        ).containsExactly(
+                existCategory.getId(),
+                existCategory.getName(),
+                existCategory.getColor(),
+                existCategory.getImgUrl(),
+                existCategory.getDescription()
+        );
     }
 }
