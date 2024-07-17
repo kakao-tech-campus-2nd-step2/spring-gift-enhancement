@@ -69,6 +69,8 @@ public class ProductService {
                 .map(optionRequest -> new Option(product, optionRequest.getName(), optionRequest.getQuantity()))
                 .forEach(product.getOptions()::add);
 
+        product.validateOptionsNotEmpty();
+
         productRepository.save(product);
     }
 

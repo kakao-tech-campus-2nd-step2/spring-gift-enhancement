@@ -28,7 +28,8 @@ public enum ErrorMessage {
 
     /* ProductService */
     DUPLICATE_OPTION("중복된 옵션입니다."),
-    OPTION_NOT_FOUND("존재하지 않는 옵션입니다.");
+    OPTION_NOT_FOUND("존재하지 않는 옵션입니다."),
+    NO_OPTIONS_IN_PRODUCT("상품에는 반드시 하나 이상의 옵션이 있어야 합니다.");
 
     private final String message;
 
