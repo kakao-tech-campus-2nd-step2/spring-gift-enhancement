@@ -39,10 +39,7 @@ public class MemberControllerTest {
 
   @BeforeEach
   public void setUp() {
-    MockitoAnnotations.openMocks(this);
-    member = new Member();
-    member.setEmail("test@example.com");
-    member.setPassword("password");
+    member = new Member(null, "test@example.com", "password", "Test User");
   }
 
   @Test
