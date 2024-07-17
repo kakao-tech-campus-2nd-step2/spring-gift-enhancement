@@ -25,6 +25,7 @@ public class JwtTokenProvider {
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
     }
+
     public String generateToken(Member member) {
         return Jwts.builder()
                 .setSubject(member.getEmail())
