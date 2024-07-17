@@ -15,4 +15,20 @@ public class CategoryDTO {
         this.description = description;
         this.imageUrl = imageUrl;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }
