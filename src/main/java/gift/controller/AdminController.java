@@ -52,13 +52,13 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
-    @GetMapping("edit/{id}")
+    @GetMapping("/{id}")
     public String editProduct(@PathVariable int id, Model model) {
         model.addAttribute("product", productService.getProductById(id));
         return "edit";
     }
 
-    @PutMapping( "edit/{id}")
+    @PutMapping( "/{id}")
     public String updateProduct(@PathVariable int id, @Valid @ModelAttribute("product") ProductDTO productDTO) {
         productService.updateProduct(id, productDTO);
         return "redirect:/admin/products";
