@@ -1,5 +1,6 @@
 package gift.option;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class OptionController {
     }
 
     @PostMapping("/{id}/options")
-    public OptionResponse addProductOption(@PathVariable Long id, @RequestBody OptionRequest optionRequest){
+    public OptionResponse addProductOption(@PathVariable Long id, @Valid @RequestBody OptionRequest optionRequest){
         return optionService.insertProductNewOption(id, optionRequest);
     }
 
