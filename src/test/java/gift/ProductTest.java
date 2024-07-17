@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Transactional
 public class ProductTest {
     @Autowired
     private ProductRepository productRepository;
@@ -26,10 +25,10 @@ public class ProductTest {
 
     @BeforeEach
     public void setUp() {
-        testCategory = new Category(1, "test", "test", "test", "test");
+        testCategory = new Category( "test", "test", "test", "test");
         categoryRepository.save(testCategory);
 
-        testProduct = new Product(1, testCategory,1, "test", "testURL");
+        testProduct = new Product(testCategory,1, "test", "testURL");
         productRepository.save(testProduct);
     }
 
@@ -41,7 +40,22 @@ public class ProductTest {
 
     @Test
     void testFindById() {
+        categoryRepository.save(testCategory);
         Product foundProduct = productRepository.findById(testProduct.getId());
         assertEquals(testProduct.getId(), foundProduct.getId());
+    }
+
+    @Test
+    void testSaveProduct() {
+        Product savedProduct = productRepository.save(testProduct);
+        assertEquals(testProduct.getId(), savedProduct.getId());
+    }
+
+    @Test
+    void testUpdateProduct() {
+        categoryRepository.save(testCategory);
+        Product updatedProduct = new Product(1, testCategory,1, "updated", "testURL");
+        Product savedProduct = productRepository.save(updatedProduct);
+        assertEquals("updated", savedProduct.getName());
     }
 }

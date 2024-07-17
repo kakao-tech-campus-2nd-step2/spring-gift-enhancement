@@ -25,7 +25,7 @@ public class CategoryTest {
 
     @BeforeEach
     public void setUp() {
-        testCategory = new Category(1, "test", "test", "test", "test");
+        testCategory = new Category("test", "test", "test", "test");
         categoryRepository.save(testCategory);
     }
 
@@ -38,5 +38,19 @@ public class CategoryTest {
     void testFindAll() {
         List<Category> foundedCategories = categoryRepository.findAll();
         assertEquals(testCategory.getId(), foundedCategories.get(0).getId());
+    }
+
+    @Test
+    void testSaveCategory() {
+        Category foundCategory = categoryRepository.findById(testCategory.getId());
+        assertEquals(testCategory.getId(), foundCategory.getId());
+    }
+
+    @Test
+    void testUpdateCategory() {
+        var updatedCategory = new Category(1, "updated", "updated", "updated", "updated");
+        categoryRepository.save(updatedCategory);
+        Category foundCategory = categoryRepository.findById(testCategory.getId());
+        assertEquals(testCategory.getName(), foundCategory.getName());
     }
 }
