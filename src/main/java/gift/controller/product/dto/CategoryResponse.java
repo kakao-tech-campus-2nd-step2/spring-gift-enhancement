@@ -7,11 +7,15 @@ public class CategoryResponse {
 
     public record Info(
         Long id,
-        String name
+        String name,
+        String imageUrl,
+        String description,
+        String color
     ) {
 
         public static Info from(CategoryModel.Info category) {
-            return new Info(category.id(), category.name());
+            return new Info(category.id(), category.name(), category.imageUrl(),
+                category.description(), category.color());
         }
     }
 
