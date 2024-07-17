@@ -5,7 +5,7 @@ import gift.domain.Product;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import gift.request.ProductRequest;
+import gift.request.ProductCreateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,7 +83,7 @@ class ProductServiceTest {
     void addProduct() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com", categoryId);
+        ProductCreateRequest request = new ProductCreateRequest("아이스티", 2500, "https://example.com", categoryId);
 
         given(productRepository.save(any(Product.class))).willReturn(new Product());
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(new Category()));
@@ -102,7 +102,7 @@ class ProductServiceTest {
         //given
         Long productId = 1L;
         Long categoryId = 1L;
-        ProductRequest request = new ProductRequest("아이스티", 2500, "https://example.com", categoryId);
+        ProductCreateRequest request = new ProductCreateRequest("아이스티", 2500, "https://example.com", categoryId);
 
         given(productRepository.findById(productId)).willReturn(Optional.of(new Product()));
         given(categoryRepository.findById(categoryId)).willReturn(Optional.of(new Category()));

@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
-public class ProductRequest {
+public class ProductCreateRequest {
 
     @NotBlank
     @Length(max = 15)
@@ -32,7 +32,7 @@ public class ProductRequest {
     @Valid
     private List<OptionRequest> options;
 
-    public ProductRequest(String name, Integer price, String imageUrl, Long categoryId, List<OptionRequest> options) {
+    public ProductCreateRequest(String name, Integer price, String imageUrl, Long categoryId, List<OptionRequest> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;

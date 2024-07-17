@@ -1,7 +1,7 @@
 package gift.controller;
 
 import gift.request.OptionRequest;
-import gift.request.ProductRequest;
+import gift.request.ProductCreateRequest;
 import gift.request.ProductUpdateRequest;
 import gift.response.OptionResponse;
 import gift.response.ProductResponse;
@@ -42,7 +42,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> productAdd(@RequestBody @Valid ProductRequest request) {
+    public ResponseEntity<Void> productAdd(@RequestBody @Valid ProductCreateRequest request) {
         productService.addProduct(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
