@@ -7,11 +7,8 @@ import gift.domain.model.enums.ProductSortBy;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,29 +50,18 @@ public class ProductApiController {
 
     //    상품 추가
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addProduct(
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductResponseDto addProduct(
         @Valid @RequestBody ProductAddRequestDto productAddRequestDto) {
-        ProductResponseDto createdProduct = productService.addProduct(productAddRequestDto);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "상품이 성공적으로 추가되었습니다.");
-        response.put("data", createdProduct);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return productService.addProduct(productAddRequestDto);
     }
 
     //    상품 수정
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateProduct(
+    @ResponseStatus(HttpStatus.OK)
+    public ProductResponseDto updateProduct(
         @Valid @RequestBody ProductUpdateRequestDto productUpdateRequestDto) {
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "상품이 성공적으로 수정되었습니다.");
-        response.put("data", productService.updateProduct(productUpdateRequestDto));
-
-        return ResponseEntity.ok(response);
+        return productService.updateProduct(productUpdateRequestDto);
     }
 
     //    상품 삭제

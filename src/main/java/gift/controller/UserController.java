@@ -1,6 +1,5 @@
 package gift.controller;
 
-import gift.domain.model.entity.User;
 import gift.domain.model.dto.UserRequestDto;
 import gift.domain.model.dto.TokenResponseDto;
 import gift.domain.model.dto.UserResponseDto;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,16 +24,16 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<User> joinUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> joinUser(@Valid @RequestBody UserRequestDto userRequestDto) {
         UserResponseDto response = userService.joinUser(userRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
             .header("Authorization", "Bearer " + response.getToken())
-            .body(response.getUser());
+            .body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDto> loginUser(@RequestBody UserRequestDto loginRequestDto) {
-        String token = userService.loginUser(loginRequestDto);
-        return ResponseEntity.ok(new TokenResponseDto(token));
+    @ResponseStatus(HttpStatus.OK)
+    public TokenResponseDto loginUser(@RequestBody UserRequestDto loginRequestDto) {
+        return userService.loginUser(loginRequestDto);
     }
 }
