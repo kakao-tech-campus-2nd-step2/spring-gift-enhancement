@@ -1,7 +1,6 @@
-package gift.domain.cart;
+package gift.domain.cartItem;
 
 import gift.domain.product.Product;
-import gift.domain.user.User;
 import gift.domain.user.dto.UserInfo;
 import gift.global.resolver.LoginInfo;
 import gift.global.response.ResponseMaker;
@@ -41,7 +40,8 @@ public class CartItemRestController {
 
         int currentCount = cartItemService.addCartItem(userInfo.getId(), productId);
 
-        return ResponseMaker.createResponse(HttpStatus.OK, "상품이 장바구니에 추가되었습니다. 총 개수: " + currentCount, currentCount);
+        return ResponseMaker.createResponse(HttpStatus.OK,
+            "상품이 장바구니에 추가되었습니다. 총 개수: " + currentCount, currentCount);
     }
 
     /**
@@ -88,7 +88,8 @@ public class CartItemRestController {
     ) {
         int modifiedCount = cartItemService.updateCartItem(userInfo.getId(), productId, count);
 
-        return ResponseMaker.createSimpleResponse(HttpStatus.OK, "해당 상품의 수량이 변경되었습니다. 총 개수: " + modifiedCount + "개");
+        return ResponseMaker.createSimpleResponse(HttpStatus.OK,
+            "해당 상품의 수량이 변경되었습니다. 총 개수: " + modifiedCount + "개");
     }
 
     private Sort getSortObject(String sort) {

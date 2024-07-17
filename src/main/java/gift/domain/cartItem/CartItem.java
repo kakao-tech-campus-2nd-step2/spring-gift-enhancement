@@ -1,4 +1,4 @@
-package gift.domain.cart;
+package gift.domain.cartItem;
 
 import gift.domain.product.Product;
 import gift.domain.user.User;
