@@ -1,0 +1,81 @@
+### GET request to example server
+GET http://localhost:8080/api/users?size=3&page=1&sort=email&asc=false
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
+
+### signup request
+POST http://localhost:8080/signup
+Content-Type: application/json
+
+{
+  "email": "email@email.com",
+  "password": "aB12345678"
+}
+
+### account deletion request
+DELETE http://localhost:8080/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
+
+### password change request
+PATCH http://localhost:8080/api/password-change
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
+Content-Type: application/json
+
+{
+  "password": "aB4566666"
+}
+
+### signup request
+POST http://localhost:8080/signup
+Content-Type: application/json
+
+{
+  "email": "emailll@email.com",
+  "password": "aB12345678"
+}
+
+### login request
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "emailll@email.com",
+  "password": "aB12345678"
+}
+
+### wish get request
+GET http://localhost:8080/api/wishes?size=15&sort=member&page=0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
+
+
+### wish post request
+POST http://localhost:8080/api/wishes
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "productId": 2
+}
+
+### wish delete request
+DELETE http://localhost:8080/api/wishes/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
+
+### product post request
+POST http://localhost:8080/api/products
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
+Content-Type: application/json
+
+{
+  "name": "dddd",
+  "price": 2200,
+  "imageUrl": "https://letsenhance.io/static/7f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg"
+}
+
+### product get
+GET http://localhost:8080/api/products?size=3&page=0&sort=iD
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
+
+### product delete
+DELETE http://localhost:8080/api/products/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbGxsQGVtYWlsLmNvbSIsImlzcyI6ImV4YW1wbGUuY29tIiwiaWF0IjoxNzIxMTE0MjE1LCJleHAiOjE3MjExMTc4MTV9.gO2dZ9_TcJAYk1h757NoIjGbcLYqTBqb9u0qV6x4P9E
