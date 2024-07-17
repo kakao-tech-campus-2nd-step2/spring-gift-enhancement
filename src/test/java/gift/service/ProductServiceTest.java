@@ -2,6 +2,7 @@ package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,6 +42,9 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
+        category = new Category("상품권");
+        category.setId(1L);
+        given(categoryRepository.findById(1L)).willReturn(Optional.of(category));
         var byId = categoryRepository.findById(1L);
         category = byId.get();
         product = new Product(1L, "productName", 10000, "image.jpg", category);
@@ -53,9 +57,11 @@ class ProductServiceTest {
     @DisplayName("상품 저장 후 전체 상품 조회")
     public void saveAndGetAllProductsTest() throws NonIntegerPriceException {
         // given
-        when(productRepository.save(product)).thenReturn(product);
+        given(productRepository.save(product)).willReturn(product);
         var productList = Collections.singletonList(product);
-        when(productRepository.findAll()).thenReturn(productList);
+        given(productRepository.findAll()).willReturn(productList);
+
+
 
         // when
         Product savedProduct = productService.createProduct(productDto);  // 실제 저장 호출
