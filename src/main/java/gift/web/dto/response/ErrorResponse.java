@@ -1,6 +1,6 @@
 package gift.web.dto.response;
 
-import gift.web.validation.exception.ErrorRespondable;
+import gift.web.validation.exception.CustomException;
 import gift.web.validation.exception.code.ErrorCode;
 import java.time.LocalDateTime;
 import org.springframework.validation.BindingResult;
@@ -19,9 +19,8 @@ public class ErrorResponse {
         this.timestamp = LocalDateTime.now();
     }
 
-    public static ErrorResponse from(ErrorRespondable exception) {
-        ErrorCode errorCode = exception.getErrorCode();
-        return new ErrorResponse(errorCode.getCode(), errorCode.getCategory().toString(), exception.getMessage());
+    public static ErrorResponse from(CustomException exception) {
+        return new ErrorResponse(exception.getErrorCode().getCode(), exception.getErrorCode().getCategory().getDescription(), exception.getMessage());
     }
 
     public static ErrorResponse from(BindingResult bindingResult) {

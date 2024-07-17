@@ -1,9 +1,9 @@
 package gift.web.validation.exception.server;
 
 
-import gift.web.validation.exception.ErrorRespondable;
+import gift.web.validation.exception.CustomException;
 
-public abstract class ServerException extends RuntimeException implements ErrorRespondable {
+public abstract class ServerException extends CustomException {
 
     protected ServerException() {
         super();

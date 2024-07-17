@@ -4,6 +4,7 @@ import gift.authentication.token.JwtResolver;
 import gift.authentication.token.Token;
 import gift.authentication.token.TokenContext;
 import gift.web.validation.exception.client.InvalidCredentialsException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +41,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        throw new InvalidCredentialsException();
+        throw new JwtException("Invalid token");
     }
 
     @Override
