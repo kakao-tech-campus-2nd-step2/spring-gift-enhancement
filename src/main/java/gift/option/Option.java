@@ -21,7 +21,7 @@ public class Option {
     }
 
     public Option(OptionRequest optionRequest, Product product) {
-        this.name = optionRequest.getName();
+        this.name = optionRequest.getOptionName();
         this.quantity = optionRequest.getQuantity();
         this.product = product;
     }
@@ -32,7 +32,7 @@ public class Option {
     }
 
     public void updateOption(OptionRequest optionRequest){
-        this.name = optionRequest.getName();
+        this.name = optionRequest.getOptionName();
         this.quantity = optionRequest.getQuantity();
     }
 
