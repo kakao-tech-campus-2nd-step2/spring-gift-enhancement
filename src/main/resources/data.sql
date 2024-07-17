@@ -15,6 +15,14 @@ insert into PRODUCTS (name, price, image_url, category_id) values ('productC', 1
 insert into PRODUCTS (name, price, image_url, category_id) values ('productD', 50000, 'http://d.com', 4L);
 insert into PRODUCTS (name, price, image_url, category_id) values ('productE', 3000, 'http://e.com', 5L);
 
+insert into OPTIONS (name, quantity, product_id) values ('productA_optionA', 100, 1L);
+insert into OPTIONS (name, quantity, product_id) values ('productA_optionB', 500, 1L);
+insert into OPTIONS (name, quantity, product_id) values ('productA_optionC', 999, 1L);
+insert into OPTIONS (name, quantity, product_id) values ('productB_optionA', 1, 2L);
+insert into OPTIONS (name, quantity, product_id) values ('productC_optionA', 100000000, 3L);
+insert into OPTIONS (name, quantity, product_id) values ('productD_optionA', 10, 4L);
+insert into OPTIONS (name, quantity, product_id) values ('productE_optionA', 232324, 5L);
+
 INSERT INTO MEMBER(email,password,role) VALUES ('aaa123@a.com', '1234', 'ROLE_ADMIN');
 INSERT INTO MEMBER(email,password,role) VALUES ('bbb123@b.com', '1234', 'ROLE_USER');
 INSERT INTO MEMBER(email,password,role) VALUES ('ccc123@c.com', '1234', 'ROLE_USER');
