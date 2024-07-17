@@ -3,8 +3,10 @@ package gift.JpaDataTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import gift.domain.cart.CartItem;
-import gift.domain.cart.JpaCartItemRepository;
+import gift.domain.Category.Category;
+import gift.domain.Category.JpaCategoryRepository;
+import gift.domain.cartItem.CartItem;
+import gift.domain.cartItem.JpaCartItemRepository;
 import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
 import gift.domain.user.JpaUserRepository;
@@ -35,20 +37,27 @@ public class CartItemRepositoryTest {
     @Autowired
     private JpaProductRepository productRepository;
     @Autowired
+    private JpaCategoryRepository categoryRepository;
+    @Autowired
     private EntityManager entityManager;
 
     private User user;
     private Product product1;
     private Product product2;
+    private Category savedCategory1;
+    private Category savedCategory2;
 
     @BeforeEach
     void setUp() {
+        savedCategory1 = categoryRepository.saveAndFlush(new Category("리빙/주방", "리빙/주방 관련 카테고리"));
+        savedCategory2 = categoryRepository.saveAndFlush(new Category("스포츠", "스포츠 관련 카테고리"));
+
         User user = new User("minji@example.com", "password1");
         User savedUser = userRepository.saveAndFlush(user);
         this.user = savedUser;
 
-        Product product1 = new Product("아이스 아메리카노 T", 4500, "https://example.com/image.jpg");
-        Product product2 = new Product("아이스 카페모카 M", 6300, "https://example.com/image.jpg");
+        Product product1 = new Product("아이스 아메리카노 T",  savedCategory1, 4500, "https://example.com/image.jpg");
+        Product product2 = new Product("아이스 카페모카 M", savedCategory2, 6300, "https://example.com/image.jpg");
         Product savedProduct1 = productRepository.save(product1);
         Product savedProduct2 = productRepository.save(product2);
         this.product1 = savedProduct1;
