@@ -15,6 +15,7 @@ public class ExceptionMessage {
     public static final String UNAUTHORIZATION_EXCEPTION =  "인증되지 않은 사용자 입니다. 다시 로그인 해주세요.";
     public static final String OPTION_NAME_DUPLICATION =  "중복된 옵션 이름 입니다.";
     public static final String OPTION_NOT_FOUND =  "해당 옵션은 존재하지 않습니다.";
+    public static final String DENY_OPTION_DELETE =  "상품의 옵션은 항상 1개 이상이어야 합니다.";
 
 
 
