@@ -220,7 +220,7 @@ class ProductControllerTest {
 
         //excepted
         mvc.perform(post("/products/{id}/options", 1L)
-                        .param("optionName", "TEST")
+                        .param("optionName", "01 [Best] 시어버터 핸드 & 시어 스틱 립 밤")
                         .param("optionQuantity", "1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/products/{id}/options"))
@@ -241,5 +241,21 @@ class ProductControllerTest {
                 .andDo(print());
 
     }
+
+    @Test
+    @DisplayName("옵션 삭제 API 테스트")
+    void 옵션_삭제_API_테스트() throws Exception{
+        //given
+
+        //expected
+        mvc.perform(post("/products/{product_id}/delete/{option_id}", 1, 1))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/products"))
+                .andExpect(redirectedUrl("/products"))
+                .andDo(print());
+
+        verify(optionService, times(1)).deleteOneOption(1L, 1L);
+    }
+
 
 }
