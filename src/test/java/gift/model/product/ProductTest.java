@@ -18,7 +18,7 @@ public class ProductTest {
         String name = "테스트 상품";
         Integer price = 10000;
         String imageUrl = "test.jpg";
-        Category category = new Category("카테고리");
+        Category category = new Category("category", "ABCD", "test", "test");
 
         //when
         Product product = Product.create(null, name, price, imageUrl, category);
@@ -39,7 +39,7 @@ public class ProductTest {
 
         Integer price = 10000;
         String imageUrl = "test.jpg";
-        Category category = new Category("카테고리");
+        Category category = new Category("category", "ABCD", "test", "test");
 
         //when
         // then
@@ -56,7 +56,7 @@ public class ProductTest {
 
         Integer price = 10000;
         String imageUrl = "test.jpg";
-        Category category = new Category("카테고리");
+        Category category = new Category("category", "ABCD", "test", "test");
 
         //when
         Product product = Product.create(null, name, price, imageUrl, category);

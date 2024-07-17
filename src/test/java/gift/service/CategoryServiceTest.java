@@ -31,8 +31,9 @@ public class CategoryServiceTest {
     @DisplayName("카테고리 생성 테스트")
     void 카테고리_생성() {
         // given
-        CategoryCommand.Register command = new CategoryCommand.Register("카테고리");
-        given(categoryRepository.save(any(Category.class))).willReturn(new Category("카테고리"));
+        CategoryCommand.Register command = new CategoryCommand.Register("카테고리", "red", "설명", "url");
+        given(categoryRepository.save(any(Category.class))).willReturn(
+            new Category("카테고리", "red", "설명", "url"));
 
         // when
         final CategoryModel.Info result = categoryService.createCategory(command);
@@ -45,14 +46,15 @@ public class CategoryServiceTest {
     @DisplayName("카테고리 생성 - 중복된 이름으로 인한 실패 테스트")
     void 카테고리_생성_중복_실패() {
         // given
-        CategoryCommand.Register command = new CategoryCommand.Register("카테고리");
+        CategoryCommand.Register command = new CategoryCommand.Register("카테고리", "red", "설명", "url");
         given(categoryRepository.findByName(command.name())).willReturn(
-            Optional.of(new Category("카테고리")));
+            Optional.of(new Category("카테고리", "red", "설명", "url")));
 
         // when & then
         assertThrows(IllegalArgumentException.class, () -> {
             categoryService.createCategory(command);
         });
     }
+
 
 }
