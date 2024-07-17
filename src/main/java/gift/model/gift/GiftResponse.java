@@ -1,6 +1,11 @@
 package gift.model.gift;
 
 import gift.model.category.CategoryResponse;
+import gift.model.option.Option;
+import gift.model.option.OptionResponse;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GiftResponse {
 
@@ -14,17 +19,27 @@ public class GiftResponse {
 
     private CategoryResponse category;
 
+    private List<OptionResponse> options;
 
-    public GiftResponse(Long id, String name, int price, String imageUrl, CategoryResponse category) {
+
+    public GiftResponse(Long id, String name, int price, String imageUrl, CategoryResponse category, List<OptionResponse> options) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
     public static GiftResponse from(Gift gift) {
-        return new GiftResponse(gift.getId(), gift.getName(), gift.getPrice(), gift.getImageUrl(), CategoryResponse.fromEntity(gift.getCategory()));
+        return new GiftResponse(gift.getId(),
+                gift.getName(),
+                gift.getPrice(),
+                gift.getImageUrl(),
+                CategoryResponse.fromEntity(gift.getCategory()),
+                gift.getOptions().stream()
+                        .map(OptionResponse::from)
+                        .collect(Collectors.toList()));
     }
 
     public Long getId() {
@@ -65,5 +80,13 @@ public class GiftResponse {
 
     public void setCategory(CategoryResponse category) {
         this.category = category;
+    }
+
+    public List<OptionResponse> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<OptionResponse> options) {
+        this.options = options;
     }
 }

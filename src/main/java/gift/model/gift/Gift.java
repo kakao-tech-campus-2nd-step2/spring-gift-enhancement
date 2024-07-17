@@ -1,6 +1,7 @@
 package gift.model.gift;
 
 import gift.model.category.Category;
+import gift.model.option.Option;
 import gift.model.wish.Wish;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -12,8 +13,6 @@ import java.util.List;
 @Table(name = "gift")
 public class Gift {
 
-    @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
-    protected List<Wish> wishes = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +32,12 @@ public class Gift {
     @JoinColumn(name = "category_id")
     @NotNull
     private Category category;
+
+    @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
+    protected List<Wish> wishes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
+    protected List<Option> options = new ArrayList<>();
 
     public Gift() {
     }
@@ -76,6 +81,10 @@ public class Gift {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     private boolean isValidName(String name) {

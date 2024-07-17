@@ -91,6 +91,10 @@ VALUES ('carrot', 1000, 'image29', 5);
 INSERT INTO gift (name, price, imageUrl, category_id)
 VALUES ('tomato', 1500, 'image30', 5);
 
+INSERT INTO gift_option (name, quantity, gift_id)
+VALUES ('Option1-Gift1', 10, 1),
+       ('Option2-Gift1', 5, 1),
+       ('Option3-Gift1', 20, 1);
 
 INSERT INTO users (email, password)
 VALUES ('admin@email.com', 'password');
