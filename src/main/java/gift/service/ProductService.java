@@ -4,7 +4,7 @@ import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
 import gift.exception.CategoryNotFoundException;
-import gift.exception.OptionAlreadyExistsException;
+import gift.exception.DuplicateOptionException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -52,6 +54,18 @@ public class ProductService {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(CategoryNotFoundException::new);
         Product product = new Product(request.getName(), request.getPrice(), request.getImageUrl(), category);
+
+        Set<String> optionNames = request.getOptions().stream()
+                .map(OptionRequest::getName)
+                .collect(Collectors.toSet());
+
+        if (optionNames.size() < request.getOptions().size()) {
+            throw new DuplicateOptionException();
+        }
+
+        request.getOptions().stream()
+                .map(optionRequest -> new Option(product, optionRequest.getName(), optionRequest.getQuantity()))
+                .forEach(product.getOptions()::add);
 
         productRepository.save(product);
     }
@@ -93,7 +107,7 @@ public class ProductService {
                 .anyMatch(option -> option.getName().equals(request.getName()));
 
         if (optionExists) {
-            throw new OptionAlreadyExistsException();
+            throw new DuplicateOptionException();
         }
 
         Option option = new Option(product, request.getName(), request.getQuantity());
