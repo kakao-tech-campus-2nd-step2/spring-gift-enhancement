@@ -24,7 +24,10 @@ public enum ErrorMessage {
 
     /* CategoryService */
     CATEGORY_NOT_FOUND("존재하지 않는 카테고리입니다."),
-    CATEGORY_NAME_NOT_DUPLICATES("이미 존재하는 카테고리 이름입니다.");
+    CATEGORY_NAME_NOT_DUPLICATES("이미 존재하는 카테고리 이름입니다."),
+
+    /* ProductService */
+    OPTION_ALREADY_EXISTS("이미 존재하는 옵션입니다.");
 
     private final String message;
 

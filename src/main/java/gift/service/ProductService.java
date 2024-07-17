@@ -4,6 +4,7 @@ import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
 import gift.exception.CategoryNotFoundException;
+import gift.exception.OptionAlreadyExistsException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -87,6 +88,13 @@ public class ProductService {
     public void addOption(Long productId, OptionRequest request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
+
+        boolean optionExists = product.getOptions().stream()
+                .anyMatch(option -> option.getName().equals(request.getName()));
+
+        if (optionExists) {
+            throw new OptionAlreadyExistsException();
+        }
 
         Option option = new Option(product, request.getName(), request.getQuantity());
 
