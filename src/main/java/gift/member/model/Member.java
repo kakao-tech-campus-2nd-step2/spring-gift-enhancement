@@ -29,7 +29,6 @@ public class Member {
         this.email = email;
         this.password = password;
     }
-
     public Long getMemberId() {
         return memberId;
     }
