@@ -1,19 +1,29 @@
 package gift.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Entity(name = "categories")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, unique = true)
+    @NotNull
+    @NotBlank
+    @Column(unique = true)
     private String name;
-    @Column(nullable = false)
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", message = "색상 코드가 적절하지 않습니다.")
     private String color;
-    @Column(nullable = false)
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^https", message = "이미지 주소가 적절하지 않습니다.")
     private String imageUrl;
-    @Column(nullable = false)
+    @NotNull
+    @NotBlank
     private String description;
 
     public Category() {
