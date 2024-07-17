@@ -8,7 +8,6 @@ import gift.entity.Category;
 import gift.exception.CategoryNameDuplicateException;
 import gift.exception.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -47,10 +46,10 @@ class CategoryServiceTest {
         when(categoryRepository.findAll()).thenReturn(categoryList);
 
         //When
-        List<CategoryResponse> categoryResponses = categoryService.getAllCategories();
+        List<CategoryResponse> categoryResponses = categoryService.getAllCategoryResponses();
 
         //Then
-        Assertions.assertThat(categoryResponses)
+        assertThat(categoryResponses)
                 .hasSize(3)
                 .extracting("name")
                 .containsExactly("상품권", "교환권", "패션잡화");

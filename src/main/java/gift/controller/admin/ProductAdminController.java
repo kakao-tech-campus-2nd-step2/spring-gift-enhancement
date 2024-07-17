@@ -38,7 +38,7 @@ public class ProductAdminController {
     @GetMapping("/add")
     public String getAddForm(Model model) {
         model.addAttribute("addProductRequest", new AddProductRequest("", 0, "", 0L));
-        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("categories", categoryService.getAllCategoryResponses());
         return "version-SSR/add-form";
     }
 
@@ -68,7 +68,7 @@ public class ProductAdminController {
     public String getEditForm(@PathVariable("id") long id, Model model) {
         Product existingProduct = productService.getProduct(id);
         model.addAttribute("updateProductRequest", new UpdateProductRequest(existingProduct.getId(), existingProduct.getName(), existingProduct.getPrice(), existingProduct.getImageUrl(), existingProduct.getId()));
-        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("categories", categoryService.getAllCategoryResponses());
         return "version-SSR/edit-form";
     }
 

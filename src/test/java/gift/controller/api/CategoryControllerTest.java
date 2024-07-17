@@ -67,7 +67,7 @@ class CategoryControllerTest {
         categoryResponses.add(new CategoryResponse(2L, "백화점", "색", "이미지주소", "설명"));
 
         //When
-        when(categoryService.getAllCategories()).thenReturn(categoryResponses);
+        when(categoryService.getAllCategoryResponses()).thenReturn(categoryResponses);
 
         //Then
         mockMvc.perform(MockMvcRequestBuilders.get(URL))

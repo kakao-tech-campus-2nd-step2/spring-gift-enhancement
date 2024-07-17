@@ -22,7 +22,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<CategoryResponse> getAllCategories() {
+    public List<CategoryResponse> getAllCategoryResponses() {
         return categoryRepository.findAll().
                 stream().
                 map(CategoryResponse::fromCategory)
