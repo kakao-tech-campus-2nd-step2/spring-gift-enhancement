@@ -40,7 +40,7 @@ public class WishListService {
         }
         List<WishListEntity> wishListEntities = wishListRepository.findByMemberEntity(memberEntity);
         return wishListEntities.stream()
-            .map(this::entityToDto)
+            .map(WishListEntity::toDto)
             .collect(Collectors.toList());
     }
 
@@ -53,31 +53,24 @@ public class WishListService {
         }
         Pageable pageable = PageRequest.of(page, size);
         Page<WishListEntity> wishListEntities = wishListRepository.findByMemberEntity(memberEntity, pageable);
-        return wishListEntities.map(this::entityToDto);
+        return wishListEntities.map(WishListEntity::toDto);
     }
 
     //위시리스트 추가
     @Transactional
-    public void addWishListItem(WishList item) {
-        wishListRepository.save(dtoToEntity(item));
+    public void addWishListItem(WishList wishList) {
+        MemberEntity memberEntity = memberRepository.findById(wishList.getMemberId())
+            .orElseThrow(() -> new NotFoundException("멤버가 존재하지 않습니다."));
+        ProductEntity productEntity = productRepository.findById(wishList.getProductId())
+            .orElseThrow(() -> new NotFoundException("상품이 존재하지 않습니다."));
+        WishListEntity wishListEntity =  new WishListEntity(memberEntity, productEntity);
+        wishListRepository.save(wishListEntity);
     }
 
     //위시리스트 삭제
     @Transactional
     public void deleteWishListItem(Long id) {
         wishListRepository.deleteById(id);
-    }
-
-    private WishList entityToDto(WishListEntity wishListEntity) {
-        return new WishList(wishListEntity.getMemberEntity().getId(), wishListEntity.getProductEntity().getPrice());
-    }
-
-    private WishListEntity dtoToEntity(WishList wishList) {
-        MemberEntity memberEntity = memberRepository.findById(wishList.getMemberId())
-            .orElseThrow(() -> new NotFoundException("멤버가 존재하지 않습니다."));
-        ProductEntity productEntity = productRepository.findById(wishList.getProductId())
-            .orElseThrow(() -> new NotFoundException("상품이 존재하지 않습니다."));
-        return new WishListEntity(memberEntity, productEntity);
     }
 
 }
