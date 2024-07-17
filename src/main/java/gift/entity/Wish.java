@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
-@Table(name = "wishes")
+@Table(name = "wish")
 public class Wish {
 
     @Id
