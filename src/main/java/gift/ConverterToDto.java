@@ -4,6 +4,8 @@ import gift.DTO.Category;
 import gift.DTO.CategoryDto;
 import gift.DTO.Member;
 import gift.DTO.MemberDto;
+import gift.DTO.Option;
+import gift.DTO.OptionDto;
 import gift.DTO.Product;
 import gift.DTO.ProductDto;
 import gift.DTO.WishList;
@@ -33,5 +35,10 @@ public class ConverterToDto {
     CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName(),
       category.getColor(), category.getImageUrl(), category.getDescription());
     return categoryDto;
+  }
+
+  public static OptionDto convertToOptionDto(Option option) {
+    OptionDto optionDto = new OptionDto(option.getId(), option.getName(),option.getQuantity());
+    return optionDto;
   }
 }
