@@ -21,12 +21,12 @@ public class MemberService {
 
     public String signin(LogInMemberDTO memberDTO){
         Optional<Member> Optionalmember = memberRepository.findByEmail(memberDTO.getEmail());
-        if(!Optionalmember.isPresent()){
-            Member member = new Member(memberDTO.getEmail(), memberDTO.getPassword());
-            memberRepository.save(member);
-            return createJwtToken.createJwt(member.getId(), member.getEmail());
-        }
-        throw new IllegalArgumentException("이미 가입한 이메일 입니다.");
+        Optionalmember.ifPresent(member -> {
+            throw new IllegalArgumentException("이미 가입한 이메일 입니다.");
+        });
+        Member member = new Member(memberDTO.getEmail(), memberDTO.getPassword());
+        memberRepository.save(member);
+        return createJwtToken.createJwt(member.getId(), member.getEmail());
     }
 
     public String login(LogInMemberDTO member) {
