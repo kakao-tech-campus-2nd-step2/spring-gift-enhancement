@@ -28,11 +28,14 @@
             <td th:text="${productDto.price()}"></td>
             <td th:text="${productDto.imageUrl()}"></td>
             <td>
+                <form th:action="@{/products/{id}/options(id=${productDto.id()})}" method="get" class="d-inline">
+                    <button type="submit" class="btn btn-success btn-sm">상품 옵션 보기</button>
+                </form>
                 <form th:action="@{/products/{id}/edit(id=${productDto.id()})}" method="get" class="d-inline">
-                    <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                    <button type="submit" class="btn btn-warning btn-sm">상품 정보 수정</button>
                 </form>
                 <form th:action="@{/products/{id}/delete(id=${productDto.id()})}" method="post" class="d-inline">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    <button type="submit" class="btn btn-danger btn-sm">상품 삭제</button>
                 </form>
             </td>
         </tr>
