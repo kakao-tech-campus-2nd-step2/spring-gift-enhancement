@@ -84,6 +84,6 @@ public class WishServiceTest {
         wishRequestDto.setProductId(1L);
         return wishRequestDto;
     }
-    
-    
+
+
 }

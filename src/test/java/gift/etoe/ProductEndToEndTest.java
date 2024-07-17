@@ -4,14 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.category.model.Category;
 import gift.category.model.CategoryRequestDto;
-import gift.common.model.PageResponseDto;
 import gift.member.model.MemberRequestDto;
 import gift.product.model.ProductRequestDto;
-import gift.product.model.ProductResponseDto;
 import java.net.URI;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -74,7 +70,8 @@ class ProductEndToEndTest {
     private void saveCategory(HttpHeaders headers) {
         var categoryUrl = "http://localhost:" + port + "/api/categories";
         var categoryRequest = new CategoryRequestDto("test", "##test", "test.jpg", "test");
-        var categoryRequestEntity = new RequestEntity<>(categoryRequest, headers, HttpMethod.POST, URI.create(categoryUrl));
+        var categoryRequestEntity = new RequestEntity<>(categoryRequest, headers, HttpMethod.POST,
+            URI.create(categoryUrl));
         var categoryResponseEntity = restTemplate.exchange(categoryRequestEntity, String.class);
     }
 }

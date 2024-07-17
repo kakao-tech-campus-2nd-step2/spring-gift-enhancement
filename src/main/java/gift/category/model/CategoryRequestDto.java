@@ -3,6 +3,7 @@ package gift.category.model;
 import jakarta.validation.constraints.NotBlank;
 
 public class CategoryRequestDto {
+
     @NotBlank
     private String name;
     private String color;
@@ -35,7 +36,7 @@ public class CategoryRequestDto {
         return description;
     }
 
-    public Category toEntity(){
+    public Category toEntity() {
         return new Category(
             name,
             color,

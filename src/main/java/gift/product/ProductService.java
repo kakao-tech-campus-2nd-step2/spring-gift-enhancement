@@ -52,7 +52,8 @@ public class ProductService {
             .orElseThrow(() -> new IllegalArgumentException("Category 값이 잘못되었습니다."));
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Product 값이 잘못되었습니다."));
-        product.updateInfo(productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getImageUrl(), category);
+        product.updateInfo(productRequestDto.getName(), productRequestDto.getPrice(),
+            productRequestDto.getImageUrl(), category);
     }
 
     public void deleteProductById(Long id) {

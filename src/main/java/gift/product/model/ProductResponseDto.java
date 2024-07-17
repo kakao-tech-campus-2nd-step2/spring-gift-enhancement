@@ -11,7 +11,8 @@ public class ProductResponseDto {
     public ProductResponseDto() {
     }
 
-    public ProductResponseDto(Long id, String name, Integer price, String imageUrl, Long categoryId) {
+    public ProductResponseDto(Long id, String name, Integer price, String imageUrl,
+        Long categoryId) {
         this.imageUrl = imageUrl;
         this.price = price;
         this.name = name;
