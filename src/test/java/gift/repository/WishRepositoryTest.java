@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.entity.Category;
 import gift.entity.Member;
 import gift.entity.Product;
 import gift.entity.Wish;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
@@ -16,16 +18,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@DisplayName("위시 레포티토리 단위테스트")
 class WishRepositoryTest {
 
     @Autowired
+    private TestEntityManager testEntityManager;
+    @Autowired
     private WishRepository wishRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
 
     private Member testMember;
     private Product testProduct1;
@@ -34,16 +33,19 @@ class WishRepositoryTest {
     @BeforeEach
     void setUp() {
         testMember = new Member("test@email.com", "password");
-        memberRepository.save(testMember);
+        testEntityManager.persist(testMember);
 
-        testProduct1 = new Product("almond", 500, "almond.jpg");
-        testProduct2 = new Product("ice", 9000, "ice.jpg");
-        productRepository.save(testProduct1);
-        productRepository.save(testProduct2);
+        Category testCategory = new Category("음식", "테스트", "테스트", "테스트");
+        testEntityManager.persist(testCategory);
+
+        testProduct1 = new Product("almond", 500, "almond.jpg", testCategory);
+        testProduct2 = new Product("ice", 900, "ice.jpg", testCategory);
+        testEntityManager.persist(testProduct1);
+        testEntityManager.persist(testProduct2);
     }
 
     @Test
-    @DisplayName("멤버의 전체 위시 찾기")
+    @DisplayName("특정 멤버의 위시 전체 조회")
     void findAllByMemberIdWithProduct() {
         //Given
         Wish testWish1 = new Wish(testMember, 100, testProduct1);
@@ -64,8 +66,8 @@ class WishRepositoryTest {
     }
 
     @Test
-    @DisplayName("멤버, 상품으로 위시 찾기")
-    void findByMemberIdAndProductId() {
+    @DisplayName("멤버와 상품으로 위시 조회")
+    void findByMemberAndProduct() {
         //Given
         Wish testWish1 = new Wish(testMember, 100, testProduct1);
         wishRepository.save(testWish1);
@@ -80,5 +82,4 @@ class WishRepositoryTest {
                     assertThat(w.getProduct()).isEqualTo(testProduct1);
                 });
     }
-
 }

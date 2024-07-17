@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.request.MemberRequest;
 import gift.entity.Member;
 import gift.exception.EmailDuplicateException;
 import gift.exception.MemberNotFoundException;
@@ -17,25 +18,23 @@ public class MemberService {
     }
 
     @Transactional
-    public Long registerMember(String email, String password) {
-        memberRepository.findByEmail(email)
-                .ifPresent(member -> {
-                    throw new EmailDuplicateException(member);
-                });
-        Member member = new Member(email, password);
+    public Long register(MemberRequest request) {
+        if (memberRepository.existsByEmail(request.email())) {
+            throw new EmailDuplicateException(request.email());
+        }
+        Member member = new Member(request.email(), request.password());
         return memberRepository.save(member).getId();
     }
 
 
-    public Long login(String email, String password) {
-        Member registeredMember = memberRepository.findByEmailAndPassword(email, password)
+    public Long login(MemberRequest request) {
+        Member registeredMember = memberRepository.findByEmailAndPassword(request.email(), request.password())
                 .orElseThrow(MemberNotFoundException::new);
         return registeredMember.getId();
     }
 
-    public Member getMemberById(Long memberId) {
+    public Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
     }
-
 }

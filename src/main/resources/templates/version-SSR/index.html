@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>상품 관리</title>
-    <link th:href="@{/style.css}" rel="stylesheet"/>
+가    <link rel="stylesheet" th:href="@{/style.css}"/>
 
     <script>
         function submitForm(id) {
@@ -45,7 +45,7 @@
         <button id="addButton">상품 추가</button>
     </a>
     <button form="all" id="selectDeleteButton" onclick="submitSelectDelete()" type="button">선택된 상품들 일괄 삭제</button>
-    <form id="all" th:action="@{/deleteSelected}" method="post">
+    <form id="all" method="post" th:action="@{/deleteSelected}">
 
         <div>
             <table>
@@ -54,6 +54,7 @@
                     <th>선택</th>
                     <th>Actions</th>
                     <th>ID</th>
+                    <th>Category</th>
                     <th>NAME</th>
                     <th>PRICE</th>
                     <th>IMAGE</th>
@@ -62,27 +63,24 @@
                 <tbody>
                 <tr th:each="product : ${products}">
                     <td>
-                        <input type="checkbox" th:value="${product.id}" name="productIds"/>
+                        <input name="productIds" th:value="${product.id}" type="checkbox"/>
                     </td>
                     <td>
                         <!-- 삭제 폼 -->
-                        <button type="button" id="deleteButton" th:onclick="'submitForm(\'' + ${product.id} + '\')'">
+                        <button id="deleteButton" th:onclick="'submitForm(\'' + ${product.id} + '\')'" type="button">
                             삭제
                         </button>
 
                         <a th:href="@{/edit/{id}(id=${product.id})}">
-                            <button type="button" id="editButton">수정</button>
+                            <button id="editButton" type="button">수정</button>
                         </a>
-                        <!--                        <form th:action="@{/edit}" method="get" style="display:inline;">-->
-                        <!--                            <input type="hidden" th:value="${product.id}" name="productId"/>-->
-                        <!--                            <button id="editButton" type="submit">수정</button>-->
-                        <!--                        </form>-->
                     </td>
                     <td th:text="${product.id}">id</td>
+                    <td th:text="${product.categoryName}">category</td>
                     <td th:text="${product.name}">name</td>
                     <td th:text="${product.price}">price</td>
                     <td>
-                        <img th:src="${product.imageUrl}" width="200" height="200" alt="Product Image"/>
+                        <img alt="Product Image" height="200" th:src="${product.imageUrl}" width="200"/>
                     </td>
                 </tr>
                 </tbody>
@@ -93,8 +91,8 @@
 </div>
 
 <!-- 단일 상품 삭제 폼 -->
-<form id="deleteForm" th:action="@{/delete}" method="post" style="display:none;">
-    <input type="hidden" id="deleteFormInputId" name="productId" \>  <!--name은 모델의 이름 -->
+<form id="deleteForm" method="post" style="display:none;" th:action="@{/delete}">
+    <input \ id="deleteFormInputId" name="productId" type="hidden">  <!--name은 모델의 이름 -->
 </form>
 
 </body>

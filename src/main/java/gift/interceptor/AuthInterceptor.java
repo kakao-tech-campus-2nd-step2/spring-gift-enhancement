@@ -29,8 +29,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
-        request.setAttribute("memberId", tokenService.getMemberIdByToken(token));
+        request.setAttribute("memberId", tokenService.getMemberId(token));
         return true;
     }
-
 }

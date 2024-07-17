@@ -64,4 +64,10 @@ public class ApiGlobalExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ProblemDetail handleCategoryNotFoundException(CategoryNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+        problemDetail.setTitle(e.getMessage());
+        return problemDetail;
+    }
 }

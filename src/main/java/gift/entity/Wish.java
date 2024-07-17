@@ -1,7 +1,6 @@
 package gift.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,26 +14,24 @@ public class Wish {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "memberId", foreignKey = @ForeignKey(name = "fk_wish_member_id_ref_member_id"))
+    @JoinColumn(name = "memberId", nullable = false, foreignKey = @ForeignKey(name = "fk_wish_member_id_ref_member_id"))
     private Member member;
 
-    @NotNull
-    private Integer amount;
+    @Column(nullable = false)
+    private Integer quantity;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "productId", foreignKey = @ForeignKey(name = "fk_wish_product_id_ref_product_id"))
+    @JoinColumn(name = "productId", nullable = false, foreignKey = @ForeignKey(name = "fk_wish_product_id_ref_product_id"))
     private Product product;
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdTime;
 
-    public Wish(Member member, Integer amount, Product product) {
+    public Wish(Member member, Integer quantity, Product product) {
         this.member = member;
-        this.amount = amount;
+        this.quantity = quantity;
         this.product = product;
     }
 
@@ -45,8 +42,8 @@ public class Wish {
         return id;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public Integer getQuantity() {
+        return quantity;
     }
 
     public Product getProduct() {
@@ -57,8 +54,7 @@ public class Wish {
         return member;
     }
 
-    public void changeAmount(Integer amount) {
-        this.amount = amount;
+    public void updateQuantity(Integer amount) {
+        this.quantity = amount;
     }
-
 }
