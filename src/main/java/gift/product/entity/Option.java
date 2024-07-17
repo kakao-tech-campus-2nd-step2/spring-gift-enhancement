@@ -1,6 +1,5 @@
 package gift.product.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,16 +22,17 @@ public class Option {
     @Column(nullable = false)
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     protected Option() {
     }
 
-    public Option(String name, Integer quantity) {
+    public Option(String name, Integer quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
+        this.product = product;
     }
 
     public Long getId() {
@@ -55,7 +55,7 @@ public class Option {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Option) {
-            return this.hashCode() == ((Option) obj).hashCode();
+            return this.hashCode() == obj.hashCode();
         }
         return false;
     }

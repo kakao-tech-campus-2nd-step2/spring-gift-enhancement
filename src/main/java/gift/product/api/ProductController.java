@@ -1,6 +1,7 @@
 package gift.product.api;
 
 import gift.product.application.ProductService;
+import gift.product.dto.OptionRequest;
 import gift.product.dto.OptionResponse;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
@@ -42,12 +43,6 @@ public class ProductController {
         return productService.getProductByIdOrThrow(id);
     }
 
-    // 상품 옵션 조회
-    @GetMapping("/{id}/options")
-    public Set<OptionResponse> getProductOptions(@PathVariable("id") Long id) {
-        return productService.getProductOptionsByIdOrThrow(id);
-    }
-
     // 상품 추가
     @PostMapping
     public ProductResponse addProduct(@RequestBody @Valid ProductRequest request) {
@@ -71,6 +66,19 @@ public class ProductController {
     public void updateProduct(@PathVariable("id") Long id,
                               @RequestBody @Valid ProductRequest request) {
         productService.updateProduct(id, request);
+    }
+
+    // 상품 옵션 조회
+    @GetMapping("/{id}/options")
+    public Set<OptionResponse> getProductOptions(@PathVariable("id") Long id) {
+        return productService.getProductOptionsByIdOrThrow(id);
+    }
+
+    // 상품 옵션 추가
+    @PostMapping ("/{id}/options")
+    public OptionResponse addOptionToProduct(@PathVariable("id") Long id,
+                                             @RequestBody @Valid OptionRequest request) {
+        return productService.addOptionToProduct(id, request);
     }
 
 }

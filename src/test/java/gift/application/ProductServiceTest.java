@@ -49,7 +49,7 @@ class ProductServiceTest {
             .setDescription("")
             .build();
 
-    private final Option option = new Option("옵션", 10);
+    private final String optionName = "옵션";
 
     @Test
     @DisplayName("상품 전체 조회 서비스 테스트")
@@ -113,7 +113,7 @@ class ProductServiceTest {
                 1000,
                 "https://testshop.com",
                 category.getName(),
-                option.getName());
+                optionName);
         Product product = ProductMapper.toEntity(request, category);
         given(productRepository.save(any())).willReturn(product);
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
@@ -155,7 +155,7 @@ class ProductServiceTest {
                 product.getPrice(),
                 product.getImageUrl(),
                 category.getName(),
-                option.getName());
+                optionName);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
 
@@ -173,7 +173,7 @@ class ProductServiceTest {
                 3000,
                 "https://testshop.io",
                 category.getName(),
-                option.getName());
+                optionName);
         given(productRepository.findById(anyLong())).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> productService.updateProduct(productId, request))

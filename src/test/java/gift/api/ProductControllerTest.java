@@ -10,7 +10,6 @@ import gift.product.api.ProductController;
 import gift.product.application.ProductService;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
-import gift.product.entity.Option;
 import gift.product.entity.Product;
 import gift.product.util.ProductMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -60,7 +59,7 @@ class ProductControllerTest {
             .setDescription("")
             .build();
 
-    private final Option option = new Option("옵션", 10);
+    private final String optionName = "옵션";
 
     @Test
     @DisplayName("상품 전체 조회 기능 테스트")
@@ -149,7 +148,7 @@ class ProductControllerTest {
                 1000,
                 "https://testshop.com",
                 category.getName(),
-                option.getName());
+                optionName);
         ProductResponse response = ProductMapper.toResponseDto(
                 ProductMapper.toEntity(request, category)
         );
@@ -205,7 +204,7 @@ class ProductControllerTest {
                 3000,
                 "https://testshop.com",
                 category.getName(),
-                option.getName());
+                optionName);
         String requestJson = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(patch("/api/products/{id}", productId)
