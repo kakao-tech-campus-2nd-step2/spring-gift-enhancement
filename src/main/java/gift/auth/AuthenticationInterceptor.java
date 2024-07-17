@@ -26,7 +26,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     }
 
     private boolean containsAuthority(HttpServletRequest request, HttpServletResponse response, Authorized authorized) {
-        var value = authorized.value();
+        var value = authorized.value().getRole();
 
         if (Objects.isNull(request.getAttribute("role"))) {
             setUnauthorized(response);
