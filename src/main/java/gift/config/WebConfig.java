@@ -1,7 +1,8 @@
 package gift.config;
 
-import gift.common.validation.AuthInterceptor;
-import gift.common.validation.LoginMemberArgumentResolver;
+import gift.auth.AuthenticationInterceptor;
+import gift.auth.AuthorizationInterceptor;
+import gift.auth.LoginMemberArgumentResolver;
 import gift.member.persistence.MemberRepository;
 import gift.member.service.JwtProvider;
 import java.util.List;
@@ -22,9 +23,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthInterceptor(jwtProvider))
-                .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/users/**");
+        registry.addInterceptor(new AuthorizationInterceptor(jwtProvider)).order(1);
+        registry.addInterceptor(new AuthenticationInterceptor()).order(2);
     }
 
     @Override
