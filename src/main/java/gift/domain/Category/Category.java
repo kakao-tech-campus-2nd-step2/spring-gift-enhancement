@@ -37,6 +37,11 @@ public class Category {
         return description;
     }
 
+    public void update(CategoryDTO categoryDTO) {
+        this.name = categoryDTO.getName();
+        this.description = categoryDTO.getDescription();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
