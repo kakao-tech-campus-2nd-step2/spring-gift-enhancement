@@ -1,5 +1,6 @@
 package gift.domain.Category;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +14,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     private String description;
@@ -21,6 +23,12 @@ public class Category {
     }
 
     public Category(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Category(long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
