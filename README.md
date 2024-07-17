@@ -35,7 +35,7 @@
 
 ## 피드백
 - [x] JwtConfig를 Component로 변경하고 autowired사용하여 호출하도록 수정
-- [ ] WebConfig의 addArgumentResolvers가 없었을 땐 어떻게 동작했을까?
+- [x] WebConfig의 addArgumentResolvers가 없었을 땐 어떻게 동작했을까? (comment 작성)
 - [x] ProductController의 pagenation 관련 내용 requestParam 말고 pageable 객체 받아서 사용하도록 수정
   - [x] 요청에서 page=0&size=2&sort=amount,desc 하면 됨
 - [ ] webConfigTest 목적 설명
