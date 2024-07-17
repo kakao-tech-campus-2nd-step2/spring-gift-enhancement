@@ -24,7 +24,6 @@ public class WishRequestDto {
         return count;
     }
 
-
     public boolean isCountZero() {
         return count == 0;
     }

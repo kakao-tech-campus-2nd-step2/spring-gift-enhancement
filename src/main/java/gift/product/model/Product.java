@@ -1,14 +1,14 @@
 package gift.product.model;
 
+import gift.category.model.Category;
 import gift.common.exception.ProductException;
 import gift.common.model.BaseEntity;
 import gift.product.ProductErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Product extends BaseEntity {
 
@@ -18,15 +18,27 @@ public class Product extends BaseEntity {
     private Integer price;
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     protected Product() {
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         validateKakaoWord(name);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
+    public Product(Long id, String name, int price, String imageUrl, Category category) {
+        this.setId(id);
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public String getName() {
@@ -41,10 +53,15 @@ public class Product extends BaseEntity {
         return imageUrl;
     }
 
-    public void updateInfo(Product product) {
-        this.name = product.getName();
-        this.price = product.getPrice();
-        this.imageUrl = product.getImageUrl();
+    public Category getCategory() {
+        return category;
+    }
+
+    public void updateInfo(String name, Integer price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     private void validateKakaoWord(String name) throws ProductException {

@@ -23,10 +23,6 @@ public class Wish extends BaseEntity {
     protected Wish() {
     }
 
-    public Wish(Integer count) {
-        this.count = count;
-    }
-
     public Wish(Member member, Product product, Integer count) {
         this.member = member;
         this.product = product;

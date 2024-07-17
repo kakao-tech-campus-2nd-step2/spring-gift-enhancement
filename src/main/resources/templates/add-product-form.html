@@ -12,6 +12,7 @@
     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
     <p>Price: <input type="number" th:field="*{price}"></p>
     <p>Image URL: <input type="text" th:field="*{imageUrl}"></p>
+    <p>CategoryId: <input type="number" th:field="*{categoryId}"></p>>
     <p>
         <button type="submit">저장</button>
     </p>

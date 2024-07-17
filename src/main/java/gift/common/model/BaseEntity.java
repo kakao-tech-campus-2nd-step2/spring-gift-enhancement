@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 public abstract class BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +22,7 @@ public abstract class BaseEntity {
     private LocalDateTime createdDate;
 
     @LastModifiedDate
-    private  LocalDateTime modifiedDate;
+    private LocalDateTime modifiedDate;
 
     public Long getId() {
         return id;

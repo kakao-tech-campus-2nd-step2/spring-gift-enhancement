@@ -6,15 +6,18 @@ public class ProductResponseDto {
     private String name;
     private Integer price;
     private String imageUrl;
+    private Long categoryId;
 
     public ProductResponseDto() {
     }
 
-    public ProductResponseDto(Long id, String name, Integer price, String imageUrl) {
+    public ProductResponseDto(Long id, String name, Integer price, String imageUrl,
+        Long categoryId) {
         this.imageUrl = imageUrl;
         this.price = price;
         this.name = name;
         this.id = id;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -33,12 +36,17 @@ public class ProductResponseDto {
         return imageUrl;
     }
 
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
     public static ProductResponseDto from(Product product) {
         return new ProductResponseDto(
             product.getId(),
             product.getName(),
             product.getPrice(),
-            product.getImageUrl()
+            product.getImageUrl(),
+            product.getCategory().getId()
         );
     }
 }
