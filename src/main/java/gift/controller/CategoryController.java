@@ -3,14 +3,14 @@ package gift.controller;
 import gift.DTO.Category.CategoryRequest;
 import gift.DTO.Category.CategoryResponse;
 import gift.service.CategoryService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -19,8 +19,8 @@ public class CategoryController {
     }
 
     @GetMapping("api/categories")
-    public ResponseEntity<List<CategoryResponse>> readCategory(){
-        List<CategoryResponse> categories = categoryService.findAll();
+    public ResponseEntity<Page<CategoryResponse>> readCategory(@RequestParam int page, @RequestParam int size){
+        Page<CategoryResponse> categories = categoryService.findAll(page, size);
 
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
@@ -42,6 +42,6 @@ public class CategoryController {
     public ResponseEntity<Void> deleteCategory(@PathVariable Long category_id){
         categoryService.delete(category_id);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
