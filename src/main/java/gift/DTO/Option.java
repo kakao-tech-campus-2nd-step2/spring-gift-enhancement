@@ -28,6 +28,8 @@ public class Option {
   @JoinColumn(name = "product_id",nullable = false)
   private Product product;
 
+  public Option(){}
+
   public Option(Long id, String name, int quantity){
     this.id=id;
     this.name=name;

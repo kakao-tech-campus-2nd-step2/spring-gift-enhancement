@@ -17,6 +17,8 @@ public class OptionDto {
   @Max(value = 99999999, message = "옵션 수량은 1억 개 미만이어야 합니다.")
   private int quantity;
 
+  public OptionDto(){}
+
   public OptionDto(Long id, String name, int quantity){
     this.id=id;
     this.name=name;
