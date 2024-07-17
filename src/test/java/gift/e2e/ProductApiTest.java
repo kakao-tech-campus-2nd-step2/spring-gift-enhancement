@@ -1,15 +1,17 @@
-package gift.controller;
+package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.auth.JwtTokenProvider;
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
-import gift.model.Wish;
+import gift.model.Role;
+import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
-import gift.repository.WishRepository;
-import gift.request.WishListRequest;
+import gift.request.ProductAddRequest;
+import gift.request.ProductUpdateRequest;
 import gift.response.ProductResponse;
 import gift.service.MemberService;
 import java.net.URI;
@@ -31,10 +33,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class WishListApiControllerTest {
+class ProductApiTest {
 
     @LocalServerPort
     int port;
@@ -46,13 +49,13 @@ class WishListApiControllerTest {
     ProductRepository productRepository;
 
     @Autowired
-    WishRepository wishRepository;
-
-    @Autowired
     MemberService memberService;
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -60,37 +63,34 @@ class WishListApiControllerTest {
     Member member;
     String token;
     List<Product> savedProducts;
+    Category category;
 
     @BeforeEach
     void before() {
+        category = categoryRepository.save(new Category("카테고리"));
         List<Product> products = new ArrayList<>();
         IntStream.range(0, 10)
-            .forEach( i -> {
-                products.add(new Product("product"+i, 1000, "https://a.com"));
+            .forEach(i -> {
+                products.add(new Product("product" + i, 1000, "https://a.com", category));
             });
         savedProducts = productRepository.saveAll(products);
-
         member = memberService.join("aaa123@a.com", "1234");
+        member.makeAdminMember();
         token = jwtTokenProvider.generateToken(member);
-
-        List<Wish> wishes = products.stream()
-            .map(product -> new Wish(member, product))
-            .toList();
-        wishRepository.saveAll(wishes);
     }
 
     @AfterEach
     void after() {
-        wishRepository.deleteAll();
         memberRepository.delete(member);
         productRepository.deleteAll();
+        categoryRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("위시 리스트 조회 테스트")
-    void getWishList() {
+    @DisplayName("상품 조회 테스트")
+    void getAllProducts() {
         //given
-        String url = "http://localhost:" + port + "/api/wishlist";
+        String url = "http://localhost:" + port + "/api/products";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
@@ -107,68 +107,79 @@ class WishListApiControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).hasSize(10);
         IntStream.range(0, 10)
-            .forEach( i -> {
+            .forEach(i -> {
                 ProductResponse pr = response.getBody().get(i);
                 assertThat(pr.id()).isEqualTo(savedProducts.get(i).getId());
                 assertThat(pr.name()).isEqualTo(savedProducts.get(i).getName());
                 assertThat(pr.price()).isEqualTo(savedProducts.get(i).getPrice());
                 assertThat(pr.imageUrl()).isEqualTo(savedProducts.get(i).getImageUrl());
+                assertThat(pr.categoryName()).isEqualTo(savedProducts.get(i).getCategoryName());
             });
     }
 
-
     @Test
-    @DisplayName("위시 리스트 추가 성공 테스트")
-    void addMyWish() {
-        Product saved = productRepository.save(new Product("product11", 1000, "https://a.com"));
-        ResponseEntity<Void> response = addAndRemoveTest(saved.getId(), HttpMethod.POST);
+    @DisplayName("상품 추가 테스트")
+    void addProduct() {
+        //given
+        String url = "http://localhost:" + port + "/api/products";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        ProductAddRequest productAddRequest = new ProductAddRequest("product11", 1500,
+            "https://b.com", "카테고리");
+        RequestEntity<ProductAddRequest> request = new RequestEntity<>(
+            productAddRequest, headers, HttpMethod.POST, URI.create(url));
+
+        //when
+        ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
+        //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    @DisplayName("위시 리스트 추가 실패 테스트")
-    void failAddMyWish() {
-        ResponseEntity<Void> response = addAndRemoveTest(savedProducts.get(0).getId(), HttpMethod.POST);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
+    @DisplayName("상품 변경 테스트")
+    void updateProduct() {
+        //given
+        String url = "http://localhost:" + port + "/api/products";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
 
+        //기존 첫번째 상품을 변경한다.
+        ProductUpdateRequest ProductUpdateRequest = new ProductUpdateRequest(
+            savedProducts.get(0).getId(), "product11", 1500, "https://b.com", "카테고리");
+        RequestEntity<ProductUpdateRequest> request = new RequestEntity<>(
+            ProductUpdateRequest, headers, HttpMethod.PUT, URI.create(url));
 
-    @Test
-    @DisplayName("위시 리스트 삭제 성공 테스트")
-    void removeMyWish() {
-        ResponseEntity<Void> response = addAndRemoveTest(savedProducts.get(0).getId(),
-            HttpMethod.DELETE);
+        //when
+        ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
+        //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
     @Test
-    @DisplayName("위시 리스트 삭제 실패 테스트")
-    void failRemoveMyWish() {
-        Long nonExistingId = 1239L; //위시 리스트에 존재하지 않는 상품 id
-        ResponseEntity<Void> response = addAndRemoveTest(nonExistingId, HttpMethod.DELETE);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-
-
-
-
-
-    private ResponseEntity<Void> addAndRemoveTest(Long productId, HttpMethod httpMethod) {
+    @DisplayName("상품 삭제 메소드")
+    void deleteProduct() {
         //given
-        String url = "http://localhost:" + port + "/api/wishlist";
+        URI uri = UriComponentsBuilder
+            .fromUriString("http://localhost:" + port)
+            .path("/api/products")
+            .queryParam("id", savedProducts.get(0).getId())
+            .encode()
+            .build()
+            .toUri();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
 
-
-        WishListRequest wishListRequest = new WishListRequest(productId);
-
-        RequestEntity<WishListRequest> request = new RequestEntity<>(
-            wishListRequest, headers, httpMethod, URI.create(url));
+        //기존 첫번째 상품을 삭제한다.
+        RequestEntity<Void> request = new RequestEntity<>(
+            headers, HttpMethod.DELETE, uri);
 
         //when
-        return restTemplate.exchange(request, Void.class);
-
+        ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
+
 
 }

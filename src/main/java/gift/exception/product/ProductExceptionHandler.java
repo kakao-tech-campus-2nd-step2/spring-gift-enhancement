@@ -1,5 +1,6 @@
-package gift.exception;
+package gift.exception.product;
 
+import gift.exception.ErrorResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

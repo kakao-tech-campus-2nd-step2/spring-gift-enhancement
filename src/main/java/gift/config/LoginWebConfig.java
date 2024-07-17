@@ -29,7 +29,7 @@ public class LoginWebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new AuthMvcInterceptor(jwtTokenProvider))
             .order(2)
             .addPathPatterns("/view/**")
-            .excludePathPatterns("/view/products", "/view/join",
+            .excludePathPatterns("/api/**","/view/products", "/view/join",
                 "/view/login");
 
     }

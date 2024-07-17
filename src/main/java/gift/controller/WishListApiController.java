@@ -62,7 +62,7 @@ public class WishListApiController {
             throw new InputException(bindingResult.getAllErrors());
         }
 
-        wishService.removeMyWish(memberDto.id(), dto.productId());
+        wishService.deleteMyWish(memberDto.id(), dto.productId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

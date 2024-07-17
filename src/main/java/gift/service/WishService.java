@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.exception.NotFoundProductException;
+import gift.exception.product.NotFoundProductException;
 import gift.exception.wishlist.DuplicateWishException;
 import gift.exception.member.NotFoundMemberException;
 import gift.exception.wishlist.NotFoundWishException;
@@ -57,7 +57,7 @@ public class WishService {
     }
 
     @Transactional
-    public void removeMyWish(Long memberId, Long productId) {
+    public void deleteMyWish(Long memberId, Long productId) {
         wishRepository.findByMemberIdAndProductId(memberId, productId)
             .ifPresentOrElse(wishRepository::delete
                 , () -> {

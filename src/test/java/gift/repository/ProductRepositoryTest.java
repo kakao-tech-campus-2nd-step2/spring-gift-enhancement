@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
+import gift.model.Category;
 import gift.model.Product;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.hibernate.exception.DataException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,16 @@ class ProductRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
-    Product product = new Product("productA", 1000, "https://a.com");
+    @Autowired
+    CategoryRepository categoryRepository;
+
+    Category category = new Category("categoryA");
+    Product product = new Product("productA", 1000, "https://a.com", category);
+
+    @BeforeEach
+    void setUp() {
+        categoryRepository.save(category);
+    }
 
     @Test
     @DisplayName("Product insert 테스트")
@@ -40,7 +51,8 @@ class ProductRepositoryTest {
     void update() {
         Product savedProduct = productRepository.save(product);
         Long id = productRepository.findById(savedProduct.getId()).get().getId();
-        Product modifiedProduct = new Product(id, "productAB", 5000, "https://b.com");
+        Category modifieCcategory = new Category("categoryAB");
+        Product modifiedProduct = new Product(id, "productAB", 5000, "https://b.com", modifieCcategory);
         Product modifiedSavedProduct = productRepository.save(modifiedProduct);
 
         assertThat(modifiedSavedProduct.getId()).isEqualTo(id);
@@ -66,7 +78,9 @@ class ProductRepositoryTest {
         List<Product> products = new ArrayList<>();
         IntStream.range(0, 10)
             .forEach( i -> {
-                products.add(new Product("product"+i, 1000, "https://a.com"));
+                Category category = new Category("category" + i);
+                categoryRepository.save(category);
+                products.add(new Product("product"+i, 1000, "https://a.com", category));
             });
         productRepository.saveAll(products);
 

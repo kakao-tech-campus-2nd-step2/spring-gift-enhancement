@@ -1,7 +1,9 @@
 package gift.service;
 
-import gift.exception.NotFoundProductException;
+import gift.exception.category.NotFoundCategoryException;
+import gift.exception.product.NotFoundProductException;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -14,9 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Product> getAllProducts() {
@@ -33,23 +38,32 @@ public class ProductService {
     }
 
     @Transactional
-    public void addProduct(String name, Integer price, String imageUrl) {
-        Product product = new Product(name, price, imageUrl);
-        productRepository.save(product);
-    }
-
-    @Transactional
-    public void editProduct(Long id, String name, Integer price, String imageUrl) {
-        productRepository.findById(id)
-            .ifPresentOrElse(p -> p.updateProduct(name, price, imageUrl),
+    public void addProduct(String name, Integer price, String imageUrl, String categoryName) {
+        categoryRepository.findByName(categoryName)
+            .ifPresentOrElse(
+                category -> productRepository.save(new Product(name, price, imageUrl, category)),
                 () -> {
-                    throw new NotFoundProductException();
+                    throw new NotFoundCategoryException();
                 }
             );
     }
 
     @Transactional
-    public void removeProduct(Long id) {
+    public void updateProduct(Long id, String name, Integer price, String imageUrl,
+        String categoryName) {
+        productRepository.findById(id)
+            .map(product -> {
+                if (product.getCategory() == null) {
+                    throw new NotFoundCategoryException();
+                }
+                product.updateProduct(name, price, imageUrl, categoryName);
+                return product;
+            })
+            .orElseThrow(NotFoundProductException::new);
+    }
+
+    @Transactional
+    public void deleteProduct(Long id) {
         productRepository.findById(id)
             .ifPresentOrElse(productRepository::delete
                 , () -> {

@@ -8,15 +8,28 @@ import gift.model.Product;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import java.util.stream.IntStream;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
 
-@DataJpaTest
+@SpringBootTest
+@ActiveProfiles("test")
+@Sql(
+    scripts = {"/paging.sql"},
+    config = @SqlConfig(transactionMode = TransactionMode.ISOLATED),
+    executionPhase = ExecutionPhase.BEFORE_TEST_CLASS
+)
 class PagingTest {
 
     @Autowired
@@ -38,9 +51,10 @@ class PagingTest {
         PageRequest pageRequest = PageRequest.of(0, PRODUCTS_PER_PAGE, sort);
         Page<Product> paging = productRepository.findPageBy(pageRequest);
 
-        IntStream.range(0, PRODUCTS_PER_PAGE-1)
+        IntStream.range(0, PRODUCTS_PER_PAGE - 1)
             .forEach(i -> {
-                assertThat(paging.getContent().get(i).getName()).isLessThanOrEqualTo(paging.getContent().get(i+1).getName());
+                assertThat(paging.getContent().get(i).getName()).isLessThanOrEqualTo(
+                    paging.getContent().get(i + 1).getName());
             });
     }
 
@@ -50,9 +64,10 @@ class PagingTest {
         PageRequest pageRequest = PageRequest.of(0, PRODUCTS_PER_PAGE, sort);
         Page<Product> paging = productRepository.findPageBy(pageRequest);
 
-        IntStream.range(0, PRODUCTS_PER_PAGE-1)
+        IntStream.range(0, PRODUCTS_PER_PAGE - 1)
             .forEach(i -> {
-                assertThat(paging.getContent().get(i).getName()).isGreaterThanOrEqualTo(paging.getContent().get(i+1).getName());
+                assertThat(paging.getContent().get(i).getName()).isGreaterThanOrEqualTo(
+                    paging.getContent().get(i + 1).getName());
             });
     }
 
@@ -62,9 +77,10 @@ class PagingTest {
         PageRequest pageRequest = PageRequest.of(0, PRODUCTS_PER_PAGE, sort);
         Page<Product> paging = productRepository.findPageBy(pageRequest);
 
-        IntStream.range(0, PRODUCTS_PER_PAGE-1)
+        IntStream.range(0, PRODUCTS_PER_PAGE - 1)
             .forEach(i -> {
-                assertThat(paging.getContent().get(i).getPrice()).isLessThanOrEqualTo(paging.getContent().get(i+1).getPrice());
+                assertThat(paging.getContent().get(i).getPrice()).isLessThanOrEqualTo(
+                    paging.getContent().get(i + 1).getPrice());
             });
     }
 
@@ -74,12 +90,12 @@ class PagingTest {
         PageRequest pageRequest = PageRequest.of(0, PRODUCTS_PER_PAGE, sort);
         Page<Product> paging = productRepository.findPageBy(pageRequest);
 
-        IntStream.range(0, PRODUCTS_PER_PAGE-1)
+        IntStream.range(0, PRODUCTS_PER_PAGE - 1)
             .forEach(i -> {
-                assertThat(paging.getContent().get(i).getPrice()).isGreaterThanOrEqualTo(paging.getContent().get(i+1).getPrice());
+                assertThat(paging.getContent().get(i).getPrice()).isGreaterThanOrEqualTo(
+                    paging.getContent().get(i + 1).getPrice());
             });
     }
-
 
 
 }

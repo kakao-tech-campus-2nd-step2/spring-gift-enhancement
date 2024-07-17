@@ -1,5 +1,6 @@
 package gift.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gift.validation.NoKakao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,11 @@ public record ProductUpdateRequest(
     Integer price,
     @NotBlank(message = "이미지 주소를 입력해주세요.")
     @Pattern(regexp = "^(https?)://[^ /$.?#].[^ ]*$", message = "올바른 url이 아닙니다.")
-    String imageUrl
+    @JsonProperty(value = "image_url")
+    String imageUrl,
+    @NotBlank(message = "카테고리를 입력해주세요.")
+    @JsonProperty(value = "category_name")
+    String categoryName
 ) {
 
 }

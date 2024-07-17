@@ -135,7 +135,7 @@ public class PagingViewController {
     public void deleteWish(@RequestParam("id") Long id, @LoginMember LoginMemberDto loginMemberDto,
         HttpServletResponse response) throws IOException {
         try {
-            wishService.removeMyWish(loginMemberDto.id(), id);
+            wishService.deleteMyWish(loginMemberDto.id(), id);
             ScriptUtils.alertAndMovePage(response, "정상적으로 삭제되었습니다.", "/view/wish");
         } catch (WishException | IOException e) {
             ScriptUtils.alertAndBackPage(response, e.getMessage());

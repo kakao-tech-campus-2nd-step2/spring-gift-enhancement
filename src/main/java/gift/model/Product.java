@@ -4,9 +4,13 @@ package gift.model;
 import gift.exception.InputException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,21 +26,33 @@ public class Product extends BaseEntity {
     private Integer price;
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false,
+        foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"))
+    private Category category;
 
     protected Product() {
     }
 
-    public Product(Long id, String name, Integer price, String imageUrl) {
+    public Product(Long id, String name, Integer price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Product(String name, Integer price, String imageUrl) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Product(String name, Integer price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -55,16 +71,25 @@ public class Product extends BaseEntity {
         return imageUrl;
     }
 
-    public void updateProduct(String newName, Integer newPrice, String newImageUrl) {
+    public Category getCategory() {
+        return category;
+    }
+
+    public String getCategoryName() {
+        return category.getName();
+    }
+
+    public void updateProduct(String newName, Integer newPrice, String newImageUrl, String newCategoryName) {
         validateName(newName);
         validatePrice(newPrice);
         validateImageUrl(newImageUrl);
         this.name = newName;
         this.price = newPrice;
         this.imageUrl = newImageUrl;
+        category.updateCategory(newCategoryName);
     }
 
-    private void validateName(String name) {
+    public static void validateName(String name) {
         if (name == null || name.isEmpty() || name.length() > 15) {
             throw new InputException("1~15자 사이로 입력해주세요.");
         }
@@ -73,7 +98,7 @@ public class Product extends BaseEntity {
         }
     }
 
-    private void validatePrice(Integer price) {
+    public static void validatePrice(Integer price) {
         if (price == null) {
             throw new InputException("가격을 입력해주세요.");
         }
@@ -82,7 +107,7 @@ public class Product extends BaseEntity {
         }
     }
 
-    private void validateImageUrl(String imageUrl) {
+    public static void validateImageUrl(String imageUrl) {
         if (imageUrl == null || imageUrl.isBlank()) {
             throw new InputException("이미지 주소를 입력해주세요.");
         }
