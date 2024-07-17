@@ -5,7 +5,7 @@ public class MemberRequest {
     String email;
     String password;
 
-    public MemberRequest() {
+    private MemberRequest() {
     }
 
     public MemberRequest(String email, String password) {

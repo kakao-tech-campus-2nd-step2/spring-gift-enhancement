@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import gift.domain.category.entity.Category;
 import gift.domain.wishlist.dto.WishRequest;
 import gift.domain.member.entity.Member;
 import gift.domain.product.entity.Product;
@@ -45,12 +46,14 @@ class WishServiceTest {
 
     @Test
     @DisplayName("getWishesByMember 테스트")
-    void getWishesByMember() {
+    void getWishesByMemberTest() {
         // given
         Member savedMember = new Member(1L, "email@google.co.kr", "password");
 
-        Product product1 = new Product("product1", 1000, "product1.jpg");
-        Product product2 = new Product("product2", 2000, "product2.jpg");
+        Category savedCategory1 = new Category(1L, "test", "color", "image", "description");
+        Category savedCategory2 = new Category(2L, "test", "color", "image", "description");
+        Product product1 = new Product("product1", 1000, "product1.jpg",savedCategory1);
+        Product product2 = new Product("product2", 2000, "product2.jpg",savedCategory2);
 
         Wish wish1 = new Wish(savedMember, product1);
         Wish wish2 = new Wish(savedMember, product2);
@@ -82,13 +85,13 @@ class WishServiceTest {
 
     @Test
     @DisplayName("위시 리스트 추가 테스트")
-    void addWish() {
+    void createWishTest() {
         // given
         WishRequest wishRequest = new WishRequest(1L, 1L);
 
         Member savedMember = new Member(1L, "email@google.com", "password");
-        Product savedProduct = new Product(1L, "test", 1000, "test.jpg");
-        ;
+        Category savedCategory = new Category(1L, "test", "color", "image", "description");
+        Product savedProduct = new Product(1L, "test", 1000, "test.jpg", savedCategory);
 
         Wish saveWish = new Wish(savedMember, savedProduct);
         WishResponse expected = entityToDto(saveWish);
@@ -100,7 +103,7 @@ class WishServiceTest {
         doReturn(saveWish).when(wishRepository).save(any(Wish.class));
 
         // when
-        WishResponse actual = wishService.addWish(wishRequest);
+        WishResponse actual = wishService.createWish(wishRequest);
 
         // then
         assertThat(actual.getMemberId()).isEqualTo(expected.getMemberId());
@@ -110,10 +113,11 @@ class WishServiceTest {
 
     @Test
     @DisplayName("위시 리시트 삭제 테스트")
-    void deleteWish() {
+    void deleteWishTest() {
         Long id = 1L;
         Member savedMember = new Member(1L, "email@google.co.kr", "password");
-        Product savedProduct = new Product(1L, "test", 1000, "test.jpg");
+        Category savedCategory = new Category(1L, "test", "color", "image", "description");
+        Product savedProduct = new Product(1L, "test", 1000, "test.jpg", savedCategory);
 
         Wish wish = new Wish(savedMember, savedProduct);
 

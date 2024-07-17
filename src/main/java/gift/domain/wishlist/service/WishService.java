@@ -38,7 +38,7 @@ public class WishService {
             .map(this::entityToDto);
     }
 
-    public WishResponse addWish(WishRequest wishRequest) {
+    public WishResponse createWish(WishRequest wishRequest) {
         Wish wish = DtoToEntity(wishRequest);
 
         return entityToDto(wishRepository.save(wish));
@@ -51,7 +51,6 @@ public class WishService {
 
         if (wish.getMember().getId().equals(member.getId())) {
             wish.getMember().removeWish(wish);
-            wish.getProduct().removeWish(wish);
             wishRepository.delete(wish);
         }
     }

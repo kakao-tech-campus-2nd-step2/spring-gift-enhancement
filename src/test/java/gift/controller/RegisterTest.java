@@ -26,7 +26,7 @@ public class RegisterTest {
 
     @Test
     @DisplayName("회원가입 E2E 테스트")
-    void register() {
+    void registerTest() {
         var request = new MemberRequest("test@google.co.kr", "password");
         var url = "http://localhost:" + port + "/api/members/register";
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));

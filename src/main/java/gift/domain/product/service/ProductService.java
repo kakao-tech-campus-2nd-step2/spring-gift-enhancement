@@ -1,24 +1,29 @@
 package gift.domain.product.service;
 
+import gift.domain.category.entity.Category;
+import gift.domain.category.repository.CategoryRepository;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.dto.ProductResponse;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public ProductResponse getProduct(Long id) {
@@ -33,8 +38,9 @@ public class ProductService {
         return productRepository.findAll(pageable).map(this::entityToDto);
     }
 
-    public ProductResponse addProduct(ProductRequest productRequest) {
-        Product product = productRepository.save(dtoToEntity(productRequest));
+    public ProductResponse createProduct(ProductRequest productRequest) {
+        Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
+        Product product = productRepository.save(dtoToEntity(productRequest, savedCategory));
         return entityToDto(product);
     }
 
@@ -43,8 +49,10 @@ public class ProductService {
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("not found entity"));
 
-        product.update(productRequest.getName(), productRequest.getPrice(),
-            productRequest.getImageUrl());
+        Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
+
+        product.updateAll(productRequest.getName(), productRequest.getPrice(),
+            productRequest.getImageUrl(), savedCategory);
 
         return entityToDto(productRepository.save(product));
 
@@ -59,12 +67,13 @@ public class ProductService {
 
     private ProductResponse entityToDto(Product product) {
         return new ProductResponse(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl());
+            product.getImageUrl(), product.getCategory().getId());
     }
 
-    private Product dtoToEntity(ProductRequest productRequest) {
+    private Product dtoToEntity(ProductRequest productRequest, Category category) {
+
         return new Product(productRequest.getName(), productRequest.getPrice(),
-            productRequest.getImageUrl());
+            productRequest.getImageUrl(), category);
     }
 
 }

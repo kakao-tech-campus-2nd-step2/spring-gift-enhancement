@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<Page<ProductResponse>> readAll(
+    public ResponseEntity<Page<ProductResponse>> getAllProducts(
         @RequestParam(defaultValue = "0") int pageNo,
         @RequestParam(defaultValue = "10") int pageSize
     ) {
@@ -38,19 +38,18 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> read(@PathVariable("id") Long id) {
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") Long id) {
         return new ResponseEntity<>(productService.getProduct(id), HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<ProductResponse> create(
-        @RequestBody @Valid ProductRequest productRequest) {
-        ProductResponse productResponse = productService.addProduct(productRequest);
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
+        ProductResponse productResponse = productService.createProduct(productRequest);
         return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> update(@PathVariable("id") Long id,
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable("id") Long id,
         @RequestBody @Valid ProductRequest productRequest) {
         ProductResponse productResponse = productService.updateProduct(id, productRequest);
 
@@ -58,7 +57,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductResponse> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<ProductResponse> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }

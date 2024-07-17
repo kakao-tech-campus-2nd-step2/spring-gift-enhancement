@@ -49,7 +49,7 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("로그인 성공 E2E 테스트")
-    void loginSuccess() {
+    void loginSuccessTest() {
         var request = new MemberRequest("test@google.co.kr", "password");
         var url = "http://localhost:" + port + "/api/members/login";
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
@@ -60,7 +60,7 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("로그인 실패 E2E 테스트")
-    void loginFail() {
+    void loginFailTest() {
         var request = new MemberRequest("test@google.co.kr", "wrong-password");
         var url = "http://localhost:" + port + "/api/members/login";
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
