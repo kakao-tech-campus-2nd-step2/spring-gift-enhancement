@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/api/products/").hasAnyRole("SELLER", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/products/").hasAnyRole("SELLER", "ADMIN")
+                .requestMatchers("/api/categories/**").permitAll()
                 .anyRequest().authenticated())
             .sessionManagement(
                 configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
