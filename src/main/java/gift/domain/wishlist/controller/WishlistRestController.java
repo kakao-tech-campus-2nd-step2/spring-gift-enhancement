@@ -2,8 +2,8 @@ package gift.domain.wishlist.controller;
 
 import gift.config.LoginUser;
 import gift.domain.user.entity.User;
-import gift.domain.wishlist.dto.WishItemDto;
-import gift.domain.wishlist.entity.WishItem;
+import gift.domain.wishlist.dto.WishItemRequestDto;
+import gift.domain.wishlist.dto.WishItemResponseDto;
 import gift.domain.wishlist.service.WishlistService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,13 +28,13 @@ public class WishlistRestController {
     }
 
     @PostMapping
-    public ResponseEntity<WishItem> create(@RequestBody WishItemDto wishItemDto, @LoginUser User user) {
-        WishItem savedWishItem = wishlistService.create(wishItemDto, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedWishItem);
+    public ResponseEntity<WishItemResponseDto> create(@RequestBody WishItemRequestDto wishItemRequestDto, @LoginUser User user) {
+        WishItemResponseDto wishItemResponseDto = wishlistService.create(wishItemRequestDto, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(wishItemResponseDto);
     }
 
     @GetMapping
-    public ResponseEntity<Page<WishItem>> readAll(Pageable pageable, @LoginUser User user) {
+    public ResponseEntity<Page<WishItemResponseDto>> readAll(Pageable pageable, @LoginUser User user) {
         return ResponseEntity.status(HttpStatus.OK).body(wishlistService.readAll(pageable, user));
     }
 
