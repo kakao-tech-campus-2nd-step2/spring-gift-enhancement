@@ -20,6 +20,7 @@ public class Product {
     @Size(max = 15)
     private String name;
 
+    @NotNull
     private Integer price;
 
     @NotNull

@@ -1,6 +1,7 @@
 package gift.vo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -12,6 +13,7 @@ public class Member {
     private Long id;
 
     @NotNull
+    @Email
     @Column(unique = true)
     private String email;
 
