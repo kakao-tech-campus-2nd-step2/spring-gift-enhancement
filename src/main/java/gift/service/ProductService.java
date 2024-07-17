@@ -74,7 +74,8 @@ public class ProductService {
     }
 
     public List<OptionResponse> getOptionResponses(Long productId) {
-        return getProduct(productId)
+        return productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new)
                 .getOptions()
                 .stream()
                 .map(OptionResponse::fromOption)
