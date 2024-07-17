@@ -38,4 +38,8 @@ public class CustomException extends RuntimeException{
     public static CustomException invalidHeaderException() {
         return new CustomException(ErrorMessage.headerInvalid, HttpStatus.BAD_REQUEST);
     }
+
+    public static CustomException categoryNotFoundException() {
+        return new CustomException(ErrorMessage.categoryNotExists, HttpStatus.BAD_REQUEST);
+    }
 }
