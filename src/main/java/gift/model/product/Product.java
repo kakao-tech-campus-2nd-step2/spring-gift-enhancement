@@ -39,6 +39,7 @@ public class Product {
     }
 
     public void updateProduct(Product product){
+        this.category = product.getCategory();
         this.name = product.getName();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
