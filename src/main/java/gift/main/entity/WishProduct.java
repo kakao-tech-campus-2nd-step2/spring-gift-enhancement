@@ -11,11 +11,11 @@ public class WishProduct {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = true)
     public Product product;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = true)
+    @JoinColumn(name = "user_id")
     public User user;
 
 
@@ -39,4 +39,9 @@ public class WishProduct {
     public User getUser() {
         return user;
     }
+
+    public void setProductIdToNull() {
+        this.product = null;
+    }
+
 }
