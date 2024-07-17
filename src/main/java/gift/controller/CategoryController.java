@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.model.Category;
 import gift.service.CategoryService;
+import gift.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +12,11 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoryController {
     private final CategoryService categoryService;
+    private final ProductService productService;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, ProductService productService) {
         this.categoryService = categoryService;
+        this.productService = productService;
     }
 
     @GetMapping
@@ -42,6 +45,8 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        Category category = categoryService.getCategoryById(id);
+        productService.updateProductCategoryToNone(category);
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
