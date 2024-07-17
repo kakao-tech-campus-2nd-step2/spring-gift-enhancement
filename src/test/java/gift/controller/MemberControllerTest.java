@@ -70,7 +70,8 @@ class MemberControllerTest {
     void loginSuccess() throws Exception {
         // Given
         String token = "loginToken";
-        when(memberService.login(member.getEmail(), member.getPassword())).thenReturn(Optional.of(token));
+        when(memberService.login(member.getEmail(), member.getPassword())).thenReturn(
+            Optional.of(token));
 
         // When & Then
         mockMvc.perform(post("/members/login")
@@ -83,7 +84,8 @@ class MemberControllerTest {
     @Test
     void loginFail() throws Exception {
         // Given
-        when(memberService.login(member.getEmail(), member.getPassword())).thenReturn(Optional.empty());
+        when(memberService.login(member.getEmail(), member.getPassword())).thenReturn(
+            Optional.empty());
 
         // When & Then
         mockMvc.perform(post("/members/login")
