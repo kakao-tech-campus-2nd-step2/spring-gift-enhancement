@@ -4,6 +4,7 @@ import static gift.exception.ErrorMessage.OPTION_ALREADY_EXISTS;
 import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
 import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
 import static gift.exception.ErrorMessage.OPTION_NOT_FOUND;
+import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
 import static gift.exception.ErrorMessage.PRODUCT_NOT_FOUND;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -174,7 +175,7 @@ public class OptionControllerTest {
 
         @Test
         @DisplayName("option already exist error")
-        void optionNotFoundError() throws Exception {
+        void optionAlreadyExistError() throws Exception {
             //given
             long productId = 1L;
             OptionDTO optionDTO = new OptionDTO(1L, "option-1", 10);
@@ -253,7 +254,7 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().string(OPTION_NAME_LENGTH));
+                .andExpect(content().string(OPTION_QUANTITY_SIZE));
         }
     }
 
@@ -383,7 +384,7 @@ public class OptionControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(optionDTO))
                 ).andExpect(status().isBadRequest())
-                .andExpect(content().string(OPTION_NAME_LENGTH));
+                .andExpect(content().string(OPTION_QUANTITY_SIZE));
         }
     }
 

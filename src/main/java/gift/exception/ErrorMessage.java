@@ -16,4 +16,5 @@ public class ErrorMessage {
     public static final String OPTION_NOT_FOUND = "Option not found";
     public static final String OPTION_NAME_LENGTH = "Option name length must be between 1 and 50 include blank";
     public static final String OPTION_NAME_ALLOWED_CHARACTER = "Option name must consist of English, Korean, numbers, blank and special symbols (, ), [, ], +, -, &, /, _";
+    public static final String OPTION_QUANTITY_SIZE = "Option quantity size must be between 1 and 100,000,000";
 }
