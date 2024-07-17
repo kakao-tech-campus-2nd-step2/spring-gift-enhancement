@@ -5,6 +5,9 @@ import gift.DTO.LoginResponse;
 import gift.DTO.SignupRequest;
 import gift.DTO.SignupResponse;
 import gift.domain.Member;
+import gift.exception.member.DuplicatedEmailException;
+import gift.exception.member.InvalidAccountException;
+import gift.exception.member.PasswordMismatchException;
 import gift.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -34,10 +37,12 @@ public class MemberService {
     @Transactional
     public SignupResponse registerMember(SignupRequest signupRequest) {
         memberRepository.findByEmail(signupRequest.getEmail()).ifPresent(p -> {
-            throw new RuntimeException("Email already exists");
+            throw new DuplicatedEmailException();
         });
         Member member = new Member(signupRequest.getEmail(), signupRequest.getPassword());
         memberRepository.save(member);
+
+        confirmPassword(signupRequest.getPassword(), signupRequest.getConfirmPassword());
 
         String welcome = "Welcome, " + member.getEmail() + "!";
         return new SignupResponse(welcome);
@@ -46,7 +51,7 @@ public class MemberService {
     public LoginResponse loginMember(LoginRequest loginRequest) {
         Optional<Member> member = memberRepository.findByEmail(loginRequest.getEmail());
         member.orElseThrow(
-            () -> new RuntimeException("Login failed : Invalid email or password"));
+            () -> new InvalidAccountException());
         Member registeredMember = member.get();
 
         validatePassword(registeredMember, loginRequest.getPassword());
@@ -57,15 +62,20 @@ public class MemberService {
 
     public Member getMemberByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
-        member.orElseThrow(() -> new RuntimeException("Invalid Email"));
+        member.orElseThrow(() -> new InvalidAccountException());
         return member.get();
     }
 
     private void validatePassword(Member member, String password) {
         if (!member.getPassword().equals(password)) {
-            throw new RuntimeException("Login failed : Invalid email or password");
+            throw new InvalidAccountException();
         }
     }
 
+    private void confirmPassword(String password, String passwordConfirm) {
+        if(!password.equals(passwordConfirm)) {
+            throw new PasswordMismatchException();
+        }
+    }
 
 }
