@@ -24,37 +24,52 @@ public class ProductDTO {
         this.categoryName = categoryName;
     }
 
-    // Getters
     public Long getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
+
     public int getPrice() {
         return price;
     }
+
     public String getImageUrl() {
         return imageUrl;
     }
-    public int getCategory() {return category;}
-    public String getCategoryName() {return categoryName;}
 
+    public int getCategory() {
+        return category;
+    }
 
-    // Setters
+    public String getCategoryName() {
+        return categoryName;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public void setPrice(int price) {
         this.price = price;
     }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    public void setCategory(int category) {this.category = category;}
-    public void setCategoryName(String categoryName) {this.categoryName = categoryName;}
+
+    public void setCategory(int category) {
+        this.category = category;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }
 
