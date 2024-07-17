@@ -14,13 +14,14 @@
 
 ### Request
 ```http request
-Request
 GET /api/categories HTTP/1.1
 ```
 ### Response
-```json
+```http request
 HTTP/1.1 200
 Content-Type: application/json
+```
+```json
 
 [
   {
