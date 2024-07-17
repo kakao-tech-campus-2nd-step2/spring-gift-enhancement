@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>로그인</title>
+</head>
+<body>
+<form id="loginForm">
+  <div>
+    <label>email: </label>
+    <input type="email" id="userEmail">
+  </div>
+  <div>
+    <label>password: </label>
+    <input type="password" id="userPassword">
+  </div>
+  <div>
+    <button type="submit">로그인</button>
+  </div>
+</form>
+<script th:inline="javascript">
+  document.getElementById('registerForm').addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const user = {
+      email: document.getElementById('userEmail').value,
+      password: document.getElementById('userPassword').value
+    };
+    try {
+      const response = await fetch(`/api/users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.userId);
+        alert("로그인 되었습니다.");
+        window.location.href = /*[[@{/products}]]*/ 'product_list.html';
+      } else {
+        const errorData = await response.json();
+        alert(errorData.detail);
+      }
+
+    } catch (error) {
+      alert("로그인 중 오류가 발생하였습니다.");
+      console.error(error);
+    }
+
+  })
+</script>
+</body>
+</html>
