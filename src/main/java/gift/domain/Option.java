@@ -46,4 +46,8 @@ public class Option {
         return new OptionResponse(this.id, this.name, this.quantity);
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }
