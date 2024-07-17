@@ -1,6 +1,8 @@
 package gift;
 
+import gift.domain.model.entity.Category;
 import gift.domain.model.entity.Product;
+import gift.domain.repository.CategoryRepository;
 import gift.domain.repository.ProductRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -15,10 +17,16 @@ public class ProductTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     public void saveProductTest() {
         // given
-        Product product = new Product("Test Product", 1000L, "http://example.com/image.jpg");
+        Category category = new Category("Category 1");
+        category = categoryRepository.save(category);
+
+        Product product = new Product("Test Product", 1000L, "http://example.com/image.jpg", category);
 
         // when
         Product savedProduct = productRepository.save(product);
@@ -34,7 +42,10 @@ public class ProductTest {
     @Test
     public void findByIdTest() {
         // given
-        Product product = new Product("Test Product", 1000L, "http://example.com/image.jpg");
+        Category category = new Category("Category 1");
+        category = categoryRepository.save(category);
+
+        Product product = new Product("Test Product", 1000L, "http://example.com/image.jpg", category);
         productRepository.save(product);
 
         // when
@@ -50,13 +61,16 @@ public class ProductTest {
     @Test
     public void updateProductTest() {
         // given
-        Product product = new Product("Test Product", 1000L, "http://example.com/image.jpg");
+        Category category = new Category("Category 1");
+        category = categoryRepository.save(category);
+
+        Product product = new Product("Test Product", 1000L, "http://example.com/image.jpg", category);
         productRepository.save(product);
 
         // when
         Product savedProduct = productRepository.findById(product.getId()).orElse(null);
         assertThat(savedProduct).isNotNull();
-        savedProduct.update("Updated Product", 2000L, "http://example.com/updated.jpg");
+        savedProduct.update("Updated Product", 2000L, "http://example.com/updated.jpg", category);
         productRepository.save(savedProduct);
 
         // then
@@ -70,8 +84,11 @@ public class ProductTest {
     @Test
     public void existsByNameTest() {
         // given
+        Category category = new Category("Category 1");
+        category = categoryRepository.save(category);
+
         String productName = "Test Product";
-        Product product = new Product(productName, 1000L, "http://example.com/image.jpg");
+        Product product = new Product("Test Product", 1000L, "http://example.com/image.jpg", category);
         productRepository.save(product);
 
         // when
@@ -86,8 +103,11 @@ public class ProductTest {
     @Test
     public void findByNameTest() {
         // given
+        Category category = new Category("Category 1");
+        category = categoryRepository.save(category);
+
         String productName = "Test Product";
-        Product product = new Product(productName, 1000L, "http://example.com/image.jpg");
+        Product product = new Product("Test Product", 1000L, "http://example.com/image.jpg", category);
         productRepository.save(product);
 
         // when
