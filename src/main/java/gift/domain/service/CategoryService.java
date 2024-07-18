@@ -6,6 +6,7 @@ import gift.domain.entity.Category;
 import gift.domain.exception.CategoryAlreadyExistsException;
 import gift.domain.exception.CategoryNotFoundException;
 import gift.domain.repository.CategoryRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +24,16 @@ public class CategoryService {
         return categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> getCategories() {
+        return categoryRepository.findAll().stream()
+            .map(CategoryResponse::of)
+            .toList();
+    }
+
     @Transactional
     public CategoryResponse addCategory(CategoryRequest request) {
+
         categoryRepository.findByName(request.name()).ifPresent(c -> {
             throw new CategoryAlreadyExistsException();
         });

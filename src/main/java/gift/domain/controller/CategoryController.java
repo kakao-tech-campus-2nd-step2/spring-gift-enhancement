@@ -1,11 +1,13 @@
 package gift.domain.controller;
 
 import gift.domain.controller.apiResponse.CategoryAddApiResponse;
+import gift.domain.controller.apiResponse.CategoryListApiResponse;
 import gift.domain.dto.request.CategoryRequest;
 import gift.domain.service.CategoryService;
 import gift.global.apiResponse.SuccessApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,5 +30,10 @@ public class CategoryController {
             new CategoryAddApiResponse(HttpStatus.CREATED, result),
             "/api/categories/{id}",
             result.id());
+    }
+
+    @GetMapping
+    public ResponseEntity<CategoryListApiResponse> getCategoryList() {
+        return SuccessApiResponse.ok(new CategoryListApiResponse(HttpStatus.OK, categoryService.getCategories()));
     }
 }
