@@ -1,4 +1,4 @@
-package gift.model.user;
+package gift.dto.user;
 
 public class UserRequest {
 

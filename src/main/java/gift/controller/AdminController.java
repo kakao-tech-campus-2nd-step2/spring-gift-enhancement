@@ -1,12 +1,12 @@
 package gift.controller;
 
 
-import gift.dto.PagingRequest;
-import gift.dto.PagingResponse;
-import gift.model.category.CategoryResponse;
-import gift.model.gift.GiftRequest;
-import gift.model.gift.GiftResponse;
-import gift.model.option.OptionRequest;
+import gift.dto.paging.PagingRequest;
+import gift.dto.paging.PagingResponse;
+import gift.dto.category.CategoryResponse;
+import gift.dto.gift.GiftRequest;
+import gift.dto.gift.GiftResponse;
+import gift.dto.option.OptionRequest;
 import gift.service.category.CategoryService;
 import gift.service.gift.GiftService;
 import gift.service.option.OptionService;

@@ -1,4 +1,4 @@
-package gift.model.wish;
+package gift.dto.wish;
 
 public class WishResponse {
 

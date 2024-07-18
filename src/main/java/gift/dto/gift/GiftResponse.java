@@ -1,11 +1,10 @@
-package gift.model.gift;
+package gift.dto.gift;
 
-import gift.model.category.CategoryResponse;
-import gift.model.option.Option;
-import gift.model.option.OptionResponse;
+import gift.dto.category.CategoryResponse;
+import gift.model.gift.Gift;
+import gift.dto.option.OptionResponse;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GiftResponse {
 

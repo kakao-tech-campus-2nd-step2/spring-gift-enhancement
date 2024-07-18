@@ -1,6 +1,6 @@
 package gift.service.wish;
 
-import gift.dto.PagingResponse;
+import gift.dto.paging.PagingResponse;
 import gift.exception.WishItemNotFoundException;
 import gift.model.gift.Gift;
 import gift.model.user.User;

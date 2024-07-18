@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.model.option.OptionRequest;
-import gift.model.option.OptionResponse;
+import gift.dto.option.OptionRequest;
+import gift.dto.option.OptionResponse;
 import gift.service.option.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package gift.dto;
+package gift.dto.paging;
 
 public class PagingRequest {
     private int page = 1;

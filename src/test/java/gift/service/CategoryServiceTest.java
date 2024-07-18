@@ -1,5 +1,7 @@
 package gift.service;
 
+import gift.dto.category.CategoryRequest;
+import gift.dto.category.CategoryResponse;
 import gift.model.category.*;
 import gift.repository.category.CategoryRepository;
 import gift.service.category.CategoryService;

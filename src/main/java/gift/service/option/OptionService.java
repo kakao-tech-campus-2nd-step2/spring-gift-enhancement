@@ -1,5 +1,7 @@
 package gift.service.option;
 
+import gift.dto.option.OptionRequest;
+import gift.dto.option.OptionResponse;
 import gift.model.gift.Gift;
 import gift.model.option.*;
 import gift.repository.gift.GiftRepository;

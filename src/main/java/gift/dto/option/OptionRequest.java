@@ -1,5 +1,6 @@
-package gift.model.option;
+package gift.dto.option;
 
+import gift.model.option.Option;
 import jakarta.validation.constraints.*;
 
 public class OptionRequest {

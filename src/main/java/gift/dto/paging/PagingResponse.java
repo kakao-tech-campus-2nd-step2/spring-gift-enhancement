@@ -1,4 +1,4 @@
-package gift.dto;
+package gift.dto.paging;
 
 import java.util.List;
 

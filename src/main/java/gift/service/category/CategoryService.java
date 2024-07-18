@@ -1,5 +1,7 @@
 package gift.service.category;
 
+import gift.dto.category.CategoryRequest;
+import gift.dto.category.CategoryResponse;
 import gift.model.category.*;
 import gift.repository.category.CategoryRepository;
 import jakarta.transaction.Transactional;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {

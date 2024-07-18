@@ -1,4 +1,6 @@
-package gift.model.category;
+package gift.dto.category;
+
+import gift.model.category.Category;
 
 public class CategoryResponse {
 

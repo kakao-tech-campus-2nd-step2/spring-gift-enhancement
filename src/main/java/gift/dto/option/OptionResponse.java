@@ -1,4 +1,6 @@
-package gift.model.option;
+package gift.dto.option;
+
+import gift.model.option.Option;
 
 public class OptionResponse {
 

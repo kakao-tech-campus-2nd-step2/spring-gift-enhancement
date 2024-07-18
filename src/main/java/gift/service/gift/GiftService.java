@@ -1,7 +1,10 @@
 package gift.service.gift;
 
 
-import gift.dto.PagingResponse;
+import gift.dto.paging.PagingResponse;
+import gift.dto.gift.GiftRequest;
+import gift.dto.gift.GiftResponse;
+import gift.dto.option.OptionRequest;
 import gift.model.category.Category;
 import gift.model.gift.*;
 import gift.model.option.*;

@@ -1,6 +1,6 @@
-package gift.model.gift;
+package gift.dto.gift;
 
-import gift.model.option.OptionRequest;
+import gift.dto.option.OptionRequest;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
@@ -67,6 +67,6 @@ public class GiftRequest {
     public void setOptions(List<OptionRequest> options) {
         this.options = options;
     }
-    
+
 }
 
