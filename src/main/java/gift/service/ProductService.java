@@ -30,7 +30,7 @@ public class ProductService {
 
     @Transactional
     public void addProduct(ProductRequestDto requestDto) {
-        Category category = categoryRepository.findByName(requestDto.getName())
+        Category category = categoryRepository.findById(requestDto.getCategory())
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CATEGORY));
         Product product = new Product(requestDto.getName(), requestDto.getPrice(), requestDto.getImgUrl(), category);
         productRepository.save(product);
@@ -53,7 +53,7 @@ public class ProductService {
     public ProductResponseDto editProduct(Long id, ProductChangeRequestDto request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(INVALID_PRODUCT));
-        Category category = categoryRepository.findByName(request.getCategory())
+        Category category = categoryRepository.findById(request.getCategory())
                 .orElseThrow(() -> new CustomException(INVALID_CATEGORY));
         product.update(request.getName(), request.getPrice(), request.getImgUrl(), category);
         productRepository.save(product);

@@ -22,8 +22,8 @@ public class ProductChangeRequestDto {
     @Min(value = 0, message = "상품의 가격은 0원 이상이어야합니다.")
     private int price;
 
-    @NotNull
-    private String category;
+    @NotNull(message = "상품 카테고리는 필수항목입니다.")
+    private long category;
 
     public String getName() {
         return name;
@@ -37,7 +37,7 @@ public class ProductChangeRequestDto {
         return price;
     }
 
-    public String getCategory() {
+    public long getCategory() {
         return category;
     }
 }

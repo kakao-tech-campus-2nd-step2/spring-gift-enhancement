@@ -23,7 +23,7 @@ public class ProductRequestDto {
     private int price;
 
     @NotNull(message = "상품 카테고리는 필수항목입니다.")
-    private String category;
+    private Long category;
 
     public String getName() {
         return name;
@@ -35,5 +35,25 @@ public class ProductRequestDto {
 
     public int getPrice() {
         return price;
+    }
+
+    public long getCategory() {
+        return category;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setCategory(Long category) {
+        this.category = category;
     }
 }
