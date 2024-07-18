@@ -69,7 +69,13 @@ public class Option {
 
     // Option management methods
     public void assignProduct(Product product) {
+        if (this.product != null) {
+            this.product.getOptions().remove(this);
+        }
         this.product = product;
+        if (product != null && !product.getOptions().contains(this)) {
+            product.getOptions().add(this);
+        }
     }
 
     public void removeProduct() {
@@ -85,16 +91,5 @@ public class Option {
         this.quantity = new OptionQuantity(this.quantity.getQuantity() - amount);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Option option = (Option) o;
-        return Objects.equals(id, option.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
