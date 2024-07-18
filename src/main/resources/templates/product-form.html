@@ -2,13 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:if="${product.id == null}">Add Product</title>
-    <title th:if="${product.id != null}">Edit Product</title>
+    <title th:if="${productUpdateRequest.id == null}">Add Product</title>
+    <title th:if="${productUpdateRequest.id != null}">Edit Product</title>
 </head>
 <body>
-    <h1 th:if="${product.id == null}">Add Product</h1>
-    <h1 th:if="${product.id != null}">Edit Product</h1>
-    <form th:action="@{${product.id == null} ? '/admin/add' : '/admin/edit/' + ${product.id}}" th:object="${product}" method="post">
+    <h1 th:if="${productUpdateRequest.id == null}">Add Product</h1>
+    <h1 th:if="${productUpdateRequest.id != null}">Edit Product</h1>
+    <form th:action="@{${productUpdateRequest.id == null} ? '/admin/products' : '/admin/products/edit/' + ${productUpdateRequest.id}}"
+	th:object="${product}" method="post">
         <p>
             <label for="name">Name:</label>
             <input type="text" id="name" th:field="*{name}" required/>
