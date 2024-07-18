@@ -34,7 +34,7 @@ public class WishlistService {
     }
 
     public Page<Product> getAllWishlists(MemberTokenDTO memberTokenDTO, Pageable pageable) {
-        Member member = verifyToken(memberTokenDTO);
+        Member member = memberTokenDTOToMember(memberTokenDTO);
 
         return wishlistRepository
             .findAllByMember(member, pageable)
@@ -42,7 +42,7 @@ public class WishlistService {
     }
 
     public List<Product> getAllWishlists(MemberTokenDTO memberTokenDTO) {
-        Member member = verifyToken(memberTokenDTO);
+        Member member = memberTokenDTOToMember(memberTokenDTO);
 
         return wishlistRepository.findAllByMember(member)
             .stream()
@@ -78,13 +78,12 @@ public class WishlistService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new IllegalArgumentException(PRODUCT_NOT_FOUND));
 
-        Member member = memberRepository.findById(memberTokenDTO.getEmail())
-            .orElseThrow(() -> new IllegalArgumentException(MEMBER_NOT_FOUND));
+        Member member = memberTokenDTOToMember(memberTokenDTO);
 
         return Pair.of(product, member);
     }
 
-    public Member verifyToken(MemberTokenDTO memberTokenDTO) {
+    private Member memberTokenDTOToMember(MemberTokenDTO memberTokenDTO) {
         return memberRepository.findById(memberTokenDTO.getEmail())
             .orElseThrow(() -> new IllegalArgumentException(MEMBER_NOT_FOUND));
     }
