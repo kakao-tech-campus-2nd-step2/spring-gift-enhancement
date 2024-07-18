@@ -17,6 +17,7 @@ import gift.domain.entity.Wish;
 import gift.domain.exception.ProductNotFoundException;
 import gift.domain.repository.WishRepository;
 import gift.global.util.HashUtil;
+import gift.utilForTest.MockObjectSupplier;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,13 +47,10 @@ class WishServiceAddTest {
 
     @BeforeEach
     void beforeEach() {
-        product = new Product("name", 10000, "image.png");
-        member = new Member("test@example.com", HashUtil.hashCode("password"), "user");
-        wish = new Wish(product, member, 3L);
-        wishRequest = new WishRequest(1L, 5L);
-        ReflectionTestUtils.setField(product, "id", 1L);
-        ReflectionTestUtils.setField(member, "id", 1L);
-        ReflectionTestUtils.setField(wish, "id", 1L);
+        product = MockObjectSupplier.get(Product.class);
+        member = MockObjectSupplier.get(Member.class);
+        wish = MockObjectSupplier.get(Wish.class);
+        wishRequest = new WishRequest(product.getId(), 5L);
     }
 
     @Test

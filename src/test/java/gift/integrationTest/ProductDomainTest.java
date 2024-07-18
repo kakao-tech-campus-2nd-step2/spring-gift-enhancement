@@ -48,9 +48,9 @@ class ProductDomainTest {
     void getProducts() {
         //given
         List<ProductRequest> request = new ArrayList<>(List.of(
-            new ProductRequest("product1", 1_000, "image1.jpg"),
-            new ProductRequest("product2", 2_000, "image2.jpg"),
-            new ProductRequest("product3", 3_000, "image3.jpg")));
+            new ProductRequest("product1", 1_000, "image1.jpg", 1L),
+            new ProductRequest("product2", 2_000, "image2.jpg", 1L),
+            new ProductRequest("product3", 3_000, "image3.jpg", 1L)));
         request.sort(Comparator.comparing(ProductRequest::name));
         for (var req: request) {
             restTemplate.exchange(
@@ -80,7 +80,7 @@ class ProductDomainTest {
     @DisplayName("API test: add Product")
     void addProduct() {
         //given
-        ProductRequest request = new ProductRequest("product", 1_000, "image.jpg");
+        ProductRequest request = new ProductRequest("product", 1_000, "image.jpg", 1L);
 
         //when
         var actualResponse = restTemplate.exchange(
@@ -102,11 +102,11 @@ class ProductDomainTest {
     @DisplayName("API test: update Product")
     void updateProduct() {
         //given
-        ProductRequest request = new ProductRequest("product", 1_000, "image.jpg");
+        ProductRequest request = new ProductRequest("product", 1_000, "image.jpg", 1L);
         Long createdId = Objects.requireNonNull(restTemplate.exchange(
             new RequestEntity<>(request, HttpMethod.POST, testUtil.getUri(port, "/api/products")),
             ProductAddApiResponse.class).getBody()).getCreatedProduct().id();
-        ProductRequest toUpdateRequest = new ProductRequest("newProductName", 5_000, "newImage.jpg");
+        ProductRequest toUpdateRequest = new ProductRequest("newProductName", 5_000, "newImage.jpg", 1L);
 
         //when
         var actualResponse = restTemplate.exchange(
@@ -129,7 +129,7 @@ class ProductDomainTest {
     @DisplayName("API test: delete Product")
     void deleteProduct() {
         //given
-        ProductRequest request = new ProductRequest("product", 1_000, "image.jpg");
+        ProductRequest request = new ProductRequest("product", 1_000, "image.jpg", 1L);
         Long createdId = Objects.requireNonNull(restTemplate.exchange(
             new RequestEntity<>(request, HttpMethod.POST, testUtil.getUri(port, "/api/products")),
             ProductAddApiResponse.class).getBody()).getCreatedProduct().id();

@@ -4,7 +4,7 @@ import gift.domain.controller.apiResponse.MemberRegisterApiResponse;
 import gift.domain.dto.request.MemberRequest;
 import gift.domain.entity.Member;
 import gift.domain.exception.MemberNotFoundException;
-import gift.domain.repository.MemberRepository;
+import gift.domain.service.MemberService;
 import java.net.URI;
 import java.util.Objects;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -18,14 +18,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 public class TestUtil {
 
-    private final MemberRepository memberRepository;
-    private final String memberEmail = "test@example.com";
-
+    private final MemberService memberService;
+    private final MemberRequest memberRequest;
     private HttpHeaders headers = null;
     private Member authorizedMember = null;
 
-    public TestUtil(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    public TestUtil(MemberService memberService) {
+        this.memberService = memberService;
+        this.memberRequest = new MemberRequest("test@example.com", "test");
     }
 
     public URI getUri(Integer port, String path, Object... pathVariables) {
@@ -38,29 +38,34 @@ public class TestUtil {
     }
 
     public HttpHeaders getAuthorizedHeader(TestRestTemplate restTemplate, Integer port) {
-        if (headers != null) {
+        synchronized (this) {
+            if (headers != null) {
+                return headers;
+            }
+
+            ResponseEntity<MemberRegisterApiResponse> response = restTemplate.exchange(
+                new RequestEntity<>(
+                    memberRequest,
+                    new HttpHeaders(),
+                    HttpMethod.POST,
+                    getUri(port, "/api/members/register")),
+                MemberRegisterApiResponse.class);
+
+            headers = new HttpHeaders();
+            headers.setBearerAuth(Objects.requireNonNull(response.getBody()).getToken());
             return headers;
         }
-
-        ResponseEntity<MemberRegisterApiResponse> response = restTemplate.exchange(
-            new RequestEntity<>(
-                new MemberRequest(memberEmail, "test"),
-                new HttpHeaders(),
-                HttpMethod.POST,
-                getUri(port, "/api/members/register")),
-            MemberRegisterApiResponse.class);
-
-        headers = new HttpHeaders();
-        headers.setBearerAuth(Objects.requireNonNull(response.getBody()).getToken());
-        return headers;
     }
 
-    public Member getAuthorizedMember() {
-        if (authorizedMember != null) {
+    synchronized public Member getAuthorizedMember() {
+        synchronized (this) {
+            if (authorizedMember != null) {
+                return authorizedMember;
+            }
+
+            authorizedMember = memberService.findByEmail(memberRequest.email());
             return authorizedMember;
         }
 
-        authorizedMember = memberRepository.findByEmail(memberEmail).orElseThrow(MemberNotFoundException::new);
-        return authorizedMember;
     }
 }

@@ -249,7 +249,6 @@ Content-Type: application/json
 - [x] 상품을 추가하는 API
 - [x] 상품 리스트를 조회하는 API
 - [x] 상품을 수정하는 API
-  - [x] 상품 카테고리를 수정하는 API
 - [x] 상품을 삭제하는 API
 
 #### 예외, 검증 설계
