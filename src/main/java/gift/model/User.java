@@ -17,10 +17,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(255)")
+    @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(255) COMMENT '사용자 이메일'")
     private String email;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT '사용자 비밀 번호'")
     private String password;
 
     protected User() {}

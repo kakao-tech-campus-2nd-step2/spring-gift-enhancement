@@ -52,7 +52,7 @@ public class CategoryService {
         Category existingCategory = categoryRepository.findById(categoryDTO.getId())
             .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 
-        existingCategory = new Category(existingCategory.getId(), categoryDTO.getName());
+        existingCategory.update(categoryDTO.getName());
         categoryRepository.save(existingCategory);
     }
 

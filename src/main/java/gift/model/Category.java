@@ -16,7 +16,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT '카테고리 항목 이름'")
     private String name;
 
     protected Category() {}
@@ -45,5 +45,9 @@ public class Category {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void update(String name) {
+        this.name = name;
     }
 }

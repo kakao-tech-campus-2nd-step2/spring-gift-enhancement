@@ -15,9 +15,14 @@ class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    void save() {
+    void saveUser_ReturnSavedUser() {
+        // given
         User expected = new User(null, "test@example.com", "password");
+
+        // when
         User actual = userRepository.save(expected);
+
+        // then
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getEmail()).isEqualTo(expected.getEmail())
@@ -25,11 +30,16 @@ class UserRepositoryTest {
     }
 
     @Test
-    void findByEmail() {
+    void findUserByEmail_ReturnUser_WhenUserExists() {
+        // given
         String expectedEmail = "test@example.com";
         User expected = new User(null, expectedEmail, "password");
         userRepository.save(expected);
+
+        // when
         User actual = userRepository.findByEmail(expectedEmail);
+
+        // then
         assertThat(actual).isNotNull();
         assertThat(actual.getEmail()).isEqualTo(expectedEmail);
     }
