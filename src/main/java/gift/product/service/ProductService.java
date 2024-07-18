@@ -36,10 +36,9 @@ public class ProductService {
 
     // repository를 호출해서 DB에 담긴 로우를 반환하는 함수
     public ProductResponseDto selectProduct(long productId) {
-        // id가 존재하면 불러오기
+        // 불러오면서 확인
         Optional<Product> optionalProduct = productRepository.findById(productId);
-        verifyExistence(optionalProduct);
-        Product product = optionalProduct.get();
+        Product product = getActualProduct(optionalProduct);
 
         return new ProductResponseDto(product.getProductId(), product.getName(), product.getPrice(),
             product.getImage());
@@ -58,10 +57,9 @@ public class ProductService {
     // repository를 호출해서 특정 로우를 파라메터로 전달된 DTO로 교체하는 함수
     @Transactional
     public void updateProduct(long productId, ProductRequestDto productRequestDto) {
-        // id가 존재하면 불러오기
+        // 불러오면서 확인
         Optional<Product> optionalProduct = productRepository.findById(productId);
-        verifyExistence(optionalProduct);
-        Product product = optionalProduct.get();
+        Product product = getActualProduct(optionalProduct);
 
         product.updateProduct(productRequestDto.name(), productRequestDto.price(),
             productRequestDto.imageUrl());
@@ -74,9 +72,11 @@ public class ProductService {
     }
 
     // 제품이 존재하는지 검증 (쿼리 두번 날리지 않도록)
-    private void verifyExistence(Optional<Product> optionalProduct) {
+    private Product getActualProduct(Optional<Product> optionalProduct) {
         if (optionalProduct.isEmpty()) {
             throw new NoSuchElementException("존재하지 않는 제품입니다.");
         }
+
+        return optionalProduct.get();
     }
 }

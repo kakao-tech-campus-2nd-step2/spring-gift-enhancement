@@ -73,9 +73,9 @@ public class WishListService {
     @Transactional
     public void increaseWishProduct(WishListIdDto wishListIdDto) {
         Optional<WishList> optionalWishList = wishListRepository.findById(wishListIdDto.wishListId());
-        verifyWishProductExistence(optionalWishList);
 
-        WishList actualWishList = optionalWishList.get();
+        // 검증 및 불러오기
+        WishList actualWishList = getActualWishProduct(optionalWishList);
         int afterQuantity = actualWishList.getQuantity() + 1;
 
         actualWishList.updateQuantity(afterQuantity);
@@ -85,9 +85,9 @@ public class WishListService {
     @Transactional
     public void decreaseWishProduct(WishListIdDto wishListIdDto) {
         Optional<WishList> optionalWishList = wishListRepository.findById(wishListIdDto.wishListId());
-        verifyWishProductExistence(optionalWishList);
 
-        WishList actualWishList = optionalWishList.get();
+        // 검증 및 불러오기
+        WishList actualWishList = getActualWishProduct(optionalWishList);
         int afterQuantity = actualWishList.getQuantity() - 1;
 
         // 1을 뺀 경우가 0 이하가 되면 제거.
@@ -120,10 +120,12 @@ public class WishListService {
     }
 
     // 불러온 제품이 존재하는지 확인
-    private void verifyWishProductExistence(Optional<WishList> optionalWishProduct) {
+    private WishList getActualWishProduct(Optional<WishList> optionalWishProduct) {
         if (optionalWishProduct.isEmpty()) {
             throw new IllegalArgumentException("장바구니에 존재하지 않는 제품입니다.");
         }
+
+        return optionalWishProduct.get();
     }
 
     // Id를 통해 제품이 존재하는지 확인
