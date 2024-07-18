@@ -11,6 +11,16 @@ public class WishList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishlistId;
 
+    /** fetch = FetchType.LAZY를 사용하여 WishList가 로드될 때 Member와 Product는 즉시 로드되지 않음.
+     Member나 Product에 접근할 때 데이터베이스에서 해당 데이터를 로드함. **/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId", nullable = false)
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productId", nullable = false)
+    private Product product;
+
     // 기본 생성자
     public WishList() {
     }
@@ -32,15 +42,4 @@ public class WishList {
     public Product getProduct() {
         return product;
     }
-
-    /** fetch = FetchType.LAZY를 사용하여 WishList가 로드될 때 Member와 Product는 즉시 로드되지 않음.
-     Member나 Product에 접근할 때 데이터베이스에서 해당 데이터를 로드함. **/
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId", nullable = false)
-    private Member member;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productId", nullable = false)
-    private Product product;
 }

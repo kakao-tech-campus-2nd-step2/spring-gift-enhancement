@@ -14,17 +14,17 @@ import java.util.Optional;
 
 @Repository
 public interface WishListRepository extends JpaRepository<WishList, String> {
-    WishList findByMemberId(Long member_id);
-    Optional<WishList> findByMemberIdAndProductId(Long member_id, Long produc_id);
+    WishList findByMemberId(Long memberId);
 
-    Page<WishList> findByMemberId(Long member_id, Pageable pageable);
+    Optional<WishList> findByMemberIdAndProductId(Long memberId, Long productId);
+
+    Page<WishList> findByMemberId(Long memberId, Pageable pageable);
 
     @Modifying
-    @Query("update WishList w set w.products = concat(w.products, :product) where w.member.member_id = :member_id")
+    @Query("update WishList w set w.product = :product where w.member.memberId = :member_id")
     void addProductToWishList(@Param("member_id") Long userId, @Param("product") Product product);
 
     @Modifying
-    @Query("update WishList w set w.products = remove(w.products, :product_id) where w.member.member_id = :member_id")
-    static void removeProductFromWishList(@Param("member_id") Long member_id, @Param("getProductId") Long product_id) {
-    }
+    @Query("update WishList w set w.product.productId = :product_id where w.member.memberId = :member_id")
+    void removeProductFromWishList(@Param("member_id") Long member_id, @Param("product_id") Long product_id);
 }

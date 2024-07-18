@@ -25,17 +25,13 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<WishList> wishLists = new ArrayList<>();
 
-    // 기본 생성자
-    public Member() {
-    }
-
     // 매개변수가 있는 생성자
     public Member(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    // Getter methods
+    // Getter 메소드들
     public Long getMemberId() {
         return memberId;
     }
