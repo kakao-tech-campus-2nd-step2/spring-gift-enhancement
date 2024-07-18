@@ -2,6 +2,7 @@ package gift.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +17,16 @@ class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("제품 저장 테스트")
     public void testSaveProduct() {
-        Product product = new Product(null, "Test Product", 1000, "http://example.com/test.jpg");
+        Category category = new Category("Test Category", "Blue", "abcd", "Test");
+        categoryRepository.save(category);
+        Product product = new Product(null, "Test Product", 1000, "http://example.com/test.jpg",
+            category);
         Product savedProduct = productRepository.save(product);
 
         assertThat(savedProduct).isNotNull();
@@ -32,7 +39,10 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("ID로 제품 조회 테스트")
     public void testFindById() {
-        Product product = new Product(null, "Test Product", 1000, "http://example.com/test.jpg");
+        Category category = new Category("Test Category", "Blue", "abcd", "Test");
+        categoryRepository.save(category);
+        Product product = new Product(null, "Test Product", 1000, "http://example.com/test.jpg",
+            category);
         Product savedProduct = productRepository.save(product);
 
         Optional<Product> foundProduct = productRepository.findById(savedProduct.getId());
@@ -44,10 +54,15 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("모든 제품 조회 테스트")
     public void testFindAll() {
+        Category category1 = new Category("Test Category1", "Blue", "abcd", "Test");
+        Category category2 = new Category("Test Category2", "Blue", "abcd", "Test");
+        categoryRepository.save(category1);
+        categoryRepository.save(category2);
+
         Product product1 = new Product(null, "Test Product 1", 1000,
-            "http://example.com/test1.jpg");
+            "http://example.com/test1.jpg", category1);
         Product product2 = new Product(null, "Test Product 2", 2000,
-            "http://example.com/test2.jpg");
+            "http://example.com/test2.jpg", category2);
         productRepository.save(product1);
         productRepository.save(product2);
 
@@ -61,7 +76,10 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("ID로 제품 삭제 테스트")
     public void testDeleteById() {
-        Product product = new Product(null, "Test Product", 1000, "http://example.com/test.jpg");
+        Category category = new Category("Test Category", "Blue", "abcd", "Test");
+        categoryRepository.save(category);
+        Product product = new Product(null, "Test Product", 1000, "http://example.com/test.jpg",
+            category);
         Product savedProduct = productRepository.save(product);
 
         productRepository.deleteById(savedProduct.getId());
@@ -73,7 +91,10 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("제품 업데이트 테스트")
     public void testUpdateProduct() {
-        Product product = new Product(null, "Test Product", 1000, "http://example.com/test.jpg");
+        Category category = new Category("Test Category", "Blue", "abcd", "Test");
+        categoryRepository.save(category);
+        Product product = new Product(null, "Test Product", 1000, "http://example.com/test.jpg",
+            category);
         Product savedProduct = productRepository.save(product);
 
         savedProduct.setName("Updated Product");

@@ -1,9 +1,12 @@
 package gift.controller;
 
 import gift.domain.Product;
+import gift.dto.CategoryDto;
 import gift.dto.ProductDto;
 import gift.repositories.ProductRepository;
+import gift.services.CategoryService;
 import gift.services.ProductService;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,9 +25,11 @@ public class PageController {
     ProductRepository productRepository;
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public PageController(ProductService productService) {
+    public PageController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/") // 주소 매핑
@@ -51,18 +56,24 @@ public class PageController {
 
     @GetMapping("/add") // 주소 매핑
     public String addPageGet(Model model) {
-        Product product = new Product(null, "", 0.0, "");
+        Product product = new Product(null, "", 0.0, "", null);
+        List<CategoryDto> categories = categoryService.getAllCategories();
         model.addAttribute("product", product);
+        model.addAttribute("category", categories);
         return "add";
     }
 
     @GetMapping("/update") // 주소 매핑
     public String updatePageGet(@RequestParam Long id, Model model) {
         Optional<Product> product = productRepository.findById(id);
+        List<CategoryDto> categories = categoryService.getAllCategories();
+
         if (product.isEmpty()) {
-            product = Optional.of(new Product(null, "", 0.0, ""));
+            product = Optional.of(new Product(null, "", 0.0, "", null));
         }
         model.addAttribute("product", product);
+        model.addAttribute("category", categories);
+
         return "update";
     }
 }

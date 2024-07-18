@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.domain.Category;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -16,11 +17,14 @@ public class ProductDto {
 
     private String imageUrl;
 
-    public ProductDto(Long id, String name, double price, String imageUrl) {
+    private Category category;
+
+    public ProductDto(Long id, String name, double price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -38,4 +42,6 @@ public class ProductDto {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public Category getCategory() { return category; }
 }
