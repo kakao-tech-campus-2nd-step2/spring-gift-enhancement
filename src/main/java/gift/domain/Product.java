@@ -2,6 +2,9 @@ package gift.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity{
@@ -17,7 +20,14 @@ public class Product extends BaseEntity{
             foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"),
             nullable = false)
     private Category category;
-  
+
+    @OneToMany
+    @JoinColumn(
+            name = "option_id",
+            foreignKey = @ForeignKey(name = "fk_product_option_id_ref_option_id"),
+            nullable = false)
+    private List<Option> options = new ArrayList<>();
+
     protected Product(){
         super();
     }
@@ -47,6 +57,10 @@ public class Product extends BaseEntity{
 
     public Category getCategory(){
         return category;
+    }
+
+    public List<Option> getOptions(){
+        return options;
     }
 
     public void updateEntity(String name, int price, String imageUrl, Category category){
