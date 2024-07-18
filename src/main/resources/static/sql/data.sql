@@ -306,6 +306,13 @@ insert into product (name, price, image_url, created_at, last_modified_at, categ
 values ('Ada', 7528, 'http://dummyimage.com/164x100.png/5fa2dd/ffffff', '2023-05-31 10:00:00',
         '2023-05-31 12:00:00', 1);
 
+insert into option (name, quantity, product_id, created_at, last_modified_at)
+values ('option1', 5, 1, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
+insert into option (name, quantity, product_id, created_at, last_modified_at)
+values ('option2', 5, 1, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
+insert into option (name, quantity, product_id, created_at, last_modified_at)
+values ('option3', 5, 1, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
+
 insert into member (name, email, password, role, created_at, last_modified_at)
 values ('Jarred', 'test@test.com',
         'f9aac0519f30824bb09b2dbae6eb62633255d765c2272e8392d737332554926c', 'USER',
