@@ -13,4 +13,7 @@ public interface OptionRepository {
     Option save(Option option);
 
     List<Option> findByProductId(Long productId);
+
+    boolean existsById(Long optionId);
+    
 }

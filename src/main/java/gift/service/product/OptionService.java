@@ -54,7 +54,14 @@ public class OptionService {
     }
 
     @Transactional
-    public void deleteOption(Long optionId) {
+    public void deleteOption(Long productId, Long optionId) {
+        if (!optionRepository.existsById(optionId)) {
+            throw new NotFoundException("Option not found");
+        }
+        var options = new Options(optionRepository.findByProductId(productId));
+        if (!options.isDeletePossible()) {
+            throw new IllegalArgumentException("Option이 1개 일때는 삭제할 수 없습니다.");
+        }
         optionRepository.deleteById(optionId);
     }
 

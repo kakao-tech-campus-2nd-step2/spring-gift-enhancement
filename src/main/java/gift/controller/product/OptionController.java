@@ -51,11 +51,12 @@ public class OptionController {
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/products/options/{optionId}")
+    @DeleteMapping("/products/{productId}/options/{optionId}")
     public ResponseEntity<String> deleteOption(
+        @PathVariable("productId") Long productId,
         @PathVariable("optionId") Long optionId
     ) {
-        optionService.deleteOption(optionId);
+        optionService.deleteOption(productId, optionId);
         return ResponseEntity.ok().body("Deleted correctly");
     }
 }
