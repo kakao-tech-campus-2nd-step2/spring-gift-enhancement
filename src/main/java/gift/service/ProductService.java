@@ -48,11 +48,9 @@ public class ProductService{
 
     @Transactional
     public void addProduct(ProductDto productDto) {
-        Category category = categoryRepository.findByName(productDto.getCategory())
-                .orElseThrow(() -> new CustomException("Category with name " + productDto.getCategory() + " not found", HttpStatus.NOT_FOUND));
-            
+  
         if(productRepository.findById(productDto.getId()).isEmpty()){
-            Product product = productDto.toEntity(category);
+            Product product = toEntity(productDto);
             productRepository.save(product);
         }else{
             throw new CustomException("Product with id " + productDto.getId() + "exists", HttpStatus.CONFLICT);
@@ -64,11 +62,8 @@ public class ProductService{
 
         Optional<Product> optionalProduct = productRepository.findById(productDto.getId());
 
-        Category category = categoryRepository.findByName(productDto.getCategory())
-                .orElseThrow(() -> new CustomException("Category with name " + productDto.getCategory() + " not found", HttpStatus.NOT_FOUND));
-
         if (optionalProduct.isPresent()) {
-            Product product = productDto.toEntity(category);
+            Product product = toEntity(productDto);
             productRepository.delete(optionalProduct.get());
             productRepository.save(product);
         }else{
@@ -86,5 +81,11 @@ public class ProductService{
         wishListRepository.deleteAll(wishList);
 
         productRepository.deleteById(id);
+    }
+
+    public Product toEntity(ProductDto productDto){
+        Category category = categoryRepository.findByName(productDto.getCategory())
+                    .orElseThrow(() -> new CustomException("Category with name" + productDto.getCategory() + "NOT FOUND" , HttpStatus.NOT_FOUND));
+        return new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category);
     }
 }

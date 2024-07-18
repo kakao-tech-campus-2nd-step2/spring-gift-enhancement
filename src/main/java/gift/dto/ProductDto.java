@@ -1,6 +1,5 @@
 package gift.dto;
 
-import gift.entity.Category;
 import gift.entity.Product;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -66,10 +65,6 @@ public class ProductDto {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public Product toEntity(Category category) {
-        return new Product(this.name, this.price, this.imageUrl, category);
     }
 
     public static ProductDto fromEntity(Product product) {

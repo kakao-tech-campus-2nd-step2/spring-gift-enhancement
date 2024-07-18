@@ -32,7 +32,7 @@ public class MemberService {
     public void addMember(MemberDto memberDto){
 
         if(memberRepository.findByEmail(memberDto.getEmail()).isEmpty()){
-            Member member = memberDto.toEntity(memberDto);
+            Member member = toEntity(memberDto);
             memberRepository.save(member);
         }else{
             throw new CustomException("Member with email " + memberDto.getEmail() + "exists", HttpStatus.CONFLICT);
@@ -77,4 +77,7 @@ public class MemberService {
         return generateToken(memberDto.getEmail());
     }
     
+    public Member toEntity(MemberDto memberDto){
+        return new Member(memberDto.getPassword(), memberDto.getEmail(), memberDto.getRole());
+    }
 }
