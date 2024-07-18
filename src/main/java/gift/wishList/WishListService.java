@@ -1,5 +1,7 @@
 package gift.wishList;
 
+import gift.option.Option;
+import gift.option.OptionRepository;
 import gift.product.Product;
 import gift.product.ProductRepository;
 import gift.user.User;
@@ -13,18 +15,18 @@ import java.util.Objects;
 @Service
 public class WishListService {
     private final WishListRepository wishListRepository;
-    private final ProductRepository productRepository;
+    private final OptionRepository optionRepository;
 
-    public WishListService(WishListRepository wishListRepository, ProductRepository productRepository) {
+    public WishListService(WishListRepository wishListRepository, OptionRepository optionRepository) {
         this.wishListRepository = wishListRepository;
-        this.productRepository = productRepository;
+        this.optionRepository = optionRepository;
     }
 
     public WishListDTO addWish(WishListDTO wishListDTO, User user) {
-        Product product = productRepository.findById(wishListDTO.getProductID()).orElseThrow();
+        Option option = optionRepository.findById(wishListDTO.getOptionID()).orElseThrow();
         WishList wishList = new WishList(wishListDTO.getCount());
         user.addWishList(wishList);
-        product.addWishList(wishList);
+        option.addWishList(wishList);
         wishListRepository.save(wishList);
         return new WishListDTO(wishList);
     }
@@ -32,9 +34,7 @@ public class WishListService {
     public List<WishListDTO> findByUser(User user) {
         List<WishList> wishLists = wishListRepository.findByUser(user);
         List<WishListDTO> wishListDTOS = new ArrayList<>();
-        for (WishList wishList : wishLists) {
-            wishListDTOS.add(new WishListDTO(wishList));
-        }
+        wishLists.forEach((wishList -> wishListDTOS.add(new WishListDTO(wishList))));
         return wishListDTOS;
     }
 
@@ -47,7 +47,7 @@ public class WishListService {
     public void deleteByID(Long id) {
         WishList wishList = wishListRepository.findById(id).orElseThrow();
         wishList.getUser().removeWishList(wishList);
-        wishList.getProduct().removeWishList(wishList);
+        wishList.getOption().removeWishList(wishList);
         wishListRepository.deleteById(id);
     }
 
