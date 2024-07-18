@@ -20,7 +20,6 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-//@ActiveProfiles("test")
 class CategoryControllerTest {
 
     @Autowired
