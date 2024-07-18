@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CategoryService {
@@ -28,7 +29,18 @@ public class CategoryService {
         Category actualCategory = categoryRepository.save(category);
     }
 
+    // resolver에서 사용할 하나만 조회하는 핸들러
+    @Transactional
+    public CategoryResponseDto selectCategory(Long categoryId) {
+        Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
+        Category actualCategory = getActualCategory(optionalCategory);
+
+        return new CategoryResponseDto(actualCategory.getCategoryId(), actualCategory.getName(),
+            actualCategory.getImageUrl());
+    }
+
     // 카테고리를 조회하는 핸들러.
+    @Transactional(readOnly = true)
     public List<CategoryResponseDto> selectCategories() {
         List<Category> categories = categoryRepository.findAll();
 
@@ -38,6 +50,7 @@ public class CategoryService {
     }
 
     // 카테고리를 수정하는 핸들러.
+    @Transactional
     public void updateCategory(CategoryIdDto categoryIdDto, CategoryRequestDto categoryRequestDto) {
         Long categoryId = categoryIdDto.categoryId();
 
@@ -48,6 +61,7 @@ public class CategoryService {
     }
 
     // 카테고리를 삭제하는 핸들러.
+    @Transactional
     public void deleteCategory(CategoryIdDto categoryIdDto) {
         Long categoryId = categoryIdDto.categoryId();
         verifyCategoryExists(categoryId);
