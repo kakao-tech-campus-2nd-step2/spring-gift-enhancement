@@ -10,6 +10,7 @@ import java.util.List;
 public class Product {
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id",nullable = false,updatable = false)
     private final List<Option> options = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
