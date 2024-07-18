@@ -1,37 +1,38 @@
 package gift.service;
 
 import gift.domain.Member;
-import gift.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TokenService {
 
+    private static final String SECRET_KEY = "s3cr3tK3yF0rJWTt0k3nG3n3r@ti0n12345678";
+    private static final String TOKEN_TYPE = "bearer ";
+    private static final Long TOKEN_VALIDITY = 3600000L;
+
     private final Key key;
 
-    public TokenService() {
-        String secretKey = "s3cr3tK3yF0rJWTt0k3nG3n3r@ti0n12345678"; // 256 bits
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    public TokenService() {// 256 bits
+        this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
     public String getBearerTokenFromHeader(String header) {
-        if (!header.toLowerCase().startsWith("bearer ")) {
-            throw new RuntimeException("Bearer token not included in header");
+        if (!header.toLowerCase().startsWith(TOKEN_TYPE)) {
+            throw new RuntimeException("Invalid token type");
         }
-        return header.substring(7);
+        return header.substring(TOKEN_TYPE.length());
     }
 
     protected String generateToken(Member member) {
         long now = System.currentTimeMillis();
         return Jwts.builder().setSubject(member.getEmail())
             .setIssuedAt(new Date(now))
-            .setExpiration(new Date(now + 3600000)) // 1 hour validity
+            .setExpiration(new Date(now + TOKEN_VALIDITY)) // 1 hour validity
             .signWith(key).compact();
     }
 
