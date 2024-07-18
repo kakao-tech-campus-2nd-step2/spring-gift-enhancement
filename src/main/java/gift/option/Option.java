@@ -25,6 +25,7 @@ public class Option {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
     protected Option() {
 
     }
@@ -51,7 +52,15 @@ public class Option {
         return product;
     }
 
-    public boolean isDuplicated(Option other) {
-        return name.equals(other.getName());
+    public void validateDuplicated(Option other) {
+        if (name.equals(other.getName())){
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void updateInfo(String name, Integer quantity) {
+        validateDuplicated(new Option(name, quantity, null));
+        this.name = name;
+        this.quantity = quantity;
     }
 }

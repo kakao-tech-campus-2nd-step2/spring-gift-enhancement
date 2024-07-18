@@ -5,23 +5,26 @@ import gift.product.model.Product;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
 
-    private OptionRepository optionRepository;
-    private ProductRepository productRepository;
+    private final OptionRepository optionRepository;
+    private final ProductRepository productRepository;
 
     public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
         this.optionRepository = optionRepository;
         this.productRepository = productRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<OptionResponse> getOptions(Long productId, Pageable pageable) {
         return optionRepository.findAllByProductId(productId, pageable)
             .map(OptionResponse::from).getContent();
     }
 
+    @Transactional
     public Long addOption(Long productId, OptionRequest optionRequest) {
         Product product = productRepository.findById(productId).orElseThrow();
         Options options = optionRepository.findAllByProductId(productId);
@@ -29,5 +32,16 @@ public class OptionService {
         options.validate(option);
         option = optionRepository.save(option);
         return option.getId();
+    }
+
+    @Transactional
+    public void updateOption(Long optionId, OptionRequest optionRequest) {
+        Option option = optionRepository.findById(optionId).orElseThrow();
+        option.updateInfo(optionRequest.getName(), optionRequest.getQuantity());
+    }
+
+    @Transactional
+    public void deleteOption(Long optionId) {
+        optionRepository.deleteById(optionId);
     }
 }

@@ -3,9 +3,10 @@ package gift.option;
 import java.util.List;
 
 public class Options {
+
     private List<Option> options;
 
-    protected  Options() {
+    protected Options() {
 
     }
 
@@ -14,8 +15,6 @@ public class Options {
     }
 
     public void validate(Option option) {
-        if(options.stream().anyMatch(option::isDuplicated)) {
-            throw new IllegalArgumentException();
-        }
+        options.forEach((it) -> it.validateDuplicated(option));
     }
 }
