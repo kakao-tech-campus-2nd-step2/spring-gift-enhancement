@@ -28,4 +28,12 @@ public class Option {
     public String getName() {
         return name;
     }
+
+    public Long getId() {
+        return option_id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
