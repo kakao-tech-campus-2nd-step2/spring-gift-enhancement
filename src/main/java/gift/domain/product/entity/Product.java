@@ -84,6 +84,10 @@ public class Product {
         return options;
     }
 
+    public void removeOptions() {
+        options.clear();
+    }
+
     public void addOption(Option option) {
         options.add(option);
         option.setProduct(this);
