@@ -73,6 +73,14 @@ public class Category extends BaseEntity {
         color = builder.color;
     }
 
+    public Category update(Category category) {
+        name = category.name;
+        description = category.description;
+        imageUrl = category.imageUrl;
+        color = category.color;
+        return this;
+    }
+
     public String getName() {
         return name;
     }
