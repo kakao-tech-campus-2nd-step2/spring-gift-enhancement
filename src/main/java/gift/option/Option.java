@@ -29,6 +29,12 @@ public class Option {
 
     }
 
+    public Option(String name, Integer quantity, Product product) {
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
     public Long getId() {
         return id;
     }
@@ -43,5 +49,9 @@ public class Option {
 
     public Product getProduct() {
         return product;
+    }
+
+    public boolean isDuplicated(Option other) {
+        return name.equals(other.getName());
     }
 }
