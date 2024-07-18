@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class UserControllerAdvice {
+public class UnacceptableAdvice {
 
     @ExceptionHandler(ResponseStatusException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
