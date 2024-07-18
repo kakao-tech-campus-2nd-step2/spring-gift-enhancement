@@ -44,7 +44,7 @@ class ProductDomainTest {
     }
 
     @Test
-    @DisplayName("API test: get Product list")
+    @DisplayName("[ApiIntegrationTest] 상품 리스트 조회")
     void getProducts() {
         //given
         List<ProductRequest> request = new ArrayList<>(List.of(
@@ -77,7 +77,7 @@ class ProductDomainTest {
     }
 
     @Test
-    @DisplayName("API test: add Product")
+    @DisplayName("[ApiIntegrationTest] 상품 추가")
     void addProduct() {
         //given
         ProductRequest request = new ProductRequest("product", 1_000, "image.jpg", 1L);
@@ -99,7 +99,7 @@ class ProductDomainTest {
     }
 
     @Test
-    @DisplayName("API test: update Product")
+    @DisplayName("[ApiIntegrationTest] 상품 수정")
     void updateProduct() {
         //given
         ProductRequest request = new ProductRequest("product", 1_000, "image.jpg", 1L);
@@ -126,7 +126,7 @@ class ProductDomainTest {
     }
 
     @Test
-    @DisplayName("API test: delete Product")
+    @DisplayName("[ApiIntegrationTest] 상품 삭제")
     void deleteProduct() {
         //given
         ProductRequest request = new ProductRequest("product", 1_000, "image.jpg", 1L);

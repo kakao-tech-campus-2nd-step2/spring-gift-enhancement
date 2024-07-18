@@ -53,7 +53,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품 얻기 - 성공")
+    @DisplayName("[UnitTest] 상품 얻기: 성공")
     void getProductById() {
         //given
         given(productRepository.findById(any(Long.class))).willReturn(Optional.of(product));
@@ -67,7 +67,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품 얻기 - 실패")
+    @DisplayName("[UnitTest/Fail] 상품 얻기")
     void getProductById_Fail() {
         //given
         given(productRepository.findById(any(Long.class))).willReturn(Optional.empty());
@@ -78,7 +78,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("모든 상품 얻기")
+    @DisplayName("[UnitTest] 모든 상품 얻기")
     void getAllProducts() {
         //given
         List<Product> productList = List.of(
@@ -102,7 +102,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품 추가 - 성공")
+    @DisplayName("[UnitTest] 상품 추가")
     void addProduct() {
         //given
         ProductRequest request = ProductRequest.of(product);
@@ -122,7 +122,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품 추가 - 이미 있는 상품 등록시")
+    @DisplayName("[UnitTest/Fail] 상품 추가: 이미 있는 상품 등록시")
     void addProduct_AlreadyExists() {
         //given
         ProductRequest request = new ProductRequest("name", 1000,"image.png", 1L);
@@ -136,7 +136,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품 업데이트")
+    @DisplayName("[UnitTest] 상품 업데이트")
     void updateProductById() {
         //given
         Long id = 1L;

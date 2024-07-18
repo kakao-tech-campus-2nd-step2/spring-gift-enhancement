@@ -44,7 +44,7 @@ public class ProductControllerValidationTest {
     private JwtUtil jwtUtil;
 
     @Test
-    @DisplayName("상품 추가 이름검증 - 이름이 문제 없는 경우")
+    @DisplayName("[UnitTest] 상품 추가 이름검증: 이름이 문제 없는 경우")
     void addProduct() throws Exception {
         //given
         ProductRequest validRequest = new ProductRequest("ValidName", 1000, "http://example.com/image.jpg", 1L);
@@ -69,7 +69,7 @@ public class ProductControllerValidationTest {
     }
 
     @Test
-    @DisplayName("상품 추가 이름검증 - 검증이 실패하는 3가지 경우")
+    @DisplayName("[UnitTest/Fail] 상품 추가 이름검증: 검증이 실패하는 3가지 경우")
     void addProduct_ValidationFails() throws Exception {
         //given
         ProductRequest[] invalidRequest = {

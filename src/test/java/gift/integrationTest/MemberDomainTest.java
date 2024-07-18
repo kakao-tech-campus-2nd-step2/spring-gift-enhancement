@@ -41,7 +41,7 @@ class MemberDomainTest {
     }
 
     @Test
-    @DisplayName("API test: register Member")
+    @DisplayName("[ApiIntegrationTest] 회원가입")
     void registerMember() {
         //given
         MemberRequest request = new MemberRequest("testaccount@example.com", "test");
@@ -57,7 +57,7 @@ class MemberDomainTest {
     }
 
     @Test
-    @DisplayName("API test: login Member")
+    @DisplayName("[ApiIntegrationTest] 로그인")
     void loginMember() {
         //given
         MemberRequest request = new MemberRequest("test2@example.com", "test");

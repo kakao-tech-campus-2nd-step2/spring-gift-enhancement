@@ -3,7 +3,6 @@ package gift.utilForTest;
 import gift.domain.controller.apiResponse.MemberRegisterApiResponse;
 import gift.domain.dto.request.MemberRequest;
 import gift.domain.entity.Member;
-import gift.domain.exception.MemberNotFoundException;
 import gift.domain.service.MemberService;
 import java.net.URI;
 import java.util.Objects;
