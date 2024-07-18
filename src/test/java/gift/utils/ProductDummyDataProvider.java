@@ -24,7 +24,7 @@ public class ProductDummyDataProvider {
     }
 
     private void doRun(int quantity) {
-        String sql = "insert into product (name, price, created_at, created_by, updated_at, updated_by) values (?, ?, ?, ?, ?, ?)";
+        String sql = "insert into product (name, price, category_id, created_at, created_by, updated_at, updated_by) values (?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.batchUpdate(sql, getBatchPreparedStatementSetter(quantity));
     }
 
@@ -34,10 +34,11 @@ public class ProductDummyDataProvider {
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1, "product" + i);
                 ps.setInt(2, 1000 * i);
-                ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-                ps.setLong(4, 1L);
-                ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
-                ps.setLong(6, 1L);
+                ps.setLong(3, 1L);
+                ps.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
+                ps.setLong(5, 1L);
+                ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+                ps.setLong(7, 1L);
             }
 
             @Override
