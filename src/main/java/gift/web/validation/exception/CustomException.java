@@ -27,6 +27,6 @@ public abstract class CustomException extends RuntimeException {
      * 예외가 어떤 {@link ErrorStatus} 를 가지는지 반환한다.
      * @return {@link ErrorStatus}
      */
-    public abstract ErrorStatus getErrorCode();
+    public abstract ErrorStatus getErrorStatus();
 
 }

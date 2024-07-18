@@ -25,7 +25,7 @@ public class IncorrectPasswordException extends ClientException {
     }
 
     @Override
-    public ErrorStatus getErrorCode() {
+    public ErrorStatus getErrorStatus() {
         return INCORRECT_PASSWORD;
     }
 

@@ -21,7 +21,7 @@ public class IncorrectEmailException extends ClientException {
     }
 
     @Override
-    public ErrorStatus getErrorCode() {
+    public ErrorStatus getErrorStatus() {
         return INCORRECT_EMAIL;
     }
 

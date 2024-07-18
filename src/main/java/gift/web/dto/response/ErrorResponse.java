@@ -20,7 +20,7 @@ public class ErrorResponse {
     }
 
     public static ErrorResponse from(CustomException exception) {
-        return new ErrorResponse(exception.getErrorCode().getCode(), exception.getErrorCode().getCategory().getDescription(), exception.getMessage());
+        return new ErrorResponse(exception.getErrorStatus().getCode(), exception.getErrorStatus().getCategory().getDescription(), exception.getMessage());
     }
 
     public static ErrorResponse from(BindingResult bindingResult) {

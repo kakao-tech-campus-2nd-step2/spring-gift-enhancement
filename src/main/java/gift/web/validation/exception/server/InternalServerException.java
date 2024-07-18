@@ -25,7 +25,7 @@ public class InternalServerException extends ServerException {
     }
 
     @Override
-    public ErrorStatus getErrorCode() {
+    public ErrorStatus getErrorStatus() {
         return INTERNAL_SERVER_ERROR;
     }
 

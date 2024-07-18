@@ -28,7 +28,7 @@ public class BadRequestException extends ClientException {
     }
 
     @Override
-    public ErrorStatus getErrorCode() {
+    public ErrorStatus getErrorStatus() {
         return BAD_REQUEST;
     }
 

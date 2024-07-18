@@ -25,7 +25,7 @@ public class InvalidCredentialsException extends ClientException {
     }
 
     @Override
-    public ErrorStatus getErrorCode() {
+    public ErrorStatus getErrorStatus() {
         return UNAUTHORIZED_INVALID_CREDENTIALS;
     }
 
