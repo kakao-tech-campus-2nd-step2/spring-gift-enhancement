@@ -1,6 +1,8 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.web.dto.request.product.CreateProductRequest;
 import gift.web.dto.request.product.UpdateProductRequest;
@@ -19,14 +21,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional
     public CreateProductResponse createProduct(CreateProductRequest request) {
-        Product product = request.toEntity();
+        Category category = categoryRepository.findById(request.getCategoryId())
+            .orElseThrow(NoSuchElementException::new);
+
+        Product product = request.toEntity(category);
         return CreateProductResponse.fromEntity(productRepository.save(product));
     }
 
