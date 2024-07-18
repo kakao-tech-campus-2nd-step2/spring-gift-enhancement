@@ -73,7 +73,7 @@ public class ProductDTO {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-    
+
     public static ProductDTO convertToDTO(Product product, CategoryService categoryService) {
         String categoryName = categoryService.getCategoryById(product.getCategory()).getName();
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory(), categoryName);
