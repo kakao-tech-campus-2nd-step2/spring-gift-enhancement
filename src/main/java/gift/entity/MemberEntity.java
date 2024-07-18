@@ -25,7 +25,7 @@ public class MemberEntity {
     @OneToMany(mappedBy = "userEntity")
     private List<WishListEntity> wishListEntities;
 
-    protected MemberEntity() {}
+    public MemberEntity() {}
 
     public MemberEntity(String email, String password) {
         this.email = email;

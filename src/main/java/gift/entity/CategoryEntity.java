@@ -18,7 +18,7 @@ public class CategoryEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 7)
     private String color;
 
     @Column(name = "image_url", nullable = false)

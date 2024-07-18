@@ -19,7 +19,7 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private String name;
 
     @Column(nullable = false)
@@ -30,6 +30,8 @@ public class ProductEntity {
 
     @OneToMany(mappedBy = "productEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishListEntity> wishListEntities;
+
+    public ProductEntity() {}
 
     public ProductEntity(Long id, String name, int price, String imageUrl) {}
 
