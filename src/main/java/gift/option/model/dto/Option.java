@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Option", uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "name"})})
@@ -23,6 +24,7 @@ public class Option {
     private Long id;
 
     @Column(nullable = false)
+    @Size(max = 50)
     private String name;
 
     @Min(1)

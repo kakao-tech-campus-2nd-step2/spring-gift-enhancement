@@ -88,13 +88,13 @@
 > ```
 
 ### 데이터베이스 테이블: Option
-| 필드명             | 데이터 타입  | 설명            | 기타 조건              |
-|-----------------|---------|---------------|--------------------|
-| id              | Long    | option 고유 식별자 | Primary Key, 자동 생성 |
-| name            | String  | 옵션 이름         |      |
-| quantity        | Integer | 옵션 수량         | 1 ~ 1억 미만          |
-| additional_cost | Integer | 옵션 추가 금액    | 0 이상, 기본값 0        |
-| product_id      | Long    | 상품 고유 식별자   | Foreign Key        |
+| 필드명             | 데이터 타입  | 설명            | 기타 조건                     |
+|-----------------|---------|---------------|---------------------------|
+| id              | Long    | option 고유 식별자 | Primary Key, 자동 생성        |
+| name            | String  | 옵션 이름         | 50자 이하                    |
+| quantity        | Integer | 옵션 수량         | 1 ~ 1억 미만                 |
+| additional_cost | Integer | 옵션 추가 금액    | 0 이상, 기본값 0               |
+| product_id      | Long    | 상품 고유 식별자   | Foreign Key               |
 | -               | -       | -               | UNIQUE (product_id, name) |
 
 ### 기능 목록
