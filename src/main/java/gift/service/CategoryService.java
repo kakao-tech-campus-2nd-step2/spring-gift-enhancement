@@ -29,8 +29,7 @@ public class CategoryService {
     }
 
     public CategoryResponse addCategory(CategoryRequest categoryRequest) {
-        Category category = categoryRequest.toEntity(categoryRequest.name(), categoryRequest.color(),
-            categoryRequest.imageUrl(), categoryRequest.description());
+        Category category = toEntity(categoryRequest);
         return CategoryResponse.from(categoryRepository.save(category));
     }
 
@@ -47,6 +46,10 @@ public class CategoryService {
     }
 
 
+    public Category toEntity(CategoryRequest categoryRequest) {
+        return new Category(categoryRequest.name(), categoryRequest.color(),
+            categoryRequest.imageUrl(), categoryRequest.description());
+    }
 
 
 
