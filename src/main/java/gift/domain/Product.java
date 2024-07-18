@@ -135,9 +135,9 @@ public class Product {
         this.category = category;
     }
 
-    public void remove(Product product){
+    public void remove(){
         if(this.category != null){
-            this.category.removeProduct(product);
+            this.category.removeProduct(this);
         }
     }
 
