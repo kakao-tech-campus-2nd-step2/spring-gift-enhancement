@@ -7,6 +7,7 @@ import gift.core.domain.product.ProductRepository;
 import gift.core.domain.product.exception.*;
 import gift.core.exception.ErrorCode;
 import gift.core.exception.validation.InvalidArgumentException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     }
 
     @Override
+    @Transactional
     public void registerOptionToProduct(Long productId, ProductOption productOption) {
         if (!productRepository.exists(productId)) {
             throw new ProductNotFoundException();
@@ -47,6 +49,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     }
 
     @Override
+    @Transactional
     public List<ProductOption> getOptionsFromProduct(Long productId) {
         if (!productRepository.exists(productId)) {
             throw new ProductNotFoundException();
@@ -55,6 +58,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     }
 
     @Override
+    @Transactional
     public void removeOptionFromProduct(Long productId, Long optionId) {
         if (!productRepository.exists(productId)) {
             throw new ProductNotFoundException();
