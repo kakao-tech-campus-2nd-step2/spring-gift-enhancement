@@ -32,20 +32,20 @@ class WishControllerTest {
     this.wishController = wishController;
     this.productController = productController;
     this.memberController = memberController;
-    this.categoryController=categoryController;
+    this.categoryController = categoryController;
   }
 
   @Test
   void getWishListTest() {
     Pageable pageable = PageRequest.of(0, 5);
-    CategoryDto categoryDto = new CategoryDto(1L,"교환권","#61cdef","image.url","교환권 카테고리");
+    CategoryDto categoryDto = new CategoryDto(1L, "교환권", "#61cdef", "image.url", "교환권 카테고리");
     categoryController.addCategory(categoryDto);
 
     MemberDto memberDto1 = new MemberDto(1L, "a@naver.com", "abcde");
     memberController.SignUp(memberDto1);
 
-    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img",categoryDto);
-    ProductDto productDto2 = new ProductDto(2L, "product2", 200, "efgh.img",categoryDto);
+    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img", categoryDto);
+    ProductDto productDto2 = new ProductDto(2L, "product2", 200, "efgh.img", categoryDto);
     productController.addProduct(productDto1);
     productController.addProduct(productDto2);
 
@@ -89,10 +89,10 @@ class WishControllerTest {
     MemberDto memberDto1 = new MemberDto(1L, "a@naver.com", "abcde");
     memberController.SignUp(memberDto1);
 
-    CategoryDto categoryDto = new CategoryDto(1L,"교환권","#61cdef","image.url","교환권 카테고리");
+    CategoryDto categoryDto = new CategoryDto(1L, "교환권3", "#61cdef", "image.url", "교환권 카테고리");
     categoryController.addCategory(categoryDto);
 
-    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img",categoryDto);
+    ProductDto productDto1 = new ProductDto(1L, "product13", 100, "abcd.img", categoryDto);
     productController.addProduct(productDto1);
 
     WishListDto wishListDto1 = new WishListDto(1L, memberDto1, productDto1);
@@ -116,16 +116,16 @@ class WishControllerTest {
     MemberDto memberDto1 = new MemberDto(1L, "a@naver.com", "abcde");
     memberController.SignUp(memberDto1);
 
-    CategoryDto categoryDto = new CategoryDto(1L,"교환권","#61cdef","image.url","교환권 카테고리");
+    CategoryDto categoryDto = new CategoryDto(1L, "교환권2", "#61cdef", "image.url", "교환권 카테고리");
     categoryController.addCategory(categoryDto);
 
-    ProductDto productDto1 = new ProductDto(1L, "product1", 100, "abcd.img",categoryDto);
+    ProductDto productDto1 = new ProductDto(1L, "product12", 100, "abcd.img", categoryDto);
     productController.addProduct(productDto1);
 
     WishListDto wishListDto1 = new WishListDto(1L, memberDto1, productDto1);
-    wishController.addProductToWishList(wishListDto1,null);
+    wishController.addProductToWishList(wishListDto1, null);
 
-    ResponseEntity responseEntity=wishController.deleteProductToWishList(1L);
+    ResponseEntity responseEntity = wishController.deleteProductToWishList(1L);
     ResponseEntity<Void> expectedResponse = ResponseEntity.noContent().build();
 
     assertThat(responseEntity.getStatusCode()).isEqualTo(expectedResponse.getStatusCode());
