@@ -5,6 +5,7 @@ import gift.domain.CategoryName;
 import gift.domain.Product;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -17,7 +18,7 @@ public class ProductDTO {
     @Pattern(regexp = "^(?!.*(?i)(kakao|카카오).*$).*$", message = "상품 이름에 '카카오'를 사용할 수 없습니다.")
     private String name;
 
-    @NotBlank(message = "가격은 필수 입력 항목입니다.")
+    @NotNull(message = "가격은 필수 입력 항목입니다.")
     @DecimalMin(value = "0.0", inclusive = false, message = "가격은 0보다 커야 합니다.")
     private BigDecimal price;
 
@@ -25,7 +26,7 @@ public class ProductDTO {
 
     private String description;
 
-    @NotBlank(message = "카테고리는 필수 입력 항목입니다.")
+    @NotNull(message = "카테고리는 필수 입력 항목입니다.")
     private CategoryName categoryName;
 
     public ProductDTO() {}

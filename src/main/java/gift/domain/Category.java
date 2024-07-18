@@ -1,9 +1,9 @@
 package gift.domain;
 
-import gift.converter.CategoryNameConverter;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +18,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Convert(converter = CategoryNameConverter.class)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
     private CategoryName name;
 
