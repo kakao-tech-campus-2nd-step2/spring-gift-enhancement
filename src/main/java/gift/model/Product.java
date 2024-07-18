@@ -1,5 +1,6 @@
 package gift.model;
 
+import gift.common.exception.DuplicateDataException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -45,8 +46,16 @@ public class Product extends BasicEntity{
         if (entity == null) {
             return;
         }
+        checkDuplicateName(entity.getName());
         options.add(entity);
-        entity.setProduct(this);
+    }
+
+    public void checkDuplicateName(String theirName) {
+        for (Option option : options) {
+            if(option.isSameName(theirName)) {
+                throw new DuplicateDataException("Option with name " + theirName + " already exists");
+            }
+        }
     }
 
     public String getName() {

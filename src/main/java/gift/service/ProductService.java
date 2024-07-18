@@ -1,6 +1,5 @@
 package gift.service;
 
-import gift.common.exception.DuplicateDataException;
 import gift.common.exception.EntityNotFoundException;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
@@ -47,12 +46,12 @@ public class ProductService {
 
     @Transactional
     public Long save(CreateProductDto request) {
-        checkDuplicateOptionName(request.optionName());
         Option option = new Option(request.optionName(), request.optionQuantity());
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category with id " + request.categoryId() + " not found"));
-        Product product = new Product(request.name(), request.price(), request.imageUrl(), category, option);
-        return productRepository.save(product).getId();
+        Product product = productRepository.save(new Product(request.name(), request.price(), request.imageUrl(), category, option));
+        option.updateOptionByProduct(product);
+        return product.getId();
     }
 
     @Transactional
@@ -67,11 +66,5 @@ public class ProductService {
     @Transactional
     public void deleteById(Long id) {
         productRepository.deleteById(id);
-    }
-
-    private void checkDuplicateOptionName(String optionName) {
-        if (optionRepository.existsByName(optionName)) {
-            throw new DuplicateDataException("Option with name " + optionName + " already exists");
-        }
     }
 }

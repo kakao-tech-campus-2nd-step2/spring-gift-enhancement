@@ -1,6 +1,5 @@
 package gift.service;
 
-import gift.common.exception.DuplicateDataException;
 import gift.common.exception.EntityNotFoundException;
 import gift.controller.dto.request.CreateOptionRequest;
 import gift.controller.dto.request.UpdateOptionRequest;
@@ -43,9 +42,8 @@ public class OptionService {
     public void updateById(UpdateOptionRequest request) {
         checkOptionExist(request.id());
         Option option = optionRepository.getReferenceById(request.id());
-        if (option.nameChanged(request.name())) {
-            checkDuplicateName(request.name());
-        }
+        Product product = option.getProduct();
+        product.checkDuplicateName(request.name());
         option.updateOption(request.name(), request.quantity());
     }
 
@@ -74,12 +72,6 @@ public class OptionService {
     private void checkOptionExist(Long id) {
         if(!optionRepository.existsById(id)) {
             throw new EntityNotFoundException("Option with id " + id + " not found");
-        }
-    }
-
-    private void checkDuplicateName(String name) {
-        if (optionRepository.existsByName(name)) {
-            throw new DuplicateDataException("Option with name " + name + " already exists");
         }
     }
 }

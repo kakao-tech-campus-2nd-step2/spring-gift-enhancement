@@ -35,11 +35,11 @@ public class Option extends BasicEntity{
         this.quantity = quantity;
     }
 
-    public boolean nameChanged(String theirName) {
+    public boolean isSameName(String theirName) {
         return !name.equals(theirName);
     }
 
-    public void setProduct(Product product) {
+    public void updateOptionByProduct(Product product) {
         this.product = product;
     }
 

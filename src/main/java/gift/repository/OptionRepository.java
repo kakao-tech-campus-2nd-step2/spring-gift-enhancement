@@ -14,6 +14,4 @@ public interface OptionRepository extends JpaRepository<Option, Long> {
 
     @Query("SELECT o FROM Option o JOIN FETCH o.product p WHERE o.id= :id")
     Optional<Option> findByIdFetchJoin(Long id);
-
-    boolean existsByName(String name);
 }
