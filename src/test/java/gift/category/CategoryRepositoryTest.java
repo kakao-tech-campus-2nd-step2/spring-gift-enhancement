@@ -24,12 +24,12 @@ class CategoryRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-//    @BeforeEach
-//    void setCategoryRepository() {
-//        categoryRepository.save(new Cateogory("교환권","쌈@뽕한 블루","www","여름"));
-//        categoryRepository.save(new Cateogory("과제면제권","방학","www.com","학교"));
-//        categoryRepository.save(new Cateogory("라우브","스틸더","www.show","키야"));
-//    }
+    @BeforeEach
+    void setCategoryRepository() {
+        categoryRepository.save(new Cateogory("교환권","쌈@뽕한 블루","www","여름"));
+        categoryRepository.save(new Cateogory("과제면제권","방학","www.com","학교"));
+        categoryRepository.save(new Cateogory("라우브","스틸더","www.show","키야"));
+    }
 
 //    @BeforeEach
 //    void setProductRepository() {
