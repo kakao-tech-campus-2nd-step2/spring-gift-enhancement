@@ -1,7 +1,7 @@
 -- 카테고리 데이터 삽입
 INSERT INTO category (categoryId, name, color, imgUrl) VALUES
-(1, 'Clothes', 'black', 'https://www.google.com'),
-(2, 'Foods', 'white', 'https://www.google.com');
+('Clothes', 'black', 'https://www.google.com'),
+('Foods', 'white', 'https://www.google.com');
 
 -- 상품 데이터 삽입
 INSERT INTO products (name, price, imgUrl, categoryId) VALUES
