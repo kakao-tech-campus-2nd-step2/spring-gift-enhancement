@@ -1,8 +1,10 @@
 package gift.controller;
 
 import gift.model.Product;
+import gift.model.ProductOption;
 import gift.service.CategoryService;
 import gift.service.ProductService;
+import gift.service.ProductOptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,11 +24,13 @@ public class ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final ProductOptionService productOptionService;
 
     @Autowired
-    public ProductController(ProductService productService, CategoryService categoryService) {
+    public ProductController(ProductService productService, CategoryService categoryService, ProductOptionService productOptionService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.productOptionService = productOptionService;
     }
 
     @PostMapping
@@ -36,6 +40,13 @@ public class ProductController {
         }
         product.setCategory(categoryService.findById(product.getCategory().getId()));
         productService.save(product);
+
+        // Save options
+        for (ProductOption option : product.getOptions()) {
+            option.setProduct(product);
+            productOptionService.save(option);
+        }
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -58,7 +69,15 @@ public class ProductController {
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setPrice(updatedProduct.getPrice());
         existingProduct.setImageurl(updatedProduct.getImageurl());
-        existingProduct.setOptions(updatedProduct.getOptions());
+
+        // Remove existing options
+        productOptionService.deleteByProductId(existingProduct.getId());
+
+        // Save new options
+        for (ProductOption option : updatedProduct.getOptions()) {
+            option.setProduct(existingProduct);
+            productOptionService.save(option);
+        }
 
         productService.update(existingProduct);
         return new ResponseEntity<>(existingProduct, HttpStatus.OK);

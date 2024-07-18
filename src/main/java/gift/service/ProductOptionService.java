@@ -15,11 +15,20 @@ public class ProductOptionService {
     private ProductOptionRepository productOptionRepository;
 
     public List<ProductOption> getOptionsByProductId(Long productId) {
-        return productOptionRepository.findByProductId(productId); // 메서드 호출
+        return productOptionRepository.findByProductId(productId);
     }
 
     public ProductOption findById(Long id) {
         Optional<ProductOption> productOption = productOptionRepository.findById(id);
         return productOption.orElse(null);
+    }
+
+    public void save(ProductOption option) {
+        productOptionRepository.save(option);
+    }
+
+    public void deleteByProductId(Long productId) {
+        List<ProductOption> options = productOptionRepository.findByProductId(productId);
+        productOptionRepository.deleteAll(options);
     }
 }

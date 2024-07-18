@@ -5,6 +5,7 @@ import gift.model.Product;
 import gift.model.ProductOption;
 import gift.service.CategoryService;
 import gift.service.ProductService;
+import gift.service.ProductOptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,9 @@ public class WebController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductOptionService productOptionService;
 
     @GetMapping("/register")
     public String showRegisterForm() {
