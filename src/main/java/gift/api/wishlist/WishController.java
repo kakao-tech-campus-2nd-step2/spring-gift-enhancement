@@ -1,6 +1,7 @@
 package gift.api.wishlist;
 
 import gift.global.LoginMember;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -29,19 +30,19 @@ public class WishController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> add(@RequestBody WishRequest wishRequest, @LoginMember Long memberId) {
+    public ResponseEntity<Void> add(@RequestBody @Valid WishRequest wishRequest, @LoginMember Long memberId) {
         wishService.add(memberId, wishRequest);
         return ResponseEntity.created(URI.create("/api/wishes/" + memberId)).build();
     }
 
     @PutMapping()
-    public ResponseEntity<Void> update(@RequestBody WishRequest wishRequest, @LoginMember Long memberId) {
+    public ResponseEntity<Void> update(@RequestBody @Valid WishRequest wishRequest, @LoginMember Long memberId) {
         wishService.update(memberId, wishRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping()
-    public ResponseEntity<Void> delete(@RequestBody WishRequest wishRequest, @LoginMember Long memberId) {
+    public ResponseEntity<Void> delete(@RequestBody @Valid WishRequest wishRequest, @LoginMember Long memberId) {
         wishService.delete(memberId, wishRequest);
         return ResponseEntity.noContent().build();
     }

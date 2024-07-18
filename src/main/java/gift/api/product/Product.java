@@ -1,16 +1,18 @@
 package gift.api.product;
 
+import gift.api.category.Category;
+import gift.global.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Product extends BaseEntity {
+    @ManyToOne
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"), nullable = false)
+    private Category category;
     @Column(length = 15, nullable = false)
     private String name;
     @Column(nullable = false)
@@ -21,27 +23,22 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, Integer price, String imageUrl) {
+    public Product(Category category, String name, Integer price, String imageUrl) {
+        this.category = category;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public Product(Long id, String name, Integer price, String imageUrl) {
-        this.id = id;
+    public void update(Category category, String name, Integer price, String imageUrl) {
+        this.category = category;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public void update(String name, Integer price, String imageUrl) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
-
-    public Long getId() {
-        return id;
+    public Category getCategory() {
+        return category;
     }
 
     public String getName() {
@@ -56,8 +53,8 @@ public class Product {
         return imageUrl;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public void setName(String name) {

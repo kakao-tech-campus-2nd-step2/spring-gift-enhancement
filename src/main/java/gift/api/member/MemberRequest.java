@@ -12,6 +12,10 @@ public record MemberRequest(
     @NotBlank(message = "Password is mandatory")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)\\S{8,}$", message = "Must contain upper and lower case letters, numbers, and no blanks")
     String password,
-    @NotNull
+    @NotNull(message = "Role is mandatory")
     Role role
-) {}
+) {
+    public Member toEntity() {
+        return new Member(email, password, role);
+    }
+}
