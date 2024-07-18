@@ -43,6 +43,6 @@
 ## 1단계 피드백
 - [ ] product의 category를 List가 아니라 대분류>중분류>소분류 처럼 되도록 생각해보기
 - [x] fk를 product쪽에만 두기
-- [ ] CreateProductDto에 category 포함
-- [ ] ProductService에서 CateggoryRepo 제거
+- [x] CreateProductDto에 category 포함
+- [x] ProductService에서 CateggoryRepo 제거
 

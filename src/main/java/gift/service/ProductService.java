@@ -14,21 +14,16 @@ import org.springframework.data.domain.Pageable;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
     private final CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository,CategoryService categoryService) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
         this.categoryService = categoryService;
     }
 
-    public Product createProduct(CreateProductDto productDto, String categoryType) {
-        Category category = categoryService.addCategory(categoryType);
-        Product product = productDto.toProduct(category);
+    public Product createProduct(CreateProductDto productDto) {
+        Product product = productDto.toProduct();
         productRepository.save(product);
-        category.addProduct(product);
-        categoryRepository.save(category);
         return product;
     }
 
