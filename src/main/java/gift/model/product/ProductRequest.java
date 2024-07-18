@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record ProductRequest(
-    Long id,
     @NotBlank(message = "이름은 필수 입력값입니다.")
     @Size(max = 15, message = "이름의 최대 글자수는 15입니다.")
     @Pattern(
