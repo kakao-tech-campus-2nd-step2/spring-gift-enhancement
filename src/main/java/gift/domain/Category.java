@@ -33,6 +33,9 @@ public class Category {
     @OneToOne(mappedBy = "category")
     private Product product;
 
+    protected Category() {
+    }
+
     public Category(String name, String color, String description, String imageUrl) {
         this.name = name;
         this.color = color;

@@ -7,9 +7,8 @@
 </head>
 <body>
 <div class="container mt-5">
-  <h1 th:text="${!isEditing} ? 'Add Product' : 'Edit Product'"></h1>
-  <form th:action="@{/admin/form}" th:object="${product}" method="post">
-    <input type="hidden" th:if="${isEditing}" name="_method" value="put"/>
+  <h1>Add Product</h1>
+  <form th:action="@{/admin/product/add}" th:object="${product}" method="post">
     <div class="form-group">
       <label for="name">Name</label>
       <input type="text" class="form-control" id="name" th:field="*{name}" required>
@@ -23,7 +22,7 @@
     <div class="form-group">
       <label for="imageUrl">Image URL</label>
       <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" required>
-      <td th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">Name Error</td>
+      <td th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">ImageUrl Error</td>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
     <a href="/admin" class="btn btn-secondary">Cancel</a>
