@@ -3,6 +3,7 @@ package gift.product.entity;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import gift.category.entity.Category;
+import gift.option.entity.Option;
 import gift.product.dto.ProductReqDto;
 import gift.wishlist.entity.WishList;
 import jakarta.persistence.CascadeType;
@@ -39,6 +40,9 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
 
     public Product(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
@@ -82,6 +86,14 @@ public class Product {
         return category;
     }
 
+    public List<WishList> getWishLists() {
+        return wishLists;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void update(ProductReqDto productReqDto) {
         this.name = productReqDto.name();
         this.price = productReqDto.price();
@@ -92,6 +104,11 @@ public class Product {
         this.category = category;
     }
 
+    public void addOption(Option option) {
+        this.options.add(option);
+        option.changeProduct(this);
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -100,5 +117,9 @@ public class Product {
                 ", price=" + price +
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
+    }
+
+    public void clearOptions() {
+        this.options.clear();
     }
 }

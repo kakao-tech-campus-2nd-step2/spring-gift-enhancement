@@ -6,6 +6,7 @@ import gift.auth.dto.LoginReqDto;
 import gift.auth.token.AuthToken;
 import gift.category.dto.CategoryReqDto;
 import gift.common.exception.ErrorResponse;
+import gift.option.dto.OptionReqDto;
 import gift.product.dto.ProductReqDto;
 import gift.product.dto.ProductResDto;
 import gift.utils.JwtTokenProvider;
@@ -58,11 +59,17 @@ class WishListE2ETest {
     private static String baseUrl;
     private static String accessToken;
 
+    private static final List<OptionReqDto> options = List.of(
+            new OptionReqDto("옵션1", 1000),
+            new OptionReqDto("옵션2", 2000),
+            new OptionReqDto("옵션3", 3000)
+    );
+
     private static List<ProductReqDto> products = List.of(
-            new ProductReqDto("상품1", 1000, "keyboard.png", "위시리스트 카테고리1"),
-            new ProductReqDto("상품2", 2000, "mouse.png", "위시리스트 카테고리2"),
-            new ProductReqDto("상품3", 3000, "monitor.png", "위시리스트 카테고리3"),
-            new ProductReqDto("상품4", 4000, "headset.png", "위시리스트 카테고리4")
+            new ProductReqDto("상품1", 1000, "keyboard.png", "위시리스트 카테고리1", options),
+            new ProductReqDto("상품2", 2000, "mouse.png", "위시리스트 카테고리2", options),
+            new ProductReqDto("상품3", 3000, "monitor.png", "위시리스트 카테고리3", options),
+            new ProductReqDto("상품4", 4000, "headset.png", "위시리스트 카테고리4", options)
     );
     private static List<ProductResDto> productList = new ArrayList<>();
 

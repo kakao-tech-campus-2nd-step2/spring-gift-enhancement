@@ -8,6 +8,7 @@ import gift.auth.token.AuthToken;
 import gift.category.dto.CategoryReqDto;
 import gift.category.dto.CategoryResDto;
 import gift.category.exception.CategoryErrorCode;
+import gift.common.exception.CommonErrorCode;
 import gift.common.exception.ErrorResponse;
 import gift.common.exception.ValidationError;
 import gift.utils.TestUtils;
@@ -157,9 +158,9 @@ class CategoryE2ETest {
         assertThat(errorResponse).isNotNull();
         assertThat(errorResponse).isInstanceOf(ErrorResponse.class);
 
-        assertThat(errorResponse.getCode()).isEqualTo(CategoryErrorCode.INVALID_INPUT_VALUE_CATEGORY.getCode());
+        assertThat(errorResponse.getCode()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getCode());
         assertThat(errorResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        assertThat(errorResponse.getMessage()).isEqualTo(CategoryErrorCode.INVALID_INPUT_VALUE_CATEGORY.getMessage());
+        assertThat(errorResponse.getMessage()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getMessage());
 
         List<ValidationError> invalidParams = errorResponse.getInvalidParams();
         assertThat(invalidParams).hasSize(3);
@@ -213,9 +214,9 @@ class CategoryE2ETest {
         assertThat(errorResponse).isNotNull();
         assertThat(errorResponse).isInstanceOf(ErrorResponse.class);
 
-        assertThat(errorResponse.getCode()).isEqualTo(CategoryErrorCode.INVALID_INPUT_VALUE_CATEGORY.getCode());
+        assertThat(errorResponse.getCode()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getCode());
         assertThat(errorResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        assertThat(errorResponse.getMessage()).isEqualTo(CategoryErrorCode.INVALID_INPUT_VALUE_CATEGORY.getMessage());
+        assertThat(errorResponse.getMessage()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getMessage());
 
         List<ValidationError> invalidParams = errorResponse.getInvalidParams();
         assertThat(invalidParams).hasSize(3);
