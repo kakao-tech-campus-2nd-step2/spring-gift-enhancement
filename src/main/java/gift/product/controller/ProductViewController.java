@@ -1,9 +1,13 @@
 package gift.product.controller;
 
 import gift.category.service.CategoryService;
+import gift.option.domain.OptionDTO;
+import gift.option.service.OptionService;
 import gift.product.domain.Product;
 import gift.product.domain.ProductDTO;
 import gift.product.service.ProductService;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +26,13 @@ public class ProductViewController
 {
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
-    public ProductViewController(ProductService productService, CategoryService categoryService) {
+    public ProductViewController(ProductService productService, CategoryService categoryService,
+        OptionService optionService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     @GetMapping("")
@@ -41,12 +48,15 @@ public class ProductViewController
     public String showCreateForm(Model model) {
         model.addAttribute("product", new ProductDTO());
         model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("optionDTOList", new ArrayList<OptionDTO>());
         return "add_product";
     }
 
     @PostMapping("")
-    public String createProduct(@ModelAttribute ProductDTO productDTO) {
+    public String createProduct(@ModelAttribute ProductDTO productDTO,
+                                @ModelAttribute List<OptionDTO> optionDTOList) {
         productService.createProduct(productDTO);
+        optionService.saveAll(optionDTOList);
         return "redirect:/admin/products";
     }
 
