@@ -3,7 +3,7 @@ package gift.member.model;
 import gift.wishlist.model.WishList;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
