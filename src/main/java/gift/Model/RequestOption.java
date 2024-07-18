@@ -1,8 +1,6 @@
 package gift.Model;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record RequestOption (
         @Pattern(
@@ -14,7 +12,8 @@ public record RequestOption (
         @NotNull (message =  "옵션 이름은 필수입니다")
         String name,
 
-        @Size(min=1 , max = 99999999, message = "옵션 수량은 최소 1개 이상 최대 1억개 미만입니다")
+        @Min(value = 1, message = "상품 옵션의 수량은 최소 1개이상이여야 합니다")
+        @Max(value = 99999999, message = "상품 옵션의 수량은 최대 1억개미만이여야 합니다")
         int quantity
 ){
 }
