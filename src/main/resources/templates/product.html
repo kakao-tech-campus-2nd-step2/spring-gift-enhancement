@@ -5,6 +5,7 @@
     <title>상품 관리 페이지</title>
 </head>
 <body>
+<a href="/admin/category">[ 카테고리 관리 ]</a>
 <h1>상품 관리 페이지</h1>
 
 <a href="/admin/product/register">새 상품 추가</a>
@@ -22,7 +23,6 @@
 <table id="productList">
     <thead>
     <tr>
-        <th>Id</th>
         <th>Name</th>
         <th>Price</th>
         <th>ImageURL</th>
@@ -31,9 +31,6 @@
     </thead>
     <tbody th:each="product : ${productList}">
     <tr>
-        <td>
-            <span th:text="${product.id}"></span>
-        </td>
         <td>
             <span th:text="${product.name}"></span>
         </td>
@@ -44,7 +41,7 @@
             <span th:text="${product.imageUrl}"></span>
         </td>
         <td>
-            <form th:action="@{/admin/product/update/{id}(id=${product.id})}" method="get">
+            <form th:action="@{/admin/product/{id}(id=${product.id})}" method="get">
                 <button type="submit">수정</button>
             </form>
             <form th:action="@{/admin/product/{id}(id=${product.id})}" method="post">

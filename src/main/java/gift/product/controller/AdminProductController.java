@@ -31,11 +31,11 @@ public class AdminProductController {
     @GetMapping("/register")
     public String showProductForm(Model model) {
         System.out.println("[ProductController] showProductForm()");
-        model.addAttribute("product", new ProductDTO("", 0, ""));
+        model.addAttribute("product", new ProductDTO());
         return "product-form";
     }
 
-    @PostMapping()
+    @PostMapping
     public String registerProduct(@Valid @ModelAttribute ProductDTO productDTO, BindingResult bindingResult, Model model) {
         System.out.println("[ProductController] registerProduct()");
         if (bindingResult.hasErrors()) {
@@ -46,7 +46,7 @@ public class AdminProductController {
         return "redirect:/admin/product/list";
     }
 
-    @GetMapping("/update/{id}")
+    @GetMapping("/{id}")
     public String updateProductForm(@PathVariable Long id, Model model) {
         System.out.println("[ProductController] updateProductForm()");
         ProductDTO productDTO = productService.getDTOById(id);

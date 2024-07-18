@@ -73,9 +73,10 @@ public class WishListService {
     public ProductDTO convertWishToProductDTO(Wish wish) {
         Product product = wish.getProduct();
         return new ProductDTO(
-            product.getName(),
-            product.getPrice(),
-            product.getImageUrl()
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl(),
+                product.getCategory().getId()
         );
     }
 
