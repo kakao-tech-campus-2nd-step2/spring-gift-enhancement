@@ -23,7 +23,7 @@ public class ProductChangeRequestDto {
     private int price;
 
     @NotNull(message = "상품 카테고리는 필수항목입니다.")
-    private long category;
+    private Long category;
 
     public String getName() {
         return name;
@@ -37,7 +37,7 @@ public class ProductChangeRequestDto {
         return price;
     }
 
-    public long getCategory() {
+    public Long getCategory() {
         return category;
     }
 }

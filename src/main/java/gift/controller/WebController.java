@@ -1,9 +1,6 @@
 package gift.controller;
 
-import gift.dto.CategoryResponseDto;
-import gift.dto.ProductChangeRequestDto;
-import gift.dto.ProductRequestDto;
-import gift.dto.ProductResponseDto;
+import gift.dto.*;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -39,20 +36,21 @@ public class WebController {
     }
 
     @PostMapping("products/add")
-    public String add(@Valid @ModelAttribute("requestDto") ProductRequestDto requestDto, BindingResult result, Model model) {
+    public String add(@Valid @ModelAttribute("requestDto") ViewProductDto requestDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<CategoryResponseDto> list = categoryService.getAll();
             model.addAttribute("list", list);
             return "addForm";
         }
-        productService.addProduct(requestDto);
+        ProductRequestDto request = new ProductRequestDto(requestDto.getName(), requestDto.getImgUrl(), requestDto.getPrice(), requestDto.getCategory());
+        productService.addProduct(request);
         return "redirect:/";
     }
 
     @GetMapping("products/add")
     public String getAddForm(Model model) {
         List<CategoryResponseDto> list = categoryService.getAll();
-        model.addAttribute("requestDto", new ProductRequestDto());
+        model.addAttribute("requestDto", new ViewProductDto());
         model.addAttribute("list", list);
         return "addForm";
     }
