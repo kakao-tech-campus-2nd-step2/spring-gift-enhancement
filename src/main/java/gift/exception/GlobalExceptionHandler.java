@@ -6,7 +6,6 @@ import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -44,6 +43,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleOptionNotFoundException(OptionNotFoundException ex, WebRequest request) {
+        String path = request.getDescription(false).replace("uri=", "");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage(), path);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
     @ExceptionHandler(DuplicateCategoryNameException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateCategoryNameException(DuplicateCategoryNameException ex, WebRequest request) {
         String path = request.getDescription(false).replace("uri=", "");
@@ -51,11 +57,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
+    @ExceptionHandler(DuplicateOptionNameException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateDuplicateOptionNameException(DuplicateOptionNameException ex, WebRequest request) {
         String path = request.getDescription(false).replace("uri=", "");
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), path);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage(), path);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -63,11 +69,18 @@ public class GlobalExceptionHandler {
         String path = request.getDescription(false).replace("uri=", "");
 
         List<String> errorMessages = ex.getBindingResult().getFieldErrors().stream()
-                .map(FieldError::getDefaultMessage)
+                .map(FieldError -> FieldError.getField() + ": " + FieldError.getDefaultMessage())
                 .collect(Collectors.toList());
 
         MultipleErrorResponse multipleErrorResponse = new MultipleErrorResponse(HttpStatus.BAD_REQUEST.value(),errorMessages,path);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(multipleErrorResponse);
+    }
+
+    @ExceptionHandler(CannotDeleteLastOptionException.class)
+    public ResponseEntity<ErrorResponse> handleCannotDeleteLastOptionException(CannotDeleteLastOptionException ex, WebRequest request) {
+        String path = request.getDescription(false).replace("uri=", "");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.value(), ex.getMessage(), path);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
     }
 
     @ExceptionHandler(JwtException.class)
@@ -75,5 +88,12 @@ public class GlobalExceptionHandler {
         String path = request.getDescription(false).replace("uri=", "");
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), path);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
+        String path = request.getDescription(false).replace("uri=", "");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), path);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 }

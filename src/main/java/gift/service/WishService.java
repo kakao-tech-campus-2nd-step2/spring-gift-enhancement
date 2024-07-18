@@ -60,9 +60,10 @@ public class WishService {
 
     @Transactional
     public void deleteWishByMemberIdAndId(Long memberId, Long id){
-        wishRepository.findByIdAndMemberId(id, memberId)
+        Wish foundWish = wishRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(()-> new WishNotFoundException(Messages.NOT_FOUND_WISH));
 
+        foundWish.remove();
         wishRepository.deleteById(id);
     }
 

@@ -46,6 +46,21 @@ public class Category {
         }
     }
 
+    public Category(String name, String color, String imageUrl, String description) {
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
+
+    public Category(Long id, String name, String color, String imageUrl, String description) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
+    }
+
     public Category(Builder builder){
         this.id = builder.id;
         this.name = builder.name;
@@ -138,21 +153,13 @@ public class Category {
         this.products = products;
     }
 
-    public void updateName(String name){
+    public  void updateCategory(String name, String color, String imageUrl, String description) {
         this.name = name;
-    }
-
-    public void updateColor(String color){
         this.color = color;
-    }
-
-    public void updateImageUrl(String imageUrl){
         this.imageUrl = imageUrl;
-    }
-
-    public void updateDescription(String description){
         this.description = description;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

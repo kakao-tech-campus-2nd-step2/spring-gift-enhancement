@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.domain.Category;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
@@ -25,16 +26,27 @@ class WishRepositoryTest {
     private ProductRepository products;
     @Autowired
     private MemberRepository members;
+    @Autowired
+    private CategoryRepository categories;
 
     @Test
     @DisplayName("위시 저장 테스트")
     void save() {
         // given
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
+        categories.save(category);
         products.save(expectedProduct);
 
         Member expectedMember = new Member.Builder()
@@ -60,11 +72,20 @@ class WishRepositoryTest {
     @Test
     @DisplayName("위시 멤버 아이디로 위시 조회 테스트")
     void findByMemberId() {
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
+        categories.save(category);
         products.save(expectedProduct);
 
         Member expectedMember = new Member.Builder()
@@ -93,11 +114,20 @@ class WishRepositoryTest {
     @DisplayName("위시 아이디와 멤버 아이디로 위시 조회 테스트")
     void findByIdAndMemberId() {
         // given
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
+        categories.save(category);
         products.save(expectedProduct);
 
         Member expectedMember = new Member.Builder()
@@ -126,11 +156,20 @@ class WishRepositoryTest {
     @DisplayName("위시 아이디로 위시 삭제 테스트")
     void deleteById() {
         // given
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
+        categories.save(category);
         products.save(expectedProduct);
 
         Member expectedMember = new Member.Builder()
@@ -143,7 +182,9 @@ class WishRepositoryTest {
         wishes.save(expected);
 
         // when
+        expected.remove();
         wishes.deleteById(expected.getId());
+
 
         // then
         List<Wish> findWishes = wishes.findAll();
@@ -156,11 +197,20 @@ class WishRepositoryTest {
     @DisplayName("위시 페이지 조회 테스트")
     void testFindByMemberId() {
         // given
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
-                .imageUrl("http://example.com/americano")
+                .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
+        categories.save(category);
         products.save(expectedProduct);
 
         Member expectedMember = new Member.Builder()

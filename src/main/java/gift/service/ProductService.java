@@ -59,7 +59,8 @@ public class ProductService {
 
     @Transactional
     public void deleteById(Long id){
-        findProductByIdOrThrow(id);
+        Product foundProduct = findProductByIdOrThrow(id);
+        foundProduct.remove();
         productRepository.deleteById(id);
     }
 
@@ -68,10 +69,7 @@ public class ProductService {
         Product foundProduct = findProductByIdOrThrow(id);
         Category category = categoryService.findById(productRequest.categoryId()).toEntity();
 
-        foundProduct.updateName(productRequest.name());
-        foundProduct.updatePrice(productRequest.price());
-        foundProduct.updateImageUrl(productRequest.imageUrl());
-        foundProduct.updateCategory(category);
+        foundProduct.updateProduct(productRequest.name(), productRequest.price(), productRequest.imageUrl(),category);
         productRepository.save(foundProduct);
     }
 

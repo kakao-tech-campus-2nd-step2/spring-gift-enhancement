@@ -24,6 +24,8 @@ public class Product {
     private Category category;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
 
     public void addWish(Wish wish) {
         this.wishes.add(wish);
@@ -41,6 +43,26 @@ public class Product {
         while(iterator.hasNext()) {
             Wish wish = iterator.next();
             wish.setProduct(null);
+            iterator.remove();
+        }
+    }
+
+    public void addOption(Option option) {
+        this.options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOption(Option option) {
+        option.setProduct(null);
+        this.options.remove(option);
+    }
+
+    public void removeOptions() {
+        Iterator<Option> iterator = options.iterator();
+
+        while(iterator.hasNext()){
+            Option option = iterator.next();
+            option.setProduct(null);
             iterator.remove();
         }
     }
@@ -69,6 +91,9 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        if(this.category != null){
+            this.category.addProduct(this);
+        }
     }
 
     public Long getId() {
@@ -95,24 +120,25 @@ public class Product {
         return category;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void setCategory(Category category) {
         this.category = category;
     }
 
-    public void updateName(String name) {
+    public void updateProduct(String name, int price, String imageUrl, Category category){
         this.name = name;
-    }
-
-    public void updatePrice(int price) {
         this.price = price;
-    }
-
-    public void updateImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public void updateCategory(Category category) {
-        this.category = category;
+    public void remove(){
+        if(this.category != null){
+            this.category.removeProduct(this);
+        }
     }
 
     public static class Builder {
@@ -148,7 +174,11 @@ public class Product {
         }
 
         public Product build() {
-            return new Product(this);
+            Product product = new Product(this);
+            if(product.category != null && product.id == null){
+                product.category.addProduct(product);
+            }
+            return product;
         }
     }
 
