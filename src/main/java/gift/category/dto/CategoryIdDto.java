@@ -1,2 +1,7 @@
-package gift.category.dto;public record CategoryIdDto() {
+package gift.category.dto;
+
+public record CategoryIdDto(
+    Long categoryId
+) {
+
 }

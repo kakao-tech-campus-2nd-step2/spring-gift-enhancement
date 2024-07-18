@@ -31,6 +31,10 @@ public class Category {
 
     }
 
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
     public String getName() {
         return name;
     }

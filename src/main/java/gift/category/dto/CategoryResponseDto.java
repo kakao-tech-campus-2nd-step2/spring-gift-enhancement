@@ -1,2 +1,9 @@
-package gift.category.dto;public record CategoryResponseDto() {
+package gift.category.dto;
+
+public record CategoryResponseDto(
+    long id,
+    String name,
+    String imageUrl
+) {
+
 }
