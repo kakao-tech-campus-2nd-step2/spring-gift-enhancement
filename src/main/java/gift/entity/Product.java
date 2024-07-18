@@ -28,7 +28,6 @@ public class Product {
     @Column(nullable = false)
     String imageUrl;
 
-
     @OneToMany(mappedBy = "product")
     @Size(max=100_000_000)//1~1억
     List<Option> options = new ArrayList<>();
@@ -47,6 +46,10 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public String getCategoryName() {
+        return category.getName();
     }
 
     public int getId() {
@@ -87,10 +90,11 @@ public class Product {
     public void deleteOption(Option option) {
         options.remove(option);
     }
+  
     public void setCategory(Category category) {
         this.category = category;
     }
-
+  
     public void modifyProduct(ModifyProductDTO modifyProductDTO) {
         this.name = modifyProductDTO.name();
         this.price = modifyProductDTO.price();
