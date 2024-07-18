@@ -1,4 +1,4 @@
-package gift.product.infrastructure.persistence;
+package gift.product.infrastructure.persistence.entity;
 
 import gift.core.BaseEntity;
 import gift.core.domain.product.ProductCategory;

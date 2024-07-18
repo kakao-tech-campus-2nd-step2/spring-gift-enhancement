@@ -1,8 +1,9 @@
-package gift.product.infrastructure.persistence;
+package gift.product.infrastructure.persistence.repository;
 
 import gift.core.PagedDto;
 import gift.core.domain.product.ProductCategory;
 import gift.core.domain.product.ProductCategoryRepository;
+import gift.product.infrastructure.persistence.entity.ProductCategoryEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
