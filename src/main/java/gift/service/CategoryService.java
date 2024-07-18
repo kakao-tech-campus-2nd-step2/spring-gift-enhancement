@@ -47,18 +47,18 @@ public class CategoryService {
     @Transactional
     public void updateCategory(UpdateCategoryRequest request) {
         Category updateTargetCategory = categoryRepository.findById(request.id())
-                .orElseThrow(CategoryNotFoundException::new);
+                .orElseThrow(() -> new CategoryNotFoundException(request.id()));
         updateTargetCategory.update(request);
     }
 
     public Category getCategory(Long categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(CategoryNotFoundException::new);
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
     }
 
     public void deleteCategory(Long categoryId) {
         Category deleteTargetCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(CategoryNotFoundException::new);
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
 
         categoryRepository.delete(deleteTargetCategory);
     }
