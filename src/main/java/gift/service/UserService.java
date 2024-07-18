@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.domain.model.dto.TokenResponseDto;
 import gift.domain.model.entity.User;
 import gift.domain.model.dto.UserRequestDto;
 import gift.domain.model.dto.UserResponseDto;
@@ -38,7 +39,7 @@ public class UserService {
         return new UserResponseDto(savedUser, token);
     }
 
-    public String loginUser(UserRequestDto userRequestDto) {
+    public TokenResponseDto loginUser(UserRequestDto userRequestDto) {
         User user = userRepository.findByEmail(userRequestDto.getEmail())
             .orElseThrow(() -> new NoSuchEmailException("사용자를 찾을 수 없습니다."));
 
@@ -46,7 +47,7 @@ public class UserService {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
-        return jwtUtil.generateToken(user.getEmail());
+        return new TokenResponseDto(jwtUtil.generateToken(user.getEmail()));
     }
 
     public User getUserByEmail(String userEmail) {

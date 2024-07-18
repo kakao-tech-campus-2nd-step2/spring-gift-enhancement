@@ -18,10 +18,14 @@ public class ProductAddRequestDto {
     @NotNull
     private String imageUrl;
 
-    public ProductAddRequestDto(String name, Long price, String imageUrl) {
+    @NotNull
+    private String categoryName;
+
+    public ProductAddRequestDto(String name, Long price, String imageUrl, String categoryName) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryName = categoryName;
     }
 
     public String getName() {
@@ -34,5 +38,9 @@ public class ProductAddRequestDto {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
     }
 }
