@@ -3,7 +3,6 @@ package gift.service;
 import gift.dto.ProductOptionRequestDto;
 import gift.dto.ProductOptionResponseDto;
 import gift.entity.Option;
-import gift.entity.OptionName;
 import gift.entity.Product;
 import gift.entity.ProductOption;
 import gift.exception.BusinessException;
@@ -12,11 +11,15 @@ import gift.mapper.ProductOptionMapper;
 import gift.repository.OptionRepository;
 import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 @Service
 public class ProductOptionService {
@@ -32,10 +35,8 @@ public class ProductOptionService {
 
     @Transactional
     public ProductOptionResponseDto addProductOption(ProductOptionRequestDto requestDto) {
-        Product product = productRepository.findById(requestDto.getProductId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND, "ID: " + requestDto.getProductId()));
-        Option option = optionRepository.findById(requestDto.getOptionId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.OPTION_NOT_FOUND, "ID: " + requestDto.getOptionId()));
+        Product product = getProductById(requestDto.getProductId());
+        Option option = getOptionById(requestDto.getOptionId());
 
         boolean isDuplicateOption = productOptionRepository.existsByProductAndOptionName(product, option.getName());
         if (isDuplicateOption) {
@@ -71,6 +72,17 @@ public class ProductOptionService {
     public void deleteProductOption(Long id) {
         ProductOption productOption = getProductOptionById(id);
         productOptionRepository.delete(productOption);
+    }
+
+    @Retryable(
+            maxAttempts = 5,
+            backoff = @Backoff(delay = 200, multiplier = 2)
+    )
+    @Transactional
+    public void decreaseProductOptionQuantity(Long productOptionId, int amount) {
+        ProductOption productOption = productOptionRepository.findByIdWithLock(productOptionId);
+        productOption.decreaseQuantity(amount);
+        productOptionRepository.save(productOption);
     }
 
     private Product getProductById(Long id) {
