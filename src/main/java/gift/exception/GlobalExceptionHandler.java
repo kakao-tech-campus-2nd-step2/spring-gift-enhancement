@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicatedEmailException.class)
-    public ResponseEntity<String> HandleDuplicatedEmail(DuplicatedEmailException e) {
+    protected ResponseEntity<String> HandleDuplicatedEmail(DuplicatedEmailException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
     @ExceptionHandler(PasswordMismatchException.class)
-    public ResponseEntity<String> HandlePasswordMismatch(PasswordMismatchException e) {
+    protected ResponseEntity<String> HandlePasswordMismatch(PasswordMismatchException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
     @ExceptionHandler(InvalidAccountException.class)
-    public ResponseEntity<String> HandleInvalidAccount(InvalidAccountException e) {
+    protected ResponseEntity<String> HandleInvalidAccount(InvalidAccountException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 }

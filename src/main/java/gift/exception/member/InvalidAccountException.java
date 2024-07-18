@@ -1,16 +1,12 @@
 package gift.exception.member;
 
-import org.springframework.http.HttpStatus;
+import static gift.exception.ErrorCode.INVALID_ACCOUNT;
 
-public class InvalidAccountException extends RuntimeException {
-    private static final HttpStatus STATUS = HttpStatus.UNAUTHORIZED;
-    private static final String MESSAGE = "Invalid Email or Password";
+import gift.exception.CustomException;
+
+public class InvalidAccountException extends CustomException {
 
     public InvalidAccountException() {
-        super(MESSAGE);
-    }
-
-    public static HttpStatus getStatus() {
-        return STATUS;
+        super(INVALID_ACCOUNT);
     }
 }

@@ -1,16 +1,11 @@
 package gift.exception.member;
 
-import org.springframework.http.HttpStatus;
+import static gift.exception.ErrorCode.DUPLICATED_EMAIL;
 
-public class DuplicatedEmailException extends RuntimeException {
-    private static final HttpStatus STATUS = HttpStatus.CONFLICT;
-    private static final String MESSAGE = "Email already exists";
+import gift.exception.CustomException;
 
+public class DuplicatedEmailException extends CustomException {
     public DuplicatedEmailException() {
-        super(MESSAGE);
-    }
-
-    public HttpStatus getStatus() {
-        return STATUS;
+        super(DUPLICATED_EMAIL);
     }
 }

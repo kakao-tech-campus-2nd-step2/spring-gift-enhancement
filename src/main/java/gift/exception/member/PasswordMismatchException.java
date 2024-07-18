@@ -1,17 +1,12 @@
 package gift.exception.member;
 
-import org.springframework.http.HttpStatus;
+import static gift.exception.ErrorCode.PASSWORD_MISMATCH;
 
-public class PasswordMismatchException extends RuntimeException {
+import gift.exception.CustomException;
 
-    private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
-    private static final String MESSAGE = "Password and password confirmation do not match";
+public class PasswordMismatchException extends CustomException {
 
     public PasswordMismatchException() {
-        super(MESSAGE);
-    }
-
-    public HttpStatus getStatus() {
-        return STATUS;
+        super(PASSWORD_MISMATCH);
     }
 }
