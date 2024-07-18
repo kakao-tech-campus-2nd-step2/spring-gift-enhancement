@@ -18,7 +18,7 @@ public class CategoryDTO {
         this.description = description;
     }
 
-    public static CategoryDTO fromCategory(Category category) {
+    public static CategoryDTO convertDTO(Category category) {
         return new CategoryDTO(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
     }
 
