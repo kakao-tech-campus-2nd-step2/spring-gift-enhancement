@@ -25,10 +25,15 @@ public class OptionService {
             .toList();
     }
 
-    public List<OptionDTO> findAllByProductID(Long productId){
+    public List<OptionDTO> findAllByProductId(Long productId){
         return optionRepository.findAllByProductId(productId)
             .stream().map(this::convertToDTO)
             .toList();
+    }
+    public List<Option> saveAll(List<OptionDTO> optionDTOList){
+        return optionRepository.saveAll(optionDTOList.stream()
+            .map(this::convertToEntity)
+            .toList());
     }
 
     public Option save(OptionDTO optionDTO){
