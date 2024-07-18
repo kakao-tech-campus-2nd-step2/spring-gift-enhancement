@@ -81,7 +81,7 @@ class WishProductServiceTest {
     void addWishProductFailWithInvalidProductId() {
         //given
         var invalidWishProductAddRequest = new WishProductAddRequest(10L, 5);
-        //then
+        //when, then
         Assertions.assertThatThrownBy(() -> wishProductService.addWishProduct(invalidWishProductAddRequest, 1L))
                 .isInstanceOf(NotFoundElementException.class);
     }

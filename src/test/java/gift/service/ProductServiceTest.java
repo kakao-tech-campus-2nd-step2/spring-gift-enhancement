@@ -38,7 +38,7 @@ class ProductServiceTest {
     void addProductFailWithKAKAOName() {
         //given
         var productRequest = new ProductRequest("카카오상품", 10000, "이미지 주소", 1L);
-        //then
+        //when, then
         Assertions.assertThatThrownBy(() -> productService.addProduct(productRequest, MemberRole.MEMBER))
                 .isInstanceOf(InvalidProductNameWithKAKAOException.class);
     }
