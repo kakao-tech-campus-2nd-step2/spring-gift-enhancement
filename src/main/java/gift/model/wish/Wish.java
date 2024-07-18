@@ -1,6 +1,5 @@
 package gift.model.wish;
 
-import gift.dto.WishDto;
 import gift.model.member.Member;
 import gift.model.product.Product;
 import jakarta.persistence.*;

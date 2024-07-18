@@ -14,9 +14,6 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Product> products;
-
     protected Category(){
     }
     public Category(String categoryName){
