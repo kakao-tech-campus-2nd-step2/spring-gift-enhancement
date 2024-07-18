@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.entity.Category;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 public class ProductRequestDto {
@@ -8,21 +9,24 @@ public class ProductRequestDto {
     private String name;
     private Long price;
     private String url;
+    private Category category;
 
-    public ProductRequestDto(String name, Long price, String url) {
+    public ProductRequestDto(String name, Long price, String url, Category category) {
         if (checkValidProductName(name)) {
             this.name = name;
             this.price = price;
             this.url = url;
+            this.category = category;
         }
     }
 
-    public ProductRequestDto(Long id, String name, Long price, String url) {
+    public ProductRequestDto(Long id, String name, Long price, String url, Category category) {
         if (checkValidProductName(name)) {
             this.id = id;
             this.name = name;
             this.price = price;
             this.url = url;
+            this.category = category;
         }
     }
 
@@ -103,6 +107,13 @@ public class ProductRequestDto {
         return url;
     }
 
+    public Category getCategoryId() {
+        return category;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
 
     public class IllegalProductNameLengthException extends IllegalArgumentException {
         public IllegalProductNameLengthException() {

@@ -1,5 +1,6 @@
 package gift;
 
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.repository.ProductRepositoryInterface;
 import jakarta.transaction.Transactional;
@@ -20,7 +21,8 @@ public class ProductRepositoryTest {
 
     @Test
     void save() {
-        final Product product = new Product("사과", 500L, "naver.com");
+        final Category category = new Category("과일");
+        final Product product = new Product("사과", 500L, "naver.com", );
         assertThat(product.getId()).isNull();
         var actualProduct = products.save(product);
         assertThat(actualProduct.getId()).isNotNull();
@@ -28,7 +30,7 @@ public class ProductRepositoryTest {
 
     @Test
     void findByName() {
-        products.save(new Product("사과", 500L, "naver.com"));
+        products.save(new Product("사과", 500L, "naver.com", 1L));
         final Product actualProduct = products.findByName("사과");
         assertThat(actualProduct.getId()).isNotNull();
         assertThat(actualProduct.getName()).isEqualTo("사과");
