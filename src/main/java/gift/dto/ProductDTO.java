@@ -25,6 +25,9 @@ public class ProductDTO {
     @URL(message = "유효한 URL 형식이 아닙니다")
     private String imageUrl;
 
+    @NotNull
+    private Long categoryId;
+
     public Long getId() {
         return id;
     }
@@ -55,5 +58,13 @@ public class ProductDTO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }
