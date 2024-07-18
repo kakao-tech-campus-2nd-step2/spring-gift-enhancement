@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
@@ -30,7 +31,8 @@ public class Category {
   @Column(nullable = false)
   private String imageUrl;
 
-  @Column(nullable = false)
+  @Lob
+  @Column(nullable = false,columnDefinition = "CLOB")
   private String description;
 
   public Category() {
