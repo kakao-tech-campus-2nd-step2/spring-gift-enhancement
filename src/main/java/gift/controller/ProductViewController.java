@@ -33,7 +33,7 @@ public class ProductViewController {
 
     @GetMapping("/new")
     public String showAddProductForm(Model model) {
-        model.addAttribute("product", new ProductRequestDto("", 0, ""));
+        model.addAttribute("product", new ProductRequestDto("", 0, "", 0L));
         return "product_form";
     }
 

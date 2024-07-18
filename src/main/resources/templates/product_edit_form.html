@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <title>상품 수정</title>
     <style>
@@ -61,18 +61,69 @@
 <body>
 <div class="container">
     <h1>상품 수정</h1>
-    <form th:action="@{/products/edit/{id}(id=${product.id})}" method="post">
-        <label>이름: <input type="text" th:value="${product.name}" name="name"></label><br>
-        <label>가격: <input type="text" th:value="${product.price}" name="price"></label><br>
-        <label>이미지 URL: <input type="text" th:value="${product.imageUrl}" name="imageUrl"></label><br>
+    <form onsubmit="event.preventDefault(); updateProduct();" id="productForm">
+        <label>이름: <input type="text" id="name"></label><br>
+        <label>가격: <input type="text" id="price"></label><br>
+        <label>이미지 URL: <input type="text" id="imageUrl"></label><br>
         <label>카테고리:
-            <select name="categoryId">
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"
-                        th:selected="${category.id == product.category.id}"></option>
+            <select id="categoryId">
+                <!-- 카테고리 목록이 여기에 동적으로 추가됩니다 -->
             </select>
         </label><br>
         <button type="submit">수정</button>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const productId = window.location.pathname.split("/").pop();
+
+        fetch('/api/categories')
+            .then(response => response.json())
+            .then(data => {
+                const categorySelect = document.getElementById('categoryId');
+                data.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.text = category.name;
+                    categorySelect.appendChild(option);
+                });
+
+                return fetch(`/api/products/${productId}`);
+            })
+            .then(response => response.json())
+            .then(product => {
+                document.getElementById('name').value = product.name;
+                document.getElementById('price').value = product.price;
+                document.getElementById('imageUrl').value = product.imageUrl;
+                document.getElementById('categoryId').value = product.category.id;
+            })
+            .catch(error => console.error('Error loading product or categories:', error));
+    });
+
+    function updateProduct() {
+        const productId = window.location.pathname.split("/").pop();
+        const name = document.getElementById('name').value;
+        const price = parseInt(document.getElementById('price').value);
+        const imageUrl = document.getElementById('imageUrl').value;
+        const categoryId = document.getElementById('categoryId').value;
+
+        fetch(`/api/products/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({name: name, price: price, imageUrl: imageUrl, categoryId: categoryId})
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('상품이 수정되었습니다.');
+                window.location.href = '/products';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('상품 수정 중 오류가 발생했습니다.');
+            });
+    }
+</script>
 </body>
 </html>

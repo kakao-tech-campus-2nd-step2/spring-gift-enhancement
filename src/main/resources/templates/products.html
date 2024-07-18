@@ -121,6 +121,8 @@
             <th>카테고리</th>
             <th>수정</th>
             <th>삭제</th>
+            <th>옵션 조회</th>
+            <th>옵션 추가</th>
         </tr>
         </thead>
         <tbody id="productTableBody">
@@ -163,6 +165,8 @@
                                             <button type="submit">삭제</button>
                                         </form>
                                     </td>
+                                    <td class="actions"><a href="/products/${product.id}/options">옵션 조회</a></td>
+                                    <td class="actions"><a href="/products/${product.id}/options/new">옵션 추가</a></td>
                                 </tr>`;
                         });
                     } else {
