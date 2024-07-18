@@ -31,7 +31,7 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(value = NullPointerException.class)
     public ResponseEntity<String> handleNullPointerException(NullPointerException ex) {
-        return new ResponseEntity<>("Null Pointer Exception occurred",
+        return new ResponseEntity<>(ex.getMessage(),
             HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
