@@ -48,8 +48,4 @@ public class OptionService {
         return id;
     }
 
-    @Transactional
-
-
-
 }
