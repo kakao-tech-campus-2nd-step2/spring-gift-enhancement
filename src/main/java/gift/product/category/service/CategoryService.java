@@ -56,16 +56,10 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long id) {
-        validateCategory(id);
-        categoryRepository.deleteById(id);
-    }
-
-    // for delete
-    @Transactional(readOnly = true)
-    protected void validateCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new CategoryNotFoundException();
         }
+        categoryRepository.deleteById(id);
     }
 
 }
