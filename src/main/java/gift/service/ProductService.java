@@ -39,18 +39,22 @@ public class ProductService {
         return ADD_SUCCESS_MSG;
     }
 
-    public String updateProduct(Long productId, UpdateProductRequest product) {
+    public String updateProduct(Long productId, UpdateProductRequest productRequest) {
 
         Product productToUpdate = productRepository.findProductById(productId).get();
 
-        if (product.getName() != null) {
-            productToUpdate.setName(product.getName());
+        if (productRequest.getName() != null) {
+            productToUpdate.setName(productRequest.getName());
         }
-        if (product.getPrice() > 0) {
-            productToUpdate.setPrice(product.getPrice());
+        if (productRequest.getPrice() > 0) {
+            productToUpdate.setPrice(productRequest.getPrice());
         }
-        if (product.getImageUrl() != null) {
-            productToUpdate.setImageUrl(product.getImageUrl());
+        if (productRequest.getImageUrl() != null) {
+            productToUpdate.setImageUrl(productRequest.getImageUrl());
+        }
+        if (productRequest.getCategory() != null) {
+            Category category = categoryRepository.findByName(productRequest.getCategory()).get();
+            productToUpdate.setCategory(category);
         }
         productRepository.save(productToUpdate);
         return UPDATE_SUCCESS_MSG;

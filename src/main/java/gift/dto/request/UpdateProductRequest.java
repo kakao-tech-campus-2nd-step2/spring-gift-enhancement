@@ -16,6 +16,8 @@ public class UpdateProductRequest {
 
     private String imageUrl;
 
+    private String category;
+
     public String getName() {
         return name;
     }
@@ -26,5 +28,9 @@ public class UpdateProductRequest {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getCategory() {
+        return category;
     }
 }

@@ -95,4 +95,8 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
