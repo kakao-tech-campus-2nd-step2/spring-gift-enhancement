@@ -139,10 +139,10 @@ public class Category {
     }
 
     public  void updateCategory(String name, String color, String imageUrl, String description) {
-        this.setName(name);
-        this.setColor(color);
-        this.setImageUrl(imageUrl);
-        this.setDescription(description);
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
 
     @Override
