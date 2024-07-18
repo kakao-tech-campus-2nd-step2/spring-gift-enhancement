@@ -7,6 +7,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,6 +18,7 @@ import java.util.NoSuchElementException;
 
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
+    private static final Logger log = LoggerFactory.getLogger(TokenInterceptor.class);
     private final MemberRepository memberRepository;
 
     public TokenInterceptor(MemberRepository memberRepository) {
@@ -43,7 +46,7 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         return true;
         } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
+            log.error("Exception: {}", e.getMessage());
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;

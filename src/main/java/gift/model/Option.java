@@ -1,6 +1,7 @@
 package gift.model;
 
 import jakarta.persistence.*;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,6 +9,8 @@ import java.util.List;
 
 @Entity
 public class Option {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Option.class);
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,7 +25,7 @@ public class Option {
     }
 
     public Option(String option){
-        System.out.println("옵션받아옴" + option);
+        log.info("옵션받아옴" + option);
         List<String> options = List.of(option.split(","));
         if(isCorrectOptionSize(options) && isCorrectOptionList(options) && isNotDuplicate(options)){
             this.option = options;
@@ -51,7 +54,6 @@ public class Option {
     }
 
     private boolean isCorrectOptionSize(List<String> options){
-        System.out.println("11" + options);
         if(options.isEmpty() || options.size() >= 100000000){
             throw new IllegalArgumentException("옵션은 1개 이상 1억개 미만이어야 합니다.");
 
@@ -60,7 +62,6 @@ public class Option {
     }
 
     private boolean isCorrectOptionName(String option){
-        System.out.println("22" + option);
         if(option.length()>50){
             throw new IllegalArgumentException("옵션은 최대 50자까지만 입력이 가능합니다.");
         }
@@ -76,7 +77,6 @@ public class Option {
     }
 
     private boolean isCorrectOptionList(List<String> options) {
-        System.out.println("33" + options);
         for (String s : options) {
             if (!isCorrectOptionName(s)) {
                 throw new IllegalArgumentException("옵션은 최대 50자 이내이어야 하며, 특수문자로는 (),[],+,-,&,/,_만 사용 가능합니다.");
@@ -86,7 +86,6 @@ public class Option {
     }
 
     private boolean isNotDuplicate(List<String> options){
-        System.out.println("44" + options);
         if(options.size() != new HashSet<>(options).size()){
             throw new IllegalArgumentException("옵션은 중복될 수 없습니다.");
         }

@@ -2,10 +2,13 @@ package gift.dto;
 
 import gift.model.CategoryName;
 import gift.model.ProductName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class InputProductDTO {
+    private static final Logger log = LoggerFactory.getLogger(InputProductDTO.class);
     private String name;
     private Integer price;
     private String imageUrl;
@@ -38,7 +41,7 @@ public class InputProductDTO {
     }
 
     public void setOption(String option){
-        System.out.println(option);
+        log.info(option);
         if(option == null){
             throw new IllegalArgumentException("옵션은 한 개 이상 등록해야 합니다.");
         }
