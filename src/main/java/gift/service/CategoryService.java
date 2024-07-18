@@ -1,11 +1,10 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.dto.CategoryDto;
 import gift.exception.CategoryNameNotDuplicateException;
 import gift.exception.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
-import gift.dto.request.CategoryRequest;
-import gift.dto.response.CategoryResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,31 +21,31 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<CategoryResponse> getCategories() {
+    public List<CategoryDto> getCategories() {
         return categoryRepository.findAll().stream()
                 .map(Category::toDto)
                 .toList();
     }
 
-    public void addCategory(CategoryRequest request) {
-        if (categoryRepository.existsByName(request.getName())) {
+    public void addCategory(CategoryDto dto) {
+        if (categoryRepository.existsByName(dto.getName())) {
             throw new CategoryNameNotDuplicateException();
         }
 
-        Category category = new Category(request.getName());
+        Category category = new Category(dto.getName());
 
         categoryRepository.save(category);
     }
 
-    public void editCategory(Long categoryId, CategoryRequest request) {
+    public void editCategory(Long categoryId, CategoryDto dto) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(CategoryNotFoundException::new);
 
-        if (!category.getName().equals(request.getName()) && categoryRepository.existsByName(request.getName())) {
+        if (!category.getName().equals(dto.getName()) && categoryRepository.existsByName(dto.getName())) {
             throw new CategoryNameNotDuplicateException();
         }
 
-        category.changeName(request.getName());
+        category.changeName(dto.getName());
     }
 
     public void removeCategory(Long categoryId) {

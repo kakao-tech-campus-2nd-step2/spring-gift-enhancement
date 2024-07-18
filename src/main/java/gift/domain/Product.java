@@ -1,7 +1,7 @@
 package gift.domain;
 
+import gift.dto.ProductDto;
 import gift.exception.NoOptionsInProductException;
-import gift.dto.response.ProductResponse;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -59,8 +59,8 @@ public class Product {
         this.id = id;
     }
 
-    public ProductResponse toDto() {
-        return new ProductResponse(this.getId(), this.getName(), this.getPrice(),
+    public ProductDto toDto() {
+        return new ProductDto(this.getId(), this.getName(), this.getPrice(),
                 this.getImageUrl());
     }
 

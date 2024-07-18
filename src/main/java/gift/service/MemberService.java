@@ -2,11 +2,11 @@ package gift.service;
 
 import gift.config.JwtProvider;
 import gift.domain.member.Member;
+import gift.dto.MemberDto;
 import gift.exception.EmailDuplicateException;
 import gift.exception.LoginException;
 import gift.exception.MemberNotFoundException;
 import gift.repository.MemberRepository;
-import gift.dto.request.RegisterRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,16 +20,16 @@ public class MemberService {
         this.jwtProvider = jwtProvider;
     }
 
-    public void addMember(RegisterRequest request) {
-        if (memberRepository.existsByEmail(request.getEmail())) {
+    public void addMember(MemberDto dto) {
+        if (memberRepository.existsByEmail(dto.getEmail())) {
             throw new EmailDuplicateException();
         }
 
-        memberRepository.save(request.toEntity());
+        memberRepository.save(dto.toEntity());
     }
 
-    public String login(String email, String password) {
-        Member member = memberRepository.findByEmailAndPassword(email, password)
+    public String login(MemberDto dto) {
+        Member member = memberRepository.findByEmailAndPassword(dto.getEmail(), dto.getPassword())
                 .orElseThrow(LoginException::new);
 
         return jwtProvider.create(member);

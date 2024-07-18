@@ -1,6 +1,6 @@
 package gift.domain;
 
-import gift.dto.response.OptionResponse;
+import gift.dto.OptionDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -42,8 +42,8 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public OptionResponse toDto() {
-        return new OptionResponse(this.id, this.name, this.quantity);
+    public OptionDto toDto() {
+        return new OptionDto(this.id, this.name, this.quantity);
     }
 
     public void setId(Long id) {

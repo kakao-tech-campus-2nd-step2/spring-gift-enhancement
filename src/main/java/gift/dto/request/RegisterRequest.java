@@ -1,6 +1,5 @@
 package gift.dto.request;
 
-import gift.domain.member.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
@@ -18,14 +17,6 @@ public class RegisterRequest {
     @NotBlank
     @Length(min = 4, max = 16)
     private String password;
-
-    public Member toEntity() {
-        return new Member.MemberBuilder()
-                .name(this.name)
-                .email(this.email)
-                .password(this.password)
-                .build();
-    }
 
     public String getName() {
         return name;

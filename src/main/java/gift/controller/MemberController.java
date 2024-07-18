@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.MemberDto;
 import gift.dto.request.LoginRequest;
 import gift.dto.request.RegisterRequest;
 import gift.dto.response.JwtResponse;
@@ -24,14 +25,18 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
-        memberService.addMember(request);
+        MemberDto memberDto = new MemberDto(request.getName(), request.getEmail(), request.getPassword());
+
+        memberService.addMember(memberDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody @Valid LoginRequest request) {
-        String jwt = memberService.login(request.getEmail(), request.getPassword());
+        MemberDto memberDto = new MemberDto(request.getEmail(), request.getPassword());
+
+        String jwt = memberService.login(memberDto);
 
         return ResponseEntity.ok()
                 .body(new JwtResponse(jwt));

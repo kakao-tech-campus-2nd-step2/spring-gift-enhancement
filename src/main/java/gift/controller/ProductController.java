@@ -1,5 +1,7 @@
 package gift.controller;
 
+import gift.dto.OptionDto;
+import gift.dto.ProductDto;
 import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductCreateRequest;
 import gift.dto.request.ProductUpdateRequest;
@@ -8,6 +10,7 @@ import gift.dto.response.ProductResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -29,21 +32,33 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> productList(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<ProductResponse> products = productService.getProducts(pageable);
+        List<ProductDto> productDtoList = productService.getProducts(pageable);
+
+        List<ProductResponse> productResponseList = productDtoList.stream()
+                .map(ProductDto::toResponseDto)
+                .toList();
+
+        PageImpl<ProductResponse> response = new PageImpl<>(productResponseList, pageable, productResponseList.size());
 
         return ResponseEntity.ok()
-                .body(products);
+                .body(response);
     }
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> productOne(@PathVariable Long productId) {
+        ProductDto productDto = productService.getProduct(productId);
+
+        ProductResponse response = productDto.toResponseDto();
+
         return ResponseEntity.ok()
-                .body(productService.getProduct(productId));
+                .body(response);
     }
 
     @PostMapping
     public ResponseEntity<Void> productAdd(@RequestBody @Valid ProductCreateRequest request) {
-        productService.addProduct(request);
+        ProductDto productDto = new ProductDto(request.getName(), request.getPrice(), request.getImageUrl(), request.getCategoryId(), request.getOptions());
+
+        productService.addProduct(productDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -51,7 +66,9 @@ public class ProductController {
     @PutMapping("/{productId}")
     public ResponseEntity<Void> productEdit(@PathVariable Long productId,
                                             @RequestBody @Valid ProductUpdateRequest request) {
-        productService.editProduct(productId, request);
+        ProductDto productDto = new ProductDto(request.getName(), request.getPrice(), request.getImageUrl(), request.getCategoryId());
+
+        productService.editProduct(productId, productDto);
 
         return ResponseEntity.ok().build();
     }
@@ -65,15 +82,21 @@ public class ProductController {
 
     @GetMapping("/{productId}/options")
     public ResponseEntity<List<OptionResponse>> optionList(@PathVariable Long productId) {
-        List<OptionResponse> options = productService.getOptions(productId);
+        List<OptionDto> options = productService.getOptions(productId);
+
+        List<OptionResponse> response = options.stream()
+                .map(OptionDto::toResponseDto)
+                .toList();
 
         return ResponseEntity.ok()
-                .body(options);
+                .body(response);
     }
 
     @PostMapping("/{productId}/options")
     public ResponseEntity<Void> optionAdd(@PathVariable Long productId, @RequestBody @Valid OptionRequest request) {
-        productService.addOption(productId, request);
+        OptionDto optionDto = new OptionDto(request.getName(), request.getQuantity());
+
+        productService.addOption(productId, optionDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

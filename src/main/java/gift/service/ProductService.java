@@ -3,19 +3,15 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
+import gift.dto.OptionDto;
+import gift.dto.ProductDto;
+import gift.dto.request.OptionRequest;
 import gift.exception.CategoryNotFoundException;
 import gift.exception.DuplicateOptionException;
 import gift.exception.OptionNotFoundException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import gift.dto.request.OptionRequest;
-import gift.dto.request.ProductCreateRequest;
-import gift.dto.request.ProductUpdateRequest;
-import gift.dto.response.OptionResponse;
-import gift.dto.response.ProductResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,35 +33,33 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductResponse> getProducts(Pageable pageable) {
-        List<ProductResponse> response = productRepository.findAll(pageable).stream()
+    public List<ProductDto> getProducts(Pageable pageable) {
+        return productRepository.findAll(pageable).stream()
                 .map(Product::toDto)
                 .toList();
-
-        return new PageImpl<>(response, pageable, response.size());
     }
 
     @Transactional(readOnly = true)
-    public ProductResponse getProduct(Long productId) {
+    public ProductDto getProduct(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new)
                 .toDto();
     }
 
-    public void addProduct(ProductCreateRequest request) {
-        Category category = categoryRepository.findById(request.getCategoryId())
+    public void addProduct(ProductDto dto) {
+        Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(CategoryNotFoundException::new);
-        Product product = new Product(request.getName(), request.getPrice(), request.getImageUrl(), category);
+        Product product = new Product(dto.getName(), dto.getPrice(), dto.getImageUrl(), category);
 
-        Set<String> optionNames = request.getOptions().stream()
+        Set<String> optionNames = dto.getOptions().stream()
                 .map(OptionRequest::getName)
                 .collect(Collectors.toSet());
 
-        if (optionNames.size() < request.getOptions().size()) {
+        if (optionNames.size() < dto.getOptions().size()) {
             throw new DuplicateOptionException();
         }
 
-        request.getOptions().stream()
+        dto.getOptions().stream()
                 .map(optionRequest -> new Option(product, optionRequest.getName(), optionRequest.getQuantity()))
                 .forEach(product.getOptions()::add);
 
@@ -74,15 +68,15 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void editProduct(Long productId, ProductUpdateRequest request) {
+    public void editProduct(Long productId, ProductDto dto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
-        Category category = categoryRepository.findById(request.getCategoryId())
+        Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(CategoryNotFoundException::new);
 
-        product.changeName(request.getName());
-        product.changePrice(request.getPrice());
-        product.changeImageUrl(request.getImageUrl());
+        product.changeName(dto.getName());
+        product.changePrice(dto.getPrice());
+        product.changeImageUrl(dto.getImageUrl());
         product.changeCategory(category);
     }
 
@@ -94,7 +88,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<OptionResponse> getOptions(Long productId) {
+    public List<OptionDto> getOptions(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
@@ -103,18 +97,18 @@ public class ProductService {
                 .toList();
     }
 
-    public void addOption(Long productId, OptionRequest request) {
+    public void addOption(Long productId, OptionDto dto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
         boolean optionExists = product.getOptions().stream()
-                .anyMatch(option -> option.getName().equals(request.getName()));
+                .anyMatch(option -> option.getName().equals(dto.getName()));
 
         if (optionExists) {
             throw new DuplicateOptionException();
         }
 
-        Option option = new Option(product, request.getName(), request.getQuantity());
+        Option option = new Option(product, dto.getName(), dto.getQuantity());
 
         product.getOptions().add(option);
     }
