@@ -1,6 +1,6 @@
 package gift.product.application.dto.request;
 
-import gift.common.validation.ProductNamePattern;
+import gift.common.validation.NamePattern;
 import gift.common.validation.ValidateErrorMessage;
 import gift.product.service.command.ProductCommand;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
 public record ProductRequest(
-        @ProductNamePattern
+        @NamePattern
         @NotBlank(message = ValidateErrorMessage.INVALID_PRODUCT_NAME_NULL)
         @Length(max = 15, message = ValidateErrorMessage.INVALID_PRODUCT_NAME_LENGTH)
         String name,

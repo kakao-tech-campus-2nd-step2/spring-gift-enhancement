@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
         message = INVALID_PRODUCT_NAME_PATTERN
 )
 @Constraint(validatedBy = {})
-public @interface ProductNamePattern {
+public @interface NamePattern {
     String message() default INVALID_PRODUCT_NAME_PATTERN;
 
     Class<?>[] groups() default {};
