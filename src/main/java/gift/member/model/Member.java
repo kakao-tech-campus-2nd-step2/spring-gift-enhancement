@@ -26,6 +26,11 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<WishList> wishLists = new ArrayList<>();
 
+    public Member(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public Long getMemberId() {
         return memberId;
     }
