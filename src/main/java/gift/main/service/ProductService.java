@@ -2,36 +2,34 @@ package gift.main.service;
 
 import gift.main.Exception.CustomException;
 import gift.main.Exception.ErrorCode;
-import gift.main.dto.ProductRequest;
-import gift.main.dto.ProductResponce;
-import gift.main.dto.UserVo;
-import gift.main.entity.Category;
-import gift.main.entity.Product;
-import gift.main.entity.User;
-import gift.main.repository.CategoryRepository;
-import gift.main.repository.ProductRepository;
-import gift.main.repository.UserRepository;
-import gift.main.repository.WishProductRepository;
+import gift.main.dto.*;
+import gift.main.entity.*;
+import gift.main.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final OptionRepository optionRepository;
+    private final OptionListRepository optionListRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final WishProductRepository wishProductRepository;
 
-    public ProductService(ProductRepository productRepository, UserRepository userRepository, CategoryRepository categoryRepository, WishProductRepository wishProductRepository) {
+    public ProductService(ProductRepository productRepository, OptionRepository optionRepository, OptionListRepository optionListRepository, UserRepository userRepository, CategoryRepository categoryRepository, WishProductRepository wishProductRepository) {
         this.productRepository = productRepository;
+        this.optionRepository = optionRepository;
+        this.optionListRepository = optionListRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+
         this.wishProductRepository = wishProductRepository;
     }
-
-
     public Page<ProductResponce> getProductPage(Pageable pageable) {
         Page<ProductResponce> productPage = productRepository.findAll(pageable)
                 .map(ProductResponce::new);
@@ -39,14 +37,31 @@ public class ProductService {
     }
 
     @Transactional
-    public void addProduct(ProductRequest productRequest, UserVo user) {
+    public void addProduct(ProductRequest productRequest, OptionListRequest optionListRequest, UserVo user) {
         User seller = userRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Category category = categoryRepository.findByUniNumber(productRequest.categoryUniNumber())
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+
         Product product = new Product(productRequest, seller, category);
-        productRepository.save(product);
-    }
+        Product savedProduct = productRepository.save(product);
+
+        // OptionList 객체 생성 및 저장
+        OptionList optionList = new OptionList(savedProduct.getId(), optionListRequest.getSize());
+        optionListRepository.save(optionList);
+
+        // Option 객체 생성 및 저장
+        List<OptionRequest> optionRequestList = optionListRequest.getOptionRequestList();
+        optionRequestList.stream()
+                .map(optionRequest -> new Option(optionRequest.name(), optionRequest.num(), optionList))
+                .forEach(option -> optionRepository.save(option));
+
+        // JPA 세션 내에서 OptionList의 options 필드를 초기화하여 접근
+        OptionList reloadedOptionList = optionListRepository.findById(optionList.getId()).orElseThrow(() -> new CustomException(ErrorCode.EXISTS_PRODUCT));
+        System.out.println("reloadedOptionList.getOptions() = " + reloadedOptionList.getOptions());
+        }
+
+
 
     @Transactional
     public void deleteProduct(long id) {
@@ -57,7 +72,6 @@ public class ProductService {
                     wishProduct.setProductIdToNull();
                     wishProductRepository.save(wishProduct);
                 });
-
         productRepository.deleteById(id);
     }
 

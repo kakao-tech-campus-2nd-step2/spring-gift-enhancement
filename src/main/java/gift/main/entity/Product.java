@@ -4,6 +4,7 @@ import gift.main.dto.ProductRequest;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -34,9 +35,16 @@ public class Product {
     private List<WishProduct> wishProducts;
     //물건을 삭제하는 경우 -> 위시리스트 삭제...?
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "option_list_id",nullable = true)
+    private OptionList optionList;
 
     public Product() {
 
+    }
+
+    public void setOptionList(OptionList optionList) {
+        this.optionList = optionList;
     }
 
     public Product(ProductRequest productRequest, User seller, Category category) {
@@ -107,5 +115,18 @@ public class Product {
 
     public List<WishProduct> getWishProducts() {
         return wishProducts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

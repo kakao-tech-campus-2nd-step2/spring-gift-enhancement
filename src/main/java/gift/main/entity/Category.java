@@ -22,6 +22,10 @@ public class Category {
     private List<Product> Products;
     //카테고리내에 상품이 존재하는 경우 -> 삭제 불가능
 
+    public List<Product> getProducts() {
+        return Products;
+    }
+
     public Category() {
     }
 
@@ -71,4 +75,6 @@ public class Category {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }
