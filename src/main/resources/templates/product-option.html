@@ -36,7 +36,7 @@
 </table>
 
 <h2>상품 내 옵션 조회</h2>
-<form th:action="@{/admin/products/{productId}/search(productId=${productId})}" method="get">
+<form th:action="@{/admin/product/{productId}/search(productId=${productId})}" method="get">
     <div>
         <span>옵션의 이름을 입력하세요:</span>
         <label>
@@ -47,7 +47,7 @@
 </form>
 
 <h2>상품 내 옵션 목록</h2>
-<a th:href="@{/admin/product/{productId}/register(productId=${productId})}">[ 옵션 추가 ]</a>
+<a th:href="@{/admin/product/{productId}/option/register(productId=${productId})}">[ 옵션 추가 ]</a>
 <table id="optionList">
     <thead>
     <tr>
@@ -65,10 +65,10 @@
             <span th:text="${option.quantity}"></span>
         </td>
         <td>
-            <form th:action="@{/admin/products/option/{id}(id=${option.id})}" method="get">
+            <form th:action="@{/admin/product/{productId}/option/{optionId}(productId=${productId}, optionId=${option.id})}" method="get">
                 <button type="submit">수정</button>
             </form>
-            <form th:action="@{/admin/products/option/{id}(id=${option.id})}" method="post">
+            <form th:action="@{/admin/product/{productId}/option/{optionId}(productId=${productId}, optionId=${option.id})}" method="post">
                 <input type="hidden" name="_method" value="delete" />
                 <button type="submit">삭제</button>
             </form>

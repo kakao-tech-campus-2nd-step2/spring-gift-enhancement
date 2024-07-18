@@ -36,10 +36,10 @@ public class OptionService {
         return optionRepository.findAllByProductId(id, pageable);
     }
 
-    public void registerOption(OptionDTO optionDTO) {
+    public void registerOption(Long productId, OptionDTO optionDTO) {
         System.out.println("[OptionService] registerOption()");
 
-        Product product = productRepository.findById(optionDTO.getProductId())
+        Product product = productRepository.findById(productId)
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
 
         optionValidation.register(product, optionDTO);
@@ -78,5 +78,12 @@ public class OptionService {
         optionValidation.delete(id);
 
         optionRepository.deleteById(id);
+    }
+
+    public Option findById(Long id) {
+        System.out.println("[OptionService] findById()");
+
+        return optionRepository.findById(id)
+            .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
     }
 }

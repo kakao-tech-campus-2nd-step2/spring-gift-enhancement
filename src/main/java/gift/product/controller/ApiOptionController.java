@@ -38,13 +38,7 @@ public class ApiOptionController {
     @PostMapping("/{productId}/option")
     public ResponseEntity<String> registerOption(@PathVariable Long productId, @RequestBody OptionDTO optionDTO) {
         System.out.println("[ApiOptionController] getAllOptions()");
-        optionService.registerOption(
-            new OptionDTO(
-                optionDTO.getName(),
-                optionDTO.getQuantity(),
-                productId
-            )
-        );
+        optionService.registerOption(productId, optionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("Option registered successfully");
     }
 
