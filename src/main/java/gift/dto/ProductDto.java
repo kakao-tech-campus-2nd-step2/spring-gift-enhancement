@@ -14,6 +14,9 @@ public class ProductDto {
     private Long categoryId;
     private List<OptionRequest> options;
 
+    public ProductDto() {
+    }
+
     public ProductDto(String name, int price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;

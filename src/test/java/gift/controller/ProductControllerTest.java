@@ -2,10 +2,11 @@ package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constant.ErrorMessage;
+import gift.dto.OptionDto;
+import gift.dto.ProductDto;
 import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductCreateRequest;
 import gift.dto.request.ProductUpdateRequest;
-import gift.dto.response.ProductResponse;
 import gift.service.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,7 +45,7 @@ class ProductControllerTest {
     @Test
     void productList() throws Exception {
         //given
-        given(productService.getProducts(any(Pageable.class))).willReturn(new PageImpl<>(List.of()));
+        given(productService.getProducts(any(Pageable.class))).willReturn(List.of());
 
         //when
         ResultActions result = mvc.perform(get("/api/products"));
@@ -62,7 +62,7 @@ class ProductControllerTest {
     void productOne() throws Exception {
         //given
         Long productId = 1L;
-        ProductResponse product = new ProductResponse();
+        ProductDto product = new ProductDto();
 
         given(productService.getProduct(productId)).willReturn(product);
 
@@ -81,9 +81,9 @@ class ProductControllerTest {
     void productAdd() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionRequest("옵션", 12L)));
+        ProductDto request = new ProductDto("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionRequest("옵션", 12L)));
 
-        willDoNothing().given(productService).addProduct(any(ProductCreateRequest.class));
+        willDoNothing().given(productService).addProduct(any(ProductDto.class));
 
         //when
         ResultActions result = mvc.perform(post("/api/products")
@@ -94,7 +94,7 @@ class ProductControllerTest {
         result
                 .andExpect(status().isCreated());
 
-        then(productService).should().addProduct(any(ProductCreateRequest.class));
+        then(productService).should().addProduct(any(ProductDto.class));
     }
 
     @DisplayName("[POST/Exception] 상품 하나를 추가하는데, 상품 이름이 주어지지 않으면 예외를 던진다.")
@@ -191,9 +191,9 @@ class ProductControllerTest {
         //given
         Long productId = 1L;
         Long categoryId = 1L;
-        ProductUpdateRequest request = new ProductUpdateRequest("아이스티", 2500, "https://example.com", categoryId);
+        ProductDto request = new ProductDto("아이스티", 2500, "https://example.com", categoryId);
 
-        willDoNothing().given(productService).editProduct(anyLong(), any(ProductUpdateRequest.class));
+        willDoNothing().given(productService).editProduct(anyLong(), any(ProductDto.class));
 
         //when
         ResultActions result = mvc.perform(put("/api/products/{productId}", productId)
@@ -204,7 +204,7 @@ class ProductControllerTest {
         result
                 .andExpect(status().isOk());
 
-        then(productService).should().editProduct(anyLong(), any(ProductUpdateRequest.class));
+        then(productService).should().editProduct(anyLong(), any(ProductDto.class));
     }
 
 
@@ -342,9 +342,9 @@ class ProductControllerTest {
     void optionAdd() throws Exception {
         //given
         Long productId = 1L;
-        OptionRequest request = new OptionRequest("옵션", 2500L);
+        OptionDto request = new OptionDto("옵션", 2500L);
 
-        willDoNothing().given(productService).addOption(anyLong(), any(OptionRequest.class));
+        willDoNothing().given(productService).addOption(anyLong(), any(OptionDto.class));
 
         //when
         ResultActions result = mvc.perform(post("/api/products/{productId}/options", productId)
@@ -355,7 +355,7 @@ class ProductControllerTest {
         result
                 .andExpect(status().isCreated());
 
-        then(productService).should().addOption(anyLong(), any(OptionRequest.class));
+        then(productService).should().addOption(anyLong(), any(OptionDto.class));
     }
 
     @DisplayName("[DELETE] 상품에 존재하는 옵션 하나를 삭제한다.")

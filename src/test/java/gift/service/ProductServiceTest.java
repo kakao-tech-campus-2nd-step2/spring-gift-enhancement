@@ -3,12 +3,12 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
+import gift.dto.OptionDto;
+import gift.dto.ProductDto;
+import gift.dto.request.OptionRequest;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import gift.dto.request.OptionRequest;
-import gift.dto.request.ProductCreateRequest;
-import gift.dto.request.ProductUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -86,13 +86,13 @@ class ProductServiceTest {
     void addProduct() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductCreateRequest request = new ProductCreateRequest("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionRequest("옵션", 123L)));
+        ProductDto dto = new ProductDto("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionRequest("옵션", 123L)));
 
         given(productRepository.save(any(Product.class))).willReturn(new Product());
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(new Category()));
 
         //when
-        productService.addProduct(request);
+        productService.addProduct(dto);
 
         //then
         then(productRepository).should().save(any(Product.class));
@@ -105,13 +105,13 @@ class ProductServiceTest {
         //given
         Long productId = 1L;
         Long categoryId = 1L;
-        ProductUpdateRequest request = new ProductUpdateRequest("아이스티", 2500, "https://example.com", categoryId);
+        ProductDto dto = new ProductDto("아이스티", 2500, "https://example.com", categoryId);
 
         given(productRepository.findById(productId)).willReturn(Optional.of(new Product()));
         given(categoryRepository.findById(categoryId)).willReturn(Optional.of(new Category()));
 
         //when
-        productService.editProduct(productId, request);
+        productService.editProduct(productId, dto);
 
         //then
         then(productRepository).should().findById(productId);
@@ -170,12 +170,12 @@ class ProductServiceTest {
     void addOption() throws Exception {
         //given
         Long productId = 1L;
-        OptionRequest request = new OptionRequest("옵션", 2500L);
+        OptionDto dto = new OptionDto("옵션", 2500L);
 
         given(productRepository.findById(anyLong())).willReturn(Optional.of(new Product()));
 
         //when
-        productService.addOption(productId, request);
+        productService.addOption(productId, dto);
 
         //then
         then(productRepository).should().findById(anyLong());
