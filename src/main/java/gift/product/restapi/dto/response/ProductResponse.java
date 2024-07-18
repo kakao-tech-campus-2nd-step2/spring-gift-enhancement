@@ -7,7 +7,7 @@ public record ProductResponse(
         String name,
         Integer price,
         String imageUrl,
-        String categoryName
+        String category
 ) {
     public static ProductResponse from(Product product) {
         return new ProductResponse(
@@ -15,7 +15,7 @@ public record ProductResponse(
                 product.name(),
                 product.price(),
                 product.imageUrl(),
-                product.category()
+                product.categoryName()
         );
     }
 }

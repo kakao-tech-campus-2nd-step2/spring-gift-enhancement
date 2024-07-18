@@ -2,9 +2,10 @@ package gift.product.service;
 
 import gift.core.PagedDto;
 import gift.core.domain.product.*;
-import gift.core.domain.product.exception.NegativeProductPriceException;
 import gift.core.domain.product.exception.ProductAlreadyExistsException;
 import gift.core.domain.product.exception.ProductNotFoundException;
+import gift.core.exception.ErrorCode;
+import gift.core.exception.validation.InvalidArgumentException;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +48,12 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductAlreadyExistsException();
         }
         if (product.price() <= 0) {
-            throw new NegativeProductPriceException();
+            throw new InvalidArgumentException(ErrorCode.NEGATIVE_PRODUCT_PRICE);
         }
         ProductCategory category = productCategoryRepository
-                .findByName(product.category())
+                .findByName(product.categoryName())
                 .orElseGet(
-                        () -> productCategoryRepository.save(ProductCategory.of(product.category()))
+                        () -> productCategoryRepository.save(ProductCategory.of(product.categoryName()))
                 );
         productRepository.save(product.withCategory(category));
     }
@@ -64,12 +65,12 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException();
         }
         if (product.price() <= 0) {
-            throw new NegativeProductPriceException();
+            throw new InvalidArgumentException(ErrorCode.NEGATIVE_PRODUCT_PRICE);
         }
         ProductCategory category = productCategoryRepository
-                .findByName(product.category())
+                .findByName(product.categoryName())
                 .orElseGet(
-                        () -> productCategoryRepository.save(ProductCategory.of(product.category()))
+                        () -> productCategoryRepository.save(ProductCategory.of(product.categoryName()))
                 );
         productRepository.save(product.withCategory(category));
     }

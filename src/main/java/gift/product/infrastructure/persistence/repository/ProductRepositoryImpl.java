@@ -79,7 +79,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 product.name(),
                 product.price(),
                 product.imageUrl(),
-                ProductCategoryEntity.toEntity(ProductCategory.of(product.category()))
+                ProductCategoryEntity.toEntity(ProductCategory.from(product.category()))
         );
     }
 }
