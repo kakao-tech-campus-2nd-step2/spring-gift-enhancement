@@ -1,8 +1,6 @@
 package gift.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
@@ -17,6 +15,9 @@ public class Option {
     private String name;
     @Column(nullable = false)
     private Long quantity;
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     public Option() {
     }
@@ -30,5 +31,15 @@ public class Option {
     public Option(String name, Long quantity) {
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void setProduct(Product product) {
+        if (this.product != null) {
+            this.product.getOptions().remove(this);
+        }
+        this.product = product;
+        if (product != null) {
+            product.getOptions().add(this);
+        }
     }
 }
