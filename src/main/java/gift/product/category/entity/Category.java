@@ -22,6 +22,15 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
+    @Column(length = 7, nullable = false)
+    private String color;
+
+    @Column
+    private String description;
+
+    @Column(nullable = false)
+    private String imageUrl;
+
     protected Category() {
     }
 
@@ -33,6 +42,14 @@ public class Category {
         this.id = id;
         this.name = name;
     }
+
+    public Category(String name, String color, String description, String imageUrl) {
+        this.name = name;
+        this.color = color;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
+
 
     public Long getId() {
         return id;
