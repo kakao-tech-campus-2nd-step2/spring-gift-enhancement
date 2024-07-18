@@ -1,6 +1,6 @@
 package gift.controller.signup;
 
-import gift.DTO.SignupRequest;
+import gift.DTO.member.SignupRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

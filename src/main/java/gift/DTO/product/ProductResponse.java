@@ -1,4 +1,4 @@
-package gift.DTO;
+package gift.DTO.product;
 
 import gift.domain.Product;
 

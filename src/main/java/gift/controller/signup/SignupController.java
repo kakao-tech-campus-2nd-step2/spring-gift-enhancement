@@ -1,7 +1,7 @@
 package gift.controller.signup;
 
-import gift.DTO.SignupRequest;
-import gift.DTO.SignupResponse;
+import gift.DTO.member.SignupRequest;
+import gift.DTO.member.SignupResponse;
 import gift.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

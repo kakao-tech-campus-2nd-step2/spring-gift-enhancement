@@ -1,7 +1,7 @@
 package gift.controller.login;
 
-import gift.DTO.LoginRequest;
-import gift.DTO.LoginResponse;
+import gift.DTO.member.LoginRequest;
+import gift.DTO.member.LoginResponse;
 import gift.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

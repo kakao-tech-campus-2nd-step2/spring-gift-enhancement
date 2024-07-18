@@ -1,8 +1,7 @@
 package gift.controller.admin;
 
-import gift.DTO.ProductResponse;
-import gift.domain.Product;
-import gift.DTO.ProductRequest;
+import gift.DTO.product.ProductResponse;
+import gift.DTO.product.ProductRequest;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -13,11 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 @Controller
 @RequestMapping("/admin")
@@ -46,7 +41,7 @@ public class AdminViewController {
 
     @GetMapping("/product/add")
     public String showProductAddForm(Model model) {
-        model.addAttribute("product", new ProductRequest("", 0, ""));
+        model.addAttribute("product", new ProductRequest());
         return "productAddForm";
     }
 

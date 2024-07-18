@@ -1,12 +1,11 @@
 package gift.service;
 
-import gift.DTO.ProductResponse;
+import gift.DTO.product.ProductResponse;
 import gift.domain.Product;
-import gift.DTO.ProductRequest;
+import gift.DTO.product.ProductRequest;
 import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

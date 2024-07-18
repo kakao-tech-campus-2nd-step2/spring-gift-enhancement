@@ -1,9 +1,9 @@
 package gift.service;
 
-import gift.DTO.LoginRequest;
-import gift.DTO.LoginResponse;
-import gift.DTO.SignupRequest;
-import gift.DTO.SignupResponse;
+import gift.DTO.member.LoginRequest;
+import gift.DTO.member.LoginResponse;
+import gift.DTO.member.SignupRequest;
+import gift.DTO.member.SignupResponse;
 import gift.domain.Member;
 import gift.exception.member.DuplicatedEmailException;
 import gift.exception.member.InvalidAccountException;
