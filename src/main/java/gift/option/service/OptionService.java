@@ -42,7 +42,6 @@ public class OptionService {
 
     private OptionDTO convertToDTO(Option option){
         return new OptionDTO(
-            option.getId(),
             option.getName(),
             option.getQuantity(),
             option.getProduct().getId()
@@ -50,7 +49,7 @@ public class OptionService {
     }
 
     private Option convertToEntity(OptionDTO optionDTO){
-        Option option = new Option(optionDTO.getId(), optionDTO.getName(), optionDTO.getQuantity());
+        Option option = new Option(optionDTO.getName(), optionDTO.getQuantity());
 
         option.setProduct(productRepository.findById(optionDTO.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("productId" + optionDTO.getProductId() + "가 없다.")));
