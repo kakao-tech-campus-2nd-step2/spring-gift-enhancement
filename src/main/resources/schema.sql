@@ -31,3 +31,13 @@ CREATE TABLE IF NOT EXISTS kakaoProduct (
     price DECIMAL(10, 2) NOT NULL,
     image_url VARCHAR(255)
     );
+
+CREATE TABLE IF NOT EXISTS option (
+                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                      name VARCHAR(50) NOT NULL,
+    quantity INT NOT NULL,
+    product_id BIGINT NOT NULL,
+    CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product(id),
+    CONSTRAINT unique_product_option UNIQUE (product_id, name)
+    );
+
