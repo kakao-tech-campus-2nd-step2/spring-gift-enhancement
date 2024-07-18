@@ -4,9 +4,11 @@ import gift.dto.PagingRequest;
 import gift.dto.PagingResponse;
 import gift.model.gift.GiftRequest;
 import gift.model.gift.GiftResponse;
+import gift.model.option.OptionRequest;
 import gift.model.option.OptionResponse;
 import gift.service.gift.GiftService;
 import gift.service.option.OptionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +31,8 @@ public class GiftController {
 
 
     @PostMapping
-    public ResponseEntity<String> addGift(@RequestBody GiftRequest giftReq) {
-        giftService.addGift(giftReq);
+    public ResponseEntity<String> addGift(@Valid @RequestBody GiftRequest giftRequest) {
+        giftService.addGift(giftRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("Gift created");
     }
 
@@ -53,14 +55,14 @@ public class GiftController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateGift(@PathVariable Long id, @RequestBody GiftRequest giftReq) {
-        giftService.updateGift(giftReq, id);
+    public ResponseEntity<String> updateGift(@PathVariable Long id, @RequestBody GiftRequest giftRequest) {
+        giftService.updateGift(giftRequest, id);
         return ResponseEntity.ok("상품 수정이 완료되었습니다.");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteGift(@PathVariable Long id) {
         giftService.deleteGift(id);
-        return ResponseEntity.ok("상품 삭제가 완료되었습니다.");
+        return ResponseEntity.status(200).body("삭제가 완료되었습니다");
     }
 }

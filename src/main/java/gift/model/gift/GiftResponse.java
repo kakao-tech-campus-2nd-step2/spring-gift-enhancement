@@ -39,7 +39,7 @@ public class GiftResponse {
                 CategoryResponse.fromEntity(gift.getCategory()),
                 gift.getOptions().stream()
                         .map(OptionResponse::from)
-                        .collect(Collectors.toList()));
+                        .toList());
     }
 
     public Long getId() {
@@ -53,7 +53,7 @@ public class GiftResponse {
     public int getPrice() {
         return price;
     }
-    
+
     public String getImageUrl() {
         return imageUrl;
     }

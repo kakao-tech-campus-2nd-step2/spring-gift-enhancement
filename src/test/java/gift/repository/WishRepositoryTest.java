@@ -1,6 +1,8 @@
 package gift.repository;
 
+import gift.model.category.Category;
 import gift.model.gift.Gift;
+import gift.model.option.Option;
 import gift.model.user.User;
 import gift.model.wish.Wish;
 import gift.repository.gift.GiftRepository;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +42,11 @@ class WishRepositoryTest {
 
         userRepository.save(user);
 
-        gift = new Gift("Test Gift", 100, "test.jpg");
+        Category category = new Category(10L, "test", "test", "test", "test");
+        Option option1 = new Option("testOption", 1);
+        List<Option> option = Arrays.asList(option1);
+
+        gift = new Gift("Test Gift", 100, "test.jpg", category, option);
         giftRepository.save(gift);
 
         Wish wish = new Wish(user, gift, 1);

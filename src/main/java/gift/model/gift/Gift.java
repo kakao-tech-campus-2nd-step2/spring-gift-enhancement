@@ -51,6 +51,20 @@ public class Gift {
         this.category = category;
     }
 
+    public Gift(String name, int price, String imageUrl, Category category, List<Option> options) {
+        if (!isValidName(name)) {
+            throw new IllegalArgumentException("카카오 문구는 MD와 협의 후 사용가능합니다.");
+        }
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.options = options;
+        for (Option option : options) {
+            option.setGift(this);
+        }
+    }
+
     public Long getId() {
         return id;
     }

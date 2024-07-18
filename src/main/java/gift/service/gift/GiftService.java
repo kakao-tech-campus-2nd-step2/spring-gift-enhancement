@@ -4,7 +4,7 @@ package gift.service.gift;
 import gift.dto.PagingResponse;
 import gift.model.category.Category;
 import gift.model.gift.*;
-import gift.model.option.OptionResponse;
+import gift.model.option.*;
 import gift.repository.category.CategoryRepository;
 import gift.repository.gift.GiftRepository;
 import gift.repository.option.OptionRepository;
@@ -50,7 +50,10 @@ public class GiftService {
     public GiftResponse addGift(GiftRequest giftRequest) {
         Category category = categoryRepository.findById(giftRequest.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("해당 카테고리 id가 없습니다."));
-        Gift gift = new Gift(giftRequest.getName(), giftRequest.getPrice(), giftRequest.getImageUrl(), category);
+
+        List<Option> options = giftRequest.getOptions().stream().map(OptionRequest::toEntity).toList();
+
+        Gift gift = new Gift(giftRequest.getName(), giftRequest.getPrice(), giftRequest.getImageUrl(), category, options);
         return GiftResponse.from(giftRepository.save(gift));
     }
 
