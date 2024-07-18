@@ -1,11 +1,11 @@
 package gift.repository;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static gift.util.CategoryFixture.createCategory;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.domain.Category;
 import gift.exception.NoSuchProductException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +17,15 @@ public class CategoryRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private Category category;
-
-    @BeforeEach
-    void setup() {
-        category = new Category("test", "#FFFFFF", "testImageUrl", "test");
-    }
-
     @DisplayName("카테고리 추가")
     @Test
     void save() {
         // given
-        Category expected = category;
+        Category expected = createCategory();
+        System.out.println(expected);
 
         // when
-        Category actual = categoryRepository.save(category);
+        Category actual = categoryRepository.save(expected);
 
         // then
         assertAll(
@@ -47,7 +41,7 @@ public class CategoryRepositoryTest {
     @Test
     void findById() {
         // given
-        Category expected = categoryRepository.save(category);
+        Category expected = categoryRepository.save(createCategory());
 
         // when
         Category actual = categoryRepository.findById(expected.getId())
@@ -66,8 +60,8 @@ public class CategoryRepositoryTest {
     @Test
     void update() {
         // given
-        long id = categoryRepository.save(category).getId();
-        Category expected = new Category(id, "updatedTest", "#000000", "updatedTestImageUrl", "updatedTest");
+        long id = categoryRepository.save(createCategory()).getId();
+        Category expected = createCategory(id, "updatedTest");
 
         // when
         Category actual = categoryRepository.save(expected);
@@ -86,7 +80,7 @@ public class CategoryRepositoryTest {
     @Test
     void delete() {
         // given
-        long id = categoryRepository.save(category).getId();
+        long id = categoryRepository.save(createCategory()).getId();
 
         // when
         categoryRepository.deleteById(id);

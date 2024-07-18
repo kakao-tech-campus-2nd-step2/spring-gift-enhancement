@@ -1,5 +1,9 @@
 package gift.repository;
 
+import static gift.util.CategoryFixture.createCategory;
+import static gift.util.MemberFixture.createMember;
+import static gift.util.ProductFixture.createProduct;
+import static gift.util.WishedProductFixture.createWishedProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -32,24 +36,22 @@ public class WishedProductRepositoryTest {
     private Member member;
     private Category category;
     private Product product;
-    private WishedProduct wishedProduct;
 
     @BeforeEach
     void setup() {
-        member = new Member("admin@gmail.com", "admin");
+        member = createMember();
         member = memberRepository.save(member);
-        category = new Category("test", "#FFFFFF", "testImageUrl", "test");
+        category = createCategory();
         category = categoryRepository.save(category);
-        product = new Product("test", 1000, "testImage", category);
+        product = createProduct(category);
         product = productRepository.save(product);
-        wishedProduct = new WishedProduct(member, product, 3);
     }
 
     @DisplayName("위시리스트 상품 추가")
     @Test
     void save() {
         // given
-        WishedProduct expected = wishedProduct;
+        WishedProduct expected = createWishedProduct(member, product);
 
         // when
         WishedProduct actual = wishedProductRepository.save(expected);
@@ -67,13 +69,12 @@ public class WishedProductRepositoryTest {
     @Test
     void findByMemberEmail() {
         // given
-        WishedProduct savedWishedProduct = wishedProductRepository.save(wishedProduct);
+        WishedProduct savedWishedProduct = wishedProductRepository.save(createWishedProduct(member, product));
         List<WishedProduct> expected = new ArrayList<>(List.of(savedWishedProduct));
         Pageable pageable = PageRequest.of(0, 5);
 
         // when
-        List<WishedProduct> actual = wishedProductRepository.findByMember(member, pageable)
-            .stream().toList();
+        List<WishedProduct> actual = wishedProductRepository.findByMember(member, pageable).toList();
 
         // then
         assertThat(actual).isEqualTo(expected);
@@ -83,7 +84,7 @@ public class WishedProductRepositoryTest {
     @Test
     void delete() {
         // given
-        long id = wishedProductRepository.save(wishedProduct).getId();
+        long id = wishedProductRepository.save(createWishedProduct(member, product)).getId();
 
         // when
         wishedProductRepository.deleteById(id);
@@ -96,7 +97,7 @@ public class WishedProductRepositoryTest {
     @Test
     void update() {
         // given
-        WishedProduct expected = wishedProductRepository.save(wishedProduct);
+        WishedProduct expected = wishedProductRepository.save(createWishedProduct(member, product));
         expected.setAmount(5);
 
         // when

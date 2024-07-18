@@ -1,5 +1,7 @@
 package gift.repository;
 
+import static gift.util.CategoryFixture.createCategory;
+import static gift.util.ProductFixture.createProduct;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,20 +23,18 @@ public class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     private Category category;
-    private Product product;
 
     @BeforeEach
     void setup() {
-        category = new Category("test", "#FFFFFF", "testImageUrl", "test");
-        category = categoryRepository.save(category);
-        product = new Product("아이스 아메리카노", 4500, "image", category);
+        category = createCategory();
+        category = categoryRepository.save(createCategory());
     }
 
     @DisplayName("상품 추가")
     @Test
     void save() {
         // given
-        Product expected = product;
+        Product expected = createProduct(category);
 
         // when
         Product actual = productRepository.save(expected);
@@ -53,7 +53,7 @@ public class ProductRepositoryTest {
     @Test
     void findById() {
         // given
-        Product expected = productRepository.save(product);
+        Product expected = productRepository.save(createProduct(category));
 
         // when
         Product actual = productRepository.findById(expected.getId())
@@ -72,8 +72,8 @@ public class ProductRepositoryTest {
     @Test
     void update() {
         // given
-        long id = productRepository.save(product).getId();
-        Product expected = new Product(id, "아이스 아메리카노", 5500, "image", category);
+        long id = productRepository.save(createProduct(category)).getId();
+        Product expected = createProduct("핫 아메리카노", category);
 
         // when
         Product actual = productRepository.save(expected);
@@ -92,7 +92,7 @@ public class ProductRepositoryTest {
     @Test
     void delete() {
         // given
-        long id = productRepository.save(product).getId();
+        long id = productRepository.save(createProduct(category)).getId();
 
         // when
         productRepository.deleteById(id);
