@@ -89,7 +89,7 @@ class WishControllerTest {
     void updateWishProductAmount() throws Exception {
         //Given
         when(authInterceptor.preHandle(any(), any(), any())).thenReturn(true);
-        WishRequest updateRequest = new WishRequest( 1L, 1000);
+        WishRequest updateRequest = new WishRequest(1L, 1000);
 
         //When
         mockMvc.perform(MockMvcRequestBuilders

@@ -37,7 +37,7 @@ class ProductRepositoryTest {
     @DisplayName("상품 저장")
     void saveTest() {
         // Given
-        Product product = new Product("아몬드", 500, "image.jpg", testCategory,List.of(new Option("option1",1)));
+        Product product = new Product("아몬드", 500, "image.jpg", testCategory, List.of(new Option("option1", 1)));
         Long savedProductId = productRepository.save(product).getId();
 
         // When
@@ -52,8 +52,8 @@ class ProductRepositoryTest {
     @DisplayName("상품 읽기(read)")
     void readTest() {
         // Given
-        Product product1 = new Product("아몬드", 500, "image.jpg", testCategory,List.of(new Option("option1",1)));
-        Product product2 = new Product("초코", 5400, "image2.jpg", testCategory,List.of(new Option("option1",1)));
+        Product product1 = new Product("아몬드", 500, "image.jpg", testCategory, List.of(new Option("option1", 1)));
+        Product product2 = new Product("초코", 5400, "image2.jpg", testCategory, List.of(new Option("option1", 1)));
         productRepository.save(product1);
         productRepository.save(product2);
 
@@ -69,7 +69,7 @@ class ProductRepositoryTest {
     @DisplayName("상품 수정")
     void updateTest() {
         // Given
-        Product product = new Product("아몬드", 500, "image.jpg", testCategory,List.of(new Option("option1",1)));
+        Product product = new Product("아몬드", 500, "image.jpg", testCategory, List.of(new Option("option1", 1)));
         Product savedProduct = productRepository.save(product);
 
         // When
@@ -83,7 +83,7 @@ class ProductRepositoryTest {
     @DisplayName("상품 삭제")
     void deleteTest() {
         // Given
-        Product product = new Product("아몬드", 500, "image.jpg", testCategory,List.of(new Option("option1",1)));
+        Product product = new Product("아몬드", 500, "image.jpg", testCategory, List.of(new Option("option1", 1)));
         Product savedProduct = productRepository.save(product);
         Long savedProductId = savedProduct.getId();
 
@@ -97,7 +97,7 @@ class ProductRepositoryTest {
 
     @Nested
     @DisplayName("상품 엔티티 테스트")
-    class EntityTest{
+    class EntityTest {
         @Test
         @DisplayName("Name Null")
         void nameNull() {

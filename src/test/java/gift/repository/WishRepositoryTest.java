@@ -37,8 +37,8 @@ class WishRepositoryTest {
         Category testCategory = new Category("음식", "테스트", "테스트", "테스트");
         testEntityManager.persist(testCategory);
 
-        testProduct1 = new Product("almond", 500, "almond.jpg", testCategory,List.of(new Option("optoin1",1)));
-        testProduct2 = new Product("ice", 900, "ice.jpg", testCategory,List.of(new Option("optoin1",1)));
+        testProduct1 = new Product("almond", 500, "almond.jpg", testCategory, List.of(new Option("optoin1", 1)));
+        testProduct2 = new Product("ice", 900, "ice.jpg", testCategory, List.of(new Option("optoin1", 1)));
         testEntityManager.persist(testProduct1);
         testEntityManager.persist(testProduct2);
     }
@@ -84,7 +84,7 @@ class WishRepositoryTest {
 
     @Nested
     @DisplayName("위시 엔티티 테스트")
-    class EntityTest{
+    class EntityTest {
         @Test
         @DisplayName("생성된 날짜")
         void dateCheck() {

@@ -9,6 +9,8 @@ import java.util.List;
 @Entity
 public class Product {
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private final List<Option> options = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,8 +23,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"))
     private Category category;
-    @OneToMany(cascade = CascadeType.ALL)
-    private final List<Option> options = new ArrayList<>();
 
     protected Product() {
     }

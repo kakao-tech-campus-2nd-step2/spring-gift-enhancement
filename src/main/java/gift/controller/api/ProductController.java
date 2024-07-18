@@ -58,8 +58,8 @@ public class ProductController {
 
     @PostMapping("api/products/{id}/options")
     public ResponseEntity<AddedOptionIdResponse> addOptionToProduct(@PathVariable("id") Long productId,
-                                                                    @Valid @RequestBody OptionRequest optionRequest){
-        AddedOptionIdResponse addedOptionId =productService.addOptionToProduct(productId,optionRequest);
+                                                                    @Valid @RequestBody OptionRequest optionRequest) {
+        AddedOptionIdResponse addedOptionId = productService.addOptionToProduct(productId, optionRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(addedOptionId);
     }
 }

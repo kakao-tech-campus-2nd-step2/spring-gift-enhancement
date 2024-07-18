@@ -76,7 +76,7 @@ class ProductServiceTest {
         Long productId = 1L;
         Category category = new Category("CategoryName", "color", "description", "imageUrl");
         List<Option> options = List.of(new Option("option", 1010));
-        Product product = new Product( "product", 101, "img", category, options);
+        Product product = new Product("product", 101, "img", category, options);
 
         OptionRequest optionRequest = new OptionRequest("newOption", 1010);
         Option option = Mockito.mock(Option.class);
@@ -94,6 +94,32 @@ class ProductServiceTest {
         assertThat(addedOptionIdResponse.optionId()).isEqualTo(1L);
     }
 
+    @Test
+    @DisplayName("상품(Response) 얻기")
+    void GetResponses() {
+        //Given
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Category category = new Category("CategoryName", "color", "description", "imageUrl");
+        List<Option> options = List.of(new Option("option", 1010));
+        Product product = new Product("product", 101, "img", category, options);
+
+        Page<Product> page = new PageImpl<>(List.of(product));
+
+        when(productRepository.findAll(pageable)).thenReturn(page);
+
+        //When
+        Page<ProductResponse> productResponses = productService.getProductResponses(pageable);
+
+        //Then
+        assertThat(productResponses.getContent())
+                .hasSize(1)
+                .first()
+                .isInstanceOf(ProductResponse.class)
+                .extracting("name", "price")
+                .containsExactly("product", 101);
+    }
+
     @Nested
     @DisplayName("상품(Entity) 얻기")
     class GetEntity {
@@ -103,7 +129,7 @@ class ProductServiceTest {
             //Given
             Category category = new Category("CategoryName", "color", "description", "imageUrl");
             List<Option> options = List.of(new Option("option", 1010));
-            Product product = new Product( "product", 101, "img", category, options);
+            Product product = new Product("product", 101, "img", category, options);
             when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
             //When
@@ -125,32 +151,6 @@ class ProductServiceTest {
         }
     }
 
-    @Test
-    @DisplayName("상품(Response) 얻기")
-    void GetResponses() {
-        //Given
-        Pageable pageable = PageRequest.of(0, 10);
-
-        Category category = new Category("CategoryName", "color", "description", "imageUrl");
-        List<Option> options = List.of(new Option("option", 1010));
-        Product product = new Product( "product", 101, "img", category, options);
-
-        Page<Product> page = new PageImpl<>(List.of(product));
-
-        when(productRepository.findAll(pageable)).thenReturn(page);
-
-        //When
-        Page<ProductResponse> productResponses = productService.getProductResponses(pageable);
-
-        //Then
-        assertThat(productResponses.getContent())
-                .hasSize(1)
-                .first()
-                .isInstanceOf(ProductResponse.class)
-                .extracting( "name","price")
-                .containsExactly( "product",101);
-    }
-
     @Nested
     @DisplayName("상품 수정")
     class Update {
@@ -162,7 +162,7 @@ class ProductServiceTest {
 
             Category category = new Category("CategoryName", "color", "description", "imageUrl");
             List<Option> options = List.of(new Option("option", 1010));
-            Product product = new Product( "oldName", 101, "img", category, options);
+            Product product = new Product("oldName", 101, "img", category, options);
 
             when(productRepository.findById(1L)).thenReturn(Optional.of(product));
             when(categoryService.getCategory(request.categoryId())).thenReturn(category);
@@ -199,7 +199,7 @@ class ProductServiceTest {
 
             Category category = new Category("CategoryName", "color", "description", "imageUrl");
             List<Option> options = List.of(new Option("option", 1010));
-            Product product = new Product( "oldName", 101, "img", category, options);
+            Product product = new Product("oldName", 101, "img", category, options);
 
             when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
