@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/products")
 public class ProductController {
 
+    private final ProductService productService;
+    private final CategoryService categoryService;
+
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @PostMapping
@@ -31,45 +35,41 @@ public class ProductController {
         productService.update(productId, productDto);
     }
 
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @GetMapping("/admin/products/add")
-    public String showAddProductForm(Model model) {
-        model.addAttribute("product", new ProductDto());
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "add";  // 상품 추가 폼 뷰
-    }
-
     @DeleteMapping("/{productId}")
     public void deleteProduct(@PathVariable Long productId) {
         productService.deleteById(productId);
     }
 
-    /** 페이지네이션을 위한 새로운 엔드포인트
+    // 상품 추가 폼 뷰
+    @GetMapping("/admin/products/add")
+    public String showAddProductForm(Model model) {
+        model.addAttribute("product", new ProductDto());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "add";
+    }
+
+    /**
+     * 페이지네이션을 위한 새로운 엔드포인트
      * 특정 페이지와 크기 요청: /api/products?page=1&size=5
      * 페이지 번호: 0
      * 페이지 크기: 10
-     * 정렬: 이름을 기준으로 오름차순 정렬 (기본값) **/
-    @GetMapping("/api/products")
+     * 정렬: 이름을 기준으로 오름차순 정렬 (기본값)
+     **/
+    @GetMapping
     public Page<ProductDto> getProducts(
-            @RequestParam(defaultValue = "0") int page, // 클라이언트가 특정 페이지를 요청할 때 이 파라미터를 사용
-            @RequestParam(defaultValue = "10") int size, // 한 페이지에 몇 개의 항목이 표시될지를 정의
-            @RequestParam(defaultValue = "name,asc") String[] sort) // 배열 형태. 순서대로 정렬 속성, 정렬 방향 표시
-    {
-        int maxSize = 50; // 최대 페이지 크기를 50으로 제한
-        size = Math.min(size, maxSize); // 50 초과 입력시 50으로 설정
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name,asc") String[] sort) {
 
-        String sortBy = sort[0]; // sort 배열의 첫 번째 요소는 정렬 기준
-        Sort.Direction direction = Sort.Direction.fromString(sort[1]); // sort 배열의 두 번째 요소는 정렬 방향
+        int maxSize = 50;
+        size = Math.min(size, maxSize);
+
+        String sortBy = sort[0];
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
         return productService.findAll(pageable);
-
     }
 
     @GetMapping("/{productId}")

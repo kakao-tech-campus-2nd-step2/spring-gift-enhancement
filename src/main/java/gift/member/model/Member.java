@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
     @SequenceGenerator(name = "member_seq", sequenceName = "member_seq", allocationSize = 1)
@@ -35,6 +36,7 @@ public class Member {
         this.password = password;
     }
 
+    // Getter methods
     public Long getMemberId() {
         return memberId;
     }
@@ -51,18 +53,20 @@ public class Member {
         return email;
     }
 
+    // 이메일 업데이트 메소드
     public void updateEmail(@NotNull @NotBlank String newEmail) {
         if (newEmail == null || newEmail.trim().isEmpty()) {
             throw new IllegalArgumentException("이메일은 비어있을 수 없습니다.");
         }
-        this.email = newEmail; // 현재 인스턴스의 이메일을 업데이트
+        this.email = newEmail;
     }
 
+    // 비밀번호 업데이트 메소드
     public void updatePassword(@NotNull @NotBlank String newPassword) {
         if (newPassword == null || newPassword.trim().isEmpty()) {
             throw new IllegalArgumentException("비밀번호는 비어있을 수 없습니다.");
         }
-        this.password = newPassword; // 현재 인스턴스의 비밀번호를 업데이트
+        this.password = newPassword;
     }
 
     // 비밀번호 검증 메소드

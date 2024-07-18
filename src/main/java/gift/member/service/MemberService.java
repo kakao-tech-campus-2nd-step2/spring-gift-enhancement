@@ -19,6 +19,7 @@ public class MemberService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // 회원 생성
     public Member createMember(String email, String password) {
         Member member = new Member(email, passwordEncoder.encode(password));
         return memberRepository.save(member);
@@ -27,7 +28,7 @@ public class MemberService {
     // 회원 등록
     public Member register(String email, String password) {
         memberRepository.findByEmail(email).ifPresent(existingMember -> {
-            throw new IllegalArgumentException("이미 존재하는 이메일 입니다.");
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         });
 
         Member member = new Member(email, passwordEncoder.encode(password));
@@ -37,11 +38,10 @@ public class MemberService {
     // 로그인 조회
     public Member login(String email, String password) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("옳지 않은 이메일이나 비밀번호 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("옳지 않은 이메일이나 비밀번호입니다."));
 
         // 비밀번호 검증은 Member 엔티티에서 수행
         member.validateLogin(password, passwordEncoder);
-
         return member;
     }
 
