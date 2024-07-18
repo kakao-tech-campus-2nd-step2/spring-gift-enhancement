@@ -1,9 +1,12 @@
 package gift.service;
 
+import gift.exception.CustomNotFoundException;
 import gift.exception.KakaoValidationException;
 import gift.exception.StringValidationException;
+import gift.model.Category;
 import gift.model.Product;
 import gift.model.ProductDto;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +17,16 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
+
+  @Autowired
   private final ProductRepository productRepository;
 
   @Autowired
-  public ProductService(ProductRepository productRepository) {
+  private final CategoryRepository categoryRepository;
+
+  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
     this.productRepository = productRepository;
+    this.categoryRepository = categoryRepository;
   }
 
   public Page<ProductDto> findAll(Pageable pageable) {
@@ -31,15 +39,24 @@ public class ProductService {
 
   public ProductDto save(ProductDto productDto) {
     validate(productDto);
-    Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
+    Category category = categoryRepository.findById(productDto.getCategoryId())
+            .orElseThrow(() -> new CustomNotFoundException("Category not found"));
+    Product product = new Product(productDto.getName(),  productDto.getPrice(), productDto.getImageUrl(),category);
     Product savedProduct = productRepository.save(product);
     return convertToDto(savedProduct);
   }
 
+  public ProductDto createProduct(ProductDto productDto) {
+    return save(productDto);
+  }
+
   public boolean updateProduct(Long id, ProductDto productDetails) {
+    if (id == null) {
+      throw new IllegalArgumentException("The given id must not be null");
+    }
     validate(productDetails);
     return productRepository.findById(id).map(product -> {
-      product.update(productDetails.getName(), productDetails.getPrice(), productDetails.getImageUrl());
+      product.updateFromDto(productDetails, categoryRepository);
       productRepository.save(product);
       return true;
     }).orElse(false);
@@ -50,11 +67,8 @@ public class ProductService {
   }
 
   private ProductDto convertToDto(Product product) {
-    return new ProductDto(product.getId(), product.getName(), product.getPrice(), product.getImageUrl());
-  }
-  public Product findProductById(Long productId) {
-    return productRepository.findById(productId)
-            .orElseThrow(() -> new IllegalArgumentException("Product with id " + productId + " not found"));
+    Long categoryId = product.getCategory() != null ? product.getCategory().getId() : null;
+    return new ProductDto(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), categoryId);
   }
 
   private void validate(ProductDto productDto) {
@@ -63,7 +77,7 @@ public class ProductService {
       throw new KakaoValidationException("상품 이름에 '카카오'를 포함하려면 담당 MD와 협의가 필요합니다.");
     }
     if (!name.matches("^[\\p{L}\\p{N}\\s\\(\\)\\[\\]\\+\\-\\&\\/]*$")) {
-      throw new StringValidationException("허용되지 않은 특수기호는 사용할 수 없습니다. 허용된 특수기호:( ), [ ], +, -, &, /, _");
+      throw new StringValidationException("허용되지 않은 특수기호는 사용할 수 없습니다. 허용된 특수기호: ( ), [ ], +, -, &, /, _");
     }
   }
 }
