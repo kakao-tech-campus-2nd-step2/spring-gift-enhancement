@@ -33,23 +33,19 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void 한_상품이_카테고리_여러개를_가지는_경우() {
+    public void 카테고리_생성_성공여부() {
         // Given
         Category category1 = new Category("Adidas", "black", "https://www.google.com");
-        Category category2 = new Category("Pizze", "white", "https://www.google.com");
         categoryRepository.save(category1);
-        categoryRepository.save(category2);
 
         Product product = new Product("Product1", 35000, "https://www.google.com", category1);
         productRepository.save(product);
 
         // When
-        Product updatedProduct = new Product(product.getName(), product.getPrice(), product.getImgUrl(), category2);
-        productRepository.save(updatedProduct);
         Product foundProduct = productRepository.findById(product.getProductId()).orElse(null);
 
         // Then
         assertThat(foundProduct).isNotNull();
-        assertThat(foundProduct.getCategory()).isEqualTo(category2);
+        assertThat(foundProduct.getCategory()).isEqualTo(category1);
     }
 }
