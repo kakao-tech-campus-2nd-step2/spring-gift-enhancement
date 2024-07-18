@@ -1,4 +1,4 @@
-package gift.domain.Category;
+package gift.domain.category;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

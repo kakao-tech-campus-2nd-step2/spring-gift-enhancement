@@ -1,7 +1,7 @@
 package gift.domain.product;
 
-import gift.domain.Category.Category;
-import gift.domain.Category.JpaCategoryRepository;
+import gift.domain.category.Category;
+import gift.domain.category.JpaCategoryRepository;
 import gift.global.exception.BusinessException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;

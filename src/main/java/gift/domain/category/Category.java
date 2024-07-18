@@ -1,4 +1,4 @@
-package gift.domain.Category;
+package gift.domain.category;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

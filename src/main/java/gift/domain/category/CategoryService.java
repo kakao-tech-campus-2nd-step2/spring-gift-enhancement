@@ -1,4 +1,4 @@
-    package gift.domain.Category;
+    package gift.domain.category;
 
     import gift.global.exception.BusinessException;
     import java.util.List;

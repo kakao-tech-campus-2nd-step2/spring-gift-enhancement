@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import gift.domain.Category.Category;
-import gift.domain.Category.JpaCategoryRepository;
+import gift.domain.category.Category;
+import gift.domain.category.JpaCategoryRepository;
 import gift.domain.cartItem.CartItem;
 import gift.domain.cartItem.JpaCartItemRepository;
 import gift.domain.product.JpaProductRepository;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import jdk.jfr.Description;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

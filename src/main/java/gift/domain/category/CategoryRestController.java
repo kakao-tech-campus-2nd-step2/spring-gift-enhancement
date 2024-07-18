@@ -1,4 +1,4 @@
-package gift.domain.Category;
+package gift.domain.category;
 
 import gift.global.response.ResponseMaker;
 import gift.global.response.ResultResponseDto;

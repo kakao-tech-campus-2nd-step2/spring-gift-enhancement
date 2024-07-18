@@ -1,7 +1,7 @@
 package gift.global.dataLoader;
 
-import gift.domain.Category.Category;
-import gift.domain.Category.JpaCategoryRepository;
+import gift.domain.category.Category;
+import gift.domain.category.JpaCategoryRepository;
 import gift.domain.cartItem.CartItem;
 import gift.domain.cartItem.JpaCartItemRepository;
 
