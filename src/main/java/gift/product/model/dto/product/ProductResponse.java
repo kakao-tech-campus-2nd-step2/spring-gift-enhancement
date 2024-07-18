@@ -1,5 +1,9 @@
 package gift.product.model.dto.product;
 
+import gift.product.model.dto.option.OptionResponse;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ProductResponse {
     private final Long id;
     private final String name;
@@ -7,6 +11,8 @@ public class ProductResponse {
     private final String imageUrl;
     private final Long categoryId;
     private final Long wishCount;
+    private final List<OptionResponse> options;
+
 
     public ProductResponse(Product product, Long wishCount) {
         this.id = product.getId();
@@ -15,6 +21,9 @@ public class ProductResponse {
         this.imageUrl = product.getImageUrl();
         this.categoryId = product.getCategory().getId();
         this.wishCount = wishCount;
+        this.options = product.getOptions().stream()
+                .map(o -> new OptionResponse(o.getId(), o.getName(), o.getQuantity(), o.getAdditionalCost()))
+                .collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -39,5 +48,9 @@ public class ProductResponse {
 
     public Long getWishCount() {
         return wishCount;
+    }
+
+    public List<OptionResponse> getOptions() {
+        return options;
     }
 }
