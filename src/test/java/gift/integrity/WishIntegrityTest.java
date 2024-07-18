@@ -39,7 +39,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class WishesIntegrityTest {
+class WishIntegrityTest {
 
     @LocalServerPort
     int port;
