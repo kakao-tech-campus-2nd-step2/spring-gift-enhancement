@@ -19,14 +19,14 @@ public class WishlistService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
-    public WishlistService(WishlistRepository wishlistRepository, UserRepository userRepository, ProductRepository productRepository){
+    public WishlistService(WishlistRepository wishlistRepository, UserRepository userRepository, ProductRepository productRepository) {
         this.wishlistRepository = wishlistRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
     }
 
     @Transactional
-    public void addWishlist(WishlistDTO wishlistDTO){
+    public void addWishlist(WishlistDTO wishlistDTO) {
         User user = userRepository.findByEmail(wishlistDTO.getUserId());
         Product product = productRepository.findById(wishlistDTO.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + wishlistDTO.getProductId()));
@@ -36,14 +36,14 @@ public class WishlistService {
     }
 
     @Transactional(readOnly = true)
-    public Page<WishlistDTO> loadWishlist(String userId, int page, int size){
+    public Page<WishlistDTO> loadWishlist(String userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return wishlistRepository.findByUserEmail(userId, pageable)
                 .map(wishlist -> new WishlistDTO(wishlist.getUser().getEmail(), wishlist.getProduct().getId()));
     }
 
     @Transactional
-    public void deleteWishlist(String userId, Long productId){
+    public void deleteWishlist(String userId, Long productId) {
         wishlistRepository.deleteByUserEmailAndProductId(userId, productId);
     }
 
