@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
-public class OptionServiceTest {
+public class OptionServiceMockTest {
 
     @Autowired
     private ProductService productService;
