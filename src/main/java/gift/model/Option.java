@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Entity(name = "options")
 public class Option {
     @Id
@@ -41,5 +43,8 @@ public class Option {
         if (product != null) {
             product.getOptions().add(this);
         }
+    }
+    public String getName() {
+        return name;
     }
 }
