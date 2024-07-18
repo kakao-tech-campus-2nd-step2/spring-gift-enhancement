@@ -17,13 +17,12 @@
 <a href="/register">Register</a>
 
 <script type="text/javascript">
-
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault(); // 폼 제출 막기
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        fetch('http://localhost:8000/members/login', {
+        fetch('/members/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -33,25 +32,27 @@
                 'password': password
             })
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
-                    console.log('Token saved to local storage:', data.token);
-                    authSetup.storeToken(data.token);
-                    location.href = "/view/home";
+        .then(response => response.json())
+        .then(data => {
+            if (data.token) {
+                console.log('Token saved to local storage:', data.token);
+                authSetup.storeToken(data.token);
 
-                } else {
-                    console.error('Error:', data.error);
+                if (data.role === 'ADMIN') {
+                    location.href = "/admin";
+                } else if (data.role === 'USER') {
+                    location.href = "/view/home";
                 }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+
+            } else {
+                alert('Invalid email or password');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     });
 </script>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 </html>
-

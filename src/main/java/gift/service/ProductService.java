@@ -7,6 +7,7 @@ import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 import org.springframework.data.domain.Page;
@@ -22,16 +23,18 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public Page<Product> getProducts(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
 
     }
 
     public Product getProductById(Long id) {
-        var product = productRepository.findById(id)
-                .orElseThrow(() -> ProductNotFoundException.of(id));
-        return product;
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            return optionalProduct.get();
+        } else {
+            throw ProductNotFoundException.of(id);
+        }
     }
 
     public void addProduct(ProductDto productDto) {

@@ -4,6 +4,8 @@ import gift.dto.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 @Entity
 public class Member {
 
@@ -21,6 +23,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     @NotNull
     private Role role;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wishlist> wishlists;
 
     // 기본 생성자
     public Member() {

@@ -4,6 +4,7 @@ import gift.dto.MemberDto;
 import gift.entity.Member;
 import gift.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,15 +44,27 @@ public class MemberController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Map<String, String> login(@RequestParam String email, @RequestParam String password) {
+    public Map<String, String> login(@RequestParam String email, @RequestParam String password, HttpSession session) {
         Map<String, String> response = new HashMap<>();
         try {
             String token = memberService.login(email, password);
-            response.put("token", token);
+            if ("admin@kakao.com".equals(email) && "admin".equals(password)) {
+                session.setAttribute("user", email);
+                response.put("token", token);
+                response.put("role", "ADMIN");
+            } else{ // 유효한 일반 사용자 검사
+                session.setAttribute("user", email);
+                response.put("token", token);
+                response.put("role", "USER");
+            }
             return response;
         } catch (RuntimeException e) {
             response.put("error", "Invalid email or password");
             return response;
         }
     }
+
+
+
+
 }

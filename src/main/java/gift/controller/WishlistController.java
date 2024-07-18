@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +30,9 @@ public class WishlistController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getWishlistItems(
-            @RequestHeader("Authorization") String token,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        String email = jwtTokenProvider.getEmail(token.substring(7));
-        Page<Product> items = wishlistService.getWishlistByEmail(email, page, size);
+            @RequestParam("email") String email,
+            Pageable pageable) {
+        Page<Product> items = wishlistService.getWishlistByEmail(email, pageable);
         Map<String, Object> response = new HashMap<>();
         response.put("content", items.getContent());
         response.put("currentPage", items.getNumber() + 1);

@@ -7,7 +7,7 @@
 <body>
 <h1>Edit Product</h1>
 
-<form th:action="@{/api/admin/products/edit/{id}(id=${product.id})}" th:object="${product}" method="post">
+<form th:action="@{/api/products/edit/{id}(id=${product.id})}" th:object="${product}" method="post">
     <input type="hidden" th:field="*{id}">
 
     <label for="name">Name:</label><br>
@@ -23,7 +23,7 @@
     <button type="submit">Save</button>
 </form>
 
-<a href="/view/admin/products">Cancel</a>
+<a href="/view/products">Cancel</a>
 
 </body>
 </html>

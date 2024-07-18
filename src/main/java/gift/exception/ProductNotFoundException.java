@@ -13,4 +13,5 @@ public class ProductNotFoundException extends ProductException {
     public static ProductNotFoundException of(final Long id) {
         return new ProductNotFoundException(id);
     }
+
 }

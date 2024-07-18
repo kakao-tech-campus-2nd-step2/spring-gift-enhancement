@@ -19,8 +19,7 @@ public class WishlistService {
     @Autowired
     private WishlistRepository wishlistRepository;
 
-    public Page<Product> getWishlistByEmail(String email, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Product> getWishlistByEmail(String email, Pageable pageable) {
         Page<Wishlist> wishlist = wishlistRepository.findByMemberEmail(email, pageable);
         return wishlist.map(Wishlist::getProduct);
     }
