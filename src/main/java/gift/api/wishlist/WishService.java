@@ -8,6 +8,7 @@ import gift.api.wishlist.domain.Wish;
 import gift.api.wishlist.domain.WishId;
 import gift.api.wishlist.dto.WishAddUpdateRequest;
 import gift.api.wishlist.dto.WishDeleteRequest;
+import gift.api.wishlist.dto.WishResponse;
 import gift.global.exception.NoSuchEntityException;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
@@ -33,10 +34,16 @@ public class WishService {
         this.wishRepository = wishRepository;
     }
 
-    public List<Wish> getItems(Long memberId, Pageable pageable) {
+    public List<WishResponse> getItems(Long memberId, Pageable pageable) {
         Member member = findMemberById(memberId);
-        Page<Wish> allWishes = wishRepository.findAllByMember(member, createPageableWithProduct(pageable));
-        return allWishes.hasContent() ? allWishes.getContent() : Collections.emptyList();
+        Page<Wish> wishes = wishRepository.findAllByMember(member, createPageableWithProduct(pageable));
+        if (wishes.hasContent()) {
+            return wishes.getContent()
+                    .stream()
+                    .map(WishResponse::of)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     public void add(Long memberId, WishAddUpdateRequest wishAddUpdateRequest) {

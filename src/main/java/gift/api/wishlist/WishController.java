@@ -1,8 +1,8 @@
 package gift.api.wishlist;
 
-import gift.api.wishlist.domain.Wish;
 import gift.api.wishlist.dto.WishAddUpdateRequest;
 import gift.api.wishlist.dto.WishDeleteRequest;
+import gift.api.wishlist.dto.WishResponse;
 import gift.global.resolver.LoginMember;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -28,7 +28,7 @@ public class WishController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Wish>> getItems(@LoginMember Long memberId, Pageable pageable) {
+    public ResponseEntity<List<WishResponse>> getItems(@LoginMember Long memberId, Pageable pageable) {
         return ResponseEntity.ok().body(wishService.getItems(memberId, pageable));
     }
 
