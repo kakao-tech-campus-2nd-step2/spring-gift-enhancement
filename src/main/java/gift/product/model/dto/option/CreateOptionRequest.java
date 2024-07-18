@@ -22,9 +22,6 @@ public record CreateOptionRequest(
 
         @Min(value = 0, message = "추가 금액은 0 이상의 정수로 입력해주세요.")
         @NotNull
-        int additionalCost,
-
-        @NotNull
-        Long productId
+        int additionalCost
 ) {
 }

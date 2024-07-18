@@ -52,7 +52,7 @@ public class ProductRepositoryTest {
         appUser = new AppUser("aabb@kakao.com", "1234", Role.USER, "aaaa");
         category = new Category("기타", "");
         options = List.of(new Option("Option 1", 10, 200, product));
-        product = new Product("Test", 1000, "url", appUser, category, options);
+        product = new Product("Test", 1000, "url", appUser, category);
         wish = new Wish(appUser, product, 5);
         appUser = userRepository.save(appUser);
         category = categoryRepository.save(category);
@@ -88,8 +88,6 @@ public class ProductRepositoryTest {
 
         assertEquals(product.getName(), foundProduct.getName());
         assertEquals(1L, wishCount);
-        assertFalse(foundProduct.getOptions().isEmpty());
-        assertEquals(options, foundProduct.getOptions());
     }
 
     @Test
@@ -105,7 +103,5 @@ public class ProductRepositoryTest {
 
         assertEquals(product.getName(), foundProduct.getName());
         assertEquals(Long.valueOf(1), wishCount);
-        assertFalse(foundProduct.getOptions().isEmpty());
-        assertEquals(options, foundProduct.getOptions());
     }
 }

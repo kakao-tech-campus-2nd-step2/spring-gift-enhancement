@@ -16,7 +16,6 @@ import gift.product.model.dto.option.Option;
 import gift.product.model.dto.option.UpdateOptionRequest;
 import gift.product.model.dto.product.Product;
 import gift.product.service.OptionService;
-import gift.product.service.ProductService;
 import gift.user.model.dto.AppUser;
 import gift.user.model.dto.Role;
 import jakarta.persistence.EntityNotFoundException;
@@ -36,9 +35,6 @@ public class OptionServiceTest {
     @Mock
     private OptionRepository optionRepository;
 
-    @Mock
-    private ProductService productService;
-
     @InjectMocks
     private OptionService optionService;
 
@@ -51,34 +47,19 @@ public class OptionServiceTest {
     public void setUp() {
         Category defaultCategory = new Category("기본", "기본 카테고리");
         AppUser defaultSeller = new AppUser("aabb@kakao.com", "1234", Role.USER, "aaaa");
-        product = new Product("test", 100, "image", defaultSeller, defaultCategory);
         option = new Option("option", 10, 300, product);
-        createRequest = new CreateOptionRequest("option", 10, 300, product.getId());
+        product = new Product("test", 100, "image", defaultSeller, defaultCategory);
+        createRequest = new CreateOptionRequest("option", 10, 300);
         updateRequest = new UpdateOptionRequest("option2", 10, 300);
     }
 
     @Test
-    @DisplayName("상품이 존재한다면 옵션을 추가할 수 있다")
-    public void addOption_ShouldAddOption_WhenProductExists() {
-        // given
-        when(productService.findProduct(product.getId())).thenReturn(product);
-
-        // when
-        optionService.addOption(createRequest);
+    @DisplayName("옵션을 추가할 수 있다")
+    public void addOption_ShouldAddOption() {// when
+        optionService.addOption(product, createRequest);
 
         // then
         verify(optionRepository, times(1)).save(any(Option.class));
-    }
-
-    @Test
-    @DisplayName("상품이 존재하지 않는다면 EntityNotFoundException을 던진다")
-    public void addOption_ShouldThrowEntityNotFoundException_WhenProductDoesNotExist() {
-        // given
-        when(productService.findProduct(product.getId())).thenThrow(new EntityNotFoundException("Product"));
-
-        // when, then
-        assertThrows(EntityNotFoundException.class, () -> optionService.addOption(createRequest));
-        verify(optionRepository, times(0)).save(any(Option.class));
     }
 
     @Test

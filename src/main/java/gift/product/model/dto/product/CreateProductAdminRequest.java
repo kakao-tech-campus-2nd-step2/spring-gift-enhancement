@@ -2,11 +2,13 @@ package gift.product.model.dto.product;
 
 import static gift.util.Utils.NAME_PATTERN;
 
+import gift.product.model.dto.option.CreateOptionRequest;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import org.springframework.lang.Nullable;
 
 public record CreateProductAdminRequest(
@@ -26,6 +28,9 @@ public record CreateProductAdminRequest(
         Long sellerId,
 
         @NotNull
-        Long categoryId
+        Long categoryId,
+
+        @NotNull
+        List<CreateOptionRequest> options
 ) {
 }

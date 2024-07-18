@@ -6,6 +6,7 @@ import gift.product.model.dto.option.Option;
 import gift.product.model.dto.option.UpdateOptionRequest;
 import gift.product.model.dto.product.Product;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,20 +14,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OptionService {
     private final OptionRepository optionRepository;
-    private final ProductService productService;
 
-    public OptionService(OptionRepository optionRepository, ProductService productService) {
+    public OptionService(OptionRepository optionRepository) {
         this.optionRepository = optionRepository;
-        this.productService = productService;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Option> findOptionsByProductId(Long productId) {
+        return optionRepository.findAllByProductIdAndIsActiveTrue(productId);
     }
 
     @Transactional
-    public void addOption(CreateOptionRequest createOptionRequest) {
-        Product product = productService.findProduct(createOptionRequest.productId());
+    public void addOption(Product product, CreateOptionRequest createOptionRequest) {
         Option option = new Option(createOptionRequest.name(), createOptionRequest.quantity(),
-                createOptionRequest.additionalCost(),
-                product);
+                createOptionRequest.additionalCost(), product);
         optionRepository.save(option);
+    }
+
+    @Transactional
+    public void addOptionList(Product product, List<CreateOptionRequest> createOptionRequests) {
+        for (CreateOptionRequest request : createOptionRequests) {
+            addOption(product, request);
+        }
     }
 
     @Transactional

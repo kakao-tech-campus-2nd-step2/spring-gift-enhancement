@@ -2,12 +2,14 @@ package gift.product.model.dto.product;
 
 import static gift.util.Utils.NAME_PATTERN;
 
+import gift.product.model.dto.option.CreateOptionRequest;
 import gift.product.model.dto.valid.ExcludeKeyword;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import org.springframework.lang.Nullable;
 
 public record CreateProductRequest(
@@ -22,6 +24,9 @@ public record CreateProductRequest(
         int price,
 
         @Nullable
-        String imageUrl
+        String imageUrl,
+
+        @NotNull
+        List<CreateOptionRequest> options
 ) {
 }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,14 +12,17 @@ import static org.mockito.Mockito.when;
 import gift.category.model.dto.Category;
 import gift.category.service.CategoryService;
 import gift.product.model.ProductRepository;
+import gift.product.model.dto.option.CreateOptionRequest;
 import gift.product.model.dto.product.CreateProductAdminRequest;
 import gift.product.model.dto.product.Product;
+import gift.product.service.OptionService;
 import gift.product.service.ProductAdminService;
 import gift.product.service.ProductService;
 import gift.user.model.dto.AppUser;
 import gift.user.model.dto.Role;
 import gift.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +45,9 @@ public class ProductAdminServiceTest {
     @Mock
     private ProductService productService;
 
+    @Mock
+    private OptionService optionService;
+
     @InjectMocks
     private ProductAdminService productAdminService;
 
@@ -51,10 +58,13 @@ public class ProductAdminServiceTest {
 
     @BeforeEach
     void setUp() {
-        createProductAdminRequest = new CreateProductAdminRequest("ProductName", 100, "http://image.url", 1L, 1L);
+        List<CreateOptionRequest> createRequest = List.of(new CreateOptionRequest("option", 10, 300));
+        createProductAdminRequest = new CreateProductAdminRequest("ProductName", 100, "http://image.url", 1L, 1L,
+                createRequest);
         defaultCategory = new Category("기본", "기본 카테고리");
         defaultSeller = new AppUser("aabb@kakao.com", "1234", Role.USER, "aaaa");
         defaultProduct = new Product("test", 100, "image", defaultSeller, defaultCategory);
+
     }
 
     @Test
@@ -63,6 +73,7 @@ public class ProductAdminServiceTest {
         // given
         when(categoryService.getCategory(createProductAdminRequest.categoryId())).thenReturn(defaultCategory);
         when(userService.findUser(createProductAdminRequest.sellerId())).thenReturn(defaultSeller);
+        doNothing().when(optionService).addOptionList(any(Product.class), any(List.class));
 
         // when, then
         assertDoesNotThrow(() -> productAdminService.addProduct(createProductAdminRequest));
