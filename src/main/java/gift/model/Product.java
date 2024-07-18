@@ -62,8 +62,8 @@ public class Product {
 	
 	public void setName(String name) {
 		if (name.contains("카카오")) {
-      throw new InvalidProductException("이름에 '카카오'를 포함할 수 없습니다.");
-    }
+			throw new InvalidProductException("이름에 '카카오'를 포함할 수 없습니다.");
+		}
 		this.name = name;
 	}
 	
