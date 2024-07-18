@@ -5,7 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="CATEGORY_TABLE")
@@ -16,10 +19,10 @@ public class Category {
     @Column(name = "CATEGORY_ID")
     private Long id;
 
-    @Column(name = "CATEGORY_NAME")
+    @Column(name = "CATEGORY_NAME",unique = true, nullable = false)
     private String name;
 
-    @Column(name = "CATEGORY_COLOR",length = 7)
+    @Column(name = "CATEGORY_COLOR",length = 7, nullable = false)
     private String color;
 
     @Column(name = "CATEGORY_DESCRIPTION")
@@ -27,6 +30,9 @@ public class Category {
 
     @Column(name = "CATEGORY_IMAGE_URL")
     private String imageUrl;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> productList = new ArrayList<>();
 
     public Category() {
     }

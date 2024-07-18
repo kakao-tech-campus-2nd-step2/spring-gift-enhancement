@@ -18,6 +18,8 @@ public class ProductDTO {
     private Integer price;
     @NotBlank(message = "이미지 주소를 입력해주세요")
     private String imageUrl;
+    @NotBlank(message = "카테고리를 입력해주세요")
+    private Long categoryId;
 
     //타임리프 사용을 위한 기본 생성자
     public ProductDTO() {
@@ -28,6 +30,14 @@ public class ProductDTO {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public ProductDTO(Long id, String name, Integer price, String imageUrl, Long categoryId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     //상품 모델을 DTO로 빠르게 전환

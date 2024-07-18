@@ -15,6 +15,15 @@ EntityModel -> spring hateoas 이용시 (하이퍼 미디어 규약?)
 
 service 부분이 없어서 그런가 Mock가 제대로 설정되지 않는다.
 
+mappedBy -> 엔티티 class 이름을 적어야함.
+
+---
+product에 카테고리를 연결시켜야함.
+
+그럼 관련된 모든 부분이 변경되어야하는?
+
+product의 컨트롤러와 서비스와 테스트코드까지 전부 변경을 해주어야하는가? 아니면, 
+
 
 
 ### 의문
@@ -46,3 +55,5 @@ post, put 등에서 반환에서 특정 url로 location header를 변경해서 �
 
 - product update를 jpa save로 변환하기
   (jpa에서 id값이 null이 아니면 이미 존재한다고 판단하고 merge 한다.)
+
+- 페이징 - 사용자가 정렬 옵션이나 페이지 사이즈 등의 옵션을 넘길 수 있도록 하기

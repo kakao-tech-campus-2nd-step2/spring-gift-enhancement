@@ -25,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> readAll() {
         return jpaProductRepository.findAll().stream().map(
             product -> new ProductDTO(product.getId(), product.getName(), product.getPrice(),
-                product.getImageUrl())).toList();
+                product.getImageUrl(),product.getCategoryId())).toList();
     }
 
     //새로운 상품 추가
