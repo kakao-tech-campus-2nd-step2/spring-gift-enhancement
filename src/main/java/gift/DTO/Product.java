@@ -34,7 +34,7 @@ public class Product {
   @Column(nullable = false)
   private String imageUrl;
 
-  public Product() {
+  protected Product() {
   }
 
   public Product(Long id, String name, int price, String imageUrl, Category category) {

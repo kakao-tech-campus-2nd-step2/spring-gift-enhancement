@@ -35,7 +35,7 @@ public class Category {
   @Column(nullable = false,columnDefinition = "CLOB")
   private String description;
 
-  public Category() {
+  protected Category() {
   }
 
   public Category(Long id, String name, String color, String imageUrl, String description) {
