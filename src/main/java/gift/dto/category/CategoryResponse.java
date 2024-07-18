@@ -28,25 +28,4 @@ public class CategoryResponse {
     public static CategoryResponse fromEntity(Category category) {
         return new CategoryResponse(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
 }
