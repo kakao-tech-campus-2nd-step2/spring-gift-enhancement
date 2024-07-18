@@ -68,10 +68,7 @@ public class ProductService {
         Product foundProduct = findProductByIdOrThrow(id);
         Category category = categoryService.findById(productRequest.categoryId()).toEntity();
 
-        foundProduct.updateName(productRequest.name());
-        foundProduct.updatePrice(productRequest.price());
-        foundProduct.updateImageUrl(productRequest.imageUrl());
-        foundProduct.updateCategory(category);
+        foundProduct.updateProduct(productRequest.name(), productRequest.price(), productRequest.imageUrl(),category);
         productRepository.save(foundProduct);
     }
 
