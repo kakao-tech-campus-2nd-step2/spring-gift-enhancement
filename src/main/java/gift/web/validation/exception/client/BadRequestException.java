@@ -2,12 +2,13 @@ package gift.web.validation.exception.client;
 
 import static gift.web.validation.exception.code.ErrorStatus.BAD_REQUEST;
 
+import gift.web.validation.exception.CustomException;
 import gift.web.validation.exception.code.ErrorStatus;
 
 /**
  * 4XX 예외
  */
-public class BadRequestException extends ClientException {
+public class BadRequestException extends CustomException {
 
     private static final String ERROR_MESSAGE = "잘못된 요청입니다. 요청 URL: %s";
 
