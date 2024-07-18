@@ -55,7 +55,7 @@
   - [ ] option_name은 ( ), [ ], +, -, &, /, _ 를 제외한 특수문자 사용 불가
   - [x] 같은 Product의 option_name은 유니크 해야함
 
-- [ ] Option Repository 구현
+- [x] Option Repository 구현
   
 - [x] Product Entity 수정
   - [x] Product에 하나 이상의 옵션을 추가하기 위해 List를 사용하여 옵션 저장
