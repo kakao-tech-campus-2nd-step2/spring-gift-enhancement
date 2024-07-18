@@ -15,6 +15,9 @@ public class Option {
     @Column(nullable = false)
     private Integer quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Product product;
+
     protected Option() {
     }
 
@@ -33,5 +36,9 @@ public class Option {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public void associateWithProduct(Product product) {
+        this.product = product;
     }
 }

@@ -9,8 +9,7 @@ import java.util.List;
 @Entity
 public class Product {
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", nullable = false)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private final List<Option> options = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +33,9 @@ public class Product {
         this.imageUrl = imageUrl;
         this.category = category;
         this.options.addAll(options);
+        for (Option option : options) {
+            option.associateWithProduct(this);
+        }
     }
 
     public Product(AddProductRequest request, Category category, List<Option> options) {
@@ -46,6 +48,7 @@ public class Product {
 
     public void addOption(Option option) {
         options.add(option);
+        option.associateWithProduct(this);
     }
 
     public Long getId() {
