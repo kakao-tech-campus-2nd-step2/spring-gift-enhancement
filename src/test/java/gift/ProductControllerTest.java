@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class ProductControllerTest {
+class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;  // Spring MockMvc 프레임워크를 사용하여 HTTP 요청 및 응답 테스트
@@ -55,7 +55,7 @@ public class ProductControllerTest {
 
     @Test
     @DisplayName("상품 추가 테스트")
-    public void addProductTest() throws Exception {
+    void addProductTest() throws Exception {
         mockMvc.perform(post("/api/products")  // '/api/products' 경로로 POST 요청
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("name", "복숭아 아이스티 T")
