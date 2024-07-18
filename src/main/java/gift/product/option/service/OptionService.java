@@ -31,7 +31,10 @@ public class OptionService {
         Options options = new Options(optionRepository.findAllByProduct(product));
         options.validate(option);
 
-        return optionRepository.save(option).getId();
+        product.addOption(option);
+        Option saved = optionRepository.save(option);
+
+        return saved.getId();
     }
 
 }

@@ -2,6 +2,7 @@ package gift.product.entity;
 
 import gift.product.category.entity.Category;
 import gift.product.dto.request.UpdateProductRequest;
+import gift.product.option.entity.Option;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -10,7 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -34,6 +37,9 @@ public class Product {
         foreignKey = @ForeignKey(name = "fk_products_category_id_ref_categories_id"))
     private Category category;
 
+    @OneToMany
+    private Set<Option> options;
+
     protected Product() {
     }
 
@@ -50,6 +56,10 @@ public class Product {
         this.price = request.price();
         this.imageUrl = request.imageUrl();
         this.category = category;
+    }
+
+    public void addOption(Option option) {
+        options.add(option);
     }
 
     public static Builder builder() {
