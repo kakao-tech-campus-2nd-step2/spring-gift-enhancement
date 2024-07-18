@@ -1,5 +1,6 @@
 package gift.domain.product.entity;
 
+import gift.exception.DuplicateOptionNameException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -80,11 +81,20 @@ public class Product {
     }
 
     public void addOption(Option option) {
+        validateOption(option);
         options.add(option);
         option.setProduct(this);
     }
 
     public void removeOption(Option option) {
         options.remove(option);
+    }
+
+    private void validateOption(Option option) {
+        for (Option o : options) {
+            if (o.getName().equals(option.getName())) {
+                new DuplicateOptionNameException("error.duplicate.option.name");
+            }
+        }
     }
 }
