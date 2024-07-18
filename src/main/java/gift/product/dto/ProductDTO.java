@@ -1,5 +1,6 @@
 package gift.product.dto;
 
+import gift.product.model.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -14,7 +15,7 @@ public class ProductDTO {
     private int price;
     @NotBlank(message = "상품 이미지 URL은 필수 입력 요소입니다.")
     private String imageUrl;
-    @NotNull(message = "상품의 카테고리가 미지정 되었습니다.")
+    @NotNull(message = "상품의 카테고리가 지정되지 않았습니다.")
     private Long categoryId;
 
     public ProductDTO() {

@@ -118,6 +118,11 @@ public class ProductService {
         );
     }
 
+    public Product findById(Long id) {
+        return productRepository.findById(id)
+            .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
+    }
+
     public ProductDTO convertToDTO(Product product) {
         return new ProductDTO(
             product.getId(),

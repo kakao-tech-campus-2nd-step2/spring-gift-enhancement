@@ -1,5 +1,8 @@
 package gift.product.service;
 
+import static gift.product.exception.GlobalExceptionHandler.NOT_EXIST_ID;
+
+import gift.product.exception.InvalidIdException;
 import gift.product.model.Category;
 import gift.product.repository.CategoryRepository;
 import gift.product.validation.CategoryValidation;
@@ -50,6 +53,7 @@ public class CategoryService {
 
     public Category findCategoryById(Long id) {
         System.out.println("[CategoryService] findCategoryById()");
-        return categoryRepository.findById(id).get();
+        return categoryRepository.findById(id)
+            .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
     }
 }

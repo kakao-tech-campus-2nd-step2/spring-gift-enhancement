@@ -2,15 +2,17 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>상품 추가 페이지</title>
+    <title>옵션 추가 페이지</title>
 </head>
 <body>
-<a href="/admin/product/list"><- 상품 관리 페이지로 돌아가기</a>
-<h2>새 상품 추가</h2>
-<form action="/admin/product" th:action="@{/admin/product}" th:object="${product}" method="post">
+<a th:action="@{/admin/products/{productId}(productId=${productId})}"><- 상품 옵션 관리 페이지로 돌아가기</a>
+<h2>상품 옵션 추가</h2>
+<form th:action="@{/admin/products/{productId}(productId=${productId})}" th:object="${option}" method="post">
     <table>
         <tr>
-            <td>카테고리: </td>
+            <td>
+                카테고리:
+            </td>
             <td>
                 <label>
                     <select name="categoryId" required>
@@ -23,29 +25,19 @@
         </tr>
         <tr>
             <td>상품명: </td>
-            <td>
-                <label>
-                    <input type="text" name="name" value="" required />
-                </label>
-            </td>
+            <td><label>
+                <input type="text" name="name" value="" required />
+            </label></td>
             <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error Message</td>
         </tr>
         <tr>
             <td>가격: </td>
-            <td>
-                <label>
-                    <input type="number" name="price" value="" required />
-                </label>
-            </td>
+            <td><label><input type="number" name="price" value="" required /></label></td>
             <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error Message</td>
         </tr>
         <tr>
             <td>상품이미지 URL: </td>
-            <td>
-                <label>
-                    <input type="text" name="imageUrl" value="" required />
-                </label>
-            </td>
+            <td><label><input type="text" name="imageUrl" value="" required /></label></td>
             <td th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">ImageURL Error Message</td>
         </tr>
         <tr>

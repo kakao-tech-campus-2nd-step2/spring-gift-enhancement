@@ -98,7 +98,7 @@ public class ProductServiceTest {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-                product.getCategory().getId()
+            product.getCategory().getId()
         );
         Assertions.assertThrows(InvalidIdException.class, () -> {
             productService.updateProduct(-1L, productDTO);
@@ -109,12 +109,12 @@ public class ProductServiceTest {
     void testUpdateInvalidNameProduct() {
         System.out.println("[ProductServiceTest] testUpdateInvalidNameProduct()");
         Product product = productRepository.save(
-                new Product(
-                        "originalProduct",
-                        1000,
-                        "image.url",
-                        category
-                )
+            new Product(
+                "originalProduct",
+                1000,
+                "image.url",
+                category
+            )
         );
         ProductDTO updateProduct = new ProductDTO("카카오프렌즈", product.getPrice(), product.getImageUrl(), product.getCategory().getId());
         Assertions.assertThrows(InstanceValueException.class, () -> {
@@ -126,12 +126,12 @@ public class ProductServiceTest {
     void testUpdateNegativePriceProduct() {
         System.out.println("[ProductServiceTest] testUpdateNegativePriceProduct()");
         Product product = productRepository.save(
-                new Product(
-                        "originalProduct",
-                        1000,
-                        "image.url",
-                        category
-                )
+            new Product(
+                "originalProduct",
+                1000,
+                "image.url",
+                category
+            )
         );
         ProductDTO updateProduct = new ProductDTO(product.getName(), -1, product.getImageUrl(), product.getCategory().getId());
         Assertions.assertThrows(InstanceValueException.class, () -> {
