@@ -1,5 +1,7 @@
 package gift.product.domain;
 
+import java.util.List;
+
 public class ProductDTO {
 
     private Long id;
@@ -7,6 +9,8 @@ public class ProductDTO {
     private Long price;
     private String imageUrl;
     private Long categoryId;
+
+    private List<Long> optionIdList;
 
     public ProductDTO() {
         id = 0L;
