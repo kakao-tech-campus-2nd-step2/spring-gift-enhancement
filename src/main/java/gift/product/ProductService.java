@@ -21,7 +21,8 @@ public class ProductService {
     public HttpStatus updateProduct(Product changeProduct) throws NotFoundException {
         Product product = productRepository.findById(changeProduct.getId()).orElseThrow(
             NotFoundException::new);
-        product.update(changeProduct.getName(),changeProduct.getPrice(),changeProduct.getImageUrl());
+        product.update(changeProduct.getName(),changeProduct.getPrice(),changeProduct.getImageUrl(),
+            changeProduct.getCategoryId());
         productRepository.save(product);
       
         return HttpStatus.OK;

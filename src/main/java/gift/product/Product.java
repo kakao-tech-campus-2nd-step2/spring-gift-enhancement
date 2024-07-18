@@ -17,6 +17,8 @@ public class Product {
 
     private String imageUrl;
 
+    private Long categoryId;
+
     public Long getId(){
         return this.id;
     }
@@ -33,21 +35,27 @@ public class Product {
         return this.imageUrl;
     }
 
+    public Long getCategoryId(){
+        return this.categoryId;
+    }
+
     protected Product(){
     }
-    public Product(Long id, String name, int price, String imageUrl){
+    public Product(Long id, String name, int price, String imageUrl, Long categoryId){
         isValidName(name);
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
-    public void update(String name, int price, String imageUrl){
+    public void update(String name, int price, String imageUrl, Long categoryId){
         isValidName(name);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     private void isValidName(String name){
