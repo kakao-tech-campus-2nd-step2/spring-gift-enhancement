@@ -1,4 +1,4 @@
-package gift.domain;
+package gift.domain.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -30,7 +30,7 @@ public abstract class BaseTimeEntity {
     protected BaseTimeEntity() {
     }
 
-    abstract static class Builder<T extends Builder<T>> {
+    protected abstract static class Builder<T extends Builder<T>> {
 
         Long id;
 
@@ -39,7 +39,7 @@ public abstract class BaseTimeEntity {
             return self();
         }
 
-        abstract BaseTimeEntity build();
+        protected abstract BaseTimeEntity build();
 
         protected abstract T self();
     }

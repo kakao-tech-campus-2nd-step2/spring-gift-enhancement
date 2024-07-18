@@ -1,5 +1,7 @@
 package gift.domain;
 
+import gift.domain.base.BaseEntity;
+import gift.domain.base.BaseTimeEntity;
 import gift.domain.vo.Color;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +27,7 @@ public class Category extends BaseEntity {
     protected Category() {
     }
 
-    public static class Builder extends BaseEntity.Builder<Builder> {
+    public static class Builder extends BaseTimeEntity.Builder<Builder> {
 
         private String name;
         private String description;

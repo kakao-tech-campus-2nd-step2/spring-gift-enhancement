@@ -1,4 +1,4 @@
-package gift.domain;
+package gift.domain.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

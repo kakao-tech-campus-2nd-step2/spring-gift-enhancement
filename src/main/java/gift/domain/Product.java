@@ -1,5 +1,7 @@
 package gift.domain;
 
+import gift.domain.base.BaseEntity;
+import gift.domain.base.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
@@ -39,7 +41,7 @@ public class Product extends BaseEntity {
     protected Product() {
     }
 
-    public static class Builder extends BaseEntity.Builder<Builder> {
+    public static class Builder extends BaseTimeEntity.Builder<Builder> {
 
         private String name;
         private Integer price;

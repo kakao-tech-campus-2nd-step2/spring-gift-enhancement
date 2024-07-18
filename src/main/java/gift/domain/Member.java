@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.domain.base.BaseTimeEntity;
 import gift.domain.vo.Email;
 import gift.domain.vo.Password;
 import gift.web.validation.exception.client.IncorrectPasswordException;
