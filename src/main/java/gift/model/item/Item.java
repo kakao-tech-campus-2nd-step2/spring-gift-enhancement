@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.annotations.BatchSize;
 
-@BatchSize(size = 100)
 @Entity
 public class Item {
 
@@ -31,6 +30,7 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private final List<WishItem> wishes = new ArrayList<>();
 

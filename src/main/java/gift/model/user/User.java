@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.annotations.BatchSize;
 
-@BatchSize(size = 100)
 @Entity
 @Table(name = "users")
 public class User {
@@ -25,6 +24,7 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<WishItem> wishItemList = new ArrayList<>();
 
