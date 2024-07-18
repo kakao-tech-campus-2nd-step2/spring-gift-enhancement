@@ -33,7 +33,7 @@ public class ProductService {
         return ProductModel.Info.from(product);
     }
 
-    //@Transactional
+    @Transactional
     public ProductModel.Info createProduct(ProductCommand.Register command) {
         var category = categoryRepository.findById(command.categoryId())
             .orElseThrow(() -> new NotFoundException("Category not found"));
@@ -56,7 +56,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductModel.Info> getProductsPaging(
+    public Page<ProductModel.InfoWithOption> getProductsPaging(
         SearchType searchType,
         String searchValue,
         Pageable pageable
@@ -65,10 +65,11 @@ public class ProductService {
         Page<Product> productPage = switch (searchType) {
             case NAME -> productRepository.findByNameContaining(searchValue, pageable);
             case PRICE -> productRepository.findAllOrderByPrice(pageable);
+            case CATEGORY -> productRepository.findByCategoryId(searchValue, pageable);
             default -> productRepository.findAll(pageable);
         };
 
-        return productPage.map(ProductModel.Info::from);
+        return productPage.map(ProductModel.InfoWithOption::from);
     }
 }
 
