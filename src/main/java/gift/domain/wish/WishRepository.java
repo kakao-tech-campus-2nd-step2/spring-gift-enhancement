@@ -13,9 +13,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WishRepository extends JpaRepository<Wish, Long> {
+
     @EntityGraph(attributePaths = {"member", "product"})
     Page<Wish> findAll(Pageable pageable);
+
     @EntityGraph(attributePaths = {"member", "product"})
-    Page<Wish> findAllByMember_Id(@Param("memberId") Long memberId, Pageable pageable);
+    Page<Wish> findAllByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
     Optional<Wish> findByMember_IdAndProduct_Id(Long memberId, Long productId);
 }

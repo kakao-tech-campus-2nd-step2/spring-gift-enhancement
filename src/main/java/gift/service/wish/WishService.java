@@ -39,7 +39,7 @@ public class WishService {
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new MemberNotFoundException("멤버가 엄슴다"));
 
-        return wishRepository.findAllByMember_Id(member.getId(), pageable)
+        return wishRepository.findAllByMemberId(member.getId(), pageable)
             .map(wishMapper::toDto);
     }
 
