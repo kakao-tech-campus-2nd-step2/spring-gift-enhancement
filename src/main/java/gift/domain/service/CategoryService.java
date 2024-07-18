@@ -34,7 +34,6 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse addCategory(CategoryRequest request) {
-
         categoryRepository.findByName(request.name()).ifPresent(c -> {
             throw new CategoryAlreadyExistsException();
         });
