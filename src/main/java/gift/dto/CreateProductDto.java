@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -17,9 +18,11 @@ public class CreateProductDto {
     Integer price;
     @NotBlank
     String imageUrl;
+    @NotBlank
+    Category category;
 
     public Product toProduct(){
-        return new Product(name, price, imageUrl);
+        return new Product(name, price, imageUrl, category);
     }
 
     public String getName() {

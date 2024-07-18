@@ -21,36 +21,34 @@ public class Product {
     @Column(nullable = false)
     String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
 
-
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public void setId(long andIncrement) {
-        this.product_id = andIncrement;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    public void setName(Object name) {
-        this.name = name.toString();
+    public void setPrice(Integer price) {
+        this.price = price;
     }
-
-    public void setPrice(Object price) {
-        this.price = (Integer) price;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
-
-    public void setImageUrl(Object imageUrl) {
-        this.imageUrl = imageUrl.toString();
-    }
+    public void setCategory(Category category) { this.category = category; }
 
     public Long getId() {
         return product_id;
     }
-
     public String getName() {
         return name;
     }
