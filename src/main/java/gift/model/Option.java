@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
 @Table(name = "option")
@@ -61,6 +62,11 @@ public class Option {
         return name;
     }
 
+
+    public int getQuantity() {
+        return quantity;
+    }
+
     public Product getProduct() {
         return product;
     }
@@ -69,5 +75,9 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+    }
+
+    public boolean isProductIdMatching(Long productId) {
+        return Objects.equals(this.product.getId(), productId);
     }
 }

@@ -49,7 +49,7 @@ public class ProductAdminController {
     public String showAddProductForm(Model model) {
         List<CategoryResponse> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
-        model.addAttribute("product", new ProductCreateRequest("", 0, "", null));
+        model.addAttribute("product", new ProductCreateRequest("", 0, "", null, List.of()));
         return "product_form";
     }
 
