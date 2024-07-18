@@ -30,5 +30,10 @@ public class ViewController {
     public String products() {
         return "products";
     }
+
+    @GetMapping("/categories")
+    public String categories() {
+        return "categories";
+    }
 }
 
