@@ -1,5 +1,6 @@
 package gift.domain.entity;
 
+import gift.domain.dto.request.CategoryRequest;
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -71,6 +72,13 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void set(CategoryRequest request) {
+        setName(request.name());
+        setColor(request.color());
+        setImageUrl(request.imageUrl());
+        setDescription(request.description());
     }
 
     @Override

@@ -39,4 +39,18 @@ public class CategoryService {
 
         return CategoryResponse.of(categoryRepository.save(request.toEntity()));
     }
+
+    @Transactional
+    public CategoryResponse updateCategory(Long id, CategoryRequest request) {
+        Category category = findById(id);
+        // 바꾸려는 이름이 기존과 다른 경우
+        // 그 이름이 다른 카테고리와 겹치는 경우 에러
+        if (!category.getName().equals(request.name())) {
+            categoryRepository.findByName(request.name()).ifPresent(c -> {
+                throw new CategoryAlreadyExistsException();
+            });
+        }
+        category.set(request);
+        return CategoryResponse.of(category);
+    }
 }
