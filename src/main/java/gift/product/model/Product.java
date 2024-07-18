@@ -3,11 +3,16 @@ package gift.product.model;
 import gift.category.model.Category;
 import gift.common.exception.ProductException;
 import gift.common.model.BaseEntity;
+import gift.option.Option;
 import gift.product.ProductErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.data.jpa.repository.query.InvalidJpaQueryMethodException;
 
 @Entity
 public class Product extends BaseEntity {
@@ -58,6 +63,7 @@ public class Product extends BaseEntity {
     }
 
     public void updateInfo(String name, Integer price, String imageUrl, Category category) {
+        validateKakaoWord(name);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
