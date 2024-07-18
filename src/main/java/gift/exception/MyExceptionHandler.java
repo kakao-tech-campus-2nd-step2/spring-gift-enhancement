@@ -4,6 +4,7 @@ import gift.exception.exception.BadRequestException;
 import gift.exception.exception.NotFoundException;
 import gift.exception.exception.ServerInternalException;
 import gift.exception.exception.UnAuthException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class MyExceptionHandler {
     @ResponseBody
     @ExceptionHandler(ServerInternalException.class)
     public String exception(ServerInternalException e) {
-        return e.getMessage();
+        return "서버 오류";
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -53,6 +54,12 @@ public class MyExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public String exception(ConstraintViolationException e) {
         return "제약사항 요구 어긋남";
+    }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    @ExceptionHandler(ExpiredJwtException.class)
+    public String exception(ExpiredJwtException e) {
+        return "인증이 잘못됨";
     }
 }
 

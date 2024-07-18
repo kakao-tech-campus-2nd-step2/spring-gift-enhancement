@@ -1,6 +1,7 @@
 package gift.controller;
 
 
+import gift.dto.product.ModifyProductDTO;
 import gift.dto.product.SaveProductDTO;
 import gift.dto.product.ShowProductDTO;
 import gift.entity.Product;
@@ -36,21 +37,21 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public String addProduct(@RequestBody SaveProductDTO product) {
         productService.saveProduct(product);
-        return "redirect:/api/products";
+        return "redirect:api/products";
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/api/products/{Id}")
     public String deleteProduct(@PathVariable int Id) {
         productService.deleteProduct(Id);
-        return "redirect:/api/products";
+        return "redirect:api/products";
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/api/products")
-    public String modifyProduct(@RequestBody Product product) {
+    public String modifyProduct(@RequestBody ModifyProductDTO product) {
         productService.modifyProduct(product);
-        return "redirect:/api/products";
+        return "redirect:api/products";
     }
 
 

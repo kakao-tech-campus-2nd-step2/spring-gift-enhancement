@@ -34,13 +34,10 @@ public class UserService {
     }
 
     public Token signIn(LoginDTO loginDTO){
-        Optional<User> user = userRepository.findByEmail(loginDTO.email());
-        if(user.isEmpty())
-            throw new NotFoundException("존재하지 않는 계정");
-        User user1 = user.get();
-        if (!user1.getPassword().equals( loginDTO.password()))
+        User user = userRepository.findByEmail(loginDTO.email()).orElseThrow(()->new NotFoundException("존재하지 않는 계정"));
+        if (!user.getPassword().equals(loginDTO.password()))
             throw new BadRequestException("비밀번호가 일치하지 않습니다.");
 
-        return new Token(jwtUtil.generateToken(user1));
+        return new Token(jwtUtil.generateToken(user));
     }
 }

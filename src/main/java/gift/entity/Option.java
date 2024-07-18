@@ -24,10 +24,6 @@ public class Option {
 
     int quantity;
 
-    public void setProduct(Product product){
-        this.product = product;
-    }
-
     public Option(Product product, String option) {
         this.product = product;
         this.option = option;

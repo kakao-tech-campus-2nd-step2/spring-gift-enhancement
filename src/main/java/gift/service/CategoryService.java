@@ -31,10 +31,7 @@ public class CategoryService {
     }
 
     public void delete(int categoryId) {
-        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
-        if(categoryOptional.isEmpty())
-            throw new NotFoundException("존재하지 않는 카테고리입니다.");
-        Category category =categoryOptional.get();
+        Category category =categoryRepository.findById(categoryId).orElseThrow(()->new NotFoundException("존재하지 않는 카테고리입니다."));
         if(!category.getProducts().isEmpty())
             throw new BadRequestException("해당 카테고리에 물품이 존재합니다.");
         categoryRepository.delete(category);

@@ -37,7 +37,6 @@ public class Category {
         product.setCategory(this);
     }
 
-
     public int getId() {
         return id;
     }

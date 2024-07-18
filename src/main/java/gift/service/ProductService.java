@@ -2,6 +2,7 @@ package gift.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.dto.product.ModifyProductDTO;
 import gift.dto.product.ProductWithOptionDTO;
 import gift.dto.product.SaveProductDTO;
 import gift.dto.product.ShowProductDTO;
@@ -41,7 +42,6 @@ public class ProductService {
 
     public Page<ProductWithOptionDTO> getAllProductsWithOption(Pageable pageable) {
         return optionRepository.findAllWithOption(pageable);
-
     }
 
     public Page<ShowProductDTO> getAllProducts(Pageable pageable) {
@@ -49,17 +49,12 @@ public class ProductService {
     }
 
     public void saveProduct(SaveProductDTO product) {
-        if(categoryRepository.findById(product.categoryId()).isEmpty())
-            throw new NotFoundException("해당 카테고리가 없음");
-
-        Category category = categoryRepository.findById(product.categoryId()).get();
+        Category category = categoryRepository.findById(product.categoryId()).orElseThrow(()->new NotFoundException("해당 카테고리가 없음"));
         Product saveProduct = new Product(product.name(), product.price(), product.imageUrl(),category);
         List<String> optionList = stream(product.option().split(",")).toList();
         optionList= optionList.stream().distinct().collect(Collectors.toList());
-        if(optionList.isEmpty())
-            throw new BadRequestException("하나의 옵션은 필요");
 
-        if(isValidProduct(saveProduct)){
+        if(isValidProduct(saveProduct,optionList)){
             saveProduct = productRepository.save(saveProduct);
             category.addProduct(saveProduct);
             addOptionToProduct(optionList,saveProduct);
@@ -67,16 +62,18 @@ public class ProductService {
     }
 
     private void addOptionToProduct(List<String> optionList, Product product) {
-        for(String str : optionList){
-            Option option = new Option(product, str);
-            if(isValidOption(option)) {
-                product.addOptions(option);
-                optionRepository.save(option);
-            }
-        }
+        optionList.stream()
+                .map(str -> new Option(product, str))
+                .filter(this::isValidOption)
+                .forEach(option -> {
+                    product.addOptions(option);
+                    optionRepository.save(option);
+                });
     }
 
-    private boolean isValidProduct(@Validated Product product){
+    private boolean isValidProduct(@Validated Product product,List<String> optionList){
+        if(optionList.isEmpty())
+            throw new BadRequestException("하나의 옵션은 필요");
         if(product.getName().contentEquals("카카오"))
             throw new UnAuthException("MD와 상담해주세요.");
 
@@ -91,22 +88,15 @@ public class ProductService {
     }
 
     public void deleteProduct(int id) {
-        if(productRepository.findById(id).isEmpty())
-            throw new NotFoundException("존재하지 않는 id입니다.");
-        Product product = productRepository.findById(id).get();
-        Category category = product.getCategory() ;
-        category.deleteProduct(product);
+        Product product = productRepository.findById(id).orElseThrow(()->new NotFoundException("존재하지 않는 id입니다."));
+        product.getCategory().deleteProduct(product);
         optionRepository.deleteAll();
         productRepository.deleteById(id);
     }
 
 
     public String getProductByID(int id) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if(optionalProduct.isEmpty())
-            throw new NotFoundException("해당 물건이 없습니다.");
-        Product product = optionalProduct.get();
-
+        Product product = productRepository.findById(id).orElseThrow(()->new NotFoundException("해당 물건이 없습니다."));
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonProduct="";
 
@@ -118,11 +108,10 @@ public class ProductService {
         return jsonProduct;
     }
 
-    public void modifyProduct(Product product) {
-        if(productRepository.findById(product.getId()).isEmpty())
+    public void modifyProduct(ModifyProductDTO product) {
+        if(productRepository.findById(product.id()).isEmpty())
             throw new NotFoundException("물건이 없습니다.");
-        productRepository.deleteById(product.getId());
-        productRepository.save(product);
+        productRepository.updateProductById(product.id(), product.name(),product.price(),product.imageUrl());
     }
 
 }
