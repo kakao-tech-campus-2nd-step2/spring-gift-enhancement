@@ -1,9 +1,8 @@
 package gift.Service;
 
-import gift.Model.Category;
-import gift.Model.Product;
-import gift.Model.RequestProduct;
+import gift.Model.*;
 import gift.Repository.CategoryRepository;
+import gift.Repository.OptionRepository;
 import gift.Repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +16,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository  = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     @Transactional(readOnly = true)
@@ -31,11 +32,12 @@ public class ProductService {
     }
 
     @Transactional
-    public void addProduct(RequestProduct requestProduct) {
-        Category category = categoryRepository.findById(requestProduct.categoryId())
+    public void addProduct(RequestProductPost requestProductPost) {
+        Category category = categoryRepository.findById(requestProductPost.categoryId())
                 .orElseThrow(()-> new NoSuchElementException("매칭되는 카테고리가 없습니다"));
-        Product product = new Product(requestProduct.name(), requestProduct.price(), requestProduct.imageUrl(), category);
+        Product product = new Product(requestProductPost.name(), requestProductPost.price(), requestProductPost.imageUrl(), category);
         productRepository.save(product);
+        optionRepository.save(new Option(requestProductPost.name(), requestProductPost.optionQuantity(), product));
     }
 
     @Transactional(readOnly = true)
@@ -58,6 +60,7 @@ public class ProductService {
     @Transactional
     public void deleteProduct(long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("매칭되는 product가 없습니다"));
+        optionRepository.deleteByProduct(product);
         productRepository.deleteById(product.getId());
     }
 

@@ -1,5 +1,6 @@
 package gift.Controller;
 
+import gift.Model.RequestProductPost;
 import gift.Service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -43,13 +44,13 @@ public class ProductController {
 
     @GetMapping("/products/new")
     public String newProductForm(Model model) {
-        model.addAttribute("product", new RequestProduct("", 0, "", 0L));
+        model.addAttribute("product", new RequestProductPost("", 0, "", 0L, "",1));
         return "new-product";
     }
 
     @PostMapping("/products")
-    public String newProduct(@Valid @ModelAttribute RequestProduct requestProduct) {
-        productService.addProduct(requestProduct);
+    public String newProduct(@Valid @ModelAttribute RequestProductPost requestProductPost) {
+        productService.addProduct(requestProductPost);
         return "redirect:/api/products";
     }
 
