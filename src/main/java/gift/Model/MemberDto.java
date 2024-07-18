@@ -8,7 +8,7 @@ public class MemberDto {
     private boolean isAdmin;
 
     public MemberDto() {
-      
+
     }
 
     public MemberDto(long id, String email, String password, String name, boolean isAdmin) {
@@ -42,7 +42,7 @@ public class MemberDto {
     public void setName(String name) {
         this.name = name;
     }
-  
+
     public long getId() {
         return id;
     }
