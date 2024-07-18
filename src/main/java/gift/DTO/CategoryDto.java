@@ -11,28 +11,38 @@ public class CategoryDto {
   public CategoryDto() {
   }
 
-  public CategoryDto(Long id, String name, String color, String imageUrl, String description){
-    this.id=id;
-    this.name=name;
-    this.color=color;
-    this.imageUrl=imageUrl;
-    this.description=description;
+  public CategoryDto(Long id, String name, String color, String imageUrl, String description) {
+    this.id = id;
+    this.name = name;
+    this.color = color;
+    this.imageUrl = imageUrl;
+    this.description = description;
   }
 
-  public CategoryDto(String name, String color, String imageUrl, String description){
-    this.name=name;
-    this.color=color;
-    this.imageUrl=imageUrl;
-    this.description=description;
+  public CategoryDto(String name, String color, String imageUrl, String description) {
+    this.name = name;
+    this.color = color;
+    this.imageUrl = imageUrl;
+    this.description = description;
   }
 
-  public Long getId(){return this.id;}
+  public Long getId() {
+    return this.id;
+  }
 
-  public String getName(){return this.name;}
+  public String getName() {
+    return this.name;
+  }
 
-  public String getColor(){return this.color;}
+  public String getColor() {
+    return this.color;
+  }
 
-  public String getImageUrl(){return this.imageUrl;}
+  public String getImageUrl() {
+    return this.imageUrl;
+  }
 
-  public String getDescription(){return this.description;}
+  public String getDescription() {
+    return this.description;
+  }
 }

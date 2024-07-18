@@ -38,7 +38,7 @@ public class CategoryService {
     return ConverterToDto.convertToCategoryDto(addedCategory);
   }
 
-  public CategoryDto updateCategory(Long id,CategoryDto categoryDto) {
+  public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
     Category category = categoryRepository.findById(id)
       .orElseThrow(() -> new EmptyResultDataAccessException("해당 카테고리가 없습니다.", 1));
     Category updateCategory = new Category(id, categoryDto.getName(),
@@ -47,7 +47,7 @@ public class CategoryService {
     return ConverterToDto.convertToCategoryDto(updatedCategory);
   }
 
-  public CategoryDto deleteCategory(Long id){
+  public CategoryDto deleteCategory(Long id) {
     Category category = categoryRepository.findById(id)
       .orElseThrow(() -> new EmptyResultDataAccessException("해당 카테고리가 없습니다.", 1));
     categoryRepository.deleteById(id);

@@ -13,7 +13,7 @@ public class ConverterToDto {
 
   public static ProductDto convertToProductDto(Product product) {
     ProductDto productDto = new ProductDto(product.getId(), product.getName(),
-      product.getPrice(), product.getImageUrl(),convertToCategoryDto(product.getCategory()));
+      product.getPrice(), product.getImageUrl(), convertToCategoryDto(product.getCategory()));
     return productDto;
   }
 

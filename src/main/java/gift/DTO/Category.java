@@ -25,14 +25,14 @@ public class Category {
   @Column(nullable = false, unique = true)
   private String name;
 
-  @Column(nullable = false,length = 7)
+  @Column(nullable = false, length = 7)
   private String color;
 
   @Column(nullable = false)
   private String imageUrl;
 
   @Lob
-  @Column(nullable = false,columnDefinition = "CLOB")
+  @Column(nullable = false, columnDefinition = "CLOB")
   private String description;
 
   protected Category() {

@@ -22,7 +22,7 @@ public class Product {
   private final List<WishList> wishlists = new ArrayList<>();
 
   @ManyToOne(cascade = CascadeType.MERGE)
-  @JoinColumn(name = "category_id",nullable = false)
+  @JoinColumn(name = "category_id", nullable = false)
   private Category category;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,14 +42,14 @@ public class Product {
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
-    this.category=category;
+    this.category = category;
   }
 
-  public Product(String name, int price, String imageUrl,Category category) {
+  public Product(String name, int price, String imageUrl, Category category) {
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
-    this.category=category;
+    this.category = category;
   }
 
   public Long getId() {
@@ -72,5 +72,7 @@ public class Product {
     return this.imageUrl;
   }
 
-  public Category getCategory(){return this.category;}
+  public Category getCategory() {
+    return this.category;
+  }
 }
