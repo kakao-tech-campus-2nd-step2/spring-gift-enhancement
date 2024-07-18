@@ -15,12 +15,13 @@ import java.util.Date;
 @Service
 public class JwtService {
     private SecretKey key = Jwts.SIG.HS256.key().build();
-    public String createJWT(String id){
+
+    public String createJWT(String id) {
         return Jwts.builder()
-                .claim("id",id)
+                .claim("id", id)
                 .signWith(key)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+60*10000))
+                .setExpiration(new Date(System.currentTimeMillis() + 60 * 10000))
                 .compact();
     }
 
@@ -31,16 +32,16 @@ public class JwtService {
 
         System.out.println("token = " + token);
 
-        return token.replace("Bearer ","");
+        return token.replace("Bearer ", "");
     }
 
-    public String getMemberId(){
+    public String getMemberId() {
         String accessToken = getJWT();
         System.out.println(accessToken);
-        if(accessToken == null){
+        if (accessToken == null) {
             throw new JwtException("토큰이 유효하지 않습니다.");
         }
-        if(accessToken.isEmpty()){
+        if (accessToken.isEmpty()) {
             throw new JwtException("토큰이 유효하지 않습니다.");
         }
         Jws<Claims> jws;

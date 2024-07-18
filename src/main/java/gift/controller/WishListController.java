@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/wishlists")
+@RequestMapping("api/wishlists")
+
 public class WishListController {
     private final WishListService wishListService;
     private final JwtService jwtService;
@@ -50,7 +51,7 @@ public class WishListController {
             Pageable pageable
     ) {
         String jwtId = jwtService.getMemberId();
-        List<WishListResponse> nowWishList = wishListService.findById(jwtId,pageable);
+        List<WishListResponse> nowWishList = wishListService.findById(jwtId, pageable);
         return ResponseEntity.ok().body(nowWishList);
     }
 

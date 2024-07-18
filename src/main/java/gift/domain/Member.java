@@ -11,15 +11,16 @@ public class Member {
     @Id
     private String id;
 
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<WishList> wishList;
 
-    public Member(){}
+    public Member() {
+    }
 
-    public Member(String id, String password,List<WishList> wishList) {
+    public Member(String id, String password, List<WishList> wishList) {
         this.id = id;
         this.password = password;
         this.wishList = wishList;

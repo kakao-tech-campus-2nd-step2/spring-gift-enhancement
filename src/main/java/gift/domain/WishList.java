@@ -17,13 +17,14 @@ public class WishList {
     @OneToOne
     private Menu menu;
 
-    public WishList() {}
-
-    public WishList(Member member,Menu menu){
-        this(null, member,menu);
+    public WishList() {
     }
 
-    public WishList(Long id, Member member, Menu menu){
+    public WishList(Member member, Menu menu) {
+        this(null, member, menu);
+    }
+
+    public WishList(Long id, Member member, Menu menu) {
         this.id = id;
         this.member = member;
         this.menu = menu;

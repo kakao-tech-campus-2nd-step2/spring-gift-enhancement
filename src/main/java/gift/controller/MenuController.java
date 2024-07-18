@@ -8,13 +8,13 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/menus/view")
+@RequestMapping("api/menus/view")
+
 public class MenuController {
 
     private final MenuService menuService;
@@ -42,7 +42,7 @@ public class MenuController {
             Model model,
             Pageable pageable
     ) {
-        returnView(null, model,pageable);
+        returnView(null, model, pageable);
     }
 
     @GetMapping
@@ -60,11 +60,11 @@ public class MenuController {
     }
 
     public static Menu MapMenuRequestToMenu(MenuRequest menuRequest) {
-        return new Menu(menuRequest.name(), menuRequest.price(), menuRequest.imageUrl());
+        return new Menu(menuRequest.name(), menuRequest.price(), menuRequest.imageUrl(),menuRequest.category());
     }
 
     public static MenuResponse MapMenuToMenuResponse(Menu menu) {
-        return new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(), menu.getImageUrl());
+        return new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(), menu.getImageUrl(),menu.getCategory());
     }
 
 }

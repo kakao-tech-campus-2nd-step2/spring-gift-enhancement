@@ -19,24 +19,31 @@ public class Menu {
     @Column(nullable = false)
     private String imageUrl;
 
-    public Menu() {}
+    @ManyToOne
+    @JoinColumn(name = "category_id",nullable = false)
+    private Category category;
 
-    public Menu(String name, int price, String imageUrl) {
-        this(null,name,price,imageUrl);
+    public Menu() {
     }
 
-    public Menu(Long id, String name, int price, String imageUrl) {
+    public Menu(String name, int price, String imageUrl,Category category) {
+        this(null, name, price, imageUrl, category);
+    }
+
+    public Menu(Long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Menu(Long id, MenuRequest menuRequest){
+    public Menu(Long id, MenuRequest menuRequest) 
         this.id = id;
         this.name = menuRequest.name();
         this.price = menuRequest.price();
         this.imageUrl = menuRequest.imageUrl();
+        this.category = menuRequest.category();
     }
 
     public Long getId() {
@@ -60,6 +67,7 @@ public class Menu {
         this.name = menu.name;
         this.price = menu.price;
         this.imageUrl = menu.imageUrl;
+        this.category = menu.category;
     }
 
     @Override
@@ -75,4 +83,7 @@ public class Menu {
         return Objects.hash(id);
     }
 
+    public Category getCategory() {
+        return category;
+    }
 }

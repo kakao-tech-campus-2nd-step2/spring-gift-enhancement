@@ -41,10 +41,10 @@ public class MenuService {
         return menu;
     }
 
-    public MenuResponse update(Long id,MenuRequest menuRequest) {
-        Menu menu =  menuRepository.findById(id)
+    public MenuResponse update(Long id, MenuRequest menuRequest) {
+        Menu menu = menuRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("메뉴 정보가 없습니다."));
-        menu.update(new Menu(id,menuRequest));
+        menu.update(new Menu(id, menuRequest));
         return MenuController.MapMenuToMenuResponse(menuRepository.save(menu));
     }
 
