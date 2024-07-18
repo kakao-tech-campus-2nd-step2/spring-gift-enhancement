@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
 @Controller
 @RequestMapping("admin/products")
 public class ProductAdminController {
@@ -25,6 +26,7 @@ public class ProductAdminController {
   public ProductAdminController(ProductService productService, CategoryService categoryService) {
     this.productService = productService;
     this.categoryService = categoryService;
+
   }
 
   @GetMapping
