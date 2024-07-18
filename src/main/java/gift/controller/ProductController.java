@@ -72,7 +72,6 @@ public class ProductController {
         return "productForm";
     }
 
-
     @PostMapping("/edit/{id}")
     public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute("productRequestDTO") ProductRequestDTO productRequestDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -89,6 +88,7 @@ public class ProductController {
         productService.updateProduct(id, productRequestDTO);
         return "redirect:/api/products";
     }
+
     @DeleteMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
