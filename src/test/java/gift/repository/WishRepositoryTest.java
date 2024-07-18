@@ -2,8 +2,6 @@ package gift.repository;
 
 import gift.common.enums.Role;
 import gift.config.JpaConfig;
-import gift.controller.dto.request.CreateWishRequest;
-import gift.controller.dto.request.UpdateWishRequest;
 import gift.model.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
