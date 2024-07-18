@@ -29,4 +29,10 @@ public class CategoryService {
             .toList();
         return new ReadAllCategoriesResponse(categories);
     }
+
+    public ReadCategoryResponse readCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException(id + "에 해당하는 카테고리가 없습니다."));
+        return ReadCategoryResponse.fromEntity(category);
+    }
 }
