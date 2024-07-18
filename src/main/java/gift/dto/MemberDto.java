@@ -1,7 +1,5 @@
 package gift.dto;
 
-import gift.entity.Member;
-
 public class MemberDto {
     
     private long id;

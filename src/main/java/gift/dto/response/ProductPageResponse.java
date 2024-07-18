@@ -67,23 +67,5 @@ public class ProductPageResponse {
     public void setHasNext(boolean hasNext) {
         this.hasNext = hasNext;
     }
-
-    public ProductPageResponse fromPage(Page<Product> productPage){
-
-        List<ProductDto> productList = productPage.getContent()
-                                          .stream()
-                                          .map(ProductDto::fromEntity)
-                                          .collect(Collectors.toList());
-
-        ProductPageResponse productPageResponse = new ProductPageResponse(
-            productList, 
-            productPage.getNumber(),
-            productPage.hasPrevious(), 
-            productPage.getTotalPages(), 
-            productPage.hasNext());
-
-        return productPageResponse;
-    }
-
     
 }

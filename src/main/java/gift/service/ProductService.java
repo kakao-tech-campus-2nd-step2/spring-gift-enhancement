@@ -1,4 +1,5 @@
 package gift.service;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,10 +34,22 @@ public class ProductService{
 
     @Transactional
     public ProductPageResponse getPage(int page, int size) {
+
         Pageable pageable = PageRequest.of(page, size);
-        ProductPageResponse productPageResponse = new ProductPageResponse();
-        productPageResponse.fromPage(productRepository.findByOrderByNameDesc(pageable));
-        return productPageResponse;
+        Page<Product> response = productRepository.findByOrderByNameDesc(pageable);
+
+        List<ProductDto> products = response.getContent()
+                                        .stream()
+                                        .map(ProductDto::fromEntity)
+                                        .toList();
+
+        return new ProductPageResponse(
+            products,
+            response.getNumber(), 
+            response.hasPrevious(), 
+            response.getTotalPages(),
+            response.hasNext()
+        );
     }
 
     @Transactional

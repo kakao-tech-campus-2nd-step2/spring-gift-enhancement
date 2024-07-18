@@ -45,7 +45,7 @@ public class ProductController {
 
     @PostMapping("/new")
     public String addProduct(@Valid @ModelAttribute ProductDto productDto, BindingResult bindingResult, Model model) {
-        
+
         if(bindingResult.hasErrors()){
             model.addAttribute("product", productDto);
             model.addAttribute("categories",categoryService.findAll().getCategories());
