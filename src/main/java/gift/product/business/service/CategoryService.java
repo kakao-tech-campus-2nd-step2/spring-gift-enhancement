@@ -2,6 +2,7 @@ package gift.product.business.service;
 
 import gift.product.business.dto.CategoryDto;
 import gift.product.business.dto.CategoryRegisterDto;
+import gift.product.business.dto.CategoryUpdateDto;
 import gift.product.persistence.repository.CategoryRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,8 @@ public class CategoryService {
         return categoryRepository.saveCategory(category);
     }
 
-    public Long updateCategory(Long id, CategoryRegisterDto categoryRegisterDto) {
-        var category = categoryRepository.getCategory(id);
+    public Long updateCategory(CategoryUpdateDto categoryRegisterDto) {
+        var category = categoryRepository.getCategory(categoryRegisterDto.id());
         category.setName(categoryRegisterDto.name());
         return categoryRepository.saveCategory(category);
     }

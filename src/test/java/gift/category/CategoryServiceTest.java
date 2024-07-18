@@ -8,13 +8,12 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import gift.product.business.dto.CategoryRegisterDto;
+import gift.product.business.dto.CategoryUpdateDto;
 import gift.product.business.service.CategoryService;
 import gift.product.persistence.entity.Category;
 import gift.product.persistence.repository.CategoryRepository;
-import java.lang.reflect.Field;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,7 +79,7 @@ public class CategoryServiceTest {
     @Test
     void testUpdateCategory() {
         // given
-        var categoryRegisterDto = new CategoryRegisterDto("new name");
+        var categoryUpdateDto = new CategoryUpdateDto(1L, "new name");
 
         given(categoryRepository.getCategory(1L))
             .willReturn(category);
@@ -88,7 +87,7 @@ public class CategoryServiceTest {
             .willReturn(1L);
 
         // when
-        var id = categoryService.updateCategory(1L, categoryRegisterDto);
+        var id = categoryService.updateCategory(categoryUpdateDto);
 
         // then
         then(categoryRepository).should().getCategory(1L);
