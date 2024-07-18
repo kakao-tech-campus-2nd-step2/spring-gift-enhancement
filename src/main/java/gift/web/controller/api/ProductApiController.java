@@ -9,6 +9,7 @@ import gift.web.dto.request.product.UpdateProductRequest;
 import gift.web.dto.request.wishproduct.CreateWishProductRequest;
 import gift.web.dto.response.product.CreateProductResponse;
 import gift.web.dto.response.product.ReadAllProductsResponse;
+import gift.web.dto.response.product.ReadProductResponse;
 import gift.web.dto.response.product.UpdateProductResponse;
 import gift.web.dto.response.wishproduct.CreateWishProductResponse;
 import java.net.URI;
@@ -57,6 +58,13 @@ public class ProductApiController {
     @GetMapping
     public ResponseEntity<ReadAllProductsResponse> readAllProducts(@PageableDefault Pageable pageable) {
         ReadAllProductsResponse response = productService.readAllProducts(pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadProductResponse> readProduct(@PathVariable Long id) {
+        ReadProductResponse response;
+        response = productService.searchProduct(id);
         return ResponseEntity.ok(response);
     }
 
