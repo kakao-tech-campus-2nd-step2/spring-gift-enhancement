@@ -80,18 +80,6 @@ public class Product {
         this.name = name;
     }
 
-    public void changePrice(Integer price) {
-        this.price = price;
-    }
-
-    public void changeImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void changeCategory(Category category) {
-        this.category = category;
-    }
-
     public static class Builder {
 
         private Long id;
