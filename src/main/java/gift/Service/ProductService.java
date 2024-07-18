@@ -44,6 +44,7 @@ public class ProductService {
       productDto.getPrice(), productDto.getImageUrl(), category);
 
     productRepository.save(product);
+
     return productDto;
   }
 
@@ -59,6 +60,7 @@ public class ProductService {
     Product newProduct = new Product(id,
       updatedProductDto.getName(), updatedProductDto.getPrice(),
       updatedProductDto.getImageUrl(), updateCategory);
+
     productRepository.save(newProduct);
 
     return ConverterToDto.convertToProductDto(newProduct);

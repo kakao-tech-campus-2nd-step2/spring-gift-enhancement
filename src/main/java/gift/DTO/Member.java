@@ -39,7 +39,6 @@ public class Member {
     this.password = password;
   }
 
-
   public Long getId() {
     return this.id;
   }

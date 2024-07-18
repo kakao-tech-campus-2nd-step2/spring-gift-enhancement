@@ -59,7 +59,6 @@ public class ProductDto {
     return imageUrl;
   }
   public CategoryDto getCategoryDto(){return this.categoryDto;}
-
 }
 
 

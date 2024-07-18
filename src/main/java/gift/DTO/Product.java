@@ -24,8 +24,6 @@ public class Product {
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "category_id",nullable = false)
   private Category category;
-
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -56,6 +54,7 @@ public class Product {
 
   public Long getId() {
     return this.id;
+
   }
 
 
@@ -74,5 +73,4 @@ public class Product {
   }
 
   public Category getCategory(){return this.category;}
-
 }
