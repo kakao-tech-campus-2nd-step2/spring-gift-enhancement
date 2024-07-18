@@ -14,6 +14,10 @@ public class Options {
         this.options = options;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void validate(Option option) {
         options.forEach((it) -> it.validateDuplicated(option));
     }

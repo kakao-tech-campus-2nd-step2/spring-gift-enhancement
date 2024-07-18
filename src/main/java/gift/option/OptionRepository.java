@@ -9,8 +9,6 @@ public interface OptionRepository extends JpaRepository<Long, Option> {
 
     Option save(Option option);
 
-    Page<Option> findAllByProductId(Long productId, Pageable pageable);
-
     Options findAllByProductId(Long productId);
 
     Optional<Option> findById(Long id);

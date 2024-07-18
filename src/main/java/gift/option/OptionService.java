@@ -3,7 +3,6 @@ package gift.option;
 import gift.product.ProductRepository;
 import gift.product.model.Product;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +18,13 @@ public class OptionService {
     }
 
     @Transactional(readOnly = true)
-    public List<OptionResponse> getOptions(Long productId, Pageable pageable) {
-        return optionRepository.findAllByProductId(productId, pageable)
-            .map(OptionResponse::from).getContent();
+    public List<OptionResponse> getOptions(Long productId) {
+        return optionRepository.findAllByProductId(productId)
+            .getOptions()
+            .stream()
+            .map(OptionResponse::from)
+            .toList();
+
     }
 
     @Transactional
