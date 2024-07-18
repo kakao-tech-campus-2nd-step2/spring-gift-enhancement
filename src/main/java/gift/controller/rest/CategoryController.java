@@ -6,7 +6,9 @@ import gift.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -31,7 +33,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategory(@PathVariable Long id) {
-        Category result = categoryService.findOne(id);
+        Category result = categoryService.findById(id);
         return ResponseEntity.ok().body(result);
     }
 
@@ -42,8 +44,10 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteCategory(@PathVariable Long id) {
         categoryService.delete(id);
-        return ResponseEntity.ok().body("deleted successfully");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "deleted successfully");
+        return ResponseEntity.ok().body(response);
     }
 }
