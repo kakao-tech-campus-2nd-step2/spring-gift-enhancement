@@ -59,11 +59,11 @@ public class MenuController {
     }
 
     public static Menu MapMenuRequestToMenu(MenuRequest menuRequest) {
-        return new Menu(menuRequest.name(), menuRequest.price(), menuRequest.imageUrl());
+        return new Menu(menuRequest.name(), menuRequest.price(), menuRequest.imageUrl(),menuRequest.category());
     }
 
     public static MenuResponse MapMenuToMenuResponse(Menu menu) {
-        return new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(), menu.getImageUrl());
+        return new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(), menu.getImageUrl(),menu.getCategory());
     }
 
 }

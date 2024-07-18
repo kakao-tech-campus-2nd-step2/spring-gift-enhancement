@@ -26,8 +26,8 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(String name, int price, String imageUrl) {
-        this(null, name, price, imageUrl, null);
+    public Menu(String name, int price, String imageUrl,Category category) {
+        this(null, name, price, imageUrl, category);
     }
 
     public Menu(Long id, String name, int price, String imageUrl, Category category) {
@@ -83,4 +83,7 @@ public class Menu {
         return Objects.hash(id);
     }
 
+    public Category getCategory() {
+        return category;
+    }
 }
