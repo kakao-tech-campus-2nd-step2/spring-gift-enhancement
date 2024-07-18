@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class OptionController {
+
     private final OptionService optionService;
 
     public OptionController(OptionService optionService) {
@@ -37,7 +38,8 @@ public class OptionController {
     }
 
     @GetMapping("/products/{id}/options")
-    public ResponseEntity<List<OptionResponse>> getOptionAllByProductId(@PathVariable(name = "id") Long productId) {
+    public ResponseEntity<List<OptionResponse>> getOptionAllByProductId(
+        @PathVariable(name = "id") Long productId) {
         return ResponseEntity.ok(optionService.getOptionAllByProductId(productId));
     }
 
@@ -48,7 +50,8 @@ public class OptionController {
     }
 
     @PutMapping("/options/update/{id}")
-    public ResponseEntity<Option> updateOption(@PathVariable(name = "id") Long id, @Valid @RequestBody OptionDto optionDto) {
+    public ResponseEntity<Option> updateOption(@PathVariable(name = "id") Long id,
+        @Valid @RequestBody OptionDto optionDto) {
         return ResponseEntity.ok(optionService.updateOption(id, optionDto));
     }
 

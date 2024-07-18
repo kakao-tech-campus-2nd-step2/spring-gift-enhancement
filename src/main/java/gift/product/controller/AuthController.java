@@ -24,7 +24,8 @@ public class AuthController {
         @RequestBody MemberDto memberDto) {
         authService.register(memberDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterSuccessResponse("회원가입이 완료되었습니다."));
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(new RegisterSuccessResponse("회원가입이 완료되었습니다."));
     }
 
     @PostMapping("/members/login")

@@ -28,7 +28,8 @@ public class WebConfig implements WebMvcConfigurer {
 
 
     public WebConfig(ProductRepository productRepository, WishRepository wishRepository,
-        AuthRepository authRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
+        AuthRepository authRepository, CategoryRepository categoryRepository,
+        OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.wishRepository = wishRepository;
         this.authRepository = authRepository;

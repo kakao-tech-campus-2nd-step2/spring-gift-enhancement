@@ -45,8 +45,9 @@ public class OptionService {
     public Option updateOption(Long id, OptionDto optionDto) {
         Product product = getValidatedProduct(optionDto.productId());
         getValidatedOption(id);
-        
-        return optionRepository.save(new Option(id, optionDto.name(), optionDto.quentity(), product));
+
+        return optionRepository.save(
+            new Option(id, optionDto.name(), optionDto.quentity(), product));
     }
 
     @Transactional

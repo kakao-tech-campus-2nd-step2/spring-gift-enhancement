@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Option {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;

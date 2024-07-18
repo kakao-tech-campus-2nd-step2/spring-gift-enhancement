@@ -1,7 +1,8 @@
 package gift.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.assertj.core.api.SoftAssertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import gift.product.dto.OptionDto;
 import gift.product.dto.OptionResponse;
@@ -13,8 +14,6 @@ import gift.product.repository.ProductRepository;
 import gift.product.service.OptionService;
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -27,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class OptionServiceTest {
+
     @Autowired
     OptionService optionService;
 
@@ -76,7 +76,8 @@ class OptionServiceTest {
         optionService.insertOption(new OptionDto("테스트옵션2", 1, product2.getId()));
 
         //when
-        List<OptionResponse> optionResponses = optionService.getOptionAllByProductId(product1.getId());
+        List<OptionResponse> optionResponses = optionService.getOptionAllByProductId(
+            product1.getId());
 
         //then
         assertThat(optionResponses).hasSize(1);
@@ -88,7 +89,8 @@ class OptionServiceTest {
         Category category = categoryRepository.save(new Category("테스트카테고리"));
         Product product = productRepository.save(new Product("테스트상품", 1500, "테스트주소", category));
 
-        Option insertedOption = optionService.insertOption(new OptionDto("테스트옵션", 1, product.getId()));
+        Option insertedOption = optionService.insertOption(
+            new OptionDto("테스트옵션", 1, product.getId()));
 
         //when
         Option option = optionService.getOption(insertedOption.getId());
@@ -103,7 +105,8 @@ class OptionServiceTest {
         Category category = categoryRepository.save(new Category("테스트카테고리"));
         Product product = productRepository.save(new Product("테스트상품", 1500, "테스트주소", category));
 
-        Option insertedOption = optionService.insertOption(new OptionDto("테스트옵션", 1, product.getId()));
+        Option insertedOption = optionService.insertOption(
+            new OptionDto("테스트옵션", 1, product.getId()));
 
         //when
         OptionDto updatedOptionDto = new OptionDto("테스트옵션_수정됨", 2, product.getId());
@@ -122,7 +125,8 @@ class OptionServiceTest {
         Category category = categoryRepository.save(new Category("테스트카테고리"));
         Product product = productRepository.save(new Product("테스트상품", 1500, "테스트주소", category));
 
-        Option insertedOption = optionService.insertOption(new OptionDto("테스트옵션", 1, product.getId()));
+        Option insertedOption = optionService.insertOption(
+            new OptionDto("테스트옵션", 1, product.getId()));
 
         //when
         optionService.deleteOption(insertedOption.getId());
@@ -145,11 +149,13 @@ class OptionServiceTest {
         Category category = categoryRepository.save(new Category("테스트카테고리"));
         Product product = productRepository.save(new Product("테스트상품", 1500, "테스트주소", category));
 
-        Option insertedOption = optionService.insertOption(new OptionDto("테스트옵션", 1, product.getId()));
+        Option insertedOption = optionService.insertOption(
+            new OptionDto("테스트옵션", 1, product.getId()));
 
         //when, then
         assertThatThrownBy(
-            () -> optionService.updateOption(insertedOption.getId(), new OptionDto("테스트옵션", 1, -1L))).isInstanceOf(
+            () -> optionService.updateOption(insertedOption.getId(),
+                new OptionDto("테스트옵션", 1, -1L))).isInstanceOf(
             NoSuchElementException.class);
     }
 
@@ -169,7 +175,8 @@ class OptionServiceTest {
 
         //when, then
         assertThatThrownBy(
-            () -> optionService.insertOption(new OptionDto("테스트옵션중복명", 1, product.getId()))).isInstanceOf(
+            () -> optionService.insertOption(
+                new OptionDto("테스트옵션중복명", 1, product.getId()))).isInstanceOf(
             IllegalArgumentException.class);
     }
 }
