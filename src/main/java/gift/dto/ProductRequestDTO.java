@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.model.Category;
+import gift.model.Product;
 import jakarta.validation.constraints.*;
 
 public class ProductRequestDTO {
@@ -32,5 +34,9 @@ public class ProductRequestDTO {
 
     public Long getCategoryId() {
         return categoryId;
+    }
+
+    public Product toEntity(Category category) {
+        return new Product(this.name, this.price, this.imageUrl, category);
     }
 }

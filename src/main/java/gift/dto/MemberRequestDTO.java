@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.model.Member;
+
 public class MemberRequestDTO {
     private String email;
     private String password;
@@ -32,5 +34,9 @@ public class MemberRequestDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Member toEntity() {
+        return new Member(this.email, this.password);
     }
 }

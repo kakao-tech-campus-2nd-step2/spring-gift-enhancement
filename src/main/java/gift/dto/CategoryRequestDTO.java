@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.model.Category;
+
 public class CategoryRequestDTO {
     private String name;
 
@@ -9,5 +11,9 @@ public class CategoryRequestDTO {
 
     public String getName() {
         return name;
+    }
+
+    public Category toEntity() {
+        return new Category(this.name);
     }
 }

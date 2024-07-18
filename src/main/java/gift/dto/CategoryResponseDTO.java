@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.model.Category;
+
 public class CategoryResponseDTO {
     private Long id;
     private String name;
@@ -15,5 +17,9 @@ public class CategoryResponseDTO {
 
     public String getName() {
         return name;
+    }
+
+    public static CategoryResponseDTO fromEntity(Category category) {
+        return new CategoryResponseDTO(category.getId(), category.getName());
     }
 }

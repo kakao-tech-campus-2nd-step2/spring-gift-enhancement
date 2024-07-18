@@ -27,4 +27,8 @@ public class ProductResponseDTO {
         return imageUrl;
     }
 
+    public static ProductResponseDTO fromEntity(Product product) {
+        return new ProductResponseDTO(product);
+    }
+
 }
