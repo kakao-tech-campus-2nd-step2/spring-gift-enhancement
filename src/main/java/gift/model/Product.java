@@ -3,6 +3,8 @@ package gift.model;
 import static gift.util.constants.ProductConstants.NAME_INVALID_CHARACTERS;
 import static gift.util.constants.ProductConstants.NAME_REQUIRES_APPROVAL;
 import static gift.util.constants.ProductConstants.NAME_SIZE_LIMIT;
+import static gift.util.constants.ProductConstants.OPTION_REQUIRED;
+import static gift.util.constants.ProductConstants.OPTION_NAME_DUPLICATE;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,7 +18,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -61,7 +66,7 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        this.options = options;
+        this.setOptions(options);
     }
 
     public Long getId() {
@@ -92,12 +97,29 @@ public class Product {
         return options;
     }
 
+    public void setOptions(List<Option> options) {
+        if (options == null || options.isEmpty()) {
+            throw new IllegalArgumentException(OPTION_REQUIRED);
+        }
+        this.options = options;
+        validateUniqueOptionNames();
+    }
+
+    private void validateUniqueOptionNames() {
+        Set<String> uniqueNames = new HashSet<>();
+        for (Option option : options) {
+            if (!uniqueNames.add(option.getName())) {
+                throw new IllegalArgumentException(OPTION_NAME_DUPLICATE);
+            }
+        }
+    }
+
     public void update(String name, int price, String imageUrl, Category category,
         List<Option> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        this.options = options;
+        this.setOptions(options);
     }
 }
