@@ -2,15 +2,15 @@ package gift.exception;
 
 public class GiftException extends RuntimeException {
 
-    private ErrorMessage errorMessage;
+    private ErrorCode errorCode;
 
-    public GiftException(ErrorMessage errorMessage) {
-        super(errorMessage.getMessage());
-        this.errorMessage = errorMessage;
+    public GiftException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
-    public ErrorMessage getErrorMessage() {
-        return errorMessage;
+    public ErrorCode getErrorMessage() {
+        return errorCode;
     }
 
 }

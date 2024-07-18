@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.exception.ErrorMessage;
+import gift.exception.ErrorCode;
 import gift.domain.Product;
 import gift.domain.Wish;
 import gift.domain.member.Member;
@@ -36,10 +36,10 @@ public class WishService {
 
     public void addProduct(Member member, Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new GiftException(ErrorMessage.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
 
         if (wishRepository.existsByMemberIdAndProductId(member.getId(), productId)) {
-            throw new GiftException(ErrorMessage.PRODUCT_ALREADY_IN_WISHLIST);
+            throw new GiftException(ErrorCode.PRODUCT_ALREADY_IN_WISHLIST);
         }
 
         Wish wish = new Wish(member, product);
@@ -49,10 +49,10 @@ public class WishService {
 
     public void removeProduct(Member member, Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new GiftException(ErrorMessage.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
 
         Wish wish = wishRepository.findByMemberAndProduct(member, product)
-                .orElseThrow(() -> new GiftException(ErrorMessage.PRODUCT_NOT_IN_WISHLIST));
+                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_IN_WISHLIST));
 
         wishRepository.delete(wish);
     }

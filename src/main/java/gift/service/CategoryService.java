@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.exception.ErrorMessage;
+import gift.exception.ErrorCode;
 import gift.domain.Category;
 import gift.dto.CategoryDto;
 import gift.exception.GiftException;
@@ -29,7 +29,7 @@ public class CategoryService {
 
     public void addCategory(CategoryDto dto) {
         if (categoryRepository.existsByName(dto.getName())) {
-            throw new GiftException(ErrorMessage.CATEGORY_NAME_NOT_DUPLICATES);
+            throw new GiftException(ErrorCode.CATEGORY_NAME_NOT_DUPLICATES);
         }
 
         Category category = new Category(dto.getName());
@@ -39,10 +39,10 @@ public class CategoryService {
 
     public void editCategory(Long categoryId, CategoryDto dto) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new GiftException(ErrorMessage.CATEGORY_NOT_FOUND));
+                .orElseThrow(() -> new GiftException(ErrorCode.CATEGORY_NOT_FOUND));
 
         if (!category.getName().equals(dto.getName()) && categoryRepository.existsByName(dto.getName())) {
-            throw new GiftException(ErrorMessage.CATEGORY_NAME_NOT_DUPLICATES);
+            throw new GiftException(ErrorCode.CATEGORY_NAME_NOT_DUPLICATES);
         }
 
         category.changeName(dto.getName());

@@ -1,6 +1,6 @@
 package gift.config;
 
-import gift.exception.ErrorMessage;
+import gift.exception.ErrorCode;
 import gift.exception.GiftException;
 import gift.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,13 +32,13 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         String token = request.getHeader("Authorization");
 
         if (token == null || !token.startsWith(jwtProvider.PREFIX)) {
-            throw new GiftException(ErrorMessage.MISSING_TOKEN);
+            throw new GiftException(ErrorCode.MISSING_TOKEN);
         }
 
         token = token.replace(jwtProvider.PREFIX, "");
 
         if (!jwtProvider.isVerified(token)) {
-            throw new GiftException(ErrorMessage.INVALID_TOKEN);
+            throw new GiftException(ErrorCode.INVALID_TOKEN);
         }
 
         Long memberId = Long.parseLong(jwtProvider.getClaims(token).getSubject());

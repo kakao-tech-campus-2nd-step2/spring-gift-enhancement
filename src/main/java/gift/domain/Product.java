@@ -1,6 +1,6 @@
 package gift.domain;
 
-import gift.exception.ErrorMessage;
+import gift.exception.ErrorCode;
 import gift.dto.ProductDto;
 import gift.exception.GiftException;
 import jakarta.persistence.*;
@@ -93,7 +93,7 @@ public class Product {
 
     public void validateOptionNameUnique(String optionName) {
         if (options.stream().anyMatch(option -> option.getName().equals(optionName))) {
-            throw new GiftException(ErrorMessage.DUPLICATE_OPTION);
+            throw new GiftException(ErrorCode.DUPLICATE_OPTION);
         }
     }
 
@@ -101,11 +101,11 @@ public class Product {
         boolean optionExists = options.stream().anyMatch(option -> option.getId().equals(optionId));
 
         if (!optionExists) {
-            throw new GiftException(ErrorMessage.OPTION_NOT_FOUND);
+            throw new GiftException(ErrorCode.OPTION_NOT_FOUND);
         }
 
         if (options.size() == 1) {
-            throw new GiftException(ErrorMessage.AT_LEAST_ONE_OPTION_REQUIRED);
+            throw new GiftException(ErrorCode.AT_LEAST_ONE_OPTION_REQUIRED);
         }
 
         options.removeIf(option -> option.getId().equals(optionId));

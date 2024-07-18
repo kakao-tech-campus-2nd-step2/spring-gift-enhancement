@@ -2,7 +2,7 @@ package gift.exception;
 
 import org.springframework.http.HttpStatus;
 
-public enum ErrorMessage {
+public enum ErrorCode {
 
     /* Validation */
     VALIDATION_ERROR("입력 데이터의 유효성을 검사하던 중 문제가 발생했습니다.", HttpStatus.BAD_REQUEST),
@@ -37,7 +37,7 @@ public enum ErrorMessage {
     private final String message;
     private final HttpStatus status;
 
-    ErrorMessage(String message, HttpStatus status) {
+    ErrorCode(String message, HttpStatus status) {
         this.message = message;
         this.status = status;
     }

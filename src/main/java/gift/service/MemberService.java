@@ -1,7 +1,7 @@
 package gift.service;
 
 import gift.config.JwtProvider;
-import gift.exception.ErrorMessage;
+import gift.exception.ErrorCode;
 import gift.domain.member.Member;
 import gift.dto.MemberDto;
 import gift.exception.GiftException;
@@ -21,7 +21,7 @@ public class MemberService {
 
     public void addMember(MemberDto dto) {
         if (memberRepository.existsByEmail(dto.getEmail())) {
-            throw new GiftException(ErrorMessage.DUPLICATED_EMAIL);
+            throw new GiftException(ErrorCode.DUPLICATED_EMAIL);
         }
 
         memberRepository.save(dto.toEntity());
@@ -29,14 +29,14 @@ public class MemberService {
 
     public String login(MemberDto dto) {
         Member member = memberRepository.findByEmailAndPassword(dto.getEmail(), dto.getPassword())
-                .orElseThrow(() -> new GiftException(ErrorMessage.LOGIN_FAILURE));
+                .orElseThrow(() -> new GiftException(ErrorCode.LOGIN_FAILURE));
 
         return jwtProvider.create(member);
     }
 
     public Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new GiftException(ErrorMessage.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new GiftException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
 }

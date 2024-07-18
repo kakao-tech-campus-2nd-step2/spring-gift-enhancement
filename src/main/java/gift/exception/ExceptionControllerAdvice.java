@@ -12,7 +12,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> invalid(MethodArgumentNotValidException e) {
-        ErrorMessage error = ErrorMessage.VALIDATION_ERROR;
+        ErrorCode error = ErrorCode.VALIDATION_ERROR;
 
         ErrorResponse response = new ErrorResponse.ErrorResponseBuilder()
                 .code(error.getStatus().value())
