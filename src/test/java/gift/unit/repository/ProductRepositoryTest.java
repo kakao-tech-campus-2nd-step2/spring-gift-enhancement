@@ -3,9 +3,9 @@ package gift.unit.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.exception.product.ProductNotFoundException;
-import gift.product.entity.Category;
+import gift.product.category.entity.Category;
 import gift.product.entity.Product;
-import gift.product.repository.CategoryRepository;
+import gift.product.category.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;

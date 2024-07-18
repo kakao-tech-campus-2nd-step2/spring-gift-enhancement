@@ -1,10 +1,10 @@
 package gift.view.controller;
 
 import gift.config.PageConfig;
-import gift.product.dto.category.response.CategoryResponse;
+import gift.product.category.dto.response.CategoryResponse;
 import gift.product.dto.response.ProductResponse;
 import gift.product.entity.Product;
-import gift.product.service.CategoryService;
+import gift.product.category.service.CategoryService;
 import gift.product.service.ProductService;
 import java.util.List;
 import org.springframework.data.domain.Page;

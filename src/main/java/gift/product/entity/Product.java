@@ -1,5 +1,6 @@
 package gift.product.entity;
 
+import gift.product.category.entity.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;

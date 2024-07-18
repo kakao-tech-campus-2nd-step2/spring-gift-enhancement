@@ -3,7 +3,7 @@ package gift.util.mapper;
 import gift.product.dto.request.CreateProductRequest;
 import gift.product.dto.request.UpdateProductRequest;
 import gift.product.dto.response.ProductResponse;
-import gift.product.entity.Category;
+import gift.product.category.entity.Category;
 import gift.product.entity.Product;
 
 public class ProductMapper {
