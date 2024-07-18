@@ -53,6 +53,7 @@ class ProductDomainTest {
             new ProductRequest("product3", 3_000, "image3.jpg", 1L)));
         request.sort(Comparator.comparing(ProductRequest::name));
         for (var req: request) {
+            // request로 상품 등록 API 호출해 상품들을 등록함
             restTemplate.exchange(
                 new RequestEntity<>(req, HttpMethod.POST, testUtil.getUri(port, "/api/products")),
                 ProductAddApiResponse.class);
@@ -69,10 +70,12 @@ class ProductDomainTest {
             .isEqualTo(HttpStatus.OK);
         List<ProductResponse> response = getProductListByRequest();
         for (var req: request) {
-            ProductResponse resp = response.stream().filter(r -> r.name().equals(req.name())).findAny().get();
-            assertThat(resp.name()).isEqualTo(req.name());
-            assertThat(resp.price()).isEqualTo(req.price());
-            assertThat(resp.imageUrl()).isEqualTo(req.imageUrl());
+            ProductResponse actual = response.stream().filter(r -> r.name().equals(req.name())).findAny().get();
+            assertThat(actual.name()).isEqualTo(req.name());
+            assertThat(actual.price()).isEqualTo(req.price());
+            assertThat(actual.imageUrl()).isEqualTo(req.imageUrl());
+            //TODO: 카테고리 응답에 대한 검증 필요 (카테고리 컨트롤러 구현필요)
+            //assertThat(actual.category()).isEqualTo()
         }
     }
 
@@ -96,6 +99,7 @@ class ProductDomainTest {
         assertThat(createdProduct.name()).isEqualTo(request.name());
         assertThat(createdProduct.price()).isEqualTo(request.price());
         assertThat(createdProduct.imageUrl()).isEqualTo(request.imageUrl());
+        //TODO: 카테고리 컨트롤러 추가후 카테고리 검증 필요
     }
 
     @Test
@@ -123,7 +127,10 @@ class ProductDomainTest {
         assertThat(updatedProduct.name()).isEqualTo(toUpdateRequest.name());
         assertThat(updatedProduct.price()).isEqualTo(toUpdateRequest.price());
         assertThat(updatedProduct.imageUrl()).isEqualTo(toUpdateRequest.imageUrl());
+        //TODO: 카테고리 검증 필요
     }
+
+    //TODO: 카테고리 수정 테스트 필요
 
     @Test
     @DisplayName("[ApiIntegrationTest] 상품 삭제")
