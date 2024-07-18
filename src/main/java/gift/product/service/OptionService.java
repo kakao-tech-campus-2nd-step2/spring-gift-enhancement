@@ -8,6 +8,7 @@ import gift.product.model.Option;
 import gift.product.model.Product;
 import gift.product.repository.OptionRepository;
 import gift.product.repository.ProductRepository;
+import gift.product.validation.OptionValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +19,16 @@ public class OptionService {
 
     private final OptionRepository optionRepository;
     private final ProductRepository productRepository;
+    private final OptionValidation optionValidation;
 
     @Autowired
-    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
+    public OptionService(
+        OptionRepository optionRepository,
+        ProductRepository productRepository,
+        OptionValidation optionValidation) {
         this.optionRepository = optionRepository;
         this.productRepository = productRepository;
+        this.optionValidation = optionValidation;
     }
 
     public Page<Option> getAllOptions(Long id, Pageable pageable) {
@@ -32,8 +38,12 @@ public class OptionService {
 
     public void registerOption(OptionDTO optionDTO) {
         System.out.println("[OptionService] registerOption()");
+
         Product product = productRepository.findById(optionDTO.getProductId())
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
+
+        optionValidation.register(product, optionDTO);
+
         optionRepository.save(
             new Option(
                 optionDTO.getName(),
@@ -50,6 +60,8 @@ public class OptionService {
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
             .getProduct();
 
+        optionValidation.update(product, optionDTO);
+
         optionRepository.save(
             new Option(
                 id,
@@ -62,6 +74,9 @@ public class OptionService {
 
     public void deleteOption(Long id) {
         System.out.println("[OptionService] deleteOption()");
+
+        optionValidation.delete(id);
+
         optionRepository.deleteById(id);
     }
 }
