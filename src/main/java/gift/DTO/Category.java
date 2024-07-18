@@ -25,7 +25,7 @@ public class Category {
   @Column(nullable = false, unique = true)
   private String name;
 
-  @Column(nullable = false)
+  @Column(nullable = false,length = 7)
   private String color;
 
   @Column(nullable = false)
