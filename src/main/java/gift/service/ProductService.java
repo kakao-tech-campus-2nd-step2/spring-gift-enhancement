@@ -80,14 +80,12 @@ public class ProductService {
     }
 
     private Product getProduct(Long productId) {
-        Product product = jpaProductRepository.findById(productId)
+        return jpaProductRepository.findById(productId)
             .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
-        return product;
     }
 
     private Category getCategory(ProductRequestDTO productRequestDTO) {
-        Category category = jpaCategoryRepository.findById(productRequestDTO.categoryId())
+        return jpaCategoryRepository.findById(productRequestDTO.categoryId())
             .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
-        return category;
     }
 }
