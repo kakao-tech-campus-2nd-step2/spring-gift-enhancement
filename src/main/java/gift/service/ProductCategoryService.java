@@ -6,6 +6,9 @@ import gift.exception.DuplicatedNameException;
 import gift.exception.NotFoundElementException;
 import gift.model.ProductCategory;
 import gift.repository.ProductCategoryRepository;
+import gift.repository.ProductOptionRepository;
+import gift.repository.ProductRepository;
+import gift.repository.WishProductRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +20,15 @@ import java.util.List;
 public class ProductCategoryService {
 
     private final ProductCategoryRepository productCategoryRepository;
+    private final ProductRepository productRepository;
+    private final ProductOptionRepository productOptionRepository;
+    private final WishProductRepository wishProductRepository;
 
-    public ProductCategoryService(ProductCategoryRepository productCategoryRepository) {
+    public ProductCategoryService(ProductCategoryRepository productCategoryRepository, ProductRepository productRepository, ProductOptionRepository productOptionRepository, WishProductRepository wishProductRepository) {
         this.productCategoryRepository = productCategoryRepository;
+        this.productRepository = productRepository;
+        this.productOptionRepository = productOptionRepository;
+        this.wishProductRepository = wishProductRepository;
     }
 
     public ProductCategoryResponse addCategory(ProductCategoryRequest productCategoryRequest) {
@@ -50,6 +59,12 @@ public class ProductCategoryService {
     }
 
     public void deleteCategory(Long id) {
+        var productList = productRepository.findAllByProductCategoryId(id);
+        for (var product : productList) {
+            productOptionRepository.deleteAllByProductId(product.getId());
+            wishProductRepository.deleteAllByProductId(product.getId());
+        }
+        productRepository.deleteAllByProductCategoryId(id);
         productCategoryRepository.deleteById(id);
     }
 

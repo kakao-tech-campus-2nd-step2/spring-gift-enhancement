@@ -9,7 +9,9 @@ import gift.model.MemberRole;
 import gift.model.Product;
 import gift.model.ProductCategory;
 import gift.repository.ProductCategoryRepository;
+import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
+import gift.repository.WishProductRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +24,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
+    private final WishProductRepository wishProductRepository;
+    private final ProductOptionRepository productOptionRepository;
 
-    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
+    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository, WishProductRepository wishProductRepository, ProductOptionRepository productOptionRepository) {
         this.productRepository = productRepository;
         this.productCategoryRepository = productCategoryRepository;
+        this.wishProductRepository = wishProductRepository;
+        this.productOptionRepository = productOptionRepository;
     }
 
     public ProductResponse addProduct(ProductRequest productRequest, MemberRole memberRole) {
@@ -54,6 +60,8 @@ public class ProductService {
     }
 
     public void deleteProduct(Long productId) {
+        productOptionRepository.deleteAllByProductId(productId);
+        wishProductRepository.deleteAllByProductId(productId);
         productRepository.deleteById(productId);
     }
 
