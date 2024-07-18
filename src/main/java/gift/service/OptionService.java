@@ -43,7 +43,9 @@ public class OptionService {
     public void updateById(UpdateOptionRequest request) {
         checkOptionExist(request.id());
         Option option = optionRepository.getReferenceById(request.id());
-        checkDuplicateName(option.getName(), request.name());
+        if (option.nameChanged(request.name())) {
+            checkDuplicateName(request.name());
+        }
         option.updateOption(request.name(), request.quantity());
     }
 
@@ -75,8 +77,8 @@ public class OptionService {
         }
     }
 
-    private void checkDuplicateName(String origin, String name) {
-        if (!origin.equals(name) && optionRepository.existsByName(name)) {
+    private void checkDuplicateName(String name) {
+        if (optionRepository.existsByName(name)) {
             throw new DuplicateDataException("Option with name " + name + " already exists");
         }
     }

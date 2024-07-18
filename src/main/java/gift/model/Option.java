@@ -35,6 +35,10 @@ public class Option extends BasicEntity{
         this.quantity = quantity;
     }
 
+    public boolean nameChanged(String theirName) {
+        return !name.equals(theirName);
+    }
+
     public void setProduct(Product product) {
         this.product = product;
     }
