@@ -4,7 +4,7 @@ import gift.domain.Category;
 import jakarta.validation.constraints.NotNull;
 
 public record CategoryDTO(
-    Long id,
+    long id,
 
     @NotNull
     String name,

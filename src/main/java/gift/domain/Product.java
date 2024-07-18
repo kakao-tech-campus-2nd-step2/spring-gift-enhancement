@@ -43,7 +43,7 @@ public class Product {
         this.category = category;
     }
 
-    public Product(long id, String name, int price, String imageUrl, Category category) {
+    public Product(Long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;

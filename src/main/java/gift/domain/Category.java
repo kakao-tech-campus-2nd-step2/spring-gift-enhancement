@@ -39,7 +39,7 @@ public class Category {
         this.description = description;
     }
 
-    public Category(long id, String name, String color, String imageUrl, String description) {
+    public Category(Long id, String name, String color, String imageUrl, String description) {
         this.id = id;
         this.name = name;
         this.color = color;
