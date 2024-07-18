@@ -17,7 +17,6 @@ public @interface SpecialCharacter {
 
     String message() default "'(', ')', '[', ']', '+', '-', '&', '/', '_' 외의 특수문자는 사용할 수 없습니다.";
 
-
     Class<?>[] groups() default {};
 
     Class<?>[] payload() default {};
