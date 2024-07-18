@@ -366,7 +366,7 @@ Content-Type: application/json
 
 #### 모델 설계
 
-- [ ] 카테고리를 표현하는 도메인 객체
+- [x] 카테고리를 표현하는 도메인 객체
   - 카테고리의 구성요소
     - id: int (pk)
     - name: string (not null, unique)
