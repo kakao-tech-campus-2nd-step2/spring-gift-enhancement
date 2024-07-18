@@ -1,5 +1,6 @@
 package gift.service;
 
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,5 +36,8 @@ class OptionRepositoryKeeperServiceTest {
         given(optionRepository.existsByProductAndName(any(), any())).willReturn(true);
         assertThatThrownBy(() -> optionRepositoryKeeperService.checkUniqueOptionName(product, "테스트")).isInstanceOf(
                 DataIntegrityViolationException.class);
+
+        given(optionRepository.existsByProductAndName(any(), any())).willReturn(false);
+        assertThatNoException().isThrownBy(() -> optionRepositoryKeeperService.checkUniqueOptionName(product, "테스트"));
     }
 }

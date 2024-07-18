@@ -2,14 +2,17 @@ package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 
 import gift.dto.OptionRequestDTO;
 import gift.entity.Category;
 import gift.entity.Option;
 import gift.entity.Product;
+import gift.exception.BadRequestExceptions.BadRequestException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DataIntegrityViolationException;
 
 class OptionServiceTest {
     @Mock
@@ -34,7 +38,6 @@ class OptionServiceTest {
 
     private Product product1;
     private Option option1;
-
 
     @BeforeEach
     void setUp() {
@@ -70,6 +73,17 @@ class OptionServiceTest {
     }
 
     @Test
+    void duplicatedAddOptionTest(){
+        given(optionRepository.save(any())).willReturn(option1);
+        given(productRepository.findById(any())).willReturn(Optional.of(product1));
+        doThrow(new DataIntegrityViolationException("테스트")).when(optionRepositoryKeeperService)
+                .checkUniqueOptionName(any(), any());
+
+        assertThrows(BadRequestException.class, () -> optionService.addOption(1L,
+                new OptionRequestDTO(1L, 1L, option1.getName(), option1.getQuantity())));
+    }
+
+    @Test
     void updateOption() {
         given(productRepository.findById(any())).willReturn(Optional.of(product1));
         given(optionRepository.findById((Long) any())).willReturn(Optional.of(option1));
@@ -80,11 +94,37 @@ class OptionServiceTest {
     }
 
     @Test
+    void duplicateUpdateOptionTest(){
+        given(productRepository.findById(any())).willReturn(Optional.of(product1));
+        given(optionRepository.findById((Long) any())).willReturn(Optional.of(option1));
+        doThrow(new DataIntegrityViolationException("테스트")).when(optionRepositoryKeeperService)
+                .checkUniqueOptionName(any(), any());
+
+        assertThrows(BadRequestException.class, () -> optionService.updateOption(1L, 1L,
+                new OptionRequestDTO(1L, 1L, option1.getName(), option1.getQuantity())));
+    }
+
+    @Test
     void deleteOption() {
         given(optionRepository.findByIdAndProductId(any(), any())).willReturn(Optional.of(option1));
         given(optionRepository.countByProduct(any())).willReturn(2);
 
         doNothing().when(optionRepository).delete(any());
         assertThatNoException().isThrownBy(() -> optionService.deleteOption(1L, 1L));
+    }
+
+    @Test
+    void deleteButNotFound(){
+        given(optionRepository.findByIdAndProductId(any(), any())).willReturn(Optional.empty());
+
+        assertThrows(BadRequestException.class, () -> optionService.deleteOption(1L, 1L));
+    }
+
+    @Test
+    void deleteButProhibitedOrphanOption(){
+        given(optionRepository.findByIdAndProductId(any(), any())).willReturn(Optional.of(option1));
+        given(optionRepository.countByProduct(any())).willReturn(1);
+
+        assertThrows(BadRequestException.class, () -> optionService.deleteOption(1L, 1L));
     }
 }
