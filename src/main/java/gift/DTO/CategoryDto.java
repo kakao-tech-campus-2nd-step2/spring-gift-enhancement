@@ -26,23 +26,13 @@ public class CategoryDto {
     this.description=description;
   }
 
-  public void setId(Long id){this.id=id;}
-
   public Long getId(){return this.id;}
-
-  public void setName(String name){this.name=name;}
 
   public String getName(){return this.name;}
 
-  public void setColor(String color){this.color=color;}
-
   public String getColor(){return this.color;}
 
-  public void setImageUrl(String imageUrl){this.imageUrl=imageUrl;}
-
   public String getImageUrl(){return this.imageUrl;}
-
-  public void setDescription(String description){this.description=description;}
 
   public String getDescription(){return this.description;}
 }
