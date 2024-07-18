@@ -12,15 +12,17 @@ public class ProductResponse {
 
     private String imageUrl;
 
-    public ProductResponse() {
+    private Long categoryId;
 
+    public ProductResponse() {
     }
 
-    public ProductResponse(Long id, String name, int price, String imageUrl) {
+    public ProductResponse(Long id, String name, int price, String imageUrl, Long categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -39,10 +41,15 @@ public class ProductResponse {
         return imageUrl;
     }
 
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
     public void fromEntity(Product productEntity) {
         this.id = productEntity.getId();
         this.name = productEntity.getName();
         this.price = productEntity.getPrice();
         this.imageUrl = productEntity.getImageUrl();
+        this.categoryId = productEntity.getCategoryId();
     }
 }

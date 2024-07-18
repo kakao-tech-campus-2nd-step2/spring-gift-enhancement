@@ -46,4 +46,8 @@ public class Category {
     public Category(String name, String color, String imageUrl) {
         this(name, color, null, imageUrl);
     }
+
+    public Long getId() {
+        return id;
+    }
 }

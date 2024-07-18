@@ -1,5 +1,6 @@
 package gift.DTO;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -25,10 +26,18 @@ public class ProductRequest {
     )
     private final String imageUrl;
 
-    public ProductRequest(String name, int price, String imageUrl) {
+    @Min(value = 1, message = "Category id must be positive")
+    private final Long categoryId;
+
+    public ProductRequest() {
+        this("name", 1000, "image url", 1L);
+    }
+
+    public ProductRequest(String name, int price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public String getName() {
@@ -41,5 +50,9 @@ public class ProductRequest {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
     }
 }

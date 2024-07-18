@@ -30,7 +30,8 @@ public class ProductService {
                                             p.getId(),
                                             p.getName(),
                                             p.getPrice(),
-                                            p.getImageUrl()
+                                            p.getImageUrl(),
+                                            p.getCategoryId()
                                         ))
                                         .toList();
         return response;
@@ -44,7 +45,8 @@ public class ProductService {
                                             p.getId(),
                                             p.getName(),
                                             p.getPrice(),
-                                            p.getImageUrl()
+                                            p.getImageUrl(),
+                                            p.getCategoryId()
                                         ))
                                         .toList();
         return responses;
@@ -56,7 +58,8 @@ public class ProductService {
                                             product.getId(),
                                             product.getName(),
                                             product.getPrice(),
-                                            product.getImageUrl()
+                                            product.getImageUrl(),
+                                            product.getCategoryId()
                                         );
         return response;
     }
