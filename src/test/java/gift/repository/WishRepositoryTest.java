@@ -2,6 +2,8 @@ package gift.repository;
 
 import gift.common.enums.Role;
 import gift.config.JpaConfig;
+import gift.controller.dto.request.CreateWishRequest;
+import gift.controller.dto.request.UpdateWishRequest;
 import gift.model.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -22,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import(JpaConfig.class)
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class WishRepositoryTest {
     @Autowired
     private WishRepository wishRepository;
@@ -139,6 +143,7 @@ class WishRepositoryTest {
     }
 
     @Test
+    @DisplayName("Wish 존재 체크 테스트[성공]")
     void existsByProductIdAndMemberId() {
         // given
         String email = "test@gmail.com";
@@ -159,5 +164,27 @@ class WishRepositoryTest {
 
         // then
         assertThat(actual).isTrue();
+    }
+
+    @Test
+    @DisplayName("Wish 수정 테스트[성공]")
+    void update() {
+        // given
+        Category category = categoryRepository.save(new Category("cname", "color", "imageUrl", "description"));
+        Member member = memberRepository.save(new Member("mname", "mage", Role.USER));
+        Option option = new Option("oName", 123);
+        Product product = productRepository.save(new Product("pname", 1_000, "pimage", category, option));
+        Wish wish = wishRepository.save(new Wish(member, 1, product));
+        int productCount = 10;
+        wish.updateWish(wish.getMember(), productCount, wish.getProduct());
+        entityManager.flush();
+        entityManager.clear();
+
+        // when
+        Wish actual = wishRepository.findById(wish.getId()).get();
+        assertThat(actual).isNotNull();
+        assertThat(actual.getProduct().getId()).isEqualTo(product.getId());
+        assertThat(actual.getMember().getId()).isEqualTo(member.getId());
+        assertThat(actual.getProductCount()).isEqualTo(productCount);
     }
 }

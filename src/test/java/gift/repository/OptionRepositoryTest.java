@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import(JpaConfig.class)
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class OptionRepositoryTest {
     @Autowired
     private OptionRepository optionRepository;
@@ -36,16 +38,19 @@ class OptionRepositoryTest {
         Category category = categoryRepository.save(new Category("cname", "ccolor", "cImage", ""));
         String oName = "oName";
         int oQuantity = 123;
+        Option option = new Option(oName, oQuantity);
         Product product = productRepository.save(
-                new Product(pName, pPrice, pImageUrl, category, new Option(oName, oQuantity)));
+                new Product(pName, pPrice, pImageUrl, category, option));
+        option.updateOptionByProduct(product);
 
         // when
-        Option actual = optionRepository.findByIdFetchJoin(product.getOptions().get(0).getId()).get();
-
+        Option actual = optionRepository.findByIdFetchJoin(option.getId()).orElse(null);
+//
         // then
-        assertThat(actual.getId()).isEqualTo(product.getOptions().get(0).getId());
-        assertThat(actual.getName()).isEqualTo(product.getOptions().get(0).getName());
-        assertThat(actual.getQuantity()).isEqualTo(product.getOptions().get(0).getQuantity());
+        assert actual != null;
+        assertThat(actual.getName()).isEqualTo(oName);
+        assertThat(actual.getQuantity()).isEqualTo(oQuantity);
+        assertThat(actual.getProduct()).isEqualTo(product);
     }
 
     @Test
@@ -59,11 +64,11 @@ class OptionRepositoryTest {
         String oName = "oName";
         int oQuantity = 123;
         Option option = new Option(oName, oQuantity);
-        Product product = new Product(pName, pPrice, pImageUrl, category, option);
-        Product saved = productRepository.save(product);
+        Product product = productRepository.save(new Product(pName, pPrice, pImageUrl, category, option));
+        option.updateOptionByProduct(product);
 
         // when
-        List<Option> actual = optionRepository.findAllByProductIdFetchJoin(saved.getId());
+        List<Option> actual = optionRepository.findAllByProductIdFetchJoin(product.getId());
 
         // then
         assertThat(actual).hasSize(1);

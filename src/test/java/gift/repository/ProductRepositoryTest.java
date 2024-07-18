@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import(JpaConfig.class)
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
@@ -51,7 +53,7 @@ class ProductRepositoryTest {
         assertThat(actual.getImageUrl()).isEqualTo(imageUrl2);
         assertThat(actual.getCreatedAt()).isNotNull();
         assertThat(actual.getUpdatedAt()).isNotNull();
-        assertThat(actual.getOptions()).isEqualTo(option);
+        assertThat(actual.getOptions().get(0)).isEqualTo(option);
     }
 
     @Test
