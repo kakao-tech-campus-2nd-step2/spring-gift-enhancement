@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import gift.repository.CategoryRepository;
 import gift.exception.CustomNotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Product {
 
@@ -23,6 +26,10 @@ public class Product {
   @ManyToOne
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
+
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Option> options = new ArrayList<>();
+
 
   protected Product() {
   }
@@ -52,6 +59,22 @@ public class Product {
 
   public Category getCategory() {
     return category;
+  }
+  public List<Option> getOptions() {
+    return options;
+  }
+
+  public void addOption(Option option) {
+    if (options.stream().anyMatch(o -> o.getName().equals(option.getName()))) {
+      throw new IllegalArgumentException("동일한 상품 내의 옵션 이름은 중복될 수 없습니다.");
+    }
+    options.add(option);
+    option.setProduct(this);
+  }
+
+  public void removeOption(Option option) {
+    options.remove(option);
+    option.setProduct(null);
   }
   public void updateFromDto(ProductDto productDto, CategoryRepository categoryRepository) {
     this.name = productDto.getName();
