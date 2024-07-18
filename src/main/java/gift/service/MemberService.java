@@ -24,7 +24,7 @@ public class MemberService {
         if (memberRepository.existsByEmail(requestDto.email())) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
-        Member member = new Member(requestDto.email(), requestDto.email(), requestDto.password(), 1);
+        Member member = new Member(requestDto.email(), requestDto.name(), requestDto.password(), 1);
         Member registered = memberRepository.save(member);
         return new MemberRegisterResponseDto(registered.getId(), registered.getEmail(), requestDto.name());
     }
