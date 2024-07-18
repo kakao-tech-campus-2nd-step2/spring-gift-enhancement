@@ -32,7 +32,7 @@ public class Item {
     private Category category;
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-    private final List<WishItem> wishes = new ArrayList<>();
+    private List<WishItem> wishes = new ArrayList<>();
 
     protected Item() {
     }

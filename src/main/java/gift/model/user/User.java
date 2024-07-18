@@ -36,7 +36,6 @@ public class User {
         this.id = id;
         this.password = password;
         this.email = email;
-        wishItemList = new ArrayList<>();
     }
 
     public Long getId() {
