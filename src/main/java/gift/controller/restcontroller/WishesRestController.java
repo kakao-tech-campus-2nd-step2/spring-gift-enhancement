@@ -61,11 +61,11 @@ public class WishesRestController {
         return ResponseEntity.ok().body(request.productCount());
     }
 
-    @DeleteMapping("{product_id}")
+    @DeleteMapping("{product-id}")
     @Operation(summary = "위시리스트 삭제", description = "위시리스트를 삭제합니다.")
     @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Void> deleteWish(
-            @PathVariable("product_id") @NotNull @Min(1) Long productId,
+            @PathVariable("product-id") @NotNull @Min(1) Long productId,
             @Parameter(hidden = true) @NotNull @LoginMember Long memberId
     ) {
         wishService.deleteByProductId(productId, memberId);
