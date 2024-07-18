@@ -60,7 +60,7 @@ public class ProductController {
         if (id == null) {
             throw new IllegalArgumentException("id를 입력해주세요");
         }
-        changeCheckAndUpdate(id, dto);
+        productService.update(id,dto);
     }
 
     @DeleteMapping("/products/{id}")
@@ -68,17 +68,7 @@ public class ProductController {
         productService.delete(id);
     }
 
-    private void changeCheckAndUpdate(Long id, ProductDTO dto) {
-        if (dto.getName() != null) {
-            productService.updateName(id, dto.getName());
-        }
-        if (dto.getPrice() != null) {
-            productService.updatePrice(id, dto.getPrice());
-        }
-        if (dto.getImageUrl() != null) {
-            productService.updateImageUrl(id, dto.getImageUrl());
-        }
-    }
+
 
     @GetMapping("/products/{page}")
     public List<ProductDTO> getPage(@PathVariable int page) {
