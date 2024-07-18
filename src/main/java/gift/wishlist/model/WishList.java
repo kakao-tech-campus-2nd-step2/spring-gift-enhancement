@@ -8,8 +8,7 @@ import jakarta.persistence.*;
 public class WishList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "wishlist_seq")
-    @SequenceGenerator(name = "wishlist_seq", sequenceName = "wishlist_sequence", allocationSize = 100)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishlistId;
 
     // 기본 생성자
