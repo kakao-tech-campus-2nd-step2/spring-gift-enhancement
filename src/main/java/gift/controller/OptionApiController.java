@@ -22,4 +22,10 @@ public class OptionApiController {
         List<Option> options = optionService.getOptionsByProductId(productId);
         return ResponseEntity.ok(options);
     }
+
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<Option> addOption(@PathVariable Long productId, @RequestBody Option option) {
+        Option newOption = optionService.addOption(productId, option);
+        return ResponseEntity.status(201).body(newOption);
+    }
 }

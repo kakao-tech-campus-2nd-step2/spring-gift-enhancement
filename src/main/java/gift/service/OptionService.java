@@ -25,4 +25,12 @@ public class OptionService {
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다."));
         return product.getOptions();
     }
+
+    public Option addOption(Long productId, Option option) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다."));
+        product.getOptions().add(option);
+        productRepository.save(product);
+        return option;
+    }
 }
