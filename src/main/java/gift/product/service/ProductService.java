@@ -44,7 +44,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductInfo getProductDetails(final Long id) {
-        Product foundProduct = productRepository.findById(id)
+        Product foundProduct = productRepository.findByIdWithCategory(id)
                 .orElseThrow(() -> ProductNotFoundException.of(id));
 
         return ProductInfo.from(foundProduct);
@@ -52,7 +52,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductPageInfo getProducts(Pageable pageable) {
-        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.findAllWithCategory(pageable);
 
         return ProductPageInfo.from(productPage);
     }
