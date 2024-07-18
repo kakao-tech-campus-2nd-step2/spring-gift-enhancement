@@ -20,6 +20,7 @@ public class Menu {
     private String imageUrl;
 
     @ManyToOne
+    @JoinColumn(name = "category_id",nullable = false)
     private Category category;
 
     public Menu() {
