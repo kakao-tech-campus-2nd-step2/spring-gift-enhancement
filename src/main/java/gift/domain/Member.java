@@ -29,10 +29,10 @@ public class Member {
     private String password;
 
     @OneToMany(mappedBy = "member",
-               cascade = CascadeType.REMOVE, orphanRemoval = true)
+               cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wishlist> wishes = new ArrayList<>();
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String email, String password) {
