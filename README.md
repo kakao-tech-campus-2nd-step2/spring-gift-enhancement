@@ -383,11 +383,11 @@ Content-Type: application/json
 - [x] 카테고리 리스트 조회 API
 - [x] 특정 id 카테고리 조회 API
 - [x] 카테고리 수정 API
-- [ ] 카테고리 삭제 API
+- [x] 카테고리 삭제 API
 
 #### 예외, 검증 설계
 
-- [ ] 커스텀 예외 및 예외 핸들링
+- [x] 커스텀 예외 및 예외 핸들링
 
 #### Server-side Renderings
 
