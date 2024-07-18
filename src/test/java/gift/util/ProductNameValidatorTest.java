@@ -1,7 +1,6 @@
 package gift.util;
 
 import gift.entity.ProductDTO;
-import gift.service.ProductService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.assertj.core.api.Assertions;
@@ -18,9 +17,6 @@ public class ProductNameValidatorTest {
 
     @Autowired
     private Validator validator;
-
-    @Autowired
-    private ProductService productService;
 
     @Test
     public void save_nameSuccess() {
