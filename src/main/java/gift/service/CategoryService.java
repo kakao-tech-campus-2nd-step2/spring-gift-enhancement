@@ -59,4 +59,12 @@ public class CategoryService {
         CategoryResponse response = CategoryResponse.fromEntity(category);
         return response;
     }
+
+    public void deleteCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("No such category"));
+        categoryRepository.delete(category);
+    }
+
+
 }
