@@ -50,7 +50,7 @@ public class ProductServiceTest {
 
     @Test
     void getProductTest() {
-        Category category = new Category(1L, "test", "##test", "test.jpg", "test");
+        Category category = new Category("test", "##test", "test.jpg", "test");
         given(productRepository.findById(any())).willReturn(Optional.of(new Product(1L, "test", 1000, "test.jpg", category)));
 
         productService.getProductById(1L);
@@ -60,7 +60,7 @@ public class ProductServiceTest {
 
     @Test
     void insertProductTest() {
-        Category category = new Category(1L, "test", "##test", "test.jpg", "test");
+        Category category = new Category( "test", "##test", "test.jpg", "test");
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
         given(productRepository.save(any())).willReturn(new Product(1L, "test", 1000, "test.jpg", category));
 

@@ -56,7 +56,7 @@ public class CategoryServiceTest {
     @Test
     void insertCategoryTest() {
         given(categoryRepository.save(any())).willReturn(
-            new Category(1L, "test", "##test", "test.jpg", "test"));
+            new Category( "test", "##test", "test.jpg", "test"));
 
         categoryService.insertCategory(
             new CategoryRequestDto("test", "##test", "test.jpg", "test"));
