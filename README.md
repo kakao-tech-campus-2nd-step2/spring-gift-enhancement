@@ -32,9 +32,9 @@ Content-Type: application/json
 ```
 
 - [ ] Option CRUD API 구현
-    - [ ] option 추가
-    - [ ] option 수정
-    - [ ] option 삭제
+    - [x] option 추가
+    - [x] option 수정
+    - [x] option 삭제
     - [ ] 상품 조회에 option 추가
     - [ ] 상품 추가에 option 항목 추가
     - [ ] 상품 수정에 option 항목 추가
