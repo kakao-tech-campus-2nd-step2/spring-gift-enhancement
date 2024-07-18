@@ -1,11 +1,14 @@
 package gift.controller;
 
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +88,22 @@ public class ProductController {
         productService.deleteProduct(id);
 
         return REDIRECT_URL;
+    }
+
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<Option>> getOptions(@PathVariable("id") Long id) {
+        Product product = productService.getProductById(id);
+        if (product == null) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Option> options = product.getOptions();
+        return ResponseEntity.ok(options);
+    }
+
+    @PostMapping("/{id}/options")
+    public ResponseEntity<String> addOptionToProduct(@PathVariable("id") Long id, @RequestBody @Valid Option option) {
+        productService.addOptionToProduct(id, option);
+        return ResponseEntity.status(HttpStatus.CREATED).body("옵션이 추가 완료!");
     }
 
 }
