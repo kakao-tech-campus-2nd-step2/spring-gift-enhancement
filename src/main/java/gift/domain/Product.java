@@ -2,9 +2,13 @@ package gift.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -23,11 +27,16 @@ public class Product {
     @Pattern(regexp = "^(?!.*카카오).*$", message = "'카카오'가 포함된 상품 이름은 담당 MD와 협의한 후에 사용할 수 있습니다.")
     @Column(name = "name", nullable = false)
     private String name;
+
     @Column(name="price",nullable = false)
     private int price;
+
     @Column(name = "imageUrl",nullable = false)
     private String imageUrl;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id")
+    private Category category;
     public Product() {}
 
     public Product(String name, int price, String imageUrl) {
@@ -41,6 +50,13 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Product(String name, int price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public long getId() {
@@ -75,4 +91,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

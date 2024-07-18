@@ -15,10 +15,10 @@
         <h2>상품 수정 폼</h2>
     </div>
 
-    <form th:action="@{/products/{id}/edit(id=${product.id})}" th:object="${product}" method="post">
+    <form th:action="@{/products/{id}/edit(id=${productDto.id})}" th:object="${productDto}" method="post">
         <div>
             <label for="id">상품 ID</label>
-            <input type="text" id="id" name="id" th:value="${product.id}" readonly>
+            <input type="text" id="id" name="id" th:value="${id}" readonly>
         </div>
 
         <div>
@@ -38,6 +38,12 @@
             <input type="text" id="imageUrl" th:field="*{imageUrl}">
             <div th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">이미지 오류</div>
         </div>
+        <div>
+            <label for="category">카테고리</label>
+            <select id="category" th:field="*{categoryId}">
+                <option th:each="categoryResponseDto : ${categories}" th:value="${categoryResponseDto.id}" th:text="${categoryResponseDto.name}"></option>
+            </select>
+        </div>
 
         <hr>
 
@@ -49,7 +55,7 @@
 
                 <button th:onclick="|location.href='@{/products}'|" type="button">취소</button>
 
-            </div
+            </div>
         </div>
 
     </form>

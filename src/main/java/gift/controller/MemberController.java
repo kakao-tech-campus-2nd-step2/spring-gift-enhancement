@@ -15,24 +15,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/Members")
 public class MemberController {
-    private final MemberService MemberService;
+    private final MemberService memberService;
     private final JwtProvider jwtProvider;
 
-    public MemberController(MemberService MemberService, JwtProvider jwtProvider) {
-        this.MemberService = MemberService;
+    public MemberController(MemberService memberService, JwtProvider jwtProvider) {
+        this.memberService = memberService;
         this.jwtProvider = jwtProvider;
     }
 
     @PostMapping("/register")
     public ResponseEntity<MemberResponseDto> registerMember(@RequestBody MemberRequestDto requestDto){
-        MemberService.save(requestDto);
+        memberService.save(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new MemberResponseDto("유저 생성 완료"));
     }
 
     @PostMapping("/login")
     public ResponseEntity<HashMap<String,String>> login(@RequestBody MemberRequestDto requestDto){
         // 회원 존재 확인 : 여기서 없으면 MemberNotException을 던지는데, 발생하는 에러를 여기서 잡지않고 GlobalExceptionHandler에서 잡는다.
-        MemberService.authenticate(requestDto.getEmail(),requestDto.getPassword());
+        memberService.authenticate(requestDto.getEmail(),requestDto.getPassword());
         // Access Token 토큰 생성
         String token = jwtProvider.createToken(requestDto.getEmail());
         // 응답 생성
