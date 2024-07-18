@@ -27,8 +27,8 @@ public class OptionController {
     public ResponseEntity<OptionResponse.InfoList> getOptions(
         @PathVariable("id") Long productId
     ) {
-        var models = optionService.getOptions(productId);
-        var response = OptionResponse.InfoList.from(models);
+        List<OptionModel.Info> models = optionService.getOptions(productId);
+        OptionResponse.InfoList response = OptionResponse.InfoList.from(models);
         return ResponseEntity.ok().body(response);
     }
 
@@ -38,7 +38,7 @@ public class OptionController {
         @RequestBody OptionRequest.Register request
     ) {
         List<OptionModel.Info> models = optionService.createOption(productId, request.toCommand());
-        var response = OptionResponse.InfoList.from(models);
+        OptionResponse.InfoList response = OptionResponse.InfoList.from(models);
         return ResponseEntity.ok().body(response);
     }
 
@@ -48,8 +48,9 @@ public class OptionController {
         @PathVariable("productId") Long productId,
         @RequestBody OptionRequest.Update request
     ) {
-        var model = optionService.updateOption(optionId, productId, request.toCommand());
-        var response = OptionResponse.Info.from(model);
+        OptionModel.Info model = optionService.updateOption(optionId, productId,
+            request.toCommand());
+        OptionResponse.Info response = OptionResponse.Info.from(model);
         return ResponseEntity.ok().body(response);
     }
 

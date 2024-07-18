@@ -25,7 +25,7 @@ public class OptionService {
 
     @Transactional
     public List<OptionModel.Info> createOption(Long productId, OptionCommand.Register command) {
-        var product = productRepository.findById(productId)
+        Product product = productRepository.findById(productId)
             .orElseThrow(() -> new NotFoundException("Product not found"));
         List<Option> optionList = command.toEntities(product);
         Options.validateOptions(optionList);
@@ -40,20 +40,20 @@ public class OptionService {
 
     @Transactional(readOnly = true)
     public List<OptionModel.Info> getOptions(Long productId) {
-        var options = optionRepository.findByProductId(productId);
+        List<Option> options = optionRepository.findByProductId(productId);
         return options.stream().map(OptionModel.Info::from).toList();
     }
 
     @Transactional
     public OptionModel.Info updateOption(Long optionId, Long productId,
         OptionCommand.Update command) {
-        var option = optionRepository.findById(optionId)
+        Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new NotFoundException("Option not found"));
         //수정한 이름과 원래 이름이 같음
         if (option.isSameName(command.name())) {
             return OptionModel.Info.from(option);
         }
-        var options = new Options(optionRepository.findByProductId(productId));
+        Options options = new Options(optionRepository.findByProductId(productId));
         options.validateUniqueName(option);
         option.update(command.name(), command.quantity());
         return OptionModel.Info.from(option);
@@ -64,7 +64,7 @@ public class OptionService {
         if (!optionRepository.existsById(optionId)) {
             throw new NotFoundException("Option not found");
         }
-        var options = new Options(optionRepository.findByProductId(productId));
+        Options options = new Options(optionRepository.findByProductId(productId));
         if (!options.isDeletePossible()) {
             throw new IllegalArgumentException("Option이 1개 일때는 삭제할 수 없습니다.");
         }

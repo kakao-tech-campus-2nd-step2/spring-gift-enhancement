@@ -6,14 +6,18 @@ import gift.global.auth.Authorization;
 import gift.global.dto.PageResponse;
 import gift.model.member.Role;
 import gift.model.product.SearchType;
+import gift.service.product.OptionService;
 import gift.service.product.ProductService;
+import gift.service.product.dto.OptionModel;
 import gift.service.product.dto.ProductModel;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,17 +31,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductResponse.Info> getProduct(
         @PathVariable("id") Long id
     ) {
-        var model = productService.getProduct(id);
-        ProductResponse.Info response = ProductResponse.Info.from(model);
+        ProductModel.Info productModel = productService.getProduct(id);
+        List<OptionModel.Info> optionModels = optionService.getOptions(id);
+        ProductResponse.Info response = ProductResponse.Info.from(productModel, optionModels);
         return ResponseEntity.ok().body(response);
     }
 
@@ -46,8 +53,10 @@ public class ProductController {
     public ResponseEntity<ProductResponse.Info> createProduct(
         @RequestBody @Valid ProductRequest.Register request
     ) {
-        var model = productService.createProduct(request.toCommand());
-        ProductResponse.Info response = ProductResponse.Info.from(model);
+        ProductModel.Info productModel = productService.createProduct(request.toProductCommand());
+        List<OptionModel.Info> optionModel = optionService.createOption(productModel.id(),
+            request.toOptionCommand());
+        ProductResponse.Info response = ProductResponse.Info.from(productModel, optionModel);
         return ResponseEntity.ok().body(response);
     }
 
@@ -58,8 +67,10 @@ public class ProductController {
         @PathVariable("id") Long id,
         @RequestBody @Valid ProductRequest.Update request
     ) {
-        var model = productService.updateProduct(id, request.toCommand());
-        ProductResponse.Info response = ProductResponse.Info.from(model);
+        ProductModel.Info productModel = productService.updateProduct(id,
+            request.toProductCommand());
+        List<OptionModel.Info> optionModel = optionService.getOptions(id);
+        ProductResponse.Info response = ProductResponse.Info.from(productModel, optionModel);
         return ResponseEntity.ok().body(response);
     }
 
@@ -73,14 +84,15 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<PageResponse<ProductResponse.Info>> getProductsPaging(
+    public ResponseEntity<PageResponse<ProductResponse.Summary>> getProductsPaging(
         @RequestParam(name = "SearchType", required = false, defaultValue = "ALL") SearchType searchType,
         @RequestParam(name = "SearchValue", required = false, defaultValue = "") String searchValue,
         @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Page<ProductModel.Info> page = productService.getProductsPaging(searchType, searchValue,
+        Page<ProductModel.InfoWithOption> page = productService.getProductsPaging(searchType,
+            searchValue,
             pageable);
-        var response = PageResponse.from(page, ProductResponse.Info::from);
+        var response = PageResponse.from(page, ProductResponse.Summary::from);
         return ResponseEntity.ok().body(response);
     }
 
