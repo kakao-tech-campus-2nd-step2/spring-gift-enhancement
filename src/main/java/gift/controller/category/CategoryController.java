@@ -41,21 +41,9 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody @Valid Category updatedCategory) {
-        Category existingCategory = categoryService.getCategoryById(id);
-        if (existingCategory == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        existingCategory.setName(updatedCategory.getName());
-        existingCategory.setColor(updatedCategory.getColor());
-        existingCategory.setImageUrl(updatedCategory.getImageUrl());
-        existingCategory.setDescription(updatedCategory.getDescription());
-
-        Category savedCategory = categoryService.updateCategory(existingCategory);
-
+        Category savedCategory = categoryService.updateCategory(id, updatedCategory);
         return ResponseEntity.ok(savedCategory);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
