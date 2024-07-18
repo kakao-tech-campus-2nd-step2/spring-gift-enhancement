@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.OptionRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.dto.response.AddedOptionIdResponse;
 import gift.dto.response.AddedProductIdResponse;
+import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
 import gift.service.ProductService;
 import gift.service.TokenService;
@@ -25,8 +27,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = ProductController.class)
 @DisplayName("상품 컨트롤러 단위테스트")
@@ -116,5 +117,52 @@ class ProductControllerTest {
                 //Then
                 .andExpect(status().isOk());
         verify(productService, times(1)).deleteProduct(deleteTargetId);
+    }
+
+    @Test
+    @DisplayName("상품 옵션 조회")
+    void getOptionResponses() throws Exception {
+        //Given
+        Long productId = 1L;
+        List<OptionResponse> optionResponses = List.of(
+                new OptionResponse(1L, "옵션1", 100),
+                new OptionResponse(2L, "옵션1", 100)
+        );
+
+        when(productService.getOptionResponses(productId)).thenReturn(optionResponses);
+
+        //When
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get(URL + "/1/options"))
+                //Then
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("[0].name").value("옵션1"),
+                        jsonPath("[0].id").value(1),
+                        jsonPath("[1].name").value("옵션1"),
+                        jsonPath("[1].id").value(2)
+                );
+    }
+
+    @Test
+    @DisplayName("상품 옵션 조회")
+    void addOptionToProduct() throws Exception {
+        //Given
+        Long productId = 1L;
+        OptionRequest optionRequest = new OptionRequest("옵션1", 9900);
+        AddedOptionIdResponse addedOptionIdResponse = new AddedOptionIdResponse(1L);
+
+        when(productService.addOptionToProduct(productId,optionRequest)).thenReturn(addedOptionIdResponse);
+
+        //When
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post(URL + "/1/options")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(optionRequest)))
+                //Then
+                .andExpectAll(
+                        status().isCreated(),
+                        jsonPath("optionId").value(1)
+                );
     }
 }
