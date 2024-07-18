@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/products/{productId}/options")
 @Controller
@@ -19,9 +20,12 @@ public class OptionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Option>> getAllOptionsById(@PathVariable Long productId) {
+    public ResponseEntity<List<OptionDto>> getAllOptionsById(@PathVariable Long productId) {
         List<Option> options = optionService.getAllOptionsById(productId);
-        return ResponseEntity.ok(options);
+        List<OptionDto> optionDtos = options.stream()
+                .map(option -> new OptionDto(option.getName(), option.getAmount()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(optionDtos);
     }
 
     @PostMapping

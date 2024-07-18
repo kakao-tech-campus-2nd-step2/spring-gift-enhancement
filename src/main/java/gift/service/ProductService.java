@@ -26,8 +26,8 @@ public class ProductService {
     }
 
     public boolean addNewProduct(ProductDto productDto){
-        if (productRepository.existsByName(productDto.name())) {
-            throw new RepositoryRelatedException("Product with name " + productDto.name() + " already exists.");
+        if (productRepository.existsByName(new ProductName(productDto.name()))) {
+            return false;
         }
         Category category = findCategory(productDto.categoryName());
         Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());

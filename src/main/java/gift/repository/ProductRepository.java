@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 @Validated
 public interface ProductRepository extends JpaRepository<@Valid Product, Long> {
-    boolean existsByName(String name);
+    boolean existsByName(ProductName name);
 
     @Modifying
     @Transactional
