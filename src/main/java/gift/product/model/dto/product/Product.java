@@ -50,12 +50,13 @@ public class Product extends BaseTimeEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Option> options = new ArrayList<>();
 
-    public Product(String name, int price, String imageUrl, AppUser seller, Category category) {
+    public Product(String name, int price, String imageUrl, AppUser seller, Category category, List<Option> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.seller = seller;
         this.category = category;
+        this.options = options;
     }
 
     public Product() {
