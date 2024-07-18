@@ -1,11 +1,9 @@
 package gift.service;
 
-import gift.exceptionAdvisor.MemberServiceException;
+import gift.exceptionAdvisor.exceptions.MemberServiceException;
 import gift.model.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jwts.SIG;
 import javax.crypto.SecretKey;

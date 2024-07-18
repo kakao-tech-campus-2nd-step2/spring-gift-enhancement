@@ -6,7 +6,7 @@ import gift.database.JpaMemberRepository;
 import gift.database.JpaProductRepository;
 import gift.database.JpaWishRepository;
 import gift.dto.WishListDTO;
-import gift.exceptionAdvisor.MemberNoSuchException;
+import gift.exceptionAdvisor.exceptions.MemberNoSuchException;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wish;

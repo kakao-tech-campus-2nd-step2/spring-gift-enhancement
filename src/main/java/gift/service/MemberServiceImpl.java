@@ -3,7 +3,7 @@ package gift.service;
 import gift.database.JpaMemberRepository;
 import gift.dto.LoginMemberToken;
 import gift.dto.MemberDTO;
-import gift.exceptionAdvisor.MemberAuthenticationException;
+import gift.exceptionAdvisor.exceptions.MemberAuthenticationException;
 import gift.model.Member;
 import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
