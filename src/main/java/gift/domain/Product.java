@@ -1,6 +1,7 @@
 package gift.domain;
 
 import gift.dto.ProductDto;
+import gift.exception.DuplicateOptionException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -87,6 +88,12 @@ public class Product {
     public void addOption(Option option) {
         option.setProduct(this);
         options.add(option);
+    }
+
+    public void validateOptionNameUnique(String optionName) {
+        if (this.options.stream().anyMatch(option -> option.getName().equals(optionName))) {
+            throw new DuplicateOptionException();
+        }
     }
 
 }

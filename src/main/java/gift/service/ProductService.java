@@ -6,7 +6,6 @@ import gift.domain.Product;
 import gift.dto.OptionDto;
 import gift.dto.ProductDto;
 import gift.exception.CategoryNotFoundException;
-import gift.exception.DuplicateOptionException;
 import gift.exception.OptionNotFoundException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
@@ -90,16 +89,10 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        boolean optionExists = product.getOptions().stream()
-                .anyMatch(option -> option.getName().equals(dto.getName()));
-
-        if (optionExists) {
-            throw new DuplicateOptionException();
-        }
-
         Option option = new Option(product, dto.getName(), dto.getQuantity());
 
-        product.getOptions().add(option);
+        product.validateOptionNameUnique(option.getName());
+        product.addOption(option);
     }
 
     public void removeOption(Long productId, Long optionId) {
