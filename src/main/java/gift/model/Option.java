@@ -87,6 +87,13 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public void decreaseQuantity(int amount) {
+        if (this.quantity < amount) {
+            this.quantity = 0;
+        }
+        this.quantity -= amount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

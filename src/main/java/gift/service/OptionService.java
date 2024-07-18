@@ -80,4 +80,12 @@ public class OptionService {
     public void deleteOption(Long id) {
         optionRepository.deleteById(id);
     }
+
+    public void decreaseOptionQuantity(Long optionId, int amount) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new IllegalArgumentException("옵션을 찾을 수 없습니다."));
+
+        option.decreaseQuantity(amount);
+        optionRepository.save(option);
+    }
 }
