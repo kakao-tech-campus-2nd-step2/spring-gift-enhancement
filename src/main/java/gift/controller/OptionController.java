@@ -24,7 +24,7 @@ public class OptionController {
     }
 
     @PostMapping("/{productId}/options")
-    public ResponseEntity<Void> makeOption(@PathVariable Long productId, @RequestBody @Valid OptionRequest request) {
+    public ResponseEntity<Void> makeOption(@PathVariable("productId") Long productId, @RequestBody @Valid OptionRequest request) {
        optionService.makeOption(productId, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
