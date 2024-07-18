@@ -63,7 +63,7 @@ public class ProductService {
 
         Product savedProduct = productRepository.save(product);
         // 옵션 저장
-        optionService.addOption(savedProduct, productDTO.getOptionDTO());
+        optionService.addOption(savedProduct, productDTO.getOption());
     }
 
     /**

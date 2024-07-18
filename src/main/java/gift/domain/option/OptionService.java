@@ -1,5 +1,6 @@
 package gift.domain.option;
 
+import gift.domain.option.dto.OptionRequestDTO;
 import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
 import gift.global.exception.BusinessException;
@@ -28,28 +29,28 @@ public class OptionService {
     }
 
     // 기존 상품에 옵션 추가
-    public void addOption(Long productId, OptionDTO optionDTO) {
+    public void addOption(Long productId, OptionRequestDTO optionRequestDTO) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "옵션을 추가할 상품 존재 X"));
 
         List<Option> options = optionRepository.findAllByProductId(productId);
 
         for (Option option : options) {
-            if (option.getName().equals(optionDTO.getName())) {
+            if (option.getName().equals(optionRequestDTO.getName())) {
                 throw new BusinessException(HttpStatus.BAD_REQUEST, "상품에 동일한 이름의 옵션 존재");
             }
         }
 
-        Option option = new Option(optionDTO.getName(), optionDTO.getQuantity(), product);
+        Option option = new Option(optionRequestDTO.getName(), optionRequestDTO.getQuantity(), product);
 
         optionRepository.save(option);
     }
 
     // 상품 생성 시 옵션 입력
-    public void addOption(Product product, OptionDTO optionDTO) {
+    public void addOption(Product product, OptionRequestDTO optionRequestDTO) {
         List<Option> options = optionRepository.findAllByProduct(product);
 
-        Option option = new Option(optionDTO.getName(), optionDTO.getQuantity(), product);
+        Option option = new Option(optionRequestDTO.getName(), optionRequestDTO.getQuantity(), product);
 
         optionRepository.save(option);
     }

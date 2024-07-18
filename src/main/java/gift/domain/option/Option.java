@@ -2,6 +2,9 @@ package gift.domain.option;
 
 import gift.domain.product.Product;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -10,11 +13,12 @@ import jakarta.persistence.ManyToOne;
 public class Option {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private Long quantity;
 
-    @ManyToOne // 옵션은 해당 상품에서 직접 추가됨
+    @ManyToOne(fetch = FetchType.LAZY) // 옵션은 해당 상품에서 직접 추가됨
     @JoinColumn(name = "product_id")
     private Product product;
 

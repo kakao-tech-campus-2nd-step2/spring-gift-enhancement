@@ -1,5 +1,7 @@
 package gift.domain.option;
 
+import gift.domain.option.dto.OptionRequestDTO;
+import gift.domain.option.dto.OptionResponseDTO;
 import gift.global.response.ResponseMaker;
 import gift.global.response.ResultResponseDto;
 import java.util.List;
@@ -34,17 +36,19 @@ public class OptionRestController {
      * 특정 상품의 옵션 목록 조회
      */
     @GetMapping("/products/{productId}/options")
-    public ResponseEntity<ResultResponseDto<List<Option>>> getOptionsByProductId(
+    public ResponseEntity<ResultResponseDto<OptionResponseDTO>> getOptionsByProductId(
         @PathVariable("productId") Long productId) {
         List<Option> options = optionService.getOptionsByProductId(productId);
-        return ResponseMaker.createResponse(HttpStatus.OK, "해당 상품의 옵션 조회 성공", options);
+        OptionResponseDTO optionResponseDTO = new OptionResponseDTO(options);
+
+        return ResponseMaker.createResponse(HttpStatus.OK, "해당 상품의 옵션 조회 성공", optionResponseDTO);
     }
 
     /**
      * 특정 상품에 옵션 추가
      */
     @PostMapping("/products/{productId}/options")
-    public void addOption(@PathVariable("productId") Long productId, OptionDTO optionDTO) {
-        optionService.addOption(productId, optionDTO);
+    public void addOption(@PathVariable("productId") Long productId, OptionRequestDTO optionRequestDTO) {
+        optionService.addOption(productId, optionRequestDTO);
     }
 }
