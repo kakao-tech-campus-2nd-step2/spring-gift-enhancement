@@ -4,6 +4,7 @@ import gift.domain.dto.request.CategoryRequest;
 import gift.domain.dto.response.CategoryResponse;
 import gift.domain.entity.Category;
 import gift.domain.exception.CategoryAlreadyExistsException;
+import gift.domain.exception.CategoryHasProductsException;
 import gift.domain.exception.CategoryNotFoundException;
 import gift.domain.repository.CategoryRepository;
 import java.util.List;
@@ -52,5 +53,14 @@ public class CategoryService {
         }
         category.set(request);
         return CategoryResponse.of(category);
+    }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+        Category category = findById(id);
+        if (!category.getProducts().isEmpty()) {
+            throw new CategoryHasProductsException();
+        }
+        categoryRepository.delete(category);
     }
 }

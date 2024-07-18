@@ -86,4 +86,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorApiResponse> handleCategoryAlreadyExistsException(CategoryAlreadyExistsException e) {
         return ErrorApiResponse.notFound(e);
     }
+
+    @ExceptionHandler(CategoryHasProductsException.class)
+    public ResponseEntity<ErrorApiResponse> handleCategoryHasProductsException(CategoryHasProductsException e) {
+        return ErrorApiResponse.conflict(e);
+    }
 }

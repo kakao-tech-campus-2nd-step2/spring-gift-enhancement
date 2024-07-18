@@ -10,6 +10,7 @@ import gift.global.apiResponse.BasicApiResponse;
 import gift.global.apiResponse.SuccessApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,5 +53,11 @@ public class CategoryController {
     public ResponseEntity<BasicApiResponse> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryRequest request) {
         categoryService.updateCategory(id, request);
         return SuccessApiResponse.ok();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BasicApiResponse> deleteCategory(@PathVariable("id") Long id) {
+        categoryService.deleteCategory(id);
+        return SuccessApiResponse.of(HttpStatus.NO_CONTENT);
     }
 }

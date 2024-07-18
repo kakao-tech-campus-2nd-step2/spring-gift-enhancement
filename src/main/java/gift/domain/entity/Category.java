@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -27,6 +29,9 @@ public class Category {
 
     @Column
     private String description;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 
     protected Category() {
     }
@@ -56,6 +61,10 @@ public class Category {
 
     public String getDescription() {
         return description;
+    }
+
+    public List<Product> getProducts() {
+        return products;
     }
 
     public void setName(String name) {
