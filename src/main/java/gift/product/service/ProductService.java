@@ -2,12 +2,12 @@ package gift.product.service;
 
 import gift.exception.category.CategoryNotFoundException;
 import gift.exception.product.ProductNotFoundException;
+import gift.product.category.entity.Category;
+import gift.product.category.repository.CategoryRepository;
 import gift.product.dto.request.CreateProductRequest;
 import gift.product.dto.request.UpdateProductRequest;
 import gift.product.dto.response.ProductResponse;
-import gift.product.category.entity.Category;
 import gift.product.entity.Product;
-import gift.product.category.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import gift.util.mapper.ProductMapper;
 import org.springframework.data.domain.Page;
@@ -53,7 +53,8 @@ public class ProductService {
             .orElseThrow(ProductNotFoundException::new);
         Category category = categoryRepository.findById(request.categoryId())
             .orElseThrow(CategoryNotFoundException::new);
-        ProductMapper.updateProduct(product, request, category);
+
+        product.edit(request, category);
     }
 
     @Transactional

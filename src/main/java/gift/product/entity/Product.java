@@ -1,6 +1,7 @@
 package gift.product.entity;
 
 import gift.product.category.entity.Category;
+import gift.product.dto.request.UpdateProductRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -42,6 +43,13 @@ public class Product {
         this.price = builder.price;
         this.imageUrl = builder.imageUrl;
         this.category = builder.category;
+    }
+
+    public void edit(UpdateProductRequest request, Category category) {
+        this.name = request.name();
+        this.price = request.price();
+        this.imageUrl = request.imageUrl();
+        this.category = category;
     }
 
     public static Builder builder() {
