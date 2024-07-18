@@ -5,6 +5,7 @@ import gift.domain.Product;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -102,8 +103,14 @@ public class ProductController {
 
     @PostMapping("/{id}/options")
     public ResponseEntity<String> addOptionToProduct(@PathVariable("id") Long id, @RequestBody @Valid Option option) {
-        productService.addOptionToProduct(id, option);
-        return ResponseEntity.status(HttpStatus.CREATED).body("옵션이 추가 완료!");
+        try {
+            productService.addOptionToProduct(id, option);
+            return ResponseEntity.status(HttpStatus.CREATED).body("옵션 추가 완료!");
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("동일한 상품 내에 동일한 옵션 이름이 존재합니다.");
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
 }

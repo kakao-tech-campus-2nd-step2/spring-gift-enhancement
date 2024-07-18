@@ -44,6 +44,13 @@ public class ProductService {
 
     public void addOptionToProduct(Long productId, Option option) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("해당 product ID가 존재하지 않음"));
+
+        boolean optionExists = product.getOptions().stream()
+                .anyMatch(existingOption -> existingOption.getName().equals(option.getName()));
+        if (optionExists) {
+            throw new IllegalArgumentException("동일한 상품 내에 동일한 옵션 이름이 존재합니다.");
+        }
+
         option.setProduct(product);
         optionRepository.save(option);
     }

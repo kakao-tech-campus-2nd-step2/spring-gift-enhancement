@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 @Entity
+@Table(name = "options", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "product_id"})
+})
 public class Option {
 
     @Id
