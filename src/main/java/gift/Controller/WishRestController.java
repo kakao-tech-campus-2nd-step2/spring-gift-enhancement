@@ -26,6 +26,6 @@ public class WishRestController {
 
     @GetMapping()
     public List<String> viewAllWish(@RequestAttribute("Email") String email){
-        return wishService.getAll(email);
+        return wishService.read(email);
     }
 }
