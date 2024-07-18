@@ -7,9 +7,10 @@ POST http://localhost:8080/api/products
 Content-Type: application/json
 
 {
-  "name" : "coffee",
+  "name" : "coffeee",
   "imgUrl" : "test.jpg",
-  "price" : 10000
+  "price" : 10000,
+  "category": 1
 }
 
 ### 3.상품 수정
