@@ -3,6 +3,7 @@ package gift;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.Model.Category;
 import gift.Model.Member;
 import gift.Model.Product;
 import gift.Model.Wishlist;
@@ -33,8 +34,8 @@ public class WishlistRepositoryTest {
     @Test
     void findAllByEmail(){
         Member member = memberRepository.save(new Member(1L, "1234@google.com","1234"));
-        Product expected1 = productRepository.save(new Product(1L,"A",1000,"A"));
-        Product expected2 = productRepository.save(new Product(2L,"B",2000,"B"));
+        Product expected1 = productRepository.save(new Product(1L,"A",1000,"A",new Category(1L, "A","B","C","D")));
+        Product expected2 = productRepository.save(new Product(2L,"B",2000,"B",new Category(1L, "A","B","C","D")));
 
         wishlistRepository.addProductInWishlist(member.getId(),expected1.getId());
         wishlistRepository.addProductInWishlist(member.getId(),expected2.getId());
@@ -62,7 +63,7 @@ public class WishlistRepositoryTest {
     @Test
     void addProductInWishlist(){
         Member expectedMember = memberRepository.save(new Member(1L, "1234@google.com","1234"));
-        Product expectedProduct = productRepository.save(new Product(1L,"A",1000,"A"));
+        Product expectedProduct = productRepository.save(new Product(1L,"A",1000,"A",new Category(1L, "A","B","C","D")));
 
         wishlistRepository.addProductInWishlist(expectedMember.getId(), expectedMember.getId());
         Wishlist actual = wishlistRepository.findWishlistById(wishlistRepository.getWishlistIdByMemberEmailAndProductId(expectedMember.getEmail(),expectedProduct.getId()));
@@ -82,7 +83,7 @@ public class WishlistRepositoryTest {
     @Test
     void getWishlistId(){
         Member expectedMember = memberRepository.save(new Member(1L, "1234@google.com","1234"));
-        Product expectedProduct = productRepository.save(new Product(1L,"A",1000,"A"));
+        Product expectedProduct = productRepository.save(new Product(1L,"A",1000,"A",new Category(1L, "A","B","C","D")));
 
         wishlistRepository.addProductInWishlist(expectedMember.getId(), expectedMember.getId());
         Long actualId = wishlistRepository.getWishlistIdByMemberEmailAndProductId(expectedMember.getEmail(),expectedProduct.getId());
@@ -94,7 +95,7 @@ public class WishlistRepositoryTest {
     @Test
     void changeProductMemberNull(){
         Member expectedMember = memberRepository.save(new Member(1L, "1234@google.com","1234"));
-        Product expectedProduct = productRepository.save(new Product(1L,"A",1000,"A"));
+        Product expectedProduct = productRepository.save(new Product(1L,"A",1000,"A",new Category(1L, "A","B","C","D")));
 
         wishlistRepository.addProductInWishlist(expectedMember.getId(), expectedMember.getId());
         Long actualId = wishlistRepository.getWishlistIdByMemberEmailAndProductId(expectedMember.getEmail(),expectedProduct.getId());
@@ -110,7 +111,7 @@ public class WishlistRepositoryTest {
     @Test
     void deleteByWishlistId(){
         Member expectedMember = memberRepository.save(new Member(1L, "1234@google.com","1234"));
-        Product expectedProduct = productRepository.save(new Product(1L,"A",1000,"A"));
+        Product expectedProduct = productRepository.save(new Product(1L,"A",1000,"A",new Category(1L, "A","B","C","D")));
 
         wishlistRepository.addProductInWishlist(expectedMember.getId(), expectedMember.getId());
         Long actualId = wishlistRepository.getWishlistIdByMemberEmailAndProductId(expectedMember.getEmail(),expectedProduct.getId());

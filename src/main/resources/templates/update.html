@@ -26,6 +26,15 @@
       <label for="imageUrl">Image URL</label>
       <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" required>
     </div>
+
+    <div>
+      <div>카테고리</div>
+      <select th:field="*{category}" class="form-select">
+        <option value="">==카테고리==</option>
+        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">카테고리</option>
+      </select>
+    </div>
+
     <button type="submit" class="btn btn-primary">저장</button>
     <button class="btn btn-secondary"
             onclick="location.href='index.html'"

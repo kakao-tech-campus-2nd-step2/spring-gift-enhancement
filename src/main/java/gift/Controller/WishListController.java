@@ -33,7 +33,6 @@ public class WishListController {
         wishlistService.checkUserByMemberEmail(email);
         model.addAttribute("products", wishlistService.getAllProducts(pageable));
         model.addAttribute("wishlists", wishlistService.getAllWishlist(email, pageable));
-
         return "wish";
     }
 
