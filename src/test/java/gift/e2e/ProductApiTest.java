@@ -126,7 +126,7 @@ class ProductApiTest {
         headers.setBearerAuth(token);
 
         ProductAddRequest productAddRequest = new ProductAddRequest("product11", 1500,
-            "https://b.com", "카테고리");
+            "https://b.com", "카테고리", "옵션", 1);
         RequestEntity<ProductAddRequest> request = new RequestEntity<>(
             productAddRequest, headers, HttpMethod.POST, URI.create(url));
 
