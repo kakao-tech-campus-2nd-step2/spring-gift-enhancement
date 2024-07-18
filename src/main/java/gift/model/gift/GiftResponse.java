@@ -46,47 +46,23 @@ public class GiftResponse {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getPrice() {
         return price;
     }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
+    
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public CategoryResponse getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryResponse category) {
-        this.category = category;
-    }
-
     public List<OptionResponse> getOptions() {
         return options;
-    }
-
-    public void setOptions(List<OptionResponse> options) {
-        this.options = options;
     }
 }
