@@ -20,7 +20,6 @@ public class Option extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    @Column(unique = true)
     private String name;
 
     @NotNull
@@ -61,6 +60,10 @@ public class Option extends BaseTimeEntity {
         this.quantity = quantity;
     }
 
+    public boolean isSameName(String name) {
+        return this.name.equals(name);
+    }
+
     private static class OptionNameValidator {
 
         private static final int MAX_LENGTH = 50;
@@ -95,4 +98,5 @@ public class Option extends BaseTimeEntity {
             return true;
         }
     }
+
 }
