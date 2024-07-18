@@ -46,6 +46,6 @@ public class CategoryService {
 
     private Category getCategory(long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CATEGORY));
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CATEGORY, id));
     }
 }

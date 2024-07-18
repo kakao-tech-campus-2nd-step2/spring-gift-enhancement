@@ -30,8 +30,9 @@ public class ProductService {
 
     @Transactional
     public void addProduct(ProductRequestDto requestDto) {
-        Category category = categoryRepository.findById(requestDto.category())
-                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CATEGORY));
+        Long categoryId = requestDto.category();
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CATEGORY, categoryId));
         Product product = new Product(requestDto.name(), requestDto.price(), requestDto.imgUrl(), category);
         productRepository.save(product);
     }
@@ -45,16 +46,16 @@ public class ProductService {
 
     public ProductResponseDto findProduct(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new CustomException(INVALID_PRODUCT));
+                .orElseThrow(() -> new CustomException(INVALID_PRODUCT, id));
         return new ProductResponseDto(product);
     }
 
     @Transactional
     public ProductResponseDto editProduct(Long id, ProductChangeRequestDto request) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new CustomException(INVALID_PRODUCT));
+                .orElseThrow(() -> new CustomException(INVALID_PRODUCT, id));
         Category category = categoryRepository.findById(request.getCategory())
-                .orElseThrow(() -> new CustomException(INVALID_CATEGORY));
+                .orElseThrow(() -> new CustomException(INVALID_CATEGORY, id));
         product.update(request.getName(), request.getPrice(), request.getImgUrl(), category);
         productRepository.save(product);
         return new ProductResponseDto(product);
@@ -68,7 +69,7 @@ public class ProductService {
 
     private void checkProductValidation(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new CustomException(INVALID_PRODUCT);
+            throw new CustomException(INVALID_PRODUCT, id);
         }
     }
 }
