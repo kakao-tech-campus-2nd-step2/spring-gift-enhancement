@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.model.Option;
+
 public class OptionDTO {
 
     private Long id;
@@ -57,5 +59,9 @@ public class OptionDTO {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public static OptionDTO convertToDTO(Option option) {
+        return new OptionDTO(option.getId(), option.getName(), option.getQuantity(), option.getPrice(), option.getProduct().getId());
     }
 }
