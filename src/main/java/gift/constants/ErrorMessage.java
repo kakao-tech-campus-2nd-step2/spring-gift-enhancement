@@ -30,4 +30,6 @@ public class ErrorMessage {
     public static final String CATEGORY_NAME_INVALID_LENGTH_MSG = "카테고리명은 공백 포함 최대 15자까지 입력 가능합니다.";
 
     public static final String NULL_POINTER_EXCEPTION_MSG = "객체가 null 입니다.";
+
+    public static final String OPTION_NOT_EXISTS_MSG = "존재하지 않는 옵션입니다.";
 }

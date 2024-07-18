@@ -31,6 +31,9 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "category")
     private Category category;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Option> options = new ArrayList<>();
+
     protected Product() {
     }
 

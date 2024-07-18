@@ -84,4 +84,11 @@ INSERT INTO Product(name, price, image_url, category) VALUES(
 INSERT INTO Member(email, password) VALUES('admin@admin', 'admin');
 INSERT INTO Member(email, password) VALUES('root@admin', 'root');
 
+INSERT INTO Options(name, quantity, product_id) VALUES('스타벅스 라떼', 15, 1);
+INSERT INTO Options(name, quantity, product_id) VALUES('스타벅스 아메리카노', 50, 1);
+INSERT INTO Options(name, quantity, product_id) VALUES('스타벅스 에스프레소', 20, 1);
+INSERT INTO Options(name, quantity, product_id) VALUES('스타벅스 프라프치노', 3, 1);
+INSERT INTO Options(name, quantity, product_id) VALUES('신세계 백화점 5만원권', 5, 2);
+INSERT INTO Options(name, quantity, product_id) VALUES('현대 백화점 10만원권', 10, 2);
+
 
