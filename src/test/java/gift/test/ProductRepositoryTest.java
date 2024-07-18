@@ -7,19 +7,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import gift.model.Category;
-import gift.model.Product;
+import gift.entity.Category;
+import gift.entity.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 
 @DataJpaTest
 public class ProductRepositoryTest {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
     
     @Autowired
-    private CategoryRepository categoryRepository;
+    public ProductRepositoryTest(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    	this.productRepository = productRepository;
+    	this.categoryRepository = categoryRepository;
+    }
     
     private Category category;
     private Product product;

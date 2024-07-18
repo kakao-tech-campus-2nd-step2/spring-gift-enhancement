@@ -9,14 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import gift.model.User;
+import gift.entity.User;
 import gift.repository.UserRepository;
 
 @DataJpaTest
 public class UserRepositoryTest {
 
+    private final UserRepository userRepository;
+    
     @Autowired
-    private UserRepository userRepository;
+    public UserRepositoryTest(UserRepository userRepository) {
+    	this.userRepository = userRepository;
+    }
     
     private User user;
     
