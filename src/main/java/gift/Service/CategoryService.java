@@ -25,7 +25,7 @@ public class CategoryService {
         Category category = new Category(requestCategory.name(), requestCategory.color(), requestCategory.imageUrl(), requestCategory.description());
         return categoryRepository.save(category);
     }
-
+    @Transactional(readOnly = true)
     public List<ResponseCategoryDTO> getCategories() {
         List<Category> categoryList = categoryRepository.findAll();
         List<ResponseCategoryDTO> responseCategoryDTOList = new ArrayList<>();

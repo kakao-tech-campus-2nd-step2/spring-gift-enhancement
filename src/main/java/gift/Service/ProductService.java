@@ -5,10 +5,11 @@ import gift.Model.Product;
 import gift.Model.RequestProduct;
 import gift.Repository.CategoryRepository;
 import gift.Repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.NoSuchElementException;
 
 @Service
@@ -23,6 +24,7 @@ public class ProductService {
         this.categoryRepository  = categoryRepository;
     }
 
+    @Transactional(readOnly = true)
     public Page<Product> getAllProducts(Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(pageable);
         return productPage;
@@ -36,6 +38,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    @Transactional(readOnly = true)
     public Product selectProduct(long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("매칭되는 product가 없습니다"));
         return product;
