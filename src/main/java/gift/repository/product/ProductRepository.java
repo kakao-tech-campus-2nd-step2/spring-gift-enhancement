@@ -21,4 +21,7 @@ public interface ProductRepository {
     Page<Product> findAllOrderByPrice(Pageable pageable);
 
     Page<Product> findByNameContaining(String name, Pageable pageable);
+
+    Page<Product> findByCategoryId(String searchValue, Pageable pageable);
+
 }
