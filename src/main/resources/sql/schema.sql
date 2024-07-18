@@ -51,7 +51,7 @@ create table product_wishlist
     wishlist_id bigint,
     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE,
     FOREIGN KEY (wishlist_id) REFERENCES wishlist (id) ON DELETE CASCADE
-)
+);
 
 -- option
 drop table if exists option CASCADE;
@@ -60,4 +60,17 @@ create table option
     id       bigint AUTO_INCREMENT PRIMARY KEY,
     name     varchar(50),
     quantity int
+);
+INSERT INTO option (name, quantity)
+VALUES ('DefaultOption', 1);
+
+-- product_option(중간 테이블)
+drop table if exists product_option CASCADE;
+create table product_option
+(
+    id         bigint AUTO_INCREMENT PRIMARY KEY,
+    product_id bigint,
+    option_id  bigint,
+    FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE,
+    FOREIGN KEY (option_id) REFERENCES option (id) ON DELETE CASCADE
 );
