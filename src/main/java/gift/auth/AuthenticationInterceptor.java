@@ -10,14 +10,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        if (handler instanceof HandlerMethod) {
-            if (requiredAuthorized((HandlerMethod) handler)) {
-                return containsAuthority(request, response,
-                        ((HandlerMethod) handler).getMethodAnnotation(Authorized.class));
-            }
+        if ((handler instanceof HandlerMethod) == false) {
             return true;
         }
-
+        if (requiredAuthorized((HandlerMethod) handler)) {
+            return containsAuthority(request, response,
+                    ((HandlerMethod) handler).getMethodAnnotation(Authorized.class));
+        }
         return true;
     }
 
