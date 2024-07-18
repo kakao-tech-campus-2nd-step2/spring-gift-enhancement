@@ -31,7 +31,7 @@ public class OptionController {
 
         Product product = optionService.findProductById(optionDTO.getProductId());
         Option option = optionDTO.toEntity(product);
-        optionService.qaddOption(option);
+        optionService.addOption(option);
 
         return new ResponseEntity<>("Option 추가 완료", HttpStatus.CREATED);
     }
