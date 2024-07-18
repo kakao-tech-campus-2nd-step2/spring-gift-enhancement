@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -111,5 +113,26 @@ class ProductRepositoryTest {
         for (int i = 0; i < actuals.getContent().size(); i++) {
             assertThat(actuals.getContent().get(i)).isEqualTo(product[i]);
         }
+    }
+
+    @Test
+    @DisplayName("카테고리 id로 Product 조회 테스트[성공]")
+    void findByCategoryId() {
+        // given
+        String pName = "name1";
+        int price = 1000;
+        String imageUrl = "imageUrl1";
+        Category category = categoryRepository.save(new Category("name", "#123", "url", ""));
+        Option option = new Option("oName", 123);
+        Product product = productRepository.save(new Product(pName, price, imageUrl, category, option));
+
+        // when
+        List<Product> products = productRepository.findByCategoryId(product.getCategory().getId());
+
+        // then
+        assertThat(products.size()).isEqualTo(1);
+        assertThat(products.get(0).getName()).isEqualTo(pName);
+        assertThat(products.get(0).getPrice()).isEqualTo(price);
+        assertThat(products.get(0).getImageUrl()).isEqualTo(imageUrl);
     }
 }
