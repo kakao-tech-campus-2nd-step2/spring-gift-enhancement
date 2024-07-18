@@ -1,8 +1,7 @@
 package gift.service;
 
 import gift.common.exception.EntityNotFoundException;
-import gift.controller.dto.request.CreateOptionRequest;
-import gift.controller.dto.request.UpdateOptionRequest;
+import gift.controller.dto.request.OptionRequest;
 import gift.controller.dto.response.OptionResponse;
 import gift.model.Option;
 import gift.model.Product;
@@ -31,7 +30,7 @@ public class OptionService {
     }
 
     @Transactional
-    public void save(CreateOptionRequest request) {
+    public void save(OptionRequest.Create request) {
         checkProductExist(request.productId());
         Product product = productRepository.getReferenceById(request.productId());
         Option option = new Option(request.name(), request.quantity(), product);
@@ -39,7 +38,7 @@ public class OptionService {
     }
 
     @Transactional
-    public void updateById(UpdateOptionRequest request) {
+    public void updateById(OptionRequest.Update request) {
         checkOptionExist(request.id());
         Option option = optionRepository.getReferenceById(request.id());
         Product product = option.getProduct();

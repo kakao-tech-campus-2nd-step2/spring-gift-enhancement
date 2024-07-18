@@ -1,11 +1,9 @@
 package gift.controller.restcontroller;
 
-import gift.controller.dto.request.CreateProductRequest;
-import gift.controller.dto.request.UpdateProductRequest;
+import gift.controller.dto.request.ProductRequest;
 import gift.controller.dto.response.OptionResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
-import gift.controller.dto.response.ProductWithOptionResponse;
 import gift.service.OptionService;
 import gift.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,26 +34,26 @@ public class ProductRestController {
 
     @GetMapping("/products")
     @Operation(summary = "전체 상품 조회", description = "전체 상품을 조회합니다.")
-    public ResponseEntity<PagingResponse<ProductResponse>> getProducts(
+    public ResponseEntity<PagingResponse<ProductResponse.Info>> getProducts(
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        PagingResponse<ProductResponse> responses = productService.findAllProductPaging(pageable);
+        PagingResponse<ProductResponse.Info> responses = productService.findAllProductPaging(pageable);
         return ResponseEntity.ok().body(responses);
     }
 
     @GetMapping("/product/{id}")
     @Operation(summary = "상품 조회", description = "특정 상품을 조회합니다.")
-    public ResponseEntity<ProductWithOptionResponse> getProduct(
+    public ResponseEntity<ProductResponse.WithOption> getProduct(
             @PathVariable("id") @NotNull @Min(1) Long id
     ) {
-        ProductWithOptionResponse response = productService.findById(id);
+        ProductResponse.WithOption response = productService.findById(id);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/product")
     @Operation(summary = "상품 추가", description = "상품을 추가합니다.")
     public ResponseEntity<Long> createProduct(
-            @Valid @RequestBody CreateProductRequest request
+            @Valid @RequestBody ProductRequest.Create request
     ) {
         Long id = productService.save(request.toDto());
         return ResponseEntity.created(URI.create("/api/v1/product" + id)).body(id);
@@ -64,7 +62,7 @@ public class ProductRestController {
     @PutMapping("/product")
     @Operation(summary = "상품 수정", description = "상품을 수정합니다.")
     public ResponseEntity<Void> updateProduct(
-            @Valid @RequestBody UpdateProductRequest request
+            @Valid @RequestBody ProductRequest.Update request
     ) {
         productService.updateProduct(request.toDto());
         return ResponseEntity.ok().build();

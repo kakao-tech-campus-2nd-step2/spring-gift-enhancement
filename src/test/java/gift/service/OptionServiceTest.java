@@ -1,8 +1,7 @@
 package gift.service;
 
 import gift.common.exception.EntityNotFoundException;
-import gift.controller.dto.request.CreateOptionRequest;
-import gift.controller.dto.request.UpdateOptionRequest;
+import gift.controller.dto.request.OptionRequest;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +39,7 @@ class OptionServiceTest {
         String name = "name";
         int quantity = 2;
         Long productId = 1L;
-        var request = new CreateOptionRequest(name, quantity, productId);
+        var request = new OptionRequest.Create(name, quantity, productId);
         given(productRepository.existsById(eq(productId)))
                 .willReturn(false);
 
@@ -58,7 +57,7 @@ class OptionServiceTest {
         String name = "name";
         int quantity = 2;
         Long productId = 1L;
-        var request = new UpdateOptionRequest(id, name, quantity, productId);
+        var request = new OptionRequest.Update(id, name, quantity, productId);
         given(optionRepository.existsById(eq(id)))
                 .willReturn(false);
         // when

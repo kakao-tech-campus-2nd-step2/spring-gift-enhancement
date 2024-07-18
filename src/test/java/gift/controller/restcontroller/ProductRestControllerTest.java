@@ -1,6 +1,6 @@
 package gift.controller.restcontroller;
 
-import gift.controller.dto.request.CreateProductRequest;
+import gift.controller.dto.request.ProductRequest;
 import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
@@ -48,7 +48,7 @@ class ProductRestControllerTest {
     void create() {
         Category category = categoryRepository.save(new Category("상품권", "#123", "url", ""));
         var url = "http://localhost:" + port + "/api/v1/product";
-        var request = new CreateProductRequest("product", 1_000, "Url", category.getId(), "oName", 100);
+        var request = new ProductRequest.Create("product", 1_000, "Url", category.getId(), "oName", 100);
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
         var actual = restTemplate.exchange(requestEntity, String.class);
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.CREATED);

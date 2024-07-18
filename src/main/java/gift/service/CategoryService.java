@@ -2,8 +2,7 @@ package gift.service;
 
 import gift.common.exception.DuplicateDataException;
 import gift.common.exception.EntityNotFoundException;
-import gift.controller.dto.request.CreateCategoryRequest;
-import gift.controller.dto.request.UpdateCategoryRequest;
+import gift.controller.dto.request.CategoryRequest;
 import gift.controller.dto.response.CategoryResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.model.Category;
@@ -24,7 +23,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public Long save(CreateCategoryRequest request) {
+    public Long save(CategoryRequest.Create request) {
         checkDuplicateCategory(request);
         Category category = new Category(request.name(), request.color(), request.imageUrl(), request.description());
         return categoryRepository.save(category).getId();
@@ -44,7 +43,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void updateById(UpdateCategoryRequest request) {
+    public void updateById(CategoryRequest.Update request) {
         Category category = categoryRepository.findById(request.id())
                 .orElseThrow(() ->
                         new EntityNotFoundException("Category with id " + request.id() + " not found"));
@@ -63,7 +62,7 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    private void checkDuplicateCategory(CreateCategoryRequest request) {
+    private void checkDuplicateCategory(CategoryRequest.Create request) {
         if (categoryRepository.existsByName(request.name())) {
             throw new DuplicateDataException("Category with name " + request.name() + " already exists", "Duplicate Category");
         }

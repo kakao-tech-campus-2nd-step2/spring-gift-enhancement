@@ -96,7 +96,7 @@ class WishesRestControllerTest {
         List<WishResponse> wishList = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
             wishList.add(new WishResponse((long) i, i + 1,
-                    new ProductResponse((long)i, "testProduct", i * 1000,
+                    new ProductResponse.Info((long)i, "testProduct", i * 1000,
                             "URL", " ", null, null),
                     null, null));
         }

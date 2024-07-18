@@ -1,7 +1,6 @@
 package gift.controller.admin;
 
-import gift.controller.dto.request.CreateCategoryRequest;
-import gift.controller.dto.request.UpdateCategoryRequest;
+import gift.controller.dto.request.CategoryRequest;
 import gift.controller.dto.response.CategoryResponse;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
@@ -43,13 +42,13 @@ public class AdminCategoryController {
     }
 
     @PostMapping("/category")
-    public String createCategory(@Valid @ModelAttribute CreateCategoryRequest request) {
+    public String createCategory(@Valid @ModelAttribute CategoryRequest.Create request) {
         categoryService.save(request);
         return "redirect:/admin/categories";
     }
 
     @PutMapping("/category")
-    public String updateMember(@Valid @ModelAttribute UpdateCategoryRequest request) {
+    public String updateMember(@Valid @ModelAttribute CategoryRequest.Update request) {
         categoryService.updateById(request);
         return "redirect:/admin/categories";
     }

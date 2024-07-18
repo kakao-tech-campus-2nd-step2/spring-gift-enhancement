@@ -1,7 +1,6 @@
 package gift.controller.admin;
 
-import gift.controller.dto.request.CreateOptionRequest;
-import gift.controller.dto.request.UpdateOptionRequest;
+import gift.controller.dto.request.OptionRequest;
 import gift.controller.dto.response.OptionResponse;
 import gift.service.OptionService;
 import jakarta.validation.Valid;
@@ -38,13 +37,13 @@ public class AdminOptionController {
     }
 
     @PostMapping("")
-    public String createOption(@Valid @ModelAttribute CreateOptionRequest request) {
+    public String createOption(@Valid @ModelAttribute OptionRequest.Create request) {
         optionService.save(request);
         return "redirect:/admin/product/" + request.productId();
     }
 
     @PutMapping("")
-    public String updateOption(@Valid @ModelAttribute UpdateOptionRequest request) {
+    public String updateOption(@Valid @ModelAttribute OptionRequest.Update request) {
         optionService.updateById(request);
         return "redirect:/admin/product/" + request.productId();
     }

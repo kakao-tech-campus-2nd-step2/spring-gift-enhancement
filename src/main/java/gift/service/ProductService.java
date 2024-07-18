@@ -3,7 +3,6 @@ package gift.service;
 import gift.common.exception.EntityNotFoundException;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
-import gift.controller.dto.response.ProductWithOptionResponse;
 import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
@@ -27,18 +26,18 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public PagingResponse<ProductResponse> findAllProductPaging(Pageable pageable) {
-        Page<ProductResponse> pages = productRepository.findAllFetchJoin(pageable)
-                .map(ProductResponse::from);
+    public PagingResponse<ProductResponse.Info> findAllProductPaging(Pageable pageable) {
+        Page<ProductResponse.Info> pages = productRepository.findAllFetchJoin(pageable)
+                .map(ProductResponse.Info::from);
         return PagingResponse.from(pages);
     }
 
     @Transactional(readOnly = true)
-    public ProductWithOptionResponse findById(Long id) {
+    public ProductResponse.WithOption findById(Long id) {
         Product product = productRepository.findByIdFetchJoin(id)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Product with id " + id + " not found"));
-        return ProductWithOptionResponse.from(product);
+        return ProductResponse.WithOption.from(product);
     }
 
     @Transactional

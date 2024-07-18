@@ -2,7 +2,7 @@ package gift.service;
 
 import gift.common.exception.DuplicateDataException;
 import gift.common.exception.EntityNotFoundException;
-import gift.controller.dto.request.CreateWishRequest;
+import gift.controller.dto.request.WishRequest;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +38,7 @@ class WishServiceTest {
         Long productId = 1L;
         int productCount = 11;
         Long memberId = 1L;
-        var request = new CreateWishRequest(productId);
+        var request = new WishRequest.Create(productId);
         given(productRepository.existsById(eq(productId)))
                 .willReturn(false);
 
@@ -55,7 +55,7 @@ class WishServiceTest {
         Long productId = 1L;
         int productCount = 11;
         Long memberId = 1L;
-        var request = new CreateWishRequest(productId);
+        var request = new WishRequest.Create(productId);
         given(productRepository.existsById(eq(productId)))
                 .willReturn(true);
         given(wishRepository.existsByProductIdAndMemberId(eq(productId), eq(memberId)))

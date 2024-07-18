@@ -1,11 +1,9 @@
 package gift.controller.admin;
 
-import gift.controller.dto.request.AdminCreateProductRequest;
-import gift.controller.dto.request.AdminUpdateProductRequest;
+import gift.controller.dto.request.ProductRequest;
 import gift.controller.dto.response.CategoryResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
-import gift.controller.dto.response.ProductWithOptionResponse;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -34,7 +32,7 @@ public class AdminProductController {
     @GetMapping("")
     public String getProducts(Model model,
               @PageableDefault(size = 10) Pageable pageable) {
-        PagingResponse<ProductResponse> products = productService.findAllProductPaging(pageable);
+        PagingResponse<ProductResponse.Info> products = productService.findAllProductPaging(pageable);
         model.addAttribute("products", products);
         return "product/products";
     }
@@ -48,7 +46,7 @@ public class AdminProductController {
 
     @GetMapping("/{id}")
     public String updateProduct(@PathVariable("id") @NotNull @Min(1) Long id, Model model) {
-        ProductWithOptionResponse product = productService.findById(id);
+        ProductResponse.WithOption product = productService.findById(id);
         List<CategoryResponse> categories = categoryService.getAllCategories();
         model.addAttribute("product", product);
         model.addAttribute("categories", categories);
@@ -56,13 +54,13 @@ public class AdminProductController {
     }
 
     @PostMapping("")
-    public String createProduct(@Valid @ModelAttribute AdminCreateProductRequest request) {
+    public String createProduct(@Valid @ModelAttribute ProductRequest.AdminCreate request) {
         productService.save(request.toDto());
         return "redirect:/admin/product";
     }
 
     @PutMapping("/{id}")
-    public String updateProduct(@Valid @ModelAttribute AdminUpdateProductRequest request) {
+    public String updateProduct(@Valid @ModelAttribute ProductRequest.AdminUpdate request) {
         productService.updateProduct(request.toDto());
         return "redirect:/admin/product";
     }
