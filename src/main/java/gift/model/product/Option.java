@@ -34,19 +34,24 @@ public class Option extends BaseTimeEntity {
     protected Option() {
     }
 
-    public Option(String name, Integer count) {
+    public Option(String name, Integer count, Product product) {
         OptionNameValidator.isValidName(name);
         OptionNameValidator.isValidCount(count);
         this.name = name;
         this.count = count;
+        this.product = product;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public Integer getCount() {
+        return count;
     }
 
     private static class OptionNameValidator {
