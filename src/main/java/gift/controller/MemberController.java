@@ -18,7 +18,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/members")
 public class MemberController {
 
-    private MemberService memberService;
+    private final MemberService memberService;
 
     public MemberController(MemberService memberService, JwtUtil jwtUtil){
         this.memberService = memberService;

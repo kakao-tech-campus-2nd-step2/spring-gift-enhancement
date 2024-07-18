@@ -26,7 +26,6 @@ public class ProductService{
     private WishListRepository wishListRepository;
     private CategoryRepository categoryRepository;
 
-    @Autowired
     public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.wishListRepository = wishListRepository;
@@ -68,7 +67,7 @@ public class ProductService{
 
         Category category = categoryRepository.findByName(productDto.getCategory())
                 .orElseThrow(() -> new CustomException("Category with name " + productDto.getCategory() + " not found", HttpStatus.NOT_FOUND));
-                
+
         if (optionalProduct.isPresent()) {
             Product product = productDto.toEntity(category);
             productRepository.delete(optionalProduct.get());
