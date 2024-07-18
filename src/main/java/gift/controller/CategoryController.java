@@ -1,14 +1,11 @@
 package gift.controller;
 
 import gift.dto.ApiResponse;
-import gift.dto.CategoryDto;
 import gift.model.Category;
 import gift.model.HttpResult;
 import gift.service.CategoryService;
 import java.util.Collections;
-import java.util.List;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,13 +26,11 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDto>> getAllCategories() {
+    public ResponseEntity<ApiResponse> getAllCategories() {
         var allCategories = categoryService.getAllCategories();
         var getAllCateogiresSucess = new ApiResponse(HttpResult.OK, allCategories.toString(),
             HttpStatus.OK);
-        return ResponseEntity.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(allCategories);
+        return new ResponseEntity<>(getAllCateogiresSucess, getAllCateogiresSucess.getHttpStatus());
     }
 
     @GetMapping("/categories/{id}")
@@ -44,9 +39,7 @@ public class CategoryController {
         var getAllCateogiresSucess = new ApiResponse(HttpResult.OK,
             Collections.singletonList(foundCategory).toString(),
             HttpStatus.OK);
-        return ResponseEntity.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(getAllCateogiresSucess);
+        return new ResponseEntity<>(getAllCateogiresSucess, getAllCateogiresSucess.getHttpStatus());
     }
 
 
