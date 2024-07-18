@@ -98,7 +98,7 @@ class WishesIntegrityTest {
         var actual = testRestTemplate.exchange(requestEntity, String.class);
 
         //then
-        assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Order(2)
