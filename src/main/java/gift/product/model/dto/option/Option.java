@@ -40,6 +40,16 @@ public class Option {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    public Option(String name, Integer quantity, Integer additionalCost, Product product) {
+        this.name = name;
+        this.quantity = quantity;
+        this.additionalCost = additionalCost;
+        this.product = product;
+    }
+
+    public Option() {
+    }
+
     public Long getId() {
         return id;
     }
