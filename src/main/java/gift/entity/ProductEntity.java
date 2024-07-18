@@ -56,6 +56,11 @@ public class ProductEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductOptionEntity> options;
+
     public ProductEntity() {
     }
 
@@ -113,5 +118,17 @@ public class ProductEntity {
 
     public void setCategory(CategoryEntity category) {
         this.category = category;
+    }
+
+    public List<ProductOptionEntity> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<ProductOptionEntity> options) {
+        this.options = options;
+    }
+
+    public void addOption(ProductOptionEntity entity) {
+        options.add(entity);
     }
 }

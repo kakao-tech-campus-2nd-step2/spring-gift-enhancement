@@ -6,6 +6,7 @@ import gift.domain.Product.ProductSimple;
 import gift.domain.Product.UpdateProduct;
 import gift.entity.CategoryEntity;
 import gift.entity.ProductEntity;
+import gift.entity.ProductOptionEntity;
 import gift.entity.WishEntity;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,6 +60,10 @@ public class ProductMapper {
     public ProductEntity toEntity(CreateProduct create, CategoryEntity category) {
         return new ProductEntity(create.getName(), create.getPrice(), create.getImageUrl(),
             category);
+    }
+
+    public void setOption(ProductEntity product, ProductOptionEntity option) {
+        product.addOption(option);
     }
 
     public ProductEntity toUpdate(UpdateProduct update, ProductEntity entity,

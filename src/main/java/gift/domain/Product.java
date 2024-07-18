@@ -1,6 +1,8 @@
 package gift.domain;
 
 import gift.util.page.PageParam;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -31,12 +33,22 @@ public class Product {
         private String imageUrl;
         @NotNull
         private Long categoryId;
+        @Size(min = 1, max = 50, message = "옵션의 이름은 1부터 50까지 입니다.")
+        @Pattern(regexp = "^[가-힣a-zA-Z0-9()\\[\\]+\\-&/_]+$",
+            message = "한글, 영어, 숫자, ( ), [ ], +, -, &, /, _만 가능합니다.")
+        private String OptionName;
+        @Min(value = 1, message = "재고은 최소 1부터 1억 까지 입니다.")
+        @Max(value = 100000000, message = "재고은 최소 1부터 1억 까지 입니다.")
+        private Long quantity;
 
-        public CreateProduct(String name, Integer price, String imageUrl, Long categoryId) {
+        public CreateProduct(String name, Integer price, String imageUrl, Long categoryId,
+            String OptionName, Long quantity) {
             this.name = name;
             this.price = price;
             this.imageUrl = imageUrl;
             this.categoryId = categoryId;
+            this.OptionName = OptionName;
+            this.quantity = quantity;
         }
 
         public String getName() {
@@ -69,6 +81,14 @@ public class Product {
 
         public void setCategoryId(Long categoryId) {
             this.categoryId = categoryId;
+        }
+
+        public String getOptionName() {
+            return OptionName;
+        }
+
+        public Long getQuantity() {
+            return quantity;
         }
     }
 
