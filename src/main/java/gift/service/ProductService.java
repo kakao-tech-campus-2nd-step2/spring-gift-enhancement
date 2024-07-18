@@ -88,7 +88,7 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        Option option = new Option(product, dto.getName(), dto.getQuantity());
+        Option option = new Option(dto.getName(), dto.getQuantity());
 
         product.validateOptionNameUnique(option.getName());
         product.addOption(option);

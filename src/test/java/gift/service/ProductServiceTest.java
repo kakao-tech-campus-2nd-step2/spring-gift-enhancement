@@ -3,8 +3,8 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
+import gift.dto.OptionDto;
 import gift.dto.ProductDto;
-import gift.dto.request.OptionCreateRequest;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -85,7 +85,7 @@ class ProductServiceTest {
     void addProduct() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductDto dto = new ProductDto("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionCreateRequest("옵션", 123L)));
+        ProductDto dto = new ProductDto("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionDto("옵션", 123L)));
 
         given(productRepository.save(any(Product.class))).willReturn(new Product());
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(new Category()));
@@ -189,10 +189,14 @@ class ProductServiceTest {
 
         Product product = new Product();
         product.setId(productId);
-        Option option = new Option(product, "옵션", 123L);
-        option.setId(optionId);
 
-        product.getOptions().add(option);
+        Option option1 = new Option("옵션", 123L);
+        Option option2 = new Option("옵션", 123L);
+        option1.setId(1L);
+        option2.setId(2L);
+
+        product.addOption(option1);
+        product.addOption(option2);
 
         given(productRepository.findById(productId)).willReturn(Optional.of(product));
 

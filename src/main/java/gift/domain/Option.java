@@ -45,12 +45,6 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public Option(Product product, String name, Long quantity) {
-        this.product = product;
-        this.name = name;
-        this.quantity = quantity;
-    }
-
     public OptionDto toDto() {
         return new OptionDto(this.id, this.name, this.quantity);
     }
