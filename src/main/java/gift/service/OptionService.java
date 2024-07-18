@@ -10,26 +10,33 @@ import org.springframework.stereotype.Service;
 public class OptionService {
 
     private final OptionRepository optionRepository;
+    private final ProductService productService;
 
-    public OptionService(OptionRepository optionRepository) {
+    public OptionService(OptionRepository optionRepository, ProductService productService) {
         this.optionRepository = optionRepository;
+        this.productService = productService;
     }
 
-    private boolean isDuplicateName(Option option){
+    private boolean isDuplicateName(Option option) {
         Optional<Option> options = optionRepository.findByIdAndName(
             option.getProduct().getId(), option.getName()
         );
         return options.isPresent();
     }
-    public void addOption(Product product,Option option) {
-        if(isDuplicateName(option)){
-            throw new IllegalArgumentException();
+
+    public void addOption(Option option) {
+        if (isDuplicateName(option)) {
+            throw new IllegalArgumentException("asdfasdf");
         }
         optionRepository.save(option);
     }
 
-    public void deleteOption(Option option){
+    public void deleteOption(Option option) {
         optionRepository.delete(option);
+    }
+
+    public Product findProductById(Long id){
+       return productService.getProductById(id);
     }
 
 }

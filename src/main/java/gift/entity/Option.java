@@ -20,7 +20,6 @@ public class Option {
     private String name;
 
     @NotNull
-    @Size(min = 1, max = 1_000_000)
     private int quantity;
 
     @NotNull
