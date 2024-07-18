@@ -35,14 +35,6 @@ class ProductServiceTest {
     @Autowired
     CategoryRepository categoryRepository;
 
-    @AfterEach
-    void 상품_초기화() {
-        List<Product> products = productService.getProductAll();
-        for (Product product : products) {
-            productService.deleteProduct(product.getId());
-        }
-    }
-
     @Test
     void 상품_추가() {
         //given
