@@ -25,7 +25,7 @@ public class Option extends BaseTimeEntity {
 
     @NotNull
     @Column(nullable = false)
-    private Integer count;
+    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -34,11 +34,11 @@ public class Option extends BaseTimeEntity {
     protected Option() {
     }
 
-    public Option(String name, Integer count, Product product) {
+    public Option(String name, Integer quantity, Product product) {
         OptionNameValidator.isValidName(name);
-        OptionNameValidator.isValidCount(count);
+        OptionNameValidator.isValidCount(quantity);
         this.name = name;
-        this.count = count;
+        this.quantity = quantity;
         this.product = product;
     }
 
@@ -50,8 +50,15 @@ public class Option extends BaseTimeEntity {
         return name;
     }
 
-    public Integer getCount() {
-        return count;
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void update(String name, Integer quantity) {
+        OptionNameValidator.isValidName(name);
+        OptionNameValidator.isValidCount(quantity);
+        this.name = name;
+        this.quantity = quantity;
     }
 
     private static class OptionNameValidator {
