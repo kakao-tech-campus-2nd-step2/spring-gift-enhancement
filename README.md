@@ -380,8 +380,8 @@ Content-Type: application/json
 
 #### 기능 설계(컨트롤러 및 서비스 설계)
 
-- [x] 카테고리 추가 API
-- [x] 카테고리 리스트 조회 API
+- [ ] 카테고리 추가 API
+- [ ] 카테고리 리스트 조회 API
 - [ ] 특정 id 카테고리 조회 API
 - [ ] 카테고리 수정 API
 - [ ] 카테고리 삭제 API
