@@ -41,15 +41,6 @@ public class Gift {
     protected Gift() {
     }
 
-    public Gift(String name, int price, String imageUrl) {
-        if (!isValidName(name)) {
-            throw new IllegalArgumentException("카카오 문구는 MD와 협의 후 사용가능합니다.");
-        }
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
-
     public Gift(String name, int price, String imageUrl, Category category) {
         if (!isValidName(name)) {
             throw new IllegalArgumentException("카카오 문구는 MD와 협의 후 사용가능합니다.");

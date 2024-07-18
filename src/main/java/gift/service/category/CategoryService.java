@@ -36,7 +36,7 @@ public class CategoryService {
         List<Category> categories = categoryRepository.findAll();
         return categories.stream()
                 .map(CategoryResponse::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional
