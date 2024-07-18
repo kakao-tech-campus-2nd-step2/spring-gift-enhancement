@@ -15,7 +15,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private final JwtProvider jwtProvider;
     private final String authType;
 
-    public AuthInterceptor(JwtProvider jwtProvider,@Value("${jwt.authType}")String authType) {
+    public AuthInterceptor(JwtProvider jwtProvider, @Value("${jwt.authType}") String authType) {
         this.jwtProvider = jwtProvider;
         this.authType = authType;
     }

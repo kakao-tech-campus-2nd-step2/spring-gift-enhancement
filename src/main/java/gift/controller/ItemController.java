@@ -1,12 +1,14 @@
 package gift.controller;
 
+import gift.exception.ErrorCode;
+import gift.exception.customException.CustomArgumentNotValidException;
 import gift.model.item.ItemDTO;
 import gift.model.item.ItemForm;
 import gift.service.ItemService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -31,19 +33,27 @@ public class ItemController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Page<ItemDTO>> getItemList(@PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<Page<ItemDTO>> getItemList(
+        @PageableDefault(size = 5, sort = "id", direction = Direction.DESC) Pageable pageable) {
         Page<ItemDTO> list = itemService.getList(pageable);
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/category/{category_id}")
+    public ResponseEntity<Page<ItemDTO>> getItemListByCategory(
+        @PathVariable("category_id") Long categoryId,
+        @PageableDefault(size = 5, sort = "id", direction = Direction.DESC) Pageable pageable) {
+        Page<ItemDTO> list = itemService.getListByCategoryId(categoryId, pageable);
+        return ResponseEntity.ok(list);
+    }
+
     @PostMapping("/")
-    public ResponseEntity<Long> createItem(@Valid @RequestBody ItemForm form, BindingResult result,
-        HttpServletResponse response) throws MethodArgumentNotValidException {
+    public ResponseEntity<Long> createItem(@Valid @RequestBody ItemForm form, BindingResult result)
+        throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(null, result);
+            throw new CustomArgumentNotValidException(result, ErrorCode.BAD_REQUEST);
         }
-        Long itemId = itemService.insertItem(form);
-        return ResponseEntity.ok(itemId);
+        return ResponseEntity.ok(itemService.insertItem(form));
     }
 
 
@@ -51,11 +61,11 @@ public class ItemController {
     public ResponseEntity<Long> updateItem(@PathVariable Long id, @Valid @RequestBody ItemForm form,
         BindingResult result) throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(null, result);
+            throw new CustomArgumentNotValidException(result, ErrorCode.BAD_REQUEST);
         }
-        ItemDTO itemDTO = new ItemDTO(id, form.getName(), form.getPrice(), form.getImgUrl());
-        Long itemId = itemService.updateItem(itemDTO);
-        return ResponseEntity.ok(itemId);
+        ItemDTO itemDTO = new ItemDTO(id, form.getName(), form.getPrice(), form.getImgUrl(),
+            form.getCategoryId());
+        return ResponseEntity.ok(itemService.updateItem(itemDTO));
     }
 
     @DeleteMapping("/{id}")

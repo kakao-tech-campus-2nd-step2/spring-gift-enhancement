@@ -1,19 +1,19 @@
 package gift.model.item;
 
-import java.util.Objects;
-
 public class ItemDTO {
 
     private final Long id;
     private final String name;
     private final Long price;
     private final String imgUrl;
+    private final Long categoryId;
 
-    public ItemDTO(Long id, String name, Long price, String imgUrl) {
+    public ItemDTO(Long id, String name, Long price, String imgUrl, Long categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -32,13 +32,7 @@ public class ItemDTO {
         return imgUrl;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, price, imgUrl);
+    public Long getCategoryId() {
+        return categoryId;
     }
-
-    public Item toEntity() {
-        return new Item(id, name, price, imgUrl);
-    }
-
 }

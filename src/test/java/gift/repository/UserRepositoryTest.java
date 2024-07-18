@@ -17,7 +17,7 @@ public class UserRepositoryTest {
 
     private final String testEmail = "test@test";
     private final String testPassword = "testPw";
-    private final User testUser = new User(1L,testEmail, testPassword);
+    private final User testUser = new User(testEmail, testPassword);
 
     @BeforeEach
     void setUp(){

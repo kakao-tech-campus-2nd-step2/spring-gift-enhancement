@@ -17,11 +17,15 @@ public class ItemForm {
     @Positive(message = "음수는 입력 불가합니다.")
     private final Long price;
     private final String imgUrl;
+    @NotNull(message = "카테고리는 필수 입력입니다.")
+    @Positive(message = "음수는 입력 불가합니다.")
+    private final Long categoryId;
 
-    public ItemForm(String name, Long price, String imgUrl) {
+    public ItemForm(String name, Long price, String imgUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.categoryId = categoryId;
     }
 
     public String getName() {
@@ -36,4 +40,7 @@ public class ItemForm {
         return imgUrl;
     }
 
+    public Long getCategoryId() {
+        return categoryId;
+    }
 }

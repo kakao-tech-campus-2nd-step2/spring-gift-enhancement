@@ -1,7 +1,7 @@
 package gift.service;
 
-import gift.exception.CustomException.UserNotFoundException;
 import gift.exception.ErrorCode;
+import gift.exception.customException.CustomNotFoundException;
 import gift.model.user.User;
 import gift.model.user.UserDTO;
 import gift.model.user.UserForm;
@@ -20,17 +20,14 @@ public class UserService {
 
     @Transactional
     public Long insertUser(UserForm userForm) {
-        userRepository.save(new User(0L, userForm.getEmail(), userForm.getPassword()));
-        return userRepository.findByEmail(userForm.getEmail())
-            .orElseThrow(() -> new UserNotFoundException(
-                ErrorCode.USER_NOT_FOUND)).getId();
+        return userRepository.save(new User(userForm.getEmail(), userForm.getPassword())).getId();
     }
 
     @Transactional(readOnly = true)
     public UserDTO findByEmail(String email) {
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-        return new UserDTO(user.getId(), user.getEmail(), user.getPassword());
+            .orElseThrow(() -> new CustomNotFoundException(ErrorCode.USER_NOT_FOUND));
+        return user.toDTO();
     }
 
     @Transactional(readOnly = true)
@@ -42,7 +39,7 @@ public class UserService {
     public boolean isPasswordMatch(UserForm userForm) {
         return userForm.getPassword()
             .equals(userRepository.findByEmail(userForm.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND))
+                .orElseThrow(() -> new CustomNotFoundException(ErrorCode.USER_NOT_FOUND))
                 .getPassword());
     }
 

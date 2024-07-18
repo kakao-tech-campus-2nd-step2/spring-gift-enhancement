@@ -18,6 +18,7 @@ public class WishItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -32,6 +33,10 @@ public class WishItem {
         this.item = item;
     }
 
+    public WishItem(User user, Item item) {
+        this(null, user, item);
+    }
+
     public Long getId() {
         return id;
     }
@@ -44,10 +49,10 @@ public class WishItem {
         return item;
     }
 
-    public WishItem() {
+    protected WishItem() {
     }
 
     public WishListResponse toResponse() {
-        return new WishListResponse(id, item.toItemDTO());
+        return new WishListResponse(id, item.toDTO());
     }
 }
