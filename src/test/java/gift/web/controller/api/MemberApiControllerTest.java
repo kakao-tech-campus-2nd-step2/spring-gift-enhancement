@@ -10,6 +10,7 @@ import gift.domain.Member;
 import gift.repository.MemberRepository;
 import gift.service.MemberService;
 import gift.service.WishProductService;
+import gift.utils.CategoryDummyDataProvider;
 import gift.utils.DatabaseCleanup;
 import gift.utils.MemberDummyDataProvider;
 import gift.utils.ProductDummyDataProvider;
@@ -58,6 +59,9 @@ class MemberApiControllerTest {
     private WishProductDummyDataProvider wishProductDummyDataProvider;
 
     @Autowired
+    private CategoryDummyDataProvider categoryDummyDataProvider;
+
+    @Autowired
     private DatabaseCleanup databaseCleanup;
 
     @Autowired
@@ -101,6 +105,7 @@ class MemberApiControllerTest {
         memberDummyDataProvider.run(quantity);
         productDummyDataProvider.run(quantity);
         wishProductDummyDataProvider.run(quantity);
+        categoryDummyDataProvider.run(quantity);
     }
 
     @AfterEach
