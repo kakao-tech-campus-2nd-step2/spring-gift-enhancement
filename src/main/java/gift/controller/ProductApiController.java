@@ -102,8 +102,8 @@ public class ProductApiController {
     @CheckRole("ROLE_ADMIN")
     @DeleteMapping("/api/products")
     public ResponseEntity<Void> deleteProduct(@RequestParam("id") Long id) {
-        productService.deleteProduct(id);
         optionsService.deleteAllOptions(id);
+        productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
