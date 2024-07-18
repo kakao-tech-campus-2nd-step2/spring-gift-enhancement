@@ -7,6 +7,7 @@ import gift.web.dto.response.category.CreateCategoryResponse;
 import gift.web.dto.response.category.ReadAllCategoriesResponse;
 import gift.web.dto.response.category.ReadCategoryResponse;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,8 +24,8 @@ public class CategoryService {
         return CreateCategoryResponse.fromEntity(category);
     }
 
-    public ReadAllCategoriesResponse readAllCategories() {
-        List<ReadCategoryResponse> categories = categoryRepository.findAll().stream()
+    public ReadAllCategoriesResponse readAllCategories(Pageable pageable) {
+        List<ReadCategoryResponse> categories = categoryRepository.findAll(pageable).stream()
             .map(ReadCategoryResponse::fromEntity)
             .toList();
         return new ReadAllCategoriesResponse(categories);
