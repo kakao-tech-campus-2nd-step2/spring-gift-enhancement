@@ -1,7 +1,10 @@
 package gift.controller.dto;
 
+import gift.domain.Category;
+import gift.domain.Option;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import java.util.List;
 
 public class ProductResponse {
     private Long id;
@@ -15,21 +18,21 @@ public class ProductResponse {
 
     private String imageUrl;
 
-    private Long categoryId;
+    private Category category;
 
-    private String categoryName;
+    private List<Option> optionList;
 
     public ProductResponse() {
     }
 
-    public ProductResponse(Long id, String name, Double price, String imageUrl, Long categoryId,
-        String categoryName) {
+    public ProductResponse(Long id, String name, Double price, String imageUrl, Category category,
+        List<Option> optionList) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
+        this.category = category;
+        this.optionList = optionList;
     }
 
     public String getName() {
@@ -42,5 +45,41 @@ public class ProductResponse {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<Option> getOptionList() {
+        return optionList;
+    }
+
+    public void setOptionList(List<Option> optionList) {
+        this.optionList = optionList;
     }
 }

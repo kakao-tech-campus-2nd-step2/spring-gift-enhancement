@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/wish")
+@RequestMapping("api/wishs")
 public class WishController {
 
     private final WishService wishlistService;
@@ -32,7 +32,7 @@ public class WishController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<String> addToWishlist(@RequestBody WishRequest wishRequest,
         @RequestHeader("Authorization") String token) {
         String email = jwtTokenProvider.getEmailFromToken(token.substring(7));
@@ -41,7 +41,7 @@ public class WishController {
 
     }
 
-    @DeleteMapping("/remove/{productId}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<String> removeFromWishlist(@PathVariable Long productId,
         @RequestHeader("Authorization") String token) {
         String email = jwtTokenProvider.getEmailFromToken(token.substring(7));
@@ -62,8 +62,7 @@ public class WishController {
         return ResponseEntity.ok(wishlistProducts);
     }
 
-    @PutMapping
-    @PostMapping("/add")
+    @PutMapping()
     public ResponseEntity<String> changeToWishlist(@RequestBody WishRequest wishRequest,
         @RequestHeader("Authorization") String token) {
         String email = jwtTokenProvider.getEmailFromToken(token.substring(7));

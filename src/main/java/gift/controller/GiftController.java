@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.controller.dto.OptionResponse;
 import gift.controller.dto.PaginationDTO;
 import gift.controller.dto.ProductRequest;
 import gift.controller.dto.ProductResponse;
@@ -7,6 +8,7 @@ import gift.domain.Product;
 import gift.service.GiftService;
 import gift.utils.PaginationUtils;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("api/products")
 public class GiftController {
 
     private final GiftService giftService;
@@ -38,23 +40,10 @@ public class GiftController {
         return ResponseEntity.ok(productResponse);
     }
 
-    @PostMapping
-    public ResponseEntity<ProductResponse> postProduct(@Valid @RequestBody ProductRequest productRequest) {
-        ProductResponse DTO = giftService.postProducts(productRequest);
-        return new ResponseEntity<>(DTO, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
-        @Valid @RequestBody ProductRequest productRequest) {
-        ProductResponse DTO = giftService.putProducts(productRequest, id);
-        return ResponseEntity.ok(DTO);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteProduct(@PathVariable Long id) {
-        Long i = giftService.deleteProducts(id);
-        return ResponseEntity.ok(i);
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<OptionResponse>> getProductOption(@PathVariable Long id){
+        List<OptionResponse> option = giftService.getOption(id);
+        return ResponseEntity.ok(option);
     }
 
 }

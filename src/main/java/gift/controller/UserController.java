@@ -8,12 +8,13 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("api/user")
 
 public class UserController {
 
@@ -35,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok().body(login);
     }
 
-    @PostMapping("/change")
+    @PutMapping("/change")
     public ResponseEntity<Boolean> changePassword(
         @Valid @RequestBody ChangePasswordDTO changePasswordDTO) {
         boolean b = userService.changePassword(changePasswordDTO);
