@@ -55,11 +55,7 @@ public class CategoryService {
         Category foundCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(Messages.NOT_FOUND_CATEGORY));
 
-        foundCategory.updateName(request.name());
-        foundCategory.setColor(request.color());
-        foundCategory.setImageUrl(request.imageUrl());
-        foundCategory.setDescription(request.description());
-
+        foundCategory.updateCategory(request.name(), request.color(), request.imageUrl(), request.description());
         categoryRepository.save(foundCategory);
     }
 
