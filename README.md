@@ -50,10 +50,10 @@
 
 ## 구현할 기능 목록
 - [ ] Option Entity 추가
-  - [ ] Option Entity에는 id, option_name이 있음
-  - [ ] option_name은 공백 포함 최대 50자
+  - [x] Option Entity에는 id, option_name이 있음
+  - [x] option_name은 공백 포함 최대 50자
   - [ ] option_name은 ( ), [ ], +, -, &, /, _ 를 제외한 특수문자 사용 불가
-  - [ ] 같은 Product의 option_name은 유니크 해야함
+  - [x] 같은 Product의 option_name은 유니크 해야함
 
 - [ ] Option Repository 구현
   
