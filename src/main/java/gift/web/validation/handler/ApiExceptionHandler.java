@@ -5,9 +5,7 @@ import static gift.web.validation.exception.code.ErrorStatus.INVALID_PARAMETER;
 import static gift.web.validation.exception.code.ErrorStatus.NOT_FOUND;
 
 import gift.web.dto.response.ErrorResponse;
-import gift.web.validation.exception.client.ClientException;
-import gift.web.validation.exception.server.InternalServerException;
-import gift.web.validation.exception.server.ServerException;
+import gift.web.validation.exception.CustomException;
 import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,17 +38,10 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    @ExceptionHandler(ClientException.class)
-    public ResponseEntity<ErrorResponse> handleClientException(ClientException exception) {
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException exception) {
         ErrorResponse errorResponse = ErrorResponse.from(exception);
-        HttpStatus httpStatus = exception.getErrorCode().getHttpStatus();
-        return ResponseEntity.status(httpStatus).body(errorResponse);
-    }
-
-    @ExceptionHandler(ServerException.class)
-    public ResponseEntity<ErrorResponse> handleInternalServerException(InternalServerException exception) {
-        ErrorResponse errorResponse = ErrorResponse.from(exception);
-        HttpStatus httpStatus = exception.getErrorCode().getHttpStatus();
+        HttpStatus httpStatus = exception.getErrorStatus().getHttpStatus();
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
