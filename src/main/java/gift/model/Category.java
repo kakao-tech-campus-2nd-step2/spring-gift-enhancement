@@ -16,7 +16,7 @@ public class Category {
     }
 
     public Category(String name) {
-        this.updateName(name);
+        this.name = name;
     }
 
     public Long getId() {
@@ -26,10 +26,4 @@ public class Category {
     public String getName() {
         return name;
     }
-
-    public void updateName(String name) {
-        CategoryName categoryName = new CategoryName(name);
-        this.name = categoryName.getName();
-    }
-
 }

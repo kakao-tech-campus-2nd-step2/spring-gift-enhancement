@@ -9,8 +9,6 @@ import java.util.List;
 
 @Entity
 public class Option {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Option.class);
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,7 +23,6 @@ public class Option {
     }
 
     public Option(String option){
-        log.info("옵션받아옴" + option);
         List<String> options = List.of(option.split(","));
         if(isCorrectOptionSize(options) && isCorrectOptionList(options) && isNotDuplicate(options)){
             this.option = options;

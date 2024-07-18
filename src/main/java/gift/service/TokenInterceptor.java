@@ -18,7 +18,6 @@ import java.util.NoSuchElementException;
 
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
-    private static final Logger log = LoggerFactory.getLogger(TokenInterceptor.class);
     private final MemberRepository memberRepository;
 
     public TokenInterceptor(MemberRepository memberRepository) {
@@ -46,7 +45,6 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         return true;
         } catch (Exception e) {
-            log.error("Exception: {}", e.getMessage());
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;

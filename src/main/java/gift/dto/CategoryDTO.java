@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.model.Category;
+
 public class CategoryDTO {
     private Long id;
     private String name;
@@ -18,5 +20,12 @@ public class CategoryDTO {
 
     public String getName() {
         return name;
+    }
+
+    public static CategoryDTO getCategoryDTO(Category category){
+        return new CategoryDTO(
+                category.getId(),
+                category.getName()
+        );
     }
 }

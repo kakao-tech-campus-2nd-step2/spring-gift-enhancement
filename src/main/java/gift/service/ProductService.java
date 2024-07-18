@@ -1,9 +1,6 @@
 package gift.service;
 
-import gift.dto.OptionDTO;
-import gift.dto.PageRequestDTO;
-import gift.dto.InputProductDTO;
-import gift.dto.ProductDTO;
+import gift.dto.*;
 import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
@@ -82,18 +79,18 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public void updateProduct(Long id, InputProductDTO inputProductDTO) {
+    public void updateProduct(Long id, UpdateProductDTO updateProductDTO) {
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품이 없습니다."));
         Category category = null;
-        if (inputProductDTO.getCategory() != null) {
-            category = categoryRepository.findByName(inputProductDTO.getCategory())
+        if (updateProductDTO.getCategory() != null) {
+            category = categoryRepository.findByName(updateProductDTO.getCategory())
                     .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 없습니다."));
         }
         Product updatedProduct = oldProduct.update(
-                inputProductDTO.getName(),
-                inputProductDTO.getPrice(),
-                inputProductDTO.getImageUrl(),
+                updateProductDTO.getName(),
+                updateProductDTO.getPrice(),
+                updateProductDTO.getImageUrl(),
                 category);
         productRepository.save(updatedProduct);
     }
