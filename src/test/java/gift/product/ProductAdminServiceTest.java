@@ -22,10 +22,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 public class ProductAdminServiceTest {
     @Mock
     private ProductRepository productRepository;
@@ -49,7 +51,6 @@ public class ProductAdminServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         createProductAdminRequest = new CreateProductAdminRequest("ProductName", 100, "http://image.url", 1L, 1L);
         defaultCategory = new Category("기본", "기본 카테고리");
         defaultSeller = new AppUser("aabb@kakao.com", "1234", Role.USER, "aaaa");
