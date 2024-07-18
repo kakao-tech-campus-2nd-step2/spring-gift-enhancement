@@ -46,9 +46,9 @@ TodoList
 - (선택) 관리자 화면에서 옵션을 추가할 수 있다.
 
 #### TodoList
-- [ ] Option Entity
-- [ ] Option Repository
-- [ ] Option Service
-- [ ] Option Reqeust
-- [ ] Option Response
-- [ ] Option Controller
+- [x] Option Entity
+- [x] Option Repository
+- [x] Option Service
+- [x] Option Reqeust
+- [x] Option Response
+- [x] Option Controller

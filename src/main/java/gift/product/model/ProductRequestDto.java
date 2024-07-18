@@ -12,7 +12,7 @@ public class ProductRequestDto {
 
     @NotBlank
     @Size(min = 1, max = 15, message = "상품 이름은 공백을 포함하여 최대 15자입니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣 \\(\\)\\[\\]\\+\\-\\&/_]*$", message = "사용가능한 특수 문자는 (),[],+,-,&,/,_ 입니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/_]*$", message = "사용가능한 특수 문자는 (),[],+,-,&,/,_ 입니다.")
     private String name;
 
     @NotNull

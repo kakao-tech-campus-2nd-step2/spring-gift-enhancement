@@ -1,5 +1,6 @@
 package gift.option;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +26,13 @@ public class OptionController {
 
     @PostMapping("/api/products/{id}/options")
     public Long addOption(@PathVariable("id") Long productId,
-        @RequestBody OptionRequest optionRequest) {
+        @Valid @RequestBody OptionRequest optionRequest) {
         return optionService.addOption(productId, optionRequest);
     }
 
     @PutMapping("/api/options/{id}")
     public void updateOption(@PathVariable("id") Long optionId,
-        @RequestBody OptionRequest optionRequest) {
+        @Valid @RequestBody OptionRequest optionRequest) {
         optionService.updateOption(optionId, optionRequest);
     }
 
