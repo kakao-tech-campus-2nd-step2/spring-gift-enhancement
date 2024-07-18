@@ -1,6 +1,8 @@
 package gift.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "option", uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "name"}))
@@ -10,6 +12,8 @@ public class Option {
     private Long option_id;
 
     @Column(nullable = false, length = 50)
+    @Size(min = 1, max = 50, message = "Option 이름은 공백 포함 50문자 이내여야 합니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9\\s()\\[\\]+\\-&/\\_]*$", message = "허용된 특수 문자는 (, ), [, ], +, -, &, /, _ 입니다.")
     private String name;
 
     @ManyToOne

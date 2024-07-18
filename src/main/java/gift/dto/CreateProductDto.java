@@ -26,6 +26,7 @@ public class CreateProductDto {
     Category category;
 
     List<Option> options;
+
     public Product toProduct(){
         Product product = new Product(name, price, imageUrl, category);
         List<Option> optionList = options.stream()
