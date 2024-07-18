@@ -1,6 +1,7 @@
 package gift.Controller;
 
 import gift.Model.ProductDto;
+import gift.Service.CategoryService;
 import gift.Service.ProductService;
 
 import java.util.Optional;
@@ -20,10 +21,12 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/api/products")
@@ -54,6 +57,7 @@ public class ProductController {
     public String createProduct(@Valid @ModelAttribute ProductDto productDto, HttpServletRequest request, Model model) {
         if ("GET".equalsIgnoreCase(request.getMethod())) {
             model.addAttribute("product", new ProductDto());
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "product_form";
         } else if ("POST".equalsIgnoreCase(request.getMethod())) {
             model.addAttribute("product", productDto);
