@@ -8,7 +8,6 @@ import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +29,7 @@ public class ProductService {
         return productRepository.findProductById(productId).orElse(null);
     }
 
-    public Page<Product> getAllProducts(int page) {
-        Pageable pageable = PageRequest.of(page, 5);
+    public Page<Product> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
 

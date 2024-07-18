@@ -10,7 +10,7 @@ import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,13 +31,11 @@ public class WishListService {
         this.productRepository = productRepository;
     }
 
-    public Page<WishProductResponse> getWishList(Long memberId, int page) {
+    public Page<WishProductResponse> getWishList(Long memberId, Pageable pageable) {
         List<WishProductResponse> wishProducts = getWishProducts(memberId);
-
-        PageRequest pageRequest = PageRequest.of(page, 3);
-        int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), wishProducts.size());
-        return new PageImpl<>(wishProducts.subList(start, end), pageRequest, wishProducts.size());
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), wishProducts.size());
+        return new PageImpl<>(wishProducts.subList(start, end), pageable, wishProducts.size());
     }
 
     public String addWishProduct(WishProduct wishProduct) {

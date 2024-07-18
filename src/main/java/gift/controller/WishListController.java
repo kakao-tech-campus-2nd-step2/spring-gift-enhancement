@@ -6,6 +6,7 @@ import gift.dto.WishProduct;
 import gift.dto.response.WishProductResponse;
 import gift.service.WishListService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +21,8 @@ public class WishListController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<WishProductResponse>> getWishList(@Login LoginMember member,
-                                                                 @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
-        Page<WishProductResponse> wishes = wishListService.getWishList(member.getId(), page);
+    public ResponseEntity<Page<WishProductResponse>> getWishList(@Login LoginMember member, Pageable pageable) {
+        Page<WishProductResponse> wishes = wishListService.getWishList(member.getId(), pageable);
         return ResponseEntity.ok(wishes);
     }
 
