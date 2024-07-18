@@ -80,6 +80,10 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void addOption(Option option) {
         validateOption(option);
         options.add(option);
@@ -93,7 +97,7 @@ public class Product {
     private void validateOption(Option option) {
         for (Option o : options) {
             if (o.getName().equals(option.getName())) {
-                new DuplicateOptionNameException("error.duplicate.option.name");
+                throw new DuplicateOptionNameException("error.duplicate.option.name");
             }
         }
     }
