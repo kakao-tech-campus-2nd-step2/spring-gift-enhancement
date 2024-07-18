@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.category;
 
 import gift.dto.category.CategoryRequest;
 import gift.dto.category.CategoryResponse;

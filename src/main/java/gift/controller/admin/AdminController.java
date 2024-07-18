@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.admin;
 
 
 import gift.dto.paging.PagingRequest;

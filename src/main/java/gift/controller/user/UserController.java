@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.user;
 
 import gift.model.user.User;
 import gift.dto.user.UserRequest;
