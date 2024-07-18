@@ -1,9 +1,9 @@
 package gift.service;
 
-import static gift.util.Constants.PERMISSION_DENIED;
-import static gift.util.Constants.PRODUCT_NOT_FOUND;
-import static gift.util.Constants.WISH_ALREADY_EXISTS;
-import static gift.util.Constants.WISH_NOT_FOUND;
+import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
+import static gift.util.constants.WishConstants.PERMISSION_DENIED;
+import static gift.util.constants.WishConstants.WISH_ALREADY_EXISTS;
+import static gift.util.constants.WishConstants.WISH_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

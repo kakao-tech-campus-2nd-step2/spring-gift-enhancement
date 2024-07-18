@@ -11,8 +11,8 @@ import gift.dto.category.CategoryRequest;
 import gift.dto.category.CategoryResponse;
 import gift.exception.category.CategoryNotFoundException;
 import gift.service.CategoryService;
-import gift.util.Constants;
 import gift.util.TokenValidator;
+import gift.util.constants.CategoryConstants;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -67,11 +67,11 @@ public class CategoryControllerTest {
     @DisplayName("존재하지 않는 카테고리 ID로 조회")
     public void testGetCategoryByIdNotFound() throws Exception {
         when(categoryService.getCategoryById(1L)).thenThrow(
-            new CategoryNotFoundException(Constants.CATEGORY_NOT_FOUND + 1));
+            new CategoryNotFoundException(CategoryConstants.CATEGORY_NOT_FOUND + 1));
 
         mockMvc.perform(get("/api/categories/1"))
             .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.error").value(Constants.CATEGORY_NOT_FOUND + 1));
+            .andExpect(jsonPath("$.error").value(CategoryConstants.CATEGORY_NOT_FOUND + 1));
     }
 
     @Test
@@ -116,13 +116,13 @@ public class CategoryControllerTest {
         CategoryRequest categoryRequest = new CategoryRequest(null, "Updated Category", "#FFFFFF",
             "newImageUrl", "newDescription");
         when(categoryService.updateCategory(1L, categoryRequest)).thenThrow(
-            new CategoryNotFoundException(Constants.CATEGORY_NOT_FOUND + 1));
+            new CategoryNotFoundException(CategoryConstants.CATEGORY_NOT_FOUND + 1));
 
         mockMvc.perform(put("/api/categories/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     "{\"name\": \"Updated Category\", \"color\": \"#FFFFFF\", \"imageUrl\": \"newImageUrl\", \"description\": \"newDescription\"}"))
             .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.error").value(Constants.CATEGORY_NOT_FOUND + 1));
+            .andExpect(jsonPath("$.error").value(CategoryConstants.CATEGORY_NOT_FOUND + 1));
     }
 }

@@ -1,7 +1,7 @@
 package gift.service;
 
-import static gift.util.Constants.INVALID_PRICE;
-import static gift.util.Constants.PRODUCT_NOT_FOUND;
+import static gift.util.constants.ProductConstants.INVALID_PRICE;
+import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

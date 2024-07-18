@@ -1,7 +1,7 @@
 package gift.controller;
 
-import static gift.util.Constants.INVALID_PRICE;
-import static gift.util.Constants.PRODUCT_NOT_FOUND;
+import static gift.util.constants.ProductConstants.INVALID_PRICE;
+import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;

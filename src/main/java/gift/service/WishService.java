@@ -1,8 +1,8 @@
 package gift.service;
 
-import static gift.util.Constants.PERMISSION_DENIED;
-import static gift.util.Constants.WISH_ALREADY_EXISTS;
-import static gift.util.Constants.WISH_NOT_FOUND;
+import static gift.util.constants.WishConstants.PERMISSION_DENIED;
+import static gift.util.constants.WishConstants.WISH_ALREADY_EXISTS;
+import static gift.util.constants.WishConstants.WISH_NOT_FOUND;
 
 import gift.dto.member.MemberResponse;
 import gift.dto.product.ProductResponse;

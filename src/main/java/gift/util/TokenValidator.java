@@ -1,6 +1,6 @@
 package gift.util;
 
-import static gift.util.Constants.INVALID_AUTHORIZATION_HEADER;
+import static gift.util.constants.MemberConstants.INVALID_AUTHORIZATION_HEADER;
 
 import gift.exception.member.InvalidTokenException;
 import io.jsonwebtoken.Claims;

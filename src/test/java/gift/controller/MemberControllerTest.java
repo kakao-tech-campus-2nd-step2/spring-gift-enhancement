@@ -1,7 +1,7 @@
 package gift.controller;
 
-import static gift.util.Constants.EMAIL_ALREADY_USED;
-import static gift.util.Constants.INVALID_CREDENTIALS;
+import static gift.util.constants.MemberConstants.EMAIL_ALREADY_USED;
+import static gift.util.constants.MemberConstants.INVALID_CREDENTIALS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

@@ -1,8 +1,8 @@
 package gift.service;
 
-import static gift.util.Constants.EMAIL_ALREADY_USED;
-import static gift.util.Constants.ID_NOT_FOUND;
-import static gift.util.Constants.INVALID_CREDENTIALS;
+import static gift.util.constants.MemberConstants.EMAIL_ALREADY_USED;
+import static gift.util.constants.MemberConstants.ID_NOT_FOUND;
+import static gift.util.constants.MemberConstants.INVALID_CREDENTIALS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

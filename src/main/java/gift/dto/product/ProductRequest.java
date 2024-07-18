@@ -1,6 +1,6 @@
 package gift.dto.product;
 
-import static gift.util.Constants.REQUIRED_FIELD_MISSING;
+import static gift.util.constants.ProductConstants.REQUIRED_FIELD_MISSING;
 
 import jakarta.validation.constraints.NotNull;
 

@@ -1,6 +1,6 @@
 package gift.service;
 
-import static gift.util.Constants.CATEGORY_NOT_FOUND;
+import static gift.util.constants.CategoryConstants.CATEGORY_NOT_FOUND;
 
 import gift.dto.category.CategoryRequest;
 import gift.dto.category.CategoryResponse;

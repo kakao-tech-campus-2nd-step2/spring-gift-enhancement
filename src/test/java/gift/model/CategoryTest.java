@@ -1,7 +1,7 @@
 package gift.model;
 
-import static gift.util.Constants.CATEGORY_DESCRIPTION_SIZE_LIMIT;
-import static gift.util.Constants.INVALID_COLOR;
+import static gift.util.constants.CategoryConstants.CATEGORY_DESCRIPTION_SIZE_LIMIT;
+import static gift.util.constants.CategoryConstants.INVALID_COLOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import jakarta.validation.ConstraintViolation;

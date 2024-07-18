@@ -1,8 +1,8 @@
 package gift.service;
 
-import static gift.util.Constants.CATEGORY_NOT_FOUND;
-import static gift.util.Constants.INVALID_PRICE;
-import static gift.util.Constants.PRODUCT_NOT_FOUND;
+import static gift.util.constants.CategoryConstants.CATEGORY_NOT_FOUND;
+import static gift.util.constants.ProductConstants.INVALID_PRICE;
+import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 
 import gift.dto.product.ProductRequest;
 import gift.dto.product.ProductResponse;
