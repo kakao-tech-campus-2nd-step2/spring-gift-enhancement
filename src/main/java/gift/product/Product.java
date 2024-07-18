@@ -23,31 +23,11 @@ public class Product {
     private String imageUrl;
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "product", orphanRemoval = true)
-    private List<WishList> wishLists = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "product", orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-
-    public void addWishList(WishList wishList) {
-        this.wishLists.add(wishList);
-        wishList.setProduct(this);
-    }
-
-    public void removeWishList(WishList wishList) {
-        wishList.setProduct(null);
-        this.wishLists.remove(wishList);
-    }
-
-    public void removeWishLists() {
-        for (WishList wishList : wishLists) {
-            removeWishList(wishList);
-        }
-    }
 
     public void addOptions(Option option) {
         this.options.add(option);
@@ -101,10 +81,6 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public List<WishList> getWishLists() {
-        return wishLists;
     }
 
     public Category getCategory() {
