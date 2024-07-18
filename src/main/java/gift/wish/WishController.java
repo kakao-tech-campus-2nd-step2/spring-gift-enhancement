@@ -32,7 +32,8 @@ public class WishController {
     public ResponseEntity<PageResponseDto<WishResponseDto>> getWishList(
         @LoginMember LoginMemberDto loginMemberDto,
         @PageableDefault(size = 10, sort = "product", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(PageResponseDto.of(wishService.getWishList(loginMemberDto, pageable), pageable));
+        return ResponseEntity.ok(
+            PageResponseDto.of(wishService.getWishList(loginMemberDto, pageable), pageable));
     }
 
     @PostMapping

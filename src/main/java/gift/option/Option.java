@@ -52,7 +52,7 @@ public class Option {
     }
 
     public void validateDuplicated(Option other) {
-        if (name.equals(other.getName())){
+        if (name.equals(other.getName())) {
             throw new IllegalArgumentException();
         }
     }

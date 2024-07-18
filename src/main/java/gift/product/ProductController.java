@@ -31,7 +31,8 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<PageResponseDto<ProductResponseDto>> getAllProducts(
         @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(PageResponseDto.of(productService.getAllProducts(pageable).getContent(), pageable));
+        return ResponseEntity.ok(
+            PageResponseDto.of(productService.getAllProducts(pageable).getContent(), pageable));
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,7 @@
 package gift.option;
 
 public class OptionResponse {
+
     private Long id;
     private String name;
     private Integer quantity;
