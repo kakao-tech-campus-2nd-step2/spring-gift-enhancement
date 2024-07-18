@@ -70,5 +70,10 @@ public class OptionsService {
             }).orElseThrow(NotFoundOptionsException::new);
     }
 
+    @Transactional
+    public void deleteAllOptions(Long productId) {
+        optionsRepository.deleteAllByProductId(productId);
+    }
+
 
 }

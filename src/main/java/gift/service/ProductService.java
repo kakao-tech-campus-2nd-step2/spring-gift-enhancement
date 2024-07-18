@@ -1,11 +1,18 @@
 package gift.service;
 
 import gift.exception.category.NotFoundCategoryException;
+import gift.exception.option.NotFoundOptionsException;
 import gift.exception.product.NotFoundProductException;
+import gift.model.Options;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionsRepository;
 import gift.repository.ProductRepository;
+import gift.response.OptionResponse;
+import gift.response.ProductAllOptionsResponse;
+import gift.response.ProductOptionResponse;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,14 +45,11 @@ public class ProductService {
     }
 
     @Transactional
-    public void addProduct(String name, Integer price, String imageUrl, String categoryName) {
-        categoryRepository.findByName(categoryName)
-            .ifPresentOrElse(
-                category -> productRepository.save(new Product(name, price, imageUrl, category)),
-                () -> {
-                    throw new NotFoundCategoryException();
-                }
-            );
+    public Product addProduct(String name, Integer price, String imageUrl, String categoryName) {
+        return categoryRepository.findByName(categoryName)
+            .map(
+                category -> productRepository.save(new Product(name, price, imageUrl, category))
+            ).orElseThrow(NotFoundCategoryException::new);
     }
 
     @Transactional

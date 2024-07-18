@@ -1,11 +1,16 @@
 package gift.controller;
 
 import gift.auth.CheckRole;
+import gift.model.Options;
 import gift.request.ProductAddRequest;
+import gift.response.OptionResponse;
+import gift.response.ProductAllOptionsResponse;
+import gift.response.ProductOptionResponse;
 import gift.response.ProductResponse;
 import gift.request.ProductUpdateRequest;
 import gift.exception.InputException;
 import gift.model.Product;
+import gift.service.OptionsService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -25,9 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductApiController {
 
     private final ProductService productService;
+    private final OptionsService optionsService;
 
-    public ProductApiController(ProductService productService) {
+    public ProductApiController(ProductService productService, OptionsService optionsService) {
         this.productService = productService;
+        this.optionsService = optionsService;
     }
 
     @CheckRole("ROLE_ADMIN")
@@ -44,14 +51,29 @@ public class ProductApiController {
 
     @CheckRole("ROLE_ADMIN")
     @GetMapping("/api/products/{id}")
-    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
-
+    public ResponseEntity<ProductAllOptionsResponse> getProductWithAllOptions(
+        @PathVariable Long id) {
         Product product = productService.getProduct(id);
         if (product == null) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        ProductResponse productResponse = new ProductResponse(product);
-        return new ResponseEntity<>(productResponse, HttpStatus.OK);
+        List<Options> options = optionsService.getAllOptions(id);
+        ProductAllOptionsResponse dto = new ProductAllOptionsResponse(product, options);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @CheckRole("ROLE_ADMIN")
+    @GetMapping("/api/products/{id}")
+    public ResponseEntity<ProductOptionResponse> getProductWithOption(@PathVariable Long id,
+        @RequestParam("option_id") Long optionId) {
+        Product product = productService.getProduct(id);
+        if (product == null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        Options option = optionsService.getOption(optionId);
+        ProductOptionResponse dto = new ProductOptionResponse(product,
+            new OptionResponse(option.getId(), option.getName(), option.getQuantity()));
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @CheckRole("ROLE_ADMIN")
@@ -62,7 +84,9 @@ public class ProductApiController {
             throw new InputException(bindingResult.getAllErrors());
         }
 
-        productService.addProduct(dto.name(), dto.price(), dto.imageUrl(), dto.categoryName());
+        Product savedProduct = productService.addProduct(dto.name(), dto.price(), dto.imageUrl(),
+            dto.categoryName());
+        optionsService.addOption(dto.optionName(), dto.quantity(), savedProduct.getId());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -83,6 +107,7 @@ public class ProductApiController {
     @DeleteMapping("/api/products")
     public ResponseEntity<Void> deleteProduct(@RequestParam("id") Long id) {
         productService.deleteProduct(id);
+        optionsService.deleteAllOptions(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

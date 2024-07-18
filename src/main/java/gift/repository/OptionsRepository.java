@@ -17,4 +17,6 @@ public interface OptionsRepository extends JpaRepository<Options, Long> {
 
     @Query(value = "select count(*) from Options o where o.product.id = :productId")
     Long optionsCountByProductId(@Param("productId") Long productId);
+
+    void deleteAllByProductId(Long productId);
 }
