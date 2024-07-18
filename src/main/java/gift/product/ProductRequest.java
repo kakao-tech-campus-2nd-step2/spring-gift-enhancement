@@ -1,12 +1,11 @@
 package gift.product;
 
-import gift.category.Category;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-public class ProductDTO {
+public class ProductRequest {
     Long id;
     @NotBlank(message = "상품명은 공백으로 둘 수 없습니다.")
     @Pattern(regexp = "^[a-zA-Zㄱ-ㅎ가-힣0-9\\(\\)\\[\\]\\+\\-&/\\_ ]{1,16}$", message = "상품명은 공백을 포함하여 최대 15자까지 입력할 수 있습니다. 특수문자는 ( ) [ ] + - & / _ 만 사용 가능합니다.")
@@ -24,10 +23,10 @@ public class ProductDTO {
         return name == null || !name.contains("카카오");
     }
 
-    public ProductDTO() {
+    public ProductRequest() {
     }
 
-    public ProductDTO(Long id, String name, Long price, String imageUrl, Long categoryID) {
+    public ProductRequest(Long id, String name, Long price, String imageUrl, Long categoryID) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -35,7 +34,7 @@ public class ProductDTO {
         this.categoryID = categoryID;
     }
 
-    public ProductDTO(Product product) {
+    public ProductRequest(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.price = product.getPrice();
