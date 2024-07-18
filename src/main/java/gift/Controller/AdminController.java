@@ -54,7 +54,7 @@ public class AdminController {
         if(bindingResult.hasErrors()) {
             return "add";
         }
-        productService.add(email, productDTO);
+        productService.create(email, productDTO);
         return "redirect:/admin/products";
     }
 
@@ -73,7 +73,7 @@ public class AdminController {
         if(bindingResult.hasErrors()) {
             return "edit";
         }
-        productService.edit(email, id, productDTO);
+        productService.update(email, id, productDTO);
         return "redirect:/admin/products";
     }
 

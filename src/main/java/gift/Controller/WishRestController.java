@@ -16,7 +16,7 @@ public class WishRestController {
 
     @PostMapping()
     public void addWish(@RequestAttribute("Email") String email, @RequestParam String name){
-        wishService.add(email, name);
+        wishService.create(email, name);
     }
 
     @DeleteMapping("/{name}")

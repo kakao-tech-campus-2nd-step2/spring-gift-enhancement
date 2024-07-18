@@ -33,7 +33,7 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public void add(String email, ProductDTO productDTO){
+    public void create(String email, ProductDTO productDTO){
         Optional<MemberEntity> memberOptional = memberRepository.findByEmail(email);
         if(memberOptional.isEmpty()) {
             throw new AuthorizedException();
@@ -54,18 +54,25 @@ public class ProductService {
         productRepository.save(new ProductEntity(categoryEntity, productDTO.name(), productDTO.price(), productDTO.imageUrl()));
     }
 
-    public void delete(String email, Long id){
+    public List<ProductDTO> read(String email){
         Optional<MemberEntity> memberOptional = memberRepository.findByEmail(email);
         if(memberOptional.isEmpty()) throw new AuthorizedException();
 
         MemberEntity memberEntity = memberOptional.get();
-        if(memberEntity.getRole() != Role.ADMIN)
+        if(!memberEntity.getRole().equals(Role.ADMIN) && !memberEntity.getRole().equals(Role.CONSUMER))
             throw new AuthorizedException();
+        List<ProductEntity> entityList = productRepository.findAll();
+        List<ProductDTO> dtoList = new ArrayList<>();
 
-        productRepository.deleteById(id);
+        for(ProductEntity p: entityList){
+            CategoryEntity category = p.getCategory();
+            dtoList.add(new ProductDTO(p.getId(), category.getName(), p.getName() ,p.getPrice(), p.getImageUrl()));
+        }
+
+        return dtoList;
     }
 
-    public void edit(String email, Long id, ProductDTO productDTO){
+    public void update(String email, Long id, ProductDTO productDTO){
         Optional<MemberEntity> memberOptional = memberRepository.findByEmail(email);
         if(memberOptional.isEmpty()) throw new AuthorizedException();
 
@@ -86,26 +93,19 @@ public class ProductService {
         productRepository.save(productEntity);
     }
 
-    public List<ProductDTO> getAll(String email){
+    public void delete(String email, Long id){
         Optional<MemberEntity> memberOptional = memberRepository.findByEmail(email);
         if(memberOptional.isEmpty()) throw new AuthorizedException();
 
         MemberEntity memberEntity = memberOptional.get();
-        if(!memberEntity.getRole().equals(Role.ADMIN) && !memberEntity.getRole().equals(Role.CONSUMER))
+        if(memberEntity.getRole() != Role.ADMIN)
             throw new AuthorizedException();
-        List<ProductEntity> entityList = productRepository.findAll();
-        List<ProductDTO> dtoList = new ArrayList<>();
 
-        for(ProductEntity p: entityList){
-            CategoryEntity category = p.getCategory();
-            dtoList.add(new ProductDTO(p.getId(), category.getName(), p.getName() ,p.getPrice(), p.getImageUrl()));
-        }
-
-        return dtoList;
+        productRepository.deleteById(id);
     }
 
     public Page<ProductDTO> getPage(String email, int page){
-        List<ProductDTO> dtoList = getAll(email);
+        List<ProductDTO> dtoList = read(email);
         Pageable pageable = PageRequest.of(page, 10);
 
         int start = (int) pageable.getOffset();
