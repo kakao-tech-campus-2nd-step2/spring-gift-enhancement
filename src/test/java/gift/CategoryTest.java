@@ -4,102 +4,87 @@ import gift.controller.CategoryController;
 import gift.domain.model.dto.CategoryAddRequestDto;
 import gift.domain.model.dto.CategoryResponseDto;
 import gift.domain.model.dto.CategoryUpdateRequestDto;
-import gift.service.CategoryService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import java.util.Arrays;
-import java.util.List;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+@Transactional
 class CategoryTest {
 
-    @Mock
-    private CategoryService categoryService;
-
-    @InjectMocks
+    @Autowired
     private CategoryController categoryController;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void getAllCategoriesTest() {
         // Given
-        List<CategoryResponseDto> expectedCategories = Arrays.asList(
-            new CategoryResponseDto(1L, "Category 1"),
-            new CategoryResponseDto(2L, "Category 2")
-        );
-        when(categoryService.getAllCategories()).thenReturn(expectedCategories);
+        CategoryAddRequestDto category1 = new CategoryAddRequestDto("New Category 1");
+        CategoryAddRequestDto category2 = new CategoryAddRequestDto("New Category 2");
+        categoryController.addCategory(category1);
+        categoryController.addCategory(category2);
 
         // When
-        List<CategoryResponseDto> actualCategories = categoryController.getAllCategories();
+        List<CategoryResponseDto> categories = categoryController.getAllCategories();
 
         // Then
-        assertEquals(expectedCategories, actualCategories);
-        verify(categoryService).getAllCategories();
+        assertFalse(categories.isEmpty());
+        assertTrue(categories.stream().anyMatch(c -> c.getName().equals("New Category 1")));
+        assertTrue(categories.stream().anyMatch(c -> c.getName().equals("New Category 2")));
     }
 
     @Test
     void addCategoryTest() {
         // Given
         CategoryAddRequestDto requestDto = new CategoryAddRequestDto("New Category");
-        CategoryResponseDto expectedResponse = new CategoryResponseDto(1L, "New Category");
-        when(categoryService.addCategory(requestDto)).thenReturn(expectedResponse);
 
         // When
-        CategoryResponseDto actualResponse = categoryController.addCategory(requestDto);
+        CategoryResponseDto response = categoryController.addCategory(requestDto);
 
         // Then
-        assertEquals(expectedResponse, actualResponse);
-        verify(categoryService).addCategory(requestDto);
+        assertNotNull(response);
+        assertEquals("New Category", response.getName());
     }
 
     @Test
     void updateCategoryTest() {
         // Given
-        CategoryUpdateRequestDto requestDto = new CategoryUpdateRequestDto(1L, "Updated Category");
-        CategoryResponseDto expectedResponse = new CategoryResponseDto(1L, "Updated Category");
-        when(categoryService.updateCategory(requestDto)).thenReturn(expectedResponse);
+        CategoryAddRequestDto addRequestDto = new CategoryAddRequestDto("Original Category");
+        CategoryResponseDto addedCategory = categoryController.addCategory(addRequestDto);
+
+        CategoryUpdateRequestDto updateRequestDto = new CategoryUpdateRequestDto(addedCategory.getId(), "Updated Category");
 
         // When
-        CategoryResponseDto actualResponse = categoryController.updateCategory(requestDto);
+        CategoryResponseDto updatedCategory = categoryController.updateCategory(updateRequestDto);
 
         // Then
-        assertEquals(expectedResponse, actualResponse);
-        verify(categoryService).updateCategory(requestDto);
+        assertNotNull(updatedCategory);
+        assertEquals("Updated Category", updatedCategory.getName());
     }
 
     @Test
     void validDeleteCategoryTest() {
         // Given
-        Long categoryId = 1L;
-        doNothing().when(categoryService).deleteCategory(categoryId);
+        CategoryAddRequestDto addRequestDto = new CategoryAddRequestDto("Category to Delete");
+        CategoryResponseDto addedCategory = categoryController.addCategory(addRequestDto);
 
         // When & Then
-        assertDoesNotThrow(() -> categoryController.deleteCategory(categoryId));
-        verify(categoryService).deleteCategory(categoryId);
+        assertDoesNotThrow(() -> categoryController.deleteCategory(addedCategory.getId()));
+
+        List<CategoryResponseDto> remainingCategories = categoryController.getAllCategories();
+        assertFalse(remainingCategories.stream().anyMatch(c -> c.getId().equals(addedCategory.getId())));
     }
 
     @Test
     void invalidDeleteCategoryTest() {
         // Given
-        Long categoryId = 1L;
-        doThrow(new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."))
-            .when(categoryService).deleteCategory(categoryId);
+        Long nonExistentCategoryId = 9999L;
 
         // When & Then
-        assertThrows(IllegalArgumentException.class, () -> categoryController.deleteCategory(categoryId));
-        verify(categoryService).deleteCategory(categoryId);
+        assertThrows(IllegalArgumentException.class, () -> categoryController.deleteCategory(nonExistentCategoryId));
     }
 }
