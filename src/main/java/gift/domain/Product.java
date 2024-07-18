@@ -2,7 +2,6 @@ package gift.domain;
 
 import gift.domain.base.BaseEntity;
 import gift.domain.base.BaseTimeEntity;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -10,10 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -34,9 +30,6 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT), nullable = false)
     private Category category;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private List<WishProduct> wishProducts = new ArrayList<>();
 
     protected Product() {
     }
