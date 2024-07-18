@@ -82,7 +82,7 @@ function saveQuantity(event) {
         localStorage.removeItem('token');
         window.location.href = '/members/login';
       } else {
-        alert('상품 개수 수정을 실패하였습니다.');
+        alert('상품의 개수는 0보다 커야합니다.');
       }
     }
   });
