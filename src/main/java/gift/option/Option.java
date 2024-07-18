@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.Optional;
 
 @Entity
 public class Option {
@@ -32,5 +33,25 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+    }
+
+    public void updateOption(Option option) {
+        Optional.ofNullable(option.name)
+            .ifPresent(updateName -> this.name = updateName);
+        Optional.of(option.quantity)
+            .ifPresent(updateQuantity -> this.quantity = updateQuantity);
+        Optional.ofNullable(option.product)
+            .ifPresent(updateProduct -> this.product = updateProduct);
+    }
+
+    public void updateOption(OptionDTO optionDTO) {
+        updateOption(
+            new Option(
+                optionDTO.getId(),
+                optionDTO.getName(),
+                optionDTO.getQuantity(),
+                product
+            )
+        );
     }
 }

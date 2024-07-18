@@ -4,6 +4,7 @@ import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
 import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
 import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
 
+import gift.product.Product;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
@@ -35,6 +36,15 @@ public class OptionDTO {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public Option toEntity(Product product) {
+        return new Option(
+            id,
+            name,
+            quantity,
+            product
+        );
     }
 
     @Override

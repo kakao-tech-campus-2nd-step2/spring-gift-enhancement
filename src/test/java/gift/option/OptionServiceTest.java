@@ -2,6 +2,7 @@ package gift.option;
 
 import static gift.exception.ErrorMessage.OPTION_ALREADY_EXISTS;
 import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
+import static gift.exception.ErrorMessage.OPTION_NAME_DUPLICATED_IN_PRODUCT;
 import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
 import static gift.exception.ErrorMessage.OPTION_NOT_FOUND;
 import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
@@ -375,7 +376,7 @@ public class OptionServiceTest {
             );
             Option option = new Option(
                 1L,
-                "option-1",
+                "update-option",
                 1,
                 product
             );
@@ -390,8 +391,8 @@ public class OptionServiceTest {
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
 
-            when(optionRepository.save(option.updateOption(optionDTO)))
-                .thenReturn(option.updateOption(optionDTO));
+            when(optionRepository.save(option))
+                .thenReturn(option);
 
             //then
             assertDoesNotThrow(
@@ -418,7 +419,7 @@ public class OptionServiceTest {
             );
             Option option = new Option(
                 1L,
-                "option-1",
+                "option",
                 1,
                 product
             );
@@ -432,9 +433,6 @@ public class OptionServiceTest {
 
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
-
-            when(optionRepository.save(option.updateOption(optionDTO)))
-                .thenReturn(option.updateOption(optionDTO));
 
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
@@ -459,12 +457,6 @@ public class OptionServiceTest {
                 "imageUrl",
                 new Category(1L, "category")
             );
-            Option option = new Option(
-                1L,
-                "option-1",
-                1,
-                product
-            );
 
             //when
             when(productRepository.findById(productId))
@@ -475,9 +467,6 @@ public class OptionServiceTest {
 
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
-
-            when(optionRepository.save(option.updateOption(optionDTO)))
-                .thenReturn(option.updateOption(optionDTO));
 
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
@@ -504,7 +493,7 @@ public class OptionServiceTest {
             );
             Option option = new Option(
                 1L,
-                "option-1",
+                "option",
                 1,
                 product
             );
@@ -518,9 +507,6 @@ public class OptionServiceTest {
 
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(true);
-
-            when(optionRepository.save(option.updateOption(optionDTO)))
-                .thenReturn(option.updateOption(optionDTO));
 
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
@@ -563,9 +549,6 @@ public class OptionServiceTest {
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
 
-            when(optionRepository.save(option.updateOption(optionDTO)))
-                .thenReturn(option.updateOption(optionDTO));
-
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -607,9 +590,6 @@ public class OptionServiceTest {
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
 
-            when(optionRepository.save(option.updateOption(optionDTO)))
-                .thenReturn(option.updateOption(optionDTO));
-
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -650,9 +630,6 @@ public class OptionServiceTest {
 
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
-
-            when(optionRepository.save(option.updateOption(optionDTO)))
-                .thenReturn(option.updateOption(optionDTO));
 
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
