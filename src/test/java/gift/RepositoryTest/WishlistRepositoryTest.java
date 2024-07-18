@@ -1,5 +1,6 @@
-package gift;
+package gift.RepositoryTest;
 
+import gift.Entity.Category;
 import gift.Entity.Member;
 import gift.Entity.Product;
 import gift.Entity.Wishlist;
@@ -7,23 +8,27 @@ import gift.Mapper.Mapper;
 import gift.Model.MemberDto;
 import gift.Model.ProductDto;
 import gift.Model.WishlistDto;
+import gift.Repository.CategoryJpaRepository;
 import gift.Repository.MemberJpaRepository;
 import gift.Repository.ProductJpaRepository;
 import gift.Repository.WishlistJpaRepository;
+import gift.Service.CategoryService;
 import gift.Service.MemberService;
 import gift.Service.ProductService;
 import gift.Service.WishlistService;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
+
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.BDDAssumptions.given;
 
 @DataJpaTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -38,6 +43,9 @@ public class WishlistRepositoryTest {
     @Autowired
     private MemberJpaRepository memberJpaRepository;
 
+    @Autowired
+    private CategoryJpaRepository categoryJpaRepository;
+
     private Mapper mapper;
 
     @BeforeEach
@@ -45,16 +53,21 @@ public class WishlistRepositoryTest {
         ProductService productService = Mockito.mock(ProductService.class);
         MemberService memberService = Mockito.mock(MemberService.class);
         WishlistService wishlistService = Mockito.mock(WishlistService.class);
+        CategoryService categoryService = Mockito.mock(CategoryService.class);
+
+        Category category = new Category(1L, "category1");
+        BDDMockito.given(categoryService.getCategoryById(1L)).willReturn(Optional.of(category));
+
 
         // 예시 데이터 설정
         MemberDto mockMemberDto = new MemberDto(1L, "test@test.com", "testName", "testPassword", false);
-        ProductDto mockProductDto = new ProductDto(1L, "testProduct", 1000, "testUrl", false);
+        ProductDto mockProductDto = new ProductDto(1L, "testProduct", 1L, 1000, "testUrl", false);
 
         // 목 객체에 대한 반환 값 설정
         Mockito.when(memberService.findByUserId(Mockito.anyLong())).thenReturn(Optional.of(mockMemberDto));
         Mockito.when(productService.getProductById(Mockito.anyLong())).thenReturn(Optional.of(mockProductDto));
 
-        mapper = new Mapper(productService, memberService, wishlistService);
+        mapper = new Mapper(productService, memberService, wishlistService, categoryService);
     }
 
     @Test
@@ -94,7 +107,10 @@ public class WishlistRepositoryTest {
         Member member = mapper.memberDtoToEntity(member1);
         memberJpaRepository.save(member);
 
-        ProductDto productDto1 = new ProductDto(1L, "productDto1", 1000, "http://localhost:8080/image1.jpg", false);
+        Category category = new Category(1L, "category1");
+        categoryJpaRepository.save(category);
+
+        ProductDto productDto1 = new ProductDto(1L, "productDto1", 1L, 1000, "http://localhost:8080/image1.jpg", false);
         Product product = mapper.productDtoToEntity(productDto1);
         productJpaRepository.save(product);
 
@@ -117,7 +133,10 @@ public class WishlistRepositoryTest {
         Member member = mapper.memberDtoToEntity(member1);
         memberJpaRepository.save(member);
 
-        ProductDto productDto1 = new ProductDto(1L, "productDto1", 1000, "http://localhost:8080/image1.jpg", false);
+        Category category = new Category(1L, "category1");
+        categoryJpaRepository.save(category);
+
+        ProductDto productDto1 = new ProductDto(1L, "productDto1", 1L, 1000, "http://localhost:8080/image1.jpg", false);
         Product product = mapper.productDtoToEntity(productDto1);
         productJpaRepository.save(product);
 

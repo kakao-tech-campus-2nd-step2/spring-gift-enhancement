@@ -1,4 +1,4 @@
-package gift;
+package gift.RepositoryTest;
 
 import gift.Entity.Member;
 import gift.Mapper.Mapper;
@@ -33,7 +33,7 @@ public class MemberDtoRepositoryTest {
         WishlistService wishListService = Mockito.mock(WishlistService.class);
 
         // Mapper 인스턴스 수동 생성 및 주입
-        mapper = new Mapper(productService, memberService, wishListService);
+        mapper = new Mapper(productService, memberService, wishListService, null);
     }
 
     @Test

@@ -1,22 +1,27 @@
-package gift;
+package gift.RepositoryTest;
 
+import gift.Entity.Category;
 import gift.Entity.Product;
-import gift.Mapper.Mapper;
-import gift.Model.ProductDto;
+import gift.Repository.CategoryJpaRepository;
 import gift.Repository.ProductJpaRepository;
-import gift.Service.MemberService;
-import gift.Service.ProductService;
-import gift.Service.WishlistService;
+import gift.Service.CategoryService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
 
 @DataJpaTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -25,40 +30,37 @@ public class ProductDtoRepositoryTest {
     @Autowired
     private ProductJpaRepository productJpaRepository;
 
-    private Mapper mapper;
+    @Autowired
+    private CategoryJpaRepository categoryJpaRepository;
 
     @BeforeEach
     void setUp() {
-        // 필요한 서비스의 목 객체 생성
-        ProductService productService = Mockito.mock(ProductService.class);
-        MemberService memberService = Mockito.mock(MemberService.class);
-        WishlistService wishListService = Mockito.mock(WishlistService.class);
-
-        // Mapper 인스턴스 수동 생성 및 주입
-        mapper = new Mapper(productService, memberService, wishListService);
+        Category category = new Category(1L, "category1");
+        categoryJpaRepository.save(category);
     }
 
     @Test
     public void testGetAllProducts() {
-        ProductDto productDto1 = new ProductDto(1L, "productDto1", 1000, "http://localhost:8080/image1.jpg", false);
-        Product product = mapper.productDtoToEntity(productDto1);
-        productJpaRepository.save(product);
+        //given
+        Category category1 = categoryJpaRepository.findById(1L).get();
+        Product product1 = new Product(1L, "product1", category1, 1000, "http://localhost:8080/image1.jpg", false);
+        productJpaRepository.save(product1);
 
-        ProductDto productDto2 = new ProductDto(2L, "productDto2", 2000, "http://localhost:8080/image2.jpg", false);
-        Product product2 = mapper.productDtoToEntity(productDto2);
-
+        Product product2 = new Product(2L, "product2", category1, 2000, "http://localhost:8080/image2.jpg", false);
         productJpaRepository.save(product2);
 
         List<Product> productslist = productJpaRepository.findByisDeletedFalse();
 
-        assertThat(productslist.get(0).getId()).isEqualTo(product.getId());
-        assertThat(productslist.get(0).getName()).isEqualTo(product.getName());
-        assertThat(productslist.get(0).getPrice()).isEqualTo(product.getPrice());
-        assertThat(productslist.get(0).getImageUrl()).isEqualTo(product.getImageUrl());
-        assertThat(productslist.get(0).isDeleted()).isEqualTo(product.isDeleted());
+        assertThat(productslist.get(0).getId()).isEqualTo(product1.getId());
+        assertThat(productslist.get(0).getName()).isEqualTo(product1.getName());
+        assertThat(productslist.get(0).getCategory().getCategoryId()).isEqualTo(category1.getCategoryId());
+        assertThat(productslist.get(0).getPrice()).isEqualTo(product1.getPrice());
+        assertThat(productslist.get(0).getImageUrl()).isEqualTo(product1.getImageUrl());
+        assertThat(productslist.get(0).isDeleted()).isEqualTo(product1.isDeleted());
 
         assertThat(productslist.get(1).getId()).isEqualTo(product2.getId());
         assertThat(productslist.get(1).getName()).isEqualTo(product2.getName());
+        assertThat(productslist.get(1).getCategory().getCategoryId()).isEqualTo(category1.getCategoryId());
         assertThat(productslist.get(1).getPrice()).isEqualTo(product2.getPrice());
         assertThat(productslist.get(1).getImageUrl()).isEqualTo(product2.getImageUrl());
         assertThat(productslist.get(1).isDeleted()).isEqualTo(product2.isDeleted());
@@ -67,8 +69,8 @@ public class ProductDtoRepositoryTest {
 
     @Test
     public void testGetProductById() {
-        ProductDto productDto1 = new ProductDto(1L, "productDto1", 1000, "http://localhost:8080/image1.jpg", false);
-        Product product = mapper.productDtoToEntity(productDto1);
+        Category category = categoryJpaRepository.findById(1L).get();
+        Product product = new Product(1L, "product1", category, 1000, "http://localhost:8080/image1.jpg", false);
 
         Product savedProduct = productJpaRepository.save(product);
 
@@ -82,8 +84,8 @@ public class ProductDtoRepositoryTest {
 
     @Test
     public void testSaveProduct() {
-        ProductDto productDto1 = new ProductDto(1L, "productDto1", 1000, "http://localhost:8080/image1.jpg", false);
-        Product product = mapper.productDtoToEntity(productDto1);
+        Category category = categoryJpaRepository.findById(1L).get();
+        Product product = new Product(1L, "product1", category, 1000, "http://localhost:8080/image1.jpg", false);
 
         Product savedProduct = productJpaRepository.save(product);
 
@@ -94,8 +96,8 @@ public class ProductDtoRepositoryTest {
 
     @Test
     public void testUpdateProduct() {
-        ProductDto productDto1 = new ProductDto(1L, "productDto1", 1000, "http://localhost:8080/image1.jpg", false);
-        Product product1 = mapper.productDtoToEntity(productDto1);
+        Category category = categoryJpaRepository.findById(1L).get();
+        Product product1 = new Product(1L, "product1", category, 1000, "http://localhost:8080/image1.jpg", false);
 
         productJpaRepository.save(product1);
 
@@ -114,8 +116,8 @@ public class ProductDtoRepositoryTest {
 
     @Test
     public void testDeleteProduct() {
-        ProductDto productDto1 = new ProductDto(1L, "productDto1", 1000, "http://localhost:8080/image1.jpg", false);
-        Product product = mapper.productDtoToEntity(productDto1);
+        Category category = categoryJpaRepository.findById(1L).get();
+        Product product = new Product(1L, "product1", category, 1000, "http://localhost:8080/image1.jpg", false);
 
         productJpaRepository.save(product);
 
