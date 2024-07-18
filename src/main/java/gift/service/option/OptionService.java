@@ -3,7 +3,7 @@ package gift.service.option;
 import gift.dto.option.OptionRequest;
 import gift.dto.option.OptionResponse;
 import gift.model.gift.Gift;
-import gift.model.option.*;
+import gift.model.option.Option;
 import gift.repository.gift.GiftRepository;
 import gift.repository.option.OptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

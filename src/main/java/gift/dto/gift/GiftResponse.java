@@ -1,8 +1,8 @@
 package gift.dto.gift;
 
 import gift.dto.category.CategoryResponse;
-import gift.model.gift.Gift;
 import gift.dto.option.OptionResponse;
+import gift.model.gift.Gift;
 
 import java.util.List;
 

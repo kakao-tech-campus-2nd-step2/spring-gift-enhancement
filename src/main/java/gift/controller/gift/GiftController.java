@@ -1,10 +1,10 @@
 package gift.controller.gift;
 
-import gift.dto.paging.PagingRequest;
-import gift.dto.paging.PagingResponse;
 import gift.dto.gift.GiftRequest;
 import gift.dto.gift.GiftResponse;
 import gift.dto.option.OptionResponse;
+import gift.dto.paging.PagingRequest;
+import gift.dto.paging.PagingResponse;
 import gift.service.gift.GiftService;
 import gift.service.option.OptionService;
 import jakarta.validation.Valid;

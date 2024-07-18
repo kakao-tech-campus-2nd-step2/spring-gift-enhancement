@@ -1,13 +1,13 @@
 package gift.service.gift;
 
 
-import gift.dto.paging.PagingResponse;
 import gift.dto.gift.GiftRequest;
 import gift.dto.gift.GiftResponse;
 import gift.dto.option.OptionRequest;
+import gift.dto.paging.PagingResponse;
 import gift.model.category.Category;
-import gift.model.gift.*;
-import gift.model.option.*;
+import gift.model.gift.Gift;
+import gift.model.option.Option;
 import gift.repository.category.CategoryRepository;
 import gift.repository.gift.GiftRepository;
 import gift.repository.option.OptionRepository;

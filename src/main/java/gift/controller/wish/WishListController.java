@@ -1,11 +1,11 @@
 package gift.controller.wish;
 
+import gift.dto.gift.GiftResponse;
 import gift.dto.paging.PagingRequest;
 import gift.dto.paging.PagingResponse;
-import gift.dto.gift.GiftResponse;
+import gift.dto.wish.WishResponse;
 import gift.model.user.User;
 import gift.model.wish.Wish;
-import gift.dto.wish.WishResponse;
 import gift.service.gift.GiftService;
 import gift.service.wish.WishService;
 import org.springframework.beans.factory.annotation.Autowired;
