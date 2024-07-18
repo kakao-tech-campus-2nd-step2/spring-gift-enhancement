@@ -7,6 +7,7 @@ import gift.main.dto.UserVo;
 import gift.main.entity.*;
 import gift.main.repository.*;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,10 +45,13 @@ class ProductServiceTest {
 
     @Test
     @Transactional
+    @DisplayName("옵션이_정확하게_들어가는지")
     void saveProductTest() {
         //given
         User seller = new User("seller", "seller@", "1234", "ADMIN");
         userRepository.save(seller);
+        System.out.println("entityManager.contains(seller)" + entityManager.contains(seller));
+        //true : 영속성 컨텍스트에 올라간 상황이다. 즉 1차 영속컨텍스트에 존재함.
         entityManager.flush();
         entityManager.clear();
 
@@ -64,24 +68,19 @@ class ProductServiceTest {
 
         //when
         productService.addProduct(productRequest, optionListRequest, userVo);
+//        entityManager.clear(); 이 부분 주석 처리하면 마지막 절에서 null예외가 발생해 테스트 코드 실패합니다.
+
 
         //then
-        //어떻게 불러오지?? ⭐ 일단 구현이 먼저다
-        /*
-        체크해야할 점
-            [] 프로덕트 객체가 잘 저장되었는지.
-            [] 옵션 리스트가 잘 저장되었는지,
-            [] 옵션이 잘 저장되었는지,
-         */
-
         assertThat(productRepository.existsById(1L)).isTrue();
         Product saveProduct = productRepository.findById(1L).get();
 
         assertThat(optionListRepository.existsByProductId(saveProduct.getId())).isTrue();
         OptionList optionList = optionListRepository.findByProductId(saveProduct.getId()).get();
-
+        System.out.println("entityManager.contains(optionList.getOptions()) = " + entityManager.contains(optionList.getOptions()));
+        // 출력값 : false
+        assertThat(optionList.getOptions().size()).isEqualTo(3);
         assertThat(optionRepository.findAllByOptionListId(optionList.getId()).get().size()).isEqualTo(3);
-        System.out.println("optionList.getOptions() = " + optionList.getOptions());
     }
 
     @Test
