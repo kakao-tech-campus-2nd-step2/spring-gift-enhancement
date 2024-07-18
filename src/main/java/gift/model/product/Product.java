@@ -70,6 +70,10 @@ public class Product extends BaseTimeEntity {
         return category;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public static Product create(Long id, String name, Integer price, String imageUrl,
         Category category) {
         ProductNameValidator.isValid(name);
