@@ -25,7 +25,7 @@ public class CreateProductDto {
     @NotBlank
     Category category;
 
-    List<Option> options;
+    List<OptionDto> options;
 
     public Product toProduct(){
         Product product = new Product(name, price, imageUrl, category);
