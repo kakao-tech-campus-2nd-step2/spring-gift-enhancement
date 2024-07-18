@@ -1,4 +1,4 @@
-package gift.domain.user.dao;
+package gift.domain.user.repository;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;

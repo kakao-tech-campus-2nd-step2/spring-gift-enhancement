@@ -1,4 +1,4 @@
-package gift.domain.user.dao;
+package gift.domain.user.repository;
 
 import gift.domain.user.entity.User;
 import java.util.Optional;
@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserJpaRepository extends JpaRepository<User, Long> {
 
-    @Query("select distinct u from User u left join fetch u.wishlist where u.email = :email")
+    @Query("select u from User u left join fetch u.wishlist where u.email = :email")
     Optional<User> findByEmail(@Param("email") String email);
 }

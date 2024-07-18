@@ -11,11 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.auth.jwt.JwtProvider;
+import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
-import gift.domain.user.dao.UserJpaRepository;
+import gift.domain.user.repository.UserJpaRepository;
 import gift.domain.user.entity.Role;
 import gift.domain.user.entity.User;
-import gift.domain.wishlist.dto.WishItemDto;
+import gift.domain.wishlist.dto.WishItemRequestDto;
+import gift.domain.wishlist.dto.WishItemResponseDto;
 import gift.domain.wishlist.entity.WishItem;
 import gift.domain.wishlist.service.WishlistService;
 import io.jsonwebtoken.Claims;
@@ -57,7 +59,8 @@ class WishlistRestControllerTest {
 
 
     private static final User user = new User(1L, "testUser", "test@test.com", "test123", Role.USER);
-    private static final Product product = new Product(1L, "아이스 카페 아메리카노 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
+    private static final Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
+    private static final Product product = new Product(1L, category, "아이스 카페 아메리카노 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg");
 
     private static final String DEFAULT_URL = "/api/wishlist";
 
@@ -75,11 +78,11 @@ class WishlistRestControllerTest {
     @DisplayName("위시리스트 추가")
     void create_success() throws Exception {
         // given
-        WishItemDto wishItemDto = new WishItemDto(null, 1L);
-        String jsonContent = objectMapper.writeValueAsString(wishItemDto);
+        WishItemRequestDto wishItemRequestDto = new WishItemRequestDto(1L);
+        String jsonContent = objectMapper.writeValueAsString(wishItemRequestDto);
 
-        WishItem wishItem = wishItemDto.toWishItem(user, product);
-        given(wishlistService.create(any(WishItemDto.class), any(User.class))).willReturn(wishItem);
+        WishItem wishItem = wishItemRequestDto.toWishItem(user, product);
+        given(wishlistService.create(any(WishItemRequestDto.class), any(User.class))).willReturn(WishItemResponseDto.from(wishItem));
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -87,7 +90,7 @@ class WishlistRestControllerTest {
             .content(jsonContent)
             .header("Authorization", "Bearer token"))
             .andExpect(status().isCreated())
-            .andExpect(content().json(objectMapper.writeValueAsString(wishItem)));
+            .andExpect(content().json(objectMapper.writeValueAsString(WishItemResponseDto.from(wishItem))));
     }
 
     @Test
@@ -95,7 +98,8 @@ class WishlistRestControllerTest {
     void readAll_success() throws Exception {
         // given
         List<WishItem> wishItems = List.of(new WishItem(1L, user, product));
-        Page<WishItem> expectedPage = new PageImpl<>(wishItems, PageRequest.of(0, 5),wishItems.size());
+        Page<WishItemResponseDto> expectedPage = new PageImpl<>(wishItems, PageRequest.of(0, 5),wishItems.size())
+                                                    .map(WishItemResponseDto::from);
 
         given(wishlistService.readAll(any(Pageable.class), any(User.class))).willReturn(expectedPage);
 

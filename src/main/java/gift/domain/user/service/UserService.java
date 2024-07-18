@@ -1,7 +1,7 @@
 package gift.domain.user.service;
 
 import gift.auth.jwt.Token;
-import gift.domain.user.dao.UserJpaRepository;
+import gift.domain.user.repository.UserJpaRepository;
 import gift.domain.user.dto.UserDto;
 import gift.domain.user.dto.UserLoginDto;
 import gift.domain.user.entity.Role;

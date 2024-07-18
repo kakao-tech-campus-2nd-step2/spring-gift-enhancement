@@ -1,10 +1,11 @@
 package gift.domain.wishlist.service;
 
-import gift.domain.product.dao.ProductJpaRepository;
+import gift.domain.product.repository.ProductJpaRepository;
 import gift.domain.product.entity.Product;
 import gift.domain.user.entity.User;
-import gift.domain.wishlist.dao.WishlistJpaRepository;
-import gift.domain.wishlist.dto.WishItemDto;
+import gift.domain.wishlist.dto.WishItemResponseDto;
+import gift.domain.wishlist.repository.WishlistJpaRepository;
+import gift.domain.wishlist.dto.WishItemRequestDto;
 import gift.domain.wishlist.entity.WishItem;
 import gift.exception.InvalidProductInfoException;
 import org.springframework.data.domain.Page;
@@ -24,19 +25,24 @@ public class WishlistService {
         this.productJpaRepository = productJpaRepository;
     }
 
-    public WishItem create(WishItemDto wishItemDto, User user) {
-        Product product = productJpaRepository.findById(wishItemDto.productId())
+    public WishItemResponseDto create(WishItemRequestDto wishItemRequestDto, User user) {
+        Product product = productJpaRepository.findById(wishItemRequestDto.productId())
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
 
-        WishItem wishItem = wishItemDto.toWishItem(user, product);
+        WishItem wishItem = wishItemRequestDto.toWishItem(user, product);
         WishItem savedWishItem = wishlistJpaRepository.save(wishItem);
         user.addWishItem(savedWishItem);
 
-        return savedWishItem;
+        return WishItemResponseDto.from(savedWishItem);
     }
 
-    public Page<WishItem> readAll(Pageable pageable, User user) {
-        return wishlistJpaRepository.findAllByUserId(user.getId(), pageable);
+    public Page<WishItemResponseDto> readAll(Pageable pageable, User user) {
+        Page<WishItem> foundWishlist = wishlistJpaRepository.findAllByUserId(user.getId(), pageable);
+
+        if (foundWishlist == null) {
+            return Page.empty();
+        }
+        return foundWishlist.map(WishItemResponseDto::from);
     }
 
     public void delete(long wishItemId) {

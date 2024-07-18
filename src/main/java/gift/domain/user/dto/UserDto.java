@@ -25,4 +25,14 @@ public record UserDto(
     public User toUser() {
         return new User(id, name, email, password, Role.USER);
     }
+
+    public static UserDto from(User user) {
+        return new UserDto(
+            user.getId(),
+            user.getName(),
+            user.getEmail(),
+            user.getPassword(),
+            user.getRole().toString()
+        );
+    }
 }
