@@ -38,8 +38,22 @@ public class CategoryService {
     //카테고리 추가 기능
     @Transactional
     public void addCategory(Category category) {
-        checkAlreadyExists(category);
-        CategoryEntity categoryEntity = new CategoryEntity();
+        validateCategoryUniqueness(category);
+        CategoryEntity categoryEntity = new CategoryEntity(
+            category.getName(),
+            category.getColor(),
+            category.getImageUrl(),
+            category.getDescription()
+        );
+        categoryRepository.save(categoryEntity);
+    }
+
+    //카테고리 수정 기능
+    @Transactional
+    public void updateCategory(Long id, Category category) {
+        validateCategoryUniqueness(category);
+        CategoryEntity categoryEntity = categoryRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Category not found"));
         categoryEntity.setName(category.getName());
         categoryEntity.setColor(category.getColor());
         categoryEntity.setImageUrl(category.getImageUrl());
@@ -47,34 +61,17 @@ public class CategoryService {
         categoryRepository.save(categoryEntity);
     }
 
-    //카테고리 수정 기능
-    @Transactional
-    public void updateCategory(Long id, Category category) {
-        CategoryEntity existingCategory = categoryRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Category not found"));
-        checkAlreadyExists(category);
-        existingCategory.setName(category.getName());
-        existingCategory.setColor(category.getColor());
-        existingCategory.setImageUrl(category.getImageUrl());
-        existingCategory.setDescription(category.getDescription());
-        categoryRepository.save(existingCategory);
-    }
-
     //카테고리 삭제 기능
     @Transactional
     public void deleteCategory(Long id) {
-        CategoryEntity existingCategory = categoryRepository.findById(id)
+        CategoryEntity categoryEntity = categoryRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Category not found"));
-        categoryRepository.delete(existingCategory);
+        categoryRepository.delete(categoryEntity);
     }
 
-    private void checkAlreadyExists(Category category) {
-        boolean exists = categoryRepository.findAll().stream()
-            .anyMatch(c -> c.getName().equals(category.getName()) &&
-                c.getColor().equals(category.getColor()) &&
-                c.getImageUrl().equals(category.getImageUrl()));
-        if (exists) {
-            throw new AlreadyExistsException("해당 카테고리가 이미 존재 합니다!");
+    private void validateCategoryUniqueness(Category category) {
+        if(categoryRepository.existsByNameAndColor(category.getName(),category.getColor())) {
+            throw new AlreadyExistsException("Already Exists Category");
         }
     }
 

@@ -60,7 +60,7 @@ public class OptionService {
     //카테고리 추가 기능
     @Transactional
     public void addOption(Long productId, Option option) {
-        checkAlreadyExists(null, option);
+        validateOptionUniqueness(option, null);
         OptionEntity optionEntity = optionRepository.save(new OptionEntity(option.getName(), option.getQuantity()));
         ProductEntity productEntity = productRepository.findById(productId)
             .orElseThrow(() -> new NotFoundException("Product not found"));
@@ -70,7 +70,7 @@ public class OptionService {
     //카테고리 수정 기능
     @Transactional
     public void updateOption(Long id, Option option) {
-        checkAlreadyExists(id, option);
+        validateOptionUniqueness(option, id);
         OptionEntity optionEntity = optionRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Option not found"));
         optionEntity.setName(option.getName());
@@ -84,10 +84,8 @@ public class OptionService {
         optionRepository.deleteById(id);
     }
 
-    private void checkAlreadyExists(Long id, Option option) {
-        boolean exists = optionRepository.findAll().stream()
-            .anyMatch(o -> o.getName().equals(option.getName()) && !o.getId().equals(id));
-        if (exists) {
+    private void validateOptionUniqueness(Option option, Long id) {
+        if(optionRepository.existsByNameAndIdNot(option.getName(), id)) {
             throw new AlreadyExistsException("Already Exists Option");
         }
     }

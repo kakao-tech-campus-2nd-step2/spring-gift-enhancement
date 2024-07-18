@@ -16,4 +16,6 @@ public interface OptionRepository extends JpaRepository<OptionEntity, Long> {
 
     Optional<OptionEntity> findByProductIdAndName(Long ProductId, String name);
 
+    boolean existsByNameAndIdNot(String name, Long id);
+
 }
