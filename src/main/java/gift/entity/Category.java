@@ -5,13 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "product")
-public class Product {
+@Table(name = "category")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,31 +19,28 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private double price;
-
-    @Column(nullable = false)
     private String imageUrl;
 
-    @JoinColumn(name = "category_id", nullable = false)
-    @ManyToOne
-    private Category category;
+    @Column(nullable = false)
+    private String color;
 
-    protected Product() {
-    }
+    @Column(nullable = false)
+    private String description;
 
-    public Product(Long id, String name, double price, String imageUrl, Category category) {
-        this.id = id;
+    protected Category() {}
+
+    public Category(String name, String imageUrl, String color, String description) {
         this.name = name;
-        this.price = price;
         this.imageUrl = imageUrl;
-        this.category = categoty;
+        this.color = color;
+        this.description = description;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -57,19 +52,27 @@ public class Product {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
