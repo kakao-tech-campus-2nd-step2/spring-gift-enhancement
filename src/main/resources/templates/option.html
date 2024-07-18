@@ -45,6 +45,9 @@
 <h3>
     product Id <td th:text="${productId}"></td>
     option Id <td th:text="${options.id}"></td>
+    <form th:action="@{/products}" method="get" style="display: inline;">
+        <button type="submit">Back To List</button>
+    </form>
 </h3>
 <div>
     <form th:action="@{/options/add/{optionId}/{productId}(optionId=${options.id}, productId=${productId})}" method="post">
