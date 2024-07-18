@@ -11,6 +11,7 @@ import gift.repository.product.ProductRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -21,6 +22,7 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<OptionResponse> getOptionByProductId(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new ProductNotFoundException("해당 Id의 상품은 존재하지 않습니다.")
@@ -30,6 +32,7 @@ public class OptionService {
             .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public OptionResponse addOption(Long productId, OptionRequest optionRequest) {
         Product product = productRepository.findById(productId).orElseThrow();
         Option option = toEntity(optionRequest, product);
