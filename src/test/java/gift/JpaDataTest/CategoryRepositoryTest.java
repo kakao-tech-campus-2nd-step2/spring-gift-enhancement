@@ -60,7 +60,7 @@ public class CategoryRepositoryTest {
 
         // when
         Category findCategory = categoryRepository.findById(savedCategory.getId()).get();
-        findCategory.update(categoryDTO);
+        findCategory.update(categoryDTO.getName(), categoryDTO.getDescription());
         categoryRepository.saveAndFlush(findCategory);
         clear();
 

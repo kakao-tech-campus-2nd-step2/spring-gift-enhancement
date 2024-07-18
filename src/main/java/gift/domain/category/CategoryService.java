@@ -51,6 +51,6 @@
                 throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 이름의 카테고리 이미 존재");
             }
 
-            findCategory.get().update(categoryDTO);
+            findCategory.get().update(categoryDTO.getName(), categoryDTO.getDescription());
         }
     }
