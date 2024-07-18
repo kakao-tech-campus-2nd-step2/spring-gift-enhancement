@@ -51,11 +51,12 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Product(AddProductRequest productRequest) {
+    public Product(AddProductRequest productRequest, Category category) {
         ProductNameValidationUtil.isValidProductName(productRequest.getName());
         this.name = productRequest.getName();
         this.price = productRequest.getPrice();
         this.imageUrl = productRequest.getImageUrl();
+        this.category = category;
     }
 
     public Long getId() {

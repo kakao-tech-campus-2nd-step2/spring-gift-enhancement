@@ -18,7 +18,7 @@ public class AddProductRequest {
     private String imageUrl;
 
     @NotBlank(message = REQUIRED_FIELD_MSG)
-    private String categoryName;
+    private String category;
 
     public String getName() {
         return name;
@@ -30,5 +30,9 @@ public class AddProductRequest {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getCategory() {
+        return category;
     }
 }

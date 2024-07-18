@@ -1,8 +1,10 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +17,11 @@ import static gift.constant.Message.*;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public Product getProduct(Long productId) {
@@ -30,7 +34,8 @@ public class ProductService {
     }
 
     public String addProduct(AddProductRequest requestProduct) {
-        productRepository.save(new Product(requestProduct));
+        Category category = categoryRepository.findByName(requestProduct.getCategory()).get();
+        productRepository.save(new Product(requestProduct, category));
         return ADD_SUCCESS_MSG;
     }
 
