@@ -1,4 +1,4 @@
-package gift.product.model.dto;
+package gift.product.model.dto.product;
 
 public class ProductResponse {
     private final Long id;

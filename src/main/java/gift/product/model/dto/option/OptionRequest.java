@@ -1,4 +1,4 @@
-package gift.option.model.dto;
+package gift.product.model.dto.option;
 
 import static gift.util.Utils.NAME_PATTERN;
 

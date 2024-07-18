@@ -1,7 +1,7 @@
-package gift.option.model.dto;
+package gift.product.model.dto.option;
 
 
-import gift.product.model.dto.Product;
+import gift.product.model.dto.product.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

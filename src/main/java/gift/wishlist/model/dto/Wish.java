@@ -1,7 +1,7 @@
 package gift.wishlist.model.dto;
 
 import gift.BaseTimeEntity;
-import gift.product.model.dto.Product;
+import gift.product.model.dto.product.Product;
 import gift.user.model.dto.AppUser;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

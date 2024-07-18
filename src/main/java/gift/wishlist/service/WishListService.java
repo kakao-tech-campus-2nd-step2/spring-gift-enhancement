@@ -1,6 +1,6 @@
 package gift.wishlist.service;
 
-import gift.product.model.dto.Product;
+import gift.product.model.dto.product.Product;
 import gift.product.service.ProductService;
 import gift.user.model.dto.AppUser;
 import gift.user.service.UserService;

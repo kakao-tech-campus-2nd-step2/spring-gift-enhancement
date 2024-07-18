@@ -1,7 +1,7 @@
 package gift.product.controller;
 
-import gift.product.model.dto.CreateProductAdminRequest;
-import gift.product.model.dto.UpdateProductRequest;
+import gift.product.model.dto.product.CreateProductAdminRequest;
+import gift.product.model.dto.product.UpdateProductRequest;
 import gift.product.service.ProductAdminService;
 import gift.product.service.ProductService;
 import gift.user.model.dto.AppUser;
