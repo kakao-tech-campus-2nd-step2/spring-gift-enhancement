@@ -41,9 +41,8 @@ public class Option {
         return product;
     }
 
-    public void update(String name, int quantity, Product product){
+    public void update(String name, int quantity){
         this.name = name;
         this.quantity = quantity;
-        this.product = product;
     }
 }
