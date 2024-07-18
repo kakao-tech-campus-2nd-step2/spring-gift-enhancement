@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,7 +17,8 @@ public interface WishRepository extends JpaRepository<Wish, UUID> {
 
     void deleteByMemberIdAndProductId(UUID memberId, UUID productId);
 
-    Page<Wish> findPageable(Pageable pageable);
+    @NonNull
+    Page<Wish> findAll(@NonNull Pageable pageable);
 
     Page<Wish> findAllByMemberId(UUID memberId, Pageable pageable);
 }

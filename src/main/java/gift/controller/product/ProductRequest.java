@@ -10,6 +10,8 @@ public record ProductRequest(
 
     @PositiveOrZero Long price,
 
-    String imageUrl) {
+    String imageUrl,
+
+    String categoryName) {
 
 }

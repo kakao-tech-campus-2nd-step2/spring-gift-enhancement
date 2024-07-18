@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +26,9 @@ public class Product {
     @Column(nullable = false)
     private Long price;
     private String imageUrl;
+    @ManyToOne
+    @JoinColumn(name = "catetoryId", nullable = false)
+    private Category category;
 
     public Product() {
     }
@@ -66,5 +71,9 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
