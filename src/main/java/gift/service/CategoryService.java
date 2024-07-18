@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.common.exception.CategoryNotFoundException;
 import gift.model.category.Category;
 import gift.model.category.CategoryRequest;
 import gift.model.category.CategoryResponse;
@@ -22,7 +23,8 @@ public class CategoryService {
     }
 
     public CategoryResponse getCategoryById(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow();
+        Category category = categoryRepository.findById(id).orElseThrow(
+            () -> new CategoryNotFoundException("해당 Id의 카테고리는 존재하지 않습니다."));
         return CategoryResponse.from(category);
     }
 
@@ -33,7 +35,9 @@ public class CategoryService {
     }
 
     public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
-        Category category = categoryRepository.findById(id).orElseThrow();
+        Category category = categoryRepository.findById(id).orElseThrow(
+            () -> new CategoryNotFoundException("해당 Id의 카테고리는 존재하지 않습니다.")
+        );
         category.update(categoryRequest);
         return CategoryResponse.from(categoryRepository.save(category));
     }
