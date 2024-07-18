@@ -61,7 +61,7 @@ public class ProductController {
 
     //product 추가
     @PostMapping
-    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) {
+    public ResponseEntity<String> addProduct(@RequestBody @Valid ProductDTO productDTO) {
         Category category = productService.findCategoryById(productDTO.getCategoryId());
         Product product = productDTO.toEntity(category);
         List<Option> options = new ArrayList<>();
