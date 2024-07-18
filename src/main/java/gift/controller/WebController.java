@@ -1,8 +1,10 @@
 package gift.controller;
 
+import gift.dto.CategoryResponseDto;
 import gift.dto.ProductChangeRequestDto;
 import gift.dto.ProductRequestDto;
 import gift.dto.ProductResponseDto;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +20,11 @@ import java.util.List;
 @Controller
 public class WebController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public WebController(ProductService productService) {
+    public WebController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/")
@@ -35,8 +39,10 @@ public class WebController {
     }
 
     @PostMapping("products/add")
-    public String add(@Valid @ModelAttribute("requestDto") ProductRequestDto requestDto, BindingResult result) {
+    public String add(@Valid @ModelAttribute("requestDto") ProductRequestDto requestDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            List<CategoryResponseDto> list = categoryService.getAll();
+            model.addAttribute("list", list);
             return "addForm";
         }
         productService.addProduct(requestDto);
@@ -44,8 +50,10 @@ public class WebController {
     }
 
     @GetMapping("products/add")
-    public String add(Model model) {
+    public String getAddForm(Model model) {
+        List<CategoryResponseDto> list = categoryService.getAll();
         model.addAttribute("requestDto", new ProductRequestDto());
+        model.addAttribute("list", list);
         return "addForm";
     }
 
