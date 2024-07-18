@@ -1,5 +1,6 @@
 package gift.model;
 
+import gift.exception.InputException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -39,6 +40,8 @@ public class Wish extends BaseEntity {
     }
 
     public Wish(Member member, Product product) {
+        validateMember(member);
+        validateProduct(product);
         this.member = member;
         this.product = product;
     }
@@ -53,5 +56,17 @@ public class Wish extends BaseEntity {
 
     public Product getProduct() {
         return product;
+    }
+
+    private void validateMember(Member member) {
+        if(member == null || member.getId() == null) {
+            throw new InputException("알 수 없는 오류가 발생하였습니다.");
+        }
+    }
+
+    private void validateProduct(Product product) {
+        if(product == null || product.getId() == null) {
+            throw new InputException("알 수 없는 오류가 발생하였습니다.");
+        }
     }
 }

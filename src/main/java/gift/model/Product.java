@@ -35,6 +35,10 @@ public class Product extends BaseEntity {
     }
 
     public Product(Long id, String name, Integer price, String imageUrl, Category category) {
+        validateName(name);
+        validatePrice(price);
+        validateImageUrl(imageUrl);
+        validateCategory(category);
         this.id = id;
         this.name = name;
         this.price = price;
@@ -43,12 +47,19 @@ public class Product extends BaseEntity {
     }
 
     public Product(String name, Integer price, String imageUrl) {
+        validateName(name);
+        validatePrice(price);
+        validateImageUrl(imageUrl);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
     public Product(String name, Integer price, String imageUrl, Category category) {
+        validateName(name);
+        validatePrice(price);
+        validateImageUrl(imageUrl);
+        validateCategory(category);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -89,7 +100,7 @@ public class Product extends BaseEntity {
         category.updateCategory(newCategoryName);
     }
 
-    public static void validateName(String name) {
+    private void validateName(String name) {
         if (name == null || name.isEmpty() || name.length() > 15) {
             throw new InputException("1~15자 사이로 입력해주세요.");
         }
@@ -98,7 +109,7 @@ public class Product extends BaseEntity {
         }
     }
 
-    public static void validatePrice(Integer price) {
+    private void validatePrice(Integer price) {
         if (price == null) {
             throw new InputException("가격을 입력해주세요.");
         }
@@ -107,12 +118,18 @@ public class Product extends BaseEntity {
         }
     }
 
-    public static void validateImageUrl(String imageUrl) {
+    private void validateImageUrl(String imageUrl) {
         if (imageUrl == null || imageUrl.isBlank()) {
             throw new InputException("이미지 주소를 입력해주세요.");
         }
         if (!imageUrl.matches("^(https?)://[^ /$.?#].[^ ]*$")) {
             throw new InputException("올바른 url이 아닙니다.");
+        }
+    }
+
+    private void validateCategory(Category category) {
+        if (category == null || category.getId() == null) {
+            throw new InputException("알 수 없는 오류가 발생하였습니다.");
         }
     }
 }

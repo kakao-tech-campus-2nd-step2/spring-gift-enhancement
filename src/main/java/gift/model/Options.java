@@ -80,7 +80,7 @@ public class Options extends BaseEntity {
         this.quantity = newQuantity;
     }
 
-    public static void validateName(String name) {
+    private void validateName(String name) {
         if (!StringUtils.hasText(name) || name.length() > 50) {
             throw new InputException("1~50자 사이로 입력해주세요.");
         }
@@ -89,7 +89,7 @@ public class Options extends BaseEntity {
         }
     }
 
-    public static void validateQuantity(Integer quantity) {
+    private void validateQuantity(Integer quantity) {
         if (quantity == null || quantity < 0 || quantity > 100000000) {
             throw new InputException("수량은 1개~1억개 사이여야 합니다.");
         }

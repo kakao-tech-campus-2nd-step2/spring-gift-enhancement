@@ -29,6 +29,7 @@ public class Category extends BaseEntity {
     }
 
     public Category(Long id, String name) {
+        validateName(name);
         this.id = id;
         this.name = name;
     }
@@ -50,7 +51,7 @@ public class Category extends BaseEntity {
         this.name = newName;
     }
 
-    public void validateName(String name) {
+    private void validateName(String name) {
         if (name == null || name.isEmpty() || name.length() > 20) {
             throw new InputException("이름을 1~20자 사이로 입력해주세요");
         }
