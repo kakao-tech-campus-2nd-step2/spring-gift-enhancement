@@ -70,4 +70,11 @@ public class ApiGlobalExceptionHandler {
         problemDetail.setTitle(e.getMessage());
         return problemDetail;
     }
+
+    @ExceptionHandler(OptionDuplicateException.class)
+    public ProblemDetail handleOptionDuplicateException(OptionDuplicateException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+        problemDetail.setTitle(e.getMessage());
+        return problemDetail;
+    }
 }
