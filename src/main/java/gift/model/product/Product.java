@@ -75,10 +75,10 @@ public class Product {
         return options;
     }
 
-    public void updateProduct(ProductRequest productRequest) {
-        this.name = productRequest.name();
-        this.price = productRequest.price();
-        this.imageUrl = productRequest.imageUrl();
+    public void updateProduct(String name, int price, String imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     public void checkDuplicateName(String name) {
@@ -92,5 +92,23 @@ public class Product {
 
     public boolean hasOneOption() {
         return this.options.size() == 1;
+    }
+
+    public void addOption(Option option) {
+        this.options.add(option);
+        option.addProduct(this);
+    }
+
+    public void updateOption(Option updateOption) {
+        int index = options.stream()
+            .filter(option -> option.getName().equals(updateOption.getName()))
+            .map(options::indexOf)
+            .findFirst().get();
+
+        options.set(index, updateOption);
+    }
+
+    public void removeOption(Option option) {
+        this.options.remove(option);
     }
 }

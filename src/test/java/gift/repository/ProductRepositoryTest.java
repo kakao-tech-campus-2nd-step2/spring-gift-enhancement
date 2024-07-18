@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import gift.common.exception.ProductNotFoundException;
 import gift.model.category.Category;
 import gift.model.product.Product;
-import gift.model.product.ProductRequest;
+import gift.model.product.CreateProductRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,7 +77,7 @@ public class ProductRepositoryTest {
 
         Product product = productRepository.save(new Product(null, "상품1", 1000, "image1.jpg", category));
 
-        product.updateProduct(new ProductRequest("수정된 상품", 2000, "update.jpg", null));
+        product.updateProduct(new CreateProductRequest("수정된 상품", 2000, "update.jpg", null));
 
         assertAll(
             () -> assertThat(product.getName()).isEqualTo("수정된 상품"),

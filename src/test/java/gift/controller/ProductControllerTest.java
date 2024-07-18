@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.model.product.ProductRequest;
+import gift.model.product.CreateProductRequest;
 import gift.model.user.UserRequest;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
@@ -37,10 +37,10 @@ public class ProductControllerTest {
 
     @Test
     void addProduct() throws JsonProcessingException {
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
+        CreateProductRequest createProductRequest = new CreateProductRequest("product1", 1000, "image1.jpg", 1L);
         HttpHeaders headers = getToken();
         var url = "http://localhost:" + port + registerProductUrl;
-        var requestEntity = new RequestEntity<>(productRequest, headers, HttpMethod.POST, URI.create(url));
+        var requestEntity = new RequestEntity<>(createProductRequest, headers, HttpMethod.POST, URI.create(url));
 
         var actual = restTemplate.exchange(requestEntity, String.class);
 

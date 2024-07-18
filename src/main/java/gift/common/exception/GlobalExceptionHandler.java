@@ -91,4 +91,18 @@ public class GlobalExceptionHandler {
         problemDetail.setDetail(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
     }
+
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<ProblemDetail> optionNotFoundException(OptionNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+        problemDetail.setDetail(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
+    }
+
+    @ExceptionHandler(DuplicateOptionNameException.class)
+    public ResponseEntity<ProblemDetail> duplicateOptionNameException(DuplicateOptionNameException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setDetail(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
 }

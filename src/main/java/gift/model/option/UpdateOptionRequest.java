@@ -22,7 +22,7 @@ public record UpdateOptionRequest(
     Long productId
 ) {
 
-    public Option toEntity(Product product) {
-        return new Option(null, name, quantity, product);
+    public Option toEntity() {
+        return new Option(null, name, quantity);
     }
 }

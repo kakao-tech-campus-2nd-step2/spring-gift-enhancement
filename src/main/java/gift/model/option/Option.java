@@ -27,18 +27,20 @@ public class Option {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    @NotNull
     private Product product;
 
     protected Option() {
     }
 
+    public Option(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
 
-    public Option(Long id, String name, int quantity, Product product) {
+    public Option(Long id, String name, int quantity) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
-        this.product = product;
     }
 
     public Long getId() {
@@ -64,5 +66,10 @@ public class Option {
     public void updateOption(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
+        this.product.updateOption(this);
+    }
+
+    public void addProduct(Product product) {
+        this.product = product;
     }
 }

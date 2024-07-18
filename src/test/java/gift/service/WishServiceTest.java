@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.common.dto.PageResponse;
-import gift.model.product.ProductRequest;
+import gift.model.product.CreateProductRequest;
 import gift.model.product.ProductResponse;
 import gift.model.user.UserRequest;
 import gift.model.user.UserResponse;
@@ -34,9 +34,9 @@ public class WishServiceTest {
     @DisplayName("위시 리스트 등록")
     void register() {
         UserRequest userRequest = new UserRequest("yso3865", "yso8296@gmail.com");
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
+        CreateProductRequest createProductRequest = new CreateProductRequest("product1", 1000, "image1.jpg", 1L);
         UserResponse user = userService.register(userRequest);
-        ProductResponse product = productService.addProduct(productRequest);
+        ProductResponse product = productService.addProduct(createProductRequest);
 
         wishService.addWistList(user.id(), new WishRequest(product.id(), 3));
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
@@ -57,9 +57,9 @@ public class WishServiceTest {
     @DisplayName("위시 리스트 조회")
     void findWish() {
         UserRequest userRequest = new UserRequest("yso3865", "yso8296@gmail.com");
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
+        CreateProductRequest createProductRequest = new CreateProductRequest("product1", 1000, "image1.jpg", 1L);
         UserResponse user = userService.register(userRequest);
-        ProductResponse product = productService.addProduct(productRequest);
+        ProductResponse product = productService.addProduct(createProductRequest);
         wishService.addWistList(user.id(), new WishRequest(product.id(), 3));
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
@@ -72,9 +72,9 @@ public class WishServiceTest {
     @DisplayName("위시 리스트 삭졔")
     void delete() {
         UserRequest userRequest = new UserRequest("yso3865", "yso8296@gmail.com");
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
+        CreateProductRequest createProductRequest = new CreateProductRequest("product1", 1000, "image1.jpg", 1L);
         UserResponse user = userService.register(userRequest);
-        ProductResponse product = productService.addProduct(productRequest);
+        ProductResponse product = productService.addProduct(createProductRequest);
         wishService.addWistList(user.id(), new WishRequest(product.id(), 3));
 
         wishService.deleteWishList(user.id(), product.id());

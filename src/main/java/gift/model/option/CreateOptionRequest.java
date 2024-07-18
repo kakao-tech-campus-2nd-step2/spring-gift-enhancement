@@ -17,12 +17,11 @@ public record CreateOptionRequest(
     )
     String name,
     @Min(1)
-    @Max(999_999_99)
-    int quantity,
-    Long productId
+    @Max(99_999_999)
+    int quantity
 ) {
 
-    public Option toEntity(Product product) {
-        return new Option(null, name, quantity, product);
+    public Option toEntity() {
+        return new Option(null, name, quantity);
     }
 }

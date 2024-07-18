@@ -34,17 +34,21 @@ public class OptionService {
     }
 
     @Transactional
-    public CreateOptionResponse register(CreateOptionRequest request) {
-        Product product = productRepository.findById(request.productId())
+    public CreateOptionResponse register(Long productId, CreateOptionRequest request) {
+        Product product = productRepository.findById(productId)
             .orElseThrow(ProductNotFoundException::new);
-        Option option = optionRepository.save(request.toEntity(product));
+        product.checkDuplicateName(request.name());
+
+        Option option = request.toEntity();
+        product.addOption(option);
+        optionRepository.save(option);
+
         return CreateOptionResponse.from(option);
     }
 
-    public PageResponse<OptionResponse> findAllOption(Pageable pageable) {
-        Page<Option> optionList = optionRepository.findAll(pageable);
-        List<OptionResponse> responses = optionList.getContent().stream()
-            .map(OptionResponse::from).toList();
+    public PageResponse<OptionResponse> getAllProductOptions(Long productId, Pageable pageable) {
+        Page<Option> optionList = optionRepository.findAllByProductId(productId, pageable);
+        List<OptionResponse> responses = optionList.getContent().stream().map(OptionResponse::from).toList();
         return PageResponse.from(responses, optionList);
     }
 
@@ -54,8 +58,8 @@ public class OptionService {
     }
 
     @Transactional
-    public OptionResponse updateOption(Long id, UpdateOptionRequest request) {
-        Option option = optionRepository.findById(id).orElseThrow(OptionNotFoundException::new);
+    public OptionResponse updateOption(Long productId, Long optionId, UpdateOptionRequest request) {
+        Option option = optionRepository.findById(optionId).orElseThrow(OptionNotFoundException::new);
         Product product = option.getProduct();
         product.checkDuplicateName(request.name());
         option.updateOption(request.name(), request.quantity());
@@ -63,23 +67,18 @@ public class OptionService {
     }
 
     @Transactional
-    public void deleteOption(Long optionId) {
-        if (!productRepository.existsByOptionId(optionId)) {
-            optionRepository.deleteById(optionId);
-            return;
-        }
+    public void deleteOption(Long productId, Long optionId) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(OptionNotFoundException::new);
 
-        Product product = productRepository.findByOptionId(optionId);
+        Product product = productRepository.findById(productId)
+            .orElseThrow(ProductNotFoundException::new);
+
         if (product.hasOneOption()) {
-            throw new IllegalArgumentException("삭제할 수 없는 옵션입니다.");
+            throw new IllegalArgumentException("옵션이 1개 일때는 삭제할 수 없습니다.");
         }
 
-        optionRepository.deleteById(optionId);
-    }
-
-    public List<OptionResponse> getAllProductOptions(Long productId) {
-        List<Option> optionList = optionRepository.findAllByProductId(productId);
-        List<OptionResponse> responses = optionList.stream().map(OptionResponse::from).toList();
-        return responses;
+        product.removeOption(option);
+        // optionRepository.deleteById(optionId); 이거 왜 안됨? 어이없을 무
     }
 }

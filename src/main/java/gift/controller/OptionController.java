@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/options")
+@RequestMapping("/api/v1/products")
 public class OptionController {
 
     private final OptionService optionService;
@@ -33,37 +33,49 @@ public class OptionController {
         this.optionService = optionService;
     }
 
-    @PostMapping("")
-    public ResponseEntity<CreateOptionResponse> registerOption(@Valid @RequestBody
-        CreateOptionRequest request) {
-        CreateOptionResponse response = optionService.register(request);
+    @PostMapping("{productId}/options")
+    public ResponseEntity<CreateOptionResponse> registerOption(
+        @PathVariable("productId") Long productId,
+        @Valid @RequestBody CreateOptionRequest request
+    ) {
+        CreateOptionResponse response = optionService.register(productId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("")
+    @GetMapping("{productId}/options")
     public ResponseEntity<PageResponse<OptionResponse>> getAllOption(
+        @PathVariable("productId") Long productId,
         @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        PageResponse<OptionResponse> response = optionService.findAllOption(pageable);
+        PageResponse<OptionResponse> response = optionService.getAllProductOptions(productId,
+            pageable);
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<OptionResponse> getOption(@PathVariable("id") Long id) {
-        OptionResponse response = optionService.findOption(id);
+    @GetMapping("{productId}/options/{optionId}")
+    public ResponseEntity<OptionResponse> getOption(
+        @PathVariable("productId") Long productId,
+        @PathVariable("optionId") Long optionId
+    ) {
+        OptionResponse response = optionService.findOption(optionId);
         return ResponseEntity.ok().body(response);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<OptionResponse> updateOption(@PathVariable("id") Long id,
+    @PatchMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<OptionResponse> updateOption(
+        @PathVariable("productId") Long productId,
+        @PathVariable("optionId") Long optionId,
         @Valid @RequestBody UpdateOptionRequest request) {
-        OptionResponse response = optionService.updateOption(id, request);
+        OptionResponse response = optionService.updateOption(productId, optionId, request);
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteOption(@PathVariable("id") Long id) {
-        optionService.deleteOption(id);
+    @DeleteMapping("/{productId}/options/{optionId}")
+    public ResponseEntity deleteOption(
+        @PathVariable("productId") Long productId,
+        @PathVariable("optionId") Long optionId)
+    {
+        optionService.deleteOption(productId, optionId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -2,13 +2,9 @@ package gift.service;
 
 import gift.common.dto.PageResponse;
 import gift.common.exception.CategoryNotFoundException;
-import gift.common.exception.ProductNotFoundException;
 import gift.model.category.Category;
 import gift.model.category.CategoryRequest;
 import gift.model.category.CategoryResponse;
-import gift.model.product.Product;
-import gift.model.product.ProductRequest;
-import gift.model.product.ProductResponse;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.List;

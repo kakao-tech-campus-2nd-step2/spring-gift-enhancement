@@ -2,8 +2,9 @@ package gift.controller;
 
 import gift.common.dto.PageResponse;
 import gift.model.category.CategoryResponse;
-import gift.model.product.ProductRequest;
+import gift.model.product.CreateProductRequest;
 import gift.model.product.ProductResponse;
+import gift.model.product.UpdateProductRequest;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import java.util.List;
@@ -41,8 +42,8 @@ public class AdminController {
     }
 
     @PostMapping("/admin/product")
-    public String registerProduct(ProductRequest productRequest) {
-        productService.addProduct(productRequest);
+    public String registerProduct(CreateProductRequest createProductRequest) {
+        productService.addProduct(createProductRequest);
         return "redirect:/products";
     }
 
@@ -66,8 +67,8 @@ public class AdminController {
     }
 
     @PutMapping("/admin/product/{id}")
-    public String updateProduct(@PathVariable("id") Long id, ProductRequest productRequest) {
-        productService.updateProduct(id, productRequest);
+    public String updateProduct(@PathVariable("id") Long id, UpdateProductRequest request) {
+        productService.updateProduct(id, request);
         return "redirect:/products";
     }
 
