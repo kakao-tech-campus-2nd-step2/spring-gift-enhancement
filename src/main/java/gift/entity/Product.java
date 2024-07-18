@@ -19,6 +19,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductWishlist> productWishlist = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductOption> productOption = new ArrayList<>();
+
     private Long categoryid;
 
     public Product() {
@@ -43,6 +46,11 @@ public class Product {
         this.price = product.getPrice();
         this.imageurl = product.getImageurl();
         this.categoryid = categoryid;
+    }
+
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

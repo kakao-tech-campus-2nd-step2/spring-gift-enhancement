@@ -2,6 +2,9 @@ package gift.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "option")
 public class Option {
@@ -12,12 +15,19 @@ public class Option {
     private String name;
     private int quantity;
 
+    @OneToMany(mappedBy = "option", cascade = CascadeType.ALL)
+    private List<ProductOption> productOption = new ArrayList<>();
+
     public Option() {
     }
 
     public Option(OptionDTO optionDTO) {
         this.name = optionDTO.getName();
         this.quantity = optionDTO.getQuantity();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

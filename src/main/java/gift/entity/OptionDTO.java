@@ -7,10 +7,10 @@ import org.hibernate.validator.constraints.Length;
 
 public class OptionDTO {
     @Length(min = 1, max = 50)
-    @Pattern(regexp = "^[a-zA-Z가-힣()\\[\\]\\+\\-&/_]+$")
+    @Pattern(regexp = "^[a-zA-Z가-힣()\\[\\]\\+\\-&/_\s]+$")
     private String name;
     @Min(1)
-    @Max(100000000)
+    @Max(99_999_999) // 100,000,000 미만
     private int quantity;
 
     public OptionDTO() {
