@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -55,16 +56,22 @@ public class ProductApiController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadProductResponse> readProduct(@PathVariable Long id) {
+        ReadProductResponse response;
+        response = productService.readProductById(id);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping
     public ResponseEntity<ReadAllProductsResponse> readAllProducts(@PageableDefault Pageable pageable) {
         ReadAllProductsResponse response = productService.readAllProducts(pageable);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ReadProductResponse> readProduct(@PathVariable Long id) {
-        ReadProductResponse response;
-        response = productService.searchProduct(id);
+    @GetMapping(params = "categoryId")
+    public ResponseEntity<ReadAllProductsResponse> readProductsByCategoryId(@PageableDefault Pageable pageable, @RequestParam Long categoryId) {
+        ReadAllProductsResponse response = productService.readProductsByCategoryId(categoryId, pageable);
         return ResponseEntity.ok(response);
     }
 
