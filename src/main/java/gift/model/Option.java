@@ -14,7 +14,7 @@ public class Option {
     @Column(nullable = false)
     private int quantity;
 
-    public Option() {
+    protected Option() {
     }
 
     public Option(String name, int quantity) {
@@ -36,9 +36,5 @@ public class Option {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 }

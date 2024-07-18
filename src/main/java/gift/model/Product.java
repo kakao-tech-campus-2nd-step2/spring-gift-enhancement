@@ -73,8 +73,4 @@ public class Product {
     public List<Option> getOptions() {
         return options;
     }
-
-    public void setOptions(List<Option> options) {
-        this.options = options;
-    }
 }
