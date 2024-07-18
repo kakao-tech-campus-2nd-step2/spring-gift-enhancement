@@ -6,9 +6,12 @@ public record ProductResponse(
         Long id,
         String name,
         Integer price,
-        String imgUrl
+        String imgUrl,
+        CategoryResponse category
 ) {
     public static ProductResponse from(ProductInfo productInfo) {
-        return new ProductResponse(productInfo.id(), productInfo.name(), productInfo.price(), productInfo.imgUrl());
+        var category = CategoryResponse.from(productInfo.category());
+        return new ProductResponse(productInfo.id(), productInfo.name(), productInfo.price(), productInfo.imgUrl(),
+                category);
     }
 }

@@ -6,9 +6,12 @@ public record ProductInfo(
         Long id,
         String name,
         Integer price,
-        String imgUrl
+        String imgUrl,
+        CategoryInfo category
 ) {
     public static ProductInfo from(Product product) {
-        return new ProductInfo(product.getId(), product.getName(), product.getPrice(), product.getImgUrl());
+        var category = CategoryInfo.from(product.getCategory());
+
+        return new ProductInfo(product.getId(), product.getName(), product.getPrice(), product.getImgUrl(), category);
     }
 }
