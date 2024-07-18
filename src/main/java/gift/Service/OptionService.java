@@ -83,4 +83,22 @@ public class OptionService {
 
         optionRepository.deleteById(id);
     }
+
+    public void subtract(OptionDTO optionDTO, Long count){
+        Optional<OptionEntity> optionEntityOptional = optionRepository.findByName(optionDTO.name());
+
+        if(optionEntityOptional.isEmpty()){
+            throw new OptionException();
+        }
+
+        OptionEntity optionEntity = optionEntityOptional.get();
+        long quantity = optionEntity.getQuantity() - count;
+
+        if(quantity < 0) {
+            throw new OptionException();
+        }
+
+        optionEntity.setQuantity(quantity);
+        optionRepository.save(optionEntity);
+    }
 }
