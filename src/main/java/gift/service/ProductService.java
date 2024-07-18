@@ -8,7 +8,6 @@ import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
-import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.service.dto.CreateProductDto;
 import gift.service.dto.UpdateProductDto;
@@ -21,12 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.optionRepository = optionRepository;
     }
 
     @Transactional(readOnly = true)
