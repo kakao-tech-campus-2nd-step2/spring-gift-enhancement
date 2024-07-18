@@ -64,9 +64,9 @@
     <div class="page-size-selector-container">
       Page Size :
       <select id="page-size" onchange="pageSizeSelected()">
-        <option value=5 th:selected="${products.getSize()} == 5">5</option>
-        <option value=10 th:selected="${products.getSize()} == 10">10</option>
-        <option value=20 th:selected="${products.getSize()} == 20">20</option>
+        <option value=5 th:selected="${wishProducts.getSize()} == 5">5</option>
+        <option value=10 th:selected="${wishProducts.getSize()} == 10">10</option>
+        <option value=20 th:selected="${wishProducts.getSize()} == 20">20</option>
       </select>
     </div>
     <table>
@@ -78,7 +78,7 @@
           ID
           <button
               id="page-sort-by-id"
-              th:data-sort-order="${products.getSort().getOrderFor('product.id')}"
+              th:data-sort-order="${wishProducts.getSort().getOrderFor('product.id')}"
               onclick=idColumnPageSort()>
             O
           </button>
@@ -88,7 +88,7 @@
           Price
           <button
               id="page-sort-by-price"
-              th:data-sort-order="${products.getSort().getOrderFor('product.price')}"
+              th:data-sort-order="${wishProducts.getSort().getOrderFor('product.price')}"
               onclick=priceColumnPageSort()
           >O
           </button>
@@ -97,22 +97,22 @@
         <th>Action</th>
       </tr>
 
-      <tr th:each="product : ${products}">
+      <tr th:each="wishPorduct : ${wishProducts}">
         <td><input type="checkbox" th:onclick="checkboxOnClick()"/></td>
-        <td th:text="${product.getId()}" id="id"></td>
-        <td th:text="${product.getName()}"></td>
-        <td th:text="${product.getPrice()}"></td>
-        <td th:text="${product.getImageUrl()}"></td>
+        <td th:text="${wishPorduct.getId()}" id="id"></td>
+        <td th:text="${wishPorduct.getName()}"></td>
+        <td th:text="${wishPorduct.getPrice()}"></td>
+        <td th:text="${wishPorduct.getImageUrl()}"></td>
         <td>
           <button
               class="material-symbols-outlined content-edit"
-              th:onclick="'editProductbtnOnClick(' + ${product.getId()} + ',' + ${page} + ')'"
+              th:onclick="'editProductbtnOnClick(' + ${wishPorduct.getId()} + ',' + ${page} + ')'"
           >
             edit
           </button>
           <button
               class="material-symbols-outlined content-delete"
-              th:onclick="'deleteProduct(' + ${product.getId()} + ',' + ${page} + ')'"
+              th:onclick="'deleteProduct(' + ${wishPorduct.getId()} + ',' + ${page} + ')'"
           >
             delete
           </button>
