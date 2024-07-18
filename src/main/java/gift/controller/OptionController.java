@@ -18,7 +18,7 @@ public class OptionController {
         this.optionService = optionService;
     }
     @GetMapping("/{productId}/options")
-    public ResponseEntity<List<Option>> getOptionsByProductId(@PathVariable Long productId) {
+    public ResponseEntity<List<Option>> getOptionsByProductId(@PathVariable("productId") Long productId) {
         List<Option> options = optionService.getOptionByProductId(productId);
         return ResponseEntity.ok().body(options);
     }
