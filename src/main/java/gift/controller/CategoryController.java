@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.dto.CategoryRequestDTO;
+import gift.dto.CategoryResponseDTO;
 import gift.entity.Category;
 import gift.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class CategoryController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<List<Category>> getCategory () {
-        List<Category> categoryList = categoryService.findAll();
+    public ResponseEntity<List<CategoryResponseDTO>> getCategory () {
+        List<CategoryResponseDTO> categoryList = categoryService.findAll();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(categoryList);
     }

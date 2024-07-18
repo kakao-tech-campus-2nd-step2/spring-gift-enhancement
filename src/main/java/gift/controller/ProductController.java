@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.dto.ProductRequestDTO;
+import gift.dto.ProductResponseDTO;
 import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -26,8 +27,8 @@ public class ProductController {
 
     @Description("get all products")
     @GetMapping("/products")
-    public ResponseEntity<Collection<Product>> getProducts() {
-        List<Product> products = productService.getAllProducts();
+    public ResponseEntity<List<ProductResponseDTO>> getProducts() {
+        List<ProductResponseDTO> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 

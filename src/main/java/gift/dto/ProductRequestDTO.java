@@ -14,4 +14,4 @@ public record ProductRequestDTO(@Size(max = 15, message = "상품 이름은 최�
                           int price,
 
                                 String imageUrl,
-                                String Category){}
+                                String category){}
