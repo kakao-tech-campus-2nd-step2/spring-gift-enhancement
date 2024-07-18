@@ -13,3 +13,6 @@
   - [ ] 상품 카테고리 삭제
   - [ ] 상품 카테고리 조회
 - [ ] Product에 카테고리 속성 추가
+- [ ] Test 작성
+  - [ ] categoryController
+  - [ ] categoryService
