@@ -3,6 +3,7 @@ package gift.service;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.OptionRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.dto.response.AddedOptionIdResponse;
 import gift.dto.response.AddedProductIdResponse;
 import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -64,6 +66,31 @@ class ProductServiceTest {
 
         //Then
         assertThat(addedProductIdResponse.id()).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("싱품에 옵션 추가하기(기존상황에서 추가하는것)")
+    void addOptionToProduct() {
+        //Given
+        Long productId = 1L;
+        Category category = new Category("CategoryName", "color", "description", "imageUrl");
+        List<Option> options = List.of(new Option("option", 1010));
+        Product product = new Product(1L, "product", 101, "img", category, options);
+
+        OptionRequest optionRequest = new OptionRequest("newOption", 1010);
+        Option option = Mockito.mock(Option.class);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        doNothing().when(optionService).checkDuplicateOptionName(product.getOptions(), optionRequest.name());
+        when(optionService.convertToOption(optionRequest)).thenReturn(option);
+        doNothing().when(productRepository).flush();
+        when(option.getId()).thenReturn(1L);
+
+        //When
+        AddedOptionIdResponse addedOptionIdResponse = productService.addOptionToProduct(productId, optionRequest);
+
+        //Then
+        assertThat(addedOptionIdResponse.optionId()).isEqualTo(1L);
     }
 
     @Nested

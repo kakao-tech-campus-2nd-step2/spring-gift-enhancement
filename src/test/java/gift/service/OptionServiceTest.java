@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.request.OptionRequest;
 import gift.entity.Option;
+import gift.exception.OptionDuplicateException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("옵션 서비스 단위테스트")
@@ -21,7 +23,7 @@ class OptionServiceTest {
 
     @Test
     @DisplayName("특정 상품 옵션 조회")
-    void getOptions() {
+    void convertToOptions() {
         //Given
         List<OptionRequest> optionRequests = List.of(new OptionRequest("옵션1", 3030));
 
@@ -32,5 +34,17 @@ class OptionServiceTest {
         assertThat(options).hasSize(1)
                 .extracting("name")
                 .containsExactly("옵션1");
+    }
+
+    @Test
+    @DisplayName("옵션 이름 중복 체크 - 중복 적발")
+    void checkDuplicateName() {
+        //Given
+        List<Option> existingOptions = List.of(new Option("이미존재", 100));
+        String newName = "이미존재";
+
+        //When Then
+        assertThatThrownBy(() -> optionService.checkDuplicateOptionName(existingOptions, newName))
+                .isInstanceOf(OptionDuplicateException.class);
     }
 }
