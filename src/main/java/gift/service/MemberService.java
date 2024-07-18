@@ -20,15 +20,16 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
+    // 회원 가입 메서드
     public void register(MemberRequestDTO memberRequestDTO) {
         if (memberRepository.findByEmail(memberRequestDTO.getEmail()).isPresent()) {
             throw new DuplicateException("이미 존재하는 회원입니다.");
         }
-        Member member = new Member(memberRequestDTO.getEmail(), memberRequestDTO.getPassword());
+        Member member = memberRequestDTO.toEntity();
         memberRepository.save(member);
     }
 
-
+    // 사용자 인증 메서드
     public LoginResponseDTO authenticate(MemberRequestDTO memberRequestDTO) {
         Optional<Member> memberOpt = memberRepository.findByEmail(memberRequestDTO.getEmail());
         if (memberOpt.isEmpty() || !memberOpt.get().checkPassword(memberRequestDTO.getPassword())) {
@@ -38,6 +39,7 @@ public class MemberService {
         return new LoginResponseDTO(token);
     }
 
+    // 토큰 이용하여 사용자 조회하는 메서드
     public MemberResponseDTO findByToken(MemberRequestDTO memberRequestDTO) {
         String email = JwtUtil.extractEmail(memberRequestDTO.getToken());
         if (!JwtUtil.validateToken(memberRequestDTO.getToken(), email)) {
@@ -45,20 +47,23 @@ public class MemberService {
         }
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        return new MemberResponseDTO(member.getId(), member.getEmail());
+        return MemberResponseDTO.fromEntity(member);
     }
 
+    // 이메일 이용하여 사용자 조회하는 메서드
     public MemberResponseDTO findByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        return new MemberResponseDTO(member.getId(), member.getEmail());
+        return MemberResponseDTO.fromEntity(member);
     }
 
+    // 이메일 이용하여 사용자 엔티티 조회 메서드
     public Member findMemberEntityByEmail(String email) {
         return memberRepository.findByEmail(email)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
 
+    // 토큰에서 이메일 추출
     public String extractEmailFromToken(String token) {
         return JwtUtil.extractEmail(token);
     }
