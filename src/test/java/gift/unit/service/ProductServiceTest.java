@@ -9,15 +9,14 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 
 import gift.exception.product.ProductNotFoundException;
+import gift.product.category.entity.Category;
+import gift.product.category.repository.CategoryRepository;
 import gift.product.dto.request.CreateProductRequest;
 import gift.product.dto.request.UpdateProductRequest;
 import gift.product.dto.response.ProductResponse;
-import gift.product.category.entity.Category;
 import gift.product.entity.Product;
-import gift.product.category.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import gift.product.service.ProductService;
-import gift.util.mapper.ProductMapper;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
