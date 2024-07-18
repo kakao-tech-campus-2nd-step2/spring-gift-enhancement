@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.CategoryDto;
 import gift.model.Category;
 import gift.service.CategoryService;
 import gift.service.ProductService;
@@ -31,6 +32,7 @@ public class CategoryController {
         return ResponseEntity.ok(category);
     }
 
+    //dto로 바꾸기
     @PostMapping
     public ResponseEntity<Category> addCategory(@RequestBody Category category) {
         categoryService.addCategory(category);
@@ -38,8 +40,8 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        categoryService.updateCategory(id, category);
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+        Category category = categoryService.updateCategory(id, categoryDto);
         return ResponseEntity.ok(category);
     }
 

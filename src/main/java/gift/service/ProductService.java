@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.ProductDto;
 import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
@@ -30,19 +31,22 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public Product addProduct(Product product) {
+    public Product addProduct(ProductDto productDto) {
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+        Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category);
         productRepository.save(product);
         return product;
     }
 
-    public Product updateProduct(Long id, Product product) {
-        Category category = categoryRepository.findById(product.getCategory().getId())
+    public Product updateProduct(Long id, ProductDto productDto) {
+        Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
         Product updateProduct = new Product(
                 id,
-                product.getName(),
-                product.getPrice(),
-                product.getImageUrl(),
+                productDto.getName(),
+                productDto.getPrice(),
+                productDto.getImageUrl(),
                 category
         );
         return productRepository.save(updateProduct);
@@ -59,6 +63,7 @@ public class ProductService {
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다."));
     }
 
+    //Dto로 리팩터링 할 것
     public void updateProductCategoryToNone(Category category) {
         Category noneCategory = categoryRepository.findById(1L)
                 .orElseThrow(() -> new NoSuchElementException("없음 카테고리를 찾을 수 없습니다."));

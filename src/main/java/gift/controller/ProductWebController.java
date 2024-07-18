@@ -48,15 +48,8 @@ public class ProductWebController {
     }
 
     @PostMapping("/add")
-    public String addProduct(@ModelAttribute @Valid ProductDto productDto, @RequestParam Long categoryId) {
-        Category category = categoryService.getCategoryById(categoryId);
-        Product product = new Product(
-                productDto.getName(),
-                productDto.getPrice(),
-                productDto.getImageUrl(),
-                category
-        );
-        productService.addProduct(product);
+    public String addProduct(@ModelAttribute @Valid ProductDto productDto) {
+        productService.addProduct(productDto);
         return "redirect:/web/products";
     }
 
@@ -72,14 +65,7 @@ public class ProductWebController {
     public String updateProduct(@PathVariable Long id,
                                 @ModelAttribute @Valid ProductDto productDto, @RequestParam Long categoryId) {
         Category category = categoryService.getCategoryById(categoryId);
-        Product updatedProduct = new Product(
-                id,
-                productDto.getName(),
-                productDto.getPrice(),
-                productDto.getImageUrl(),
-                category
-        );
-        productService.updateProduct(id, updatedProduct);
+        productService.updateProduct(id, productDto);
         return "redirect:/web/products";
     }
 

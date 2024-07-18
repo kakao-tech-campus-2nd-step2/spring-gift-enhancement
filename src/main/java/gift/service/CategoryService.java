@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.CategoryDto;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
 import jakarta.annotation.PostConstruct;
@@ -26,6 +27,7 @@ public class CategoryService {
                 .orElse(null);
     }
 
+    //dto로 바꾸기
     public void addCategory(Category category) {
         categoryRepository.findByName(category.getName())
                 .ifPresent(existingCategory -> {
@@ -34,8 +36,8 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public void updateCategory(Long id, Category category) {
-        categoryRepository.findByName(category.getName())
+    public Category updateCategory(Long id, CategoryDto categoryDto) {
+        categoryRepository.findByName(categoryDto.getName())
                 .ifPresent(existingCategory -> {
                     throw new DuplicateKeyException("이미 존재하는 카테고리 이름입니다.");
                 });
@@ -43,12 +45,13 @@ public class CategoryService {
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
         Category updatedCategory = new Category(
                 existingCategory.getId(),
-                category.getName(),
-                category.getColor(),
-                category.getImageUrl(),
-                category.getDescription()
+                categoryDto.getName(),
+                categoryDto.getColor(),
+                categoryDto.getImageUrl(),
+                categoryDto.getDescription()
         );
         categoryRepository.save(updatedCategory);
+        return existingCategory;
     }
 
     public void deleteCategory(Long id) {

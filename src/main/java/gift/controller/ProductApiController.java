@@ -39,14 +39,7 @@ public class ProductApiController {
 
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductDto productDto) {
-        Category category = categoryService.getCategoryById(productDto.getCategoryId());
-        Product product = new Product(
-                productDto.getName(),
-                productDto.getPrice(),
-                productDto.getImageUrl(),
-                category
-        );
-        Product savedProduct = productService.addProduct(product);
+        Product savedProduct = productService.addProduct(productDto);
         return ResponseEntity.status(201).body(savedProduct);
     }
 
@@ -54,14 +47,7 @@ public class ProductApiController {
     public ResponseEntity<Product> updateProduct(@PathVariable Long id,
                                                  @RequestBody @Valid ProductDto productDto) {
         Category category = categoryService.getCategoryById(productDto.getCategoryId());
-        Product updatedProduct = new Product(
-                id,
-                productDto.getName(),
-                productDto.getPrice(),
-                productDto.getImageUrl(),
-                category
-        );
-        Product product = productService.updateProduct(id, updatedProduct);
+        Product product = productService.updateProduct(id, productDto);
         return ResponseEntity.ok(product);
     }
 
