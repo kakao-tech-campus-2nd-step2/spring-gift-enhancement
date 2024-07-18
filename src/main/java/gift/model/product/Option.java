@@ -1,6 +1,10 @@
 package gift.model.product;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "options")
@@ -13,10 +17,14 @@ public class Option {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(length = 50)
+    @Column(unique = true, nullable = false)
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣\\s()\\[\\]+\\-&/_]*$")
+    @Size(max = 50)
     private String name;
 
     @Column(nullable = false)
+    @Min(value = 1)
+    @Max(value = 100000000 - 1)
     private  int amount;
 
     protected Option(){
