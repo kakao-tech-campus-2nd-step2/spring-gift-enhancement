@@ -54,7 +54,8 @@ public class Product {
     protected Product() {
     }
 
-    public Product(Long id, String name, int price, String imageUrl, Category category, List<Option> options) {
+    public Product(Long id, String name, int price, String imageUrl, Category category,
+        List<Option> options) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -91,7 +92,8 @@ public class Product {
         return options;
     }
 
-    public void update(String name, int price, String imageUrl, Category category, List<Option> options) {
+    public void update(String name, int price, String imageUrl, Category category,
+        List<Option> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
