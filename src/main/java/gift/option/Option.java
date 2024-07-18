@@ -1,7 +1,11 @@
 package gift.option;
 
 import gift.product.Product;
+import gift.wishList.WishList;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "OPTIONS")
@@ -17,6 +21,10 @@ public class Option {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "option", orphanRemoval = true)
+    private List<WishList> wishLists = new ArrayList<>();
+
     public Option() {
     }
 
@@ -29,6 +37,22 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+    }
+
+    public void addWishList(WishList wishList) {
+        this.wishLists.add(wishList);
+        wishList.setOption(this);
+    }
+
+    public void removeWishList(WishList wishList) {
+        wishList.setOption(null);
+        this.wishLists.remove(wishList);
+    }
+
+    public void removeWishLists() {
+        for (WishList wishList : wishLists) {
+            removeWishList(wishList);
+        }
     }
 
     public void updateOption(OptionRequest optionRequest){
