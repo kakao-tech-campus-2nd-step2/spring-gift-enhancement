@@ -27,18 +27,15 @@ public class CategoryService {
     }
     @Transactional(readOnly = true)
     public List<ResponseCategoryDTO> getCategories() {
-        List<Category> categoryList = categoryRepository.findAll();
-        List<ResponseCategoryDTO> responseCategoryDTOList = new ArrayList<>();
-        for(Category category : categoryList){
-            responseCategoryDTOList.add(new ResponseCategoryDTO(
-                    category.getId(),
-                    category.getName(),
-                    category.getColor(),
-                    category.getImageUrl(),
-                    category.getDescription()
-            ));
-        }
-        return responseCategoryDTOList;
+        return categoryRepository.findAll()
+                .stream()
+                .map(it->new ResponseCategoryDTO(
+                        it.getId(),
+                        it.getName(),
+                        it.getColor(),
+                        it.getImageUrl(),
+                        it.getDescription()))
+                .toList();
     }
 
     @Transactional
