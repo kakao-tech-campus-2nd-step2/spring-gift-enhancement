@@ -25,6 +25,7 @@ public class Product {
     @JoinColumn(name = "seller_id")
     private User seller;
 
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -38,6 +39,7 @@ public class Product {
     public Product() {
 
     }
+
 
     public Product(ProductRequest productRequest, User seller, Category category) {
         this.name = productRequest.name();
@@ -108,4 +110,5 @@ public class Product {
     public List<WishProduct> getWishProducts() {
         return wishProducts;
     }
+
 }

@@ -17,7 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ProductService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
@@ -50,6 +52,7 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(long id) {
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         product.getWishProducts().stream()
