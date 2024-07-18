@@ -5,6 +5,7 @@ import gift.model.Option;
 import gift.model.Product;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,7 +61,20 @@ public class OptionService {
         return optionRepository.save(updatedOption);
     }
 
+    @Transactional
     public void deleteOption(Long optionId) {
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 옵션입니다."));
+        Product product = optionRepository.findProductByOptionId(optionId)
+                .orElseThrow(() -> new NoSuchElementException("상품이 존재하지 않는 옵션입니다."));
+
+        if (product.getOptions().size() <= 1) {
+            throw new IllegalArgumentException("상품에는 최소 하나의 옵션이 있어야 합니다");
+        }
+
+        product.getOptions().remove(option);
+        productRepository.save(product);
         optionRepository.deleteById(optionId);
     }
+
 }

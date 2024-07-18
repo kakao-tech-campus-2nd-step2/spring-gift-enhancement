@@ -41,6 +41,10 @@ public class ProductService {
                 .map(optionDto -> new Option(optionDto.getName(), optionDto.getQuantity()))
                 .toList();
 
+        if (options.isEmpty()) {
+            throw new IllegalArgumentException("상품에는 최소 하나의 옵션이 있어야 합니다.");
+        }
+
         Product product = new Product(
                 productDto.getName(),
                 productDto.getPrice(),
