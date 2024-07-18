@@ -1,5 +1,6 @@
 package gift.controller.rest;
 
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.entity.ProductDTO;
 import gift.service.ProductService;
@@ -54,6 +55,31 @@ public class ProductController {
         productService.delete(id);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Product deleted");
+        return ResponseEntity.ok().body(response);
+    }
+
+    // option
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<Option>> getProductOptions(@PathVariable("id") Long id) {
+        List<Option> result = productService.getOptions(id);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/{product_id}/options/{option_id}")
+    public ResponseEntity<Map<String, String>> postProductOptions(@PathVariable("product_id") Long product_id,
+                                                                  @PathVariable("option_id") Long option_id) {
+        productService.addProductOption(product_id, option_id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Product option added");
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/{product_id}/options/{option_id}")
+    public ResponseEntity<Map<String, String>> deleteProductOptions(@PathVariable("product_id") Long product_id,
+                                                                    @PathVariable("option_id") Long option_id) {
+        productService.deleteProductOption(product_id, option_id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Product option deleted");
         return ResponseEntity.ok().body(response);
     }
 }
