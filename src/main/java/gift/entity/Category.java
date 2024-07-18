@@ -14,12 +14,24 @@ import java.util.List;
 @Entity
 @Table(name = "category")
 public class Category {
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     Long Id;
     @Column
     String name;
 
     @OneToMany(mappedBy = "category")
     List<Product> products = new ArrayList<>();
+
+    public Long getId() {
+        return Id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
 }

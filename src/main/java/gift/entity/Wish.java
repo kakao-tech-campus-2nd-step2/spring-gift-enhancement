@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "wish")
 public class Wish {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;

@@ -1,44 +1,35 @@
 package test;
 
 import gift.entity.Category;
-import gift.repository.CategoryRepository;
-import org.junit.jupiter.api.BeforeEach;
+import gift.repository.CategoryRepositoryInterface;
+import gift.service.CategoryService;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-
+@DataJpaTest
 public class CategoryServiceTest {
 
-    @InjectMocks
     private CategoryService categoryService;
 
-    @Mock
-    private CategoryRepository categoryRepository;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private CategoryRepositoryInterface categoryRepository;
 
     @Test
     void testGetAllCategories() {
         List<Category> categories = Arrays.asList(
-                new Category(1L, "교환권"),
-                new Category(2L, "상품권")
+                categoryRepository.findCategoryByName("식품"),
+                categoryRepository.findCategoryByName("패션")
         );
         when(categoryRepository.findAll()).thenReturn(categories);
 
         List<Category> result = categoryService.getAllCategories();
 
         assertEquals(2, result.size());
-        assertEquals("교환권", result.get(0).getName());
-        assertEquals("상품권", result.get(1).getName());
+        assertEquals("식품", result.get(0).getName());
+        assertEquals("패션", result.get(1).getName());
     }
 }
