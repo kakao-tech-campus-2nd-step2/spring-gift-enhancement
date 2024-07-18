@@ -28,12 +28,14 @@ public class Product extends BasicEntity{
 
     protected Product() {}
 
-    public Product(String name, int price, String imageUrl, Category category, Option option) {
+    public Product(String name, int price, String imageUrl, Category category, List<Option> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        addOption(option);
+        for (Option option : options) {
+            addOption(option);
+        }
     }
 
     public Product(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, int price, String imageUrl, Category category) {

@@ -44,10 +44,12 @@ public class ProductService {
 
     @Transactional
     public Long save(CreateProductDto request) {
-        Option option = new Option(request.optionName(), request.optionQuantity());
+        List<Option> options = request.options().stream().map(
+                optionRq -> new Option(optionRq.name(), optionRq.quantity())
+        ).toList();
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category with id " + request.categoryId() + " not found"));
-        Product product = productRepository.save(new Product(request.name(), request.price(), request.imageUrl(), category, option));
+        Product product = productRepository.save(new Product(request.name(), request.price(), request.imageUrl(), category, options));
         return product.getId();
     }
 

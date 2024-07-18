@@ -1,5 +1,6 @@
 package gift.controller.restcontroller;
 
+import gift.controller.dto.request.OptionRequest;
 import gift.controller.dto.request.ProductRequest;
 import gift.model.Category;
 import gift.model.Option;
@@ -20,6 +21,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,9 +48,10 @@ class ProductRestControllerTest {
 
     @Test
     void create() {
+        List<OptionRequest.Init> options = List.of(new OptionRequest.Init("oName", 100), new OptionRequest.Init("oName1", 1100));
         Category category = categoryRepository.save(new Category("상품권", "#123", "url", ""));
         var url = "http://localhost:" + port + "/api/v1/product";
-        var request = new ProductRequest.Create("product", 1_000, "Url", category.getId(), "oName", 100);
+        var request = new ProductRequest.Create("product", 1_000, "Url", category.getId(), options);
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
         var actual = restTemplate.exchange(requestEntity, String.class);
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -57,8 +60,9 @@ class ProductRestControllerTest {
 
     @Test
     void getOptions() {
+
         Category category = categoryRepository.save(new Category("상품권", "#123", "url", ""));
-        Product product = productRepository.save(new Product("pname", 1_000, "purl", category, new Option("oname", 10)));
+        Product product = productRepository.save(new Product("pname", 1_000, "purl", category, List.of(new Option("oname", 10))));
         optionRepository.save(new Option("option1", 1000, product));
         var url = "http://localhost:" + port + "/api/v1/product/" + product.getId() + "/options";
         var requestEntity = new RequestEntity<>(HttpMethod.GET, URI.create(url));

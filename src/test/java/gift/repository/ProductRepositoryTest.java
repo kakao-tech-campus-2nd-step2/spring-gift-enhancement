@@ -38,8 +38,9 @@ class ProductRepositoryTest {
         String imageUrl = "imageUrl1";
         String imageUrl2 = "imageUrl2";
         Category category = categoryRepository.save(new Category("name", "#123", "url", ""));
-        Option option = new Option("oName", 123);
-        Product product = new Product(name, price, imageUrl, category, option);
+
+        List<Option> options = List.of(new Option("oName", 123));
+        Product product = new Product(name, price, imageUrl, category, options);
         Product original = productRepository.save(product);
 
         // when
@@ -55,7 +56,7 @@ class ProductRepositoryTest {
         assertThat(actual.getImageUrl()).isEqualTo(imageUrl2);
         assertThat(actual.getCreatedAt()).isNotNull();
         assertThat(actual.getUpdatedAt()).isNotNull();
-        assertThat(actual.getOptions().get(0)).isEqualTo(option);
+        assertThat(actual.getOptions().get(0)).isEqualTo(options.get(0));
     }
 
     @Test
@@ -66,8 +67,8 @@ class ProductRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl1";
         Category category = categoryRepository.save(new Category("name", "#123", "url", ""));
-        Option option = new Option("oName", 123);
-        Product product = new Product(name, price, imageUrl, category, option);
+        List<Option> options = List.of(new Option("oName", 123));
+        Product product = new Product(name, price, imageUrl, category, options);
 
         // when
         Product actual = productRepository.save(product);
@@ -80,7 +81,7 @@ class ProductRepositoryTest {
         assertThat(actual.getCreatedAt()).isNotNull();
         assertThat(actual.getUpdatedAt()).isNotNull();
         assertThat(actual.getOptions()).hasSize(1);
-        assertThat(actual.getOptions().get((0))).isEqualTo(option);
+        assertThat(actual.getOptions().get((0))).isEqualTo(options.get(0));
     }
 
     @Test
@@ -91,17 +92,16 @@ class ProductRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl1";
         Category category = categoryRepository.save(new Category("name", "#123", "url", ""));
-        Option[] option = {
-                new Option("oName1", 123),
-                new Option("oName2", 123)
-        };
+        List<Option> options1 = List.of(new Option("oName", 123));
+        List<Option> options2 = List.of(new Option("oName", 123));
+
         Product[] product = {
-                new Product(name[0], price, imageUrl, category, option[0]),
-                new Product(name[1], price, imageUrl, category, option[1])
+                new Product(name[0], price, imageUrl, category, options1),
+                new Product(name[1], price, imageUrl, category, options2)
         };
-        Pageable pageable = PageRequest.of(0, 10);
         productRepository.save(product[0]);
         productRepository.save(product[1]);
+        Pageable pageable = PageRequest.of(0, 10);
 
         // when
         Page<Product> actuals = productRepository.findAllFetchJoin(pageable);
@@ -123,8 +123,9 @@ class ProductRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl1";
         Category category = categoryRepository.save(new Category("name", "#123", "url", ""));
-        Option option = new Option("oName", 123);
-        Product product = productRepository.save(new Product(pName, price, imageUrl, category, option));
+        List<Option> options = List.of(new Option("oName", 123));
+        Product product = new Product(pName, price, imageUrl, category, options);
+        productRepository.save(product);
 
         // when
         List<Product> products = productRepository.findByCategoryId(product.getCategory().getId());

@@ -1,12 +1,15 @@
 package gift.service.dto;
 
+import gift.controller.dto.request.OptionRequest;
+
+import java.util.List;
+
 public record CreateProductDto(
         String name,
         int price,
         String imageUrl,
         Long categoryId,
-        String optionName,
-        int optionQuantity
+        List<OptionRequest.Create> options
 ) {
 }
 

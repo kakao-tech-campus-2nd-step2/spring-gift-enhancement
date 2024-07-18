@@ -4,6 +4,8 @@ import gift.common.exception.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class WishTest {
@@ -15,7 +17,8 @@ class WishTest {
         Long memberId = 1L;
         Long memberId2 = 2L;
         Member member = new Member(memberId, null, null, null, null, null);
-        Product product = new Product(null, 0, null, null, null);
+        List<Option> options = List.of(new Option("oName", 123));
+        Product product = new Product(null, 0, null, null, options);
         Wish wish = new Wish(member, 0, product);
         // when
         // then

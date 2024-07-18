@@ -48,10 +48,10 @@ class WishRepositoryTest {
         int[] prices = {10, 20};
         String[] imageUrls = {"test1", "test2"};
         Category category = categoryRepository.save(new Category("가전", "#123", "url", ""));
-        Option option = new Option("oName", 123);
+        List<Option> options = List.of(new Option("oName", 123));
         Product[] products = {
-                productRepository.save(new Product(names[0], prices[0], imageUrls[0], category, option)),
-                productRepository.save(new Product(names[1], prices[1], imageUrls[1], category, option))};
+                productRepository.save(new Product(names[0], prices[0], imageUrls[0], category, options)),
+                productRepository.save(new Product(names[1], prices[1], imageUrls[1], category, options))};
         int[] productCounts = {1, 2};
         Wish[] wishes = {
                 wishRepository.save(new Wish(member, productCounts[0], products[0])),
@@ -88,8 +88,8 @@ class WishRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl";
         Category category = categoryRepository.save(new Category("가전", "#123", "url", ""));
-        Option option = new Option("oName", 123);
-        Product product = productRepository.save(new Product(name, price, imageUrl, category, option));
+        List<Option> options = List.of(new Option("oName", 123));
+        Product product = productRepository.save(new Product(name, price, imageUrl, category, options));
         int productCount = 10;
         Wish wish = new Wish(member, productCount, product);
 
@@ -127,8 +127,8 @@ class WishRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl";
         Category category = categoryRepository.save(new Category("가전", "#123", "url", ""));
-        Option option = new Option("oName", 123);
-        Product product = productRepository.save(new Product(name, price, imageUrl, category, option));
+        List<Option> options = List.of(new Option("oName", 123));
+        Product product = productRepository.save(new Product(name, price, imageUrl, category, options));
         int productCount = 10;
         wishRepository.save(new Wish(member, productCount, product));
 
@@ -152,8 +152,8 @@ class WishRepositoryTest {
         Category category = categoryRepository.save(new Category("가전", "#123", "url", ""));
         int price = 1000;
         String imageUrl = "imageUrl";
-        Option option = new Option("oName", 123);
-        Product product = productRepository.save(new Product(name, price, imageUrl, category, option));
+        List<Option> options = List.of(new Option("oName", 123));
+        Product product = productRepository.save(new Product(name, price, imageUrl, category, options));
         int productCount = 10;
         wishRepository.save(new Wish(member, productCount, product));
 
@@ -170,8 +170,8 @@ class WishRepositoryTest {
         // given
         Category category = categoryRepository.save(new Category("cname", "color", "imageUrl", "description"));
         Member member = memberRepository.save(new Member("mname", "mage", Role.USER));
-        Option option = new Option("oName", 123);
-        Product product = productRepository.save(new Product("pname", 1_000, "pimage", category, option));
+        List<Option> options = List.of(new Option("oName", 123));
+        Product product = productRepository.save(new Product("pname", 1_000, "pimage", category, options));
         Wish wish = wishRepository.save(new Wish(member, 1, product));
         int productCount = 10;
         wish.updateWish(wish.getMember(), productCount, wish.getProduct());

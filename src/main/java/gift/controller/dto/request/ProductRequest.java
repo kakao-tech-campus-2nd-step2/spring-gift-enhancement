@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 public class ProductRequest {
     private final static String SPECIAL_REGEX = "^[()\\[\\]+\\-&/_ㄱ-하-ㅣ가-힣a-zA-Z0-9\\s.,]*$";
 
@@ -25,13 +27,12 @@ public class ProductRequest {
             String imageUrl,
             @Min(1)
             Long categoryId,
-            @NotBlank
-            String optionName,
-            @Min(1) @Max(99_999_999)
-            int optionQuantity
+            List<OptionRequest.Init> options
     ) {
         public CreateProductDto toDto() {
-            return new CreateProductDto(name, price, imageUrl, categoryId, optionName, optionQuantity);
+            List<OptionRequest.Create> options = options().stream()
+                    .map(init -> new OptionRequest.Create(init.name(), init.quantity(), null)).toList();
+            return new CreateProductDto(name, price, imageUrl, categoryId, options);
         }
     }
 
@@ -54,7 +55,8 @@ public class ProductRequest {
             int optionQuantity
     ) {
         public CreateProductDto toDto() {
-            return new CreateProductDto(name, price, imageUrl, categoryId, optionName, optionQuantity);
+            List<OptionRequest.Create> options = List.of(new OptionRequest.Create(optionName, optionQuantity, null));
+            return new CreateProductDto(name, price, imageUrl, categoryId, options);
         }
     }
 

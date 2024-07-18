@@ -38,13 +38,13 @@ class OptionRepositoryTest {
         Category category = categoryRepository.save(new Category("cname", "ccolor", "cImage", ""));
         String oName = "oName";
         int oQuantity = 123;
-        Option option = new Option(oName, oQuantity);
+        List<Option> options = List.of(new Option(oName, oQuantity));
         Product product = productRepository.save(
-                new Product(pName, pPrice, pImageUrl, category, option));
-        option.updateOptionByProduct(product);
+                new Product(pName, pPrice, pImageUrl, category, options));
+        options.get(0).updateOptionByProduct(product);
 
         // when
-        Option actual = optionRepository.findByIdFetchJoin(option.getId()).orElse(null);
+        Option actual = optionRepository.findByIdFetchJoin(options.get(0).getId()).orElse(null);
 //
         // then
         assert actual != null;
@@ -63,15 +63,15 @@ class OptionRepositoryTest {
         Category category = categoryRepository.save(new Category("cname", "ccolor", "cImage", ""));
         String oName = "oName";
         int oQuantity = 123;
-        Option option = new Option(oName, oQuantity);
-        Product product = productRepository.save(new Product(pName, pPrice, pImageUrl, category, option));
-        option.updateOptionByProduct(product);
+        List<Option> options = List.of(new Option(oName, oQuantity));
+        Product product = productRepository.save(new Product(pName, pPrice, pImageUrl, category, options));
+        options.get(0).updateOptionByProduct(product);
 
         // when
         List<Option> actual = optionRepository.findAllByProductIdFetchJoin(product.getId());
 
         // then
         assertThat(actual).hasSize(1);
-        assertThat(actual.get(0)).isEqualTo(option);
+        assertThat(actual.get(0)).isEqualTo(options.get(0));
     }
 }
