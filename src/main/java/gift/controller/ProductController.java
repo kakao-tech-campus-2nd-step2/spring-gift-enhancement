@@ -1,5 +1,8 @@
 package gift.controller;
 
+import gift.dto.CategoryUpdateRequest;
+import gift.dto.ProductRequest;
+import gift.dto.productUpdateRequest;
 import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -34,21 +37,28 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addProduct(@Valid @RequestBody Product product, BindingResult bindingResult) {
-        productService.createProduct(product, bindingResult);
+    public ResponseEntity<Void> addProduct(@Valid @RequestBody ProductRequest request, BindingResult bindingResult) {
+        productService.createProduct(request, bindingResult);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateProduct(@PathVariable("id") long id, @Valid @RequestBody Product product
-    		, BindingResult bindingResult) {
-        productService.updateProduct(id, product, bindingResult);
+    public ResponseEntity<Void> updateProduct(@PathVariable("id") long id, 
+    		@Valid @RequestBody productUpdateRequest request, BindingResult bindingResult) {
+        productService.updateProduct(id, request, bindingResult);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    
+    @PutMapping("/{id}/category")
+    public ResponseEntity<Void> updateProductCategory(@PathVariable("id") long id,
+    		@Valid @RequestBody CategoryUpdateRequest request, BindingResult bindingResult){
+    	productService.updateProductCategory(id, request, bindingResult);
+    	return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("id") long id) {
         productService.deleteProduct(id);
         return ResponseEntity.status(HttpStatus.OK).build();
-    }
+    } 
 }
