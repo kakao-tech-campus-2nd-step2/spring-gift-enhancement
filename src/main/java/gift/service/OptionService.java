@@ -71,11 +71,8 @@ public class OptionService {
         Option foundOption = optionRepository.findById(id)
                 .orElseThrow(()->new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
 
-        foundOption.updateName(optionRequest.name());
-        foundOption.updateQuantity(optionRequest.quantity());
         ProductResponse foundProductResponse = productService.findById(optionRequest.productId());
-        foundOption.updateProduct(foundProductResponse.toEntity());
-
+        foundOption.updateOption(optionRequest.name(),optionRequest.quantity(),foundProductResponse.toEntity());
         optionRepository.save(foundOption);
     }
 }
