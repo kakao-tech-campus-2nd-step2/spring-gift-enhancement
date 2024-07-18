@@ -1,10 +1,13 @@
 package gift.product.entity;
+import gift.category.entity.Category;
 import gift.product.dto.ProductDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,27 +33,27 @@ public class Product {
   @Min(value = 1, message = "가격은 양수여야 합니다.")
   @Column(name = "price", nullable = false)
   private int price;
+
+  @NotNull(message = "이미지 url을 입력해야 합니다.")
   @Column(name = "image_url", nullable = false)
   private String imageUrl;
 
-  public static Product fromDto(ProductDto productDto) {
-    Product product = new Product();
-    product.setId(productDto.getId());
-    product.setName(productDto.getName());
-    product.setPrice(productDto.getPrice());
-    product.setImageUrl(productDto.getImageUrl());
-    return product;
+  @ManyToOne
+  @NotNull(message = "카테고리를 입력해야 합니다.")
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
+
+  public Product(Long id, String name, int price, String imageUrl, Category category) {
+    this.id = id;
+    this.name = name;
+    this.price = price;
+    this.imageUrl = imageUrl;
+    this.category = category;
   }
 
-  public ProductDto toDto() {
-    return new ProductDto(
-        this.getId(),
-        this.getName(),
-        this.getPrice(),
-        this.getImageUrl()
-    );
-  }
+  public Product() {
 
+  }
 
   public Long getId() {
     return id;
@@ -82,5 +85,13 @@ public class Product {
 
   public void setImageUrl(String imageUrl) {
     this.imageUrl = imageUrl;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
   }
 }

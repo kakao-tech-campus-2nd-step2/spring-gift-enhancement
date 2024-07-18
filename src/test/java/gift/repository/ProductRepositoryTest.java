@@ -1,5 +1,10 @@
 package gift.repository;
+
 import static org.assertj.core.api.Assertions.assertThat;
+
+import gift.category.entity.Category;
+import gift.category.repository.CategoryRepository;
+
 import gift.product.entity.Product;
 import gift.product.repository.ProductRepository;
 import gift.wish.repository.WishRepository;
@@ -12,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-
 @DataJpaTest
 public class ProductRepositoryTest {
 
@@ -22,24 +26,38 @@ public class ProductRepositoryTest {
   @Autowired
   private WishRepository wishRepository;
 
+  @Autowired
+  private CategoryRepository categoryRepository;
+
+  private Category createAndSaveCategory(String name) {
+    Category category = new Category();
+    category.setName(name);
+    return categoryRepository.save(category);
+  }
+
   @BeforeEach
   public void setUp() {
     wishRepository.deleteAll();
     productRepository.deleteAll();
+    categoryRepository.deleteAll();
   }
 
-  private Product createAndSaveProduct(String name, int price, String imageUrl) {
+  private Product createAndSaveProduct(String name, int price, String imageUrl, Category category) {
     Product product = new Product();
     product.setName(name);
     product.setPrice(price);
     product.setImageUrl(imageUrl);
+    product.setCategory(category);
+
     return productRepository.save(product);
   }
 
   @Test
   public void testSaveAndFindProduct() {
     // given
-    Product product = createAndSaveProduct("딸기 아사이", 5900, "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg");
+    Category category = createAndSaveCategory("Beverages");
+    Product product = createAndSaveProduct("딸기 아사이", 5900, "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg", category);
+
 
     // when
     Optional<Product> foundProduct = productRepository.findById(product.getId());
@@ -51,13 +69,17 @@ public class ProductRepositoryTest {
       assertThat(p.getName()).isEqualTo("딸기 아사이");
       assertThat(p.getPrice()).isEqualTo(5900);
       assertThat(p.getImageUrl()).isEqualTo("https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg");
+      assertThat(p.getCategory().getName()).isEqualTo("Beverages");
+
     });
   }
 
   @Test
   public void testUpdateProduct() {
     // given
-    Product product = createAndSaveProduct("딸기 아사이", 5900, "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg");
+    Category category = createAndSaveCategory("Beverages");
+    Product product = createAndSaveProduct("딸기 아사이", 5900, "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg", category);
+
 
     // when
     product.setName("바나나 스무디");
@@ -68,13 +90,15 @@ public class ProductRepositoryTest {
     assertThat(foundProduct).isPresent();
     foundProduct.ifPresent(p -> {
       assertThat(p.getName()).isEqualTo("바나나 스무디");
+      assertThat(p.getCategory().getName()).isEqualTo("Beverages");
     });
   }
 
   @Test
   public void testDeleteProduct() {
     // given
-    Product product = createAndSaveProduct("딸기 아사이", 5900, "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg");
+    Category category = createAndSaveCategory("Beverages");
+    Product product = createAndSaveProduct("딸기 아사이", 5900, "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg", category);
     Long productId = product.getId();
 
     // when
@@ -89,8 +113,9 @@ public class ProductRepositoryTest {
   @Test
   public void testFindAllWithPagination() {
     // given
+    Category category = createAndSaveCategory("Beverages");
     for (int i = 1; i <= 20; i++) {
-      createAndSaveProduct("Product " + i, 1000 + i, "http://example.com/image" + i + ".jpg");
+      createAndSaveProduct("Product " + i, 1000 + i, "http://example.com/image" + i + ".jpg", category);
     }
 
     // when

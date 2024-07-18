@@ -41,12 +41,7 @@ public class WishService {
             wish.getUser().getPassword(),
             wish.getUser().getRole()
         ),
-        new ProductDto(
-            wish.getProduct().getId(),
-            wish.getProduct().getName(),
-            wish.getProduct().getPrice(),
-            wish.getProduct().getImageUrl()
-        )
+        ProductDto.toDto(wish.getProduct())
     ));
   }
 
@@ -73,12 +68,8 @@ public class WishService {
             savedWish.getUser().getPassword(),
             savedWish.getUser().getRole()
         ),
-        new ProductDto(
-            savedWish.getProduct().getId(),
-            savedWish.getProduct().getName(),
-            savedWish.getProduct().getPrice(),
-            savedWish.getProduct().getImageUrl()
-        )
+        ProductDto.toDto(savedWish.getProduct())
+
     );
   }
 

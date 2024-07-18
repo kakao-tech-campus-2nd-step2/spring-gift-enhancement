@@ -1,8 +1,16 @@
+CREATE TABLE IF NOT EXISTS category (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name varchar(255) NOT NULL
+);
+
+
 CREATE TABLE IF NOT EXISTS product (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL CHECK (TRIM(name) <> ''),
     price INT CHECK (price >= 0),
-    image_url VARCHAR(255) NOT NULL CHECK (TRIM(image_url) <> '')
+    image_url VARCHAR(255) NOT NULL CHECK (TRIM(image_url) <> ''),
+    category_id BIGINT NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES category(id)
     );
 
 CREATE TABLE IF NOT EXISTS users (

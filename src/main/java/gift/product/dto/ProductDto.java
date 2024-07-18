@@ -1,9 +1,12 @@
 package gift.product.dto;
+import gift.category.entity.Category;
 import gift.product.entity.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -33,33 +36,44 @@ public class ProductDto {
   @Column(name = "imageUrl", nullable = false)
   private String imageUrl;
 
-  public ProductDto(Long id, String name, int price, String imageUrl) {
-    this.id = id;
-    this.name = name;
-    this.price = price;
-    this.imageUrl = imageUrl;
-  }
+  @ManyToOne
+  @NotNull(message = "카테고리를 입력해야 합니다.")
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
+
 
   public ProductDto() {
 
   }
 
-  public static ProductDto fromEntity(Product product) {
+  public ProductDto(Long id, String name, int price, String imageUrl, Category category) {
+
+    this.id = id;
+    this.name = name;
+    this.price = price;
+    this.imageUrl = imageUrl;
+    this.category = category;
+  }
+
+  public static ProductDto toDto(Product product) {
+
     return new ProductDto(
         product.getId(),
         product.getName(),
         product.getPrice(),
-        product.getImageUrl()
-    );
+        product.getImageUrl(),
+        product.getCategory());
   }
 
-  public Product toEntity() {
-    Product product = new Product();
-    product.setId(this.id);
-    product.setName(this.name);
-    product.setPrice(this.price);
-    product.setImageUrl(this.imageUrl);
-    return product;
+  public static Product toEntity(ProductDto productDto) {
+    return new Product(
+        productDto.getId(),
+        productDto.getName(),
+        productDto.getPrice(),
+        productDto.getImageUrl(),
+        productDto.getCategory()
+    );
+
   }
 
 
@@ -93,5 +107,13 @@ public class ProductDto {
 
   public void setImageUrl(String imageUrl) {
     this.imageUrl = imageUrl;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
   }
 }
