@@ -1,6 +1,5 @@
 package gift.entity;
 
-import gift.dto.MemberDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
