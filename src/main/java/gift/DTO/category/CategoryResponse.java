@@ -10,20 +10,20 @@ public class CategoryResponse {
 
     private String color;
 
-    private String description;
-
     private String imageUrl;
+
+    private String description;
 
     protected CategoryResponse() {
     }
 
     public CategoryResponse(Long id, String name, String color,
-                            String description, String imageUrl) {
+                            String imageUrl, String description) {
         this.id = id;
         this.name = name;
         this.color = color;
-        this.description = description;
         this.imageUrl = imageUrl;
+        this.description = description;
     }
 
     public static CategoryResponse fromEntity(Category categoryEntity) {
@@ -31,8 +31,8 @@ public class CategoryResponse {
             categoryEntity.getId(),
             categoryEntity.getName(),
             categoryEntity.getColor(),
-            categoryEntity.getDescription(),
-            categoryEntity.getImageUrl()
+            categoryEntity.getImageUrl(),
+            categoryEntity.getDescription()
         );
     }
 
@@ -48,11 +48,11 @@ public class CategoryResponse {
         return color;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

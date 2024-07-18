@@ -25,10 +25,10 @@ public class Category {
     @Column(nullable = false, length = 7)
     private String color;
 
-    private String description;
-
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
+
+    private String description;
 
     @OneToOne(mappedBy = "category")
     private Product product;
@@ -36,15 +36,15 @@ public class Category {
     protected Category() {
     }
 
-    public Category(String name, String color, String description, String imageUrl) {
+    public Category(String name, String color, String imageUrl, String description) {
         this.name = name;
         this.color = color;
-        this.description = description;
         this.imageUrl = imageUrl;
+        this.description = description;
     }
 
     public Category(String name, String color, String imageUrl) {
-        this(name, color, null, imageUrl);
+        this(name, color, imageUrl, null);
     }
 
     public Long getId() {

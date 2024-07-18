@@ -1,5 +1,6 @@
 package gift.DTO.category;
 
+import gift.domain.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
@@ -26,5 +27,13 @@ public class CategoryRequest {
         this.color = color;
         this.imageUrl = imageUrl;
         this.description = description;
+    }
+
+    public Category toEntity() {
+        return new Category(name, color, imageUrl, description);
+    }
+
+    public String getName() {
+        return name;
     }
 }
