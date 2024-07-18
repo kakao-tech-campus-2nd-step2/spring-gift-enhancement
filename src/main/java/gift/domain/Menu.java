@@ -19,7 +19,6 @@ public class Menu {
     @Column(nullable = false)
     private String imageUrl;
 
-    @Column(nullable = false)
     @ManyToOne
     private Category category;
 

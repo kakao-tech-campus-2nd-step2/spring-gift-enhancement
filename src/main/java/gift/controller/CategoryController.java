@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.domain.CategoryRequest;
+import gift.domain.WishListRequest;
 import gift.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +18,16 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<String> create(
-            @RequestParam("categoryName") String categoryName
+            @RequestBody CategoryRequest categoryRequest
     ) {
-        CategoryRequest categoryRequest = new CategoryRequest(null, categoryName);
         categoryService.create(categoryRequest);
         return ResponseEntity.ok().body("successfully created");
     }
 
     @PutMapping
     public ResponseEntity<String> update(
-            @RequestParam("id") Long categoryId,
-            @RequestParam("categoryName") String categoryName
+            @RequestBody CategoryRequest categoryRequest
     ) {
-        CategoryRequest categoryRequest = new CategoryRequest(categoryId, categoryName);
         categoryService.update(categoryRequest);
         return ResponseEntity.ok().body("successfully created");
     }

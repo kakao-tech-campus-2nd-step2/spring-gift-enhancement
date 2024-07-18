@@ -26,7 +26,7 @@ public class CategoryService {
     }
 
     public Category MapCategoryRequsetToCategory(CategoryRequest categoryRequest) {
-        return new Category(categoryRequest.id(), categoryRequest.name(), new LinkedList<Menu>());
+        return new Category(null, categoryRequest.name(), new LinkedList<Menu>());
     }
 
 }
