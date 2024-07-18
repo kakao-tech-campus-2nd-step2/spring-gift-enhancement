@@ -73,16 +73,16 @@ public class ProductService {
         return productRepository.save(updatedProduct);
     }
 
-    public Long deleteProduct(Long id) {
+    public void deleteProduct(Long id) {
         if (!isExist(id)) {
-            return -1L;
+            throw new IllegalArgumentException("Product not found with id: " + id);
         }
         productRepository.deleteById(id);
-        return id;
     }
 
     public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
+        return productRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
     }
 
     private boolean isExist(Long id) {
