@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import gift.model.User;
+import gift.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 	
