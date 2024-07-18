@@ -28,6 +28,7 @@
             <th>Name</th>
             <th>Price</th>
             <th>Image URL</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -68,6 +69,10 @@
                         <label for="productImageUrl">Image URL</label>
                         <input type="text" class="form-control" id="productImageUrl" name="imageUrl" required>
                     </div>
+                    <div class="form-group">
+                        <label for="productCategory">Category</label>
+                        <select class="form-control" id="productCategory" name="category" required></select>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -81,7 +86,19 @@
 <script>
     $(document).ready(function () {
         const apiBaseUrl = '/api/products';
+        const apiCategoriesUrl = '/api/categories';
         let currentPage = 0;
+
+        function loadCategories() {
+            return $.get(apiCategoriesUrl).then(function(response) {
+                const categories = response.data;
+                const categorySelect = $('#productCategory');
+                categorySelect.empty();
+                categories.forEach(category => {
+                    categorySelect.append(`<option value="${category.id}">${category.name}</option>`);
+                });
+            });
+        }
 
         function loadProducts(page) {
             $.get(apiBaseUrl + '?page=' + page, function (response) {
@@ -93,6 +110,7 @@
                             <td>${product.name}</td>
                             <td>${product.price}</td>
                             <td>${product.imageUrl}</td>
+                            <td>${product.category ? product.category.name : ''}</td>
                             <td>
                                 <button class="btn btn-warning btn-sm editProduct">✏️</button>
                                 <button class="btn btn-danger btn-sm deleteProduct">🗑️</button>
@@ -125,14 +143,17 @@
             $('#productModalLabel').text('Add New Product');
             $('#productForm')[0].reset();
             $('#productId').val('');
-            $('#productModal').modal('show');
+            loadCategories().then(function() {
+                $('#productModal').modal('show');
+            });
         });
 
         $('#saveProduct').click(function () {
             const productData = {
                 name: $('#productName').val(),
                 price: $('#productPrice').val(),
-                imageUrl: $('#productImageUrl').val()
+                imageUrl: $('#productImageUrl').val(),
+                categoryId: $('#productCategory').val()
             };
             const productId = $('#productId').val();
 
@@ -168,7 +189,10 @@
                 $('#productName').val(response.data.name);
                 $('#productPrice').val(response.data.price);
                 $('#productImageUrl').val(response.data.imageUrl);
-                $('#productModal').modal('show');
+                loadCategories().then(function() {
+                    $('#productCategory').val(response.data.category ? response.data.category.id : '');
+                    $('#productModal').modal('show');
+                });
             });
         });
 
@@ -216,6 +240,7 @@
                                 <td>${product.name}</td>
                                 <td>${product.price}</td>
                                 <td>${product.imageUrl}</td>
+                                <td>${product.category ? product.category.name : ''}</td>
                                 <td>
                                     <button class="btn btn-warning btn-sm editProduct">✏️</button>
                                     <button class="btn btn-danger btn-sm deleteProduct">🗑️</button>
