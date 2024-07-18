@@ -3,6 +3,7 @@ package gift.service;
 import gift.dto.CategoryRequestDto;
 import gift.dto.CategoryResponseDto;
 import gift.entity.Category;
+import gift.exception.BusinessException;
 import gift.repository.CategoryRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,11 +43,18 @@ public class CategoryService {
     }
 
     public void updateCategory(Long id, CategoryRequestDto request) {
-        if (!categoryRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("해당 이름의 상품이 존재하지 않습니다.");
+        Category existingCategory = categoryRepository.findById(id).orElseThrow(() -> new BusinessException("해당 id에 대한 카테고리가 없습니다."));
+
+        if (!existingCategory.getName().equals(request.getName()) && categoryRepository.existsByName(request.getName())) {
+            throw new BusinessException("카테고리 이름은 중복될 수 없습니다.");
         }
-        Category category = new Category(id, request.getName(), request.getImageUrl(), request.getColor(), request.getDescription());
-        categoryRepository.save(category);
+
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new BusinessException("해당 id에 대한 카테고리가 없습니다."));
+
+        Category newCategory = new Category(id, request.getName(), request.getImageUrl(),
+            request.getColor(), request.getDescription());
+        categoryRepository.save(newCategory);
     }
 
     public void deleteCategoryById(Long id) {
