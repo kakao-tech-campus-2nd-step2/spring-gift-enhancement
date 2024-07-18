@@ -43,19 +43,19 @@ category
 
 ### 구현 기능 목록
 Option
-- [ ] Option Entity 생성
-- [ ] Product - Option (양방향 OneToMany 연관 관계 설정)
-- [ ] OptionRequest, OptionResponse DTO 생성
-  - [ ] Option 이름, 수량 검증 기능 추가
-- [ ] Option Repository 생성
-- [ ] Option Service 생성 (CRUD 기능)
-  - [ ] 상품의 옵션이 1개 이하일 때는 옵션 삭제 불가
-- [ ] Option Controller 생성 (CRUD 기능)
-- [ ] Product Controller에 상품에 해당하는 option 조회 기능 추가
+- [X] Option Entity 생성
+- [X] Product - Option (양방향 OneToMany 연관 관계 설정)
+- [X] OptionRequest, OptionResponse DTO 생성
+  - [X] Option 이름, 수량 검증 기능 추가
+- [X] Option Repository 생성
+- [X] Option Service 생성 (CRUD 기능)
+  - [X] 상품의 옵션이 1개 이하일 때는 옵션 삭제 불가
+- [X] Option Controller 생성 (CRUD 기능)
+- [X] Product Controller에 상품에 해당하는 option 조회 기능 추가
 
 관리자 페이지
-- [ ] 상품 목록 페이지에서 상품의 옵션 관리 버튼 추가
-- [ ] 상품 옵션 목록 조회 페이지 추가
-- [ ] 상품 옵션 등록 페이지 추가
-- [ ] 상품 옵션 변경 페이지 추가
-- [ ] 상품 옵션 삭제 기능 추가
+- [X] 상품 목록 페이지에서 상품의 옵션 관리 버튼 추가
+- [X] 상품 옵션 목록 조회 페이지 추가
+- [X] 상품 옵션 등록 페이지 추가
+- [X] 상품 옵션 변경 페이지 추가
+- [X] 상품 옵션 삭제 기능 추가
