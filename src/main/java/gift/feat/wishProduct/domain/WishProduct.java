@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class WishProduct {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -49,4 +49,6 @@ public class WishProduct {
 	}
 
 }
+
+
 
