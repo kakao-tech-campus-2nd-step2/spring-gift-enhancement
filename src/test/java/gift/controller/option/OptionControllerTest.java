@@ -55,7 +55,10 @@ class OptionControllerTest {
     void testAddOptionToGift() throws Exception {
         Mockito.doNothing().when(optionService).addOptionToGift(anyLong(), any());
 
-        String optionRequestJson = "{ \"name\": \"Option1\", \"quantity\": 10 }";
+        String optionRequestJson = "{ " +
+                "\"name\": \"Option1\", " +
+                "\"quantity\": 10 " +
+                "}";
 
         mockMvc.perform(post("/api/options/gifts/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +73,9 @@ class OptionControllerTest {
     void testUpdateOptionToGift() throws Exception {
         Mockito.doNothing().when(optionService).updateOptionToGift(anyLong(), anyLong(), any());
 
-        String optionRequestJson = "{ \"name\": \"UpdatedOption\", \"quantity\": 15 }";
+        String optionRequestJson = "{ \"name\": \"UpdatedOption\"," +
+                " \"quantity\": 15" +
+                "}";
 
         mockMvc.perform(put("/api/options/gifts/{giftId}/{optionId}", 1L, 1L)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -85,7 +90,7 @@ class OptionControllerTest {
         Mockito.doNothing().when(optionService).deleteOptionFromGift(anyLong(), anyLong());
 
         mockMvc.perform(delete("/api/options/gifts/{giftId}/{optionId}", 1L, 1L))
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isNoContent())
                 .andExpect(content().string("1번 상품에서1번 옵션이 삭제되었습니다!"));
     }
 

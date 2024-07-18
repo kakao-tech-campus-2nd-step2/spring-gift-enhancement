@@ -62,6 +62,6 @@ public class GiftController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteGift(@PathVariable Long id) {
         giftService.deleteGift(id);
-        return ResponseEntity.status(200).body("삭제가 완료되었습니다");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("상품 삭제가 완료되었습니다");
     }
 }
