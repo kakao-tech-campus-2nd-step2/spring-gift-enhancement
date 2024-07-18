@@ -39,6 +39,8 @@ public class Options extends BaseEntity {
     }
 
     public Options(Long id, String name, Integer quantity, Product product) {
+        validateName(name);
+        validateQuantity(quantity);
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -46,6 +48,8 @@ public class Options extends BaseEntity {
     }
 
     public Options(String name, Integer quantity, Product product) {
+        validateName(name);
+        validateQuantity(quantity);
         this.name = name;
         this.quantity = quantity;
         this.product = product;
