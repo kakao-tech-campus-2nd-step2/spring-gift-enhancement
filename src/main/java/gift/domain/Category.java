@@ -18,4 +18,11 @@ public class Category {
     public Category(String name) {
         this.name = name;
     }
+
+    public Long getId() {
+        return category_id;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 }
