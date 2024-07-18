@@ -9,7 +9,6 @@ import gift.repository.WishListRepository;
 import java.util.Optional;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,10 +31,6 @@ public class WishListService {
         this.memberRepository = memberRepository;
     }
 
-    private WishListDTO toWishListDTO(WishListEntity wishListEntity) {
-        return new WishListDTO(wishListEntity.getProductEntity().getId(), wishListEntity.getUserEntity().getId());
-    }
-
     private WishListEntity dtoToEntity(Long userId, ProductDTO product) throws Exception {
         MemberEntity memberEntity = memberRepository.findById(userId)
             .orElseThrow(() -> new Exception("유저가 존재하지 않습니다."));
@@ -48,7 +43,7 @@ public class WishListService {
 
     public Page<WishListDTO> readWishList(Long userId, Pageable pageable) {
         Page<WishListEntity> wishListEntities = wishListRepository.findByUserEntity_Id(userId, pageable);
-        return wishListEntities.map(this::toWishListDTO);
+        return wishListEntities.map(WishListEntity::toDTO);
     }
 
     @Transactional
