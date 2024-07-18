@@ -40,6 +40,9 @@ public class Option {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
+    private boolean isActive = true;
+
     public Option(String name, Integer quantity, Integer additionalCost, Product product) {
         this.name = name;
         this.quantity = quantity;
@@ -88,5 +91,13 @@ public class Option {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
