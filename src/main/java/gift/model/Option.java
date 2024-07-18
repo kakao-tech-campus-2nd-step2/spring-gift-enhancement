@@ -44,7 +44,13 @@ public class Option {
             product.getOptions().add(this);
         }
     }
+    public Long getId() {
+        return id;
+    }
     public String getName() {
         return name;
+    }
+    public Long getQuantity() {
+        return quantity;
     }
 }
