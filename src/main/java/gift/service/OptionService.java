@@ -26,7 +26,7 @@ public class OptionService {
 
     public void addOption(Option option) {
         if (isDuplicateName(option)) {
-            throw new IllegalArgumentException("asdfasdf");
+            throw new IllegalArgumentException("Option 이름은 중복될 수 없습니다.");
         }
         optionRepository.save(option);
     }
