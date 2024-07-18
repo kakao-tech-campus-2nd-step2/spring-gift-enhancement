@@ -71,7 +71,7 @@ class ProductRestControllerTest {
         ProductResponseDto productResponseDto = ProductResponseDto.from(product);
 
         given(productService.create(any(ProductRequestDto.class))).willReturn(productResponseDto);
-        String expectedResult = objectMapper.writeValueAsString(product);
+        String expectedResult = objectMapper.writeValueAsString(ProductResponseDto.from(product));
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -123,7 +123,7 @@ class ProductRestControllerTest {
         Page<Product> expectedPage = new PageImpl<>(productList, PageRequest.of(0, 5), productList.size());
 
         given(productService.readAll(any(Pageable.class))).willReturn(expectedPage.map(ProductResponseDto::from));
-        String expectedResult = objectMapper.writeValueAsString(expectedPage);
+        String expectedResult = objectMapper.writeValueAsString(expectedPage.map(ProductResponseDto::from));
 
         // when & then
         mockMvc.perform(get(DEFAULT_URL)
@@ -141,7 +141,7 @@ class ProductRestControllerTest {
         Product product = new Product(1L, category, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg");
 
         given(productService.readById(anyLong())).willReturn(ProductResponseDto.from(product));
-        String expectedResult = objectMapper.writeValueAsString(product);
+        String expectedResult = objectMapper.writeValueAsString(ProductResponseDto.from(product));
 
         // when & then
         mockMvc.perform(get(PATH_VAR_URL, 1L))
@@ -176,7 +176,7 @@ class ProductRestControllerTest {
         product.setId(1L);
 
         given(productService.update(anyLong(), any(ProductRequestDto.class))).willReturn(ProductResponseDto.from(product));
-        String expectedResult = objectMapper.writeValueAsString(product);
+        String expectedResult = objectMapper.writeValueAsString(ProductResponseDto.from(product));
 
         // when & then
         mockMvc.perform(put(PATH_VAR_URL, 1L)
