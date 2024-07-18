@@ -1,8 +1,11 @@
 package gift.controller.product.dto;
 
 
+import gift.controller.product.dto.OptionRequest.Info;
 import gift.controller.product.dto.OptionRequest.Register;
+import gift.service.product.dto.OptionCommand;
 import gift.service.product.dto.ProductCommand;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,13 +23,19 @@ public class ProductRequest {
         @NotNull
         Long categoryId,
         @NotNull
-        OptionRequest.Register options
+        @Valid
+        List<OptionRequest.Info> options
     ) {
 
-        public ProductCommand.Register toCommand() {
+        public ProductCommand.Register toProductCommand() {
             return new ProductCommand.Register(name, price, imageUrl, categoryId);
         }
 
+        public OptionCommand.Register toOptionCommand() {
+            return new OptionCommand.Register(options.stream()
+                .map(Info::toCommand)
+                .toList());
+        }
 
     }
 
@@ -41,8 +50,10 @@ public class ProductRequest {
         Long categoryId
     ) {
 
-        public ProductCommand.Update toCommand() {
+        public ProductCommand.Update toProductCommand() {
             return new ProductCommand.Update(name, price, imageUrl, categoryId);
         }
+
+
     }
 }
