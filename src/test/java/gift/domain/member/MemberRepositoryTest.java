@@ -8,7 +8,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MemberRepositoryTest {
@@ -18,14 +19,14 @@ class MemberRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        repository.save(new Member("tester@gmail.com","더미","password",1));
+        repository.save(new Member("tester@gmail.com", "더미", "password", 1));
     }
 
 
     @Test
     @DisplayName("save 메서드 테스트")
     void save() {
-        Member expected = new Member("test@gmail.com","영식","password",1);
+        Member expected = new Member("test@gmail.com", "영식", "password", 1);
 
         Member actual = repository.save(expected);
         assertAll(
@@ -33,10 +34,11 @@ class MemberRepositoryTest {
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName())
         );
     }
+
     @Test
     @DisplayName("findByEmail 테스트")
     void findByEmail() {
-        Member expected = new Member("tester@gmail.com","더미","password",1);
+        Member expected = new Member("tester@gmail.com", "더미", "password", 1);
 
         Member actual = repository.findByEmail(expected.getEmail()).orElse(null);
         assertAll(
