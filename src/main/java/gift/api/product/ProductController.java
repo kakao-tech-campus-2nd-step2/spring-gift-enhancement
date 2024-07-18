@@ -1,5 +1,7 @@
 package gift.api.product;
 
+import gift.api.option.OptionResponse;
+import gift.api.option.OptionService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public ProductController(ProductService productService) {
-        this. productService = productService;
+    public ProductController(ProductService productService, OptionService optionService) {
+        this.productService = productService;
+        this.optionService = optionService;
     }
 
 
@@ -37,14 +41,19 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable("id") long id, @Valid @RequestBody ProductRequest productRequest) {
+    public ResponseEntity<Void> update(@PathVariable("id") Long id, @Valid @RequestBody ProductRequest productRequest) {
         productService.update(id, productRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         productService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<OptionResponse>> getOptions(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(optionService.getOptions(id));
     }
 }
