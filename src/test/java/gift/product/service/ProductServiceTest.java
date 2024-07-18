@@ -102,17 +102,22 @@ class ProductServiceTest {
         Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
         Product product = new Product(id, "테스트 상품", 1000, "http://test.com", category);
 
-        given(productRepository.findById(id)).willReturn(Optional.of(product));
+        given(productRepository.findByIdWithCategory(id)).willReturn(Optional.of(product));
 
         //when
         var productInfo = productService.getProductDetails(id);
 
         //then
-        verify(productRepository).findById(id);
+        verify(productRepository).findByIdWithCategory(id);
         assertThat(productInfo.id()).isEqualTo(1L);
         assertThat(productInfo.name()).isEqualTo("테스트 상품");
         assertThat(productInfo.price()).isEqualTo(1000);
         assertThat(productInfo.imgUrl()).isEqualTo("http://test.com");
+        assertThat(productInfo.category().id()).isEqualTo(1L);
+        assertThat(productInfo.category().name()).isEqualTo("카테고리");
+        assertThat(productInfo.category().imgUrl()).isEqualTo("카테고리 이미지");
+        assertThat(productInfo.category().description()).isEqualTo("카테고리 썸네일 이미지");
+
     }
 
     @Test
@@ -121,7 +126,7 @@ class ProductServiceTest {
         //given
         final Long id = 1L;
 
-        given(productRepository.findById(id)).willReturn(Optional.empty());
+        given(productRepository.findByIdWithCategory(id)).willReturn(Optional.empty());
 
         //when && then
         assertThatThrownBy(() -> productService.getProductDetails(id))
@@ -142,13 +147,13 @@ class ProductServiceTest {
         ));
         Pageable pageable = Pageable.ofSize(10).first();
 
-        given(productRepository.findAll(pageable)).willReturn(productPage);
+        given(productRepository.findAllWithCategory(pageable)).willReturn(productPage);
 
         //when
         var products = productService.getProducts(pageable);
 
         //then
-        verify(productRepository).findAll(pageable);
+        verify(productRepository).findAllWithCategory(pageable);
         assertThat(products.products().size()).isEqualTo(2);
         assertThat(products.currentPage()).isEqualTo(1);
         assertThat(products.totalPages()).isEqualTo(1);
