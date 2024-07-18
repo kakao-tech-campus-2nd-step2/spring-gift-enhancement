@@ -38,7 +38,7 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.category = categoty;
+        this.category = category;
     }
 
     public long getId() {
