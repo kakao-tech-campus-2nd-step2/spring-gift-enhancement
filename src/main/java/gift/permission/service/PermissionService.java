@@ -5,7 +5,7 @@ import gift.global.dto.TokenDto;
 import gift.permission.dto.LoginRequestDto;
 import gift.permission.dto.RegistrationRequestDto;
 import gift.permission.repository.PermissionRepository;
-import gift.user.entity.User;
+import gift.permission.entity.User;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

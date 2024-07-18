@@ -1,4 +1,4 @@
-package gift.admin.controller;
+package gift.product.controller;
 
 import gift.product.dto.ProductResponseDto;
 import gift.product.service.ProductService;
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "admin-controller", description = "view 반환")
 @RequestMapping("/admin")
 @SecurityRequirement(name = HttpHeaders.AUTHORIZATION)
-public class AdminController {
+public class ProductController {
 
     private final ProductService productService;
 
     @Autowired
-    public AdminController(ProductService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 

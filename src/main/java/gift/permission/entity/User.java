@@ -1,4 +1,4 @@
-package gift.user.entity;
+package gift.permission.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

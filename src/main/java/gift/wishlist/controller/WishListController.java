@@ -1,4 +1,4 @@
-package gift.user.controller;
+package gift.wishlist.controller;
 
 import gift.global.annotation.PageInfo;
 import gift.global.annotation.UserInfo;
@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Tag(name = "user-controller", description = "view 반환")
 @RequestMapping("/users")
 @SecurityRequirement(name = HttpHeaders.AUTHORIZATION)
-public class UserController {
+public class WishListController {
 
     private final WishListService wishListService;
 
     @Autowired
-    public UserController(WishListService wishListService) {
+    public WishListController(WishListService wishListService) {
         this.wishListService = wishListService;
     }
 
