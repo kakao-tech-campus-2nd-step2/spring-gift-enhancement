@@ -26,6 +26,28 @@ public class ProductRestController {
 	public ResponseEntity<Long> registerProduct(@RequestBody @Valid ProductCreateRequest productCreateRequest) {
 		return ResponseEntity.ok(productService.saveProduct(productCreateRequest));
 	}
+	// 상품 단일 조회 메서드
+	@GetMapping("/api/v1/product/{id}")
+	@ResponseBody
+	public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long id) {
+		Product product = productService.getProductById(id);
+		return ResponseEntity.ok(ProductResponseDto.from(product));
+	}
+
+	// 상품 수정 메서드
+	@PutMapping("/api/v1/product/{id}")
+	@ResponseBody
+	public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductCreateRequest productCreateRequest) {
+		return ResponseEntity.ok(productService.updateProduct(id, productCreateRequest));
+	}
+
+	// 상품 삭제 메서드
+	@DeleteMapping("/api/v1/product/{id}")
+	@ResponseBody
+	public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+		productService.deleteProduct(id);
+		return ResponseEntity.ok().build();
+	}
 
 	// 모든 상품을 페이징해서 조회
 	@GetMapping("/api/v1/product")
@@ -38,23 +60,4 @@ public class ProductRestController {
 		return ResponseEntity.ok(productService.getProductsWithPaging(pageable, searchType, searchValue).map(ProductResponseDto::from));
 	}
 
-	@GetMapping("/api/v1/product/{id}")
-	@ResponseBody
-	public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long id) {
-		Product product = productService.getProductById(id);
-		return ResponseEntity.ok(ProductResponseDto.from(product));
-	}
-
-	@PutMapping("/api/v1/product/{id}")
-	@ResponseBody
-	public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductCreateRequest productCreateRequest) {
-		return ResponseEntity.ok(productService.updateProduct(id, productCreateRequest));
-	}
-
-	@DeleteMapping("/api/v1/product/{id}")
-	@ResponseBody
-	public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
-		productService.deleteProduct(id);
-		return ResponseEntity.ok().build();
-	}
 }

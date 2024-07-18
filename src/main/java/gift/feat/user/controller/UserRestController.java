@@ -25,6 +25,6 @@ public class UserRestController {
 
 	@PostMapping("/signup")
 	public void signup(@RequestBody SignupRequestDto signupRequestDto) {
-		userService.registerUser(signupRequestDto.toEntity());
+		userService.registerUser(signupRequestDto);
 	}
 }
