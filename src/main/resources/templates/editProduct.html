@@ -23,7 +23,11 @@
 
     <label>Category:</label>
     <select th:field="*{categoryId}" required>
-        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+        <option th:each="category : ${categories}"
+                th:value="${category.id}"
+                th:text="${category.name}"
+                th:attr="selected=${category.id == product.categoryId}">
+        </option>
     </select>
     <div th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
 
