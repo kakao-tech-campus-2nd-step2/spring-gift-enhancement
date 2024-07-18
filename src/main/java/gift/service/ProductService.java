@@ -2,6 +2,7 @@ package gift.service;
 
 
 import gift.dto.ProductDto;
+import gift.exception.RepositoryRelatedException;
 import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductName;
@@ -26,7 +27,7 @@ public class ProductService {
 
     public boolean addNewProduct(ProductDto productDto){
         if (productRepository.existsByName(productDto.name())) {
-            return false;
+            throw new RepositoryRelatedException("Product with name " + productDto.name() + " already exists.");
         }
         Category category = findCategory(productDto.categoryName());
         Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
