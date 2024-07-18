@@ -1,8 +1,7 @@
 package gift.wish.service;
 
-import gift.exception.product.ProductNotFoundException;
-import gift.exception.user.UserNotFoundException;
-import gift.exception.wish.WishNotFoundException;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.product.entity.Product;
 import gift.product.repository.ProductRepository;
 import gift.user.entity.User;
@@ -43,9 +42,9 @@ public class WishService {
     @Transactional
     public Long addWish(Long userId, AddWishRequest request) {
         Product product = productRepository.findById(request.productId())
-            .orElseThrow(ProductNotFoundException::new);
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         User user = userRepository.findById(userId)
-            .orElseThrow(UserNotFoundException::new);
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Wish wish = new Wish(user, product, request.quantity());
 
@@ -77,12 +76,12 @@ public class WishService {
     @Transactional(readOnly = true)
     protected Wish getWish(Long id) {
         return wishRepository.findById(id)
-            .orElseThrow(WishNotFoundException::new);
+            .orElseThrow(() -> new CustomException(ErrorCode.WISH_NOT_FOUND));
     }
 
     private void validateWishPage(Page<Wish> wishes) {
         if (wishes == null || wishes.isEmpty()) {
-            throw new WishNotFoundException();
+            throw new CustomException(ErrorCode.WISH_NOT_FOUND);
         }
     }
 

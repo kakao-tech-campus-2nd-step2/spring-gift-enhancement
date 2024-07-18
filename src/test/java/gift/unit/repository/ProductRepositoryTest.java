@@ -2,7 +2,8 @@ package gift.unit.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.exception.product.ProductNotFoundException;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.product.category.entity.Category;
 import gift.product.category.repository.CategoryRepository;
 import gift.product.entity.Product;
@@ -94,7 +95,7 @@ class ProductRepositoryTest {
     void updateTest() {
         // given
         final Product updateProduct = productRepository.findById(1L)
-            .orElseThrow(() -> new ProductNotFoundException(""));
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
         // when
         updateProduct.changeName("update product");

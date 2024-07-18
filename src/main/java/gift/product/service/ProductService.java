@@ -1,7 +1,7 @@
 package gift.product.service;
 
-import gift.exception.category.CategoryNotFoundException;
-import gift.exception.product.ProductNotFoundException;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.product.category.entity.Category;
 import gift.product.category.repository.CategoryRepository;
 import gift.product.dto.request.CreateProductRequest;
@@ -36,23 +36,23 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponse getProductById(Long id) {
         Product product = productRepository.findById(id)
-            .orElseThrow(ProductNotFoundException::new);
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         return ProductMapper.toResponse(product);
     }
 
     @Transactional
     public Long createProduct(CreateProductRequest request) {
         Category category = categoryRepository.findById(request.categoryId())
-            .orElseThrow(CategoryNotFoundException::new);
+            .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         return productRepository.save(ProductMapper.toProduct(request, category)).getId();
     }
 
     @Transactional
     public void updateProduct(Long id, UpdateProductRequest request) {
         Product product = productRepository.findById(id)
-            .orElseThrow(ProductNotFoundException::new);
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Category category = categoryRepository.findById(request.categoryId())
-            .orElseThrow(CategoryNotFoundException::new);
+            .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
         product.edit(request, category);
     }
@@ -66,7 +66,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public void checkProductExist(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException();
+            throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
         }
     }
 }

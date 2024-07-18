@@ -8,7 +8,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 
-import gift.exception.product.ProductNotFoundException;
+import gift.exception.CustomException;
 import gift.product.category.entity.Category;
 import gift.product.category.repository.CategoryRepository;
 import gift.product.dto.request.CreateProductRequest;
@@ -109,7 +109,7 @@ class ProductServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> productService.getProductById(7L))
-            .isInstanceOf(ProductNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(productRepository).should(times(1)).findById(7L);
     }
 
@@ -225,7 +225,7 @@ class ProductServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> productService.deleteProduct(9L))
-            .isInstanceOf(ProductNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(productRepository).should(times(1)).existsById(9L);
     }
 }

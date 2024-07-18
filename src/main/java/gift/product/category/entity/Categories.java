@@ -1,6 +1,7 @@
 package gift.product.category.entity;
 
-import gift.exception.category.CategoryAlreadyExistException;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class Categories {
 
     public void validate(Category category) {
         if (categories.stream().anyMatch(it -> it.getName().equals(category.getName()))) {
-            throw new CategoryAlreadyExistException();
+            throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
         }
     }
 

@@ -1,6 +1,7 @@
 package gift.product.category.service;
 
-import gift.exception.category.CategoryNotFoundException;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.product.category.dto.request.CreateCategoryRequest;
 import gift.product.category.dto.request.UpdateCategoryRequest;
 import gift.product.category.dto.response.CategoryResponse;
@@ -32,7 +33,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryResponse getCategory(Long id) {
         Category category = categoryRepository.findById(id)
-            .orElseThrow(CategoryNotFoundException::new);
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         return CategoryMapper.toResponse(category);
     }
 
@@ -50,14 +51,14 @@ public class CategoryService {
     @Transactional
     public void updateCategory(Long id, UpdateCategoryRequest request) {
         Category category = categoryRepository.findById(id)
-            .orElseThrow(CategoryNotFoundException::new);
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         category.edit(request);
     }
 
     @Transactional
     public void deleteCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new CategoryNotFoundException();
+            throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
         }
         categoryRepository.deleteById(id);
     }

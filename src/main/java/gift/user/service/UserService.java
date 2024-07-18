@@ -1,8 +1,7 @@
 package gift.user.service;
 
-import gift.exception.InvalidTokenException;
-import gift.exception.user.UserAlreadyExistException;
-import gift.exception.user.UserNotFoundException;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.user.dto.request.UserLoginRequest;
 import gift.user.dto.request.UserRegisterRequest;
 import gift.user.dto.response.UserResponse;
@@ -36,7 +35,7 @@ public class UserService {
     public UserResponse registerUser(UserRegisterRequest request) {
         userRepository.findByEmail(request.email())
             .ifPresent(user -> {
-                throw new UserAlreadyExistException("이미 존재하는 Email입니다.");
+                throw new CustomException(ErrorCode.USER_ALREADY_EXITS);
             });
         User registeredUser = userRepository.save(UserMapper.toUser(request));
         List<String> roles = new ArrayList<>();
@@ -49,7 +48,7 @@ public class UserService {
     public UserResponse loginUser(UserLoginRequest userRequest) {
         User user = userRepository.findByEmailAndPassword(userRequest.email(),
                 userRequest.password())
-            .orElseThrow(() -> new UserNotFoundException("로그인할 수 없습니다."));
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         List<Long> roleIds = user.getRoles()
             .stream()
             .filter(Objects::nonNull)
@@ -69,14 +68,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
     public Long getUserIdByToken(String token) {
         Long userId = jwtUtil.extractUserId(token);
         if (userId == null || !userRepository.existsById(userId)) {
-            throw new InvalidTokenException();
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         return userId;
     }

@@ -43,7 +43,7 @@ public class Wish {
     }
 
     public Wish(User user, Product product, int quantity) {
-        if(isQuantityZero()) {
+        if (isQuantityZero()) {
             throw new IllegalArgumentException("수량은 0보다 큰 수이어야 합니다.");
         }
         this.user = user;

@@ -7,9 +7,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 
-import gift.exception.InvalidTokenException;
-import gift.exception.user.UserAlreadyExistException;
-import gift.exception.user.UserNotFoundException;
+import gift.exception.CustomException;
 import gift.user.dto.request.UserLoginRequest;
 import gift.user.dto.request.UserRegisterRequest;
 import gift.user.dto.response.UserResponse;
@@ -96,7 +94,7 @@ class UserServiceTest implements AutoCloseable {
 
         //when&then
         assertThatThrownBy(() -> userService.registerUser(request))
-            .isInstanceOf(UserAlreadyExistException.class);
+            .isInstanceOf(CustomException.class);
         then(userRepository).should(times(1)).findByEmail(request.email());
     }
 
@@ -140,7 +138,7 @@ class UserServiceTest implements AutoCloseable {
 
         //when & then
         assertThatThrownBy(() -> userService.loginUser(request))
-            .isInstanceOf(UserNotFoundException.class);
+            .isInstanceOf(CustomException.class);
     }
 
     @Test
@@ -155,7 +153,7 @@ class UserServiceTest implements AutoCloseable {
 
         //when & then
         assertThatThrownBy(() -> userService.loginUser(request))
-            .isInstanceOf(UserNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(userRepository).should(times(1)).findByEmailAndPassword(request.email(),
             request.password());
     }
@@ -188,7 +186,7 @@ class UserServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> userService.getUserById(1L))
-            .isInstanceOf(UserNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(userRepository).should(times(1)).findById(1L);
     }
 
@@ -218,7 +216,7 @@ class UserServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> userService.getUserIdByToken(token))
-            .isInstanceOf(InvalidTokenException.class);
+            .isInstanceOf(CustomException.class);
         then(jwtUtil).should(times(1)).extractUserId(token);
     }
 }

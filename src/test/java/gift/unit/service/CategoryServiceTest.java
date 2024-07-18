@@ -8,7 +8,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
-import gift.exception.category.CategoryNotFoundException;
+import gift.exception.CustomException;
 import gift.product.category.dto.request.CreateCategoryRequest;
 import gift.product.category.dto.request.UpdateCategoryRequest;
 import gift.product.category.dto.response.CategoryResponse;
@@ -102,7 +102,7 @@ public class CategoryServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> categoryService.getCategory(999L)).isInstanceOf(
-            CategoryNotFoundException.class);
+            CustomException.class);
         then(categoryRepository).should(times(1)).findById(any());
     }
 
@@ -155,7 +155,7 @@ public class CategoryServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> categoryService.updateCategory(1L, request))
-            .isInstanceOf(CategoryNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(categoryRepository).should(times(1)).findById(any());
     }
 
@@ -182,7 +182,7 @@ public class CategoryServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> categoryService.deleteCategory(1L))
-            .isInstanceOf(CategoryNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(categoryRepository).should(times(1)).existsById(any());
         then(categoryRepository).should(times(0)).deleteById(any());
     }
