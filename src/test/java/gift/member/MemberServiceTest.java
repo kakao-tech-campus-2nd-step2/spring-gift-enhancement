@@ -71,7 +71,7 @@ class MemberServiceTest {
 
         @Test
         @DisplayName("wrong password error")
-        void wrongPasswordError(MemberDTO memberDTO, Member member) {
+        void wrongPasswordError() {
             //given
             MemberDTO inputMemberDTO = new MemberDTO("aaa@email.com", "wrong-password");
             Member except = new Member("aaa@email.com", "right-password");
