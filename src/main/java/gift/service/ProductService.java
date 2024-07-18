@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.ProductDto;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -35,7 +36,17 @@ public class ProductService {
     public Product addProduct(ProductDto productDto) {
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
-        Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category,null);
+
+        List<Option> options = productDto.getOptions().stream()
+                .map(optionDto -> new Option(optionDto.getName(), optionDto.getQuantity()))
+                .toList();
+
+        Product product = new Product(
+                productDto.getName(),
+                productDto.getPrice(),
+                productDto.getImageUrl(),
+                category,options
+        );
         productRepository.save(product);
         return product;
     }
@@ -43,13 +54,18 @@ public class ProductService {
     public Product updateProduct(Long id, ProductDto productDto) {
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+
+        List<Option> options = productDto.getOptions().stream()
+                .map(optionDto -> new Option(optionDto.getName(), optionDto.getQuantity()))
+                .toList();
+
         Product updateProduct = new Product(
                 id,
                 productDto.getName(),
                 productDto.getPrice(),
                 productDto.getImageUrl(),
                 category,
-                null
+                options
         );
         return productRepository.save(updateProduct);
     }
@@ -68,8 +84,10 @@ public class ProductService {
     public void updateProductCategoryToNone(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+
         Category noneCategory = categoryRepository.findById(1L)
                 .orElseThrow(() -> new NoSuchElementException("없음 카테고리를 찾을 수 없습니다."));
+
         List<Product> products = productRepository.findByCategory(category);
         for (Product product : products) {
             Product updateProduct = new Product(
@@ -78,7 +96,7 @@ public class ProductService {
                     product.getPrice(),
                     product.getImageUrl(),
                     noneCategory,
-                    null
+                    product.getOptions()
             );
             productRepository.save(updateProduct);
         }

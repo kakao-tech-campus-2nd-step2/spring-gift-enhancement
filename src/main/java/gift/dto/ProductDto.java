@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 public class ProductDto {
     @NotBlank(message = "이름은 필수 입력 값입니다.")
     @Size(max = 15, message = "이름은 최대 15자까지 입력 가능합니다.")
@@ -15,6 +17,7 @@ public class ProductDto {
     private String imageUrl;
     @NotNull(message = "카테고리 ID는 필수 입력 값입니다.")
     private Long categoryId;
+    private List<OptionDto> options;
 
     public int getPrice() {
         return price;
@@ -46,5 +49,9 @@ public class ProductDto {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<OptionDto> getOptions() {
+        return options;
     }
 }
