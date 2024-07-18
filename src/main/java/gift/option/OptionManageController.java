@@ -7,10 +7,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-public class OptionController {
+public class OptionManageController {
     private final OptionService optionService;
 
-    public OptionController(OptionService optionService) {
+    public OptionManageController(OptionService optionService) {
         this.optionService = optionService;
     }
 
