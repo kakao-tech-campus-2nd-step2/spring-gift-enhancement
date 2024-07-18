@@ -1,5 +1,9 @@
 package gift.wishes;
 
+import gift.core.domain.product.Product;
+import gift.core.domain.product.ProductCategory;
+import gift.core.domain.user.User;
+import gift.core.domain.user.UserAccount;
 import gift.product.infrastructure.persistence.repository.JpaProductCategoryRepository;
 import gift.product.infrastructure.persistence.repository.JpaProductRepository;
 import gift.product.infrastructure.persistence.entity.ProductCategoryEntity;
@@ -37,14 +41,20 @@ public class WishRepositoryTests {
 
     @BeforeEach
     public void setUp() {
-        user = jpaUserRepository.save(new UserEntity("test"));
-        category = jpaProductCategoryRepository.save(new ProductCategoryEntity("test"));
-        product = jpaProductRepository.save(new ProductEntity("test", 100, "test", category));
+        user = jpaUserRepository.save(
+                UserEntity.fromDomain(new User("test", new UserAccount("test", "test")))
+        );
+        category = jpaProductCategoryRepository.save(
+                ProductCategoryEntity.fromDomain(new ProductCategory(0L, "test"))
+        );
+        product = jpaProductRepository.save(ProductEntity.fromDomain(
+                new Product(0L, "test", 100, "test", category.toDomain()))
+        );
     }
 
     @Test
     public void saveWish() {
-        WishEntity wish = new WishEntity(user, product);
+        WishEntity wish = WishEntity.of(user, product);
 
         wish = jpaWishRepository.save(wish);
 
@@ -54,7 +64,7 @@ public class WishRepositoryTests {
 
     @Test
     public void removeWish() {
-        WishEntity wish = new WishEntity(user, product);
+        WishEntity wish = WishEntity.of(user, product);
 
         wish = jpaWishRepository.save(wish);
 
@@ -64,7 +74,7 @@ public class WishRepositoryTests {
 
     @Test
     public void existsByUserIdAndProductId() {
-        WishEntity wish = new WishEntity(user, product);
+        WishEntity wish = WishEntity.of(user, product);
 
         wish = jpaWishRepository.save(wish);
 
@@ -73,7 +83,7 @@ public class WishRepositoryTests {
 
     @Test
     public void findAllByUserId() {
-        WishEntity wish = new WishEntity(user, product);
+        WishEntity wish = WishEntity.of(user, product);
 
         jpaWishRepository.save(wish);
 

@@ -35,7 +35,7 @@ public class ProductCategoryRepositoryImpl implements ProductCategoryRepository 
 
     public ProductCategory save(ProductCategory category) {
         return jpaProductCategoryRepository
-                .save(ProductCategoryEntity.toEntity(category))
+                .save(ProductCategoryEntity.fromDomain(category))
                 .toDomain();
     }
 

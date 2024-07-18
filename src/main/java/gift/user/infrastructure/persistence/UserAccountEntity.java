@@ -19,10 +19,10 @@ public class UserAccountEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    public UserAccountEntity() {
+    protected UserAccountEntity() {
     }
 
-    public UserAccountEntity(Long userId, String email, String password) {
+    protected UserAccountEntity(Long userId, String email, String password) {
         this.userId = userId;
         this.email = email;
         this.password = password;

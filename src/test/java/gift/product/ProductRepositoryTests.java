@@ -1,9 +1,12 @@
 package gift.product;
 
+import gift.core.domain.product.Product;
+import gift.core.domain.product.ProductCategory;
 import gift.product.infrastructure.persistence.repository.JpaProductCategoryRepository;
 import gift.product.infrastructure.persistence.repository.JpaProductRepository;
 import gift.product.infrastructure.persistence.entity.ProductCategoryEntity;
 import gift.product.infrastructure.persistence.entity.ProductEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -20,13 +23,18 @@ public class ProductRepositoryTests {
     @Autowired
     private JpaProductRepository jpaProductRepository;
 
-    private ProductEntity product;
     private ProductCategoryEntity category;
+
+    @BeforeEach
+    public void setUp() {
+        category = jpaProductCategoryRepository.save(
+                ProductCategoryEntity.fromDomain(new ProductCategory(0L, "test"))
+        );
+    }
 
     @Test
     public void saveProduct() {
-        ProductCategoryEntity category = jpaProductCategoryRepository.save(new ProductCategoryEntity("test"));
-        ProductEntity product = jpaProductRepository.save(new ProductEntity("test", 100, "test", category));
+        ProductEntity product = jpaProductRepository.save(ProductEntity.fromDomain(sampleProduct()));
 
         assertThat(jpaProductRepository.findById(product.getId())).isPresent();
         assertThat(jpaProductRepository.findById(product.getId()).get()).isEqualTo(product);
@@ -34,19 +42,21 @@ public class ProductRepositoryTests {
 
     @Test
     public void findProductById() {
-        ProductCategoryEntity category = jpaProductCategoryRepository.save(new ProductCategoryEntity("test"));
-        ProductEntity product = jpaProductRepository.save(new ProductEntity("test", 100, "test", category));
+        ProductEntity product = jpaProductRepository.save(ProductEntity.fromDomain(sampleProduct()));
 
         assertThat(jpaProductRepository.findById(product.getId())).isPresent();
     }
 
     @Test
     public void deleteProduct() {
-        ProductCategoryEntity category = jpaProductCategoryRepository.save(new ProductCategoryEntity("test"));
-        ProductEntity product = jpaProductRepository.save(new ProductEntity("test", 100, "test", category));
+        ProductEntity product = jpaProductRepository.save(ProductEntity.fromDomain(sampleProduct()));
 
         jpaProductRepository.deleteById(product.getId());
 
         assertThat(jpaProductRepository.findById(product.getId())).isEmpty();
+    }
+
+    private Product sampleProduct() {
+        return new Product(0L, "test", 100, "test", category.toDomain());
     }
 }

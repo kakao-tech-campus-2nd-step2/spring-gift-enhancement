@@ -57,7 +57,7 @@ public class WishesRepositoryImpl implements WishesRepository {
 
     @Override
     public List<Product> getWishlistOfUser(User user) {
-        return jpaWishRepository.findAllByUser(UserEntity.from(user))
+        return jpaWishRepository.findAllByUser(UserEntity.fromDomain(user))
                 .stream()
                 .map((entity -> entity.getProduct().toDomain()))
                 .toList();
@@ -66,7 +66,7 @@ public class WishesRepositoryImpl implements WishesRepository {
     @Override
     public PagedDto<Product> getWishlistOfUser(User user, Pageable pageable) {
         Page<Product> pagedProducts = jpaWishRepository
-                .findAllByUser(UserEntity.from(user), pageable)
+                .findAllByUser(UserEntity.fromDomain(user), pageable)
                 .map((entity -> entity.getProduct().toDomain()));
         return new PagedDto<>(
                 pageable.getPageNumber(),

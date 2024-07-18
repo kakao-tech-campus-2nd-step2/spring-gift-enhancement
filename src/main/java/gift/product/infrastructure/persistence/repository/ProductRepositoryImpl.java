@@ -38,7 +38,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void save(@Nonnull Product product) {
-        jpaProductRepository.save(mapToProductEntity(product));
+        jpaProductRepository.save(ProductEntity.fromDomain(product));
     }
 
     @Override
@@ -71,15 +71,5 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public void remove(Long id) {
         jpaProductRepository.deleteById(id);
-    }
-
-    private ProductEntity mapToProductEntity(Product product) {
-        return new ProductEntity(
-                product.id(),
-                product.name(),
-                product.price(),
-                product.imageUrl(),
-                ProductCategoryEntity.toEntity(ProductCategory.from(product.category()))
-        );
     }
 }

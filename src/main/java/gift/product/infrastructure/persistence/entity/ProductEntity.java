@@ -20,10 +20,10 @@ public class ProductEntity extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private ProductCategoryEntity category;
 
-    public ProductEntity() {
+    protected ProductEntity() {
     }
 
-    public ProductEntity(
+    protected ProductEntity(
             Long id,
             String name,
             Integer price,
@@ -37,7 +37,7 @@ public class ProductEntity extends BaseEntity {
         this.category = category;
     }
 
-    public ProductEntity(
+    protected ProductEntity(
             String name,
             Integer price,
             String imageUrl,
@@ -47,6 +47,16 @@ public class ProductEntity extends BaseEntity {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public static ProductEntity fromDomain(Product product) {
+        return new ProductEntity(
+                product.id(),
+                product.name(),
+                product.price(),
+                product.imageUrl(),
+                ProductCategoryEntity.fromDomain(product.category())
+        );
     }
 
     public String getName() {

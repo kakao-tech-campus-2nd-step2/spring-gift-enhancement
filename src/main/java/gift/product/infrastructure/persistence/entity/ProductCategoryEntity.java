@@ -10,16 +10,20 @@ public class ProductCategoryEntity extends BaseEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    public ProductCategoryEntity() {
+    protected ProductCategoryEntity() {
     }
 
-    public ProductCategoryEntity(Long id, String name) {
+    protected ProductCategoryEntity(Long id, String name) {
         super(id);
         this.name = name;
     }
 
-    public ProductCategoryEntity(String name) {
+    protected ProductCategoryEntity(String name) {
         this.name = name;
+    }
+
+    public static ProductCategoryEntity fromDomain(ProductCategory productCategory) {
+        return new ProductCategoryEntity(productCategory.id(), productCategory.name());
     }
 
     public String getName() {
@@ -28,9 +32,5 @@ public class ProductCategoryEntity extends BaseEntity {
 
     public ProductCategory toDomain() {
         return new ProductCategory(getId(), name);
-    }
-
-    public static ProductCategoryEntity toEntity(ProductCategory productCategory) {
-        return new ProductCategoryEntity(productCategory.id(), productCategory.name());
     }
 }

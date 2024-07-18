@@ -10,23 +10,23 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    public UserEntity() {
+    protected UserEntity() {
     }
 
-    public UserEntity(Long id, String name) {
+    protected UserEntity(Long id, String name) {
         super(id);
         this.name = name;
     }
 
-    public UserEntity(String name) {
+    public static UserEntity fromDomain(User user) {
+        return new UserEntity(user.id(), user.name());
+    }
+
+    protected UserEntity(String name) {
         this.name = name;
     }
 
     public String getName() {
         return name;
-    }
-
-    public static UserEntity from(User user) {
-        return new UserEntity(user.id(), user.name());
     }
 }
