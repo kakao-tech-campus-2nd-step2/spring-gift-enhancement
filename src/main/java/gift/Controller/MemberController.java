@@ -58,7 +58,7 @@ public class MemberController {
 
     @RequestMapping(value = "/register", method = {RequestMethod.GET, RequestMethod.POST})
     public String register(@ModelAttribute MemberDto memberDto, Model model, HttpServletRequest request) {
-        if("GET".equalsIgnoreCase(request.getMethod())) {
+        if ("GET".equalsIgnoreCase(request.getMethod())) {
             model.addAttribute("user", new MemberDto());
             return "register";
         } else if ("POST".equalsIgnoreCase(request.getMethod())) {
