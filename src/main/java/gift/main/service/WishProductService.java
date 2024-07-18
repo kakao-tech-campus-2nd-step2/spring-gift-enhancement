@@ -11,12 +11,8 @@ import gift.main.repository.ProductRepository;
 import gift.main.repository.UserRepository;
 import gift.main.repository.WishProductRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class WishProductService {
@@ -32,7 +28,7 @@ public class WishProductService {
     }
 
 
-    public Page<WishProductResponce> getWishProductPage(UserVo sessionUser,Pageable pageable) {
+    public Page<WishProductResponce> getWishProductPage(UserVo sessionUser, Pageable pageable) {
         Page<WishProductResponce> wishProductResponcePage = wishProductRepository.findAllByUserId(sessionUser.getId(), pageable)
                 .map(wishProduct -> new WishProductResponce(wishProduct));
 

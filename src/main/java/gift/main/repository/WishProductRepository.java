@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface WishProductRepository extends JpaRepository<WishProduct, Long> {
     void deleteByProductIdAndUserId(Long productId, Long userId);
 
+    boolean existsAllByUserId(Long userId);
+
     boolean existsByProductIdAndUserId(Long productId, Long userId);
 
     Page<WishProduct> findAllByUserId(Long userId, Pageable pageable);

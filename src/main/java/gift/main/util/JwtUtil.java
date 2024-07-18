@@ -1,8 +1,8 @@
 package gift.main.util;
 
 import gift.main.dto.UserDto;
-import gift.main.entity.User;
 import gift.main.entity.Role;
+import gift.main.entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

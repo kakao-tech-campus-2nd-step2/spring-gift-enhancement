@@ -36,9 +36,9 @@ public class AdminProductController {
             @PathVariable(value = "id") long id,
             @Valid @RequestBody ProductRequest productRequest,
             @SessionUser UserVo sessionUserVo) {
-        System.out.println("productRequest = " + productRequest);
         productService.updateProduct(id, productRequest);
-        return ResponseEntity.ok("Product added successfully");
+        return ResponseEntity.ok("Product updated successfully");
+
     }
 
     @DeleteMapping("/{id}")
