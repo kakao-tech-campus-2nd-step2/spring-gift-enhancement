@@ -31,7 +31,10 @@ public class CategoryServiceTest {
         CategoryDTO result = categoryService.insertCategory(testCategory1);
         assertThat(result).usingRecursiveComparison().isEqualTo(testCategory1);
     }
+    @Test
+    void tmp(){
 
+    }
     @DisplayName("getCategoryList 테스트")
     @Test
     void testGetCategoryList() {
