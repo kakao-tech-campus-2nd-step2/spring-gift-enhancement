@@ -1,8 +1,8 @@
 package gift.repository;
 
-import gift.entity.User;
+import gift.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepositoryInterface extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+public interface UserRepositoryInterface extends JpaRepository<Member, Long> {
+    Member findByEmail(String email);
 }

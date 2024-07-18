@@ -1,7 +1,7 @@
 package gift.service;
 
 import gift.dto.UserResponseDto;
-import gift.entity.User;
+import gift.entity.Member;
 import gift.repository.UserRepositoryInterface;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +20,10 @@ public class UserService {
 
     public String save(String email, String password) {
 
-        User newUser = new User(email, password);
+        Member newMember = new Member(email, password);
 
-        User actualUser = userRepositoryInterface.save(newUser);
-        return generateTokenFrom(actualUser.getEmail());
+        Member actualMember = userRepositoryInterface.save(newMember);
+        return generateTokenFrom(actualMember.getEmail());
     }
 
 

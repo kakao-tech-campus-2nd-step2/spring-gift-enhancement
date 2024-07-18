@@ -2,7 +2,7 @@ package gift.service;
 
 import gift.dto.WishResponseDto;
 import gift.entity.Product;
-import gift.entity.User;
+import gift.entity.Member;
 import gift.entity.Wish;
 import gift.repository.ProductRepositoryInterface;
 import gift.repository.UserRepositoryInterface;
@@ -35,9 +35,9 @@ public class WishService {
     public WishResponseDto save(Long productId, String tokenValue) {
 
         Long userId = translateIdFrom(tokenValue);
-        User user = userRepositoryInterface.findById(userId).get();
+        Member member = userRepositoryInterface.findById(userId).get();
         Product product = productRepositoryInterface.findById(productId).get();
-        Wish newWish = new Wish(product, user);
+        Wish newWish = new Wish(product, member);
 
         return WishResponseDto.fromEntity(wishRepositoryInterface.save(newWish));
     }

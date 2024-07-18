@@ -1,6 +1,6 @@
 -- 기존 테이블 삭제
 DROP TABLE IF EXISTS product;
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS member;
 DROP TABLE IF EXISTS wish;
 DROP TABLE IF EXISTS category;
 
@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS product (
                                        url VARCHAR(255) NOT NULL
 );
 
--- user 테이블 생성
-CREATE TABLE IF NOT EXISTS user (
+-- member 테이블 생성
+CREATE TABLE IF NOT EXISTS member (
                                     id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                     email VARCHAR(255) NOT NULL,
                                     password VARCHAR(255) NOT NULL
@@ -25,14 +25,14 @@ CREATE TABLE IF NOT EXISTS wish (
                                     product_id BIGINT NOT NULL,
                                     user_id BIGINT NOT NULL,
                                     FOREIGN KEY (product_id) REFERENCES product(id),
-                                    FOREIGN KEY (user_id) REFERENCES user(id)
+                                    FOREIGN KEY (user_id) REFERENCES member(id)
 );
 
 -- category 테이블 생성
 CREATE TABLE IF NOT EXISTS category (
                                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                         name VARCHAR(255) NOT NULL,
-                                        color VARCHAR(7) NOT NULL,
+                                        color VARCHAR(7),
                                         description VARCHAR(255),
-                                        image_url VARCHAR(255) NOT NULL
+                                        image_url VARCHAR(255)
 );
