@@ -50,15 +50,14 @@ public class WishesRestController {
         return ResponseEntity.ok().body(responses);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("")
     @Operation(summary = "위시리스트 수정", description = "위시리스트를 수정합니다.")
     @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Integer> updateWish(
-            @PathVariable("id") Long id,
             @Valid @RequestBody WishRequest.Update request,
             @Parameter(hidden = true) @NotNull @LoginMember Long memberId
     ) {
-        wishService.update(id, request, memberId);
+        wishService.update(request, memberId);
         return ResponseEntity.ok().body(request.productCount());
     }
 

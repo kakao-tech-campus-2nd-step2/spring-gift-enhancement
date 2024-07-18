@@ -12,6 +12,8 @@ public class WishRequest {
 
     public record Update(
             @Min(1)
+            Long id,
+            @Min(1)
             Long productId,
             @Min(0)
             int productCount

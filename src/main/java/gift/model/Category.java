@@ -11,7 +11,7 @@ public class Category extends BasicEntity{
     private String color;
     @Column(nullable = false, length = 1000)
     private String imageUrl;
-    @Column(nullable = false)
+    @Column()
     private String description;
 
     protected Category() {}

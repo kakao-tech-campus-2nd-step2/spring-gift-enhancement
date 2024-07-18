@@ -29,9 +29,9 @@ public class WishService {
     }
 
     @Transactional
-    public void update(Long id, WishRequest.Update request, Long memberId) {
-        Wish wish = wishRepository.findByIdFetchJoin(id)
-                .orElseThrow(() -> new EntityNotFoundException("Wish with id " + id + " Does not exist"));
+    public void update(WishRequest.Update request, Long memberId) {
+        Wish wish = wishRepository.findByIdFetchJoin(request.id())
+                .orElseThrow(() -> new EntityNotFoundException("Wish with id " + request.id() + " Does not exist"));
         wish.checkWishByMemberId(memberId);
         wish.checkWishByProductId(request.productId());
         if (request.productCount() == 0) {
