@@ -39,9 +39,9 @@ public class ProductService {
     public Long insertProduct(ProductRequestDto productRequestDto) throws ProductException {
         Category category = categoryRepository.findById(productRequestDto.getCategoryId())
             .orElseThrow(() -> new IllegalArgumentException("wish 가 잘못되었습니다."));
-        Product product = productRepository.save(
-            new Product(productRequestDto.getName(), productRequestDto.getPrice(),
-                productRequestDto.getImageUrl(), category));
+        Product product = new Product(productRequestDto.getName(), productRequestDto.getPrice(),
+            productRequestDto.getImageUrl(), category);
+        productRepository.save(product);
         return product.getId();
     }
 
