@@ -6,7 +6,6 @@ import gift.domain.Product;
 import gift.dto.OptionDto;
 import gift.dto.ProductDto;
 import gift.exception.CategoryNotFoundException;
-import gift.exception.OptionNotFoundException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -99,13 +98,7 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        List<Option> options = product.getOptions();
-
-        boolean isRemoved = options.removeIf(option -> option.getId().equals(optionId));
-
-        if (!isRemoved) {
-            throw new OptionNotFoundException();
-        }
+        product.removeOptionById(optionId);
     }
 
 }

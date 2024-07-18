@@ -2,6 +2,7 @@ package gift.domain;
 
 import gift.dto.ProductDto;
 import gift.exception.DuplicateOptionException;
+import gift.exception.OptionNotFoundException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -91,8 +92,16 @@ public class Product {
     }
 
     public void validateOptionNameUnique(String optionName) {
-        if (this.options.stream().anyMatch(option -> option.getName().equals(optionName))) {
+        if (options.stream().anyMatch(option -> option.getName().equals(optionName))) {
             throw new DuplicateOptionException();
+        }
+    }
+
+    public void removeOptionById(Long optionId) {
+        boolean isRemoved = options.removeIf(option -> option.getId().equals(optionId));
+
+        if (!isRemoved) {
+            throw new OptionNotFoundException();
         }
     }
 
