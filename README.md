@@ -24,3 +24,38 @@
 ```
 ### 프로그래밍 요구 사항
 - 구현한 기능들에대한 테스트 코드 작성
+
+@Test
+@DisplayName("생성된 날짜")
+void dateCheck() {
+
+
+        Member member = new Member("a@naver.com", "1234");
+        memberRepository.save(member);
+        Product product = productRepository.getReferenceById(1L);
+
+        Wish wish = new Wish(member, 100, product);
+
+        Wish save = wishRepository.save(wish);
+
+        assertThat(save.getCreatedTime())
+                .isInstanceOf(LocalDateTime.class);
+    }
+## 2단계 - 상품 옵션
+### 기능 요구 사항
+#### 옵션 추가
+##### 옵션 제한사항
+- 상품에는 항상 하나 이상의 옵션이 존재
+- 옵션 이름 공백 포함 최대 50자
+- 특수문자는 ( ), [ ], +, -, &, /, _ 만 가능
+- 옵션 수량은 최소 1 이상 1억 미만
+- 동일 상품 동일 옵션 이름 불가
+- (선택) 관리자 화면에서 옵션 추가가능
+
+##### 유의
+- 제한 사항 꼭 지키기
+- 제한사항 어길때의 테스트 적용해보기
+- 연관관계 적절히 구성
+
+### 프로그래밍 요구 사항
+- 구현한 기능들에대한 테스트 코드 작성
