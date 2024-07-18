@@ -40,12 +40,13 @@ public class OptionController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping("/products/options/{optionId}")
+    @PutMapping("/products/{productId}/options/{optionId}")
     public ResponseEntity<OptionResponse.Info> updateOption(
         @PathVariable("optionId") Long optionId,
+        @PathVariable("productId") Long productId,
         @RequestBody OptionRequest.Update request
     ) {
-        var model = optionService.updateOption(optionId, request.toCommand());
+        var model = optionService.updateOption(optionId, productId, request.toCommand());
         var response = OptionResponse.Info.from(model);
         return ResponseEntity.ok().body(response);
     }
