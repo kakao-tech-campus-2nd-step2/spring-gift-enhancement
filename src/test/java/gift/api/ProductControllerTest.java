@@ -3,6 +3,8 @@ package gift.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.global.security.JwtFilter;
 import gift.global.security.JwtUtil;
+import gift.product.application.OptionService;
+import gift.product.dto.OptionRequest;
 import gift.product.entity.Category;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
@@ -50,6 +52,8 @@ class ProductControllerTest {
     private JwtUtil jwtUtil;
     @MockBean
     private ProductService productService;
+    @MockBean
+    private OptionService optionService;
     private final String bearerToken = "Bearer token";
 
     private final Category category = new Category.CategoryBuilder()
@@ -59,7 +63,7 @@ class ProductControllerTest {
             .setDescription("")
             .build();
 
-    private final String optionName = "옵션";
+    private final OptionRequest option = new OptionRequest("옵션", 10);
 
     @Test
     @DisplayName("상품 전체 조회 기능 테스트")
@@ -148,7 +152,7 @@ class ProductControllerTest {
                 1000,
                 "https://testshop.com",
                 category.getName(),
-                optionName);
+                option);
         ProductResponse response = ProductMapper.toResponseDto(
                 ProductMapper.toEntity(request, category)
         );
@@ -204,7 +208,7 @@ class ProductControllerTest {
                 3000,
                 "https://testshop.com",
                 category.getName(),
-                optionName);
+                option);
         String requestJson = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(patch("/api/products/{id}", productId)

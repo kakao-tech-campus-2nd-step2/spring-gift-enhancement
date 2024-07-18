@@ -1,5 +1,6 @@
 package gift.validation;
 
+import gift.product.dto.OptionRequest;
 import gift.product.dto.ProductRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -17,6 +18,8 @@ public class ProductRequestValidationTest {
 
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
+
+    private final OptionRequest option = new OptionRequest("옵션", 10);
 
     @BeforeEach
     public void createValidator() {
@@ -37,7 +40,7 @@ public class ProductRequestValidationTest {
                 1000,
                 "https://shop.com",
                 "상품권",
-                "옵션");
+                option);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -52,7 +55,7 @@ public class ProductRequestValidationTest {
                 1000,
                 "https://shop.com",
                 "상품권",
-                "옵션");
+                option);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -67,7 +70,7 @@ public class ProductRequestValidationTest {
                 1000,
                 "https://shop.com",
                 "상품권",
-                "옵션");
+                option);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -82,7 +85,7 @@ public class ProductRequestValidationTest {
                 1000,
                 "https://shop.com",
                 "상품권",
-                "옵션");
+                option);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -97,7 +100,7 @@ public class ProductRequestValidationTest {
                 1000,
                 "https://shop.com",
                 "상품권",
-                "옵션");
+                option);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
@@ -112,7 +115,7 @@ public class ProductRequestValidationTest {
                 -1000,
                 "https://shop.com",
                 "상품권",
-                "옵션");
+                option);
 
         Set<ConstraintViolation<ProductRequest>> violations = validator.validate(request);
 
