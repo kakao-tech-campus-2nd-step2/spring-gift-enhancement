@@ -381,7 +381,7 @@ Content-Type: application/json
 
 - [x] 카테고리 추가 API
 - [x] 카테고리 리스트 조회 API
-- [ ] 특정 id 카테고리 조회 API
+- [x] 특정 id 카테고리 조회 API
 - [ ] 카테고리 수정 API
 - [ ] 카테고리 삭제 API
 
