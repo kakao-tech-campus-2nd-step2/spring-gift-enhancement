@@ -58,8 +58,7 @@ public class OptionValidation {
 
     public void isDuplicateName(Collection<Option> options, OptionDTO optionDTO) {
         if(options.stream()
-            .anyMatch(option -> option.getName()
-                .equals(optionDTO.getName())
+            .anyMatch(option -> option.isSameName(optionDTO.getName())
             )
         )
             throw new DuplicateException(DUPLICATE_OPTION_NAME);
