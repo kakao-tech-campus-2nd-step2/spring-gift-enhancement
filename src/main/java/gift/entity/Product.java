@@ -1,5 +1,6 @@
 package gift.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL )
+    private List<Option> options = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "product")
 //    private List<Wish> wishList = new ArrayList<>();
@@ -92,4 +96,21 @@ public class Product {
         this.category = category;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
+    }
+
+    public void addOption(Option option) {
+        options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOption(Option option) {
+        options.remove(option);
+        option.setProduct(null);
+    }
 }
