@@ -1,5 +1,6 @@
 package gift.product.controller;
 
+import gift.category.service.CategoryService;
 import gift.product.dto.ProductDto;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
@@ -8,12 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
-    private final ProductService productService;
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -28,6 +29,19 @@ public class ProductController {
     @PutMapping("/{productId}")
     public void editProduct(@PathVariable Long productId, @Valid @RequestBody ProductDto productDto) {
         productService.update(productId, productDto);
+    }
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @GetMapping("/admin/products/add")
+    public String showAddProductForm(Model model) {
+        model.addAttribute("product", new ProductDto());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "add";  // 상품 추가 폼 뷰
     }
 
     @DeleteMapping("/{productId}")
@@ -55,6 +69,7 @@ public class ProductController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
         return productService.findAll(pageable);
+
     }
 
     @GetMapping("/{productId}")

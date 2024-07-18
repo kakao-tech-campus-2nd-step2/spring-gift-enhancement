@@ -1,56 +1,42 @@
 package gift.product.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import org.hibernate.validator.constraints.URL;
-
 public class ProductDto {
     private Long productId;
-
-    @NotBlank(message = "상품명을 입력하세요.")
     private String name;
-
-    @NotNull(message = "가격을 입력하세요.")
     private int price;
-
-    @NotBlank(message = "이미지 URL을 입력하세요.")
-    @URL(message = "잘못된 URL 입니다.")
     private String imgUrl;
+    private Long categoryId;
 
-    public ProductDto() {}
+    // 기본 생성자
+    public ProductDto() {
+    }
 
-    public ProductDto(Long productId, String name, int price, String imgUrl) {
+    // 모든 필드를 인자로 받는 생성자
+    public ProductDto(Long productId, String name, int price, String imgUrl, Long categoryId) {
         this.productId = productId;
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.categoryId = categoryId;
     }
 
-    public void productId() {
+    public Long getProductId() {
+        return productId;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
-    public void name(String name) {
-        this.name = name;
-    }
-
-    public int price() {
+    public int getPrice() {
         return price;
     }
 
-    public void price(int price) {
-        this.price = price;
-    }
-
-    public String imgUrl() {
+    public String getImgUrl() {
         return imgUrl;
     }
 
-    public void imgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public Long getCategoryId() {
+        return categoryId;
     }
 }

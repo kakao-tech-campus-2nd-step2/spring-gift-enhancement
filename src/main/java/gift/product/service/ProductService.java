@@ -1,5 +1,7 @@
 package gift.product.service;
 
+import gift.category.model.Category;
+import gift.category.repository.CategoryRepository;
 import gift.product.dto.ProductDto;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
@@ -12,47 +14,52 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public void save(ProductDto productDto) {
-        Product product = new Product(productDto.name(), productDto.price(), productDto.imgUrl());
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
+        Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImgUrl(), category);
         productRepository.save(product);
     }
 
-    /** 기존의 findAll()은 모든 상품을 조회하지만
-        페이지네이션을 추가한 findAll()은 주어진 페이지와 크기 및 정렬 기준에 따라 제한된 데이터만 가져옴. **/
     public Page<ProductDto> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(product -> new ProductDto(
                         product.getProductId(),
-                        product.name(),
+                        product.getName(),
                         product.getPrice(),
-                        product.getImgUrl()));
+                        product.getImgUrl(),
+                        product.getCategoryId()));
     }
 
-    public ProductDto findById(Long id) {
-        return productRepository.findById(id)
+    public ProductDto findById(Long categoryId) {
+        return productRepository.findById(categoryId)
                 .map(product -> new ProductDto(
                         product.getProductId(),
-                        product.name(),
+                        product.getName(),
                         product.getPrice(),
-                        product.getImgUrl()))
+                        product.getImgUrl(),
+                        product.getCategoryId()))
                 .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
     }
 
     public void update(Long productId, ProductDto productDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
-        product.update(productDto.name(), productDto.price(), productDto.imgUrl());
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
+        product.update(productDto.getName(), productDto.getPrice(), productDto.getImgUrl(), category);
         productRepository.save(product);
     }
 
     public void deleteById(Long productId) {
         productRepository.deleteById(productId);
     }
-
 }
