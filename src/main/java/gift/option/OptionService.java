@@ -1,5 +1,9 @@
 package gift.option;
 
+import gift.option.model.Option;
+import gift.option.model.OptionRequest;
+import gift.option.model.OptionResponse;
+import gift.option.model.Options;
 import gift.product.ProductRepository;
 import gift.product.model.Product;
 import java.util.List;
@@ -20,7 +24,6 @@ public class OptionService {
     @Transactional(readOnly = true)
     public List<OptionResponse> getOptions(Long productId) {
         return optionRepository.findAllByProductId(productId)
-            .getOptions()
             .stream()
             .map(OptionResponse::from)
             .toList();
@@ -30,7 +33,7 @@ public class OptionService {
     @Transactional
     public Long addOption(Long productId, OptionRequest optionRequest) {
         Product product = productRepository.findById(productId).orElseThrow();
-        Options options = optionRepository.findAllByProductId(productId);
+        Options options = new Options(optionRepository.findAllByProductId(productId));
         Option option = new Option(optionRequest.getName(), optionRequest.getQuantity(), product);
         options.validate(option);
         option = optionRepository.save(option);

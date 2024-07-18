@@ -1,5 +1,7 @@
 package gift.option;
 
+import gift.option.model.OptionRequest;
+import gift.option.model.OptionResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;

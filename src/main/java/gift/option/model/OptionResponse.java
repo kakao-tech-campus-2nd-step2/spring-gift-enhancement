@@ -1,4 +1,4 @@
-package gift.option;
+package gift.option.model;
 
 public class OptionResponse {
 
