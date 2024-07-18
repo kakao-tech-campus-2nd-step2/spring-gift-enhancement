@@ -28,8 +28,8 @@
                 <td th:text="${product.price}"></td>
                 <td th:text="${product.imageUrl}"></td>
                 <td>
-                    <a th:href="@{/admin/edit/{id}(id=${product.id})}">수정</a> |
-                    <a th:href="@{/admin/delete/{id}(id=${product.id})}">삭제</a>
+                    <a th:href="@{/admin/products/edit/{id}(id=${product.id})}">수정</a> |
+                    <a th:href="@{/admin/products/delete/{id}(id=${product.id})}">삭제</a>
                 </td>
             </tr>
         </tbody>
