@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface OptionRepository extends JpaRepository<Option, Integer> {
@@ -17,9 +16,9 @@ public interface OptionRepository extends JpaRepository<Option, Integer> {
     @Transactional
     void deleteById(Long id);
     Page<Option> findAllByProductId(Long productId, Pageable pageable);
-    @Query("select name from Option where product = ?")
-    List<String> findAllByProduct(Product product);
+    List<Option> findAllByProduct(Product product);
     @Query("select count(*) from Option o "
-        + "where o.product = (select op.product from Option op where op.id = ?)")
-    Long countAllByProduct(Long id);
+        + "where o.product = (select op.product from Option op where op.id = ?1)")
+    int countAllByProduct(Long id);
+    boolean existsById(Long id);
 }
