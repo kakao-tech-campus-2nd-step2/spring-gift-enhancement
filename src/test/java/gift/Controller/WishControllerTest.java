@@ -54,8 +54,8 @@ class WishControllerTest {
     wishController.addProductToWishList(wishListDto1, null);
     wishController.addProductToWishList(wishListDto2, null);
 
-    ResponseEntity<Page<WishListDto>> wishListDtoEntity = wishController.getWishList(pageable);
-    Page<WishListDto> wishListDtos = wishListDtoEntity.getBody();
+    ResponseEntity<Page<WishListDto>> wishListDto = wishController.getWishList(pageable);
+    Page<WishListDto> wishListDtos = wishListDto.getBody();
 
     assertThat(wishListDtos.getContent().get(0).getMemberDto().getId()).isEqualTo(
       memberDto1.getId());
