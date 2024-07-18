@@ -48,4 +48,11 @@ public class WishlistController {
         wishlistService.deleteWishlistItem(email, productId);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{productId}")
+    public ResponseEntity<Void> addWishlistItem( @RequestParam("email") String email, @PathVariable Long productId) {
+        wishlistService.addWishlistItem(email, productId);
+        return ResponseEntity.ok().build();
+    }
+
 }

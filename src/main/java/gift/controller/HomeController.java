@@ -26,6 +26,11 @@ public class HomeController {
         return "products";
     }
 
+    @GetMapping("/productlist")
+    public String showProductListsPage() {
+        return "user-products";
+    }
+
     @GetMapping("/wishlist")
     public String wishlistForm() {
         return "wishlist";
