@@ -20,17 +20,14 @@ public class UserService {
 
     @Transactional
     public Long insertUser(UserForm userForm) {
-        userRepository.save(new User(0L, userForm.getEmail(), userForm.getPassword()));
-        return userRepository.findByEmail(userForm.getEmail())
-            .orElseThrow(() -> new CustomNotFoundException(
-                ErrorCode.USER_NOT_FOUND)).getId();
+        return userRepository.save(new User(userForm.getEmail(), userForm.getPassword())).getId();
     }
 
     @Transactional(readOnly = true)
     public UserDTO findByEmail(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new CustomNotFoundException(ErrorCode.USER_NOT_FOUND));
-        return new UserDTO(user.getId(), user.getEmail(), user.getPassword());
+        return user.toDTO();
     }
 
     @Transactional(readOnly = true)

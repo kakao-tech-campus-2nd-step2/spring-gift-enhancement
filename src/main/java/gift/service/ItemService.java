@@ -28,7 +28,7 @@ public class ItemService {
     public Long insertItem(ItemForm form) {
         Category category = categoryRepository.findById(form.getCategoryId())
             .orElseThrow(() -> new CustomNotFoundException(ErrorCode.CATEGORY_NOT_FOUND));
-        Item item = new Item(0L, form.getName(), form.getPrice(), form.getImgUrl(), category);
+        Item item = new Item(form.getName(), form.getPrice(), form.getImgUrl(), category);
         return itemRepository.save(item).getId();
     }
 

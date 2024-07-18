@@ -32,7 +32,8 @@ public class WishListService {
 
     @Transactional(readOnly = true)
     public Page<WishListResponse> getWishList(Long userId, Pageable pageable) {
-        return wishListRepository.findAllByUserIdFetchJoin(userId, pageable).map(WishItem::toResponse);
+        return wishListRepository.findAllByUserIdFetchJoin(userId, pageable)
+            .map(WishItem::toResponse);
     }
 
     @Transactional
@@ -41,7 +42,7 @@ public class WishListService {
             .orElseThrow(() -> new CustomNotFoundException(ErrorCode.ITEM_NOT_FOUND));
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new CustomNotFoundException(ErrorCode.USER_NOT_FOUND));
-        WishItem wishItem = new WishItem(0L, user, item);
+        WishItem wishItem = new WishItem(user, item);
         return wishListRepository.save(wishItem).getId();
     }
 
