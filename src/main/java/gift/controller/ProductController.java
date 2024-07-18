@@ -41,7 +41,7 @@ public class ProductController {
         product.setCategory(categoryService.findById(product.getCategory().getId()));
         productService.save(product);
 
-        // Save options
+
         for (ProductOption option : product.getOptions()) {
             option.setProduct(product);
             productOptionService.save(option);
@@ -70,10 +70,10 @@ public class ProductController {
         existingProduct.setPrice(updatedProduct.getPrice());
         existingProduct.setImageurl(updatedProduct.getImageurl());
 
-        // Remove existing options
+
         productOptionService.deleteByProductId(existingProduct.getId());
 
-        // Save new options
+
         for (ProductOption option : updatedProduct.getOptions()) {
             option.setProduct(existingProduct);
             productOptionService.save(option);

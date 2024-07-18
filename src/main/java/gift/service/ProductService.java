@@ -17,9 +17,11 @@ import java.util.Optional;
 @Transactional
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ProductOptionService productOptionService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductOptionService productOptionService) {
         this.productRepository = productRepository;
+        this.productOptionService = productOptionService;
     }
 
     public void save(Product product) {
@@ -43,6 +45,9 @@ public class ProductService {
     }
 
     public void delete(Long id) {
+
+        productOptionService.deleteByProductId(id);
+
         productRepository.deleteById(id);
     }
 
