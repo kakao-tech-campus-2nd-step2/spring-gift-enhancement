@@ -5,10 +5,12 @@ import static gift.util.Utils.TUPLE_PRODUCT_KEY;
 import static gift.util.Utils.TUPLE_WISH_COUNT_KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.category.model.CategoryRepository;
 import gift.category.model.dto.Category;
 import gift.product.model.ProductRepository;
+import gift.product.model.dto.option.Option;
 import gift.product.model.dto.product.Product;
 import gift.user.model.UserRepository;
 import gift.user.model.dto.AppUser;
@@ -17,6 +19,7 @@ import gift.wishlist.model.WishListRepository;
 import gift.wishlist.model.dto.Wish;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Tuple;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,18 +45,19 @@ public class ProductRepositoryTest {
     private Product product;
     private Wish wish;
     private Category category;
+    private List<Option> options;
 
     @BeforeEach
     public void setUp() {
         appUser = new AppUser("aabb@kakao.com", "1234", Role.USER, "aaaa");
         category = new Category("기타", "");
-        product = new Product("Test", 1000, "url", appUser, category);
+        options = List.of(new Option("Option 1", 10, 200, product));
+        product = new Product("Test", 1000, "url", appUser, category, options);
         wish = new Wish(appUser, product, 5);
         appUser = userRepository.save(appUser);
         category = categoryRepository.save(category);
         product = productRepository.save(product);
         wishListRepository.save(wish);
-
     }
 
     @Test
@@ -76,7 +80,7 @@ public class ProductRepositoryTest {
     public void testFindProductWithWishCount() {
         Optional<Tuple> optionalResult = productRepository.findProductByIdWithWishCount(product.getId());
 
-        optionalResult.isPresent();
+        assertTrue(optionalResult.isPresent());
         Tuple result = optionalResult.get();
 
         Product foundProduct = result.get(TUPLE_PRODUCT_KEY, Product.class);
@@ -84,6 +88,8 @@ public class ProductRepositoryTest {
 
         assertEquals(product.getName(), foundProduct.getName());
         assertEquals(1L, wishCount);
+        assertFalse(foundProduct.getOptions().isEmpty());
+        assertEquals(options, foundProduct.getOptions());
     }
 
     @Test
@@ -99,5 +105,7 @@ public class ProductRepositoryTest {
 
         assertEquals(product.getName(), foundProduct.getName());
         assertEquals(Long.valueOf(1), wishCount);
+        assertFalse(foundProduct.getOptions().isEmpty());
+        assertEquals(options, foundProduct.getOptions());
     }
 }
