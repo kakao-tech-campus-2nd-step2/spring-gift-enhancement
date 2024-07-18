@@ -2,6 +2,7 @@ package gift.product.service;
 
 import gift.core.PagedDto;
 import gift.core.domain.product.*;
+import gift.core.domain.product.exception.NegativeProductPriceException;
 import gift.core.domain.product.exception.ProductAlreadyExistsException;
 import gift.core.domain.product.exception.ProductNotFoundException;
 import jakarta.annotation.Nonnull;
@@ -45,6 +46,9 @@ public class ProductServiceImpl implements ProductService {
         if (productRepository.exists(product.id())) {
             throw new ProductAlreadyExistsException();
         }
+        if (product.price() <= 0) {
+            throw new NegativeProductPriceException();
+        }
         ProductCategory category = productCategoryRepository
                 .findByName(product.category())
                 .orElseGet(
@@ -58,6 +62,9 @@ public class ProductServiceImpl implements ProductService {
     public void updateProduct(@Nonnull Product product) {
         if (!productRepository.exists(product.id())) {
             throw new ProductNotFoundException();
+        }
+        if (product.price() <= 0) {
+            throw new NegativeProductPriceException();
         }
         ProductCategory category = productCategoryRepository
                 .findByName(product.category())

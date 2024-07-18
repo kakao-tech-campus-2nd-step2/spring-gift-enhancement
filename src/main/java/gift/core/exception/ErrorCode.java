@@ -5,6 +5,9 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "상품을 찾을 수 없습니다!"),
     PRODUCT_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 존재하는 상품입니다."),
+    NEGATIVE_PRODUCT_PRICE(HttpStatus.BAD_REQUEST, "상품 가격은 음수가 될 수 없습니다."),
+
+    OPTION_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 존재하는 옵션입니다."),
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다!"),
     USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 존재하는 사용자입니다."),
