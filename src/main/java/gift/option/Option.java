@@ -27,7 +27,6 @@ public class Option {
     private Product product;
 
     protected Option() {
-
     }
 
     public Option(String name, Integer quantity, Product product) {
