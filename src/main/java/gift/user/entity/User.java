@@ -45,7 +45,6 @@ public class User {
         this.email = builder.email;
         this.password = builder.password;
         this.userRoles = builder.userRoles;
-        this.wishes = builder.wishes;
     }
 
     public static Builder builder() {
@@ -68,17 +67,12 @@ public class User {
         this.password = password;
     }
 
-    public Set<Wish> wishes() {
-        return wishes;
-    }
-
     public static class Builder {
 
         private Long id;
         private String email;
         private String password;
         private Set<UserRole> userRoles;
-        private Set<Wish> wishes;
 
         public Builder id(Long id) {
             this.id = id;
@@ -97,11 +91,6 @@ public class User {
 
         public Builder userRoles(Set<UserRole> userRoles) {
             this.userRoles = userRoles;
-            return this;
-        }
-
-        public Builder wishes(Set<Wish> wishes) {
-            this.wishes = wishes;
             return this;
         }
 
