@@ -11,3 +11,11 @@ insert into users (user_id, email, password, is_admin)
 values (default, 'luckyrkd@naver.com', 'aaaaa11111', true);
 insert into users (user_id, email, password, is_admin)
 values (default, 'kangji0615@gmail.com', 'aaaaa11111', false);
+
+insert into categories (category_id, name, imageurl)
+values (default, '식료품', 'food.png');
+insert into categories (category_id, name, imageurl)
+values (default, '의류', 'clothes.png');
+insert into categories (category_id, name, imageurl)
+values (default, '가전', 'gajun.png');
+insert into categories (category_id, name, imageurl)
