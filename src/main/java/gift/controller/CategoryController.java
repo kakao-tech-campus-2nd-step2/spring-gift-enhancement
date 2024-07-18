@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.CategoryRequestDTO;
 import gift.entity.Category;
 import gift.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,12 @@ public class CategoryController {
     }
 
     @PostMapping("/category")
-    public ResponseEntity<Category> createCategory (@RequestBody Category category) {
-
+    public ResponseEntity<String> createCategory (@RequestBody CategoryRequestDTO categoryRequestDTO) {
+        categoryService.addCategory(categoryRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Category created");
     }
+
+
 
 }
