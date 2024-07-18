@@ -54,9 +54,9 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member getMemberByEmail(String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
-        member.orElseThrow(() -> new InvalidAccountException());
-        return member.get();
+        Member member = memberRepository.findByEmail(email)
+                                .orElseThrow(() -> new InvalidAccountException());
+        return member;
     }
 
     private void validatePassword(Member member, String password) {

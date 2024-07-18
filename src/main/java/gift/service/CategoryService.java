@@ -32,9 +32,9 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public Category getCategoryById(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        category.orElseThrow(() -> new RuntimeException("No such category"));
-        return category.get();
+        Category category = categoryRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("No such category"));
+        return category;
     }
 
     @Transactional
