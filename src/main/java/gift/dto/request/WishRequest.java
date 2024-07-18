@@ -1,10 +1,9 @@
 package gift.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record WishRequest(
-        @NotBlank
+        @NotNull
         Long productId,
         @NotNull
         int quantity
