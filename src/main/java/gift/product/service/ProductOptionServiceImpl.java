@@ -1,0 +1,68 @@
+package gift.product.service;
+
+import gift.core.domain.product.ProductOption;
+import gift.core.domain.product.ProductOptionRepository;
+import gift.core.domain.product.ProductOptionService;
+import gift.core.domain.product.ProductRepository;
+import gift.core.domain.product.exception.*;
+import gift.core.exception.ErrorCode;
+import gift.core.exception.validation.InvalidArgumentException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ProductOptionServiceImpl implements ProductOptionService {
+    @Value("${app.product.max-option}") Long maxOptionLimit;
+    private final ProductOptionRepository productOptionRepository;
+    private final ProductRepository productRepository;
+
+    public ProductOptionServiceImpl(
+            ProductOptionRepository productOptionRepository,
+            ProductRepository productRepository
+    ) {
+        this.productOptionRepository = productOptionRepository;
+        this.productRepository = productRepository;
+    }
+
+    @Override
+    public void registerOptionToProduct(Long productId, ProductOption productOption) {
+        if (!productRepository.exists(productId)) {
+            throw new ProductNotFoundException();
+        }
+        if (productOptionRepository.hasOption(productOption.id())) {
+            throw new OptionAlreadExistsException();
+        }
+        if (productOptionRepository.hasOption(productId, productOption.name())) {
+            throw new OptionAlreadExistsException();
+        }
+        if (productOptionRepository.countByProductId(productId) >= maxOptionLimit) {
+            throw new OptionLimitExceededException();
+        }
+        if (productOption.quantity() <= 0) {
+            throw new InvalidArgumentException(ErrorCode.NEGATIVE_QUANTITY);
+        }
+        productOptionRepository.save(productId, productOption);
+    }
+
+    @Override
+    public List<ProductOption> getOptionsFromProduct(Long productId) {
+        if (!productRepository.exists(productId)) {
+            throw new ProductNotFoundException();
+        }
+        return productOptionRepository.findAllByProductId(productId);
+    }
+
+    @Override
+    public void removeOptionFromProduct(Long productId, Long optionId) {
+        if (!productRepository.exists(productId)) {
+            throw new ProductNotFoundException();
+        }
+        if (!productOptionRepository.hasOption(optionId)) {
+            throw new OptionNotFoundException();
+        }
+
+        productOptionRepository.deleteById(optionId);
+    }
+}
