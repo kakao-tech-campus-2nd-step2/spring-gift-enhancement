@@ -1,8 +1,8 @@
 package gift.service;
 
+import gift.entity.Product;
 import gift.exception.InvalidProductException;
 import gift.exception.InvalidUserException;
-import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +29,10 @@ public class ProductService {
         return findProductById(id);
     }
 
-    public Product createProduct(Product product, BindingResult bindingResult) {
+    public void createProduct(Product product, BindingResult bindingResult) {
     	validateBindingResult(bindingResult);
     	validateCategory(product.getCategory().getId());
-        return productRepository.save(product);
+        productRepository.save(product);
     }
 
     public void updateProduct(long id, Product updatedProduct, BindingResult bindingResult) {
@@ -49,7 +49,7 @@ public class ProductService {
     }
     
     private void validateBindingResult(BindingResult bindingResult) {
-    	if(bindingResult.hasErrors()) {
+    	if (bindingResult.hasErrors()) {
     		String errorMessage = bindingResult
 					.getFieldError()
 					.getDefaultMessage();
@@ -58,13 +58,13 @@ public class ProductService {
     }
     
     private void validProductId(long id, Product updatedProduct) {
-    	if(!updatedProduct.getId().equals(id)) {
+    	if (!updatedProduct.getId().equals(id)) {
     		throw new InvalidProductException("Product Id mismatch.");
     	}
     }
     
     private void validateProductId(long id) {
-    	if(!productRepository.existsById(id)) {
+    	if (!productRepository.existsById(id)) {
     		throw new InvalidProductException("Product not found");
     	}
     }
@@ -75,7 +75,7 @@ public class ProductService {
     }
     
     public void validateCategory(Long categoryId) {
-    	if(!categoryRepository.existsById(categoryId)) {
+    	if (!categoryRepository.existsById(categoryId)) {
     		throw new InvalidProductException("Category not found");
     	}
     }
