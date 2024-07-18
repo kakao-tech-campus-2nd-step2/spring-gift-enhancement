@@ -3,6 +3,7 @@ package gift.product.validation;
 import gift.product.dto.ProductDTO;
 import gift.product.exception.InstanceValueException;
 import gift.product.exception.InvalidIdException;
+import gift.product.repository.OptionRepository;
 import gift.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,15 @@ import static gift.product.exception.GlobalExceptionHandler.*;
 public class ProductValidation {
 
     private final ProductRepository productRepository;
+    private final OptionRepository optionRepository;
 
     @Autowired
-    public ProductValidation(ProductRepository productRepository) {
+    public ProductValidation(
+        ProductRepository productRepository,
+        OptionRepository optionRepository
+    ) {
         this.productRepository = productRepository;
+        this.optionRepository = optionRepository;
     }
 
     public void registerValidation(ProductDTO productDTO) {
@@ -29,13 +35,24 @@ public class ProductValidation {
 
     public void updateValidation(Long id, ProductDTO productDTO) {
         System.out.println("[ProductValidation] updateValidation()");
-        isExistId(id);
+        validateExistId(id);
         registerValidation(productDTO);
     }
+
+    public void deleteValidation(Long id) {
+        System.out.println("[ProductValidation] deleteValidation()");
+        validateExistId(id);
+        if(isExistOptions(id))
+            optionRepository.deleteAllByProductId(id);
+    }
     
-    public void isExistId(Long id) {
-        System.out.println("[ProductValidation] isExistId()");
+    private void validateExistId(Long id) {
+        System.out.println("[ProductValidation] validateExistId()");
         if(!productRepository.existsById(id))
             throw new InvalidIdException(NOT_EXIST_ID);
+    }
+
+    private boolean isExistOptions(Long productId) {
+        return optionRepository.existsByProductId(productId);
     }
 }

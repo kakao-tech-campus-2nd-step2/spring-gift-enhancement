@@ -29,34 +29,34 @@ public class OptionValidation {
 
     public void register(Product product, OptionDTO optionDTO) {
         List<Option> options = optionRepository.findAllByProduct(product);
-        isOver100Million(options.size());
-        isDuplicateName(options, optionDTO);
-        isNegative(optionDTO.getQuantity());
+        validateOver100Million(options.size());
+        validateDuplicateName(options, optionDTO);
+        validateNegative(optionDTO.getQuantity());
     }
 
     public void update(Product product, OptionDTO optionDTO) {
-        isExist(optionDTO.getId());
+        validateExistId(optionDTO.getId());
         List<Option> options = optionRepository.findAllByProduct(product);
-        isDuplicateName(options, optionDTO);
-        isNegative(optionDTO.getQuantity());
+        validateDuplicateName(options, optionDTO);
+        validateNegative(optionDTO.getQuantity());
     }
 
     public void delete(Long id) {
-        isExist(id);
-        isLastOption(optionRepository.countAllByProduct(id));
+        validateExistId(id);
+        validateLastOption(optionRepository.countAllByProduct(id));
     }
 
-    public void isExist(Long id) {
+    private void validateExistId(Long id) {
         if(optionRepository.existsById(id))
             throw new InvalidIdException(NOT_EXIST_ID);
     }
 
-    public void isOver100Million(int size) {
+    private void validateOver100Million(int size) {
         if(size >= 99_999_999)
             throw new RuntimeException(OVER_100MILLION);
     }
 
-    public void isDuplicateName(Collection<Option> options, OptionDTO optionDTO) {
+    private void validateDuplicateName(Collection<Option> options, OptionDTO optionDTO) {
         if(options.stream()
             .anyMatch(option -> option.isSameName(optionDTO.getName())
             )
@@ -64,12 +64,12 @@ public class OptionValidation {
             throw new DuplicateException(DUPLICATE_OPTION_NAME);
     }
 
-    public void isNegative(int quantity) {
+    private void validateNegative(int quantity) {
         if(quantity < 0)
             throw new IllegalArgumentException(LEAST_QUANTITY);
     }
 
-    public void isLastOption(int cnt) {
+    private void validateLastOption(int cnt) {
         if(cnt < 2)
             throw new IllegalStateException(LAST_OPTION);
     }

@@ -81,15 +81,12 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        productValidation.isExistId(id);
+        productValidation.deleteValidation(id);
         productRepository.deleteById(id);
-        optionRepository.deleteAllByProductId(id);
     }
 
     public ProductDTO getDTOById(Long id) {
         System.out.println("[ProductService] getDTOById()");
-
-        productValidation.isExistId(id);
 
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));

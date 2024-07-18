@@ -21,4 +21,5 @@ public interface OptionRepository extends JpaRepository<Option, Integer> {
         + "where o.product = (select op.product from Option op where op.id = ?1)")
     int countAllByProduct(Long id);
     boolean existsById(Long id);
+    boolean existsByProductId(Long productId);
 }
