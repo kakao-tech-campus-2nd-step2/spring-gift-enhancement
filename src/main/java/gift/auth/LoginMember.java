@@ -1,4 +1,4 @@
-package gift.common.validation;
+package gift.auth;
 
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

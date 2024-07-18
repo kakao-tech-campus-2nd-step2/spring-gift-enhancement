@@ -12,4 +12,6 @@ public class ValidateErrorMessage {
     public static final String INVALID_USER_NAME_NULL = "사용자 이름은 필수 입력값입니다.";
     public static final String INVALID_USER_NAME_PATTERN = "사용자 이름은 이메일 형식이어야 합니다.";
     public static final String INVALID_USER_PASSWORD_NULL = "비밀번호는 필수 입력값입니다.";
+
+    public static final String INVALID_CATEGORY_NAME_NULL = "카테고리는 이름은 필수 입력값입니다.";
 }

@@ -3,11 +3,14 @@ package gift.product.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import gift.product.domain.Category;
 import gift.product.domain.Product;
 import gift.product.exception.ProductNotFoundException;
+import gift.product.persistence.CategoryRepository;
 import gift.product.persistence.ProductRepository;
 import gift.product.service.dto.ProductParam;
 import java.util.List;
@@ -26,6 +29,8 @@ import org.springframework.data.domain.Pageable;
 class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private CategoryRepository categoryRepository;
     @InjectMocks
     private ProductService productService;
 
@@ -33,11 +38,13 @@ class ProductServiceTest {
     @DisplayName("ProductService 생성 테스트[성공]")
     void saveProductTest() {
         //given
-        ProductParam productParam = new ProductParam("테스트 상품", 1000, "http://test.com");
-        Product savedProduct = new Product(1L, "테스트 상품", 1000, "http://test.com");
+        ProductParam productParam = new ProductParam("테스트 상품", 1000, "http://test.com", "카테고리");
+        Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
+        Product savedProduct = new Product(1L, "테스트 상품", 1000, "http://test.com", category);
+        given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
+        given(productRepository.save(any(Product.class))).willReturn(savedProduct);
 
         //when
-        when(productRepository.save(any(Product.class))).thenReturn(savedProduct);
         Long savedProductId = productService.saveProduct(productParam);
 
         //then
@@ -50,11 +57,15 @@ class ProductServiceTest {
     void modifyProductTest() {
         //given
         Long id = 1L;
-        ProductParam productParam = new ProductParam("수정된 상품", 2000, "http://test.com");
-        Product product = new Product(1L, "테스트 상품", 1000, "http://test.com");
+        ProductParam productParam = new ProductParam("수정된 상품", 2000, "http://test.com", "새 카테고리");
+        Category existCategory = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
+        Product product = new Product(1L, "테스트 상품", 1000, "http://test.com", existCategory);
+        Category newCategory = new Category(2L, "새 카테고리", "새 카테고리 설명", "새 카테고리 이미지", "새 카테고리 썸네일 이미지");
+
+        given(categoryRepository.findByName(any())).willReturn(Optional.of(newCategory));
+        given(productRepository.findById(id)).willReturn(Optional.of(product));
 
         //when
-        when(productRepository.findById(id)).thenReturn(Optional.of(product));
         productService.modifyProduct(id, productParam);
 
         //then
@@ -62,6 +73,7 @@ class ProductServiceTest {
         assertThat(product.getName()).isEqualTo("수정된 상품");
         assertThat(product.getPrice()).isEqualTo(2000);
         assertThat(product.getImgUrl()).isEqualTo("http://test.com");
+        assertThat(product.getCategory()).isEqualTo(newCategory);
     }
 
     @Test
@@ -69,10 +81,12 @@ class ProductServiceTest {
     void deleteProductTest() {
         //given
         final Long id = 1L;
-        Product product = new Product(id, "테스트 상품", 1000, "http://test.com");
+        Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
+        Product product = new Product(id, "테스트 상품", 1000, "http://test.com", category);
+
+        given(productRepository.findById(id)).willReturn(Optional.of(product));
 
         //when
-        when(productRepository.findById(id)).thenReturn(Optional.of(product));
         productService.deleteProduct(id);
 
         //then
@@ -85,18 +99,25 @@ class ProductServiceTest {
     void getProductDetailsTest() {
         //given
         final Long id = 1L;
-        Product product = new Product(id, "테스트 상품", 1000, "http://test.com");
+        Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
+        Product product = new Product(id, "테스트 상품", 1000, "http://test.com", category);
+
+        given(productRepository.findByIdWithCategory(id)).willReturn(Optional.of(product));
 
         //when
-        when(productRepository.findById(id)).thenReturn(Optional.of(product));
         var productInfo = productService.getProductDetails(id);
 
         //then
-        verify(productRepository).findById(id);
+        verify(productRepository).findByIdWithCategory(id);
         assertThat(productInfo.id()).isEqualTo(1L);
         assertThat(productInfo.name()).isEqualTo("테스트 상품");
         assertThat(productInfo.price()).isEqualTo(1000);
         assertThat(productInfo.imgUrl()).isEqualTo("http://test.com");
+        assertThat(productInfo.category().id()).isEqualTo(1L);
+        assertThat(productInfo.category().name()).isEqualTo("카테고리");
+        assertThat(productInfo.category().imgUrl()).isEqualTo("카테고리 이미지");
+        assertThat(productInfo.category().description()).isEqualTo("카테고리 썸네일 이미지");
+
     }
 
     @Test
@@ -105,10 +126,9 @@ class ProductServiceTest {
         //given
         final Long id = 1L;
 
-        //when
-        when(productRepository.findById(id)).thenReturn(Optional.empty());
+        given(productRepository.findByIdWithCategory(id)).willReturn(Optional.empty());
 
-        //then
+        //when && then
         assertThatThrownBy(() -> productService.getProductDetails(id))
                 .isInstanceOf(ProductNotFoundException.class);
     }
@@ -117,18 +137,23 @@ class ProductServiceTest {
     @DisplayName("ProductService 목록 조회 테스트")
     void getProductsTest() {
         //given
+        List<Category> categories = List.of(
+                new Category(1L, "카테고리1", "카테고리 설명1", "http://test.com", "http://test.com"),
+                new Category(2L, "카테고리2", "카테고리 설명2", "http://test.com", "http://test.com")
+        );
         Page<Product> productPage = new PageImpl<>(List.of(
-                new Product(1L, "테스트 상품1", 1000, "http://test.com"),
-                new Product(2L, "테스트 상품2", 2000, "http://test.com")
+                new Product(1L, "테스트 상품1", 1000, "http://test.com", categories.get(0)),
+                new Product(2L, "테스트 상품2", 2000, "http://test.com", categories.get(1))
         ));
         Pageable pageable = Pageable.ofSize(10).first();
 
+        given(productRepository.findAllWithCategory(pageable)).willReturn(productPage);
+
         //when
-        when(productRepository.findAll(pageable)).thenReturn(productPage);
         var products = productService.getProducts(pageable);
 
         //then
-        verify(productRepository).findAll(pageable);
+        verify(productRepository).findAllWithCategory(pageable);
         assertThat(products.products().size()).isEqualTo(2);
         assertThat(products.currentPage()).isEqualTo(1);
         assertThat(products.totalPages()).isEqualTo(1);
@@ -140,7 +165,7 @@ class ProductServiceTest {
     void modifyProductFailTest() {
         //given
         final Long id = 1L;
-        ProductParam productParam = new ProductParam("수정된 상품", 2000, "http://test.com");
+        ProductParam productParam = new ProductParam("수정된 상품", 2000, "http://test.com", "새 카테고리");
 
         //when
         when(productRepository.findById(id)).thenReturn(Optional.empty());

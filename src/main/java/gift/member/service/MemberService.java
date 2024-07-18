@@ -31,7 +31,7 @@ public class MemberService {
                 PasswordProvider.encode(memberInfoParam.username(), memberInfoParam.password()));
         memberRepository.save(newMember);
 
-        String token = jwtProvider.generateToken(newMember.getUsername(), newMember.getPassword());
+        String token = jwtProvider.generateToken(newMember.getId(), newMember.getUsername(), newMember.getRole());
 
         return MemberSignupInfo.of(newMember.getId(), token);
     }
@@ -45,7 +45,7 @@ public class MemberService {
             throw new MemberNotFoundException();
         }
 
-        String token = jwtProvider.generateToken(savedMember.getUsername(), savedMember.getPassword());
+        String token = jwtProvider.generateToken(savedMember.getId(), savedMember.getUsername(), savedMember.getRole());
 
         return MemberSignInInfo.of(token);
     }

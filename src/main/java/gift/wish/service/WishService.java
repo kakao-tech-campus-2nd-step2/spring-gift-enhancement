@@ -65,8 +65,11 @@ public class WishService {
                 .orElseThrow(() -> WishNotFoundException.of(wishId));
         if (!wish.isOwner(userId)) {
             throw WishNotFoundException.of(wishId);
-        }
+        } // 긍정문으로 바꾸려면 어떻게 해야할까?
 
+        if (wish.beDeleted()) {
+            deleteWish(wishId, userId);
+        }
         return WishInfo.from(wish);
     }
 
