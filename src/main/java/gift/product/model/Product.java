@@ -11,7 +11,7 @@ import java.util.List;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
     @Column(nullable = false)
@@ -43,6 +43,15 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.category = category;
+    }
+
+    // ID를 포함한 생성자
+    public Product(Long productId, String name, String imgUrl, int price, Category category) {
+        this.productId = productId;
+        this.name = name;
+        this.imgUrl = imgUrl;
+        this.price = price;
         this.category = category;
     }
 
