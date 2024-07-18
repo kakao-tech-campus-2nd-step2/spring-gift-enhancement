@@ -33,7 +33,8 @@ public class ServerRenderProductController {
 
     @GetMapping("/add")
     public String showAddProductForm(Model model) {
-        model.addAttribute("productRequestDto", new ProductRequest("", 0, ""));
+        //TODO: category ID를 처리할 수 있게 수정하기
+        model.addAttribute("productRequestDto", new ProductRequest("", 0, "", null));
         return "addProduct";
     }
 
@@ -46,7 +47,8 @@ public class ServerRenderProductController {
     @GetMapping("/update/{id}")
     public String showUpdateProductForm(@PathVariable("id") Long id, Model model) {
         ProductResponse product = ProductResponse.of(service.getProductById(id));
-        ProductRequest dto = new ProductRequest(product.name(), product.price(), product.imageUrl());
+        //TODO: category ID를 처리할 수 있게 수정하기
+        ProductRequest dto = new ProductRequest(product.name(), product.price(), product.imageUrl(), 0L);
         model.addAttribute("productRequestDto", dto);
         model.addAttribute("productId", id);
         return "updateProduct";

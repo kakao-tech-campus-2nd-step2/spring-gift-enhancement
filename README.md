@@ -233,7 +233,7 @@ Content-Type: application/json
 
 #### 모델 설계
 
-- [ ] 상품을 표현하는 도메인 객체
+- [x] 상품을 표현하는 도메인 객체
   - 상품의 구성요소
     - id: int (pk, unique)
     - name: string
@@ -249,7 +249,7 @@ Content-Type: application/json
 - [x] 상품을 추가하는 API
 - [x] 상품 리스트를 조회하는 API
 - [x] 상품을 수정하는 API
-  - [ ] 상품 카테고리를 수정하는 API
+  - [x] 상품 카테고리를 수정하는 API
 - [x] 상품을 삭제하는 API
 
 #### 예외, 검증 설계
@@ -431,13 +431,27 @@ Content-Type: application/json
         "id": 8146027,
         "name": "아이스 카페 아메리카노 T",
         "price": 4500,
-        "image-url": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"
+        "image-url": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
+        "category": {
+          "id": 1,
+          "name": "교환권",
+          "color": "#ff0000",
+          "image-url": "red.png",
+          "description": ""
+        }
       },
       {
         "id": 1,
         "name": "name",
         "price": 2000,
-        "image-url": "url"
+        "image-url": "url",
+        "category": {
+          "id": 1,
+          "name": "교환권",
+          "color": "#ff0000",
+          "image-url": "red.png",
+          "description": ""
+        }
       },
       {},
       {}
@@ -465,7 +479,8 @@ Content-Type: application/json
 {
   "name": "Product name",
   "price": 10000,
-  "image-url": "http://~"
+  "image-url": "http://~",
+  "category-id": 1
 }
 ```
 
@@ -495,7 +510,14 @@ Content-Type: application/json
       "id": 23,
       "name": "Product name",
       "price": 10000,
-      "image-url": "image.png"
+      "image-url": "image.png",
+      "category": {
+        "id": 1,
+        "name": "교환권",
+        "color": "#ff0000",
+        "image-url": "red.png",
+        "description": ""
+      }
     }
   }
   ```
@@ -529,6 +551,21 @@ Content-Type: application/json
     "timestamp": "2024-01-01T00:00:00.0000000",
     "status": 400,
     "message": "이름 형식이 올바르지 않습니다."
+  }
+  ```
+
+#### 상품 추가 API/Response(fail)
+
+- 카테고리가 존재하지 않은 경우 발생
+- Status
+  - 404 Not found
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 404,
+    "message": "The category was not found."
   }
   ```
   

@@ -1,6 +1,7 @@
 package gift.domain.dto.request;
 
 import gift.domain.entity.Product;
+import gift.domain.service.CategoryService;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -17,13 +18,16 @@ public record ProductRequest(
     @NotNull
     Integer price,
     @NotNull
-    String imageUrl) {
+    String imageUrl,
+    @NotNull
+    Long categoryId
+    ) {
 
     public static ProductRequest of(Product product) {
-        return new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl());
+        return new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getId());
     }
 
-    public Product toEntity() {
-        return new Product(name, price, imageUrl);
+    public Product toEntity(CategoryService categoryService) {
+        return new Product(name, price, imageUrl, categoryService.findById(categoryId));
     }
 }
