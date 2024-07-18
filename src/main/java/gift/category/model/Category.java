@@ -3,14 +3,24 @@ package gift.category.model;
 import gift.common.model.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-public class Category extends BaseEntity {
+public class Category {
 
-    @Column(name = "name", nullable = false, length = 255, unique = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
+    @Column(name = "color", nullable = false, length = 7)
     private String color;
+    @Column(name = "name", nullable = false)
     private String imageUrl;
+    @Column(name = "description")
     private String description;
 
     protected Category() {
@@ -24,7 +34,7 @@ public class Category extends BaseEntity {
     }
 
     public Category(Long id, String name, String color, String imageUrl, String description) {
-        this.setId(id);
+        this.id = id;
         this.name = name;
         this.color = color;
         this.imageUrl = imageUrl;
