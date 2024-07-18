@@ -21,7 +21,7 @@ public class MemberService {
         MemberEntity foundMember = memberRepository.findByEmail(memberDTO.getEmail());
 
         if (foundMember == null || !memberDTO.getPassword().equals(foundMember.getPassword())) {
-            return null;
+            throw new RuntimeException("Invalid email or password");
         }
 
         return foundMember;

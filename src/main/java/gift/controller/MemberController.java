@@ -29,28 +29,14 @@ public class MemberController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody MemberDTO memberDTO) {
         MemberServiceStatus status = memberService.save(memberDTO);
-
-        if (status == MemberServiceStatus.EMAIL_ALREADY_EXISTS) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", "Email already exists"));
-        }
-
-        return ResponseEntity.ok().body(Collections.singletonMap("message", "Success"));
+        return new ResponseEntity<>(Collections.singletonMap("status", status.name()), HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody MemberDTO memberDTO) {
         MemberEntity authenticatedMember = memberService.authenticateToken(memberDTO);
-
-        if (authenticatedMember == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", "Invalid email or password"));
-        }
-
-        Long userId = authenticatedMember.getId();
-
-        // 토큰 생성 및 응답
-        String token = jwtUtil.generateToken(authenticatedMember.getEmail(), userId);
-        Map<String, String> responseBody = Collections.singletonMap("token", token);
-        return ResponseEntity.ok().body(responseBody);
+        String token = jwtUtil.generateToken(authenticatedMember.getEmail(), authenticatedMember.getId());
+        Map<String, String> response = Collections.singletonMap("token", token);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 }
