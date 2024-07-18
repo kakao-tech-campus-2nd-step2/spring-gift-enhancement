@@ -28,7 +28,10 @@ public class NameValidator implements ConstraintValidator<ValidName, String> {
         if (!name.matches("^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/]*$")) {
             return SPECIAL_SYMBOL_ERROR_MESSAGE;
         }
+        return null;
+    }
 
+    public static String isValidKakaoName(String name) {
         // Check for "카카오"
         if (name.contains("카카오")) {
             return KAKAO_ERROR_MESSAGE;

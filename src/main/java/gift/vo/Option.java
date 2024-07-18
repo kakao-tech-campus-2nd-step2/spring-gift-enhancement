@@ -42,9 +42,6 @@ public class Option {
         if (!name.matches("^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/]*$")) {
             throw new IllegalArgumentException("상품명에 () [] + - & / 외의 특수기호는 불가합니다");
         }
-        if (name.contains("카카오")) {
-            throw new IllegalArgumentException("`카카오`가 포함된 문구는 담당 MD와 협의한 경우에만 사용 가능합니다");
-        }
     }
 
     public Long getId() {

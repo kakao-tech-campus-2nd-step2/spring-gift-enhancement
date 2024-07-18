@@ -82,4 +82,4 @@ Content-Type: application/json
 ### ToDo
 - [X] Option: Repository, Service, Entity, Dto 구현
 - [X] 옵션 이름 공백 포함 최대 50자 유효성 검사 
-- [ ] 옵션 이름 특수 문자 ( ), [ ], +, -, &, /, _ 그 외 특수 문자 사용 불가
+- [X] 옵션 이름 특수 문자 ( ), [ ], +, -, &, /, _ 그 외 특수 문자 사용 불가
