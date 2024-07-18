@@ -33,13 +33,12 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    @JsonCreator
     public ProductDTO(
-        @JsonProperty("name") String name,
-        @JsonProperty("categoryId") Long categoryId,
-        @JsonProperty("price") Integer price,
-        @JsonProperty("imageUrl") String imageUrl,
-        @JsonProperty("option") OptionRequestDTO option)
+        String name,
+        Long categoryId,
+        Integer price,
+        String imageUrl,
+        OptionRequestDTO option)
     {
         this.name = name;
         this.categoryId = categoryId;

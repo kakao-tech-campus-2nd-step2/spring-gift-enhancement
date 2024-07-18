@@ -13,8 +13,7 @@ public class UserDTO {
     @NotBlank
     private String password;
 
-    @JsonCreator
-    public UserDTO(@JsonProperty("email") String email, @JsonProperty("password") String password) {
+    public UserDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }

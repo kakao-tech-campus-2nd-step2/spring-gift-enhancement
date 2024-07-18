@@ -13,8 +13,7 @@ public class CategoryDTO {
     public String description;
 
     @JsonCreator
-    public CategoryDTO(@JsonProperty("name") String name,
-        @JsonProperty("description") String description) {
+    public CategoryDTO(String name, String description) {
         this.name = name;
         this.description = description;
     }
