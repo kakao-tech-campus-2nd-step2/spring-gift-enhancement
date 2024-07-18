@@ -22,6 +22,7 @@ public class Option {
     @Size(max=50)
     String option;
 
+    @Size(min=0)
     int quantity;
 
     public Option(Product product, String option) {
