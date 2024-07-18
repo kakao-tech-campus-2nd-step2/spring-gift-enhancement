@@ -43,7 +43,7 @@ public class CategoryServiceTest {
         Category category = categoryService.save(new CategoryDTO("test", "#test", "", ""));
 
         // when
-        Category expect = categoryService.findOne(category.getId());
+        Category expect = categoryService.findById(category.getId());
 
         // then
         assertThat(expect.getId()).isEqualTo(category.getId());
@@ -75,7 +75,7 @@ public class CategoryServiceTest {
         categoryService.delete(category.getId());
 
         // then
-        Category expect = categoryService.findOne(category.getId());
+        Category expect = categoryService.findById(category.getId());
         Assertions.assertThat(expect.getName()).isEqualTo("DefaultCategory");
     }
 
@@ -93,7 +93,7 @@ public class CategoryServiceTest {
 
         // then
         Product expectProduct = productService.findById(product.getId());
-        Category expectCategory = categoryService.findOne(expectProduct.getCategoryid());
+        Category expectCategory = categoryService.findById(expectProduct.getCategoryid());
         assertThat(expectCategory.getId()).isEqualTo(1L); // defaultCategory
     }
 }
