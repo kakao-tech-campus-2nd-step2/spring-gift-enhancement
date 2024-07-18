@@ -36,6 +36,15 @@ public class Option {
         return name;
     }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Option(String name, Long quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public Option(Product product, String name, Long quantity) {
         this.product = product;
         this.name = name;

@@ -3,7 +3,7 @@ package gift.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constant.ErrorMessage;
 import gift.dto.ProductDto;
-import gift.dto.request.OptionDto;
+import gift.dto.request.OptionCreateRequest;
 import gift.dto.request.ProductCreateRequest;
 import gift.dto.request.ProductUpdateRequest;
 import gift.service.ProductService;
@@ -80,7 +80,7 @@ class ProductControllerTest {
     void productAdd() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductDto request = new ProductDto("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionDto("옵션", 12L)));
+        ProductDto request = new ProductDto("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionCreateRequest("옵션", 12L)));
 
         willDoNothing().given(productService).addProduct(any(ProductDto.class));
 

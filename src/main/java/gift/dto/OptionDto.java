@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.domain.Option;
 import gift.dto.response.OptionResponse;
 
 public class OptionDto {
@@ -21,6 +22,10 @@ public class OptionDto {
 
     public OptionResponse toResponseDto() {
         return new OptionResponse(this.id, this.name, this.quantity);
+    }
+
+    public Option toEntity() {
+        return new Option(this.name, this.quantity);
     }
 
     public Long getId() {

@@ -3,8 +3,8 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
+import gift.dto.OptionDto;
 import gift.dto.ProductDto;
-import gift.dto.request.OptionDto;
 import gift.exception.CategoryNotFoundException;
 import gift.exception.DuplicateOptionException;
 import gift.exception.OptionNotFoundException;
@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -48,21 +46,13 @@ public class ProductService {
     public void addProduct(ProductDto dto) {
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(CategoryNotFoundException::new);
+
         Product product = new Product(dto.getName(), dto.getPrice(), dto.getImageUrl(), category);
+        List<Option> options = dto.getOptions().stream()
+                .map(OptionDto::toEntity)
+                .toList();
 
-        Set<String> optionNames = dto.getOptions().stream()
-                .map(OptionDto::getName)
-                .collect(Collectors.toSet());
-
-        if (optionNames.size() < dto.getOptions().size()) {
-            throw new DuplicateOptionException();
-        }
-
-        dto.getOptions().stream()
-                .map(optionRequest -> new Option(product, optionRequest.getName(), optionRequest.getQuantity()))
-                .forEach(product.getOptions()::add);
-
-        product.validateOptionsNotEmpty();
+        options.forEach(product::addOption);
 
         productRepository.save(product);
     }
@@ -87,7 +77,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<gift.dto.OptionDto> getOptions(Long productId) {
+    public List<OptionDto> getOptions(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
@@ -96,7 +86,7 @@ public class ProductService {
                 .toList();
     }
 
-    public void addOption(Long productId, gift.dto.OptionDto dto) {
+    public void addOption(Long productId, OptionDto dto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 

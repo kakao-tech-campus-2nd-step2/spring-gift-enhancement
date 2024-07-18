@@ -1,8 +1,9 @@
 package gift.dto.request;
 
+import gift.dto.OptionDto;
 import jakarta.validation.constraints.*;
 
-public class OptionDto {
+public class OptionCreateRequest {
 
     @NotBlank
     @Size(max = 50)
@@ -14,10 +15,10 @@ public class OptionDto {
     @NotNull
     private Long quantity;
 
-    public OptionDto() {
+    public OptionCreateRequest() {
     }
 
-    public OptionDto(String name, Long quantity) {
+    public OptionCreateRequest(String name, Long quantity) {
         this.name = name;
         this.quantity = quantity;
     }
@@ -28,6 +29,10 @@ public class OptionDto {
 
     public Long getQuantity() {
         return quantity;
+    }
+
+    public OptionDto toDto() {
+        return new OptionDto(this.name, this.quantity);
     }
 
 }

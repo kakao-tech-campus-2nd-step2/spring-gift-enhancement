@@ -1,7 +1,6 @@
 package gift.domain;
 
 import gift.dto.ProductDto;
-import gift.exception.NoOptionsInProductException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -29,12 +28,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
-
-    public void validateOptionsNotEmpty() {
-        if (options.isEmpty()) {
-            throw new NoOptionsInProductException();
-        }
-    }
 
     public Product() {
     }
@@ -89,6 +82,11 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public void addOption(Option option) {
+        option.setProduct(this);
+        options.add(option);
     }
 
 }

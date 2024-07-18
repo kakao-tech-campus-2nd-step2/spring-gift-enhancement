@@ -1,6 +1,5 @@
 package gift.dto;
 
-import gift.dto.request.OptionDto;
 import gift.dto.response.ProductResponse;
 
 import java.util.List;

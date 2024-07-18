@@ -1,6 +1,7 @@
 package gift.dto.request;
 
 import gift.validation.KakaoNotAllowed;
+import gift.validation.NoDuplicatedOptionName;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,11 +29,12 @@ public class ProductCreateRequest {
     private Long categoryId;
 
     @NotNull
-    @Size(min = 1, message = "하나 이상의 옵션을 입력해야 합니다.")
+    @Size(min = 1)
+    @NoDuplicatedOptionName
     @Valid
-    private List<OptionDto> options;
+    private List<OptionCreateRequest> options;
 
-    public ProductCreateRequest(String name, Integer price, String imageUrl, Long categoryId, List<OptionDto> options) {
+    public ProductCreateRequest(String name, Integer price, String imageUrl, Long categoryId, List<OptionCreateRequest> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -56,7 +58,7 @@ public class ProductCreateRequest {
         return categoryId;
     }
 
-    public List<OptionDto> getOptions() {
+    public List<OptionCreateRequest> getOptions() {
         return options;
     }
 

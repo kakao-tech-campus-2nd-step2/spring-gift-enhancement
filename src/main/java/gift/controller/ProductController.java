@@ -1,7 +1,8 @@
 package gift.controller;
 
+import gift.dto.OptionDto;
 import gift.dto.ProductDto;
-import gift.dto.request.OptionDto;
+import gift.dto.request.OptionCreateRequest;
 import gift.dto.request.ProductCreateRequest;
 import gift.dto.request.ProductUpdateRequest;
 import gift.dto.response.OptionResponse;
@@ -55,7 +56,10 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Void> productAdd(@RequestBody @Valid ProductCreateRequest request) {
-        ProductDto productDto = new ProductDto(request.getName(), request.getPrice(), request.getImageUrl(), request.getCategoryId(), request.getOptions());
+        List<OptionDto> optionDtoList = request.getOptions().stream()
+                .map(OptionCreateRequest::toDto)
+                .toList();
+        ProductDto productDto = new ProductDto(request.getName(), request.getPrice(), request.getImageUrl(), request.getCategoryId(), optionDtoList);
 
         productService.addProduct(productDto);
 
@@ -92,7 +96,7 @@ public class ProductController {
     }
 
     @PostMapping("/{productId}/options")
-    public ResponseEntity<Void> optionAdd(@PathVariable Long productId, @RequestBody @Valid OptionDto request) {
+    public ResponseEntity<Void> optionAdd(@PathVariable Long productId, @RequestBody @Valid OptionCreateRequest request) {
         gift.dto.OptionDto optionDto = new gift.dto.OptionDto(request.getName(), request.getQuantity());
 
         productService.addOption(productId, optionDto);
