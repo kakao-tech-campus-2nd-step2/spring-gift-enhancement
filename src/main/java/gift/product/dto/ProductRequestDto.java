@@ -19,6 +19,7 @@ public record ProductRequestDto(
     int price,
 
     @NotBlank(message = "잘못된 이미지입니다.")
-    String imageUrl) {
+    String imageUrl
+) {
 
 }

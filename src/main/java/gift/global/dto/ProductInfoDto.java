@@ -7,7 +7,10 @@ public record ProductInfoDto(
     Long productId,
     String name,
     int price,
-    String imageUrl
+    String imageUrl,
+    Long categoryId,
+    String categoryName,
+    String categoryImageUrl
 ) {
 
 }

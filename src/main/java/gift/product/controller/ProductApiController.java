@@ -1,7 +1,9 @@
 package gift.product.controller;
 
+import gift.global.annotation.CategoryInfo;
 import gift.global.annotation.PageInfo;
 import gift.global.dto.ApiResponseDto;
+import gift.global.dto.CategoryInfoDto;
 import gift.global.dto.PageInfoDto;
 import gift.product.dto.ProductRequestDto;
 import gift.product.service.ProductService;
@@ -34,9 +36,12 @@ public class ProductApiController {
 
     // 제품을 추가하는 핸들러
     @PostMapping("/admin/products")
+    @Parameter(name = "category-id", required = true)
     public ApiResponseDto createProduct(
-        @RequestBody @Valid ProductRequestDto productRequestDto) {
-        productService.insertProduct(productRequestDto);
+        @RequestBody @Valid ProductRequestDto productRequestDto,
+        @CategoryInfo CategoryInfoDto categoryInfoDto) {
+        System.out.println(categoryInfoDto.categoryId());
+        productService.insertProduct(productRequestDto, categoryInfoDto);
 
         return ApiResponseDto.of();
     }
@@ -55,11 +60,13 @@ public class ProductApiController {
 
     // id가 i인 상품을 수정하는 핸들러
     @PutMapping("/admin/products/{product-id}")
+    @Parameter(name = "category-id", required = true)
     public ApiResponseDto updateProduct(@PathVariable(name = "product-id") long productId,
-        @RequestBody @Valid ProductRequestDto productRequestDto) {
+        @RequestBody @Valid ProductRequestDto productRequestDto,
+        @CategoryInfo CategoryInfoDto categoryInfoDto) {
         System.out.println(productRequestDto.name());
         // service를 호출해서 제품 수정
-        productService.updateProduct(productId, productRequestDto);
+        productService.updateProduct(productId, productRequestDto, categoryInfoDto);
 
         return ApiResponseDto.of();
     }

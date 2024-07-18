@@ -1,5 +1,6 @@
 package gift.global.resolver;
 
+import gift.category.entity.Category;
 import gift.global.annotation.ProductInfo;
 import gift.global.component.TokenComponent;
 import gift.global.dto.ProductInfoDto;
@@ -17,12 +18,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class ProductInfoResolver implements HandlerMethodArgumentResolver {
 
-    private final TokenComponent tokenComponent;
     private final ProductService productService;
 
     @Autowired
-    public ProductInfoResolver(TokenComponent tokenComponent, ProductService productService) {
-        this.tokenComponent = tokenComponent;
+    public ProductInfoResolver(ProductService productService) {
         this.productService = productService;
     }
 
@@ -44,8 +43,12 @@ public class ProductInfoResolver implements HandlerMethodArgumentResolver {
         String name = productResponseDto.name();
         int price = productResponseDto.price();
         String imageUrl = productResponseDto.imageUrl();
+        Long categoryId = productResponseDto.categoryId();
+        String categoryName = productResponseDto.categoryName();
+        String categoryImageUrl = productResponseDto.imageUrl();
 
-        ProductInfoDto productInfoDto = new ProductInfoDto(productId, name, price, imageUrl);
+        ProductInfoDto productInfoDto = new ProductInfoDto(productId, name, price, imageUrl,
+            categoryId, categoryName, categoryImageUrl);
 
         return productInfoDto;
     }
