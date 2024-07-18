@@ -1,21 +1,27 @@
 package gift.wishList;
-
-public class WishListRequest {
+public class WishListResponse {
+    long productID;
     long optionID;
 
     long count;
 
-    public WishListRequest() {
+    public WishListResponse() {
     }
 
-    public WishListRequest(long optionID, long count) {
+    public WishListResponse(long productID, long optionID, long count) {
+        this.productID = productID;
         this.optionID = optionID;
         this.count = count;
     }
 
-    public WishListRequest(WishList wishList) {
+    public WishListResponse(WishList wishList) {
+        this.productID = wishList.getProduct().getId();
         this.optionID = wishList.getOption().getId();
         this.count = wishList.getCount();
+    }
+
+    public long getProductID() {
+        return productID;
     }
 
     public long getOptionID() {
@@ -24,6 +30,10 @@ public class WishListRequest {
 
     public long getCount() {
         return count;
+    }
+
+    public void setProductID(long productID) {
+        this.productID = productID;
     }
 
     public void setOptionID(long optionID) {
