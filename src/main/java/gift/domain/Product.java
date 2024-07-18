@@ -99,19 +99,10 @@ public class Product {
         this.category = category;
     }
 
-    public void updateName(String name) {
+    public void updateProduct(String name, int price, String imageUrl, Category category){
         this.name = name;
-    }
-
-    public void updatePrice(int price) {
         this.price = price;
-    }
-
-    public void updateImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public void updateCategory(Category category) {
         this.category = category;
     }
 
