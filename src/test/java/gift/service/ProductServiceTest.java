@@ -57,9 +57,10 @@ class ProductServiceTest {
         when(categoryService.getCategory(request.categoryId())).thenReturn(category);
         when(optionService.convertToOptions(request.optionRequests())).thenReturn(options);
 
-        Product savedProduct = new Product(1L, "productName", 100, "img", category, options);
+        Product savedProduct = mock(Product.class);
 
         when(productRepository.save(any(Product.class))).thenReturn(savedProduct);
+        when(savedProduct.getId()).thenReturn(1L);
 
         //When
         AddedProductIdResponse addedProductIdResponse = productService.addProduct(request);
@@ -75,7 +76,7 @@ class ProductServiceTest {
         Long productId = 1L;
         Category category = new Category("CategoryName", "color", "description", "imageUrl");
         List<Option> options = List.of(new Option("option", 1010));
-        Product product = new Product(1L, "product", 101, "img", category, options);
+        Product product = new Product( "product", 101, "img", category, options);
 
         OptionRequest optionRequest = new OptionRequest("newOption", 1010);
         Option option = Mockito.mock(Option.class);
@@ -102,7 +103,7 @@ class ProductServiceTest {
             //Given
             Category category = new Category("CategoryName", "color", "description", "imageUrl");
             List<Option> options = List.of(new Option("option", 1010));
-            Product product = new Product(1L, "product", 101, "img", category, options);
+            Product product = new Product( "product", 101, "img", category, options);
             when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
             //When
@@ -132,7 +133,7 @@ class ProductServiceTest {
 
         Category category = new Category("CategoryName", "color", "description", "imageUrl");
         List<Option> options = List.of(new Option("option", 1010));
-        Product product = new Product(1L, "product", 101, "img", category, options);
+        Product product = new Product( "product", 101, "img", category, options);
 
         Page<Product> page = new PageImpl<>(List.of(product));
 
@@ -146,8 +147,8 @@ class ProductServiceTest {
                 .hasSize(1)
                 .first()
                 .isInstanceOf(ProductResponse.class)
-                .extracting("id", "price")
-                .containsExactly(1L, 101);
+                .extracting( "name","price")
+                .containsExactly( "product",101);
     }
 
     @Nested
@@ -161,7 +162,7 @@ class ProductServiceTest {
 
             Category category = new Category("CategoryName", "color", "description", "imageUrl");
             List<Option> options = List.of(new Option("option", 1010));
-            Product product = new Product(1L, "oldName", 101, "img", category, options);
+            Product product = new Product( "oldName", 101, "img", category, options);
 
             when(productRepository.findById(1L)).thenReturn(Optional.of(product));
             when(categoryService.getCategory(request.categoryId())).thenReturn(category);
@@ -198,7 +199,7 @@ class ProductServiceTest {
 
             Category category = new Category("CategoryName", "color", "description", "imageUrl");
             List<Option> options = List.of(new Option("option", 1010));
-            Product product = new Product(1L, "oldName", 101, "img", category, options);
+            Product product = new Product( "oldName", 101, "img", category, options);
 
             when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
@@ -234,7 +235,7 @@ class ProductServiceTest {
 
             Category category = new Category("CategoryName", "color", "description", "imageUrl");
             List<Option> options = List.of(new Option("option", 1010));
-            Product product = new Product(1L, "oldName", 101, "img", category, options);
+            Product product = new Product("oldName", 101, "img", category, options);
 
             when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 

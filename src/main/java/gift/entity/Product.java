@@ -27,15 +27,6 @@ public class Product {
     protected Product() {
     }
 
-    public Product(Long id, String name, Integer price, String imageUrl, Category category, List<Option> options) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.category = category;
-        this.options.addAll(options);
-    }
-
     public Product(String name, Integer price, String imageUrl, Category category, List<Option> options) {
         this.name = name;
         this.price = price;
