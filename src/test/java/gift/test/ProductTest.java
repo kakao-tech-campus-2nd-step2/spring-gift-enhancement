@@ -21,6 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import gift.controller.ProductController;
+import gift.dto.CategoryUpdateRequest;
+import gift.dto.ProductRequest;
+import gift.dto.ProductUpdateRequest;
 import gift.entity.Category;
 import gift.entity.Product;
 import gift.service.ProductService;
@@ -38,12 +41,19 @@ public class ProductTest {
 
     private Category category;
     private Product product;
+    private ProductRequest productRequest;
+    private ProductUpdateRequest productUpdateRequest;
+    private CategoryUpdateRequest categoryUpdateRequest;
     
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         category = new Category("교환권", "#6c95d1", "https://example.com/image.jpg", "");
         product = new Product("아이스 아메리카노 T", 4500, "https://example.com/image.jpg", category);
+        
+        productRequest = new ProductRequest("아이스 아메리카노 T", 4500, "https://example.com/image.jpg", "교환권");
+        productUpdateRequest = new ProductUpdateRequest("아이스 아메리카노 T", 4500, "https://example.com/image.jpg");
+        categoryUpdateRequest = new CategoryUpdateRequest("교환권");
     }
 
     @Test
@@ -72,20 +82,29 @@ public class ProductTest {
 
     @Test
     public void testAddProduct() {
-    	doNothing().when(productService).createProduct(any(Product.class), any(BindingResult.class));
+    	doNothing().when(productService).createProduct(any(ProductRequest.class), any(BindingResult.class));
 
-        ResponseEntity<Void> response = productController.addProduct(product, bindingResult);
+        ResponseEntity<Void> response = productController.addProduct(productRequest, bindingResult);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(201);
     }
 
     @Test
     public void testUpdateProduct() {
-        doNothing().when(productService).updateProduct(eq(1L), any(Product.class), any(BindingResult.class));
+        doNothing().when(productService).updateProduct(eq(1L), any(ProductUpdateRequest.class), any(BindingResult.class));
 
-        ResponseEntity<Void> response = productController.updateProduct(1L, product, bindingResult);
+        ResponseEntity<Void> response = productController.updateProduct(1L, productUpdateRequest, bindingResult);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
+    }
+    
+    @Test
+    public void testUpdateProductCategory() {
+    	doNothing().when(productService).updateProductCategory(eq(1L), any(CategoryUpdateRequest.class), any(BindingResult.class));
+    	
+    	ResponseEntity<Void> response = productController.updateProductCategory(1L, categoryUpdateRequest, bindingResult);
+    	
+    	assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
 
     @Test
