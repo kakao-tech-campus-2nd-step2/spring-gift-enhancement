@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.ProductDTO;
 import gift.dto.WishlistDTO;
 import gift.model.Product;
 import gift.model.User;
@@ -48,9 +49,9 @@ public class WishlistService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Product> getProductsFromWishlist(String userId, int page, int size) {
+    public Page<ProductDTO> getProductsFromWishlist(String userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return wishlistRepository.findByUserEmail(userId, pageable)
-                .map(Wishlist::getProduct);
+                .map(wishlist -> new ProductDTO(wishlist.getProduct()));
     }
 }
