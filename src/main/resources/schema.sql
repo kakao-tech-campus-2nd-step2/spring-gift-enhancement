@@ -1,4 +1,4 @@
-CREATE Table category
+CREATE TABLE category
 (
     id   BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL
@@ -12,6 +12,15 @@ CREATE TABLE product
     image_url VARCHAR(255) NOT NULL,
     category  BIGINT       NOT NULL,
     FOREIGN KEY (category) REFERENCES category (id)
+);
+
+CREATE TABLE option
+(
+    id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(255),
+    quantity INT,
+    product  BIGINT,
+    FOREIGN KEY (product) REFERENCES product (id)
 );
 
 CREATE TABLE member
