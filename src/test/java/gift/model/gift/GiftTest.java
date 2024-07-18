@@ -4,7 +4,8 @@ import gift.model.category.Category;
 import gift.model.option.Option;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

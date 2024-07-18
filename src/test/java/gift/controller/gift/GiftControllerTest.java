@@ -1,11 +1,9 @@
 package gift.controller.gift;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.gift.GiftRequest;
 import gift.dto.gift.GiftResponse;
 import gift.dto.option.OptionRequest;
-import gift.model.option.Option;
 import gift.service.gift.GiftService;
 import gift.service.option.OptionService;
 import org.junit.jupiter.api.*;
@@ -16,10 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;

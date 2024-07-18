@@ -4,15 +4,9 @@ import gift.dto.user.UserRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
-
 
 import java.util.Map;
 
@@ -22,15 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTest {
 
-    @LocalServerPort
-    private int port;
-
-    private RestTemplate restTemplate;
-    private String baseUrl;
-
     private static final String REGISTER_URL = "/auth/register";
     private static final String LOGIN_URL = "/auth/login";
     private static final String ADD_GIFT_URL = "/wish/";
+    @LocalServerPort
+    private int port;
+    private RestTemplate restTemplate;
+    private String baseUrl;
 
     @BeforeEach
     void setUp() {
