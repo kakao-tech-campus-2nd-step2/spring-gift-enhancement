@@ -3,8 +3,10 @@ package gift.product.service;
 import gift.product.domain.Category;
 import gift.product.persistence.CategoryRepository;
 import gift.product.service.dto.CategoryInfo;
+import gift.product.service.dto.CategoryPageInfo;
 import gift.product.service.dto.CategoryParam;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,10 +48,10 @@ public class CategoryService {
         return CategoryInfo.from(category);
     }
 
-    public List<CategoryInfo> getCategoryList() {
-        List<Category> categories = categoryRepository.findAll();
+    public CategoryPageInfo getCategoryList(Pageable pageable) {
+        Page<Category> categories = categoryRepository.findAll(pageable);
 
-        return categories.stream().map(CategoryInfo::from).toList();
+        return CategoryPageInfo.from(categories);
     }
 
     public void deleteCategory(final Long categoryId) {

@@ -3,10 +3,11 @@ package gift.product.application;
 import gift.auth.Authorized;
 import gift.member.domain.Role;
 import gift.product.application.dto.request.CategoryRequest;
+import gift.product.application.dto.response.CategoryPageResponse;
 import gift.product.application.dto.response.CategoryResponse;
 import gift.product.service.CategoryService;
 import java.net.URI;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,12 +57,10 @@ public class CategoryController {
 
     @GetMapping()
     @Authorized(Role.USER)
-    public ResponseEntity<List<CategoryResponse>> getCategoryList() {
-        var categoryList = categoryService.getCategoryList();
+    public ResponseEntity<CategoryPageResponse> getCategoryList(Pageable pageable) {
+        var categoryList = categoryService.getCategoryList(pageable);
 
-        var response = categoryList.stream()
-                .map(CategoryResponse::from)
-                .toList();
+        var response = CategoryPageResponse.from(categoryList);
         return ResponseEntity.ok()
                 .body(response);
     }
