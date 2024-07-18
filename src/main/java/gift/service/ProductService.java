@@ -25,13 +25,7 @@ public class ProductService {
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
         List<ProductResponse> response = products.stream()
-                                        .map(p -> new ProductResponse(
-                                            p.getId(),
-                                            p.getName(),
-                                            p.getPrice(),
-                                            p.getImageUrl(),
-                                            p.getCategoryId()
-                                        ))
+                                        .map(p -> ProductResponse.fromEntity(p))
                                         .toList();
         return response;
     }
@@ -40,26 +34,14 @@ public class ProductService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Product> productPage = productRepository.findAll(pageable);
         List<ProductResponse> responses = productPage.stream()
-                                        .map(p -> new ProductResponse(
-                                            p.getId(),
-                                            p.getName(),
-                                            p.getPrice(),
-                                            p.getImageUrl(),
-                                            p.getCategoryId()
-                                        ))
+                                        .map(p -> ProductResponse.fromEntity(p))
                                         .toList();
         return responses;
     }
 
     public ProductResponse getProductById(Long id) {
         Product product = getProductByIdOrThrow(id);
-        ProductResponse response = new ProductResponse(
-                                            product.getId(),
-                                            product.getName(),
-                                            product.getPrice(),
-                                            product.getImageUrl(),
-                                            product.getCategoryId()
-                                        );
+        ProductResponse response = ProductResponse.fromEntity(product);
         return response;
     }
 

@@ -45,11 +45,13 @@ public class ProductResponse {
         return categoryId;
     }
 
-    public void fromEntity(Product productEntity) {
-        this.id = productEntity.getId();
-        this.name = productEntity.getName();
-        this.price = productEntity.getPrice();
-        this.imageUrl = productEntity.getImageUrl();
-        this.categoryId = productEntity.getCategoryId();
+    public static ProductResponse fromEntity(Product productEntity) {
+        return new ProductResponse(
+            productEntity.getId(),
+            productEntity.getName(),
+            productEntity.getPrice(),
+            productEntity.getImageUrl(),
+            productEntity.getCategoryId()
+        );
     }
 }
