@@ -114,6 +114,10 @@ public class Product extends BaseTimeEntity {
         isActive = active;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public boolean isOwner(Long id) {
         return seller.getId().equals(id);
     }
