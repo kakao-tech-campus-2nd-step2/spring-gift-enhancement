@@ -17,9 +17,14 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     Long Id;
-    @Column
+    @Column(nullable = false, unique = true)
     String name;
-
+    @Column
+    String color;
+    @Column
+    String description;
+    @Column(nullable = false)
+    String imageUrl;
     @OneToMany(mappedBy = "category")
     List<Product> products = new ArrayList<>();
 
