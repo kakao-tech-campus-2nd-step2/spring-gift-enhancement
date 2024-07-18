@@ -57,8 +57,8 @@
 
 - [ ] Option Repository 구현
   
-- [ ] Product Entity 수정
-  - [ ] Product에 하나 이상의 옵션을 추가하기 위해 List를 사용하여 옵션 저장
+- [x] Product Entity 수정
+  - [x] Product에 하나 이상의 옵션을 추가하기 위해 List를 사용하여 옵션 저장
   
 - [ ] Product Controller 수정
   - [ ] Option 추가되면서 관련 내용들 확인하고 수정
