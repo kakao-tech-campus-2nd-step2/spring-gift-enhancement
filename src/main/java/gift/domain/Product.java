@@ -31,12 +31,11 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true )
     private List<Option> options = new ArrayList<>();
 
-    public Product(String name, int price, String imageUrl, Category category, List<Wish> wishes) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        this.wishes = wishes;
     }
 
     public void setName(String name) {
@@ -61,5 +60,9 @@ public class Product {
     }
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setOptions(List<Option> optionList) {
+        this.options = optionList;
     }
 }

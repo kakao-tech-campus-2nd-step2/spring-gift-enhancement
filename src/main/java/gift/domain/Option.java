@@ -15,4 +15,13 @@ public class Option {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    public Option(String name, Product product) {
+        this.name = name;
+        this.product = product;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

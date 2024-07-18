@@ -1,11 +1,15 @@
 package gift.dto;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CreateProductDto {
     @NotBlank
@@ -21,8 +25,14 @@ public class CreateProductDto {
     @NotBlank
     Category category;
 
+    List<Option> options;
     public Product toProduct(){
-        return new Product(name, price, imageUrl, category);
+        Product product = new Product(name, price, imageUrl, category);
+        List<Option> optionList = options.stream()
+                .map(optionDto -> new Option(optionDto.getName(), product))
+                .collect(Collectors.toList());
+        product.setOptions(optionList);
+        return product;
     }
 
     public String getName() {

@@ -60,8 +60,8 @@
 - [x] Product Entity 수정
   - [x] Product에 하나 이상의 옵션을 추가하기 위해 List를 사용하여 옵션 저장
   
-- [ ] Product Controller 수정
-  - [ ] Option 추가되면서 관련 내용들 확인하고 수정
+- [x] Product Controller 수정
+  - [x] Option 추가되면서 관련 내용들 확인하고 수정할 것 있다면 수정
   
 - [ ] Option Controller 구현
   - [ ] Option 생성
