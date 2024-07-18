@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class productUpdateRequest {
+public class ProductUpdateRequest {
 	
 	@NotBlank(message = "이름은 필수로 입력해야 합니다.")
 	@Size(max = 15, message = "이름은 최대 15자까지 입력 가능합니다.")
@@ -44,6 +44,12 @@ public class productUpdateRequest {
 	}
 	
 	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	
+	public ProductUpdateRequest(String name, int price, String imageUrl) {
+		this.setName(name);
+		this.price = price;
 		this.imageUrl = imageUrl;
 	}
 	

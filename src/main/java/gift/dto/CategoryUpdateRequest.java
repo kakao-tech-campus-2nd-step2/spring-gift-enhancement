@@ -14,4 +14,8 @@ public class CategoryUpdateRequest {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
+	
+	public CategoryUpdateRequest(String categoryName) {
+		this.categoryName = categoryName;
+	}
 }

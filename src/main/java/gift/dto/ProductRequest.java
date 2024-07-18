@@ -59,6 +59,13 @@ public class ProductRequest {
 		this.categoryName = categoryName;
 	}
 	
+	public ProductRequest(String name, int price, String imageUrl, String categoryName) {
+		this.setName(name);
+		this.price = price;
+		this.imageUrl = imageUrl;
+		this.categoryName = categoryName;
+	}
+	
 	public Product toEntity(Category category) {
 		return new Product(this.name, this.price, this.imageUrl, category);
 	}
