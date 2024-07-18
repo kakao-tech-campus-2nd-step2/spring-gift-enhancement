@@ -50,12 +50,12 @@ public class Wish {
         }
     }
 
-    public void remove(Wish wish){
+    public void remove(){
         if(this.member != null){
-            this.member.removeWish(wish);
+            this.member.removeWish(this);
         }
         if(this.product != null){
-            this.product.removeWish(wish);
+            this.product.removeWish(this);
         }
     }
 

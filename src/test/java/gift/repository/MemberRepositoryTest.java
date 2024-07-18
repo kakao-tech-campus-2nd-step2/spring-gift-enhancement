@@ -23,8 +23,6 @@ class MemberRepositoryTest {
     @Autowired
     private ProductRepository products;
     @Autowired
-    private  WishRepository wishes;
-    @Autowired
     private EntityManager entityManager;
     @Autowired
     private RepositoryHelper helper;
