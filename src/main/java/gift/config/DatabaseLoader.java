@@ -19,11 +19,10 @@ public class DatabaseLoader {
     @Bean
     public CommandLineRunner initData(ProductRepository repository, CategoryRepository categoryRepository) {
         return args -> {
-            // 공통 옵션 생성
+            
             Option packageOption = new Option("포장 선택", 1, 3000, null);
             Option deliverOption = new Option("배송비 포함", 1, 2500, null);
 
-            // 상품 및 옵션 데이터 삽입
             Product product1 = new Product(2001L, "[기프티콘] BBQ 황금올리브치킨", 20000, "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/1802204067/B.jpg?315000000", 1);
             List<Option> options1 = Arrays.asList(
                 new Option("01. 치즈볼 5알", 1, 6000, product1),
