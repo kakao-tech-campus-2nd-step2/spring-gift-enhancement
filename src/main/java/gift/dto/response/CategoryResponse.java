@@ -8,12 +8,6 @@ public record CategoryResponse(Long id, String name, String color, String imageU
     }
 
     public Category toEntity() {
-        return new Category.Builder()
-                .id(this.id)
-                .name(this.name)
-                .color(this.color)
-                .imageUrl(this.imageUrl)
-                .description(this.description)
-                .build();
+        return new Category(this.id, this.name, this.color, this.imageUrl, this.description);
     }
 }
