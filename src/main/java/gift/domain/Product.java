@@ -7,8 +7,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 
 @Entity
-@Table(name = "products")
-public class Products extends BaseEntity {
+@Table(name = "product")
+public class Product extends BaseEntity {
 
     @Column(nullable = false, length = 15)
     private String name;
@@ -23,10 +23,10 @@ public class Products extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    public Products() {
+    protected Product() {
     }
 
-    public Products(String name, int price, String imageUrl, Category category) {
+    public Product(String name, int price, String imageUrl, Category category) {
         super();
         this.name = name;
         this.price = price;
@@ -82,8 +82,8 @@ public class Products extends BaseEntity {
             return this;
         }
 
-        public Products build() {
-            Products product = new Products(name, price, imageUrl, category);
+        public Product build() {
+            Product product = new Product(name, price, imageUrl, category);
             product.id = this.id;
             return product;
         }

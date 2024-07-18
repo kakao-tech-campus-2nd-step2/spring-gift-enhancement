@@ -17,12 +17,12 @@ public class Wish extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Products product;
+    private Product product;
 
     public Wish() {
     }
 
-    public Wish(Member member, Products product) {
+    public Wish(Member member, Product product) {
         super();
         this.member = member;
         this.product = product;
@@ -32,20 +32,20 @@ public class Wish extends BaseEntity {
         return member;
     }
 
-    public Products getProduct() {
+    public Product getProduct() {
         return product;
     }
 
     public static class Builder {
         private Member member;
-        private Products product;
+        private Product product;
 
         public Builder member(Member member) {
             this.member = member;
             return this;
         }
 
-        public Builder product(Products product) {
+        public Builder product(Product product) {
             this.product = product;
             return this;
         }
