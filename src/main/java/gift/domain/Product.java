@@ -5,6 +5,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -23,6 +28,10 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Option> options = new HashSet<>();
+
+
     protected Product() {
     }
 
@@ -32,6 +41,15 @@ public class Product extends BaseEntity {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public Product(String name, int price, String imageUrl, Category category, Set<Option> options) {
+        super();
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.options = options;
     }
 
     public String getName() {
@@ -64,5 +82,23 @@ public class Product extends BaseEntity {
 
     public void updateCategory(Category category) {
         this.category = category;
+    }
+
+    public void addOption(Option option) {
+        this.options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOption(Option option) {
+        this.options.remove(option);
+        option.setProduct(null);
+    }
+
+    public Set<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(Set<Option> options) {
+        this.options = options;
     }
 }
