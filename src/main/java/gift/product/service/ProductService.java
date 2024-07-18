@@ -39,8 +39,8 @@ public class ProductService {
                         product.getCategoryId()));
     }
 
-    public ProductDto findById(Long categoryId) {
-        return productRepository.findById(categoryId)
+    public ProductDto findById(Long productId) {
+        return productRepository.findById(productId)
                 .map(product -> new ProductDto(
                         product.getProductId(),
                         product.getName(),
