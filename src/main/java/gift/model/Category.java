@@ -21,11 +21,9 @@ public class Category {
   @Column(name = "description", length = 255)
   private String description;
 
-  // Default constructor for JPA
   protected Category() {
   }
 
-  // All-arguments constructor
   public Category(String name, String color, String imageUrl, String description) {
     this.name = name;
     this.color = color;
