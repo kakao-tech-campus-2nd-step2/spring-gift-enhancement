@@ -20,7 +20,6 @@ public class ProductServiceTest {
 
     @PersistenceContext
     private EntityManager em;
-
     @Autowired
     private ProductService productService;
     @Autowired

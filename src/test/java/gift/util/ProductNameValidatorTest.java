@@ -17,7 +17,7 @@ public class ProductNameValidatorTest {
 
     @Autowired
     private Validator validator;
-
+  
     @Test
     public void save_nameSuccess() {
         //given
