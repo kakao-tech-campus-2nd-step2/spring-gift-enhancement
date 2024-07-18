@@ -1,6 +1,5 @@
 package gift.Entity;
 
-import gift.Model.ProductDto;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,6 +7,10 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long productId;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
+    private Category category;
     private String name;
     private int price;
     private String imageUrl;
@@ -16,9 +19,10 @@ public class Product {
     protected Product() {
     }
 
-    public Product(long productId, String name, int price, String imageUrl, boolean isDeleted) {
+    public Product(long productId, String name, Category category, int price, String imageUrl, boolean isDeleted) {
         this.productId = productId;
         this.name = name;
+        this.category = category;
         this.price = price;
         this.imageUrl = imageUrl;
         this.isDeleted = isDeleted;
@@ -62,5 +66,13 @@ public class Product {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
