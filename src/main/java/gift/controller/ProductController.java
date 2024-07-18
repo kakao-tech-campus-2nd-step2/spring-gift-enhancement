@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
+    public ProductController(ProductService productService) {
+    	this.productService = productService;
+    }
+    
     @GetMapping
     public ResponseEntity<Page<Product>> getAllProducts(@PageableDefault(sort="name") Pageable pageable) {
     	Page<Product> products = productService.getProducts(pageable);

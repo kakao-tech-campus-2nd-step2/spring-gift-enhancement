@@ -2,7 +2,6 @@ package gift.controller;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +17,11 @@ import jakarta.validation.Valid;
 @RequestMapping("/members")
 public class AuthController {
 	
-	@Autowired
-	private AuthService authService;
+	private final AuthService authService;
+	
+	public AuthController(AuthService authService) {
+		this.authService = authService;
+	}
 	
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@Valid @RequestBody User user, BindingResult bindingResult){

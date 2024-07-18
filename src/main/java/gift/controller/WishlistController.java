@@ -1,6 +1,5 @@
 package gift.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,36 +21,39 @@ import gift.service.WishlistService;
 @RequestMapping("/wishlist")
 public class WishlistController {
 	
-	@Autowired
-	private WishlistService wishlistService;
+	private final WishlistService wishlistService;
 	
+	public WishlistController(WishlistService wishlistService) {
+		this.wishlistService = wishlistService;
+	}
+
 	@GetMapping
-	public ResponseEntity<Page<Wishlist>> getWishlist(@RequestHeader("Authorization") String token, BindingResult bindingResult,
-			@PageableDefault(sort="name") Pageable pageable){
+	public ResponseEntity<Page<Wishlist>> getWishlist(@RequestHeader("Authorization") String token,
+			BindingResult bindingResult, @PageableDefault(sort = "name") Pageable pageable) {
 		Page<Wishlist> wishlist = wishlistService.getWishlist(token, bindingResult, pageable);
-		if(wishlist.isEmpty()) {
+		if (wishlist.isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}
 		return ResponseEntity.ok(wishlist);
 	}
 
 	@PostMapping
-	public ResponseEntity<String> addWishlist(@RequestHeader("Authorization") String token, @RequestBody Wishlist wishlist
-			, BindingResult bindingResult){
+	public ResponseEntity<String> addWishlist(@RequestHeader("Authorization") String token,
+			@RequestBody Wishlist wishlist, BindingResult bindingResult) {
 		wishlistService.addWishlist(token, wishlist, bindingResult);
 		return ResponseEntity.ok("Product added to wishlist successfully.");
 	}
-	
+
 	@DeleteMapping
-	public ResponseEntity<String> removeWishlist(@RequestHeader("Authorization") String token, @RequestBody Wishlist wishlist
-			, BindingResult bindingResult){
+	public ResponseEntity<String> removeWishlist(@RequestHeader("Authorization") String token,
+			@RequestBody Wishlist wishlist, BindingResult bindingResult) {
 		wishlistService.removeWishlist(token, wishlist, bindingResult);
 		return ResponseEntity.ok("Product removed from wishlist successfully.");
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<String> updateWishlist(@RequestHeader("Authorization") String token, @RequestBody  Wishlist wishlist
-			, BindingResult bindingResult){
+	public ResponseEntity<String> updateWishlist(@RequestHeader("Authorization") String token,
+			@RequestBody Wishlist wishlist, BindingResult bindingResult) {
 		wishlistService.updateWishlistQuantity(token, wishlist, bindingResult);
 		return ResponseEntity.ok("Product quantity updated successfully.");
 	}

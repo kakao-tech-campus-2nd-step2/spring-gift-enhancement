@@ -1,6 +1,5 @@
 package gift.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,11 +15,13 @@ import gift.service.ProductService;
 @RequestMapping("/admin/products")
 public class AdminController {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
+    private final CategoryService categoryService;
     
-    @Autowired
-    private CategoryService categoryService;
+    public AdminController(ProductService productService, CategoryService categoryService) {
+    	this.productService = productService;
+    	this.categoryService =categoryService;
+    }
 
     @GetMapping
     public String adminPage(Model model,
