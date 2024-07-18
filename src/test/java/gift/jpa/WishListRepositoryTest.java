@@ -1,5 +1,7 @@
 package gift.jpa;
 
+import gift.option.Option;
+import gift.option.OptionRepository;
 import gift.product.Product;
 import gift.product.ProductRepository;
 import gift.user.User;
@@ -27,6 +29,8 @@ public class WishListRepositoryTest {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    OptionRepository optionRepository;
+    @Autowired
     ProductRepository productRepository;
 
     @Test
@@ -37,15 +41,16 @@ public class WishListRepositoryTest {
                 "myNickName");
         userRepository.save(user);
         Product product = productRepository.findById(1L).orElseThrow();
+        Option option = optionRepository.save(new Option("option1", 100L, product));
 
         WishList expected = new WishList(10);
         user.addWishList(expected);
-        product.addWishList(expected);
+        option.addWishList(expected);
         WishList actual = wishListRepository.save(expected);
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getUser()).isEqualTo(expected.getUser()),
-                () -> assertThat(actual.getProduct()).isEqualTo(expected.getProduct()),
+                () -> assertThat(actual.getOption()).isEqualTo(expected.getOption()),
                 () -> assertThat(actual.getCount()).isEqualTo(expected.getCount())
         );
 
@@ -59,20 +64,23 @@ public class WishListRepositoryTest {
                 "myNickName");
         userRepository.save(user);
         Product product = productRepository.findById(1L).orElseThrow();
+        Option option = optionRepository.save(new Option("option1", 100L, product));
 
         User user2 = new User("email2@kakao.com",
                 "passwordForTest2",
                 "myNickName2");
         userRepository.save(user2);
         Product product2 = productRepository.findById(2L).orElseThrow();
+        Option option2 = optionRepository.save(new Option("option2", 200L, product2));
+
 
         WishList expected = wishListRepository.save(new WishList(10));
         user.addWishList(expected);
-        product.addWishList(expected);
+        option.addWishList(expected);
 
         WishList saved = wishListRepository.save(new WishList(5));
         user2.addWishList(saved);
-        product2.addWishList(saved);
+        option2.addWishList(saved);
 
         List<WishList> actual = wishListRepository.findByUser(user);
         assertThat(actual.size()).isEqualTo(1);
@@ -80,7 +88,7 @@ public class WishListRepositoryTest {
         assertAll(
                 () -> assertThat(actualWish.getId()).isNotNull(),
                 () -> assertThat(actualWish.getUser()).isEqualTo(expected.getUser()),
-                () -> assertThat(actualWish.getProduct()).isEqualTo(expected.getProduct()),
+                () -> assertThat(actualWish.getOption()).isEqualTo(expected.getOption()),
                 () -> assertThat(actualWish.getCount()).isEqualTo(expected.getCount())
         );
     }
@@ -93,10 +101,10 @@ public class WishListRepositoryTest {
                 "myNickName");
         userRepository.save(user);
         Product product = productRepository.findById(1L).orElseThrow();
-
+        Option option = optionRepository.save(new Option("option1", 100L, product));
         WishList wish = wishListRepository.save(new WishList(10));
         user.addWishList(wish);
-        product.addWishList(wish);
+        option.addWishList(wish);
         wish.setCount(100);
         WishList actual = wishListRepository.findById(wish.getId()).orElseThrow();
         assertThat(actual.getCount()).isEqualTo(100);
@@ -110,10 +118,11 @@ public class WishListRepositoryTest {
                 "myNickName");
         userRepository.save(user);
         Product product = productRepository.findById(1L).orElseThrow();
-
+        Option option = optionRepository.save(new Option("option1", 100L, product));
         WishList wish = wishListRepository.save(new WishList(10));
+        
         user.addWishList(wish);
-        product.addWishList(wish);
+        option.addWishList(wish);
         wishListRepository.deleteById(wish.getId());
         Optional<WishList> wishList = wishListRepository.findById(wish.getId());
         assertThat(wishList.isPresent()).isFalse();
