@@ -30,6 +30,7 @@
             <td>
                 <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-sm btn-warning">수정</a>
                 <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-sm btn-danger">삭제</a>
+                <a th:href="@{/products/{id}/options(id=${product.id})}" class="btn btn-sm btn-info">옵션 관리</a>
             </td>
         </tr>
         </tbody>
