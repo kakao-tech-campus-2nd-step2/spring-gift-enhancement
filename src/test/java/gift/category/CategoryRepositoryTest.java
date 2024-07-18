@@ -31,13 +31,6 @@ class CategoryRepositoryTest {
         categoryRepository.save(new Cateogory("라우브","스틸더","www.show","키야"));
     }
 
-//    @BeforeEach
-//    void setProductRepository() {
-//        productRepository.save(new Product("사과", 2000, "www",));
-//        productRepository.save(new Product("참외",4000,"달다!",1));
-//        productRepository.save(new Product("바나나", 3000,"맛있다!",2));
-//    }
-
     @Test
     @DisplayName("카테고리 저장 테스트")
     void save() {
