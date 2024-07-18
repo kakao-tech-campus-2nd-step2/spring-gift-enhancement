@@ -41,4 +41,8 @@ public class OptionService {
         updateOption.setQuantity(option.getQuantity());
         return optionRepository.save(updateOption);
     }
+
+    public void deleteOption(Long optionId) {
+        optionRepository.deleteById(optionId);
+    }
 }

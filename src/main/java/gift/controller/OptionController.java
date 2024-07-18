@@ -9,11 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-public class OptionApiController {
+public class OptionController {
 
     private final OptionService optionService;
 
-    public OptionApiController(OptionService optionService) {
+    public OptionController(OptionService optionService) {
         this.optionService = optionService;
     }
 
@@ -33,5 +33,11 @@ public class OptionApiController {
     public ResponseEntity<Option> updateOption(@PathVariable Long optionId, @RequestBody Option optionDetails) {
         Option updatedOption = optionService.updateOption(optionId, optionDetails);
         return ResponseEntity.ok(updatedOption);
+    }
+
+    @DeleteMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<Void> deleteOption(@PathVariable Long optionId) {
+        optionService.deleteOption(optionId);
+        return ResponseEntity.noContent().build();
     }
 }
