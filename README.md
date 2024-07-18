@@ -78,5 +78,5 @@ Content-Type: application/json
 1. Option 엔티티 클래스 구현
 2. 옵션 -> 상품 단방향 맵핑 구현 
 3. Option Cotnroller, Service, Repository 구현
-4. (선택) 관리자 화면에서 관련 옵션을 추가하고 수정할 수 있도록 상품 추가 및 수정 api에서 옵션 추가 및 수정 기능 구현
+4. (선택) 관리자 화면에서 상품 추가 시 옵션을 1개 추가하게 끔 구현 
 5. Option 도메인 객체 및 OptionController에 대한 테스트 구현
