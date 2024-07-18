@@ -4,6 +4,7 @@ import gift.database.JpaCategoryRepository;
 import gift.database.JpaProductRepository;
 import gift.dto.ProductDTO;
 import gift.exceptionAdvisor.CategoryServiceException;
+import gift.exceptionAdvisor.ProductNoSuchException;
 import gift.exceptionAdvisor.ProductServiceException;
 import gift.model.Category;
 import gift.model.Product;
@@ -48,25 +49,14 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public void updateName(long id, String name) {
-        var prod = getProduct(id);
-        prod.setName(name);
+    public void update(long id,ProductDTO dto) {
+        jpaProductRepository.findById(id).orElseThrow(ProductNoSuchException::new);
 
+        Product product = new Product(id, dto.getName(), dto.getPrice(), dto.getImageUrl());
+        Category category = checkCategory(dto.getCategoryId());
 
-    }
-
-    @Override
-    public void updatePrice(long id, int price) {
-        var prod = getProduct(id);
-        prod.setPrice(price);
-
-    }
-
-    @Override
-    public void updateImageUrl(long id, String url) {
-        var prod = getProduct(id);
-        prod.setImageUrl(url);
-
+        product.setCategory(category);
+        jpaProductRepository.save(product);
     }
 
     @Override
