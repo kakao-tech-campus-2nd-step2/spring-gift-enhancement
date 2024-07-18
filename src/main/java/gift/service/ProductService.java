@@ -17,15 +17,6 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    private ProductDTO toProductDTO(ProductEntity productEntity) {
-        return new ProductDTO(
-            productEntity.getId(),
-            productEntity.getName(),
-            productEntity.getPrice(),
-            productEntity.getImageUrl()
-        );
-    }
-
     private ProductEntity toProductEntity(ProductDTO productDTO) {
         return new ProductEntity(
             productDTO.getId(),
@@ -38,19 +29,19 @@ public class ProductService {
     public List<ProductDTO> getAllProducts() {
         List<ProductEntity> response = productRepository.findAll();
         return response.stream()
-            .map(this::toProductDTO)
+            .map(ProductEntity::toDTO)
             .collect(Collectors.toList());
     }
 
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
         Page<ProductEntity> productEntities = productRepository.findAll(pageable);
-        return productEntities.map(this::toProductDTO);
+        return productEntities.map(ProductEntity::toDTO);
     }
 
     // Read(단일 상품) - getProduct()
     public Optional<ProductDTO> getProduct(Long id) {
         return productRepository.findById(id)
-            .map(this::toProductDTO);
+            .map(ProductEntity::toDTO);
     }
 
     // Create(생성) - addProduct()
