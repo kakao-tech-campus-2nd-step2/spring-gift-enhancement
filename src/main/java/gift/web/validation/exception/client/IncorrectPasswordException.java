@@ -1,8 +1,8 @@
 package gift.web.validation.exception.client;
 
-import static gift.web.validation.exception.code.ErrorCode.INCORRECT_PASSWORD;
+import static gift.web.validation.exception.code.ErrorStatus.INCORRECT_PASSWORD;
 
-import gift.web.validation.exception.code.ErrorCode;
+import gift.web.validation.exception.code.ErrorStatus;
 
 public class IncorrectPasswordException extends ClientException {
 
@@ -25,7 +25,7 @@ public class IncorrectPasswordException extends ClientException {
     }
 
     @Override
-    public ErrorCode getErrorCode() {
+    public ErrorStatus getErrorCode() {
         return INCORRECT_PASSWORD;
     }
 

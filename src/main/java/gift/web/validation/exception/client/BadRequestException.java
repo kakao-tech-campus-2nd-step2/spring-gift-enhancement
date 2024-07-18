@@ -1,8 +1,8 @@
 package gift.web.validation.exception.client;
 
-import static gift.web.validation.exception.code.ErrorCode.BAD_REQUEST;
+import static gift.web.validation.exception.code.ErrorStatus.BAD_REQUEST;
 
-import gift.web.validation.exception.code.ErrorCode;
+import gift.web.validation.exception.code.ErrorStatus;
 
 /**
  * 4XX 예외
@@ -28,7 +28,7 @@ public class BadRequestException extends ClientException {
     }
 
     @Override
-    public ErrorCode getErrorCode() {
+    public ErrorStatus getErrorCode() {
         return BAD_REQUEST;
     }
 

@@ -1,8 +1,8 @@
 package gift.web.validation.exception.client;
 
-import static gift.web.validation.exception.code.ErrorCode.INCORRECT_EMAIL;
+import static gift.web.validation.exception.code.ErrorStatus.INCORRECT_EMAIL;
 
-import gift.web.validation.exception.code.ErrorCode;
+import gift.web.validation.exception.code.ErrorStatus;
 
 public class IncorrectEmailException extends ClientException {
 
@@ -21,7 +21,7 @@ public class IncorrectEmailException extends ClientException {
     }
 
     @Override
-    public ErrorCode getErrorCode() {
+    public ErrorStatus getErrorCode() {
         return INCORRECT_EMAIL;
     }
 

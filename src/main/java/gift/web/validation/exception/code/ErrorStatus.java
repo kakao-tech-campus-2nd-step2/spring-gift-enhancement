@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
  * 에러 코드<br>
  * code - HTTP 상태 코드 + 두 자리 숫자(내부 규칙 정의) 으로 정의된다.<br>
  */
-public enum ErrorCode {
+public enum ErrorStatus {
 
     UNAUTHORIZED_INVALID_CREDENTIALS(-40100, Category.AUTHENTICATION, HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED_INVALID_TOKEN(-40101, Category.AUTHENTICATION, HttpStatus.UNAUTHORIZED),
@@ -28,7 +28,7 @@ public enum ErrorCode {
     private final Category category;
     private final HttpStatus httpStatus;
 
-    ErrorCode(int code, Category category, HttpStatus httpStatus) {
+    ErrorStatus(int code, Category category, HttpStatus httpStatus) {
         this.code = code;
         this.category = category;
         this.httpStatus = httpStatus;

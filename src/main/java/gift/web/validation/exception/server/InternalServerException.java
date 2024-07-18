@@ -1,8 +1,8 @@
 package gift.web.validation.exception.server;
 
-import static gift.web.validation.exception.code.ErrorCode.INTERNAL_SERVER_ERROR;
+import static gift.web.validation.exception.code.ErrorStatus.INTERNAL_SERVER_ERROR;
 
-import gift.web.validation.exception.code.ErrorCode;
+import gift.web.validation.exception.code.ErrorStatus;
 
 public class InternalServerException extends ServerException {
 
@@ -25,7 +25,7 @@ public class InternalServerException extends ServerException {
     }
 
     @Override
-    public ErrorCode getErrorCode() {
+    public ErrorStatus getErrorCode() {
         return INTERNAL_SERVER_ERROR;
     }
 
