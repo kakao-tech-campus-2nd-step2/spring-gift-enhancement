@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
             return new LoginMemberToken(token);
         }
 
-        throw new MemberAuthenticationException();
+        throw new MemberAuthenticationException("로그인에 실패하였습니다.");
     }
 
     @Override

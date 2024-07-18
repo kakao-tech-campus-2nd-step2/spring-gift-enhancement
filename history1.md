@@ -42,6 +42,14 @@ https://vesselsdiary.tistory.com/137
 
 post, put 등에서 반환에서 특정 url로 location header를 변경해서 넘겨주기?
 
+3. 서비스가 다른 서비스로 작업을 넘겨도 되는가?
+
+여러 서비스를 모아서 처리하는 서비스도 있을 수 있지 않을까?
+
+4. 커스텀 Exception을 만들었을 때 ( ex -> MemberNoSuchException.class ) 더 이상 상속된 클래스가 필요없다면
+final class로 하는 것이 이점이 있는가?
+
+
 
 ### 리팩토링 예약
 
@@ -62,6 +70,6 @@ post, put 등에서 반환에서 특정 url로 location header를 변경해서 �
 
 - 페이징 - 사용자가 정렬 옵션이나 페이지 사이즈 등의 옵션을 넘길 수 있도록 하기
 
-- 예외에 대해서 구조화하기 -> 예외 기본 생성자 private으로 하거나, 기본 예외 메세지와 httpstate를 만들어주기
+- ~~예외에 대해서 구조화하기 -> 예외 기본 생성자 private으로 하거나, 기본 예외 메세지와 httpstate를 만들어주기~~
 
-- 예외에 대해서 중복된 구조 상속 이용?
+- ~~예외에 대해서 중복된 구조 상속 이용?~~

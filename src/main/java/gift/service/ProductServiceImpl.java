@@ -3,7 +3,7 @@ package gift.service;
 import gift.database.JpaCategoryRepository;
 import gift.database.JpaProductRepository;
 import gift.dto.ProductDTO;
-import gift.exceptionAdvisor.exceptions.CategoryServiceException;
+import gift.exceptionAdvisor.exceptions.CategoryNoSuchException;
 import gift.exceptionAdvisor.exceptions.ProductNoSuchException;
 import gift.exceptionAdvisor.exceptions.ProductServiceException;
 import gift.model.Category;
@@ -82,13 +82,12 @@ public class ProductServiceImpl implements ProductService {
     // private //
 
     private Product getProduct(long id) {
-        var prod = jpaProductRepository.findById(id).orElseThrow(
-            () -> new ProductServiceException("상품이 존재하지 않습니다", HttpStatus.BAD_REQUEST));
+        var prod = jpaProductRepository.findById(id).orElseThrow(ProductNoSuchException::new);
         checkKakao(prod.getName());
         return prod;
     }
 
     private Category checkCategory(long id) {
-        return jpaCategoryRepository.findById(id).orElseThrow(CategoryServiceException::new);
+        return jpaCategoryRepository.findById(id).orElseThrow(CategoryNoSuchException::new);
     }
 }
