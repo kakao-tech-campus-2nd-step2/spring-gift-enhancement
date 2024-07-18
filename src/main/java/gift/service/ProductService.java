@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.entity.Category;
 import gift.entity.Member;
+import gift.entity.Option;
 import gift.entity.Product;
 
 import gift.exception.DataNotFoundException;
@@ -51,7 +52,7 @@ public class ProductService {
 
     public void updateProduct(Product product, Long id) {
 
-        Product update = findByProductByIdOrThrow(id);
+        Product update = getProductById(id);
         update.setName(product.getName());
         update.setPrice(product.getPrice());
         update.setImageUrl(product.getImageUrl());
@@ -73,17 +74,5 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    private Product findByProductByIdOrThrow(Long id) {
-        return productRepository.findById(id)
-            .orElseThrow(() -> new DataNotFoundException("존재하지 않는 상품입니다."));
-    }
-
-    public Category findCategoryById(Long id) {
-        return categoryService.findById(id);
-    }
-
-    public List<Category> findAllCategory() {
-        return categoryService.findAll();
-    }
 
 }

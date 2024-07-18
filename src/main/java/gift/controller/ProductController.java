@@ -1,11 +1,15 @@
 package gift.controller;
 
 
+import gift.dto.OptionDTO;
 import gift.dto.ProductDTO;
 import gift.entity.Category;
+import gift.entity.Option;
 import gift.entity.Product;
+import gift.service.ProductFacadeService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -24,10 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/product")
 public class ProductController {
 
-    ProductService productService;
+    ProductFacadeService productService;
 
     //생성자 주입
-    public ProductController(ProductService productService) {
+    public ProductController(ProductFacadeService productService) {
         this.productService = productService;
     }
 
@@ -42,6 +46,11 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
+    @GetMapping("/{id}/options")
+    public Product getProductByIdWithOption(@PathVariable("id") long id) {
+        return productService.getProductById(id);
+    }
+
 
     //Product Pagination
     @GetMapping("/page/{page}")
@@ -52,10 +61,14 @@ public class ProductController {
 
     //product 추가
     @PostMapping
-    public ResponseEntity<String> addProduct(@RequestBody @Valid ProductDTO productDTO) {
+    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) {
         Category category = productService.findCategoryById(productDTO.getCategoryId());
         Product product = productDTO.toEntity(category);
-        productService.saveProduct(product);
+        List<Option> options = new ArrayList<>();
+        for (OptionDTO optionDTO : productDTO.getOption()) {
+            options.add(optionDTO.toEntity(product));
+        }
+        productService.addProduct(product, options);
         return new ResponseEntity<>("OK", HttpStatus.CREATED);
 
     }
@@ -79,5 +92,6 @@ public class ProductController {
         productService.deleteProduct(id);
         return new ResponseEntity<>("product delete success", HttpStatus.NO_CONTENT);
     }
+
 
 }
