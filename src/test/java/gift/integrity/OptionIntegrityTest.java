@@ -2,7 +2,10 @@ package gift.integrity;
 
 import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.product.dto.CategoryDto;
 import gift.product.dto.OptionDto;
 import gift.product.model.Category;
@@ -11,6 +14,7 @@ import gift.product.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.MethodOrderer;
@@ -29,6 +33,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
@@ -139,5 +144,68 @@ class OptionIntegrityTest {
 
         //then
         assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Order(6)
+    @Test
+    void 옵션_이름이_50자를_초과했을_때() throws JsonProcessingException {
+        //given
+        String url = BASE_URL + port + "/api/options/insert";
+        OptionDto optionDto = new OptionDto("테스트옵션".repeat(51), 1, 1L);
+
+        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(optionDto, HttpMethod.POST,
+            URI.create(url));
+
+        //when
+        ObjectMapper mapper = new ObjectMapper();
+        String responseMessage = testRestTemplate.exchange(requestEntity, String.class).getBody();
+        Map<String, Object> responseMessageMap = mapper.readValue(responseMessage, Map.class);
+
+        String message = (String)responseMessageMap.get("detail");
+
+        //then
+        assertThat(message).isEqualTo("옵션 이름은 공백 포함 최대 50자까지 입력할 수 있습니다.");
+    }
+
+    @Order(7)
+    @Test
+    void 옵션_이름에_사용_불가능한_특수_문자를_입력했을_때() throws JsonProcessingException {
+        //given
+        String url = BASE_URL + port + "/api/options/insert";
+        OptionDto optionDto = new OptionDto("테스트옵션#", 1, 1L);
+
+        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(optionDto, HttpMethod.POST,
+            URI.create(url));
+
+        //when
+        ObjectMapper mapper = new ObjectMapper();
+        String responseMessage = testRestTemplate.exchange(requestEntity, String.class).getBody();
+        Map<String, Object> responseMessageMap = mapper.readValue(responseMessage, Map.class);
+
+        String message = (String)responseMessageMap.get("detail");
+
+        //then
+        assertThat(message).isEqualTo("사용 가능한 특수 문자는 ()[]+-&/_ 입니다.");
+    }
+
+    @Order(8)
+    @Test
+    void 옵션_수량이_범위를_초과했을_때() throws JsonProcessingException {
+        //given
+        String url = BASE_URL + port + "/api/options/insert";
+        OptionDto optionDto = new OptionDto("테스트옵션", 100_000_001, 1L);
+
+        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(optionDto, HttpMethod.POST,
+            URI.create(url));
+
+        //when
+        ObjectMapper mapper = new ObjectMapper();
+        String responseMessage = testRestTemplate.exchange(requestEntity, String.class).getBody();
+        Map<String, Object> responseMessageMap = mapper.readValue(responseMessage, Map.class);
+
+        String message = (String)responseMessageMap.get("detail");
+
+        //then
+        assertThat(message).isEqualTo("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");
     }
 }
