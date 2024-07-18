@@ -45,4 +45,18 @@ public class CategoryService {
         CategoryResponse response = CategoryResponse.fromEntity(category);
         return response;
     }
+
+    public CategoryResponse updateCategory(Long id, CategoryRequest newCategory) {
+        Category category = categoryRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException("No such category"));
+        category.setName(newCategory.getName());
+        category.setColor(newCategory.getColor());
+        category.setImageUrl(newCategory.getImageUrl());
+        category.setDescription(newCategory.getDescription());
+
+        categoryRepository.save(category);
+
+        CategoryResponse response = CategoryResponse.fromEntity(category);
+        return response;
+    }
 }
