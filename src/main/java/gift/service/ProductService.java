@@ -12,8 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class ProductService {
@@ -45,11 +47,19 @@ public class ProductService {
             throw new IllegalArgumentException("상품에는 최소 하나의 옵션이 있어야 합니다.");
         }
 
+        Set<String> optionNames = new HashSet<>();
+        for (Option option : options) {
+            if (!optionNames.add(option.getName())) {
+                throw new IllegalArgumentException("옵션 이름이 중복됩니다: " + option.getName());
+            }
+        }
+
         Product product = new Product(
                 productDto.getName(),
                 productDto.getPrice(),
                 productDto.getImageUrl(),
-                category,options
+                category,
+                options
         );
         productRepository.save(product);
         return product;
@@ -62,6 +72,13 @@ public class ProductService {
         List<Option> options = productDto.getOptions().stream()
                 .map(optionDto -> new Option(optionDto.getName(), optionDto.getQuantity()))
                 .toList();
+
+        Set<String> optionNames = new HashSet<>();
+        for (Option option : options) {
+            if (!optionNames.add(option.getName())) {
+                throw new IllegalArgumentException("옵션 이름이 중복됩니다: " + option.getName());
+            }
+        }
 
         Product updateProduct = new Product(
                 id,
