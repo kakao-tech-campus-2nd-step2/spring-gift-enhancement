@@ -1,7 +1,7 @@
 package gift.product.persistence.repository;
 
 import gift.global.exception.ErrorCode;
-import gift.global.exception.NotFoundException;
+import gift.global.exception.custrom.NotFoundException;
 import gift.product.persistence.entity.Product;
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,6 @@
-package gift.global.exception;
+package gift.global.exception.custrom;
+
+import gift.global.exception.ErrorCode;
 
 public class LoginException extends RuntimeException {
 

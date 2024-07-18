@@ -1,8 +1,8 @@
 package gift.product.persistence.repository;
 
-import gift.global.exception.DBException;
+import gift.global.exception.custrom.DBException;
 import gift.global.exception.ErrorCode;
-import gift.global.exception.NotFoundException;
+import gift.global.exception.custrom.NotFoundException;
 import gift.product.persistence.entity.Category;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;

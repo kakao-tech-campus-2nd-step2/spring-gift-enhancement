@@ -1,5 +1,7 @@
-package gift.global.exception;
+package gift.global.exception.custrom;
 
+
+import gift.global.exception.ErrorCode;
 
 public class NotFoundException extends RuntimeException{
     private final ErrorCode errorCode;

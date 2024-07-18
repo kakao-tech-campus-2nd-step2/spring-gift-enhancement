@@ -1,5 +1,8 @@
 package gift.global.exception;
 
+import gift.global.exception.custrom.DBException;
+import gift.global.exception.custrom.LoginException;
+import gift.global.exception.custrom.NotFoundException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
