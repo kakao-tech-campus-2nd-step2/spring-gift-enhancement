@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import gift.model.Category;
+import gift.entity.Category;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
 
@@ -30,19 +30,19 @@ public class CategoryController {
 	@GetMapping
 	public ResponseEntity<List<Category>> getAllCategories(){
 		List<Category> categories = categoryService.getAllCategories();
-		return ResponseEntity.ok(categories);
+		return ResponseEntity.status(HttpStatus.OK).body(categories);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Category> addCategory(@Valid @RequestBody Category category, BindingResult bindingResult){
-		Category createdCategory = categoryService.createCategory(category, bindingResult);
-		return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
+	public ResponseEntity<Void> addCategory(@Valid @RequestBody Category category, BindingResult bindingResult){
+		categoryService.createCategory(category, bindingResult);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<String> updateCategory(@PathVariable("id") Long id, @Valid Category category,
+	public ResponseEntity<Void> updateCategory(@PathVariable("id") Long id, @Valid Category category,
 			BindingResult bindingResult){
 		categoryService.updateCategory(id, category, bindingResult);
-		return new ResponseEntity<>("Category updated successfully.", HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }
