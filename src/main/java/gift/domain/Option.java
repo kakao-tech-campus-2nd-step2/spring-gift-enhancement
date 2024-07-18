@@ -1,6 +1,8 @@
 package gift.domain;
 
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -15,7 +17,8 @@ public class Option {
     @Pattern(regexp = "^[가-힣a-zA-Z0-9()\\[\\]+\\-&/_]*$", message = "유효한 이름이 아닙니다")
     private String name;
 
-    @Size(min = 1, max = 99999999, message = "0초과 1억미만의 범위로 입력 가능합니다.")
+    @Min(value = 1, message = "0초과 1억미만의 범위로 입력 가능합니다.")
+    @Max(value = 99999999, message = "0초과 1억미만의 범위로 입력 가능합니다.")
     private Long quantity;
 
     private Long productId;
