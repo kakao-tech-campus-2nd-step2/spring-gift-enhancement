@@ -8,12 +8,8 @@ public class WishRequestDto {
     public WishRequestDto() {
     }
 
-    public void setProductId(Long productId) {
+    public WishRequestDto(Long productId) {
         this.productId = productId;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
     }
 
     public Long getProductId() {

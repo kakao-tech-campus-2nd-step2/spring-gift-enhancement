@@ -80,8 +80,7 @@ public class WishServiceTest {
     }
 
     private WishRequestDto getWishRequestDto() {
-        WishRequestDto wishRequestDto = new WishRequestDto();
-        wishRequestDto.setProductId(1L);
+        WishRequestDto wishRequestDto = new WishRequestDto(1L);
         return wishRequestDto;
     }
 
