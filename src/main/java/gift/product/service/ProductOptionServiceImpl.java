@@ -27,6 +27,16 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         this.productRepository = productRepository;
     }
 
+    public ProductOptionServiceImpl(
+            ProductOptionRepository productOptionRepository,
+            ProductRepository productRepository,
+            Long maxOptionLimit
+    ) {
+        this.productOptionRepository = productOptionRepository;
+        this.productRepository = productRepository;
+        this.maxOptionLimit = maxOptionLimit;
+    }
+
     @Override
     @Transactional
     public void registerOptionToProduct(Long productId, ProductOption productOption) {
