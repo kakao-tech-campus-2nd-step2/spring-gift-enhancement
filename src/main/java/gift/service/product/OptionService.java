@@ -1,6 +1,7 @@
 package gift.service.product;
 
 import gift.global.validate.NotFoundException;
+import gift.model.product.Option;
 import gift.model.product.Options;
 import gift.model.product.Product;
 import gift.repository.product.OptionRepository;
@@ -22,14 +23,19 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
-    public OptionModel.Info createOption(Long productId, OptionCommand.Register command) {
+    @Transactional
+    public List<OptionModel.Info> createOption(Long productId, OptionCommand.Register command) {
         var product = productRepository.findById(productId)
             .orElseThrow(() -> new NotFoundException("Product not found"));
-        var option = command.toEntity(product);
+        List<Option> optionList = command.toEntities(product);
+        Options.validateOptions(optionList);
         Options options = new Options(optionRepository.findByProductId(productId));
-        options.validateUniqueName(option);
-        optionRepository.save(option);
-        return OptionModel.Info.from(option);
+
+        for (Option option : optionList) {
+            options.validateUniqueName(option);
+            optionRepository.save(option);
+        }
+        return optionList.stream().map(OptionModel.Info::from).toList();
     }
 
     @Transactional(readOnly = true)

@@ -3,6 +3,8 @@ package gift.controller.product;
 import gift.controller.product.dto.OptionRequest;
 import gift.controller.product.dto.OptionResponse;
 import gift.service.product.OptionService;
+import gift.service.product.dto.OptionModel;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +33,12 @@ public class OptionController {
     }
 
     @PostMapping("/products/{id}/options")
-    public ResponseEntity<OptionResponse.Info> createOption(
+    public ResponseEntity<OptionResponse.InfoList> createOption(
         @PathVariable("id") Long productId,
         @RequestBody OptionRequest.Register request
     ) {
-        var models = optionService.createOption(productId, request.toCommand());
-        var response = OptionResponse.Info.from(models);
+        List<OptionModel.Info> models = optionService.createOption(productId, request.toCommand());
+        var response = OptionResponse.InfoList.from(models);
         return ResponseEntity.ok().body(response);
     }
 
