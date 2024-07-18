@@ -1,12 +1,7 @@
 package gift.dto.response;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-
 import gift.dto.ProductDto;
-import gift.entity.Product;
 
 public class ProductPageResponse {
     
