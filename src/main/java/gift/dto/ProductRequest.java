@@ -2,13 +2,14 @@ package gift.dto;
 
 import gift.constants.ErrorMessage;
 import gift.constants.RegularExpression;
-import gift.entity.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ProductDto {
+public class ProductRequest {
 
     private Long id;
 
@@ -33,22 +34,20 @@ public class ProductDto {
     @NotBlank
     private String categoryName;
 
-    protected ProductDto() {
+    private List<OptionDto> options = new ArrayList<>();
+
+    protected ProductRequest() {
     }
 
-    public ProductDto(Long id, String name, long price, String imageUrl, Long categoryId,
-        String categoryName) {
+    public ProductRequest(Long id, String name, long price, String imageUrl, Long categoryId,
+        String categoryName, List<OptionDto> options) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
-    }
-
-    public ProductDto(Product p) {
-        this(p.getId(), p.getName(), p.getPrice(), p.getImageUrl(), p.getCategory().getId(),
-            p.getCategory().getName());
+        this.options = options;
     }
 
     public Long getId() {
@@ -71,7 +70,7 @@ public class ProductDto {
         return categoryId;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public List<OptionDto> getOptions() {
+        return options;
     }
 }

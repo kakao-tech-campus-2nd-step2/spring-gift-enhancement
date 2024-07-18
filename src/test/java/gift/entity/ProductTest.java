@@ -2,7 +2,7 @@ package gift.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.ProductDto;
+import gift.dto.ProductRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,8 @@ class ProductTest {
     @Test
     @DisplayName("상품 정보 수정 테스트")
     void updateProduct() {
-        ProductDto productDto = new ProductDto(null, "카카오 인형", 35000L, "https", 1L, "생일선물");
+        ProductRequest productDto = new ProductRequest(null, "카카오 인형", 35000L, "https", 1L,
+            "생일선물", null);
         product.updateProduct(productDto, category);
 
         assertThat(product.getName()).isEqualTo(productDto.getName());

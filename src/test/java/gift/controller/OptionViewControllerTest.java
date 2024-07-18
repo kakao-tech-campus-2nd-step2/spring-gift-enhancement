@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.CategoryDto;
 import gift.dto.OptionDto;
-import gift.dto.ProductDto;
+import gift.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class OptionViewControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(category));
 
-        ProductDto productDto = new ProductDto(null, "케잌", 50000L, "http", 1L, "생일 선물");
+        ProductResponse productDto = new ProductResponse(null, "케잌", 50000L, "http", 1L, "생일 선물");
         String product = new ObjectMapper().writeValueAsString(productDto);
         mockMvc.perform(post("/api/products/product")
             .contentType(MediaType.APPLICATION_JSON)

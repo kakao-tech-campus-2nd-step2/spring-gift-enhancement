@@ -1,7 +1,7 @@
 package gift.entity;
 
 import gift.constants.ErrorMessage;
-import gift.dto.ProductDto;
+import gift.dto.ProductRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,8 +37,9 @@ public class Product extends BaseEntity {
     protected Product() {
     }
 
-    public Product(ProductDto productDto, Category category) {
-        this(productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category);
+    public Product(ProductRequest productRequest, Category category) {
+        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(),
+            category);
     }
 
     public Product(String name, long price, String imageUrl, Category category) {
@@ -73,10 +74,10 @@ public class Product extends BaseEntity {
         return category;
     }
 
-    public void updateProduct(ProductDto productDto, Category category) {
-        this.name = productDto.getName();
-        this.price = productDto.getPrice();
-        this.imageUrl = productDto.getImageUrl();
+    public void updateProduct(ProductRequest productRequest, Category category) {
+        this.name = productRequest.getName();
+        this.price = productRequest.getPrice();
+        this.imageUrl = productRequest.getImageUrl();
         this.category = category;
     }
 

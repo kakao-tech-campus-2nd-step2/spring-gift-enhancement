@@ -2,7 +2,7 @@ package gift.service;
 
 import gift.constants.ErrorMessage;
 import gift.dto.MemberDto;
-import gift.dto.ProductDto;
+import gift.dto.ProductResponse;
 import gift.entity.Member;
 import gift.entity.Product;
 import gift.entity.Wishlist;
@@ -50,9 +50,9 @@ public class MemberService {
         return jwtUtil.createJwt(member.getEmail(), 1000 * 60 * 30);
     }
 
-    public Page<ProductDto> getAllWishlist(String email, Pageable pageable) {
+    public Page<ProductResponse> getAllWishlist(String email, Pageable pageable) {
         return wishlistJpaDao.findAllByMember_Email(email, pageable)
-            .map(wishlist -> new ProductDto(wishlist.getProduct()));
+            .map(wishlist -> new ProductResponse(wishlist.getProduct()));
     }
 
     public void addWishlist(String email, Long productId) {

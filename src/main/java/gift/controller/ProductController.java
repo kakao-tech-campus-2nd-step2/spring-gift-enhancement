@@ -1,7 +1,7 @@
 package gift.controller;
 
 import gift.constants.SuccessMessage;
-import gift.dto.ProductDto;
+import gift.dto.ProductRequest;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +24,14 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> addProduct(@RequestBody @Valid ProductDto product) {
-        productService.addProduct(product);
+    public ResponseEntity<String> addProduct(@RequestBody @Valid ProductRequest productRequest) {
+        productService.addProduct(productRequest);
         return ResponseEntity.ok(SuccessMessage.ADD_PRODUCT_SUCCESS_MSG);
     }
 
     @PutMapping()
-    public ResponseEntity<String> editProduct(@RequestBody @Valid ProductDto product) {
-        productService.editProduct(product);
+    public ResponseEntity<String> editProduct(@RequestBody @Valid ProductRequest productRequest) {
+        productService.editProduct(productRequest);
         return ResponseEntity.ok(SuccessMessage.EDIT_PRODUCT_SUCCESS_MSG);
     }
 
