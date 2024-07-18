@@ -1,5 +1,6 @@
-package gift.test;
+package test;
 
+import gift.controller.CategoryController;
 import gift.entity.Category;
 import gift.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,8 +33,6 @@ public class CategoryControllerTest {
     @Test
     void testGetAllCategories() throws Exception {
         List<Category> categories = Arrays.asList(
-                new Category(1L, "교환권"),
-                new Category(2L, "상품권")
         );
         when(categoryService.getAllCategories()).thenReturn(categories);
 

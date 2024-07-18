@@ -1,4 +1,4 @@
-package gift.test;
+package test;
 
 import gift.entity.Category;
 import gift.repository.CategoryRepository;
