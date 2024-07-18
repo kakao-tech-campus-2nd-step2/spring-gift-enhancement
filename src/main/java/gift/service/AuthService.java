@@ -9,10 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import gift.entity.User;
 import gift.exception.InvalidUserException;
 import gift.exception.UnauthorizedException;
 import gift.exception.UserNotFoundException;
-import gift.model.User;
 import gift.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -64,7 +64,7 @@ public class AuthService {
     }
 	
 	private void validateBindingResult(BindingResult bindingResult) {
-		if(bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors()) {
 			String errorMessage = bindingResult
 					.getFieldError()
 					.getDefaultMessage();
@@ -73,7 +73,7 @@ public class AuthService {
 	}
 	
 	private void validatePassword(String inputPassword, String storedPassword) {
-		if(!inputPassword.equals(storedPassword)) {
+		if (!inputPassword.equals(storedPassword)) {
 			throw new InvalidUserException("The email doesn't or thr password is incorrect.", HttpStatus.FORBIDDEN);
 		}
 	}
