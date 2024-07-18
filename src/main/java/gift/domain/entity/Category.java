@@ -17,23 +17,23 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column
-    private String description;
+    @Column(nullable = false, length = 7)
+    private String color;
 
     @Column(nullable = false)
     private String imageUrl;
 
-    @Column(nullable = false, length = 7)
-    private String color;
+    @Column
+    private String description;
 
     protected Category() {
     }
 
-    public Category(String name, @Nullable String description, String imageUrl, String color) {
+    public Category(String name, String color, String imageUrl, @Nullable String description) {
         this.name = name;
-        this.description = description;
-        this.imageUrl = imageUrl;
         this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
 
     public Long getId() {
@@ -44,32 +44,32 @@ public class Category {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getColor() {
+        return color;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public String getColor() {
-        return color;
+    public String getDescription() {
+        return description;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -77,9 +77,9 @@ public class Category {
         return "Category{" +
             "id=" + id +
             ", name='" + name + '\'' +
-            ", description='" + description + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
             ", color='" + color + '\'' +
+            ", imageUrl='" + imageUrl + '\'' +
+            ", description='" + description + '\'' +
             '}';
     }
 }

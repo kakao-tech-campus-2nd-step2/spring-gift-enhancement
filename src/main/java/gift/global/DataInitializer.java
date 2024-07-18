@@ -1,8 +1,10 @@
 package gift.global;
 
+import gift.domain.entity.Category;
 import gift.domain.entity.Member;
 import gift.domain.entity.Product;
 import gift.domain.entity.Wish;
+import gift.domain.repository.CategoryRepository;
 import gift.domain.repository.ProductRepository;
 import gift.domain.repository.MemberRepository;
 import gift.domain.repository.WishRepository;
@@ -16,12 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class DataInitializer {
 
     @Bean
-    ApplicationRunner init(ProductRepository product, MemberRepository user, WishRepository wish) {
-        return args -> insertInitialData(product, user, wish);
+    ApplicationRunner init(ProductRepository product, MemberRepository user, WishRepository wish, CategoryRepository category) {
+        return args -> insertInitialData(product, user, wish, category);
     }
 
     @Transactional
-    public void insertInitialData(ProductRepository productRepository, MemberRepository memberRepository, WishRepository wishRepository) {
+    public void insertInitialData(ProductRepository productRepository, MemberRepository memberRepository, WishRepository wishRepository, CategoryRepository categoryRepository) {
         Product[] products = {
             new Product("아이스 카페 아메리카노 T", 4500, "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"),
             new Product("제로 펩시 라임 355ml", 2300, "https://img.danawa.com/prod_img/500000/193/555/img/13555193_1.jpg?shrink=330:*&_v=20230222093241"),
@@ -44,5 +46,10 @@ public class DataInitializer {
         wishRepository.save(new Wish(products[0], members[1], 2L));
         wishRepository.save(new Wish(products[2], members[2], 4L));
         wishRepository.save(new Wish(products[4], members[2], 1L));
+
+        categoryRepository.save(new Category("교환권", "#6c95d1", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", ""));
+        categoryRepository.save(new Category("식품", "#ff0000", "red.png", ""));
+        categoryRepository.save(new Category("리빙/도서", "#00ff00", "green.png", ""));
+        categoryRepository.save(new Category("디지털/가전", "#0000ff", "blue.png", ""));
     }
 }
