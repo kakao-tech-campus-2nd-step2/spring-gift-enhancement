@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
@@ -26,6 +27,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    @Transactional(readOnly = true)
     public Page<ProductResponse> findAll(Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(pageable);
         List<ProductResponse> productResponses = productPage.stream()
@@ -33,11 +35,13 @@ public class ProductService {
         return new PageImpl<>(productResponses, pageable, productPage.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public ProductResponse find(UUID id) {
         Product target = productRepository.findById(id).orElseThrow(ProductNotExistsException::new);
         return toProductResponse(target);
     }
 
+    @Transactional
     public ProductResponse save(ProductRequest product) {
         productRepository.findByNameAndPriceAndImageUrl(product.name(), product.price(),
             product.imageUrl()).ifPresent(p -> {
@@ -46,12 +50,14 @@ public class ProductService {
         return toProductResponse(productRepository.save(from(product)));
     }
 
+    @Transactional
     public ProductResponse update(UUID id, ProductRequest product) {
         Product target = productRepository.findById(id).orElseThrow(ProductNotExistsException::new);
         target.updateDetails(product.name(), product.price(), product.imageUrl());
         return toProductResponse(target);
     }
 
+    @Transactional
     public void delete(UUID id) {
         productRepository.findById(id).orElseThrow(ProductNotExistsException::new);
         productRepository.deleteById(id);
