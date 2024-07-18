@@ -63,7 +63,7 @@ public class WishService {
         Wish foundWish = wishRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(()-> new WishNotFoundException(Messages.NOT_FOUND_WISH));
 
-        foundWish.remove(foundWish);
+        foundWish.remove();
         wishRepository.deleteById(id);
     }
 
