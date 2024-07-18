@@ -91,6 +91,7 @@ public class ProductService {
 
         Option option = optionService.convertToOption(optionRequest);
         product.addOption(option);
+        productRepository.flush();
 
         return new AddedOptionIdResponse(option.getId());
     }
