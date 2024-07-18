@@ -1,5 +1,7 @@
 package gift.DTO.product;
 
+import gift.domain.Category;
+import gift.domain.Product;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -37,6 +39,10 @@ public class ProductRequest {
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+    }
+
+    public Product toEntity(Category category) {
+        return new Product(name, price, imageUrl, category);
     }
 
     public String getName() {

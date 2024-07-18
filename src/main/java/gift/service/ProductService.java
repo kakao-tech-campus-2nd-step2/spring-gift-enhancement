@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.DTO.product.ProductResponse;
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.DTO.product.ProductRequest;
 import gift.repository.ProductRepository;
@@ -16,10 +17,12 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     public List<ProductResponse> getAllProducts() {
@@ -52,13 +55,12 @@ public class ProductService {
                                 throw new RuntimeException("Product name must be unique");
                             });
 
-        Product productEntity = new Product(productRequest.getName(),
-                                            productRequest.getPrice(),
-                                            productRequest.getImageUrl());
+        Category category = categoryService.getCategoryById(productRequest.getCategoryId());
+        Product productEntity = productRequest.toEntity(category);
+
         productRepository.save(productEntity);
 
-        ProductResponse response = new ProductResponse();
-        response.fromEntity(productEntity);
+        ProductResponse response = ProductResponse.fromEntity(productEntity);
         return response;
     }
 

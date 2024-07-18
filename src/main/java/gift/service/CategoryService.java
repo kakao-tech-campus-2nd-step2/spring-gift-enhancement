@@ -6,6 +6,7 @@ import gift.domain.Category;
 import gift.exception.category.DuplicateCategoryNameException;
 import gift.repository.CategoryRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,12 @@ public class CategoryService {
             .map(cat -> CategoryResponse.fromEntity(cat))
             .toList();
         return responses;
+    }
+
+    public Category getCategoryById(Long id) {
+        Optional<Category> category = categoryRepository.findById(id);
+        category.orElseThrow(() -> new RuntimeException("No such category"));
+        return category.get();
     }
 
     public CategoryResponse addCategory(CategoryRequest newCategory) {

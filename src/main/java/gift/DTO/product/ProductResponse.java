@@ -51,7 +51,7 @@ public class ProductResponse {
             productEntity.getName(),
             productEntity.getPrice(),
             productEntity.getImageUrl(),
-            productEntity.getCategoryId()
+            productEntity.getCategory().getId()
         );
     }
 }

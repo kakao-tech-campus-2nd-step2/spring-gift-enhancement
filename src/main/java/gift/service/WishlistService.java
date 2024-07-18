@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.DTO.product.ProductResponse;
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.domain.Member;
 import gift.domain.Wishlist;
@@ -19,12 +20,19 @@ public class WishlistService {
     private final WishlistRepository wishlistRepository;
     private final ProductService productService;
     private final MemberService memberService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public WishlistService(WishlistRepository wr, ProductService ps, MemberService ms) {
+    public WishlistService(
+        WishlistRepository wr,
+        ProductService ps,
+        MemberService ms,
+        CategoryService cs
+    ) {
         wishlistRepository = wr;
         productService = ps;
         memberService = ms;
+        categoryService = cs;
     }
 
     public List<Product> getWishlistByEmail(String email, Integer pageNumber, Integer pageSize) {
@@ -36,11 +44,13 @@ public class WishlistService {
     @Transactional
     public void addWishlist(String email, Long productId) {
         ProductResponse productResponse = productService.getProductById(productId);
+        Category cat = categoryService.getCategoryById(productResponse.getCategoryId());
         Member member = memberService.getMemberByEmail(email);
         Product product = new Product(
                         productResponse.getName(),
                         productResponse.getPrice(),
-                        productResponse.getImageUrl()
+                        productResponse.getImageUrl(),
+                        cat
                     );
 
         Wishlist wish = new Wishlist(member, product);

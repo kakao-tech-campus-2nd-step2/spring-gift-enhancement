@@ -45,11 +45,13 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
+
 
     public Long getId() {
         return id;
@@ -79,7 +81,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Long getCategoryId() {
-        return category.getId();
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }
