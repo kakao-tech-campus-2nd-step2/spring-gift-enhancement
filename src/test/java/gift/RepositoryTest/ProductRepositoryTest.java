@@ -26,7 +26,7 @@ public class ProductRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        category = categoryRepository.save(new Category("식품", "#8123f3D", "식품 url", ""));
+        category = categoryRepository.save(new Category("카테고리", "#8123f3D", "카테고리 url", "카테고리 description"));
     }
 
     @Test
