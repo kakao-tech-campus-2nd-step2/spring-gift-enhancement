@@ -4,6 +4,7 @@ import gift.domain.Category;
 import gift.domain.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
+import gift.repository.WishProductRepository;
 import gift.web.dto.request.product.CreateProductRequest;
 import gift.web.dto.request.product.UpdateProductRequest;
 import gift.web.dto.response.product.CreateProductResponse;
@@ -22,10 +23,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final WishProductRepository wishProductRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository,
+        WishProductRepository wishProductRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.wishProductRepository = wishProductRepository;
     }
 
     @Transactional
@@ -80,6 +85,7 @@ public class ProductService {
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(NoSuchElementException::new);
+        wishProductRepository.deleteAllByProductId(id);
         productRepository.delete(product);
     }
 }
