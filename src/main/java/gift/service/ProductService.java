@@ -4,6 +4,7 @@ import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import static gift.constant.Message.*;
+import static gift.exception.ErrorCode.DATA_NOT_FOUND;
 
 @Service
 public class ProductService {
@@ -40,23 +42,9 @@ public class ProductService {
     }
 
     public String updateProduct(Long productId, UpdateProductRequest productRequest) {
-
-        Product productToUpdate = productRepository.findProductById(productId).get();
-
-        if (productRequest.getName() != null) {
-            productToUpdate.setName(productRequest.getName());
-        }
-        if (productRequest.getPrice() > 0) {
-            productToUpdate.setPrice(productRequest.getPrice());
-        }
-        if (productRequest.getImageUrl() != null) {
-            productToUpdate.setImageUrl(productRequest.getImageUrl());
-        }
-        if (productRequest.getCategory() != null) {
-            Category category = categoryRepository.findByName(productRequest.getCategory()).get();
-            productToUpdate.setCategory(category);
-        }
-        productRepository.save(productToUpdate);
+        Product existingProduct = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
+        Category category = categoryRepository.findByName(productRequest.getCategory()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
+        productRepository.save(new Product(existingProduct.getId(), productRequest, category));
         return UPDATE_SUCCESS_MSG;
     }
 
