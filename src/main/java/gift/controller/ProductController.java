@@ -69,7 +69,6 @@ public class ProductController {
     @PostMapping("/update/{id}")
     public String updateProduct(@PathVariable Long id, @ModelAttribute InputProductDTO inputProductDTO, Model model) {
         try{
-            System.out.println(inputProductDTO);
             productService.updateProduct(id, inputProductDTO);
             return "redirect:/products";
         } catch (IllegalArgumentException e) {
