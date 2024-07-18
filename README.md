@@ -35,13 +35,12 @@ Content-Type: application/json
     - [x] option 추가
     - [x] option 수정
     - [x] option 삭제
-    - [ ] 상품 조회에 option 추가
-    - [ ] 상품 추가에 option 항목 추가
-    - [ ] 상품 수정에 option 항목 추가
-    - [ ] 상품별 옵션 조회
+    - [x] 상품 조회에 option 추가
+    - [x] 상품 생성에 option 항목 추가
+    - [x] 상품별 옵션 조회
     - [ ] 옵션별 상품 조회
-- [ ] OptionService 구현
-- [ ] OptionRepository 구현
+- [x] OptionService 구현
+- [x] OptionRepository 구현
 
 ## step2로 넘어오면서 리팩토링 해야할 목록
 
