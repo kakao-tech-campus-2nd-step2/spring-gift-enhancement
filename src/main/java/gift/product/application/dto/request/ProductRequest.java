@@ -2,7 +2,7 @@ package gift.product.application.dto.request;
 
 import gift.common.validation.ProductNamePattern;
 import gift.common.validation.ValidateErrorMessage;
-import gift.product.service.dto.ProductParam;
+import gift.product.service.command.ProductCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -26,7 +26,7 @@ public record ProductRequest(
         @NotBlank(message = ValidateErrorMessage.INVALID_CATEGORY_NAME_NULL)
         String categoryName
 ) {
-    public ProductParam toProductParam() {
-        return new ProductParam(name(), price(), imgUrl(), categoryName());
+    public ProductCommand toProductParam() {
+        return new ProductCommand(name(), price(), imgUrl(), categoryName());
     }
 }

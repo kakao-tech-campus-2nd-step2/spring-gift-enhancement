@@ -1,9 +1,9 @@
-package gift.product.service.dto;
+package gift.product.service.command;
 
 import gift.product.domain.Category;
 import gift.product.domain.Product;
 
-public record ProductParam(
+public record ProductCommand(
         String name,
         Integer price,
         String imgUrl,

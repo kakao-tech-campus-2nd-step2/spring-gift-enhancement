@@ -5,9 +5,9 @@ import gift.product.domain.Product;
 import gift.product.exception.ProductNotFoundException;
 import gift.product.persistence.CategoryRepository;
 import gift.product.persistence.ProductRepository;
+import gift.product.service.command.ProductCommand;
 import gift.product.service.dto.ProductInfo;
 import gift.product.service.dto.ProductPageInfo;
-import gift.product.service.dto.ProductParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Long saveProduct(ProductParam productRequest) {
+    public Long saveProduct(ProductCommand productRequest) {
         Category category = categoryRepository.findByName(productRequest.categoryName())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
         Product product = productRequest.toEntity(category);
@@ -33,7 +33,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void modifyProduct(final Long id, ProductParam productRequest) {
+    public void modifyProduct(final Long id, ProductCommand productRequest) {
         var product = productRepository.findById(id)
                 .orElseThrow(() -> ProductNotFoundException.of(id));
         var category = categoryRepository.findByName(productRequest.categoryName())
