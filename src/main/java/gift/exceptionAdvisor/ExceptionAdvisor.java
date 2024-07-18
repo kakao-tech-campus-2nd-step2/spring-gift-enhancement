@@ -2,6 +2,9 @@ package gift.exceptionAdvisor;
 
 
 import gift.dto.ExceptionResponse;
+import gift.exceptionAdvisor.exceptions.GiftException;
+import gift.exceptionAdvisor.exceptions.MemberServiceException;
+import gift.exceptionAdvisor.exceptions.ProductServiceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -41,6 +44,16 @@ public class ExceptionAdvisor {
     @ExceptionHandler(MemberServiceException.class)
     public ResponseEntity<ExceptionResponse> memberServiceException(
         MemberServiceException exception) {
+        return new ResponseEntity<>(new ExceptionResponse(exception.getMessage()),
+            exception.getStatusCode());
+    }
+
+    /*
+    처리되지 않은 예외 핸들러
+    호출되면 안됨
+     */
+    @ExceptionHandler(GiftException.class)
+    public ResponseEntity<ExceptionResponse> giftException(GiftException exception) {
         return new ResponseEntity<>(new ExceptionResponse(exception.getMessage()),
             exception.getStatusCode());
     }

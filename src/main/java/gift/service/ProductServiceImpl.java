@@ -1,9 +1,14 @@
 package gift.service;
 
+import gift.database.JpaCategoryRepository;
 import gift.database.JpaProductRepository;
 import gift.dto.ProductDTO;
-import gift.exceptionAdvisor.ProductServiceException;
+import gift.exceptionAdvisor.exceptions.CategoryNoSuchException;
+import gift.exceptionAdvisor.exceptions.ProductNoSuchException;
+import gift.exceptionAdvisor.exceptions.ProductServiceException;
+import gift.model.Category;
 import gift.model.Product;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,19 +16,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private JpaProductRepository jpaProductRepository;
 
-    public ProductServiceImpl(JpaProductRepository jpaProductRepository) {
+    private JpaCategoryRepository jpaCategoryRepository;
+
+    public ProductServiceImpl(JpaProductRepository jpaProductRepository,
+        JpaCategoryRepository jpaCategoryRepository) {
         this.jpaProductRepository = jpaProductRepository;
+        this.jpaCategoryRepository = jpaCategoryRepository;
     }
 
     @Override
     public List<ProductDTO> readAll() {
         return jpaProductRepository.findAll().stream().map(
             product -> new ProductDTO(product.getId(), product.getName(), product.getPrice(),
-                product.getImageUrl())).toList();
+                product.getImageUrl(),product.getCategoryId())).toList();
     }
 
     //새로운 상품 추가
@@ -32,29 +42,21 @@ public class ProductServiceImpl implements ProductService {
         checkKakao(dto.getName());
         Product product = new Product(null, dto.getName(), dto.getPrice(), dto.getImageUrl());
         jpaProductRepository.save(product);
+
+        Category category = checkCategory(dto.getCategoryId());
+        product.setCategory(category);
     }
 
 
     @Override
-    public void updateName(long id, String name) {
-        var prod = getProduct(id);
-        prod.setName(name);
+    public void update(long id,ProductDTO dto) {
+        jpaProductRepository.findById(id).orElseThrow(ProductNoSuchException::new);
 
+        Product product = new Product(id, dto.getName(), dto.getPrice(), dto.getImageUrl());
+        Category category = checkCategory(dto.getCategoryId());
 
-    }
-
-    @Override
-    public void updatePrice(long id, int price) {
-        var prod = getProduct(id);
-        prod.setPrice(price);
-
-    }
-
-    @Override
-    public void updateImageUrl(long id, String url) {
-        var prod = getProduct(id);
-        prod.setImageUrl(url);
-
+        product.setCategory(category);
+        jpaProductRepository.save(product);
     }
 
     @Override
@@ -69,18 +71,23 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    private Product getProduct(long id) {
-        var prod = jpaProductRepository.findById(id).orElseThrow(
-            () -> new ProductServiceException("상품이 존재하지 않습니다", HttpStatus.BAD_REQUEST));
-        checkKakao(prod.getName());
-        return prod;
-    }
-
     @Override
     public List<ProductDTO> readProduct(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return jpaProductRepository.findAll(pageable).stream().map(product ->
             new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl()))
             .toList();
+    }
+
+    // private //
+
+    private Product getProduct(long id) {
+        var prod = jpaProductRepository.findById(id).orElseThrow(ProductNoSuchException::new);
+        checkKakao(prod.getName());
+        return prod;
+    }
+
+    private Category checkCategory(long id) {
+        return jpaCategoryRepository.findById(id).orElseThrow(CategoryNoSuchException::new);
     }
 }

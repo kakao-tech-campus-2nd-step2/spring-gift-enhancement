@@ -1,6 +1,6 @@
 package gift.ArgumentResolver;
 
-import gift.exceptionAdvisor.MemberAuthenticationException;
+import gift.exceptionAdvisor.exceptions.MemberAuthenticationException;
 import gift.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;

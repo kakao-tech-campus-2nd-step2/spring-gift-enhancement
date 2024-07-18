@@ -11,11 +11,7 @@ public interface ProductService {
 
     void create(ProductDTO prod);
 
-    void updateName(long id, String name);
-
-    void updatePrice(long id, int price);
-
-    void updateImageUrl(long id, String url);
+    void update(long id,ProductDTO prod);
 
     void delete(long id);
 

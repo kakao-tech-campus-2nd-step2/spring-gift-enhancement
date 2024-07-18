@@ -3,12 +3,14 @@ package gift.service;
 import gift.database.JpaMemberRepository;
 import gift.dto.LoginMemberToken;
 import gift.dto.MemberDTO;
-import gift.exceptionAdvisor.MemberAuthenticationException;
+import gift.exceptionAdvisor.exceptions.MemberAuthenticationException;
 import gift.model.Member;
+import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class MemberServiceImpl implements MemberService {
 
     private JpaMemberRepository jpaMemberRepository;
@@ -39,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
             return new LoginMemberToken(token);
         }
 
-        throw new MemberAuthenticationException();
+        throw new MemberAuthenticationException("로그인에 실패하였습니다.");
     }
 
     @Override

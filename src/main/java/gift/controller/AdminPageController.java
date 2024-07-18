@@ -39,7 +39,7 @@ public class AdminPageController {
     @PutMapping("/{id}")
     public String adminPageUpdate(@PathVariable Long id,
         @ModelAttribute("productDTO") @Valid ProductDTO productDTO) {
-        changeCheckAndUpdate(id, productDTO);
+        productService.update(id, productDTO);
         return "redirect:/admin/products";
     }
 
@@ -49,16 +49,4 @@ public class AdminPageController {
         return "redirect:/admin/products";
     }
 
-    private void changeCheckAndUpdate(Long id, ProductDTO dto) {
-
-        if (dto.getName().length() > 0) {
-            productService.updateName(id, dto.getName());
-        }
-        if (dto.getPrice() != null) {
-            productService.updatePrice(id, dto.getPrice());
-        }
-        if (dto.getImageUrl().length() > 0) {
-            productService.updateImageUrl(id, dto.getImageUrl());
-        }
-    }
 }

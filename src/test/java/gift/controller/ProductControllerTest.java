@@ -41,7 +41,7 @@ class ProductControllerTest {
 
 
     private static ProductDTO getProductDTO(String name, Integer price, String imageUrl) {
-        return new ProductDTO(null, name, price, imageUrl);
+        return new ProductDTO(null, name, price, imageUrl,1L);
     }
 
     @Test
