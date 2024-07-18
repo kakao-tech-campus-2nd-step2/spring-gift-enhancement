@@ -49,7 +49,7 @@ public class Product {
         return category;
     }
 
-    public Product() {
+    protected Product() {
     }
 
     public Product(long id, String name, int price, String imageUrl, Category category) {

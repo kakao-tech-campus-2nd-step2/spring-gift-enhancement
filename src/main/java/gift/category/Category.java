@@ -20,7 +20,7 @@ public class Category {
         return name;
     }
 
-    public Category() {
+    protected Category() {
     }
 
     public Category(long id, String name) {
