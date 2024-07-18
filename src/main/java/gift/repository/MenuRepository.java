@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface MenuRepository extends JpaRepository<Menu, Long> {
     Optional<Menu> findById(Long id);
-
     Page<Menu> findAll(Pageable pageable);
 }

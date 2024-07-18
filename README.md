@@ -22,3 +22,4 @@ wishList 삭제하기
 
 카테고리 자체 추가, 수정 -> categoryController에서 구현
 특정 음식에 카테고리 추가, 삭제 -> MenuController에서 구현
+

@@ -38,7 +38,7 @@ public class Menu {
         this.category = category;
     }
 
-    public Menu(Long id, MenuRequest menuRequest) {
+    public Menu(Long id, MenuRequest menuRequest) 
         this.id = id;
         this.name = menuRequest.name();
         this.price = menuRequest.price();
