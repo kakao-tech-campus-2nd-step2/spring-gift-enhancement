@@ -35,7 +35,7 @@ public class UserService {
     public UserResponse registerUser(UserRegisterRequest request) {
         userRepository.findByEmail(request.email())
             .ifPresent(user -> {
-                throw new CustomException(ErrorCode.USER_ALREADY_EXITS);
+                throw new CustomException(ErrorCode.USER_ALREADY_EXIST);
             });
         User registeredUser = userRepository.save(UserMapper.toUser(request));
         List<String> roles = new ArrayList<>();

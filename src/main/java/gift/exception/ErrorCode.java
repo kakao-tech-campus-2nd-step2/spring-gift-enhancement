@@ -9,7 +9,7 @@ public enum ErrorCode {
     WISH_NOT_FOUND(HttpStatus.NOT_FOUND, "위시리스트를 찾을 수 없습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
     PRODUCT_ALREADY_EXIST(HttpStatus.CONFLICT, "상품이 이미 존재합니다."),
-    USER_ALREADY_EXITS(HttpStatus.CONFLICT, "사용자가 이미 존재합니다."),
+    USER_ALREADY_EXIST(HttpStatus.CONFLICT, "사용자가 이미 존재합니다."),
     USER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다.");
 
