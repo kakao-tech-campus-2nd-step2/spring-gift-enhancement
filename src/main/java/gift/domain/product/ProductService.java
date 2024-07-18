@@ -2,6 +2,7 @@ package gift.domain.product;
 
 import gift.domain.category.Category;
 import gift.domain.category.JpaCategoryRepository;
+import gift.domain.option.OptionService;
 import gift.global.exception.BusinessException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
@@ -24,17 +25,20 @@ public class ProductService {
 
     private final JpaProductRepository productRepository;
     private final JpaCategoryRepository categoryRepository;
+    private final OptionService optionService;
     private final Validator validator;
 
     @Autowired
     public ProductService(
         JpaProductRepository jpaProductRepository,
         JpaCategoryRepository jpaCategoryRepository,
-        Validator validator
+        Validator validator,
+        OptionService optionService
     ) {
         this.productRepository = jpaProductRepository;
         this.categoryRepository = jpaCategoryRepository;
         this.validator = validator;
+        this.optionService = optionService;
     }
 
     /**
@@ -57,7 +61,9 @@ public class ProductService {
 
         validateProduct(product);
 
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        // 옵션 저장
+        optionService.addOption(savedProduct, productDTO.getOptionDTO());
     }
 
     /**

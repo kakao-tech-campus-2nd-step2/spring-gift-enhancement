@@ -19,4 +19,12 @@ public class OptionDTO {
         this.name = name;
         this.quantity = quantity;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
 }

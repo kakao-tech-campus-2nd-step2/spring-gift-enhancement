@@ -4,17 +4,16 @@ import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
 import gift.global.exception.BusinessException;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OptionService {
 
-    private final OptionRepository optionRepository;
+    private final JpaOptionRepository optionRepository;
     private final JpaProductRepository productRepository;
 
-    public OptionService(OptionRepository optionRepository, JpaProductRepository productRepository) {
+    public OptionService(JpaOptionRepository optionRepository, JpaProductRepository productRepository) {
         this.optionRepository = optionRepository;
         this.productRepository = productRepository;
     }
@@ -28,16 +27,30 @@ public class OptionService {
         return options;
     }
 
-    public void deleteById(Long optionId) {
-        Optional<Option> option = optionRepository.findById(optionId);
-        if (option.isEmpty()) {
-            throw new BusinessException(HttpStatus.BAD_REQUEST, "삭제할 옵션이 존재하지 않음");
+    // 기존 상품에 옵션 추가
+    public void addOption(Long productId, OptionDTO optionDTO) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "옵션을 추가할 상품 존재 X"));
+
+        List<Option> options = optionRepository.findAllByProductId(productId);
+
+        for (Option option : options) {
+            if (option.getName().equals(optionDTO.getName())) {
+                throw new BusinessException(HttpStatus.BAD_REQUEST, "상품에 동일한 이름의 옵션 존재");
+            }
         }
-        // 해당 옵션을 참조하는 상품 있는지 확인
-        if (option.get().getProduct() == null) {
-            optionRepository.deleteById(optionId);
-            return;
-        }
-        throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 옵션을 사용하는 상품 존재, 삭제 불가");
+
+        Option option = new Option(optionDTO.getName(), optionDTO.getQuantity(), product);
+
+        optionRepository.save(option);
+    }
+
+    // 상품 생성 시 옵션 입력
+    public void addOption(Product product, OptionDTO optionDTO) {
+        List<Option> options = optionRepository.findAllByProduct(product);
+
+        Option option = new Option(optionDTO.getName(), optionDTO.getQuantity(), product);
+
+        optionRepository.save(option);
     }
 }

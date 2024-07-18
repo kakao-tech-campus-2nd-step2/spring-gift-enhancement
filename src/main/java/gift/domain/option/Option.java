@@ -21,10 +21,10 @@ public class Option {
     public Option() {
     }
 
-    public Option(String name, Long quantity) {
+    public Option(String name, Long quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
-
+        this.product = product;
     }
 
     public Option(Long id, String name, Long quantity, Product product) {
@@ -36,5 +36,17 @@ public class Option {
 
     public Product getProduct() {
         return product;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Long getQuantity() {
+        return quantity;
     }
 }
