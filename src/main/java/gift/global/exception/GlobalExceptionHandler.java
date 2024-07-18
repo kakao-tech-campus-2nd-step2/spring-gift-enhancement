@@ -1,5 +1,8 @@
 package gift.global.exception;
 
+import gift.global.exception.custrom.DBException;
+import gift.global.exception.custrom.LoginException;
+import gift.global.exception.custrom.NotFoundException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,18 +14,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-record ErrorResponseDto(
-    String message,
-    Map<String, String> details
-) {
-
-}
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleElementNotFoundException(NotFoundException e) {
+        return createErrorResponseEntity(e.getErrorCode(), Map.of("description", e.getDetails()));
+    }
+
+    @ExceptionHandler(DBException.class)
+    public ResponseEntity<ErrorResponseDto> handleDBException(DBException e) {
         return createErrorResponseEntity(e.getErrorCode(), Map.of("description", e.getDetails()));
     }
 
@@ -75,4 +76,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponseDto(errorCode.getMessage(), details),
             errorCode.getHttpStatus());
     }
+
+    record ErrorResponseDto(
+        String message,
+        Map<String, String> details
+    ) {}
 }

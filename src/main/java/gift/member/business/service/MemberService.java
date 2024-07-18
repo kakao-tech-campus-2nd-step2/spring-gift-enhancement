@@ -4,7 +4,7 @@ import gift.member.business.dto.JwtToken;
 import gift.global.authentication.jwt.JwtValidator;
 import gift.global.authentication.jwt.TokenType;
 import gift.global.exception.ErrorCode;
-import gift.global.exception.LoginException;
+import gift.global.exception.custrom.LoginException;
 import gift.member.business.dto.MemberRegisterDto;
 import gift.member.persistence.repository.MemberRepository;
 import gift.member.business.dto.MemberLoginDto;

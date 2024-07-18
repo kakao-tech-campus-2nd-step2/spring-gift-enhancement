@@ -3,7 +3,7 @@ package gift.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import gift.global.exception.NotFoundException;
+import gift.global.exception.custrom.NotFoundException;
 import gift.member.business.dto.JwtToken;
 import gift.global.authentication.jwt.JwtValidator;
 import gift.global.authentication.jwt.TokenType;
@@ -12,11 +12,10 @@ import gift.member.persistence.repository.WishlistRepository;
 import gift.member.presentation.dto.RequestMemberDto;
 import gift.member.presentation.dto.RequestWishlistDto;
 import gift.member.presentation.dto.ResponsePagingWishlistDto;
-import gift.member.presentation.dto.ResponseWishListDto;
+import gift.product.persistence.entity.Category;
 import gift.product.persistence.entity.Product;
+import gift.product.persistence.repository.CategoryJpaRepository;
 import gift.product.persistence.repository.ProductRepository;
-import gift.product.presentation.dto.RequestProductDto;
-import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -54,6 +52,7 @@ public class MemberApiTest {
     @BeforeAll
     static void setUp(@Autowired TestRestTemplate restTemplate,
         @LocalServerPort int port,
+        @Autowired CategoryJpaRepository categoryJpaRepository,
         @Autowired ProductRepository productRepository
     ) {
         RequestMemberDto requestMemberDto = new RequestMemberDto(
@@ -66,8 +65,11 @@ public class MemberApiTest {
         accessToken = jwtToken.accessToken();
         refreshToken = jwtToken.refreshToken();
 
+        // 카테고리 추가
+        var category = categoryJpaRepository.save(new Category("test"));
+
         // 상품 추가
-        Product product = new Product("test", "description", 1000, "http://test.com");
+        Product product = new Product("test", "description", 1000, "http://test.com", category);
         productRepository.saveProduct(product);
     }
 

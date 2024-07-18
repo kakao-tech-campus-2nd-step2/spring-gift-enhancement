@@ -18,10 +18,11 @@ public record RequestProductDto(
     String name,
     @NotNull @Min(0) Integer price,
     @Size(max = 255) String description,
-    @URL String imageUrl
+    @URL String imageUrl,
+    @NotNull Long categoryId
 ) {
 
     public ProductRegisterDto toProductRegisterDto() {
-        return new ProductRegisterDto(name, description, price, imageUrl);
+        return new ProductRegisterDto(name, description, price, imageUrl, categoryId);
     }
 }

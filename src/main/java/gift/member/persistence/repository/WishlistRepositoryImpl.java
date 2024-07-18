@@ -1,7 +1,7 @@
 package gift.member.persistence.repository;
 
 import gift.global.exception.ErrorCode;
-import gift.global.exception.NotFoundException;
+import gift.global.exception.custrom.NotFoundException;
 import gift.member.persistence.entity.Wishlist;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

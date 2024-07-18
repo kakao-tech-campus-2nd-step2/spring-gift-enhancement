@@ -3,10 +3,13 @@ package gift.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.product.persistence.entity.Category;
 import gift.product.persistence.entity.Product;
+import gift.product.persistence.repository.CategoryJpaRepository;
 import gift.product.persistence.repository.ProductJpaRepository;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -23,10 +26,17 @@ public class ProductJpaRepositoryTest {
         productRepository.deleteAll();
     }
 
+    private static Category category;
+
+    @BeforeAll
+    static void setUp(@Autowired CategoryJpaRepository categoryRepository) {
+        category = categoryRepository.save(new Category("name"));
+    }
+
     @Test
     void save() {
         // given
-        Product expected = new Product("product", "description", 1000, "http://url.com");
+        Product expected = new Product("product", "description", 1000, "http://url.com", category);
 
         // when
         Product actual = productRepository.save(expected);
@@ -41,7 +51,7 @@ public class ProductJpaRepositoryTest {
     @Test
     void findById() {
         // given
-        Product expected = new Product("product", "description", 1000, "http://url.com");
+        Product expected = new Product("product", "description", 1000, "http://url.com", category);
         Product saved = productRepository.save(expected);
 
         // when
@@ -57,7 +67,7 @@ public class ProductJpaRepositoryTest {
     @Test
     void existsById() {
         // given
-        Product expected = new Product("product", "description", 1000, "http://url.com");
+        Product expected = new Product("product", "description", 1000, "http://url.com", category);
         Product saved = productRepository.save(expected);
 
         // when
@@ -70,7 +80,7 @@ public class ProductJpaRepositoryTest {
     @Test
     void deleteById() {
         // given
-        Product expected = new Product("product", "description", 1000, "http://url.com");
+        Product expected = new Product("product", "description", 1000, "http://url.com", category);
         Product saved = productRepository.save(expected);
 
         // when
@@ -83,8 +93,8 @@ public class ProductJpaRepositoryTest {
     @Test
     void findAll() {
         // given
-        Product product1 = new Product("product1", "description1", 1000, "http://url1.com");
-        Product product2 = new Product("product2", "description2", 2000, "http://url2.com");
+        Product product1 = new Product("product1", "description1", 1000, "http://url1.com", category);
+        Product product2 = new Product("product2", "description2", 2000, "http://url2.com", category);
         productRepository.save(product1);
         productRepository.save(product2);
 
@@ -98,8 +108,8 @@ public class ProductJpaRepositoryTest {
     @Test
     void deleteAllById() {
         // given
-        Product product1 = new Product("product1", "description1", 1000, "http://url1.com");
-        Product product2 = new Product("product2", "description2", 2000, "http://url2.com");
+        Product product1 = new Product("product1", "description1", 1000, "http://url1.com", category);
+        Product product2 = new Product("product2", "description2", 2000, "http://url2.com", category);
         Long id1 = productRepository.save(product1).getId();
         Long id2 = productRepository.save(product2).getId();
 
@@ -113,8 +123,8 @@ public class ProductJpaRepositoryTest {
     @Test
     void findAllById() {
         // given
-        Product product1 = new Product("product1", "description1", 1000, "http://url1.com");
-        Product product2 = new Product("product2", "description2", 2000, "http://url2.com");
+        Product product1 = new Product("product1", "description1", 1000, "http://url1.com", category);
+        Product product2 = new Product("product2", "description2", 2000, "http://url2.com", category);
         Long id1 = productRepository.save(product1).getId();
         Long id2 = productRepository.save(product2).getId();
 
@@ -128,8 +138,8 @@ public class ProductJpaRepositoryTest {
     @Test
     void findAll_Pageable() {
         // given
-        Product product1 = new Product("product1", "description1", 1000, "http://url1.com");
-        Product product2 = new Product("product2", "description2", 2000, "http://url2.com");
+        Product product1 = new Product("product1", "description1", 1000, "http://url1.com", category);
+        Product product2 = new Product("product2", "description2", 2000, "http://url2.com", category);
         productRepository.save(product1);
         productRepository.save(product2);
         PageRequest pageRequest = PageRequest.of(0, 1);

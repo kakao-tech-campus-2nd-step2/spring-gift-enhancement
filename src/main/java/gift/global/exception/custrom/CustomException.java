@@ -1,11 +1,12 @@
-package gift.global.exception;
+package gift.global.exception.custrom;
 
+import gift.global.exception.ErrorCode;
 
-public class NotFoundException extends RuntimeException{
+public abstract class CustomException extends RuntimeException{
     private final ErrorCode errorCode;
     private final String details;
 
-    public NotFoundException(ErrorCode errorCode, String details) {
+    protected CustomException(ErrorCode errorCode, String details) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
         this.details = details;
