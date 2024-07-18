@@ -1,7 +1,6 @@
 package gift.model;
 
 import jakarta.persistence.Embeddable;
-import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
