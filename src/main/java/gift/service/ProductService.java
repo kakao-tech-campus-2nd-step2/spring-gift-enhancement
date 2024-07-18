@@ -37,10 +37,18 @@ public class ProductService {
         return CreateProductResponse.fromEntity(productRepository.save(product));
     }
 
-    public ReadProductResponse searchProduct(Long id) {
+    public ReadProductResponse readProductById(Long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(NoSuchElementException::new);
         return ReadProductResponse.fromEntity(product);
+    }
+
+    public ReadAllProductsResponse readProductsByCategoryId(Long categoryId, Pageable pageable) {
+        List<ReadProductResponse> products = productRepository.findByCategoryId(categoryId, pageable)
+            .stream()
+            .map(ReadProductResponse::fromEntity)
+            .toList();
+        return ReadAllProductsResponse.from(products);
     }
 
     public ReadAllProductsResponse readAllProducts() {
