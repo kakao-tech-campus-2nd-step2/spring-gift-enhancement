@@ -63,7 +63,7 @@ public class ProductService {
         return productRepository.findById(id).get();
     }
 
-    public Page<Product> selectAllProducts(Pageable pageable){
+    public Page<Product> getAllProducts(Pageable pageable){
         return productRepository.findAll(pageable);
     }
 

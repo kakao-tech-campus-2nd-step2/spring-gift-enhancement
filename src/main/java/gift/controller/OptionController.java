@@ -18,6 +18,8 @@ public class OptionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Option>> getAllOptions(@PathVariable Long productId) {
+    public ResponseEntity<List<Option>> getAllOptionsById(@PathVariable Long productId) {
+        List<Option> options = optionService.getAllOptionsById(productId);
+        return ResponseEntity.ok(options);
     }
 }
