@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/products/options")
-public class OptionController {
+public class OptionAdminController {
     OptionService optionService;
 
-    public OptionController(OptionService optionService) {
+    public OptionAdminController(OptionService optionService) {
         this.optionService = optionService;
     }
 

@@ -40,25 +40,6 @@ public class GiftController {
         return ResponseEntity.ok(productResponse);
     }
 
-    @PostMapping
-    public ResponseEntity<ProductResponse> postProduct(@Valid @RequestBody ProductRequest productRequest) {
-        ProductResponse DTO = giftService.postProducts(productRequest);
-        return new ResponseEntity<>(DTO, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
-        @Valid @RequestBody ProductRequest productRequest) {
-        ProductResponse DTO = giftService.putProducts(productRequest, id);
-        return ResponseEntity.ok(DTO);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteProduct(@PathVariable Long id) {
-        Long i = giftService.deleteProducts(id);
-        return ResponseEntity.ok(i);
-    }
-
     @GetMapping("/{id}/options")
     public ResponseEntity<List<OptionResponse>> getProductOption(@PathVariable Long id){
         List<OptionResponse> option = giftService.getOption(id);
