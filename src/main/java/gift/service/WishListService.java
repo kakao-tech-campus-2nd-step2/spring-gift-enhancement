@@ -6,7 +6,6 @@ import gift.domain.Wish;
 import gift.dto.WishProduct;
 import gift.dto.response.WishProductResponse;
 import gift.exception.CustomException;
-import gift.exception.ErrorCode;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
