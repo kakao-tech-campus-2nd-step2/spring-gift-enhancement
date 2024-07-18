@@ -30,6 +30,7 @@ public class GlobalExceptionHandler {
     public static final String DUPLICATE_OPTION_NAME = "동일한 이름을 가진 옵션이 상품 내에 존재합니다.";
     public static final String LAST_OPTION = "해당 상품에 남아있는 옵션이 하나밖에 없어 옵션을 삭제할 수 없습니다.";
     public static final String LEAST_QUANTITY = "옵션의 수량은 0보다 작을 수 없습니다.";
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public void handleException(Exception ex, Model model) {
