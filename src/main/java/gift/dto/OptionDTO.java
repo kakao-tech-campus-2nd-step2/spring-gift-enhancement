@@ -1,37 +1,22 @@
-package gift.model;
+package gift.dto;
 
-import jakarta.persistence.*;
+public class OptionDTO {
 
-@Entity
-@Table(name = "options")
-public class Option {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, length = 50)
     private String name;
-
-    @Column(nullable = false )
     private int quantity;
-
-    @Column(nullable = false)
     private int price;
+    private Long productId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-
-    public Option() {
+    public OptionDTO() {
     }
 
-    public Option(String name, int quantity, int price, Product product) {
+    public OptionDTO(Long id, String name, int quantity, int price, Long productId) {
+        this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
-        this.product = product;
+        this.productId = productId;
     }
 
     public Long getId() {
@@ -50,8 +35,8 @@ public class Option {
         return price;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
     public void setId(Long id) {
@@ -70,7 +55,7 @@ public class Option {
         this.price = price;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }
