@@ -31,4 +31,7 @@ public class MemberService {
         return jwtUtil.generateToken(memberId, email);
     }
 
+    public Member getMemberById(Long id) {
+        return repository.findById(id).orElseThrow( () -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다. "));
+    }
 }

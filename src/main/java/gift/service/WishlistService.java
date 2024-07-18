@@ -15,21 +15,21 @@ import org.springframework.stereotype.Service;
 public class WishlistService {
 
     private final WishlistRepository wishlistRepository;
-    private final MemberRepository memberRepository;
-    private final ProductRepository productRepository;
+    private final MemberService memberService;
+    private final ProductService productService;
 
-    public WishlistService(WishlistRepository wishlistRepository, MemberRepository memberRepository, ProductRepository productRepository) {
+    public WishlistService(WishlistRepository wishlistRepository, MemberService memberService, ProductService productService) {
         this.wishlistRepository = wishlistRepository;
-        this.memberRepository = memberRepository;
-        this.productRepository = productRepository;
+        this.memberService = memberService;
+        this.productService = productService;
     }
 
     private Member getMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new IllegalAccessError("위시리스트에 추가하려는 회원을 찾을 수 없습니다. "));
+        return memberService.getMemberById(memberId);
     }
 
     private Product getProduct(Long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("위시리스트에 추가하려는 상품을 찾을 수 없습니다. "));
+        return productService.getProductById(productId);
     }
 
     public Page<Wish> getWishProductList(Long memberId, int pageNumber, int pageSize) {
