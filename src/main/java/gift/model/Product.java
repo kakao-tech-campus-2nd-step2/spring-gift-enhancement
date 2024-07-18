@@ -24,7 +24,7 @@ public class Product extends BasicEntity{
     private Category category;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<Option> options = new ArrayList<>();
+    private List<Option> options = new ArrayList<>();
 
     protected Product() {}
 
