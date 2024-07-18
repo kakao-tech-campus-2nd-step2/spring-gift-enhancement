@@ -7,11 +7,11 @@ public class ProductRequestDto {
 
     private Long id;
     private String name;
-    private Long price;
+    private Integer price;
     private String url;
     private Category category;
 
-    public ProductRequestDto(String name, Long price, String url, Category category) {
+    public ProductRequestDto(String name, Integer price, String url, Category category) {
         if (checkValidProductName(name)) {
             this.name = name;
             this.price = price;
@@ -20,7 +20,7 @@ public class ProductRequestDto {
         }
     }
 
-    public ProductRequestDto(Long id, String name, Long price, String url, Category category) {
+    public ProductRequestDto(Long id, String name, Integer price, String url, Category category) {
         if (checkValidProductName(name)) {
             this.id = id;
             this.name = name;
@@ -99,7 +99,7 @@ public class ProductRequestDto {
         return name;
     }
 
-    public Long getPrice() {
+    public Integer getPrice() {
         return price;
     }
 

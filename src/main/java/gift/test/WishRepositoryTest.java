@@ -2,8 +2,7 @@ package gift.test;
 
 
 import gift.repository.WishRepositoryInterface;
-import org.testng.annotations.Test;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;

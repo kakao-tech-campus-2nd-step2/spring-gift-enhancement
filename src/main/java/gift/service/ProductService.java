@@ -23,7 +23,7 @@ public class ProductService {
         this.productRepositoryInterface = productRepositoryInterface;
     }
 
-    public ProductResponseDto createProductDto(String name, Long price, String url, Category category) {
+    public ProductResponseDto createProductDto(String name, Integer price, String url, Category category) {
         Product newProduct = productRepositoryInterface.save(new Product(name, price, url, category));
         return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory());
     }
@@ -37,7 +37,7 @@ public class ProductService {
         return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory());
     }
 
-    public void update(Long id, String name, Long price, String url, Category category) {
+    public void update(Long id, String name, Integer price, String url, Category category) {
         Product actualProduct = productRepositoryInterface.findById(id).orElseThrow(() -> new RuntimeException("상품을 찾지 못했습니다."));
         actualProduct.update(name, price, url, category);
     }
