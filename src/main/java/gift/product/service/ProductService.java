@@ -3,6 +3,8 @@ package gift.product.service;
 import gift.category.domain.Category;
 import gift.category.repository.CategoryRepository;
 import gift.category.service.CategoryService;
+import gift.option.repository.OptionRepository;
+import gift.option.service.OptionService;
 import gift.product.domain.Product;
 import gift.product.domain.ProductDTO;
 import gift.product.repository.ProductRepository;
@@ -22,11 +24,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository,
+        OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
@@ -83,7 +88,8 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategory().getId()
+            product.getCategory().getId(),
+            optionRepository.findAllNameByProductId(product.getId())
         );
     }
 
