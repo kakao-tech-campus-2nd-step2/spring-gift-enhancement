@@ -1,9 +1,13 @@
 package gift.controller;
 
+import gift.model.Option;
+import gift.model.OptionDTO;
 import gift.model.ProductDTO;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,9 +28,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class AdminController {
 
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public AdminController(ProductService productService) {
+    public AdminController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @GetMapping("/list")
@@ -36,11 +42,27 @@ public class AdminController {
         return "product-list";
     }
 
+    @GetMapping("{productId}/option/list")
+    public String optionList(Model model,
+        @PathVariable long productId, Pageable pageable) {
+        List<OptionDTO> options = optionService.getOptions(productId, pageable);
+        model.addAttribute("productId", productId);
+        model.addAttribute("options", options);
+        return "option-list";
+    }
+
     @GetMapping("/add")
     public ModelAndView showAddPage() {
         ModelAndView modelAndView = new ModelAndView("product-add");
         modelAndView.addObject("product", new ProductDTO(0L, "", 0L, "", 0L));
         return modelAndView;
+    }
+
+    @GetMapping("/{productId}/option/add")
+    public String showAddOptionPage(@PathVariable long productId, Model model) {
+        model.addAttribute("productId", productId);
+        model.addAttribute("option", new OptionDTO(0L, "", 0L));
+        return "option-add";
     }
 
     @GetMapping("/edit/{id}")
@@ -51,10 +73,24 @@ public class AdminController {
         return modelAndView;
     }
 
+    @GetMapping("/option/edit/{optionId}")
+    public ModelAndView showOptionEditPage(@PathVariable Long optionId) {
+        ModelAndView modelAndView = new ModelAndView("option-edit");
+        OptionDTO optionDTO = optionService.getOption(optionId);
+        modelAndView.addObject("option", optionDTO);
+        return modelAndView;
+    }
+
     @PostMapping("/add")
     public String addProduct(@Valid @ModelAttribute ProductDTO productDTO) {
         productService.createProduct(productDTO);
         return "redirect:/admin/product/list";
+    }
+
+    @PostMapping("/{productId}/option/add")
+    public String addOption(@Valid @ModelAttribute OptionDTO optionDTO, @PathVariable long productId) {
+        optionService.createOption(productId, optionDTO);
+        return "redirect:/admin/product/" + productId + "/option/list";
     }
 
     @PutMapping("/edit/{id}")
@@ -67,6 +103,12 @@ public class AdminController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         return ResponseEntity.ok(productService.deleteProduct(id));
+    }
+
+    @DeleteMapping("/option/delete/{optionId}")
+    public ResponseEntity<String> deleteOption(@PathVariable Long optionId) {
+        optionService.deleteOption(optionId);
+        return ResponseEntity.noContent().build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

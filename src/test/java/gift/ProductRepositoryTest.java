@@ -8,6 +8,7 @@ import gift.exception.RepositoryException;
 import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,11 +24,12 @@ public class ProductRepositoryTest {
     private ProductRepository products;
     @Autowired
     private CategoryRepository categories;
+    @Autowired
+    private OptionRepository options;
 
-    private final Category category = new Category(1L, "test_category", "000000", "category-image.url", "");
-    private Product createProduct(long id, String name, long price, String imageUrl) {
-        return new Product(id, name, price, imageUrl, category);
-    }
+    private final Category category = new Category(1L, "test_category", "000000",
+        "category-image.url", "");
+
     @BeforeEach
     void setUp() {
         categories.save(category);
@@ -91,10 +93,9 @@ public class ProductRepositoryTest {
         products.save(expected);
         var current = products.findById(1L)
             .orElseThrow(() -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, 1L));
-        current.setName("Product B");
-        current.setPrice(5500);
+        var update = updateProduct(current, 5500);
+        products.save(update);
 
-        Product update = products.save(current);
         assertThat(update.getPrice()).isEqualTo(5500);
     }
 
@@ -106,4 +107,12 @@ public class ProductRepositoryTest {
         assertThat(products.findAll()).isEmpty();
     }
 
+    private Product updateProduct(Product currentProduct, long newPrice) {
+        return createProduct(currentProduct.getId(), currentProduct.getName(), newPrice,
+            currentProduct.getImageUrl());
+    }
+
+    private Product createProduct(long id, String name, long price, String imageUrl) {
+        return new Product(id, name, price, imageUrl, category);
+    }
 }
