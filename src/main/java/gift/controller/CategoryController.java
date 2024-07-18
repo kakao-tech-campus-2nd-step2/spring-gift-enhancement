@@ -32,10 +32,9 @@ public class CategoryController {
         return ResponseEntity.ok(category);
     }
 
-    //dto로 바꾸기
     @PostMapping
-    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
-        categoryService.addCategory(category);
+    public ResponseEntity<Category> addCategory(@RequestBody CategoryDto categoryDto) {
+        Category category = categoryService.addCategory(categoryDto);
         return ResponseEntity.ok(category);
     }
 
@@ -47,8 +46,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
-        productService.updateProductCategoryToNone(category);
+        productService.updateProductCategoryToNone(id);
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }

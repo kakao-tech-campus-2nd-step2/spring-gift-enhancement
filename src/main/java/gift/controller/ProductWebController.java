@@ -1,7 +1,6 @@
 package gift.controller;
 
 import gift.dto.ProductDto;
-import gift.model.Category;
 import gift.model.Product;
 import gift.service.CategoryService;
 import gift.service.ProductService;
@@ -63,8 +62,7 @@ public class ProductWebController {
 
     @PostMapping("/edit/{id}")
     public String updateProduct(@PathVariable Long id,
-                                @ModelAttribute @Valid ProductDto productDto, @RequestParam Long categoryId) {
-        Category category = categoryService.getCategoryById(categoryId);
+                                @ModelAttribute @Valid ProductDto productDto) {
         productService.updateProduct(id, productDto);
         return "redirect:/web/products";
     }

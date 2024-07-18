@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.CategoryDto;
 import gift.dto.ProductDto;
 import gift.model.Category;
 import gift.model.Product;
@@ -21,7 +22,8 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final WishlistRepository wishlistRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, WishlistRepository wishlistRepository) {
+    public ProductService(ProductRepository productRepository,
+                          CategoryRepository categoryRepository, WishlistRepository wishlistRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.wishlistRepository = wishlistRepository;
@@ -63,8 +65,9 @@ public class ProductService {
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다."));
     }
 
-    //Dto로 리팩터링 할 것
-    public void updateProductCategoryToNone(Category category) {
+    public void updateProductCategoryToNone(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
         Category noneCategory = categoryRepository.findById(1L)
                 .orElseThrow(() -> new NoSuchElementException("없음 카테고리를 찾을 수 없습니다."));
         List<Product> products = productRepository.findByCategory(category);

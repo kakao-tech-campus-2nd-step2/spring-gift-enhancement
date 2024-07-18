@@ -1,9 +1,7 @@
 package gift.controller;
 
 import gift.dto.ProductDto;
-import gift.model.Category;
 import gift.model.Product;
-import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -17,11 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/products")
 public class ProductApiController {
     private final ProductService productService;
-    private final CategoryService categoryService;
 
-    public ProductApiController(ProductService productService, CategoryService categoryService) {
+    public ProductApiController(ProductService productService) {
         this.productService = productService;
-        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -46,7 +42,6 @@ public class ProductApiController {
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id,
                                                  @RequestBody @Valid ProductDto productDto) {
-        Category category = categoryService.getCategoryById(productDto.getCategoryId());
         Product product = productService.updateProduct(id, productDto);
         return ResponseEntity.ok(product);
     }
