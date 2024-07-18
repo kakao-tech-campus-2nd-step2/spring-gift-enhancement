@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import gift.core.authorization.UserDetails;
-import gift.feat.wishProduct.controller.Dto.WishProductResponseDto;
+import gift.feat.wishProduct.controller.dto.WishProductResponseDto;
 import gift.feat.wishProduct.Service.WishProductService;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("api/v1/wishlist")

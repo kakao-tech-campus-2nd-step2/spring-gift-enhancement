@@ -1,4 +1,4 @@
-package gift.feat.wishProduct.controller.Dto;
+package gift.feat.wishProduct.controller.dto;
 
 import gift.feat.product.contoller.dto.ProductResponseDto;
 import gift.feat.wishProduct.domain.WishProduct;
