@@ -7,16 +7,12 @@ import gift.product.validation.ValidProductName;
 
 import java.util.Objects;
 
-public record ProductRequestDto(@ValidProductName ProductName name, ProductPrice price, ImageUrl imageUrl) {
-    public ProductRequestDto {
-        Objects.requireNonNull(imageUrl);
-    }
-
+public record ProductRequestDto(@ValidProductName ProductName name, ProductPrice price, ImageUrl imageUrl, Long categoryId) {
     public ProductServiceDto toProductServiceDto() {
-        return new ProductServiceDto(null, this.name, this.price, this.imageUrl);
+        return new ProductServiceDto(null, this.name, this.price, this.imageUrl, this.categoryId);
     }
 
     public ProductServiceDto toProductServiceDto(Long id) {
-        return new ProductServiceDto(id, this.name, this.price, this.imageUrl);
+        return new ProductServiceDto(id, this.name, this.price, this.imageUrl, this.categoryId);
     }
 }

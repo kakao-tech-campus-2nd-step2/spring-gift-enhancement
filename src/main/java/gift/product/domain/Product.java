@@ -27,7 +27,7 @@ public class Product {
     List<Wish> wishes = new ArrayList<>();
 
     // product 를 가져올 때, category 를 함께 가져와야 함으로, EAGER 로 가져온다
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -40,6 +40,14 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Product(Long id, ProductName name, ProductPrice price, ImageUrl imageUrl, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Product(Long id, ProductRequestDto productRequestDto) {
@@ -64,6 +72,10 @@ public class Product {
 
     public ImageUrl getImageUrl() {
         return imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public boolean checkNew() {
