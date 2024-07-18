@@ -3,7 +3,6 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.requestDTO.ProductRequestDTO;
-import gift.dto.responseDTO.ProductListResponseDTO;
 import gift.dto.responseDTO.ProductResponseDTO;
 import gift.repository.JpaCategoryRepository;
 import gift.repository.JpaProductRepository;
@@ -29,24 +28,22 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductListResponseDTO getAllProducts() {
-        List<ProductResponseDTO> productResponseDTOList = jpaProductRepository.findAll()
+    public List<ProductResponseDTO> getAllProducts() {
+
+        return jpaProductRepository.findAll()
             .stream()
             .map(ProductResponseDTO::of)
             .toList();
-
-        return new ProductListResponseDTO(productResponseDTOList);
     }
 
     @Transactional(readOnly = true)
-    public ProductListResponseDTO getAllProducts(int page, int size, String criteria) {
+    public List<ProductResponseDTO> getAllProducts(int page, int size, String criteria) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(criteria));
-        List<ProductResponseDTO> productResponseDTOList = jpaProductRepository.findAll(pageable)
+
+        return jpaProductRepository.findAll(pageable)
             .stream()
             .map(ProductResponseDTO::of)
             .toList();
-
-        return new ProductListResponseDTO(productResponseDTOList);
     }
 
     @Transactional(readOnly = true)

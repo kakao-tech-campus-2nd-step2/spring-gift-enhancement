@@ -6,11 +6,11 @@ import gift.domain.User;
 import gift.dto.common.apiResponse.ApiResponseBody.SuccessBody;
 import gift.dto.common.apiResponse.ApiResponseGenerator;
 import gift.dto.requestDTO.ProductRequestDTO;
-import gift.dto.responseDTO.ProductListResponseDTO;
 import gift.dto.responseDTO.ProductResponseDTO;
 import gift.service.AuthService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,20 +36,20 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<SuccessBody<ProductListResponseDTO>> getAllProducts() {
-        ProductListResponseDTO productListResponseDTO = productService.getAllProducts();
+    public ResponseEntity<SuccessBody<List<ProductResponseDTO>>> getAllProducts() {
+        List<ProductResponseDTO> productResponseDTOList = productService.getAllProducts();
         return ApiResponseGenerator.success(HttpStatus.OK, "모든 상품을 조회했습니다.",
-            productListResponseDTO);
+            productResponseDTOList);
     }
 
     @GetMapping("/products/page")
-    public ResponseEntity<SuccessBody<ProductListResponseDTO>> getAllProductPages(
+    public ResponseEntity<SuccessBody<List<ProductResponseDTO>>> getAllProductPages(
         @RequestParam(value = "page", defaultValue = "0") int page,
         @RequestParam(value = "size", defaultValue = "8") int size,
         @RequestParam(value = "criteria", defaultValue = "id") String criteria) {
-        ProductListResponseDTO productListResponseDTO = productService.getAllProducts(page, size, criteria);
+        List<ProductResponseDTO> productResponseDTOList = productService.getAllProducts(page, size, criteria);
         return ApiResponseGenerator.success(HttpStatus.OK, "모든 상품을 조회했습니다.",
-            productListResponseDTO);
+            productResponseDTOList);
     }
 
     @GetMapping("/product/{id}")

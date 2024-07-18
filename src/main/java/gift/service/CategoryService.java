@@ -2,7 +2,6 @@ package gift.service;
 
 import gift.domain.Category;
 import gift.dto.requestDTO.CategoryRequestDTO;
-import gift.dto.responseDTO.CategoryListResponseDTO;
 import gift.dto.responseDTO.CategoryResponseDTO;
 import gift.repository.JpaCategoryRepository;
 import java.util.List;
@@ -31,13 +30,11 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryListResponseDTO getAllCategories(){
-        List<CategoryResponseDTO> categoryResponseDTOList = jpaCategoryRepository.findAll()
+    public List<CategoryResponseDTO> getAllCategories(){
+        return jpaCategoryRepository.findAll()
             .stream()
             .map(CategoryResponseDTO::of)
             .toList();
-
-        return new CategoryListResponseDTO(categoryResponseDTOList);
     }
 
     public Long updateCategory(Long categoryId, CategoryRequestDTO categoryRequestDTO) {
