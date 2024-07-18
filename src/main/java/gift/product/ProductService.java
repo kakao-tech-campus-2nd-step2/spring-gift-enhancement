@@ -48,7 +48,7 @@ public class ProductService {
     @Transactional
     public void updateProductById(Long id, ProductRequestDto productRequestDto)
         throws ProductException {
-        Category category = categoryRepository.findById(id)
+        Category category = categoryRepository.findById(productRequestDto.getCategoryId())
             .orElseThrow(() -> new IllegalArgumentException("Category 값이 잘못되었습니다."));
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Product 값이 잘못되었습니다."));
