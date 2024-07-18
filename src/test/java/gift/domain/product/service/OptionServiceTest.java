@@ -1,6 +1,7 @@
 package gift.domain.product.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -13,7 +14,9 @@ import gift.domain.product.entity.Product;
 import gift.domain.product.repository.OptionJpaRepository;
 import gift.domain.product.repository.ProductJpaRepository;
 import gift.exception.DuplicateOptionNameException;
+import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,11 @@ class OptionServiceTest {
 
     private static final Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
     private static final Product product = new Product(1L, category, "testProduct", 10000, "https://test.com");
+
+    @BeforeEach
+    void setUp() {
+        product.removeOptions();
+    }
 
     @Test
     @DisplayName("옵션 생성 서비스 테스트")
@@ -69,5 +77,23 @@ class OptionServiceTest {
 
         // when & then
         assertThrows(DuplicateOptionNameException.class, () -> optionService.create(1L, optionDto));
+    }
+
+    @Test
+    @DisplayName("옵션 전체 조회 서비스 테스트")
+    void readAll() {
+        // given
+        Option option = new Option(1L, product, "사과맛", 90);
+        product.addOption(option);
+        given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
+
+        // when
+        List<OptionDto> actual = optionService.readAll(1L);
+
+        // then
+        assertAll(
+            () -> assertThat(actual).hasSize(1),
+            () -> assertThat(actual.get(0)).isEqualTo(OptionDto.from(option))
+        );
     }
 }

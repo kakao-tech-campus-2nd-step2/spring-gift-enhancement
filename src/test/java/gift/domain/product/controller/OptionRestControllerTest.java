@@ -3,6 +3,7 @@ package gift.domain.product.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -12,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.domain.product.dto.OptionDto;
 import gift.domain.product.service.OptionService;
+import java.util.List;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -114,5 +116,23 @@ class OptionRestControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.quantity", Is.is("옵션 수량은 1 이상 100,000,000 이하여야 합니다.")));
+    }
+
+    @Test
+    @DisplayName("옵션을 전체 조회하는 경우")
+    void readAll() throws Exception {
+        // given
+        List<OptionDto> optionDtos = List.of(
+            new OptionDto(1L, "빨간색", 20),
+            new OptionDto(2L, "하늘색", 50)
+        );
+        given(optionService.readAll(anyLong())).willReturn(optionDtos);
+
+        // when & then
+        mockMvc.perform(get(DEFAULT_URL)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().json(objectMapper.writeValueAsString(optionDtos)))
+            .andDo(print());
     }
 }
