@@ -2,7 +2,7 @@ package gift.service;
 
 import gift.dto.CategoryUpdateRequest;
 import gift.dto.ProductRequest;
-import gift.dto.productUpdateRequest;
+import gift.dto.ProductUpdateRequest;
 import gift.entity.Category;
 import gift.entity.Product;
 import gift.exception.InvalidProductException;
@@ -41,7 +41,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void updateProduct(long id, productUpdateRequest request, BindingResult bindingResult) {
+    public void updateProduct(long id, ProductUpdateRequest request, BindingResult bindingResult) {
     	validateBindingResult(bindingResult);
     	Product updateProduct = findProductById(id);
     	request.updateEntity(updateProduct);
