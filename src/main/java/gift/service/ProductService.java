@@ -47,7 +47,6 @@ public class ProductService {
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new EntityNotFoundException("Category with id " + request.categoryId() + " not found"));
         Product product = productRepository.save(new Product(request.name(), request.price(), request.imageUrl(), category, option));
-        option.updateOptionByProduct(product);
         return product.getId();
     }
 

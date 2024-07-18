@@ -16,12 +16,10 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Tag(name = "Product", description = "상품 API")
@@ -57,17 +55,10 @@ public class ProductRestController {
     @PostMapping("/product")
     @Operation(summary = "상품 추가", description = "상품을 추가합니다.")
     public ResponseEntity<Long> createProduct(
-            UriComponentsBuilder uriBuilder,
             @Valid @RequestBody CreateProductRequest request
     ) {
         Long id = productService.save(request.toDto());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(
-                uriBuilder.path("/api/v1/product/{id}")
-                        .buildAndExpand(id)
-                        .toUri()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(id);
+        return ResponseEntity.created(URI.create("/api/v1/product" + id)).body(id);
     }
 
     @PutMapping("/product")

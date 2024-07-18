@@ -14,7 +14,7 @@ public class Option extends BasicEntity{
     private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     protected Option() {}
@@ -30,17 +30,8 @@ public class Option extends BasicEntity{
         this.product = product;
     }
 
-    public void updateOption(String name, int quantity) {
-        this.name = name;
-        this.quantity = quantity;
-    }
-
     public boolean isSameName(String theirName) {
         return !name.equals(theirName);
-    }
-
-    public void updateOptionByProduct(Product product) {
-        this.product = product;
     }
 
     public String getName() {
