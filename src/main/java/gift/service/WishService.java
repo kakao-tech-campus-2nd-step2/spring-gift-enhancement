@@ -1,7 +1,7 @@
 package gift.service;
 
 import static gift.util.constants.WishConstants.PERMISSION_DENIED;
-import static gift.util.constants.WishConstants.WISH_ALREADY_EXISTS;
+import static gift.util.constants.WishConstants.ALREADY_EXISTS;
 import static gift.util.constants.WishConstants.WISH_NOT_FOUND;
 
 import gift.dto.member.MemberResponse;
@@ -47,7 +47,7 @@ public class WishService {
         Product product = productService.convertToEntity(productResponse);
 
         if (wishRepository.existsByMember_IdAndProduct_Id(member.getId(), product.getId())) {
-            throw new DuplicateWishException(WISH_ALREADY_EXISTS);
+            throw new DuplicateWishException(ALREADY_EXISTS);
         }
 
         Wish wish = new Wish(null, member, product);

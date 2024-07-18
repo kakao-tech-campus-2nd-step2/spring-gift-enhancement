@@ -1,8 +1,8 @@
 package gift.model;
 
-import static gift.util.constants.ProductConstants.PRODUCT_NAME_INVALID_CHARACTERS;
-import static gift.util.constants.ProductConstants.PRODUCT_NAME_REQUIRES_APPROVAL;
-import static gift.util.constants.ProductConstants.PRODUCT_NAME_SIZE_LIMIT;
+import static gift.util.constants.ProductConstants.NAME_INVALID_CHARACTERS;
+import static gift.util.constants.ProductConstants.NAME_REQUIRES_APPROVAL;
+import static gift.util.constants.ProductConstants.NAME_SIZE_LIMIT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import jakarta.validation.ConstraintViolation;
@@ -71,7 +71,7 @@ public class ProductTest {
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("name") &&
-                violation.getMessage().equals(PRODUCT_NAME_SIZE_LIMIT)
+                violation.getMessage().equals(NAME_SIZE_LIMIT)
         );
     }
 
@@ -86,7 +86,7 @@ public class ProductTest {
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("name") &&
-                violation.getMessage().equals(PRODUCT_NAME_INVALID_CHARACTERS)
+                violation.getMessage().equals(NAME_INVALID_CHARACTERS)
         );
     }
 
@@ -101,7 +101,7 @@ public class ProductTest {
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("name") &&
-                violation.getMessage().equals(PRODUCT_NAME_REQUIRES_APPROVAL)
+                violation.getMessage().equals(NAME_REQUIRES_APPROVAL)
         );
     }
 }

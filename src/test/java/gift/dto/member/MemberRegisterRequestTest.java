@@ -1,6 +1,6 @@
 package gift.dto.member;
 
-import static gift.util.constants.ProductConstants.REQUIRED_FIELD_MISSING;
+import static gift.util.constants.GeneralConstants.REQUIRED_FIELD_MISSING;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import jakarta.validation.ConstraintViolation;

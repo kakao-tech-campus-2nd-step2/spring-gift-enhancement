@@ -1,6 +1,6 @@
 package gift.model;
 
-import static gift.util.constants.CategoryConstants.CATEGORY_DESCRIPTION_SIZE_LIMIT;
+import static gift.util.constants.CategoryConstants.DESCRIPTION_SIZE_LIMIT;
 import static gift.util.constants.CategoryConstants.INVALID_COLOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,7 +62,7 @@ public class CategoryTest {
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("description") &&
-                violation.getMessage().equals(CATEGORY_DESCRIPTION_SIZE_LIMIT)
+                violation.getMessage().equals(DESCRIPTION_SIZE_LIMIT)
         );
     }
 }

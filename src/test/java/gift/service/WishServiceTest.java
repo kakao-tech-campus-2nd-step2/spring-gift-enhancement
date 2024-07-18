@@ -2,7 +2,7 @@ package gift.service;
 
 import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 import static gift.util.constants.WishConstants.PERMISSION_DENIED;
-import static gift.util.constants.WishConstants.WISH_ALREADY_EXISTS;
+import static gift.util.constants.WishConstants.ALREADY_EXISTS;
 import static gift.util.constants.WishConstants.WISH_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -117,7 +117,7 @@ public class WishServiceTest {
             wishService.addWish(wishCreateRequest, 1L);
         });
 
-        assertEquals(WISH_ALREADY_EXISTS, exception.getMessage());
+        assertEquals(ALREADY_EXISTS, exception.getMessage());
     }
 
     @Test

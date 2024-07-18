@@ -1,6 +1,6 @@
 package gift.model;
 
-import static gift.util.constants.CategoryConstants.CATEGORY_DESCRIPTION_SIZE_LIMIT;
+import static gift.util.constants.CategoryConstants.DESCRIPTION_SIZE_LIMIT;
 import static gift.util.constants.CategoryConstants.INVALID_COLOR;
 
 import jakarta.persistence.Column;
@@ -30,7 +30,7 @@ public class Category {
     @Column(name = "image_url", nullable = false, length = 255)
     private String imageUrl;
 
-    @Size(max = 255, message = CATEGORY_DESCRIPTION_SIZE_LIMIT)
+    @Size(max = 255, message = DESCRIPTION_SIZE_LIMIT)
     private String description;
 
     protected Category() {

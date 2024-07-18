@@ -1,9 +1,10 @@
 package gift.model;
 
-import static gift.util.constants.ProductConstants.PRODUCT_NAME_INVALID_CHARACTERS;
-import static gift.util.constants.ProductConstants.PRODUCT_NAME_REQUIRES_APPROVAL;
-import static gift.util.constants.ProductConstants.PRODUCT_NAME_SIZE_LIMIT;
+import static gift.util.constants.ProductConstants.NAME_INVALID_CHARACTERS;
+import static gift.util.constants.ProductConstants.NAME_REQUIRES_APPROVAL;
+import static gift.util.constants.ProductConstants.NAME_SIZE_LIMIT;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,9 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -24,14 +27,14 @@ public class Product {
     private Long id;
 
     @Column(nullable = false, length = 15)
-    @Size(min = 1, max = 15, message = PRODUCT_NAME_SIZE_LIMIT)
+    @Size(min = 1, max = 15, message = NAME_SIZE_LIMIT)
     @Pattern(
         regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣\\(\\)\\[\\]\\+\\-\\&\\/\\_ ]*$",
-        message = PRODUCT_NAME_INVALID_CHARACTERS
+        message = NAME_INVALID_CHARACTERS
     )
     @Pattern(
         regexp = "^(?!.*카카오).*$",
-        message = PRODUCT_NAME_REQUIRES_APPROVAL
+        message = NAME_REQUIRES_APPROVAL
     )
     private String name;
 
@@ -45,15 +48,19 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options;
+
     protected Product() {
     }
 
-    public Product(Long id, String name, int price, String imageUrl, Category category) {
+    public Product(Long id, String name, int price, String imageUrl, Category category, List<Option> options) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
     public Long getId() {
@@ -80,10 +87,15 @@ public class Product {
         return category.getName();
     }
 
-    public void update(String name, int price, String imageUrl, Category category) {
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void update(String name, int price, String imageUrl, Category category, List<Option> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 }
