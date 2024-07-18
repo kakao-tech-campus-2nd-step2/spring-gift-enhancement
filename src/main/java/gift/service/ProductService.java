@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.ProductDTO;
+import gift.dto.ProductRequestDTO;
 import gift.entity.Product;
 import gift.exception.ProductException;
 import gift.repository.ProductRepository;
@@ -36,9 +36,9 @@ public class ProductService {
         return products;
     }
 
-    public void saveProduct(ProductDTO productDTO){
+    public void saveProduct(ProductRequestDTO productRequestDTO){
         try {
-            Product product = toEntity(productDTO);
+            Product product = toEntity(productRequestDTO);
             repository.save(product);
         } catch (DataAccessException e) {
             throw new ProductException("데이터베이스 접근 오류가 발생했습니다.");
@@ -58,16 +58,16 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateProduct(Long productId, ProductDTO productDTO) {
+    public void updateProduct(Long productId, ProductRequestDTO productRequestDTO) {
         Product product = repository.findById(productId)
                 .orElseThrow(() -> new ProductException("상품을 찾을 수 없어서 업데이트 할 수 없습니다."));
-        product.setName(productDTO.name());
-        product.setPrice(productDTO.price());
-        product.setImageUrl(productDTO.imageUrl());
+        product.setName(productRequestDTO.name());
+        product.setPrice(productRequestDTO.price());
+        product.setImageUrl(productRequestDTO.imageUrl());
         repository.save(product);
     }
 
-    public static Product toEntity(ProductDTO dto) {
+    public static Product toEntity(ProductRequestDTO dto) {
         Product product = new Product();
         product.setName(dto.name());
         product.setPrice(dto.price());

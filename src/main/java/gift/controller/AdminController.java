@@ -1,7 +1,7 @@
 package gift.controller;
 
 
-import gift.dto.ProductDTO;
+import gift.dto.ProductRequestDTO;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +50,8 @@ public class AdminController {
     }
 
     @PostMapping("/admin/post/submit")
-    public String submitPostProduct(@ModelAttribute @Valid ProductDTO productDTO, Model model) {
-        productService.saveProduct(productDTO);
+    public String submitPostProduct(@ModelAttribute @Valid ProductRequestDTO productRequestDTO, Model model) {
+        productService.saveProduct(productRequestDTO);
         return adminGetPage(model);
     }
 
@@ -63,9 +63,9 @@ public class AdminController {
 
     @PostMapping("/admin/put/submit")
     public String submitUpdateProduct(@RequestParam("productId") Long productId,
-                                      @ModelAttribute @Valid ProductDTO productDTO,
+                                      @ModelAttribute @Valid ProductRequestDTO productRequestDTO,
                                       Model model) {
-        productService.updateProduct(productId, productDTO);
+        productService.updateProduct(productId, productRequestDTO);
         return adminGetPage(model);
     }
 
