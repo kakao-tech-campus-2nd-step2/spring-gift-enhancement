@@ -1,5 +1,6 @@
 package gift.Entity;
 
+import gift.Model.ProductDto;
 import jakarta.persistence.*;
 
 @Entity
