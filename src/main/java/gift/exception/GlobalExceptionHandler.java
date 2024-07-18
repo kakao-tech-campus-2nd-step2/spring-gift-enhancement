@@ -17,5 +17,4 @@ public class GlobalExceptionHandler {
         model.addAttribute("product", new ProductDTO());
         return "add_product";
     }
-
 }
