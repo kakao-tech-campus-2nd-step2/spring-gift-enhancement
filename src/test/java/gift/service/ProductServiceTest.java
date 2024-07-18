@@ -1,9 +1,12 @@
 package gift.service;
 
 import gift.dto.InputProductDTO;
+import gift.dto.UpdateProductDTO;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionReposityory;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +28,9 @@ class ProductServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private OptionReposityory optionReposityory;
+
     @InjectMocks
     private ProductService productService;
 
@@ -38,7 +44,7 @@ class ProductServiceTest {
     void getProductByIdTest() {
         // given
         given(productRepository.findById(any()))
-                .willReturn(Optional.of(new Product(1L,"product", 1000, "image.url", null)));
+                .willReturn(Optional.of(new Product(1L,"product", 1000, "image.url", null, null)));
         // when
         productService.getProductById(1L);
         // then
@@ -52,7 +58,7 @@ class ProductServiceTest {
         given(categoryRepository.findByName(any()))
                 .willReturn(Optional.of(new Category("교환권")));
         // when
-        InputProductDTO inputProductDTO = new InputProductDTO("product", 1000, "image.url", "교환권");
+        InputProductDTO inputProductDTO = new InputProductDTO("product", 1000, "image.url", "교환권", "optionA, optionB");
         productService.saveProduct(inputProductDTO);
         // then
         then(productRepository).should().save(any());
@@ -73,14 +79,15 @@ class ProductServiceTest {
     @DisplayName("product 업데이트")
     void updateProductTest() {
         // given
-        InputProductDTO inputProductDTO = new InputProductDTO("updatedProduct", 2000, "image.url", "교환권");
+        UpdateProductDTO updateProductDTO = new UpdateProductDTO("updatedProduct", 2000, "image.url", "교환권");
         Category category = new Category("교환권");
+        Option option = new Option("optionA, optionB");
         given(productRepository.findById(1L))
-                .willReturn(Optional.of(new Product(1L, "Product", 1000, "image.url", category)));
+                .willReturn(Optional.of(new Product(1L, "Product", 1000, "image.url", category, option)));
         given(categoryRepository.findByName(any()))
                 .willReturn(Optional.of(category));
         // when
-        productService.updateProduct(1L, inputProductDTO);
+        productService.updateProduct(1L, updateProductDTO);
         // then
         then(productRepository).should().findById(1L);
         then(productRepository).should().save(any(Product.class));
