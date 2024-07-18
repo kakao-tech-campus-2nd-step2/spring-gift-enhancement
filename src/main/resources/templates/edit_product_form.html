@@ -6,7 +6,7 @@
 </head>
 <body>
     <p>Edit Product Form</p>
-    <form th:action="@{'/admin/edit/' + ${product.getId()}}" th:object="${product}" method="post">
+    <form th:action="@{'/api/products/edit/' + ${product.getId()}}" th:object="${product}" method="post">
         <div>
             <label>id</label>
             <input type="text" th:value="${product.getId()}" readonly/>
@@ -25,9 +25,14 @@
             <input type="text" name="imageUrl" th:value="${product.getImageUrl()}"/>
         </div>
         <div>
+            <select th:field="*{category}">
+                <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+            </select>
+        </div>
+        <div>
             <button type="submit">Save</button>
         </div>
     </form>
-    <a href="/admin">Back to Product List</a>
+    <a href="/api/products">Back to Product List</a>
 </body>
 </html>

@@ -6,7 +6,7 @@
 </head>
 <body>
     <p>product_form page</p>
-    <form th:action="@{/admin/new}" th:object="${product}" method="post">
+    <form th:action="@{/api/products/new}" th:object="${product}" method="post">
         <div>
             <label>id</label>
             <input type="text" name="id"/> 
@@ -25,12 +25,18 @@
             <input type="text" name="imageUrl"/> 
         </div>
         <div>
+            <label>category</label>
+            <select th:field="*{category}">
+                <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+            </select>
+        </div>
+        <div>
             <button type="submit">Save</button>
         </div>
     </form>
     <div th:if="${errorMessage}">
         <p th:text="${errorMessage}"></p>
     </div>
-    <a href="/admin">Back to Product List</a>
+    <a href="/api/products">Back to Product List</a>
 </body>
 </html>

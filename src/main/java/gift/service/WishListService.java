@@ -27,8 +27,9 @@ public class WishListService {
 
     private JwtUtil jwtUtil;
 
-    public WishListService(WishListRepository wishListRepository, ProductRepository productRepository, JwtUtil jwtUtil) {
+    public WishListService(WishListRepository wishListRepository, MemberRepository memberRepository, ProductRepository productRepository, JwtUtil jwtUtil) {
         this.wishListRepository = wishListRepository;
+        this.memberRepository = memberRepository;
         this.productRepository = productRepository;
         this.jwtUtil = jwtUtil;
     }

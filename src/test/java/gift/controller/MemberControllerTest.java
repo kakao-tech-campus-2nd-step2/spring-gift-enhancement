@@ -1,6 +1,7 @@
 package gift.controller;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -12,7 +13,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
 
 
 import gift.dto.MemberDto;
@@ -50,9 +50,8 @@ public class MemberControllerTest {
         LoginRequest failRequest = new LoginRequest("wrongPassword", "wrongPassword");
         HttpEntity<LoginRequest> failRequestEntity = new HttpEntity<>(failRequest);
 
-        assertThatThrownBy(() -> restTemplate.postForEntity(loginUrl, failRequestEntity, String.class))
-                .isInstanceOf(HttpClientErrorException.class)
-                .hasMessageContaining("User with Request not found");
+        ResponseEntity<String> failResponse =restTemplate.postForEntity(loginUrl, failRequestEntity, String.class);
+        assertThat(failResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 
     }
 

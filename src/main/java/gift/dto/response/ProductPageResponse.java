@@ -1,12 +1,7 @@
 package gift.dto.response;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-
 import gift.dto.ProductDto;
-import gift.entity.Product;
 
 public class ProductPageResponse {
     
@@ -67,23 +62,5 @@ public class ProductPageResponse {
     public void setHasNext(boolean hasNext) {
         this.hasNext = hasNext;
     }
-
-    public ProductPageResponse fromPage(Page<Product> productPage){
-
-        List<ProductDto> productList = productPage.getContent()
-                                          .stream()
-                                          .map(ProductDto::fromEntity)
-                                          .collect(Collectors.toList());
-
-        ProductPageResponse productPageResponse = new ProductPageResponse(
-            productList, 
-            productPage.getNumber(),
-            productPage.hasPrevious(), 
-            productPage.getTotalPages(), 
-            productPage.hasNext());
-
-        return productPageResponse;
-    }
-
     
 }

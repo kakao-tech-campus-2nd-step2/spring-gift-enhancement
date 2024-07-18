@@ -1,7 +1,5 @@
 package gift.dto;
 
-import gift.entity.Member;
-
 public class MemberDto {
     
     private long id;
@@ -49,9 +47,5 @@ public class MemberDto {
 
     public void setRole(String role){
         this.role = role;
-    }
-
-    public Member toEntity(MemberDto memberDto){
-        return new Member(this.password, this.email, this.role);
     }
 }

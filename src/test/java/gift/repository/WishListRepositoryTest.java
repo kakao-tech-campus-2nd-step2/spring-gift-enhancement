@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import gift.entity.Category;
 import gift.entity.Member;
 import gift.entity.Product;
 
@@ -26,6 +27,9 @@ public class WishListRepositoryTest {
     private MemberRepository memberRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
 
     private WishList expected;
     private WishList expected2;
@@ -34,16 +38,18 @@ public class WishListRepositoryTest {
     private Member member;
     private Product product1;
     private Product product2;
+    private Category category;
 
     private long notExistMemberId;
 
     @BeforeEach
     void setUp(){
-
+        category = new Category("test", "color", "imageUrl", "");
+        categoryRepository.save(category);
         member = new Member("testPassword", "testEmail", "testRole");
         memberRepository.save(member);
-        product1 = new Product("testName", 0, "testUrl");
-        product2 = new Product("testName2", 0, "testUrl");
+        product1 = new Product("testName", 0, "testUrl", category);
+        product2 = new Product("testName2", 0, "testUrl", category);
         productRepository.save(product1);
         productRepository.save(product2);
 
@@ -51,7 +57,7 @@ public class WishListRepositoryTest {
         expected = new WishList(member, product1);
         expected2 = new WishList(member, product2);
         actual = wishListRepository.save(expected);
-        notExistMemberId = 2L;
+        notExistMemberId = member.getId() + 1;
     }
 
     @Test

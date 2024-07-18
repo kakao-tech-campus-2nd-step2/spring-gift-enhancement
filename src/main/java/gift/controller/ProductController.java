@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import gift.dto.ProductDto;
 import gift.dto.response.ProductPageResponse;
-import gift.entity.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 
@@ -18,16 +18,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/api/products")
 public class ProductController {
 
-    private ProductService productService;
+    private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService){
+    public ProductController(ProductService productService, CategoryService categoryService){
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String getProducts(Model model, @RequestParam(value = "page", defaultValue = "0")int page, @RequestParam(value = "size", defaultValue = "10") int size) {
         ProductPageResponse paging = productService.getPage(page, size);
         model.addAttribute("paging", paging);
@@ -36,25 +38,28 @@ public class ProductController {
 
     @GetMapping("/new")
     public String showProductForm(Model model){
-        model.addAttribute("product", new Product("", 0, ""));
+        model.addAttribute("product", new ProductDto(0, "", 0, "", ""));
+        model.addAttribute("categories", categoryService.findAll().getCategories());
         return "product_form";
     }
 
     @PostMapping("/new")
     public String addProduct(@Valid @ModelAttribute ProductDto productDto, BindingResult bindingResult, Model model) {
-        
+
         if(bindingResult.hasErrors()){
             model.addAttribute("product", productDto);
+            model.addAttribute("categories",categoryService.findAll().getCategories());
             return "product_form";
         }
 
         productService.addProduct(productDto);
-        return "redirect:/admin";
+        return "redirect:/api/products";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        model.addAttribute("product", productService.findById(id));       
+        model.addAttribute("product", productService.findById(id)); 
+        model.addAttribute("categories", categoryService.findAll().getCategories());
         return "edit_product_form";
     }
 
@@ -63,16 +68,17 @@ public class ProductController {
         
         if(bindingResult.hasErrors()){
             model.addAttribute("product", productDto);
+            model.addAttribute("categories", categoryService.findAll().getCategories());
             return "product_form";
         }
 
         productService.updateProduct(productDto);
-        return "redirect:/admin";
+        return "redirect:/api/products";
     }
 
     @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return "redirect:/admin";
+        return "redirect:/api/products";
     }
 }

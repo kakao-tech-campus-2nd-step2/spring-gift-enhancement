@@ -1,6 +1,5 @@
 package gift.entity;
 
-import gift.dto.WishListDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -43,10 +42,6 @@ public class WishList {
 
     public Product getProduct() {
         return product;
-    }
-
-    public WishListDto toDto(){
-        return new WishListDto(this.member.getId(), this.product.getId());
     }
 
 }

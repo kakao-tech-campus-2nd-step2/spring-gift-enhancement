@@ -26,8 +26,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/wishlist")
 public class WishListController {
     
-    private WishListService wishListService;
-    private JwtUtil jwtUtil;
+    private final WishListService wishListService;
+    private final JwtUtil jwtUtil;
 
     public WishListController(WishListService wishListService, JwtUtil jwtUtil){
         this.wishListService = wishListService;

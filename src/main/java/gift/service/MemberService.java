@@ -32,7 +32,7 @@ public class MemberService {
     public void addMember(MemberDto memberDto){
 
         if(memberRepository.findByEmail(memberDto.getEmail()).isEmpty()){
-            Member member = memberDto.toEntity(memberDto);
+            Member member = toEntity(memberDto);
             memberRepository.save(member);
         }else{
             throw new CustomException("Member with email " + memberDto.getEmail() + "exists", HttpStatus.CONFLICT);
@@ -55,14 +55,14 @@ public class MemberService {
     public MemberDto findByEmail(String email){
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new CustomException("Member with email " + email + " not found", HttpStatus.NOT_FOUND));
-        return member.toDto();
+        return new MemberDto(member.getId(), member.getPassword(), member.getEmail(), member.getRole());
     }
 
     @Transactional
     public MemberDto findByRequest(LoginRequest loginRequest){
         Member member = memberRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword())
             .orElseThrow(() -> new CustomException("User with Request not found", HttpStatus.NOT_FOUND));
-        return member.toDto();
+        return new MemberDto(member.getId(), member.getPassword(), member.getEmail(), member.getRole());
     }
 
     @Transactional
@@ -77,4 +77,7 @@ public class MemberService {
         return generateToken(memberDto.getEmail());
     }
     
+    public Member toEntity(MemberDto memberDto){
+        return new Member(memberDto.getPassword(), memberDto.getEmail(), memberDto.getRole());
+    }
 }
