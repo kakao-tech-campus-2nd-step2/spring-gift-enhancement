@@ -1,18 +1,21 @@
 package gift.member;
 
+import static gift.exception.ErrorMessage.MEMBER_NOT_FOUND;
+import static gift.exception.ErrorMessage.WRONG_PASSWORD;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.when;
 
-import gift.exception.ErrorMessage;
+import gift.token.JwtProvider;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
 class MemberServiceTest {
@@ -20,68 +23,67 @@ class MemberServiceTest {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    JwtProvider jwtProvider;
+
+    @MockBean
+    MemberRepository memberRepository;
+
     @Test
     void register() {
     }
 
-    @Test
-    void login() {
-    }
-
     @Nested
     @DisplayName("[Unit] verify password test")
-    class VerifyPasswordTest {
+    class loginTest {
 
-        @ParameterizedTest
+        @Test
         @DisplayName("success")
-        @MethodSource("success")
-        void success(Member member, MemberDTO memberDTO) {
-            assertDoesNotThrow(() -> memberService.verifyPassword(member, memberDTO));
+        void success() {
+            //given
+            MemberDTO inputMemberDTO = new MemberDTO("aaa@email.com", "password");
+            Member except = new Member("aaa@email.com", "password");
+
+            //when
+            when(memberRepository.findById(inputMemberDTO.getEmail()))
+                .thenReturn(Optional.of(except));
+
+            //then
+            assertThat(memberService.login(inputMemberDTO))
+                .isEqualTo(jwtProvider.generateToken(inputMemberDTO.toTokenDTO()));
         }
 
-        private static Stream<Arguments> success() {
-            return Stream.of(
-                Arguments.of(
-                    new Member("aaa@email.com", "aaa"),
-                    new MemberDTO("aaa@email.com", "aaa")
-                )
-            );
-        }
+        @Test
+        @DisplayName("member not found error")
+        void memberNotFoundError() {
+            //given
+            MemberDTO inputMemberDTO = new MemberDTO("aaa@email.com", "password");
 
-        @ParameterizedTest
-        @DisplayName("fail")
-        @MethodSource("fail")
-        void fail(Member member, MemberDTO memberDTO, String errorMessage) {
-            assertThatThrownBy(() -> memberService.verifyPassword(member, memberDTO))
+            //when
+            when(memberRepository.findById(inputMemberDTO.getEmail()))
+                .thenThrow(new IllegalArgumentException(MEMBER_NOT_FOUND));
+
+            //then
+            assertThatThrownBy(() -> memberService.login(inputMemberDTO))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(errorMessage);
+                .hasMessageContaining(MEMBER_NOT_FOUND);
         }
 
-        private static Stream<Arguments> fail() {
-            return Stream.of(
-                Arguments.of(
-                    new Member("aaa@email.com", "aaa"),
-                    new MemberDTO("aaa@email.com", "aaab"),
-                    ErrorMessage.WRONG_PASSWORD
-                )
-            );
-        }
+        @Test
+        @DisplayName("wrong password error")
+        void wrongPasswordError(MemberDTO memberDTO, Member member) {
+            //given
+            MemberDTO inputMemberDTO = new MemberDTO("aaa@email.com", "wrong-password");
+            Member except = new Member("aaa@email.com", "right-password");
 
-        @ParameterizedTest
-        @DisplayName("edge case")
-        @MethodSource("edgeCase")
-        void edgeCase(Member member, MemberDTO memberDTO) {
-            assertDoesNotThrow(() -> memberService.verifyPassword(member, memberDTO));
-        }
+            //when
+            when(memberRepository.findById(inputMemberDTO.getEmail()))
+                .thenReturn(Optional.of(except));
 
-        // 오직 비밀번호에 한정해서 같은지 여부를 확인하기에, 이메일이 다른 경우에도 통과한다.
-        private static Stream<Arguments> edgeCase() {
-            return Stream.of(
-                Arguments.of(
-                    new Member("aaa@email.com", "aaa"),
-                    new MemberDTO("bbb@email.com", "aaa")
-                )
-            );
+            //then
+            assertThatThrownBy(() -> memberService.login(inputMemberDTO))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(WRONG_PASSWORD);
         }
     }
 }
