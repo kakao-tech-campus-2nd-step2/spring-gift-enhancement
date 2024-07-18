@@ -13,7 +13,6 @@ import java.util.List;
 @Table(name = "gift")
 public class Gift {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,12 +33,12 @@ public class Gift {
     private Category category;
 
     @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
-    protected List<Wish> wishes = new ArrayList<>();
+    private List<Wish> wishes = new ArrayList<>();
 
     @OneToMany(mappedBy = "gift", cascade = CascadeType.ALL)
-    protected List<Option> options = new ArrayList<>();
+    private List<Option> options = new ArrayList<>();
 
-    public Gift() {
+    protected Gift() {
     }
 
     public Gift(String name, int price, String imageUrl) {

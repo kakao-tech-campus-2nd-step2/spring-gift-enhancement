@@ -30,9 +30,9 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category")
-    protected List<Gift> gifts = new ArrayList<>();
+    private List<Gift> gifts = new ArrayList<>();
 
-    public Category() {
+    protected Category() {
     }
 
     public Category(Long id, String name, String color, String imageUrl, String description) {

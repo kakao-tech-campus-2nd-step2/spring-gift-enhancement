@@ -21,9 +21,9 @@ public class Option {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gift_id")
-    protected Gift gift;
+    private Gift gift;
 
-    public Option() {
+    protected Option() {
     }
 
     public Option(Long id, String name, int quantity) {
