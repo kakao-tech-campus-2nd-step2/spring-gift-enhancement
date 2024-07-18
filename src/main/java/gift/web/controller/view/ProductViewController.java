@@ -37,7 +37,7 @@ public class ProductViewController {
 
     @GetMapping("/{id}")
     public String editForm(@PathVariable Long id, Model model) {
-        ReadProductResponse product = productService.searchProduct(id);
+        ReadProductResponse product = productService.readProductById(id);
         model.addAttribute("product", product);
         return "form/edit-product-form";
     }
