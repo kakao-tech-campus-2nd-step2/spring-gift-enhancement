@@ -5,15 +5,18 @@ import gift.entity.Option;
 import gift.entity.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("상품 레포지토리 단위테스트")
@@ -90,5 +93,29 @@ class ProductRepositoryTest {
 
         // Then
         assertThat(deleteResult).isNotPresent();
+    }
+
+    @Nested
+    @DisplayName("상품 엔티티 테스트")
+    class EntityTest{
+        @Test
+        @DisplayName("Name Null")
+        void nameNull() {
+            List<Option> options = List.of(new Option("option", 1010));
+            Product product = new Product(null, 101, "img", testCategory, options);
+
+            assertThatThrownBy(() -> productRepository.save(product))
+                    .isInstanceOf(DataIntegrityViolationException.class);
+        }
+
+        @Test
+        @DisplayName("이름 16자 일때 예외 발생")
+        void nameLength() {
+            List<Option> options = List.of(new Option("option", 1010));
+            Product product = new Product("1234".repeat(4), 101, "img", testCategory, options);
+
+            assertThatThrownBy(() -> productRepository.save(product))
+                    .isInstanceOf(DataIntegrityViolationException.class);
+        }
     }
 }

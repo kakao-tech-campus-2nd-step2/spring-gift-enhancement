@@ -3,12 +3,14 @@ package gift.repository;
 import gift.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,5 +80,21 @@ class WishRepositoryTest {
                     assertThat(w).isEqualTo(testWish1);
                     assertThat(w.getProduct()).isEqualTo(testProduct1);
                 });
+    }
+
+    @Nested
+    @DisplayName("위시 엔티티 테스트")
+    class EntityTest{
+        @Test
+        @DisplayName("생성된 날짜")
+        void dateCheck() {
+            Wish wish = new Wish(testMember, 100, testProduct1);
+
+            Wish save = wishRepository.save(wish);
+
+            assertThat(save.getCreatedTime())
+                    .isInstanceOf(LocalDateTime.class);
+        }
+
     }
 }
