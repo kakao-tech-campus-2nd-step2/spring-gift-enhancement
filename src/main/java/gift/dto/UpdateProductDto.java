@@ -24,21 +24,29 @@ public class UpdateProductDto {
     @NotBlank
     Category category;
 
-    List<OptionDto> options;
+    List<Option> options;
 
     public String getName() {
         return this.name;
     }
 
     public void updateProduct(Product product) {
-        product.setName(this.name);
-        product.setPrice(this.price);
-        product.setImageUrl(this.imageUrl);
-        product.setCategory(this.category);
-
+        List<Option> originOptions = product.getOption();
         List<Option> optionList = options.stream()
-                .map(optionDto -> new Option(optionDto.getName(), product))
+                .map(optionDto -> {
+                    Option originOption = originOptions.stream()
+                            .filter(o -> o.getId().equals(optionDto.getId()))
+                            .findFirst()
+                            .orElse(null);
+                    if (originOption != null) {
+                        originOption.setName(optionDto.getName());
+                        return originOption;
+                    } else{
+                        return new Option(optionDto.getName(), product);
+                    }
+                })
                 .collect(Collectors.toList());
         product.setOptions(optionList);
+        product.update(product);
     }
 }
