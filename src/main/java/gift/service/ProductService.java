@@ -1,7 +1,9 @@
 package gift.service;
 
 import gift.dto.request.AddProductRequest;
+import gift.dto.request.OptionRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.dto.response.AddedOptionIdResponse;
 import gift.dto.response.AddedProductIdResponse;
 import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
@@ -33,7 +35,7 @@ public class ProductService {
     @Transactional
     public AddedProductIdResponse addProduct(AddProductRequest request) {
         Category category = categoryService.getCategory(request.categoryId());
-        List<Option> options = optionService.getOptions(request.optionRequests());
+        List<Option> options = optionService.convertToOptions(request.optionRequests());
 
         Product product = new Product(request, category, options);
 
@@ -80,5 +82,16 @@ public class ProductService {
                 .stream()
                 .map(OptionResponse::fromOption)
                 .toList();
+    }
+
+    public AddedOptionIdResponse addOptionToProduct(Long productId, OptionRequest optionRequest) {
+        Product product = getProduct(productId);
+
+        optionService.checkDuplicateOptionName(product.getOptions(), optionRequest.name());
+
+        Option option = optionService.convertToOption(optionRequest);
+        product.addOption(option);
+
+        return new AddedOptionIdResponse(option.getId());
     }
 }

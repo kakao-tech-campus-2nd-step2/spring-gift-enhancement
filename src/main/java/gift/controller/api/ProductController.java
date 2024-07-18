@@ -1,7 +1,9 @@
 package gift.controller.api;
 
 import gift.dto.request.AddProductRequest;
+import gift.dto.request.OptionRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.dto.response.AddedOptionIdResponse;
 import gift.dto.response.AddedProductIdResponse;
 import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
@@ -52,5 +54,12 @@ public class ProductController {
     @GetMapping("api/products/{id}/options")
     public ResponseEntity<List<OptionResponse>> getOptionResponses(@PathVariable("id") Long productId) {
         return ResponseEntity.ok(productService.getOptionResponses(productId));
+    }
+
+    @PostMapping("api/products/{id}/options")
+    public ResponseEntity<AddedOptionIdResponse> addOptionToProduct(@PathVariable("id") Long productId,
+                                                                    @RequestBody OptionRequest optionRequest){
+        AddedOptionIdResponse addedOptionId =productService.addOptionToProduct(productId,optionRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedOptionId);
     }
 }
