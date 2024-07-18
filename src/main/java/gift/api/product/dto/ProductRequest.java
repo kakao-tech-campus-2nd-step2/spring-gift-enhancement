@@ -1,6 +1,7 @@
-package gift.api.product;
+package gift.api.product.dto;
 
 import gift.api.category.Category;
+import gift.api.product.Product;
 import gift.api.product.validator.NoKakao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

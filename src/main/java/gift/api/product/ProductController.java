@@ -3,6 +3,8 @@ package gift.api.product;
 import gift.api.option.OptionService;
 import gift.api.option.dto.OptionRequest;
 import gift.api.option.dto.OptionResponse;
+import gift.api.product.dto.ProductRequest;
+import gift.api.product.dto.ProductResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -31,7 +33,7 @@ public class ProductController {
 
 
     @GetMapping()
-    public ResponseEntity<List<Product>> getProducts(Pageable pageable) {
+    public ResponseEntity<List<ProductResponse>> getProducts(Pageable pageable) {
         return ResponseEntity.ok().body(productService.getProducts(pageable));
     }
 

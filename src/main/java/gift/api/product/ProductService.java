@@ -2,10 +2,13 @@ package gift.api.product;
 
 import gift.api.category.Category;
 import gift.api.category.CategoryRepository;
+import gift.api.product.dto.ProductRequest;
+import gift.api.product.dto.ProductResponse;
 import gift.global.exception.NoSuchEntityException;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,9 +24,15 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Product> getProducts(Pageable pageable) {
-        Page<Product> allProducts = productRepository.findAll(pageable);
-        return allProducts.hasContent() ? allProducts.getContent() : Collections.emptyList();
+    public List<ProductResponse> getProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        if (products.hasContent()) {
+            return products.getContent()
+                    .stream()
+                    .map(ProductResponse::of)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     public Long add(ProductRequest productRequest) {
