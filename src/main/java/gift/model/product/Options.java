@@ -27,9 +27,9 @@ public class Options {
         }
     }
 
-    private static void validateOptions(List<Option> options) {
+    public static void validateOptions(List<Option> options) {
         if (options.stream().map(Option::getName).distinct().count() != options.size()) {
-            throw new IllegalArgumentException("Option name already exists");
+            throw new IllegalArgumentException("중복된 option 이름이 존재합니다.");
         }
     }
 
