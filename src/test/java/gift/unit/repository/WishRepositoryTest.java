@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gift.product.entity.Product;
 import gift.product.repository.ProductRepository;
 import gift.user.repository.UserRepository;
+import gift.wish.dto.request.UpdateWishRequest;
 import gift.wish.entity.Wish;
 import gift.wish.repository.WishRepository;
 import java.util.List;
@@ -98,15 +99,15 @@ class WishRepositoryTest {
     @DisplayName("wish update test")
     void updateWishTest() {
         // given
-        Integer newQuantity = 50;
+        UpdateWishRequest request = new UpdateWishRequest(1L, 1L, 50);
 
         // when
         final Wish wish = wishRepository.findById(1L).get();
-        wish.changeQuantity(newQuantity);
+        wish.changeQuantity(request);
         final Wish actual = wishRepository.findById(1L).get();
 
         // then
-        assertThat(actual.getQuantity()).isEqualTo(newQuantity);
+        assertThat(actual.getQuantity()).isEqualTo(request.quantity());
     }
 
     @Test

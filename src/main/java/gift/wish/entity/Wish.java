@@ -2,6 +2,7 @@ package gift.wish.entity;
 
 import gift.product.entity.Product;
 import gift.user.entity.User;
+import gift.wish.dto.request.UpdateWishRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -80,8 +81,8 @@ public class Wish {
         return product;
     }
 
-    public void changeQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void changeQuantity(UpdateWishRequest request) {
+        this.quantity = request.quantity();
     }
 
     public boolean isQuantityZero() {
