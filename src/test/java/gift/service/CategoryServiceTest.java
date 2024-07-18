@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -23,8 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("카테고리 서비스 단위테스트")
@@ -39,16 +37,21 @@ class CategoryServiceTest {
     @DisplayName("모든 카테고리 조회")
     void getAllCategories() {
         //Given
-        List<Category> categoryList = List.of(
-                new Category("상품권", "test", "test", "test"),
-                new Category("교환권", "test", "test", "test"),
-                new Category("패션잡화", "test", "test", "test")
-        );
-        when(categoryRepository.findAll()).thenReturn(categoryList);
+        Category category1 = mock(Category.class);
+        Category category2 = mock(Category.class);
+        Category category3 = mock(Category.class);
 
-        when(categoryList.get(0).getId()).thenReturn(1L);
-        when(categoryList.get(1).getId()).thenReturn(2L);
-        when(categoryList.get(2).getId()).thenReturn(3L);
+        List<Category> categoryList = List.of(
+                category1,
+                category2,
+                category3
+        );
+
+        when(category1.getName()).thenReturn("상품권");
+        when(category2.getName()).thenReturn("교환권");
+        when(category3.getName()).thenReturn("패션잡화");
+
+        when(categoryRepository.findAll()).thenReturn(categoryList);
 
         //When
         List<CategoryResponse> categoryResponses = categoryService.getAllCategoryResponses();
@@ -75,8 +78,8 @@ class CategoryServiceTest {
 
             //Then
             assertThat(result).isNotNull()
-                    .extracting( "name","color")
-                    .containsExactly("원하는 카테고리","test");
+                    .extracting("name", "color")
+                    .containsExactly("원하는 카테고리", "test");
         }
 
         @Test
@@ -101,10 +104,10 @@ class CategoryServiceTest {
             when(categoryRepository.existsByName(any())).thenReturn(false);
 
             AddCategoryRequest request = new AddCategoryRequest("상품권", "색", "이미지주소", "설명");
-            Category category = new Category("상품권", "색", "이미지주소", "설명");
+            Category category = mock(Category.class);
 
             when(categoryRepository.save(any())).thenReturn(category);
-            when(category.getId()).thenReturn(Long.valueOf(1));
+            when(category.getId()).thenReturn(1L);
 
             //When
             CategoryIdResponse response = categoryService.addCategory(request);
@@ -133,7 +136,7 @@ class CategoryServiceTest {
         @DisplayName("성공")
         void success() {
             //Given
-            Category existingCategory = new Category( "기존", "기존", "기존", "기존");
+            Category existingCategory = new Category("기존", "기존", "기존", "기존");
 
             UpdateCategoryRequest request = new UpdateCategoryRequest(1L, "새로움", "새로움", "뉴이미지", "설명");
             when(categoryRepository.findById(1L)).thenReturn(Optional.of(existingCategory));
@@ -166,7 +169,7 @@ class CategoryServiceTest {
         @DisplayName("성공")
         void success() {
             //Given
-            Category deleteTargetCategory = new Category( "타겟", "타겟", "타겟", "타겟");
+            Category deleteTargetCategory = new Category("타겟", "타겟", "타겟", "타겟");
             when(categoryRepository.findById(1L)).thenReturn(Optional.of(deleteTargetCategory));
 
             //When
