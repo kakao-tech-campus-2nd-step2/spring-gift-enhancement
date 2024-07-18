@@ -48,7 +48,7 @@ public class AdminCategoryController {
     }
 
     @PutMapping("/category")
-    public String updateMember(@Valid @ModelAttribute CategoryRequest.Update request) {
+    public String updateCategory(@Valid @ModelAttribute CategoryRequest.Update request) {
         categoryService.updateById(request);
         return "redirect:/admin/categories";
     }
