@@ -75,7 +75,7 @@ class JpaCategoryRepositoryTest {
         List<Category> categoryList = jpaCategoryRepository.findAll();
         //then
         assertAll(
-            () -> assertThat(categoryList.size()).isEqualTo(2)
+            () -> assertThat(categoryList).hasSize(2)
         );
     }
 
@@ -104,7 +104,7 @@ class JpaCategoryRepositoryTest {
         //then
         List<Category> categoryList = jpaCategoryRepository.findAll();
         assertAll(
-            () -> assertThat(categoryList.size()).isEqualTo(0)
+            () -> assertThat(categoryList).hasSize(0)
         );
     }
 }
