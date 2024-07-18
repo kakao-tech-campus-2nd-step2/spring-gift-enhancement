@@ -39,17 +39,20 @@ public class ProductService {
 
     @Transactional
     public ProductDTO createProduct(ProductDTO productDTO) {
-        Product product = convertToEntity(productDTO);
+        Category category = categoryRepository.findById(productDTO.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
+        Product product = new Product(null, productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(), category);
         Product savedProduct = productRepository.save(product);
         return convertToDTO(savedProduct);
     }
 
     @Transactional
     public ProductDTO updateProduct(long id, ProductDTO productDTO) {
-        Product product = convertToEntity(productDTO);
-        product = Product.createWithId(id, product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory());
-        Product updatedProduct = productRepository.save(product);
-        return convertToDTO(updatedProduct);
+        Category category = categoryRepository.findById(productDTO.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
+        Product updatedProduct = new Product(id, productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(), category);
+        Product savedProduct = productRepository.save(updatedProduct);
+        return convertToDTO(savedProduct);
     }
 
     @Transactional
@@ -68,16 +71,8 @@ public class ProductService {
     }
 
     public Product convertToEntity(ProductDTO productDTO) {
-        Optional<Category> category = categoryRepository.findById(productDTO.getCategoryId());
-        if (!category.isPresent()) {
-            throw new IllegalArgumentException("Invalid category ID");
-        }
-        return new Product(
-                productDTO.getId(),
-                productDTO.getName(),
-                productDTO.getPrice(),
-                productDTO.getImageUrl(),
-                category.get()
-        );
+        Category category = categoryRepository.findById(productDTO.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
+        return new Product(productDTO.getId(), productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(), category);
     }
 }

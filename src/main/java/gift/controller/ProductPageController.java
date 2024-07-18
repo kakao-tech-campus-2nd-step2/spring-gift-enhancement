@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class ProductPageController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductPageController(ProductService productService) {
+
+    public ProductPageController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -34,12 +37,14 @@ public class ProductPageController {
     public String createProductForm(Model model) {
         ProductDTO productDTO = new ProductDTO();
         model.addAttribute("product", productDTO);
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "addProduct";
     }
 
     @PostMapping("/save")
     public String createProduct(@Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "addProduct";
         }
         productService.createProduct(productDTO);
@@ -50,12 +55,14 @@ public class ProductPageController {
     public String updateProductForm(@PathVariable long id, Model model) {
         ProductDTO productDTO = productService.getProductById(id);
         model.addAttribute("product", productDTO);
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "editProduct";
     }
 
     @PostMapping("/update/{id}")
     public String updateProduct(@PathVariable long id, @Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "editProduct";
         }
         productService.updateProduct(id, productDTO);

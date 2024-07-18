@@ -28,6 +28,8 @@ public class ProductDTO {
     @NotNull
     private Long categoryId;
 
+    private String categoryName;
+
     public Long getId() {
         return id;
     }
@@ -66,5 +68,13 @@ public class ProductDTO {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
