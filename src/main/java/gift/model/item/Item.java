@@ -48,6 +48,10 @@ public class Item {
         this.category = category;
     }
 
+    public Item(String name, Long price, String imgUrl, Category category) {
+        this(null, name, price, imgUrl, category);
+    }
+
     public Long getId() {
         return id;
     }

@@ -33,6 +33,10 @@ public class WishItem {
         this.item = item;
     }
 
+    public WishItem(User user, Item item) {
+        this(null, user, item);
+    }
+
     public Long getId() {
         return id;
     }

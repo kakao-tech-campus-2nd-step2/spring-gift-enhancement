@@ -40,6 +40,10 @@ public class Category {
         this.imgUrl = imgUrl;
     }
 
+    public Category(String name, String imgUrl) {
+        this(null, name, imgUrl);
+    }
+
     public CategoryDTO toDTO() {
         return new CategoryDTO(id, name, imgUrl);
     }
