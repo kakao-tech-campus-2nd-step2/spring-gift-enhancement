@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Product {
@@ -16,17 +19,21 @@ public class Product {
 	private Long price;
 	private String imageUrl;
 
-	protected Product() {
+	@ManyToOne @NotNull
+	@JoinColumn(name = "category_id")
+	private Category category;
 
+	protected Product() {
 	}
-	private Product(String name, Long price, String imageUrl) {
+	private Product(String name, Long price, String imageUrl, Category category) {
 		this.name = name;
 		this.price = price;
 		this.imageUrl = imageUrl;
+		this.category = category;
 	}
 
-	public static Product of(String name, Long price, String imageUrl) {
-		return new Product(name, price, imageUrl);
+	public static Product of(String name, Long price, String imageUrl, Category category) {
+		return new Product(name, price, imageUrl, category);
 	}
 
 	public Long getId() {
@@ -55,6 +62,14 @@ public class Product {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	@Override
