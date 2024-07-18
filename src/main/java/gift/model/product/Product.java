@@ -72,37 +72,14 @@ public class Product {
         return imageUrl;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public Category getCategory() {
         return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 
     public List<Option> getOptions() {
         return options;
     }
-
-    public void setOptions(List<Option> options) {
-        this.options = options;
-    }
+    
 
     // update
     public void update(ProductRequest productRequest, Category category) {
