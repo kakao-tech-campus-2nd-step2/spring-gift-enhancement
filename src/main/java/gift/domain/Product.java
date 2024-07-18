@@ -40,6 +40,10 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private List<Option> options;
+
     public Product() {
     }
 
@@ -77,6 +81,10 @@ public class Product {
 
     public String getCategory() {
         return category.getName();
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     public void setId(Long id) {
