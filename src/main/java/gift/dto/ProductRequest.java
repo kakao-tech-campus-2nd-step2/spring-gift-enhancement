@@ -31,7 +31,7 @@ public class ProductRequest {
     @NotNull
     private Long categoryId;
 
-    @NotBlank
+    @NotBlank(message = "ddd")
     private String categoryName;
 
     private List<OptionDto> options = new ArrayList<>();
@@ -68,6 +68,10 @@ public class ProductRequest {
 
     public Long getCategoryId() {
         return categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
     }
 
     public List<OptionDto> getOptions() {

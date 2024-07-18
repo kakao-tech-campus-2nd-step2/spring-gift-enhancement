@@ -41,4 +41,12 @@ public class ProductResponse {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
 }
