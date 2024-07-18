@@ -1,7 +1,9 @@
 package gift.controller;
 
+import gift.dto.OptionDto;
 import gift.model.Option;
 import gift.service.OptionService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +26,14 @@ public class OptionController {
     }
 
     @PostMapping("/{productId}/options")
-    public ResponseEntity<Option> addOption(@PathVariable Long productId, @RequestBody Option option) {
-        Option newOption = optionService.addOption(productId, option);
+    public ResponseEntity<Option> addOption(@PathVariable Long productId, @RequestBody @Valid OptionDto optionDto) {
+        Option newOption = optionService.addOption(productId, optionDto);
         return ResponseEntity.status(201).body(newOption);
     }
 
     @PutMapping("/{productId}/options/{optionId}")
-    public ResponseEntity<Option> updateOption(@PathVariable Long optionId, @RequestBody Option optionDetails) {
-        Option updatedOption = optionService.updateOption(optionId, optionDetails);
+    public ResponseEntity<Option> updateOption(@PathVariable Long optionId, @RequestBody @Valid OptionDto optionDto) {
+        Option updatedOption = optionService.updateOption(optionId, optionDto);
         return ResponseEntity.ok(updatedOption);
     }
 
