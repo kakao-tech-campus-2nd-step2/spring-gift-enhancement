@@ -32,8 +32,6 @@ public class Category {
     this.imageUrl = imageUrl;
     this.description = description;
   }
-
-  // Getters only, no setters
   public Long getId() {
     return id;
   }
