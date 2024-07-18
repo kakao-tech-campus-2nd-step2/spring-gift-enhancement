@@ -1,6 +1,7 @@
 package gift.service.product;
 
 import gift.global.validate.NotFoundException;
+import gift.model.product.Options;
 import gift.model.product.Product;
 import gift.repository.product.OptionRepository;
 import gift.repository.product.ProductRepository;
@@ -24,7 +25,10 @@ public class OptionService {
     public OptionModel.Info createOption(Long productId, OptionCommand.Register command) {
         var product = productRepository.findById(productId)
             .orElseThrow(() -> new NotFoundException("Product not found"));
-        var option = optionRepository.save(command.toEntity(product));
+        var option = command.toEntity(product);
+        Options options = new Options(optionRepository.findByProductId(productId));
+        options.validateUniqueName(option);
+        optionRepository.save(option);
         return OptionModel.Info.from(option);
     }
 
@@ -35,9 +39,16 @@ public class OptionService {
     }
 
     @Transactional
-    public OptionModel.Info updateOption(Long optionId, OptionCommand.Update command) {
+    public OptionModel.Info updateOption(Long optionId, Long productId,
+        OptionCommand.Update command) {
         var option = optionRepository.findById(optionId)
             .orElseThrow(() -> new NotFoundException("Option not found"));
+        //수정한 이름과 원래 이름이 같음
+        if (option.isSameName(command.name())) {
+            return OptionModel.Info.from(option);
+        }
+        var options = new Options(optionRepository.findByProductId(productId));
+        options.validateUniqueName(option);
         option.update(command.name(), command.quantity());
         return OptionModel.Info.from(option);
     }
