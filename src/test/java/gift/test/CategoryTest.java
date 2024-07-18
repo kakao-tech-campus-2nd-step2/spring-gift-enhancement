@@ -3,7 +3,7 @@ package gift.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -14,12 +14,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import gift.controller.CategoryController;
-import gift.model.Category;
+import gift.entity.Category;
 import gift.service.CategoryService;
 
 public class CategoryTest {
@@ -54,20 +53,18 @@ public class CategoryTest {
 	
 	@Test
 	public void testAddCategory() {
-		when(categoryService.createCategory(any(Category.class), any(BindingResult.class))).thenReturn(category);
-		ResponseEntity<Category> response = categoryController.addCategory(category, bindingResult);
+		doNothing().when(categoryService).createCategory(any(Category.class), any(BindingResult.class));
+		ResponseEntity<Void> response = categoryController.addCategory(category, bindingResult);
 		
-		assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.CREATED.value());
-		assertThat(response.getBody()).isEqualTo(category);
+		assertThat(response.getStatusCodeValue()).isEqualTo(201);
 	}
 	
 	@Test
 	public void testUpdateCategory() {
-		doReturn(null).when(categoryService).updateCategory(eq(1L), any(Category.class), any(BindingResult.class));
+		doNothing().when(categoryService).updateCategory(eq(1L), any(Category.class), any(BindingResult.class));
 		
-		ResponseEntity<String> response = categoryController.updateCategory(1L, category, bindingResult);
+		ResponseEntity<Void> response = categoryController.updateCategory(1L, category, bindingResult);
 	
-		assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
-		assertThat(response.getBody()).isEqualTo("Category updated successfully.");
+		assertThat(response.getStatusCodeValue()).isEqualTo(200);
 	}
 }

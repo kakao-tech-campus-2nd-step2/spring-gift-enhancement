@@ -2,7 +2,6 @@ package gift.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -21,10 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import gift.controller.WishlistController;
-import gift.model.Category;
-import gift.model.Product;
-import gift.model.User;
-import gift.model.Wishlist;
+import gift.entity.Category;
+import gift.entity.Product;
+import gift.entity.User;
+import gift.entity.Wishlist;
 import gift.service.WishlistService;
 
 public class WishlistTest {
@@ -71,26 +70,23 @@ public class WishlistTest {
 
     @Test
     public void testAddWishlist() {
-        ResponseEntity<String> response = wishlistController.addWishlist("Bearer token", wishlist, bindingResult);
+        ResponseEntity<Void> response = wishlistController.addWishlist("Bearer token", wishlist, bindingResult);
 
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).isEqualTo("Product added to wishlist successfully.");
+        assertThat(response.getStatusCodeValue()).isEqualTo(201);
     }
 
     @Test
     public void testRemoveWishlist() {
-        ResponseEntity<String> response = wishlistController.removeWishlist("Bearer token", wishlist, bindingResult);
+        ResponseEntity<Void> response = wishlistController.removeWishlist("Bearer token", wishlist, bindingResult);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).isEqualTo("Product removed from wishlist successfully.");
     }
 
     @Test
     public void testUpdateWishlist() {
         wishlist.setQuantity(10);
-        ResponseEntity<String> response = wishlistController.updateWishlist("Bearer token", wishlist, bindingResult);
+        ResponseEntity<Void> response = wishlistController.updateWishlist("Bearer token", wishlist, bindingResult);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).isEqualTo("Product quantity updated successfully.");
     }
 }

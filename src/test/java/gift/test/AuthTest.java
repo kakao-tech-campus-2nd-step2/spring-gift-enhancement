@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import gift.controller.AuthController;
-import gift.model.User;
+import gift.entity.User;
 import gift.service.AuthService;
 
 public class AuthTest {
@@ -42,10 +42,9 @@ public class AuthTest {
 	@Test
     public void testRegister() {
         doNothing().when(authService).createUser(any(User.class), any(BindingResult.class));
-        ResponseEntity<String> response = authController.register(user, bindingResult);
+        ResponseEntity<Void> response = authController.register(user, bindingResult);
         
-        assertThat(response.getBody()).isEqualTo("User registered successfully.");
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getStatusCodeValue()).isEqualTo(201);
     }
 	
 	@Test

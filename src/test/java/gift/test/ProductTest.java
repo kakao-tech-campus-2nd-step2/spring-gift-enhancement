@@ -21,8 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import gift.controller.ProductController;
-import gift.model.Category;
-import gift.model.Product;
+import gift.entity.Category;
+import gift.entity.Product;
 import gift.service.ProductService;
 
 public class ProductTest {
@@ -72,31 +72,28 @@ public class ProductTest {
 
     @Test
     public void testAddProduct() {
-        when(productService.createProduct(any(Product.class), any(BindingResult.class))).thenReturn(product);
+    	doNothing().when(productService).createProduct(any(Product.class), any(BindingResult.class));
 
-        ResponseEntity<Product> response = (ResponseEntity<Product>) productController.addProduct(product, bindingResult);
+        ResponseEntity<Void> response = productController.addProduct(product, bindingResult);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(201);
-        assertThat(response.getBody()).isEqualTo(product);
     }
 
     @Test
     public void testUpdateProduct() {
         doNothing().when(productService).updateProduct(eq(1L), any(Product.class), any(BindingResult.class));
 
-        ResponseEntity<String> response = productController.updateProduct(1L, product, bindingResult);
+        ResponseEntity<Void> response = productController.updateProduct(1L, product, bindingResult);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).isEqualTo("Product updated successfylly.");
     }
 
     @Test
     public void testDeleteProduct() {
         doNothing().when(productService).deleteProduct(1L);
 
-        ResponseEntity<String> response = productController.deleteProduct(1L);
+        ResponseEntity<Void> response = productController.deleteProduct(1L);
 
-        assertThat(response.getStatusCodeValue()).isEqualTo(204);
-        assertThat(response.getBody()).isEqualTo("Product deleted successfully.");
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
 }
