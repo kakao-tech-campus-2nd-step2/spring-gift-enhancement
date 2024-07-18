@@ -1,7 +1,9 @@
 package gift.controller.admin;
 
+import gift.DTO.category.CategoryResponse;
 import gift.DTO.product.ProductResponse;
 import gift.DTO.product.ProductRequest;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -19,9 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminViewController {
 
     private final ProductService productService;
-
-    public AdminViewController(ProductService productService) {
+    private final CategoryService categoryService;
+    public AdminViewController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -42,25 +45,27 @@ public class AdminViewController {
     @GetMapping("/product/add")
     public String showProductAddForm(Model model) {
         model.addAttribute("product", new ProductRequest());
+        List<CategoryResponse> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "productAddForm";
     }
 
     @PostMapping("/product/add")
     public String saveProduct(
         @ModelAttribute @Valid ProductRequest newProduct,
-        BindingResult bindingResult
-    ) {
-        if (bindingResult.hasErrors()) {
-            return "productAddForm";
-        }
+        BindingResult bindingResult,
+        Model model
+     ) {
         productService.addProduct(newProduct);
         return "redirect:/admin";
     }
 
     @GetMapping("/product/edit/{id}")
-    public String showProductForm(@PathVariable Long id, Model model) {
+    public String showProductEditForm(@PathVariable Long id, Model model) {
         try {
             model.addAttribute("product", productService.getProductById(id));
+            List<CategoryResponse> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
         } catch (RuntimeException e) {
             return "redirect:/admin";
         }
@@ -69,16 +74,24 @@ public class AdminViewController {
     }
 
     @PostMapping("/product/edit/{id}")
-    public String showProductForm(
+    public String updateProduct(
+        @PathVariable Long id,
         @ModelAttribute @Valid ProductRequest updateProduct,
+        BindingResult bindingResult,
         Model model
     ) {
-        try {
-            model.addAttribute("product", updateProduct);
-        } catch (RuntimeException e) {
+        if (bindingResult.hasErrors()) {
+            // 에러 메시지 콘솔에 출력
+            bindingResult.getAllErrors().forEach(error -> {
+                System.out.println(error.getObjectName() + " - " + error.getDefaultMessage());
+            });
+
+            model.addAttribute("product", productService.getProductById(id));
+            List<CategoryResponse> categories = categoryService.getAllCategories();
+            model.addAttribute("categories", categories);
             return "productEditForm";
         }
-
+        productService.updateProduct(id, updateProduct);
         return "redirect:/admin";
     }
 
