@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.context.ActiveProfiles;
@@ -31,7 +30,7 @@ public class OptionTest {
         // then
         assertAll(
             () -> assertThat(option.getName()).isEqualTo(testName),
-            () -> assertThat(option.getCount()).isEqualTo(count)
+            () -> assertThat(option.getQuantity()).isEqualTo(count)
         );
     }
 
