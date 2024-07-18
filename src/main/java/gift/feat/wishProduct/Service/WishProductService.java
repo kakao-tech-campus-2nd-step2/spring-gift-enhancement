@@ -22,7 +22,6 @@ public class WishProductService {
 	private final ProductJpaRepository productJpaRepository;
 	private final UserJpaRepository userJpaRepository;
 
-	@Autowired
 	public WishProductService(WishProductJpaRepository wishProductJpaRepository,
 		ProductJpaRepository productJpaRepository,
 		UserJpaRepository userJpaRepository) {
