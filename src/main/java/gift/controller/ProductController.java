@@ -1,21 +1,27 @@
 package gift.controller;
 
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @GetMapping
@@ -42,6 +48,11 @@ public class ProductController {
     @DeleteMapping("/{productId}")
     public ResponseEntity<String> deleteProduct(@PathVariable("productId") Long productId) {
         return ResponseEntity.ok(productService.deleteProduct(productId));
+    }
+
+    @GetMapping("/{productId}/options")
+    public ResponseEntity<List<Option>> getOptions(@PathVariable("productId") Long productId) {
+        return ResponseEntity.ok(optionService.getOptions(productId));
     }
 
 }
