@@ -3,6 +3,7 @@ package gift.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.LoginRequest;
 import gift.dto.ProductCategoryRequest;
+import gift.service.ProductCategoryService;
 import gift.service.auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +28,8 @@ class ProductCategoryControllerTest {
     private ObjectMapper objectMapper;
     @Autowired
     private AuthService authService;
+    @Autowired
+    private ProductCategoryService productCategoryService;
     private String memberToken;
 
     @BeforeEach
@@ -97,6 +100,26 @@ class ProductCategoryControllerTest {
     }
 
     @Test
+    @DisplayName("카테고리는 중복되면 안된다.")
+    void failCategoryAddWithDuplicatedCategory() throws Exception {
+        //given
+        var productCategoryRequest = new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
+        var productCategory = productCategoryService.addCategory(productCategoryRequest);
+
+        var postRequest = post("/api/categories/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(productCategoryRequest));
+        //when
+        var result = mockMvc.perform(postRequest);
+        //then
+        result.andExpect(status().isConflict())
+                .andExpect(content().string("이미 존재하는 이름입니다."));
+
+        deleteCategory(productCategory.id());
+    }
+
+    @Test
     @DisplayName("정상 상품 카테고리 생성")
     void successCategoryAdd() throws Exception {
         //given
@@ -107,6 +130,14 @@ class ProductCategoryControllerTest {
         //when
         var result = mockMvc.perform(postRequest);
         //then
-        result.andExpect(status().isCreated());
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        var location = createdResult.getResponse().getHeader("Location");
+        var categoryId = location.replaceAll("/api/categories/", "");
+        deleteCategory(Long.parseLong(categoryId));
+    }
+
+    private void deleteCategory(Long id) {
+        productCategoryService.deleteCategory(id);
     }
 }

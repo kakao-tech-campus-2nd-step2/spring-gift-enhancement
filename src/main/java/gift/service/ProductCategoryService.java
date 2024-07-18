@@ -2,7 +2,7 @@ package gift.service;
 
 import gift.dto.ProductCategoryRequest;
 import gift.dto.ProductCategoryResponse;
-import gift.exception.DuplicatedEmailException;
+import gift.exception.DuplicatedNameException;
 import gift.exception.NotFoundElementException;
 import gift.model.ProductCategory;
 import gift.repository.ProductCategoryRepository;
@@ -69,7 +69,7 @@ public class ProductCategoryService {
 
     private void categoryNameValidation(String name) {
         if (productCategoryRepository.existsByName(name)) {
-            throw new DuplicatedEmailException("이미 존재하는 이메일입니다.");
+            throw new DuplicatedNameException("이미 존재하는 카테고리 이름입니다.");
         }
     }
 }

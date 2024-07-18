@@ -68,8 +68,7 @@ class ProductOptionControllerTest {
 
         var location = createdResult.getResponse().getHeader("Location");
         var optionId = location.replaceAll("/api/options/", "");
-
-        productOptionService.deleteOption(Long.parseLong(optionId));
+        deleteOption(Long.parseLong(optionId));
     }
 
     @Test
@@ -83,5 +82,9 @@ class ProductOptionControllerTest {
         var result = mockMvc.perform(postRequest);
         //then
         result.andExpect(status().isNotFound());
+    }
+
+    private void deleteOption(Long id) {
+        productOptionService.deleteOption(id);
     }
 }

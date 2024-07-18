@@ -138,8 +138,7 @@ class ProductControllerTest {
 
         var location = createdResult.getResponse().getHeader("Location");
         var productId = location.replaceAll("/api/products/", "");
-
-        productService.deleteProduct(Long.parseLong(productId));
+        deleteProduct(Long.parseLong(productId));
     }
 
     @Test
@@ -191,9 +190,7 @@ class ProductControllerTest {
         });
         Assertions.assertThat(productResponseList.size()).isEqualTo(4);
 
-        for (var product : productResponseList) {
-            productService.deleteProduct(product.id());
-        }
+        deleteProducts(productResponseList);
     }
 
     @Test
@@ -220,5 +217,15 @@ class ProductControllerTest {
         var getResult = mockMvc.perform(getRequest);
         //then
         getResult.andExpect(status().isBadRequest());
+    }
+
+    private void deleteProduct(Long id) {
+        productService.deleteProduct(id);
+    }
+
+    private void deleteProducts(List<ProductResponse> productResponseList) {
+        for (var product : productResponseList) {
+            productService.deleteProduct(product.id());
+        }
     }
 }
