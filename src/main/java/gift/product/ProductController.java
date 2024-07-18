@@ -31,15 +31,12 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<PageResponseDto<ProductResponseDto>> getAllProducts(
         @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok()
-            .body(
-                PageResponseDto.of(productService.getAllProducts(pageable).getContent(), pageable));
+        return ResponseEntity.ok(PageResponseDto.of(productService.getAllProducts(pageable).getContent(), pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> getProduct(@PathVariable("id") Long id) {
-        return ResponseEntity.ok()
-            .body(productService.getProductById(id));
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PostMapping

@@ -31,14 +31,12 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<PageResponseDto<CategoryResponseDto>> getAllCategories(
         @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok()
-            .body(PageResponseDto.of(categoryService.getAllCategories(pageable), pageable));
+        return ResponseEntity.ok(PageResponseDto.of(categoryService.getAllCategories(pageable), pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponseDto> getCategory(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok()
-            .body(categoryService.getCategoryById(id));
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @PostMapping
