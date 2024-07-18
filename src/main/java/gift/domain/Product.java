@@ -24,6 +24,8 @@ public class Product {
     private Category category;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
 
     public void addWish(Wish wish) {
         this.wishes.add(wish);
@@ -41,6 +43,26 @@ public class Product {
         while(iterator.hasNext()) {
             Wish wish = iterator.next();
             wish.setProduct(null);
+            iterator.remove();
+        }
+    }
+
+    public void addOption(Option option) {
+        this.options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOption(Option option) {
+        option.setProduct(null);
+        this.options.remove(option);
+    }
+
+    public void removeOptions() {
+        Iterator<Option> iterator = options.iterator();
+
+        while(iterator.hasNext()){
+            Option option = iterator.next();
+            option.setProduct(null);
             iterator.remove();
         }
     }
@@ -96,6 +118,10 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     public void setCategory(Category category) {
