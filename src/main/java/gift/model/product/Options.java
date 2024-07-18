@@ -12,10 +12,8 @@ public class Options {
         this.options = new ArrayList<>(options);
     }
 
-    private static void validateOptions(List<Option> options) {
-        if (options.stream().map(Option::getName).distinct().count() != options.size()) {
-            throw new IllegalArgumentException("Option name already exists");
-        }
+    public boolean isDeletePossible() {
+        return options.size() > 1;
     }
 
     public void validateUniqueName(Option option) {
@@ -25,6 +23,12 @@ public class Options {
             }
         }
         if (options.stream().anyMatch(o -> o.isSameName(option.getName()))) {
+            throw new IllegalArgumentException("Option name already exists");
+        }
+    }
+
+    private static void validateOptions(List<Option> options) {
+        if (options.stream().map(Option::getName).distinct().count() != options.size()) {
             throw new IllegalArgumentException("Option name already exists");
         }
     }
