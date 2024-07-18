@@ -1,12 +1,12 @@
 package gift.product.api;
 
+import gift.product.application.OptionService;
 import gift.product.application.ProductService;
 import gift.product.dto.OptionRequest;
 import gift.product.dto.OptionResponse;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,10 +25,12 @@ import java.util.Set;
 public class ProductController {
 
     private final ProductService productService;
+    private final OptionService optionService;
 
-    @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService,
+                             OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     // 상품 전체 조회
@@ -71,21 +73,21 @@ public class ProductController {
     // 상품 옵션 조회
     @GetMapping("/{id}/options")
     public Set<OptionResponse> getProductOptions(@PathVariable("id") Long id) {
-        return productService.getProductOptionsByIdOrThrow(id);
+        return optionService.getProductOptionsByIdOrThrow(id);
     }
 
     // 상품 옵션 추가
     @PostMapping ("/{id}/options")
     public OptionResponse addOptionToProduct(@PathVariable("id") Long id,
                                              @RequestBody @Valid OptionRequest request) {
-        return productService.addOptionToProduct(id, request);
+        return optionService.addOptionToProduct(id, request);
     }
 
     // 상품 옵션 삭제
     @DeleteMapping("/{id}/options")
     public void deleteOptionFromProduct(@PathVariable("id") Long id,
                                         @RequestBody @Valid OptionRequest request) {
-        productService.deleteOptionFromProduct(id, request);
+        optionService.deleteOptionFromProduct(id, request);
     }
 
 }
