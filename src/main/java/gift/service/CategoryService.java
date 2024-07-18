@@ -11,8 +11,10 @@ import gift.web.dto.response.category.UpdateCategoryResponse;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -21,6 +23,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    @Transactional
     public CreateCategoryResponse createCategory(CreateCategoryRequest request) {
         Category category = categoryRepository.save(request.toEntity());
         return CreateCategoryResponse.fromEntity(category);
@@ -39,6 +42,7 @@ public class CategoryService {
         return ReadCategoryResponse.fromEntity(category);
     }
 
+    @Transactional
     public UpdateCategoryResponse updateCategory(Long id, UpdateCategoryRequest request) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException(id + "에 해당하는 카테고리가 없습니다."));
@@ -46,6 +50,7 @@ public class CategoryService {
         return UpdateCategoryResponse.fromEntity(category);
     }
 
+    @Transactional
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
     }
