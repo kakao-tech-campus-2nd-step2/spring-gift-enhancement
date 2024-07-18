@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import gift.product.business.dto.CategoryRegisterDto;
 import gift.product.business.service.CategoryService;
@@ -31,8 +33,9 @@ public class CategoryServiceTest {
 
     @BeforeAll
     static void setCategory() {
-        category = new Category("name");
-        setPrivateField(category, "id", 1L);
+        category = mock(Category.class);
+        doReturn(1L).when(category).getId();
+        doReturn("name").when(category).getName();
     }
 
     @BeforeEach
@@ -89,8 +92,8 @@ public class CategoryServiceTest {
 
         // then
         then(categoryRepository).should().getCategory(1L);
+        then(category).should().setName("new name");
         then(categoryRepository).should().saveCategory(category);
-        assertThat(category.getName()).isEqualTo("new name");
     }
 
     @Test
@@ -105,15 +108,5 @@ public class CategoryServiceTest {
         // then
         then(categoryRepository).should().deleteCategory(1L);
         assertThat(id).isEqualTo(1L);
-    }
-
-    private static void setPrivateField(Object obj, String fieldName, Object value) {
-        try {
-            Field field = obj.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(obj, value);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 }
