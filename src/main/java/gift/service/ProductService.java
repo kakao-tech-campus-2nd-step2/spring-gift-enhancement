@@ -30,9 +30,9 @@ public class ProductService {
 
     @Transactional
     public void addProduct(ProductRequestDto requestDto) {
-        Category category = categoryRepository.findById(requestDto.getCategory())
+        Category category = categoryRepository.findById(requestDto.category())
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CATEGORY));
-        Product product = new Product(requestDto.getName(), requestDto.getPrice(), requestDto.getImgUrl(), category);
+        Product product = new Product(requestDto.name(), requestDto.price(), requestDto.imgUrl(), category);
         productRepository.save(product);
     }
 
