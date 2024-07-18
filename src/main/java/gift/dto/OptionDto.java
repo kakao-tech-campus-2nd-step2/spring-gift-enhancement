@@ -10,7 +10,6 @@ public class OptionDto {
     private String name;
     @Min(value = 1, message = "옵션 수량은 최소 1개 이상이어야 합니다.")
     @Max(value = 99999999, message = "옵션 수량은 1억 개 미만이어야 합니다.")
-    @NotBlank(message = "Option 수량은 필수값입니다.")
     private int quantity;
 
     public String getName() {
