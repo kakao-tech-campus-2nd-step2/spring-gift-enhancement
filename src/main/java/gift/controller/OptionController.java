@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.OptionDto;
 import gift.model.product.Option;
 import gift.service.OptionService;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +22,11 @@ public class OptionController {
     public ResponseEntity<List<Option>> getAllOptionsById(@PathVariable Long productId) {
         List<Option> options = optionService.getAllOptionsById(productId);
         return ResponseEntity.ok(options);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> addNewOption(@PathVariable Long productId, @RequestBody OptionDto optionDto) {
+        optionService.addNewOption(productId, optionDto);
+        return ResponseEntity.status(201).build();
     }
 }
