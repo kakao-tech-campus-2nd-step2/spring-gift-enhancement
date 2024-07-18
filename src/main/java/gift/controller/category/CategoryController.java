@@ -4,6 +4,7 @@ import gift.dto.category.CategoryRequest;
 import gift.dto.category.CategoryResponse;
 import gift.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable(name = "id") Long categoryId) {
         categoryService.deleteCategory(categoryId);
-        return ResponseEntity.ok(categoryId + "번 카테고리가 삭제되었습니다!");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(categoryId + "번 카테고리가 삭제되었습니다!");
     }
 
 }

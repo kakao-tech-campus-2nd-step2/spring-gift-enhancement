@@ -72,7 +72,7 @@ public class WishListController {
 
         }
         wishService.removeGiftFromUser(user.getId(), giftId);
-        return ResponseEntity.ok("카트에서 상품이 삭제되었습니다.");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("카트에서 상품이 삭제되었습니다.");
 
     }
 

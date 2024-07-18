@@ -5,6 +5,7 @@ import gift.dto.option.OptionResponse;
 import gift.service.option.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -47,8 +48,6 @@ public class OptionController {
     public ResponseEntity<String> deleteOptionFromGift(@PathVariable("giftId") Long giftId,
                                                        @PathVariable("optionId") Long optionId) {
         optionService.deleteOptionFromGift(giftId, optionId);
-        return ResponseEntity.status(200).body(giftId + "번 상품에서" + optionId + "번 옵션이 삭제되었습니다!");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(giftId + "번 상품에서" + optionId + "번 옵션이 삭제되었습니다!");
     }
-
-
 }
