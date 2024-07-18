@@ -17,3 +17,4 @@ public class OptionNameValidator implements ConstraintValidator<OptionName, Stri
 
         return value.matches(regex);
     }
+}
