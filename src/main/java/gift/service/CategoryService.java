@@ -22,10 +22,9 @@ public class CategoryService {
 
     @Transactional
     public void save(CategoryRequest categoryDto){
-        categoryRepository.findByName(categoryDto.name())
-                .ifPresent(e -> {
-                    throw new DuplicateCategoryNameException(Messages.CATEGORY_NAME_ALREADY_EXISTS);
-                });
+        if(categoryRepository.existsByName(categoryDto.name())){
+            throw new DuplicateCategoryNameException(Messages.CATEGORY_NAME_ALREADY_EXISTS);
+        }
         categoryRepository.save(categoryDto.toEntity());
     }
 
