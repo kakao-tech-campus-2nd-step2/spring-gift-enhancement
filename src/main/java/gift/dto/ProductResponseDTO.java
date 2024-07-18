@@ -17,8 +17,6 @@ public class ProductResponseDTO {
         this.categoryId = categoryId;
     }
 
-
-
     public ProductRequestDTO toRequestDTO() {
         ProductRequestDTO dto = new ProductRequestDTO();
         dto.setId(this.id);
