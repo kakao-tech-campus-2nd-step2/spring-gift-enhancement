@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
     static final String NOT_FOUND_MESSAGE = "존재하지 않는 리소스에 대한 접근입니다.";
     static final String INVALID_PRODUCT_NAME_WITH_KAKAO_MESSAGE = "카카오가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.";
     static final String DUPLICATED_EMAIL_MESSAGE = "이미 존재하는 이메일입니다.";
+    static final String DUPLICATED_NAME_MESSAGE = "이미 존재하는 이름입니다.";
     static final String INVALID_LOGIN_INFO_MESSAGE = "로그인 정보가 유효하지 않습니다.";
     static final String INVALID_PAGE_REQUEST_MESSAGE = "요청에 담긴 페이지 정보가 유효하지 않습니다.";
     static final String UNAUTHORIZED_ACCESS_MESSAGE = "인가되지 않은 요청입니다.";
@@ -34,6 +35,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = DuplicatedEmailException.class)
     public ResponseEntity<String> duplicatedEmailExceptionHandling() {
         return new ResponseEntity<>(DUPLICATED_EMAIL_MESSAGE, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = DuplicatedNameException.class)
+    public ResponseEntity<String> duplicatedNameExceptionHandling() {
+        return new ResponseEntity<>(DUPLICATED_NAME_MESSAGE, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = InvalidPageRequestException.class)

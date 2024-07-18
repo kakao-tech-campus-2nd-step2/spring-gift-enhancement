@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.ProductCategoryRequest;
 import gift.dto.ProductCategoryResponse;
+import gift.exception.DuplicatedEmailException;
 import gift.exception.NotFoundElementException;
 import gift.model.ProductCategory;
 import gift.repository.ProductCategoryRepository;
@@ -22,11 +23,13 @@ public class ProductCategoryService {
     }
 
     public ProductCategoryResponse addCategory(ProductCategoryRequest productCategoryRequest) {
+        categoryNameValidation(productCategoryRequest.name());
         var productCategory = saveCategoryWithCategoryRequest(productCategoryRequest);
         return getCategoryResponseFromCategory(productCategory);
     }
 
     public void updateCategory(Long id, ProductCategoryRequest productCategoryRequest) {
+        categoryNameValidation(productCategoryRequest.name());
         var productCategory = findCategoryById(id);
         productCategory.updateCategory(productCategoryRequest.name(), productCategoryRequest.description(), productCategoryRequest.color(), productCategoryRequest.imageUrl());
         productCategoryRepository.save(productCategory);
@@ -62,5 +65,11 @@ public class ProductCategoryService {
     private ProductCategory findCategoryById(Long id) {
         return productCategoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품 카테고리가 존재하지 않습니다."));
+    }
+
+    private void categoryNameValidation(String name) {
+        if (productCategoryRepository.existsByName(name)) {
+            throw new DuplicatedEmailException("이미 존재하는 이메일입니다.");
+        }
     }
 }
