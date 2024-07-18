@@ -1,5 +1,6 @@
 package gift.product;
 
+import gift.product.exception.CannotDeleteOnlyOneOptionException;
 import gift.product.exception.LoginFailedException;
 import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = LoginFailedException.class)
     public ProblemDetail handleLoginFailedException(LoginFailedException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, e.getMessage());
+    }
+
+    @ExceptionHandler(value = CannotDeleteOnlyOneOptionException.class)
+    public ProblemDetail handleCannotDeleteOnlyOneOptionException(CannotDeleteOnlyOneOptionException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     private String buildErrorMessage(MethodArgumentNotValidException e) {

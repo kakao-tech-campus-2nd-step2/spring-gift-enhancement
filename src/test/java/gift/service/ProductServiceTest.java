@@ -145,11 +145,11 @@ class ProductServiceTest {
         //given
         categoryRepository.save(new Category("테스트카테고리1"));
 
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
-        productService.insertProduct(productDTO);
+        ClientProductDto productDto = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
+        productService.insertProduct(productDto);
 
-        productDTO = new ClientProductDto("바나나", 1500, "사진링크2", "테스트카테고리1");
-        Product product = productService.insertProduct(productDTO);
+        productDto = new ClientProductDto("바나나", 1500, "사진링크2", "테스트카테고리1");
+        Product product = productService.insertProduct(productDto);
 
         //when
         productService.deleteProduct(product.getId());

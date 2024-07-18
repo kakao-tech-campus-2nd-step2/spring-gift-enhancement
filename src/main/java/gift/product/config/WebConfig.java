@@ -39,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public ProductService productService() {
-        return new ProductService(productRepository, categoryRepository);
+        return new ProductService(productRepository, categoryRepository, optionRepository);
     }
 
     @Bean

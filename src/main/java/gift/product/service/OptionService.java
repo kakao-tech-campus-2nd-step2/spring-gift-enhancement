@@ -2,6 +2,7 @@ package gift.product.service;
 
 import gift.product.dto.OptionDto;
 import gift.product.dto.OptionResponse;
+import gift.product.exception.CannotDeleteOnlyOneOptionException;
 import gift.product.model.Option;
 import gift.product.model.Product;
 import gift.product.repository.OptionRepository;
@@ -52,7 +53,8 @@ public class OptionService {
 
     @Transactional
     public void deleteOption(Long id) {
-        getValidatedOption(id);
+        Option option = getValidatedOption(id);
+        validateOptionOnlyOne(option);
         optionRepository.deleteById(id);
     }
 
@@ -69,6 +71,12 @@ public class OptionService {
     private void validateRedundancyOptionName(String optionName, Long productId) {
         if (optionRepository.existsByNameAndProductId(optionName, productId)) {
             throw new IllegalArgumentException("해당 상품에 이미 존재하는 옵션입니다.");
+        }
+    }
+
+    private void validateOptionOnlyOne(Option option) {
+        if (optionRepository.findAllByProductId(option.getProduct().getId()).size() == 1) {
+            throw new CannotDeleteOnlyOneOptionException("상품에는 최소 하나 이상의 옵션이 존재해야 합니다.");
         }
     }
 }
