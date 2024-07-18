@@ -39,25 +39,24 @@ public class OptionController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addOption(@Valid @RequestBody Option option) {
-        optionService.addCategory(option);
+    public ResponseEntity<?> addOption(
+        @PathVariable("product_id") Long productId,
+        @Valid @RequestBody Option option) {
+        optionService.addOption(productId, option);
         return ResponseEntity.status(HttpStatus.CREATED).body("Option added");
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateOption(
-        @PathVariable("product_id") Long productId,
         @PathVariable("id") Long id,
         @Valid @RequestBody Option option) {
-        optionService.updateCategory(id, option);
+        optionService.updateOption(id, option);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOption(
-            @PathVariable("product_id") Long productId,
-            @PathVariable("id") Long id) {
-        optionService.deleteCategory(productId, id);
+    public ResponseEntity<?> deleteOption(@PathVariable("id") Long id) {
+        optionService.deleteOption(id);
         return ResponseEntity.ok().build();
     }
 
