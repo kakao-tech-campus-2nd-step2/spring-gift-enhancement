@@ -1,9 +1,12 @@
 package gift.product.controller;
 
+import gift.option.domain.Option;
+import gift.option.repository.OptionRepository;
 import gift.product.domain.Product;
 import gift.product.domain.ProductDTO;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,9 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final OptionRepository optionRepository;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, OptionRepository optionRepository) {
         this.productService = productService;
+        this.optionRepository = optionRepository;
     }
 
     @GetMapping("")
@@ -68,5 +73,10 @@ public class ProductController {
         }
         productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("{id}/options")
+    public ResponseEntity<List<Option>> getOptionList(@PathVariable Long id){
+        return new ResponseEntity<>(optionRepository.findAllByProductId(id),HttpStatus.OK);
     }
 }
