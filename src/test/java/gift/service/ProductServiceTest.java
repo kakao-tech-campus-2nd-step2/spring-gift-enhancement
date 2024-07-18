@@ -1,5 +1,6 @@
 package gift.service;
 
+import static gift.util.CategoryFixture.createCategory;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -34,7 +35,7 @@ public class ProductServiceTest {
 
     @BeforeEach
     void setup() {
-        category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
+        category = createCategory();
     }
 
     @DisplayName("상품 추가")

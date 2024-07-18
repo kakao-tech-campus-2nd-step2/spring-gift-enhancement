@@ -1,5 +1,6 @@
 package gift.service;
 
+import static gift.util.CategoryFixture.createCategory;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -27,11 +28,13 @@ public class CategoryServiceTest {
     @InjectMocks
     private CategoryService categoryService;
 
+    private Long id;
     private Category category;
 
     @BeforeEach
     void setup() {
-        category = new Category(1L, "test", "#FFFFFF", "testImageUrl", "test");
+        id = 1L;
+        category = createCategory(id, "test");
     }
 
     @DisplayName("카테고리 추가")
@@ -54,7 +57,7 @@ public class CategoryServiceTest {
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
 
         // when
-        CategoryDTO actual = categoryService.getCategory(1L);
+        CategoryDTO actual = categoryService.getCategory(id);
 
         // then
         assertThat(actual).isEqualTo(category.toDTO());
@@ -64,13 +67,12 @@ public class CategoryServiceTest {
     @Test
     void updateProduct() {
         // given
-        Category updatedCategory = new Category(1L, "updatedTest", "#000000", "updatedTestImageUrl",
-            "updatedTest");
+        Category updatedCategory = createCategory(id, "updatedTest");
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
         given(categoryRepository.save(any(Category.class))).willReturn(updatedCategory);
 
         // when
-        CategoryDTO actual = categoryService.updateCategory(1L, updatedCategory.toDTO());
+        CategoryDTO actual = categoryService.updateCategory(id, updatedCategory.toDTO());
 
         // then
         assertThat(actual).isEqualTo(updatedCategory.toDTO());
@@ -83,7 +85,7 @@ public class CategoryServiceTest {
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
 
         // when
-        categoryService.deleteCategory(1L);
+        categoryService.deleteCategory(id);
 
         // then
         then(categoryRepository).should().delete(any(Category.class));
