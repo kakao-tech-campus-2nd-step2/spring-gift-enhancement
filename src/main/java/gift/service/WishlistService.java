@@ -1,7 +1,5 @@
 package gift.service;
 
-import gift.repository.MemberRepository;
-import gift.repository.ProductRepository;
 import gift.repository.WishlistRepository;
 import gift.vo.Member;
 import gift.vo.Product;
