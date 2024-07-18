@@ -10,7 +10,8 @@ public class WishlistId implements Serializable {
     private long userId;
     private long productId;
 
-    protected WishlistId() {}
+    protected WishlistId() {
+    }
 
     public WishlistId(long userId, long productId) {
         this.userId = userId;
