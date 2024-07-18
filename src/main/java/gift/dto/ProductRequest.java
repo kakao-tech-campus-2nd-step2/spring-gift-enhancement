@@ -13,7 +13,7 @@ public record ProductRequest(Long id,
                              String name,
                              int price,
                              @NotBlank
-                             @Pattern(regexp = "^https", message = "이미지 주소가 적절하지 않습니다.")
+                             @Pattern(regexp = "^https://.*$", message = "이미지 주소가 적절하지 않습니다.")
                              String imageUrl,
                              @NotNull
                              Long categoryId
