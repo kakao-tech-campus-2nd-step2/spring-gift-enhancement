@@ -2,6 +2,7 @@ package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+import gift.dto.product.ModifyProductDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -83,9 +84,16 @@ public class Product {
     public void addOptions(Option option) {
         options.add(option);
     }
+    public void deleteOption(Option option) {
+        options.remove(option);
+    }
     public void setCategory(Category category) {
         this.category = category;
     }
 
-
+    public void modifyProduct(ModifyProductDTO modifyProductDTO) {
+        this.name = modifyProductDTO.name();
+        this.price = modifyProductDTO.price();
+        this.imageUrl = modifyProductDTO.imageUrl();
+    }
 }

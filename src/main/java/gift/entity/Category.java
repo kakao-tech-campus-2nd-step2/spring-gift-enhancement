@@ -48,4 +48,8 @@ public class Category {
     public void deleteProduct(Product product) {
         this.products.remove(product);
     }
+
+    public void updateCategoryName(String name) {
+        this.name = name;
+    }
 }

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
@@ -65,10 +66,7 @@ public class ProductService {
         optionList.stream()
                 .map(str -> new Option(product, str))
                 .filter(this::isValidOption)
-                .forEach(option -> {
-                    product.addOptions(option);
-                    optionRepository.save(option);
-                });
+                .forEach(option -> optionRepository.save(option));
     }
 
     private boolean isValidProduct(@Validated Product product,List<String> optionList){
@@ -108,10 +106,10 @@ public class ProductService {
         return jsonProduct;
     }
 
-    public void modifyProduct(ModifyProductDTO product) {
-        if(productRepository.findById(product.id()).isEmpty())
-            throw new NotFoundException("물건이 없습니다.");
-        productRepository.updateProductById(product.id(), product.name(),product.price(),product.imageUrl());
+    @Transactional
+    public void modifyProduct(ModifyProductDTO modifyProductDTO) {
+        Product product = productRepository.findById(modifyProductDTO.id()).orElseThrow(()-> new NotFoundException("물건이 없습니다."));
+        product.modifyProduct(modifyProductDTO);
     }
 
 }

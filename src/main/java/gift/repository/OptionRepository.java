@@ -15,13 +15,4 @@ public interface OptionRepository extends JpaRepository<Option, Integer> {
     @Query("SELECT new gift.dto.product.ProductWithOptionDTO(p.id, p.name , p.price , p.imageUrl , o.option, p.category.name) FROM Product p join Option o ON p.id = o.product.id")
     Page<ProductWithOptionDTO> findAllWithOption(Pageable pageable);
 
-    @Modifying
-    @Transactional
-    @Query("update Option o set o.quantity = o.quantity + :quantity where o.id= :option_id")
-    void refill(@Param("option_id")int option_id, @Param("quantity") int quantity);
-
-    @Modifying
-    @Transactional
-    @Query("update Option o set o.quantity = o.quantity - :quantity where o.id= :option_id")
-    void order(@Param("option_id")int option_id, @Param("quantity") int quantity);
 }

@@ -17,9 +17,4 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("select new gift.dto.product.ShowProductDTO(p.id, p.name, p.price, p.imageUrl, p.category.name) from Product p ")
     Page<ShowProductDTO> findAllProduct(Pageable pageable);
-
-    @Modifying
-    @Transactional
-    @Query("update Product p set p.name = :name, p.price =:price, p.imageUrl=:image where p.id = :id")
-    void updateProductById(@Param("id")int id, @Param("name")String name, @Param("price")int price, @Param("image")String image);
 }

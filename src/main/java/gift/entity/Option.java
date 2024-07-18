@@ -2,10 +2,9 @@ package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-import java.io.Serializable;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @Entity
@@ -19,14 +18,19 @@ public class Option {
     Product product;
 
     @Pattern(regexp = "^[a-zA-Z0-9()\\[\\]+\\-&/_]+$", message = "특수기호 안됨")
-    @Size(max=50)
+
     String option;
 
-    @Size(min=0)
+    @Min(0)
     int quantity;
+
+    public Product getProduct() {
+        return product;
+    }
 
     public Option(Product product, String option) {
         this.product = product;
+        product.addOptions(this);
         this.option = option;
         this.quantity=0;
     }
@@ -52,5 +56,10 @@ public class Option {
 
     public void subQuantity(int num){
         this.quantity -= num;
+    }
+
+    public Option changeOption(String option) {
+        this.option = option;
+        return this;
     }
 }

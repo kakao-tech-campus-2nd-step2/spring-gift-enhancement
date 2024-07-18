@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.category.ShowCategoryDTO;
+import gift.dto.category.CategoryDTO;
 import gift.entity.Category;
 import gift.exception.exception.BadRequestException;
 import gift.exception.exception.NotFoundException;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -24,10 +25,11 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public void update(Category category) {
-        if(categoryRepository.findById(category.getId()).isEmpty())
-            throw new NotFoundException("존재하지 않는 카테고리입니다.");
-        categoryRepository.updateCategoryName(category.getId(), category.getName());
+    @Transactional
+    public void update(CategoryDTO categoryDTO) {
+        Category category =categoryRepository.findById(categoryDTO.id()).orElseThrow(()->new NotFoundException("존재하지 않는 카테고리입니다."));
+        categoryRepository.findByName(categoryDTO.name()).ifPresent(c -> { throw new BadRequestException("이미 존재하는 카테고리"); });
+        category.updateCategoryName(categoryDTO.name());
     }
 
     public void delete(int categoryId) {
@@ -37,7 +39,7 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
 
-    public Page<ShowCategoryDTO> getCategory(Pageable pageable) {
+    public Page<CategoryDTO> getCategory(Pageable pageable) {
         return categoryRepository.findAllCategory(pageable);
     }
 }

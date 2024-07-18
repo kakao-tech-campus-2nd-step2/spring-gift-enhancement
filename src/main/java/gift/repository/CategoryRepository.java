@@ -1,6 +1,6 @@
 package gift.repository;
 
-import gift.dto.category.ShowCategoryDTO;
+import gift.dto.category.CategoryDTO;
 import gift.entity.Category;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -15,13 +15,8 @@ import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
+    @Query("select new gift.dto.category.CategoryDTO(c.id,c.name) from Category c")
+    Page<CategoryDTO> findAllCategory(Pageable pageable);
+
     Optional<Category> findByName(String name);
-
-    @Modifying
-    @Transactional
-    @Query("update Category c set c.name = :name where c.id = :id")
-    void updateCategoryName(@Param("id") int id, @Param("name") String name);
-
-    @Query("select new gift.dto.category.ShowCategoryDTO(c.id,c.name) from Category c")
-    Page<ShowCategoryDTO> findAllCategory(Pageable pageable);
 }
