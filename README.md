@@ -1,5 +1,11 @@
 # spring-gift-enhancement
 
+## 1단계 구현사항
+- 상품 카테고리 mvc 구현
+- add.html 상품 추가시 카테고리 지정할 수 있도록
+- 테스트코드 작성
+
+
 ## 현재 코드 구조
 ```plaintext
 └── src
@@ -9,6 +15,15 @@
         │       ├── Application.java
         │       ├── admin
         │       │   └── AdminController.java
+        │       ├── category
+        │       │   ├── controller
+        │       │   │    └── categoryController.java
+        │       │   ├── model
+        │       │   │    └── category.java
+        │       │   ├── repostitory
+        │       │   │    └── categoryRepository.java
+        │       │   └── service
+        │       │        └── categoryService.java        
         │       ├── exception
         │       │   ├── ForbiddenException.java
         │       │   ├── UnauthorizedException.java
