@@ -41,8 +41,6 @@ public class DataLoader {
         // Category
         Category ethiopia = jpaCategoryRepository.saveAndFlush(new Category("에티오피아산", "에티오피아 산 원두를 사용했습니다."));
         Category jamaica = jpaCategoryRepository.saveAndFlush(new Category("자메이카산", "자메이카산 원두를 사용했습니다."));
-        System.out.println("ethiopia = " + ethiopia);
-        System.out.println("jamaica = " + jamaica);
 
         // Product
         Product americano = new Product("아이스 아메리카노 T", ethiopia, 4500,
