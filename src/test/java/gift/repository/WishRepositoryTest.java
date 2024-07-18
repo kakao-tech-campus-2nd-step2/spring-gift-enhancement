@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.category.entity.Category;
 import gift.category.repository.CategoryRepository;
+
 import gift.product.entity.Product;
 import gift.product.repository.ProductRepository;
 import gift.user.entity.User;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 
 @DataJpaTest
 public class WishRepositoryTest {
@@ -41,6 +43,7 @@ public class WishRepositoryTest {
     return categoryRepository.save(category);
   }
 
+
   @BeforeEach
   public void setUp() {
     wishRepository.deleteAll();
@@ -56,6 +59,7 @@ public class WishRepositoryTest {
     product.setImageUrl(imageUrl);
     product.setCategory(category);
     return productRepository.save(product);
+
   }
 
   private User createAndSaveUser(String email, String password) {
@@ -64,6 +68,7 @@ public class WishRepositoryTest {
     user.setPassword(password);
     return userRepository.save(user);
   }
+
 
   private Wish createAndSaveWish(User user, Product product) {
     Wish wish = new Wish();
@@ -78,6 +83,7 @@ public class WishRepositoryTest {
     Category category = createAndSaveCategory("Beverages");
     User user = createAndSaveUser("test@example.com", "password");
     Product product = createAndSaveProduct("Test Product", 100, "http://example.com/image.jpg", category);
+
     Wish wish = createAndSaveWish(user, product);
 
     // when
@@ -113,6 +119,7 @@ public class WishRepositoryTest {
     Category category = createAndSaveCategory("Beverages");
     User user = createAndSaveUser("test2@example.com", "password");
     Product product = createAndSaveProduct("Test Product", 100, "http://example.com/image.jpg", category);
+
     createAndSaveWish(user, product);
 
     // when
@@ -129,6 +136,7 @@ public class WishRepositoryTest {
     Category category = createAndSaveCategory("Beverages");
     User user = createAndSaveUser("delete@example.com", "password");
     Product product = createAndSaveProduct("Test Product", 100, "http://example.com/image.jpg", category);
+
     Wish wish = createAndSaveWish(user, product);
     Long wishId = wish.getId();
 

@@ -1,5 +1,4 @@
 package gift.product.entity;
-
 import gift.category.entity.Category;
 import gift.product.dto.ProductDto;
 import jakarta.persistence.Column;

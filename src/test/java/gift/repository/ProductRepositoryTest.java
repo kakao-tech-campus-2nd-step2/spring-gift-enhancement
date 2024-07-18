@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.category.entity.Category;
 import gift.category.repository.CategoryRepository;
+
 import gift.product.entity.Product;
 import gift.product.repository.ProductRepository;
 import gift.wish.repository.WishRepository;
@@ -47,6 +48,7 @@ public class ProductRepositoryTest {
     product.setPrice(price);
     product.setImageUrl(imageUrl);
     product.setCategory(category);
+
     return productRepository.save(product);
   }
 
@@ -55,6 +57,7 @@ public class ProductRepositoryTest {
     // given
     Category category = createAndSaveCategory("Beverages");
     Product product = createAndSaveProduct("딸기 아사이", 5900, "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg", category);
+
 
     // when
     Optional<Product> foundProduct = productRepository.findById(product.getId());
@@ -67,6 +70,7 @@ public class ProductRepositoryTest {
       assertThat(p.getPrice()).isEqualTo(5900);
       assertThat(p.getImageUrl()).isEqualTo("https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg");
       assertThat(p.getCategory().getName()).isEqualTo("Beverages");
+
     });
   }
 
@@ -75,6 +79,7 @@ public class ProductRepositoryTest {
     // given
     Category category = createAndSaveCategory("Beverages");
     Product product = createAndSaveProduct("딸기 아사이", 5900, "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20231010111407_7fcb10e99eec4365af527f0bb3d27a0e.jpg", category);
+
 
     // when
     product.setName("바나나 스무디");

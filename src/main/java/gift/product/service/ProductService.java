@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class ProductService {
 
@@ -84,6 +85,7 @@ public class ProductService {
       validateProduct(productDto);
       Product savedProduct = productRepository.save(existingProduct);
       return ProductDto.toDto(savedProduct);
+
     } catch (Exception e) {
       throw new RuntimeException("상품을 업데이트하는 중에 오류가 발생했습니다.", e);
     }
@@ -92,6 +94,7 @@ public class ProductService {
   public void deleteProduct(long id) {
     try {
       wishRepository.deleteAllByProductId(id);
+
       productRepository.deleteById(id);
     } catch (Exception e) {
       throw new RuntimeException("ID가 " + id + "인 상품을 삭제하는 중에 오류가 발생했습니다.", e);
@@ -111,5 +114,6 @@ public class ProductService {
     if (productDto.getCategory() == null) {
       throw new IllegalArgumentException("상품 카테고리는 비어 있을 수 없습니다.");
     }
+
   }
 }

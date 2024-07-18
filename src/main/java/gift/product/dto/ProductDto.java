@@ -1,5 +1,4 @@
 package gift.product.dto;
-
 import gift.category.entity.Category;
 import gift.product.entity.Product;
 import jakarta.persistence.Column;
@@ -48,6 +47,7 @@ public class ProductDto {
   }
 
   public ProductDto(Long id, String name, int price, String imageUrl, Category category) {
+
     this.id = id;
     this.name = name;
     this.price = price;
@@ -56,6 +56,7 @@ public class ProductDto {
   }
 
   public static ProductDto toDto(Product product) {
+
     return new ProductDto(
         product.getId(),
         product.getName(),
@@ -72,6 +73,7 @@ public class ProductDto {
         productDto.getImageUrl(),
         productDto.getCategory()
     );
+
   }
 
 
