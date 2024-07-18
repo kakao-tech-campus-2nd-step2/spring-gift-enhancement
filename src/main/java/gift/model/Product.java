@@ -3,6 +3,7 @@ package gift.model;
 import gift.common.exception.DuplicateDataException;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,14 @@ public class Product extends BasicEntity{
         addOption(option);
     }
 
+    public Product(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, int price, String imageUrl, Category category) {
+        super(id, createdAt, updatedAt);
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
     public void updateProduct(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
@@ -47,6 +56,7 @@ public class Product extends BasicEntity{
             return;
         }
         checkDuplicateName(entity.getName());
+        entity.updateOptionByProduct(this);
         options.add(entity);
     }
 

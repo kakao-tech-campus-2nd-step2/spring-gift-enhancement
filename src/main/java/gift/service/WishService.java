@@ -33,7 +33,8 @@ public class WishService {
     public void update(Long id, UpdateWishRequest request, Long memberId) {
         Wish wish = wishRepository.findByIdFetchJoin(id)
                 .orElseThrow(() -> new EntityNotFoundException("Wish with id " + id + " Does not exist"));
-        wish.checkWishByProductIdAndMemberId(request.productId(), memberId);
+        wish.checkWishByMemberId(memberId);
+        wish.checkWishByProductId(request.productId());
         if (request.productCount() == 0) {
             deleteByProductId(request.productId(), memberId);
             return;

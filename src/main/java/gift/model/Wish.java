@@ -3,8 +3,6 @@ package gift.model;
 import gift.common.exception.EntityNotFoundException;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(indexes = @Index(name = "idx_wish_created_at", columnList = "created_at"))
 public class Wish extends BasicEntity{
@@ -22,13 +20,6 @@ public class Wish extends BasicEntity{
 
     protected Wish() {}
 
-    public Wish(Long id, Member member, int productCount, Product product, LocalDateTime createdAt, LocalDateTime updateAt) {
-        super(id, createdAt, updateAt);
-        this.member = member;
-        this.productCount = productCount;
-        this.product = product;
-    }
-
     public Wish(Member member, int productCount, Product product) {
         super();
         this.member = member;
@@ -42,9 +33,15 @@ public class Wish extends BasicEntity{
         this.product = product;
     }
 
-    public void checkWishByProductIdAndMemberId(Long productId, Long memberId) {
-        if (!isOwner(memberId) || !containsProduct(productId)) {
-            throw new EntityNotFoundException("Product with id " + productId + " does not exist in " + memberId +"'s wish");
+    public void checkWishByMemberId(Long memberId) {
+        if (!isOwner(memberId)) {
+            throw new EntityNotFoundException("Product does not exist in " + memberId +"'s wish");
+        }
+    }
+
+    public void checkWishByProductId(Long productId) {
+        if (!containsProduct(productId)) {
+            throw new EntityNotFoundException("Product with id " + productId + " does not exist");
         }
     }
 

@@ -44,7 +44,7 @@ public class OptionService {
         Option option = optionRepository.getReferenceById(request.id());
         Product product = option.getProduct();
         product.checkDuplicateName(request.name());
-//        option.updateOption(request.name(), request.quantity());
+        option.updateOption(request.name(), request.quantity());
     }
 
     @Transactional(readOnly = true)
