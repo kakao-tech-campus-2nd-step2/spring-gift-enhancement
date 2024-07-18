@@ -85,7 +85,6 @@ public class Product {
     }
 
     public void addOption(Option option) {
-        validateOption(option);
         options.add(option);
         option.setProduct(this);
     }
@@ -94,7 +93,7 @@ public class Product {
         options.remove(option);
     }
 
-    private void validateOption(Option option) {
+    public void validateOption(Option option) {
         for (Option o : options) {
             if (o.getName().equals(option.getName())) {
                 throw new DuplicateOptionNameException("error.duplicate.option.name");

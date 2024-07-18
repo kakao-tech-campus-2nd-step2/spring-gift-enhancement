@@ -25,8 +25,9 @@ public class OptionService {
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
         Option option = optionDto.toOption(product);
 
-        product.addOption(option);
-        productJpaRepository.save(product);
-        return OptionDto.from(option);
+        product.validateOption(option);
+        Option savedOption = optionJpaRepository.save(option);
+        product.addOption(savedOption);
+        return OptionDto.from(savedOption);
     }
 }

@@ -1,15 +1,16 @@
 package gift.domain.product.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 import gift.domain.product.dto.OptionDto;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Option;
 import gift.domain.product.entity.Product;
+import gift.domain.product.repository.OptionJpaRepository;
 import gift.domain.product.repository.ProductJpaRepository;
 import gift.exception.DuplicateOptionNameException;
 import java.util.Optional;
@@ -28,6 +29,9 @@ class OptionServiceTest {
     private OptionService optionService;
 
     @MockBean
+    private OptionJpaRepository optionJpaRepository;
+
+    @MockBean
     private ProductJpaRepository productJpaRepository;
 
     private static final Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
@@ -38,14 +42,17 @@ class OptionServiceTest {
     void create() {
         // given
         OptionDto optionDto = new OptionDto(null, "수박맛", 969);
+        Option option = optionDto.toOption(product);
+        option.setId(1L);
 
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(optionJpaRepository.save(any(Option.class))).willReturn(option);
 
         // when
-        optionService.create(1L, optionDto);
+        OptionDto actual = optionService.create(1L, optionDto);
 
         // then
-        verify(productJpaRepository).save(any(Product.class));
+        assertThat(actual).isEqualTo(OptionDto.from(option));
     }
 
     @Test
@@ -54,8 +61,11 @@ class OptionServiceTest {
         // given
         product.addOption(new Option(2L, product, "자두맛", 80));
         OptionDto optionDto = new OptionDto(null, "자두맛", 969);
+        Option option = optionDto.toOption(product);
+        option.setId(1L);
 
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(optionJpaRepository.save(any(Option.class))).willReturn(option);
 
         // when & then
         assertThrows(DuplicateOptionNameException.class, () -> optionService.create(1L, optionDto));
