@@ -12,6 +12,7 @@ import java.util.List;
 
 import gift.service.CategoryService;
 import gift.dto.CategoryDto;
+import gift.dto.response.CategoryResponse;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -24,9 +25,9 @@ public class CategoryController {
     }
     
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> getCategories(){
-        List<CategoryDto> categories = categoryService.getCategories();
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+    public ResponseEntity<CategoryResponse> getCategories(){
+        CategoryResponse categoryResponse = categoryService.findAll();
+        return new ResponseEntity<>(categoryResponse, HttpStatus.OK);
     }
 
     @PostMapping

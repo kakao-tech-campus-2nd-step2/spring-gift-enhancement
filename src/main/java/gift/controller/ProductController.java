@@ -39,7 +39,7 @@ public class ProductController {
     @GetMapping("/new")
     public String showProductForm(Model model){
         model.addAttribute("product", new ProductDto(0, "", 0, "", ""));
-        model.addAttribute("categories", categoryService.getCategories());
+        model.addAttribute("categories", categoryService.findAll().getCategories());
         return "product_form";
     }
 
@@ -48,7 +48,7 @@ public class ProductController {
         
         if(bindingResult.hasErrors()){
             model.addAttribute("product", productDto);
-            model.addAttribute("categories", categoryService.getCategories());
+            model.addAttribute("categories",categoryService.findAll().getCategories());
             return "product_form";
         }
 
@@ -59,7 +59,7 @@ public class ProductController {
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         model.addAttribute("product", productService.findById(id)); 
-        model.addAttribute("categories", categoryService.getCategories());
+        model.addAttribute("categories", categoryService.findAll().getCategories());
         return "edit_product_form";
     }
 
@@ -68,7 +68,7 @@ public class ProductController {
         
         if(bindingResult.hasErrors()){
             model.addAttribute("product", productDto);
-            model.addAttribute("categories", categoryService.getCategories());
+            model.addAttribute("categories", categoryService.findAll().getCategories());
             return "product_form";
         }
 
