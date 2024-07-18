@@ -19,6 +19,7 @@
             <th>Name</th>
             <th>Price</th>
             <th>Image URL</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -27,6 +28,7 @@
             <td th:text="${product.name}"></td>
             <td th:text="${product.price}"></td>
             <td><img th:src="${product.imageUrl}" width="100"></td>
+            <td th:text="${product.category.name}"></td>
             <td>
                 <a th:href="@{/products/update/{id}(id=${product.id})}" class="btn btn-primary">Edit</a>
                 <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger">Delete</a>
