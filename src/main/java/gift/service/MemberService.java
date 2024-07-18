@@ -9,12 +9,7 @@ import gift.exception.member.DuplicatedEmailException;
 import gift.exception.member.InvalidAccountException;
 import gift.exception.member.PasswordMismatchException;
 import gift.repository.MemberRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
-import java.security.Key;
-import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,14 +19,11 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
-    private final Key key;
 
     @Autowired
     public MemberService(MemberRepository memberRepository, TokenService tokenService) {
         this.memberRepository = memberRepository;
         this.tokenService = tokenService;
-        String secretKey = "s3cr3tK3yF0rJWTt0k3nG3n3r@ti0n12345678"; // 256 bits
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
     @Transactional
@@ -44,8 +36,7 @@ public class MemberService {
 
         confirmPassword(signupRequest.getPassword(), signupRequest.getConfirmPassword());
 
-        String welcome = "Welcome, " + member.getEmail() + "!";
-        return new SignupResponse(welcome);
+        return new SignupResponse(member.getEmail());
     }
 
     public LoginResponse loginMember(LoginRequest loginRequest) {

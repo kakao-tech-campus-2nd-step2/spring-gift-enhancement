@@ -4,8 +4,8 @@ public class SignupResponse {
 
     private String token;
 
-    public SignupResponse(String token) {
-        this.token = token;
+    public SignupResponse(String email) {
+        this.token = "Welcome, " + email + "!";
     }
 
     public String getToken() {
