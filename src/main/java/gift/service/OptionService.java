@@ -48,7 +48,7 @@ public class OptionService {
             .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
         Option option = new Option(
-            optionDTO.getId(),
+            null,
             new OptionName(optionDTO.getName().getName()),
             new OptionQuantity(optionDTO.getQuantity().getQuantity()),
             product

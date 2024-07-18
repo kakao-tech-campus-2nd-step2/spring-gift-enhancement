@@ -79,7 +79,7 @@ public class Option {
     }
 
     public void removeProduct() {
-        this.product = null;
+        this.product = new Product();
     }
 
     public void update(OptionName name, OptionQuantity quantity) {
@@ -88,7 +88,11 @@ public class Option {
     }
 
     public void decreaseQuantity(int amount) {
-        this.quantity = new OptionQuantity(this.quantity.getQuantity() - amount);
+        if (this.quantity.getQuantity() <= amount){
+            this.quantity = new OptionQuantity(1);
+        }
+        else
+            this.quantity = new OptionQuantity(this.quantity.getQuantity() - amount);
     }
 
 
