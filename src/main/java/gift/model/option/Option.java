@@ -48,7 +48,11 @@ public class Option {
     public int getQuantity() {
         return quantity;
     }
-    
+
+    public void setGift(Gift gift) {
+        this.gift = gift;
+    }
+
     public void modify(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
