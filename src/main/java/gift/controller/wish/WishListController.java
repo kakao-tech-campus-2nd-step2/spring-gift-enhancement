@@ -31,57 +31,64 @@ public class WishListController {
     @GetMapping("/wish")
     public ResponseEntity<?> getGiftList(@RequestAttribute("user") User user,
                                          @ModelAttribute PagingRequest pagingRequest) {
-        if (user != null) {
-            PagingResponse<GiftResponse> gifts = giftService.getAllGifts(pagingRequest.getPage(), pagingRequest.getSize());
-            return ResponseEntity.ok(gifts);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+        PagingResponse<GiftResponse> gifts = giftService.getAllGifts(pagingRequest.getPage(), pagingRequest.getSize());
+        return ResponseEntity.ok(gifts);
     }
 
     @PostMapping("/wish/{giftId}")
     public ResponseEntity<String> addGiftToCart(@RequestAttribute("user") User user,
                                                 @PathVariable Long giftId,
                                                 @RequestParam(required = false, defaultValue = "1") int quantity) {
-        if (user != null) {
-            wishService.addGiftToUser(user.getId(), giftId, quantity);
-            return ResponseEntity.ok("위시리스트에 상품이 추가되었습니다.");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+        wishService.addGiftToUser(user.getId(), giftId, quantity);
+        return ResponseEntity.ok("위시리스트에 상품이 추가되었습니다.");
+
     }
 
     @PutMapping("/wish/{giftId}")
     public ResponseEntity<String> updateGiftQuantity(@RequestAttribute("user") User user,
                                                      @PathVariable Long giftId,
                                                      @RequestParam(name = "quantity") int quantity) {
-        if (user != null) {
-            wishService.updateWishQuantity(user.getId(), giftId, quantity);
-            return ResponseEntity.ok("카트에서 상품수량이 변경되었습니다.");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+        wishService.updateWishQuantity(user.getId(), giftId, quantity);
+        return ResponseEntity.ok("카트에서 상품수량이 변경되었습니다.");
+
     }
 
     @DeleteMapping("/wish/{giftId}")
     public ResponseEntity<String> removeGiftFromCart(@RequestAttribute("user") User user,
                                                      @PathVariable Long giftId) {
-        if (user != null) {
-            wishService.removeGiftFromUser(user.getId(), giftId);
-            return ResponseEntity.ok("카트에서 상품이 삭제되었습니다.");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+        wishService.removeGiftFromUser(user.getId(), giftId);
+        return ResponseEntity.ok("카트에서 상품이 삭제되었습니다.");
+
     }
 
     @GetMapping("/mywish")
     public ResponseEntity<PagingResponse<WishResponse>> getUserGifts(@RequestAttribute("user") User user,
                                                                      @ModelAttribute PagingRequest pagingRequest) {
-        if (user != null) {
-            PagingResponse<Wish> userWishes = wishService.getGiftsForUser(user.getId(), pagingRequest.getPage(), pagingRequest.getSize());
-            List<WishResponse> wishResponses =
-                    userWishes.getContent()
-                            .stream()
-                            .map(wish -> new WishResponse(wish.getGift().getId(), wish.getGift().getName(), wish.getGift().getPrice(), wish.getQuantity())).collect(Collectors.toList());
-            PagingResponse<WishResponse> pagingResponse = new PagingResponse<>(pagingRequest.getPage(), wishResponses, pagingRequest.getSize(), userWishes.getTotalElements(), userWishes.getTotalPages());
-            return ResponseEntity.ok(pagingResponse);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        PagingResponse<Wish> userWishes = wishService.getGiftsForUser(user.getId(), pagingRequest.getPage(), pagingRequest.getSize());
+        List<WishResponse> wishResponses =
+                userWishes.getContent()
+                        .stream()
+                        .map(wish -> new WishResponse(wish.getGift().getId(), wish.getGift().getName(), wish.getGift().getPrice(), wish.getQuantity())).collect(Collectors.toList());
+        PagingResponse<WishResponse> pagingResponse = new PagingResponse<>(pagingRequest.getPage(), wishResponses, pagingRequest.getSize(), userWishes.getTotalElements(), userWishes.getTotalPages());
+        return ResponseEntity.ok(pagingResponse);
+
     }
 }

@@ -1,6 +1,7 @@
 package gift.dto.gift;
 
 import gift.dto.option.OptionRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class GiftRequest {
     private Long categoryId;
 
     @NotEmpty(message = "옵션은 최소 하나 이상 포함되어야 합니다.")
+    @Valid
     private List<OptionRequest> options;
 
     public GiftRequest(String name, int price, String imageUrl, Long categoryId, List<OptionRequest> options) {

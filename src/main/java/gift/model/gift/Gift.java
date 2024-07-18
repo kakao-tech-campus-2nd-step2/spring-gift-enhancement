@@ -32,7 +32,7 @@ public class Gift {
     @NotNull
     private Category category;
 
-    @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "gift", cascade = CascadeType.ALL)
     private List<Wish> wishes = new ArrayList<>();
 
     @OneToMany(mappedBy = "gift", cascade = CascadeType.ALL)

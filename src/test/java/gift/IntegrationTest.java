@@ -59,7 +59,7 @@ public class IntegrationTest {
         ResponseEntity<String> registerResponse = restTemplate.postForEntity(registerUrl, registerRequestEntity, String.class);
 
         assertThat(registerResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(registerResponse.getBody()).isEqualTo("회원가입이 정상적으로 완료되었습니다.");
+        assertThat(registerResponse.getBody()).isEqualTo("회원가입을 성공하였습니다!");
     }
 
     public String loginAndGetToken(String email, String password) {
