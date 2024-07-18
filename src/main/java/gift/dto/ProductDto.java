@@ -1,6 +1,6 @@
 package gift.dto;
 
-import gift.dto.request.OptionRequest;
+import gift.dto.request.OptionDto;
 import gift.dto.response.ProductResponse;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public class ProductDto {
     private int price;
     private String imageUrl;
     private Long categoryId;
-    private List<OptionRequest> options;
+    private List<OptionDto> options;
 
     public ProductDto() {
     }
@@ -24,7 +24,7 @@ public class ProductDto {
         this.categoryId = categoryId;
     }
 
-    public ProductDto(String name, int price, String imageUrl, Long categoryId, List<OptionRequest> options) {
+    public ProductDto(String name, int price, String imageUrl, Long categoryId, List<OptionDto> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -63,7 +63,7 @@ public class ProductDto {
         return categoryId;
     }
 
-    public List<OptionRequest> getOptions() {
+    public List<OptionDto> getOptions() {
         return options;
     }
 

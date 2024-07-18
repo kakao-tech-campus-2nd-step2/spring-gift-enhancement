@@ -30,9 +30,9 @@ public class ProductCreateRequest {
     @NotNull
     @Size(min = 1, message = "하나 이상의 옵션을 입력해야 합니다.")
     @Valid
-    private List<OptionRequest> options;
+    private List<OptionDto> options;
 
-    public ProductCreateRequest(String name, Integer price, String imageUrl, Long categoryId, List<OptionRequest> options) {
+    public ProductCreateRequest(String name, Integer price, String imageUrl, Long categoryId, List<OptionDto> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -56,7 +56,7 @@ public class ProductCreateRequest {
         return categoryId;
     }
 
-    public List<OptionRequest> getOptions() {
+    public List<OptionDto> getOptions() {
         return options;
     }
 

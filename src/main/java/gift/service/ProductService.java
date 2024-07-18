@@ -3,9 +3,8 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
-import gift.dto.OptionDto;
 import gift.dto.ProductDto;
-import gift.dto.request.OptionRequest;
+import gift.dto.request.OptionDto;
 import gift.exception.CategoryNotFoundException;
 import gift.exception.DuplicateOptionException;
 import gift.exception.OptionNotFoundException;
@@ -52,7 +51,7 @@ public class ProductService {
         Product product = new Product(dto.getName(), dto.getPrice(), dto.getImageUrl(), category);
 
         Set<String> optionNames = dto.getOptions().stream()
-                .map(OptionRequest::getName)
+                .map(OptionDto::getName)
                 .collect(Collectors.toSet());
 
         if (optionNames.size() < dto.getOptions().size()) {
@@ -88,7 +87,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<OptionDto> getOptions(Long productId) {
+    public List<gift.dto.OptionDto> getOptions(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
@@ -97,7 +96,7 @@ public class ProductService {
                 .toList();
     }
 
-    public void addOption(Long productId, OptionDto dto) {
+    public void addOption(Long productId, gift.dto.OptionDto dto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 

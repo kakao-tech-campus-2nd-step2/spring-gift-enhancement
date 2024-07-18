@@ -2,9 +2,8 @@ package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constant.ErrorMessage;
-import gift.dto.OptionDto;
 import gift.dto.ProductDto;
-import gift.dto.request.OptionRequest;
+import gift.dto.request.OptionDto;
 import gift.dto.request.ProductCreateRequest;
 import gift.dto.request.ProductUpdateRequest;
 import gift.service.ProductService;
@@ -81,7 +80,7 @@ class ProductControllerTest {
     void productAdd() throws Exception {
         //given
         Long categoryId = 1L;
-        ProductDto request = new ProductDto("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionRequest("옵션", 12L)));
+        ProductDto request = new ProductDto("아이스티", 2500, "https://example.com", categoryId, List.of(new OptionDto("옵션", 12L)));
 
         willDoNothing().given(productService).addProduct(any(ProductDto.class));
 
@@ -342,9 +341,9 @@ class ProductControllerTest {
     void optionAdd() throws Exception {
         //given
         Long productId = 1L;
-        OptionDto request = new OptionDto("옵션", 2500L);
+        gift.dto.OptionDto request = new gift.dto.OptionDto("옵션", 2500L);
 
-        willDoNothing().given(productService).addOption(anyLong(), any(OptionDto.class));
+        willDoNothing().given(productService).addOption(anyLong(), any(gift.dto.OptionDto.class));
 
         //when
         ResultActions result = mvc.perform(post("/api/products/{productId}/options", productId)
@@ -355,7 +354,7 @@ class ProductControllerTest {
         result
                 .andExpect(status().isCreated());
 
-        then(productService).should().addOption(anyLong(), any(OptionDto.class));
+        then(productService).should().addOption(anyLong(), any(gift.dto.OptionDto.class));
     }
 
     @DisplayName("[DELETE] 상품에 존재하는 옵션 하나를 삭제한다.")
