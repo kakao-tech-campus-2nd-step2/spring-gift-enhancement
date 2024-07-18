@@ -69,15 +69,10 @@ public class Option {
     public void setProduct(Product product) {
         this.product = product;
     }
-    public void updateName(String name) {
+
+    public void updateOption(String name, int quantity, Product product){
         this.name = name;
-    }
-
-    public void updateQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public void updateProduct(Product product) {
         this.product = product;
     }
 
