@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1>Product Form</h1>
+    <h1 th:text="${productRequestDTO.id} == null ? 'Create Product' : 'Edit Product'">Product Form</h1>
     <form th:action="@{${productRequestDTO.id} == null ? '/api/products' : '/api/products/edit/' + ${productRequestDTO.id}}" th:object="${productRequestDTO}" method="post">
         <div class="form-group">
             <label for="name">Name</label>

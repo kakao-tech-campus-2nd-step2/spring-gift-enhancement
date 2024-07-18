@@ -74,7 +74,7 @@ public class ProductService {
                 product.getPrice(),
                 product.getImageUrl(),
                 product.getCategory().getName(),
-                product.getCategory().getId() // Add this line
+                product.getCategory().getId()
         );
     }
 }

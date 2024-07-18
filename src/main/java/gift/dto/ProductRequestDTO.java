@@ -28,6 +28,13 @@ public class ProductRequestDTO {
         this.categoryId = categoryId;
     }
 
+    public ProductRequestDTO(String name, int price, String imageUrl, Long categoryId) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
+    }
+
     public Long getId() {
         return id;
     }
