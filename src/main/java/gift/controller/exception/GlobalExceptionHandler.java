@@ -31,4 +31,10 @@ public class GlobalExceptionHandler {
         return ApiResponseGenerator.fail(HttpStatus.FORBIDDEN, e.getMessage(),
             String.valueOf(HttpStatus.FORBIDDEN.value()));
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<FailureBody> handleIllegalArgumentException(IllegalArgumentException e){
+        return ApiResponseGenerator.fail(HttpStatus.BAD_REQUEST, e.getMessage(),
+            String.valueOf(HttpStatus.BAD_REQUEST.value()));
+    }
 }
