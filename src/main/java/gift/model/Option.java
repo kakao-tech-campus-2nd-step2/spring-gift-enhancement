@@ -51,4 +51,8 @@ public class Option {
     public Long getQuantity() {
         return quantity;
     }
+
+    public Product getProduct() {
+        return product;
+    }
 }
