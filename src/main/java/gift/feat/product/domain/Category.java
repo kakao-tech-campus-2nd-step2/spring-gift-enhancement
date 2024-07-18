@@ -8,20 +8,12 @@ import jakarta.persistence.Id;
 @Entity
 public class Category {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 
 	protected Category() {
 
-	}
-
-	private Category(String name) {
-		this.name = name;
-	}
-
-	public static Category of(String name) {
-		return new Category(name);
 	}
 
 	public Long getId() {
