@@ -1,6 +1,7 @@
 package gift.domain;
 
 import gift.dto.ProductDto;
+import gift.exception.AtLeastOneOptionRequiredException;
 import gift.exception.DuplicateOptionException;
 import gift.exception.OptionNotFoundException;
 import jakarta.persistence.*;
@@ -98,11 +99,17 @@ public class Product {
     }
 
     public void removeOptionById(Long optionId) {
-        boolean isRemoved = options.removeIf(option -> option.getId().equals(optionId));
+        boolean optionExists = options.stream().anyMatch(option -> option.getId().equals(optionId));
 
-        if (!isRemoved) {
+        if (!optionExists) {
             throw new OptionNotFoundException();
         }
+
+        if (options.size() == 1) {
+            throw new AtLeastOneOptionRequiredException();
+        }
+
+        options.removeIf(option -> option.getId().equals(optionId));
     }
 
 }
