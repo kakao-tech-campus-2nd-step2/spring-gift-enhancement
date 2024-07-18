@@ -1,7 +1,6 @@
 package gift.service;
 
 import gift.domain.Category;
-import gift.domain.CategoryType;
 import gift.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +12,10 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category addCategory(String categoryType) {
-        Category category = categoryRepository.findByName(categoryType);
+    public Category addCategory(String name) {
+        Category category = categoryRepository.findByName(name);
         if (category == null) {
-            category = new Category(CategoryType.valueOf(categoryType));
+            category = new Category(name);
             categoryRepository.save(category);
         }
         return category;

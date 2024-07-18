@@ -12,16 +12,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long category_id;
 
-    private CategoryType name;
+    @Column(nullable = false, unique = true)
+    private String name;
 
-    @OneToMany(mappedBy = "category")
-    private List<Product> products = new ArrayList<>();
-
-    public Category(CategoryType categoryType) {
-        this.name = categoryType;
-    }
-
-    public void addProduct(Product product) {
-        products.add(product);
+    public Category(String name) {
+        this.name = name;
     }
 }
