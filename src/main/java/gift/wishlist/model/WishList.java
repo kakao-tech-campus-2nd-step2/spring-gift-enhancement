@@ -5,6 +5,7 @@ import gift.product.model.Product;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "wishlists")
 public class WishList {
 
     @Id
@@ -21,11 +22,9 @@ public class WishList {
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
-    // 기본 생성자
     public WishList() {
     }
 
-    // 매개변수가 있는 생성자
     public WishList(Member member, Product product) {
         this.member = member;
         this.product = product;

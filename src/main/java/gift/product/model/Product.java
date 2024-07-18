@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -30,7 +31,6 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishList> wishLists = new ArrayList<>();
 
-    // JPA에서 필요로 하는 기본 생성자
     protected Product() {
     }
 
@@ -46,7 +46,6 @@ public class Product {
         this.category = category;
     }
 
-    // ID를 포함한 생성자
     public Product(Long productId, String name, String imgUrl, int price, Category category) {
         this.productId = productId;
         this.name = name;
@@ -75,12 +74,10 @@ public class Product {
         return category;
     }
 
-    // 카테고리 ID를 반환하는 메소드 추가
     public Long getCategoryId() {
         return category.getCategoryId();
     }
 
-    // update 메소드 추가
     public void update(String name, int price, String imgUrl, Category category) {
         this.name = name;
         this.price = price;

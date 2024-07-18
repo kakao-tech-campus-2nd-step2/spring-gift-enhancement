@@ -1,5 +1,5 @@
 -- 테이블이 존재할 경우 삭제
-DROP TABLE IF EXISTS wish_lists;
+DROP TABLE IF EXISTS wishlists;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS members;
 DROP TABLE IF EXISTS category;
@@ -31,7 +31,7 @@ CREATE TABLE products (
 );
 
 -- 위시리스트 테이블 생성
-CREATE TABLE wish_lists (
+CREATE TABLE wishlists (
     id BIGINT auto_increment PRIMARY KEY COMMENT '위시리스트 id',
     member_id BIGINT NOT NULL COMMENT '회원 id',
     product_id BIGINT NOT NULL COMMENT '상품 id',
