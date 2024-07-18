@@ -2,6 +2,7 @@ package gift.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table
@@ -16,11 +17,14 @@ public class Option {
     @JoinColumn(name = "product_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_option_product_id_ref_product_id"))
     private Product product;
 
+    @NotNull
     private String name;
 
+    @NotNull
     private int quantity;
 
     public Option(Long id, Product product, String name, int quantity) {
+        validateName(name);
         this.id = id;
         this.product = product;
         this.name = name;
@@ -29,6 +33,18 @@ public class Option {
 
     public Option() {
 
+    }
+
+    private static void validateName(String name) {
+        if (name == null || name.length() > 50) {
+            throw new IllegalArgumentException("옵션명은 공백 포함하여 최대 50자까지 가능합니다.");
+        }
+        if (!name.matches("^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/]*$")) {
+            throw new IllegalArgumentException("상품명에 () [] + - & / 외의 특수기호는 불가합니다");
+        }
+        if (name.contains("카카오")) {
+            throw new IllegalArgumentException("`카카오`가 포함된 문구는 담당 MD와 협의한 경우에만 사용 가능합니다");
+        }
     }
 
     public Long getId() {
