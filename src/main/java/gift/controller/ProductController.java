@@ -35,8 +35,7 @@ public class ProductController {
      */
     @GetMapping("/products")
     public List<ProductDTO> getList() {
-        List<ProductDTO> dto = productService.readAll();
-        return dto;
+        return productService.readAll();
     }
 
     /**

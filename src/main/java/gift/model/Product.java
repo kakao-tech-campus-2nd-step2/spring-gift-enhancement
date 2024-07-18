@@ -7,13 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name="PRODUCT_TABLE")
+@Table(name = "PRODUCT_TABLE")
 public class Product {
 
     @Id
@@ -21,17 +18,17 @@ public class Product {
     @Column(name = "PRODUCT_ID")
     private Long id;
 
-    @Column(name="PRODUCT_NAME",length = 15, nullable = false)
+    @Column(name = "PRODUCT_NAME", length = 15, nullable = false)
     private String name;
 
-    @Column(name="PRODUCT_PRICE",nullable = false)
+    @Column(name = "PRODUCT_PRICE", nullable = false)
     private Integer price;
 
-    @Column(name="PRODUCT_IMAGE_URL",nullable = false)
+    @Column(name = "PRODUCT_IMAGE_URL", nullable = false)
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "CATEGORY_ID",referencedColumnName = "CATEGORY_ID")
+    @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_ID")
     private Category category;
 
 
@@ -48,7 +45,7 @@ public class Product {
 
     //setter - 타임리프 사용을 위해 필요
     public void setId(Long id) {
-        this.id=id;
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -84,7 +81,7 @@ public class Product {
         return imageUrl;
     }
 
-    public Long getCategoryId(){
+    public Long getCategoryId() {
         return category.getId();
     }
 }
