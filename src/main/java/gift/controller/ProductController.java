@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -29,13 +29,13 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping("/product")
+    @PostMapping("")
     public ResponseEntity<ProductResponse> registerProduct(@Valid @RequestBody ProductRequest productRequest) {
         ProductResponse response = productService.addProduct(productRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/products")
+    @GetMapping("")
     public ResponseEntity<PageResponse<ProductResponse>> getAllProducts(
         @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
@@ -43,23 +43,28 @@ public class ProductController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") Long id) {
         ProductResponse response = productService.findProduct(id);
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping("/product/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable("id") Long id,
                                                          @Valid @RequestBody ProductRequest productRequest) {
         ProductResponse response = productService.updateProduct(id, productRequest);
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/product/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
+
+   /* @GetMapping("/{id}/options")
+    public ResponseEntity<Void> getAllOptions(@PathVariable("id") Long id) {
+
+    }*/
 }
 
