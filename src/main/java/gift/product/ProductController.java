@@ -15,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -37,7 +36,7 @@ public class ProductController {
 
 
     @PostMapping("/products/add")
-    public String addProduct(@Valid @ModelAttribute("newProduct") ProductDTO newProduct, BindingResult bindingResult1, @Valid @ModelAttribute("option") OptionRequest option, BindingResult bindingResult2, RedirectAttributes redirectAttributes) {
+    public String addProduct(@Valid @ModelAttribute("newProduct") ProductRequest newProduct, BindingResult bindingResult1, @Valid @ModelAttribute("option") OptionRequest option, BindingResult bindingResult2, RedirectAttributes redirectAttributes) {
         if (bindingResult1.hasErrors() || bindingResult2.hasErrors()) {
             return "AddProduct";
         }
@@ -50,7 +49,7 @@ public class ProductController {
 
     @PutMapping("/products/update/{id}")
     @Transactional
-    public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute("product") ProductDTO product, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute("product") ProductRequest product, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "UpdateProduct";
         }
@@ -84,25 +83,20 @@ public class ProductController {
 
     @GetMapping("/products/add")
     public String addProductView(Model model) {
-        model.addAttribute("newProduct", new ProductDTO());
+        model.addAttribute("newProduct", new ProductResponse());
         model.addAttribute("option", new OptionRequest());
-        //model.addAttribute("categories", categoryService.findAllCategories());
         return "AddProduct";
     }
 
     @GetMapping("/products/update/{id}")
     public String updateProduct(@PathVariable Long id, Model model) {
-        model.addAttribute("product", new ProductDTO(productService.findByID(id)));
-        //model.addAttribute("categories", categoryService.findAllCategories());
-
+        model.addAttribute("product", new ProductResponse(productService.findByID(id)));
         return "UpdateProduct";
     }
 
     @GetMapping("/products/{id}")
     public String getProduct(@PathVariable long id, Model model) {
-        model.addAttribute("product", new ProductDTO(productService.findByID(id)));
-        //model.addAttribute("categories", categoryService.findAllCategories());
-
+        model.addAttribute("product", new ProductResponse(productService.findByID(id)));
         return "ProductInfo";
     }
 }

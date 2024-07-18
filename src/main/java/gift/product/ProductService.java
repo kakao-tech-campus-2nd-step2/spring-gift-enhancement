@@ -37,7 +37,7 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow();
     }
 
-    public Product insertNewProduct(ProductDTO newProduct, OptionRequest optionRequest) {
+    public Product insertNewProduct(ProductRequest newProduct, OptionRequest optionRequest) {
         Long categoryID = newProduct.getCategoryID();
         Category category = categoryRepository.findById(categoryID).orElseThrow();
 
@@ -50,7 +50,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product updateProduct(Long id, ProductDTO updateProduct) {
+    public Product updateProduct(Long id, ProductRequest updateProduct) {
         Product product = findByID(id);
         product.setName(updateProduct.getName());
         product.setPrice(updateProduct.getPrice());
