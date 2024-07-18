@@ -1,10 +1,10 @@
 package gift.product.category.service;
 
-import gift.exception.category.CategoryAlreadyExistException;
 import gift.exception.category.CategoryNotFoundException;
 import gift.product.category.dto.request.CreateCategoryRequest;
 import gift.product.category.dto.request.UpdateCategoryRequest;
 import gift.product.category.dto.response.CategoryResponse;
+import gift.product.category.entity.Categories;
 import gift.product.category.entity.Category;
 import gift.product.category.repository.CategoryRepository;
 import gift.util.mapper.CategoryMapper;
@@ -38,10 +38,13 @@ public class CategoryService {
 
     @Transactional
     public Long createCategory(CreateCategoryRequest request) {
-        Category newCategory = new Category(request.name());
-        validateCategory(newCategory);
-        Category savedCategory = categoryRepository.save(newCategory);
-        return savedCategory.getId();
+        Category newCategory = new Category(request.name(), request.color(), request.description(),
+            request.imageUrl());
+
+        Categories categories = categoryRepository.findAllCategories();
+        categories.validate(newCategory);
+
+        return categoryRepository.save(newCategory).getId();
     }
 
     @Transactional

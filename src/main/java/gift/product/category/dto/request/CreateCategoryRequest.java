@@ -6,7 +6,15 @@ import jakarta.validation.constraints.NotNull;
 public record CreateCategoryRequest(
     @NotNull
     @NotEmpty
-    String name
+    String name,
+
+    @NotNull
+    String color,
+
+    @NotNull
+    String imageUrl,
+
+    String description
 ) {
 
 }
