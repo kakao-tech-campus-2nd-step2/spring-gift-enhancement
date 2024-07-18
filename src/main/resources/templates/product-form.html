@@ -10,10 +10,17 @@
 <form action="/admin/product" th:action="@{/admin/product}" th:object="${product}" method="post">
     <table>
         <tr>
-            <td>카테고리: </td>
-            <td><label>
-                <input type="number" name="categoryId" value="" required/>
-            </label></td>
+            <td>
+                카테고리:
+            </td>
+            <td>
+                <label>
+                    <select name="categoryId" required>
+                        <option value="" disabled selected>카테고리를 선택하세요</option>
+                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                    </select>
+                </label>
+            </td>
             <td th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}">Category Error Message</td>
         </tr>
         <tr>

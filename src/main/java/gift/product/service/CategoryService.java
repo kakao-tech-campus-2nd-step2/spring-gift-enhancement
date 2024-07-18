@@ -3,6 +3,7 @@ package gift.product.service;
 import gift.product.model.Category;
 import gift.product.repository.CategoryRepository;
 import gift.product.validation.CategoryValidation;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +42,10 @@ public class CategoryService {
     public Page<Category> findAllCategory(Pageable pageable) {
         System.out.println("[CategoryService] getAllCategories()");
         return categoryRepository.findAll(pageable);
+    }
+
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
     }
 
     public Category findCategoryById(Long id) {

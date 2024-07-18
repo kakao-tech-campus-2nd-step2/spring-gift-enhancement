@@ -11,10 +11,17 @@
     <input type="hidden" name="_method" value="put" />
     <table>
         <tr>
-            <td>카테고리 분류: </td>
-            <td><label>
-                <input type="number" name="categoryId" th:field="*{categoryId}" />
-            </label></td>
+            <td>
+                카테고리:
+            </td>
+            <td>
+                <label>
+                    <select name="categoryId" th:field="*{categoryId}" required>
+                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"
+                            th:selected="${category.id} == *{categoryId}"></option>
+                    </select>
+                </label>
+            </td>
             <td th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}">Category Error Message</td>
         </tr>
         <tr>
