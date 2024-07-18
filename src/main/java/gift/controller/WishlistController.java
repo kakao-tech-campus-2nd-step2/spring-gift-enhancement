@@ -45,7 +45,7 @@ public class WishlistController {
     @GetMapping()
     public String getWishlistForCurrentUser(Model model, Pageable pageable, @LoginMember TokenAuth tokenAuth) {
         Long memberId = tokenAuth.getMember().getId();
-        Page<WishlistItem> wishlist = wishlistService.getWishlistByMemberIdAndPageable(memberId, pageable);
+        Page<WishlistItem> wishlist = wishlistService.getWishlistByMemberId(memberId, pageable);
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("memberId", memberId);
         return "wishlist-list";

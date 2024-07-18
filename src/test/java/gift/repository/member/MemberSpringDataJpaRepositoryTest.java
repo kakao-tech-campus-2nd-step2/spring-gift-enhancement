@@ -8,7 +8,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
@@ -18,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(MemberService.class)  // MemberService를 컨텍스트에 추가
 public class MemberSpringDataJpaRepositoryTest {
 
@@ -32,11 +30,6 @@ public class MemberSpringDataJpaRepositoryTest {
     public void setUp() {
         Member member = new Member("test@example.com", "password");
         memberRepository.save(member);
-    }
-
-    @AfterEach
-    public void tearDown() {
-        memberRepository.deleteAll();
     }
 
     @Test
