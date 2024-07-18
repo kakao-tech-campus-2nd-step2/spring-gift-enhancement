@@ -50,42 +50,19 @@ public class Product extends BaseEntity {
         return category;
     }
 
-    public static class Builder {
-        private Long id;
-        private String name;
-        private int price;
-        private String imageUrl;
-        private Category category;
+    public void updateName(String name) {
+        this.name = name;
+    }
 
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
+    public void updatePrice(int price) {
+        this.price = price;
+    }
 
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-        public Builder price(int price) {
-            this.price = price;
-            return this;
-        }
-
-        public Builder imageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
-            return this;
-        }
-
-        public Builder category(Category category) {
-            this.category = category;
-            return this;
-        }
-
-        public Product build() {
-            Product product = new Product(name, price, imageUrl, category);
-            product.id = this.id;
-            return product;
-        }
+    public void updateCategory(Category category) {
+        this.category = category;
     }
 }

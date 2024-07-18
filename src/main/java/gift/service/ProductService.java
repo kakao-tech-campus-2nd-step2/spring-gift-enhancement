@@ -44,27 +44,23 @@ public class ProductService {
         Category category = categoryRepository.findById(productRequestDTO.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category id: " + productRequestDTO.getCategoryId()));
 
-        Product product = new Product.Builder()
-                .name(productRequestDTO.getName())
-                .price(productRequestDTO.getPrice())
-                .imageUrl(productRequestDTO.getImageUrl())
-                .category(category)
-                .build();
+        Product product = new Product(productRequestDTO.getName(),productRequestDTO.getPrice(),productRequestDTO.getImageUrl(),category);
         productRepository.save(product);
     }
 
     public void updateProduct(Long id, ProductRequestDTO productRequestDTO) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product id: " + id));
+
         Category category = categoryRepository.findById(productRequestDTO.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category id: " + productRequestDTO.getCategoryId()));
 
-        Product updatedProduct = new Product.Builder()
-                .id(id)
-                .name(productRequestDTO.getName())
-                .price(productRequestDTO.getPrice())
-                .imageUrl(productRequestDTO.getImageUrl())
-                .category(category)
-                .build();
-        productRepository.save(updatedProduct);
+        existingProduct.updateName(productRequestDTO.getName());
+        existingProduct.updatePrice(productRequestDTO.getPrice());
+        existingProduct.updateImageUrl(productRequestDTO.getImageUrl());
+        existingProduct.updateCategory(category);
+
+        productRepository.save(existingProduct);
     }
 
     public void deleteProduct(Long id) {

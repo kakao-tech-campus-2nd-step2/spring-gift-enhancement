@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS product (
     price DECIMAL(10, 2) NOT NULL,
     image_url VARCHAR(255),
     category_id BIGINT NOT NULL,
-    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories(id)
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES category(id)
     );
 
 CREATE TABLE IF NOT EXISTS members (
