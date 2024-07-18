@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Member;
 import gift.dto.request.CategoryRequest;
 import gift.exception.CategoryNotFoundException;
 import gift.exception.DuplicateCategoryNameException;
@@ -53,8 +54,7 @@ public class CategoryServiceTest {
     @Test
     public void testGetCategoryById() {
         Long categoryId = 1L;
-        Category mockCategory = new Category(categoryId, "교환권");
-        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory));
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategories.getFirst()));
 
         Category category = categoryService.getCategory(categoryId);
 
@@ -75,25 +75,27 @@ public class CategoryServiceTest {
 
     @Test
     public void testCreateCategory() {
-        CategoryRequest categoryRequest = new CategoryRequest("뷰티");
+        CategoryRequest categoryRequest = new CategoryRequest("교환권");
         when(categoryRepository.existsByName(categoryRequest.getName())).thenReturn(false);
+
+        when(categoryRepository.save(any(Category.class))).thenReturn(mockCategories.getFirst());
 
         Category createdCategory = categoryService.createCategory(categoryRequest);
 
-        assertEquals("뷰티", createdCategory.getName());
+        assertEquals("교환권", createdCategory.getName());
 
-        verify(categoryRepository, times(1)).existsByName("뷰티");
+        verify(categoryRepository, times(1)).existsByName("교환권");
         verify(categoryRepository, times(1)).save(any(Category.class));
     }
 
     @Test
     public void testCreateCategoryDuplicateName() {
-        CategoryRequest categoryRequest = new CategoryRequest("뷰티");
+        CategoryRequest categoryRequest = new CategoryRequest("교환권");
         when(categoryRepository.existsByName(categoryRequest.getName())).thenReturn(true);
 
         assertThrows(DuplicateCategoryNameException.class, () -> categoryService.createCategory(categoryRequest));
 
-        verify(categoryRepository, times(1)).existsByName("뷰티");
+        verify(categoryRepository, times(1)).existsByName("교환권");
         verify(categoryRepository, never()).save(any());
     }
 
@@ -101,9 +103,12 @@ public class CategoryServiceTest {
     public void testUpdateCategory() {
         Long categoryId = 1L;
         CategoryRequest categoryRequest = new CategoryRequest("뷰티");
-        Category existingCategory = new Category(categoryId, "교환권");
+        Category existingCategory = mockCategories.getFirst();
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
         when(categoryRepository.existsByName(categoryRequest.getName())).thenReturn(false);
+
+        when(categoryRepository.save(any(Category.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
 
         Category updatedCategory = categoryService.updateCategory(categoryId, categoryRequest);
 
@@ -131,7 +136,7 @@ public class CategoryServiceTest {
     public void testUpdateCategoryDuplicateName() {
         Long categoryId = 1L;
         CategoryRequest categoryRequest = new CategoryRequest("상품권");
-        Category existingCategory = new Category(categoryId, "교환권");
+        Category existingCategory = mockCategories.getFirst();
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
         when(categoryRepository.existsByName(categoryRequest.getName())).thenReturn(true);
 
@@ -145,7 +150,7 @@ public class CategoryServiceTest {
     @Test
     public void testDeleteCategory() {
         Long categoryId = 1L;
-        Category existingCategory = new Category(categoryId, "패션");
+        Category existingCategory =  mockCategories.getFirst();
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
 
         categoryService.deleteCategory(categoryId);

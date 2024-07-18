@@ -32,9 +32,6 @@ public class WishlistServiceTest {
     private TokenService tokenService;
 
     @Mock
-    private MemberSpringDataJpaRepository memberRepository;
-
-    @Mock
     private ProductSpringDataJpaRepository productRepository;
 
     @InjectMocks
