@@ -1,6 +1,4 @@
-function setAuthToken(token) {
-    return localStorage.setItem('authToken', token);
-}
+import { setAuthToken } from './token.js';
 
 function register() {
     const email = document.querySelector('#username').value;
@@ -41,3 +39,6 @@ function login() {
             }
         });
 }
+
+window.register = register;
+window.login = login;

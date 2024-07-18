@@ -18,6 +18,10 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     public Product() {
     }
 
@@ -34,10 +38,18 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Product update(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
+    public Product update(String name, int price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
         return this;
     }
   
@@ -55,5 +67,8 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+    public Category getCategory() {
+        return category;
     }
 }

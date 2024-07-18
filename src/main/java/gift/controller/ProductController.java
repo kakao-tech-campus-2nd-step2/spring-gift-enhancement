@@ -1,7 +1,7 @@
 package gift.controller;
 
 import gift.dto.ProductRequest;
-import gift.model.Product;
+import gift.dto.ProductResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -28,14 +28,14 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<Page<Product>> getAllProducts(@PageableDefault(page = 0, size = 5) Pageable pageable) {
-        Page<Product> productsList = productService.getAllProducts(pageable);
+    public ResponseEntity<Page<ProductResponse>> getAllProducts(@PageableDefault(page = 0, size = 5) Pageable pageable) {
+        Page<ProductResponse> productsList = productService.getAllProducts(pageable);
         return ResponseEntity.ok().body(productsList);
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") Long id) {
-        Product product = productService.getProduct(id);
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") Long id) {
+        ProductResponse product = productService.getProduct(id);
         return ResponseEntity.ok().body(product);
     }
 

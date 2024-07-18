@@ -1,7 +1,7 @@
 package gift.service;
 
 import gift.dto.WishRequest;
-import gift.exception.product.ProductNotFoundException;
+import gift.exception.NotFoundException;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wish;
@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class WishService {
@@ -27,7 +26,7 @@ public class WishService {
 
     public Wish makeWish(WishRequest request, Member member) {
         Product product = productRepository.findById(request.productId())
-                .orElseThrow(() -> new ProductNotFoundException("해당 productId의 상품을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 productId의 상품을 찾을 수 없습니다."));
         Wish wish = new Wish(product, member);
         wishRepository.save(wish);
         return wish;
@@ -40,7 +39,7 @@ public class WishService {
     @Transactional
     public void deleteWish(Long productId, Member member) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException("해당 productId의 상품을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 productId의 상품을 찾을 수 없습니다."));
         wishRepository.deleteByProductAndMember(product, member);
     }
 }
