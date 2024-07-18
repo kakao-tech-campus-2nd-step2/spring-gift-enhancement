@@ -53,6 +53,5 @@ public class Category {
     public List<Product> getProducts(){
         return products;
     }
-
     
 }

@@ -55,14 +55,14 @@ public class MemberService {
     public MemberDto findByEmail(String email){
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new CustomException("Member with email " + email + " not found", HttpStatus.NOT_FOUND));
-        return member.toDto();
+        return new MemberDto(member.getId(), member.getPassword(), member.getEmail(), member.getRole());
     }
 
     @Transactional
     public MemberDto findByRequest(LoginRequest loginRequest){
         Member member = memberRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword())
             .orElseThrow(() -> new CustomException("User with Request not found", HttpStatus.NOT_FOUND));
-        return member.toDto();
+        return new MemberDto(member.getId(), member.getPassword(), member.getEmail(), member.getRole());
     }
 
     @Transactional

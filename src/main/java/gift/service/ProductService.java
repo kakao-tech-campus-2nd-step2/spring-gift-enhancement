@@ -43,7 +43,7 @@ public class ProductService{
     public ProductDto findById(Long id){
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new CustomException("Product with id " + id + " not found", HttpStatus.NOT_FOUND));
-        return product.toDto();
+        return new ProductDto(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getName());
     }
 
     @Transactional

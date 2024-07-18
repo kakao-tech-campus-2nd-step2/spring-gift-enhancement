@@ -45,8 +45,4 @@ public class WishList {
         return product;
     }
 
-    public WishListDto toDto(){
-        return new WishListDto(this.member.getId(), this.product.getId());
-    }
-
 }

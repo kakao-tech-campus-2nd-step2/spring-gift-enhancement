@@ -53,11 +53,11 @@ public class Member {
         return password;
     }
 
-    public List<WishList> getWishList(){
-        return wishList;
+    public String getRole(){
+        return role;
     }
 
-    public MemberDto toDto(){
-        return new MemberDto(this.id, this.password, this.email, this.role);
+    public List<WishList> getWishList(){
+        return wishList;
     }
 }

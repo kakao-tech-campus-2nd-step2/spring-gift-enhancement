@@ -68,7 +68,4 @@ public class Product{
         return category;
     }
 
-    public ProductDto toDto(){
-        return new ProductDto(this.id, this.name, this.price, this.imageUrl, this.category.getName());
-    }
 }
