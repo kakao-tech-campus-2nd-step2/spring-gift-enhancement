@@ -99,7 +99,7 @@ class WishProductControllerTest {
         });
         Assertions.assertThat(wishProducts.size()).isEqualTo(1);
 
-        deleteWishProduct(wishProduct.id());
+        wishProductService.deleteWishProduct(wishProduct.id());
     }
 
     @Test
@@ -120,7 +120,7 @@ class WishProductControllerTest {
         Assertions.assertThat(wishProducts.size()).isEqualTo(1);
         Assertions.assertThat(wishProducts.get(0).count()).isEqualTo(20);
 
-        deleteWishProduct(wishProduct.id());
+        wishProductService.deleteWishProduct(wishProduct.id());
     }
 
     @Test
@@ -164,7 +164,7 @@ class WishProductControllerTest {
         Assertions.assertThat(wishProducts.size()).isEqualTo(1);
         Assertions.assertThat(wishProducts.get(0).count()).isEqualTo(30);
 
-        deleteWishProduct(wishProduct.id());
+        wishProductService.deleteWishProduct(wishProduct.id());
     }
 
     @Test
@@ -210,10 +210,6 @@ class WishProductControllerTest {
         var getResult = mockMvc.perform(getRequest);
         //then
         getResult.andExpect(status().isBadRequest());
-    }
-
-    private void deleteWishProduct(Long id) {
-        wishProductService.deleteWishProduct(id);
     }
 
     private void deleteWishProducts(List<WishProductResponse> wishProductResponseList) {

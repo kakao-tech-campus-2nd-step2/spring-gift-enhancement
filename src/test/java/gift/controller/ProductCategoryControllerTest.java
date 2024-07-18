@@ -116,7 +116,7 @@ class ProductCategoryControllerTest {
         result.andExpect(status().isConflict())
                 .andExpect(content().string("이미 존재하는 이름입니다."));
 
-        deleteCategory(productCategory.id());
+        productCategoryService.deleteCategory(productCategory.id());
     }
 
     @Test
@@ -134,10 +134,6 @@ class ProductCategoryControllerTest {
 
         var location = createdResult.getResponse().getHeader("Location");
         var categoryId = location.replaceAll("/api/categories/", "");
-        deleteCategory(Long.parseLong(categoryId));
-    }
-
-    private void deleteCategory(Long id) {
-        productCategoryService.deleteCategory(id);
+        productCategoryService.deleteCategory(Long.parseLong(categoryId));
     }
 }
