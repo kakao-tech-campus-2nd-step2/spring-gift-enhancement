@@ -69,6 +69,9 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        if(this.category != null){
+            this.category.addProduct(this);
+        }
     }
 
     public Long getId() {
@@ -106,6 +109,12 @@ public class Product {
         this.category = category;
     }
 
+    public void remove(Product product){
+        if(this.category != null){
+            this.category.removeProduct(product);
+        }
+    }
+
     public static class Builder {
         private Long id;
         private String name;
@@ -139,7 +148,11 @@ public class Product {
         }
 
         public Product build() {
-            return new Product(this);
+            Product product = new Product(this);
+            if(product.category != null && product.id == null){
+                product.category.addProduct(product);
+            }
+            return product;
         }
     }
 
