@@ -25,12 +25,12 @@ public class ProductService {
     }
 
     public boolean addNewProduct(ProductDto productDto){
-        Category category = findCategory(productDto.categoryName());
-
-        Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
-        if (productRepository.existsByName(product.getName())) {
+        if (productRepository.existsByName(productDto.name())) {
             return false;
         }
+        Category category = findCategory(productDto.categoryName());
+        Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
+
         productRepository.save(product);
         return true;
     }
