@@ -27,7 +27,7 @@ public class WishTest {
     }
 
     @Test
-    void CreationTest(){
+    void creationTest(){
         Wish wish = new Wish(member1, product1, 1);
 
         assertAll(
@@ -38,7 +38,7 @@ public class WishTest {
     }
 
     @Test
-    void SetterTest(){
+    void setterTest(){
         Wish wish = new Wish(member1, product1, 1);
 
         wish.setMember(member2);

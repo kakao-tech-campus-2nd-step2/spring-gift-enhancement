@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class MemberTest {
 
     @Test
-    void CreationTest(){
+    void creationTest(){
         Member member = new Member("woo6388@naver.com", "123456789");
 
         assertAll(
@@ -19,7 +19,7 @@ public class MemberTest {
     }
 
     @Test
-    void SetterTest(){
+    void setterTest(){
         Member member = new Member("woo6388@naver.com", "123456789");
 
         member.setEmail("qoo6388@naver.com");
