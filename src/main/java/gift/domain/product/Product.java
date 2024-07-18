@@ -1,5 +1,6 @@
 package gift.domain.product;
 
+import gift.domain.category.Category;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +21,10 @@ public class Product {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     protected Product() {}
 
