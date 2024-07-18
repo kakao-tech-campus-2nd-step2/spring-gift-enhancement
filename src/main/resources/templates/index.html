@@ -85,7 +85,7 @@
             <td th:text="${product.imageUrl}"></td>
             <td th:text="${product.category}"></td>
             <td>
-                <form th:action="@{/option/{id}(id=${product.id})}" method="Post" style="display: inline;">
+                <form th:action="@{/options/{id}(id=${product.id})}" method="Post" style="display: inline;">
                     <button type="submit">Option</button>
                 </form>
             </td>
