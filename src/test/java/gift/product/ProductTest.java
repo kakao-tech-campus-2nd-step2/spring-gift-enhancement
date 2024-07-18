@@ -66,7 +66,7 @@ public class ProductTest {
     @DisplayName("상품 생성")
     @DirtiesContext
     void createProduct() {
-        Product product = new Product("우유", 1000L, "https://milk.jpg", 1L);
+        Product product = new Product("우유", 1000L, "https://milk.jpg", 1L,null);
 
         HttpHeaders headers = getHttpHeaders();
         //form data를 받기 때문에
@@ -102,7 +102,7 @@ public class ProductTest {
     @DirtiesContext
     void updateProduct() {
 
-        Product product = new Product("우유", 1000L, "https://example1.jpg", 1L);
+        Product product = new Product("우유", 1000L, "https://example1.jpg", 1L,null);
 
         HttpHeaders headers = getHttpHeaders();
         //form data를 받기 때문에
