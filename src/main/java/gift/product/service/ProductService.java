@@ -37,7 +37,7 @@ public class ProductService {
     public List<ProductDTO> getAllProducts() {
         return productRepository.findAll().stream()
             .map(this::convertToDTO)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public Optional<ProductDTO> getProductDTOById(Long id) {
