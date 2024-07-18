@@ -28,8 +28,8 @@ public class WishlistController {
 
     @GetMapping("/wishlist")
     public String getWishlist(@LoginMemberResolver MemberDto memberDto, Model model,
-                                       @RequestParam(value="page", defaultValue="0") int page,
-                                       @RequestParam(value="size", defaultValue="10") int size) {
+                              @RequestParam(value = "page", defaultValue = "0") int page,
+                              @RequestParam(value = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<WishlistDto> paging = wishlistService.getWishlistByPage(memberDto, pageable);
         model.addAttribute("paging", paging);
@@ -40,7 +40,7 @@ public class WishlistController {
 
     @PostMapping("/wishlist/add")
     public String addWishlistItem(@LoginMemberResolver MemberDto memberDto, @RequestBody WishlistDto wishlistDto) {
-        if(memberDto == null) {
+        if (memberDto == null) {
             return "redirect:/login";
         }
         wishlistDto.setUserId(memberDto.getId());
@@ -50,7 +50,7 @@ public class WishlistController {
 
     @PostMapping("/wishlist/remove")
     public String removeWishlistItem(@LoginMemberResolver MemberDto memberDto, @RequestBody WishlistDto wishlistDto) {
-        if(memberDto == null) {
+        if (memberDto == null) {
             return "redirect:/login";
         }
 
