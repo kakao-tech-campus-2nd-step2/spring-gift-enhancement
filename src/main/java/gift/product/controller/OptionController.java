@@ -4,6 +4,7 @@ import gift.product.dto.OptionDto;
 import gift.product.dto.OptionResponse;
 import gift.product.model.Option;
 import gift.product.service.OptionService;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,13 +42,13 @@ public class OptionController {
     }
 
     @PostMapping("/options/insert")
-    public ResponseEntity<Option> insertOption(@RequestBody OptionDto optionDto) {
+    public ResponseEntity<Option> insertOption(@Valid @RequestBody OptionDto optionDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(optionService.insertOption(optionDto));
     }
 
     @PutMapping("/options/update/{id}")
-    public ResponseEntity<Option> updateOption(@PathVariable(name = "id") Long id, @RequestBody OptionDto optionDto) {
+    public ResponseEntity<Option> updateOption(@PathVariable(name = "id") Long id, @Valid @RequestBody OptionDto optionDto) {
         return ResponseEntity.ok(optionService.updateOption(id, optionDto));
     }
 
