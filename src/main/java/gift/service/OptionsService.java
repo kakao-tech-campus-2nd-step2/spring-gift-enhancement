@@ -37,8 +37,9 @@ public class OptionsService {
     public Options addOption(String name, Integer quantity, Long productId) {
         return productRepository.findById(productId)
             .map(product -> {
-                    optionsRepository.findByNameAndProductId(name, productId)
-                        .orElseThrow(DuplicateOptionsException::new);
+                    if (optionsRepository.findByNameAndProductId(name, productId).isPresent()) {
+                        throw new DuplicateOptionsException();
+                    }
                     return optionsRepository.save(new Options(name, quantity, product));
                 }
             ).orElseThrow(NotFoundProductException::new);
