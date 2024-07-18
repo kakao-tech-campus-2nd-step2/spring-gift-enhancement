@@ -8,8 +8,10 @@ public class CreateMemberRequest {
 
     @Email
     private String email;
+
     @Password
     private String password;
+
     private String name;
 
     public CreateMemberRequest(String email, String password, String name) {
