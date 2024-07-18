@@ -1,6 +1,6 @@
 package gift.request;
 
-import gift.validation.product.KakaoNotAllowed;
+import gift.validation.KakaoNotAllowed;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
