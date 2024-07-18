@@ -51,21 +51,13 @@ public class CategoryService {
     public void updateCategory(Long id, UpdateCategoryRequest request) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(CategoryNotFoundException::new);
-        category.setName(request.name());
+        category.edit(request);
     }
 
     @Transactional
     public void deleteCategory(Long id) {
         validateCategory(id);
         categoryRepository.deleteById(id);
-    }
-
-    // for update
-    @Transactional(readOnly = true)
-    protected void validateCategory(Category category) {
-        if (categoryRepository.existsByName(category.getName())) {
-            throw new CategoryAlreadyExistException();
-        }
     }
 
     // for delete
@@ -75,4 +67,5 @@ public class CategoryService {
             throw new CategoryNotFoundException();
         }
     }
+
 }

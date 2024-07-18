@@ -4,9 +4,17 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateCategoryRequest(
-    @NotEmpty
     @NotNull
-    String name
+    @NotEmpty
+    String name,
+
+    @NotNull
+    String color,
+
+    @NotNull
+    String imageUrl,
+
+    String description
 ) {
 
 }
