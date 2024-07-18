@@ -1,6 +1,7 @@
 package gift.model.product;
 
 import gift.model.category.Category;
+import gift.model.option.Option;
 import gift.model.wishlist.WishList;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -27,10 +28,24 @@ public class Product {
     private String name;
     private int price;
     private String imageUrl;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
+    public void addOption(Option option) {
+        options.add(option);
+        option.setProduct(this);
+    }
+    public boolean hasOption(String name) {
+        return options.stream().anyMatch(option -> option.getName().equals(name));
+    }
+
+    public void removeOption(Option option) {
+        options.remove(option);
+        option.setProduct(null);
+    }
+
 
     public Product(){}
     public Product(String name, int price, String imageUrl, Category category) {
@@ -79,6 +94,14 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 
     // update

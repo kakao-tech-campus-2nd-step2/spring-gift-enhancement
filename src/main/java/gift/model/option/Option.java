@@ -1,5 +1,6 @@
 package gift.model.option;
 
+import gift.common.exception.AlreadyExistName;
 import gift.model.product.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,9 +31,16 @@ public class Option {
     }
     public Option() {}
     public Option(String name, int quantity, Product product) {
+        validationName(name, product);
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+    }
+    // 옵션명 중복 검증 로직
+    private void validationName(String name, Product product) {
+        if(product.hasOption(name)) {
+            throw new AlreadyExistName("이미 존재하는 옵션명입니다.");
+        }
     }
 
     public Long getId() {
