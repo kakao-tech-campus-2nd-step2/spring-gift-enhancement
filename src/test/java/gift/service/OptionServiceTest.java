@@ -3,7 +3,6 @@ package gift.service;
 import gift.common.exception.EntityNotFoundException;
 import gift.controller.dto.request.CreateOptionRequest;
 import gift.controller.dto.request.UpdateOptionRequest;
-import gift.model.Option;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
