@@ -42,6 +42,21 @@ public class Wish {
         this.member = member;
         this.product = product;
         this.quantity = quantity;
+        if(this.member != null){
+            this.member.addWish(this);
+        }
+        if(this.product != null){
+            this.product.addWish(this);
+        }
+    }
+
+    public void remove(Wish wish){
+        if(this.member != null){
+            this.member.removeWish(wish);
+        }
+        if(this.product != null){
+            this.product.removeWish(wish);
+        }
     }
 
     public void updateQuantity(int quantity){
@@ -99,7 +114,14 @@ public class Wish {
         }
 
         public Wish build() {
-            return new Wish(this);
+            Wish wish = new Wish(this);
+            if(wish.member != null && wish.id == null){
+                wish.member.addWish(wish);
+            }
+            if(wish.product != null && wish.id == null){
+                wish.product.addWish(wish);
+            }
+            return wish;
         }
     }
 
