@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.domain.Category;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
@@ -27,21 +28,30 @@ class ProductRepositoryTest {
     @Autowired
     private  MemberRepository members;
     @Autowired
-    private  WishRepository wishes;
-    @Autowired
     private EntityManager entityManager;
     @Autowired
     private RepositoryHelper helper;
+    @Autowired
+    private CategoryRepository categories;
 
     @Test
     @DisplayName("상품 저장 테스트")
     void save() {
         // given
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
                 .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
+        categories.save(category);
 
         // when
         Product actual = products.save(expectedProduct);
@@ -59,11 +69,20 @@ class ProductRepositoryTest {
     @DisplayName("상품 아이디 조회 테스트")
     void findById() {
         // given
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
                 .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
+        categories.save(category);
         Product savedProduct = products.save(expectedProduct);
 
         // when
@@ -73,9 +92,7 @@ class ProductRepositoryTest {
         assertNotNull(foundProduct);
         assertAll(
                 () -> assertThat(foundProduct.getId()).isNotNull(),
-                () -> assertThat(foundProduct.getName()).isEqualTo(expectedProduct.getName()),
-                () -> assertThat(foundProduct.getPrice()).isEqualTo(expectedProduct.getPrice()),
-                () -> assertThat(foundProduct.getImageUrl()).isEqualTo(expectedProduct.getImageUrl())
+                () -> assertThat(foundProduct).isEqualTo(expectedProduct)
         );
     }
 
@@ -83,11 +100,20 @@ class ProductRepositoryTest {
     @DisplayName("상품 이름 조회 테스트")
     void findByName() {
         // given
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
                 .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
+        categories.save(category);
         Product savedProduct = products.save(expectedProduct);
 
         // when
@@ -97,9 +123,7 @@ class ProductRepositoryTest {
         assertNotNull(foundProduct);
         assertAll(
                 () -> assertThat(foundProduct.getId()).isNotNull(),
-                () -> assertThat(foundProduct.getName()).isEqualTo(expectedProduct.getName()),
-                () -> assertThat(foundProduct.getPrice()).isEqualTo(expectedProduct.getPrice()),
-                () -> assertThat(foundProduct.getImageUrl()).isEqualTo(expectedProduct.getImageUrl())
+                () -> assertThat(foundProduct).isEqualTo(expectedProduct)
         );
     }
 
@@ -107,9 +131,17 @@ class ProductRepositoryTest {
     @DisplayName("상품 전체 조회 테스트")
     void findAll() {
         // given
-        products.save(new Product("상품1", 1000, "http://product1"));
-        products.save(new Product("상품2", 2000, "http://product2"));
-        products.save(new Product("상품3", 3000, "http://product3"));
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+        categories.save(category);
+
+        products.save(new Product("상품1", 1000, "http://product1", category));
+        products.save(new Product("상품2", 2000, "http://product2", category));
+        products.save(new Product("상품3", 3000, "http://product3", category));
 
         // when
         List<Product> findProducts = products.findAll();
@@ -122,14 +154,24 @@ class ProductRepositoryTest {
     @DisplayName("상품 아이디로 삭제 테스트")
     void deleteById() {
         // given
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
                 .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
+        categories.save(category);
         Product savedProduct = products.save(expectedProduct);
 
         // when
+        savedProduct.remove();
         products.deleteById(savedProduct.getId());
 
         // then
@@ -148,10 +190,18 @@ class ProductRepositoryTest {
                 .password("1234")
                 .build();
 
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
                 .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
 
         Wish expectedWish = new Wish.Builder()
@@ -160,6 +210,7 @@ class ProductRepositoryTest {
                 .qunatity(1)
                 .build();
 
+        categories.save(category);
         members.save(expectedMember);
         expectedProduct.addWish(expectedWish);
 
@@ -187,10 +238,18 @@ class ProductRepositoryTest {
                 .password("1234")
                 .build();
 
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
                 .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
 
         Wish expectedWish = new Wish.Builder()
@@ -199,6 +258,7 @@ class ProductRepositoryTest {
                 .qunatity(1)
                 .build();
 
+        categories.save(category);
         members.save(expectedMember);
         expectedProduct.addWish(expectedWish);
         Product savedProduct = products.save(expectedProduct);
@@ -226,10 +286,18 @@ class ProductRepositoryTest {
                 .password("1234")
                 .build();
 
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
                 .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
 
         Wish expectedWish = new Wish.Builder()
@@ -238,6 +306,7 @@ class ProductRepositoryTest {
                 .qunatity(1)
                 .build();
 
+        categories.save(category);
         members.save(expectedMember);
         expectedProduct.addWish(expectedWish);
 
@@ -268,10 +337,18 @@ class ProductRepositoryTest {
                 .password("1234")
                 .build();
 
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
         Product expectedProduct = new Product.Builder()
                 .name("아메리카노")
                 .price(2000)
                 .imageUrl("https://example.com/americano")
+                .category(category)
                 .build();
 
         Wish expected = new Wish.Builder()
@@ -296,6 +373,7 @@ class ProductRepositoryTest {
         expectedProduct.addWish(expected2);
         expectedProduct.addWish(expected3);
 
+        categories.save(category);
         members.save(expectedMember);
         products.save(expectedProduct);
         products.flush();
@@ -320,9 +398,17 @@ class ProductRepositoryTest {
     @DisplayName("상품 페이지 조회 테스트")
     void testFindAll() {
         // given
-        products.save(new Product("상품1", 1000, "http://product1"));
-        products.save(new Product("상품2", 2000, "http://product2"));
-        products.save(new Product("상품3", 3000, "http://product3"));
+        Category category = new Category.Builder()
+                .name("교환권")
+                .color("#FF5733")
+                .imageUrl("https://example.com/images/exchange_voucher.jpg")
+                .description("다양한 상품으로 교환 가능한 교환권")
+                .build();
+
+        categories.save(category);
+        products.save(new Product("상품1", 1000, "http://product1", category));
+        products.save(new Product("상품2", 2000, "http://product2", category));
+        products.save(new Product("상품3", 3000, "http://product3", category));
 
         // when
         Pageable pageable = PageRequest.of(0,2, Sort.by("id").descending());
