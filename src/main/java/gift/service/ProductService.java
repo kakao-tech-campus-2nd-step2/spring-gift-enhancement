@@ -1,10 +1,12 @@
 package gift.service;
 
+import gift.entity.Category;
 import gift.entity.Member;
 import gift.entity.Product;
 
 import gift.exception.DataNotFoundException;
 import gift.exception.DuplicateUserEmailException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 
 import java.util.ArrayList;
@@ -21,10 +23,12 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
     private final int PAGE_SIZE = 5;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     public void saveProduct(Product product) {
@@ -51,7 +55,7 @@ public class ProductService {
         update.setName(product.getName());
         update.setPrice(product.getPrice());
         update.setImageUrl(product.getImageUrl());
-
+        update.setCategory(product.getCategory());
         productRepository.save(update);
 
 
@@ -71,7 +75,15 @@ public class ProductService {
 
     private Product findByProductByIdOrThrow(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("존재하지 않는 상품입니다."));
+            .orElseThrow(() -> new DataNotFoundException("존재하지 않는 상품입니다."));
+    }
+
+    public Category findCategoryById(Long id) {
+        return categoryService.findById(id);
+    }
+
+    public List<Category> findAllCategory() {
+        return categoryService.findAll();
     }
 
 }

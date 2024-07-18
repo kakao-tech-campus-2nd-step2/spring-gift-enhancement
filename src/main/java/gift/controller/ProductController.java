@@ -2,6 +2,7 @@ package gift.controller;
 
 
 import gift.dto.ProductDTO;
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -44,15 +45,16 @@ public class ProductController {
 
     //Product Pagination
     @GetMapping("/page/{page}")
-    public ResponseEntity<Page<Product>> getProductPage(@PathVariable("page") int page){
+    public ResponseEntity<Page<Product>> getProductPage(@PathVariable("page") int page) {
         Page<Product> products = productService.getProductPage(page);
-        return new ResponseEntity<>(products,HttpStatus.OK);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     //product 추가
     @PostMapping
     public ResponseEntity<String> addProduct(@RequestBody @Valid ProductDTO productDTO) {
-        Product product = productDTO.toEntity();
+        Category category = productService.findCategoryById(productDTO.getCategoryId());
+        Product product = productDTO.toEntity(category);
         productService.saveProduct(product);
         return new ResponseEntity<>("OK", HttpStatus.CREATED);
 
@@ -62,7 +64,9 @@ public class ProductController {
     //product 수정
     @PatchMapping("/{id}")
     public ResponseEntity<String> editProduct(@PathVariable("id") Long id,
-        @RequestBody @Valid Product product) {
+        @RequestBody ProductDTO productDTO) {
+        Category category = productService.findCategoryById(productDTO.getCategoryId());
+        Product product = productDTO.toEntity(category);
         productService.updateProduct(product, id);
 
         return new ResponseEntity<>("product edit success", HttpStatus.OK);

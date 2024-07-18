@@ -26,7 +26,7 @@ public class MemberDTO {
         return password;
     }
 
-    public Member toEntity(){
-        return new Member(email,password) ;
+    public Member toEntity() {
+        return new Member(email, password);
     }
 }

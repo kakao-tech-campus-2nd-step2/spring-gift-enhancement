@@ -78,6 +78,8 @@
           <h2 th:text="${product.name}">상품 이름</h2>
           <p>상품 ID: <span th:text="${product.id}">1</span></p>
           <p>가격: <span th:text="${product.price}">10000</span>원</p>
+          <p>분류: <span th:text="${product.category.name}">카테고리</span></p>
+
         </div>
 
         <div class="product-actions">
@@ -97,6 +99,15 @@
           <input type="number" th:value="${product.price}" name="price" placeholder="상품 가격">
           <p>이미지 URL</p>
           <input type="text" th:value="${product.imageUrl}" name="imageUrl" placeholder="이미지 URL">
+
+          <div class="form-group">
+            <label for="productCategory">상품 카테고리:</label>
+            <select id="productCategory" name="categoryId" required>
+              <option value="" disabled selected>카테고리를 선택하세요</option>
+              <option th:each="category : ${categories}" th:value="${category.id}"
+                      th:text="${category.name}"></option>
+            </select>
+          </div>
           <div/>
           <button type="submit" th:onclick="'editHandler(' + ${product.id} + ')'" >저장</button>
           <button type="button" th:onclick="'hideEditForm(' + ${product.id} + ')'">취소</button>
@@ -132,12 +143,14 @@
     const name = form.querySelector('input[name="name"]').value;
     const price = form.querySelector('input[name="price"]').value;
     const imageUrl = form.querySelector('input[name="imageUrl"]').value;
+    const categoryId = form.querySelector('select[name="categoryId"]').value;
 
     const product={
       id:id,
       name:name,
       price:price,
-      imageUrl:imageUrl
+      imageUrl:imageUrl,
+      categoryId:categoryId
     };
 
     fetch(`/product/${productId}`, {

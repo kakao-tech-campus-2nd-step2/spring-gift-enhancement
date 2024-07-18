@@ -41,7 +41,7 @@ public class WishlistService {
 
     public Wish findById(Long id) {
         return wishRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("위시리스트가 존재하지 않습니다."));
+            .orElseThrow(() -> new DataNotFoundException("위시리스트가 존재하지 않습니다."));
     }
 
 

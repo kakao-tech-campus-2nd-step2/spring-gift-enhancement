@@ -32,7 +32,8 @@ public class WishlistController {
     MemberService memberService;
     ProductService productService;
 
-    public WishlistController(WishlistService wishlistService, MemberService memberService, ProductService productService) {
+    public WishlistController(WishlistService wishlistService, MemberService memberService,
+        ProductService productService) {
         this.wishlistService = wishlistService;
         this.memberService = memberService;
         this.productService = productService;
@@ -45,13 +46,15 @@ public class WishlistController {
     }
 
     @GetMapping("/page/{page}")
-    public ResponseEntity<Page<Wish>> getWishlistPage(@PathVariable("page") int page, @LoginUser String email) {
-        Page<Wish> wishes = wishlistService.getWishPage(email,page);
-        return new ResponseEntity<>(wishes,HttpStatus.OK);
+    public ResponseEntity<Page<Wish>> getWishlistPage(@PathVariable("page") int page,
+        @LoginUser String email) {
+        Page<Wish> wishes = wishlistService.getWishPage(email, page);
+        return new ResponseEntity<>(wishes, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<String> addWishlist(@RequestBody WishDTO wishDTO, @LoginUser String email) {
+    public ResponseEntity<String> addWishlist(@RequestBody WishDTO wishDTO,
+        @LoginUser String email) {
         Member member = memberService.findById(wishDTO.getMemberId());
         Product product = productService.getProductById(wishDTO.getProductId());
         Wish wish = wishDTO.toEntity(member, product);
@@ -61,7 +64,7 @@ public class WishlistController {
 
     @DeleteMapping("/{wishId}")
     public ResponseEntity<String> deleteWishlist(@PathVariable("wishId") long wishId,
-                                                 @LoginUser String email) {
+        @LoginUser String email) {
         wishlistService.deleteWishlist(wishId, email);
         return new ResponseEntity<>("위시리스트 상품 삭제 완료", HttpStatus.NO_CONTENT);
     }
