@@ -2,7 +2,12 @@ package gift.domain;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,6 +29,10 @@ public class Product extends BaseEntity {
     @ColumnDefault("'https://gift-s3.s3.ap-northeast-2.amazonaws.com/default-image.png'")
     private URL imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT), nullable = false)
+    private Category category;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<WishProduct> wishProducts = new ArrayList<>();
 
@@ -35,7 +44,7 @@ public class Product extends BaseEntity {
         private String name;
         private Integer price;
         private URL imageUrl;
-
+        private Category category;
 
         public Builder name(String name) {
             this.name = name;
@@ -49,6 +58,11 @@ public class Product extends BaseEntity {
 
         public Builder imageUrl(URL imageUrl) {
             this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public Builder category(Category category) {
+            this.category = category;
             return this;
         }
 
@@ -68,12 +82,14 @@ public class Product extends BaseEntity {
         name = builder.name;
         price = builder.price;
         imageUrl = builder.imageUrl;
+        category = builder.category;
     }
 
     public Product update(Product product) {
         this.name = product.getName();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
+        this.category = product.getCategory();
         return this;
     }
 
@@ -89,4 +105,7 @@ public class Product extends BaseEntity {
         return imageUrl;
     }
 
+    public Category getCategory() {
+        return category;
+    }
 }
