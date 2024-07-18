@@ -53,7 +53,7 @@ class ProductServiceTest {
         List<Option> options = List.of(new Option("option", 1010));
 
         when(categoryService.getCategory(request.categoryId())).thenReturn(category);
-        when(optionService.getOptions(request.optionRequests())).thenReturn(options);
+        when(optionService.convertToOptions(request.optionRequests())).thenReturn(options);
 
         Product savedProduct = new Product(1L, "productName", 100, "img", category, options);
 

@@ -26,7 +26,7 @@ class OptionServiceTest {
         List<OptionRequest> optionRequests = List.of(new OptionRequest("옵션1", 3030));
 
         //When
-        List<Option> options = optionService.getOptions(optionRequests);
+        List<Option> options = optionService.convertToOptions(optionRequests);
 
         //Then
         assertThat(options).hasSize(1)
