@@ -88,4 +88,6 @@ public class ProductDTO {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
 }

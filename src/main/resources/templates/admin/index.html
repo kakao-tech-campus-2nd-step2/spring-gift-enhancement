@@ -15,6 +15,7 @@
         <td> <span th:text="|name : ${product.name}|">상품명</span></td>
         <td> <span th:text="|price : ${product.price}|">가격</span></td>
         <td> <span th:text="|imageUrl : ${product.imageUrl}|">이미지</span></td>
+        <td> <span th:text="|categoryId : ${product.categoryId}|">카테고리</span></td>
         <td>
           <form th:action="@{/admin/{id}(id=${product.id})}" th:object="${productDTO}" method="#" th:method="put">
             <div>
@@ -28,6 +29,10 @@
             <div>
               <label for="fixImg">상품 이미지</label>
               <input type="text" id="fixImg" th:field="*{imageUrl}">
+            </div>
+            <div>
+              <label for="fixCategoryId">카테고리Id</label>
+              <input type="text" id="fixCategoryId" th:field="*{categoryId}">
             </div>
             <button type="submit">수정하기</button>
           </form>
@@ -56,6 +61,10 @@
     <div>
       <label for="productImgUrl">이미지주소</label>
       <input type="text" id="productImgUrl" th:field="*{imageUrl}">
+    </div>
+    <div>
+      <label for="productCategoryId">카테고리Id</label>
+      <input type="text" id="productCategoryId" th:field="*{categoryId}">
     </div>
     <button type="submit">상품 추가하기</button>
   </form>
