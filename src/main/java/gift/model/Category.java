@@ -20,14 +20,14 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 255)
     private String name;
 
     @Column(nullable = false)
     @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = INVALID_COLOR)
     private String color;
 
-    @Column(name = "image_url", nullable = false)
+    @Column(name = "image_url", nullable = false, length = 255)
     private String imageUrl;
 
     @Size(max = 255, message = CATEGORY_DESCRIPTION_SIZE_LIMIT)
