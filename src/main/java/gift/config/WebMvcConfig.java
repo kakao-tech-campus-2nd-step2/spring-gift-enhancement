@@ -1,5 +1,6 @@
 package gift.config;
 
+import gift.resolver.LoginMemberArgumentResolver;
 import gift.service.MemberService;
 
 import java.util.List;
