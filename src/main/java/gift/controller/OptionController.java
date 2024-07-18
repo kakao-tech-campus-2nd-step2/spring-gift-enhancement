@@ -3,6 +3,7 @@ package gift.controller;
 import gift.constants.SuccessMessage;
 import gift.dto.OptionDto;
 import gift.service.OptionService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,14 +25,14 @@ public class OptionController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addOption(@RequestBody OptionDto optionDto) {
+    public ResponseEntity<String> addOption(@RequestBody @Valid OptionDto optionDto) {
         optionService.addOption(optionDto);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(SuccessMessage.ADD_OPTION_SUCCESS_MSG);
     }
 
     @PutMapping
-    public ResponseEntity<String> editOption(@RequestBody OptionDto optionDto) {
+    public ResponseEntity<String> editOption(@RequestBody @Valid OptionDto optionDto) {
         optionService.editOption(optionDto);
         return ResponseEntity.ok(SuccessMessage.EDIT_OPTION_SUCCESS_MSG);
     }

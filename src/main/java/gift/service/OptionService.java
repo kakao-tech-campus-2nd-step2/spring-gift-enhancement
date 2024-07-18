@@ -30,7 +30,7 @@ public class OptionService {
      */
     public List<OptionDto> getProductOptionList(Long productId) {
         findProductByIdOrElseThrow(productId);
-        return optionJpaDao.findAllByProduct_id(productId).stream().map(OptionDto::new)
+        return optionJpaDao.findAllByProduct_Id(productId).stream().map(OptionDto::new)
             .toList();
     }
 
@@ -46,6 +46,7 @@ public class OptionService {
 
     public void addOption(OptionDto optionDto) {
         Product product = findProductByIdOrElseThrow(optionDto.getProductId());
+        assertOptionNotDuplicate(optionDto.getName(), optionDto.getProductId());
         optionJpaDao.save(new Option(optionDto, product));
     }
 
@@ -63,9 +64,6 @@ public class OptionService {
 
     /**
      * productId에 해당하는 상품이 존재하면 반환하고 아니면 NoSuchElementException
-     *
-     * @param productId
-     * @return Product
      */
     private Product findProductByIdOrElseThrow(Long productId) {
         return productJpaDao.findById(productId)
@@ -74,12 +72,19 @@ public class OptionService {
 
     /**
      * optionId에 해당하는 상품이 존재하면 반환하고 아니면 NoSuchElementException
-     *
-     * @param optionId
-     * @return
      */
     private Option findOptionByIdOrElseThrow(Long optionId) {
         return optionJpaDao.findById(optionId)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
+    }
+
+    /**
+     * optionName과 productId로 같은 상품에 중복된 옵션이 존재한다면 IllegalArgumentException
+     */
+    private void assertOptionNotDuplicate(String optionName, Long productId) {
+        optionJpaDao.findByNameAndProduct_Id(optionName, productId)
+            .ifPresent(v -> {
+                throw new IllegalArgumentException(ErrorMessage.OPTION_NAME_ALREADY_EXISTS_MSG);
+            });
     }
 }
