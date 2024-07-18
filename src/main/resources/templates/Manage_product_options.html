@@ -10,7 +10,7 @@
   <div>
     <label for="options">옵션:</label>
     <select multiple id="options" name="optionIds">
-      <option th:each="option : ${options}" th:value="${option.id}" th:text="${option.name}" th:selected="${#lists.contains(product.options, option)}"></option>
+      <option th:each="option : ${options}" th:value="${option.id}" th:text="${option.name.name}" th:selected="${#lists.contains(product.options, option)}"></option>
     </select>
   </div>
   <div>
