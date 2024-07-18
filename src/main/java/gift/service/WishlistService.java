@@ -6,7 +6,7 @@ import gift.domain.Product;
 import gift.domain.Member;
 import gift.domain.Wishlist;
 import gift.repository.WishlistRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +35,7 @@ public class WishlistService {
         categoryService = cs;
     }
 
+    @Transactional(readOnly = true)
     public List<Product> getWishlistByEmail(String email, Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Wishlist> wishes = wishlistRepository.findByMemberEmail(email, pageable);

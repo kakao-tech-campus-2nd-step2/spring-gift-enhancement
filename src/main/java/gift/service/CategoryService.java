@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CategoryService {
@@ -20,6 +21,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryResponse> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
         List<CategoryResponse> responses = categories.stream()
@@ -28,12 +30,14 @@ public class CategoryService {
         return responses;
     }
 
+    @Transactional(readOnly = true)
     public Category getCategoryById(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         category.orElseThrow(() -> new RuntimeException("No such category"));
         return category.get();
     }
 
+    @Transactional
     public CategoryResponse addCategory(CategoryRequest newCategory) {
         categoryRepository.findByName(newCategory.getName())
             .ifPresent(cat -> {
@@ -46,6 +50,7 @@ public class CategoryService {
         return response;
     }
 
+    @Transactional
     public CategoryResponse updateCategory(Long id, CategoryRequest newCategory) {
         Category category = categoryRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("No such category"));
@@ -60,6 +65,7 @@ public class CategoryService {
         return response;
     }
 
+    @Transactional
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("No such category"));

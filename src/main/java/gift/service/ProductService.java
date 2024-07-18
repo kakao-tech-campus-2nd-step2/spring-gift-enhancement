@@ -5,13 +5,13 @@ import gift.domain.Category;
 import gift.domain.Product;
 import gift.DTO.product.ProductRequest;
 import gift.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
@@ -25,6 +25,7 @@ public class ProductService {
         this.categoryService = categoryService;
     }
 
+    @Transactional(readOnly = true)
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
         List<ProductResponse> response = products.stream()
@@ -33,6 +34,7 @@ public class ProductService {
         return response;
     }
 
+    @Transactional(readOnly = true)
     public List<ProductResponse> getProductsByPage(Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Product> productPage = productRepository.findAll(pageable);
@@ -42,6 +44,7 @@ public class ProductService {
         return responses;
     }
 
+    @Transactional(readOnly = true)
     public ProductResponse getProductById(Long id) {
         Product product = getProductByIdOrThrow(id);
         ProductResponse response = ProductResponse.fromEntity(product);

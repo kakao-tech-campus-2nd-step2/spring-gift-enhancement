@@ -9,7 +9,7 @@ import gift.exception.member.DuplicatedEmailException;
 import gift.exception.member.InvalidAccountException;
 import gift.exception.member.PasswordMismatchException;
 import gift.repository.MemberRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +39,7 @@ public class MemberService {
         return new SignupResponse(member.getEmail());
     }
 
+    @Transactional(readOnly = true)
     public LoginResponse loginMember(LoginRequest loginRequest) {
         Optional<Member> member = memberRepository.findByEmail(loginRequest.getEmail());
         member.orElseThrow(
@@ -51,6 +52,7 @@ public class MemberService {
         return new LoginResponse(token);
     }
 
+    @Transactional(readOnly = true)
     public Member getMemberByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         member.orElseThrow(() -> new InvalidAccountException());
