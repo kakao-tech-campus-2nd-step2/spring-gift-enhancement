@@ -45,7 +45,8 @@ public class ProductOptionService {
     }
 
     public Long createProductOption(long productId, CreateOption create) {
-        if (productOptionRepository.findByNameAndProductId(create.getName(),productId).isPresent()) {
+        if (productOptionRepository.findByNameAndProductId(create.getName(), productId)
+            .isPresent()) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED, "옵션의 이름이 중복됩니다.");
         }
 
@@ -59,13 +60,14 @@ public class ProductOptionService {
 
     @Transactional
     public Long updateProductOption(long productId, long id, UpdateOption update) {
-        if (productOptionRepository.findByNameAndProductId(update.getName(),productId).isPresent()) {
-            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "옵션의 이름이 중복됩니다.");
-        }
-
         ProductOptionEntity entity = productOptionRepository.findByProductIdAndId(
                 productId, id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 상품의 옵션이 존재하지 않습니다."));
+
+        if (entity.getName() != update.getName() &&
+            productOptionRepository.findByNameAndProductId(update.getName(), productId).isPresent()) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "옵션의 이름이 중복됩니다.");
+        }
 
         productOptionMapper.toUpdate(entity, update);
         return entity.getId();
