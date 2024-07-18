@@ -41,6 +41,7 @@ public class Options extends BaseEntity {
     public Options(Long id, String name, Integer quantity, Product product) {
         validateName(name);
         validateQuantity(quantity);
+        validateProduct(product);
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -50,6 +51,7 @@ public class Options extends BaseEntity {
     public Options(String name, Integer quantity, Product product) {
         validateName(name);
         validateQuantity(quantity);
+        validateProduct(product);
         this.name = name;
         this.quantity = quantity;
         this.product = product;
@@ -79,7 +81,7 @@ public class Options extends BaseEntity {
     }
 
     public static void validateName(String name) {
-        if (StringUtils.hasText(name) || name.length() > 50) {
+        if (!StringUtils.hasText(name) || name.length() > 50) {
             throw new InputException("1~50자 사이로 입력해주세요.");
         }
         if (!name.matches("^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9()+&/_ \\[\\]-]*$")) {
@@ -90,6 +92,12 @@ public class Options extends BaseEntity {
     public static void validateQuantity(Integer quantity) {
         if (quantity == null || quantity < 0 || quantity > 100000000) {
             throw new InputException("수량은 1개~1억개 사이여야 합니다.");
+        }
+    }
+
+    private void validateProduct(Product product) {
+        if(product == null || product.getId() == null) {
+            throw new InputException("알 수 없는 오류가 발생하였습니다.");
         }
     }
 
