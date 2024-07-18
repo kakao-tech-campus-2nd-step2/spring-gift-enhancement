@@ -2,6 +2,7 @@ package gift.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,7 @@ public class Product {
     private Category category;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "product_id")
-    private List<Option> options;
+    private List<Option> options = new ArrayList<>();
 
     public Product() {
     }
@@ -48,6 +49,13 @@ public class Product {
         this.imageUrl = imageUrl;
         this.category = category;
         this.options = options;
+    }
+
+    public Product(String name, int price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
