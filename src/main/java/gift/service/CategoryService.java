@@ -1,9 +1,9 @@
 package gift.service;
 
+import gift.exception.ErrorMessage;
 import gift.domain.Category;
 import gift.dto.CategoryDto;
-import gift.exception.CategoryNameNotDuplicateException;
-import gift.exception.CategoryNotFoundException;
+import gift.exception.GiftException;
 import gift.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +29,7 @@ public class CategoryService {
 
     public void addCategory(CategoryDto dto) {
         if (categoryRepository.existsByName(dto.getName())) {
-            throw new CategoryNameNotDuplicateException();
+            throw new GiftException(ErrorMessage.CATEGORY_NAME_NOT_DUPLICATES);
         }
 
         Category category = new Category(dto.getName());
@@ -39,10 +39,10 @@ public class CategoryService {
 
     public void editCategory(Long categoryId, CategoryDto dto) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(CategoryNotFoundException::new);
+                .orElseThrow(() -> new GiftException(ErrorMessage.CATEGORY_NOT_FOUND));
 
         if (!category.getName().equals(dto.getName()) && categoryRepository.existsByName(dto.getName())) {
-            throw new CategoryNameNotDuplicateException();
+            throw new GiftException(ErrorMessage.CATEGORY_NAME_NOT_DUPLICATES);
         }
 
         category.changeName(dto.getName());

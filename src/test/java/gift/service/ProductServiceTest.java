@@ -5,7 +5,7 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.OptionDto;
 import gift.dto.ProductDto;
-import gift.exception.ProductNotFoundException;
+import gift.exception.GiftException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +21,7 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
@@ -75,7 +75,8 @@ class ProductServiceTest {
         given(productRepository.findById(productId)).willReturn(Optional.empty());
 
         //when & then
-        assertThrows(ProductNotFoundException.class, () -> productService.getProduct(productId));
+        assertThatExceptionOfType(GiftException.class)
+                .isThrownBy(() -> productService.getProduct(productId));
 
         then(productRepository).should().findById(productId);
     }
@@ -144,7 +145,8 @@ class ProductServiceTest {
         given(productRepository.findById(productId)).willReturn(Optional.empty());
 
         //when & then
-        assertThrows(ProductNotFoundException.class, () -> productService.removeProduct(productId));
+        assertThatExceptionOfType(GiftException.class)
+                .isThrownBy(() -> productService.removeProduct(productId));
 
         then(productRepository).should().findById(productId);
     }
@@ -163,7 +165,7 @@ class ProductServiceTest {
         //then
         then(productRepository).should().findById(anyLong());
     }
-    
+
     @DisplayName("상품에 옵션 하나를 추가한다.")
     @Test
     void addOption() throws Exception {

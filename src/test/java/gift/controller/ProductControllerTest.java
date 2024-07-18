@@ -1,7 +1,7 @@
 package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.constant.ErrorMessage;
+import gift.exception.ErrorMessage;
 import gift.dto.OptionDto;
 import gift.dto.ProductDto;
 import gift.dto.request.ProductCreateRequest;

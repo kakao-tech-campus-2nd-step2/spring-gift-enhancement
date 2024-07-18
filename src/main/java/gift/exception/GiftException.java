@@ -1,24 +1,16 @@
 package gift.exception;
 
-import java.util.Map;
+public class GiftException extends RuntimeException {
 
-public abstract class GiftException extends RuntimeException {
+    private ErrorMessage errorMessage;
 
-    public Map<String, String> validation;
-
-    public GiftException(String message) {
-        super(message);
+    public GiftException(ErrorMessage errorMessage) {
+        super(errorMessage.getMessage());
+        this.errorMessage = errorMessage;
     }
 
-    public GiftException(String message, Map<String, String> validation) {
-        super(message);
-        this.validation = validation;
-    }
-
-    public abstract int getStatusCode();
-
-    public Map<String, String> getValidation() {
-        return validation;
+    public ErrorMessage getErrorMessage() {
+        return errorMessage;
     }
 
 }

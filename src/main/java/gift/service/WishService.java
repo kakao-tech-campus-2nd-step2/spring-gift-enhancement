@@ -1,12 +1,11 @@
 package gift.service;
 
+import gift.exception.ErrorMessage;
 import gift.domain.Product;
 import gift.domain.Wish;
 import gift.domain.member.Member;
 import gift.dto.ProductDto;
-import gift.exception.ProductAlreadyInWishlistException;
-import gift.exception.ProductNotFoundException;
-import gift.exception.ProductNotInWishlistException;
+import gift.exception.GiftException;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import org.springframework.data.domain.Page;
@@ -37,10 +36,10 @@ public class WishService {
 
     public void addProduct(Member member, Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new GiftException(ErrorMessage.PRODUCT_NOT_FOUND));
 
         if (wishRepository.existsByMemberIdAndProductId(member.getId(), productId)) {
-            throw new ProductAlreadyInWishlistException();
+            throw new GiftException(ErrorMessage.PRODUCT_ALREADY_IN_WISHLIST);
         }
 
         Wish wish = new Wish(member, product);
@@ -50,10 +49,10 @@ public class WishService {
 
     public void removeProduct(Member member, Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new GiftException(ErrorMessage.PRODUCT_NOT_FOUND));
 
         Wish wish = wishRepository.findByMemberAndProduct(member, product)
-                .orElseThrow(ProductNotInWishlistException::new);
+                .orElseThrow(() -> new GiftException(ErrorMessage.PRODUCT_NOT_IN_WISHLIST));
 
         wishRepository.delete(wish);
     }
