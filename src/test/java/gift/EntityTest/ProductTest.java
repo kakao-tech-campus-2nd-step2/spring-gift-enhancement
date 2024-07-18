@@ -14,7 +14,7 @@ public class ProductTest {
     private Category category2;
 
     @BeforeEach
-    void BeforeEach(){
+    void beforeEach(){
         category = new Category("식품", "#8123f3D", "식품 url", "");
         category2 = new Category("음료", "#7324d2b", "음료 url", "");
     }
