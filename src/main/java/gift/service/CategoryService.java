@@ -40,10 +40,17 @@ public class CategoryService {
     }
 
     public void addCategory(CategoryDto categoryDto){
-        Category category = categoryRepository.findByName(categoryDto.getName())
-                            .orElseThrow(() -> new CustomException("Category with name" + categoryDto.getName() + "exists" , HttpStatus.CONFLICT));
-        
-        categoryRepository.save(category);
+
+        if(categoryRepository.findByName(categoryDto.getName()).isEmpty()){
+            Category category = toEntity(categoryDto);
+            categoryRepository.save(category);
+        }else{
+            new CustomException("Category with name" + categoryDto.getName() + "exists" , HttpStatus.CONFLICT);
+        }
+    }
+
+    public Category toEntity(CategoryDto categoryDto){
+        return new Category(categoryDto.getName(), categoryDto.getColor(), categoryDto.getImageUrl(), categoryDto.getDescription());
     }
 
     
