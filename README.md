@@ -7,12 +7,12 @@
   - [x] testImplementation("org.assertj:assertj-core:3.25.1") 의존성 제거
   - [x] 지연 로딩 적용
 # step1
-- [ ] 상품 카테고리 구현
-  - [ ] 상품 카테고리 추가
-  - [ ] 상품 카테고리 수정
-  - [ ] 상품 카테고리 삭제
-  - [ ] 상품 카테고리 조회
-- [ ] Product에 카테고리 속성 추가
+- [x] 상품 카테고리 구현
+  - [x] 상품 카테고리 추가
+  - [x] 상품 카테고리 수정
+  - [x] 상품 카테고리 삭제
+  - [x] 상품 카테고리 조회
+- [x] Product에 카테고리 속성 추가
 - [ ] Test 작성
   - [ ] categoryController
   - [ ] categoryService
