@@ -70,7 +70,7 @@
                 └── view.html             
 └── src
     └── main
-        ├── java
+        └── java
             └── gift   
-                └── member.service   
-                    └── MemberServiceTest.java
+                ├── CategoryServiceTest.java
+                └── MemberServiceTest.java
