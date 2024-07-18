@@ -21,7 +21,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @NotBlank(message = "상품 이름을 비우거나 공백으로 설정할 수 없습니다")
     @Size(max=15,message = "상품명은 공백 포함하여 최대 15자까지 입력할 수 있습니다")
     @Pattern(regexp = "^[\\w\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_가-힣]*$", message = "특수 문자는 ( ), [ ], +, -, &, /, _ 만 사용할 수 있습니다.")
@@ -38,7 +37,6 @@ public class Product {
     @ManyToOne(optional = false)
     @JoinColumn(name = "category_id")
     private Category category;
-
     public Product() {}
 
     public Product(String name, int price, String imageUrl) {
