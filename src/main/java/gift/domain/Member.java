@@ -4,12 +4,9 @@ import gift.domain.base.BaseTimeEntity;
 import gift.domain.vo.Email;
 import gift.domain.vo.Password;
 import gift.web.validation.exception.client.IncorrectPasswordException;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import java.util.List;
 
 @Entity
 public class Member extends BaseTimeEntity {
@@ -22,9 +19,6 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String name;
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private List<WishProduct> wishProducts;
 
     protected Member() {
     }
