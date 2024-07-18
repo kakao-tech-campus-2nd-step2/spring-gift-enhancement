@@ -10,11 +10,12 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
 public class ProductRequest {
+    private final static String SPECIAL_REGEX = "^[()\\[\\]+\\-&/_ㄱ-하-ㅣ가-힣a-zA-Z0-9\\s.,]*$";
 
     public record Create(
             @NotBlank
             @Length(max = 15)
-            @Pattern(regexp = "^[()\\[\\]+\\-&/_ㄱ-하-ㅣ가-힣a-zA-Z0-9\\s]*$",
+            @Pattern(regexp = SPECIAL_REGEX,
                     message = "( ), [ ], +, -, &, /, _ 을 제외한 특수 문자는 사용이 불가합니다.")
             @InvalidWord(value = "카카오", message = "\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.")
             String name,
@@ -37,7 +38,7 @@ public class ProductRequest {
     public record AdminCreate(
             @NotBlank
             @Length(max = 15)
-            @Pattern(regexp = "^[()\\[\\]+\\-&/_ㄱ-하-ㅣ가-힣a-zA-Z0-9\\s]*$",
+            @Pattern(regexp = SPECIAL_REGEX,
                     message = "( ), [ ], +, -, &, /, _ 을 제외한 특수 문자는 사용이 불가합니다.")
             String name,
             @Min(-1)
@@ -62,7 +63,7 @@ public class ProductRequest {
             Long id,
             @NotBlank
             @Length(max = 15)
-            @Pattern(regexp = "^[()\\[\\]+\\-&/_ㄱ-하-ㅣ가-힣a-zA-Z0-9\\s]*$",
+            @Pattern(regexp = SPECIAL_REGEX,
                     message = "( ), [ ], +, -, &, /, _ 을 제외한 특수 문자는 사용이 불가합니다.")
             @InvalidWord(value = "카카오", message = "\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.")
             String name,
@@ -83,7 +84,7 @@ public class ProductRequest {
             Long id,
             @NotBlank
             @Length(max = 15)
-            @Pattern(regexp = "^[()\\[\\]+\\-&/_ㄱ-하-ㅣ가-힣a-zA-Z0-9\\s]*$",
+            @Pattern(regexp = SPECIAL_REGEX,
                     message = "( ), [ ], +, -, &, /, _ 을 제외한 특수 문자는 사용이 불가합니다.")
             String name,
             @Min(-1)
