@@ -2,6 +2,7 @@ package gift.dto.request;
 
 import gift.validation.ContainsOnlyAllowedSpecialCharacter;
 import gift.validation.NotContainsKakao;
+import gift.validation.UniqueOptionNames;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +24,7 @@ public record AddProductRequest(
         Long categoryId,
         @Valid
         @Size(min = 1, message = "상품에는 하나 이상의 옵션이 있어야합니다.")
+        @UniqueOptionNames(message = "상품의 옵션 이름은 중복될 수 없습니다.")
         List<OptionRequest> optionRequests
 ) {
 }
