@@ -1,4 +1,4 @@
-package gift.product.entity;
+package gift.category.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
