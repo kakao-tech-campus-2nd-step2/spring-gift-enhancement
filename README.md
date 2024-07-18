@@ -374,9 +374,9 @@ Content-Type: application/json
     - image_url: string
     - color: string(length 7)
 
-- [ ] 카테고리를 저장하는 데이터베이스 연동
-  - [ ] Jpa Repository
-  - [ ] 엔티티 클래스 및 예제 데이터 구비
+- [x] 카테고리를 저장하는 데이터베이스 연동
+  - [x] Jpa Repository
+  - [x] 엔티티 클래스 및 예제 데이터 구비
 
 #### 기능 설계(컨트롤러 및 서비스 설계)
 
