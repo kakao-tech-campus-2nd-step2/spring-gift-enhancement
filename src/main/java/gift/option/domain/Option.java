@@ -10,13 +10,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
-@Table(name="options")
+@Table(name="options", uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "name"})})
 public class Option {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,7 @@ public class Option {
     @NotNull
     @Size(max = 50, message = "이름은 최대 50글자입니다.")
     @Pattern(regexp = "^[A-Za-z0-9 ()\\[\\]+\\-&/_ㄱ-ㅣ가-힣]+$", message = "특수문자는 (),[],+,-,&,/,_만 허용됩니다.")
-    @UniqueElements
+    @UniqueElements(message = "같은 이름의 옵션이 존재합니다.")
     private String name;
 
     @NotNull
