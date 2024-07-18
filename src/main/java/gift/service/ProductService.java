@@ -2,10 +2,6 @@ package gift.service;
 
 import gift.common.exception.DuplicateDataException;
 import gift.common.exception.EntityNotFoundException;
-import gift.controller.dto.request.AdminCreateProductRequest;
-import gift.controller.dto.request.AdminUpdateProductRequest;
-import gift.controller.dto.request.CreateProductRequest;
-import gift.controller.dto.request.UpdateProductRequest;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
 import gift.controller.dto.response.ProductWithOptionResponse;
@@ -15,6 +11,8 @@ import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
+import gift.service.dto.CreateProductDto;
+import gift.service.dto.UpdateProductDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -48,7 +46,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Long save(CreateProductRequest request) {
+    public Long save(CreateProductDto request) {
         checkDuplicateOptionName(request.optionName());
         Option option = new Option(request.optionName(), request.optionQuantity());
         Category category = categoryRepository.findById(request.categoryId())
@@ -58,26 +56,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Long save(AdminCreateProductRequest request) {
-        checkDuplicateOptionName(request.optionName());
-        Option option = new Option(request.optionName(), request.optionQuantity());
-        Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(() -> new EntityNotFoundException("Category with id " + request.categoryId() + " not found"));
-        Product product = new Product(request.name(), request.price(), request.imageUrl(), category, option);
-        return productRepository.save(product).getId();
-    }
-
-    @Transactional
-    public void updateById(UpdateProductRequest request) {
-        Product product = productRepository.findById(request.id())
-                .orElseThrow(() -> new EntityNotFoundException("Product with id " + request.id() + " not found"));
-        Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(() -> new EntityNotFoundException("Category with name " + request.categoryId() + " not found"));
-        product.updateProduct(request.name(), request.price(), request.imageUrl(), category);
-    }
-
-    @Transactional
-    public void updateById(AdminUpdateProductRequest request) {
+    public void updateProduct(UpdateProductDto request) {
         Product product = productRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Product with id " + request.id() + " not found"));
         Category category = categoryRepository.findById(request.categoryId())

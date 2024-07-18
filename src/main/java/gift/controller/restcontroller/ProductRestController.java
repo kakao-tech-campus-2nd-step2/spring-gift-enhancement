@@ -60,7 +60,7 @@ public class ProductRestController {
             UriComponentsBuilder uriBuilder,
             @Valid @RequestBody CreateProductRequest request
     ) {
-        Long id = productService.save(request);
+        Long id = productService.save(request.toDto());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(
                 uriBuilder.path("/api/v1/product/{id}")
@@ -75,7 +75,7 @@ public class ProductRestController {
     public ResponseEntity<Void> updateProduct(
             @Valid @RequestBody UpdateProductRequest request
     ) {
-        productService.updateById(request);
+        productService.updateProduct(request.toDto());
         return ResponseEntity.ok().build();
     }
 

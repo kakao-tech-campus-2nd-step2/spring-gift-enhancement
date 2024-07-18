@@ -43,7 +43,7 @@ class ProductServiceTest {
         UpdateProductRequest request = new UpdateProductRequest(saved.getId(), saved.getName(), saved.getPrice(), saved.getImageUrl(), category2.getId());
 
         // when
-        productService.updateById(request);
+        productService.updateProduct(request.toDto());
         Product actual = productRepository.findByIdFetchJoin(saved.getId()).get();
 
         // then

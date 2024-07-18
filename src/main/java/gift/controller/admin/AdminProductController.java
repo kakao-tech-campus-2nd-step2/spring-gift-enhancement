@@ -57,13 +57,13 @@ public class AdminProductController {
 
     @PostMapping("")
     public String createProduct(@Valid @ModelAttribute AdminCreateProductRequest request) {
-        productService.save(request);
+        productService.save(request.toDto());
         return "redirect:/admin/product";
     }
 
     @PutMapping("/{id}")
     public String updateProduct(@Valid @ModelAttribute AdminUpdateProductRequest request) {
-        productService.updateById(request);
+        productService.updateProduct(request.toDto());
         return "redirect:/admin/product";
     }
 

@@ -1,5 +1,6 @@
 package gift.controller.dto.request;
 
+import gift.service.dto.CreateProductDto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -21,8 +22,11 @@ public record AdminCreateProductRequest(
 
         @NotBlank
         String optionName,
-        @Min(1) @Max(100_000_000)
+        @Min(1) @Max(99_999_999)
         int optionQuantity
 ) {
+        public CreateProductDto toDto() {
+                return new CreateProductDto(name, price, imageUrl, categoryId, optionName, optionQuantity);
+        }
 }
 

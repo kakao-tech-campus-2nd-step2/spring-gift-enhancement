@@ -1,5 +1,6 @@
 package gift.controller.dto.request;
 
+import gift.service.dto.UpdateProductDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -20,5 +21,8 @@ public record AdminUpdateProductRequest(
         @Min(1)
         Long categoryId
 ) {
+        public UpdateProductDto toDto() {
+                return new UpdateProductDto(id, name, price, imageUrl, categoryId);
+        }
 }
 

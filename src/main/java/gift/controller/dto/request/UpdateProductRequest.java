@@ -1,6 +1,7 @@
 package gift.controller.dto.request;
 
 import gift.common.annotation.InvalidWord;
+import gift.service.dto.UpdateProductDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -22,5 +23,8 @@ public record UpdateProductRequest(
         @Min(1)
         Long categoryId
 ) {
+        public UpdateProductDto toDto() {
+                return new UpdateProductDto(id, name, price, imageUrl, categoryId);
+        }
 }
 
