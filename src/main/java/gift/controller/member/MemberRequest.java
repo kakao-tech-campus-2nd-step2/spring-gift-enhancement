@@ -1,5 +1,7 @@
 package gift.controller.member;
 
-public record MemberRequest(String email, String password, String grade) {
+import gift.domain.Grade;
+
+public record MemberRequest(String email, String password, Grade grade) {
 
 }
