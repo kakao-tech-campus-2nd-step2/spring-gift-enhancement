@@ -76,4 +76,10 @@ public class OptionService {
 
         optionRepository.deleteById(optionId);
     }
+
+    public List<OptionResponse> getAllProductOptions(Long productId) {
+        List<Option> optionList = optionRepository.findAllByProductId(productId);
+        List<OptionResponse> responses = optionList.stream().map(OptionResponse::from).toList();
+        return responses;
+    }
 }

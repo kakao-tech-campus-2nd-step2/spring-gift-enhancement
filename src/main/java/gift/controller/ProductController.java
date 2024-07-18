@@ -1,10 +1,13 @@
 package gift.controller;
 
 import gift.common.dto.PageResponse;
+import gift.model.option.OptionResponse;
 import gift.model.product.ProductRequest;
 import gift.model.product.ProductResponse;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -24,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final OptionService optionService;
 
-    ProductController(ProductService productService) {
+    ProductController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @PostMapping("")
@@ -62,9 +67,10 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-   /* @GetMapping("/{id}/options")
-    public ResponseEntity<Void> getAllOptions(@PathVariable("id") Long id) {
-
-    }*/
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<OptionResponse>> getAllOptions(@PathVariable("id") Long id) {
+        List<OptionResponse> response = optionService.getAllProductOptions(id);
+        return ResponseEntity.ok().body(response);
+    }
 }
 
