@@ -26,8 +26,7 @@ public class ProductRequest {
     public ProductRequest() {
     }
 
-    public ProductRequest(Long id, String name, Long price, String imageUrl, Long categoryID) {
-        this.id = id;
+    public ProductRequest(String name, Long price, String imageUrl, Long categoryID) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
