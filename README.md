@@ -34,6 +34,8 @@ Content-Type: application/json
 
 ### 기능 구현 예정
 
-- [ ] Category(Domain)
-- [ ] Product(Domain) 수정
-    - [ ] Product와 Category Mapping
+- [x] Category(Domain)
+- [x] Product(Domain) 수정
+    - [x] Product와 Category Mapping
+- [x] 인증 인가 로직 수정
+- [x] 토큰 인증 로직 수정
