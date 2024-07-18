@@ -28,6 +28,7 @@
                 <th>상품명</th>
                 <th>가격</th>
                 <th>이미지</th>
+                <th>카테고리</th>
                 <th>작업</th>
             </tr>
             </thead>
@@ -45,6 +46,8 @@
                 <td th:text="${product.price}">가격</td>
 
                 <td th:text="${product.imageUrl}">이미지</td>
+
+                <td th:text="${product.category.name}">카테고리</td>
 
                 <td>
 
