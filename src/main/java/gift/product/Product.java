@@ -25,6 +25,10 @@ public class Product {
             mappedBy = "product", orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "product", orphanRemoval = true)
+    private List<WishList> wishLists = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -42,6 +46,22 @@ public class Product {
     public void removeOptions() {
         for (Option option : options) {
             removeOption(option);
+        }
+    }
+
+    public void addWishList(WishList wishList) {
+        this.wishLists.add(wishList);
+        wishList.setProduct(this);
+    }
+
+    public void removeWishList(WishList wishList) {
+        wishList.setProduct(null);
+        this.wishLists.remove(wishList);
+    }
+
+    public void removeWishLists() {
+        for (WishList wishList : wishLists) {
+            removeWishList(wishList);
         }
     }
 

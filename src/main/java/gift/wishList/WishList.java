@@ -17,6 +17,10 @@ public class WishList {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "option_id")
     private Option option;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
     @Column(name = "count")
     private long count;
 
@@ -40,28 +44,32 @@ public class WishList {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Option getOption() {
         return option;
     }
 
-    public void setOption(Option option) {
-        this.option = option;
+    public Product getProduct() {
+        return product;
     }
 
     public long getCount() {
         return count;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public void setCount(long count) {
