@@ -33,4 +33,12 @@ public class OptionService {
         productRepository.save(product);
         return option;
     }
+
+    public Option updateOption(Long optionId, Option option) {
+        Option updateOption = optionRepository.findById(optionId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 옵션입니다."));
+        updateOption.setName(option.getName());
+        updateOption.setQuantity(option.getQuantity());
+        return optionRepository.save(updateOption);
+    }
 }

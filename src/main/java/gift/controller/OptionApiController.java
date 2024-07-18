@@ -28,4 +28,10 @@ public class OptionApiController {
         Option newOption = optionService.addOption(productId, option);
         return ResponseEntity.status(201).body(newOption);
     }
+
+    @PutMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<Option> updateOption(@PathVariable Long optionId, @RequestBody Option optionDetails) {
+        Option updatedOption = optionService.updateOption(optionId, optionDetails);
+        return ResponseEntity.ok(updatedOption);
+    }
 }
