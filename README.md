@@ -379,7 +379,7 @@ Content-Type: application/json
 
 #### 기능 설계(컨트롤러 및 서비스 설계)
 
-- [ ] 카테고리 추가 API
+- [x] 카테고리 추가 API
 - [ ] 카테고리 리스트 조회 API
 - [ ] 특정 id 카테고리 조회 API
 - [ ] 카테고리 수정 API
@@ -390,6 +390,10 @@ Content-Type: application/json
 - [ ] 커스텀 예외 및 예외 핸들링
 
 #### Server-side Renderings
+
+- [ ] 상품 조회 화면에서 카테고리를 볼 수 있음
+- [ ] 상품 추가 화면에서 카테고리도 추가할 수 있음
+- [ ] 상품 수정 화면에서 카테고리를 수정할 수 있음
 
 </details>
 
@@ -1478,7 +1482,6 @@ Authorization: Bearer your-token-string
 | Method | URL                  | Path param | Path variable | Body |
 |--------|----------------------|------------|---------------|------|
 | GET    | /api/categories/{id} | -          | {id: int}     | -    |
-
 
 #### 특정 id 카테고리 조회 API/Response(success)
 
