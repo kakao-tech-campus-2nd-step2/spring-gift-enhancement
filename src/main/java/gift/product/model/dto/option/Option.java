@@ -30,11 +30,11 @@ public class Option {
     @Min(1)
     @Max(100000000 - 1)
     @Column(nullable = false)
-    private Integer quantity;
+    private int quantity;
 
     @Min(0)
     @Column(nullable = false)
-    private Integer additionalCost = 0;
+    private int additionalCost = 0;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -69,7 +69,7 @@ public class Option {
         this.name = name;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
@@ -77,7 +77,7 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public Integer getAdditionalCost() {
+    public int getAdditionalCost() {
         return additionalCost;
     }
 
