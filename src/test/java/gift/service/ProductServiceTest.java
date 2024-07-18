@@ -4,7 +4,6 @@ import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.request.ProductRequest;
 import gift.exception.CategoryNotFoundException;
-import gift.exception.InvalidProductDataException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.category.CategorySpringDataJpaRepository;
 import gift.repository.product.ProductSpringDataJpaRepository;
@@ -14,8 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -38,19 +37,21 @@ public class ProductServiceTest {
     private ProductService productService;
 
     private List<Product> mockProducts;
-    private List<Category> mockCategories;
+    private Category mockCategory;
 
     @BeforeEach
     public void setUp() {
-        mockCategories = new ArrayList<>();
-        mockCategories.add(new Category(1L, "패션"));
+        mockCategory = new Category(1L, "패션");
+        mockProducts = new ArrayList<>();
+        mockProducts.add(new Product(1L, "상의", 800, "상의.jpg", mockCategory));
     }
 
     @Test
     public void testRegisterProduct() {
         ProductRequest productRequest = new ProductRequest("상의", 800, "상의.jpg", "패션");
-        Category mockCategory = mockCategories.getFirst();
+
         when(categoryRepository.findByName("패션")).thenReturn(Optional.of(mockCategory));
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Product registeredProduct = productService.register(productRequest);
 
@@ -77,21 +78,20 @@ public class ProductServiceTest {
     @Test
     public void testGetProducts() {
         Pageable pageable = Pageable.unpaged();
-        when(productRepository.findAll(pageable)).thenReturn(Page.empty());
+        Page<Product> mockPage = new PageImpl<>(mockProducts);
+        when(productRepository.findAll(pageable)).thenReturn(mockPage);
 
         Page<Product> products = productService.getProducts(pageable);
 
         assertNotNull(products);
-        assertEquals(0, products.getTotalElements());
+        assertEquals(1, products.getTotalElements());
+        assertEquals("상의", products.getContent().getFirst().getName());
 
         verify(productRepository, times(1)).findAll(pageable);
     }
 
     @Test
     public void testFindOneProduct() {
-        mockProducts = new ArrayList<>();
-        mockProducts.add(new Product(1L, "상의", 1000, "상의.jpg", mockCategories.getFirst()));
-
         Long productId = 1L;
         when(productRepository.findById(productId)).thenReturn(Optional.of(mockProducts.getFirst()));
 
@@ -114,15 +114,13 @@ public class ProductServiceTest {
 
     @Test
     public void testUpdateProduct() {
-        mockProducts = new ArrayList<>();
-        mockProducts.add(new Product(1L, "상의", 1000, "상의.jpg", mockCategories.getFirst()));
-
         Long productId = 1L;
         ProductRequest productRequest = new ProductRequest("하의", 1200, "하의.jpg", "패션");
-        Category mockCategory = mockCategories.getFirst();
         Product existingProduct = mockProducts.getFirst();
+
         when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
         when(categoryRepository.findByName("패션")).thenReturn(Optional.of(mockCategory));
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Product updatedProduct = productService.update(productId, productRequest);
 

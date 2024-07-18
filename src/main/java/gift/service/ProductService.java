@@ -48,11 +48,12 @@ public class ProductService {
     }
 
     public Product update(Long productId, ProductRequest productRequest) {
-        Category category = categoryRepository.findByName(productRequest.getCategoryName()).
-                orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리입니다."));
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
+        Category category = categoryRepository.findByName(productRequest.getCategoryName()).
+                orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리입니다."));
         product.update(productRequest, category);
+        productRepository.save(product);
         return product;
 
     }

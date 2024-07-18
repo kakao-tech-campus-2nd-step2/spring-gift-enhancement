@@ -1,7 +1,6 @@
 package gift.service;
 
 import gift.domain.Category;
-import gift.domain.Member;
 import gift.dto.request.CategoryRequest;
 import gift.exception.CategoryNotFoundException;
 import gift.exception.DuplicateCategoryNameException;
