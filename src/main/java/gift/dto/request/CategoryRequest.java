@@ -10,11 +10,6 @@ public record CategoryRequest(
         String imageUrl,
         String description) {
     public Category toEntity(){
-        return new Category.Builder()
-                .name(this.name)
-                .color(this.color)
-                .imageUrl(this.imageUrl)
-                .description(this.description)
-                .build();
+        return new Category(this.name, this.color, this.imageUrl, this.description);
     }
 }
