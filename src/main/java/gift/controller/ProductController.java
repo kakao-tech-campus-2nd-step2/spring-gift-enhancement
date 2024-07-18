@@ -25,7 +25,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@Valid @RequestBody ProductRequestDto requestDto) {
+    public ResponseEntity<String> saveProduct(@Valid @RequestBody ProductRequestDto requestDto) {
         productService.addProduct(requestDto);
         return ResponseEntity.ok("상품이 성공적으로 등록되었습니다.");
     }
