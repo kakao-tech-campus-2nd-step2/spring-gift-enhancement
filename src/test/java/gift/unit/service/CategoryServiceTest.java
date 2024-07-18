@@ -12,6 +12,7 @@ import gift.exception.CustomException;
 import gift.product.category.dto.request.CreateCategoryRequest;
 import gift.product.category.dto.request.UpdateCategoryRequest;
 import gift.product.category.dto.response.CategoryResponse;
+import gift.product.category.entity.Categories;
 import gift.product.category.entity.Category;
 import gift.product.category.repository.CategoryRepository;
 import gift.product.category.service.CategoryService;
