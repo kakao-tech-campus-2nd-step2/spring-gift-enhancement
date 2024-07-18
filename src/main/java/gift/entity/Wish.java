@@ -50,8 +50,8 @@ public class Wish {
         return product;
     }
 
-    public Member getMember() {
-        return member;
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
     }
 
     public void updateQuantity(Integer amount) {
