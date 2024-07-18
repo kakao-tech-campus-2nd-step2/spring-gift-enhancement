@@ -46,3 +46,25 @@
 - [x] CreateProductDto에 category 포함
 - [x] ProductService에서 CateggoryRepo 제거
 
+# 2단계
+
+## 구현할 기능 목록
+- [ ] Option Entity 추가
+  - [ ] Option Entity에는 id, option_name이 있음
+  - [ ] option_name은 공백 포함 최대 50자
+  - [ ] option_name은 ( ), [ ], +, -, &, /, _ 를 제외한 특수문자 사용 불가
+  - [ ] 같은 Product의 option_name은 유니크 해야함
+
+- [ ] Option Repository 구현
+  
+- [ ] Product Entity 수정
+  - [ ] Product에 하나 이상의 옵션을 추가하기 위해 List를 사용하여 옵션 저장
+  
+- [ ] Product Controller 수정
+  - [ ] Option 추가되면서 관련 내용들 확인하고 수정
+  
+- [ ] Option Controller 구현
+  - [ ] Option 생성
+  - [ ] 특정 상품의 모든 Option 불러오기
+  - [ ] Option 내용 수정
+  - [ ] Option 삭제
