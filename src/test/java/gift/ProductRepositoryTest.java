@@ -33,7 +33,9 @@ public class ProductRepositoryTest {
     @Test
     void deleteById() {
         Long id = 1L;
+
         Product expected = new Product(1L, "아메리카노", 1000, "no image", 1L);
+
         productRepository.save(expected);
 
         productRepository.deleteById(id);
