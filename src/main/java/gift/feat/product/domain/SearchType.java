@@ -10,6 +10,7 @@ public enum SearchType {
 	SearchType(String description) {
 		this.description = description;
 	}
+
 	public String getDescription() {
 		return description;
 	}
