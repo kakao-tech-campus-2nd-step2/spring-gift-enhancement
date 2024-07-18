@@ -5,7 +5,7 @@ import gift.constant.ErrorMessage;
 public class AtLeastOneOptionRequiredException extends GiftException {
 
     public AtLeastOneOptionRequiredException() {
-        super(ErrorMessage.NO_OPTIONS_IN_PRODUCT.getMessage());
+        super(ErrorMessage.AT_LEAST_ONE_OPTION_REQUIRED.getMessage());
     }
 
     @Override
