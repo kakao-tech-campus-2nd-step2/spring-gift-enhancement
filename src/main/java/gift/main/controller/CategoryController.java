@@ -23,14 +23,20 @@ public class CategoryController {
         return ResponseEntity.ok(categoryList);
     }
 
+    @DeleteMapping("/category/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable(name = "id") Long id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.ok("Category deleted successfully");
+    }
+
     @PostMapping("/category")
-    public ResponseEntity<?> addCategorylist(@RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<?> addCategory(@RequestBody CategoryRequest categoryRequest) {
         categoryService.addCategory(categoryRequest);
         return ResponseEntity.ok("Category added successfully");
     }
 
     @PutMapping("/category/{id}")
-    public ResponseEntity<?> updateCategorylist(@PathVariable(name = "id") Long id, @RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<?> updateCategory(@PathVariable(name = "id") Long id, @RequestBody CategoryRequest categoryRequest) {
         categoryService.updateCategory(id, categoryRequest);
         return ResponseEntity.ok("Category updated successfully");
     }

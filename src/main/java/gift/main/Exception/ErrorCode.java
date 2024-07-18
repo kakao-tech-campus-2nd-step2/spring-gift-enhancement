@@ -25,6 +25,7 @@ public enum ErrorCode {
     ALREADY_EXISTING_WISH_LIST(HttpStatus.BAD_REQUEST, "해당 제품은 이미 담겨있습니다."),
     ALREADY_CATEGORY_NAME(HttpStatus.BAD_REQUEST, "이미 존재하는 이름입니다."),
     ALREADY_CATEGORY_UNI_NUMBER(HttpStatus.BAD_REQUEST, "이미 존재하는 고유번호입니다."),
+    EXISTS_PRODUCT(HttpStatus.BAD_REQUEST, "프로덕트가 존재하기 때문에 삭제할 수 없습니다."),
 
     ;
     //이메일과 비밀번호 코드가 401이 아닌 400인 이유: 코드를 보고 해당 유저가 있다고 판단할 것 같아서
