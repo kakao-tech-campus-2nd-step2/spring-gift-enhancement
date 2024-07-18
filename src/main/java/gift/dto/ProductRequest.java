@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRequest {
@@ -31,10 +30,11 @@ public class ProductRequest {
     @NotNull
     private Long categoryId;
 
-    @NotBlank(message = "ddd")
+    @NotBlank
     private String categoryName;
 
-    private List<OptionDto> options = new ArrayList<>();
+    @Size(min = 1, message = ErrorMessage.OPTION_MUST_MORE_THAN_ZERO)
+    private List<OptionDto> options;
 
     protected ProductRequest() {
     }
