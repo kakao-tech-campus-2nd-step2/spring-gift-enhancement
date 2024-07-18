@@ -22,9 +22,9 @@ public class WishListController {
     }
 
     // 회원 id로 위시리스트 연결하려면
-    @GetMapping("/{member_id}")
-    public WishList getWishList(@PathVariable Long member_id) {
-        return wishListService.findByMemberId(member_id);
+    @GetMapping("/{memberId}")
+    public WishList getWishList(@PathVariable Long memberId) {
+        return wishListService.findByMemberId(memberId);
     }
 
     /** 페이지네이션된 위시리스트 데이터를 반환
@@ -32,28 +32,33 @@ public class WishListController {
      * 페이지 번호: 0
      * 페이지 크기: 10
      * 정렬: 이름을 기준으로 오름차순 정렬 (기본값) **/
-    @GetMapping("/{member_id}/paged")
+    @GetMapping("/{memberId}/paged")
     public Page<WishList> getWishListPaged(
-            @PathVariable Long member_id,
+            @PathVariable Long memberId,
             @RequestParam(defaultValue = "0") int page, // 요청 파라미터 page를 받아 페이지 번호를 설정
             @RequestParam(defaultValue = "10") int size, // 요청 파라미터 size를 받아 페이지 크기를 설정
-            @RequestParam(defaultValue = "name,asc") String[] sort) // 요청 파라미터 sort를 받아 정렬 기준과 방향을 설정
-    {
-        Sort.Direction direction = Sort.Direction.fromString(sort[1]); //  sort 배열의 두 번째 요소를 Sort.Direction 객체로 변환
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0])); // Pageable 객체를 생성
+            @RequestParam(defaultValue = "name,asc") String[] sort // 요청 파라미터 sort를 받아 정렬 기준과 방향을 설정
+    ) {
+        int maxSize = 50; // 최대 페이지 크기를 50으로 제한
+        size = Math.min(size, maxSize); // 50 초과 입력시 50으로 설정
 
-        return wishListService.findByMemberId(member_id, pageable); // 페이지네이션된 위시리스트 데이터를 반환
+        String sortBy = sort[0]; // sort 배열의 첫 번째 요소는 정렬 기준
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]); // sort 배열의 두 번째 요소는 정렬 방향
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy)); // Pageable 객체를 생성
+
+        return wishListService.findByMemberId(memberId, pageable); // 페이지네이션된 위시리스트 데이터를 반환
     }
 
     // 해당 위시리스트에 상품 추가 연결
-    @PostMapping("/{member_id}/add")
-    public void addProductToWishList(@PathVariable Long member_id, @RequestBody Product product) {
-        wishListService.addProductToWishList(member_id, product);
+    @PostMapping("/{memberId}/add")
+    public void addProductToWishList(@PathVariable Long memberId, @RequestBody Product product) {
+        wishListService.addProductToWishList(memberId, product);
     }
 
     // 해당 위시리스트에 상품 삭제 연결
-    @DeleteMapping("/{member_id}/remove/{productId}")
-    public void removeProductFromWishList(@PathVariable Long member_id, @PathVariable Long productId) {
-        wishListService.removeProductFromWishList(member_id, productId);
+    @DeleteMapping("/{memberId}/remove/{productId}")
+    public void removeProductFromWishList(@PathVariable Long memberId, @PathVariable Long productId) {
+        wishListService.removeProductFromWishList(memberId, productId);
     }
 }

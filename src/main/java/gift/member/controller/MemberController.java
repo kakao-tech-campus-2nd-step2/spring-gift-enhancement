@@ -22,23 +22,23 @@ public class MemberController {
         return memberService.login(email, password);
     }
 
-    @GetMapping("/{member_id}")
-    public Member getMemberById(@PathVariable Long member_id) {
-        return memberService.findById(member_id).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+    @GetMapping("/{memberId}")
+    public Member getMemberById(@PathVariable Long memberId) {
+        return memberService.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
     }
 
-    @PutMapping("/{product_id}/email")
-    public Member updateEmail(@PathVariable Long member_id, @RequestParam String newEmail) {
-        return memberService.updateEmail(member_id, newEmail);
+    @PutMapping("/{memberId}/email")
+    public Member updateEmail(@PathVariable Long memberId, @RequestParam String newEmail) {
+        return memberService.updateEmail(memberId, newEmail);
     }
 
-    @PutMapping("/{product_id}/password")
-    public Member updatePassword(@PathVariable Long member_id, @RequestParam String newPassword) {
-        return memberService.updatePassword(member_id, newPassword);
+    @PutMapping("/{memberId}/password")
+    public Member updatePassword(@PathVariable Long memberId, @RequestParam String newPassword) {
+        return memberService.updatePassword(memberId, newPassword);
     }
 
-    @DeleteMapping("/{member_id}")
-    public void deleteMember(@PathVariable Long member_id) {
-        memberService.deleteMember(member_id);
+    @DeleteMapping("/{memberId}")
+    public void deleteMember(@PathVariable Long memberId) {
+        memberService.deleteMember(memberId);
     }
 }

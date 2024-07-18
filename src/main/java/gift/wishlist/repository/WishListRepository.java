@@ -25,6 +25,6 @@ public interface WishListRepository extends JpaRepository<WishList, String> {
 
     @Modifying
     @Query("update WishList w set w.products = remove(w.products, :product_id) where w.member.member_id = :member_id")
-    static void removeProductFromWishList(@Param("member_id") Long member_id, @Param("product_id") Long product_id) {
+    static void removeProductFromWishList(@Param("member_id") Long member_id, @Param("getProductId") Long product_id) {
     }
 }

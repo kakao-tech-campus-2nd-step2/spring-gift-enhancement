@@ -1,5 +1,6 @@
 package gift.product.model;
 
+import gift.category.model.Category;
 import gift.wishlist.model.WishList;
 import jakarta.persistence.*;
 
@@ -10,8 +11,8 @@ import java.util.List;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long product_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long productId;
 
     @Column(nullable = false)
     private String name;
@@ -22,6 +23,10 @@ public class Product {
     @Column(nullable = true)
     private String imgUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "categoryId", nullable = false)
+    private Category category;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishList> wishLists = new ArrayList<>();
 
@@ -29,22 +34,32 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name) {
+    public Product(String name, Category category) {
         this.name = name;
+        this.category = category;
     }
 
-    public Product(String name, int price, String imgUrl) {
+    public Product(String name, int price, String imgUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.category = category;
     }
 
-    // getter 메서드
-    public Long product_id() {
-        return product_id;
+    // ID를 포함한 생성자
+    public Product(Long productId, String name, String imgUrl, int price, Category category) {
+        this.productId = productId;
+        this.name = name;
+        this.imgUrl = imgUrl;
+        this.price = price;
+        this.category = category;
     }
 
-    public String name() {
+    public Long getProductId() {
+        return productId;
+    }
+
+    public String getName() {
         return name;
     }
 
@@ -56,10 +71,20 @@ public class Product {
         return imgUrl;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    // 카테고리 ID를 반환하는 메소드 추가
+    public Long getCategoryId() {
+        return category.getCategoryId();
+    }
+
     // update 메소드 추가
-    public void update(String name, int price, String imgUrl) {
+    public void update(String name, int price, String imgUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
+        this.category = category;
     }
 }

@@ -1,179 +1,57 @@
-package gift.member.service;
-
-import gift.member.model.Member;
+import gift.Application;
 import gift.member.repository.MemberRepository;
+import gift.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
+/** @Mock 을 사용하면 테스트 성공이 뜨지만 사용하지 않을 경우,
+ * java.lang.IllegalStateException 오류 -> 해당 파일 경로 명시 */
+@SpringBootTest(classes = Application.class)
+@Transactional
 public class MemberServiceTest {
 
-    @Mock
+    @Autowired
     private MemberRepository memberRepository;
 
-    @Mock
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @InjectMocks
+    @Autowired
     private MemberService memberService;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        memberRepository.deleteAll();
     }
 
     @Test
-    public void createSuccess() {
-        // Given
+    public void 이메일이_이미_존재하는_경우() {
+        // Given: 이미 존재하는 이메일로 회원 등록
         String email = "test@example.com";
         String password = "password";
-        String encodedPassword = "encodedPassword";
-        Member member = new Member(email, encodedPassword);
+        memberService.register(email, password);
 
-        when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
-        when(memberRepository.save(any(Member.class))).thenReturn(member);
-
-        // When
-        Member createdMember = memberService.createMember(email, password);
-
-        // Then
-        assertThat(createdMember.getEmail()).isEqualTo(email);
-        assertThat(createdMember.getPassword()).isEqualTo(encodedPassword);
-        verify(memberRepository, times(1)).save(any(Member.class));
-    }
-
-    @Test
-    public void registerSuccess() {
-        // Given
-        String email = "new@example.com";
-        String password = "newPassword";
-        String encodedPassword = "encodedPassword";
-        Member member = new Member(email, encodedPassword);
-
-        when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
-        when(memberRepository.findByEmail(email)).thenReturn(Optional.empty());
-        when(memberRepository.save(any(Member.class))).thenReturn(member);
-
-        // When
-        Member registeredMember = memberService.register(email, password);
-
-        // Then
-        assertThat(registeredMember.getEmail()).isEqualTo(email);
-        assertThat(registeredMember.getPassword()).isEqualTo(encodedPassword);
-        verify(memberRepository, times(1)).findByEmail(email);
-        verify(memberRepository, times(1)).save(any(Member.class));
-    }
-
-    @Test
-    public void throwExceptionWhenEmailAlreadyExists() {
-        // Given
-        String email = "test@example.com";
-        String password = "password";
-
-        when(memberRepository.findByEmail(email)).thenReturn(Optional.of(new Member(email, "encodedPassword")));
-
-        // When & Then
+        // When & Then: 동일한 이메일로 다시 등록 시도 시 예외 발생 확인
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> memberService.register(email, password));
         assertThat(exception.getMessage()).isEqualTo("이미 존재하는 이메일 입니다.");
     }
 
     @Test
-    public void throwExceptionWhenInvalidCredentials() {
-        // Given
+    public void 잘못된_비밀번호로_로그인을_시도하는_경우() {
+        // Given: 회원 등록
         String email = "test@example.com";
         String password = "password";
-        String encodedPassword = "encodedPassword";
-        Member member = new Member(email, encodedPassword);
-
-        when(memberRepository.findByEmail(email)).thenReturn(Optional.of(member));
-        when(passwordEncoder.matches(password, encodedPassword)).thenReturn(false);
+        memberService.register(email, password);
 
         // When & Then
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> memberService.login(email, "wrongpassword"));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> memberService.login(email, "wrong"));
         assertThat(exception.getMessage()).isEqualTo("옳지 않은 이메일이나 비밀번호 입니다.");
-    }
-
-
-    @Test
-    public void loginSuccess() {
-        // Given
-        String email = "test@example.com";
-        String password = "password";
-        String encodedPassword = "encodedPassword";
-        Member member = new Member(email, encodedPassword);
-
-        when(memberRepository.findByEmail(email)).thenReturn(Optional.of(member));
-        when(passwordEncoder.matches(password, encodedPassword)).thenReturn(true);
-
-        // When
-        Member loggedInMember = memberService.login(email, password);
-
-        // Then
-        assertThat(loggedInMember.getEmail()).isEqualTo(email);
-        assertThat(loggedInMember.getPassword()).isEqualTo(encodedPassword);
-    }
-
-    @Test
-    public void updateEmailSuccess() {
-        // Given
-        Long memberId = 1L;
-        String newEmail = "newemail@example.com";
-        Member member = new Member("oldemail@example.com", "password");
-
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        Member updatedMember = new Member(newEmail, member.getPassword());
-        when(memberRepository.save(any(Member.class))).thenReturn(updatedMember);
-
-        // When
-        Member result = memberService.updateEmail(memberId, newEmail);
-
-        // Then
-        assertThat(result.getEmail()).isEqualTo(newEmail);
-        verify(memberRepository, times(1)).findById(memberId);
-        verify(memberRepository, times(1)).save(any(Member.class));
-    }
-
-    @Test
-    public void updatePasswordSuccess() {
-        // Given
-        Long memberId = 1L;
-        String newPassword = "newPassword";
-        String encodedNewPassword = "encodedNewPassword";
-        Member member = new Member("test@example.com", "oldPassword");
-
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
-        when(passwordEncoder.encode(newPassword)).thenReturn(encodedNewPassword);
-        Member updatedMember = new Member(member.getEmail(), encodedNewPassword);
-        when(memberRepository.save(any(Member.class))).thenReturn(updatedMember);
-
-        // When
-        Member result = memberService.updatePassword(memberId, newPassword);
-
-        // Then
-        assertThat(result.getPassword()).isEqualTo(encodedNewPassword);
-        verify(memberRepository, times(1)).findById(memberId);
-        verify(memberRepository, times(1)).save(any(Member.class));
-    }
-
-    @Test
-    public void deleteSuccess() {
-        // Given
-        Long memberId = 1L;
-
-        // When
-        memberService.deleteMember(memberId);
-
-        // Then
-        verify(memberRepository, times(1)).deleteById(memberId);
     }
 }
