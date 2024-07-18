@@ -12,7 +12,9 @@ import gift.user.repository.RoleRepository;
 import gift.user.repository.UserRepository;
 import gift.util.auth.JwtUtil;
 import gift.util.mapper.UserMapper;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +39,10 @@ public class UserService {
                 throw new UserAlreadyExistException("이미 존재하는 Email입니다.");
             });
         User registeredUser = userRepository.save(UserMapper.toUser(request));
+        List<String> roles = new ArrayList<>();
 
         return UserMapper.toResponse(jwtUtil.generateToken(registeredUser.getId(),
-            registeredUser.getEmail(), null));
+            registeredUser.getEmail(), roles));
     }
 
     @Transactional(readOnly = true)
@@ -49,6 +52,7 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException("로그인할 수 없습니다."));
         List<Long> roleIds = user.getRoles()
             .stream()
+            .filter(Objects::nonNull)
             .map(userRole -> userRole.getRole().getId())
             .toList();
 

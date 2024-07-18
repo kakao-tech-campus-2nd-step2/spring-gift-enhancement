@@ -14,10 +14,16 @@ import gift.user.dto.request.UserLoginRequest;
 import gift.user.dto.request.UserRegisterRequest;
 import gift.user.dto.response.UserResponse;
 import gift.user.entity.User;
+import gift.user.entity.UserRole;
+import gift.user.repository.RoleRepository;
 import gift.user.repository.UserRepository;
 import gift.user.service.UserService;
 import gift.util.auth.JwtUtil;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +39,9 @@ class UserServiceTest implements AutoCloseable {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private RoleRepository roleRepository;
 
     @Mock
     private JwtUtil jwtUtil;
@@ -62,8 +71,9 @@ class UserServiceTest implements AutoCloseable {
             .email(request.email())
             .password(request.password())
             .build();
+        List<String> roles = new ArrayList<>();
         given(userRepository.save(any(User.class))).willReturn(user);
-        given(jwtUtil.generateToken(user.getId(), user.getEmail())).willReturn("token");
+        given(jwtUtil.generateToken(user.getId(), user.getEmail(), roles)).willReturn("token");
 
         //when
         UserResponse actual = userService.registerUser(request);
@@ -72,7 +82,7 @@ class UserServiceTest implements AutoCloseable {
         assertThat(actual.token()).isEqualTo("token");
         then(userRepository).should(times(1)).findByEmail(request.email());
         then(userRepository).should(times(1)).save(any(User.class));
-        then(jwtUtil).should(times(1)).generateToken(user.getId(), user.getEmail());
+        then(jwtUtil).should(times(1)).generateToken(user.getId(), user.getEmail(), roles);
     }
 
     @Test
@@ -96,14 +106,18 @@ class UserServiceTest implements AutoCloseable {
     void userLoginTest() {
         //given
         UserLoginRequest loginRequest = new UserLoginRequest("user1@example.com", "password1");
+        Set<UserRole> roles = new HashSet<>();
         User user = User.builder()
             .id(1L)
             .email(loginRequest.email())
             .password(loginRequest.password())
+            .userRoles(roles)
             .build();
+        List<String> rolesName = new ArrayList<>();
         given(userRepository.findByEmailAndPassword(loginRequest.email(), loginRequest.password()))
             .willReturn(Optional.of(user));
-        given(jwtUtil.generateToken(user.getId(), user.getEmail())).willReturn("token");
+        given(jwtUtil.generateToken(user.getId(), user.getEmail(), rolesName)).willReturn("token");
+        given(roleRepository.findAllById(any())).willReturn(List.of());
 
         //when
         UserResponse actual = userService.loginUser(loginRequest);

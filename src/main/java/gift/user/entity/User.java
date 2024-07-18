@@ -44,6 +44,7 @@ public class User {
         this.id = builder.id;
         this.email = builder.email;
         this.password = builder.password;
+        this.userRoles = builder.userRoles;
         this.wishes = builder.wishes;
     }
 
@@ -76,6 +77,7 @@ public class User {
         private Long id;
         private String email;
         private String password;
+        private Set<UserRole> userRoles;
         private Set<Wish> wishes;
 
         public Builder id(Long id) {
@@ -90,6 +92,11 @@ public class User {
 
         public Builder password(String password) {
             this.password = password;
+            return this;
+        }
+
+        public Builder userRoles(Set<UserRole> userRoles) {
+            this.userRoles = userRoles;
             return this;
         }
 
