@@ -22,15 +22,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-class UserServiceTest implements AutoCloseable {
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
@@ -43,19 +44,6 @@ class UserServiceTest implements AutoCloseable {
 
     @Mock
     private JwtUtil jwtUtil;
-
-    private AutoCloseable closeable;
-
-    @BeforeEach
-    void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
-
-    @Override
-    public void close() throws Exception {
-        closeable.close();
-    }
-
 
     @Test
     @DisplayName("register user test")

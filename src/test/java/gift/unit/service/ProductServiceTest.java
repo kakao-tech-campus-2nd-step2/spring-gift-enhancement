@@ -19,18 +19,19 @@ import gift.product.repository.ProductRepository;
 import gift.product.service.ProductService;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-class ProductServiceTest implements AutoCloseable {
+@ExtendWith(MockitoExtension.class)
+class ProductServiceTest {
 
     @InjectMocks
     private ProductService productService;
@@ -40,19 +41,6 @@ class ProductServiceTest implements AutoCloseable {
 
     @Mock
     private CategoryRepository categoryRepository;
-
-    private AutoCloseable closeable;
-
-    @BeforeEach
-    void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
-
-    @Override
-    public void close() throws Exception {
-        closeable.close();
-    }
-
 
     @Test
     @DisplayName("getAllProducts empty test")
@@ -76,8 +64,7 @@ class ProductServiceTest implements AutoCloseable {
         // given
         Pageable pageable = Pageable.unpaged();
         Category category = new Category("Category A");
-        List<Product> productList = List.of(
-            Product.builder().id(1L).name("Product A").price(1000)
+        List<Product> productList = List.of(Product.builder().id(1L).name("Product A").price(1000)
                 .imageUrl("http://example.com/images/product_a.jpg").category(category).build(),
             Product.builder().id(2L).name("Product B").price(2000)
                 .imageUrl("http://example.com/images/product_b.jpg").category(category).build(),
@@ -86,8 +73,7 @@ class ProductServiceTest implements AutoCloseable {
             Product.builder().id(4L).name("Product D").price(4000)
                 .imageUrl("http://example.com/images/product_d.jpg").category(category).build(),
             Product.builder().id(5L).name("Product E").price(5000)
-                .imageUrl("http://example.com/images/product_e.jpg").category(category).build()
-        );
+                .imageUrl("http://example.com/images/product_e.jpg").category(category).build());
         Page<Product> productPage = new PageImpl<>(productList);
         given(productRepository.findAll(pageable)).willReturn(productPage);
 
@@ -108,8 +94,8 @@ class ProductServiceTest implements AutoCloseable {
         given(productRepository.findById(7L)).willReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> productService.getProductById(7L))
-            .isInstanceOf(CustomException.class);
+        assertThatThrownBy(() -> productService.getProductById(7L)).isInstanceOf(
+            CustomException.class);
         then(productRepository).should(times(1)).findById(7L);
     }
 
@@ -118,12 +104,8 @@ class ProductServiceTest implements AutoCloseable {
     @Transactional
     void getProductByIdTest() {
         // given
-        Product expected = Product.builder()
-            .id(2L)
-            .name("Product B")
-            .price(2000)
-            .imageUrl("http://example.com/images/product_b.jpg")
-            .build();
+        Product expected = Product.builder().id(2L).name("Product B").price(2000)
+            .imageUrl("http://example.com/images/product_b.jpg").build();
 
         given(productRepository.findById(2L)).willReturn(Optional.of(expected));
 
@@ -145,13 +127,8 @@ class ProductServiceTest implements AutoCloseable {
         CreateProductRequest request = new CreateProductRequest("Product A", 1000,
             "http://example.com/images/product_a.jpg", 1L);
         Category category = new Category(1L, "Category A", "#123456", "image", "");
-        Product savedProduct = Product.builder()
-            .id(1L)
-            .name("Product A")
-            .price(1000)
-            .imageUrl("http://example.com/images/product_a.jpg")
-            .category(category)
-            .build();
+        Product savedProduct = Product.builder().id(1L).name("Product A").price(1000)
+            .imageUrl("http://example.com/images/product_a.jpg").category(category).build();
         given(productRepository.save(any(Product.class))).willReturn(savedProduct);
         given(categoryRepository.findById(any(Long.class))).willReturn(Optional.of(category));
 
@@ -170,12 +147,8 @@ class ProductServiceTest implements AutoCloseable {
     void updateProductTest() {
         // given
         Category category = new Category(1L, "Category A", "#123456", "image", "");
-        Product product = Product.builder()
-            .id(1L)
-            .name("Product A")
-            .price(1000)
-            .imageUrl("http://example.com/images/product_a.jpg")
-            .build();
+        Product product = Product.builder().id(1L).name("Product A").price(1000)
+            .imageUrl("http://example.com/images/product_a.jpg").build();
         UpdateProductRequest request = new UpdateProductRequest("product3", 30000, null, 1L);
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
         given(categoryRepository.findById(any(Long.class))).willReturn(Optional.of(category));
@@ -184,11 +157,7 @@ class ProductServiceTest implements AutoCloseable {
         productService.updateProduct(1L, request);
         Product actual = productRepository.findById(1L).get();
         actual.edit(request, category);
-        Product expected = Product.builder()
-            .id(1L)
-            .name("product3")
-            .price(30000)
-            .category(category)
+        Product expected = Product.builder().id(1L).name("product3").price(30000).category(category)
             .build();
 
         // then
@@ -224,8 +193,8 @@ class ProductServiceTest implements AutoCloseable {
         given(productRepository.existsById(9L)).willReturn(false);
 
         // when & then
-        assertThatThrownBy(() -> productService.deleteProduct(9L))
-            .isInstanceOf(CustomException.class);
+        assertThatThrownBy(() -> productService.deleteProduct(9L)).isInstanceOf(
+            CustomException.class);
         then(productRepository).should(times(1)).existsById(9L);
     }
 }

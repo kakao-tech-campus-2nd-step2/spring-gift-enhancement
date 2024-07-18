@@ -17,32 +17,21 @@ import gift.product.category.repository.CategoryRepository;
 import gift.product.category.service.CategoryService;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public class CategoryServiceTest implements AutoCloseable {
+@ExtendWith(MockitoExtension.class)
+public class CategoryServiceTest {
 
     @InjectMocks
     private CategoryService categoryService;
 
     @Mock
     private CategoryRepository categoryRepository;
-
-    private AutoCloseable closeable;
-
-    @Override
-    public void close() throws Exception {
-        closeable.close();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     @DisplayName("get all categories test")
