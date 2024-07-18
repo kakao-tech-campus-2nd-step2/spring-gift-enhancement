@@ -67,13 +67,16 @@ public class ProductService {
     @Transactional
     public ProductResponse updateProduct(Long id, ProductRequest updatedProduct) {
         Product product = getProductByIdOrThrow(id);
+        Category newCategory = categoryService.getCategoryById(updatedProduct.getCategoryId());
+
         product.setName(updatedProduct.getName());
         product.setPrice(updatedProduct.getPrice());
         product.setImageUrl(updatedProduct.getImageUrl());
+        product.setCategory(newCategory);
+
         productRepository.save(product);
 
-        ProductResponse response = new ProductResponse();
-        response.fromEntity(product);
+        ProductResponse response = ProductResponse.fromEntity(product);
         return response;
     }
 
