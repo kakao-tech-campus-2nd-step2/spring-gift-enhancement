@@ -27,12 +27,29 @@ public class Option {
     public Option(Product product, String option) {
         this.product = product;
         this.option = option;
+        this.quantity=0;
     }
 
     public int getId() {
-        return id;
+        return this.id;
+    }
+
+    public String getOption(){
+        return this.option;
+    }
+
+    public int getQuantity(){
+        return this.quantity;
     }
 
     public Option() {
+    }
+
+    public void addQuantity(int num){
+        this.quantity += num;
+    }
+
+    public void subQuantity(int num){
+        this.quantity -= num;
     }
 }
