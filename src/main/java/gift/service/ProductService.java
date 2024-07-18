@@ -1,8 +1,10 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.dto.ProductRegisterRequestDto;
 import gift.domain.Product;
 import gift.dto.ProductResponseDto;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -13,9 +15,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Product> getAllProducts(){
@@ -25,11 +30,12 @@ public class ProductService {
     public ProductResponseDto getProductById(long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("해당 id의 상품 없음: " + id));;
-        return new ProductResponseDto(product.getName(), product.getPrice(), product.getImageUrl());
+        return new ProductResponseDto(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getName());
     }
 
     public Long addProduct(ProductRegisterRequestDto productDto){
-        Product newProduct = new Product(productDto.getName(),productDto.getPrice(),productDto.getImageUrl());
+        Category category = categoryRepository.findByName(productDto.getCategoryName());
+        Product newProduct = new Product(productDto.getName(),productDto.getPrice(),productDto.getImageUrl(), category);
         Product savedProduct = productRepository.save(newProduct);
         return savedProduct.getId();
     }
@@ -41,7 +47,7 @@ public class ProductService {
         existingProduct.setName(productDto.getName());
         existingProduct.setPrice(productDto.getPrice());
         existingProduct.setImageUrl(productDto.getImageUrl());
-
+        existingProduct.setCategory(categoryRepository.findByName(productDto.getCategoryName()));
         Product savedProduct = productRepository.save(existingProduct);
         return savedProduct.getId();
     }
@@ -59,7 +65,8 @@ public class ProductService {
             product.getId(),
             product.getName(),
             product.getPrice(),
-            product.getImageUrl()
+            product.getImageUrl(),
+            product.getCategory().getName()
         );
     }
 }
