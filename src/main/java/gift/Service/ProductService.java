@@ -40,11 +40,10 @@ public class ProductService {
     Category category = new Category(categoryDto.getId(), categoryDto.getName(),
       categoryDto.getColor(), categoryDto.getImageUrl(), categoryDto.getDescription());
 
-    Product product = new Product(productDto.getId(), productDto.getName(),
+    Product product = new Product(productDto.getName(),
       productDto.getPrice(), productDto.getImageUrl(), category);
 
     productRepository.save(product);
-
     return productDto;
   }
 

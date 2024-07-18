@@ -1,17 +1,19 @@
 package gift.Controller;
 
-import gift.DTO.CategoryDto;
 import gift.DTO.ProductDto;
 import gift.Service.CategoryService;
 import gift.Service.ProductService;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("admin/products")
@@ -38,13 +40,12 @@ public class ProductAdminController {
     return "product-form";
   }
 
-  @PostMapping("/add")
-  public String addProduct(@RequestParam String name, @RequestParam int price,
-    @RequestParam String imageUrl, @RequestParam Long categoryId) {
-    CategoryDto categoryDto = categoryService.getCategoryById(categoryId);
-    ProductDto productDto = new ProductDto(name, price, imageUrl, categoryDto);
+  @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
+  public ResponseEntity<Map<String, String>> addProduct(@RequestBody ProductDto productDto) {
     productService.addProduct(productDto);
-    return "redirect:/admin/products";
+    Map<String, String> response = new HashMap<>();
+    response.put("redirectUrl", "/admin/products");
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping("product/{id}")
@@ -55,14 +56,13 @@ public class ProductAdminController {
     return "product-form";
   }
 
-  @PostMapping("product/{id}")
-  public String updateProduct(@PathVariable Long id, @RequestParam String name,
-    @RequestParam int price, @RequestParam String imageUrl, @RequestParam Long categoryId) {
-    CategoryDto categoryDto = categoryService.getCategoryById(categoryId);
-    ProductDto productDto = new ProductDto(name, price, imageUrl, categoryDto);
-
+  @PostMapping("/product/{id}")
+  public ResponseEntity<Map<String, String>> updateProduct(@PathVariable Long id,
+    @RequestBody ProductDto productDto) {
     productService.updateProduct(id, productDto);
-    return "redirect:/admin/products";
+    Map<String, String> response = new HashMap<>();
+    response.put("redirectUrl", "/admin/products");
+    return ResponseEntity.ok(response);
   }
 
   @PostMapping("/{id}")
