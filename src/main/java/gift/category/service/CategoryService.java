@@ -4,6 +4,11 @@ import gift.category.domain.Category;
 import gift.category.dto.CategoryServiceDto;
 import gift.category.exception.CategoryNotFoundException;
 import gift.category.repository.CategoryRepository;
+import gift.product.domain.Product;
+import gift.product.repository.ProductRepository;
+import gift.product.service.ProductService;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +16,13 @@ import java.util.List;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
+    private final EntityManager entityManager;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, ProductRepository productRepository, EntityManager entityManager) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
+        this.entityManager = entityManager;
     }
 
     public List<Category> getAllCategories() {
@@ -34,9 +43,22 @@ public class CategoryService {
         return categoryRepository.save(categoryServiceDto.toCategory());
     }
 
+    @Transactional
     public void deleteCategory(Long id) {
         validateCategoryExists(id);
+        setProductCategoryNull(id);
         categoryRepository.deleteById(id);
+    }
+
+    private void setProductCategoryNull(Long id) {
+        Category category = getCategoryById(id);
+
+        if (category.getProducts().isEmpty())
+            return;
+
+        productRepository.setCategoryNullByCategoryId(id);
+        entityManager.flush();
+        entityManager.clear();
     }
 
     private void validateCategoryExists(Long id) {

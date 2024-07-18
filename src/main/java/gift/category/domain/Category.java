@@ -1,5 +1,6 @@
 package gift.category.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gift.category.dto.CategoryRequestDto;
 import gift.product.domain.Product;
 import jakarta.persistence.*;
@@ -25,6 +26,7 @@ public class Category {
     private CategoryDescription description;
 
     // 카테고리를 삭제했다고 상품이 삭제되면 안 되므로, orphanRemoval = false 를 명시적으로 주었다
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST, orphanRemoval = false)
     List<Product> products = new ArrayList<>();
 
@@ -67,6 +69,10 @@ public class Category {
         return description;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
     public boolean checkNew() {
         return id == null;
     }
@@ -84,4 +90,5 @@ public class Category {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
