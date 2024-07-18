@@ -64,13 +64,19 @@ Content-Type: application/json
 
 ### 기능 목록
 
-- [ ] Option entity
+- [x] Option entity
   - [x] 옵션 이름은 공백을 포함하여 최대 50자
   - [x] 특수 문자 `( ), [ ], +, -, &, /, _`외에 사용 불가
   - [x] 옵션 수량(quantity)는 1개 이상 1억 개 미만
   - [x] 동일한 상품 내 옵션 이름 중복 허용 X
   - [ ] ~~상품에는 하나 이상의 옵션이 존재할 필요가 있음~~ - Product의 테스트
-  
+
+- [ ] Option CRUD
+  - [ ] Create
+  - [ ] Read
+  - [ ] Update
+  - [ ] Delete
+
 - [ ] (선택) 관리자 화면에서 옵션 추가
 
 
