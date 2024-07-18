@@ -3,9 +3,11 @@ package gift.service;
 import gift.domain.Category;
 import gift.repository.CategoryRepository;
 import gift.web.dto.request.category.CreateCategoryRequest;
+import gift.web.dto.request.category.UpdateCategoryRequest;
 import gift.web.dto.response.category.CreateCategoryResponse;
 import gift.web.dto.response.category.ReadAllCategoriesResponse;
 import gift.web.dto.response.category.ReadCategoryResponse;
+import gift.web.dto.response.category.UpdateCategoryResponse;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,5 +37,16 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException(id + "에 해당하는 카테고리가 없습니다."));
         return ReadCategoryResponse.fromEntity(category);
+    }
+
+    public UpdateCategoryResponse updateCategory(Long id, UpdateCategoryRequest request) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException(id + "에 해당하는 카테고리가 없습니다."));
+        category.update(request.toEntity());
+        return UpdateCategoryResponse.fromEntity(category);
+    }
+
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
     }
 }
