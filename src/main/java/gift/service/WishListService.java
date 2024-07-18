@@ -5,6 +5,8 @@ import gift.domain.Product;
 import gift.domain.Wish;
 import gift.dto.WishProduct;
 import gift.dto.response.WishProductResponse;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
@@ -17,6 +19,7 @@ import java.util.List;
 
 import static gift.constant.Message.ADD_SUCCESS_MSG;
 import static gift.constant.Message.DELETE_SUCCESS_MSG;
+import static gift.exception.ErrorCode.DATA_NOT_FOUND;
 
 @Service
 public class WishListService {
@@ -49,8 +52,8 @@ public class WishListService {
     }
 
     private Wish wish(Long memberId, Long productId) {
-        Member member = memberRepository.findMemberById(memberId).get();
-        Product product = productRepository.findProductById(productId).get();
+        Member member = memberRepository.findMemberById(memberId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
+        Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         return new Wish(member, product);
     }
 

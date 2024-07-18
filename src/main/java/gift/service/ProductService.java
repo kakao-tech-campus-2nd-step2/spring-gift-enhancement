@@ -26,7 +26,7 @@ public class ProductService {
     }
 
     public Product getProduct(Long productId) {
-        return productRepository.findProductById(productId).orElse(null);
+        return productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
     }
 
     public Page<Product> getAllProducts(Pageable pageable) {
@@ -34,7 +34,7 @@ public class ProductService {
     }
 
     public String addProduct(AddProductRequest requestProduct) {
-        Category category = categoryRepository.findByName(requestProduct.getCategory()).get();
+        Category category = categoryRepository.findByName(requestProduct.getCategory()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         productRepository.save(new Product(requestProduct, category));
         return ADD_SUCCESS_MSG;
     }
@@ -47,7 +47,7 @@ public class ProductService {
     }
 
     public String deleteProduct(Long productId) {
-        productRepository.delete(productRepository.findProductById(productId).get());
+        productRepository.delete(productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND)));
         return DELETE_SUCCESS_MSG;
     }
 
