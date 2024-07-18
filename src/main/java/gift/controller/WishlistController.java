@@ -4,9 +4,7 @@ import gift.annotation.LoginMember;
 import gift.domain.TokenAuth;
 import gift.domain.WishlistItem;
 import gift.dto.request.WishlistRequest;
-
 import gift.service.WishlistService;
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,9 +25,8 @@ public class WishlistController {
 
     @GetMapping("/new")
     public String newWishlistItemForm(Model model, @LoginMember TokenAuth tokenAuth) {
-        Long memberId = tokenAuth.getMember().getId();
         model.addAttribute("wishlistItem", new WishlistRequest());
-        model.addAttribute("memberId", memberId);
+        model.addAttribute("token", tokenAuth.getToken());
         return "wishlist-add-form";
     }
 

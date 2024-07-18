@@ -2,12 +2,11 @@ package gift.config;
 
 import gift.filter.AuthFilter;
 import gift.repository.token.TokenSpringDataJpaRepository;
+import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import jakarta.servlet.Filter;
 
 @Configuration
 public class FilterConfiguration {

@@ -1,8 +1,10 @@
 package gift.repository.wishlist;
 
+import gift.domain.Category;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.WishlistItem;
+import gift.repository.category.CategorySpringDataJpaRepository;
 import gift.repository.member.MemberSpringDataJpaRepository;
 import gift.repository.product.ProductSpringDataJpaRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Rollback(false)
 public class WishlistSpringDataJpaRepositoryTest {
 
     @Autowired
@@ -31,12 +32,21 @@ public class WishlistSpringDataJpaRepositoryTest {
     @Autowired
     private ProductSpringDataJpaRepository productRepository;
 
+    @Autowired
+    private CategorySpringDataJpaRepository categoryRepository;
+
+    private Category createCategory() {
+        Category category = new Category("Test Category");
+        return categoryRepository.save(category);
+    }
+
     @Test
     public void testAddItemToWishlist() {
         Member member = new Member("test@example.com", "password");
         memberRepository.save(member);
 
-        Product product = new Product("Product 1", 100, "test-url");
+        Category category = createCategory();
+        Product product = new Product("Product 1", 100, "test-url", category);
         productRepository.save(product);
 
         WishlistItem item = new WishlistItem(member, product);
@@ -44,7 +54,7 @@ public class WishlistSpringDataJpaRepositoryTest {
 
         List<WishlistItem> items = wishlistRepository.findByMemberId(member.getId());
         assertThat(items).isNotEmpty();
-        assertThat(items.get(0).getProduct().getId()).isEqualTo(product.getId());
+        assertThat(items.getFirst().getProduct().getId()).isEqualTo(product.getId());
     }
 
     @Test
@@ -52,7 +62,8 @@ public class WishlistSpringDataJpaRepositoryTest {
         Member member = new Member("test2@example.com", "password");
         memberRepository.save(member);
 
-        Product product = new Product("Product 2", 200, "test2-url");
+        Category category = createCategory();
+        Product product = new Product("Product 2", 200, "test2-url", category);
         productRepository.save(product);
 
         WishlistItem item = new WishlistItem(member, product);
@@ -70,10 +81,11 @@ public class WishlistSpringDataJpaRepositoryTest {
         Member member = new Member("test3@example.com", "password");
         memberRepository.save(member);
 
-        Product product1 = new Product("Product 3", 300, "test3-url");
+        Category category = createCategory();
+        Product product1 = new Product("Product 3", 300, "test3-url", category);
         productRepository.save(product1);
 
-        Product product2 = new Product("Product 4", 400, "test4-url");
+        Product product2 = new Product("Product 4", 400, "test4-url", category);
         productRepository.save(product2);
 
         WishlistItem item1 = new WishlistItem(member, product1);

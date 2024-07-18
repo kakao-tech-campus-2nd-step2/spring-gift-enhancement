@@ -17,7 +17,7 @@
 <script>
     function submitForm() {
         const productId = document.getElementById("productId").value;
-        const token = localStorage.getItem("authToken"); // Assuming the token is stored in localStorage
+        const token = [[${token}]];
 
         if (!token) {
             alert("Authorization token is missing");

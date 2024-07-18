@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface WishlistSpringDataJpaRepository extends JpaRepository<WishlistItem, Long> {
     List<WishlistItem> findByMemberId(Long memberId);
+
     Page<WishlistItem> findByMemberId(Long memberId, Pageable pageable);
 
     Optional<WishlistItem> findByMemberIdAndProductId(Long MemberId, Long productId);

@@ -6,29 +6,28 @@ import gift.domain.TokenAuth;
 import gift.domain.WishlistItem;
 import gift.dto.request.WishlistRequest;
 import gift.exception.MemberNotFoundException;
-import gift.repository.member.MemberSpringDataJpaRepository;
 import gift.repository.product.ProductSpringDataJpaRepository;
 import gift.repository.wishlist.WishlistSpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class WishlistService {
 
     private final WishlistSpringDataJpaRepository wishlistRepository;
     private final TokenService tokenService;
-    private final MemberSpringDataJpaRepository memberRepository;
     private final ProductSpringDataJpaRepository productRepository;
 
     @Autowired
-    public WishlistService(WishlistSpringDataJpaRepository wishlistRepository, TokenService tokenService, MemberSpringDataJpaRepository memberRepository, ProductSpringDataJpaRepository productRepository) {
+    public WishlistService(WishlistSpringDataJpaRepository wishlistRepository, TokenService tokenService, ProductSpringDataJpaRepository productRepository) {
         this.wishlistRepository = wishlistRepository;
         this.tokenService = tokenService;
-        this.memberRepository = memberRepository;
         this.productRepository = productRepository;
     }
 

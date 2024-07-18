@@ -1,9 +1,6 @@
 package gift.service;
 
-import gift.domain.Member;
-import gift.domain.Product;
-import gift.domain.TokenAuth;
-import gift.domain.WishlistItem;
+import gift.domain.*;
 import gift.dto.request.WishlistRequest;
 import gift.exception.MemberNotFoundException;
 import gift.repository.member.MemberSpringDataJpaRepository;
@@ -35,9 +32,6 @@ public class WishlistServiceTest {
     private TokenService tokenService;
 
     @Mock
-    private MemberSpringDataJpaRepository memberRepository;
-
-    @Mock
     private ProductSpringDataJpaRepository productRepository;
 
     @InjectMocks
@@ -48,25 +42,23 @@ public class WishlistServiceTest {
 
     private Member member;
     private Product product;
+    private Category category;
     private String validToken = "valid.token.test";
-    private TokenAuth tokenAuth;
 
     @BeforeEach
     public void setup() {
         member = new Member("test@example.com", "password");
         member.setId(MEMBER_ID);
 
-        product = new Product("Product 1", 100, "test-url");
-        product.setId(PRODUCT_ID);
+        category = new Category(1L, "Category 1");
 
-        tokenAuth = new TokenAuth(validToken, member);
+        product = new Product("Product 1", 100, "test-url", category);
+        product.setId(PRODUCT_ID);
     }
 
     @Test
     public void testAddItemToWishlist() {
-
-        when(tokenService.findToken(validToken)).thenReturn(new TokenAuth(validToken, member));
-
+        whenTokenValid();
         when(productRepository.findById(PRODUCT_ID)).thenReturn(Optional.of(product));
 
         WishlistRequest request = new WishlistRequest(PRODUCT_ID);
@@ -82,7 +74,7 @@ public class WishlistServiceTest {
 
     @Test
     public void testDeleteItemFromWishlist() {
-        when(tokenService.findToken(validToken)).thenReturn(new TokenAuth(validToken, member));
+        whenTokenValid();
 
         WishlistItem wishlistItem = new WishlistItem(member, product);
         when(wishlistRepository.findByMemberIdAndProductId(MEMBER_ID, PRODUCT_ID)).thenReturn(Optional.of(wishlistItem));
@@ -95,7 +87,7 @@ public class WishlistServiceTest {
 
     @Test
     public void testDeleteItemFromWishlistMemberNotFound() {
-        when(tokenService.findToken(validToken)).thenReturn(new TokenAuth(validToken, member));
+        whenTokenValid();
 
         when(wishlistRepository.findByMemberIdAndProductId(MEMBER_ID, PRODUCT_ID)).thenReturn(Optional.empty());
 
@@ -108,8 +100,7 @@ public class WishlistServiceTest {
 
     @Test
     public void testGetWishlistByMemberId() {
-        Product product2 = new Product("Product 2", 200, "test-url-2");
-        product2.setId(2L);
+        Product product2 = new Product(2L, "Product 2", 200, "test-url-2", category);
         List<WishlistItem> expectedItems = Arrays.asList(
                 new WishlistItem(member, product),
                 new WishlistItem(member, product2)
@@ -122,5 +113,9 @@ public class WishlistServiceTest {
         assertEquals(expectedItems.size(), actualItems.size());
         assertEquals(expectedItems.get(0).getProduct().getId(), actualItems.get(0).getProduct().getId());
         assertEquals(expectedItems.get(1).getProduct().getId(), actualItems.get(1).getProduct().getId());
+    }
+
+    private void whenTokenValid() {
+        when(tokenService.findToken(validToken)).thenReturn(new TokenAuth(validToken, member));
     }
 }

@@ -1,6 +1,7 @@
 package gift.domain;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -23,9 +24,15 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TokenAuth> tokenAuths;
 
-    public Member() { }
+    public Member() {
+    }
 
     public Member(String email, String password) {
+        this(null, email, password);
+    }
+
+    public Member(Long id, String email, String password) {
+        this.id = id;
         this.email = email;
         this.password = password;
     }
@@ -42,19 +49,8 @@ public class Member {
         return email;
     }
 
-
     public String getPassword() {
         return password;
-    }
-
-
-    public List<WishlistItem> getWishlistItems() {
-        return wishlistItems;
-    }
-
-
-    public List<TokenAuth> getTokenAuths() {
-        return tokenAuths;
     }
 
 }

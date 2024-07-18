@@ -2,6 +2,7 @@ package gift.domain;
 
 
 import gift.dto.request.ProductRequest;
+import gift.dto.response.ProductResponse;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -25,13 +26,26 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<WishlistItem> wishlistItems;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     public Product() { }
 
+    public Product(String name, Integer price, String imageUrl, Category category) {
+        this(null, name, price, imageUrl, category);
+    }
 
-    public Product(String name, Integer price, String imageUrl) {
+    public Product(ProductRequest productRequest, Category category){
+        this(null, productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category);
+    }
+
+    public Product(Long id, String name, Integer price, String imageUrl, Category category) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public long getId() {
@@ -54,25 +68,18 @@ public class Product {
         return price;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
-    public List<WishlistItem> getWishlistItems() {
-        return wishlistItems;
-    }
+    public Category getCategory() { return category; }
 
-
-    public static Product RequestToEntity(ProductRequest productRequest) {
-        return new Product(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl());
+    public void update(ProductRequest productRequest, Category category){
+        this.name = productRequest.getName();
+        this.price = productRequest.getPrice();
+        this.imageUrl = productRequest.getImageUrl();
+        this.category = category;
     }
 
 }
