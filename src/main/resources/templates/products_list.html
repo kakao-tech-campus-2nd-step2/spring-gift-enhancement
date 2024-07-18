@@ -34,12 +34,14 @@
               <td>name</td>
               <td>price</td>
               <td>imageUrl</td>
+              <td>category</td>
             </tr>
             <tr th:each="product : ${products}">
               <td th:text="${product.id}"></td>
               <td th:text="${product.name}"></td>
               <td th:text="${product.price}"></td>
               <td th:text="${product.imageUrl}"></td>
+              <td th:text="${product.categoryId}"></td>
               <td><a th:href="@{/products/update/{id}(id = ${product.id})}">상품 수정</a></td>
               <td>
                 <form th:action="@{/products/{id}(id=${product.id})}" method="post">

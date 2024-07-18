@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.entity.ProductEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -27,20 +28,26 @@ public class Product {
     @Pattern(regexp = "^(http(s?):)([/|.\\w|\\s|-])*\\.(?:jpg|gif|png)$", message = "URL 형식에 맞추어 작성해주세요")
     private String imageUrl;
 
+//    @NotBlank(message = "카테고리를 무조건 선택해 주세요.")
+    private Long categoryId;
+
     public Product() {
+
     }
 
-    public Product(String name, Long price, String imageUrl) {
+    public Product(String name, Long price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
-    public Product(Long id, String name, Long price, String imageUrl) {
+    public Product(Long id, String name, Long price, String imageUrl, Long categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
@@ -75,10 +82,12 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isEqual(Product product) {
-        return Objects.equals(name, product.getName()) &&
-            Objects.equals(price, product.getPrice()) &&
-            Objects.equals(imageUrl, product.getImageUrl());
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
 }

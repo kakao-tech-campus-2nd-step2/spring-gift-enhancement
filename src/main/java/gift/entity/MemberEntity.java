@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.domain.Member;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -51,6 +52,11 @@ public class MemberEntity {
 
     public List<WishListEntity> getWishListEntities() {
         return wishListEntities;
+    }
+
+    public static Member toDto(MemberEntity memberEntity) {
+        return new Member(memberEntity.getId(), memberEntity.getEmail(),
+            memberEntity.getPassword());
     }
 
 }

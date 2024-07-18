@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.domain.WishList;
 import jakarta.persistence.*;
 
 @Entity
@@ -51,6 +52,10 @@ public class WishListEntity {
 
     public void setProductId(ProductEntity productEntity) {
         this.productEntity = productEntity;
+    }
+
+    public static WishList toDto(WishListEntity wishListEntity) {
+        return new WishList(wishListEntity.getMemberEntity().getId(), wishListEntity.getProductEntity().getPrice());
     }
 
 }

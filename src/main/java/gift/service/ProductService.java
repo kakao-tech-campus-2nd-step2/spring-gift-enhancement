@@ -1,9 +1,11 @@
 package gift.service;
 
 import gift.domain.Product;
+import gift.entity.CategoryEntity;
 import gift.entity.ProductEntity;
 import gift.error.AlreadyExistsException;
 import gift.error.NotFoundException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,16 +18,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     //전체 상품 조회 기능
     @Transactional(readOnly = true)
     public Page<Product> getAllProducts(Pageable pageable) {
         Page<ProductEntity> productEntities = productRepository.findAll(pageable);
-        return productEntities.map(this::entityToDto);
+        return productEntities.map(ProductEntity::toDto);
     }
 
     //단일 상품 조회 기능
@@ -33,7 +37,7 @@ public class ProductService {
     public Product getProductById(Long id) {
         ProductEntity productEntity = productRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Product not found"));
-        return entityToDto(productEntity);
+        return ProductEntity.toDto(productEntity);
 
     }
 
@@ -42,27 +46,42 @@ public class ProductService {
     public List<Product> searchProduct(String name) {
         List<ProductEntity> productEntities = productRepository.findByNameContaining(name);
         return productEntities.stream()
-            .map(this::entityToDto)
+            .map(ProductEntity::toDto)
             .collect(Collectors.toList());
     }
 
     //상품 추가 기능
     @Transactional
     public void addProduct(Product product) {
+        CategoryEntity categoryEntity = categoryRepository.findById(product.getCategoryId())
+            .orElseThrow(() -> new NotFoundException("Category Not Found"));
+
         checkAlreadyExists(product);
-        productRepository.save(dtoToEntity(product));
+
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setName(product.getName());
+        productEntity.setPrice(product.getPrice());
+        productEntity.setImageUrl(product.getImageUrl());
+        productEntity.setCategoryEntity(categoryEntity);
+        productRepository.save(productEntity);
     }
 
     //상품 수정 기능
     @Transactional
     public void updateProduct(Long id, Product product) {
-        ProductEntity existingProduct = productRepository.findById(id)
+        ProductEntity productEntity = productRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Product not found"));
+
         checkAlreadyExists(product);
-        existingProduct.setName(product.getName());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setImageUrl(product.getImageUrl());
-        productRepository.save(existingProduct);
+
+        CategoryEntity categoryEntity = categoryRepository.findById(product.getCategoryId())
+            .orElseThrow(() -> new NotFoundException("Category Not Found"));
+
+        productEntity.setName(product.getName());
+        productEntity.setPrice(product.getPrice());
+        productEntity.setImageUrl(product.getImageUrl());
+        productEntity.setCategoryEntity(categoryEntity);
+        productRepository.save(productEntity);
     }
 
     //상품 삭제 기능
@@ -81,15 +100,6 @@ public class ProductService {
         if (exists) {
             throw new AlreadyExistsException("해당 상품이 이미 존재 합니다!");
         }
-    }
-
-    private Product entityToDto(ProductEntity productEntity) {
-        return new Product(productEntity.getName(), productEntity.getPrice(),
-            productEntity.getImageUrl());
-    }
-
-    private ProductEntity dtoToEntity(Product dto) {
-        return new ProductEntity(dto.getName(), dto.getPrice(), dto.getImageUrl());
     }
 
 }
