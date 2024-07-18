@@ -6,13 +6,12 @@ import gift.domain.Category;
 import gift.domain.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@Transactional
+
 @DataJpaTest
 public class ProductRepositoryTest {
     @Autowired
