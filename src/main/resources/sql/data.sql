@@ -111,6 +111,34 @@ VALUES
     (1, 50, 1, NOW(), 1, NOW(), 1);
 
 INSERT INTO category(name, description, image_url, color, created_at, created_by, updated_at, updated_by)
-VALUES ('Category 1', 'Category 1 Description', 'https://via.placeholder.com/150', '#FF5733', NOW(), 1, NOW(), 1),
-       ('Category 2', 'Category 2 Description', 'https://via.placeholder.com/250', '#FF5733', NOW(), 1, NOW(), 1),
-       ('Category 3', 'Category 3 Description', 'https://via.placeholder.com/350', '#FF5733', NOW(), 1, NOW(), 1);
+VALUES
+    ('Category 1', 'Category 1 Description', 'https://via.placeholder.com/150', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 2', 'Category 2 Description', 'https://via.placeholder.com/250', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 3', 'Category 3 Description', 'https://via.placeholder.com/350', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 4', 'Category 4 Description', 'https://via.placeholder.com/450', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 5', 'Category 5 Description', 'https://via.placeholder.com/550', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 6', 'Category 6 Description', 'https://via.placeholder.com/650', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 7', 'Category 7 Description', 'https://via.placeholder.com/750', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 8', 'Category 8 Description', 'https://via.placeholder.com/850', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 9', 'Category 9 Description', 'https://via.placeholder.com/950', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 10', 'Category 10 Description', 'https://via.placeholder.com/1050', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 11', 'Category 11 Description', 'https://via.placeholder.com/1150', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 12', 'Category 12 Description', 'https://via.placeholder.com/1250', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 13', 'Category 13 Description', 'https://via.placeholder.com/1350', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 14', 'Category 14 Description', 'https://via.placeholder.com/1450', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 15', 'Category 15 Description', 'https://via.placeholder.com/1550', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 16', 'Category 16 Description', 'https://via.placeholder.com/1650', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 17', 'Category 17 Description', 'https://via.placeholder.com/1750', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 18', 'Category 18 Description', 'https://via.placeholder.com/1850', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 19', 'Category 19 Description', 'https://via.placeholder.com/1950', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 20', 'Category 20 Description', 'https://via.placeholder.com/2050', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 21', 'Category 21 Description', 'https://via.placeholder.com/2150', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 22', 'Category 22 Description', 'https://via.placeholder.com/2250', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 23', 'Category 23 Description', 'https://via.placeholder.com/2350', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 24', 'Category 24 Description', 'https://via.placeholder.com/2450', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 25', 'Category 25 Description', 'https://via.placeholder.com/2550', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 26', 'Category 26 Description', 'https://via.placeholder.com/2650', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 27', 'Category 27 Description', 'https://via.placeholder.com/2750', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 28', 'Category 28 Description', 'https://via.placeholder.com/2850', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 29', 'Category 29 Description', 'https://via.placeholder.com/2950', '#FF5733', NOW(), 1, NOW(), 1),
+    ('Category 30', 'Category 30 Description', 'https://via.placeholder.com/3050', '#FF5733', NOW(), 1, NOW(), 1);
