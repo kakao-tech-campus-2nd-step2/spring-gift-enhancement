@@ -8,7 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import gift.dto.member.MemberRequest;
+import gift.dto.member.MemberLoginRequest;
+import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
 import gift.exception.member.EmailAlreadyUsedException;
 import gift.exception.member.ForbiddenException;
@@ -45,7 +46,8 @@ public class MemberControllerTest {
     @Test
     @DisplayName("회원가입 테스트")
     public void testRegister() throws Exception {
-        when(memberService.registerMember(any(MemberRequest.class))).thenReturn(memberResponse);
+        when(memberService.registerMember(any(MemberRegisterRequest.class))).thenReturn(
+            memberResponse);
 
         mockMvc.perform(post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +59,7 @@ public class MemberControllerTest {
     @Test
     @DisplayName("이미 사용 중인 이메일로 회원가입 시도")
     public void testRegisterEmailAlreadyUsed() throws Exception {
-        when(memberService.registerMember(any(MemberRequest.class))).thenThrow(
+        when(memberService.registerMember(any(MemberRegisterRequest.class))).thenThrow(
             new EmailAlreadyUsedException(EMAIL_ALREADY_USED));
 
         mockMvc.perform(post("/api/members/register")
@@ -70,7 +72,7 @@ public class MemberControllerTest {
     @Test
     @DisplayName("로그인 테스트")
     public void testLogin() throws Exception {
-        when(memberService.loginMember(any(MemberRequest.class))).thenReturn(memberResponse);
+        when(memberService.loginMember(any(MemberLoginRequest.class))).thenReturn(memberResponse);
 
         mockMvc.perform(post("/api/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +84,7 @@ public class MemberControllerTest {
     @Test
     @DisplayName("잘못된 이메일로 로그인 시도")
     public void testLoginEmailNotFound() throws Exception {
-        when(memberService.loginMember(any(MemberRequest.class))).thenThrow(
+        when(memberService.loginMember(any(MemberLoginRequest.class))).thenThrow(
             new ForbiddenException(INVALID_CREDENTIALS));
 
         mockMvc.perform(post("/api/members/login")
@@ -95,7 +97,7 @@ public class MemberControllerTest {
     @Test
     @DisplayName("잘못된 비밀번호로 로그인 시도")
     public void testLoginPasswordMismatch() throws Exception {
-        when(memberService.loginMember(any(MemberRequest.class))).thenThrow(
+        when(memberService.loginMember(any(MemberLoginRequest.class))).thenThrow(
             new ForbiddenException(INVALID_CREDENTIALS));
 
         mockMvc.perform(post("/api/members/login")

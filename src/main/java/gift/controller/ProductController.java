@@ -1,7 +1,8 @@
 package gift.controller;
 
-import gift.dto.product.ProductRequest;
+import gift.dto.product.ProductCreateRequest;
 import gift.dto.product.ProductResponse;
+import gift.dto.product.ProductUpdateRequest;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -44,15 +45,15 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> addProduct(
-        @Valid @RequestBody ProductRequest productRequest) {
-        ProductResponse createdProduct = productService.addProduct(productRequest);
+        @Valid @RequestBody ProductCreateRequest productCreateRequest) {
+        ProductResponse createdProduct = productService.addProduct(productCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
-        @Valid @RequestBody ProductRequest productRequest) {
-        ProductResponse updatedProduct = productService.updateProduct(id, productRequest);
+        @Valid @RequestBody ProductUpdateRequest productUpdateRequest) {
+        ProductResponse updatedProduct = productService.updateProduct(id, productUpdateRequest);
         return ResponseEntity.ok(updatedProduct);
     }
 

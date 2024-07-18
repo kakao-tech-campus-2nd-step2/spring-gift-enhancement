@@ -1,8 +1,9 @@
 package gift.controller.admin;
 
 import gift.dto.category.CategoryResponse;
-import gift.dto.product.ProductRequest;
+import gift.dto.product.ProductCreateRequest;
 import gift.dto.product.ProductResponse;
+import gift.dto.product.ProductUpdateRequest;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -48,19 +49,20 @@ public class ProductAdminController {
     public String showAddProductForm(Model model) {
         List<CategoryResponse> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
-        model.addAttribute("product", new ProductRequest(null, "", 0, "", null));
+        model.addAttribute("product", new ProductCreateRequest("", 0, "", null));
         return "product_form";
     }
 
     @PostMapping("")
-    public String addProduct(@Valid @ModelAttribute("product") ProductRequest productRequest,
+    public String addProduct(
+        @Valid @ModelAttribute("product") ProductCreateRequest productCreateRequest,
         BindingResult result, Model model) {
         if (result.hasErrors()) {
             List<CategoryResponse> categories = categoryService.getAllCategories();
             model.addAttribute("categories", categories);
             return "product_form";
         }
-        productService.addProduct(productRequest);
+        productService.addProduct(productCreateRequest);
         return "redirect:/admin/products";
     }
 
@@ -75,15 +77,16 @@ public class ProductAdminController {
 
     @PutMapping("/{id}")
     public String updateProduct(@PathVariable("id") Long id,
-        @Valid @ModelAttribute ProductRequest productRequest, BindingResult result, Model model) {
+        @Valid @ModelAttribute ProductUpdateRequest productUpdateRequest, BindingResult result,
+        Model model) {
         if (result.hasErrors()) {
             List<CategoryResponse> categories = categoryService.getAllCategories();
             model.addAttribute("categories", categories);
-            model.addAttribute("product", productRequest);
+            model.addAttribute("product", productUpdateRequest);
             model.addAttribute("org.springframework.validation.BindingResult.product", result);
             return "product_edit";
         }
-        productService.updateProduct(id, productRequest);
+        productService.updateProduct(id, productUpdateRequest);
         return "redirect:/admin/products";
     }
 

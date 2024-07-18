@@ -4,8 +4,9 @@ import static gift.util.constants.CategoryConstants.CATEGORY_NOT_FOUND;
 import static gift.util.constants.ProductConstants.INVALID_PRICE;
 import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 
-import gift.dto.product.ProductRequest;
+import gift.dto.product.ProductCreateRequest;
 import gift.dto.product.ProductResponse;
+import gift.dto.product.ProductUpdateRequest;
 import gift.exception.product.InvalidProductPriceException;
 import gift.exception.product.ProductNotFoundException;
 import gift.model.Category;
@@ -41,27 +42,28 @@ public class ProductService {
     }
 
     // 상품 추가
-    public ProductResponse addProduct(ProductRequest productRequest) {
-        validatePrice(productRequest.price());
-        Category category = categoryRepository.findById(productRequest.categoryId())
+    public ProductResponse addProduct(ProductCreateRequest productCreateRequest) {
+        validatePrice(productCreateRequest.price());
+        Category category = categoryRepository.findById(productCreateRequest.categoryId())
             .orElseThrow(() -> new ProductNotFoundException(
-                CATEGORY_NOT_FOUND + productRequest.categoryId()));
-        Product product = convertToEntity(productRequest, category);
+                CATEGORY_NOT_FOUND + productCreateRequest.categoryId()));
+        Product product = convertToEntity(productCreateRequest, category);
         Product savedProduct = productRepository.save(product);
         return convertToDTO(savedProduct);
     }
 
     // 상품 수정
-    public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
+    public ProductResponse updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND + id));
-        validatePrice(productRequest.price());
+        validatePrice(productUpdateRequest.price());
 
-        Category category = categoryRepository.findById(productRequest.categoryId())
+        Category category = categoryRepository.findById(productUpdateRequest.categoryId())
             .orElseThrow(() -> new ProductNotFoundException(
-                CATEGORY_NOT_FOUND + productRequest.categoryId()));
+                CATEGORY_NOT_FOUND + productUpdateRequest.categoryId()));
 
-        product.update(productRequest.name(), productRequest.price(), productRequest.imageUrl(),
+        product.update(productUpdateRequest.name(), productUpdateRequest.price(),
+            productUpdateRequest.imageUrl(),
             category);
         Product updatedProduct = productRepository.save(product);
         return convertToDTO(updatedProduct);
@@ -92,12 +94,13 @@ public class ProductService {
         );
     }
 
-    private static Product convertToEntity(ProductRequest productRequest, Category category) {
+    private static Product convertToEntity(ProductCreateRequest productCreateRequest,
+        Category category) {
         return new Product(
-            productRequest.id(),
-            productRequest.name(),
-            productRequest.price(),
-            productRequest.imageUrl(),
+            null,
+            productCreateRequest.name(),
+            productCreateRequest.price(),
+            productCreateRequest.imageUrl(),
             category
         );
     }

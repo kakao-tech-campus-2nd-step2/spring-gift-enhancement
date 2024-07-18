@@ -1,15 +1,20 @@
-package gift.dto.wish;
+package gift.dto.category;
 
 import static gift.util.constants.ProductConstants.REQUIRED_FIELD_MISSING;
 
 import jakarta.validation.constraints.NotNull;
 
-public record WishRequest(
+public record CategoryCreateRequest(
     @NotNull(message = REQUIRED_FIELD_MISSING)
-    Long memberId,
+    String name,
 
     @NotNull(message = REQUIRED_FIELD_MISSING)
-    Long productId
+    String color,
+
+    @NotNull(message = REQUIRED_FIELD_MISSING)
+    String imageUrl,
+
+    String description
 ) {
 
 }

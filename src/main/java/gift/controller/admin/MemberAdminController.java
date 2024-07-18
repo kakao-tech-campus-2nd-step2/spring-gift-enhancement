@@ -1,8 +1,7 @@
 package gift.controller.admin;
 
-import gift.dto.member.MemberRequest;
+import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
-import gift.model.Member;
 import gift.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -34,36 +33,38 @@ public class MemberAdminController {
 
     @GetMapping("/new")
     public String showAddMemberForm(Model model) {
-        model.addAttribute("member", new MemberRequest(null, "", ""));
+        model.addAttribute("member", new MemberRegisterRequest("", ""));
         return "member_form";
     }
 
     @PostMapping("")
-    public String addMember(@Valid @ModelAttribute("member") MemberRequest memberDTO,
+    public String addMember(
+        @Valid @ModelAttribute("member") MemberRegisterRequest memberRegisterRequest,
         BindingResult result) {
         if (result.hasErrors()) {
             return "member_form";
         }
-        memberService.registerMember(memberDTO);
+        memberService.registerMember(memberRegisterRequest);
         return "redirect:/admin/members";
     }
 
     @GetMapping("/{id}/edit")
     public String showEditMemberForm(@PathVariable("id") Long id, Model model) {
         MemberResponse memberResponse = memberService.getMemberById(id);
-        model.addAttribute("member", new Member(memberResponse.id(), memberResponse.email(), null));
+        model.addAttribute("member", new MemberRegisterRequest(memberResponse.email(), null));
         return "member_edit";
     }
 
     @PutMapping("/{id}")
     public String updateMember(@PathVariable("id") Long id,
-        @Valid @ModelAttribute MemberRequest memberRequest, BindingResult result, Model model) {
+        @Valid @ModelAttribute MemberRegisterRequest memberRegisterRequest, BindingResult result,
+        Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("member", memberRequest);
+            model.addAttribute("member", memberRegisterRequest);
             model.addAttribute("org.springframework.validation.BindingResult.member", result);
             return "member_edit";
         }
-        memberService.updateMember(id, memberRequest);
+        memberService.updateMember(id, memberRegisterRequest);
         return "redirect:/admin/members";
     }
 

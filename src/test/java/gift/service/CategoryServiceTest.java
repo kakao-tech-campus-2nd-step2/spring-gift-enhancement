@@ -5,8 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-import gift.dto.category.CategoryRequest;
+import gift.dto.category.CategoryCreateRequest;
 import gift.dto.category.CategoryResponse;
+import gift.dto.category.CategoryUpdateRequest;
 import gift.exception.category.CategoryNotFoundException;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
@@ -36,7 +37,7 @@ public class CategoryServiceTest {
 
         List<CategoryResponse> categories = categoryService.getAllCategories();
         assertEquals(1, categories.size());
-        assertEquals("Category", categories.getFirst().name());
+        assertEquals("Category", categories.get(0).name());
     }
 
     @Test
@@ -65,11 +66,12 @@ public class CategoryServiceTest {
     @DisplayName("카테고리 추가")
     public void testAddCategory() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        CategoryRequest categoryRequest = new CategoryRequest(null, "Category", "#000000",
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest("Category",
+            "#000000",
             "imageUrl", "description");
         when(categoryRepository.save(Mockito.any(Category.class))).thenReturn(category);
 
-        CategoryResponse createdCategory = categoryService.addCategory(categoryRequest);
+        CategoryResponse createdCategory = categoryService.addCategory(categoryCreateRequest);
         assertEquals("Category", createdCategory.name());
     }
 
@@ -80,27 +82,29 @@ public class CategoryServiceTest {
             "oldDescription");
         Category updatedCategory = new Category("Updated Category", "#000000", "newImageUrl",
             "newDescription");
-        CategoryRequest categoryRequest = new CategoryRequest(1L, "Updated Category", "#000000",
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Updated Category",
+            "#000000",
             "newImageUrl", "newDescription");
 
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(existingCategory));
         when(categoryRepository.save(Mockito.any(Category.class))).thenReturn(updatedCategory);
 
         CategoryResponse updatedCategoryResponse = categoryService.updateCategory(1L,
-            categoryRequest);
+            categoryUpdateRequest);
         assertEquals("Updated Category", updatedCategoryResponse.name());
     }
 
     @Test
     @DisplayName("존재하지 않는 카테고리 ID로 수정")
     public void testUpdateCategoryNotFound() {
-        CategoryRequest categoryRequest = new CategoryRequest(1L, "Updated Category", "#000000",
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Updated Category",
+            "#000000",
             "newImageUrl", "newDescription");
 
         when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
 
         CategoryNotFoundException exception = assertThrows(CategoryNotFoundException.class, () -> {
-            categoryService.updateCategory(1L, categoryRequest);
+            categoryService.updateCategory(1L, categoryUpdateRequest);
         });
 
         assertEquals(CATEGORY_NOT_FOUND + 1, exception.getMessage());

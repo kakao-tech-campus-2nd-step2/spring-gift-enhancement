@@ -1,17 +1,20 @@
-package gift.dto.member;
+package gift.dto.category;
 
 import static gift.util.constants.ProductConstants.REQUIRED_FIELD_MISSING;
 
 import jakarta.validation.constraints.NotNull;
 
-public record MemberRequest(
-    Long id,
+public record CategoryUpdateRequest(
+    @NotNull(message = REQUIRED_FIELD_MISSING)
+    String name,
 
     @NotNull(message = REQUIRED_FIELD_MISSING)
-    String email,
+    String color,
 
     @NotNull(message = REQUIRED_FIELD_MISSING)
-    String password
+    String imageUrl,
+
+    String description
 ) {
 
 }

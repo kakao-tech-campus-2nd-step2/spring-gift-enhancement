@@ -7,8 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import gift.dto.category.CategoryRequest;
+import gift.dto.category.CategoryCreateRequest;
 import gift.dto.category.CategoryResponse;
+import gift.dto.category.CategoryUpdateRequest;
 import gift.exception.category.CategoryNotFoundException;
 import gift.service.CategoryService;
 import gift.util.TokenValidator;
@@ -77,9 +78,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 추가")
     public void testAddCategory() throws Exception {
-        CategoryRequest categoryRequest = new CategoryRequest(null, "Category", "#000000",
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest("Category",
+            "#000000",
             "imageUrl", "description");
-        when(categoryService.addCategory(categoryRequest)).thenReturn(categoryResponse);
+        when(categoryService.addCategory(categoryCreateRequest)).thenReturn(categoryResponse);
 
         mockMvc.perform(post("/api/categories")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,11 +94,12 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 수정")
     public void testUpdateCategory() throws Exception {
-        CategoryRequest categoryRequest = new CategoryRequest(null, "Updated Category", "#FFFFFF",
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Updated Category",
+            "#FFFFFF",
             "newImageUrl", "newDescription");
         CategoryResponse updatedCategoryResponse = new CategoryResponse(1L, "Updated Category",
             "#FFFFFF", "newImageUrl", "newDescription");
-        when(categoryService.updateCategory(1L, categoryRequest)).thenReturn(
+        when(categoryService.updateCategory(1L, categoryUpdateRequest)).thenReturn(
             updatedCategoryResponse);
 
         mockMvc.perform(put("/api/categories/1")
@@ -113,9 +116,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("존재하지 않는 카테고리 ID로 수정")
     public void testUpdateCategoryNotFound() throws Exception {
-        CategoryRequest categoryRequest = new CategoryRequest(null, "Updated Category", "#FFFFFF",
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Updated Category",
+            "#FFFFFF",
             "newImageUrl", "newDescription");
-        when(categoryService.updateCategory(1L, categoryRequest)).thenThrow(
+        when(categoryService.updateCategory(1L, categoryUpdateRequest)).thenThrow(
             new CategoryNotFoundException(CategoryConstants.CATEGORY_NOT_FOUND + 1));
 
         mockMvc.perform(put("/api/categories/1")
