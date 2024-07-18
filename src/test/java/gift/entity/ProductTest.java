@@ -7,7 +7,8 @@ class ProductTest {
 
     @Test
     void productConstructorAndGetters() {
-        Product product = new Product("Test Product", 100, "http://example.com/test.jpg");
+        Category category = new Category("Test Category", "#FFFFFF", "http://example.com/test.jpg", "Description");
+        Product product = new Product("Test Product", 100, "http://example.com/test.jpg", category);
 
         assertThat(product.getName()).isEqualTo("Test Product");
         assertThat(product.getPrice()).isEqualTo(100);

@@ -30,6 +30,7 @@
                 <a th:href="@{/api/products(page=0, size=${productPage.size}, sortBy='price', direction=${direction == 'asc' ? 'desc' : 'asc'})}">Price</a>
             </th>
             <th>Image</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -39,6 +40,7 @@
             <td th:text="${product.name}"></td>
             <td th:text="${product.price}"></td>
             <td><img th:src="${product.imageUrl}" alt="Product Image" class="img-thumbnail" style="max-width: 100px; max-height: 100px;"></td>
+            <td th:text="${product.category.name}"></td>
             <td>
                 <form th:action="@{/api/products/{id}/edit(id=${product.id})}" method="get" class="d-inline">
                     <button type="submit" class="btn btn-warning btn-sm">Edit</button>

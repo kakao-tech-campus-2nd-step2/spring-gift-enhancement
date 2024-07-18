@@ -29,7 +29,7 @@ public class MemberController {
 
     @GetMapping("/login")
     public String loginForm(Model model) {
-        model.addAttribute("memberRequest", new MemberRequest());
+        model.addAttribute("memberRequest", new MemberRequest("", ""));
         return "login";
     }
 
@@ -49,7 +49,7 @@ public class MemberController {
 
     @GetMapping("/register")
     public String registerForm(Model model) {
-        model.addAttribute("memberRequest", new MemberRequest());
+        model.addAttribute("memberRequest", new MemberRequest("", ""));
         return "register";
     }
 

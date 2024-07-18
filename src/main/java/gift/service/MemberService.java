@@ -28,19 +28,19 @@ public class MemberService {
     }
 
     public String register(MemberRequest memberRequest) {
-        if (memberRepository.findByEmail(memberRequest.getEmail()).isPresent()) {
+        if (memberRepository.findByEmail(memberRequest.email()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");
         }
 
-        String encodedPassword = passwordEncoder.encode(memberRequest.getPassword());
-        Member member = new Member(memberRequest.getEmail(), encodedPassword);
+        String encodedPassword = passwordEncoder.encode(memberRequest.password());
+        Member member = new Member(memberRequest.email(), encodedPassword);
         memberRepository.save(member);
         return jwtUtil.generateToken(member.getId(), member.getEmail(), "USER");
     }
 
     public String authenticate(MemberRequest memberRequest) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(memberRequest.getEmail());
-        if (optionalMember.isPresent() && passwordEncoder.matches(memberRequest.getPassword(), optionalMember.get().getPassword())) {
+        Optional<Member> optionalMember = memberRepository.findByEmail(memberRequest.email());
+        if (optionalMember.isPresent() && passwordEncoder.matches(memberRequest.password(), optionalMember.get().getPassword())) {
             Member member = optionalMember.get();
             return jwtUtil.generateToken(member.getId(), member.getEmail(), "USER");
         } else {

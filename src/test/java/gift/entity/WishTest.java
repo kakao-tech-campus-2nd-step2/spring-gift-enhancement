@@ -8,7 +8,8 @@ class WishTest {
     @Test
     void wishConstructorAndGetters() {
         Member member = new Member("test@example.com", "password");
-        Product product = new Product("Test Product", 100, "http://example.com/test.jpg");
+        Category category = new Category("Test Category", "#FFFFFF", "http://example.com/test.jpg", "Description");
+        Product product = new Product("Test Product", 100, "http://example.com/test.jpg", category);
         Wish wish = new Wish(member, product, 1);
 
         assertThat(wish.getMember()).isEqualTo(member);
@@ -19,7 +20,8 @@ class WishTest {
     @Test
     void wishSetters() {
         Member member = new Member("test@example.com", "password");
-        Product product = new Product("Test Product", 100, "http://example.com/test.jpg");
+        Category category = new Category("Test Category", "#FFFFFF", "http://example.com/test.jpg", "Description");
+        Product product = new Product("Test Product", 100, "http://example.com/test.jpg", category);
         Wish wish = new Wish();
         wish.setMember(member);
         wish.setProduct(product);
