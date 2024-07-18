@@ -1,5 +1,7 @@
 package gift.api.wishlist;
 
+import gift.api.wishlist.dto.WishAddUpdateRequest;
+import gift.api.wishlist.dto.WishDeleteRequest;
 import gift.global.LoginMember;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -30,20 +32,20 @@ public class WishController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> add(@RequestBody @Valid WishRequest wishRequest, @LoginMember Long memberId) {
-        wishService.add(memberId, wishRequest);
+    public ResponseEntity<Void> add(@RequestBody @Valid WishAddUpdateRequest wishAddUpdateRequest, @LoginMember Long memberId) {
+        wishService.add(memberId, wishAddUpdateRequest);
         return ResponseEntity.created(URI.create("/api/wishes/" + memberId)).build();
     }
 
     @PutMapping()
-    public ResponseEntity<Void> update(@RequestBody @Valid WishRequest wishRequest, @LoginMember Long memberId) {
-        wishService.update(memberId, wishRequest);
+    public ResponseEntity<Void> update(@RequestBody @Valid WishAddUpdateRequest wishAddUpdateRequest, @LoginMember Long memberId) {
+        wishService.update(memberId, wishAddUpdateRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping()
-    public ResponseEntity<Void> delete(@RequestBody @Valid WishRequest wishRequest, @LoginMember Long memberId) {
-        wishService.delete(memberId, wishRequest);
+    public ResponseEntity<Void> delete(@RequestBody @Valid WishDeleteRequest wishDeleteRequest, @LoginMember Long memberId) {
+        wishService.delete(memberId, wishDeleteRequest);
         return ResponseEntity.noContent().build();
     }
 }
