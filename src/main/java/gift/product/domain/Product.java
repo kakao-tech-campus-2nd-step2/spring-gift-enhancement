@@ -35,9 +35,14 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<WishlistItem> wishlistItemList;
 
+    @OneToMany
+    private List<Product> productList;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    // Constructor
     public Product() {}
 
     public Product(long id, String name, long price, String imageUrl) {
@@ -47,6 +52,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    //getter and setter
     public long getId() {
         return id;
     }
@@ -93,5 +99,13 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 }
