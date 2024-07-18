@@ -39,16 +39,16 @@ public class Wish {
     private Product product;
 
     public Wish(User user, Product product) {
-        this.user = user;
-        this.product = product;
-        this.quantity = DEFAULT_QUANTITY;
+        this(user, product, DEFAULT_QUANTITY);
     }
 
     public Wish(User user, Product product, int quantity) {
+        if(isQuantityZero()) {
+            throw new IllegalArgumentException("수량은 0보다 큰 수이어야 합니다.");
+        }
         this.user = user;
         this.product = product;
         this.quantity = quantity;
-        validateQuantity();
     }
 
     protected Wish() {
@@ -87,12 +87,6 @@ public class Wish {
 
     public boolean isQuantityZero() {
         return quantity <= 0;
-    }
-
-    private void validateQuantity() {
-        if (isQuantityZero()) {
-            throw new IllegalArgumentException("수량은 0보다 큰 수이어야 합니다.");
-        }
     }
 
     public static class Builder {
