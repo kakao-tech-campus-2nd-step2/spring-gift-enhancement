@@ -1,7 +1,7 @@
 package gift.controller;
 
+import gift.dto.ProductDTO;
 import gift.dto.WishlistDTO;
-import gift.model.Product;
 import gift.model.User;
 import gift.security.LoginMember;
 import gift.service.WishlistService;
@@ -28,10 +28,10 @@ public class WishlistController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Product>> getWishlist(@LoginMember User user,
-                                                     @RequestParam(defaultValue = "0") int page,
-                                                     @RequestParam(defaultValue = "5") int size) {
-        Page<Product> products = wishlistService.getProductsFromWishlist(user.getEmail(), page, size);
+    public ResponseEntity<Page<ProductDTO>> getWishlist(@LoginMember User user,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "5") int size) {
+        Page<ProductDTO> products = wishlistService.getProductsFromWishlist(user.getEmail(), page, size);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
