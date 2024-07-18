@@ -1,5 +1,6 @@
 package gift.api.product;
 
+import gift.api.option.OptionRequest;
 import gift.api.option.OptionResponse;
 import gift.api.option.OptionService;
 import jakarta.validation.Valid;
@@ -55,5 +56,12 @@ public class ProductController {
     @GetMapping("/{id}/options")
     public ResponseEntity<List<OptionResponse>> getOptions(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(optionService.getOptions(id));
+    }
+
+    @PostMapping("/{id}/options")
+    public ResponseEntity<Void> addOption(@PathVariable("id") Long id,
+                                    @RequestBody OptionRequest optionRequest) {
+        optionService.add(id, optionRequest);
+        return ResponseEntity.created(URI.create("/api/products/" + id)).build();
     }
 }

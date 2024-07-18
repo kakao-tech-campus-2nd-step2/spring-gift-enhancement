@@ -23,6 +23,20 @@ public class Option extends BaseEntity {
     protected Option() {
     }
 
+    public Option(Product product, String name, Integer quantity) {
+        this.product = product;
+        this.name = name;
+        this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "Option{" +
+            "name='" + name + '\'' +
+            ", quantity=" + quantity +
+            '}';
+    }
+
     public String getName() {
         return name;
     }
