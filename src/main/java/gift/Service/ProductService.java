@@ -57,8 +57,7 @@ public class ProductService {
       updateCategoryDto.getColor(), updatedProductDto.getImageUrl(),
       updateCategoryDto.getDescription());
 
-    Product newProduct = new Product(id,
-      updatedProductDto.getName(), updatedProductDto.getPrice(),
+    Product newProduct = new Product(id, updatedProductDto.getName(), updatedProductDto.getPrice(),
       updatedProductDto.getImageUrl(), updateCategory);
 
     productRepository.save(newProduct);

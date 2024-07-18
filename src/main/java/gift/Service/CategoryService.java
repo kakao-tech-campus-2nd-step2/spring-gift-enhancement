@@ -19,7 +19,8 @@ public class CategoryService {
 
   public List<CategoryDto> getAllCategories() {
     List<Category> categories = categoryRepository.findAll();
-    List<CategoryDto> categoryDtos = categories.stream().map(ConverterToDto::convertToCategoryDto)
+    List<CategoryDto> categoryDtos = categories.stream()
+      .map(ConverterToDto::convertToCategoryDto)
       .toList();
     return categoryDtos;
   }
