@@ -19,7 +19,7 @@ public class CategoryService {
     }
 
     public Long addCategory(CategoryRequestDTO categoryRequestDTO){
-        Category category = CategoryRequestDTO.toEntity(categoryRequestDTO);
+        Category category = categoryRequestDTO.toEntity();
         return jpaCategoryRepository.save(category).getId();
     }
 

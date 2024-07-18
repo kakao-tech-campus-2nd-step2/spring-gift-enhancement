@@ -16,7 +16,7 @@ public class UserService {
     }
 
     public void join(UserSignupRequestDTO userSignupRequestDTO) {
-        User user = UserSignupRequestDTO.toEntity(userSignupRequestDTO);
+        User user = userSignupRequestDTO.toEntity();
         jpaUserRepository.save(user);
     }
 
