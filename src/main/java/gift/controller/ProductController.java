@@ -2,7 +2,7 @@ package gift.controller;
 
 import gift.dto.CategoryUpdateRequest;
 import gift.dto.ProductRequest;
-import gift.dto.productUpdateRequest;
+import gift.dto.ProductUpdateRequest;
 import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -44,7 +44,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateProduct(@PathVariable("id") long id, 
-    		@Valid @RequestBody productUpdateRequest request, BindingResult bindingResult) {
+    		@Valid @RequestBody ProductUpdateRequest request, BindingResult bindingResult) {
         productService.updateProduct(id, request, bindingResult);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
