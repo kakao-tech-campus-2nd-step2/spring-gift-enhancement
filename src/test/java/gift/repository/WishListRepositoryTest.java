@@ -44,7 +44,7 @@ public class WishListRepositoryTest {
 
     @BeforeEach
     void setUp(){
-        category = new Category("testCategory");
+        category = new Category("test", "color", "imageUrl", "");
         categoryRepository.save(category);
         member = new Member("testPassword", "testEmail", "testRole");
         memberRepository.save(member);

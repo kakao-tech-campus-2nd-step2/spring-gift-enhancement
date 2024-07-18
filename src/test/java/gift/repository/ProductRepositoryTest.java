@@ -31,7 +31,7 @@ public class ProductRepositoryTest {
 
     @BeforeEach
     void setUp(){
-        category = new Category("testCategory");
+        category = new Category("test", "color", "imageUrl", "");
         categoryRepository.save(category);
         expected = new Product("testName", 1, "testUrl", category);
         actual = productRepository.save(expected);
