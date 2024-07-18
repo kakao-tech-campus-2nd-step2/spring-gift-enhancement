@@ -16,6 +16,12 @@
     <input type="number" id="price" name="price" required>
   </div>
   <div>
+    <label for="category">Category</label>
+    <select id="category" name="categoryName" required>
+      <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+    </select>
+  </div>
+  <div>
     <label for="imageUrl">Image URL</label>
     <input type="text" id="imageUrl" name="imageUrl" required>
   </div>
