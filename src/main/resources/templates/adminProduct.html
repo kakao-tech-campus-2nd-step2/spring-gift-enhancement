@@ -25,6 +25,22 @@
     <label for="image">Image:</label>
     <input type="text" id="image" name="imageUrl" required>
 
+    <label for="category">Category:</label>
+    <select name="category" id="category">
+        <option value="교환권">교환권</option>
+        <option value="상품권">상품권</option>
+        <option value="뷰티">뷰티</option>
+        <option value="식품">식품</option>
+        <option value="리빙/도서">리빙/도서</option>
+        <option value="레저/스포츠">레저/스포츠</option>
+        <option value="아티스트/캐릭터">아티스트/캐릭터</option>
+        <option value="유아동/반려">유아동/반려</option>
+        <option value="디지털/가전">디지털/가전</option>
+        <option value="카카오프렌즈">카카오프렌즈</option>
+        <option value="트렌드">트랜드</option>
+        <option value="선물">선물</option>
+    </select>
+
     <input type="button" id="post" value="추가">
 </div>
 <div class="form-inline">
@@ -40,6 +56,22 @@
     <label for="p_image">Image:</label>
     <input type="text" id="p_image" name="imageUrl" required>
 
+    <label for="p_category">Category:</label>
+    <select name="p_category" id="p_category">
+        <option value="교환권">교환권</option>
+        <option value="상품권">상품권</option>
+        <option value="뷰티">뷰티</option>
+        <option value="식품">식품</option>
+        <option value="리빙/도서">리빙/도서</option>
+        <option value="레저/스포츠">레저/스포츠</option>
+        <option value="아티스트/캐릭터">아티스트/캐릭터</option>
+        <option value="유아동/반려">유아동/반려</option>
+        <option value="디지털/가전">디지털/가전</option>
+        <option value="카카오프렌즈">카카오프렌즈</option>
+        <option value="트렌드">트랜드</option>
+        <option value="선물">선물</option>
+    </select>
+
     <input type="button" id="put" value="수정">
 </div>
 <table id="product-table">
@@ -49,6 +81,7 @@
         <th scope="col">Name</th>
         <th scope="col">Price</th>
         <th scope="col">Image</th>
+        <th scope="col">Category</th>
         <th scope="col">Option</th>
     </tr>
     </thead>
@@ -87,6 +120,7 @@
                             <td>${product.name}</td>
                             <td>${product.price}</td>
                             <td><img src="${product.imageUrl}" alt="image"/></td>
+                            <td>${product.category.name}</td>
                             <td>
                                 <a href="#" onclick="deleteFunction(${product.id})">삭제</a>
                             </td>
@@ -131,7 +165,8 @@
         var product = {
             name : $("#name").val(),
             price : $("#price").val(),
-            imageUrl : $("#image").val()
+            imageUrl : $("#image").val(),
+            categoryName : $("#category").val()
         }
 
         $.ajax({
@@ -178,7 +213,8 @@
         var product ={
             name : $("#p_name").val(),
             price : $("#p_price").val(),
-            imageUrl : $("#p_image").val()
+            imageUrl : $("#p_image").val(),
+            categoryName: $("#p_category").val()
         }
 
         $.ajax({

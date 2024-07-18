@@ -17,10 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      */
     Optional<Product> findById(Long id);
     /*
-     * DB에 저장된 Product 중, Name을 기준으로 하나를 선택하여 반환
-     */
-    Optional<Product> findByName(String name);
-    /*
      * DB에 Product 정보를 받아 저장
      */
     Product save(Product product);

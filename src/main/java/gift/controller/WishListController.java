@@ -74,13 +74,12 @@ public class WishListController {
      * 성공 시 : 200, 성공
      * 실패 시 : Exception Handler에서 처리
      */
-    @DeleteMapping("api/wishes/{productId}")
+    @DeleteMapping("api/wishes/{wishId}")
     public ResponseEntity<Void> deleteWishProduct(
-            @PathVariable("productId") Long productId,
+            @PathVariable("wishId") Long wishId,
             @AuthenticateMember UserResponse user
     ){
-        Long id = user.getId();
-        wishListService.deleteWishProduct(id, productId);
+        wishListService.deleteWishProduct(wishId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

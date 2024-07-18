@@ -76,10 +76,10 @@ public class WishListService {
      * 특정 유저의 특정 위시리스트 물품을 삭제하는 로직
      */
     @Transactional
-    public void deleteWishProduct(Long userId, Long productId){
-        WishProduct wish = wishListRepository.findByUserIdAndProductId(userId, productId);
+    public void deleteWishProduct(Long wishId){
+        WishProduct wish = wishListRepository.findById(wishId).orElseThrow(NullPointerException::new);
         if(wish.getCount() == 1) {
-            wishListRepository.deleteByUserIdAndProductId(userId, productId);
+            wishListRepository.deleteById(wishId);
             return;
         }
         wish.changeCount(wish.getCount() - 1);

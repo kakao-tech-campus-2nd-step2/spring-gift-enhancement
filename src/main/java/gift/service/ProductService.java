@@ -2,7 +2,9 @@ package gift.service;
 
 import gift.DTO.Product.ProductRequest;
 import gift.DTO.Product.ProductResponse;
+import gift.domain.Category;
 import gift.domain.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.*;
@@ -14,9 +16,11 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository){
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     /*
@@ -42,11 +46,14 @@ public class ProductService {
      * 객체를 전달받아 DB에 저장
      */
     @Transactional
-    public void createProduct(ProductRequest product){
+    public void createProduct(ProductRequest productRequest){
+        Category category = categoryRepository.findByName(productRequest.getCategoryName());
+
         Product productEntity = new Product(
-                product.getName(),
-                product.getPrice(),
-                product.getImageUrl()
+                productRequest.getName(),
+                productRequest.getPrice(),
+                productRequest.getImageUrl(),
+                category
         );
         productRepository.save(productEntity);
     }
@@ -61,10 +68,12 @@ public class ProductService {
      * 현재 DB에 존재하는 Product를 새로운 Product로 대체하는 로직
      */
     @Transactional
-    public void updateProduct(ProductRequest product, Long id){
+    public void updateProduct(ProductRequest productRequest, Long id){
         Product savedProduct = productRepository.findById(id).orElseThrow(NullPointerException::new);
+        Category category = categoryRepository.findByName(productRequest.getCategoryName());
+
         savedProduct.updateEntity(
-                product.getName(), product.getPrice(), product.getImageUrl()
+                productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category
         );;
     }
     /*

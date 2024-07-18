@@ -29,9 +29,9 @@ public class UserService {
         sorts.add(Sort.Order.asc("id"));
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
 
-        Page<User> all = userRepository.findAll(pageable);
+        Page<User> users = userRepository.findAll(pageable);
 
-        return all.map(UserResponse::new);
+        return users.map(UserResponse::new);
     }
     /*
      * User의 정보를 userId를 기준으로 찾는 로직
@@ -51,11 +51,11 @@ public class UserService {
      * User의 정보를 저장하는 로직
      */
     @Transactional
-    public void createUser(UserRequest user){
+    public void createUser(UserRequest userRequest){
         userRepository.save(new User(
-                user.getUserId(),
-                user.getEmail(),
-                user.getPassword()
+                userRequest.getUserId(),
+                userRequest.getEmail(),
+                userRequest.getPassword()
         ));
     }
     @Transactional
@@ -66,15 +66,15 @@ public class UserService {
      * user 정보를 업데이트하는 로직
      */
     @Transactional
-    public void update(UserRequest user){
-        User byUserId = userRepository.findByUserId(user.getUserId());
-        byUserId.updateEntity(user.getEmail(), user.getPassword());
+    public void update(UserRequest userRequest){
+        User byUserId = userRepository.findByUserId(userRequest.getUserId());
+        byUserId.updateEntity(userRequest.getEmail(), userRequest.getPassword());
     }
     /*
      * userId의 중복 여부를 확인하는 로직
      */
-    public boolean isDuplicate(UserRequest user){
-        return userRepository.existsByUserId(user.getUserId());
+    public boolean isDuplicate(UserRequest userRequest){
+        return userRepository.existsByUserId(userRequest.getUserId());
     }
     /*
      * 위와 동일 ( overloading )
@@ -85,8 +85,8 @@ public class UserService {
     /*
      * 로그인을 위한 확인을 해주는 로직
      */
-    public boolean login(UserRequest user){
-        return userRepository.existsByUserIdAndPassword(user.getUserId(), user.getPassword());
+    public boolean login(UserRequest userRequest){
+        return userRepository.existsByUserIdAndPassword(userRequest.getUserId(), userRequest.getPassword());
     }
     /*
      * user 정보를 삭제하는 로직
