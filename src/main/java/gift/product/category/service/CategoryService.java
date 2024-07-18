@@ -41,7 +41,7 @@ public class CategoryService {
         Category newCategory = new Category(request.name(), request.color(), request.description(),
             request.imageUrl());
 
-        Categories categories = categoryRepository.findAllCategories();
+        Categories categories = new Categories(categoryRepository.findAll());
         categories.validate(newCategory);
 
         return categoryRepository.save(newCategory).getId();

@@ -39,12 +39,15 @@ public class Category {
         this.name = name;
     }
 
-    public Category(Long id, String name) {
-        this.id = id;
+    public Category(String name, String color, String description, String imageUrl) {
         this.name = name;
+        this.color = color;
+        this.description = description;
+        this.imageUrl = imageUrl;
     }
 
-    public Category(String name, String color, String description, String imageUrl) {
+    public Category(Long id, String name, String color, String description, String imageUrl) {
+        this.id = id;
         this.name = name;
         this.color = color;
         this.description = description;

@@ -12,6 +12,7 @@ import gift.exception.category.CategoryNotFoundException;
 import gift.product.category.dto.request.CreateCategoryRequest;
 import gift.product.category.dto.request.UpdateCategoryRequest;
 import gift.product.category.dto.response.CategoryResponse;
+import gift.product.category.entity.Categories;
 import gift.product.category.entity.Category;
 import gift.product.category.repository.CategoryRepository;
 import gift.product.category.service.CategoryService;
@@ -81,7 +82,7 @@ public class CategoryServiceTest implements AutoCloseable {
     @DisplayName("get category by id test")
     void getCategoryByIdTest() {
         // given
-        Category category = new Category(1L, "Category 1");
+        Category category = new Category(1L, "Category 1", "#123456", "image", "");
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
 
         // when
@@ -110,10 +111,11 @@ public class CategoryServiceTest implements AutoCloseable {
     @DisplayName("create category test")
     void createCategoryTest() {
         // given
-        CreateCategoryRequest request = new CreateCategoryRequest("Category 1");
-        given(categoryRepository.existsByName(any())).willReturn(false);
-        given(categoryRepository.save(any(Category.class))).willReturn(
-            new Category(1L, "Category 1"));
+        Category category = new Category(1L, "Category 1", "#123456", "image", "");
+        CreateCategoryRequest request = new CreateCategoryRequest("new category", "#123456",
+            "image", "");
+        given(categoryRepository.findAll()).willReturn(List.of(category));
+        given(categoryRepository.save(any(Category.class))).willReturn(category);
 
         Long expectedId = 1L;
 
@@ -124,7 +126,6 @@ public class CategoryServiceTest implements AutoCloseable {
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expectedId);
         then(categoryRepository).should(times(1)).save(any(Category.class));
-        then(categoryRepository).should(times(1)).existsByName(any());
     }
 
     @Test
@@ -132,9 +133,9 @@ public class CategoryServiceTest implements AutoCloseable {
     void updateCategoryTest() {
         // given
         String newName = "update category";
-        UpdateCategoryRequest request = new UpdateCategoryRequest(newName);
+        UpdateCategoryRequest request = new UpdateCategoryRequest(newName, "#123456", "image", "");
 
-        Category existingCategory = new Category(1L, "Category 1");
+        Category existingCategory = new Category(1L, "Category 1", "#123456", "image", "");
         given(categoryRepository.findById(any())).willReturn(Optional.of(existingCategory));
 
         // when
@@ -150,7 +151,7 @@ public class CategoryServiceTest implements AutoCloseable {
     void updateNotExistCategoryTest() {
         // given
         String newName = "update category";
-        UpdateCategoryRequest request = new UpdateCategoryRequest(newName);
+        UpdateCategoryRequest request = new UpdateCategoryRequest(newName, "#123456", "image", "");
         given(categoryRepository.findById(any())).willReturn(Optional.empty());
 
         // when & then

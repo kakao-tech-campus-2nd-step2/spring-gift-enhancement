@@ -81,7 +81,7 @@ public class CategoryTest {
     @DisplayName("create category test")
     void createCategoryTest() {
         // given
-        var createBody = new CreateCategoryRequest("Category 4");
+        var createBody = new CreateCategoryRequest("Category 4", "#123456", "image", "");
         var url = "http://localhost:" + port + "/api/categories";
         var request = new RequestEntity<>(createBody, HttpMethod.POST, URI.create(url));
 
@@ -100,7 +100,7 @@ public class CategoryTest {
     @DisplayName("create exist category test")
     void createExistCategoryTest() {
         // given
-        var createBody = new CreateCategoryRequest("Category 1");
+        var createBody = new CreateCategoryRequest("Category 1", "#123456", "image", "");
         var url = "http://localhost:" + port + "/api/categories";
         var request = new RequestEntity<>(createBody, HttpMethod.POST, URI.create(url));
 
