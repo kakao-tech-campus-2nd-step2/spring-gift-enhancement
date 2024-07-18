@@ -12,13 +12,13 @@ import static org.mockito.Mockito.when;
 import gift.category.model.dto.Category;
 import gift.product.model.OptionRepository;
 import gift.product.model.dto.option.Option;
+import gift.product.model.dto.option.OptionRequest;
 import gift.product.model.dto.product.Product;
 import gift.product.service.OptionService;
 import gift.product.service.ProductService;
 import gift.user.model.dto.AppUser;
 import gift.user.model.dto.Role;
 import jakarta.persistence.EntityNotFoundException;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,26 +42,27 @@ public class OptionServiceTest {
 
     private Product product;
     private Option option;
+    private OptionRequest defaultRequest;
 
     @BeforeEach
     public void setUp() {
         Category defaultCategory = new Category("기본", "기본 카테고리");
         AppUser defaultSeller = new AppUser("aabb@kakao.com", "1234", Role.USER, "aaaa");
         product = new Product("test", 100, "image", defaultSeller, defaultCategory);
-        option = new Option("test", 10, 300, product);
+        option = new Option("option1", 10, 300, product);
+        defaultRequest = new OptionRequest("option2", 10, 300, product.getId());
     }
 
     @Test
     @DisplayName("상품이 존재한다면 옵션을 추가할 수 있다")
     public void addOption_ShouldAddOption_WhenProductExists() {
         // given
-        when(productService.findProduct(product.getId())).thenReturn(Optional.of(product));
+        when(productService.findProduct(product.getId())).thenReturn(product);
 
         // when
-        optionService.addOption(option);
+        optionService.addOption(defaultRequest);
 
-        // when, then
-        assertDoesNotThrow(() -> optionService.addOption(option));
+        // then
         verify(optionRepository, times(1)).save(any(Option.class));
     }
 
@@ -69,10 +70,10 @@ public class OptionServiceTest {
     @DisplayName("상품이 존재하지 않는다면 EntityNotFoundException을 던진다")
     public void addOption_ShouldThrowEntityNotFoundException_WhenProductDoesNotExist() {
         // given
-        when(productService.findProduct(any())).thenThrow(new EntityNotFoundException("Product"));
+        when(productService.findProduct(product.getId())).thenThrow(new EntityNotFoundException("Product"));
 
         // when, then
-        assertThrows(EntityNotFoundException.class, () -> optionService.addOption(option));
+        assertThrows(EntityNotFoundException.class, () -> optionService.addOption(defaultRequest));
         verify(optionRepository, times(0)).save(any(Option.class));
     }
 
@@ -80,15 +81,13 @@ public class OptionServiceTest {
     @DisplayName("수정 요청 시 옵션이 존재할 때 옵션을 수정할 수 있다")
     public void updateOption_ShouldUpdateOption_WhenProductExists() {
         // given
-        String newName = "수정";
-        option.setName(newName);
         when(productService.findProduct(product.getId())).thenReturn(product);
         when(optionService.findOption(option.getId())).thenReturn(option);
 
         // when, then
-        assertDoesNotThrow(() -> optionService.updateOption(option));
+        assertDoesNotThrow(() -> optionService.updateOption(option.getId(), defaultRequest));
         verify(optionRepository, times(1)).save(any(Option.class));
-        assertEquals(newName, option.getName());
+        assertEquals(defaultRequest.name(), option.getName());
     }
 
     @Test
@@ -100,7 +99,7 @@ public class OptionServiceTest {
         ;
 
         // when,then
-        assertThrows(EntityNotFoundException.class, () -> optionService.updateOption(option));
+        assertThrows(EntityNotFoundException.class, () -> optionService.updateOption(option.getId(), defaultRequest));
         verify(optionRepository, times(0)).save(any(Option.class));
     }
 
@@ -115,9 +114,6 @@ public class OptionServiceTest {
         optionService.deleteOption(option.getId());
 
         // then
-        verify(optionRepository).deleteById(option.getId());
-        // when,then
-        assertDoesNotThrow(() -> optionService.deleteOption(option));
         verify(optionRepository, times(1)).save(any(Option.class));
         assertFalse(option.isActive());
     }
@@ -130,7 +126,7 @@ public class OptionServiceTest {
         when(optionService.findOption(option.getId())).thenThrow(new EntityNotFoundException("Option"));
 
         // when,then
-        assertThrows(EntityNotFoundException.class, () -> optionService.deleteOption(option));
+        assertThrows(EntityNotFoundException.class, () -> optionService.deleteOption(option.getId()));
         verify(optionRepository, times(0)).save(any(Option.class));
     }
 }
