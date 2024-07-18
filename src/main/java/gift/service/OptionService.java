@@ -4,6 +4,7 @@ import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.DataNotFoundException;
 import gift.repository.OptionRepository;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,10 @@ public class OptionService {
             throw new DataNotFoundException("존재하지 않는 Option: Product를 찾을 수 없습니다.");
         }
         return option.get();
+    }
+
+    public List<Option> getOptionByProductId(Long productId) {
+        return optionRepository.getOptionByProductId(productId);
     }
 
 }

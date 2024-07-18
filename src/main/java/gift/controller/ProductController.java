@@ -47,8 +47,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}/options")
-    public Product getProductByIdWithOption(@PathVariable("id") long id) {
-        return productService.getProductById(id);
+    public List<Option> getProductByIdWithOption(@PathVariable("id") long id) {
+        return productService.getAllProductOption(id);
     }
 
 
