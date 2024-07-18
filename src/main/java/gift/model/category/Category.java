@@ -19,6 +19,12 @@ public class Category {
     private String imageUrl;
     private String description;
 
+    public void update(CategoryRequest categoryRequest) {
+        this.name = categoryRequest.name();
+        this.color = categoryRequest.color();
+        this.imageUrl = categoryRequest.imageUrl();
+        this.description = categoryRequest.description();
+    }
     public Category(){}
 
 
@@ -70,10 +76,4 @@ public class Category {
         this.description = description;
     }
 
-    public void update(CategoryRequest categoryRequest) {
-        this.name = categoryRequest.name();
-        this.color = categoryRequest.color();
-        this.imageUrl = categoryRequest.imageUrl();
-        this.description = categoryRequest.description();
-    }
 }
