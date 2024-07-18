@@ -2,6 +2,8 @@ package gift.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "product")
 public class Product {
@@ -18,11 +20,14 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "product_id")
+    private List<Option> options;
 
     public Product() {
     }
 
-    public Product(Long id, String name, int price, String imageUrl, Category category) {
+    public Product(Long id, String name, int price, String imageUrl, Category category, List<Option> options) {
         if (name.contains("카카오") || name.equalsIgnoreCase("kakao")) {
             throw new IllegalArgumentException("\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에 사용 가능합니다.");
         }
@@ -31,9 +36,10 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
-    public Product(String name, int price, String imageUrl, Category category) {
+    public Product(String name, int price, String imageUrl, Category category, List<Option> options) {
         if (name.contains("카카오") || name.equalsIgnoreCase("kakao")) {
             throw new IllegalArgumentException("\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에 사용 가능합니다.");
         }
@@ -41,6 +47,7 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
     public Long getId() {
@@ -61,5 +68,13 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 }

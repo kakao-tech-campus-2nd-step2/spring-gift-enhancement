@@ -1,6 +1,5 @@
 package gift.service;
 
-import gift.dto.CategoryDto;
 import gift.dto.ProductDto;
 import gift.model.Category;
 import gift.model.Product;
@@ -36,7 +35,7 @@ public class ProductService {
     public Product addProduct(ProductDto productDto) {
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
-        Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category);
+        Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category,null);
         productRepository.save(product);
         return product;
     }
@@ -49,7 +48,8 @@ public class ProductService {
                 productDto.getName(),
                 productDto.getPrice(),
                 productDto.getImageUrl(),
-                category
+                category,
+                null
         );
         return productRepository.save(updateProduct);
     }
@@ -77,7 +77,8 @@ public class ProductService {
                     product.getName(),
                     product.getPrice(),
                     product.getImageUrl(),
-                    noneCategory
+                    noneCategory,
+                    null
             );
             productRepository.save(updateProduct);
         }
