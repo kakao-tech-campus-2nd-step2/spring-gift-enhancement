@@ -2,6 +2,7 @@ package gift.exception.option;
 
 import gift.exception.ErrorResult;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -9,7 +10,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class OptionsExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundOptionsException.class)
     public ErrorResult notFoundExHandle(NotFoundOptionsException e) {
-        return new ErrorResult("상품 옵션 조회 에러", e.getMessage());
+        return new ErrorResult("상품 옵션 에러", e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateOptionsException.class)
+    public ErrorResult duplicateExHandle(DuplicateOptionsException e) {
+        return new ErrorResult("상품 옵션 에러", e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DeleteOptionsException.class)
+    public ErrorResult deleteExHandle(DeleteOptionsException e) {
+        return new ErrorResult("상품 옵션 에러", e.getMessage());
     }
 }

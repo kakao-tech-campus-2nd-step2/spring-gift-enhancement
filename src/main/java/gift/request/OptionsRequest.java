@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
-public record OptionsAddRequest(
+public record OptionsRequest(
     @NotBlank(message = "옵션명을 입력해주세요.")
     @Length(min = 1, max = 50, message = "1~50자 사이로 입력해주세요.")
     @Pattern(regexp = "^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9()+&/_ \\[\\]-]*$", message = "옵션명에 특수 문자는 '(, ), [, ], +, -, &, /, -' 만 입력 가능합니다.")
