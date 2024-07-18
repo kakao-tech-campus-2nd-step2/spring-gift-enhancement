@@ -2,7 +2,7 @@ package gift.service;
 
 import gift.domain.Category;
 import gift.repository.CategoryRepository;
-import gift.request.CategoryRequest;
+import gift.dto.request.CategoryRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,7 +1,7 @@
 package gift.domain;
 
 import gift.exception.NoOptionsInProductException;
-import gift.response.ProductResponse;
+import gift.dto.response.ProductResponse;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

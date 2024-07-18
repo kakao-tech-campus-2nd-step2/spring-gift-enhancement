@@ -1,10 +1,10 @@
 package gift.controller;
 
-import gift.request.OptionRequest;
-import gift.request.ProductCreateRequest;
-import gift.request.ProductUpdateRequest;
-import gift.response.OptionResponse;
-import gift.response.ProductResponse;
+import gift.dto.request.OptionRequest;
+import gift.dto.request.ProductCreateRequest;
+import gift.dto.request.ProductUpdateRequest;
+import gift.dto.response.OptionResponse;
+import gift.dto.response.ProductResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

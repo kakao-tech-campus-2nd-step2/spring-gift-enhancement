@@ -3,7 +3,7 @@ package gift.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.config.JwtProvider;
 import gift.domain.member.Member;
-import gift.request.WishCreateRequest;
+import gift.dto.request.WishCreateRequest;
 import gift.service.MemberService;
 import gift.service.WishService;
 import io.jsonwebtoken.Claims;

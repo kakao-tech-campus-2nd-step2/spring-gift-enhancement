@@ -4,8 +4,8 @@ import gift.domain.Category;
 import gift.exception.CategoryNameNotDuplicateException;
 import gift.exception.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
-import gift.request.CategoryRequest;
-import gift.response.CategoryResponse;
+import gift.dto.request.CategoryRequest;
+import gift.dto.response.CategoryResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

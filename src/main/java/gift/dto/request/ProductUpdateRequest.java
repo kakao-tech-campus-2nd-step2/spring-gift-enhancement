@@ -1,4 +1,4 @@
-package gift.request;
+package gift.dto.request;
 
 import gift.validation.KakaoNotAllowed;
 import jakarta.validation.constraints.NotBlank;

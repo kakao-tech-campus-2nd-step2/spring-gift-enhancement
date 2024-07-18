@@ -6,7 +6,7 @@ import gift.exception.EmailDuplicateException;
 import gift.exception.LoginException;
 import gift.exception.MemberNotFoundException;
 import gift.repository.MemberRepository;
-import gift.request.RegisterRequest;
+import gift.dto.request.RegisterRequest;
 import org.springframework.stereotype.Service;
 
 @Service

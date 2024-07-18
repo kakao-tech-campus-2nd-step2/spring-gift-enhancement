@@ -1,4 +1,4 @@
-package gift.request;
+package gift.dto.request;
 
 import gift.domain.member.Member;
 import jakarta.validation.constraints.NotBlank;

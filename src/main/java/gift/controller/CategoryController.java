@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.request.CategoryRequest;
-import gift.response.CategoryResponse;
+import gift.dto.request.CategoryRequest;
+import gift.dto.response.CategoryResponse;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

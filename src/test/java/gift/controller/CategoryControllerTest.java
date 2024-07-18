@@ -1,7 +1,7 @@
 package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.request.CategoryRequest;
+import gift.dto.request.CategoryRequest;
 import gift.service.CategoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package gift.domain;
 
-import gift.response.CategoryResponse;
+import gift.dto.response.CategoryResponse;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

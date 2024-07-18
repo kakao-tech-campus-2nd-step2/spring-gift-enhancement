@@ -1,4 +1,4 @@
-package gift.response;
+package gift.dto.response;
 
 import java.util.HashMap;
 import java.util.Map;

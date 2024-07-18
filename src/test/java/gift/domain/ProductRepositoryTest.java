@@ -2,7 +2,7 @@ package gift.domain;
 
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import gift.request.ProductUpdateRequest;
+import gift.dto.request.ProductUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package gift.domain;
 
-import gift.response.OptionResponse;
+import gift.dto.response.OptionResponse;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

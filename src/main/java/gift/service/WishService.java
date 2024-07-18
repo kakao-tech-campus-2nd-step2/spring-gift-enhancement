@@ -8,7 +8,7 @@ import gift.exception.ProductNotFoundException;
 import gift.exception.ProductNotInWishlistException;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
-import gift.response.ProductResponse;
+import gift.dto.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

@@ -2,7 +2,7 @@ package gift.controller;
 
 import gift.constant.ErrorMessage;
 import gift.exception.GiftException;
-import gift.response.ErrorResponse;
+import gift.dto.response.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

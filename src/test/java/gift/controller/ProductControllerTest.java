@@ -2,10 +2,10 @@ package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constant.ErrorMessage;
-import gift.request.OptionRequest;
-import gift.request.ProductCreateRequest;
-import gift.request.ProductUpdateRequest;
-import gift.response.ProductResponse;
+import gift.dto.request.OptionRequest;
+import gift.dto.request.ProductCreateRequest;
+import gift.dto.request.ProductUpdateRequest;
+import gift.dto.response.ProductResponse;
 import gift.service.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
