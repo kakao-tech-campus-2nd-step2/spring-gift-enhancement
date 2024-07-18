@@ -1,4 +1,4 @@
-package gift.product;
+package gift.administrator.product;
 
 import jakarta.validation.constraints.*;
 

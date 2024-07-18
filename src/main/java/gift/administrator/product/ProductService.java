@@ -1,8 +1,8 @@
-package gift.product;
+package gift.administrator.product;
 
-import gift.category.Category;
-import gift.category.CategoryDTO;
-import gift.category.CategoryService;
+import gift.administrator.category.Category;
+import gift.administrator.category.CategoryDTO;
+import gift.administrator.category.CategoryService;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -38,9 +38,8 @@ public class ProductService {
         return new PageImpl<>(products, pageRequest, productPage.getTotalElements());
     }
 
-    public List<String> getAllCategory() {
-        return productRepository.findAll().stream()
-            .map(Product::getCategory).map(CategoryDTO::fromCategory).map(CategoryDTO::getName).toList();
+    public List<String> getAllCategoryName() {
+        return productRepository.findDistinctCategoryNamesWithProducts();
     }
 
     public ProductDTO getProductById(long id) throws NotFoundException {
@@ -52,35 +51,27 @@ public class ProductService {
         return productRepository.existsByName(name);
     }
 
-    public void addProduct(ProductDTO product) throws NotFoundException {
+    public ProductDTO addProduct(ProductDTO product) throws NotFoundException {
         if (productRepository.existsByName(product.getName())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
         CategoryDTO categoryDTO = categoryService.getCategoryById(product.getCategoryId());
         Category category = categoryDTO.toCategory();
         category.addProducts(toProduct(product));
-        productRepository.save(toProduct(product));
+        return ProductDTO.fromProduct(productRepository.save(toProduct(product)));
     }
 
-    public void updateProduct(ProductDTO productDTO) throws NotFoundException {
+    public ProductDTO updateProduct(ProductDTO productDTO) throws NotFoundException {
         Product product = productRepository.findById(productDTO.getId())
             .orElseThrow(NotFoundException::new);
-        if (productRepository.existsByName(productDTO.getName())
-            && !Objects.equals(product.getId(),
-            productRepository.findByName(productDTO.getName()).getId())) {
+        if (productRepository.existsByNameAndIdNot(productDTO.getName(), productDTO.getId())){
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
         Category newCategory = categoryService.getCategoryById(productDTO.getCategoryId())
             .toCategory();
-        /*Category oldCategory = product.getCategory();
-
-        if (!oldCategory.equals(newCategory)) {
-            oldCategory.removeProducts(product);
-            newCategory.addProducts(product);
-        }*/
         product.update(productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(),
             newCategory);
-        productRepository.save(product);
+        return ProductDTO.fromProduct(productRepository.save(product));
     }
 
     public void existsByNamePutResult(String name, BindingResult result){
@@ -102,9 +93,12 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
+    public Category getCategoryById(long categoryId) throws NotFoundException {
+        return categoryService.getCategoryById(categoryId).toCategory();
+    }
+
     public Product toProduct(ProductDTO productDTO) throws NotFoundException {
         return new Product(productDTO.getId(), productDTO.getName(), productDTO.getPrice(),
-            productDTO.getImageUrl(),
-            categoryService.getCategoryById(productDTO.getCategoryId()).toCategory());
+            productDTO.getImageUrl(), getCategoryById(productDTO.getCategoryId()));
     }
 }

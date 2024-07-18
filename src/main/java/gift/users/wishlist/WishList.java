@@ -1,7 +1,7 @@
-package gift.wishlist;
+package gift.users.wishlist;
 
-import gift.product.Product;
-import gift.user.User;
+import gift.administrator.product.Product;
+import gift.users.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 

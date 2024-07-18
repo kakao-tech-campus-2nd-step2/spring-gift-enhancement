@@ -1,4 +1,4 @@
-package gift.wishlist;
+package gift.users.wishlist;
 
 import java.util.List;
 import org.springframework.data.domain.Page;

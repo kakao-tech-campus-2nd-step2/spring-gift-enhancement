@@ -1,6 +1,6 @@
-package gift.product;
+package gift.administrator.product;
 
-import gift.category.CategoryService;
+import gift.administrator.category.CategoryService;
 import gift.util.PageUtil;
 import jakarta.validation.Valid;
 import java.util.Arrays;
@@ -38,7 +38,7 @@ public class ProductController {
         model.addAttribute("currentPage", paging.getNumber());
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("sortDirection", direction.toString());
-        model.addAttribute("categories",productService.getAllCategory());
+        model.addAttribute("categories",productService.getAllCategoryName());
         return "products";
     }
 

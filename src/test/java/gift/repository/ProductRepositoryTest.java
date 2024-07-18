@@ -2,10 +2,10 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.category.Category;
-import gift.category.CategoryRepository;
-import gift.product.Product;
-import gift.product.ProductRepository;
+import gift.administrator.category.Category;
+import gift.administrator.category.CategoryRepository;
+import gift.administrator.product.Product;
+import gift.administrator.product.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,16 +52,18 @@ public class ProductRepositoryTest {
     void findById() {
         //Given
         productRepository.save(product);
+        Product expected = new Product("라이언", 1000, "image.jpg", category);
 
         //When
         Optional<Product> actual = productRepository.findById(product.getId());
-        assertThat(actual).isPresent();
 
         //Then
-        assertThat(actual.get().getName()).isEqualTo("라이언");
-        assertThat(actual.get().getPrice()).isEqualTo(1000);
-        assertThat(actual.get().getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.get().getCategory()).isEqualTo(category);
+        assertThat(actual).isPresent();
+        assertThat(actual.get())
+            .extracting(Product::getName, Product::getPrice, Product::getImageUrl,
+                Product::getCategory)
+            .containsExactly(expected.getName(), expected.getPrice(), expected.getImageUrl(),
+                expected.getCategory());
     }
 
     @Test
@@ -79,14 +81,8 @@ public class ProductRepositoryTest {
         assertThat(actual).hasSize(2);
         assertThat(actual.getFirst().getId()).isNotNull();
         assertThat(actual.get(1).getId()).isNotNull();
-        assertThat(actual.getFirst().getPrice()).isEqualTo(1000);
-        assertThat(actual.getFirst().getName()).isEqualTo("라이언");
-        assertThat(actual.getFirst().getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.getFirst().getCategory()).isEqualTo(category);
-        assertThat(actual.get(1).getPrice()).isEqualTo(3000);
-        assertThat(actual.get(1).getName()).isEqualTo("이춘식");
-        assertThat(actual.get(1).getImageUrl()).isEqualTo("example.jpg");
-        assertThat(actual.get(1).getCategory()).isEqualTo(category);
+        assertThat(actual)
+            .containsExactly(product, product2);
     }
 
     @Test

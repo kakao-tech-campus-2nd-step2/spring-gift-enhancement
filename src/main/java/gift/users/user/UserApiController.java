@@ -1,4 +1,4 @@
-package gift.user;
+package gift.users.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

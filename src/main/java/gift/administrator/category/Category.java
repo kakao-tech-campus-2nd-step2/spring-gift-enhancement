@@ -1,6 +1,6 @@
-package gift.category;
+package gift.administrator.category;
 
-import gift.product.Product;
+import gift.administrator.product.Product;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class Category {
         this.description = description;
     }
 
-    public Category(long id, String name, String color, String imageUrl, String description) {
+    public Category(Long id, String name, String color, String imageUrl, String description) {
         this.id = id;
         this.name = name;
         this.color = color;

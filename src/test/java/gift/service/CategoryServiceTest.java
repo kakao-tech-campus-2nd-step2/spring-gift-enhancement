@@ -3,15 +3,16 @@ package gift.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
-import gift.category.Category;
-import gift.category.CategoryDTO;
-import gift.category.CategoryRepository;
-import gift.category.CategoryService;
+import gift.administrator.category.Category;
+import gift.administrator.category.CategoryDTO;
+import gift.administrator.category.CategoryRepository;
+import gift.administrator.category.CategoryService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -34,29 +35,31 @@ public class CategoryServiceTest {
     @DisplayName("카테고리 전체 조회 테스트")
     void getAllCategories() {
         //given
+        Category category = new Category(1L, "상품권", "#ff11ff", "image.jpg", "");
+        Category category1 = new Category(2L, "인형", "#dd11ff", "image.jpg", "none");
         given(categoryRepository.findAll()).willReturn(
-            Arrays.asList(new Category(1L, "상품권", "#ff11ff", "image.jpg", ""),
-                new Category(2L, "인형", "#dd11ff", "image.jpg", "none")));
+            Arrays.asList(category, category1));
+        CategoryDTO expected = new CategoryDTO(1L, "상품권", "#ff11ff", "image.jpg", "");
+        CategoryDTO expected1 = new CategoryDTO(2L, "인형", "#dd11ff", "image.jpg", "none");
 
         //when
         List<CategoryDTO> actual = categoryService.getAllCategories();
 
         //then
         assertThat(actual).hasSize(2);
-        assertThat(actual.getFirst().getName()).isEqualTo("상품권");
-        assertThat(actual.getFirst().getColor()).isEqualTo("#ff11ff");
-        assertThat(actual.getFirst().getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.getFirst().getDescription()).isEqualTo("");
-        assertThat(actual.get(1).getName()).isEqualTo("인형");
-        assertThat(actual.get(1).getColor()).isEqualTo("#dd11ff");
-        assertThat(actual.get(1).getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.get(1).getDescription()).isEqualTo("none");
+        assertThat(actual)
+            .extracting(CategoryDTO::getName, CategoryDTO::getColor, CategoryDTO::getImageUrl, CategoryDTO::getDescription)
+            .containsExactly(
+                tuple(expected.getName(), expected.getColor(), expected.getImageUrl(), expected.getDescription()),
+                tuple(expected1.getName(), expected1.getColor(), expected1.getImageUrl(), expected1.getDescription())
+            );
     }
 
     @Test
     @DisplayName("아이디로 카테고리 검색")
     void getCategoryById() throws NotFoundException {
         //given
+        CategoryDTO expected = new CategoryDTO(2L, "인형", "#dd11ff", "image.jpg", "none");
         given(categoryRepository.findById(any())).willReturn(
             Optional.of(new Category(2L, "인형", "#dd11ff", "image.jpg", "none")));
 
@@ -64,10 +67,11 @@ public class CategoryServiceTest {
         CategoryDTO actual = categoryService.getCategoryById(2L);
 
         //then
-        assertThat(actual.getName()).isEqualTo("인형");
-        assertThat(actual.getColor()).isEqualTo("#dd11ff");
-        assertThat(actual.getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.getDescription()).isEqualTo("none");
+        assertThat(actual)
+            .extracting(CategoryDTO::getName, CategoryDTO::getColor, CategoryDTO::getImageUrl,
+                CategoryDTO::getDescription)
+            .containsExactly(expected.getName(), expected.getColor(), expected.getImageUrl(),
+                expected.getDescription());
     }
 
     @Test
@@ -103,7 +107,7 @@ public class CategoryServiceTest {
         //given
         CategoryDTO categoryDTO = new CategoryDTO(1L, "이름", "색상", "이미지링크", "설명");
         given(categoryRepository.existsByName(any())).willReturn(false);
-
+        given(categoryRepository.save(any())).willReturn(categoryDTO.toCategory());
         //when
         categoryService.addCategory(categoryDTO);
 
@@ -132,8 +136,8 @@ public class CategoryServiceTest {
         CategoryDTO categoryDTO = new CategoryDTO(1L, "상품권", "#ff11ff", null, null);
         Category category = new Category(2L, "상품권", "#ff11ff", null, null);
         given(categoryRepository.findById(1L)).willReturn(Optional.of(categoryDTO.toCategory()));
-        given(categoryRepository.existsByName("상품권")).willReturn(true);
-        given(categoryRepository.findByName("상품권")).willReturn(category);
+        given(categoryRepository.existsByNameAndIdNot(categoryDTO.getName(),
+            categoryDTO.getId())).willReturn(true);
 
         //when
 
@@ -150,6 +154,7 @@ public class CategoryServiceTest {
         CategoryDTO categoryDTO1 = new CategoryDTO(1L, "인형", "#ff11ff", "image.url", "dolls");
         given(categoryRepository.findById(1L)).willReturn(Optional.of(categoryDTO.toCategory()));
         given(categoryRepository.existsByName(any())).willReturn(false);
+        given(categoryRepository.save(any())).willReturn(categoryDTO.toCategory());
 
         //when
         categoryService.updateCategory(categoryDTO1);

@@ -1,6 +1,6 @@
-package gift.wishlist;
+package gift.users.wishlist;
 
-import gift.user.UserService;
+import gift.users.user.UserService;
 import gift.util.PageUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -40,29 +40,31 @@ public class WishListApiController {
     }
 
     @PostMapping("/{email}")
-    public ResponseEntity<String> addWishList(@PathVariable("email") String email,
+    public ResponseEntity<WishListDTO> addWishList(@PathVariable("email") String email,
         HttpServletRequest request, @RequestBody WishListDTO wishListDTO) throws NotFoundException {
         wishListService.extractEmailFromTokenAndValidate(request, email);
-        wishListService.addWishList(wishListDTO, email);
-        return ResponseEntity.status(HttpStatus.CREATED).body("위시리스트에 추가되었습니다.");
+        WishListDTO result = wishListService.addWishList(wishListDTO, email);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("/{email}/{productId}")
-    public ResponseEntity<String> updateWishList(@PathVariable("email") String email,
+    public ResponseEntity<WishListDTO> updateWishList(@PathVariable("email") String email,
         @PathVariable("productId") long productId, HttpServletRequest request,
         @RequestBody WishListDTO wishListDTO) throws NotFoundException {
         wishListService.extractEmailFromTokenAndValidate(request, email);
-        wishListService.updateWishList(userService.findUserByEmail(email).id(), productId,
+        WishListDTO result = wishListService.updateWishList(
+            userService.findUserByEmail(email).id(), productId,
             wishListDTO.getNum());
-        return ResponseEntity.ok().body("업데이트 성공!");
+        return ResponseEntity.ok().body(result);
     }
 
     @DeleteMapping("/{email}/{productId}")
-    public ResponseEntity<String> deleteWishList(@PathVariable("email") String email,
+    public ResponseEntity<WishListDTO> deleteWishList(@PathVariable("email") String email,
         @PathVariable("productId") long productId, HttpServletRequest request)
         throws NotFoundException {
         wishListService.extractEmailFromTokenAndValidate(request, email);
-        wishListService.deleteWishList(userService.findUserByEmail(email).id(), productId);
-        return ResponseEntity.ok().body("삭제되었습니다.");
+        wishListService.deleteWishList(
+            userService.findUserByEmail(email).id(), productId);
+        return ResponseEntity.ok().build();
     }
 }

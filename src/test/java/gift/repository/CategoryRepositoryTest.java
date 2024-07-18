@@ -2,9 +2,10 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
-import gift.category.Category;
-import gift.category.CategoryRepository;
+import gift.administrator.category.Category;
+import gift.administrator.category.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,13 +33,15 @@ public class CategoryRepositoryTest {
 
         //When
         Category actual = categoryRepository.save(category);
+        Category expected = new Category("상품권", "#ff11ff", "image.jpg", "money");
 
         //Then
         assertThat(actual.getId()).isNotNull();
-        assertThat(actual.getName()).isEqualTo("상품권");
-        assertThat(actual.getColor()).isEqualTo("#ff11ff");
-        assertThat(actual.getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.getDescription()).isEqualTo("money");
+        assertThat(actual)
+            .extracting(Category::getName, Category::getColor, Category::getImageUrl,
+                Category::getDescription)
+            .containsExactly(expected.getName(), expected.getColor(), expected.getImageUrl(),
+                expected.getDescription());
     }
 
     @Test
@@ -63,6 +66,8 @@ public class CategoryRepositoryTest {
         categoryRepository.save(category);
         Category category1 = new Category("가전", "#ddff11", "image.jpg", "");
         categoryRepository.save(category1);
+        Category expected = new Category("상품권", "#ff11ff", "image.jpg", "money");
+        Category expected1 = new Category("가전", "#ddff11", "image.jpg", "");
 
         //When
         List<Category> actual = categoryRepository.findAll();
@@ -71,14 +76,12 @@ public class CategoryRepositoryTest {
         assertThat(actual).hasSize(2);
         assertThat(actual.getFirst().getId()).isNotNull();
         assertThat(actual.get(1).getId()).isNotNull();
-        assertThat(actual.getFirst().getName()).isEqualTo("상품권");
-        assertThat(actual.getFirst().getColor()).isEqualTo("#ff11ff");
-        assertThat(actual.getFirst().getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.getFirst().getDescription()).isEqualTo("money");
-        assertThat(actual.get(1).getName()).isEqualTo("가전");
-        assertThat(actual.get(1).getColor()).isEqualTo("#ddff11");
-        assertThat(actual.get(1).getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.get(1).getDescription()).isEqualTo("");
+        assertThat(actual)
+            .extracting(Category::getName, Category::getColor, Category::getImageUrl, Category::getDescription)
+            .containsExactly(
+                tuple(expected.getName(), expected.getColor(), expected.getImageUrl(), expected.getDescription()),
+                tuple(expected1.getName(), expected1.getColor(), expected1.getImageUrl(), expected1.getDescription())
+            );
     }
 
     @Test
@@ -86,16 +89,18 @@ public class CategoryRepositoryTest {
     void findById() {
         //Given
         categoryRepository.save(category);
+        Category expected = new Category("상품권", "#ff11ff", "image.jpg", "money");
 
         //When
         Optional<Category> actual = categoryRepository.findById(category.getId());
-        assertThat(actual).isPresent();
 
         //Then
-        assertThat(actual.get().getName()).isEqualTo("상품권");
-        assertThat(actual.get().getColor()).isEqualTo("#ff11ff");
-        assertThat(actual.get().getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.get().getDescription()).isEqualTo("money");
+        assertThat(actual).isPresent();
+        assertThat(actual.get())
+            .extracting(Category::getName, Category::getColor, Category::getImageUrl,
+                Category::getDescription)
+            .containsExactly(expected.getName(), expected.getColor(), expected.getImageUrl(),
+                expected.getDescription());
     }
 
     @Test

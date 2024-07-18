@@ -2,8 +2,8 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.user.User;
-import gift.user.UserRepository;
+import gift.users.user.User;
+import gift.users.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,13 +26,14 @@ public class UserRepositoryTest {
     @DisplayName("회원 추가 테스트")
     void save() {
         //Given
+        User expected = new User("admin@email.com", "1234");
 
         //When
         User actual = userRepository.save(user);
 
         //Then
-        assertThat(actual.getEmail()).isEqualTo("admin@email.com");
-        assertThat(actual.getPassword()).isEqualTo("1234");
+        assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
+        assertThat(actual.getPassword()).isEqualTo(expected.getPassword());
     }
 
     @Test

@@ -3,17 +3,21 @@ package gift.controller;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.category.CategoryApiController;
-import gift.category.CategoryDTO;
-import gift.category.CategoryService;
+import gift.administrator.category.CategoryApiController;
+import gift.administrator.category.CategoryDTO;
+import gift.administrator.category.CategoryService;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -86,17 +90,17 @@ public class CategoryApiControllerTest {
         //given
         CategoryDTO categoryDTO = new CategoryDTO(1L, "상품권", "#ff11ff", "image.jpg", "");
         doNothing().when(categoryService).existsByNamePutResult(any(), any());
-        doNothing().when(categoryService).addCategory(categoryDTO);
+        given(categoryService.addCategory(categoryDTO)).willReturn(categoryDTO);
 
         //when
         ResultActions resultActions = mvc.perform(
             MockMvcRequestBuilders.post("/api/categories")
                 .contentType("application/json")
-                .content(objectMapper.writeValueAsString(categoryDTO)));
+                .content(objectMapper.writeValueAsString(categoryDTO)))
+            .andDo(print());
 
         //then
-        resultActions.andExpect(status().isCreated())
-            .andExpect(content().string("카테고리가 추가되었습니다."));
+        resultActions.andExpect(status().isCreated());
     }
 
     @Test
@@ -105,7 +109,6 @@ public class CategoryApiControllerTest {
         //given
         CategoryDTO categoryDTO = new CategoryDTO(1L, "상품권", "#", "image.jpg", "");
         doNothing().when(categoryService).existsByNamePutResult(any(), any());
-        doNothing().when(categoryService).addCategory(categoryDTO);
 
         //when
         ResultActions resultActions = mvc.perform(
@@ -123,7 +126,8 @@ public class CategoryApiControllerTest {
     void updateCategory() throws Exception {
         //given
         CategoryDTO categoryDTO = new CategoryDTO(1L, "상품권", "#ff11ff", "image.jpg", "");
-        doNothing().when(categoryService).updateCategory(categoryDTO);
+        doNothing().when(categoryService).existsByNameAndIdPutResult(anyString(), anyLong(), any());
+        given(categoryService.updateCategory(any(CategoryDTO.class))).willReturn(categoryDTO);
 
         //when
         ResultActions resultActions = mvc.perform(
@@ -133,7 +137,8 @@ public class CategoryApiControllerTest {
 
         //then
         resultActions.andExpect(status().isOk())
-            .andExpect(content().string("업데이트에 성공했습니다."));
+            .andExpect(content().json(
+                objectMapper.writeValueAsString(categoryDTO)));
     }
 
     @Test
@@ -141,6 +146,7 @@ public class CategoryApiControllerTest {
     void deleteCategory() throws Exception {
         //given
         CategoryDTO categoryDTO = new CategoryDTO(1L, "상품권", "#ff11ff", "image.jpg", "");
+        given(categoryService.getCategoryById(1L)).willReturn(categoryDTO);
         doNothing().when(categoryService).deleteCategory(1L);
 
         //when
@@ -150,8 +156,7 @@ public class CategoryApiControllerTest {
                 .content(objectMapper.writeValueAsString(categoryDTO)));
 
         //then
-        resultActions.andExpect(status().isOk())
-            .andExpect(content().string("삭제되었습니다."));
+        resultActions.andExpect(status().isOk());
     }
 
     @Test

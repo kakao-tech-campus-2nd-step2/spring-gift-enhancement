@@ -1,4 +1,4 @@
-package gift.user;
+package gift.users.user;
 
 import jakarta.validation.constraints.*;
 

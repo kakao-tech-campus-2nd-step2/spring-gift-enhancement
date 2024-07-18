@@ -1,7 +1,7 @@
-package gift.product;
+package gift.administrator.product;
 
-import gift.category.Category;
-import gift.wishlist.WishList;
+import gift.administrator.category.Category;
+import gift.users.wishlist.WishList;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

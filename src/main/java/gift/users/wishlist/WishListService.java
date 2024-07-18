@@ -1,12 +1,12 @@
-package gift.wishlist;
+package gift.users.wishlist;
 
+import gift.users.user.User;
+import gift.users.user.UserDTO;
 import gift.util.JwtUtil;
-import gift.product.Product;
-import gift.product.ProductDTO;
-import gift.product.ProductService;
-import gift.user.User;
-import gift.user.UserDTO;
-import gift.user.UserService;
+import gift.administrator.product.Product;
+import gift.administrator.product.ProductDTO;
+import gift.administrator.product.ProductService;
+import gift.users.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -61,7 +61,7 @@ public class WishListService {
         }
     }
 
-    public void addWishList(WishListDTO wishList, String email) throws NotFoundException {
+    public WishListDTO addWishList(WishListDTO wishList, String email) throws NotFoundException {
         UserDTO userDTO = userService.findUserByEmail(email);
         User user = userDTO.toUser();
         if (wishListRepository.existsByUserIdAndProductId(user.getId(),
@@ -74,9 +74,10 @@ public class WishListService {
         user.addWishList(wishList1);
         product.addWishList(wishList1);
         wishListRepository.save(wishList1);
+        return WishListDTO.fromWishList(wishList1);
     }
 
-    public void updateWishList(long userId, long productId, int num) throws NotFoundException {
+    public WishListDTO updateWishList(long userId, long productId, int num) throws NotFoundException {
         WishList wishList = wishListRepository.findByUserIdAndProductId(userId, productId);
         if (!wishListRepository.existsByUserIdAndProductId(userId, productId)) {
             throw new IllegalArgumentException(
@@ -86,6 +87,7 @@ public class WishListService {
         }
         wishList.update(num);
         wishListRepository.save(wishList);
+        return WishListDTO.fromWishList(wishList);
     }
 
     public void deleteWishList(long userId, long productId) throws NotFoundException {

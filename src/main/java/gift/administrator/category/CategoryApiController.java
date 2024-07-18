@@ -1,4 +1,4 @@
-package gift.category;
+package gift.administrator.category;
 
 import jakarta.validation.Valid;
 import java.util.List;
@@ -38,35 +38,36 @@ public class CategoryApiController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addCategory(@Valid @RequestBody CategoryDTO categoryDTO,
-        BindingResult result) {
-        categoryService.existsByNamePutResult(categoryDTO.getName(), result);
-        if (result.hasErrors()) {
+    public ResponseEntity<?> addCategory(@Valid @RequestBody CategoryDTO categoryDTO,
+        BindingResult bindingResult) {
+        categoryService.existsByNamePutResult(categoryDTO.getName(), bindingResult);
+        if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(result.getAllErrors().toString());
+                .body(bindingResult.getAllErrors().toString());
         }
-        categoryService.addCategory(categoryDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("카테고리가 추가되었습니다.");
+        CategoryDTO result = categoryService.addCategory(categoryDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable("id") Long id,
-        @Valid @RequestBody CategoryDTO categoryDTO, BindingResult result)
+    public ResponseEntity<?> updateCategory(@PathVariable("id") Long id,
+        @Valid @RequestBody CategoryDTO categoryDTO, BindingResult bindingResult)
         throws NotFoundException {
         categoryDTO.setId(id);
-        categoryService.existsByNameAndIdPutResult(categoryDTO.getName(), categoryDTO.getId(), result);
-        if (result.hasErrors()) {
+        categoryService.existsByNameAndIdPutResult(categoryDTO.getName(), categoryDTO.getId(), bindingResult);
+        if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(result.getAllErrors().toString());
+                .body(bindingResult.getAllErrors().toString());
         }
-        categoryService.updateCategory(categoryDTO);
-        return ResponseEntity.ok("업데이트에 성공했습니다.");
+        CategoryDTO result = categoryService.updateCategory(categoryDTO);
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable("id") Long id)
+    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable("id") Long id)
         throws NotFoundException {
+        CategoryDTO categoryDTO = categoryService.getCategoryById(id);
         categoryService.deleteCategory(id);
-        return ResponseEntity.ok("삭제되었습니다.");
+        return ResponseEntity.ok().build();
     }
 }

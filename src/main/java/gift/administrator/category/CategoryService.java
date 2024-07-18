@@ -1,4 +1,4 @@
-package gift.category;
+package gift.administrator.category;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,24 +27,22 @@ public class CategoryService {
         return CategoryDTO.fromCategory(category);
     }
 
-    public void addCategory(CategoryDTO categoryDTO) {
+    public CategoryDTO addCategory(CategoryDTO categoryDTO) {
         if (existsByName(categoryDTO.getName())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
-        categoryRepository.save(categoryDTO.toCategory());
+        return CategoryDTO.fromCategory(categoryRepository.save(categoryDTO.toCategory()));
     }
 
-    public void updateCategory(CategoryDTO categoryDTO) throws NotFoundException {
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO) throws NotFoundException {
         Category category = categoryRepository.findById(categoryDTO.getId())
             .orElseThrow(NotFoundException::new);
-        if (existsByName(categoryDTO.getName())
-            && !Objects.equals(category.getId(),
-            categoryRepository.findByName(categoryDTO.getName()).getId())) {
+        if (categoryRepository.existsByNameAndIdNot(categoryDTO.getName(), categoryDTO.getId())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
         category.update(categoryDTO.getName(), categoryDTO.getColor(), categoryDTO.getImageUrl(),
             categoryDTO.getDescription());
-        categoryRepository.save(category);
+        return CategoryDTO.fromCategory(categoryRepository.save(category));
     }
 
     public void deleteCategory(long id) throws NotFoundException {
@@ -52,11 +50,11 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    public boolean existsByName(String name){
+    public boolean existsByName(String name) {
         return categoryRepository.existsByName(name);
     }
 
-    public void existsByNamePutResult(String name, BindingResult result){
+    public void existsByNamePutResult(String name, BindingResult result) {
         if (existsByName(name)) {
             result.addError(new FieldError("category", "name", "존재하는 이름입니다."));
         }

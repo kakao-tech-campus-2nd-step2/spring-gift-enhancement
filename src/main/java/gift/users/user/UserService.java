@@ -1,4 +1,4 @@
-package gift.user;
+package gift.users.user;
 
 import gift.util.JwtUtil;
 import java.util.HashMap;

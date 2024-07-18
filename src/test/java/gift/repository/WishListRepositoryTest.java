@@ -2,14 +2,14 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.category.Category;
-import gift.category.CategoryRepository;
-import gift.product.Product;
-import gift.product.ProductRepository;
-import gift.user.User;
-import gift.user.UserRepository;
-import gift.wishlist.WishList;
-import gift.wishlist.WishListRepository;
+import gift.administrator.category.Category;
+import gift.administrator.category.CategoryRepository;
+import gift.administrator.product.Product;
+import gift.administrator.product.ProductRepository;
+import gift.users.user.User;
+import gift.users.user.UserRepository;
+import gift.users.wishlist.WishList;
+import gift.users.wishlist.WishListRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,18 +48,20 @@ public class WishListRepositoryTest {
     void save() {
         //Given
         WishList wishList = new WishList(user, product, 3);
+        WishList expected = new WishList(user, product, 3);
 
         //When
         WishList actual = wishListRepository.save(wishList);
 
         //Then
         assertThat(actual.getId()).isNotNull();
-        assertThat(actual.getUser().getEmail()).isEqualTo("admin@email.com");
-        assertThat(actual.getUser().getPassword()).isEqualTo("1234");
-        assertThat(actual.getProduct().getName()).isEqualTo("이춘식");
-        assertThat(actual.getProduct().getPrice()).isEqualTo(1000);
-        assertThat(actual.getProduct().getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.getNum()).isEqualTo(3);
+        assertThat(actual)
+            .extracting(wish -> wish.getUser().getEmail(), wish -> wish.getProduct().getName(),
+                wish -> wish.getProduct().getPrice(), wish -> wish.getProduct().getImageUrl(),
+                wish -> wish.getProduct().getCategory(), WishList::getNum)
+            .containsExactly(expected.getUser().getEmail(), expected.getProduct().getName(),
+                expected.getProduct().getPrice(), expected.getProduct().getImageUrl(),
+                expected.getProduct().getCategory(), expected.getNum());
     }
 
     @Test
@@ -68,8 +70,10 @@ public class WishListRepositoryTest {
         //Given
         Product product2 = new Product("라이언", 3000, "example.jpg", category);
         productRepository.save(product2);
-        wishListRepository.save(new WishList(user, product, 3));
-        wishListRepository.save(new WishList(user, product2, 5));
+        WishList wishList = new WishList(user, product, 3);
+        WishList wishList1 = new WishList(user, product2, 5);
+        wishListRepository.save(wishList);
+        wishListRepository.save(wishList1);
 
         //When
         List<WishList> actual = wishListRepository.findAllByUserId(user.getId());
@@ -78,16 +82,8 @@ public class WishListRepositoryTest {
         assertThat(actual).hasSize(2);
         assertThat(actual.getFirst().getId()).isNotNull();
         assertThat(actual.get(1).getId()).isNotNull();
-        assertThat(actual.getFirst().getProduct().getPrice()).isEqualTo(1000);
-        assertThat(actual.getFirst().getProduct().getName()).isEqualTo("이춘식");
-        assertThat(actual.getFirst().getProduct().getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.getFirst().getProduct().getCategory()).isEqualTo(category);
-        assertThat(actual.getFirst().getNum()).isEqualTo(3);
-        assertThat(actual.get(1).getProduct().getPrice()).isEqualTo(3000);
-        assertThat(actual.get(1).getProduct().getName()).isEqualTo("라이언");
-        assertThat(actual.get(1).getProduct().getImageUrl()).isEqualTo("example.jpg");
-        assertThat(actual.get(1).getProduct().getCategory()).isEqualTo(category);
-        assertThat(actual.get(1).getNum()).isEqualTo(5);
+        assertThat(actual)
+            .containsExactly(wishList, wishList1);
     }
 
     @Test
