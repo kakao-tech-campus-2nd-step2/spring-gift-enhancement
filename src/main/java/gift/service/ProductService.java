@@ -59,7 +59,8 @@ public class ProductService {
 
     @Transactional
     public void deleteById(Long id){
-        findProductByIdOrThrow(id);
+        Product foundProduct = findProductByIdOrThrow(id);
+        foundProduct.remove(foundProduct);
         productRepository.deleteById(id);
     }
 
