@@ -1,5 +1,7 @@
 package gift.product.option.entity;
 
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.product.entity.Product;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "options")
@@ -32,20 +36,36 @@ public class Option {
     private Product product;
 
     public Option(String name, Integer quantity, Product product) {
-        if (quantity < 0 || quantity >= 100_000_000) {
-            throw new IllegalArgumentException();
-        }
-
-        this.name = name;
-        this.quantity = quantity;
+        validateName(name);
+        validateQuantity(quantity);
         this.product = product;
     }
 
     protected Option() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    private void validateName(String name) {
+        Pattern pattern = Pattern.compile("^[\\w\\s()\\[\\]+\\-&/_]*$");
+        Matcher matcher = pattern.matcher(name);
+        if (!matcher.find() || name.length() > 50) {
+            throw new CustomException(ErrorCode.INVALID_OPTION_NAME);
+        }
+        this.name = name;
+    }
+
+    private void validateQuantity(Integer quantity) {
+        if (quantity < 1 || quantity >= 100_000_000) {
+            throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
+        }
+        this.quantity = quantity;
     }
 
 }

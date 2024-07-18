@@ -3,7 +3,9 @@ package gift.unit.service;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
+import gift.exception.CustomException;
 import gift.product.category.entity.Category;
 import gift.product.entity.Product;
 import gift.product.option.dto.request.CreateOptionRequest;
@@ -42,7 +44,7 @@ public class OptionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> optionService.createOption(newOption)).isInstanceOf(
-            IllegalArgumentException.class);
+            CustomException.class);
     }
 
     @Test
@@ -55,7 +57,7 @@ public class OptionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> optionService.createOption(newOption)).isInstanceOf(
-            IllegalArgumentException.class);
+            CustomException.class);
     }
 
     @Test
@@ -68,9 +70,9 @@ public class OptionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> optionService.createOption(newOption)).isInstanceOf(
-            IllegalArgumentException.class);
+            CustomException.class);
     }
-    
+
     @Test
     @DisplayName("동일한 상품 내 옵션 이름 중복 허용 X")
     void createOptionDuplicateOptionNameInProduct() {
@@ -83,7 +85,7 @@ public class OptionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> optionService.createOption(newOption)).isInstanceOf(
-            IllegalArgumentException.class);
+            CustomException.class);
     }
 
     @Test
@@ -91,14 +93,30 @@ public class OptionServiceTest {
     void createOptionSpecialCharacterExceptionTest() {
         // given
         Product product = createProduct();
-        Option option = new Option("a", 2, product);
         CreateOptionRequest newOption = new CreateOptionRequest(1L, "!@#$", 1);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of(option));
 
         // when & then
         assertThatThrownBy(() -> optionService.createOption(newOption)).isInstanceOf(
-            IllegalArgumentException.class);
+            CustomException.class);
+        then(productRepository).should().findById(any());
+    }
+
+    @Test
+    @DisplayName("createOption test")
+    void createOptionTest() {
+        // given
+        Product product = createProduct();
+        CreateOptionRequest newOption = new CreateOptionRequest(1L, "a", 1);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+
+        // when
+        optionService.createOption(newOption);
+
+        // then
+        then(productRepository).should().findById(any());
+        then(optionRepository).should().save(any());
     }
 
     private Product createProduct() {
