@@ -1,8 +1,8 @@
-package gift.category.util;
+package gift.product.util;
 
-import gift.category.dto.CategoryRequest;
-import gift.category.dto.CategoryResponse;
-import gift.category.entity.Category;
+import gift.product.dto.CategoryRequest;
+import gift.product.dto.CategoryResponse;
+import gift.product.entity.Category;
 
 public class CategoryMapper {
 

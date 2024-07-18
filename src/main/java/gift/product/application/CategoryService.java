@@ -1,13 +1,13 @@
-package gift.category.application;
+package gift.product.application;
 
-import gift.category.dao.CategoryRepository;
-import gift.category.dto.CategoryRequest;
-import gift.category.dto.CategoryResponse;
-import gift.category.entity.Category;
-import gift.category.util.CategoryMapper;
+import gift.product.dao.CategoryRepository;
+import gift.product.dto.CategoryRequest;
+import gift.product.dto.CategoryResponse;
+import gift.product.util.CategoryMapper;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,19 +39,15 @@ public class CategoryService {
         );
     }
 
-    public Long deleteCategoryById(Long id) {
+    public void deleteCategoryById(Long id) {
         categoryRepository.deleteById(id);
-        return id;
     }
 
-    public Long updateCategory(Long id, CategoryRequest request) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
-
-        category.update(request);
-
-        return categoryRepository.save(category)
-                                 .getId();
+    @Transactional
+    public void updateCategory(Long id, CategoryRequest request) {
+        categoryRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND))
+                .update(request);
     }
 
 }

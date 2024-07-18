@@ -1,6 +1,6 @@
 package gift.application;
 
-import gift.category.entity.Category;
+import gift.product.entity.Category;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import gift.member.dao.MemberRepository;

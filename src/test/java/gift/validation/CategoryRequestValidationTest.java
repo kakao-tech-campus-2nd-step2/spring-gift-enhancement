@@ -1,6 +1,6 @@
 package gift.validation;
 
-import gift.category.dto.CategoryRequest;
+import gift.product.dto.CategoryRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

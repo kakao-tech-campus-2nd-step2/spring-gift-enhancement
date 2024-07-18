@@ -1,6 +1,5 @@
 package gift.product.entity;
 
-import gift.category.entity.Category;
 import gift.product.dto.ProductRequest;
 import gift.wishlist.entity.Wish;
 import jakarta.persistence.CascadeType;
@@ -15,7 +14,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -36,6 +37,9 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    private final Set<Option> options = new HashSet<>();
 
     protected Product() {
     }
@@ -75,6 +79,10 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public Set<Option> getOptions() {
+        return options;
     }
 
     public void update(ProductRequest request, Category category) {

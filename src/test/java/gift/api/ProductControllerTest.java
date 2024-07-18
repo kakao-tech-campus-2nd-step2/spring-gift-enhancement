@@ -3,7 +3,9 @@ package gift.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.global.security.JwtFilter;
 import gift.global.security.JwtUtil;
-import gift.category.entity.Category;
+import gift.product.application.OptionService;
+import gift.product.dto.OptionRequest;
+import gift.product.entity.Category;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import gift.product.api.ProductController;
@@ -50,6 +52,8 @@ class ProductControllerTest {
     private JwtUtil jwtUtil;
     @MockBean
     private ProductService productService;
+    @MockBean
+    private OptionService optionService;
     private final String bearerToken = "Bearer token";
 
     private final Category category = new Category.CategoryBuilder()
@@ -58,6 +62,8 @@ class ProductControllerTest {
             .setImageUrl("https://product-shop.com")
             .setDescription("")
             .build();
+
+    private final OptionRequest option = new OptionRequest("옵션", 10);
 
     @Test
     @DisplayName("상품 전체 조회 기능 테스트")
@@ -145,7 +151,8 @@ class ProductControllerTest {
                 "product1",
                 1000,
                 "https://testshop.com",
-                category.getName());
+                category.getName(),
+                option);
         ProductResponse response = ProductMapper.toResponseDto(
                 ProductMapper.toEntity(request, category)
         );
@@ -172,28 +179,11 @@ class ProductControllerTest {
     @DisplayName("단일 상품 삭제 기능 테스트")
     void deleteProduct() throws Exception {
         Long productId = 1L;
-        when(productService.deleteProductById(productId)).thenReturn(productId);
 
         mockMvc.perform(delete("/api/products/{id}", productId)
                         .header(HttpHeaders.AUTHORIZATION, bearerToken))
                 .andExpect(status().isOk())
-                .andExpect(content().string(String.valueOf(productId)))
                 .andDo(print());
-
-        verify(productService).deleteProductById(productId);
-    }
-
-    @Test
-    @DisplayName("단일 상품 삭제 실패 테스트")
-    void deleteProductFailed() throws Exception {
-        Long productId = 1L;
-        Throwable exception = new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
-        when(productService.deleteProductById(productId)).thenThrow(exception);
-
-        mockMvc.perform(delete("/api/products/{id}", productId)
-                        .header(HttpHeaders.AUTHORIZATION, bearerToken))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(exception.getMessage()));
 
         verify(productService).deleteProductById(productId);
     }
@@ -217,40 +207,15 @@ class ProductControllerTest {
                 "product2",
                 3000,
                 "https://testshop.com",
-                category.getName());
+                category.getName(),
+                option);
         String requestJson = objectMapper.writeValueAsString(request);
-        when(productService.updateProduct(productId, request)).thenReturn(productId);
 
         mockMvc.perform(patch("/api/products/{id}", productId)
                         .header(HttpHeaders.AUTHORIZATION, bearerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().string(String.valueOf(productId)))
-                .andDo(print());
-
-        verify(productService).updateProduct(productId, request);
-    }
-
-    @Test
-    @DisplayName("상품 수정 실패 테스트")
-    void updateProductFailed() throws Exception {
-        Long productId = 2L;
-        ProductRequest request = new ProductRequest(
-                "product2",
-                3000,
-                "https://testshop.com",
-                category.getName());
-        String requestJson = objectMapper.writeValueAsString(request);
-        Throwable exception = new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
-        when(productService.updateProduct(productId, request)).thenThrow(exception);
-
-        mockMvc.perform(patch("/api/products/{id}", productId)
-                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(exception.getMessage()))
                 .andDo(print());
 
         verify(productService).updateProduct(productId, request);

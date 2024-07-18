@@ -1,8 +1,8 @@
 package gift.dao;
 
-import gift.category.dao.CategoryRepository;
-import gift.category.dto.CategoryRequest;
-import gift.category.entity.Category;
+import gift.product.dao.CategoryRepository;
+import gift.product.dto.CategoryRequest;
+import gift.product.entity.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

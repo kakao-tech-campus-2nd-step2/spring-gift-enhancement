@@ -68,8 +68,7 @@ function addProductToWishlist(productId) {
     fetch(`/api/wishes/${productId}`, {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${token}`
         }
     })
         .then(response => {

@@ -1,6 +1,6 @@
 package gift.admin.api;
 
-import gift.category.api.CategoryController;
+import gift.product.api.CategoryController;
 import gift.global.pagination.dto.PageResponse;
 import gift.product.api.ProductController;
 import gift.product.dto.ProductResponse;
@@ -44,17 +44,24 @@ public class AdminController {
 
     // 상품 추가 폼 표시
     @GetMapping("/add")
-    public String showAddProductForm(Model model) {
+    public String showProductAddForm(Model model) {
         model.addAttribute("categoryList", categoryController.getAllCategories());
         return "product-add-form";
     }
 
     // 상품 수정 폼 표시
     @GetMapping("/edit/{id}")
-    public String updateProduct(Model model, @PathVariable("id") Long id) {
+    public String showProductEditForm(Model model, @PathVariable("id") Long id) {
         model.addAttribute("product", productController.getProduct(id));
         model.addAttribute("categoryList", categoryController.getAllCategories());
         return "product-edit-form";
+    }
+
+    // 상품 옵션 추가 폼 표시
+    @GetMapping("/options/add/{id}")
+    public String showOptionAddForm(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("productId", id);
+        return "option-add-form";
     }
 
 }

@@ -1,8 +1,8 @@
-package gift.category.api;
+package gift.product.api;
 
-import gift.category.application.CategoryService;
-import gift.category.dto.CategoryRequest;
-import gift.category.dto.CategoryResponse;
+import gift.product.application.CategoryService;
+import gift.product.dto.CategoryRequest;
+import gift.product.dto.CategoryResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,14 +41,14 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public Long deleteCategory(@PathVariable("id") Long id) {
-        return categoryService.deleteCategoryById(id);
+    public void deleteCategory(@PathVariable("id") Long id) {
+        categoryService.deleteCategoryById(id);
     }
 
     @PatchMapping("/{id}")
-    public Long updateCategory(@PathVariable("id") Long id,
+    public void updateCategory(@PathVariable("id") Long id,
                                @RequestBody @Valid CategoryRequest request) {
-        return categoryService.updateCategory(id, request);
+        categoryService.updateCategory(id, request);
     }
 
 }

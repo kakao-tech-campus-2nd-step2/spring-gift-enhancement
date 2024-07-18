@@ -1,11 +1,11 @@
 package gift.application;
 
-import gift.category.application.CategoryService;
-import gift.category.dao.CategoryRepository;
-import gift.category.dto.CategoryRequest;
-import gift.category.dto.CategoryResponse;
-import gift.category.entity.Category;
-import gift.category.util.CategoryMapper;
+import gift.product.application.CategoryService;
+import gift.product.dao.CategoryRepository;
+import gift.product.dto.CategoryRequest;
+import gift.product.dto.CategoryResponse;
+import gift.product.entity.Category;
+import gift.product.util.CategoryMapper;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +56,7 @@ class CategoryServiceTest {
 
         List<CategoryResponse> responses = categoryService.getAllCategories();
 
-        assertThat(responses.size()).isEqualTo(2);
+        assertThat(responses.size()).isEqualTo(categoryList.size());
     }
 
     @Test
@@ -123,13 +123,17 @@ class CategoryServiceTest {
                 "https://product-shop.com",
                 ""
         );
-        Category category = CategoryMapper.toEntity(request);
+        Category category = new Category.CategoryBuilder()
+                .setName("교환권")
+                .setColor(request.color())
+                .setImageUrl(request.imageUrl())
+                .setDescription(request.description())
+                .build();
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
-        given(categoryRepository.save(any())).willReturn(category);
 
-        Long categoryId = categoryService.updateCategory(category.getId(), request);
+        categoryService.updateCategory(category.getId(), request);
 
-        assertThat(categoryId).isEqualTo(category.getId());
+        assertThat(category.getName()).isEqualTo(request.name());
     }
 
     @Test

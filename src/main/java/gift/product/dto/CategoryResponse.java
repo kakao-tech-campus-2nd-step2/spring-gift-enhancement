@@ -1,4 +1,4 @@
-package gift.category.dto;
+package gift.product.dto;
 
 public record CategoryResponse(Long id,
                                String name,

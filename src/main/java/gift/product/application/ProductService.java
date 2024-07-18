@@ -1,27 +1,34 @@
 package gift.product.application;
 
-import gift.category.dao.CategoryRepository;
-import gift.category.entity.Category;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
+import gift.product.dao.CategoryRepository;
+import gift.product.dao.OptionRepository;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
+import gift.product.entity.Category;
 import gift.product.entity.Product;
+import gift.product.util.OptionMapper;
 import gift.product.util.ProductMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository,
+                          CategoryRepository categoryRepository,
+                          OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public Page<ProductResponse> getPagedProducts(Pageable pageable) {
@@ -38,31 +45,30 @@ public class ProductService {
     public ProductResponse createProduct(ProductRequest request) {
         Category category = categoryRepository.findByName(request.categoryName())
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+        Product product = productRepository.save(ProductMapper.toEntity(request, category));
 
-        return ProductMapper.toResponseDto(
-                productRepository.save(ProductMapper.toEntity(request, category))
-        );
+        optionRepository.save(OptionMapper.toEntity(request.option(), product));
+
+        return ProductMapper.toResponseDto(product);
     }
 
-    public Long deleteProductById(Long id) {
+    public void deleteProductById(Long id) {
         productRepository.deleteById(id);
-        return id;
     }
+
 
     public void deleteAllProducts() {
         productRepository.deleteAll();
     }
 
-    public Long updateProduct(Long id, ProductRequest request) {
+    @Transactional
+    public void updateProduct(Long id, ProductRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Category category = categoryRepository.findByName(request.categoryName())
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
         product.update(request, category);
-
-        return productRepository.save(product)
-                                .getId();
     }
 
 }

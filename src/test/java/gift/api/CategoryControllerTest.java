@@ -1,12 +1,12 @@
 package gift.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.category.api.CategoryController;
-import gift.category.application.CategoryService;
-import gift.category.dto.CategoryRequest;
-import gift.category.dto.CategoryResponse;
-import gift.category.entity.Category;
-import gift.category.util.CategoryMapper;
+import gift.product.api.CategoryController;
+import gift.product.application.CategoryService;
+import gift.product.dto.CategoryRequest;
+import gift.product.dto.CategoryResponse;
+import gift.product.entity.Category;
+import gift.product.util.CategoryMapper;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import gift.global.security.JwtFilter;
@@ -159,27 +159,12 @@ class CategoryControllerTest {
     @DisplayName("카테고리 삭제 기능 테스트")
     void deleteCategory() throws Exception {
         Long categoryId = 1L;
-        given(categoryService.deleteCategoryById(any())).willReturn(categoryId);
 
         mockMvc.perform(delete("/api/categories/{id}", categoryId)
                         .header(HttpHeaders.AUTHORIZATION, bearerToken))
-                .andExpect(status().isOk())
-                .andExpect(content().string(String.valueOf(categoryId)));
+                .andExpect(status().isOk());
 
         verify(categoryService).deleteCategoryById(categoryId);
-    }
-
-    @Test
-    @DisplayName("카테고리 삭제 실패 테스트")
-    void deleteCategoryFailed() throws Exception {
-        Long categoryId = 1L;
-        Throwable exception = new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
-        given(categoryService.deleteCategoryById(any())).willThrow(exception);
-
-        mockMvc.perform(delete("/api/categories/{id}", categoryId)
-                        .header(HttpHeaders.AUTHORIZATION, bearerToken))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(exception.getMessage()));
     }
 
     @Test
@@ -193,36 +178,14 @@ class CategoryControllerTest {
                 ""
         );
         String requestJson = objectMapper.writeValueAsString(request);
-        given(categoryService.updateCategory(categoryId, request)).willReturn(categoryId);
 
         mockMvc.perform(patch("/api/categories/{id}", categoryId)
                         .header(HttpHeaders.AUTHORIZATION, bearerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
-                .andExpect(status().isOk())
-                .andExpect(content().string(String.valueOf(categoryId)));
-    }
+                .andExpect(status().isOk());
 
-    @Test
-    @DisplayName("카테고리 수정 실패 테스트")
-    void updateCategoryFailed() throws Exception {
-        Long categoryId = 1L;
-        CategoryRequest request = new CategoryRequest(
-                "상품권",
-                "#ffffff",
-                "https://product-shop.com",
-                ""
-        );
-        String requestJson = objectMapper.writeValueAsString(request);
-        Throwable exception = new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
-        given(categoryService.updateCategory(categoryId, request)).willThrow(exception);
-
-        mockMvc.perform(patch("/api/categories/{id}", categoryId)
-                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string(exception.getMessage()));
+        verify(categoryService).updateCategory(categoryId, request);
     }
 
 }

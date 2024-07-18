@@ -1,7 +1,9 @@
 package gift.application;
 
-import gift.category.dao.CategoryRepository;
-import gift.category.entity.Category;
+import gift.product.dao.CategoryRepository;
+import gift.product.dao.OptionRepository;
+import gift.product.dto.OptionRequest;
+import gift.product.entity.Category;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import gift.product.application.ProductService;
@@ -10,7 +12,6 @@ import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
 import gift.product.entity.Product;
 import gift.product.util.ProductMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -41,12 +43,17 @@ class ProductServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private OptionRepository optionRepository;
+
     private final Category category = new Category.CategoryBuilder()
             .setName("상품권")
             .setColor("#ffffff")
             .setImageUrl("https://product-shop.com")
             .setDescription("")
             .build();
+
+    private final OptionRequest option = new OptionRequest("옵션", 10);
 
     @Test
     @DisplayName("상품 전체 조회 서비스 테스트")
@@ -71,7 +78,7 @@ class ProductServiceTest {
 
         Page<ProductResponse> responsePage = productService.getPagedProducts(productPage.getPageable());
 
-        Assertions.assertThat(responsePage.getTotalElements()).isEqualTo(2);
+        assertThat(responsePage.getTotalElements()).isEqualTo(2);
     }
 
     @Test
@@ -87,7 +94,7 @@ class ProductServiceTest {
 
         ProductResponse resultProduct = productService.getProductByIdOrThrow(1L);
 
-        Assertions.assertThat(resultProduct.name()).isEqualTo(product.getName());
+        assertThat(resultProduct.name()).isEqualTo(product.getName());
     }
 
     @Test
@@ -96,7 +103,7 @@ class ProductServiceTest {
         Long productId = 1L;
         given(productRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        Assertions.assertThatThrownBy(() -> productService.getProductByIdOrThrow(productId))
+        assertThatThrownBy(() -> productService.getProductByIdOrThrow(productId))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PRODUCT_NOT_FOUND
                                      .getMessage());
@@ -109,29 +116,25 @@ class ProductServiceTest {
                 "product1",
                 1000,
                 "https://testshop.com",
-                category.getName());
+                category.getName(),
+                option);
         Product product = ProductMapper.toEntity(request, category);
         given(productRepository.save(any())).willReturn(product);
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
 
         ProductResponse response = productService.createProduct(request);
 
-        Assertions.assertThat(response.name()).isEqualTo(product.getName());
+        assertThat(response.name()).isEqualTo(product.getName());
     }
 
     @Test
     @DisplayName("단일 상품 삭제 서비스 테스트")
     void deleteProductById() {
-        Product product = new Product.ProductBuilder()
-                .setName("product1")
-                .setPrice(1000)
-                .setImageUrl("https://testshop.com")
-                .setCategory(category)
-                .build();
+        Long productId = 1L;
 
-        productService.deleteProductById(product.getId());
+        productService.deleteProductById(productId);
 
-        verify(productRepository).deleteById(product.getId());
+        verify(productRepository).deleteById(productId);
     }
 
     @Test
@@ -152,18 +155,17 @@ class ProductServiceTest {
                 .setCategory(category)
                 .build();
         ProductRequest request = new ProductRequest(
-                "product",
-                3000,
-                "https://testshop.io",
-                category.getName());
+                "product2",
+                product.getPrice(),
+                product.getImageUrl(),
+                category.getName(),
+                option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
-        product.update(request, category);
-        given(productRepository.save(any())).willReturn(product);
 
-        Long productId = productService.updateProduct(product.getId(), request);
+        productService.updateProduct(product.getId(), request);
 
-        Assertions.assertThat(productId).isEqualTo(product.getId());
+        assertThat(product.getName()).isEqualTo(request.name());
     }
 
     @Test
@@ -174,10 +176,11 @@ class ProductServiceTest {
                 "product",
                 3000,
                 "https://testshop.io",
-                category.getName());
+                category.getName(),
+                option);
         given(productRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        Assertions.assertThatThrownBy(() -> productService.updateProduct(productId, request))
+        assertThatThrownBy(() -> productService.updateProduct(productId, request))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PRODUCT_NOT_FOUND
                                      .getMessage());

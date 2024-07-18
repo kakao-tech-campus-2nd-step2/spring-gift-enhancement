@@ -1,6 +1,7 @@
 package gift.dao;
 
-import gift.category.entity.Category;
+import gift.product.dto.OptionRequest;
+import gift.product.entity.Category;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.ProductRequest;
 import gift.product.entity.Product;
@@ -129,7 +130,8 @@ class ProductRepositoryTest {
                 "updateproduct",
                 12345,
                 "updateproduct.jpg",
-                category.getName()
+                category.getName(),
+                new OptionRequest("옵션", 10)
         );
         Product savedProduct = productRepository.save(product);
         savedProduct.update(request, category);

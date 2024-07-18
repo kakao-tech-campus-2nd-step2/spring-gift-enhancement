@@ -1,4 +1,4 @@
-package gift.category.dto;
+package gift.product.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
