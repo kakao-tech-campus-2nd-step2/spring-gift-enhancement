@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.domain.ProductDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -57,4 +58,14 @@ public class ProductEntity {
     public List<WishListEntity> getWishListEntities() {
         return wishListEntities;
     }
+
+    public static ProductDTO toDTO(ProductEntity productEntity) {
+        return new ProductDTO(
+            productEntity.getId(),
+            productEntity.getName(),
+            productEntity.getPrice(),
+            productEntity.getImageUrl()
+        );
+    }
+
 }
