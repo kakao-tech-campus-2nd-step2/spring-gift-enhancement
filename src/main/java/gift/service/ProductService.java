@@ -5,7 +5,6 @@ import gift.exception.InvalidProductException;
 import gift.exception.InvalidUserException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,11 +14,13 @@ import org.springframework.validation.BindingResult;
 @Service
 public class ProductService {
 
-	@Autowired
-	private ProductRepository productRepository;
+	private final ProductRepository productRepository;
+	private final CategoryRepository categoryRepository;
 	
-	@Autowired
-	private CategoryRepository categoryRepository;
+	public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+		this.productRepository = productRepository;
+		this.categoryRepository = categoryRepository;
+	}
 	
     public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);

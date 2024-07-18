@@ -1,6 +1,5 @@
 package gift.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,14 +18,16 @@ import gift.repository.WishlistRepository;
 @Service
 public class WishlistService {
 	
-	@Autowired
-	private WishlistRepository wishlistRepository;
+	private final WishlistRepository wishlistRepository;
+	private final ProductRepository productRepository;
+	private final AuthService authService;
 	
-	@Autowired
-	private ProductRepository productRepository;
-	
-	@Autowired
-	private AuthService authService;
+	public WishlistService(WishlistRepository wishlistRepository, ProductRepository productRepository,
+			AuthService authService) {
+		this.wishlistRepository = wishlistRepository;
+		this.productRepository = productRepository;
+		this.authService = authService;
+	}
 	
 	public Page<Wishlist> getWishlist(String token, BindingResult bindingResult, Pageable pageable) {
         User user = getUserFormToekn(token, bindingResult);

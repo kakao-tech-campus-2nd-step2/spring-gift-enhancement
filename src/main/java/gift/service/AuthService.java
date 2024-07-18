@@ -4,7 +4,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -20,8 +19,11 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class AuthService {
 	
-	@Autowired
-	private UserRepository userRespository;
+	private final UserRepository userRespository;
+	
+	public AuthService(UserRepository userRespository) {
+		this.userRespository = userRespository;
+	}
 	
 	private final String secret = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
 	
