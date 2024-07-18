@@ -1,8 +1,9 @@
 package gift.api.wishlist;
 
+import gift.api.wishlist.domain.Wish;
 import gift.api.wishlist.dto.WishAddUpdateRequest;
 import gift.api.wishlist.dto.WishDeleteRequest;
-import gift.global.LoginMember;
+import gift.global.resolver.LoginMember;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;

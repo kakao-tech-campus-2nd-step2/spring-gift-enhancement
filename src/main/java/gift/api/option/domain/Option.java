@@ -1,4 +1,4 @@
-package gift.api.option;
+package gift.api.option.domain;
 
 import gift.api.product.Product;
 import gift.global.BaseEntity;

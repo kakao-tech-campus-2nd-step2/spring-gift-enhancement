@@ -1,5 +1,6 @@
-package gift.api.option;
+package gift.api.option.dto;
 
+import gift.api.option.domain.Option;
 import gift.api.product.Product;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

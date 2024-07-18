@@ -1,4 +1,4 @@
-package gift.global;
+package gift.global.advice;
 
 public class ErrorResponse {
 

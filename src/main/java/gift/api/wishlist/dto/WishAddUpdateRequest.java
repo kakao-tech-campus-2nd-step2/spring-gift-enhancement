@@ -2,7 +2,7 @@ package gift.api.wishlist.dto;
 
 import gift.api.member.Member;
 import gift.api.product.Product;
-import gift.api.wishlist.Wish;
+import gift.api.wishlist.domain.Wish;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 

@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.mock;
 
 import gift.api.member.Member;
 import gift.api.product.Product;
+import gift.api.wishlist.domain.Wish;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

@@ -1,5 +1,9 @@
 package gift.api.option;
 
+import gift.api.option.domain.Option;
+import gift.api.option.domain.Options;
+import gift.api.option.dto.OptionRequest;
+import gift.api.option.dto.OptionResponse;
 import gift.api.product.Product;
 import gift.api.product.ProductRepository;
 import gift.global.exception.NoSuchEntityException;

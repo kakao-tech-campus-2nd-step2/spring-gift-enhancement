@@ -1,4 +1,4 @@
-package gift.api.wishlist;
+package gift.api.wishlist.domain;
 
 import java.io.Serializable;
 import java.util.Objects;

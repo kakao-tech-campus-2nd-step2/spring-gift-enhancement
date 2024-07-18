@@ -1,8 +1,8 @@
 package gift.api.product;
 
-import gift.api.option.OptionRequest;
-import gift.api.option.OptionResponse;
 import gift.api.option.OptionService;
+import gift.api.option.dto.OptionRequest;
+import gift.api.option.dto.OptionResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;

@@ -4,6 +4,8 @@ import gift.api.member.Member;
 import gift.api.member.MemberRepository;
 import gift.api.product.Product;
 import gift.api.product.ProductRepository;
+import gift.api.wishlist.domain.Wish;
+import gift.api.wishlist.domain.WishId;
 import gift.api.wishlist.dto.WishAddUpdateRequest;
 import gift.api.wishlist.dto.WishDeleteRequest;
 import gift.global.exception.NoSuchEntityException;

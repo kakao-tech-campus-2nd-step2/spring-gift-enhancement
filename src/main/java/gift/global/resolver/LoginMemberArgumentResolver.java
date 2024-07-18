@@ -1,4 +1,4 @@
-package gift.global;
+package gift.global.resolver;
 
 import gift.global.exception.UnauthorizedMemberException;
 import gift.global.utils.JwtUtil;
