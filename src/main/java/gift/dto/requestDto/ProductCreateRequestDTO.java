@@ -1,6 +1,9 @@
 package gift.dto.requestDto;
 
+import jakarta.validation.Valid;
+
 public record ProductCreateRequestDTO(
-    ProductRequestDTO productRequestDTO, OptionCreateRequestDTO optionCreateRequestDTO
+    @Valid ProductRequestDTO productRequestDTO,
+    @Valid OptionCreateRequestDTO optionCreateRequestDTO
 ) {
 }
