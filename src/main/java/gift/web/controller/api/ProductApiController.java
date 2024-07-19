@@ -1,6 +1,7 @@
 package gift.web.controller.api;
 
 import gift.authentication.annotation.LoginMember;
+import gift.service.ProductOptionService;
 import gift.service.ProductService;
 import gift.service.WishProductService;
 import gift.web.dto.MemberDetails;
@@ -11,6 +12,7 @@ import gift.web.dto.response.product.CreateProductResponse;
 import gift.web.dto.response.product.ReadAllProductsResponse;
 import gift.web.dto.response.product.ReadProductResponse;
 import gift.web.dto.response.product.UpdateProductResponse;
+import gift.web.dto.response.productoption.ReadAllProductOptionsResponse;
 import gift.web.dto.response.wishproduct.CreateWishProductResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,10 +37,12 @@ public class ProductApiController {
 
     private final ProductService productService;
     private final WishProductService wishProductService;
+    private final ProductOptionService productOptionService;
 
-    public ProductApiController(ProductService productService, WishProductService wishProductService) {
+    public ProductApiController(ProductService productService, WishProductService wishProductService, ProductOptionService productOptionService) {
         this.productService = productService;
         this.wishProductService = wishProductService;
+        this.productOptionService = productOptionService;
     }
 
     @GetMapping
@@ -92,4 +96,9 @@ public class ProductApiController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}/options")
+    public ResponseEntity<ReadAllProductOptionsResponse> readOptions(@PathVariable Long id) {
+        ReadAllProductOptionsResponse response = productOptionService.readAllOptions(id);
+        return ResponseEntity.ok(response);
+    }
 }
