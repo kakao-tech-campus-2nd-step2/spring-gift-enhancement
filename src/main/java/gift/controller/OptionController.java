@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,18 +34,28 @@ public class OptionController {
     }
 
     @GetMapping("options/{productId}")
-    public ResponseEntity<List<OptionResponseDTO>> getOptionsByProductId(@PathVariable Long productId) {
+    public ResponseEntity<List<OptionResponseDTO>> getOptionsByProductId(@PathVariable("productId") Long productId) {
         List<OptionResponseDTO> options = optionService.findByProductId(productId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(options);
     }
 
+
+    /*
+    * requestParam과 pathvariable 차이?
+    *
+    * */
+
     @PostMapping("options/{productId}")
-    public ResponseEntity<String> createOption(@PathVariable Long productId, @Valid @RequestBody OptionRequestDTO optionRequestDTO) {
+    public ResponseEntity<String> createOption(@PathVariable("productId") Long productId, @Valid @RequestBody OptionRequestDTO optionRequestDTO) {
+
+        System.out.println("option creating ~~ ");
+        System.out.println(productId);
+
+
         optionService.save(productId, optionRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("상품 option 등록 완료");
     }
-
 
 }

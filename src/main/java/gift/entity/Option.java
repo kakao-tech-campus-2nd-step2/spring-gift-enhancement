@@ -21,6 +21,11 @@ public class Option {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    public Option() {
+
+    }
+
+
     public Option(String name, int quantity, Product product) {
         this.name = name;
         this.quantity = quantity;

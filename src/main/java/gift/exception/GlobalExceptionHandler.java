@@ -21,6 +21,21 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @Description("category-service error")
+    @ExceptionHandler(value = CategoryException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryException(ProductException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @Description("option-service error")
+    @ExceptionHandler(value = OptionException.class)
+    public ResponseEntity<ErrorResponse> handleOptionException(ProductException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+
     @Description("Product-service error")
     @ExceptionHandler(value = ProductException.class)
     public ResponseEntity<ErrorResponse> handleProductNotFound(ProductException e) {
