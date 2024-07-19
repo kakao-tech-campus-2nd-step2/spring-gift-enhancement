@@ -14,13 +14,13 @@ public class ProductTest {
     private Category category2;
 
     @BeforeEach
-    void BeforeEach(){
+    void beforeEach(){
         category = new Category("식품", "#8123f3D", "식품 url", "");
         category2 = new Category("음료", "#7324d2b", "음료 url", "");
     }
 
     @Test
-    void CreationTest() {
+    void creationTest() {
         Product product= new Product("아메리카노", 4000, "아메리카노url",category);
         assertAll(
                 () -> assertThat(product.getName()).isEqualTo("아메리카노"),
@@ -31,7 +31,7 @@ public class ProductTest {
     }
 
     @Test
-    void SetterTest() {
+    void setterTest() {
         Product product = new Product("아메리카노", 4000, "아메리카노url", category);
         product.setName("카푸치노");
         product.setPrice(5000);

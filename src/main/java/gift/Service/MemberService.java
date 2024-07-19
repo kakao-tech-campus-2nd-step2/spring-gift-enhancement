@@ -5,8 +5,8 @@ import gift.Model.Member;
 import gift.Model.RequestMember;
 import gift.Repository.MemberRepository;
 import gift.Util.JwtUtil;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
@@ -27,6 +27,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    @Transactional(readOnly = true)
     public String loginUser(RequestMember requestMember) throws ForbiddenException {
         Member member = memberRepository.findByEmail(requestMember.email()).orElseThrow(() -> new NoSuchElementException("매칭되는 멤버가 없습니다."));
         String temp = member.getPassword();
@@ -36,6 +37,7 @@ public class MemberService {
         return jwtUtil.generateToken(member);
     }
 
+    @Transactional(readOnly = true)
     public Member getUserByToken(String token) {
         return memberRepository.findByEmail(jwtUtil.getSubject(token)).orElseThrow(()-> new NoSuchElementException("매칭되는 멤버가 없습니다"));
     }

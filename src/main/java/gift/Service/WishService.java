@@ -3,12 +3,10 @@ package gift.Service;
 import gift.Model.*;
 import gift.Repository.ProductRepository;
 import gift.Repository.WishRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -33,11 +31,13 @@ public class WishService {
         wishRepository.save(wish);
     }
 
+    @Transactional(readOnly = true)
     public Page<Wish> getWishList(Member member, Pageable pageable) {
         Page<Wish> wishListPage= wishRepository.findByMember(member,pageable);
         return wishListPage;
     }
 
+    @Transactional(readOnly = true)
     public List<ResponseWishDTO> getWish(Member member) {
         List<Wish> wishList = wishRepository.findWishListByMember(member);
         List<ResponseWishDTO> responseWishDTOList = new ArrayList<>();
@@ -48,6 +48,7 @@ public class WishService {
         return responseWishDTOList;
     }
 
+    @Transactional(readOnly = true)
     public Wish findWishByMemberAndProduct(Member member, Product product){
         Optional<Wish> wish= wishRepository.findByMemberAndProduct(member, product);
         return wish.orElseThrow(()->new NoSuchElementException("매칭되는 wish가 없습니다"));
