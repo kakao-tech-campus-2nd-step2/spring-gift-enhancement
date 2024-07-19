@@ -70,7 +70,6 @@ public class ProductService {
         Category category = categoryService.findById(productRequest.categoryId()).toEntity();
 
         foundProduct.updateProduct(productRequest.name(), productRequest.price(), productRequest.imageUrl(),category);
-        productRepository.save(foundProduct);
     }
 
     private Product findProductByIdOrThrow(Long id) {
