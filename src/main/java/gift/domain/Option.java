@@ -1,6 +1,7 @@
 package gift.domain;
 
 import gift.dto.request.OptionRequest;
+import gift.exception.CustomException;
 import gift.util.ProductValidationUtil;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import static gift.constant.Message.*;
+import static gift.exception.ErrorCode.INVALID_AMOUNT_ERROR;
 
 @Entity
 @Table(name = "option")
@@ -46,6 +48,17 @@ public class Option {
         this.name = optionRequest.getName();
         this.quantity = optionRequest.getQuantity();
         this.product = product;
+    }
+
+    public void subtract(int amount) {
+        checkAmount(amount);
+        this.quantity -= amount;
+    }
+
+    private void checkAmount(int amount) {
+        if (amount < 1 || amount > this.quantity){
+            throw new CustomException(INVALID_AMOUNT_ERROR);
+        }
     }
 
     public Long getId() {
