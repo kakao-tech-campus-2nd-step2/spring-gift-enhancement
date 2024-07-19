@@ -1,7 +1,11 @@
 package gift.dto;
 
 import gift.entity.Category;
+import gift.entity.Option;
+import org.aspectj.weaver.loadtime.Options;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.List;
 
 public class ProductRequestDto {
 
@@ -10,6 +14,8 @@ public class ProductRequestDto {
     private Integer price;
     private String url;
     private Category category;
+
+    private List<Option> options;
 
     public ProductRequestDto(String name, Integer price, String url, Category category) {
         if (checkValidProductName(name)) {
@@ -113,6 +119,10 @@ public class ProductRequestDto {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     public class IllegalProductNameLengthException extends IllegalArgumentException {

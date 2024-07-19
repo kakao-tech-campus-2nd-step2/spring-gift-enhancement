@@ -28,7 +28,7 @@ public class productController {
 
     @PostMapping("")
     public ProductResponseDto createProductDto(@RequestBody ProductRequestDto productRequestDto) {
-        return productService.createProductDto(productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl(), productRequestDto.getCategory());
+        return productService.createProductDto(productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl(), productRequestDto.getCategory(), productRequestDto.getOptions());
     }
 
     @GetMapping("")
@@ -43,7 +43,7 @@ public class productController {
 
     @PutMapping("/{id}")
     public void update(@PathVariable("id") Long id, @RequestBody ProductRequestDto productRequestDto) {
-        productService.update(id, productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl(), productRequestDto.getCategory());
+        productService.update(id, productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl(), productRequestDto.getCategory(),productRequestDto.getOptions());
     }
 
     @DeleteMapping("/{id}")

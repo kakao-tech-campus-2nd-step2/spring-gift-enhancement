@@ -22,17 +22,21 @@ public class Option {
     private Long quantity;
 
     @ManyToOne
-    @JoinColumn(name="product_id")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     public Option() {
     }
 
-    public Option(Long id, String name, Long quantity, Product product) {
-        this.id = id;
+    public Option(String name, Long quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+    }
+
+    public Option(String name, Long quantity) {
+        this.name = name;
+        this.quantity = quantity;
     }
 
     public Long getId() {
