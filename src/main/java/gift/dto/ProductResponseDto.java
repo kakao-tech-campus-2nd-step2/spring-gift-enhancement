@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.domain.Product;
+
 public class ProductResponseDto {
     private Long id;
     private String name;
@@ -60,5 +62,15 @@ public class ProductResponseDto {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public static ProductResponseDto convertToDto(Product product) {
+        return new ProductResponseDto(
+            product.getId(),
+            product.getName(),
+            product.getPrice(),
+            product.getImageUrl(),
+            product.getCategory().getName()
+        );
     }
 }

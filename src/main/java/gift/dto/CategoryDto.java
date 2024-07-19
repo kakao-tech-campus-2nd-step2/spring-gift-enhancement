@@ -1,6 +1,6 @@
 package gift.dto;
 
-import jakarta.persistence.Column;
+import gift.domain.Category;
 import jakarta.validation.constraints.NotNull;
 
 public class CategoryDto {
@@ -28,39 +28,29 @@ public class CategoryDto {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getColor() {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public static CategoryDto convertToDto(Category category) {
+        return new CategoryDto(
+            category.getId(),
+            category.getName(),
+            category.getColor(),
+            category.getImageUrl(),
+            category.getDescription()
+        );
     }
 }

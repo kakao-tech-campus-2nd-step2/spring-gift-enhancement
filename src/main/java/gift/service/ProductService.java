@@ -47,7 +47,7 @@ public class ProductService {
         existingProduct.setName(productDto.getName());
         existingProduct.setPrice(productDto.getPrice());
         existingProduct.setImageUrl(productDto.getImageUrl());
-        existingProduct.setCategory(categoryRepository.findByName(productDto.getCategoryName()));
+        existingProduct.updateCategory(categoryRepository.findByName(productDto.getCategoryName()));
         Product savedProduct = productRepository.save(existingProduct);
         return savedProduct.getId();
     }
@@ -57,16 +57,8 @@ public class ProductService {
 
     public Page<ProductResponseDto> getPagedProducts(Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(pageable);
-        return productPage.map(this::convertToDto);
+        return productPage.map(ProductResponseDto::convertToDto);
     }
 
-    private ProductResponseDto convertToDto(Product product) {
-        return new ProductResponseDto(
-            product.getId(),
-            product.getName(),
-            product.getPrice(),
-            product.getImageUrl(),
-            product.getCategory().getName()
-        );
-    }
+
 }
