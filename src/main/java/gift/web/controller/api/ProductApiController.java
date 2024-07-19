@@ -7,11 +7,13 @@ import gift.service.WishProductService;
 import gift.web.dto.MemberDetails;
 import gift.web.dto.request.product.CreateProductRequest;
 import gift.web.dto.request.product.UpdateProductRequest;
+import gift.web.dto.request.productoption.CreateProductOptionRequest;
 import gift.web.dto.request.wishproduct.CreateWishProductRequest;
 import gift.web.dto.response.product.CreateProductResponse;
 import gift.web.dto.response.product.ReadAllProductsResponse;
 import gift.web.dto.response.product.ReadProductResponse;
 import gift.web.dto.response.product.UpdateProductResponse;
+import gift.web.dto.response.productoption.CreateProductOptionResponse;
 import gift.web.dto.response.productoption.ReadAllProductOptionsResponse;
 import gift.web.dto.response.wishproduct.CreateWishProductResponse;
 import java.net.URI;
@@ -101,4 +103,18 @@ public class ProductApiController {
         ReadAllProductOptionsResponse response = productOptionService.readAllOptions(id);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/{id}/options")
+    public ResponseEntity<CreateProductOptionResponse> createOption(@PathVariable Long id, @Validated @RequestBody CreateProductOptionRequest request) {
+        CreateProductOptionResponse response = productOptionService.createOption(id, request);
+
+        URI location = URI.create("http://localhost:8080/api/products/" + id + "/options/" + response.getId());
+        return ResponseEntity.created(location).body(response);
+    }
+
+//    @DeleteMapping("/{id}/options/{optionId}")
+//    public ResponseEntity<Void> deleteOption(@PathVariable Long id, @PathVariable Long optionId) {
+//        productOptionService.deleteOption(id, optionId);
+//        return ResponseEntity.noContent().build();
+//    }
 }
