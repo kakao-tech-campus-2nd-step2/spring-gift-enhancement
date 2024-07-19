@@ -1,6 +1,5 @@
 package gift.category.service;
 
-import gift.Application;
 import gift.category.model.Category;
 
 import gift.category.repository.CategoryRepository;

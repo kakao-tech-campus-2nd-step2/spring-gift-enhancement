@@ -23,11 +23,13 @@ public class MemberService {
     }
 
     public Member login(String email, String password) {
+        // 이메일 있는지
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("옳지 않은 이메일이나 비밀번호 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("옳지 않은 이메일 입니다."));
 
+        // 비밀번호가 맞는지
         if (!member.getPassword().equals(password)) {
-            throw new IllegalArgumentException("옳지 않은 이메일이나 비밀번호 입니다.");
+            throw new IllegalArgumentException("옳지 않은 비밀번호 입니다.");
         }
 
         return member;

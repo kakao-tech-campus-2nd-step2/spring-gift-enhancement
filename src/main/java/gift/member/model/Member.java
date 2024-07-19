@@ -67,9 +67,9 @@ public class Member {
         return this.password.equals(rawPassword); // 단순 문자열 비교
     }
 
-    public void validateLogin(String rawPassword) {
-        if (!this.checkPassword(rawPassword)) {
-            throw new IllegalArgumentException("Invalid password");
-        }
-    }
+//    public void validateLogin(String rawPassword) {
+//        if (!this.checkPassword(rawPassword)) {
+//            throw new IllegalArgumentException("옳지 않은 비밀번호 입니다.");
+//        }
+//    }
 }
