@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class MemberService {
 
@@ -29,6 +29,7 @@ public class MemberService {
         return memberRepository.findAll(pageable).map(this::entityToDto);
     }
 
+    @Transactional
     public String register(MemberRequest memberRequest) {
 
         Member member = memberRepository.save(dtoToEntity(memberRequest));
@@ -47,6 +48,7 @@ public class MemberService {
         return null;
     }
 
+    @Transactional
     public void deleteMember(Long id) {
         Member member = memberRepository
             .findById(id)

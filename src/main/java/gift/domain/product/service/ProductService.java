@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class ProductService {
 
@@ -41,7 +41,7 @@ public class ProductService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         return productRepository.findAll(pageable).map(this::entityToDto);
     }
-
+    @Transactional
     public ProductResponse createProduct(ProductRequest productRequest) {
         Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
         Product savedProduct = productRepository.save(dtoToEntity(productRequest, savedCategory));
@@ -49,21 +49,21 @@ public class ProductService {
 
         return entityToDto(savedProduct);
     }
-
+    @Transactional
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
-        Product product = productRepository
+        Product savedProduct = productRepository
             .findById(id)
             .orElseThrow(() -> new ProductNotFoundException("찾는 상품이 존재하지 않습니다."));
 
         Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
 
-        product.updateAll(productRequest.getName(), productRequest.getPrice(),
+        savedProduct.updateAll(productRequest.getName(), productRequest.getPrice(),
             productRequest.getImageUrl(), savedCategory);
 
-        return entityToDto(productRepository.save(product));
+        return entityToDto(savedProduct);
 
     }
-
+    @Transactional
     public void deleteProduct(Long id) {
         Product savedProduct = productRepository
             .findById(id)

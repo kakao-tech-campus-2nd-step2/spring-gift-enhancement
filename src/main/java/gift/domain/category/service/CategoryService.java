@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class CategoryService {
 
@@ -25,12 +25,12 @@ public class CategoryService {
 
         return categoryRepository.findAll(pageable).map(this::entityToDto);
     }
-
+    @Transactional
     public CategoryResponse createCategory(CategoryRequest request) {
         Category savedCategory = categoryRepository.save(dtoToEntity(request));
         return entityToDto(savedCategory);
     }
-
+    @Transactional
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         Category savedCategory = categoryRepository.findById(id).orElseThrow();
         savedCategory.updateAll(request.getName(), request.getColor(), request.getImageUrl(),
@@ -38,7 +38,7 @@ public class CategoryService {
 
         return entityToDto(savedCategory);
     }
-
+    @Transactional
     public void deleteCategory(Long id){
         Category savedCategory = categoryRepository.findById(id).orElseThrow();
         categoryRepository.delete(savedCategory);

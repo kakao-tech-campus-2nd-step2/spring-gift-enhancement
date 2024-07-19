@@ -16,7 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 @Service
 public class WishService {
 
@@ -39,13 +41,13 @@ public class WishService {
             .findAllByMember(member, pageable)
             .map(this::entityToDto);
     }
-
+    @Transactional
     public WishResponse createWish(WishRequest wishRequest) {
         Wish wish = DtoToEntity(wishRequest);
 
         return entityToDto(wishRepository.save(wish));
     }
-
+    @Transactional
     public void deleteWish(Long id, Member member) {
         Wish wish = wishRepository
             .findById(id)

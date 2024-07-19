@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class OptionService {
     private final OptionRepository optionRepository;
     private final ProductRepository productRepository;
@@ -28,17 +28,17 @@ public class OptionService {
         List<Option> savedOptions = optionRepository.findAllByProduct(savedProduct);
         return savedOptions.stream().map((option)-> new OptionResponse(option.getId(), option.getName(), option.getQuantity())).toList();
     }
+    @Transactional
     public OptionResponse addOptionToProduct(Long id, OptionRequest request){
 
         Product savedProduct = productRepository.findById(id).orElseThrow();
+        List<Option> savedOptionList = optionRepository.findAllByProduct(savedProduct);
 
-        List<Option> savedOptions = optionRepository.findAllByProduct(savedProduct);
         Option newOption = dtoToEntity(request);
-        newOption.checkDuplicateName(savedOptions);
+        newOption.checkDuplicateName(savedOptionList);
         newOption.addProduct(savedProduct);
         Option savedOption = optionRepository.save(newOption);
 
-        // 리턴 값 생각
         return entityToDto(savedOption);
     }
 
