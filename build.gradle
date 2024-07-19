@@ -43,8 +43,6 @@ dependencies {
 
     // H2 데이터베이스
     runtimeOnly 'com.h2database:h2'
-    // JUnit
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
