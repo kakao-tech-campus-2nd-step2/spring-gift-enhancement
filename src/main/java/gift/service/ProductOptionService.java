@@ -29,9 +29,10 @@ public class ProductOptionService {
 
     public void saveProductOptions(List<ProductOption> options) {
         for (ProductOption option : options) {
-            if (!existsByProductIdAndName(option.getProduct().getId(), option.getName())) {
-                productOptionRepository.save(option);
+            if (existsByProductIdAndName(option.getProduct().getId(), option.getName())) {
+                throw new IllegalArgumentException("ProductOption with the same product ID and name already exists");
             }
+            productOptionRepository.save(option);
         }
     }
 

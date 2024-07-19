@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,11 @@ public class ProductService {
                     return newOption;
                 })
                 .collect(Collectors.toList());
-        productOptionService.saveProductOptions(options);
+        try {
+            productOptionService.saveProductOptions(options);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     public ResponseEntity<Page<Product>> getAllProducts(Pageable pageable) {
@@ -57,7 +62,11 @@ public class ProductService {
                     return newOption;
                 })
                 .collect(Collectors.toList());
-        productOptionService.saveProductOptions(options);
+        try {
+            productOptionService.saveProductOptions(options);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
         productRepository.save(updatedProduct);
     }
 
