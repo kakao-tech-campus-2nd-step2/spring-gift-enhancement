@@ -103,14 +103,6 @@ public class Product {
         option.setProduct(this);
     }
 
-//    public void removeOption(Option option) {
-//        options.remove(option.getId());
-//    }
-
-//    public void replaceOptions(Map<Long, Option> newOptions) {
-//        options = newOptions;
-//    }
-
     public void validateOption(Option option) {
         for (Option o : options.values()) {
             if (o.getName().equals(option.getName())) {
