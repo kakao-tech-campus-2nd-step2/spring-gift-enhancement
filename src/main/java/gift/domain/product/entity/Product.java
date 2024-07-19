@@ -73,9 +73,4 @@ public class Product {
         this.imageUrl = imageUrl;
         this.category = category;
     }
-
-    public void updateCategory(Category category){
-        this.category = category;
-    }
-
 }
