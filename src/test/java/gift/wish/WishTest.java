@@ -1,6 +1,7 @@
 package gift.wish;
 
 import gift.model.member.Member;
+import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductName;
 import gift.model.wish.Wish;
@@ -13,11 +14,14 @@ public class WishTest {
     private Wish originWish;
     private Member expectedMember;
     private Product expectedProduct;
+    private Category category;
+
 
     @BeforeEach
     public void setUp() {
         expectedMember = new Member("qwer@gmail.com","1234","root");
-        expectedProduct = new Product(new ProductName("product1"),1000,"qwer.com",1000);
+        category = new Category("category1");
+        expectedProduct = new Product(category,new ProductName("product1"),1000,"qwer.com",1000);
         originWish = new Wish(expectedProduct,expectedMember,1000 );
     }
 
