@@ -11,8 +11,4 @@ public record OptionNameUpdateRequestDTO(
     @Size(min = 1, max = 50)
     @Pattern(regexp = "^[\\w가-힣ㄱ-ㅎㅏ-ㅣ()\\[\\]+\\-&/_]*$", message = "( ), [ ], +, -, &, /, _ 외 특수문자는 사용할 수 없습니다.")
     String name) {
-
-    public Option toEntity(int quantity, Product product){
-        return new Option(name, quantity, product);
-    }
 }
