@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.entity.Option;
+import gift.entity.Product;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -30,5 +32,9 @@ public class OptionRequest {
 	
 	public int getQuantity() {
 		return quantity;
+	}
+	
+	public Option toEntity(Product product) {
+		return new Option(this.name, this.quantity, product);
 	}
 }
