@@ -1,8 +1,6 @@
 package gift.administrator.option;
 
-import gift.administrator.category.Category;
 import gift.administrator.product.Product;
-import gift.administrator.product.ProductDTO;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -36,6 +34,10 @@ public class OptionDTO {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public long getProductId(){
+        return productId;
     }
 
     public Option toOption(OptionDTO optionDTO, Product product){
