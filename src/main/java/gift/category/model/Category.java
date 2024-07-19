@@ -8,7 +8,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -29,8 +29,8 @@ public class Category {
         this.imgUrl = imgUrl;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
