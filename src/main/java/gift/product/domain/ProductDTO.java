@@ -68,7 +68,6 @@ public class ProductDTO {
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
-
     public List<OptionDTO> getOptionDTOList() {
         return optionDTOList;
     }

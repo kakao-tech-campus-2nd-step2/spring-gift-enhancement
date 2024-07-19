@@ -87,7 +87,6 @@ public class ProductService {
     }
     private ProductDTO convertToDTO(Product product) {
         List<OptionDTO> optionDTOList = optionService.findAllByProductId(product.getId());
-
         return new ProductDTO(
             product.getId(),
             product.getName(),
@@ -97,7 +96,6 @@ public class ProductService {
             optionDTOList
         );
     }
-
 
     private Product convertToEntity(ProductDTO productDTO) {
         Category category = categoryRepository.findById(productDTO.getCategoryId()).get();
