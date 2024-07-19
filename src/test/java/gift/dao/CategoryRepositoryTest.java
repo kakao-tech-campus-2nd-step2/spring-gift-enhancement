@@ -18,16 +18,16 @@ class CategoryRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    private final Category category = new Category.CategoryBuilder()
+            .setName("상품권")
+            .setColor("#ffffff")
+            .setImageUrl("https://product-shop.com")
+            .setDescription("")
+            .build();
+
     @Test
     @DisplayName("카테고리 추가 및 ID 조회 테스트")
     void saveAndFindById() {
-        Category category = new Category.CategoryBuilder()
-                .setName("상품권")
-                .setColor("#ffffff")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
-
         Category savedCategory = categoryRepository.save(category);
         Category foundCategory = categoryRepository.findById(savedCategory.getId())
                 .orElse(null);
@@ -39,12 +39,6 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("카테고리 ID 조회 실패 테스트")
     void findByIdFailed() {
-        Category category = new Category.CategoryBuilder()
-                .setName("상품권")
-                .setColor("#ffffff")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
         categoryRepository.save(category);
 
         Category foundCategory = categoryRepository.findById(123456789L)
@@ -57,12 +51,6 @@ class CategoryRepositoryTest {
     @DisplayName("카테고리 이름 조회 테스트")
     void findByName() {
         String name = "상품권";
-        Category category = new Category.CategoryBuilder()
-                .setName(name)
-                .setColor("#ffffff")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
         categoryRepository.save(category);
 
         Category foundCategory = categoryRepository.findByName(name)
@@ -76,12 +64,6 @@ class CategoryRepositoryTest {
     @DisplayName("카테고리 이름 조회 실패 테스트")
     void findByNameFailed() {
         String name = "교환권";
-        Category category = new Category.CategoryBuilder()
-                .setName("상품권")
-                .setColor("#ffffff")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
         categoryRepository.save(category);
 
         Category foundCategory = categoryRepository.findByName(name)
@@ -93,12 +75,6 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("회원 수정 테스트")
     void updateMember() {
-        Category category = new Category.CategoryBuilder()
-                .setName("상품권")
-                .setColor("#ffffff")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
         Category savedCategory = categoryRepository.save(category);
         savedCategory.update(
                 new CategoryRequest(
@@ -119,12 +95,6 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("회원 삭제 테스트")
     void deleteMember() {
-        Category category = new Category.CategoryBuilder()
-                .setName("상품권")
-                .setColor("#ffffff")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
         Category savedCategory = categoryRepository.save(category);
 
         categoryRepository.deleteById(savedCategory.getId());
