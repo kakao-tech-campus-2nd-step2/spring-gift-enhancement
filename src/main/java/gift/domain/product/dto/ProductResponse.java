@@ -8,13 +8,6 @@ public class ProductResponse {
     private String imageUrl;
     private Long categoryId;
 
-    public ProductResponse() {
-    }
-
-    public ProductResponse(String name, int price, String imageUrl, Long categoryId) {
-        this(null, name, price, imageUrl, categoryId);
-    }
-
     public ProductResponse(Long id, String name, int price, String imageUrl, Long categoryId) {
         this.id = id;
         this.name = name;

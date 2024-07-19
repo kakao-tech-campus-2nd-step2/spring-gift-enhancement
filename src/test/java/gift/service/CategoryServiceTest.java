@@ -14,6 +14,9 @@ import gift.domain.category.dto.CategoryResponse;
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
 import gift.domain.category.service.CategoryService;
+import gift.domain.option.repository.OptionRepository;
+import gift.domain.product.entity.Product;
+import gift.domain.product.repository.ProductRepository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -31,21 +34,25 @@ import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
+
     @InjectMocks
     private CategoryService categoryService;
     @Mock
     private CategoryRepository categoryRepository;
+    @Mock
+    private ProductRepository productRepository;
+    @Mock
+    OptionRepository optionRepository;
 
     @Test
     @DisplayName("카테고리 전체 조회 테스트")
-    void getAllCategoriesTest(){
-        List<Category> categoryList = Arrays.asList(new Category(1L,"name1", "color", "imageUrl", "description"),
-            new Category(2L,"name1", "color", "imageUrl", "description"));
+    void getAllCategoriesTest() {
+        List<Category> categoryList = Arrays.asList(createCategory(), createCategory(2L));
 
         int pageNo = 0;
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Category> categoryPage =new PageImpl<>(categoryList,pageable, categoryList.size());
+        Page<Category> categoryPage = new PageImpl<>(categoryList, pageable, categoryList.size());
 
         doReturn(categoryPage).when(categoryRepository).findAll(pageable);
 
@@ -72,15 +79,14 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 생성 테스트")
-    void createCategoryTest(){
+    void createCategoryTest() {
         // given
-        CategoryRequest request = new CategoryRequest("name", "color", "imageUrl", "description");
+        CategoryRequest request = createCategoryRequest();
+        Category newCategory = createCategory();
 
-        Category savedCategory = new Category(1L, request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
+        doReturn(newCategory).when(categoryRepository).save(any());
 
-        doReturn(savedCategory).when(categoryRepository).save(any());
-
-        CategoryResponse expected = entityToDto(savedCategory);
+        CategoryResponse expected = entityToDto(newCategory);
 
         // when
         CategoryResponse actual = categoryService.createCategory(request);
@@ -97,19 +103,19 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 수정 테스트")
-    void updateCategoryTest(){
+    void updateCategoryTest() {
         // given
         Long id = 1L;
-        CategoryRequest request = new CategoryRequest("update", "color", "imageUrl", "description");
-        Category savedCategory = spy(new Category(1L, "name", "color", "imageUrl", "description"));
+        CategoryRequest request = createCategoryRequest();
+        Category updatedCategory = createCategory();
+        Category spyUpdatedCategory = spy(updatedCategory);
 
-        doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(any());
-        doNothing().when(savedCategory).updateAll(request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
+        doReturn(Optional.of(spyUpdatedCategory)).when(categoryRepository).findById(any());
+        doNothing().when(spyUpdatedCategory)
+            .updateAll(request.getName(), request.getColor(), request.getImageUrl(),
+                request.getDescription());
 
-        Category updateCategory = new Category(1L, request.getName(), request.getColor(), request.getImageUrl(), request.getImageUrl());
-        doReturn(updateCategory).when(categoryRepository).save(any());
-
-        CategoryResponse expected = entityToDto(updateCategory);
+        CategoryResponse expected = entityToDto(updatedCategory);
 
         // when
         CategoryResponse actual = categoryService.updateCategory(id, request);
@@ -126,20 +132,40 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 삭제 테스트")
-    void deleteCategoryTest(){
+    void deleteCategoryTest() {
         Long id = 1L;
-        Category savedCategory = new Category(1L, "name", "color", "imageUrl", "description");
+        Category savedCategory = createCategory();
+        List<Product> productList = Arrays.asList(
+            new Product(1L, "test", 100, "image", savedCategory),
+            new Product(2L, "test", 100, "image", savedCategory));
 
-        doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(id);
-
+        doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(any(Long.class));
+        doReturn(productList).when(productRepository).findAllByCategory(any(Category.class));
+        doNothing().when(optionRepository).deleteByProduct(any(Product.class));
+        doNothing().when(productRepository).deleteByCategory(any(Category.class));
         // when
         categoryService.deleteCategory(id);
 
         // then
-        verify(categoryRepository, times(1)).delete(savedCategory);
+        verify(optionRepository, times(2)).deleteByProduct(any(Product.class));
+        verify(productRepository, times(1)).deleteByCategory(any(Category.class));
+        verify(categoryRepository, times(1)).delete(any(Category.class));
     }
 
-    private CategoryResponse entityToDto(Category category){
-        return new CategoryResponse(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
+    private CategoryResponse entityToDto(Category category) {
+        return new CategoryResponse(category.getId(), category.getName(), category.getColor(),
+            category.getImageUrl(), category.getDescription());
+    }
+
+    private CategoryRequest createCategoryRequest() {
+        return new CategoryRequest("name", "color", "imageUrl", "description");
+    }
+
+    private Category createCategory() {
+        return createCategory(1L);
+    }
+
+    private Category createCategory(Long id) {
+        return new Category(id, "name", "color", "imageUrl", "description");
     }
 }

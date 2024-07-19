@@ -1,4 +1,4 @@
-package gift.exception;
+package gift.domain.member.exception;
 
 public class MemberAuthorizationException extends RuntimeException {
 

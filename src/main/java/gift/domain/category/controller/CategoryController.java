@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
+
     private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
@@ -29,28 +30,30 @@ public class CategoryController {
     public ResponseEntity<Page<CategoryResponse>> getAllCategories(
         @RequestParam(defaultValue = "0") int pageNo,
         @RequestParam(defaultValue = "10") int pageSize
-    ){
+    ) {
         Page<CategoryResponse> categoryPage = categoryService.getAllCategories(pageNo, pageSize);
-
-        return new ResponseEntity<>(categoryPage,HttpStatus.OK);
+        return ResponseEntity.ok(categoryPage);
     }
 
     @PostMapping()
-    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request){
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
         CategoryResponse response = categoryService.createCategory(request);
 
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryRequest request){
+    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable("id") Long id,
+        @RequestBody CategoryRequest request) {
         CategoryResponse response = categoryService.updateCategory(id, request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable("id") Long id){
+    public ResponseEntity<Void> deleteCategory(@PathVariable("id") Long id) {
         categoryService.deleteCategory(id);
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

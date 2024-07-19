@@ -32,14 +32,16 @@ public class MemberController {
         @RequestParam(defaultValue = "0") int pageNo,
         @RequestParam(defaultValue = "10") int pageSize
     ) {
-        return new ResponseEntity<>(memberService.getAllMember(pageNo, pageSize), HttpStatus.OK);
+        Page<MemberResponse> responses = memberService.getAllMember(pageNo, pageSize);
+        return ResponseEntity.ok(responses);
     }
 
     @PostMapping("/register")
     public ResponseEntity<JwtResponse> register(@RequestBody MemberRequest memberRequest) {
         String token = memberService.register(memberRequest);
 
-        return new ResponseEntity<>(new JwtResponse(token), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(new JwtResponse(token));
     }
 
     @PostMapping("/login")
@@ -48,14 +50,14 @@ public class MemberController {
         String token = memberService.login(memberRequest);
 
         if (token != null) {
-            return new ResponseEntity<>(new JwtResponse(token), HttpStatus.OK);
+            return ResponseEntity.ok(new JwtResponse(token));
         }
-        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         memberService.deleteMember(id);
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

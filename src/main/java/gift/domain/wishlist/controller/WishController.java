@@ -29,18 +29,17 @@ public class WishController {
         @RequestParam(defaultValue = "0") int pageNo,
         @RequestParam(defaultValue = "10") int pageSize
     ) {
-
-        return new ResponseEntity<>(wishService.getWishesByMember(member, pageNo, pageSize),
-            HttpStatus.OK);
+        Page<WishResponse> response = wishService.getWishesByMember(member, pageNo, pageSize);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
     public ResponseEntity<WishResponse> createWish(@RequestBody ProductIdRequest productIdRequest,
         @LoginMember Member member) {
         WishRequest wishRequest = new WishRequest(member.getId(), productIdRequest.getProductId());
-        WishResponse wishResponse = wishService.createWish(wishRequest);
-
-        return new ResponseEntity<>(wishResponse, HttpStatus.CREATED);
+        WishResponse response = wishService.createWish(wishRequest);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(response);
     }
 
 
@@ -49,6 +48,6 @@ public class WishController {
         @LoginMember Member member) {
         wishService.deleteWish(id, member);
 
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

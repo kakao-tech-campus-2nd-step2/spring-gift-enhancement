@@ -48,12 +48,11 @@ class WishServiceTest {
     @DisplayName("getWishesByMember 테스트")
     void getWishesByMemberTest() {
         // given
-        Member savedMember = new Member(1L, "email@google.co.kr", "password");
+        Member savedMember = createMember();
 
-        Category savedCategory1 = new Category(1L, "test", "color", "image", "description");
-        Category savedCategory2 = new Category(2L, "test", "color", "image", "description");
-        Product product1 = new Product("product1", 1000, "product1.jpg",savedCategory1);
-        Product product2 = new Product("product2", 2000, "product2.jpg",savedCategory2);
+        Product product1 = createProduct();
+        Product product2 = createProduct(2L,
+            new Category(2L, "test", "color", "image", "description"));
 
         Wish wish1 = new Wish(savedMember, product1);
         Wish wish2 = new Wish(savedMember, product2);
@@ -89,9 +88,8 @@ class WishServiceTest {
         // given
         WishRequest wishRequest = new WishRequest(1L, 1L);
 
-        Member savedMember = new Member(1L, "email@google.com", "password");
-        Category savedCategory = new Category(1L, "test", "color", "image", "description");
-        Product savedProduct = new Product(1L, "test", 1000, "test.jpg", savedCategory);
+        Member savedMember = createMember();
+        Product savedProduct = createProduct();
 
         Wish saveWish = new Wish(savedMember, savedProduct);
         WishResponse expected = entityToDto(saveWish);
@@ -115,9 +113,8 @@ class WishServiceTest {
     @DisplayName("위시 리시트 삭제 테스트")
     void deleteWishTest() {
         Long id = 1L;
-        Member savedMember = new Member(1L, "email@google.co.kr", "password");
-        Category savedCategory = new Category(1L, "test", "color", "image", "description");
-        Product savedProduct = new Product(1L, "test", 1000, "test.jpg", savedCategory);
+        Member savedMember = createMember();
+        Product savedProduct = createProduct();
 
         Wish wish = new Wish(savedMember, savedProduct);
 
@@ -125,12 +122,24 @@ class WishServiceTest {
 
         wishService.deleteWish(id, savedMember);
 
-        verify(wishRepository, times(1)).delete(wish);
+        verify(wishRepository, times(1)).delete(any(Wish.class));
 
     }
 
     private WishResponse entityToDto(Wish wish) {
         return new WishResponse(wish.getId(), wish.getMember().getId(),
             wish.getProduct().getId());
+    }
+
+    Member createMember() {
+        return new Member(1L, "email@google.co.kr", "password");
+    }
+
+    private Product createProduct() {
+        return createProduct(1L, new Category(1L, "test", "color", "image", "description"));
+    }
+
+    private Product createProduct(Long id, Category category) {
+        return new Product(id, "test", 1000, "test.jpg", category);
     }
 }

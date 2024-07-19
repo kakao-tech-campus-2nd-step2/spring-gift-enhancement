@@ -11,7 +11,6 @@ import gift.domain.member.entity.Member;
 import gift.domain.member.service.MemberService;
 import gift.domain.member.repository.MemberRepository;
 import gift.util.JwtUtil;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,8 +34,8 @@ class MemberServiceTest {
     @DisplayName("회원가입 테스트")
     void registerTest() {
         //given
-        MemberRequest memberRequest = new MemberRequest("test@email.com", "password");
-        Member savedMember = new Member(memberRequest.getEmail(), memberRequest.getPassword());
+        MemberRequest memberRequest = createMemberRequest();
+        Member savedMember = createMember();
 
         doReturn(savedMember).when(memberRepository).save(any(Member.class));
         doReturn("jwtToken").when(jwtUtil).generateToken(any(Member.class));
@@ -52,8 +51,8 @@ class MemberServiceTest {
     @DisplayName("로그인 성공 테스트")
     void loginSuccessTest() {
         // given
-        MemberRequest memberRequest = new MemberRequest("test@google.co.kr", "password");
-        Member savedMember = new Member(memberRequest.getEmail(), memberRequest.getPassword());
+        MemberRequest memberRequest = createMemberRequest();
+        Member savedMember = createMember();
 
         doReturn(Optional.of(savedMember)).when(memberRepository).findByEmail(any(String.class));
         doReturn("jwtToken").when(jwtUtil).generateToken(any(Member.class));
@@ -69,8 +68,8 @@ class MemberServiceTest {
     @DisplayName("비밀번호 불일치 시 로그인 실패 테스트")
     void loginFailTest() {
         // given
-        MemberRequest memberRequest = new MemberRequest("test@google.co.kr", "wrongPassword");
-        Member savedMember = new Member(memberRequest.getEmail(), "password");
+        MemberRequest memberRequest = createMemberRequest("wrongPassword");
+        Member savedMember = createMember();
 
         doReturn(Optional.of(savedMember)).when(memberRepository).findByEmail(any(String.class));
 
@@ -86,13 +85,13 @@ class MemberServiceTest {
     void deleteMemberTest() {
         // given
         Long id = 1L;
-        Member savedMember = new Member(1L, "test@gmail.co.kr", "password");
+        Member savedMember = createMember();
 
         // when
         doReturn(Optional.of(savedMember)).when(memberRepository).findById(id);
         memberService.deleteMember(id);
         // then
-        verify(memberRepository, times(1)).delete(savedMember);
+        verify(memberRepository, times(1)).delete(any(Member.class));
     }
 
     @Test
@@ -100,7 +99,7 @@ class MemberServiceTest {
     void getMemberFromTokenTest() {
         // given
         String RequestToken = "jwtToken";
-        Member savedMember = new Member("test@google.co.kr", "password");
+        Member savedMember = createMember();
 
         doReturn("email").when(jwtUtil).getEmailFromToken(RequestToken);
         doReturn(Optional.of(savedMember)).when(memberRepository).findByEmail("email");
@@ -110,5 +109,17 @@ class MemberServiceTest {
 
         // then
         assertThat(responseMember.getEmail()).isEqualTo(savedMember.getEmail());
+    }
+
+    MemberRequest createMemberRequest() {
+        return createMemberRequest("password");
+    }
+
+    MemberRequest createMemberRequest(String password) {
+        return new MemberRequest("test@google.co.kr", password);
+    }
+
+    Member createMember() {
+        return new Member(1L, "test@gmail.co.kr", "password");
     }
 }

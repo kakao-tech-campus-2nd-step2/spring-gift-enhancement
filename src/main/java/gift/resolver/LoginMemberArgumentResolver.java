@@ -1,7 +1,7 @@
 package gift.resolver;
 
 import gift.annotation.LoginMember;
-import gift.exception.MemberAuthorizationException;
+import gift.domain.member.exception.MemberAuthorizationException;
 import gift.domain.member.service.MemberService;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

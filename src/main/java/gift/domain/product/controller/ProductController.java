@@ -1,5 +1,9 @@
 package gift.domain.product.controller;
 
+import gift.domain.option.dto.OptionRequest;
+import gift.domain.option.dto.OptionResponse;
+import gift.domain.option.service.OptionService;
+import gift.domain.product.dto.ProductCreateResponse;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.dto.ProductResponse;
 import gift.domain.product.service.ProductService;
@@ -24,9 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @GetMapping()
@@ -34,31 +40,49 @@ public class ProductController {
         @RequestParam(defaultValue = "0") int pageNo,
         @RequestParam(defaultValue = "10") int pageSize
     ) {
-        return new ResponseEntity<>(productService.getAllProducts(pageNo, pageSize), HttpStatus.OK);
+        Page<ProductResponse> response = productService.getAllProducts(pageNo, pageSize);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(productService.getProduct(id), HttpStatus.OK);
+        ProductResponse response = productService.getProduct(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<OptionResponse>> getProductOptions(@PathVariable("id") Long id) {
+        List<OptionResponse> response = optionService.getProductOptions(id);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping()
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
-        ProductResponse productResponse = productService.createProduct(productRequest);
-        return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
+    public ResponseEntity<ProductCreateResponse> createProduct(
+        @RequestBody @Valid ProductRequest productRequest) {
+        ProductCreateResponse response = productService.createProduct(productRequest);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(response);
     }
+
+    @PostMapping("/{id}/options")
+    public ResponseEntity<OptionResponse> addOptionToProduct(@PathVariable("id") Long id,
+        @Valid @RequestBody OptionRequest request) {
+        OptionResponse response = optionService.addOptionToProduct(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(response);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable("id") Long id,
         @RequestBody @Valid ProductRequest productRequest) {
-        ProductResponse productResponse = productService.updateProduct(id, productRequest);
-
-        return new ResponseEntity<>(productResponse, HttpStatus.OK);
+        ProductResponse response = productService.updateProduct(id, productRequest);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductResponse> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,10 +1,14 @@
 package gift.domain.category.entity;
 
+import gift.domain.product.entity.Product;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -39,6 +43,7 @@ public class Category {
         this.imageUrl = imageUrl;
         this.description = description;
     }
+
     public Long getId() {
         return id;
     }
@@ -59,7 +64,7 @@ public class Category {
         return description;
     }
 
-    public void updateAll(String name, String color, String imageUrl, String description){
+    public void updateAll(String name, String color, String imageUrl, String description) {
         this.name = name;
         this.color = color;
         this.imageUrl = imageUrl;
