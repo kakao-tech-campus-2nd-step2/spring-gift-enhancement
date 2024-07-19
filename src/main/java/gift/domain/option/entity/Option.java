@@ -1,6 +1,6 @@
 package gift.domain.option.entity;
 
-import gift.domain.option.exception.DuplicateNameException;
+import gift.domain.option.exception.DuplicateOptionNameException;
 import gift.domain.product.entity.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 public class Option {
@@ -72,7 +70,7 @@ public class Option {
     public void checkDuplicateName(List<Option> optionList) {
 
         if (optionList.stream().map(Option::getName).anyMatch((name)->name.equals(this.name))) {
-            throw new DuplicateNameException(this.name + "은 중복된 이름입니다.");
+            throw new DuplicateOptionNameException(this.name + "은 중복된 이름입니다.");
         }
     }
     public void addProduct(Product product) {
