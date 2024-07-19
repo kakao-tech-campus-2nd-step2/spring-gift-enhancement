@@ -34,7 +34,7 @@ public class OptionService {
     }
 
     @Transactional
-    public Long addOption(Long productId, OptionRequest optionRequest) {
+    public Long addOption(Long productId, OptionRequest optionRequest) throws ProductException {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductException(
                 ProductErrorCode.NOT_FOUND));
@@ -46,7 +46,7 @@ public class OptionService {
     }
 
     @Transactional
-    public void updateOption(Long optionId, OptionRequest optionRequest) {
+    public void updateOption(Long optionId, OptionRequest optionRequest) throws OptionException {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
         option.updateInfo(optionRequest.getName(), optionRequest.getQuantity());

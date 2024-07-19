@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MemberException.class)
     public ResponseEntity<String> handleMemberException(MemberException memberException) {
-        return ResponseEntity.status(memberException.getMemberErrorCode().getHttpStatus())
+        return ResponseEntity.status(memberException.getHttpStatus())
             .body(memberException.getMessage());
     }
 }

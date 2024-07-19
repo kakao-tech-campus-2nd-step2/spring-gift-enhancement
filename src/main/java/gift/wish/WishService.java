@@ -33,7 +33,7 @@ public class WishService {
     }
 
     @Transactional
-    public Long addProductToWishList(WishRequestDto wishRequestDto, LoginMemberDto loginMemberDto) {
+    public Long addProductToWishList(WishRequestDto wishRequestDto, LoginMemberDto loginMemberDto) throws ProductException {
         Product product = productRepository.findById(wishRequestDto.getProductId())
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
         Wish wish = new Wish(loginMemberDto.toEntity(), product, wishRequestDto.getCount());
@@ -50,7 +50,7 @@ public class WishService {
             return;
         }
         Wish wish = wishRepository.findByMemberIdAndProductId(loginMemberDto.getId(),
-            wishRequestDto.getProductId());
+            wishRequestDto.getProductId()).orElseThrow();
         wish.changeCount(wishRequestDto.getCount());
     }
 

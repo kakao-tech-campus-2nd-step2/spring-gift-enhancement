@@ -38,7 +38,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Long insertProduct(ProductRequestDto productRequestDto) throws ProductException {
+    public Long insertProduct(ProductRequestDto productRequestDto) throws CategoryException, ProductException {
         Category category = categoryRepository.findById(productRequestDto.getCategoryId())
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         Product product = new Product(productRequestDto.getName(), productRequestDto.getPrice(),
@@ -49,7 +49,7 @@ public class ProductService {
 
     @Transactional
     public void updateProductById(Long id, ProductRequestDto productRequestDto)
-        throws ProductException {
+        throws CategoryException, ProductException {
         Category category = categoryRepository.findById(productRequestDto.getCategoryId())
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         Product product = productRepository.findById(id)

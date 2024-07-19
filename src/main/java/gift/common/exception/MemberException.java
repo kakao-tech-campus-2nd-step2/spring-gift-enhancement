@@ -16,7 +16,7 @@ public class MemberException extends RuntimeException {
         this.detailMessage = memberErrorCode.getMessage();
     }
 
-    public MemberErrorCode getMemberErrorCode() {
-        return memberErrorCode;
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 }

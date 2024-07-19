@@ -15,8 +15,4 @@ public class OptionException extends RuntimeException {
         this.httpStatus = optionErrorCode.getHttpStatus();
         this.detailedMessage = optionErrorCode.getMessage();
     }
-
-    public String getDetailedMessage() {
-        return detailedMessage;
-    }
 }

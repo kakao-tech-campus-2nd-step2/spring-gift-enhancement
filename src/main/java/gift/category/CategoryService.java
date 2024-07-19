@@ -26,7 +26,7 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryResponseDto getCategoryById(Long id) {
+    public CategoryResponseDto getCategoryById(Long id) throws CategoryException {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         return CategoryResponseDto.from(category);
@@ -39,7 +39,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void updateCategory(CategoryRequestDto categoryRequestDto, Long id) {
+    public void updateCategory(CategoryRequestDto categoryRequestDto, Long id) throws CategoryException {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         category.updateInfo(categoryRequestDto.toEntity());

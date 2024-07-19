@@ -17,7 +17,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public LoginMemberDto selectLoginMemberById(Long id) {
+    public LoginMemberDto selectLoginMemberById(Long id) throws MemberException {
         return memberRepository.findById(id)
             .map(LoginMemberDto::from)
             .orElseThrow(() -> new MemberException(MemberErrorCode.FAILURE_LOGIN));
