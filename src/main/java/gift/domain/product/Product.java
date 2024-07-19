@@ -15,8 +15,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 
 @Entity
@@ -36,7 +37,7 @@ public class Product extends BaseTimeEntity {
 
     // 상품 삭제 시 옵션도 같이 삭제(옵션은 하나의 상품에 종속)
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<Option> optionSet;
+    private List<Option> options = new ArrayList<>();
     private int price;
     private String imageUrl;
     protected Product() {
@@ -106,6 +107,8 @@ public class Product extends BaseTimeEntity {
         return "Product{" +
                "id=" + id +
                ", name='" + name + '\'' +
+               ", category=" + category +
+               ", options=" + options +
                ", price=" + price +
                ", imageUrl='" + imageUrl + '\'' +
                '}';
@@ -144,10 +147,8 @@ public class Product extends BaseTimeEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void proxyInitialize(String name, int price, String imageUrl) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
 
+    public List<Option> getOptions() {
+        return options;
+    }
 }
