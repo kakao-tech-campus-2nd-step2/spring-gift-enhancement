@@ -82,6 +82,13 @@ public class ExceptionController {
     }
 
     @ResponseBody
+    @ExceptionHandler(OptionQuantityNotMinusException.class)
+    public ResponseEntity<ErrorResult> optionQuantityHandler(OptionQuantityNotMinusException e){
+        ErrorResult errorResult = new ErrorResult("400", e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseBody
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResult> errorHandler(Exception e) {
         ErrorResult errorResult = new ErrorResult("500", e.getMessage());
