@@ -4,6 +4,7 @@ import gift.dto.OptionDTO;
 import gift.service.OptionService;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,22 +25,22 @@ public class OptionController {
     }
 
     @GetMapping
-    public List<OptionDTO> getOptions(@PathVariable("product_id") long productId) {
-        return optionService.getOptions(productId);
+    public ResponseEntity<List<OptionDTO>> getOptions(@PathVariable("product_id") long productId) {
+        return ResponseEntity.ok().body(optionService.getOptions(productId));
     }
 
     @PostMapping
-    public OptionDTO addOption(@PathVariable("product_id") long productId, @Valid @RequestBody OptionDTO optionDTO) {
-        return optionService.addOption(productId, optionDTO);
+    public ResponseEntity<OptionDTO> addOption(@PathVariable("product_id") long productId, @Valid @RequestBody OptionDTO optionDTO) {
+        return ResponseEntity.ok().body(optionService.addOption(productId, optionDTO));
     }
 
     @PutMapping
-    public OptionDTO updateOption(@PathVariable("product_id") long productId, @Valid @RequestBody OptionDTO optionDTO) {
-        return optionService.updateOption(productId, optionDTO);
+    public ResponseEntity<OptionDTO> updateOption(@PathVariable("product_id") long productId, @Valid @RequestBody OptionDTO optionDTO) {
+        return ResponseEntity.ok().body(optionService.updateOption(productId, optionDTO));
     }
 
     @DeleteMapping("{id}")
-    public OptionDTO deleteOption(@PathVariable("id") long id) {
-        return optionService.deleteOption(id);
+    public ResponseEntity<OptionDTO> deleteOption(@PathVariable("id") long id) {
+        return ResponseEntity.ok().body(optionService.deleteOption(id));
     }
 }

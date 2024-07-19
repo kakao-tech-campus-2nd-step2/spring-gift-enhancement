@@ -3,7 +3,6 @@ package gift.controller;
 import gift.dto.ProductDTO;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
-import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
-    private static final String BASE_PATH = "/api/products";
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -43,7 +40,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO) {
         ProductDTO addedProductDTO = productService.addProduct(productDTO);
-        return ResponseEntity.created(URI.create(BASE_PATH + addedProductDTO.id())).body(addedProductDTO);
+        return ResponseEntity.ok().body(addedProductDTO);
     }
 
     @PutMapping("/{id}")

@@ -3,7 +3,6 @@ package gift.controller;
 import gift.dto.CategoryDTO;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
-import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private static final String BASE_PATH = "/api/categories";
 
     @Autowired
     public CategoryController(CategoryService categoryService) {
@@ -41,7 +39,7 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<CategoryDTO> addCategory(@RequestBody CategoryDTO categoryDTO) {
         CategoryDTO addedcategoryDTO = categoryService.addCategory(categoryDTO);
-        return ResponseEntity.created(URI.create(BASE_PATH + addedcategoryDTO.id())).body(addedcategoryDTO);
+        return ResponseEntity.ok().body(addedcategoryDTO);
     }
 
     @PutMapping("/{id}")
