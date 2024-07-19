@@ -1,18 +1,24 @@
 package gift.product.dto;
 
 import gift.category.entity.Category;
+import gift.product.entity.Option;
 import gift.product.entity.Product;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductDto {
 
@@ -42,17 +48,22 @@ public class ProductDto {
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
 
+  @Size(min = 1)
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<OptionDto> options = new ArrayList<>();
 
   public ProductDto() {
 
   }
 
-  public ProductDto(Long id, String name, int price, String imageUrl, Category category) {
+  public ProductDto(Long id, String name, int price, String imageUrl, Category category,
+      List<OptionDto> options) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
     this.category = category;
+    this.options = options;
   }
 
   public static ProductDto toDto(Product product) {
@@ -61,19 +72,28 @@ public class ProductDto {
         product.getName(),
         product.getPrice(),
         product.getImageUrl(),
-        product.getCategory());
+        product.getCategory(),
+        product.getOptions().stream().map(OptionDto::toDto).collect(Collectors.toList())
+    );
   }
 
   public static Product toEntity(ProductDto productDto) {
-    return new Product(
+    Product product = new Product(
         productDto.getId(),
         productDto.getName(),
         productDto.getPrice(),
         productDto.getImageUrl(),
-        productDto.getCategory()
+        productDto.getCategory(),
+        new ArrayList<>()
     );
-  }
 
+    List<Option> options = productDto.getOptions().stream()
+        .map(optionDto -> OptionDto.toEntity(optionDto, product))
+        .collect(Collectors.toList());
+    product.setOptions(options);
+
+    return product;
+  }
 
   public Long getId() {
     return id;
@@ -113,5 +133,13 @@ public class ProductDto {
 
   public void setCategory(Category category) {
     this.category = category;
+  }
+
+  public List<OptionDto> getOptions() {
+    return options;
+  }
+
+  public void setOptions(List<OptionDto> options) {
+    this.options = options;
   }
 }

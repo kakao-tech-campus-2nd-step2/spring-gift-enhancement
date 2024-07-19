@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gift.category.entity.Category;
 import gift.category.repository.CategoryRepository;
 import gift.product.entity.Product;
+import gift.product.entity.Option;
 import gift.product.repository.ProductRepository;
 import gift.user.entity.User;
 import gift.user.repository.UserRepository;
@@ -35,12 +36,6 @@ public class WishRepositoryTest {
   @Autowired
   private CategoryRepository categoryRepository;
 
-  private Category createAndSaveCategory(String name) {
-    Category category = new Category();
-    category.setName(name);
-    return categoryRepository.save(category);
-  }
-
   @BeforeEach
   public void setUp() {
     wishRepository.deleteAll();
@@ -49,12 +44,26 @@ public class WishRepositoryTest {
     categoryRepository.deleteAll();
   }
 
+  private Category createAndSaveCategory(String name) {
+    Category category = new Category();
+    category.setName(name);
+    return categoryRepository.save(category);
+  }
+
   private Product createAndSaveProduct(String name, int price, String imageUrl, Category category) {
     Product product = new Product();
     product.setName(name);
     product.setPrice(price);
     product.setImageUrl(imageUrl);
     product.setCategory(category);
+
+    // 기본 옵션 추가
+    Option defaultOption = new Option();
+    defaultOption.setName("Large");
+    defaultOption.setQuantity(1);
+    defaultOption.setProduct(product);
+    product.addOption(defaultOption);
+
     return productRepository.save(product);
   }
 
@@ -87,6 +96,8 @@ public class WishRepositoryTest {
     assertThat(foundWish).isPresent();
     assertThat(foundWish.get().getUser().getEmail()).isEqualTo("test@example.com");
     assertThat(foundWish.get().getProduct().getId()).isEqualTo(product.getId());
+    assertThat(foundWish.get().getProduct().getOptions()).hasSize(1);
+    assertThat(foundWish.get().getProduct().getOptions().get(0).getName()).isEqualTo("Large");
   }
 
   @Test
@@ -103,8 +114,11 @@ public class WishRepositoryTest {
     List<Wish> wishes = wishRepository.findByUserId(user.getId());
 
     // then
-    assertThat(wishes).isNotEmpty();
-    assertThat(wishes.size()).isEqualTo(2);
+    assertThat(wishes).hasSize(2);
+    wishes.forEach(wish -> {
+      assertThat(wish.getProduct().getOptions()).hasSize(1);
+      assertThat(wish.getProduct().getOptions().get(0).getName()).isEqualTo("Large");
+    });
   }
 
   @Test
@@ -119,8 +133,9 @@ public class WishRepositoryTest {
     List<Wish> wishes = wishRepository.findByProductId(product.getId());
 
     // then
-    assertThat(wishes).isNotEmpty();
-    assertThat(wishes.size()).isEqualTo(1);
+    assertThat(wishes).hasSize(1);
+    assertThat(wishes.get(0).getProduct().getOptions()).hasSize(1);
+    assertThat(wishes.get(0).getProduct().getOptions().get(0).getName()).isEqualTo("Large");
   }
 
   @Test
@@ -155,9 +170,12 @@ public class WishRepositoryTest {
     Page<Wish> wishesPage = wishRepository.findByUserId(user.getId(), pageable);
 
     // then
-    assertThat(wishesPage.getContent()).isNotEmpty();
-    assertThat(wishesPage.getContent().size()).isEqualTo(10);
+    assertThat(wishesPage.getContent()).hasSize(10);
     assertThat(wishesPage.getTotalElements()).isEqualTo(15);
     assertThat(wishesPage.getTotalPages()).isEqualTo(2);
+    wishesPage.getContent().forEach(wish -> {
+      assertThat(wish.getProduct().getOptions()).hasSize(1);
+      assertThat(wish.getProduct().getOptions().get(0).getName()).isEqualTo("Large");
+    });
   }
 }

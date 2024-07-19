@@ -22,6 +22,12 @@ VALUES ('user1@example.com', 'password1', 'ROLE_USER'),
        ('user4@example.com', 'password4', 'ROLE_USER'),
        ('user5@example.com', 'password5', 'ROLE_USER');
 
+INSERT INTO option (product_id, name, quantity)
+VALUES ((SELECT id FROM product WHERE name = '아메리카노'), '크기', 100),
+       ((SELECT id FROM product WHERE name = '딸기 딜라이트'), '추가 샷', 50),
+       ((SELECT id FROM product WHERE name = '딸기 아사이'), '휘핑 크림', 30);
+
+
 INSERT INTO wish (user_id, product_id)
 VALUES ((SELECT id FROM users WHERE email = 'user1@example.com'),
         (SELECT id FROM product WHERE name = '딸기 딜라이트')),
