@@ -19,7 +19,7 @@ public class MemberService {
     public LoginMemberDto selectLoginMemberById(Long id) {
         return memberRepository.findById(id)
             .map(LoginMemberDto::from)
-            .orElseThrow(() -> new IllegalArgumentException("member 값이 잘못되었습니다."));
+            .orElseThrow();
     }
 
     @Transactional

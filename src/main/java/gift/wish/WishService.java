@@ -1,6 +1,8 @@
 package gift.wish;
 
 import gift.common.auth.LoginMemberDto;
+import gift.common.exception.ProductException;
+import gift.product.ProductErrorCode;
 import gift.product.ProductRepository;
 import gift.product.model.Product;
 import gift.wish.model.Wish;
@@ -33,7 +35,7 @@ public class WishService {
     @Transactional
     public Long addProductToWishList(WishRequestDto wishRequestDto, LoginMemberDto loginMemberDto) {
         Product product = productRepository.findById(wishRequestDto.getProductId())
-            .orElseThrow(() -> new IllegalArgumentException("Wish 값이 잘못되었습니다."));
+            .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
         Wish wish = new Wish(loginMemberDto.toEntity(), product, wishRequestDto.getCount());
         wishRepository.save(wish);
         return wish.getId();

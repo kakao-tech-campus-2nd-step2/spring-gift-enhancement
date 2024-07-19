@@ -32,7 +32,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponseDto getProductById(Long id) {
         return ProductResponseDto.from(productRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Product 값이 잘못되었습니다.")));
+            .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND)));
     }
 
     @Transactional
@@ -51,7 +51,7 @@ public class ProductService {
         Category category = categoryRepository.findById(productRequestDto.getCategoryId())
             .orElseThrow(() -> new IllegalArgumentException("Category 값이 잘못되었습니다."));
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Product 값이 잘못되었습니다."));
+            .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
         product.updateInfo(productRequestDto.getName(), productRequestDto.getPrice(),
             productRequestDto.getImageUrl(), category);
     }
