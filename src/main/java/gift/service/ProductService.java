@@ -30,9 +30,7 @@ public class ProductService {
     }
 
     /**
-     * 상품을 먼저 추가한 뒤, 옵션들을 추가.
-     *
-     * @param productRequest
+     * 상품을 먼저 등록한 뒤, 옵션들을 추가. 상품 등록이 실패하여 savedProduct가 null이면 옵션을 추가하지 않음.
      */
     public void addProduct(ProductRequest productRequest) {
         productJpaDao.findByName(productRequest.getName())
@@ -45,18 +43,19 @@ public class ProductService {
         addOptions(productRequest, savedProduct);
     }
 
+    /**
+     * 상품과 카테고리 존재하는지 확인 후 수정.
+     */
     @Transactional
     public void editProduct(ProductRequest productRequest) {
-        Product targetProduct = productJpaDao.findById(productRequest.getId())
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
+        Product targetProduct = findProductByIdOrElseThrow(productRequest.getId());
         Category category = categoryJpaDao.findById(productRequest.getCategoryId())
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
         targetProduct.updateProduct(productRequest, category);
     }
 
     public void deleteProduct(Long id) {
-        productJpaDao.findById(id)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
+        findProductByIdOrElseThrow(id);
         productJpaDao.deleteById(id);
     }
 
@@ -65,9 +64,16 @@ public class ProductService {
     }
 
     public ProductResponse getProduct(Long id) {
-        Product product = productJpaDao.findById(id)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
+        Product product = findProductByIdOrElseThrow(id);
         return new ProductResponse(product);
+    }
+
+    /**
+     * 해당 상품이 존재하면 반환. 아니면 NoSuchElementException
+     */
+    private Product findProductByIdOrElseThrow(Long id) {
+        return productJpaDao.findById(id)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
     }
 
     /**
