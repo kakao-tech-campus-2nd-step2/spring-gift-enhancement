@@ -21,6 +21,8 @@ public class OptionDTO {
     private int quantity;
     private Long productId;
 
+    public OptionDTO(){}
+
     public OptionDTO(String name, int quantity, long productId) {
         this.name = name;
         this.quantity = quantity;
@@ -39,8 +41,8 @@ public class OptionDTO {
         return productId;
     }
 
-    public Option toOption(OptionDTO optionDTO, Product product){
-        return new Option(optionDTO.getName(), optionDTO.getQuantity(), product);
+    public Option toOption(Product product){
+        return new Option(name, quantity, product);
     }
 
     public static OptionDTO fromOption(Option option) {

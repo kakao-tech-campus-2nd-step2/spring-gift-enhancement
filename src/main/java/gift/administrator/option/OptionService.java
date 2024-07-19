@@ -1,8 +1,6 @@
 package gift.administrator.option;
 
 import gift.administrator.product.Product;
-import gift.administrator.product.ProductDTO;
-import gift.administrator.product.ProductService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -12,11 +10,9 @@ import org.springframework.stereotype.Service;
 public class OptionService {
 
     private final OptionRepository optionRepository;
-    private final ProductService productService;
 
-    public OptionService(OptionRepository optionRepository, ProductService productService) {
+    public OptionService(OptionRepository optionRepository) {
         this.optionRepository = optionRepository;
-        this.productService = productService;
     }
 
     public List<OptionDTO> getAllOptionsByProductId(long productId) {
@@ -32,17 +28,13 @@ public class OptionService {
         return OptionDTO.fromOption(optionRepository.findById(optionId).orElseThrow(NotFoundException::new));
     }
 
-    public OptionDTO addOptionByProductId(long productId, OptionDTO optionDTO)
-        throws NotFoundException {
-        ProductDTO productDTO = productService.getProductById(productId);
-        Product product = productDTO.toProduct(productDTO,
-            productService.getCategoryById(productDTO.getCategoryId()));
-        Option option = optionDTO.toOption(optionDTO, product);
+    public OptionDTO addOptionByProductId(long productId, OptionDTO optionDTO, Product product){
+        Option option = optionDTO.toOption(product);
         product.addOption(option);
         return OptionDTO.fromOption(optionRepository.save(option));
     }
 
-    public List<OptionDTO> addOptionsByProductId(long productId, List<OptionDTO> options)
+    public List<OptionDTO> addOptionsByProductId(long productId, List<OptionDTO> options, Product product)
         throws NotFoundException {
         for(OptionDTO optionDTO : options){
             if(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId)){
@@ -51,12 +43,30 @@ public class OptionService {
         }
         List<OptionDTO> optionDTOList = new ArrayList<>();
         for (OptionDTO optionDTO : options) {
-            optionDTOList.add(addOptionByProductId(productId, optionDTO));
+            optionDTOList.add(addOptionByProductId(productId, optionDTO, product));
         }
         return optionDTOList;
     }
 
-    public OptionDTO updateOptionByOptionId(long optionId, OptionDTO optionDTO)
+    public List<OptionDTO> addOptions(List<OptionDTO> options, Product product){
+        for(OptionDTO optionDTO : options){
+            if(optionRepository.existsByName(optionDTO.getName())){
+                throw new IllegalArgumentException("옵션 이름은 같은 상품 내에서 중복될 수 없습니다.");
+            }
+        }
+        List<OptionDTO> optionDTOList = new ArrayList<>();
+        for (OptionDTO optionDTO : options) {
+            optionDTOList.add(addOption(optionDTO, product));
+        }
+        return optionDTOList;
+    }
+
+    public OptionDTO addOption(OptionDTO optionDTO, Product product){
+        Option option = optionDTO.toOption(product);
+        return OptionDTO.fromOption(optionRepository.save(option));
+    }
+
+    public OptionDTO updateOptionByOptionId(long optionId, OptionDTO optionDTO, Product product)
         throws NotFoundException {
         Option option = optionRepository.findById(optionId).orElseThrow(NotFoundException::new);
         if(optionRepository.existsByNameAndProductIdAndIdNot(option.getName(),
@@ -64,12 +74,13 @@ public class OptionService {
             throw new IllegalArgumentException("옵션 이름은 같은 상품 내에서 중복될 수 없습니다.");
         }
         option.getProduct().removeOption(option);
-        ProductDTO productDTO = productService.getProductById(optionDTO.getProductId());
-        Product product = productDTO.toProduct(productDTO,
-            productService.getCategoryById(productDTO.getCategoryId()));
         option.update(option.getName(), option.getQuantity(), product);
         option.getProduct().addOption(option);
         return OptionDTO.fromOption(optionRepository.save(option));
+    }
+
+    public void deleteOptionByProductId(long productId){
+        optionRepository.deleteByProductId(productId);
     }
 
     public void deleteOptionByOptionId(long optionId) throws NotFoundException {

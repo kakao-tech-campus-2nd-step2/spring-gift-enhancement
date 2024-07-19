@@ -6,8 +6,10 @@ import gift.administrator.category.CategoryService;
 import gift.administrator.option.Option;
 import gift.administrator.option.OptionDTO;
 import gift.administrator.option.OptionService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,11 +26,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
     public ProductService(ProductRepository productRepository,
-        CategoryService categoryService) {
+        CategoryService categoryService, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     public Page<ProductDTO> getAllProducts(int page, int size, String sortBy, Direction direction) {
@@ -54,37 +58,42 @@ public class ProductService {
         return productRepository.existsByName(name);
     }
 
-    public ProductDTO addProduct(ProductDTO product) throws NotFoundException {
-        validateProductOptions(product);
-        if (productRepository.existsByName(product.getName())) {
+    public ProductDTO addProduct(ProductDTO productDTO) throws NotFoundException {
+        validateProductOptions(productDTO);
+        if (productRepository.existsByName(productDTO.getName())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
-        CategoryDTO categoryDTO = categoryService.getCategoryById(product.getCategoryId());
-        Category category = categoryDTO.toCategory();
-        category.addProducts(product.toProduct(product, getCategoryById(product.getCategoryId())));
-        return ProductDTO.fromProduct(productRepository.save(
-            product.toProduct(product, getCategoryById(product.getCategoryId()))));
+        Category category = getCategoryById(productDTO.getCategoryId());
+        Product product = productDTO.toProduct(productDTO, category);
+        category.addProducts(product);
+        Product savedProduct = productRepository.save(product);
+        return ProductDTO.fromProduct(savedProduct);
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO) throws NotFoundException {
         validateProductOptions(productDTO);
         Product product = productRepository.findById(productDTO.getId())
             .orElseThrow(NotFoundException::new);
-        if (productRepository.existsByNameAndIdNot(productDTO.getName(), productDTO.getId())){
+        if (productRepository.existsByNameAndIdNot(productDTO.getName(), productDTO.getId())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
         Category newCategory = categoryService.getCategoryById(productDTO.getCategoryId())
             .toCategory();
         Category oldCategory = product.getCategory();
-        product.update(productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(),
-            newCategory);
-        Product resultProduct = productRepository.save(product);
+        Product product1 = productDTO.toProduct(productDTO, newCategory);
+        ArrayList<Option> newOptions = productDTO.getOptions().stream()
+            .map(optionDTO -> optionDTO.toOption(product1))
+            .collect(Collectors.toCollection(ArrayList::new));
         oldCategory.removeProducts(product);
-        newCategory.addProducts(product);
+        optionService.deleteOptionByProductId(product.getId());
+        product.update(productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(),
+            newCategory, newOptions);
+        newCategory.addProducts(product1);
+        Product resultProduct = productRepository.save(product1);
         return ProductDTO.fromProduct(resultProduct);
     }
 
-    public void existsByNamePutResult(String name, BindingResult result){
+    public void existsByNamePutResult(String name, BindingResult result) {
         if (existsByName(name)) {
             result.addError(new FieldError("productDTO", "name", "존재하는 이름입니다."));
         }

@@ -21,11 +21,11 @@ public class Option {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
     private int quantity;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
     @OneToMany(mappedBy = "option", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<WishList> wishes = new ArrayList<>();

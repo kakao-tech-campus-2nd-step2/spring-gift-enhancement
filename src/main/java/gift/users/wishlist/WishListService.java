@@ -77,9 +77,8 @@ public class WishListService {
         Product product = productDTO.toProduct(productDTO,
             productService.getCategoryById(productDTO.getCategoryId()));
         OptionDTO optionDTO = optionService.findOptionById(wishList.getOptionId());
-        Option option = optionDTO.toOption(optionDTO, product);
+        Option option = optionDTO.toOption(product);
         WishList wishList1 = new WishList(user, product, wishList.getNum(), option);
-        option.addWishList(wishList1);
         user.addWishList(wishList1);
         product.addWishList(wishList1);
         wishListRepository.save(wishList1);
@@ -100,10 +99,10 @@ public class WishListService {
             productService.getCategoryById(productDTO.getCategoryId()));
         OptionDTO oldOptionDTO = optionService.findOptionById(wishList.getOption().getId());
         OptionDTO optionDTO = optionService.findOptionById(wishListDTO.getOptionId());
-        Option newOption = optionDTO.toOption(optionDTO, product);
+        Option newOption = optionDTO.toOption(product);
         newOption.addWishList(wishList);
         wishListRepository.save(wishList);
-        Option oldOption = oldOptionDTO.toOption(oldOptionDTO, product);
+        Option oldOption = oldOptionDTO.toOption(product);
         oldOption.removeWishList(wishList);
         return WishListDTO.fromWishList(wishList);
     }

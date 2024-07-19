@@ -47,11 +47,12 @@ public class Product {
         this.options = options;
     }
 
-    public void update(String name, int price, String imageUrl, Category category) {
+    public void update(String name, int price, String imageUrl, Category category, List<Option> options) {
         this.price = price;
         this.name = name;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
     public Long getId() {
@@ -80,6 +81,10 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public void setOption(List<Option> options){
+        this.options = options;
     }
 
     public void addWishList(WishList wishList) {

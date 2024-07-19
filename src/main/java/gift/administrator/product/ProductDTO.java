@@ -2,6 +2,7 @@ package gift.administrator.product;
 
 import gift.administrator.category.Category;
 import gift.administrator.option.Option;
+import gift.administrator.option.OptionDTO;
 import jakarta.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +25,13 @@ public class ProductDTO {
     private String imageUrl;
     @NotNull(message = "카테고리를 선택해야합니다.")
     private Long categoryId;
-    private List<Option> options = new ArrayList<>();
+    private List<OptionDTO> options = new ArrayList<>();
 
     public ProductDTO() {
     }
 
-    public ProductDTO(long id, String name, int price, String imageUrl, Long categoryId, List<Option> options) {
+    public ProductDTO(long id, String name, int price, String imageUrl, Long categoryId,
+        List<OptionDTO> options) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -50,21 +52,27 @@ public class ProductDTO {
         return price;
     }
 
-    public void setPrice(int price){this.price = price;}
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name){this.name = name;}
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl){this.imageUrl = imageUrl;}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-    public void setCategoryId(Long categoryId){
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -72,17 +80,23 @@ public class ProductDTO {
         return categoryId;
     }
 
-    public List<Option> getOptions(){
+    public List<OptionDTO> getOptions() {
         return options;
     }
 
-    public Product toProduct(ProductDTO productDTO, Category category){
-        return new Product(productDTO.getId(), productDTO.getName(), productDTO.getPrice(),
-            productDTO.getImageUrl(), category, productDTO.getOptions());
+    public Product toProduct(ProductDTO productDTO, Category category) {
+        Product product = new Product(productDTO.getId(), productDTO.getName(), productDTO.getPrice(),
+            productDTO.getImageUrl(), category, new ArrayList<>());
+        List<Option> options = productDTO.getOptions().stream()
+            .map(optionDTO -> optionDTO.toOption(product))
+            .toList();
+        product.setOption(options);
+        return product;
     }
 
     public static ProductDTO fromProduct(Product product) {
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl(), product.getCategory().getId(), product.getOptions());
+            product.getImageUrl(), product.getCategory().getId(),
+            product.getOptions().stream().map(OptionDTO::fromOption).toList());
     }
 }
