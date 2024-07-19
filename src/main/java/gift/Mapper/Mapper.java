@@ -1,10 +1,7 @@
 package gift.Mapper;
 
 import gift.Entity.*;
-import gift.Model.CategoryDto;
-import gift.Model.MemberDto;
-import gift.Model.ProductDto;
-import gift.Model.WishlistDto;
+import gift.Model.*;
 import gift.Service.CategoryService;
 import gift.Service.ProductService;
 import gift.Service.MemberService;
@@ -76,6 +73,16 @@ public class Mapper {
 
     public MemberDto memberToDto(Member member) {
         return new MemberDto(member.getId(), member.getEmail(), member.getName(), member.getPassword(), member.isAdmin());
+    }
+
+    public OptionDto optionToDto(Option option) {
+        return new OptionDto(option.getId(), option.getProduct().getId(), option.getName(), option.getPrice(), option.getQuantity());
+    }
+
+    public Option optionDtoToEntity(OptionDto optionDto) {
+        Optional<ProductDto> productDtoOptional = productService.getProductById(optionDto.getProductId());
+        ProductDto productDto = productDtoOptional.get();
+        return new Option(optionDto.getId(), productDtoToEntity(productDto), optionDto.getName(), optionDto.getPrice(), optionDto.getQuantity());
     }
 
 }
