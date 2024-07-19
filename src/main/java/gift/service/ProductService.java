@@ -2,9 +2,9 @@ package gift.service;
 
 import gift.dto.ProductRequestDTO;
 import gift.dto.ProductsPageResponseDTO;
+import gift.exceptions.CustomException;
 import gift.model.Category;
 import gift.model.Product;
-import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,6 +39,11 @@ public class ProductService {
                                            pages.getTotalPages());
     }
 
+    public Product getProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(CustomException::productNotFoundException);
+
+        return product;
+    }
 
     public void updateProduct(Long id, ProductRequestDTO productRequestDTO) {
         Category category = categoryService.getCategoryById(productRequestDTO.categoryId());
