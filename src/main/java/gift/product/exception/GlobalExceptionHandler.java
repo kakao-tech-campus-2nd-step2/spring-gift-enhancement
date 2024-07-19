@@ -25,6 +25,11 @@ public class GlobalExceptionHandler {
     // 카테고리와 관련된 에러 메세지
     public static final String DUPLICATE_CATEGORY_NAME = "이미 존재하는 카테고리 입니다.";
     public static final String USING_CATEGORY = "카테고리를 제거하려면 해당 카테고리를 참조하는 상품이 없어야 합니다.";
+    // 옵션과 관련된 에러 메세지
+    public static final String OVER_100MILLION = "해당 상품에 등록 가능한 옵션 수(1억개)를 초과하였습니다.";
+    public static final String DUPLICATE_OPTION_NAME = "동일한 이름을 가진 옵션이 상품 내에 존재합니다.";
+    public static final String LAST_OPTION = "해당 상품에 남아있는 옵션이 하나밖에 없어 옵션을 삭제할 수 없습니다.";
+    public static final String LEAST_QUANTITY = "옵션의 수량은 0보다 작을 수 없습니다.";
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

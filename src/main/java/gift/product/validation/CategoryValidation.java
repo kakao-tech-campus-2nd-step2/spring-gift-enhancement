@@ -26,26 +26,26 @@ public class CategoryValidation {
     }
 
     public void registerCategory(Category category) {
-        isDuplicateName(category.getName());
+        validateDuplicateName(category.getName());
     }
 
     public void updateCategory(Category category) {
-        isExistId(category.getId());
-        isDuplicateName(category.getName());
+        validateExistId(category.getId());
+        validateDuplicateName(category.getName());
     }
 
     public void deleteCategory(Long id) {
-        isExistId(id);
+        validateExistId(id);
         if(productRepository.findByCategoryId(id).isPresent())
             throw new InvalidIdException(USING_CATEGORY);
     }
 
-    public void isDuplicateName(String name) {
+    private void validateDuplicateName(String name) {
         if(categoryRepository.findByName(name).isPresent())
             throw new DuplicateException(DUPLICATE_CATEGORY_NAME);
     }
 
-    public void isExistId(Long id) {
+    private void validateExistId(Long id) {
         if(!categoryRepository.existsById(id))
             throw new InvalidIdException(NOT_EXIST_ID);
     }

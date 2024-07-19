@@ -1,13 +1,17 @@
 package gift.product.controller;
 
 import gift.product.dto.ProductDTO;
+import gift.product.model.Category;
+import gift.product.service.CategoryService;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -15,10 +19,15 @@ import org.springframework.web.bind.annotation.*;
 public class AdminProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public AdminProductController(ProductService productService) {
+    public AdminProductController(
+        ProductService productService,
+        CategoryService categoryService
+    ) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/list")
@@ -31,6 +40,8 @@ public class AdminProductController {
     @GetMapping("/register")
     public String showProductForm(Model model) {
         System.out.println("[ProductController] showProductForm()");
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("product", new ProductDTO());
         return "product-form";
     }
@@ -49,6 +60,8 @@ public class AdminProductController {
     @GetMapping("/{id}")
     public String updateProductForm(@PathVariable Long id, Model model) {
         System.out.println("[ProductController] updateProductForm()");
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         ProductDTO productDTO = productService.getDTOById(id);
         model.addAttribute("product", productDTO);
         return "product-update-form";

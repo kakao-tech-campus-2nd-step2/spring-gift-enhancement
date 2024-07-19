@@ -26,6 +26,7 @@
         <th>Name</th>
         <th>Price</th>
         <th>ImageURL</th>
+        <th>Option</th>
         <th>Action</th>
     </tr>
     </thead>
@@ -39,6 +40,9 @@
         </td>
         <td>
             <span th:text="${product.imageUrl}"></span>
+        </td>
+        <td>
+            <a th:href="@{/admin/product/{id}/option(id=${product.id})}">[ 관리 ]</a>
         </td>
         <td>
             <form th:action="@{/admin/product/{id}(id=${product.id})}" method="get">

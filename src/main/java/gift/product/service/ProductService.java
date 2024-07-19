@@ -2,16 +2,16 @@ package gift.product.service;
 
 import gift.product.dto.ProductDTO;
 import gift.product.exception.InvalidIdException;
+import gift.product.model.Option;
 import gift.product.model.Product;
 import gift.product.repository.CategoryRepository;
+import gift.product.repository.OptionRepository;
 import gift.product.repository.ProductRepository;
 import gift.product.validation.ProductValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,28 +24,39 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductValidation productValidation;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     @Autowired
     public ProductService(
-            ProductRepository productRepository,
-            ProductValidation productValidation,
-            CategoryRepository categoryRepository) {
+        ProductRepository productRepository,
+        ProductValidation productValidation,
+        CategoryRepository categoryRepository,
+        OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.productValidation = productValidation;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public void registerProduct(ProductDTO productDTO) {
         System.out.println("[ProductService] registerProduct()");
         productValidation.registerValidation(productDTO);
 
-        productRepository.save(
+        Product product = productRepository.save(
             new Product(
                 productDTO.getName(),
                 productDTO.getPrice(),
                 productDTO.getImageUrl(),
                 categoryRepository.findById(productDTO.getCategoryId())
                     .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
+            )
+        );
+
+        optionRepository.save(
+            new Option(
+                product.getName(),
+                0,
+                product
             )
         );
     }
@@ -70,16 +81,16 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        productValidation.isExistId(id);
+        productValidation.deleteValidation(id);
         productRepository.deleteById(id);
     }
 
     public ProductDTO getDTOById(Long id) {
         System.out.println("[ProductService] getDTOById()");
 
-        productValidation.isExistId(id);
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
 
-        Product product = productRepository.findById(id).get();
         return convertToDTO(product);
     }
 
@@ -101,6 +112,11 @@ public class ProductService {
             productRepository.findAll(pageable),
             pageable
         );
+    }
+
+    public Product findById(Long id) {
+        return productRepository.findById(id)
+            .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
     }
 
     public ProductDTO convertToDTO(Product product) {
