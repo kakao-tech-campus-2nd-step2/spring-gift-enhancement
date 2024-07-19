@@ -40,12 +40,8 @@ public class ProductService {
     }
 
     public Product getProductById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-
-        if (product.isEmpty()) {
-            throw new DataNotFoundException("존재하지 않는 Product: Product를 찾을 수 없습니다.");
-        }
-        return product.get();
+        return productRepository.findById(id).
+            orElseThrow(() -> new DataNotFoundException("존재하지 않는 Product입니다."));
     }
 
 
@@ -62,6 +58,7 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
+        productRepository.findById(id);
         productRepository.deleteById(id);
     }
 
