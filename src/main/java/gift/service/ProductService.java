@@ -1,8 +1,11 @@
 package gift.service;
 
+import gift.entity.CategoryEntity;
 import gift.entity.ProductEntity;
 import gift.domain.ProductDTO;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,14 +20,8 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    private ProductEntity toProductEntity(ProductDTO productDTO) {
-        return new ProductEntity(
-            productDTO.getId(),
-            productDTO.getName(),
-            productDTO.getPrice(),
-            productDTO.getImageUrl()
-        );
-    }
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public List<ProductDTO> getAllProducts() {
         List<ProductEntity> response = productRepository.findAll();
@@ -46,48 +43,48 @@ public class ProductService {
 
     // Create(생성) - addProduct()
     @Transactional
-    public ProductServiceStatus createProduct(ProductDTO productDTO) {
-        try {
-            ProductEntity productEntity = toProductEntity(productDTO);
-            productRepository.save(productEntity);
-            return ProductServiceStatus.SUCCESS;
-        } catch (Exception e) {
-            return ProductServiceStatus.ERROR;
-        }
+    public void createProduct(ProductDTO productDTO) {
+        CategoryEntity category = categoryRepository.findById(productDTO.getCategoryId())
+            .orElseThrow(() -> new EntityNotFoundException("해당 카테고리가 존재하지 않습니다."));
+
+        ProductEntity productEntity = new ProductEntity(
+            productDTO.getName(),
+            productDTO.getPrice(),
+            productDTO.getImageUrl(),
+            category
+        );
+        productRepository.save(productEntity);
     }
 
     // Update(수정) - updateProduct()
     @Transactional
-    public ProductServiceStatus editProduct(Long id, ProductDTO productDTO) {
-        try {
-            Optional<ProductEntity> existingProductEntityOptional = productRepository.findById(id);
-            if (!existingProductEntityOptional.isPresent()) {
-                return ProductServiceStatus.NOT_FOUND;
-            }
-            ProductEntity existingProductEntity = existingProductEntityOptional.get();
-            ProductEntity updatedProductEntity = new ProductEntity(
-                existingProductEntity.getId(),
-                productDTO.getName(),
-                productDTO.getPrice(),
-                productDTO.getImageUrl()
-            );
-            productRepository.save(updatedProductEntity);
-            return ProductServiceStatus.SUCCESS;
-        } catch (Exception e) {
-            return ProductServiceStatus.ERROR;
-        }
+    public void editProduct(Long id, ProductDTO productDTO) {
+        ProductEntity existingProductEntity = productRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("해당 ID의 상품을 찾을 수 없습니다"));
+
+        CategoryEntity categoryEntity = categoryRepository.findById(productDTO.getCategoryId())
+            .orElseThrow(() -> new EntityNotFoundException("해당 ID의 카테고리를 찾을 수 없습니다."));
+
+        ProductEntity updatedProductEntity = new ProductEntity(
+            existingProductEntity.getId(), // 기존 ID 유지
+            productDTO.getName(),
+            productDTO.getPrice(),
+            productDTO.getImageUrl(),
+            categoryEntity
+        );
+        productRepository.save(updatedProductEntity);
     }
 
     @Transactional
-    public ProductServiceStatus deleteProduct(Long id) {
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException("해당 ID의 상품을 찾을 수 없습니다");
+        }
+
         try {
-            if (productRepository.existsById(id)) {
-                productRepository.deleteById(id);
-                return ProductServiceStatus.SUCCESS;
-            }
-            return ProductServiceStatus.NOT_FOUND;
+            productRepository.deleteById(id);
         } catch (Exception e) {
-            return ProductServiceStatus.ERROR;
+            throw new RuntimeException("An error occurred while deleting the product.", e);
         }
     }
 }
