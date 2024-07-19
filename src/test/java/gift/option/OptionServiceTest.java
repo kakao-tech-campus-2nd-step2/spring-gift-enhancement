@@ -7,6 +7,7 @@ import static gift.exception.ErrorMessage.OPTION_NOT_FOUND;
 import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
 import static gift.exception.ErrorMessage.PRODUCT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
@@ -82,24 +83,46 @@ public class OptionServiceTest {
         }
     }
 
+    // given values
+    private long productId;
+    private Product product;
+    private OptionDTO optionDTO;
+    private Option option;
+
+    @BeforeEach
+    void setUp() {
+        productId = 1L;
+
+        product = new Product(
+            1L,
+            "product",
+            1,
+            "imageUrl",
+            new Category(1L, "category")
+        );
+
+        optionDTO = new OptionDTO(
+            1L,
+            "option-1",
+            1
+        );
+
+        option = new Option(
+            1L,
+            "option-1",
+            1,
+            product
+        );
+    }
+
     @Nested
     @DisplayName("[Unit] get options test")
     class getOptionsTest {
 
-        private long productId;
-        private Product product;
         private List<Option> options;
 
         @BeforeEach
         void setUp() {
-            productId = 1L;
-            product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
             options = List.of(
                 new Option(1L, "option-1", 1, product),
                 new Option(2L, "option-2", 2, product),
@@ -153,35 +176,6 @@ public class OptionServiceTest {
     @Nested
     @DisplayName("[Unit] add option test")
     class addOptionTest {
-
-        private long productId;
-        private OptionDTO optionDTO;
-        private Product product;
-        private Option option;
-
-        @BeforeEach
-        void setUp() {
-            productId = 1L;
-            optionDTO = new OptionDTO(
-                1L,
-                "option-1",
-                1
-            );
-            product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            option = new Option(
-                1L,
-                "option-1",
-                1,
-                product
-            );
-
-        }
 
         @Test
         @DisplayName("success")
@@ -318,31 +312,12 @@ public class OptionServiceTest {
     @DisplayName("[Unit] update option test")
     class updateOptionTest {
 
-        private long productId = 1L;
-        private OptionDTO optionDTO;
-        private Product product;
-        private Option option;
-
         @BeforeEach
         void setUp() {
-            productId = 1L;
             optionDTO = new OptionDTO(
                 1L,
                 "update-option",
-                1
-            );
-            product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            option = new Option(
-                1L,
-                "update-option",
-                1,
-                product
+                2
             );
         }
 
@@ -363,8 +338,11 @@ public class OptionServiceTest {
                 .thenReturn(option);
 
             //then
-            assertDoesNotThrow(
-                () -> optionService.updateOption(productId, optionDTO)
+            assertAll(
+                () -> assertDoesNotThrow(() -> optionService.updateOption(productId, optionDTO)),
+                () -> assertEquals(optionDTO.getId(), option.getId()),
+                () -> assertEquals(optionDTO.getName(), option.getName()),
+                () -> assertEquals(optionDTO.getQuantity(), option.getQuantity())
             );
 
             verify(optionRepository, times(1)).save(option);
@@ -513,28 +491,11 @@ public class OptionServiceTest {
     @DisplayName("[Unit] delete option test")
     class deleteOptionTest {
 
-        private long productId;
         private long optionId;
-        private Product product;
-        private Option option;
 
         @BeforeEach
         void setUp() {
-            productId = 1L;
             optionId = 1L;
-            product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            option = new Option(
-                1L,
-                "option",
-                1,
-                product
-            );
         }
 
         @Test
