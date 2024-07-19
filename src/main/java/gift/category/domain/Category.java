@@ -23,7 +23,7 @@ public class Category {
     @Column(nullable = false)
     private String imageUrl;
 
-    public Category() {
+    protected Category() {
     }
 
     public Category(String name, String color, String description, String imageUrl) {

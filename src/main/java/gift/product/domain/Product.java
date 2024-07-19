@@ -34,7 +34,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
-    public Product() {
+    protected Product() {
     }
 
     public Product(String name, Integer price, String imageUrl, Category category) {
