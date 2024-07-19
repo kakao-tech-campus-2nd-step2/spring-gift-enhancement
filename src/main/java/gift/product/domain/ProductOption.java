@@ -54,4 +54,8 @@ public class ProductOption {
         this.name = name;
         this.quantity = quantity;
     }
+
+    public boolean isSameName(String name) {
+        return product.getName().equals(name);
+    }
 }
