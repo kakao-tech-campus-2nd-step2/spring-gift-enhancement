@@ -5,6 +5,8 @@ import gift.domain.product.Product;
 import gift.domain.user.JpaUserRepository;
 import gift.domain.user.User;
 import gift.global.exception.BusinessException;
+import gift.global.exception.product.ProductNotFoundException;
+import gift.global.exception.user.UserNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,9 +41,9 @@ public class CartItemService {
     @Transactional
     public int addCartItem(Long userId, Long productId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new BusinessException(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다"));
+            .orElseThrow(() -> new UserNotFoundException(userId));
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new BusinessException(HttpStatus.BAD_REQUEST, "상품을 찾을 수 없습니다"));
+            .orElseThrow(() -> new ProductNotFoundException(productId));
 
         // 기존에 존재하면 update
         Optional<CartItem> findCartItem = cartItemRepository.findByUserIdAndProductId(userId,

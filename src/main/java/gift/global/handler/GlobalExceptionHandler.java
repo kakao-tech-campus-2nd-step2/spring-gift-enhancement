@@ -1,13 +1,22 @@
 package gift.global.handler;
 
 import gift.global.exception.BusinessException;
+import gift.global.exception.cartItem.CartItemNotFoundException;
+import gift.global.exception.category.CategoryDuplicateException;
+import gift.global.exception.category.CategoryNotFoundException;
+import gift.global.exception.ErrorCode;
+import gift.global.exception.option.OptionDuplicateException;
+import gift.global.exception.option.OptionNotFoundException;
+import gift.global.exception.product.ProductDuplicateException;
+import gift.global.exception.product.ProductNotFoundException;
+import gift.global.exception.user.UserDuplicateException;
+import gift.global.exception.user.UserNotFoundException;
 import gift.global.response.ErrorResponseDto;
 import gift.global.response.ResponseMaker;
 import io.jsonwebtoken.JwtException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +30,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponseDto> handleBusinessException(BusinessException e) {
-        return ResponseMaker.createErrorResponse(e.getStatus(), e.getMessage());
+        return ResponseMaker.createErrorResponse(ErrorCode.BAD_REQUEST, e.getMessage()); // TODO 수정 필요
     }
 
 
@@ -36,16 +45,15 @@ public class GlobalExceptionHandler {
             errors.add(error.getDefaultMessage());
         });
         String message = String.join("\n", errors);
-        return ResponseMaker.createErrorResponse(HttpStatus.BAD_REQUEST, message);
+        return ResponseMaker.createErrorResponse(ErrorCode.BAD_REQUEST, message);
     }
-
 
     /**
      * JwtException 에러 핸들러
      */
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ErrorResponseDto> JwtException(JwtException e) {
-        return ResponseMaker.createErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        return ResponseMaker.createErrorResponse(ErrorCode.BAD_REQUEST, e.getMessage());
     }
 
     /**
@@ -55,6 +63,53 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleJdbcSQLIntegrityConstraintViolationException(
         DataIntegrityViolationException e
     ) {
-        return ResponseMaker.createErrorResponse(HttpStatus.BAD_REQUEST, "해당 카테고리를 사용하는 상품 존재");
+        return ResponseMaker.createErrorResponse(ErrorCode.BAD_REQUEST, "해당 카테고리를 사용하는 상품 존재");
+    }
+
+    /**
+     * 도메인별 DUPLICATE_EXCEPTION
+     */
+    @ExceptionHandler(ProductDuplicateException.class)
+    public ResponseEntity<ErrorResponseDto> ProductDuplicateException(ProductDuplicateException e) {
+        return ResponseMaker.createErrorResponse(ErrorCode.BAD_REQUEST, e.getMessage());
+    }
+    @ExceptionHandler(CategoryDuplicateException.class)
+    public ResponseEntity<ErrorResponseDto> CategoryDuplicateException(CategoryDuplicateException e) {
+        return ResponseMaker.createErrorResponse(ErrorCode.BAD_REQUEST, e.getMessage());
+    }
+    @ExceptionHandler(OptionDuplicateException.class)
+    public ResponseEntity<ErrorResponseDto> OptionDuplicateException(OptionDuplicateException e) {
+        return ResponseMaker.createErrorResponse(ErrorCode.BAD_REQUEST, e.getMessage());
+    }
+    @ExceptionHandler(UserDuplicateException.class)
+    public ResponseEntity<ErrorResponseDto> UserDuplicateException(UserDuplicateException e) {
+        return ResponseMaker.createErrorResponse(ErrorCode.BAD_REQUEST, e.getMessage());
+    }
+
+    /**
+     * 도메인별 NOT_FOUND_EXCEPTION
+     */
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> ProductNotFoundException(ProductNotFoundException e) {
+        return ResponseMaker.createErrorResponse(ErrorCode.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> CategoryNotFoundException(CategoryNotFoundException e) {
+        return ResponseMaker.createErrorResponse(ErrorCode.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> OptionNotFoundException(OptionNotFoundException e) {
+        return ResponseMaker.createErrorResponse(ErrorCode.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> UserNotFoundException(UserNotFoundException e) {
+        return ResponseMaker.createErrorResponse(ErrorCode.NOT_FOUND, e.getMessage());
+    }
+    @ExceptionHandler(CartItemNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> CartItemNotFoundException(CartItemNotFoundException e) {
+        return ResponseMaker.createErrorResponse(ErrorCode.NOT_FOUND, e.getMessage());
     }
 }

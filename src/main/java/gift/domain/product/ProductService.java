@@ -4,6 +4,9 @@ import gift.domain.category.Category;
 import gift.domain.category.JpaCategoryRepository;
 import gift.domain.option.OptionService;
 import gift.global.exception.BusinessException;
+import gift.global.exception.category.CategoryNotFoundException;
+import gift.global.exception.product.ProductDuplicateException;
+import gift.global.exception.product.ProductNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
@@ -46,10 +49,10 @@ public class ProductService {
      */
     public void createProduct(@Valid ProductDTO productDTO) {
         if (productRepository.existsByName(productDTO.getName())) {
-            throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 이름의 상품이 이미 존재합니다.");
+            throw new ProductDuplicateException(productDTO.getName());
         }
         if (categoryRepository.findById(productDTO.getCategoryId()).isEmpty()) {
-            throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 카테고리가 존재하지 않습니다.");
+            throw new CategoryNotFoundException(productDTO.getCategoryId());
         }
 
         Product product = new Product(
@@ -81,14 +84,14 @@ public class ProductService {
      */
     public void updateProduct(Long id, ProductDTO productDTO) {
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "수정할 상품이 존재하지 않습니다."));
+            .orElseThrow(() -> new ProductNotFoundException(id));
         if (productRepository.existsByName(productDTO.getName())) {
-            throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 이름의 상품이 이미 존재합니다.");
+            throw new ProductDuplicateException(productDTO.getName());
         }
 
         Optional<Category> category = categoryRepository.findById(productDTO.getCategoryId());
         if (category.isEmpty()) {
-            throw new BusinessException(HttpStatus.BAD_REQUEST, "해당 카테고리가 존재하지 않습니다.");
+            throw new CategoryNotFoundException(productDTO.getCategoryId());
         }
 
         product.update(productDTO.getName(), category.get(), productDTO.getPrice(),

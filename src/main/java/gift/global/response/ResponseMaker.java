@@ -1,5 +1,6 @@
 package gift.global.response;
 
+import gift.global.exception.ErrorCode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +33,11 @@ public class ResponseMaker {
     /**
      * BODY 에 에러 메시지만 보냄 (데이터 X)
      */
-    public static ResponseEntity<ErrorResponseDto> createErrorResponse(HttpStatus status,
+    public static ResponseEntity<ErrorResponseDto> createErrorResponse(ErrorCode errorCode,
         String message) {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(message);
 
-        return ResponseEntity.status(status)
+        return ResponseEntity.status(errorCode.getHttpStatus())
             .body(errorResponseDto);
     }
 

@@ -28,8 +28,6 @@ public class CategoryRepositoryTest {
     @Autowired
     EntityManager entityManager;
     @Autowired
-    private CategoryService categoryService;
-    @Autowired
     private JpaCategoryRepository categoryRepository;
     @Autowired
     private JpaProductRepository productRepository;
