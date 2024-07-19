@@ -1,26 +1,28 @@
 package gift.option.controller;
 
-import gift.option.model.Option;
+import gift.option.dto.OptionDto;
 import gift.option.service.OptionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
-@RequestMapping("/api/options")
+@RequestMapping("/api/products")
 public class OptionController {
 
     @Autowired
     private OptionService optionService;
 
-    @GetMapping
-    public ResponseEntity<List<Option>> getAllOptions() {
-        List<Option> options = optionService.getAllOptions();
-        return ResponseEntity.ok(options);
+    @GetMapping("/{productId}/options")
+    public List<OptionDto> getOptionsByProductId(@PathVariable Long productId) {
+        return optionService.getOptionsByProductId(productId);
+    }
+
+    @PostMapping("/{productId}/options")
+    public OptionDto addOptionToProduct(@PathVariable Long productId, @RequestBody OptionDto optionDto) {
+        return optionService.addOptionToProduct(productId, optionDto);
     }
 
 }

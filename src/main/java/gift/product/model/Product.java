@@ -1,6 +1,7 @@
 package gift.product.model;
 
 import gift.category.model.Category;
+import gift.option.model.Option;
 import gift.wishlist.model.WishList;
 import jakarta.persistence.*;
 
@@ -30,6 +31,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishList> wishLists = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options;
 
     protected Product() {
     }
@@ -76,6 +80,10 @@ public class Product {
 
     public Long getCategoryId() {
         return category.getCategoryId();
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     public void update(String name, int price, String imgUrl, Category category) {
