@@ -39,7 +39,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class WishesIntegrityTest {
+class WishIntegrityTest {
 
     @LocalServerPort
     int port;
@@ -98,7 +98,7 @@ class WishesIntegrityTest {
         var actual = testRestTemplate.exchange(requestEntity, String.class);
 
         //then
-        assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Order(2)

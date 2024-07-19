@@ -85,7 +85,7 @@ class WishRepositoryTest {
         Optional<Wish> foundWish = wishRepository.findByIdAndMemberId(wish.getId(), member.getId());
 
         //then
-        assertThat(foundWish.isPresent()).isTrue();
+        assertThat(foundWish).isPresent();
         assertThat(foundWish.get().getProduct().getId()).isEqualTo(product.getId());
     }
 

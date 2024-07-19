@@ -5,6 +5,7 @@ import gift.product.dto.CategoryDto;
 import gift.product.model.Category;
 import gift.product.service.CategoryService;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,7 @@ public class CategoryController {
     @PostMapping("/insert")
     public ResponseEntity<Category> insertCategory(@RequestBody CategoryDto categoryDto) {
         Category category = categoryService.insertCategory(categoryDto);
-        return ResponseEntity.ok(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
 
     @PutMapping("/update/{id}")

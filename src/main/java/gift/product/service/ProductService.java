@@ -2,8 +2,10 @@ package gift.product.service;
 
 import gift.product.dto.ProductDto;
 import gift.product.model.Category;
+import gift.product.model.Option;
 import gift.product.model.Product;
 import gift.product.repository.CategoryRepository;
+import gift.product.repository.OptionRepository;
 import gift.product.repository.ProductRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,10 +20,13 @@ public class ProductService {
 
     private final CategoryRepository categoryRepository;
 
+    private final OptionRepository optionRepository;
+
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public List<Product> getProductAll() {
@@ -39,10 +44,13 @@ public class ProductService {
     @Transactional
     public Product insertProduct(ProductDto productDto) {
         Category category = getValidatedCategory(productDto.categoryName());
-
         Product product = new Product(productDto.name(), productDto.price(), productDto.imageUrl(),
             category);
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+
+        optionRepository.save(new Option("기본", 1, savedProduct));
+
+        return savedProduct;
     }
 
     @Transactional

@@ -11,7 +11,6 @@ import gift.product.repository.CategoryRepository;
 import gift.product.service.ProductService;
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -34,14 +33,6 @@ class ProductServiceTest {
 
     @Autowired
     CategoryRepository categoryRepository;
-
-    @AfterEach
-    void 상품_초기화() {
-        List<Product> products = productService.getProductAll();
-        for (Product product : products) {
-            productService.deleteProduct(product.getId());
-        }
-    }
 
     @Test
     void 상품_추가() {
@@ -154,11 +145,11 @@ class ProductServiceTest {
         //given
         categoryRepository.save(new Category("테스트카테고리1"));
 
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
-        productService.insertProduct(productDTO);
+        ClientProductDto productDto = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
+        productService.insertProduct(productDto);
 
-        productDTO = new ClientProductDto("바나나", 1500, "사진링크2", "테스트카테고리1");
-        Product product = productService.insertProduct(productDTO);
+        productDto = new ClientProductDto("바나나", 1500, "사진링크2", "테스트카테고리1");
+        Product product = productService.insertProduct(productDto);
 
         //when
         productService.deleteProduct(product.getId());
