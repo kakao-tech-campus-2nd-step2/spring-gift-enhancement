@@ -15,8 +15,11 @@ public class Category {
     @Column(unique = true)
     private String name;
 
+    @NotNull
+    @Column(length = 7)
     private String color;
 
+    @NotNull
     private String imageUrl;
 
     private String description;
