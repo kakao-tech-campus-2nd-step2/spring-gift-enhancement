@@ -2,6 +2,7 @@ package gift.dto;
 
 import gift.domain.Category;
 import gift.domain.CategoryName;
+import gift.domain.Option;
 import gift.domain.Product;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductDTO {
 
@@ -29,6 +32,8 @@ public class ProductDTO {
     @NotNull(message = "카테고리는 필수 입력 항목입니다.")
     private CategoryName categoryName;
 
+    private List<OptionDTO> options;  // 옵션 리스트 추가
+
     public ProductDTO() {}
 
     private ProductDTO(ProductDTOBuilder builder) {
@@ -37,6 +42,7 @@ public class ProductDTO {
         this.imageUrl = builder.imageUrl;
         this.description = builder.description;
         this.categoryName = builder.categoryName;
+        this.options = builder.options;  // 옵션 추가
     }
 
     public String getName() {
@@ -59,12 +65,17 @@ public class ProductDTO {
         return categoryName;
     }
 
+    public List<OptionDTO> getOptions() {
+        return options;  // 옵션 리스트 반환 메소드 추가
+    }
+
     public static class ProductDTOBuilder {
         private String name;
         private BigDecimal price;
         private String imageUrl;
         private String description;
         private CategoryName categoryName;
+        private List<OptionDTO> options;  // 옵션 리스트 추가
 
         public ProductDTOBuilder name(String name) {
             this.name = name;
@@ -91,18 +102,28 @@ public class ProductDTO {
             return this;
         }
 
+        public ProductDTOBuilder options(List<OptionDTO> options) {  // 옵션 리스트 추가
+            this.options = options;
+            return this;
+        }
+
         public ProductDTO build() {
             return new ProductDTO(this);
         }
     }
 
     public Product toEntity(Category category) {
+        List<Option> optionEntities = this.options.stream()  // 옵션 리스트 엔티티 변환
+            .map(optionDTO -> optionDTO.toEntity())
+            .collect(Collectors.toList());
+
         return new Product.ProductBuilder()
             .name(this.name)
             .price(this.price)
             .imageUrl(this.imageUrl)
             .description(this.description)
             .category(category)
+            .options(optionEntities)  // 옵션 리스트 추가
             .build();
     }
 }

@@ -2,9 +2,11 @@ package gift.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+
 
 @Entity
 @Table(name = "product")
@@ -35,6 +37,10 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)  // 옵션 리스트 추가
+    private List<Option> options;
+
     protected Product() {
     }
 
@@ -46,6 +52,7 @@ public class Product {
         this.description = builder.description;
         this.wishes = builder.wishes;
         this.category = builder.category;
+        this.options = builder.options;  // 옵션 추가
     }
 
     public Long getId() {
@@ -76,6 +83,10 @@ public class Product {
         return category;
     }
 
+    public List<Option> getOptions() {  // 옵션 리스트 반환 메소드 추가
+        return options;
+    }
+
     public static class ProductBuilder {
         private Long id;
         private String name;
@@ -84,6 +95,7 @@ public class Product {
         private String description;
         private List<Wish> wishes;
         private Category category;
+        private List<Option> options;
 
         public ProductBuilder id(Long id) {
             this.id = id;
@@ -117,6 +129,11 @@ public class Product {
 
         public ProductBuilder category(Category category) {
             this.category = category;
+            return this;
+        }
+
+        public ProductBuilder options(List<Option> options) {  // 옵션 리스트 추가
+            this.options = options;
             return this;
         }
 
