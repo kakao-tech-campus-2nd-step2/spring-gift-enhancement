@@ -42,7 +42,7 @@ public class Product {
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "Category_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     protected Product() { }
