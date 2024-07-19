@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.dto.ProductResponse;
 import gift.exception.InvalidProductException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -89,5 +90,9 @@ public class Product {
 	
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+	
+	public ProductResponse toDto() {
+		return new ProductResponse(this.id, this.name, this.price, this.imageUrl, this.category.getName());
 	}
 }
