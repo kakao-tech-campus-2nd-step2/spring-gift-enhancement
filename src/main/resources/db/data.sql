@@ -25,14 +25,14 @@ INSERT INTO product (id, name, price, image_url, category_id) VALUES (1, '아이
 INSERT INTO member VALUES (1, 'member1.com', 'asdf');
 INSERT INTO member VALUES (2, 'member2.com', 'asdf');
 
--- -- wish data for test
--- INSERT INTO wish VALUES (1, 1, 1);
--- INSERT INTO wish VALUES (2, 1, 2);
--- INSERT INTO wish VALUES (3, 2, 4);
--- INSERT INTO wish VALUES (4, 1, 4);
--- INSERT INTO wish VALUES (5, 1, 3);
--- INSERT INTO wish VALUES (6, 2, 1);
--- INSERT INTO wish VALUES (7, 2, 3);
+-- wish data for test
+INSERT INTO wish VALUES (1, 1, 1);
+INSERT INTO wish VALUES (2, 1, 2);
+INSERT INTO wish VALUES (3, 2, 4);
+INSERT INTO wish VALUES (4, 1, 4);
+INSERT INTO wish VALUES (5, 1, 3);
+INSERT INTO wish VALUES (6, 2, 1);
+INSERT INTO wish VALUES (7, 2, 3);
 
 -- option data for test
 INSERT INTO option VALUES (1, 'option1', 100, 1);

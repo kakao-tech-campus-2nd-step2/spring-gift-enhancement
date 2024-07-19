@@ -3,11 +3,11 @@ package gift.service;
 import gift.domain.Member;
 import gift.dto.request.AuthRequest;
 import gift.dto.response.AuthResponse;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.repository.MemberRepository;
 import gift.util.JwtUtil;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 
 @Service
@@ -27,8 +27,8 @@ public class AuthService {
     }
 
     public AuthResponse login(AuthRequest authRequest) {
-        Optional<Member> storedMember = memberRepository.findMemberByEmail(authRequest.getEmail());
-        return storedMember.map(member -> new AuthResponse(jwtUtil.createJWT(member.getId()))).orElse(null);
+        Member storedMember = memberRepository.findMemberByEmail(authRequest.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        return new AuthResponse(jwtUtil.createJWT(storedMember.getId()));
     }
 
 }
