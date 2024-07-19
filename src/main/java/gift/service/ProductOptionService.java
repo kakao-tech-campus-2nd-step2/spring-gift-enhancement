@@ -7,6 +7,7 @@ import gift.web.dto.response.productoption.CreateProductOptionResponse;
 import gift.web.dto.response.productoption.ReadAllProductOptionsResponse;
 import gift.web.dto.response.productoption.ReadProductOptionResponse;
 import gift.web.validation.exception.client.AlreadyExistsException;
+import gift.web.validation.exception.client.ResourceNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,5 +53,10 @@ public class ProductOptionService {
         return ReadAllProductOptionsResponse.from(options);
     }
 
-
+    @Transactional
+    public void deleteOption(Long optionId) {
+        ProductOption option = productOptionRepository.findById(optionId)
+            .orElseThrow(() -> new ResourceNotFoundException("상품 옵션", optionId.toString()));
+        productOptionRepository.delete(option);
+    }
 }
