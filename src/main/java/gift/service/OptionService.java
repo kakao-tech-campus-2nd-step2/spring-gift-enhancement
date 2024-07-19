@@ -73,6 +73,5 @@ public class OptionService {
 
         ProductResponse foundProductResponse = productService.findById(optionRequest.productId());
         foundOption.updateOption(optionRequest.name(),optionRequest.quantity(),foundProductResponse.toEntity());
-        optionRepository.save(foundOption);
     }
 }
