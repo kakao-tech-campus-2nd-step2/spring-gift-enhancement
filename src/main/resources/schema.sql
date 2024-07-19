@@ -5,13 +5,23 @@ CREATE TABLE IF NOT EXISTS category (
 
 
 CREATE TABLE IF NOT EXISTS product (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL CHECK (TRIM(name) <> ''),
     price INT CHECK (price >= 0),
     image_url VARCHAR(255) NOT NULL CHECK (TRIM(image_url) <> ''),
     category_id BIGINT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES category(id)
-    );
+);
+
+CREATE TABLE IF NOT EXISTS option (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    product_id BIGINT NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    quantity INT NOT NULL CHECK (quantity BETWEEN 1 AND 99999999),
+    FOREIGN KEY (product_id) REFERENCES product(id),
+    UNIQUE (product_id, name)
+);
+
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
