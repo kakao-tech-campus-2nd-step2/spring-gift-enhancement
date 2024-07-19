@@ -28,8 +28,8 @@ public class Option {
     private Product product;
 
     @NotBlank
-    @Size(max = 50)
-    @Pattern(regexp = "^[a-zA-Z0-9\\s()\\[\\]+\\-&/_]+$",
+    @Size(max = 50, message = "옵션 이름은 최대 50자까지 입력 가능합니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣\\s()\\[\\]+\\-&/_.,]+$",
         message = "허용되지 않는 특수문자가 포함되어 있습니다.")
     @Column(nullable = false)
     private String name;
@@ -37,14 +37,41 @@ public class Option {
     @Min(1)
     @Max(99999999)
     @Column(nullable = false)
-    private int count;
+    private int quantity;
 
     public Option() {
     }
 
-    public Option(Product product, String name, int count) {
+    public Option(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
+    public Option(Product product, String name, int quantity) {
         this.product = product;
         this.name = name;
-        this.count = count;
+        this.quantity = quantity;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void update(Long id, String name, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
     }
 }
