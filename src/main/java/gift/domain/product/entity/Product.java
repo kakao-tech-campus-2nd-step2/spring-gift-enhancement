@@ -1,6 +1,7 @@
 package gift.domain.product.entity;
 
 import gift.exception.DuplicateOptionNameException;
+import gift.exception.InvalidOptionInfoException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,10 +11,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapKey;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Entity
 @Table
@@ -37,7 +42,8 @@ public class Product {
     private String imageUrl;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Option> options = new ArrayList<>();
+    @MapKey(name = "id")
+    private Map<Long, Option> options = new HashMap<>();
 
     protected Product() {
 
@@ -81,7 +87,11 @@ public class Product {
     }
 
     public List<Option> getOptions() {
-        return options;
+        return options.values().stream().toList();
+    }
+
+    public Optional<Option> getOption(Long id) {
+        return Optional.ofNullable(options.get(id));
     }
 
     public void removeOptions() {
@@ -89,16 +99,22 @@ public class Product {
     }
 
     public void addOption(Option option) {
-        options.add(option);
+        options.put(option.getId(), option);
         option.setProduct(this);
     }
 
     public void removeOption(Option option) {
-        options.remove(option);
+        options.remove(option.getId());
+    }
+
+    public void replaceOption(Option oldOption, Option newOption) {
+        if (!options.replace(oldOption.getId(), oldOption, newOption)) {
+            throw new InvalidOptionInfoException("error.invalid.option.id");
+        }
     }
 
     public void validateOption(Option option) {
-        for (Option o : options) {
+        for (Option o : options.values()) {
             if (o.getName().equals(option.getName())) {
                 throw new DuplicateOptionNameException("error.duplicate.option.name");
             }
