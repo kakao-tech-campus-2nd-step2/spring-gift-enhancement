@@ -26,12 +26,12 @@
   - [x] 옵션 이름에 ( ), [ ], +, -, &, /, _ 외 특수 문자 사용 불가
   - [x] 옵션 수량은 최소 1개 이상 1억 개 미만이다.
   - [x] 동일한 상품 내의 옵션 이름은 중복될 수 없다.
-- [ ] 테스트 구현
+- [x] 테스트 구현
   - [x] ProductControllerTest
   - [x] ProductRepositoryTest
   - [x] ProductServiceTest
-  - [ ] OptionRepositoryTest
-  - [ ] OptionServiceTest
+  - [x] OptionRepositoryTest
+  - [x] OptionServiceTest
 - [ ] 피드백 반영
   - [ ] gson 버전 정보 삭제
   - [ ] API 요청 url을 복수형으로 변경

@@ -16,11 +16,21 @@ public class OptionRequest {
 
     @NotNull
     @Min(1)
-    @Max(1_000_000_000)
+    @Max(100_000_000)
     private int quantity;
 
     @NotNull
     private Long productId;
+
+    protected OptionRequest(){
+
+    }
+    public OptionRequest(Long optionId, String name, int quantity, Long productId) {
+        this.optionId = optionId;
+        this.name = name;
+        this.quantity = quantity;
+        this.productId = productId;
+    }
 
     public Long getOptionId(){
         return optionId;
