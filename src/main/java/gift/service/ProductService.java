@@ -59,4 +59,8 @@ public class ProductService {
         return DELETE_SUCCESS_MSG;
     }
 
+    public List<Option> getOptions(Long productId) {
+        Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
+        return optionRepository.findAllByProduct(product);
+    }
 }

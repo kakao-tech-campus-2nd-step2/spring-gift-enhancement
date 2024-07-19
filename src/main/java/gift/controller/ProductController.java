@@ -3,8 +3,8 @@ package gift.controller;
 import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.AddProductRequest;
+import gift.dto.request.OptionRequest;
 import gift.dto.request.UpdateProductRequest;
-import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -18,11 +18,9 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
     private final ProductService productService;
-    private final OptionService optionService;
 
-    public ProductController(ProductService productService, OptionService optionService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.optionService = optionService;
     }
 
     @GetMapping
@@ -53,7 +51,7 @@ public class ProductController {
 
     @GetMapping("/{productId}/options")
     public ResponseEntity<List<Option>> getOptions(@PathVariable("productId") Long productId) {
-        return ResponseEntity.ok(optionService.getOptions(productId));
+        return ResponseEntity.ok(productService.getOptions(productId));
     }
 
 }
