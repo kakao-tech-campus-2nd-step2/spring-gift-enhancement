@@ -1,5 +1,6 @@
 package gift.services;
 
+import gift.classes.Exceptions.ProductException;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
@@ -76,6 +77,9 @@ public class ProductService {
 
     // 제품 추가
     public ProductDto addProduct(@Valid RequestProductDto requestProductDto) {
+        if (requestProductDto.getOptionDtos().isEmpty()) {
+            throw new ProductException("One or more options are required to add a product.");
+        }
 
         Product product = new Product(
             requestProductDto.getName(),
