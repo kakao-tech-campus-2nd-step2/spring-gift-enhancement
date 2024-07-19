@@ -10,4 +10,6 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, Lo
 
     List<ProductOption> findAllByProductId(Long productId);
 
+    boolean existsByNameAndProductId(String name, Long productId);
+
 }
