@@ -53,6 +53,10 @@ public class Product {
         this.options = builder.options;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public void edit(UpdateProductRequest request, Category category) {
         this.name = request.name();
         this.price = request.price();
@@ -62,10 +66,6 @@ public class Product {
 
     public void addOption(Option option) {
         options.add(option);
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public Long getId() {
@@ -127,6 +127,11 @@ public class Product {
 
         public Builder category(Category category) {
             this.category = category;
+            return this;
+        }
+
+        public Builder options() {
+            this.options = new HashSet<>();
             return this;
         }
 

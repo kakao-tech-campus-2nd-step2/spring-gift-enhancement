@@ -76,7 +76,7 @@ Content-Type: application/json
 - [ ] Option CRUD
   - [x] Create
   - [x] Read
-  - [ ] Update
+  - [x] Update
   - [ ] Delete
 - [ ] (선택) 관리자 화면에서 옵션 추가
 

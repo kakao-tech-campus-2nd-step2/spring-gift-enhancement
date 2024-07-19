@@ -3,6 +3,7 @@ package gift.product.option.entity;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.product.entity.Product;
+import gift.product.option.dto.request.UpdateOptionRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,6 +40,18 @@ public class Option {
         this.id = id;
     }
 
+    public Option(Long id, Integer quantity) {
+        this.id = id;
+        this.quantity = quantity;
+    }
+
+    public Option(Long id, String name, Integer quantity, Product product) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
     public Option(String name, Integer quantity, Product product) {
         validateName(name);
         validateQuantity(quantity);
@@ -58,6 +71,11 @@ public class Option {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public void edit(UpdateOptionRequest request) {
+        validateName(request.name());
+        validateQuantity(request.quantity());
     }
 
     private void validateName(String name) {

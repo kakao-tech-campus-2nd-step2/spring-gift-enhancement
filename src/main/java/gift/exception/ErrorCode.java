@@ -15,7 +15,8 @@ public enum ErrorCode {
     OPTION_NAME_DUPLICATE(HttpStatus.CONFLICT, "중복된 이름의 옵션이 존재합니다."),
     INVALID_OPTION_QUANTITY(HttpStatus.BAD_REQUEST, "옵션 수량은 1개 이상 1억 개 미만입니다."),
     INVALID_OPTION_NAME(HttpStatus.BAD_REQUEST,
-        "옵션 이름은 최대 50자까지 가능하고, 특수 문자는 `( ), [ ], +, -, &, /, _`만 혀용합니다.");
+        "옵션 이름은 최대 50자까지 가능하고, 특수 문자는 `( ), [ ], +, -, &, /, _`만 혀용합니다."),
+    OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "옵션을 찾을 수 없습니다.");
 
 
     private final HttpStatusCode status;

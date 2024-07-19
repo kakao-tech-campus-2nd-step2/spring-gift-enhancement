@@ -10,6 +10,7 @@ import gift.exception.CustomException;
 import gift.product.category.entity.Category;
 import gift.product.entity.Product;
 import gift.product.option.dto.request.CreateOptionRequest;
+import gift.product.option.dto.request.UpdateOptionRequest;
 import gift.product.option.entity.Option;
 import gift.product.option.repository.OptionRepository;
 import gift.product.option.service.OptionService;
@@ -112,6 +113,7 @@ public class OptionServiceTest {
         CreateOptionRequest newOption = new CreateOptionRequest(1L, "a", 1);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.save(any())).willReturn(new Option(1L));
 
         // when
         optionService.createOption(newOption);
@@ -137,6 +139,98 @@ public class OptionServiceTest {
         then(productRepository).should().findById(any());
     }
 
+    @Test
+    @DisplayName("옵션 수량 수정 1개 이상 1억 개 미만 - 1개 미만")
+    void updateOptionQuantityUnder1() {
+        // given
+        Option option = new Option(1L, 100);
+        Product product = createProductWithOptions(option);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findById(any())).willReturn(Optional.of(option));
+
+        UpdateOptionRequest request = new UpdateOptionRequest(1L, "a", 0);
+
+        // when & then
+        assertThatThrownBy(() -> optionService.updateOption(1L, request))
+            .isInstanceOf(CustomException.class);
+        then(optionRepository).should().findById(any());
+    }
+
+    @Test
+    @DisplayName("옵션 수량 수정 1개 이상 1억 개 미만 - 1억 개 이상")
+    void updateOptionQuantityOver1Million() {
+        // given
+        Option option = new Option(1L, 1000);
+        Product product = createProductWithOptions(option);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findById(any())).willReturn(Optional.of(option));
+
+        UpdateOptionRequest request = new UpdateOptionRequest(1L, "a", 100_000_000);
+
+        // when & then
+        assertThatThrownBy(() -> optionService.updateOption(1L, request))
+            .isInstanceOf(CustomException.class);
+        then(optionRepository).should().findById(any());
+    }
+
+    @Test
+    @DisplayName("수정된 옵션 이름 중복")
+    void updateOptionIfNameDuplicate() {
+        // given
+        Product product = createProduct();
+        Option option1 = new Option(1L, "a", 100, product);
+        Option option2 = new Option(2L, "b", 100, product);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findById(any())).willReturn(Optional.of(option1));
+        given(optionRepository.findAllByProduct(any())).willReturn(List.of(option1, option2));
+
+        UpdateOptionRequest newOption = new UpdateOptionRequest(1L, "b", 1000);
+
+        // when & then
+        assertThatThrownBy(
+            () -> optionService.updateOption(1L, newOption))
+            .isInstanceOf(CustomException.class);
+    }
+
+    @Test
+    @DisplayName("옵션 수정 특수문자 예외")
+    void updateOptionSpecialCharacterException() {
+        // given
+        Option option = new Option(1L, 100);
+        Product product = createProductWithOptions(option);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findById(any())).willReturn(Optional.of(option));
+
+        UpdateOptionRequest request = new UpdateOptionRequest(1L, "!@#$", 100);
+
+        // when & then
+        assertThatThrownBy(() -> optionService.updateOption(1L, request))
+            .isInstanceOf(CustomException.class);
+    }
+
+    @Test
+    @DisplayName("update Option test")
+    void updateOptionTest() {
+        // given
+        Option option = new Option(1L, 100);
+        Product product = createProductWithOptions(option);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findById(any())).willReturn(Optional.of(option));
+
+        UpdateOptionRequest request = new UpdateOptionRequest(1L, "updated", 1000);
+
+        // when
+        optionService.updateOption(1L, request);
+
+        // then
+        assertThat(option.getName()).isEqualTo("updated");
+        assertThat(option.getQuantity()).isEqualTo(1000);
+    }
+
     private Product createProduct() {
         return createProduct("Product 1");
     }
@@ -148,6 +242,7 @@ public class OptionServiceTest {
             .imageUrl("image")
             .category(new Category("category"))
             .price(1000)
+            .options()
             .build();
     }
 

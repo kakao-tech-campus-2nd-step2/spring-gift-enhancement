@@ -4,6 +4,7 @@ import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.product.entity.Product;
 import gift.product.option.dto.request.CreateOptionRequest;
+import gift.product.option.dto.request.UpdateOptionRequest;
 import gift.product.option.dto.response.OptionResponse;
 import gift.product.option.entity.Option;
 import gift.product.option.entity.Options;
@@ -51,4 +52,16 @@ public class OptionService {
         return saved.getId();
     }
 
+    @Transactional
+    public void updateOption(Long productId, UpdateOptionRequest request) {
+        Option option = optionRepository.findById(request.id())
+            .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        Options options = new Options(optionRepository.findAllByProduct(product));
+        options.validate(request);
+
+        option.edit(request);
+    }
 }
