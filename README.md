@@ -208,6 +208,40 @@ Content-Type: application/json
 
 ### week4/step2
 
+상품 정보에 옵션을 추가한다. 상품과 옵션 모델 간의 관계를 고려하여 설계하고 구현한다.
+
+- 상품에는 항상 하나 이상의 옵션이 있어야 한다.
+  - 옵션 이름은 공백을 포함하여 최대 50자까지 입력할 수 있다.
+  - 특수 문자
+    - 가능: ( ), [ ], +, -, &, /, _
+    - 그 외 특수 문자 사용 불가
+  - 옵션 수량은 최소 1개 이상 1억 개 미만이다.
+- 중복된 옵션은 구매 시 고객에게 불편을 줄 수 있다. 동일한 상품 내의 옵션 이름은 중복될 수 없다.
+- (선택) 관리자 화면에서 옵션을 추가할 수 있다.
+
+아래 예시와 같이 HTTP 메시지를 주고받도록 구현한다.
+
+#### Request
+
+```http request
+GET /api/products/1/options HTTP/1.1
+```
+
+#### Response
+
+```http request
+HTTP/1.1 200 
+Content-Type: application/json
+
+[
+  {
+    "id": 464946561,
+    "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+    "quantity": 969
+  }
+]
+```
+
 ### week4/step3
 
 </details>
@@ -240,6 +274,8 @@ Content-Type: application/json
     - price: int
     - image_url: string
     - category_id: int (fk, unique, not null)
+    - [ ] options: list<Option>
+      - [ ] option과 관련되어 상품 도메인 DTO 수정 
 - [x] 상품을 저장하는 데이터베이스 연동
   - [x] Jpa Repository
   - [x] 엔티티 클래스 및 예제 데이터 구비
@@ -247,13 +283,22 @@ Content-Type: application/json
 #### 기능 설계(컨트롤러 설계)
 
 - [x] 상품을 추가하는 API
+  - [ ] 상품 추가시 반드시 하나의 옵션을 추가하도록 하기
 - [x] 상품 리스트를 조회하는 API
-- [x] 상품을 수정하는 API
+  - [ ] 상품 옵션도 함께 조회될 수 있도록 함
+- [x] 상품을 수정하는 API 
 - [x] 상품을 삭제하는 API
+- [ ] 상품의 옵션을 조회하는 API
+- [ ] 상품의 옵션을 추가하는 API
+- [ ] 상품의 옵션을 수정하는 API
+- [ ] 상품의 옵션을 삭제하는 API
 
 #### 예외, 검증 설계
 
 - [x] 커스텀 예외 및 예외 핸들링
+  - [ ] 옵션 이름/개수 검증 예외 만들기
+  - [ ] 옵션 중복 배제 만들기
+  - [ ] 특수문자 제외하는 Validator 만들기
 - [x] 사용자 입력 검증
 
 #### Server-side Renderings
@@ -264,6 +309,10 @@ Content-Type: application/json
 - [x] 상품을 수정하는 홈페이지
 - [x] 상품 등록시 중복 발생하면 알려주는 홈페이지
 - [x] 서버사이드 렌더링 담당하는 컨트롤러
+- [ ] 상품 옵션과 관련된 렌더링
+  - [ ] 상품 조회 화면에서 옵션을 볼 수 있음
+  - [ ] 상품 추가 화면에서 옵션도 추가할 수 있음
+  - [ ] 상품 수정 화면에서 옵션을 수정할 수 있음
 
 </details>
 
@@ -372,6 +421,7 @@ Content-Type: application/json
     - description: string
     - image_url: string
     - color: string(length 7)
+    - products: List<Product>
 
 - [x] 카테고리를 저장하는 데이터베이스 연동
   - [x] Jpa Repository
@@ -399,6 +449,45 @@ Content-Type: application/json
 
 ---
 
+<details>
+<summary><span style="font-size:1.3em;font-weight:bold">옵션 도메인</span></summary>
+
+### 옵션 도메인
+
+#### 모델 설계
+
+- [ ] 옵션 표현하는 도메인 객체
+  - 옵션 구성요소
+    - id: int (pk)
+    - productId: int (fk, not null)
+    - name: string (length 50)
+      - ( ), [ ], +, -, &, /, _ 외 특수 문자 사용불가
+      - 같은 상품에서 같은 이름의 옵션은 불가능
+    - quantity: int
+      - 1 이상 1억 미만 
+  - 옵션이 속한 상품이 삭제되면 그 옵션도 연쇄 삭제됨
+
+- [ ] 옵션을 저장하는 데이터베이스 연동
+  - [ ] Jpa Repository
+  - [ ] 엔티티 클래스 및 예제 데이터 구비
+
+#### 기능 설계(컨트롤러 및 서비스 설계)
+
+- [ ] 옵션 리스트 조회 API
+- [ ] 특정 id 옵션 조회 API
+
+#### 예외, 검증 설계
+
+- [ ] 커스텀 예외 및 예외 핸들링
+
+#### Server-side Renderings
+
+- [ ] 옵션들만 모아서 볼 수 있는 화면
+
+</details>
+
+---
+
 <br>
 
 
@@ -418,43 +507,76 @@ Content-Type: application/json
 |--------|---------------|------------|---------------|------|
 | GET    | /api/products | -          | -             | -    |
 
-
 #### 상품 리스트 조회 API/Response
 
 - Status
   - 200 OK
 - Body
+  - `products` 배열에 상품 목록이 담긴다.
+  - `products.category-id` 값으로 상품이 속한 카테고리 번호를 알 수 있으며, 카테고리 정보는 `categories` 배열에 나열되어 있다.
+  - `products.options` 배열에 상품의 옵션들이 담긴다.
 
   ```json
   {
     "timestamp": "2024-01-01T00:00:00.0000000",
     "status": 200,
+    "categories": [
+      {
+      "id": 1,
+      "name": "교환권",
+      "color": "#ff0000",
+      "image-url": "red.png",
+      "description": ""
+      },
+      {
+        "id": 2,
+        "name": "뷰티",
+        "color": "#919191",
+        "image-url": "orange.png",
+        "description": ""
+      },
+      {}    
+    ],
     "products": [
       {
         "id": 8146027,
         "name": "아이스 카페 아메리카노 T",
         "price": 4500,
         "image-url": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
-        "category": {
-          "id": 1,
-          "name": "교환권",
-          "color": "#ff0000",
-          "image-url": "red.png",
-          "description": ""
-        }
+        "category-id": 1,
+        "options": [
+          {
+            "id": 463616,
+            "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+            "quantity": 969         
+          },
+          {
+            "id": 581819,
+            "name": "02. 가능성",
+            "quantity": 91
+          },
+          {},
+          {}
+        ]
       },
       {
         "id": 1,
         "name": "name",
         "price": 2000,
         "image-url": "url",
-        "category": {
-          "id": 1,
-          "name": "교환권",
-          "color": "#ff0000",
-          "image-url": "red.png",
-          "description": ""
-        }
+        "category-id": 1,
+        "options": [
+          {
+            "id": 200000,
+            "name": "01. 첫째 옵션",
+            "quantity": 1
+          },
+          {
+            "id": 300300,
+            "name": "02. 둘째옵션",
+            "quantity": 39291
+          }
+        ]
       },
       {},
       {}
@@ -483,17 +605,32 @@ Content-Type: application/json
   "name": "Product name",
   "price": 10000,
   "image-url": "http://~",
-  "category-id": 1
+  "category-id": 1,
+  "options": [
+    {
+      "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+      "quantity": 969
+    }
+  ]
 }
 ```
 
 #### 상품 추가 API/Request 제약조건
 
-- 상품의 이름은 공백 포함 15자만 가능함
-- 사용 가능 특수문자는 다음과 같음
-  - `(`, `)`, `[`, `]`, `+`, `-`, `&`, `/`, `_`
-  -  이외 특수 문자 사용 불가
-- `카카오`가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있음
+- 상품 이름
+  - 상품 이름은 공백 포함 15자만 가능함
+  - 사용 가능 특수문자는 다음과 같음
+    - `(`, `)`, `[`, `]`, `+`, `-`, `&`, `/`, `_`
+    -  이외 특수 문자 사용 불가
+  - `카카오`가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있음
+- 옵션 이름
+  - 동일 상품 내 옵션 이름은 중복 불가능
+  - 최대 공백 포함 최대 50자까지 입력 가능
+  - 사용 가능 특수문자
+    - `(`, `)`, `[`, `]`, `+`, `-`, `&`, `/`, `_`
+    - 이외 특수 문자 사용불가
+- 옵션 수량
+  - 최소 1개 이상 최대 1억 개 미만
 
 #### 상품 추가 API/Response(success)
 
@@ -520,7 +657,14 @@ Content-Type: application/json
         "color": "#ff0000",
         "image-url": "red.png",
         "description": ""
-      }
+      },
+      "options": [
+        {
+          "id": 2929,
+          "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+          "quantity": 969
+        }
+      ]
     }
   }
   ```
@@ -571,6 +715,38 @@ Content-Type: application/json
     "message": "The category was not found."
   }
   ```
+
+#### 상품 추가 API/Response(fail)
+
+등록하려는 상품의 옵션 이름 유효성을 만족하지 못한 경우 발생함
+
+- Status
+  - 400 Bad Request
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 400,
+    "message": "옵션 이름 제약조건을 만족하지 못했습니다."
+  }
+  ```
+
+#### 상품 추가 API/Response(fail)  
+
+등록하려는 상품 옵션 수량 유효성을 만족하지 못한 경우 발생함
+
+- Status
+  - 400 Bad Request
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 400,
+    "message": "옵션 수량이 잘못되었습니다."
+  }
+  ```
   
 </details>
 
@@ -581,9 +757,9 @@ Content-Type: application/json
 
 #### 상품 수정 API/Request
 
-| Method | URL                | Path param | Path variable | Body |
-|--------|--------------------|------------|---------------|------|
-| PUT    | /api/products/{id} | -          | yes{id: int}  | yes(*제약)  |
+| Method | URL                | Path param | Path variable | Body     |
+|--------|--------------------|------------|---------------|----------|
+| PUT    | /api/products/{id} | -          | yes{id: int}  | yes(*제약) |
 
 #### 상품 수정 API/Request/Body
 
@@ -604,7 +780,7 @@ Content-Type: application/json
   -  이외 특수 문자 사용 불가
 - `카카오`가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있음
 
-#### 상품 수정 API/Response(sucess)
+#### 상품 수정 API/Response(success)
 
 - Status
   - 200 OK
@@ -676,7 +852,7 @@ Content-Type: application/json
 |--------|--------------------|------------|---------------|------|
 | DELETE | /api/products/{id} | -          | yes{id: int}  | -    |
 
-#### 상품 삭제 API/Response(sucess)
+#### 상품 삭제 API/Response(success)
 
 - Status
   - 200 OK
@@ -701,6 +877,290 @@ Content-Type: application/json
     "timestamp": "2024-01-01T00:00:00.0000000",
     "status": 404,
     "message": "The product was not found."
+  }
+  ```
+
+</details>
+
+---
+
+<details>
+<summary><span style="font-size:1.3em;font-weight:bold">상품 옵션 조회 API</span></summary>
+  
+#### 상품 옵션 조회 API/Request
+
+| Method | URL                        | Path param | Path variable | Body |
+|--------|----------------------------|------------|---------------|------|
+| GET    | /api/products/{id}/options | -          | yes{id: int}  | -    |
+
+#### 상품 옵션 조회 API/Response(success)
+
+- Status
+  - 200 OK
+- Body
+  
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 200,
+    "options": [
+      {
+        "id": 463616,
+        "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+        "quantity": 969
+      },
+      {
+        "id": 581819,
+        "name": "02. 가능성",
+        "quantity": 91
+      },
+      {},
+      {}
+    ]
+  }
+  ```
+
+#### 상품 옵션 조회 API/Response(fail)
+
+- 상품이 존재하지 않을 경우 발생
+- Status
+  - 404 NOT FOUND
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 404,
+    "message": "The product was not found."
+  }
+  ```
+  
+</details>
+
+---
+
+<details>
+<summary><span style="font-size:1.3em;font-weight:bold">상품 옵션 추가 API</span></summary>
+
+
+#### 상품 옵션 추가 API/Request
+
+| Method | URL                        | Path param | Path variable | Body |
+|--------|----------------------------|------------|---------------|------|
+| POST   | /api/products/{id}/options | -          | yes{id: int}  | yes  |
+
+#### 상품 옵션 추가 API/Request/Body
+
+```json
+{
+  "name": "03. 덜매운맛",
+  "quantity": 30
+}
+```
+
+#### 상품 옵션 추가 API/Response(success)
+
+- Status
+  - 200 OK
+- Body
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "status": 200
+}
+```
+
+#### 상품 옵션 추가 API/Response(fail)
+
+- 상품이 존재하지 않을 경우 발생
+- Status
+  - 404 NOT FOUND
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 404,
+    "message": "The product was not found."
+  }
+  ```
+
+#### 상품 옵션 추가 API/Response(fail)
+
+등록하려는 상품의 옵션 이름 유효성을 만족하지 못한 경우 발생함
+
+- Status
+  - 400 Bad Request
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 400,
+    "message": "옵션 이름 제약조건을 만족하지 못했습니다."
+  }
+  ```
+
+#### 상품 옵션 추가 API/Response(fail)
+
+등록하려는 상품 옵션 수량 유효성을 만족하지 못한 경우 발생함
+
+- Status
+  - 400 Bad Request
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 400,
+    "message": "옵션 수량이 잘못되었습니다."
+  }
+  ```
+
+</details>
+
+---
+
+<details>
+<summary><span style="font-size:1.3em;font-weight:bold">상품 옵션 수정 API</span></summary>
+
+#### 상품 옵션 수정 API/Request
+
+| Method | URL                                            | Path param | Path variable                   | Body |
+|--------|------------------------------------------------|------------|---------------------------------|------|
+| PUT    | /api/products/{product-id}/options/{option-id} | -          | yes{product-id, option-id: int} | yes  |
+
+#### 상품 옵션 수정 API/Request/Body
+
+```json
+{
+  "name": "03. 덜매운맛",
+  "quantity": 30
+}
+```
+
+#### 상품 옵션 수정 API/Response(success)
+
+- Status
+  - 200 OK
+- Body
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "status": 200
+}
+```
+
+#### 상품 옵션 수정 API/Response(fail)
+
+- 상품이 존재하지 않을 경우 발생
+- Status
+  - 404 NOT FOUND
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 404,
+    "message": "The product was not found."
+  }
+  ```
+
+#### 상품 옵션 수정 API/Response(fail)
+
+- 옵션이 존재하지 않을 경우 발생
+- Status
+  - 404 NOT FOUND
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 404,
+    "message": "The option was not found."
+  }
+  ```
+
+#### 상품 옵션 수정 API/Response(fail)
+
+수정하려는 상품의 옵션 이름 유효성을 만족하지 못한 경우 발생함
+
+- Status
+  - 400 Bad Request
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 400,
+    "message": "옵션 이름 제약조건을 만족하지 못했습니다."
+  }
+  ```
+
+#### 상품 옵션 수정 API/Response(fail)
+
+수정하려는 상품 옵션 수량 유효성을 만족하지 못한 경우 발생함
+
+- Status
+  - 400 Bad Request
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 400,
+    "message": "옵션 수량이 잘못되었습니다."
+  }
+  ```
+
+</details>
+
+---
+
+<details>
+<summary><span style="font-size:1.3em;font-weight:bold">상품 옵션 삭제 API</span></summary>
+
+
+#### 상품 옵션 삭제 API/Request
+
+| Method | URL                                            | Path param | Path variable                   | Body |
+|--------|------------------------------------------------|------------|---------------------------------|------|
+| DELETE | /api/products/{product-id}/options/{option-id} | -          | yes{product-id, option-id: int} | -    |
+
+#### 상품 옵션 삭제 API/Response(success)
+
+- Status
+  - 204 No Content
+
+#### 상품 옵션 삭제 API/Response(fail)
+
+- 상품이 존재하지 않을 경우 발생
+- Status
+  - 404 NOT FOUND
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 404,
+    "message": "The product was not found."
+  }
+  ```
+
+#### 상품 옵션 삭제 API/Response(fail)
+
+- 옵션이 존재하지 않을 경우 발생
+- Status
+  - 404 NOT FOUND
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 404,
+    "message": "The option was not found."
   }
   ```
   
@@ -730,7 +1190,7 @@ Content-Type: application/json
 }
 ```
 
-#### 회원가입 API/Response(sucess)
+#### 회원가입 API/Response(success)
 
 - Status
   - 200 OK
@@ -780,7 +1240,7 @@ Content-Type: application/json
 }
 ```
 
-#### 로그인 API/Response(sucess)
+#### 로그인 API/Response(success)
 
 - Status
   - 200 OK
@@ -833,7 +1293,7 @@ Content-Type: application/json
   Authorization: Bearer your-token-string
   ```
 
-#### 멤버 리스트 조회 API/Response(sucess)
+#### 멤버 리스트 조회 API/Response(success)
 
 - Status
   - 200 OK
@@ -901,7 +1361,7 @@ Content-Type: application/json
 }
 ```
 
-#### 멤버 비밀번호 변경 API/Response(sucess)
+#### 멤버 비밀번호 변경 API/Response(success)
 
 - Status
   - 200 OK
@@ -962,7 +1422,7 @@ Content-Type: application/json
 }
 ```
 
-#### 멤버 권한 변경 API/Response(sucess)
+#### 멤버 권한 변경 API/Response(success)
 
 - Status
   - 200 OK
@@ -1026,7 +1486,7 @@ Content-Type: application/json
 }
 ```
 
-#### 회원 탈퇴 API/Response(sucess)
+#### 회원 탈퇴 API/Response(success)
 
 - Status
   - 204 No content
@@ -1630,6 +2090,99 @@ Authorization: Bearer your-token-string
     "timestamp": "2024-01-01T00:00:00.0000000",
     "status": 404,
     "message": "This category cannot be deleted because some products are included in it."
+  }
+  ```
+  
+</details>
+
+---
+
+
+
+### API 명세서/옵션 도메인
+
+<details>
+<summary><span style="font-size:1.3em;font-weight:bold">옵션 리스트 조회 API</span></summary>
+
+#### 옵션 리스트 조회 API/Request
+
+| Method | URL          | Path param | Path variable | Body |
+|--------|--------------|------------|---------------|------|
+| GET    | /api/options | -          | -             | -    |
+
+#### 옵션 리스트 조회 API/Response(success)
+
+- Status
+  - 200 OK
+- Body
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "status": 200,
+  "options": [
+    {
+      "id": 463616,
+      "product-id": 1,
+      "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+      "quantity": 969
+    },
+    {
+      "id": 581819,
+      "product-id": 1,
+      "name": "02. 가능성",
+      "quantity": 91
+    },
+    {},
+    {}
+  ]
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary><span style="font-size:1.3em;font-weight:bold">특정 id 옵션 조회 API</span></summary>
+
+#### 특정 id 옵션 조회 API/Request
+
+| Method | URL               | Path param | Path variable | Body |
+|--------|-------------------|------------|---------------|------|
+| GET    | /api/options/{id} | -          | yes{id: int}  | -    |
+
+#### 특정 id 옵션 조회 API/Response(success)
+
+- Status
+  - 200 OK
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 200,
+    "option": {
+        "id": 463616,
+        "product-id": 1,
+        "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+        "quantity": 969
+      }
+  }
+  ```
+
+#### 특정 id 옵션 조회 API/Response(fail)
+
+- 옵션이 존재하지 않은 경우 발생
+- Status
+  - 404 Not found
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 404,
+    "message": "The option was not found."
   }
   ```
 
