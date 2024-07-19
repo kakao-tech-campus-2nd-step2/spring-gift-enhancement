@@ -74,8 +74,8 @@ Content-Type: application/json
       * 최소 생성 이외에는 Option CRUD로 처리 가능
     - [ ] 옵션 삭제 시, 해당 옵션이 상품의 유일한 옵션이라면 삭제 불가
 - [ ] Option CRUD
-  - [ ] Create
-  - [ ] Read
+  - [x] Create
+  - [x] Read
   - [ ] Update
   - [ ] Delete
 - [ ] (선택) 관리자 화면에서 옵션 추가

@@ -1,5 +1,6 @@
 package gift.unit.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -15,6 +16,7 @@ import gift.product.option.service.OptionService;
 import gift.product.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -119,6 +121,22 @@ public class OptionServiceTest {
         then(optionRepository).should().save(any());
     }
 
+    @Test
+    @DisplayName("getProductOptionTest")
+    void getProductOptionTest() {
+        // given
+        Option newOption = new Option(1L);
+        Product product = createProductWithOptions(newOption);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+
+        // when
+        var actual = optionService.getProductOptions(1L);
+
+        // then
+        assertThat(actual).hasSize(1);
+        then(productRepository).should().findById(any());
+    }
+
     private Product createProduct() {
         return createProduct("Product 1");
     }
@@ -130,6 +148,17 @@ public class OptionServiceTest {
             .imageUrl("image")
             .category(new Category("category"))
             .price(1000)
+            .build();
+    }
+
+    private Product createProductWithOptions(Option option) {
+        return Product.builder()
+            .id(1L)
+            .name("Product 1")
+            .imageUrl("image")
+            .category(new Category("category"))
+            .price(1000)
+            .options(Set.of(option))
             .build();
     }
 

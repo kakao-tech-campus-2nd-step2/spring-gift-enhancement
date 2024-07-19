@@ -39,7 +39,7 @@ public class Product {
     private Category category;
 
     @OneToMany
-    private final Set<Option> options = new HashSet<>();
+    private Set<Option> options = new HashSet<>();
 
     protected Product() {
     }
@@ -50,6 +50,7 @@ public class Product {
         this.price = builder.price;
         this.imageUrl = builder.imageUrl;
         this.category = builder.category;
+        this.options = builder.options;
     }
 
     public void edit(UpdateProductRequest request, Category category) {
@@ -87,6 +88,10 @@ public class Product {
         return category.getName();
     }
 
+    public Set<Option> getOptions() {
+        return options;
+    }
+
     public void changeName(String name) {
         this.name = name;
     }
@@ -98,6 +103,7 @@ public class Product {
         private Integer price;
         private String imageUrl;
         private Category category;
+        private Set<Option> options;
 
         public Builder id(Long id) {
             this.id = id;
@@ -121,6 +127,11 @@ public class Product {
 
         public Builder category(Category category) {
             this.category = category;
+            return this;
+        }
+
+        public Builder options(Set<Option> options) {
+            this.options = options;
             return this;
         }
 

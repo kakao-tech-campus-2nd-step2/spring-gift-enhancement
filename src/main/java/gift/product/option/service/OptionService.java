@@ -4,10 +4,13 @@ import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.product.entity.Product;
 import gift.product.option.dto.request.CreateOptionRequest;
+import gift.product.option.dto.response.OptionResponse;
 import gift.product.option.entity.Option;
 import gift.product.option.entity.Options;
 import gift.product.option.repository.OptionRepository;
 import gift.product.repository.ProductRepository;
+import gift.util.mapper.OptionMapper;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,17 @@ public class OptionService {
     public OptionService(ProductRepository productRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.optionRepository = optionRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public List<OptionResponse> getProductOptions(Long productId) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        return product.getOptions()
+            .stream()
+            .map(OptionMapper::toResponse)
+            .toList();
     }
 
     @Transactional

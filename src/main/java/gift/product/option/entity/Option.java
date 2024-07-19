@@ -35,6 +35,10 @@ public class Option {
         foreignKey = @ForeignKey(name = "fk_options_product_id_ref_products_id"))
     private Product product;
 
+    public Option(Long id) {
+        this.id = id;
+    }
+
     public Option(String name, Integer quantity, Product product) {
         validateName(name);
         validateQuantity(quantity);
@@ -50,6 +54,10 @@ public class Option {
 
     public String getName() {
         return name;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
     }
 
     private void validateName(String name) {
