@@ -44,6 +44,14 @@ public class OptionController {
         return ResponseEntity.ok(giftId + "번 상품에서" + optionId + "번 옵션이 변경되었습니다!");
     }
 
+    @PutMapping("/gifts/substract/{giftId}/{optionId}")
+    public ResponseEntity<String> substractOptionToGift(@PathVariable("giftId") Long giftId,
+                                                        @PathVariable("optionId") Long optionId,
+                                                        @RequestParam(name = "quantity") int quantity) {
+        optionService.subtractOptionToGift(giftId, optionId, quantity);
+        return ResponseEntity.ok(giftId + "번 상품에서" + optionId + "번 옵션 수량이" + quantity + "만큼 차감되었습니다!");
+    }
+
     @DeleteMapping("/gifts/{giftId}/{optionId}")
     public ResponseEntity<String> deleteOptionFromGift(@PathVariable("giftId") Long giftId,
                                                        @PathVariable("optionId") Long optionId) {

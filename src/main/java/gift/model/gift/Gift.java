@@ -108,7 +108,6 @@ public class Gift {
     }
 
     public void removeOption(Option option) {
-        option.setGift(null);
         this.options.remove(option);
     }
 }

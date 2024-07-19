@@ -49,6 +49,10 @@ public class Option {
         return quantity;
     }
 
+    public Gift getGift() {
+        return gift;
+    }
+
     public void setGift(Gift gift) {
         this.gift = gift;
     }
@@ -56,5 +60,12 @@ public class Option {
     public void modify(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void subtract(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("차감할 수량이 현재 수량보다 많습니다.");
+        }
+        this.quantity -= quantity;
     }
 }

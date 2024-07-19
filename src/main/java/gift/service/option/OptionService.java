@@ -69,6 +69,22 @@ public class OptionService {
     }
 
     @Transactional
+    public void subtractOptionToGift(Long giftId, Long optionId, int quantity) {
+        Gift gift = giftRepository.findById(giftId)
+                .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new NoSuchElementException("해당 옵션을 찾을 수 없습니다 id :  " + optionId));
+
+        if (!option.getGift().getId().equals(giftId)) {
+            throw new NoSuchElementException("해당 상품에 해당 옵션이 없습니다!");
+        }
+
+        option.subtract(quantity);
+        optionRepository.save(option);
+
+    }
+
+    @Transactional
     public void deleteOptionFromGift(Long giftId, Long optionId) {
         Gift gift = giftRepository.findById(giftId)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다 id :  " + giftId));
