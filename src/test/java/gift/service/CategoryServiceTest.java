@@ -31,6 +31,7 @@ import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
+
     @InjectMocks
     private CategoryService categoryService;
     @Mock
@@ -38,13 +39,13 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 전체 조회 테스트")
-    void getAllCategoriesTest(){
+    void getAllCategoriesTest() {
         List<Category> categoryList = Arrays.asList(createCategory(), createCategory(2L));
 
         int pageNo = 0;
         int pageSize = 10;
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Category> categoryPage =new PageImpl<>(categoryList,pageable, categoryList.size());
+        Page<Category> categoryPage = new PageImpl<>(categoryList, pageable, categoryList.size());
 
         doReturn(categoryPage).when(categoryRepository).findAll(pageable);
 
@@ -71,7 +72,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 생성 테스트")
-    void createCategoryTest(){
+    void createCategoryTest() {
         // given
         CategoryRequest request = createCategoryRequest();
         Category newCategory = createCategory();
@@ -95,7 +96,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 수정 테스트")
-    void updateCategoryTest(){
+    void updateCategoryTest() {
         // given
         Long id = 1L;
         CategoryRequest request = createCategoryRequest();
@@ -103,7 +104,9 @@ class CategoryServiceTest {
         Category spyUpdatedCategory = spy(updatedCategory);
 
         doReturn(Optional.of(spyUpdatedCategory)).when(categoryRepository).findById(any());
-        doNothing().when(spyUpdatedCategory).updateAll(request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
+        doNothing().when(spyUpdatedCategory)
+            .updateAll(request.getName(), request.getColor(), request.getImageUrl(),
+                request.getDescription());
 
         CategoryResponse expected = entityToDto(updatedCategory);
 
@@ -122,7 +125,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 삭제 테스트")
-    void deleteCategoryTest(){
+    void deleteCategoryTest() {
         Long id = 1L;
         Category savedCategory = createCategory();
 
@@ -135,17 +138,20 @@ class CategoryServiceTest {
         verify(categoryRepository, times(1)).delete(savedCategory);
     }
 
-    private CategoryResponse entityToDto(Category category){
-        return new CategoryResponse(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
+    private CategoryResponse entityToDto(Category category) {
+        return new CategoryResponse(category.getId(), category.getName(), category.getColor(),
+            category.getImageUrl(), category.getDescription());
     }
 
-    private CategoryRequest createCategoryRequest(){
+    private CategoryRequest createCategoryRequest() {
         return new CategoryRequest("name", "color", "imageUrl", "description");
     }
-    private Category createCategory(){
+
+    private Category createCategory() {
         return createCategory(1L);
     }
-    private Category createCategory(Long id){
+
+    private Category createCategory(Long id) {
         return new Category(id, "name", "color", "imageUrl", "description");
     }
 }

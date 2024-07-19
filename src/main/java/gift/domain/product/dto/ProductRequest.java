@@ -29,7 +29,8 @@ public class ProductRequest {
     private ProductRequest() {
     }
 
-    public ProductRequest(String name, int price, String imageUrl, Long categoryId, OptionRequest optionRequest) {
+    public ProductRequest(String name, int price, String imageUrl, Long categoryId,
+        OptionRequest optionRequest) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -48,6 +49,7 @@ public class ProductRequest {
     public String getImageUrl() {
         return imageUrl;
     }
+
     public Long getCategoryId() {
         return categoryId;
     }

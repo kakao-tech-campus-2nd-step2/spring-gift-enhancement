@@ -78,7 +78,8 @@ class ProductServiceTest {
     void getAllProductsTest() {
         // given
         Product product1 = createProduct();
-        Product product2 = createProduct(2L, new Category(2L, "test", "color", "image", "description"));
+        Product product2 = createProduct(2L,
+            new Category(2L, "test", "color", "image", "description"));
 
         List<Product> productList = Arrays.asList(product1, product2);
         Pageable pageable = PageRequest.of(0, 10);
@@ -122,7 +123,8 @@ class ProductServiceTest {
         doReturn(newProduct).when(productRepository).save(any());
         doReturn(optionResponse).when(optionService).addOptionToProduct(any(), any());
 
-        ProductCreateResponse expected = new ProductCreateResponse(entityToDto(newProduct),optionResponse);
+        ProductCreateResponse expected = new ProductCreateResponse(entityToDto(newProduct),
+            optionResponse);
 
         // when
         ProductCreateResponse actual = productService.createProduct(productRequest);
@@ -133,8 +135,10 @@ class ProductServiceTest {
             () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
             () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl()),
             () -> assertThat(actual.getCategoryId()).isEqualTo(expected.getCategoryId()),
-            () -> assertThat(actual.getOptionResponse().getName()).isEqualTo(expected.getOptionResponse().getName()),
-            () -> assertThat(actual.getOptionResponse().getQuantity()).isEqualTo(expected.getOptionResponse().getQuantity())
+            () -> assertThat(actual.getOptionResponse().getName()).isEqualTo(
+                expected.getOptionResponse().getName()),
+            () -> assertThat(actual.getOptionResponse().getQuantity()).isEqualTo(
+                expected.getOptionResponse().getQuantity())
         );
     }
 
@@ -150,7 +154,8 @@ class ProductServiceTest {
 
         ProductResponse expected = entityToDto(updatedProduct);
 
-        doReturn(Optional.of(updatedProduct.getCategory())).when(categoryRepository).findById(any());
+        doReturn(Optional.of(updatedProduct.getCategory())).when(categoryRepository)
+            .findById(any());
         doReturn(Optional.of(spyProduct)).when(productRepository).findById(any());
         doNothing().when(spyProduct).updateAll(productRequest.getName(), productRequest.getPrice(),
             productRequest.getImageUrl(), updatedProduct.getCategory());
@@ -186,17 +191,21 @@ class ProductServiceTest {
         return new ProductResponse(product.getId(), product.getName(), product.getPrice(),
             product.getImageUrl(), product.getCategory().getId());
     }
-    private ProductRequest createProductRequest(){
+
+    private ProductRequest createProductRequest() {
         return createProductRequest("test");
     }
-    private ProductRequest createProductRequest(String name){
+
+    private ProductRequest createProductRequest(String name) {
         OptionRequest optionRequest = new OptionRequest("test", 100);
         return new ProductRequest(name, 1000, "test.jpg", 1L, optionRequest);
     }
-    private Product createProduct(){
+
+    private Product createProduct() {
         return createProduct(1L, new Category(1L, "test", "color", "image", "description"));
     }
-    private Product createProduct(Long id, Category category){
+
+    private Product createProduct(Long id, Category category) {
         return new Product(id, "test", 1000, "test.jpg", category);
     }
 }

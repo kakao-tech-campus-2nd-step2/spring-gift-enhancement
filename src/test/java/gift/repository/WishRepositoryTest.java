@@ -40,7 +40,8 @@ class WishRepositoryTest {
         // given
         Member requestMember = new Member("test", "password");
         Member savedMember = memberRepository.save(requestMember);
-        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
+        Category savedCategory = categoryRepository.save(
+            new Category("test", "color", "image", "description"));
         Product requestProduct1 = new Product("product1", 1000, "product1.jpg", savedCategory);
         Product requestProduct2 = new Product("product2", 2000, "product2.jpg", savedCategory);
         Product savedProduct1 = productRepository.save(requestProduct1);
@@ -69,7 +70,8 @@ class WishRepositoryTest {
         Member requestMember = new Member("test", "password");
         Member savedMember = memberRepository.save(requestMember);
 
-        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
+        Category savedCategory = categoryRepository.save(
+            new Category("test", "color", "image", "description"));
         Product requestProduct = new Product("product", 1000, "product1.jpg", savedCategory);
         Product savedProduct = productRepository.save(requestProduct);
 
@@ -90,8 +92,9 @@ class WishRepositoryTest {
         Member requestMember = new Member("test", "password");
         Member savedMember = memberRepository.save(requestMember);
 
-        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
-        Product requestProduct = new Product("product", 1000, "product1.jpg",savedCategory);
+        Category savedCategory = categoryRepository.save(
+            new Category("test", "color", "image", "description"));
+        Product requestProduct = new Product("product", 1000, "product1.jpg", savedCategory);
         Product savedProduct = productRepository.save(requestProduct);
 
         Wish expected = new Wish(savedMember, savedProduct);
@@ -114,8 +117,9 @@ class WishRepositoryTest {
         Member requestMember = new Member("test", "password");
         Member savedMember = memberRepository.save(requestMember);
 
-        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
-        Product requestProduct = new Product("product", 1000, "product1.jpg",savedCategory);
+        Category savedCategory = categoryRepository.save(
+            new Category("test", "color", "image", "description"));
+        Product requestProduct = new Product("product", 1000, "product1.jpg", savedCategory);
         Product savedProduct = productRepository.save(requestProduct);
 
         Wish request = new Wish(savedMember, savedProduct);

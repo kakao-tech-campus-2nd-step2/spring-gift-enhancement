@@ -56,6 +56,7 @@ public class GlbalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(errorMessages);
     }
+
     @ExceptionHandler(DuplicateOptionNameException.class)
     public ResponseEntity<?> handleEntityNotFoundException(DuplicateOptionNameException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

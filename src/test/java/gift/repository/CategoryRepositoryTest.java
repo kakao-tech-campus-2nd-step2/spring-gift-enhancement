@@ -17,13 +17,13 @@ public class CategoryRepositoryTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
-    
+
     @Test
     @DisplayName("findById 테스트")
     void findByIdTest() {
         // given
         CategoryRequest request = new CategoryRequest("test", "color", "imageUrl", "description");
-        
+
         Category expected = categoryRepository.save(dtoToEntity(request));
 
         // when
@@ -38,7 +38,7 @@ public class CategoryRepositoryTest {
     void saveTest() {
         // given
         CategoryRequest request = new CategoryRequest("test", "color", "imageUrl", "description");
-        
+
         Category expected = dtoToEntity(request);
 
         // when
@@ -69,6 +69,7 @@ public class CategoryRepositoryTest {
     }
 
     private Category dtoToEntity(CategoryRequest request) {
-        return new Category(request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
+        return new Category(request.getName(), request.getColor(), request.getImageUrl(),
+            request.getDescription());
     }
 }

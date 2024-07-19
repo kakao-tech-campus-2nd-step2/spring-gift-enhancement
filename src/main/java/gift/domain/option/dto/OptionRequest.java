@@ -20,10 +20,10 @@ public class OptionRequest {
     @Min(value = 1, message = "최소 수량은 1개 이상으로 설정해주세요")
     private int quantity;
 
-    private OptionRequest(){
+    private OptionRequest() {
     }
 
-    public OptionRequest(String name, int quantity){
+    public OptionRequest(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
     }

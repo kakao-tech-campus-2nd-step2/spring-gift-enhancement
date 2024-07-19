@@ -41,12 +41,14 @@ public class WishService {
             .findAllByMember(member, pageable)
             .map(this::entityToDto);
     }
+
     @Transactional
     public WishResponse createWish(WishRequest wishRequest) {
         Wish wish = DtoToEntity(wishRequest);
 
         return entityToDto(wishRepository.save(wish));
     }
+
     @Transactional
     public void deleteWish(Long id, Member member) {
         Wish wish = wishRepository

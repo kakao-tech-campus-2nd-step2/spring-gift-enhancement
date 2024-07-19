@@ -44,21 +44,26 @@ public class ProductService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         return productRepository.findAll(pageable).map(this::entityToDto);
     }
+
     @Transactional
     public ProductCreateResponse createProduct(ProductRequest productRequest) {
-        Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow(() -> new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다."));
+        Category savedCategory = categoryRepository.findById(productRequest.getCategoryId())
+            .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다."));
         Product savedProduct = productRepository.save(dtoToEntity(productRequest, savedCategory));
-        OptionResponse optionResponse = optionService.addOptionToProduct(savedProduct.getId(), productRequest.getOptionRequest());
+        OptionResponse optionResponse = optionService.addOptionToProduct(savedProduct.getId(),
+            productRequest.getOptionRequest());
 
-        return new ProductCreateResponse(entityToDto(savedProduct),optionResponse);
+        return new ProductCreateResponse(entityToDto(savedProduct), optionResponse);
     }
+
     @Transactional
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
         Product savedProduct = productRepository
             .findById(id)
             .orElseThrow(() -> new ProductNotFoundException("찾는 상품이 존재하지 않습니다."));
 
-        Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
+        Category savedCategory = categoryRepository.findById(productRequest.getCategoryId())
+            .orElseThrow();
 
         savedProduct.updateAll(productRequest.getName(), productRequest.getPrice(),
             productRequest.getImageUrl(), savedCategory);
@@ -66,6 +71,7 @@ public class ProductService {
         return entityToDto(savedProduct);
 
     }
+
     @Transactional
     public void deleteProduct(Long id) {
         Product savedProduct = productRepository

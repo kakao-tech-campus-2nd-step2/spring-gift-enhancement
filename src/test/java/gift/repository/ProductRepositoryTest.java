@@ -29,7 +29,8 @@ class ProductRepositoryTest {
         // given
         OptionRequest optionRequest = new OptionRequest("name", 100);
         ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L, optionRequest);
-        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
+        Category savedCategory = categoryRepository.save(
+            new Category("test", "color", "image", "description"));
         Product expected = productRepository.save(dtoToEntity(request, savedCategory));
 
         // when
@@ -45,7 +46,8 @@ class ProductRepositoryTest {
         // given
         OptionRequest optionRequest = new OptionRequest("name", 100);
         ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L, optionRequest);
-        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
+        Category savedCategory = categoryRepository.save(
+            new Category("test", "color", "image", "description"));
 
         Product expected = new Product(request.getName(), request.getPrice(),
             request.getImageUrl(), savedCategory);
@@ -69,7 +71,8 @@ class ProductRepositoryTest {
         // given
         OptionRequest optionRequest = new OptionRequest("name", 100);
         ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L, optionRequest);
-        Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
+        Category savedCategory = categoryRepository.save(
+            new Category("test", "color", "image", "description"));
         Product savedProduct = productRepository.save(dtoToEntity(request, savedCategory));
 
         // when

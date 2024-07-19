@@ -9,12 +9,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class ProductTest {
+
     @Test
     @DisplayName("상품 updateAll 테스트")
-    void productUpdateAllTest(){
+    void productUpdateAllTest() {
         // given
-        Category category= new Category(1L,"name", "color", "image", "description");
-        Product product = new Product("name" , 1000, "image" ,category);
+        Category category = new Category(1L, "name", "color", "image", "description");
+        Product product = new Product("name", 1000, "image", category);
         // when
         product.updateAll("update", 1000, "image", category);
 

@@ -51,20 +51,22 @@ public class ProductController {
     }
 
     @GetMapping("/{id}/options")
-    public ResponseEntity<List<OptionResponse>> getProductOptions(@PathVariable("id") Long id){
+    public ResponseEntity<List<OptionResponse>> getProductOptions(@PathVariable("id") Long id) {
         List<OptionResponse> response = optionService.getProductOptions(id);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping()
-    public ResponseEntity<ProductCreateResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
+    public ResponseEntity<ProductCreateResponse> createProduct(
+        @RequestBody @Valid ProductRequest productRequest) {
         ProductCreateResponse response = productService.createProduct(productRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);
     }
 
     @PostMapping("/{id}/options")
-    public ResponseEntity<OptionResponse> addOptionToProduct(@PathVariable("id") Long id, @Valid @RequestBody OptionRequest request){
+    public ResponseEntity<OptionResponse> addOptionToProduct(@PathVariable("id") Long id,
+        @Valid @RequestBody OptionRequest request) {
         OptionResponse response = optionService.addOptionToProduct(id, request);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);

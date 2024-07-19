@@ -26,21 +26,21 @@ public class Option {
     private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="product_id")
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    protected Option(){
+    protected Option() {
     }
 
-    public Option(String name, int quantity){
+    public Option(String name, int quantity) {
         this(null, name, quantity, null);
     }
 
-    public Option(String name, int quantity, Product product){
+    public Option(String name, int quantity, Product product) {
         this(null, name, quantity, product);
     }
 
-    public Option(Long id, String name, int quantity, Product product){
+    public Option(Long id, String name, int quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
@@ -67,12 +67,14 @@ public class Option {
         this.quantity = quantity;
         // this.product = product;
     }
+
     public void checkDuplicateName(List<Option> optionList) {
 
-        if (optionList.stream().map(Option::getName).anyMatch((name)->name.equals(this.name))) {
+        if (optionList.stream().map(Option::getName).anyMatch((name) -> name.equals(this.name))) {
             throw new DuplicateOptionNameException(this.name + "은 중복된 이름입니다.");
         }
     }
+
     public void addProduct(Product product) {
         this.product = product;
     }

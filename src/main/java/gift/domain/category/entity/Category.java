@@ -46,6 +46,7 @@ public class Category {
         this.imageUrl = imageUrl;
         this.description = description;
     }
+
     public Long getId() {
         return id;
     }
@@ -66,7 +67,7 @@ public class Category {
         return description;
     }
 
-    public void updateAll(String name, String color, String imageUrl, String description){
+    public void updateAll(String name, String color, String imageUrl, String description) {
         this.name = name;
         this.color = color;
         this.imageUrl = imageUrl;

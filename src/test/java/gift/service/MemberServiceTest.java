@@ -86,7 +86,7 @@ class MemberServiceTest {
     void deleteMemberTest() {
         // given
         Long id = 1L;
-        Member savedMember =createMember();
+        Member savedMember = createMember();
 
         // when
         doReturn(Optional.of(savedMember)).when(memberRepository).findById(id);
@@ -112,14 +112,15 @@ class MemberServiceTest {
         assertThat(responseMember.getEmail()).isEqualTo(savedMember.getEmail());
     }
 
-    MemberRequest createMemberRequest(){
+    MemberRequest createMemberRequest() {
         return createMemberRequest("password");
     }
 
-    MemberRequest createMemberRequest(String password){
+    MemberRequest createMemberRequest(String password) {
         return new MemberRequest("test@google.co.kr", password);
     }
-    Member createMember(){
-        return  new Member(1L, "test@gmail.co.kr", "password");
+
+    Member createMember() {
+        return new Member(1L, "test@gmail.co.kr", "password");
     }
 }

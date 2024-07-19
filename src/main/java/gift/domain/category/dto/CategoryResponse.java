@@ -1,6 +1,7 @@
 package gift.domain.category.dto;
 
 public class CategoryResponse {
+
     private Long id;
 
     private String name;

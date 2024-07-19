@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class OptionService {
+
     private final OptionRepository optionRepository;
     private final ProductRepository productRepository;
 
@@ -24,14 +25,19 @@ public class OptionService {
     }
 
     public List<OptionResponse> getProductOptions(Long id) {
-        Product savedProduct = productRepository.findById(id).orElseThrow(()-> new OptionNotFoundException("[상품 옵션 조회] 찾는 상품이 없습니다."));
+        Product savedProduct = productRepository.findById(id)
+            .orElseThrow(() -> new OptionNotFoundException("[상품 옵션 조회] 찾는 상품이 없습니다."));
         List<Option> savedOptions = optionRepository.findAllByProduct(savedProduct);
-        return savedOptions.stream().map((option)-> new OptionResponse(option.getId(), option.getName(), option.getQuantity())).toList();
+        return savedOptions.stream().map(
+                (option) -> new OptionResponse(option.getId(), option.getName(), option.getQuantity()))
+            .toList();
     }
-    @Transactional
-    public OptionResponse addOptionToProduct(Long id, OptionRequest request){
 
-        Product savedProduct = productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("해당 상품이 존재하지 않습니다."));
+    @Transactional
+    public OptionResponse addOptionToProduct(Long id, OptionRequest request) {
+
+        Product savedProduct = productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException("해당 상품이 존재하지 않습니다."));
         List<Option> savedOptionList = optionRepository.findAllByProduct(savedProduct);
 
         Option newOption = dtoToEntity(request);
@@ -42,11 +48,11 @@ public class OptionService {
         return entityToDto(savedOption);
     }
 
-    private OptionResponse entityToDto(Option option){
+    private OptionResponse entityToDto(Option option) {
         return new OptionResponse(option.getId(), option.getName(), option.getQuantity());
     }
 
-    private Option dtoToEntity(OptionRequest request){
+    private Option dtoToEntity(OptionRequest request) {
         return new Option(request.getName(), request.getQuantity());
     }
 

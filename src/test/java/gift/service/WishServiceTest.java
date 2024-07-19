@@ -52,8 +52,8 @@ class WishServiceTest {
 
         Category savedCategory1 = new Category(1L, "test", "color", "image", "description");
         Category savedCategory2 = new Category(2L, "test", "color", "image", "description");
-        Product product1 = new Product("product1", 1000, "product1.jpg",savedCategory1);
-        Product product2 = new Product("product2", 2000, "product2.jpg",savedCategory2);
+        Product product1 = new Product("product1", 1000, "product1.jpg", savedCategory1);
+        Product product2 = new Product("product2", 2000, "product2.jpg", savedCategory2);
 
         Wish wish1 = new Wish(savedMember, product1);
         Wish wish2 = new Wish(savedMember, product2);

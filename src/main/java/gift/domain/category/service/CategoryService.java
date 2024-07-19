@@ -25,11 +25,13 @@ public class CategoryService {
 
         return categoryRepository.findAll(pageable).map(this::entityToDto);
     }
+
     @Transactional
     public CategoryResponse createCategory(CategoryRequest request) {
         Category savedCategory = categoryRepository.save(dtoToEntity(request));
         return entityToDto(savedCategory);
     }
+
     @Transactional
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         Category savedCategory = categoryRepository.findById(id).orElseThrow();
@@ -38,18 +40,21 @@ public class CategoryService {
 
         return entityToDto(savedCategory);
     }
+
     @Transactional
-    public void deleteCategory(Long id){
+    public void deleteCategory(Long id) {
         Category savedCategory = categoryRepository.findById(id).orElseThrow();
         categoryRepository.delete(savedCategory);
     }
 
     private CategoryResponse entityToDto(Category category) {
-        return new CategoryResponse(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
+        return new CategoryResponse(category.getId(), category.getName(), category.getColor(),
+            category.getImageUrl(), category.getDescription());
     }
 
     private Category dtoToEntity(CategoryRequest request) {
-        return new Category(request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
+        return new Category(request.getName(), request.getColor(), request.getImageUrl(),
+            request.getDescription());
     }
 
 }
