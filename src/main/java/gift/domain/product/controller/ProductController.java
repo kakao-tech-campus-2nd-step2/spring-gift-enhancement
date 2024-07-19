@@ -1,5 +1,8 @@
 package gift.domain.product.controller;
 
+import gift.domain.option.dto.OptionRequest;
+import gift.domain.option.dto.OptionResponse;
+import gift.domain.option.service.OptionService;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.dto.ProductResponse;
 import gift.domain.product.service.ProductService;
@@ -24,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @GetMapping()
@@ -42,11 +47,26 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProduct(id), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<OptionResponse>> getProductOptions(@PathVariable("id") Long id){
+
+        List<OptionResponse> response = optionService.getProductOptions(id);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping()
     public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
         ProductResponse productResponse = productService.createProduct(productRequest);
         return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
     }
+
+    @PostMapping("/{id}/options")
+    public ResponseEntity<OptionResponse> addOptionToProduct(@PathVariable("id") Long id, @Valid @RequestBody OptionRequest request){
+        OptionResponse response = optionService.addOptionToProduct(id, request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable("id") Long id,
