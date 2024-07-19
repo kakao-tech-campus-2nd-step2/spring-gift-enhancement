@@ -4,12 +4,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import gift.product.service.ProductOptionService;
+import gift.product.service.dto.ProductOptionInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +69,27 @@ class ProductOptionControllerTest {
                         .content(requestBody))
                 .andExpect(status().isOk());
         then(productOptionService).should().modifyProductOption(eq(productId), eq(optionId), any());
+    }
+
+    @Test
+    @DisplayName("ProductOptionController Option조회 테스트")
+    void getProductOptionTest() throws Exception {
+        //given
+        final Long productId = 1L;
+        final Long optionId = 1L;
+        ProductOptionInfo productOptionInfo = new ProductOptionInfo(1L, "optionName", 1000);
+        final String requestURI = "/api/products/" + productId + "/options/" + optionId;
+
+        given(productOptionService.getProductOptionInfo(eq(productId), eq(optionId))).willReturn(productOptionInfo);
+
+        //when//then
+        mockMvc.perform(get(requestURI))
+                .andExpect(status().isOk())
+                .andExpectAll(
+                        jsonPath("$.id").value(productOptionInfo.id()),
+                        jsonPath("$.name").value(productOptionInfo.name()),
+                        jsonPath("$.quantity").value(productOptionInfo.quantity())
+                );
+        then(productOptionService).should().getProductOptionInfo(eq(productId), eq(optionId));
     }
 }
