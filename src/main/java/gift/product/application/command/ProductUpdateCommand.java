@@ -1,7 +1,6 @@
 package gift.product.application.command;
 
 import gift.category.domain.Category;
-import gift.option.application.command.OptionCreateCommand;
 import gift.option.application.command.OptionUpdateCommand;
 import gift.product.domain.Product;
 

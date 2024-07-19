@@ -3,7 +3,6 @@ package gift.member.presentation;
 import gift.auth.TokenService;
 import gift.member.application.MemberResponse;
 import gift.member.application.MemberService;
-import gift.member.domain.Member;
 import gift.member.presentation.request.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

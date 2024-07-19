@@ -2,7 +2,6 @@ package gift.config;
 
 import gift.exception.type.NotFoundException;
 import gift.member.application.MemberService;
-import gift.member.domain.Member;
 import gift.member.presentation.request.ResolvedMember;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
