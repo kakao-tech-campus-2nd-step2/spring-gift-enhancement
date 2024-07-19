@@ -3,10 +3,8 @@ package gift.controller.dto.request;
 import gift.common.annotation.InvalidWord;
 import gift.service.dto.CreateProductDto;
 import gift.service.dto.UpdateProductDto;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
@@ -27,6 +25,8 @@ public class ProductRequest {
             String imageUrl,
             @Min(1)
             Long categoryId,
+            @Size(min = 1, message = "최소 1개의 옵션이 필요합니다.")
+            @Valid
             List<OptionRequest.Init> options
     ) {
         public CreateProductDto toDto() {
