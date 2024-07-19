@@ -42,8 +42,7 @@ public class Product {
     private String imageUrl;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @MapKey(name = "id")
-    private Map<Long, Option> options = new HashMap<>();
+    private List<Option> options = new ArrayList<>();
 
     protected Product() {
 
@@ -87,11 +86,7 @@ public class Product {
     }
 
     public List<Option> getOptions() {
-        return options.values().stream().toList();
-    }
-
-    public Optional<Option> getOption(Long id) {
-        return Optional.ofNullable(options.get(id));
+        return options;
     }
 
     public void removeOptions() {
@@ -99,12 +94,12 @@ public class Product {
     }
 
     public void addOption(Option option) {
-        options.put(option.getId(), option);
+        options.add(option);
         option.setProduct(this);
     }
 
     public void validateOption(Option option) {
-        for (Option o : options.values()) {
+        for (Option o : options) {
             if (o.getName().equals(option.getName())) {
                 throw new DuplicateOptionNameException("error.duplicate.option.name");
             }
