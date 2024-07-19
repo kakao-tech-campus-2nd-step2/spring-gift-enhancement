@@ -1,4 +1,4 @@
-package gift.errorException;
+package gift.util.errorException;
 
 import gift.domain.StatusResponse;
 import org.springframework.http.ResponseEntity;

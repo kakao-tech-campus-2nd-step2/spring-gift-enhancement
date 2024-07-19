@@ -3,7 +3,7 @@ package gift.controller;
 import gift.domain.Wish;
 import gift.domain.Wish.wishDetail;
 import gift.domain.Wish.wishSimple;
-import gift.mapper.PageMapper;
+import gift.util.page.PageMapper;
 import gift.service.WishService;
 import gift.util.ParsingPram;
 import gift.util.page.PageResult;

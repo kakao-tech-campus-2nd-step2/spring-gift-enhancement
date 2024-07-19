@@ -1,9 +1,10 @@
 package gift.controller;
 
 import gift.domain.Product;
+import gift.domain.Product.ProductDetail;
 import gift.domain.Product.ProductSimple;
 import gift.entity.ProductEntity;
-import gift.mapper.PageMapper;
+import gift.util.page.PageMapper;
 import gift.service.ProductService;
 import gift.util.page.PageResult;
 import gift.util.page.SingleResult;
@@ -27,7 +28,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public PageResult<ProductEntity> getProductList(@Valid Product.getList param) {
+    public PageResult<ProductDetail> getProductList(@Valid Product.getList param) {
         return PageMapper.toPageResult(productService.getProductList(param));
     }
 
@@ -37,7 +38,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public SingleResult<ProductEntity> getProduct(@PathVariable long id) {
+    public SingleResult<ProductDetail> getProduct(@PathVariable long id) {
         return new SingleResult<>(productService.getProduct(id));
     }
 

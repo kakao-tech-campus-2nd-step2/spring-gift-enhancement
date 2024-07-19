@@ -7,12 +7,11 @@ import gift.domain.Wish.wishSimple;
 import gift.entity.ProductEntity;
 import gift.entity.UserEntity;
 import gift.entity.WishEntity;
-import gift.errorException.BaseHandler;
+import gift.util.errorException.BaseHandler;
 import gift.mapper.WishMapper;
 import gift.repository.ProductRepository;
 import gift.repository.UserRepository;
 import gift.repository.WishRepository;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -43,7 +42,8 @@ public class WishService {
     }
 
     public Page<wishSimple> getWishList(Long userId, Wish.getList param) {
-        Page<WishEntity> wishEntities = wishRepository.findByUserEntityId(userId, param.toPageable());
+        Page<WishEntity> wishEntities = wishRepository.findByUserEntityId(userId,
+            param.toPageable());
 
         return wishMapper.toSimpleList(wishEntities);
     }

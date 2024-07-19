@@ -1,4 +1,4 @@
-package gift.service;
+package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.DELETE;
@@ -36,10 +36,12 @@ class UserTest {
 
     private String token;
 
+    private HttpHeaders headers = new HttpHeaders();
+
+    private String commonPath="/api/user";
 
     @BeforeEach
     public void setUp() {
-
         Login login = new Login("kakao1@kakao.com", "1234");
 
         HttpEntity<Login> requestEntity = new HttpEntity<>(login);
@@ -48,10 +50,11 @@ class UserTest {
             requestEntity, String.class);
 
         int startIndex = responseEntity.getBody().indexOf("\"token\":\"") + "\"token\":\"".length();
-
         int endIndex = responseEntity.getBody().indexOf("\"", startIndex);
 
         token = responseEntity.getBody().substring(startIndex, endIndex);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(token);
 
     }
 
@@ -60,12 +63,8 @@ class UserTest {
     public void UpdateUser() {
         UpdateUser body = new UpdateUser("123456789");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user/1",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + commonPath +"/1",
             PUT, requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -77,12 +76,8 @@ class UserTest {
     public void NotFoundUpdateUser() {
         UpdateUser body = new UpdateUser("123456789");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user/0",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + commonPath + "/0",
             PUT, requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -94,30 +89,22 @@ class UserTest {
     public void CreateUser() {
         CreateUser body = new CreateUser("kakao10@kakao.com", "1234");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + commonPath,
             POST, requestEntity, String.class);
 
         System.out.println(responseEntity);
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
-//    병렬로 수행하면 오류나지만, 단독으로 수행하면 수행 됨
+    //    병렬로 수행하면 오류나지만, 단독으로 수행하면 수행 됨
     @Test
     @DisplayName("유저 생성(유저 중복)")
     public void DuplicateCreateUser() {
         CreateUser body = new CreateUser("kakao1@kakao.com", "1234");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + commonPath,
             POST,
             requestEntity, String.class);
 
@@ -128,12 +115,8 @@ class UserTest {
     @Test
     @DisplayName("유저 삭제")
     public void removeUser() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user/2",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + commonPath + "/2",
             DELETE, requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -143,12 +126,8 @@ class UserTest {
     @Test
     @DisplayName("유저 삭제(유저 없음)")
     public void NotFoundRemoveUser() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/user/9999",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + commonPath + "/0",
             DELETE, requestEntity, String.class);
 
         System.out.println(responseEntity);
