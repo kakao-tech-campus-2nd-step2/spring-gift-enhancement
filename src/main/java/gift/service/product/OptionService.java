@@ -71,4 +71,16 @@ public class OptionService {
         optionRepository.deleteById(optionId);
     }
 
+    public synchronized void puchaseOption(Long optionId, Integer quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new NotFoundException("Option not found"));
+        option.purchase(quantity);
+        optionRepository.save(option);
+    }
+
+    @Transactional
+    public Option findOptionById(Long optionId) {
+        return optionRepository.findById(optionId)
+            .orElseThrow(() -> new NotFoundException("Option not found"));
+    }
 }
