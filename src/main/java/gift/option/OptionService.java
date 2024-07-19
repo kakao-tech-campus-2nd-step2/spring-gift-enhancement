@@ -26,8 +26,10 @@ public class OptionService {
     }
 
     public void updateOption(OptionRequest optionRequest){
-        isValidRequest(optionRequest);
         Option option = optionRepository.findById(optionRequest.getOptionId()).orElseThrow();
+        if(!optionRequest.getName().equals(option.getName())){
+            isValidRequest(optionRequest);
+        }
         option.update(optionRequest.getName(), optionRequest.getQuantity());
 
         optionRepository.save(option);
