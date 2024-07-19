@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 public class ProductControllerApiTest {
+
     @LocalServerPort
     private int port;
 
@@ -57,7 +58,6 @@ public class ProductControllerApiTest {
     static void setUp(@Autowired TestRestTemplate restTemplate,
         @Autowired CategoryJpaRepository categoryRepository,
         @Autowired ProductJpaRepository productRepository,
-        @Autowired OptionJpaRepository optionRepository,
         @LocalServerPort int port
     ) {
         //set token
@@ -78,7 +78,8 @@ public class ProductControllerApiTest {
         category = categoryRepository.save(new Category("카테고리"));
 
         //set product
-        dummyProduct = productRepository.save(new Product("이름", "설명", 1000, "http://test.com", category));
+        dummyProduct = productRepository.save(
+            new Product("이름", "설명", 1000, "http://test.com", category));
     }
 
     @Test
@@ -93,7 +94,7 @@ public class ProductControllerApiTest {
             List.of(new RequestOptionCreateDto("옵션", 10))
         );
 
-        String url = "http://localhost:"+port+"/api/products";
+        String url = "http://localhost:" + port + "/api/products";
         var entity = new HttpEntity<>(requestProductDto, headers);
 
         // when
@@ -116,13 +117,14 @@ public class ProductControllerApiTest {
     }
 
     @Test
-    void testGetProduct(){
+    void testGetProduct() {
         // given
-        String getUrl = "http://localhost:"+port+"/api/products/"+dummyProduct.getId();
+        String getUrl = "http://localhost:" + port + "/api/products/" + dummyProduct.getId();
         var entity = new HttpEntity<>(headers);
 
         // when
-        var response = restTemplate.exchange(getUrl, HttpMethod.GET, entity, ResponseProductDto.class);
+        var response = restTemplate.exchange(getUrl, HttpMethod.GET, entity,
+            ResponseProductDto.class);
 
         // then
         assertAll(
@@ -134,13 +136,14 @@ public class ProductControllerApiTest {
             () -> assertThat(responseProductDto.id()).isEqualTo(dummyProduct.getId()),
             () -> assertThat(responseProductDto.name()).isEqualTo(dummyProduct.getName()),
             () -> assertThat(responseProductDto.price()).isEqualTo(dummyProduct.getPrice()),
-            () -> assertThat(responseProductDto.description()).isEqualTo(dummyProduct.getDescription()),
+            () -> assertThat(responseProductDto.description()).isEqualTo(
+                dummyProduct.getDescription()),
             () -> assertThat(responseProductDto.imageUrl()).isEqualTo(dummyProduct.getUrl())
         );
     }
 
     @Test
-    void testUpdateProduct(){
+    void testUpdateProduct() {
         // given
         RequestProductUpdateDto updateProductDto = new RequestProductUpdateDto(
             "수정",
@@ -150,13 +153,12 @@ public class ProductControllerApiTest {
             category.getId()
         );
 
-        String updateUrl = "http://localhost:"+port+"/api/products/"+dummyProduct.getId();
+        String updateUrl = "http://localhost:" + port + "/api/products/" + dummyProduct.getId();
 
         var entity = new HttpEntity<>(updateProductDto, headers);
 
         // when
         var response = restTemplate.exchange(updateUrl, HttpMethod.PUT, entity, Long.class);
-
 
         // then
         assertAll(
@@ -180,14 +182,17 @@ public class ProductControllerApiTest {
         // given
         String deleteUrl = "http://localhost:" + port + "/api/products";
 
-        RequestProductIdsDto requestProductIdsDto = new RequestProductIdsDto(List.of(dummyProduct.getId()));
+        RequestProductIdsDto requestProductIdsDto = new RequestProductIdsDto(
+            List.of(dummyProduct.getId()));
         var deleteEntity = new HttpEntity<>(requestProductIdsDto, headers);
 
         // when
-        var response = restTemplate.exchange(deleteUrl, HttpMethod.DELETE, deleteEntity, Void.class);
+        var response = restTemplate.exchange(deleteUrl, HttpMethod.DELETE, deleteEntity,
+            Void.class);
 
         // then
-        assertThrows(NotFoundException.class, () -> productRepository.getProductById(dummyProduct.getId()));
+        assertThrows(NotFoundException.class,
+            () -> productRepository.getProductById(dummyProduct.getId()));
 
         // rollback
         productRepository.saveProduct(dummyProduct);
@@ -245,12 +250,14 @@ public class ProductControllerApiTest {
     void testUpdateProduct_NotFound() {
         // given
         Long nonExistentId = 999L;
-        var updateProductDto = new RequestProductUpdateDto("수정된 상품", 2000, "수정된 상품 설명", "http://updated.com", category.getId());
+        var updateProductDto = new RequestProductUpdateDto("수정된 상품", 2000, "수정된 상품 설명",
+            "http://updated.com", category.getId());
         String updateUrl = "http://localhost:" + port + "/api/products/" + nonExistentId;
         var entity = new HttpEntity<>(updateProductDto, headers);
 
         // when
-        ResponseEntity<String> updateResponseEntity = restTemplate.exchange(updateUrl, HttpMethod.PUT, entity, String.class);
+        ResponseEntity<String> updateResponseEntity = restTemplate.exchange(updateUrl,
+            HttpMethod.PUT, entity, String.class);
 
         // then
         assertThat(updateResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -265,16 +272,17 @@ public class ProductControllerApiTest {
         var entity = new HttpEntity<>(headers);
 
         // when
-        ResponseEntity<String> responseEntity = restTemplate.exchange(deleteUrl, HttpMethod.DELETE, entity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(deleteUrl, HttpMethod.DELETE,
+            entity, String.class);
 
         // then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
-    void testGetProductByPage_SizeFail(){
+    void testGetProductByPage_SizeFail() {
         // given
-        String getUrl = "http://localhost:"+port+"/api/products?page=0&size=101";
+        String getUrl = "http://localhost:" + port + "/api/products?page=0&size=101";
 
         // when
         var entity = new HttpEntity<>(headers);
