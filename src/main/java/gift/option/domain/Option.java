@@ -26,7 +26,6 @@ public class Option {
     @NotNull
     @Size(max = 50, message = "이름은 최대 50글자입니다.")
     @Pattern(regexp = "^[A-Za-z0-9 ()\\[\\]+\\-&/_ㄱ-ㅣ가-힣]+$", message = "특수문자는 (),[],+,-,&,/,_만 허용됩니다.")
-    @UniqueElements(message = "같은 이름의 옵션이 존재합니다.")
     private String name;
 
     @NotNull
