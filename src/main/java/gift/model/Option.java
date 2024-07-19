@@ -42,4 +42,22 @@ public class Option {
         this.quantity = quantity;
         this.product = product;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public @NotBlank(message = "옵션 이름을 입력해주세요.") @Size(max = 50, message = "옵션 이름은 최대 50자까지 가능합니다.") @Pattern(regexp = "^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣 ()\\[\\]\\+\\-\\&/_]*$", message = "옵션 이름에 허용되지 않은 특수문자가 포함되어 있습니다.") String getName() {
+        return name;
+    }
+
+    @Min(value = 1, message = "수량은 최소 1개 이상이어야 합니다.")
+    @Max(value = 99999999, message = "수량은 1억 개 미만이어야 합니다.")
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
 }
