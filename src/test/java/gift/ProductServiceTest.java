@@ -1,0 +1,89 @@
+package gift;
+
+import gift.domain.Option;
+import gift.repository.OptionRepository;
+import gift.repository.ProductRepository;
+import gift.service.ProductService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+@Transactional
+public class ProductServiceTest {
+
+    @Mock
+    private ProductRepository productRepository;
+
+    @Mock
+    private OptionRepository optionRepository;
+
+    @InjectMocks
+    private ProductService productService;
+
+    @Test
+    @DisplayName("옵션 수량 차감 성공 테스트")
+    public void subtractOptionQuantityTest_Success() {
+        Long productId = 1L;
+        String optionName = "Option1";
+        int quantityToSubtract = 5;
+
+        Option option = new Option();
+        option.setId(1L);
+        option.setName(optionName);
+        option.setQuantity(10);
+
+        when(optionRepository.findByProductIdAndName(productId, optionName)).thenReturn(Optional.of(option));
+
+        productService.subtractOptionQuantity(productId, optionName, quantityToSubtract);
+
+        assertEquals(5, option.getQuantity());
+        verify(optionRepository, times(1)).save(option);
+    }
+
+    @Test
+    @DisplayName("존재하는 옵션 수량보다 삭제하고자 하는 수량이 많은 경우 테스트")
+    public void subtractOptionQuantityTest_InsufficientQuantity() {
+        Long productId = 1L;
+        String optionName = "Option1";
+        int quantityToSubtract = 15;
+
+        Option option = new Option();
+        option.setId(1L);
+        option.setName(optionName);
+        option.setQuantity(10);
+
+        when(optionRepository.findByProductIdAndName(productId, optionName)).thenReturn(Optional.of(option));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.subtractOptionQuantity(productId, optionName, quantityToSubtract);
+        });
+
+        assertEquals("차감할 수량이 현재 수량보다 많습니다.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("수량을 차감하고자 하는 옵션이 존재하지 않는 경우")
+    public void subtractOptionQuantityTest_OptionNotFound() {
+        Long productId = 1L;
+        String optionName = "Option1";
+        int quantityToSubtract = 5;
+
+        when(optionRepository.findByProductIdAndName(productId, optionName)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.subtractOptionQuantity(productId, optionName, quantityToSubtract);
+        });
+
+        assertEquals("해당 옵션이 존재하지 않습니다.", exception.getMessage());
+    }
+}

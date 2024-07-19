@@ -29,7 +29,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("모든 카테고리 가져오기 테스트")
-    void testGetAllCategories() {
+    void getAllCategoriesTest() {
         Category category1 = new Category("Category1", "red", "url1", "desc1");
         Category category2 = new Category("Category2", "blue", "url2", "desc2");
         List<Category> categories = Arrays.asList(category1, category2);
