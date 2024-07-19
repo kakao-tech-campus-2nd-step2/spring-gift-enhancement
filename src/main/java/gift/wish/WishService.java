@@ -2,6 +2,7 @@ package gift.wish;
 
 import gift.common.auth.LoginMemberDto;
 import gift.common.exception.ProductException;
+import gift.common.exception.WishException;
 import gift.product.ProductErrorCode;
 import gift.product.ProductRepository;
 import gift.product.model.Product;
@@ -33,7 +34,8 @@ public class WishService {
     }
 
     @Transactional
-    public Long addProductToWishList(WishRequestDto wishRequestDto, LoginMemberDto loginMemberDto) throws ProductException {
+    public Long addProductToWishList(WishRequestDto wishRequestDto, LoginMemberDto loginMemberDto)
+        throws ProductException {
         Product product = productRepository.findById(wishRequestDto.getProductId())
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
         Wish wish = new Wish(loginMemberDto.toEntity(), product, wishRequestDto.getCount());
@@ -42,22 +44,24 @@ public class WishService {
     }
 
     @Transactional
-    public void updateProductInWishList(WishRequestDto wishRequestDto,
-        LoginMemberDto loginMemberDto) {
+    public void updateProductInWishList(Long wishId, WishRequestDto wishRequestDto,
+        LoginMemberDto loginMemberDto) throws WishException {
+        Wish wish = wishRepository.findById(wishId)
+            .orElseThrow(() -> new WishException(WishErrorCode.NOT_FOUND));
+        wish.validateMember(loginMemberDto.getId());
         if (wishRequestDto.isCountZero()) {
-            wishRepository.deleteByMemberIdAndProductId(loginMemberDto.getId(),
-                wishRequestDto.getProductId());
+            wishRepository.deleteById(wishId);
             return;
         }
-        Wish wish = wishRepository.findByMemberIdAndProductId(loginMemberDto.getId(),
-            wishRequestDto.getProductId()).orElseThrow();
         wish.changeCount(wishRequestDto.getCount());
     }
 
     @Transactional
-    public void deleteProductInWishList(WishRequestDto wishRequestDto,
-        LoginMemberDto loginMemberDto) {
-        wishRepository.deleteByMemberIdAndProductId(loginMemberDto.getId(),
-            wishRequestDto.getProductId());
+    public void deleteProductInWishList(Long wishId,
+        LoginMemberDto loginMemberDto) throws WishException {
+        Wish wish = wishRepository.findById(wishId)
+            .orElseThrow(() -> new WishException(WishErrorCode.NOT_FOUND));
+        wish.validateMember(loginMemberDto.getId());
+        wishRepository.deleteById(wishId);
     }
 }

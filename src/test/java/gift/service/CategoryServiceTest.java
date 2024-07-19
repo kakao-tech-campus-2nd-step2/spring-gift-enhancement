@@ -66,7 +66,7 @@ public class CategoryServiceTest {
 
     @Test
     void updateCategoryTest() {
-        //더티 체킹
+        //다시하기
     }
 
     @Test

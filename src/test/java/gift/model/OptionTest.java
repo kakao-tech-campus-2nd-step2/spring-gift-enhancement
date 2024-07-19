@@ -3,6 +3,7 @@ package gift.model;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import gift.common.exception.OptionException;
 import gift.option.model.Option;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ class OptionTest {
     void validateDuplicated() {
         Option option = new Option("test", 1, null);
 
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(
+        assertThatExceptionOfType(OptionException.class).isThrownBy(
             () -> option.validateDuplicated(new Option("test", 1, null)));
     }
 

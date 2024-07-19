@@ -12,6 +12,7 @@ import gift.product.ProductRepository;
 import gift.product.model.Product;
 import gift.wish.WishRepository;
 import gift.wish.WishService;
+import gift.wish.model.Wish;
 import gift.wish.model.WishRequestDto;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,12 +67,12 @@ public class WishServiceTest {
 
     @Test
     void deleteWishTest() {
-        WishRequestDto wishRequestDto = getWishRequestDto();
+        given(wishRepository.findById(any())).willReturn(Optional.of(new Wish(new Member(1L, "email", "name", "role"), null, 1)));
         LoginMemberDto loginMemberDto = getLoginMemberDto();
 
-        wishService.deleteProductInWishList(wishRequestDto, loginMemberDto);
+        wishService.deleteProductInWishList(1L, loginMemberDto);
 
-        then(wishRepository).should().deleteByMemberIdAndProductId(any(), any());
+        then(wishRepository).should().deleteById(any());
     }
 
     private LoginMemberDto getLoginMemberDto() {

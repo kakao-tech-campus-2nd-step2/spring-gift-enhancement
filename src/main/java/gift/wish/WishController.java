@@ -12,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,18 +44,20 @@ public class WishController {
         return ResponseEntity.created(URI.create("/api/wishes/" + wishId)).build();
     }
 
-    @PutMapping
-    public ResponseEntity<Void> updateProductInWishList(@RequestBody WishRequestDto wishRequestDto,
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateProductInWishList(
+        @PathVariable("id") Long wishId,
+        @RequestBody WishRequestDto wishRequestDto,
         @LoginMember LoginMemberDto loginMemberDto) {
-        wishService.updateProductInWishList(wishRequestDto, loginMemberDto);
+        wishService.updateProductInWishList(wishId, wishRequestDto, loginMemberDto);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductInWishList(
-        @RequestBody WishRequestDto wishRequestDto,
+        @PathVariable("id") Long wishId,
         @LoginMember LoginMemberDto loginMemberDto) {
-        wishService.deleteProductInWishList(wishRequestDto, loginMemberDto);
+        wishService.deleteProductInWishList(wishId, loginMemberDto);
         return ResponseEntity.ok().build();
     }
 }
