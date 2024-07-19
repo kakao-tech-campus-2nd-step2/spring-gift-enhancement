@@ -2,11 +2,12 @@ package gift.domain.product.service;
 
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
+import gift.domain.option.service.OptionService;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.dto.ProductResponse;
 import gift.domain.product.entity.Product;
+import gift.domain.product.exception.ProductNotFoundException;
 import gift.domain.product.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,16 +21,19 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
+    private final OptionService optionService;
+
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionService = optionService;
     }
 
     public ProductResponse getProduct(Long id) {
         Product product = productRepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("not found entity"));
+            .orElseThrow(() -> new ProductNotFoundException("찾는 상품이 존재하지 않습니다."));
         return entityToDto(product);
     }
 
@@ -40,14 +44,16 @@ public class ProductService {
 
     public ProductResponse createProduct(ProductRequest productRequest) {
         Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
-        Product product = productRepository.save(dtoToEntity(productRequest, savedCategory));
-        return entityToDto(product);
+        Product savedProduct = productRepository.save(dtoToEntity(productRequest, savedCategory));
+        optionService.addOptionToProduct(savedProduct.getId(), productRequest.getOptionRequest());
+
+        return entityToDto(savedProduct);
     }
 
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
         Product product = productRepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("not found entity"));
+            .orElseThrow(() -> new ProductNotFoundException("찾는 상품이 존재하지 않습니다."));
 
         Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
 
@@ -59,10 +65,10 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        Product product = productRepository
+        Product savedProduct = productRepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("not found entity"));
-        productRepository.delete(product);
+            .orElseThrow(() -> new ProductNotFoundException("찾는 상품이 존재하지 않습니다."));
+        productRepository.delete(savedProduct);
     }
 
     private ProductResponse entityToDto(Product product) {
