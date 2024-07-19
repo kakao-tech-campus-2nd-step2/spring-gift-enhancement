@@ -111,4 +111,11 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{productId}/options/{optionId}/subtract")
+    public ResponseEntity<Void> subtractOptionQuantity(@PathVariable Long productId, @PathVariable Long optionId,
+                                                       @RequestParam Long quantity) {
+        productService.subtractOptionQuantity(productId, optionId, quantity);
+        return ResponseEntity.ok().build();
+    }
+
 }

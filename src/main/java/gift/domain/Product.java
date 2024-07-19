@@ -111,4 +111,11 @@ public class Product {
         options.removeIf(option -> option.getId().equals(optionId));
     }
 
+    public Option getOptionById(Long optionId) {
+        return options.stream()
+                .filter(option -> option.getId().equals(optionId))
+                .findFirst()
+                .orElseThrow(() -> new GiftException(ErrorCode.OPTION_NOT_FOUND));
+    }
+
 }

@@ -101,4 +101,12 @@ public class ProductService {
         product.removeOptionById(optionId);
     }
 
+    public void subtractOptionQuantity(Long productId, Long optionId, Long quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
+        Option option = product.getOptionById(optionId);
+
+        option.subtract(quantity);
+    }
+
 }

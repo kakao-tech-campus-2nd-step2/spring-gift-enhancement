@@ -1,6 +1,8 @@
 package gift.domain;
 
 import gift.dto.OptionDto;
+import gift.exception.ErrorCode;
+import gift.exception.GiftException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -51,6 +53,16 @@ public class Option {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void subtract(Long quantity) {
+        if (quantity == null || quantity <= 0) {
+            throw new GiftException(ErrorCode.INVALID_QUANTITY);
+        }
+        if (this.quantity <= quantity) {
+            throw new GiftException(ErrorCode.QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
+        }
+        this.quantity -= quantity;
     }
 
 }
