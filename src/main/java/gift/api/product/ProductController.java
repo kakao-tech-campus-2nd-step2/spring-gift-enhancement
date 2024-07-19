@@ -31,7 +31,6 @@ public class ProductController {
         this.optionService = optionService;
     }
 
-
     @GetMapping()
     public ResponseEntity<List<ProductResponse>> getProducts(Pageable pageable) {
         return ResponseEntity.ok().body(productService.getProducts(pageable));

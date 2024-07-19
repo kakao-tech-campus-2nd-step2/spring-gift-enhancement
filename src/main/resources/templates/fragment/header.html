@@ -16,16 +16,16 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form th:action="@{/admin/add}" th:object="${productRequest}" method="post">
+        <form th:action="@{/admin}" th:object="${productRequest}" method="post">
           <div class="modal-body">
               <label>Name
-                <input type="text" th:value="*{name}" name="name" required="required">
+                <input type="text" name="name" required="required">
               </label>
               <label>Price
-                <input type="text" th:value="*{price}" name="price" required="required">
+                <input type="text" name="price" required="required">
               </label>
               <label>Image Url
-                <input type="text" th:value="*{imageUrl}" name="imageUrl">
+                <input type="text" name="imageUrl" required="required">
               </label>
           </div>
           <div class="modal-footer">

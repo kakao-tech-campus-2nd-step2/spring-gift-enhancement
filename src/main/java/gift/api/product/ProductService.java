@@ -36,20 +36,20 @@ public class ProductService {
     }
 
     public Long add(ProductRequest productRequest) {
-        Category category = findCategoryById(productRequest.getCategoryId());
+        Category category = findCategoryById(productRequest.categoryId());
         Product product = productRequest.toEntity(category);
         return productRepository.save(product).getId();
     }
 
     @Transactional
     public void update(Long id, ProductRequest productRequest) {
-        Category category = findCategoryById(productRequest.getCategoryId());
+        Category category = findCategoryById(productRequest.categoryId());
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchEntityException("product"));
         product.update(category,
-                productRequest.getName(),
-                productRequest.getPrice(),
-                productRequest.getImageUrl());
+                productRequest.name(),
+                productRequest.price(),
+                productRequest.imageUrl());
     }
 
     public void delete(Long id) {

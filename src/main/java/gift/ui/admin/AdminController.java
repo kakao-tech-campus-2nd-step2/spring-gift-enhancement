@@ -27,23 +27,23 @@ public class AdminController {
     @GetMapping()
     public String view(Model model, Pageable pageable) {
         model.addAttribute("products", productService.getProducts(pageable));
-        model.addAttribute("productDto", new ProductRequest());
+        model.addAttribute("productRequest", new ProductRequest(0L, "", 0, ""));
         return "administrator";
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public RedirectView add(@Valid ProductRequest productRequest) {
         productService.add(productRequest);
         return new RedirectView("/api/products");
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public RedirectView update(@PathVariable("id") long id, @Valid ProductRequest productRequest) {
         productService.update(id, productRequest);
         return new RedirectView("/api/products");
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public RedirectView delete(@PathVariable("id") long id) {
         productService.delete(id);
         return new RedirectView("/api/products");
