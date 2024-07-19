@@ -74,4 +74,30 @@ public class OptionServiceTest {
         assertThrows(ResourceNotFoundException.class,
                 () -> optionService.findById(saved.getId()));
     }
+
+    @Test
+    void subtract_실패() {
+        // given
+        OptionDTO actual = new OptionDTO("abc", 10);
+        Option saved = optionService.save(actual);
+
+        // when
+        // then
+        assertThrows(IllegalArgumentException.class,
+                () -> optionService.subtract(saved.getId(), 100));
+    }
+
+    @Test
+    void subtract_성공() {
+        // given
+        OptionDTO actual = new OptionDTO("abc", 10);
+        Option saved = optionService.save(actual);
+
+        // when
+        optionService.subtract(saved.getId(), 7);
+        Option expect = optionService.findById(saved.getId());
+
+        // then
+        assertThat(expect.getQuantity()).isEqualTo(3);
+    }
 }

@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Set;
 
 @SpringBootTest
-public class OptionDTOValidationTest {
+public class OptionDTOTest {
 
     @Autowired
     private Validator validator;
