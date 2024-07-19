@@ -80,11 +80,7 @@ public class Product {
         return options;
     }
     public boolean checkDuplicateOptionName(String optionName) {
-        for (Option option : options) {
-            if (option.getName().equals(optionName)) {
-                return true;
-            }
-        }
-        return false;
+        return options.stream()
+                .anyMatch(option -> option.getName().equals(optionName));
     }
 }
