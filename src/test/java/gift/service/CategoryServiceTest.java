@@ -14,6 +14,9 @@ import gift.domain.category.dto.CategoryResponse;
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
 import gift.domain.category.service.CategoryService;
+import gift.domain.option.repository.OptionRepository;
+import gift.domain.product.entity.Product;
+import gift.domain.product.repository.ProductRepository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +39,10 @@ class CategoryServiceTest {
     private CategoryService categoryService;
     @Mock
     private CategoryRepository categoryRepository;
-
+    @Mock
+    private ProductRepository productRepository;
+    @Mock
+    OptionRepository optionRepository;
     @Test
     @DisplayName("카테고리 전체 조회 테스트")
     void getAllCategoriesTest() {
@@ -128,14 +134,20 @@ class CategoryServiceTest {
     void deleteCategoryTest() {
         Long id = 1L;
         Category savedCategory = createCategory();
+        List<Product> productList = Arrays.asList(new Product(1L, "test", 100, "image", savedCategory),
+            new Product(2L, "test", 100, "image", savedCategory));
 
-        doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(id);
-
+        doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(any(Long.class));
+        doReturn(productList).when(productRepository).findAllByCategory(any(Category.class));
+        doNothing().when(optionRepository).deleteByProduct(any(Product.class));
+        doNothing().when(productRepository).deleteByCategory(any(Category.class));
         // when
         categoryService.deleteCategory(id);
 
         // then
-        verify(categoryRepository, times(1)).delete(savedCategory);
+        verify(optionRepository, times(2)).deleteByProduct(any(Product.class));
+        verify(productRepository, times(1)).deleteByCategory(any(Category.class));
+        verify(categoryRepository, times(1)).delete(any(Category.class));
     }
 
     private CategoryResponse entityToDto(Category category) {
