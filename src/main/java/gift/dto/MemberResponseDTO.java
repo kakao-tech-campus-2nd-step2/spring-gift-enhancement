@@ -22,4 +22,5 @@ public class MemberResponseDTO {
     public static MemberResponseDTO fromEntity(Member member) {
         return new MemberResponseDTO(member.getId(), member.getEmail());
     }
+
 }
