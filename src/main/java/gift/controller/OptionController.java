@@ -3,6 +3,8 @@ package gift.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import gift.dto.OptionDto;
 import gift.dto.response.OptionResponse;
 import gift.service.OptionService;
+import jakarta.validation.Valid;
+
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/products")
@@ -31,7 +37,15 @@ public class OptionController{
     }
 
     @PostMapping("/{id}/otions/new")
-    public ResponseEntity<Void> addOption(@RequestBody OptionDto optionDto, @PathVariable Long productId){
+    public ResponseEntity<?> addOption(@Valid @RequestBody OptionDto optionDto, BindingResult bindingResult, @PathVariable Long productId){
+        
+        if(bindingResult.hasErrors()){
+            Map<String, String> erros = new HashMap<>();
+            for(FieldError error : bindingResult.getFieldErrors()){
+                erros.put(error.getField(), error.getDefaultMessage());
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         optionService.addOption(optionDto, productId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
