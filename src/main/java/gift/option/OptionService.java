@@ -1,7 +1,6 @@
 package gift.option;
 
 import static gift.exception.ErrorMessage.OPTION_ALREADY_EXISTS;
-import static gift.exception.ErrorMessage.OPTION_NAME_DUPLICATED_IN_PRODUCT;
 import static gift.exception.ErrorMessage.OPTION_NOT_FOUND;
 import static gift.exception.ErrorMessage.PRODUCT_NOT_FOUND;
 
@@ -25,7 +24,7 @@ public class OptionService {
     }
 
     public List<OptionDTO> getOptions(long productId) {
-        if(!productRepository.existsById(productId)){
+        if (!productRepository.existsById(productId)) {
             throw new IllegalArgumentException(PRODUCT_NOT_FOUND);
         }
 
@@ -43,7 +42,7 @@ public class OptionService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new IllegalArgumentException(PRODUCT_NOT_FOUND));
 
-        if(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId)){
+        if (optionRepository.existsByNameAndProductId(optionDTO.getName(), productId)) {
             throw new IllegalArgumentException(OPTION_ALREADY_EXISTS);
         }
 
@@ -56,14 +55,14 @@ public class OptionService {
     }
 
     public void updateOption(long productId, OptionDTO optionDTO) {
-        if(!productRepository.existsById(productId)){
+        if (!productRepository.existsById(productId)) {
             throw new IllegalArgumentException(PRODUCT_NOT_FOUND);
         }
 
         Option option = optionRepository.findById(optionDTO.getId())
             .orElseThrow(() -> new IllegalArgumentException(OPTION_NOT_FOUND));
 
-        if(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId)){
+        if (optionRepository.existsByNameAndProductId(optionDTO.getName(), productId)) {
             throw new IllegalArgumentException(OPTION_ALREADY_EXISTS);
         }
 
@@ -72,6 +71,13 @@ public class OptionService {
     }
 
     public void deleteOption(long productId, long optionId) {
+        if (!productRepository.existsById(productId)) {
+            throw new IllegalArgumentException(PRODUCT_NOT_FOUND);
+        }
 
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new IllegalArgumentException(OPTION_NOT_FOUND));
+
+        optionRepository.delete(option);
     }
 }
