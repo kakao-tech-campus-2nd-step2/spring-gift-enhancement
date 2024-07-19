@@ -46,7 +46,15 @@ public class ProductRequestDto {
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
     }
-    
+
+    public ProductRequestDto(String name, int price, String imageUrl, Long categoryId, List<OptionRequestDto> options) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
+        this.options = options;
+    }
+
     public String getName() {
         return name;
     }

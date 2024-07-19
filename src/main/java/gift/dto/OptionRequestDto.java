@@ -18,6 +18,10 @@ public class OptionRequestDto {
     @Max(100000000)
     private int quantity;
 
+    public OptionRequestDto() {}
+
+    public OptionRequestDto(String name, int quantity) {}
+
     public String getName() {
         return name;
     }
