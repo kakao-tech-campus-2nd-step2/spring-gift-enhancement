@@ -1,5 +1,6 @@
 package gift.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -8,22 +9,23 @@ import java.util.Objects;
 @Embeddable
 public class Email {
     @Column(name = "email")
-    private String value;
+    private String emailValue;
 
     public Email() {
     }
 
-    public Email(String value) {
-        this.value = value;
+    public Email(String emailValue) {
+        this.emailValue = emailValue;
     }
 
-    public String getValue() {
-        return value;
+    public String getEmailValue() {
+        return emailValue;
     }
 
     @Override
+    @JsonValue
     public String toString() {
-        return value;
+        return emailValue;
     }
 
     @Override
@@ -31,11 +33,11 @@ public class Email {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Email that = (Email) o;
-        return Objects.equals(value, that.value);
+        return Objects.equals(emailValue, that.emailValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(emailValue);
     }
 }

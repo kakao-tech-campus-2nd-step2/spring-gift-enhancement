@@ -1,5 +1,8 @@
 package gift.product.service;
 
+import gift.category.domain.Category;
+import gift.category.repository.CategoryRepository;
+import gift.category.service.CategoryService;
 import gift.product.domain.Product;
 import gift.product.dto.ProductResponseListDto;
 import gift.product.dto.ProductServiceDto;
@@ -15,10 +18,12 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
     private static final int PAGE_SIZE = 10;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     public List<Product> getAllProducts() {
@@ -36,12 +41,14 @@ public class ProductService {
     }
 
     public Product createProduct(ProductServiceDto productServiceDto) {
-        return productRepository.save(productServiceDto.toProduct());
+        Category category = categoryService.getCategoryById(productServiceDto.categoryId());
+        return productRepository.save(productServiceDto.toProduct(category));
     }
 
     public Product updateProduct(ProductServiceDto productServiceDto) {
         validateProductExists(productServiceDto.id());
-        return productRepository.save(productServiceDto.toProduct());
+        Category category = categoryService.getCategoryById(productServiceDto.categoryId());
+        return productRepository.save(productServiceDto.toProduct(category));
     }
 
     public void deleteProduct(Long id) {

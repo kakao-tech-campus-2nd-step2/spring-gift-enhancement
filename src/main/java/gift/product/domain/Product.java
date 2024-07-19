@@ -1,5 +1,6 @@
 package gift.product.domain;
 
+import gift.category.domain.Category;
 import gift.product.dto.ProductRequestDto;
 import gift.wish.domain.Wish;
 import jakarta.persistence.*;
@@ -25,6 +26,11 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, orphanRemoval = true)
     List<Wish> wishes = new ArrayList<>();
 
+    // product 를 가져올 때, category 를 함께 가져와야 함으로, EAGER 로 가져온다
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     // JDBC 에서 엔티티 클래스를 인스턴스화할 때 반드시 기본 생성자와 파라미터 생성자가 필요하다
     public Product() {
     }
@@ -34,6 +40,14 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Product(Long id, ProductName name, ProductPrice price, ImageUrl imageUrl, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Product(Long id, ProductRequestDto productRequestDto) {
@@ -58,6 +72,10 @@ public class Product {
 
     public ImageUrl getImageUrl() {
         return imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public boolean checkNew() {

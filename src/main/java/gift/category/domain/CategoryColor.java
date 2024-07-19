@@ -1,44 +1,39 @@
-package gift.product.domain;
+package gift.category.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import gift.global.response.ErrorCode;
-import gift.product.exception.ProductValidException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
 
 @Embeddable
-public class ProductPrice {
+public class CategoryColor {
 
-    @Column(name = "price")
-    private Long productPriceValue;
+    @Column(name = "color")
+    private String productPriceValue;
 
-    public ProductPrice() {
+    public CategoryColor() {
     }
 
-    public ProductPrice(Long productPriceValue) {
-        if (productPriceValue < 0) {
-            throw new ProductValidException(ErrorCode.PRODUCT_PRICE_OUT_OF_RANGE_ERROR);
-        }
+    public CategoryColor(String productPriceValue) {
         this.productPriceValue = productPriceValue;
     }
 
-    public Long getProductPriceValue() {
+    public String getProductPriceValue() {
         return productPriceValue;
     }
 
     @Override
     @JsonValue
     public String toString() {
-        return Long.toString(productPriceValue);
+        return productPriceValue;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductPrice that = (ProductPrice) o;
+        CategoryColor that = (CategoryColor) o;
         return Objects.equals(productPriceValue, that.productPriceValue);
     }
 

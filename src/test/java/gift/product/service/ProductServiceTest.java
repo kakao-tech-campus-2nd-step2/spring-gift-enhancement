@@ -1,5 +1,7 @@
 package gift.product.service;
 
+import gift.category.domain.*;
+import gift.category.service.CategoryService;
 import gift.product.domain.*;
 import gift.product.dto.ProductServiceDto;
 import gift.product.exception.ProductNotFoundException;
@@ -28,16 +30,21 @@ class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private CategoryService categoryService;
+
     @InjectMocks
     private ProductService productService;
 
     private Product product;
     private ProductServiceDto productServiceDto;
+    private Category category;
 
     @BeforeEach
     void setUp() {
-        product = new Product(1L, new ProductName("name"), new ProductPrice(10L), new ImageUrl("imageUrl"));
-        productServiceDto = new ProductServiceDto(1L, new ProductName("name"), new ProductPrice(10L), new ImageUrl("imageUrl"));
+        category = new Category(1L, new CategoryName("name"), new CategoryColor("color"), new CategoryImageUrl("imageUrl"), new CategoryDescription("description"));
+        product = new Product(1L, new ProductName("name"), new ProductPrice(10L), new ImageUrl("imageUrl"), category);
+        productServiceDto = new ProductServiceDto(1L, new ProductName("name"), new ProductPrice(10L), new ImageUrl("imageUrl"), 1L);
     }
 
     @Test
@@ -50,7 +57,7 @@ class ProductServiceTest {
 
         // then
         assertThat(products).hasSize(1);
-        assertThat(products.getFirst()).isEqualTo(product);
+        assertThat(products.get(0)).isEqualTo(product);
         verify(productRepository, times(1)).findAll();
     }
 
@@ -82,13 +89,15 @@ class ProductServiceTest {
     @Test
     void testCreateProduct() {
         // given
+        given(categoryService.getCategoryById(anyLong())).willReturn(category);
         given(productRepository.save(any(Product.class))).willAnswer(invocation -> invocation.getArgument(0));
 
         // when
         Product createdProduct = productService.createProduct(productServiceDto);
 
         // then
-        assertThat(createdProduct).isEqualTo(productServiceDto.toProduct());
+        assertThat(createdProduct).isEqualTo(productServiceDto.toProduct(category));
+        verify(categoryService, times(1)).getCategoryById(anyLong());
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
@@ -96,14 +105,16 @@ class ProductServiceTest {
     void testUpdateProduct() {
         // given
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(categoryService.getCategoryById(anyLong())).willReturn(category);
         given(productRepository.save(any(Product.class))).willAnswer(invocation -> invocation.getArgument(0));
 
         // when
         Product updatedProduct = productService.updateProduct(productServiceDto);
 
         // then
-        assertThat(updatedProduct).isEqualTo(productServiceDto.toProduct());
+        assertThat(updatedProduct).isEqualTo(productServiceDto.toProduct(category));
         verify(productRepository, times(1)).findById(anyLong());
+        verify(categoryService, times(1)).getCategoryById(anyLong());
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
@@ -118,6 +129,7 @@ class ProductServiceTest {
 
         verify(productRepository, times(1)).findById(anyLong());
         verify(productRepository, times(0)).save(any(Product.class));
+        verify(categoryService, times(0)).getCategoryById(anyLong());
     }
 
     @Test

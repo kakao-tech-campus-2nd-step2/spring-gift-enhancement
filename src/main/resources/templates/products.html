@@ -28,6 +28,7 @@
             <th>Name</th>
             <th>Price</th>
             <th>Image URL</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -68,6 +69,10 @@
                         <label for="productImageUrl">Image URL</label>
                         <input type="text" class="form-control" id="productImageUrl" name="imageUrl" required>
                     </div>
+                    <div class="form-group">
+                        <label for="productCategory">Category</label>
+                        <select class="form-control" id="productCategory" name="category" required></select>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -81,7 +86,19 @@
 <script>
     $(document).ready(function () {
         const apiBaseUrl = '/api/products';
+        const apiCategoriesUrl = '/api/categories';
         let currentPage = 0;
+
+        function loadCategories() {
+            return $.get(apiCategoriesUrl).then(function(response) {
+                const categories = response.data;
+                const categorySelect = $('#productCategory');
+                categorySelect.empty();
+                categories.forEach(category => {
+                    categorySelect.append(`<option value="${category.id}">${category.name}</option>`);
+                });
+            });
+        }
 
         function loadProducts(page) {
             $.get(apiBaseUrl + '?page=' + page, function (response) {
@@ -90,9 +107,10 @@
                     $('#productTableBody').append(`
                         <tr data-id="${product.id}">
                             <td><input type="checkbox" class="productCheckbox"></td>
-                            <td>${product.name.value}</td>
-                            <td>${product.price.value}</td>
-                            <td>${product.imageUrl.value}</td>
+                            <td>${product.name}</td>
+                            <td>${product.price}</td>
+                            <td>${product.imageUrl}</td>
+                            <td>${product.category ? product.category.name : ''}</td>
                             <td>
                                 <button class="btn btn-warning btn-sm editProduct">✏️</button>
                                 <button class="btn btn-danger btn-sm deleteProduct">🗑️</button>
@@ -125,14 +143,17 @@
             $('#productModalLabel').text('Add New Product');
             $('#productForm')[0].reset();
             $('#productId').val('');
-            $('#productModal').modal('show');
+            loadCategories().then(function() {
+                $('#productModal').modal('show');
+            });
         });
 
         $('#saveProduct').click(function () {
             const productData = {
-                name: { value: $('#productName').val() },
-                price: { value: $('#productPrice').val() },
-                imageUrl: { value: $('#productImageUrl').val() }
+                name: $('#productName').val(),
+                price: $('#productPrice').val(),
+                imageUrl: $('#productImageUrl').val(),
+                categoryId: $('#productCategory').val()
             };
             const productId = $('#productId').val();
 
@@ -165,10 +186,13 @@
             $.get(apiBaseUrl + '/' + productId, function (response) {
                 $('#productModalLabel').text('Edit Product');
                 $('#productId').val(response.data.id);
-                $('#productName').val(response.data.name.value);
-                $('#productPrice').val(response.data.price.value);
-                $('#productImageUrl').val(response.data.imageUrl.value);
-                $('#productModal').modal('show');
+                $('#productName').val(response.data.name);
+                $('#productPrice').val(response.data.price);
+                $('#productImageUrl').val(response.data.imageUrl);
+                loadCategories().then(function() {
+                    $('#productCategory').val(response.data.category ? response.data.category.id : '');
+                    $('#productModal').modal('show');
+                });
             });
         });
 
@@ -213,9 +237,10 @@
                         $productTableBody.append(`
                             <tr data-id="${product.id}">
                                 <td><input type="checkbox" class="productCheckbox"></td>
-                                <td>${product.name.value}</td>
-                                <td>${product.price.value}</td>
-                                <td>${product.imageUrl.value}</td>
+                                <td>${product.name}</td>
+                                <td>${product.price}</td>
+                                <td>${product.imageUrl}</td>
+                                <td>${product.category ? product.category.name : ''}</td>
                                 <td>
                                     <button class="btn btn-warning btn-sm editProduct">✏️</button>
                                     <button class="btn btn-danger btn-sm deleteProduct">🗑️</button>

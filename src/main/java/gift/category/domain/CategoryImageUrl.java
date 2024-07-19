@@ -1,4 +1,4 @@
-package gift.product.domain;
+package gift.category.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
@@ -7,15 +7,15 @@ import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class ImageUrl {
+public class CategoryImageUrl {
 
     @Column(name = "image_url")
     private String imageUrlValue;
 
-    public ImageUrl() {
+    public CategoryImageUrl() {
     }
 
-    public ImageUrl(String imageUrlValue) {
+    public CategoryImageUrl(String imageUrlValue) {
         this.imageUrlValue = imageUrlValue;
     }
 
@@ -33,7 +33,7 @@ public class ImageUrl {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ImageUrl that = (ImageUrl) o;
+        CategoryImageUrl that = (CategoryImageUrl) o;
         return Objects.equals(imageUrlValue, that.imageUrlValue);
     }
 
