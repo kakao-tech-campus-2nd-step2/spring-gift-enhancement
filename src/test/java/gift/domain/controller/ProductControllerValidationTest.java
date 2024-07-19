@@ -77,9 +77,9 @@ public class ProductControllerValidationTest {
             new ProductRequest("SpecialChar $*#", 1000, "http://example.com/image.jpg", 1L),
             new ProductRequest("name is 카카오", 1000, "http://example.com/image.jpg", 1L)};
         String[] expected = {
-            "상품 이름은 공백을 포함하여 최대 15자까지 입력할 수 있습니다.",
-            "상품 이름에 (), [], +, -, &, /, _ 이외의 특수 문자는 사용할 수 없습니다.",
-            "상품 이름에 '카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다."};
+            "공백을 포함하여 최대 15자까지 입력할 수 있습니다.",
+            "(), [], +, -, &, /, _ 이외의 특수 문자는 사용할 수 없습니다.",
+            "'카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다."};
 
         for (int i = 0; i < invalidRequest.length; i++) {
             //when

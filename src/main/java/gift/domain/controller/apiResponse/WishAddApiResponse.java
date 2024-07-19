@@ -13,7 +13,7 @@ public class WishAddApiResponse extends BasicApiResponse {
     @JsonCreator
     public WishAddApiResponse(
         @JsonProperty(value = "status", required = true) HttpStatusCode statusCode,
-        @JsonProperty(value = "value", required = true) WishAddResponse result
+        @JsonProperty(value = "result", required = true) WishAddResponse result
     ) {
         super(statusCode);
         this.result = result;
