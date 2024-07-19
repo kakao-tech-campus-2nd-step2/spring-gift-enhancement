@@ -33,12 +33,11 @@ public class ProductService{
 
     private OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository, OptionRepository optionRepository, OptionService OptionService) {
+    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.wishListRepository = wishListRepository;
         this.categoryRepository = categoryRepository;
         this.optionRepository = optionRepository;
-        this.optionService = optionService;
     }
 
     @Transactional
