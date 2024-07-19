@@ -1,7 +1,6 @@
 package gift.controller;
 
 import gift.domain.CategoryRequest;
-import gift.domain.WishListRequest;
 import gift.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

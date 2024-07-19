@@ -19,20 +19,23 @@ public class WishListService {
         this.wishListRepository = wishListRepository;
     }
 
-    public void save(WishListRequest wishListRequest) {
-        WishList wishList = WishListController.MapWishListRequestToWishList(wishListRequest);
+    public void save(WishList wishList) {
         wishListRepository.save(wishList);
     }
 
     public List<WishListResponse> findById(String jwtId, Pageable pageable) {
         List<WishList> wishLists = wishListRepository.findByMemberId(jwtId, pageable);
         return wishLists.stream()
-                .map(WishListController::MapWishListToWishListResponse)
+                .map(this::MapWishListToWishListResponse)
                 .collect(Collectors.toList());
     }
 
     public void delete(Long Id) {
         wishListRepository.deleteById(Id);
+    }
+
+    public WishListResponse MapWishListToWishListResponse(WishList wishList) {
+        return new WishListResponse(wishList.getId(), wishList.getMenu());
     }
 }
 
