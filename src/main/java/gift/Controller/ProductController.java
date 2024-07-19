@@ -37,7 +37,7 @@ public class ProductController {
 
     @GetMapping("/api/products/add")
     public String newProductForm(Model model) {
-        model.addAttribute("product", new Product(0L,"",0,"",new Category(0L,"","","","",null)));
+        model.addAttribute("product", new Product(0L,"",0,"",new Category(0L,"","","","",null),null));
         model.addAttribute("categories", productService.getAllCategory());
         return "post";
     }
