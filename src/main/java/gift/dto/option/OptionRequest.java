@@ -12,6 +12,7 @@ public class OptionRequest {
 
     @Max(value = 99999999, message = "옵션 수량은 1억 미만의 수만 입력가능합니다.")
     @Min(value = 1, message = "옵션 수량은 1 이상의 수만 입력가능합니다.")
+    @NotNull
     private int quantity;
 
     public OptionRequest(String name, int quantity) {
