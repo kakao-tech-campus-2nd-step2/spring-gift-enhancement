@@ -25,4 +25,9 @@ public class OptionRepositoryImpl implements OptionRepository{
     public List<Option> getOptionsByProductId(Long productId) {
         return optionJpaRepository.findByProductId(productId);
     }
+
+    @Override
+    public void deleteAll(List<Long> optionIds) {
+        optionJpaRepository.deleteAllById(optionIds);
+    }
 }

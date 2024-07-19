@@ -52,6 +52,11 @@ public class OptionService {
         return optionRepository.saveAll(pojoOptions.getOptions());
     }
 
+    @Transactional
+    public void deleteOptions(List<Long> optionIds) {
+        optionRepository.deleteAll(optionIds);
+    }
+
     private <T> boolean isOptionNamesDuplicate(List<T> optionDtos,
         Function<T, String> nameExtractor) {
         return optionDtos.stream()

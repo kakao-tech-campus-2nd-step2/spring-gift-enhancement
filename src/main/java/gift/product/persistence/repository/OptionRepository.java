@@ -8,4 +8,6 @@ public interface OptionRepository {
     List<Long> saveAll(List<Option> options);
 
     List<Option> getOptionsByProductId(Long productId);
+
+    void deleteAll(List<Long> optionIds);
 }
