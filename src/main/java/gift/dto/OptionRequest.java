@@ -13,7 +13,7 @@ public class OptionRequest {
     @Pattern(regexp = "^[\\w\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_가-힣]*$", message = "옵션 이름에 허용되지 않는 특수 문자가 포함되어 있습니다.")
     private String name;
 
-    @Min(value = 1, message = "0개 이하는 구입할 수 없습니다.")
+    @Min(value = 1, message = "0개 이하는 등록할 수 없습니다.")
     @Max(value = 99999999, message = "판매 가능한 수량은 1억 개 미만 입니다.")
     private int quantity;
 
