@@ -17,6 +17,7 @@ public class SessionUserArgumentResolver implements HandlerMethodArgumentResolve
                 && parameter.hasParameterAnnotation(SessionUser.class);
     }
 
+
     @Override //넣어줄 반환값을 넣어준다.
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest(HttpServletRequest.class);

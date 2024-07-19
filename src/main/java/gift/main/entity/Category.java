@@ -17,6 +17,7 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
+
     public Category() {
     }
 
@@ -54,6 +55,5 @@ public class Category {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 
 }

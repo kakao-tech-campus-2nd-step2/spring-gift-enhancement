@@ -18,5 +18,6 @@ public record ProductResponce(
                 product.getImageUrl(),
                 product.getSellerName(),
                 product.getCategoryName());
+
     }
 }

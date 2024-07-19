@@ -5,6 +5,7 @@ import gift.main.entity.Role;
 public class UserVo {
 
     private final Long id;
+
     private final String name;
     private final String email;
     private final Role role;

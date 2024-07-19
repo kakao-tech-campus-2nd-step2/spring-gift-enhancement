@@ -135,5 +135,6 @@ class ProductServiceTest {
         //then
         assertThat(wishProductRepository.findAllByProductId(saveProduct.getId()).size()).isEqualTo(0);
         assertThat(productRepository.existsById(saveProduct.getId())).isFalse();
+
     }
 }

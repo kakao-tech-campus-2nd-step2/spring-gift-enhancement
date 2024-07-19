@@ -17,11 +17,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
-
-    private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
-    private final WishProductRepository wishProductRepository;
-    private final ProductRepository productRepository;
     private final EntityManager entityManager;
 
     @Autowired
@@ -109,5 +104,4 @@ class UserRepositoryTest {
         assertThatThrownBy(() -> userRepository.save(duplicateUser)).isInstanceOf(DataIntegrityViolationException.class);
 
     }
-
 }

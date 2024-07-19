@@ -32,6 +32,7 @@ public class AdminProductController {
             @SessionUser UserVo sessionUserVo) {
         productService.updateProduct(id, productRequest);
         return ResponseEntity.ok("Product updated successfully");
+
     }
 
     @DeleteMapping("/{id}")

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -26,6 +27,7 @@ public class User {
     private Role role;
 
     public User() {
+
     }
 
     public User(long id, String name, String email, String password, Role role) {

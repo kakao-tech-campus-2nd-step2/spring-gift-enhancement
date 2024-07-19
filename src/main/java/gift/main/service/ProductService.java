@@ -35,6 +35,7 @@ public class ProductService {
                           CategoryRepository categoryRepository,
                           WishProductRepository wishProductRepository,
                           OptionService optionService) {
+
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
@@ -79,6 +80,7 @@ public class ProductService {
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         product.updateValue(productRequest, category);
     }
+
 
     public ProductResponce getProduct(long id) {
         Product product = productRepository.findById(id)

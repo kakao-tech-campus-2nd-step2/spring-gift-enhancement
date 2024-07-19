@@ -30,6 +30,7 @@ public class Product {
     private Category category;
 
     public Product() {
+
     }
 
 
@@ -99,7 +100,6 @@ public class Product {
         return category;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -112,4 +112,5 @@ public class Product {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

@@ -41,6 +41,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         if (productRepository.existsByCategoryId(id)) {
+
             throw new CustomException(ErrorCode.EXISTS_PRODUCT);
         }
         categoryRepository.delete(category);
@@ -58,4 +59,5 @@ public class CategoryService {
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         category.updateCategory(categoryRequest);
     }
+
 }

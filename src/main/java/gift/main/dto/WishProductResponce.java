@@ -11,6 +11,7 @@ public record WishProductResponce(Long id, String name, int price, String imageU
                 wishProduct.product.getPrice(),
                 wishProduct.product.getImageUrl(),
                 wishProduct.product.getSellerName());
+
     }
 
 }
