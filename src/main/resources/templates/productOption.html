@@ -62,6 +62,33 @@
         });
         document.getElementById('total-price').innerText = Math.round(totalPrice);
     }
+
+    function addToWishlist() {
+        const productId = document.querySelector('.add-to-wishlist').getAttribute('data-product-id');
+        const options = Array.from(document.querySelectorAll('.option-row')).filter(row => row.querySelector('input[name="optionSelect"]').checked).map(row => {
+            return {
+                id: row.getAttribute('data-option-id'),
+                quantity: row.querySelector('.quantity').value
+            };
+        });
+
+        fetch('/web/wishlist/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({productId, options})
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert(data);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector('.add-to-wishlist').addEventListener('click', addToWishlist);
+    });
   </script>
 </head>
 <body>
@@ -92,7 +119,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr class="option-row" th:each="option : ${options}">
+  <tr class="option-row" th:each="option : ${options}" th:data-option-id="${option.id}">
     <td th:text="${option.name}">옵션 이름</td>
     <td><input type="number" min="1" th:value="1" class="quantity" style="width: 60px;" onchange="updateTotalPrice()"/></td>
     <td class="option-price" th:text="${option.price}">가격</td>

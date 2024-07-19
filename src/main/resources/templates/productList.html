@@ -146,17 +146,13 @@
     <td th:text="${product.categoryName}">Category</td>
     <td><img th:src="${product.imageUrl}" alt="product image" width="100"/></td>
     <td class="btn-group">
-      <input type="number" min="1" value="1" class="quantity" style="width: 60px; margin-right: 10px;">
-      <button class="btn add-to-wishlist" th:data-product-id="${product.id}">찜</button>
       <a th:href="@{/web/products/detail/{id}(id=${product.id})}" class="btn">상세보기</a>
       <a th:href="@{/web/products/edit/{id}(id=${product.id})}" class="btn">수정</a>
       <a th:href="@{/web/products/delete/{id}(id=${product.id})}" class="btn btn-secondary">삭제</a>
-      <a th:href="@{/web/products/{id}/options(id=${product.id})}" class="btn">옵션</a>
+      <a th:href="@{/web/products/{id}/options(id=${product.id})}" class="btn">구매하기</a>
     </td>
   </tr>
   </tbody>
 </table>
-
-<script src="/js/wishlist.js"></script>
 </body>
 </html>
