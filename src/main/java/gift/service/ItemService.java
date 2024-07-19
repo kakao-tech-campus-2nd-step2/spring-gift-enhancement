@@ -25,12 +25,13 @@ public class ItemService {
     }
 
     @Transactional
-    public Long insertItem(ItemForm form) {
-        Category category = categoryRepository.findById(form.getCategoryId())
+    public Long insertItem(ItemDTO itemDTO) {
+        Category category = categoryRepository.findById(itemDTO.getCategoryId())
             .orElseThrow(() -> new CustomNotFoundException(ErrorCode.CATEGORY_NOT_FOUND));
-        Item item = new Item(form.getName(), form.getPrice(), form.getImgUrl(), category);
+        Item item = new Item(itemDTO.getName(),itemDTO.getPrice(),itemDTO.getImgUrl(),category);
         return itemRepository.save(item).getId();
     }
+
 
     @Transactional(readOnly = true)
     public ItemDTO findItem(Long id) {
