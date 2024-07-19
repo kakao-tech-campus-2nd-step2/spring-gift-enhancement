@@ -45,7 +45,7 @@ public class ProductController {
         ProductModel.Info productModel = productService.getProduct(id);
         List<OptionModel.Info> optionModels = optionService.getOptions(id);
         ProductResponse.Info response = ProductResponse.Info.from(productModel, optionModels);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
     @Authorization(role = Role.ADMIN)
@@ -57,7 +57,7 @@ public class ProductController {
         List<OptionModel.Info> optionModel = optionService.createOption(productModel.id(),
             request.toOptionCommand());
         ProductResponse.Info response = ProductResponse.Info.from(productModel, optionModel);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
 
@@ -71,7 +71,7 @@ public class ProductController {
             request.toProductCommand());
         List<OptionModel.Info> optionModel = optionService.getOptions(id);
         ProductResponse.Info response = ProductResponse.Info.from(productModel, optionModel);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
     @Authorization(role = Role.ADMIN)
@@ -80,7 +80,7 @@ public class ProductController {
         @PathVariable("id") Long id
     ) {
         productService.deleteProduct(id);
-        return ResponseEntity.ok().body("Product deleted successfully.");
+        return ResponseEntity.ok("Product deleted successfully.");
     }
 
     @GetMapping("/products")
@@ -93,7 +93,7 @@ public class ProductController {
             searchValue,
             pageable);
         var response = PageResponse.from(page, ProductResponse.Summary::from);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
 }

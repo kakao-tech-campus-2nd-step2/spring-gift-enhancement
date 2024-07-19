@@ -30,7 +30,7 @@ public class MemberController {
         @RequestBody @Valid MemberRequest.Register request
     ) {
         memberService.register(request.toCommand());
-        return ResponseEntity.ok().body("User created successfully.");
+        return ResponseEntity.ok("User created successfully.");
     }
 
     @PostMapping("/login")
@@ -38,7 +38,7 @@ public class MemberController {
         @RequestBody @Valid MemberRequest.Login request
     ) {
         var response = memberService.login(request.toCommand());
-        return ResponseEntity.ok().body(MemberResponse.Login.from(response));
+        return ResponseEntity.ok(MemberResponse.Login.from(response));
     }
 
     @PostMapping("/logout")
@@ -50,7 +50,7 @@ public class MemberController {
     @GetMapping("")
     public ResponseEntity<MemberResponse.Info> getUser(@Authenticate LoginInfo loginInfo) {
         var response = memberService.getUser(loginInfo.memberId());
-        return ResponseEntity.ok().body(MemberResponse.Info.from(response));
+        return ResponseEntity.ok(MemberResponse.Info.from(response));
     }
 
 }

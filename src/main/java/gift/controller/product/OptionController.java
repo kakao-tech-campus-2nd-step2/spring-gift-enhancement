@@ -29,7 +29,7 @@ public class OptionController {
     ) {
         List<OptionModel.Info> models = optionService.getOptions(productId);
         OptionResponse.InfoList response = OptionResponse.InfoList.from(models);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/products/{id}/options")
@@ -39,7 +39,7 @@ public class OptionController {
     ) {
         List<OptionModel.Info> models = optionService.createOption(productId, request.toCommand());
         OptionResponse.InfoList response = OptionResponse.InfoList.from(models);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/products/{productId}/options/{optionId}")
@@ -51,7 +51,7 @@ public class OptionController {
         OptionModel.Info model = optionService.updateOption(optionId, productId,
             request.toCommand());
         OptionResponse.Info response = OptionResponse.Info.from(model);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/products/{productId}/options/{optionId}")
@@ -60,6 +60,6 @@ public class OptionController {
         @PathVariable("optionId") Long optionId
     ) {
         optionService.deleteOption(productId, optionId);
-        return ResponseEntity.ok().body("Deleted correctly");
+        return ResponseEntity.ok("Deleted correctly");
     }
 }
