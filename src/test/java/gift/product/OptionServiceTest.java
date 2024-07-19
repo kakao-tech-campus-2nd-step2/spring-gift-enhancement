@@ -124,4 +124,34 @@ public class OptionServiceTest {
         assertThrows(EntityNotFoundException.class, () -> optionService.deleteOption(product, option.getId()));
         verify(optionRepository, times(0)).save(any(Option.class));
     }
+
+    @Test
+    @DisplayName("옵션의 수량이 충분히 남아있다면 옵션의 수량을 감소시킨다")
+    void subtractOptionQuantity_ShouldSubtractQuantity_WhenEnoughQuantity() {
+        //given
+        int oldQuantity = option.getQuantity();
+        int requestedQuantity = 5;
+        when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.of(option));
+
+        //when
+        optionService.subtractOptionQuantity(option.getId(), requestedQuantity);
+
+        //then
+        assertEquals(oldQuantity - requestedQuantity, option.getQuantity());
+        verify(optionRepository, times(1)).save(any(Option.class));
+    }
+
+    @Test
+    @DisplayName("옵션의 수량이 충분히 남아있지 않다면 오류를 발생시킨다")
+    void subtractOptionQuantity_ShouldThrowIllegalArgumentException_WhenEnoughQuantity() {
+        //given
+        int oldQuantity = option.getQuantity();
+        int requestedQuantity = oldQuantity + 1;
+        when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.of(option));
+
+        //when, then
+        assertThrows(IllegalArgumentException.class,
+                () -> optionService.subtractOptionQuantity(option.getId(), requestedQuantity));
+        verify(optionRepository, times(0)).save(any(Option.class));
+    }
 }
