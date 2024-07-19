@@ -1,6 +1,7 @@
 package gift.model;
 
 import gift.exception.InputException;
+import gift.exception.option.OptionsQuantityException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,7 +24,8 @@ import org.springframework.util.StringUtils;
 })
 public class Options extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "option_id")
     private Long id;
     @Column(nullable = false)
@@ -80,6 +82,15 @@ public class Options extends BaseEntity {
         this.quantity = newQuantity;
     }
 
+    public void subtractQuantity(Integer subQuantity) {
+        validateQuantity(subQuantity);
+        if (quantity < subQuantity) {
+            throw new OptionsQuantityException();
+        }
+
+        this.quantity -= subQuantity;
+    }
+
     private void validateName(String name) {
         if (!StringUtils.hasText(name) || name.length() > 50) {
             throw new InputException("1~50자 사이로 입력해주세요.");
@@ -96,7 +107,7 @@ public class Options extends BaseEntity {
     }
 
     private void validateProduct(Product product) {
-        if(product == null || product.getId() == null) {
+        if (product == null || product.getId() == null) {
             throw new InputException("알 수 없는 오류가 발생하였습니다.");
         }
     }
