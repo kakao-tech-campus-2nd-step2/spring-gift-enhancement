@@ -26,7 +26,7 @@ public class ProductEntity {
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
     private List<WishListEntity> wishListEntities;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = CategoryEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity categoryEntity;
 
