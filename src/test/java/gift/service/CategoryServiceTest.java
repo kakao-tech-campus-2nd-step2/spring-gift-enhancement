@@ -10,6 +10,7 @@ import gift.category.CategoryRepository;
 import gift.category.CategoryService;
 import gift.category.model.Category;
 import gift.category.model.CategoryRequestDto;
+import gift.product.ProductRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,11 +29,14 @@ public class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private ProductRepository productRepository;
+
     private CategoryService categoryService;
 
     @BeforeEach
     void setup() {
-        categoryService = new CategoryService(categoryRepository);
+        categoryService = new CategoryService(productRepository, categoryRepository);
     }
 
     @Test

@@ -4,6 +4,7 @@ import gift.category.model.Category;
 import gift.category.model.CategoryRequestDto;
 import gift.category.model.CategoryResponseDto;
 import gift.common.exception.CategoryException;
+import gift.product.ProductRepository;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CategoryService {
 
+    private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+        this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
 
@@ -47,7 +50,10 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteCategory(Long id) {
+    public void deleteCategory(Long id) throws CategoryException {
+        if(productRepository.existsByCategoryId(id)){
+            throw new CategoryException(CategoryErrorCode.CAN_NOlT_DELETE);
+        }
         categoryRepository.deleteById(id);
     }
 }
