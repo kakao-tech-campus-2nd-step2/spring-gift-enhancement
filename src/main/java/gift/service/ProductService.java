@@ -3,10 +3,12 @@ package gift.service;
 import gift.exception.ErrorCode;
 import gift.exception.RepositoryException;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import gift.model.ProductDTO;
 import gift.model.ProductPageDTO;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,11 +21,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public ProductDTO createProduct(ProductDTO productDTO) {
@@ -31,7 +35,12 @@ public class ProductService {
             () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, productDTO.categoryId()));
         Product product = new Product(productDTO.id(), productDTO.name(), productDTO.price(),
             productDTO.imageUrl(), category);
-        return convertToDTO(productRepository.save(product));
+        Product createdProduct = productRepository.save(product);
+
+        Option option = new Option(0L, "[기본 옵션] 추후 수정 바랍니다.", 0, product);
+        optionRepository.save(option);
+
+        return convertToDTO(createdProduct);
     }
 
     public ProductPageDTO getAllProduct(int pageNum, int size) {

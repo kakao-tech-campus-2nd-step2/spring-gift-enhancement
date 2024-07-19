@@ -5,9 +5,10 @@ import gift.exception.RepositoryException;
 import gift.model.Category;
 import gift.model.CategoryDTO;
 import gift.model.CategoryPageDTO;
+import gift.model.Product;
+import gift.model.ProductDTO;
 import gift.repository.CategoryRepository;
 import java.util.List;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,28 +27,31 @@ public class CategoryService {
         return convertToDTO(categoryRepository.save(category));
     }
 
-    public CategoryPageDTO findCategoryPage(long categoryId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<CategoryDTO> categories = categoryRepository.findById(categoryId, pageable)
-            .map(this::convertToDTO)
-            .stream()
-            .toList();
-        return new CategoryPageDTO(page, size, categories.size(), categories);
-    }
-
-    public CategoryPageDTO findAllCategoryPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public CategoryPageDTO findCategoryPage(Pageable pageable) {
         List<CategoryDTO> categories = categoryRepository.findAll(pageable)
             .map(this::convertToDTO)
             .stream()
             .toList();
-        return new CategoryPageDTO(page, size, categories.size(), categories);
+        return new CategoryPageDTO(pageable.getPageNumber(), pageable.getPageSize(),
+            categories.size(), categories);
     }
 
-    public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
-        Category currentCategory = categoryRepository.findById(categoryDTO.id()).orElseThrow(
+    public CategoryDTO findCategoryById(long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryId));
+        return convertToDTO(category);
+    }
+
+    public List<ProductDTO> findProductsInCategory(long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryId));
+        return category.getProducts().stream().map(this::productConvertToDTO).toList();
+    }
+
+    public CategoryDTO updateCategory(long categoryId, CategoryDTO categoryDTO) {
+        Category currentCategory = categoryRepository.findById(categoryId).orElseThrow(
             () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryDTO.id()));
-        Category updateCategory = new Category(categoryDTO.id(), categoryDTO.name(),
+        Category updateCategory = new Category(categoryId, categoryDTO.name(),
             categoryDTO.color(), categoryDTO.imageUrl(), categoryDTO.description());
         return convertToDTO(categoryRepository.save(updateCategory));
     }
@@ -63,4 +67,8 @@ public class CategoryService {
             category.getImageUrl(), category.getDescription());
     }
 
+    private ProductDTO productConvertToDTO(Product product) {
+        return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
+            product.getImageUrl(), product.getCategory().getId());
+    }
 }

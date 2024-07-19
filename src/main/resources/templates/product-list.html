@@ -14,6 +14,7 @@
     <th>Price</th>
     <th>Image URL</th>
     <th>Category ID</th>
+    <th>Option</th>
     <th>Actions</th>
   </tr>
   </thead>
@@ -24,6 +25,9 @@
     <td th:text="${product.price}"></td>
     <td th:text="${product.imageUrl}"></td>
     <td th:text="${product.categoryId}"></td>
+    <td >
+      <a th:href="@{/admin/product/{id}/option/list(id=${product.id})}">Options</a>
+    </td>
     <td>
       <a th:href="@{'/admin/product/edit/' + ${product.id}}">Edit</a>
       <a href="javascript:void(0);"
