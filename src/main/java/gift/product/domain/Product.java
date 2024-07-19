@@ -1,6 +1,7 @@
 package gift.product.domain;
 
 import gift.category.domain.Category;
+import gift.option.domain.Option;
 import gift.product.dto.ProductRequestDto;
 import gift.wish.domain.Wish;
 import jakarta.persistence.*;
@@ -23,8 +24,11 @@ public class Product {
     @Embedded
     private ImageUrl imageUrl;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.PERSIST, orphanRemoval = true)
     List<Wish> wishes = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    List<Option> options = new ArrayList<>();
 
     // product 를 가져올 때, category 를 함께 가져와야 함으로, EAGER 로 가져온다
     @ManyToOne(fetch = FetchType.EAGER)
