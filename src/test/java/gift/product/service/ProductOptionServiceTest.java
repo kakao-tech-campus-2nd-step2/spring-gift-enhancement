@@ -49,4 +49,26 @@ class ProductOptionServiceTest {
         assertThat(optionId).isEqualTo(productOption.getId());
     }
 
+    @Test
+    @DisplayName("ProductOptionService Option수정 테스트")
+    void modifyProductOptionTest() {
+        //given
+        final Long productId = 1L;
+        final Long optionId = 1L;
+        ProductOptionCommand productOptionCommand = new ProductOptionCommand("newName", 10);
+
+        Category category = new Category("카테고리", "색상", "이미지", "설명");
+        Product product = new Product("productName", 1000, "이미지", category);
+        ProductOption productOption = new ProductOption(1L, "optionName", 10, product);
+
+        given(productOptionRepository.findByProductIdAndId(any(), any())).willReturn(of(productOption));
+
+        //when
+        productOptionService.modifyProductOption(productId, optionId, productOptionCommand);
+
+        //then
+        assertThat(productOption.getName()).isEqualTo(productOptionCommand.name());
+        assertThat(productOption.getQuantity()).isEqualTo(productOptionCommand.quantity());
+    }
+
 }
