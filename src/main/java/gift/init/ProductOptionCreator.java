@@ -12,11 +12,11 @@ public class ProductOptionCreator {
     private ProductOptionService productOptionService;
 
     public void ProductOptionCreator() {
-        productOptionService.createProductOption(1L, new CreateOption("option2", 100L));
-        productOptionService.createProductOption(2L, new CreateOption("option2", 100L));
-        productOptionService.createProductOption(3L, new CreateOption("option2", 100L));
+        productOptionService.createProductOption(1L, new CreateOption("option20", 100L));
+        productOptionService.createProductOption(2L, new CreateOption("option20", 100L));
+        productOptionService.createProductOption(3L, new CreateOption("option20", 100L));
 
-        productOptionService.createProductOption(2L, new CreateOption("option3", 100L));
-        productOptionService.createProductOption(3L, new CreateOption("option3", 100L));
+        productOptionService.createProductOption(2L, new CreateOption("option30", 100L));
+        productOptionService.createProductOption(3L, new CreateOption("option30", 100L));
     }
 }
