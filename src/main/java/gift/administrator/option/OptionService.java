@@ -6,7 +6,9 @@ import gift.administrator.product.ProductService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class OptionService {
 
     private final OptionRepository optionRepository;
@@ -24,6 +26,10 @@ public class OptionService {
 
     public List<OptionDTO> getAllOptions(){
         return optionRepository.findAll().stream().map(OptionDTO::fromOption).toList();
+    }
+
+    public OptionDTO findOptionById(long optionId) throws NotFoundException {
+        return OptionDTO.fromOption(optionRepository.findById(optionId).orElseThrow(NotFoundException::new));
     }
 
     public OptionDTO addOptionByProductId(long productId, OptionDTO optionDTO)

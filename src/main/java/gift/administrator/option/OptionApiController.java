@@ -25,7 +25,7 @@ public class OptionApiController {
     }
 
     @GetMapping("/products/{productId}/options")
-    public ResponseEntity<List<OptionDTO>> getAllOptionsByProductId(@PathVariable Long productId) {
+    public ResponseEntity<List<OptionDTO>> getAllOptionsByProductId(@PathVariable("productId") Long productId) {
         return ResponseEntity.ok(optionService.getAllOptionsByProductId(productId));
     }
 
@@ -35,7 +35,7 @@ public class OptionApiController {
     }
 
     @PostMapping("/products/{productId}/options")
-    public ResponseEntity<List<OptionDTO>> addOptionsByProductId(@PathVariable Long productId,
+    public ResponseEntity<List<OptionDTO>> addOptionsByProductId(@PathVariable("productId") Long productId,
         @Valid @RequestBody List<OptionDTO> options)
         throws NotFoundException {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -44,14 +44,14 @@ public class OptionApiController {
 
     @PutMapping("/options/{optionId}")
     public ResponseEntity<OptionDTO> updateOptionByOptionId(
-        @PathVariable Long optionId, @Valid @RequestBody OptionDTO optionDTO)
+        @PathVariable("productId") Long optionId, @Valid @RequestBody OptionDTO optionDTO)
         throws NotFoundException {
         return ResponseEntity.status(HttpStatus.OK)
             .body(optionService.updateOptionByOptionId(optionId, optionDTO));
     }
 
     @DeleteMapping("/options/{optionId}")
-    public ResponseEntity<OptionDTO> deleteOptionByOptionId(@PathVariable Long optionId)
+    public ResponseEntity<OptionDTO> deleteOptionByOptionId(@PathVariable("productId") Long optionId)
         throws NotFoundException {
         optionService.deleteOptionByOptionId(optionId);
         return ResponseEntity.status(HttpStatus.OK).build();

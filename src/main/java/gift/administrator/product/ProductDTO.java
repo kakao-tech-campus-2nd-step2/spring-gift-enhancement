@@ -1,7 +1,10 @@
 package gift.administrator.product;
 
 import gift.administrator.category.Category;
+import gift.administrator.option.Option;
 import jakarta.validation.constraints.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDTO {
 
@@ -21,16 +24,18 @@ public class ProductDTO {
     private String imageUrl;
     @NotNull(message = "카테고리를 선택해야합니다.")
     private Long categoryId;
+    private List<Option> options = new ArrayList<>();
 
     public ProductDTO() {
     }
 
-    public ProductDTO(long id, String name, int price, String imageUrl, Long categoryId) {
+    public ProductDTO(long id, String name, int price, String imageUrl, Long categoryId, List<Option> options) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+        this.options = options;
     }
 
     public long getId() {
@@ -67,13 +72,17 @@ public class ProductDTO {
         return categoryId;
     }
 
+    public List<Option> getOptions(){
+        return options;
+    }
+
     public Product toProduct(ProductDTO productDTO, Category category){
         return new Product(productDTO.getId(), productDTO.getName(), productDTO.getPrice(),
-            productDTO.getImageUrl(), category);
+            productDTO.getImageUrl(), category, productDTO.getOptions());
     }
 
     public static ProductDTO fromProduct(Product product) {
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl(), product.getCategory().getId());
+            product.getImageUrl(), product.getCategory().getId(), product.getOptions());
     }
 }

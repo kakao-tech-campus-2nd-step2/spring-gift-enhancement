@@ -45,6 +45,10 @@ public class Option {
         this.product = product;
     }
 
+    public long getId(){
+        return id;
+    }
+
     public String getName(){
         return name;
     }
@@ -57,27 +61,17 @@ public class Option {
         return product;
     }
 
+    public void setProduct(Product product){
+        this.product = product;
+    }
+
     public void addWishList(WishList wishList) {
         this.wishes.add(wishList);
         wishList.setOption(this);
     }
 
-    public void addWishLists(List<WishList> wishLists) {
-        for (WishList wishList : wishLists) {
-            this.wishes.add(wishList);
-            wishList.setOption(this);
-        }
-    }
-
     public void removeWishList(WishList wishList) {
         wishes.remove(wishList);
         wishList.setOption(null);
-    }
-
-    public void removeWishLists(List<WishList> wishLists){
-        for (WishList wishList : wishLists) {
-            this.wishes.remove(wishList);
-            wishList.setOption(null);
-        }
     }
 }

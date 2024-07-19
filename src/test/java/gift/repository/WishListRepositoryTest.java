@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.administrator.category.Category;
 import gift.administrator.category.CategoryRepository;
+import gift.administrator.option.Option;
+import gift.administrator.option.OptionRepository;
 import gift.administrator.product.Product;
 import gift.administrator.product.ProductRepository;
 import gift.users.user.User;
@@ -29,9 +31,12 @@ public class WishListRepositoryTest {
     private UserRepository userRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private OptionRepository optionRepository;
     private Category category;
     private Product product;
     private User user;
+    private Option option;
 
     @BeforeEach
     void beforeEach() {
@@ -41,14 +46,16 @@ public class WishListRepositoryTest {
         productRepository.save(product);
         user = new User("admin@email.com", "1234");
         userRepository.save(user);
+        option = new Option("XL", 3, product);
+        optionRepository.save(option);
     }
 
     @Test
     @DisplayName("위시리스트 추가")
     void save() {
         //Given
-        WishList wishList = new WishList(user, product, 3);
-        WishList expected = new WishList(user, product, 3);
+        WishList wishList = new WishList(user, product, 3, option);
+        WishList expected = new WishList(user, product, 3, option);
 
         //When
         WishList actual = wishListRepository.save(wishList);
@@ -58,10 +65,12 @@ public class WishListRepositoryTest {
         assertThat(actual)
             .extracting(wish -> wish.getUser().getEmail(), wish -> wish.getProduct().getName(),
                 wish -> wish.getProduct().getPrice(), wish -> wish.getProduct().getImageUrl(),
-                wish -> wish.getProduct().getCategory(), WishList::getNum)
+                wish -> wish.getProduct().getCategory(), WishList::getNum,
+                wish -> wish.getOption().getName(), wish -> wish.getOption().getProduct())
             .containsExactly(expected.getUser().getEmail(), expected.getProduct().getName(),
                 expected.getProduct().getPrice(), expected.getProduct().getImageUrl(),
-                expected.getProduct().getCategory(), expected.getNum());
+                expected.getProduct().getCategory(), expected.getNum(),
+                expected.getOption().getName(), expected.getOption().getProduct());
     }
 
     @Test
@@ -70,8 +79,8 @@ public class WishListRepositoryTest {
         //Given
         Product product2 = new Product("라이언", 3000, "example.jpg", category);
         productRepository.save(product2);
-        WishList wishList = new WishList(user, product, 3);
-        WishList wishList1 = new WishList(user, product2, 5);
+        WishList wishList = new WishList(user, product, 3, option);
+        WishList wishList1 = new WishList(user, product2, 5, option);
         wishListRepository.save(wishList);
         wishListRepository.save(wishList1);
 
@@ -90,7 +99,7 @@ public class WishListRepositoryTest {
     @DisplayName("위시리스트 이메일과 상품 아이디로 삭제하기")
     void deleteByEmailAndProductId() {
         //Given
-        WishList wishList = new WishList(user, product, 3);
+        WishList wishList = new WishList(user, product, 3, option);
         wishListRepository.save(wishList);
 
         //When

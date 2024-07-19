@@ -3,6 +3,9 @@ package gift.administrator.product;
 import gift.administrator.category.Category;
 import gift.administrator.category.CategoryDTO;
 import gift.administrator.category.CategoryService;
+import gift.administrator.option.Option;
+import gift.administrator.option.OptionDTO;
+import gift.administrator.option.OptionService;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -52,6 +55,7 @@ public class ProductService {
     }
 
     public ProductDTO addProduct(ProductDTO product) throws NotFoundException {
+        validateProductOptions(product);
         if (productRepository.existsByName(product.getName())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
@@ -63,6 +67,7 @@ public class ProductService {
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO) throws NotFoundException {
+        validateProductOptions(productDTO);
         Product product = productRepository.findById(productDTO.getId())
             .orElseThrow(NotFoundException::new);
         if (productRepository.existsByNameAndIdNot(productDTO.getName(), productDTO.getId())){
@@ -70,9 +75,13 @@ public class ProductService {
         }
         Category newCategory = categoryService.getCategoryById(productDTO.getCategoryId())
             .toCategory();
+        Category oldCategory = product.getCategory();
         product.update(productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(),
             newCategory);
-        return ProductDTO.fromProduct(productRepository.save(product));
+        Product resultProduct = productRepository.save(product);
+        oldCategory.removeProducts(product);
+        newCategory.addProducts(product);
+        return ProductDTO.fromProduct(resultProduct);
     }
 
     public void existsByNamePutResult(String name, BindingResult result){
@@ -96,5 +105,15 @@ public class ProductService {
 
     public Category getCategoryById(long categoryId) throws NotFoundException {
         return categoryService.getCategoryById(categoryId).toCategory();
+    }
+
+    private void validateProductOptions(ProductDTO productDTO) throws NotFoundException {
+        CategoryDTO categoryDTO = categoryService.getCategoryById(productDTO.getCategoryId());
+        Category category = categoryDTO.toCategory();
+        Product product = productDTO.toProduct(productDTO, category);
+        List<Option> options = product.getOptions();
+        if (options.isEmpty()) {
+            throw new IllegalArgumentException("상품은 적어도 하나의 옵션이 있어야 합니다.");
+        }
     }
 }

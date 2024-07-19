@@ -1,5 +1,8 @@
 package gift.users.wishlist;
 
+import gift.administrator.option.Option;
+import gift.administrator.option.OptionDTO;
+import gift.administrator.option.OptionService;
 import gift.users.user.User;
 import gift.users.user.UserDTO;
 import gift.util.JwtUtil;
@@ -26,14 +29,16 @@ public class WishListService {
     private final WishListRepository wishListRepository;
     private final ProductService productService;
     private final UserService userService;
+    private final OptionService optionService;
     private final JwtUtil jwtUtil;
 
     public WishListService(WishListRepository wishListRepository, ProductService productService,
-        UserService userService,
+        UserService userService, OptionService optionService,
         JwtUtil jwtUtil) {
         this.wishListRepository = wishListRepository;
         this.productService = productService;
         this.userService = userService;
+        this.optionService = optionService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -71,14 +76,17 @@ public class WishListService {
         ProductDTO productDTO = productService.getProductById(wishList.getProductId());
         Product product = productDTO.toProduct(productDTO,
             productService.getCategoryById(productDTO.getCategoryId()));
-        WishList wishList1 = new WishList(user, product, wishList.getNum());
+        OptionDTO optionDTO = optionService.findOptionById(wishList.getOptionId());
+        Option option = optionDTO.toOption(optionDTO, product);
+        WishList wishList1 = new WishList(user, product, wishList.getNum(), option);
+        option.addWishList(wishList1);
         user.addWishList(wishList1);
         product.addWishList(wishList1);
         wishListRepository.save(wishList1);
         return WishListDTO.fromWishList(wishList1);
     }
 
-    public WishListDTO updateWishList(long userId, long productId, int num)
+    public WishListDTO updateWishList(long userId, long productId, WishListDTO wishListDTO)
         throws NotFoundException {
         WishList wishList = wishListRepository.findByUserIdAndProductId(userId, productId);
         if (!wishListRepository.existsByUserIdAndProductId(userId, productId)) {
@@ -87,8 +95,16 @@ public class WishListService {
                     productId).getName()
                     + " 상품이 존재하지 않습니다.");
         }
-        wishList.update(num);
+        ProductDTO productDTO = productService.getProductById(wishList.getProduct().getId());
+        Product product = productDTO.toProduct(productDTO,
+            productService.getCategoryById(productDTO.getCategoryId()));
+        OptionDTO oldOptionDTO = optionService.findOptionById(wishList.getOption().getId());
+        OptionDTO optionDTO = optionService.findOptionById(wishListDTO.getOptionId());
+        Option newOption = optionDTO.toOption(optionDTO, product);
+        newOption.addWishList(wishList);
         wishListRepository.save(wishList);
+        Option oldOption = oldOptionDTO.toOption(oldOptionDTO, product);
+        oldOption.removeWishList(wishList);
         return WishListDTO.fromWishList(wishList);
     }
 
@@ -100,6 +116,7 @@ public class WishListService {
                     + " 상품이 존재하지 않습니다.");
         }
         WishList wishList = wishListRepository.findByUserIdAndProductId(userId, productId);
+        wishList.getOption().removeWishList(wishList);
         wishList.getUser().removeWishList(wishList);
         wishList.getProduct().removeWishList(wishList);
         wishListRepository.deleteByUserIdAndProductId(userId, productId);

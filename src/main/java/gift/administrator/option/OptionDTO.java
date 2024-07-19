@@ -19,7 +19,6 @@ public class OptionDTO {
     @Min(value = 1, message = "옵션 수량은 최소 1개 이상입니다.")
     @Digits(integer = 8, fraction = 0, message = "옵션 수량은 1억 개 미만입니다.")
     private int quantity;
-    @NotNull(message = "상품을 선택해야합니다.")
     private Long productId;
 
     public OptionDTO(String name, int quantity, long productId) {

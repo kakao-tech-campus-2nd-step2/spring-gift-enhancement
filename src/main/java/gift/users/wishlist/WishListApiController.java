@@ -54,7 +54,7 @@ public class WishListApiController {
         wishListService.extractEmailFromTokenAndValidate(request, email);
         WishListDTO result = wishListService.updateWishList(
             userService.findUserByEmail(email).id(), productId,
-            wishListDTO.getNum());
+            wishListDTO);
         return ResponseEntity.ok().body(result);
     }
 
