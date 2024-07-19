@@ -48,23 +48,23 @@
                         th:data-id="${product.id}" th:data-name="${product.name}" th:data-price="${product.price}" th:data-imageurl="${product.imageUrl}">
                     <i class="fas fa-pencil-alt"></i>
                 </button>
-                <button type="button" class="delete-btn" th:data-id="${product.id}"><i class="fas fa-trash"></i></button>
+                <button type="button" class="option-btn" th:data-id="${product.id}"><i class="fas fa-search"></i></button>
             </td>
         </tr>
         </tbody>
     </table>
     <ul class="pagination justify-content-center">
         <li class="page-item" th:classappend="${products.currentPage == 0} ? 'disabled'">
-            <a class="page-link" th:href="@{/v3/products(page=${products.currentPage - 1})}" aria-label="Previous">
+            <a class="page-link" th:href="@{/api/products(page=${products.currentPage - 1})}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
         <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, products.totalPages - 1)}"
             th:classappend="${pageNum == products.currentPage} ? 'active'">
-            <a class="page-link" th:href="@{/v3/products(page=${pageNum})}" th:text="${pageNum + 1}">1</a>
+            <a class="page-link" th:href="@{/api/products(page=${pageNum})}" th:text="${pageNum + 1}">1</a>
         </li>
         <li class="page-item" th:classappend="${products.currentPage + 1 == products.totalPages} ? 'disabled'">
-            <a class="page-link" th:href="@{/v3/products(page=${products.currentPage + 1})}" aria-label="Next">
+            <a class="page-link" th:href="@{/api/products(page=${products.currentPage + 1})}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
