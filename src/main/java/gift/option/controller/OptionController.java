@@ -1,7 +1,7 @@
 package gift.option.controller;
 
-import gift.option.service.OptionService;
 import gift.option.model.Option;
+import gift.option.service.OptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
