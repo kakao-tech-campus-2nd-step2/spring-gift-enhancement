@@ -7,6 +7,7 @@ import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,28 +30,26 @@ public class CategoryController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<CategoryResponseDto> getAllCategories() {
-        return categoryService.getAllCategories();
+    public ResponseEntity<List<CategoryResponseDto>> getAllCategories() {
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CategoryResponseDto addCategory(
+    public ResponseEntity<CategoryResponseDto> addCategory(
         @Valid @RequestBody CategoryAddRequestDto categoryAddRequestDto) {
-        return categoryService.addCategory(categoryAddRequestDto);
+        CategoryResponseDto response = categoryService.addCategory(categoryAddRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public CategoryResponseDto updateCategory(
+    public ResponseEntity<CategoryResponseDto> updateCategory(
         @Valid @RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto) {
-        return categoryService.updateCategory(categoryUpdateRequestDto);
+        return ResponseEntity.ok(categoryService.updateCategory(categoryUpdateRequestDto));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build();
     }
 }

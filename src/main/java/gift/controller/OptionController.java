@@ -6,6 +6,7 @@ import gift.service.OptionService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,30 +29,27 @@ public class OptionController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<OptionResponseDto> getAllOptionsByProductId(@PathVariable Long productId) {
-        return OptionService.getAllOptionsByProductId(productId);
+    public ResponseEntity<List<OptionResponseDto>> getAllOptionsByProductId(@PathVariable Long productId) {
+        return ResponseEntity.ok(OptionService.getAllOptionsByProductId(productId));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public OptionResponseDto addOption(
+    public ResponseEntity<OptionResponseDto> addOption(
         @PathVariable Long productId,
         @Valid @RequestBody OptionRequestDto optionRequestDto) {
-        return OptionService.addOption(productId, optionRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(OptionService.addOption(productId, optionRequestDto));
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public OptionResponseDto updateOption(
+    public ResponseEntity<OptionResponseDto> updateOption(
         @PathVariable Long id,
         @Valid @RequestBody OptionRequestDto optionRequestDto) {
-        return OptionService.updateOption(id, optionRequestDto);
+        return ResponseEntity.ok(OptionService.updateOption(id, optionRequestDto));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOption(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOption(@PathVariable Long id) {
         OptionService.deleteOption(id);
+        return ResponseEntity.noContent().build();
     }
 }
