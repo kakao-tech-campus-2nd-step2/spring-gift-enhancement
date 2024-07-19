@@ -142,3 +142,13 @@ VALUES
     ('Category 28', 'Category 28 Description', 'https://via.placeholder.com/2850', '#FF5733', NOW(), 1, NOW(), 1),
     ('Category 29', 'Category 29 Description', 'https://via.placeholder.com/2950', '#FF5733', NOW(), 1, NOW(), 1),
     ('Category 30', 'Category 30 Description', 'https://via.placeholder.com/3050', '#FF5733', NOW(), 1, NOW(), 1);
+
+INSERT INTO product_option(name, stock, product_id, created_at, created_by, updated_at, updated_by)
+VALUES
+    ('Option 1', 100, 1, NOW(), 1, NOW(), 1),
+    ('Option 2', 200, 1, NOW(), 1, NOW(), 1),
+    ('Option 3', 300, 1, NOW(), 1, NOW(), 1),
+    ('Option 4', 400, 2, NOW(), 2, NOW(), 2),
+    ('Option 5', 500, 2, NOW(), 2, NOW(), 2),
+    ('Option 6', 600, 2, NOW(), 2, NOW(), 2),
+    ('Option 7', 700, 2, NOW(), 2, NOW(), 2);
