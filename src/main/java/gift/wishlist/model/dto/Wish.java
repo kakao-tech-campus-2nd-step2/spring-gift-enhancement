@@ -56,10 +56,6 @@ public class Wish extends BaseTimeEntity {
         return appUser;
     }
 
-    public void setUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
     public Product getProduct() {
         return product;
     }
@@ -72,7 +68,7 @@ public class Wish extends BaseTimeEntity {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void updateQuantity(int quantity) {
         this.quantity = quantity;
     }
 
@@ -80,7 +76,7 @@ public class Wish extends BaseTimeEntity {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void inactive() {
+        isActive = false;
     }
 }

@@ -51,7 +51,7 @@ public class WishListService {
     public void updateWishQuantity(Long userId, Long wishId, int quantity) {
         Wish wish = wishListRepository.findByIdAndAppUserIdAndIsActiveTrue(wishId, userId)
                 .orElseThrow(() -> new EntityNotFoundException("Wish"));
-        wish.setQuantity(quantity);
+        wish.updateQuantity(quantity);
         wishListRepository.save(wish);
     }
 
@@ -59,7 +59,7 @@ public class WishListService {
     public void deleteWish(Long userId, Long wishId) {
         Wish wish = wishListRepository.findByIdAndAppUserIdAndIsActiveTrue(wishId, userId)
                 .orElseThrow(() -> new EntityNotFoundException("Wish"));
-        wish.setActive(false);
+        wish.inactive();
         wishListRepository.save(wish);
     }
 }
