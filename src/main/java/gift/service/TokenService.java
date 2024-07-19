@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 
+import static gift.exception.ErrorCode.UNAUTHORIZED;
+
 
 @Service
 @Transactional
@@ -40,7 +42,7 @@ public class TokenService {
 
     public TokenAuth findToken(String token) {
         return tokenRepository.findByToken(token)
-                .orElseThrow(() -> new UnAuthorizationException("인증되지 않은 사용자입니다. 다시 로그인 해주세요."));
+                .orElseThrow(() -> new UnAuthorizationException(UNAUTHORIZED));
     }
 
 //    public String getMemberIdFromToken(String token) {

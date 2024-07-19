@@ -4,15 +4,15 @@ import java.util.Map;
 
 public class ErrorResponse {
     private String message;
-    private final String status;
+    private final Integer status;
     private Map<String, String> errors;
 
-    public ErrorResponse(String message, String status) {
+    public ErrorResponse(String message, Integer status) {
         this.message = message;
         this.status = status;
     }
 
-    public ErrorResponse(Map<String, String> errors, String status) {
+    public ErrorResponse(Map<String, String> errors, Integer status) {
         this.errors = errors;
         this.status = status;
     }
@@ -21,7 +21,7 @@ public class ErrorResponse {
         return message;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 

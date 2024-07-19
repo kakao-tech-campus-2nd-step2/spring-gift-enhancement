@@ -1,7 +1,8 @@
 package gift.exception;
 
-public class MemberNotFoundException extends RuntimeException {
-    public MemberNotFoundException(String message) {
-        super(message);
+public class MemberNotFoundException extends BusinessException {
+    public MemberNotFoundException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }
+

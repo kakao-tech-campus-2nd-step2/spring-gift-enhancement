@@ -15,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static gift.exception.ErrorCode.CATEGORY_NOT_FOUND;
+import static gift.exception.ErrorCode.PRODUCT_NOT_FOUND;
+
 @Service
 @Transactional()
 public class ProductService {
@@ -28,7 +31,8 @@ public class ProductService {
     }
 
     public Product register(ProductRequest productRequest) {
-        Category category = categoryRepository.findByName(productRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("해당 카테고리는 존재하지 않습니다."));
+        Category category = categoryRepository.findByName(productRequest.getCategoryName()).
+                orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
 
         Product product = new Product(productRequest, category);
         try {
@@ -44,14 +48,14 @@ public class ProductService {
     }
 
     public Product findOne(Long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
+        return productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
     }
 
     public Product update(Long productId, ProductRequest productRequest) {
         Product product = productRepository.findById(productId).
-                orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
+                orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
         Category category = categoryRepository.findByName(productRequest.getCategoryName()).
-                orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리입니다."));
+                orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
         product.update(productRequest, category);
         productRepository.save(product);
         return product;
@@ -60,7 +64,7 @@ public class ProductService {
 
     public Product delete(Long productId) {
         Product product = productRepository.findById(productId).
-                orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
+                orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
         productRepository.delete(product);
         return product;
     }

@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static gift.exception.ErrorCode.*;
+
 @Service
 @Transactional
 public class MemberService {
@@ -26,7 +28,7 @@ public class MemberService {
     public Member register(MemberRequest memberRequest) {
         Optional<Member> oldMember = memberRepository.findByEmail(memberRequest.getEmail());
         if (oldMember.isPresent()) {
-            throw new DuplicateMemberEmailException("이미 등록된 이메일입니다.");
+            throw new DuplicateMemberEmailException(DUPLICATE_MEMBER_EMAIL);
         }
         Member member = new Member(memberRequest.getEmail(), memberRequest.getPassword());
         memberRepository.save(member);
@@ -35,10 +37,10 @@ public class MemberService {
 
     public Member authenticate(MemberRequest memberRequest) {
         Member member = memberRepository.findByEmail(memberRequest.getEmail())
-                .orElseThrow(() -> new MemberNotFoundException("존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new MemberNotFoundException(MEMBER_NOT_FOUND));
 
         if (!memberRequest.getPassword().equals(member.getPassword())) {
-            throw new InvalidCredentialsException("잘못된 비밀번호입니다.");
+            throw new InvalidCredentialsException(INVALID_CREDENTIAL);
         }
         return member;
     }
