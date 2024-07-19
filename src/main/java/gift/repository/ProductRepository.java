@@ -9,8 +9,11 @@ import org.springframework.data.repository.query.Param;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public  interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.id IN :ids")
     Page<Product> findAllById(@Param("ids") List<Long> productsId, Pageable pageable);
+
+    Optional<Product> findById(Long productId);
 }
