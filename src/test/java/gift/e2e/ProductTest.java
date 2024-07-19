@@ -7,7 +7,6 @@ import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.auth.Login;
 import gift.domain.Product.CreateProduct;
 import gift.domain.Product.UpdateProduct;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,6 +36,8 @@ class ProductTest {
     private String token;
 
     private HttpHeaders headers = new HttpHeaders();
+
+    private String commonPath = "/api/products";
 
     @BeforeEach
     public void setUp() {
@@ -63,7 +63,7 @@ class ProductTest {
         CreateProduct body = new CreateProduct("test1", 1000, "test1", 1L, "option", 100L);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/products",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + commonPath,
             POST,
             requestEntity, String.class);
 
@@ -78,7 +78,7 @@ class ProductTest {
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url + port + "/api/products/9999", PUT,
+            url + port + commonPath + "/0", PUT,
             requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -92,7 +92,7 @@ class ProductTest {
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url + port + "/api/products/1", PUT,
+            url + port + commonPath + "/1", PUT,
             requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -104,7 +104,7 @@ class ProductTest {
     public void NotFoundRemoveProduct() {
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url + port + "/api/products/9999",
+            url + port + commonPath + "/0",
             DELETE, requestEntity, String.class);
 
         System.out.println(responseEntity);
@@ -116,7 +116,7 @@ class ProductTest {
     public void removeProduct() {
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-            url + port + "/api/products/1",
+            url + port + commonPath + "/1",
             DELETE, requestEntity, String.class);
 
         System.out.println(responseEntity);
