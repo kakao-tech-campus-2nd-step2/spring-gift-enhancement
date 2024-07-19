@@ -1,11 +1,11 @@
-package gift.exception;
+package gift.exception.customException;
+
+import static gift.exception.exceptionMessage.ExceptionMessage.UNAUTHORIZATION_EXCEPTION;
 
 public class UnAuthorizationException extends RuntimeException{
 
-    private static final String MESSAGE = "인증되지 않은 사용자 입니다. 다시 로그인 해주세요.";
-
     public UnAuthorizationException(){
-        super(MESSAGE);
+        super(UNAUTHORIZATION_EXCEPTION);
     }
 
     public UnAuthorizationException(String message, Throwable cause) {

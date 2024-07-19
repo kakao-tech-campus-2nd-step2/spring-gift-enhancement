@@ -5,8 +5,8 @@ import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
 import gift.dto.response.WishResponseDto;
-import gift.exception.EntityNotFoundException;
-import gift.exception.ForbiddenException;
+import gift.exception.customException.EntityNotFoundException;
+import gift.exception.customException.ForbiddenException;
 import gift.repository.member.MemberRepository;
 import gift.repository.product.ProductRepository;
 import gift.repository.wish.WishRepository;
@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static gift.exception.exceptionMessage.ExceptionMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -89,10 +90,10 @@ class WishServiceTest {
                 () -> assertThat(wishResponseDto.productResponseDto().imageUrl()).isEqualTo(product.getImageUrl()),
                 () -> assertThatThrownBy(() -> wishService.addWish(nullProductId, email, 100))
                         .isInstanceOf(EntityNotFoundException.class)
-                        .hasMessage("존재 하지 않는 상품입니다."),
+                        .hasMessage(PRODUCT_NOT_FOUND),
                 () -> assertThatThrownBy(() -> wishService.addWish(productId, nullEmail, 100))
                         .isInstanceOf(EntityNotFoundException.class)
-                        .hasMessage("존재 하지 않는 회원 입니다.")
+                        .hasMessage(NOT_EXISTS_MEMBER)
         );
     }
 
@@ -142,7 +143,7 @@ class WishServiceTest {
                 () -> assertThat(wishResponseDto.productResponseDto().imageUrl()).isEqualTo(product.getImageUrl()),
                 () -> assertThatThrownBy(() -> wishService.editWish(inValidId, validEmail, 100))
                         .isInstanceOf(EntityNotFoundException.class)
-                        .hasMessage("해당 WISH가 존재하지 않습니다"),
+                        .hasMessage(WISH_NOT_FOUND),
                 () -> assertThatThrownBy(() -> wishService.editWish(validId, inValidEmail, 100))
                         .isInstanceOf(ForbiddenException.class)
         );
@@ -194,7 +195,7 @@ class WishServiceTest {
                 () -> assertThat(wishResponseDto.productResponseDto().imageUrl()).isEqualTo(product.getImageUrl()),
                 () -> assertThatThrownBy(() -> wishService.deleteWish(inValidId, validEmail))
                         .isInstanceOf(EntityNotFoundException.class)
-                        .hasMessage("해당 WISH가 존재하지 않습니다"),
+                        .hasMessage(WISH_NOT_FOUND),
                 () -> assertThatThrownBy(() -> wishService.deleteWish(validId, inValidEmail))
                         .isInstanceOf(ForbiddenException.class),
                 () -> verify(wishRepository, times(1)).delete(any(Wish.class))

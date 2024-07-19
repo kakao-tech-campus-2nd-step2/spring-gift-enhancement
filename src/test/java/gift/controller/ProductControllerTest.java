@@ -1,11 +1,16 @@
 package gift.controller;
 
+import gift.controller.product.ProductController;
+import gift.dto.request.OptionRequestDto;
+import gift.dto.request.ProductRequestDto;
 import gift.dto.response.CategoryResponseDto;
+import gift.dto.response.OptionResponseDto;
 import gift.dto.response.ProductResponseDto;
 import gift.filter.AuthFilter;
 import gift.filter.LoginFilter;
 import gift.repository.token.TokenRepository;
 import gift.service.CategoryService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +27,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,6 +51,8 @@ class ProductControllerTest {
     @MockBean
     CategoryService categoryService;
 
+    @MockBean
+    OptionService optionService;
 
     @MockBean
     TokenRepository tokenRepository;
@@ -114,19 +124,20 @@ class ProductControllerTest {
     void 상품_저장_POST_API_TEST() throws Exception {
         //given
 
-        //when
-
-
-        //then
+        //expected
         mvc.perform(post("/products/new")
                         .param("name","test1")
                         .param("price","1000")
                         .param("imageUrl","abc.png")
                         .param("categoryId", "1")
+                        .param("optionName", "Test")
+                        .param("optionQuantity", "100")
                 )
                 .andExpect(view().name("redirect:/products"))
                 .andExpect(redirectedUrl("/products"))
                 .andDo(print());
+
+        verify(productService, times(1)).addProduct(any(ProductRequestDto.class), any(OptionRequestDto.class));
     }
 
     @Test
@@ -181,5 +192,70 @@ class ProductControllerTest {
                 .andExpect(redirectedUrl("/products"))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("상품 옵션 조회 API 테스트")
+    void 상품_옵션_조회_API_테스트() throws Exception {
+        //given
+        OptionResponseDto optionResponseDto1 = new OptionResponseDto(1L, "TEST1", 1);
+        OptionResponseDto optionResponseDto2 = new OptionResponseDto(2L, "TEST2", 2);
+        OptionResponseDto optionResponseDto3 = new OptionResponseDto(3L, "TEST3", 3);
+
+        List<OptionResponseDto> optionDtos = Arrays.asList(optionResponseDto1, optionResponseDto2, optionResponseDto3);
+
+        given(optionService.findOptionsByProduct(1L)).willReturn(optionDtos);
+
+        //excepted
+        mvc.perform(get("/products/{id}/options", 1L))
+                .andExpect(view().name("option/optionForm"))
+                .andExpect(model().attribute("productId",1L))
+                .andExpect(model().attribute("options",optionDtos))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("상품 옵션 저장 API 테스트")
+    void 상품_옵션_저장_API_테스트() throws Exception {
+        //given
+
+        //excepted
+        mvc.perform(post("/products/{id}/options", 1L)
+                        .param("optionName", "01 [Best] 시어버터 핸드 & 시어 스틱 립 밤")
+                        .param("optionQuantity", "1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/products/{id}/options"))
+                .andExpect(redirectedUrl("/products/1/options"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("상품 옵션 저장 Form API 테스트")
+    void 상품_옵션_저장_폼_API_테스트() throws Exception {
+        //given
+
+        //excepted
+        mvc.perform(get("/products/new/{id}/options", 1L))
+                .andExpect(status().isOk())
+                .andExpect(view().name("option/addOptionForm"))
+                .andExpect(model().attribute("productId",1L))
+                .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("옵션 삭제 API 테스트")
+    void 옵션_삭제_API_테스트() throws Exception{
+        //given
+
+        //expected
+        mvc.perform(post("/products/{product_id}/delete/{option_id}", 1, 1))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/products"))
+                .andExpect(redirectedUrl("/products"))
+                .andDo(print());
+
+        verify(optionService, times(1)).deleteOneOption(1L, 1L);
+    }
+
 
 }

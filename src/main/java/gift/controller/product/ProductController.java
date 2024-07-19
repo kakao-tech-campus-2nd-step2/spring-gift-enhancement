@@ -1,9 +1,12 @@
-package gift.controller;
+package gift.controller.product;
 
+import gift.dto.request.OptionRequestDto;
 import gift.dto.request.ProductRequestDto;
 import gift.dto.response.CategoryResponseDto;
+import gift.dto.response.OptionResponseDto;
 import gift.dto.response.ProductResponseDto;
 import gift.service.CategoryService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +25,14 @@ public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
+    private final OptionService optionService;
+
     public ProductController(ProductService productService,
-                             CategoryService categoryService) {
+                             CategoryService categoryService,
+                             OptionService optionService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     @GetMapping()
@@ -36,6 +43,36 @@ public class ProductController {
         return "manager";
     }
 
+    @GetMapping("/{id}/options")
+    public String getProductOptions(@PathVariable("id") Long productId,
+                                    Model model){
+        List<OptionResponseDto> optionDtos = optionService.findOptionsByProduct(productId);
+        model.addAttribute("options", optionDtos);
+        model.addAttribute("productId",productId);
+        return "option/optionForm";
+    }
+
+    @PostMapping("/{id}/options")
+    public String addProductOption(@PathVariable("id") Long productId,
+                                   @ModelAttribute @Valid OptionRequestDto optionRequestDto){
+        optionService.saveOption(optionRequestDto, productId);
+        return "redirect:/products/{id}/options";
+    }
+
+    @PostMapping("/{product_id}/delete/{option_id}")
+    public String deleteOption(@PathVariable("product_id") Long productId,
+                               @PathVariable("option_id") Long optionId){
+        optionService.deleteOneOption(productId, optionId);
+        return "redirect:/products";
+    }
+
+    @GetMapping("/new/{id}/options")
+    public String addOptionForm(@PathVariable("id") Long productId,
+                                Model model){
+        model.addAttribute("productId", productId);
+        return "option/addOptionForm";
+    }
+
     @GetMapping("/new")
     public String addForm(Model model){
         List<CategoryResponseDto> categories = categoryService.findAllCategories();
@@ -44,8 +81,9 @@ public class ProductController {
     }
 
     @PostMapping("/new")
-    public String add(@ModelAttribute @Valid ProductRequestDto productDto){
-        productService.addProduct(productDto);
+    public String add(@ModelAttribute @Valid ProductRequestDto productDto,
+                      @ModelAttribute @Valid OptionRequestDto optionRequestDto){
+        productService.addProduct(productDto, optionRequestDto);
         return "redirect:/products";
     }
 

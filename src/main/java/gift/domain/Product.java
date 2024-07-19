@@ -27,6 +27,9 @@ public class Product extends TimeStamp {
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
+    @OneToMany(mappedBy = "product")
+    private List<Option> options = new ArrayList<>();
+
     public Product() {
     }
 
@@ -90,6 +93,10 @@ public class Product extends TimeStamp {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     public void update(ProductRequestDto productDto, Category category){

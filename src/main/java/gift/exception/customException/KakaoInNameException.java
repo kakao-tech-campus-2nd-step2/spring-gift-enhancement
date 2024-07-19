@@ -1,11 +1,10 @@
-package gift.exception;
+package gift.exception.customException;
+
+import static gift.exception.exceptionMessage.ExceptionMessage.NAME_IN_KAKAO;
 
 public class KakaoInNameException extends RuntimeException{
-
-    private static final String MESSAGE = "상품이름에 카카오가 들어가 있습니다. 담당 MD와 협의하세요.";
-
     public KakaoInNameException(){
-        super(MESSAGE);
+        super(NAME_IN_KAKAO);
     }
 
     public KakaoInNameException(String message, Throwable cause) {

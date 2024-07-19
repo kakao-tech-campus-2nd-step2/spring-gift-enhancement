@@ -1,8 +1,8 @@
 package gift.service;
 
 import gift.domain.AuthToken;
-import gift.exception.EmailDuplicationException;
-import gift.exception.UnAuthorizationException;
+import gift.exception.customException.EmailDuplicationException;
+import gift.exception.customException.UnAuthorizationException;
 import gift.repository.token.TokenRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

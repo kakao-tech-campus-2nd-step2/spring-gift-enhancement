@@ -2,10 +2,11 @@ package gift.service;
 
 import gift.domain.Category;
 import gift.domain.Product;
+import gift.dto.request.OptionRequestDto;
 import gift.dto.request.ProductRequestDto;
 import gift.dto.response.ProductResponseDto;
-import gift.exception.EntityNotFoundException;
-import gift.exception.KakaoInNameException;
+import gift.exception.customException.EntityNotFoundException;
+import gift.exception.customException.KakaoInNameException;
 import gift.repository.category.CategoryRepository;
 import gift.repository.product.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -18,11 +19,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static gift.exception.exceptionMessage.ExceptionMessage.CATEGORY_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -40,12 +43,16 @@ class ProductServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private OptionService optionService;
+
     @Test
     @DisplayName("상품 이름 카카오 포함 시 Exception 테스트")
     void 상품_카카오_포함_테스트(){
         ProductRequestDto productRequestDto = new ProductRequestDto("테스트 카카오", 1000, "abc.png", 1L);
+        OptionRequestDto optionRequestDto = new OptionRequestDto("TEST", 100);
 
-        assertThatThrownBy(() -> productService.addProduct(productRequestDto))
+        assertThatThrownBy(() -> productService.addProduct(productRequestDto, optionRequestDto))
                 .isInstanceOf(KakaoInNameException.class);
 
         assertThatThrownBy(() -> productService.updateProduct(1L, productRequestDto))
@@ -54,10 +61,11 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("상품 저장 테스트")
-    void 상품_저장_테스트(){
+    void 상품_저장_테스트() throws Exception{
         //given
         ProductRequestDto productRequestDto = new ProductRequestDto("테스트 상품", 1000, "abc.png", 1L);
         ProductRequestDto inValidproductRequestDto = new ProductRequestDto("테스트 상품", 1000, "abc.png", 2L);
+        OptionRequestDto optionRequestDto = new OptionRequestDto("TEST", 100);
 
         Category category = new Category("상품권", "#0000");
 
@@ -68,12 +76,16 @@ class ProductServiceTest {
                 .category(category)
                 .build();
 
+        Field idField = Product.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(product, 1L);
+
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(categoryRepository.findById(1L)).willReturn(Optional.of(category));
         given(categoryRepository.findById(2L)).willReturn(Optional.empty());
 
         //when
-        ProductResponseDto productResponseDto = productService.addProduct(productRequestDto);
+        ProductResponseDto productResponseDto = productService.addProduct(productRequestDto, optionRequestDto);
 
         //then
         assertAll(
@@ -81,9 +93,10 @@ class ProductServiceTest {
                 () -> assertThat(productResponseDto.price()).isEqualTo(product.getPrice()),
                 () -> assertThat(productResponseDto.imageUrl()).isEqualTo(product.getImageUrl()),
                 () -> assertThat(productResponseDto.categoryResponseDto().name()).isEqualTo("상품권"),
-                () -> assertThatThrownBy(() -> productService.addProduct(inValidproductRequestDto))
+                () -> assertThatThrownBy(() -> productService.addProduct(inValidproductRequestDto, optionRequestDto))
                         .isInstanceOf(EntityNotFoundException.class)
-                        .hasMessage("해당 카테고리는 존재하지 않습니다.")
+                        .hasMessage("해당 카테고리는 존재하지 않습니다."),
+                () -> verify(optionService, times(1)).saveOption(any(OptionRequestDto.class), any(Long.class))
         );
     }
 
@@ -163,7 +176,7 @@ class ProductServiceTest {
                         .isInstanceOf(EntityNotFoundException.class),
                 () -> assertThatThrownBy(() -> productService.updateProduct(testId, inValidRequestDto))
                         .isInstanceOf(EntityNotFoundException.class)
-                        .hasMessage("해당 카테고리가 존재하지 않습니다.")
+                        .hasMessage(CATEGORY_NOT_FOUND)
         );
     }
 

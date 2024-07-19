@@ -2,10 +2,11 @@ package gift.service;
 
 import gift.domain.Category;
 import gift.domain.Product;
+import gift.dto.request.OptionRequestDto;
 import gift.dto.request.ProductRequestDto;
 import gift.dto.response.ProductResponseDto;
-import gift.exception.EntityNotFoundException;
-import gift.exception.KakaoInNameException;
+import gift.exception.customException.EntityNotFoundException;
+import gift.exception.customException.KakaoInNameException;
 import gift.repository.category.CategoryRepository;
 import gift.repository.product.ProductRepository;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static gift.exception.exceptionMessage.ExceptionMessage.CATEGORY_NOT_FOUND;
+import static gift.exception.exceptionMessage.ExceptionMessage.PRODUCT_NOT_FOUND;
+
 @Service
 @Transactional(readOnly = true)
 public class ProductService {
@@ -22,15 +26,18 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
+    private final OptionService optionService;
+
     public ProductService(ProductRepository productRepository,
-                          CategoryRepository categoryRepository
-    ){
+                          CategoryRepository categoryRepository,
+                          OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionService = optionService;
     }
 
     @Transactional
-    public ProductResponseDto addProduct(ProductRequestDto productDto){
+    public ProductResponseDto addProduct(ProductRequestDto productDto, OptionRequestDto optionRequestDto){
         checkNameInKakao(productDto);
 
         Category category = categoryRepository.findById(productDto.categoryId()).orElseThrow(() -> new EntityNotFoundException("해당 카테고리는 존재하지 않습니다."));
@@ -46,12 +53,14 @@ public class ProductService {
 
         Product savedProduct = productRepository.save(product);
 
+        optionService.saveOption(optionRequestDto, savedProduct.getId());
+
         return ProductResponseDto.from(savedProduct);
     }
 
     public ProductResponseDto findProductById(Long id){
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("존재 하지 않는 상품입니다."));
+                .orElseThrow(() -> new EntityNotFoundException(PRODUCT_NOT_FOUND));
 
         return ProductResponseDto.from(product);
     }
@@ -72,8 +81,8 @@ public class ProductService {
     public ProductResponseDto updateProduct(Long id, ProductRequestDto productRequestDto){
         checkNameInKakao(productRequestDto);
 
-        Product findProduct = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("존재 하지 않는 상품입니다."));
-        Category category = categoryRepository.findById(productRequestDto.categoryId()).orElseThrow(() -> new EntityNotFoundException("해당 카테고리가 존재하지 않습니다."));
+        Product findProduct = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(PRODUCT_NOT_FOUND));
+        Category category = categoryRepository.findById(productRequestDto.categoryId()).orElseThrow(() -> new EntityNotFoundException(CATEGORY_NOT_FOUND));
 
         findProduct.update(productRequestDto, category);
 
@@ -82,7 +91,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponseDto deleteProduct(Long id){
-        Product findProduct = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("존재 하지 않는 상품입니다."));
+        Product findProduct = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(PRODUCT_NOT_FOUND));
 
         productRepository.delete(findProduct);
 

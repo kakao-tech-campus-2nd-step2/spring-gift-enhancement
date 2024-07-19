@@ -1,13 +1,15 @@
 package gift.service;
 
 import gift.domain.AuthToken;
-import gift.exception.EmailDuplicationException;
-import gift.exception.UnAuthorizationException;
+import gift.exception.customException.EmailDuplicationException;
+import gift.exception.customException.UnAuthorizationException;
 import gift.repository.token.TokenRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+import static gift.exception.exceptionMessage.ExceptionMessage.ALREADY_TOKEN_GET_EMAIL;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,7 +26,7 @@ public class TokenService {
         Optional<AuthToken> tokenByEmail = tokenRepository.findTokenByEmail(email);
 
         if(tokenByEmail.isPresent()){
-            throw new EmailDuplicationException("이미 토큰을 발급한 아이디 입니다.");
+            throw new EmailDuplicationException(ALREADY_TOKEN_GET_EMAIL);
         }
 
         AuthToken authToken = new AuthToken(token, email);
