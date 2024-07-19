@@ -3,6 +3,7 @@ package gift.controller;
 import gift.dto.ProductDTO;
 import gift.entity.Category;
 import gift.entity.Product;
+import gift.service.ProductFacadeService;
 import gift.service.ProductService;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -16,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
-    ProductService productService;
+    ProductFacadeService productService;
 
-    public AdminController(ProductService productService) {
+    public AdminController(ProductFacadeService productService) {
         this.productService = productService;
     }
 

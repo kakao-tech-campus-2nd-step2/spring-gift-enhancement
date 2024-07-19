@@ -31,13 +31,13 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(value = NullPointerException.class)
     public ResponseEntity<String> handleNullPointerException(NullPointerException ex) {
-        return new ResponseEntity<>("Null Pointer Exception occurred",
+        return new ResponseEntity<>(ex.getMessage(),
             HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return new ResponseEntity<>("Illegal Argument", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     //Product 중복 이름값을 추가했을 때 Handling

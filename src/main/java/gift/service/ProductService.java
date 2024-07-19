@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.entity.Category;
 import gift.entity.Member;
+import gift.entity.Option;
 import gift.entity.Product;
 
 import gift.exception.DataNotFoundException;
@@ -23,35 +24,30 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryService categoryService;
     private final int PAGE_SIZE = 5;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.categoryService = categoryService;
     }
 
     public void saveProduct(Product product) {
         productRepository.save(product);
     }
 
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
     public Product getProductById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-
-        if (product.isEmpty()) {
-            throw new DataNotFoundException("존재하지 않는 Product: Product를 찾을 수 없습니다.");
-        }
-        return product.get();
+        return productRepository.findById(id).
+            orElseThrow(() -> new DataNotFoundException("존재하지 않는 Product입니다."));
     }
 
 
     public void updateProduct(Product product, Long id) {
 
-        Product update = findByProductByIdOrThrow(id);
+        Product update = getProductById(id);
         update.setName(product.getName());
         update.setPrice(product.getPrice());
         update.setImageUrl(product.getImageUrl());
@@ -62,6 +58,7 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
+        getProductById(id);
         productRepository.deleteById(id);
     }
 
@@ -73,17 +70,5 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    private Product findByProductByIdOrThrow(Long id) {
-        return productRepository.findById(id)
-            .orElseThrow(() -> new DataNotFoundException("존재하지 않는 상품입니다."));
-    }
-
-    public Category findCategoryById(Long id) {
-        return categoryService.findById(id);
-    }
-
-    public List<Category> findAllCategory() {
-        return categoryService.findAll();
-    }
 
 }
