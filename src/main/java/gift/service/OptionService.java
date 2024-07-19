@@ -50,8 +50,8 @@ public class OptionService {
 
     @Transactional
     public void subtractOptionQuantity(Long targetOptionId, int subtractQuantity) {
-
-        Option targetOption = optionRepository.findByIdWithPessimisticWriteLock(targetOptionId).orElseThrow(() -> new OptionNotFoundException(targetOptionId));
+        Option targetOption = optionRepository.findByIdWithPessimisticWriteLock(targetOptionId)
+                .orElseThrow(() -> new OptionNotFoundException(targetOptionId));
 
         if (targetOption.getQuantity() < subtractQuantity) {
             throw new InsufficientOptionQuantityException(subtractQuantity);

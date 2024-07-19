@@ -5,13 +5,16 @@ import gift.entity.Option;
 import gift.exception.InsufficientOptionQuantityException;
 import gift.exception.OptionDuplicateException;
 import gift.exception.OptionNotFoundException;
+import gift.repository.OptionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,6 +26,8 @@ class OptionServiceTest {
 
     @InjectMocks
     private OptionService optionService;
+    @Mock
+    private OptionRepository optionRepository;
 
     @Test
     @DisplayName("특정 상품 옵션 조회")
@@ -91,13 +96,16 @@ class OptionServiceTest {
     @DisplayName("옵션 수량 차감 - 넉넉한 수량이 있어 차감 성공")
     void subtractOptionQuantity() {
         //Given
+        Long targetOptionId = 1L;
         Option targetOption = mock(Option.class);
         int subtractQuantity = 99_999_999;
 
+        when(optionRepository.findByIdWithPessimisticWriteLock(targetOptionId))
+                .thenReturn(Optional.of(targetOption));
         when(targetOption.getQuantity()).thenReturn(100_000_000);
 
         //When
-        optionService.subtractOptionQuantity(targetOption, subtractQuantity);
+        optionService.subtractOptionQuantity(targetOptionId, subtractQuantity);
 
         //Then
         verify(targetOption, times(1)).subtract(subtractQuantity);
@@ -107,13 +115,16 @@ class OptionServiceTest {
     @DisplayName("옵션 수량 차감 - 차감 원하는 수량보다 기존 수량이 적어 실패")
     void subtractOptionQuantity2() {
         //Given
+        Long targetOptionId = 1L;
         Option targetOption = mock(Option.class);
-        int subtractQuantity = 99_999_999;
+        int subtractQuantity = 999_999_999;
 
+        when(optionRepository.findByIdWithPessimisticWriteLock(targetOptionId))
+                .thenReturn(Optional.of(targetOption));
         when(targetOption.getQuantity()).thenReturn(100);
 
         //When Then
-        assertThatThrownBy(() -> optionService.subtractOptionQuantity(targetOption, subtractQuantity))
+        assertThatThrownBy(() -> optionService.subtractOptionQuantity(targetOptionId, subtractQuantity))
                 .isInstanceOf(InsufficientOptionQuantityException.class);
     }
 }
