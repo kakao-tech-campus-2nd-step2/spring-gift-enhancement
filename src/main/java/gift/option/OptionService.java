@@ -40,7 +40,7 @@ public class OptionService {
                 ProductErrorCode.NOT_FOUND));
         Options options = new Options(optionRepository.findAllByProductId(productId));
         Option option = new Option(optionRequest.getName(), optionRequest.getQuantity(), product);
-        options.validate(option);
+        options.validateDuplicated(option);
         option = optionRepository.save(option);
         return option.getId();
     }
@@ -53,7 +53,9 @@ public class OptionService {
     }
 
     @Transactional
-    public void deleteOption(Long optionId) {
+    public void deleteOption(Long productId, Long optionId) {
+        Options options = new Options(optionRepository.findAllByProductId(productId));
+        options.validateOptionSize();
         optionRepository.deleteById(optionId);
     }
 }

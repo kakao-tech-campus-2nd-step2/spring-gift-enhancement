@@ -32,14 +32,15 @@ public class OptionController {
         return optionService.addOption(productId, optionRequest);
     }
 
-    @PutMapping("/api/options/{id}")
-    public void updateOption(@PathVariable("id") Long optionId,
+    @PutMapping("/api/products/{productId}/options/{optionId}")
+    public void updateOption(@PathVariable("optionId") Long optionId,
         @Valid @RequestBody OptionRequest optionRequest) {
         optionService.updateOption(optionId, optionRequest);
     }
 
-    @DeleteMapping("/api/options/{id}")
-    public void deleteOption(@PathVariable("id") Long optionId) {
-        optionService.deleteOption(optionId);
+    @DeleteMapping("/api/products/{productId}/options/{optionId}")
+    public void deleteOption(@PathVariable("productId") Long productId,
+        @PathVariable("optionId") Long optionId) {
+        optionService.deleteOption(productId, optionId);
     }
 }
