@@ -21,7 +21,7 @@ public record OptionRequest(
             throw new CustomException(ErrorCode.INVALID_OPTION_NAME_CHARACTERS);
         }
 
-        if (quantity < 1 || quantity >  100000000) {
+        if (quantity < 1 || quantity > 100000000) {
             throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
         }
 

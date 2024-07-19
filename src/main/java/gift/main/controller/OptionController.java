@@ -31,7 +31,7 @@ public class OptionController {
 
     // 옵션리스트 반환
     @GetMapping("/{id}/options")
-    public ResponseEntity<?> findOptionAll(@PathVariable(value = "id") long productId) {
+    public ResponseEntity<?> findAllOption(@PathVariable(value = "id") long productId) {
         List<OptionResponse> options = optionService.findAllOption(productId);
         return ResponseEntity.ok(options);
     }
@@ -65,7 +65,7 @@ public class OptionController {
     public ResponseEntity<?> changeOptionQuantity(@PathVariable(value = "productId") long productId,
                                                   @PathVariable(value = "optionId") long optionId,
                                                   @Valid @RequestBody OptionQuantityRequest optionQuantityRequest) {
-        optionService.changeOptionQuantity(optionId, optionQuantityRequest );
+        optionService.changeOptionQuantity(optionId, optionQuantityRequest);
         return ResponseEntity.ok("Option Quantity changed successfully");
     }
 }
