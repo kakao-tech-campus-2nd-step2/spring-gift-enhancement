@@ -3,7 +3,6 @@ package gift.main.Aspect;
 import gift.main.dto.UserVo;
 import gift.main.entity.Role;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 public final class AdminAspectLogicTest {
     /*
