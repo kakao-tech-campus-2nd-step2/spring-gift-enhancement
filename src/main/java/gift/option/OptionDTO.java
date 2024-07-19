@@ -38,15 +38,6 @@ public class OptionDTO {
         return quantity;
     }
 
-    public Option toEntity(Product product) {
-        return new Option(
-            id,
-            name,
-            quantity,
-            product
-        );
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof OptionDTO optionDTO) {

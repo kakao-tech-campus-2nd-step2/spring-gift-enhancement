@@ -82,4 +82,17 @@ public class Option {
             )
         );
     }
+
+    @Override
+    public int hashCode() {
+        return (int) id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Option option) {
+            return id == option.id;
+        }
+        return false;
+    }
 }

@@ -10,6 +10,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import gift.category.Category;
@@ -18,6 +20,7 @@ import gift.product.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -162,6 +165,13 @@ public class OptionServiceTest {
                 new Category(1L, "category")
             );
 
+            Option option = new Option(
+                1L,
+                "option-1",
+                1,
+                product
+            );
+
             //when
             when(productRepository.findById(productId))
                 .thenReturn(Optional.of(product));
@@ -169,13 +179,14 @@ public class OptionServiceTest {
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
 
-            when(optionRepository.save(optionDTO.toEntity(product)))
-                .thenReturn(optionDTO.toEntity(product));
+            when(optionRepository.save(option))
+                .thenReturn(option);
 
             //then
             assertDoesNotThrow(
                 () -> optionService.addOption(productId, optionDTO)
             );
+            verify(optionRepository, times(1)).save(option);
         }
 
         @Test
@@ -195,6 +206,12 @@ public class OptionServiceTest {
                 "imageUrl",
                 new Category(1L, "category")
             );
+            Option option = new Option(
+                1L,
+                "option-1",
+                1,
+                product
+            );
 
             //when
             when(productRepository.findById(productId))
@@ -203,8 +220,8 @@ public class OptionServiceTest {
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
 
-            when(optionRepository.save(optionDTO.toEntity(product)))
-                .thenReturn(optionDTO.toEntity(product));
+            when(optionRepository.save(option))
+                .thenReturn(option);
 
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
@@ -229,6 +246,12 @@ public class OptionServiceTest {
                 "imageUrl",
                 new Category(1L, "category")
             );
+            Option option = new Option(
+                1L,
+                "option-1",
+                1,
+                product
+            );
 
             //when
             when(productRepository.findById(productId))
@@ -237,8 +260,8 @@ public class OptionServiceTest {
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(true);
 
-            when(optionRepository.save(optionDTO.toEntity(product)))
-                .thenReturn(optionDTO.toEntity(product));
+            when(optionRepository.save(option))
+                .thenReturn(option);
 
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
@@ -388,6 +411,8 @@ public class OptionServiceTest {
             assertDoesNotThrow(
                 () -> optionService.updateOption(productId, optionDTO)
             );
+
+            verify(optionRepository, times(1)).save(option);
         }
 
         @Test
@@ -659,6 +684,7 @@ public class OptionServiceTest {
 
             //then
             assertDoesNotThrow(() -> optionService.deleteOption(productId, optionId));
+            verify(optionRepository, times(1)).delete(option);
         }
 
         @Test
