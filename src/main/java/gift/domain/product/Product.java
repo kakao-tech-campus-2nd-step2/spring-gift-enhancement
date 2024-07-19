@@ -2,6 +2,8 @@ package gift.domain.product;
 
 import gift.domain.category.Category;
 import gift.domain.option.Option;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -68,9 +70,19 @@ public class Product {
         return category;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     private void checkName(String name) {
         if (name.contains("카카오")) {
             throw new IllegalArgumentException("카카오가 포함된 이름은 담당 MD와 협의가 필요합니다.");
+        }
+    }
+
+    public void addOption(Option option) {
+        if (options.stream().anyMatch(o -> option.getName().equals(o.getName()))) {
+            throw new CustomException(ErrorCode.INVALID_PRODUCT,option.getName());
         }
     }
 }
