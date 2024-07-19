@@ -2,16 +2,19 @@ package gift.service;
 
 
 import gift.dto.OptionRequestDTO;
+import gift.dto.OptionResponseDTO;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.OptionException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OptionService {
@@ -29,9 +32,11 @@ public class OptionService {
         return optionRepository.findAll();
     }
 
-    public List<Option> findByProductId(Long productId) {
+    public List<OptionResponseDTO> findByProductId(Long productId) {
         List<Option> options = optionRepository.findByProductId(productId);
-        return options;
+        return options.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     public void save(Long productId, OptionRequestDTO optionRequestDTO) {
@@ -48,11 +53,23 @@ public class OptionService {
         optionRepository.save(toEntity(existingProduct, optionRequestDTO));
     }
 
-    private Option toEntity(Product product, OptionRequestDTO optionRequestDTO ) {
+    @Description("request DTO -> entity")
+    private Option toEntity(Product product, OptionRequestDTO optionRequestDTO) {
         String optionName = optionRequestDTO.name();
         int quantity = optionRequestDTO.quantity();
         Option option = new Option(optionName, quantity, product);
         return option;
+    }
+
+    @Description("entity -> responseDTO")
+    private OptionResponseDTO toDto(Option option) {
+        Long productId = option.getProduct()
+                .getId();
+        String optionName = option.getName();
+        int quantity = option.getQuantity();
+
+        OptionResponseDTO optionResponseDTO = new OptionResponseDTO(productId, optionName, quantity);
+        return optionResponseDTO;
     }
 
 }

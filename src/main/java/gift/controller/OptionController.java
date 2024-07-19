@@ -2,6 +2,7 @@ package gift.controller;
 
 
 import gift.dto.OptionRequestDTO;
+import gift.dto.OptionResponseDTO;
 import gift.entity.Option;
 import gift.repository.OptionRepository;
 import gift.service.OptionService;
@@ -36,8 +37,8 @@ public class OptionController {
     }
 
     @GetMapping("options/{productId}")
-    public ResponseEntity<List<Option>> getOptionsByProductId(@PathVariable Long productId) {
-        List<Option> options = optionService.findByProductId(productId);
+    public ResponseEntity<List<OptionResponseDTO>> getOptionsByProductId(@PathVariable Long productId) {
+        List<OptionResponseDTO> options = optionService.findByProductId(productId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(options);
     }
