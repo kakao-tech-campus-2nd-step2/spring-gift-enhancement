@@ -1,5 +1,7 @@
 package gift.option;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -12,8 +14,9 @@ public class OptionRequest {
     @NotNull
     private String name;
 
-    @Size(min = 1,max = 1_000_000_000)
     @NotNull
+    @Min(1)
+    @Max(1_000_000_000)
     private int quantity;
 
     @NotNull
