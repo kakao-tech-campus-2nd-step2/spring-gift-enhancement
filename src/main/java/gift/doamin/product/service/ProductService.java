@@ -16,6 +16,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -63,7 +64,8 @@ public class ProductService {
         return new ProductParam(product);
     }
 
-    public ProductParam update(Long id, ProductForm productForm, boolean isSeller) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @productService.isOwner(authentication.name, #id)")
+    public ProductParam update(Long id, ProductForm productForm) {
 
         Optional<Product> target = productRepository.findById(id);
         if (target.isEmpty()) {
@@ -72,26 +74,20 @@ public class ProductService {
 
         Product product = target.get();
 
-        checkAuthority(productForm.getUserId(), product, isSeller);
-
         Category category = categoryRepository.findById(productForm.getCategory_id())
             .orElseThrow(CategoryNotFoundException::new);
         product.updateAll(productForm, category);
         return new ProductParam(productRepository.save(product));
     }
 
-    public void delete(Long userId, Long id, boolean isSeller) {
-        Product target = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
-
-        checkAuthority(userId, target, isSeller);
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @productService.isOwner(authentication.name, #id)")
+    public void delete(Long id) {
         productRepository.deleteById(id);
     }
 
-    private void checkAuthority(Long userId, Product target, boolean isSeller) {
-        if (isSeller && !target.getUser().getId().equals(userId)) {
-            throw new NotEnoughAutorityException();
-        }
-
+    public boolean isOwner(Long userId, Long productId) {
+        return productRepository.findById(productId)
+            .map(product -> product.getUser().getId().equals(userId))
+            .orElse(false);
     }
 }
