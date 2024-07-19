@@ -1,6 +1,8 @@
 package gift.dto;
 
 import gift.model.Product;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProductDTO {
     private Long id;
@@ -8,6 +10,7 @@ public class ProductDTO {
     private int price;
     private String imageUrl;
     private CategoryDTO category;
+    private Set<OptionDTO> options;
 
     public ProductDTO() {}
 
@@ -18,6 +21,9 @@ public class ProductDTO {
         this.imageUrl = product.getImageUrl();
         if (product.getCategory() != null) {
             this.category = new CategoryDTO(product.getCategory());
+        }
+        if (product.getOptions() != null) {
+            this.options = product.getOptions().stream().map(OptionDTO::new).collect(Collectors.toSet());
         }
     }
 
@@ -59,5 +65,13 @@ public class ProductDTO {
 
     public void setCategory(CategoryDTO category) {
         this.category = category;
+    }
+
+    public Set<OptionDTO> getOptions() {
+        return options;
+    }
+
+    public void setOptions(Set<OptionDTO> options) {
+        this.options = options;
     }
 }
