@@ -15,7 +15,7 @@ POST http://localhost:8080/api/options
 Content-Type: application/json
 
 {
-  "name": "컴퓨터",
+  "name": "#$@#%",
   "count": 123,
   "productId": 1
 }

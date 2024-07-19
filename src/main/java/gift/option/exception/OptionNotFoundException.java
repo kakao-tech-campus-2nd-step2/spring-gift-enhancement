@@ -5,6 +5,6 @@ import gift.global.response.ErrorCode;
 
 public class OptionNotFoundException extends BusinessException {
     public OptionNotFoundException() {
-        super(ErrorCode.MEMBER_NOT_FOUND_ERROR);
+        super(ErrorCode.OPTION_NOT_FOUND_ERROR);
     }
 }
