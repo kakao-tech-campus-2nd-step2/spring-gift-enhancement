@@ -7,7 +7,6 @@ import gift.dto.MemberDTO;
 import gift.dto.ProductPostRequestDTO;
 import gift.dto.ProductRequestDTO;
 import gift.dto.WishDTO;
-import gift.entity.Category;
 import gift.repository.CategoryRepository;
 import gift.repository.WishRepository;
 import java.util.List;
