@@ -14,6 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("api/menus/view")
+
 public class MenuController {
 
     private final MenuService menuService;
