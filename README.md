@@ -1,5 +1,6 @@
 # spring-gift-enhancement
 # step0
+
 - [x] 피드백 반영 리팩토링
   - [x] 스프링 컨테이너가 띄워지지 않는 환경으로 단위테스트 작성
   - [x] 비즈니즈 정책에 대한 유효성 검사를 Domain에서 수행하도록 변경
@@ -25,3 +26,16 @@
   - [x] 옵션 이름에 ( ), [ ], +, -, &, /, _ 외 특수 문자 사용 불가
   - [x] 옵션 수량은 최소 1개 이상 1억 개 미만이다.
   - [x] 동일한 상품 내의 옵션 이름은 중복될 수 없다.
+- [ ] 테스트 구현
+  - [ ] ProductControllerTest
+  - [ ] ProductRepositoryTest
+  - [ ] ProductServiceTest
+  - [ ] OptionRepositoryTest
+  - [ ] OptionServiceTest
+- [ ] 피드백 반영
+  - [ ] gson 버전 정보 삭제
+  - [ ] API 요청 url을 복수형으로 변경
+  - [ ] 제네릭을 구체적으로 변경
+  - [ ] 불필요한 setter 최소화
+  - [ ] mockito의 verify 기능을 활용하여 deleteCategoryTest() 구현
+  - [ ] addCategoryController 수정
