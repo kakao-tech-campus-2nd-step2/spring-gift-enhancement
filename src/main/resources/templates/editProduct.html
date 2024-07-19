@@ -30,6 +30,20 @@
                 th:selected="${category.id == product.category.id}">Category Name</option>
       </select>
     </div>
+    <div class="form-group">
+      <label>Options</label>
+      <div th:each="option, iter : ${product.options}">
+        <input type="hidden" th:field="*{options[__${iter.index}__].id}">
+        <div class="form-group">
+          <label>Option Name</label>
+          <input type="text" class="form-control" th:field="*{options[__${iter.index}__].name}">
+        </div>
+        <div class="form-group">
+          <label>Option Quantity</label>
+          <input type="number" class="form-control" th:field="*{options[__${iter.index}__].quantity}">
+        </div>
+      </div>
+    </div>
     <button type="submit" class="btn btn-primary">Update Product</button>
   </form>
 </div>

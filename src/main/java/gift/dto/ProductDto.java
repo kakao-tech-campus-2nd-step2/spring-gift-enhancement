@@ -1,8 +1,11 @@
 package gift.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 public class ProductDto {
     @NotBlank(message = "이름은 필수 입력 값입니다.")
@@ -12,6 +15,9 @@ public class ProductDto {
     private String name;
     private int price;
     private String imageUrl;
+    @NotNull(message = "카테고리 ID는 필수 입력 값입니다.")
+    private Long categoryId;
+    private List<OptionDto> options;
 
     public int getPrice() {
         return price;
@@ -35,5 +41,21 @@ public class ProductDto {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public List<OptionDto> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<OptionDto> options) {
+        this.options = options;
     }
 }

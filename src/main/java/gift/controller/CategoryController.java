@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.CategoryDto;
 import gift.model.Category;
 import gift.service.CategoryService;
 import gift.service.ProductService;
@@ -32,21 +33,20 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
-        categoryService.addCategory(category);
+    public ResponseEntity<Category> addCategory(@RequestBody CategoryDto categoryDto) {
+        Category category = categoryService.addCategory(categoryDto);
         return ResponseEntity.ok(category);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        categoryService.updateCategory(id, category);
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+        Category category = categoryService.updateCategory(id, categoryDto);
         return ResponseEntity.ok(category);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
-        productService.updateProductCategoryToNone(category);
+        productService.updateProductCategoryToNone(id);
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
