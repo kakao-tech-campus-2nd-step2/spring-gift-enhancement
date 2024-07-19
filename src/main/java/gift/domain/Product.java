@@ -74,7 +74,7 @@ public class Product {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void updateCategory(Category category) {
         this.category = category;
     }
 
