@@ -23,6 +23,10 @@ public class Product {
     @Column(nullable = false, name = "image_url")
     private String imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "product", orphanRemoval = true)
@@ -30,11 +34,12 @@ public class Product {
 
     public Product() {}
 
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -59,6 +64,14 @@ public class Product {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getImageUrl() {

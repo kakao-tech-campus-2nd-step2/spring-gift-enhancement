@@ -1,6 +1,7 @@
 package gift.controller;
 
-import gift.dto.ProductDTO;
+import gift.dto.ProductRequestDTO;
+import gift.dto.ProductResponseDTO;
 import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -26,8 +27,8 @@ public class ProductController {
 
     @Description("get all products")
     @GetMapping("/products")
-    public ResponseEntity<Collection<Product>> getProducts() {
-        List<Product> products = productService.getAllProducts();
+    public ResponseEntity<List<ProductResponseDTO>> getProducts() {
+        List<ProductResponseDTO> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
@@ -42,8 +43,8 @@ public class ProductController {
 
     @Description("add product : id는 자동 추가")
     @PostMapping("/products")
-    public ResponseEntity<String> addProduct(@RequestBody @Valid ProductDTO productDTO) {
-        productService.saveProduct(productDTO);
+    public ResponseEntity<String> addProduct(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
+        productService.saveProduct(productRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Product added successfully");
     }
@@ -57,8 +58,8 @@ public class ProductController {
     }
 
     @PutMapping("/products/{productId}")
-    public ResponseEntity<String> updateProduct(@PathVariable Long productId, @RequestBody @Valid ProductDTO productDTO) {
-        productService.updateProduct(productId, productDTO);
+    public ResponseEntity<String> updateProduct(@PathVariable Long productId, @RequestBody @Valid ProductRequestDTO productRequestDTO) {
+        productService.updateProduct(productId, productRequestDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Product updated successfully");
     }

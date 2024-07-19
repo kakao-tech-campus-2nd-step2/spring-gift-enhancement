@@ -22,7 +22,7 @@ public class WishController {
         this.wishService = wishService;
     }
 
-    @PostMapping()
+    @PostMapping("/{productId}")
     public ResponseEntity<String> addWish(@RequestParam("productId") Long productId,
                                           @LoginMember TokenLoginRequestDTO tokenLoginRequestDTO) {
         System.out.println("post");
