@@ -1,4 +1,4 @@
-package gift.JpaDataTest;
+package gift.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

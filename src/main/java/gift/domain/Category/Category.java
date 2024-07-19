@@ -1,4 +1,4 @@
-package gift.domain.Category;
+package gift.domain.category;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,9 +45,9 @@ public class Category {
         return description;
     }
 
-    public void update(CategoryDTO categoryDTO) {
-        this.name = categoryDTO.getName();
-        this.description = categoryDTO.getDescription();
+    public void update(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     @Override

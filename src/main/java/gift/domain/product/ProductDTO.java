@@ -1,8 +1,6 @@
 package gift.domain.product;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import gift.domain.option.dto.OptionRequestDTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,19 +25,27 @@ public class ProductDTO {
     @URL(message = "이미지 url 형식이 올바르지 않습니다.")
     private String imageUrl;
 
+    @NotNull
+    private OptionRequestDTO option;
+
     public ProductDTO() {
     }
 
-    @JsonCreator
     public ProductDTO(
-        @JsonProperty("name") String name,
-        @JsonProperty("categoryId") Long categoryId,
-        @JsonProperty("price") Integer price,
-        @JsonProperty("imageUrl") String imageUrl) {
+        String name,
+        Long categoryId,
+        Integer price,
+        String imageUrl,
+        OptionRequestDTO option) {
         this.name = name;
         this.categoryId = categoryId;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.option = option;
+    }
+
+    public OptionRequestDTO getOption() {
+        return option;
     }
 
     public String getName() {
@@ -57,4 +63,5 @@ public class ProductDTO {
     public Long getCategoryId() {
         return categoryId;
     }
+
 }

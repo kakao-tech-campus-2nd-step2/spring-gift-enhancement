@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseTimeEntity {
+public abstract class BaseTimeEntity {
 
     @CreatedDate // 엔티티 생성 시간 자동 기록
     private LocalDateTime createdDate;

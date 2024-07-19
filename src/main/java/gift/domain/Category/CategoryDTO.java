@@ -1,7 +1,5 @@
-package gift.domain.Category;
+package gift.domain.category;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
 public class CategoryDTO {
@@ -12,9 +10,7 @@ public class CategoryDTO {
     @NotBlank
     public String description;
 
-    @JsonCreator
-    public CategoryDTO(@JsonProperty("name") String name,
-        @JsonProperty("description") String description) {
+    public CategoryDTO(String name, String description) {
         this.name = name;
         this.description = description;
     }

@@ -1,9 +1,10 @@
 package gift.domain.product;
 
 import gift.domain.BaseTimeEntity;
-import gift.domain.Category.Category;
+import gift.domain.category.Category;
+import gift.domain.option.Option;
 import gift.global.annotation.NotContainsValue;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +12,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -29,8 +32,13 @@ public class Product extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    // 상품 삭제 시 옵션도 같이 삭제(옵션은 하나의 상품에 종속)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
     private int price;
     private String imageUrl;
+
     protected Product() {
 
     }
@@ -98,6 +106,8 @@ public class Product extends BaseTimeEntity {
         return "Product{" +
                "id=" + id +
                ", name='" + name + '\'' +
+               ", category=" + category +
+               ", options=" + options +
                ", price=" + price +
                ", imageUrl='" + imageUrl + '\'' +
                '}';
@@ -136,10 +146,8 @@ public class Product extends BaseTimeEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void proxyInitialize(String name, int price, String imageUrl) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
 
+    public List<Option> getOptions() {
+        return options;
+    }
 }

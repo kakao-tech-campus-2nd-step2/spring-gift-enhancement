@@ -1,10 +1,10 @@
-package gift.JpaDataTest;
+package gift.CartItem;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import gift.domain.Category.Category;
-import gift.domain.Category.JpaCategoryRepository;
+import gift.domain.category.Category;
+import gift.domain.category.JpaCategoryRepository;
 import gift.domain.cartItem.CartItem;
 import gift.domain.cartItem.JpaCartItemRepository;
 import gift.domain.product.JpaProductRepository;
