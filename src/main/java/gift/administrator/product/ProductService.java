@@ -1,9 +1,9 @@
 package gift.administrator.product;
 
 import gift.administrator.category.Category;
-import gift.administrator.category.CategoryDTO;
 import gift.administrator.category.CategoryService;
 import gift.administrator.option.Option;
+import gift.administrator.option.OptionDTO;
 import gift.administrator.option.OptionService;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,15 +53,12 @@ public class ProductService {
         return ProductDTO.fromProduct(product);
     }
 
-    public boolean existsById(long productId){
-        return productRepository.existsById(productId);
-    }
     public boolean existsByName(String name) {
         return productRepository.existsByName(name);
     }
 
     public ProductDTO addProduct(ProductDTO productDTO) throws NotFoundException {
-        validateProductOptions(productDTO);
+        validateOptions(productDTO);
         if (productRepository.existsByName(productDTO.getName())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
@@ -69,30 +66,47 @@ public class ProductService {
         Product product = productDTO.toProduct(productDTO, category);
         category.addProducts(product);
         Product savedProduct = productRepository.save(product);
+        List<OptionDTO> optionList = new ArrayList<>();
+        for (Option option : product.getOptions()) {
+            option.setProduct(savedProduct);
+            optionList.add(optionService.addOption(OptionDTO.fromOption(option), product));
+        }
+        savedProduct.setOption(
+            optionList.stream().map(optionDTO -> optionDTO.toOption(product)).toList());
         return ProductDTO.fromProduct(savedProduct);
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO) throws NotFoundException {
-        validateProductOptions(productDTO);
-        Product product = productRepository.findById(productDTO.getId())
+        validateOptions(productDTO);
+        Product existingProduct = productRepository.findById(productDTO.getId())
             .orElseThrow(NotFoundException::new);
         if (productRepository.existsByNameAndIdNot(productDTO.getName(), productDTO.getId())) {
             throw new IllegalArgumentException("존재하는 이름입니다.");
         }
         Category newCategory = categoryService.getCategoryById(productDTO.getCategoryId())
             .toCategory();
-        Category oldCategory = product.getCategory();
-        Product product1 = productDTO.toProduct(productDTO, newCategory);
-        ArrayList<Option> newOptions = productDTO.getOptions().stream()
-            .map(optionDTO -> optionDTO.toOption(product1))
+        Category oldCategory = existingProduct.getCategory();
+        oldCategory.removeProducts(existingProduct);
+        existingProduct.setCategory(newCategory);
+        ArrayList<Option> options = productDTO.getOptions().stream()
+            .map(optionDTO -> optionDTO.toOption(existingProduct))
             .collect(Collectors.toCollection(ArrayList::new));
-        oldCategory.removeProducts(product);
-        optionService.deleteOptionByProductId(product.getId());
-        product.update(productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(),
-            newCategory, newOptions);
-        newCategory.addProducts(product1);
-        Product resultProduct = productRepository.save(product1);
-        return ProductDTO.fromProduct(resultProduct);
+        optionService.deleteOptionByProductId(existingProduct.getId());
+        existingProduct.update(productDTO.getName(), productDTO.getPrice(),
+            productDTO.getImageUrl(), newCategory, new ArrayList<>());
+        for (Option option : options) {
+            option.setProduct(existingProduct);
+        }
+        Product savedProduct = productRepository.save(existingProduct);
+        List<OptionDTO> optionList = new ArrayList<>();
+        for (Option option : options) {
+            OptionDTO optionDTO = optionService.addOption(OptionDTO.fromOption(option),
+                savedProduct);
+            optionList.add(optionDTO);
+        }
+        savedProduct.setOption(
+            optionList.stream().map(optionDTO -> optionDTO.toOption(savedProduct)).toList());
+        return ProductDTO.fromProduct(savedProduct);
     }
 
     public void existsByNamePutResult(String name, BindingResult result) {
@@ -110,6 +124,7 @@ public class ProductService {
 
     public void deleteProduct(long id) throws NotFoundException {
         Product product = productRepository.findById(id).orElseThrow(NotFoundException::new);
+        optionService.deleteOptionByProductId(product.getId());
         product.getCategory().removeProducts(product);
         productRepository.deleteById(id);
     }
@@ -118,12 +133,9 @@ public class ProductService {
         return categoryService.getCategoryById(categoryId).toCategory();
     }
 
-    private void validateProductOptions(ProductDTO productDTO) throws NotFoundException {
-        CategoryDTO categoryDTO = categoryService.getCategoryById(productDTO.getCategoryId());
-        Category category = categoryDTO.toCategory();
-        Product product = productDTO.toProduct(productDTO, category);
-        List<Option> options = product.getOptions();
-        if (options.isEmpty()) {
+    private void validateOptions(ProductDTO productDTO) {
+        List<OptionDTO> optionsDTO = productDTO.getOptions();
+        if (optionsDTO.isEmpty()) {
             throw new IllegalArgumentException("상품은 적어도 하나의 옵션이 있어야 합니다.");
         }
     }

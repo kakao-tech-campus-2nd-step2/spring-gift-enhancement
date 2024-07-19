@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProductDTO {
 
-    private long id;
+    private Long id;
     @Pattern(regexp = "^[a-zA-Z0-9가-힣ㄱ-ㅎ ()\\[\\]+\\-&/_]*$",
         message = "'( ), [ ], +, -, &, /, _'외의 특수문자는 사용할 수 없습니다.")
     @Pattern(regexp = "^(?!.*카카오).*",
@@ -30,7 +30,7 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(long id, String name, int price, String imageUrl, Long categoryId,
+    public ProductDTO(Long id, String name, int price, String imageUrl, Long categoryId,
         List<OptionDTO> options) {
         this.id = id;
         this.name = name;
@@ -40,11 +40,11 @@ public class ProductDTO {
         this.options = options;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

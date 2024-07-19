@@ -22,7 +22,7 @@ public class WishList {
     @Column(nullable = false)
     @Min(value = 1)
     private int num;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "option_id")
     private Option option;
 
@@ -63,6 +63,8 @@ public class WishList {
     public int getNum() {
         return num;
     }
+
+    public void setNum(int num){this.num = num;}
 
     public Option getOption() {
         return option;

@@ -22,14 +22,14 @@ public class OptionDTO {
 
     public OptionDTO(){}
 
-    public OptionDTO(long id, String name, int quantity, long productId) {
+    public OptionDTO(Long id, String name, int quantity, long productId) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.productId = productId;
     }
 
-    public long getId(){
+    public Long getId(){
         return id;
     }
 
@@ -41,12 +41,12 @@ public class OptionDTO {
         return quantity;
     }
 
-    public long getProductId(){
+    public Long getProductId(){
         return productId;
     }
 
     public Option toOption(Product product){
-        return new Option(name, quantity, product);
+        return new Option(id, name, quantity, product);
     }
 
     public static OptionDTO fromOption(Option option) {

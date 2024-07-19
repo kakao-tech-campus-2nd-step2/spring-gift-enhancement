@@ -2,7 +2,6 @@ package gift.administrator.option;
 
 import gift.administrator.product.Product;
 import gift.users.wishlist.WishList;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,10 +26,17 @@ public class Option {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
-    @OneToMany(mappedBy = "option", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "option")
     private List<WishList> wishes = new ArrayList<>();
 
     public Option() {
+    }
+
+    public Option(Long id, String name, int quantity, Product product) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
     }
 
     public Option(String name, int quantity, Product product) {
@@ -45,7 +51,7 @@ public class Option {
         this.product = product;
     }
 
-    public long getId(){
+    public Long getId(){
         return id;
     }
 

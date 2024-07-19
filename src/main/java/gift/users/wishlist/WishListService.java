@@ -66,27 +66,31 @@ public class WishListService {
         }
     }
 
-    public WishListDTO addWishList(WishListDTO wishList, String email) throws NotFoundException {
+    public WishListDTO addWishList(WishListDTO wishListDTO, String email) throws NotFoundException {
         UserDTO userDTO = userService.findUserByEmail(email);
         User user = userDTO.toUser();
         if (wishListRepository.existsByUserIdAndProductId(user.getId(),
-            wishList.getProductId())) {
+            wishListDTO.getProductId())) {
             throw new IllegalArgumentException(email + "의 위시리스트에 존재하는 상품입니다.");
         }
-        validateOptionId(wishList.getProductId(), wishList.getOptionId());
-        ProductDTO productDTO = productService.getProductById(wishList.getProductId());
-        Product product = productDTO.toProduct(productDTO,
-            productService.getCategoryById(productDTO.getCategoryId()));
-        OptionDTO optionDTO = optionService.findOptionById(wishList.getOptionId());
+        validateOptionId(wishListDTO.getProductId(), wishListDTO.getOptionId());
+        ProductDTO productDTO = productService.getProductById(wishListDTO.getProductId());
+        Product product = productService.getProductById(wishListDTO.getProductId())
+            .toProduct(productDTO,
+                productService.getCategoryById(productDTO.getCategoryId()));
+        product.setOption(optionService.getAllOptionsByOptionId(
+                productDTO.getOptions().stream().map(OptionDTO::getId).toList()).stream()
+            .map(optionDTO -> optionDTO.toOption(product)).toList());
+        OptionDTO optionDTO = optionService.findOptionById(wishListDTO.getOptionId());
         Option option = optionDTO.toOption(product);
-        WishList wishList1 = new WishList(user, product, wishList.getNum(), option);
-        user.addWishList(wishList1);
-        product.addWishList(wishList1);
-        wishListRepository.save(wishList1);
-        return WishListDTO.fromWishList(wishList1);
+        WishList wishList = new WishList(user, product, wishListDTO.getNum(), option);
+        user.addWishList(wishList);
+        product.addWishList(wishList);
+        wishListRepository.save(wishList);
+        return WishListDTO.fromWishList(wishList);
     }
 
-    public void validateOptionId(long productId, long optionId){
+    public void validateOptionId(long productId, long optionId) {
         if (!optionService.existsByOptionIdAndProductId(optionId,
             productId)) {
             throw new IllegalArgumentException(
@@ -96,24 +100,28 @@ public class WishListService {
 
     public WishListDTO updateWishList(long userId, long productId, WishListDTO wishListDTO)
         throws NotFoundException {
-        WishList wishList = wishListRepository.findByUserIdAndProductId(userId, productId);
         if (!wishListRepository.existsByUserIdAndProductId(userId, productId)) {
             throw new IllegalArgumentException(
                 userService.findById(userId).email() + "의 위시리스트에는 " + productService.getProductById(
                     productId).getName()
                     + " 상품이 존재하지 않습니다.");
         }
+        WishList wishList = wishListRepository.findByUserIdAndProductId(userId, productId);
         validateOptionId(productId, wishListDTO.getOptionId());
-        ProductDTO productDTO = productService.getProductById(wishList.getProduct().getId());
+        ProductDTO productDTO = productService.getProductById(productId);
         Product product = productDTO.toProduct(productDTO,
             productService.getCategoryById(productDTO.getCategoryId()));
-        OptionDTO oldOptionDTO = optionService.findOptionById(wishList.getOption().getId());
-        OptionDTO optionDTO = optionService.findOptionById(wishListDTO.getOptionId());
-        Option newOption = optionDTO.toOption(product);
+        List<OptionDTO> optionDTOList = optionService.getAllOptionsByOptionId(
+            productDTO.getOptions().stream().map(OptionDTO::getId).toList());
+        List<Option> options = optionDTOList.stream().map(optionDTO -> optionDTO.toOption(product))
+            .toList();
+        product.setOption(options);
+        OptionDTO newOptionDTO = optionService.findOptionById(wishListDTO.getOptionId());
+        Option newOption = newOptionDTO.toOption(product);
+        wishList.setOption(newOption);
+        wishList.setNum(wishListDTO.getNum());
         newOption.addWishList(wishList);
         wishListRepository.save(wishList);
-        Option oldOption = oldOptionDTO.toOption(product);
-        oldOption.removeWishList(wishList);
         return WishListDTO.fromWishList(wishList);
     }
 
