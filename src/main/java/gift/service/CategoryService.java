@@ -34,7 +34,7 @@ public class CategoryService {
     // 카테고리 생성
     @Transactional
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        CategoryEntity category = toEntity(categoryDTO);
+        CategoryEntity category = new CategoryEntity(categoryDTO);
         CategoryEntity newCategory = categoryRepository.save(category);
         return CategoryEntity.toDTO(newCategory);
     }
@@ -45,26 +45,14 @@ public class CategoryService {
         CategoryEntity category = categoryRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다"));
 
-        CategoryEntity updatedCategory = new CategoryEntity(
-            category.getId(),
-            categoryDTO.getName(),
-            categoryDTO.getColor(),
-            categoryDTO.getImageUrl(),
-            categoryDTO.getDescription()
-        );
-
-        updatedCategory = categoryRepository.save(updatedCategory);
-        return updatedCategory.toDTO(updatedCategory);
+        category.update(categoryDTO);
+        return category.toDTO(category);
     }
 
     // 카테고리 삭제
     @Transactional
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
-    }
-
-    public CategoryEntity toEntity(CategoryDTO categoryDTO) {
-        return new CategoryEntity(categoryDTO.getId(), categoryDTO.getName(), categoryDTO.getColor(), categoryDTO.getImageUrl(), categoryDTO.getDescription());
     }
 
 }
