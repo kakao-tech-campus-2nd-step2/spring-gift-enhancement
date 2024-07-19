@@ -9,7 +9,6 @@ import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,7 +35,7 @@ public class OptionService {
         List<Option> options = optionRepository.findByProductId(productId);
         return options.stream()
             .map(OptionResponse::from)
-            .collect(Collectors.toList());
+            .toList();
     }
 
 }
