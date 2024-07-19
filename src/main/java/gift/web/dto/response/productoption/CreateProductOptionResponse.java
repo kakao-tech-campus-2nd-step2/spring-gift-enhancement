@@ -1,5 +1,7 @@
 package gift.web.dto.response.productoption;
 
+import gift.domain.ProductOption;
+
 public class CreateProductOptionResponse {
 
     private final Long id;
@@ -10,6 +12,14 @@ public class CreateProductOptionResponse {
         this.id = id;
         this.name = name;
         this.stock = stock;
+    }
+
+    public static CreateProductOptionResponse fromEntity(ProductOption productOption) {
+        return new CreateProductOptionResponse(
+            productOption.getId(),
+            productOption.getName(),
+            productOption.getStock()
+        );
     }
 
     public Long getId() {
