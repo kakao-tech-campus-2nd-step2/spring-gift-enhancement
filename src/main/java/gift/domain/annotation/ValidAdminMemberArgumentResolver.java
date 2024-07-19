@@ -1,7 +1,7 @@
 package gift.domain.annotation;
 
 import gift.domain.entity.Member;
-import gift.domain.exception.MemberNotAdminException;
+import gift.domain.exception.forbidden.MemberNotAdminException;
 import gift.domain.service.MemberService;
 import gift.global.util.JwtUtil;
 import org.slf4j.Logger;

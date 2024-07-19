@@ -39,6 +39,16 @@ public class ErrorApiResponse extends BasicApiResponse {
         return ErrorApiResponse.of(cause.getMessage(), statusCode);
     }
 
+    // HTTP code 401에 대한 응답 생성
+    public static ResponseEntity<ErrorApiResponse> unauthorized(RuntimeException cause) {
+        return ErrorApiResponse.of(cause, HttpStatus.UNAUTHORIZED);
+    }
+
+    // HTTP code 403에 대한 응답 생성
+    public static ResponseEntity<ErrorApiResponse> forbidden(RuntimeException cause) {
+        return ErrorApiResponse.of(cause, HttpStatus.FORBIDDEN);
+    }
+
     // HTTP code 404에 대한 응답 생성
     public static ResponseEntity<ErrorApiResponse> notFound(RuntimeException cause) {
         return ErrorApiResponse.of(cause, HttpStatus.NOT_FOUND);

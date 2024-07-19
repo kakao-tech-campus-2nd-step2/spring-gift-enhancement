@@ -7,7 +7,7 @@ import gift.domain.dto.response.WishResponse;
 import gift.domain.entity.Member;
 import gift.domain.entity.Product;
 import gift.domain.entity.Wish;
-import gift.domain.exception.ProductNotIncludedInWishlistException;
+import gift.domain.exception.notFound.ProductNotIncludedInWishlistException;
 import gift.domain.repository.WishRepository;
 import java.util.List;
 import java.util.Optional;

@@ -14,7 +14,7 @@ import gift.domain.dto.response.WishAddResponse;
 import gift.domain.entity.Member;
 import gift.domain.entity.Product;
 import gift.domain.entity.Wish;
-import gift.domain.exception.ProductNotFoundException;
+import gift.domain.exception.notFound.ProductNotFoundException;
 import gift.domain.repository.WishRepository;
 import gift.utilForTest.MockObjectSupplier;
 import java.util.Optional;
