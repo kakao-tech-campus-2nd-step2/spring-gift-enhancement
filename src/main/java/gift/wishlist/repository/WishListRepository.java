@@ -1,5 +1,6 @@
 package gift.wishlist.repository;
 
+import gift.member.model.Member;
 import gift.product.model.Product;
 import gift.wishlist.model.WishList;
 import org.springframework.data.domain.Page;
@@ -14,17 +15,17 @@ import java.util.Optional;
 
 @Repository
 public interface WishListRepository extends JpaRepository<WishList, String> {
-    WishList findByMemberId(Long memberId);
+    WishList findByMember(Member member);
 
-    Optional<WishList> findByMemberIdAndProductId(Long memberId, Long productId);
+    Optional<WishList> findByMemberAndProduct(Member member, Product product);
 
-    Page<WishList> findByMemberId(Long memberId, Pageable pageable);
+    Page<WishList> findByMember(Member member, Pageable pageable);
 
     @Modifying
     @Query("update WishList w set w.product = :product where w.member.memberId = :member_id")
-    void addProductToWishList(@Param("member_id") Long userId, @Param("product") Product product);
+    void addProductToWishList(@Param("member_id") Long memberId, @Param("product") Product product);
 
     @Modifying
     @Query("update WishList w set w.product.productId = :product_id where w.member.memberId = :member_id")
-    void removeProductFromWishList(@Param("member_id") Long member_id, @Param("product_id") Long product_id);
+    void removeProductFromWishList(@Param("member_id") Long memberId, @Param("product_id") Long productId);
 }

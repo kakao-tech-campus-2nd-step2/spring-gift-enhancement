@@ -16,7 +16,7 @@ public class Category {
     @Column(nullable = false)
     private String color;
 
-    @Column(name = "imgUrl")
+    @Column(name = "img_url")
     private String imgUrl;
 
     // JPA에서 필요로 하는 기본 생성자

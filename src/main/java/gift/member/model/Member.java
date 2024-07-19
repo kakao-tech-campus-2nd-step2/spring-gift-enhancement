@@ -4,7 +4,6 @@ import gift.wishlist.model.WishList;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import org.antlr.v4.runtime.misc.NotNull;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,15 +62,14 @@ public class Member {
         this.password = newPassword;
     }
 
-    // 비밀번호 검증 메소드
-    public boolean checkPassword(String rawPassword, PasswordEncoder passwordEncoder) {
-        return passwordEncoder.matches(rawPassword, this.password);
+    public boolean checkPassword(String rawPassword) {
+        // PasswordEncoder 없이 구현
+        return this.password.equals(rawPassword); // 단순 문자열 비교
     }
 
-    // 로그인 검증 메소드
-    public void validateLogin(String rawPassword, PasswordEncoder passwordEncoder) {
-        if (!checkPassword(rawPassword, passwordEncoder)) {
-            throw new IllegalArgumentException("옳지 않은 이메일이나 비밀번호 입니다.");
+    public void validateLogin(String rawPassword) {
+        if (!this.checkPassword(rawPassword)) {
+            throw new IllegalArgumentException("Invalid password");
         }
     }
 }

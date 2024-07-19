@@ -1,6 +1,7 @@
+package gift.member.service;
+
 import gift.Application;
 import gift.member.repository.MemberRepository;
-import gift.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
