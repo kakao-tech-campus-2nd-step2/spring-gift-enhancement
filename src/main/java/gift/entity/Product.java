@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Product {
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private final List<Option> options = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
