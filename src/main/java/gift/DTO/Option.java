@@ -35,13 +35,13 @@ public class Option {
     this.id = id;
     this.name = name;
     this.quantity = quantity;
-    this.product=product;
+    this.product = product;
   }
 
   public Option(String name, int quantity, Product product) {
     this.name = name;
     this.quantity = quantity;
-    this.product=product;
+    this.product = product;
   }
 
   public Long getId() {
@@ -56,5 +56,7 @@ public class Option {
     return this.quantity;
   }
 
-  public Product getProduct(){return this.product;}
+  public Product getProduct() {
+    return this.product;
+  }
 }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Category List</title>
-<!--  <link rel="stylesheet" href="product-list.css">-->
+  <!--  <link rel="stylesheet" href="product-list.css">-->
 </head>
 <body>
 <h1>Category List</h1>
@@ -22,19 +22,21 @@
     <td th:text="${category.id}">ID</td>
     <td th:text="${category.name}">Name</td>
     <td th:text="${category.color}">Price</td>
-    <td><img th:src="${category.imageUrl}" alt="Product Image"/></td>
+    <td><img alt="Product Image" th:src="${category.imageUrl}"/></td>
     <td th:text="${category.description}">Description</td>
 
     <td class="actions">
       <a th:href="@{|/admin/categories/category/${category.id}|}">Edit</a>
-      <form th:action="@{|/admin/categories/${category.id}|}" method="post" style="display:inline;">
-        <input type="hidden" name="_method" value="delete"/>
+      <form method="post" style="display:inline;" th:action="@{|/admin/categories/${category.id}|}">
+        <input name="_method" type="hidden" value="delete"/>
         <button type="submit">Delete</button>
       </form>
     </td>
   </tr>
   </tbody>
 </table>
-<a href="/admin/categories/new" style="display:block; margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px;">Add New Category</a>
+<a href="/admin/categories/new"
+   style="display:block; margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px;">Add
+  New Category</a>
 </body>
 </html>

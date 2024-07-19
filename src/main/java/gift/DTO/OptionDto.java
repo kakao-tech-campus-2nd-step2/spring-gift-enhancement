@@ -26,13 +26,13 @@ public class OptionDto {
     this.id = id;
     this.name = name;
     this.quantity = quantity;
-    this.productDto=productDto;
+    this.productDto = productDto;
   }
 
-  public OptionDto(String name, int quantity,ProductDto productDto) {
+  public OptionDto(String name, int quantity, ProductDto productDto) {
     this.name = name;
     this.quantity = quantity;
-    this.productDto=productDto;
+    this.productDto = productDto;
   }
 
   public Long getId() {
@@ -47,5 +47,7 @@ public class OptionDto {
     return this.quantity;
   }
 
-  public ProductDto getProductDto(){return this.productDto;}
+  public ProductDto getProductDto() {
+    return this.productDto;
+  }
 }

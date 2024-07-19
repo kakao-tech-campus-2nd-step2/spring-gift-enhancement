@@ -20,14 +20,11 @@ public class Product {
 
   @OneToMany(mappedBy = "product")
   private final List<WishList> wishlists = new ArrayList<>();
-
-  @ManyToOne(cascade = CascadeType.MERGE)
-  @JoinColumn(name = "category_id",nullable = false)
-  private Category category;
-
   @OneToMany(mappedBy = "product")
   private final List<Option> options = new ArrayList<>();
-
+  @ManyToOne(cascade = CascadeType.MERGE)
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -46,14 +43,14 @@ public class Product {
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
-    this.category=category;
+    this.category = category;
   }
 
-  public Product(String name, int price, String imageUrl,Category category) {
+  public Product(String name, int price, String imageUrl, Category category) {
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
-    this.category=category;
+    this.category = category;
   }
 
   public Long getId() {
@@ -75,6 +72,8 @@ public class Product {
     return this.imageUrl;
   }
 
-  public Category getCategory(){return this.category;}
+  public Category getCategory() {
+    return this.category;
+  }
 
 }

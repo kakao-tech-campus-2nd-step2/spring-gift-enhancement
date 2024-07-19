@@ -1,7 +1,6 @@
 package gift.Controller;
 
 import gift.DTO.OptionDto;
-import gift.DTO.ProductDto;
 import gift.Service.OptionService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +59,7 @@ public class OptionController {
   @PutMapping("/{id}")
   public ResponseEntity<OptionDto> updateOption(@PathVariable Long id,
     @RequestBody OptionDto optionDto) {
-    OptionDto updatedOptionDto = optionService.updateOption(id,optionDto);
+    OptionDto updatedOptionDto = optionService.updateOption(id, optionDto);
 
     return ResponseEntity.ok(updatedOptionDto);
   }
