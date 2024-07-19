@@ -35,25 +35,20 @@ class WishRepositoryTest {
     private CategoryRepository categoryRepository;
 
     @Test
-    @DisplayName("memberId로 wish 리스트 가져오는 findAllByMember 테스트")
-    void findAllByMemberEntityTest() {
+    @DisplayName("Member로 wish 리스트 가져오는 findAllByMember 테스트")
+    void findAllByMemberTest() {
         // given
-        Member requestMember = new Member("test", "password");
-        Member savedMember = memberRepository.save(requestMember);
-        Category savedCategory = categoryRepository.save(
-            new Category("test", "color", "image", "description"));
-        Product requestProduct1 = new Product("product1", 1000, "product1.jpg", savedCategory);
-        Product requestProduct2 = new Product("product2", 2000, "product2.jpg", savedCategory);
-        Product savedProduct1 = productRepository.save(requestProduct1);
-        Product savedProduct2 = productRepository.save(requestProduct2);
+        Member savedMember = memberRepository.save(createMember());
 
-        Wish wish1 = new Wish(savedMember, savedProduct1);
-        Wish wish2 = new Wish(savedMember, savedProduct2);
+        Category savedCategory = categoryRepository.save(createCategory());
+        Product savedProduct1 = productRepository.save(createProduct(savedCategory));
+        Product savedProduct2 = productRepository.save(createProduct(savedCategory));
 
-        Wish expected1 = wishRepository.save(wish1);
-        Wish expected2 = wishRepository.save(wish2);
+        Wish expected1 = wishRepository.save(new Wish(savedMember, savedProduct1));
+        Wish expected2 = wishRepository.save(new Wish(savedMember, savedProduct2));
 
         Pageable pageable = PageRequest.of(0, 10);
+
         // when
         Page<Wish> actual = wishRepository.findAllByMember(savedMember, pageable);
 
@@ -67,16 +62,12 @@ class WishRepositoryTest {
     @DisplayName("findById 테스트")
     void findByIdTest() {
         // given
-        Member requestMember = new Member("test", "password");
-        Member savedMember = memberRepository.save(requestMember);
+        Member savedMember = memberRepository.save(createMember());
 
-        Category savedCategory = categoryRepository.save(
-            new Category("test", "color", "image", "description"));
-        Product requestProduct = new Product("product", 1000, "product1.jpg", savedCategory);
-        Product savedProduct = productRepository.save(requestProduct);
+        Category savedCategory = categoryRepository.save(createCategory());
+        Product savedProduct = productRepository.save(createProduct(savedCategory));
 
-        Wish requestWish = new Wish(savedMember, savedProduct);
-        Wish expected = wishRepository.save(requestWish);
+        Wish expected = wishRepository.save(new Wish(savedMember, savedProduct));
 
         // when
         Wish actual = wishRepository.findById(expected.getId()).orElseThrow();
@@ -89,13 +80,10 @@ class WishRepositoryTest {
     @DisplayName("save 테스트")
     void saveTest() {
         // given
-        Member requestMember = new Member("test", "password");
-        Member savedMember = memberRepository.save(requestMember);
+        Member savedMember = memberRepository.save(createMember());
 
-        Category savedCategory = categoryRepository.save(
-            new Category("test", "color", "image", "description"));
-        Product requestProduct = new Product("product", 1000, "product1.jpg", savedCategory);
-        Product savedProduct = productRepository.save(requestProduct);
+        Category savedCategory = categoryRepository.save(createCategory());
+        Product savedProduct = productRepository.save(createProduct(savedCategory));
 
         Wish expected = new Wish(savedMember, savedProduct);
 
@@ -113,22 +101,30 @@ class WishRepositoryTest {
     @Test
     @DisplayName("delete 테스트")
     void deleteTest() {
-        // given
-        Member requestMember = new Member("test", "password");
-        Member savedMember = memberRepository.save(requestMember);
+        // given-
+        Member savedMember = memberRepository.save(createMember());
 
-        Category savedCategory = categoryRepository.save(
-            new Category("test", "color", "image", "description"));
-        Product requestProduct = new Product("product", 1000, "product1.jpg", savedCategory);
-        Product savedProduct = productRepository.save(requestProduct);
+        Category savedCategory = categoryRepository.save(createCategory());
+        Product savedProduct = productRepository.save(createProduct(savedCategory));
 
-        Wish request = new Wish(savedMember, savedProduct);
-        Wish savedWish = wishRepository.save(request);
+        Wish savedWish = wishRepository.save(new Wish(savedMember, savedProduct));
 
         // when
         wishRepository.delete(savedWish);
 
         // then
         assertTrue(wishRepository.findById(savedWish.getId()).isEmpty());
+    }
+
+    Member createMember(){
+        return new Member("test", "password");
+    }
+
+    Category createCategory(){
+        return new Category("test", "color", "image", "description");
+    }
+
+    Product createProduct(Category category){
+        return new Product("product", 1000, "product1.jpg", category);
     }
 }
