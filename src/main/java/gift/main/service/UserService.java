@@ -24,7 +24,6 @@ public class UserService {
 
     @Transactional
     public String joinUser(UserJoinRequest userJoinRequest) {
-        //유효성 검사해야하는데용~!
         if (userRepository.existsByEmail(userJoinRequest.email())) {
             throw new CustomException(ErrorCode.ALREADY_EMAIL);
         }
