@@ -25,14 +25,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = CategoryException.class)
     public ResponseEntity<ErrorResponse> handleCategoryException(ProductException e) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
     }
 
     @Description("option-service error")
     @ExceptionHandler(value = OptionException.class)
     public ResponseEntity<ErrorResponse> handleOptionException(ProductException e) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
     }
 
 
@@ -40,26 +42,30 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = ProductException.class)
     public ResponseEntity<ErrorResponse> handleProductNotFound(ProductException e) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
     }
 
     @Description("api exception")
     @ExceptionHandler(value = ApiException.class)
     public ResponseEntity<String> handleApiException(ApiException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
     }
 
     @ExceptionHandler(value = WishException.class)
     public ResponseEntity<ErrorResponse> handleWishException(ProductException e) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
     }
 
 
     @Description("database access exception")
     @ExceptionHandler(value = DatabaseAccessException.class)
     public ResponseEntity<String> handleDatabaseAccessException(DatabaseAccessException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(e.getMessage());
     }
 
 
@@ -75,7 +81,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<String> handleDuplicateKeyException(DuplicateKeyException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("id 중복이 되었습니다!");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("id 중복이 되었습니다!");
     }
 
     @ExceptionHandler(value = JwtException.class)
