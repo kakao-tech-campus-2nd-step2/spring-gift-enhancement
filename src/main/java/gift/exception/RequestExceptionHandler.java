@@ -35,4 +35,11 @@ public class RequestExceptionHandler {
         errorMsg.append(ex.getMessage()).append("; ");
         return ResponseEntity.badRequest().body(errorMsg.toString());
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        StringBuilder errorMsg = new StringBuilder();
+        errorMsg.append(ex.getMessage()).append("; ");
+        return ResponseEntity.internalServerError().body(errorMsg.toString());
+    }
 }

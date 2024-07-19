@@ -58,5 +58,9 @@ Content-Type: application/json
 ## 클래스 설계
 
 ### Step 1
-- [ ] Category : 상품의 카테고리 저장하는 Entity
+- [X] Category : 상품의 카테고리 저장하는 Entity
+- - [X] CetegoryRepositoty
+- - [X] CetegoryService
+- - [X] CetegoryController
+
 

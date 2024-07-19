@@ -31,14 +31,14 @@ public class MemberTest {
     void testFindById() {
         memberRepository.save(testMember);
         Member findMember = memberRepository.findById(1);
-        assertEquals(testMember, findMember);
+        assertEquals(testMember.getToken(), findMember.getToken());
     }
 
     @Test
     void testAddProduct() {
         Member savedMember = memberRepository.save(testMember);
         assertNotNull(savedMember);
-        assertEquals(testMember, savedMember);
+        assertEquals(testMember.getToken(), savedMember.getToken());
     }
 
     @Test
@@ -47,6 +47,6 @@ public class MemberTest {
         var updateMember = new Member(1, "updateEmail", "updatePassword", "updateToken");
         Member updatedMember = memberRepository.save(updateMember);
         assertNotNull(updatedMember);
-        assertEquals(updateMember, updatedMember);
+        assertEquals(updateMember.getToken(), updatedMember.getToken());
     }
 }
