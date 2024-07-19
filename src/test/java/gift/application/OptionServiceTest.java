@@ -11,6 +11,7 @@ import gift.product.entity.Category;
 import gift.product.entity.Option;
 import gift.product.entity.Product;
 import gift.product.util.OptionMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,16 +47,22 @@ class OptionServiceTest {
             .setDescription("")
             .build();
 
-    @Test
-    @DisplayName("상품 옵션 조회 기능 테스트")
-    void getProductOptionsByIdOrThrow() {
-        Long productId = 1L;
-        Product product = new Product.ProductBuilder()
+    private Product product;
+
+    @BeforeEach
+    void setUp() {
+        product = new Product.ProductBuilder()
                 .setName("product")
                 .setPrice(1000)
                 .setCategory(category)
                 .setImageUrl("https://product-shop.com")
                 .build();
+    }
+
+    @Test
+    @DisplayName("상품 옵션 조회 기능 테스트")
+    void getProductOptionsByIdOrThrow() {
+        Long productId = 1L;
         Option option1 = new Option("옵션1", 10, product);
         Option option2 = new Option("옵션2", 20, product);
         product.addOption(option1);
@@ -74,12 +81,6 @@ class OptionServiceTest {
     @DisplayName("상품 옵션 추가 기능 테스트")
     void addOptionToProduct() {
         Long productId = 1L;
-        Product product = new Product.ProductBuilder()
-                .setName("product")
-                .setPrice(1000)
-                .setCategory(category)
-                .setImageUrl("https://product-shop.com")
-                .build();
         OptionRequest request = new OptionRequest("옵션", 10);
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
@@ -93,12 +94,6 @@ class OptionServiceTest {
     @DisplayName("상품 옵션 추가 실패 테스트")
     void addOptionToProductFailed() {
         Long productId = 1L;
-        Product product = new Product.ProductBuilder()
-                .setName("product")
-                .setPrice(1000)
-                .setCategory(category)
-                .setImageUrl("https://product-shop.com")
-                .build();
         OptionRequest request = new OptionRequest("옵션", 10);
         product.addOption(OptionMapper.toEntity(request, product));
         given(productRepository.findById(anyLong()))
@@ -114,12 +109,6 @@ class OptionServiceTest {
     @DisplayName("상품 옵션 삭제 기능 테스트")
     void deleteOptionFromProduct() {
         Long productId = 1L;
-        Product product = new Product.ProductBuilder()
-                .setName("product")
-                .setPrice(1000)
-                .setCategory(category)
-                .setImageUrl("https://product-shop.com")
-                .build();
         OptionRequest request = new OptionRequest("옵션1", 10);
         Option option1 = OptionMapper.toEntity(request, product);
         Option option2 = new Option("옵션2", 100, product);
@@ -140,12 +129,6 @@ class OptionServiceTest {
     @DisplayName("상품 옵션 삭제 실패 테스트")
     void deleteOptionFromProductFailed() {
         Long productId = 1L;
-        Product product = new Product.ProductBuilder()
-                .setName("product")
-                .setPrice(1000)
-                .setCategory(category)
-                .setImageUrl("https://product-shop.com")
-                .build();
         OptionRequest request = new OptionRequest("옵션1", 10);
         product.addOption(OptionMapper.toEntity(request, product));
         given(productRepository.findById(anyLong()))
@@ -162,12 +145,6 @@ class OptionServiceTest {
     void subtractQuantityOfOption() {
         Long productId = 1L;
         int quantity = 5;
-        Product product = new Product.ProductBuilder()
-                .setName("product")
-                .setPrice(1000)
-                .setCategory(category)
-                .setImageUrl("https://product-shop.com")
-                .build();
         OptionRequest request = new OptionRequest("옵션1", 10);
         Option option = OptionMapper.toEntity(request, product);
         int result = option.getQuantity() - quantity;
@@ -184,12 +161,6 @@ class OptionServiceTest {
     @DisplayName("상품 옵션 수량 차감 실패 테스트")
     void subtractQuantityOfOptionFailed() {
         Long productId = 1L;
-        Product product = new Product.ProductBuilder()
-                .setName("product")
-                .setPrice(1000)
-                .setCategory(category)
-                .setImageUrl("https://product-shop.com")
-                .build();
         OptionRequest request = new OptionRequest("옵션1", 10);
         Option option = OptionMapper.toEntity(request, product);
         int quantity = option.getQuantity() + 1;
