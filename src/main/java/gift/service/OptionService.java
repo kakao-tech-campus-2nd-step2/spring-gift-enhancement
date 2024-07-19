@@ -12,14 +12,27 @@ public class OptionService {
         this.optionRepositoryInterface = optionRepositoryInterface;
     }
 
+    public Option getById(Long optionId) {
+        return optionRepositoryInterface.findById(optionId);
+    }
     public List<Option> getAllOptions() {
         return optionRepositoryInterface.findAll();
     }
 
+    public Option save(Option option) {
+        return optionRepositoryInterface.save(option);
+    }
+
+    public void delete(Option option) {
+        optionRepositoryInterface.delete(option);
+    }
+
+    public Option update(Option option) {
+        return optionRepositoryInterface.save(option);
+    }
     public Option getOptionByName(String optionName) {
         return optionRepositoryInterface.findOptionByName(optionName);
     }
-
 
     public boolean checkValidOptionName(String optionName) {
 
