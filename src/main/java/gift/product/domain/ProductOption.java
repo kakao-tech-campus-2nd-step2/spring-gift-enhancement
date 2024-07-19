@@ -33,13 +33,20 @@ public class ProductOption {
         this.product = product;
     }
 
-    @Override
-    public String toString() {
-        return "ProductOption{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", quantity=" + quantity +
-                ", product=" + product +
-                '}';
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void modify(String name, Integer quantity) {
+        this.name = name;
+        this.quantity = quantity;
     }
 }
