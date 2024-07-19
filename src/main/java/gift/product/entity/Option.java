@@ -60,4 +60,12 @@ public class Option {
         return false;
     }
 
+    public void subtract(int quantity) {
+        this.quantity -= quantity;
+    }
+
+    public boolean isLessEqual(int quantity) {
+        return this.quantity <= quantity;
+    }
+
 }

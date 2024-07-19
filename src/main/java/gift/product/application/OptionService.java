@@ -60,4 +60,18 @@ public class OptionService {
         product.deleteOption(option);
     }
 
+    @Transactional
+    public void subtractQuantityOfOption(Long id,
+                                         OptionRequest request,
+                                         int quantity) {
+        Option option = optionRepository.findByProduct_IdAndName(id, request.name())
+                .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
+
+        if (option.isLessEqual(quantity)) {
+            throw new CustomException(ErrorCode.OPTION_QUANTITY_SUBTRACT_FAILED);
+        }
+
+        option.subtract(quantity);
+    }
+
 }

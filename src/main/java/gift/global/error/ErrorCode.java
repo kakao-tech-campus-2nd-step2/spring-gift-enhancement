@@ -18,6 +18,7 @@ public enum ErrorCode {
     OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 옵션은 존재하지 않습니다."),
     OPTION_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 옵션입니다."),
     OPTION_REMOVE_FAILED(HttpStatus.CONFLICT, "상품은 항상 하나 이상의 옵션이 있어야 합니다."),
+    OPTION_QUANTITY_SUBTRACT_FAILED(HttpStatus.CONFLICT, "해당 수량은 뺄 수 없습니다."),
 
     // Member Error
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원 계정입니다."),
