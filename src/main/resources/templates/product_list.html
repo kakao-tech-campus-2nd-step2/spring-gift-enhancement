@@ -110,6 +110,7 @@
     <th>카테고리</th>
     <th>Image URL</th>
     <th style="display:none;" class="auth-required"> 수정 및 삭제</th>
+    <th> 옵션 보기</th>
     <th> 위시 리스트 추가</th>
   </tr>
   </thead>
@@ -130,6 +131,9 @@
         <input type="hidden" name="_method" value="delete"/>
         <button type="submit">삭제</button>
       </form>
+    </td>
+    <td>
+      <a th:href="@{/admin/products/{id}/options(id=${product.id})}" class="btn btn-info">옵션 보기</a>
     </td>
     <td>
       <button th:attr="onclick='addToWishlist(' + ${product.id} + ')'">위시 리스트에 추가</button>
