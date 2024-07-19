@@ -40,8 +40,7 @@ public class ProductController {
         var data = productPage.getContent();
         response.put("content", data.stream().map(v -> {
             var dto = new ProductDto(v);
-            var categoryId = v.getCategory().getId();
-            var categoryName = v.getCategory().getName();
+            dto.setCategoryName(v.getCategory().getName());
             return dto;
         }));
         response.put("currentPage", productPage.getNumber());

@@ -42,7 +42,6 @@ public class WishlistController {
             ProductDto dto = new ProductDto(v);
             dto.setCategoryId(v.getCategory().getId());
             dto.setCategoryName(v.getCategory().getName());
-            // Add other fields you need to include in the ProductDto
             return dto;
         }).collect(Collectors.toList());
 

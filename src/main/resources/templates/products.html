@@ -16,6 +16,7 @@
         <th>ID</th>
         <th>Name</th>
         <th>Price</th>
+        <th>Category</th>
         <th>Image</th>
         <th>Actions</th>
     </tr>
@@ -53,6 +54,7 @@
                     row.append($('<td>').text(product.id));
                     row.append($('<td>').text(product.name));
                     row.append($('<td>').text(product.price));
+                    row.append($('<td>').text(product.categoryName));
                     row.append($('<td>').append($('<img>').attr('src', product.imageUrl).css({'max-width': '100px', 'max-height': '100px'})));
                     row.append($('<td>').html('<a href="/api/products/edit/' + product.id + '">Edit</a> | <a href="/api/admin/products/delete/' + product.id + '">Delete</a>'));
 
