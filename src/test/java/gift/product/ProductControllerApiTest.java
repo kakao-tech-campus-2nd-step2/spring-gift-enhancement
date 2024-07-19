@@ -46,8 +46,6 @@ public class ProductControllerApiTest {
     @Autowired
     private ProductRepository productRepository;
 
-    private static String accessToken;
-
     private static HttpHeaders headers;
 
     private static Category category;
@@ -68,7 +66,7 @@ public class ProductControllerApiTest {
         String url = "http://localhost:" + port + "/api/members/register";
         var response = restTemplate.postForEntity(url, requestMemberDto, JwtToken.class);
         var jwtToken = response.getBody();
-        accessToken = jwtToken.accessToken();
+        String accessToken = jwtToken.accessToken();
 
         headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
