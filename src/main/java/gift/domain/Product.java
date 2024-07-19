@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.dto.CategoryDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -73,8 +74,10 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Category getCategory() {
-        return category;
+    public CategoryDto getCategoryDto() {
+        CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName(),
+            category.getColor(), category.getImageUrl(), category.getDescription());
+        return categoryDto;
     }
 
     public void update(String name, double price, String imageUrl) {

@@ -1,5 +1,6 @@
 package gift.services;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.dto.ProductDto;
 import gift.repositories.ProductRepository;
@@ -31,7 +32,7 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategory()
+            product.getCategoryDto()
         )).toList();
 
         return productDtos;
@@ -45,7 +46,7 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategory()
+            product.getCategoryDto()
         ));
 
         return productDtos;
@@ -58,7 +59,7 @@ public class ProductService {
             throw new NoSuchElementException("Product not found with id " + id);
         }
         ProductDto productDto = new ProductDto(product.get().getId(), product.get().getName(),
-            product.get().getPrice(), product.get().getImageUrl(), product.get().getCategory());
+            product.get().getPrice(), product.get().getImageUrl(), product.get().getCategoryDto());
         return productDto;
     }
 
@@ -69,16 +70,18 @@ public class ProductService {
             productDto.getName(),
             productDto.getPrice(),
             productDto.getImageUrl(),
-            productDto.getCategory()
+            new Category(productDto.getCategoryDto().getName(),
+                productDto.getCategoryDto().getColor(), productDto.getCategoryDto().getImageUrl(),
+                productDto.getCategoryDto().getDescription())
         );
-        
+
         if (product.getId() == null) {
             product.setId(currentId++);
         }
         productRepository.save(product);
 
         ProductDto savedProductDto = new ProductDto(product.getId(), product.getName(),
-            product.getPrice(), product.getImageUrl(), product.getCategory());
+            product.getPrice(), product.getImageUrl(), product.getCategoryDto());
 
         return savedProductDto;
     }
@@ -90,7 +93,7 @@ public class ProductService {
                 "Product not found with id " + productDto.getId()));
         product.update(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
         return new ProductDto(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl(), product.getCategory());
+            product.getImageUrl(), product.getCategoryDto());
     }
 
     // 제품 삭제

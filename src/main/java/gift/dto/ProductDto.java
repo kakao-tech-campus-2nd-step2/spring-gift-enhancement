@@ -17,14 +17,15 @@ public class ProductDto {
 
     private String imageUrl;
 
-    private Category category;
+    private CategoryDto categoryDto;
 
-    public ProductDto(Long id, String name, double price, String imageUrl, Category category) {
+    public ProductDto(Long id, String name, double price, String imageUrl,
+        CategoryDto categoryDto) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.category = category;
+        this.categoryDto = categoryDto;
     }
 
     public Long getId() {
@@ -43,5 +44,7 @@ public class ProductDto {
         return imageUrl;
     }
 
-    public Category getCategory() { return category; }
+    public CategoryDto getCategoryDto() {
+        return categoryDto;
+    }
 }
