@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import gift.domain.Category;
 import gift.domain.Option;
@@ -106,5 +107,20 @@ public class OptionServiceTest {
 
         // then
         assertThat(actual).isEqualTo(updatedOption.toDTO());
+    }
+
+    @DisplayName("옵션 삭제")
+    @Test
+    void deleteOption() {
+        // given
+        long id = 1L;
+        Option option = createOption(id, "test", product);
+        given(optionRepository.findById(anyLong())).willReturn(Optional.of(option));
+
+        // when
+        optionService.deleteOption(id);
+
+        // then
+        then(optionRepository).should().delete(any(Option.class));
     }
 }

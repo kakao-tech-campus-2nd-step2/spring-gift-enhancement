@@ -50,6 +50,13 @@ public class OptionService {
         return optionRepository.save(updatedOption).toDTO();
     }
 
+    public OptionDTO deleteOption(long id) {
+        Option deletedOption = optionRepository.findById(id)
+            .orElseThrow(NoSuchOptionException::new);
+        optionRepository.delete(deletedOption);
+        return deletedOption.toDTO();
+    }
+
     private void checkNameDuplicate(Product product, String name) {
         if (optionRepository.findByProduct(product)
             .stream()
