@@ -36,6 +36,7 @@ public class OptionService {
 
     public void add(SaveOptionDTO saveOptionDTO) {
         Product product = productRepository.findById(saveOptionDTO.product_id()).orElseThrow(()->new NotFoundException("해당 물품이 없음"));
+        optionRepository.findByOption(saveOptionDTO.option()).ifPresent(c -> { throw new BadRequestException("이미 존재하는 옵션"); });
         Option option = new Option(product, saveOptionDTO.option());
         optionRepository.save(option);
     }
@@ -50,6 +51,7 @@ public class OptionService {
     @Transactional
     public void update(UpdateOptionDTO updateOptionDTO) {
         Option option = optionRepository.findById(updateOptionDTO.id()).orElseThrow(()->new NotFoundException("해당 옵션이 없음"));
+        optionRepository.findByOption(updateOptionDTO.option()).ifPresent(c -> { throw new BadRequestException("이미 존재하는 옵션"); });
         option.changeOption(updateOptionDTO.option());
     }
 

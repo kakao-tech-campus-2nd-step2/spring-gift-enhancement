@@ -20,8 +20,7 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     public void save(Category category) {
-        if(categoryRepository.findByName(category.getName()).isPresent())
-            throw new BadRequestException("이미 존재하는 카테고리입니다.");
+        categoryRepository.findByName(category.getName()).ifPresent(c -> { throw new BadRequestException("이미 존재하는 카테고리"); });
         categoryRepository.save(category);
     }
 
