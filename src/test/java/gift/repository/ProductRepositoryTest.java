@@ -30,12 +30,14 @@ class ProductRepositoryTest {
     @Autowired
     CategoryRepository categoryRepository;
 
-    Category category = new Category("categoryA");
-    Product product = new Product("productA", 1000, "https://a.com", category);
+    Category category;
+    Product product;
 
     @BeforeEach
     void setUp() {
-        categoryRepository.save(category);
+        category = new Category("categoryA");
+        Category savedCategory = categoryRepository.save(category);
+        product = new Product("productA", 1000, "https://a.com", savedCategory);
     }
 
     @Test
@@ -51,14 +53,17 @@ class ProductRepositoryTest {
     void update() {
         Product savedProduct = productRepository.save(product);
         Long id = productRepository.findById(savedProduct.getId()).get().getId();
-        Category modifieCcategory = new Category("categoryAB");
-        Product modifiedProduct = new Product(id, "productAB", 5000, "https://b.com", modifieCcategory);
-        Product modifiedSavedProduct = productRepository.save(modifiedProduct);
+        String newName = "productAB"; Integer newPrice = 5000; String newImageUrl = "https://b.com";
+
+        Category modifiedCategory = categoryRepository.findById(category.getId()).get();
+        modifiedCategory.updateCategory("categoryAB");
+        savedProduct.updateProduct(newName, newPrice, newImageUrl, modifiedCategory.getName());
+        Product modifiedSavedProduct = productRepository.save(savedProduct);
 
         assertThat(modifiedSavedProduct.getId()).isEqualTo(id);
-        assertThat(modifiedSavedProduct.getName()).isEqualTo(modifiedProduct.getName());
-        assertThat(modifiedSavedProduct.getPrice()).isEqualTo(modifiedProduct.getPrice());
-        assertThat(modifiedSavedProduct.getImageUrl()).isEqualTo(modifiedProduct.getImageUrl());
+        assertThat(modifiedSavedProduct.getName()).isEqualTo(newName);
+        assertThat(modifiedSavedProduct.getPrice()).isEqualTo(newPrice);
+        assertThat(modifiedSavedProduct.getImageUrl()).isEqualTo(newImageUrl);
     }
 
     @Test
