@@ -1,6 +1,7 @@
 package gift.member;
 
 import gift.common.auth.LoginMemberDto;
+import gift.common.exception.MemberException;
 import gift.member.model.Member;
 import gift.member.model.MemberRequestDto;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class MemberService {
     public LoginMemberDto selectLoginMemberById(Long id) {
         return memberRepository.findById(id)
             .map(LoginMemberDto::from)
-            .orElseThrow();
+            .orElseThrow(() -> new MemberException(MemberErrorCode.FAILURE_LOGIN));
     }
 
     @Transactional
