@@ -12,7 +12,6 @@ import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,6 @@ public class OptionService {
     private final OptionRepositoryKeeperService optionRepositoryKeeperService;
     private final ProductRepository productRepository;
 
-    @Autowired
     public OptionService(OptionRepository optionRepository,
             OptionRepositoryKeeperService optionRepositoryKeeperService, ProductRepository productRepository) {
         this.optionRepository = optionRepository;

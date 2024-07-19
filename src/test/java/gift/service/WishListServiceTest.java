@@ -99,8 +99,6 @@ class WishListServiceTest {
         wishListService.addWishes(memberDTO, productRequestDTO);
         wishListService.setWishListNumber(memberDTO, productRequestDTO, 10);
 
-        Category category = categoryRepository.findByName("기타").get();
-
         assertThat(wishListService.getWishList(memberDTO, pageable).getContent().getFirst().quantity())
                 .isEqualTo(10);
     }

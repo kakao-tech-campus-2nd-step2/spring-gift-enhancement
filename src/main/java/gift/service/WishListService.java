@@ -15,7 +15,6 @@ import gift.repository.WishRepository;
 import gift.util.validator.databaseValidator.MemberDatabaseValidator;
 import gift.util.validator.databaseValidator.ProductDatabaseValidator;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +29,6 @@ public class WishListService {
     private final MemberDatabaseValidator memberDatabaseValidator;
     private final ProductDatabaseValidator productDatabaseValidator;
 
-    @Autowired
     public WishListService(MemberRepository memberRepository, WishRepository wishRepository,
             MemberDatabaseValidator memberDatabaseValidator, ProductDatabaseValidator productDatabaseValidator) {
         this.memberRepository = memberRepository;
