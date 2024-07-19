@@ -5,6 +5,7 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductRequest;
+import gift.dto.request.SubtractOptionRequest;
 import gift.dto.request.UpdateProductRequest;
 import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
@@ -101,5 +102,28 @@ class ProductServiceTest {
         assertThrows(CustomException.class, () -> {
             productService.addOption(requestId, optionRequest);
         });
+    }
+
+    @Test
+    void subtractQuantityOfOption() {
+        // given
+        Product product = new Product(1L, "name", 500, "image.image");
+        Category category1 = new Category(1L, "상품권");
+        Option option = new Option("optionName", 100, product);
+        product.setCategory(category1);
+        product.setOption(option);
+
+        Long requestId = 1L;
+        SubtractOptionRequest subtractOptionRequest = new SubtractOptionRequest("optionName", 9);
+
+        given(productRepository.findProductById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findAllByProductAndName(any(), any())).willReturn(Optional.of(option));
+
+        // when
+        productService.subtractOptionQuantity(requestId, subtractOptionRequest);
+
+        // then
+        Assertions.assertThat(option.getQuantity())
+                .isEqualTo(91);
     }
 }
