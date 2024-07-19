@@ -43,7 +43,7 @@ Content-Type: application/json
   "price": 200,
   "imageUrl": "http://example.com/updated.jpg",
   "category": {
-    "name": "패션"
+    "name": "교환권"
   }
 }
 
@@ -93,7 +93,7 @@ POST {{baseUrl}}/api/categories
 Content-Type: application/json
 
 {
-  "name": "교환권",
+  "name": "상품권",
   "color": "#0000FF",
   "imageUrl": "http://example.com/image.jpg",
   "description": ""
@@ -109,7 +109,3 @@ Content-Type: application/json
   "imageUrl": "http://example.com/image_updated.jpg",
   "description": ""
 }
-
-### 카테고리 삭제
-DELETE {{baseUrl}}/api/categories/1
-Authorization: Bearer {{token}}
