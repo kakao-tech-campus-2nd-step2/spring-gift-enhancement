@@ -54,7 +54,7 @@ public class ProductService {
     private void validateProductOptions(Product product) {
         List<ProductOption> options = product.getOptions();
         if (options == null || options.isEmpty()) {
-            throw new IllegalArgumentException("Product must have at least one option.");
+            throw new IllegalArgumentException("1개 이상의 옵션이 필요합니다.");
         }
     }
 }

@@ -31,4 +31,13 @@ public class ProductOptionService {
         List<ProductOption> options = productOptionRepository.findByProductId(productId);
         productOptionRepository.deleteAll(options);
     }
+
+    public void subtractOptionQuantity(Long optionId, int quantityToSubtract) {
+        ProductOption option = findById(optionId);
+        if (option == null) {
+            throw new IllegalArgumentException("Option not found");
+        }
+        option.subtractQuantity(quantityToSubtract);
+        productOptionRepository.save(option);
+    }
 }
