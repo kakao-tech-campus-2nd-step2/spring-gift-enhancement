@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -27,7 +27,7 @@ public class Product {
     @Column(nullable = false)
     private int price;
 
-    @Column(name = "img_url", nullable = false)
+    @Column(nullable = false)
     private String imgUrl;
 
     @ManyToOne

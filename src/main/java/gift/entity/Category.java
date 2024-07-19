@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "category", uniqueConstraints = @UniqueConstraint(name = "uk_category", columnNames = "name"))
+@Table(name = "categories", uniqueConstraints = @UniqueConstraint(name = "uk_category", columnNames = "name"))
 public class Category {
 
     @Id
