@@ -4,8 +4,7 @@ import gift.product.business.dto.OptionRegisterDto;
 import java.util.List;
 
 public record RequestOptionsDto(
-    List<RequestOptionDto> options,
-    Long productId
+    List<RequestOptionDto> options
 ) {
 
     public List<OptionRegisterDto> toOptionRegisterDtos() {
