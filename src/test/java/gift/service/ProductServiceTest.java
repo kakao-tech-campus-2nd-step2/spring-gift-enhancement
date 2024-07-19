@@ -1,13 +1,18 @@
 package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import gift.dto.ProductDto;
 import gift.exception.NonIntegerPriceException;
+import gift.model.Category;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.Collections;
 import java.util.Optional;
@@ -25,15 +30,26 @@ class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
     @InjectMocks
     private ProductService productService;
 
     private Product product;
+    private ProductDto productDto;
+    private Category category;
 
     @BeforeEach
     void setUp() {
-        product = new Product("productName", 10000, "image.jpg");
-        product.setId(1L);
+        category = new Category("상품권");
+        category.setId(1L);
+        given(categoryRepository.findById(1L)).willReturn(Optional.of(category));
+        var byId = categoryRepository.findById(1L);
+        category = byId.get();
+        product = new Product(1L, "productName", 10000, "image.jpg", category);
+        productDto = new ProductDto(product.getName(), product.getPrice(), product.getImageUrl(),
+            product.getCategory().getId());
     }
 
 
@@ -41,12 +57,14 @@ class ProductServiceTest {
     @DisplayName("상품 저장 후 전체 상품 조회")
     public void saveAndGetAllProductsTest() throws NonIntegerPriceException {
         // given
-        when(productRepository.save(product)).thenReturn(product);
+        given(productRepository.save(product)).willReturn(product);
         var productList = Collections.singletonList(product);
-        when(productRepository.findAll()).thenReturn(productList);
+        given(productRepository.findAll()).willReturn(productList);
+
+
 
         // when
-        Product savedProduct = productService.createProduct(product);  // 실제 저장 호출
+        Product savedProduct = productService.createProduct(productDto);  // 실제 저장 호출
         var allProducts = productService.getAllProducts();
 
         // then
@@ -77,7 +95,7 @@ class ProductServiceTest {
         when(productRepository.save(product)).thenReturn(product);
 
         // when
-        var savedProduct = productService.createProduct(product);
+        var savedProduct = productService.createProduct(productDto);
 
         // then
         assertThat(savedProduct).isEqualTo(product);

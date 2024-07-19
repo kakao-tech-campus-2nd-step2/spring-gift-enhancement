@@ -1,9 +1,13 @@
 package gift.service;
 
+import gift.dto.ProductDto;
 import gift.exception.ForbiddenWordException;
 import gift.exception.NonIntegerPriceException;
 import gift.exception.ProductNotFoundException;
+import gift.exception.ResourceNotFoundException;
+import gift.model.Category;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import jakarta.validation.Valid;
 import java.math.BigDecimal;
@@ -21,9 +25,12 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Product> getAllProducts() {
@@ -38,15 +45,24 @@ public class ProductService {
         return product.orElse(null);
     }
 
-    public Product createProduct(@Valid Product product) throws NonIntegerPriceException {
-        if (product.getName().contains("카카오")) {
+    public Product createProduct(@Valid ProductDto productDto) throws NonIntegerPriceException {
+        if (productDto.getName().contains("카카오")) {
             throw new ForbiddenWordException("상품 이름에 '카카오'가 포함된 경우 담당 MD와 협의가 필요합니다.");
         }
-        var priceValue = new BigDecimal(product.getPrice());
+        var priceValue = new BigDecimal(productDto.getPrice());
         if (priceValue.scale() > 0 && priceValue.stripTrailingZeros().scale() > 0) {
             throw new NonIntegerPriceException("상품 가격은 소수점이 없어야 합니다");
         }
-        return productRepository.save(product);
+        var newProduct = new Product(productDto.getName(), productDto.getPrice(),
+            productDto.getImageUrl());
+        var categoryById = categoryRepository.findById(productDto.getCategoryId());
+        if(categoryById.isEmpty()){
+            throw new ResourceNotFoundException("존재하지 않는 카테고리입니다.");
+        }
+        var category = categoryById.get();
+        newProduct.setCategory(category);
+        category.getProductList().add(newProduct);
+        return productRepository.save(newProduct);
     }
 
     public Product updateProduct(@Valid Product updatedProduct) {

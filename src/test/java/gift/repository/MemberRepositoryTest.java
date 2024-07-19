@@ -1,7 +1,7 @@
 package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.model.Member;
 import org.junit.jupiter.api.BeforeEach;

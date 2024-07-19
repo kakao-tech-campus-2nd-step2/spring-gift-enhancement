@@ -1,11 +1,10 @@
 package gift.controller;
 
 import gift.exception.ForbiddenException;
-import gift.model.ApiResponse;
+import gift.dto.ApiResponse;
 import gift.model.HttpResult;
 import gift.model.Member;
 import gift.service.MemberService;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;

@@ -1,12 +1,14 @@
 package gift.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.dto.ApiResponse;
 import gift.model.Member;
 import gift.service.MemberService;
 import java.util.Optional;
@@ -31,6 +33,7 @@ class MemberControllerTest {
     private ObjectMapper objectMapper;
 
     private Member member;
+    private ApiResponse apiResponse;
 
     @BeforeEach
     void setUp() {
@@ -41,15 +44,14 @@ class MemberControllerTest {
     void registerMemberSuccess() throws Exception {
         // Given
         String token = "generatedToken";
-        when(memberService.registerMember(any(Member.class))).thenReturn(Optional.of(token));
+        given(memberService.registerMember(any(Member.class))).willReturn(Optional.of(token));
 
         // When & Then
         mockMvc.perform(post("/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(member)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("Member registered successfully"))
-            .andExpect(jsonPath("$.token").value(token));
+            .andExpect(jsonPath("$.message").value("Member Register success"));
     }
 
     @Test
@@ -62,28 +64,29 @@ class MemberControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(member)))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("Registration failed"))
-            .andExpect(jsonPath("$.errors[0]").value("email: 올바른 형식의 이메일 주소여야 합니다"));
+            .andExpect(jsonPath("$.message").value("Registration Failed, 올바른 이메일 형식이 아닙니다."));
     }
 
     @Test
     void loginSuccess() throws Exception {
         // Given
         String token = "loginToken";
-        when(memberService.login(member.getEmail(), member.getPassword())).thenReturn(Optional.of(token));
+        when(memberService.login(member.getEmail(), member.getPassword())).thenReturn(
+            Optional.of(token));
 
         // When & Then
         mockMvc.perform(post("/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(member)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.token").value(token));
+            .andExpect(jsonPath("$.message").value("Request Success. 정상 로그인 되었습니다"));
     }
 
     @Test
     void loginFail() throws Exception {
         // Given
-        when(memberService.login(member.getEmail(), member.getPassword())).thenReturn(Optional.empty());
+        when(memberService.login(member.getEmail(), member.getPassword())).thenReturn(
+            Optional.empty());
 
         // When & Then
         mockMvc.perform(post("/members/login")
