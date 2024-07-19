@@ -15,6 +15,8 @@ public class ProductRequest {
     private String imageUrl;
     private String categoryName;
 
+    private String basicOption;
+
     public ProductRequest(){
 
     }
@@ -56,5 +58,13 @@ public class ProductRequest {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getBasicOption() {
+        return basicOption;
+    }
+
+    public void setBasicOption(String basicOption) {
+        this.basicOption = basicOption;
     }
 }

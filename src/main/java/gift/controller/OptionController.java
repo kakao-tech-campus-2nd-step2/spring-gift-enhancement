@@ -20,9 +20,18 @@ public class OptionController {
     }
 
     @GetMapping("/api/products/{product_id}/options")
-    public ResponseEntity<List<OptionResponse>> getOption(@PathVariable("product_id") Long product_id){
-        List<OptionResponse> oneProductOption = optionService.findOneProductOption(product_id);
-
+    public ResponseEntity<Page<OptionResponse>> getOption(
+            @PathVariable("product_id") Long product_id,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "sort", defaultValue = "asc") String sort,
+            @RequestParam(value = "field", defaultValue = "id") String field
+    ){
+        if(sort.equals("asc")){
+            Page<OptionResponse> oneProductOption = optionService.findOptionASC(product_id, page, size, field);
+            return new ResponseEntity<>(oneProductOption, HttpStatus.OK);
+        }
+        Page<OptionResponse> oneProductOption = optionService.findOptionDESC(product_id, page, size, field);
         return new ResponseEntity<>(oneProductOption, HttpStatus.OK);
     }
 
