@@ -11,7 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
-    private final String EMAIL = "kakao@kakao.com";
+    private final String EMAIL = "member@test.com";
     private final String PASSWORD = "passWd12";
     private final Role ROLE = Role.ADMIN;
 
