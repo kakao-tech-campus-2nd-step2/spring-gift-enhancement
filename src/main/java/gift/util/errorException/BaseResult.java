@@ -1,4 +1,4 @@
-package gift.errorException;
+package gift.util.errorException;
 
 import java.io.Serializable;
 

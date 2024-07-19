@@ -1,4 +1,4 @@
-package gift.errorException;
+package gift.util.errorException;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ResponseStatusException;

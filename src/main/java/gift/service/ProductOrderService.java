@@ -3,7 +3,7 @@ package gift.service;
 import gift.domain.ProductOption.optionDetail;
 import gift.domain.ProductOrder.decreaseProductOption;
 import gift.entity.ProductOptionEntity;
-import gift.errorException.BaseHandler;
+import gift.util.errorException.BaseHandler;
 import gift.mapper.ProductOptionMapper;
 import gift.repository.ProductOptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

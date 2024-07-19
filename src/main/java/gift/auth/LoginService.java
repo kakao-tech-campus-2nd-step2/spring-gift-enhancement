@@ -1,7 +1,7 @@
 package gift.auth;
 
 import gift.entity.UserEntity;
-import gift.errorException.BaseHandler;
+import gift.util.errorException.BaseHandler;
 import gift.repository.UserRepository;
 import gift.util.PasswordCrypto;
 import org.springframework.beans.factory.annotation.Autowired;

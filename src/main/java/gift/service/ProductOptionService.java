@@ -7,7 +7,7 @@ import gift.domain.ProductOption.optionDetail;
 import gift.domain.ProductOption.optionSimple;
 import gift.entity.ProductEntity;
 import gift.entity.ProductOptionEntity;
-import gift.errorException.BaseHandler;
+import gift.util.errorException.BaseHandler;
 import gift.mapper.ProductOptionMapper;
 import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;

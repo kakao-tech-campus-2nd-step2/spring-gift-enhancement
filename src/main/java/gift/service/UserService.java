@@ -5,7 +5,7 @@ import gift.domain.User.CreateUser;
 import gift.domain.User.UpdateUser;
 import gift.domain.User.UserSimple;
 import gift.entity.UserEntity;
-import gift.errorException.BaseHandler;
+import gift.util.errorException.BaseHandler;
 import gift.mapper.UserMapper;
 import gift.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package gift.auth;
 
 import gift.entity.UserEntity;
-import gift.errorException.BaseHandler;
+import gift.util.errorException.BaseHandler;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

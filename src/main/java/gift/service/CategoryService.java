@@ -6,7 +6,7 @@ import gift.domain.Category.DetailCategory;
 import gift.domain.Category.SimpleCategory;
 import gift.domain.Category.UpdateCategory;
 import gift.entity.CategoryEntity;
-import gift.errorException.BaseHandler;
+import gift.util.errorException.BaseHandler;
 import gift.mapper.CategoryMapper;
 import gift.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;

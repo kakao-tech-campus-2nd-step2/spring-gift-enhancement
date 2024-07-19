@@ -9,7 +9,7 @@ import gift.domain.ProductOption.CreateOption;
 import gift.entity.CategoryEntity;
 import gift.entity.ProductEntity;
 import gift.entity.ProductOptionEntity;
-import gift.errorException.BaseHandler;
+import gift.util.errorException.BaseHandler;
 import gift.mapper.ProductMapper;
 import gift.mapper.ProductOptionMapper;
 import gift.repository.CategoryRepository;
