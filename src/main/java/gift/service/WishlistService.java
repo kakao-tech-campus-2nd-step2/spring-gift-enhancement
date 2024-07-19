@@ -2,17 +2,17 @@ package gift.service;
 
 import gift.DTO.product.ProductResponse;
 import gift.domain.Category;
-import gift.domain.Product;
 import gift.domain.Member;
+import gift.domain.Product;
 import gift.domain.Wishlist;
 import gift.repository.WishlistRepository;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WishlistService {
