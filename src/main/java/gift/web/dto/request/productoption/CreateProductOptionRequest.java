@@ -1,5 +1,6 @@
 package gift.web.dto.request.productoption;
 
+import gift.domain.ProductOption;
 import gift.web.validation.constraints.SpecialCharacter;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
@@ -21,6 +22,14 @@ public class CreateProductOptionRequest {
     public CreateProductOptionRequest(String name, Integer stock) {
         this.name = name;
         this.stock = stock;
+    }
+
+    public ProductOption toEntity(Long productId) {
+        return new ProductOption.Builder()
+            .name(this.name)
+            .stock(this.stock)
+            .productId(productId)
+            .build();
     }
 
     public String getName() {
