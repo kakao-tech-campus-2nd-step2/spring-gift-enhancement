@@ -25,7 +25,7 @@ public class ProductOptionService {
         var product = productRepository.findById(productId)
                 .orElseThrow(() -> ProductNotFoundException.of(productId));
         validateDuplicatedProductName(productId, command.name());
-        
+
         var productOption = command.toEntity(product);
 
         var savedProduct = productOptionRepository.save(productOption);
@@ -55,6 +55,17 @@ public class ProductOptionService {
                 .map(ProductOptionInfo::from)
                 .toList();
         return response;
+    }
+
+    @Transactional
+    public void deleteProductOption(Long productId, Long optionId) {
+        var productOption = productOptionRepository.findByProductId(productId);
+        if (productOption.size() == 1) {
+            throw new IllegalArgumentException("상품 옵션은 최소 1개 이상이어야 합니다.");
+        }
+
+        var option = getExistsProductOption(productId, optionId);
+        productOptionRepository.delete(option);
     }
 
     private ProductOption getExistsProductOption(Long productId, Long optionId) {
