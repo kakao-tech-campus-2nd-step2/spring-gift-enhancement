@@ -51,7 +51,8 @@ class WishServiceTest {
         Member savedMember = createMember();
 
         Product product1 = createProduct();
-        Product product2 = createProduct(2L, new Category(2L, "test", "color", "image", "description"));
+        Product product2 = createProduct(2L,
+            new Category(2L, "test", "color", "image", "description"));
 
         Wish wish1 = new Wish(savedMember, product1);
         Wish wish2 = new Wish(savedMember, product2);
@@ -129,6 +130,7 @@ class WishServiceTest {
         return new WishResponse(wish.getId(), wish.getMember().getId(),
             wish.getProduct().getId());
     }
+
     Member createMember() {
         return new Member(1L, "email@google.co.kr", "password");
     }

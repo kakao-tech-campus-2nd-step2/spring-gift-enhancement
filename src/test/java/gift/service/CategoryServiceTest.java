@@ -43,6 +43,7 @@ class CategoryServiceTest {
     private ProductRepository productRepository;
     @Mock
     OptionRepository optionRepository;
+
     @Test
     @DisplayName("카테고리 전체 조회 테스트")
     void getAllCategoriesTest() {
@@ -134,7 +135,8 @@ class CategoryServiceTest {
     void deleteCategoryTest() {
         Long id = 1L;
         Category savedCategory = createCategory();
-        List<Product> productList = Arrays.asList(new Product(1L, "test", 100, "image", savedCategory),
+        List<Product> productList = Arrays.asList(
+            new Product(1L, "test", 100, "image", savedCategory),
             new Product(2L, "test", 100, "image", savedCategory));
 
         doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(any(Long.class));

@@ -116,15 +116,15 @@ class WishRepositoryTest {
         assertTrue(wishRepository.findById(savedWish.getId()).isEmpty());
     }
 
-    Member createMember(){
+    Member createMember() {
         return new Member("test", "password");
     }
 
-    Category createCategory(){
+    Category createCategory() {
         return new Category("test", "color", "image", "description");
     }
 
-    Product createProduct(Category category){
+    Product createProduct(Category category) {
         return new Product("product", 1000, "product1.jpg", category);
     }
 }

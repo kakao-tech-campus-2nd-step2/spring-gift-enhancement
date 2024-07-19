@@ -61,7 +61,8 @@ public class CategoryRepositoryTest {
         // then
         assertTrue(categoryRepository.findById(savedCategory.getId()).isEmpty());
     }
-    private Category createCategory(){
-        return  new Category("test", "color", "imageUrl", "description");
+
+    private Category createCategory() {
+        return new Category("test", "color", "imageUrl", "description");
     }
 }

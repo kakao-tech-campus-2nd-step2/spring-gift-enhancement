@@ -53,7 +53,7 @@ public class OptionServiceTest {
 
         // then
         assertAll(
-            () -> IntStream.range(0, actual.size()).forEach((i)->{
+            () -> IntStream.range(0, actual.size()).forEach((i) -> {
                 assertThat(actual.get(i).getName())
                     .isEqualTo(expected.get(i).getName());
                 assertThat(actual.get(i).getQuantity())
@@ -78,7 +78,8 @@ public class OptionServiceTest {
         OptionResponse expected = entityToDto(newOption);
 
         // when
-        OptionResponse actual = optionService.addOptionToProduct(savedProduct.getId(), new OptionRequest("newOption", 1000));
+        OptionResponse actual = optionService.addOptionToProduct(savedProduct.getId(),
+            new OptionRequest("newOption", 1000));
 
         assertAll(
             () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
@@ -86,7 +87,7 @@ public class OptionServiceTest {
         );
     }
 
-    private OptionResponse entityToDto(Option option){
+    private OptionResponse entityToDto(Option option) {
         return new OptionResponse(option.getId(), option.getName(), option.getQuantity());
     }
 
@@ -97,10 +98,12 @@ public class OptionServiceTest {
     private Product createProduct(Long id, Category category) {
         return new Product(id, "test", 1000, "test.jpg", category);
     }
-    private Option createOption(){
+
+    private Option createOption() {
         return createOption("name");
     }
-    private Option createOption(String name){
+
+    private Option createOption(String name) {
         return new Option(name, 1000, createProduct());
     }
 }

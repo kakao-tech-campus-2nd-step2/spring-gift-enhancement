@@ -71,6 +71,7 @@ class ProductRepositoryTest {
         // then
         assertTrue(productRepository.findById(savedProduct.getId()).isEmpty());
     }
+
     @Test
     @DisplayName("카테고리로 상품 전체 조회 테스트")
     void findAllByCategoryTest() {
@@ -102,10 +103,12 @@ class ProductRepositoryTest {
             })
         );
     }
-    private Category createCategory(){
+
+    private Category createCategory() {
         return new Category("test", "color", "image", "description");
     }
-    private Product createProduct(Category category){
+
+    private Product createProduct(Category category) {
         return new Product("test", 1000, "test.jpg", category);
     }
 
