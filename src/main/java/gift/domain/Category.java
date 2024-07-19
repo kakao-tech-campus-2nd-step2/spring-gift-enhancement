@@ -22,7 +22,7 @@ public class Category {
     @Column
     private String description;
 
-    public Category() {
+    protected Category() {
     }
 
     public Category(String name, String color, String imageUrl, String description) {
