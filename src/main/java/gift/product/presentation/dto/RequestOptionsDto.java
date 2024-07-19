@@ -16,9 +16,4 @@ public record RequestOptionsDto(
             ))
             .toList();
     }
-
-    public record RequestOptionDto (
-        String name,
-        Integer quantity
-    ) {}
 }
