@@ -22,7 +22,7 @@ public class MemberService {
         this.jwtProvider = jwtProvider;
     }
 
-    //@Transactional
+    @Transactional
     public MemberModel.Info register(MemberCommand.Create command) {
         if (memberRepository.existsByEmail(command.email())) {
             throw new InvalidAuthRequestException("User already exists.");

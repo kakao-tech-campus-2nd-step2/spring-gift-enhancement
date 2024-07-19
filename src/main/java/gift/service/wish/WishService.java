@@ -31,7 +31,7 @@ public class WishService {
         this.productRepository = productRepository;
     }
 
-    //@Transactional
+    @Transactional
     public WishModel.Info addWish(Long userId, WishCommand.Register command) {
         Member member = memberRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException("Member not found"));
@@ -58,7 +58,7 @@ public class WishService {
         return WishModel.Info.from(wish);
     }
 
-    //@Transactional
+    @Transactional
     public void deleteWish(Long memberId, Long wishId) {
         Wish wish = wishRepository.findById(wishId)
             .orElseThrow(() -> new NotFoundException("Wish not found"));

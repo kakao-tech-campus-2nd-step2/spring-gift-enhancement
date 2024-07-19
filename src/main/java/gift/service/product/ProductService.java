@@ -50,7 +50,7 @@ public class ProductService {
         return ProductModel.Info.from(product);
     }
 
-    //@Transactional
+    @Transactional
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }

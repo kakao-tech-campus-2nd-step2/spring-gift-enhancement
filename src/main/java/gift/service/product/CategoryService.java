@@ -17,6 +17,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    @Transactional
     public CategoryModel.Info createCategory(CategoryCommand.Register command) {
         categoryRepository.findByName(command.name()).ifPresent(category -> {
             throw new IllegalArgumentException("Category already exists");
