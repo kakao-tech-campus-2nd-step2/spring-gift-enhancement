@@ -25,6 +25,17 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(BadRequestException.class)
+  public ResponseEntity<String> handleBadRequestException(BadRequestException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+
   @ExceptionHandler(RuntimeException.class)
   public String handleAllExceptions(RuntimeException ex, Model model) {
     model.addAttribute("exception", ex);

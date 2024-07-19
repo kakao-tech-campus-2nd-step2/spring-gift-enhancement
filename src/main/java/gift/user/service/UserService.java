@@ -1,5 +1,7 @@
 package gift.user.service;
 
+import gift.exception.BadRequestException;
+import gift.exception.ResourceNotFoundException;
 import gift.user.dto.UserDto;
 import gift.user.entity.User;
 import gift.user.entity.UserRole;
@@ -27,21 +29,23 @@ public class UserService {
   }
   public String register(@Valid UserDto userDto) {
     if (userRepository.findByEmail(userDto.getEmail()).isPresent()){
-      throw new RuntimeException("이미 존재하는 이메일입니다.");
+      throw new BadRequestException("이미 존재하는 이메일입니다.");
     }
 
     User user = new User();
     user.setEmail(userDto.getEmail());
-    user.setPassword(userDto.getPassword());
+    user.setPassword(passwordEncoder.encode(userDto.getPassword()));
     user.setRole(userDto.getUserRole());
+
+    userRepository.save(user);
     return tokenProvider.createToken(user.getEmail());
   }
 
   public String authenticate(String email, String password) {
     User user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다."));
+        .orElseThrow(() -> new BadRequestException("이메일 또는 비밀번호가 올바르지 않습니다."));
     if (!passwordEncoder.matches(password, user.getPassword())) {
-      throw new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다.");
+      throw new BadRequestException("이메일 또는 비밀번호가 올바르지 않습니다.");
     }
     return tokenProvider.createToken(user.getEmail());
   }
@@ -49,7 +53,7 @@ public class UserService {
   public User getMemberFromToken(String token) {
     String email = tokenProvider.getEmailFromToken(token);
     return userRepository.findByEmail(email)
-        .orElseThrow(() -> new RuntimeException("Invalid token"));
+        .orElseThrow(() -> new ResourceNotFoundException("유효하지 않은 토큰입니다."));
   }
 
 }

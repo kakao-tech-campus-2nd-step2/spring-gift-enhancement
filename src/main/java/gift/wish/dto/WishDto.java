@@ -1,7 +1,10 @@
 package gift.wish.dto;
 
+import gift.product.dto.OptionDto;
 import gift.product.dto.ProductDto;
+import gift.product.entity.Option;
 import gift.user.dto.UserDto;
+import gift.wish.entity.Wish;
 import jakarta.validation.constraints.NotNull;
 
 public class WishDto {
@@ -21,8 +24,19 @@ public class WishDto {
     this.user = user;
     this.product = product;
   }
+  public static WishDto toDto(Wish wish) {
+    return new WishDto(
+        wish.getId(),
+        new UserDto(
+            wish.getUser().getId(),
+            wish.getUser().getEmail(),
+            null,
+            wish.getUser().getRole()
+        ),
+        ProductDto.toDto(wish.getProduct())
+    );
+  }
 
-  // Getters and Setters
   public Long getId() {
     return id;
   }
