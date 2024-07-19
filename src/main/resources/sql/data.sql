@@ -1,5 +1,5 @@
 -- 카테고리 데이터 삽입
-INSERT INTO category (name, color, imgUrl) VALUES
+INSERT INTO category (name, color, img_url) VALUES
                                                ('Clothes', 'black', 'https://www.google.com'),
                                                ('Foods', 'white', 'https://www.google.com');
 
@@ -9,6 +9,6 @@ INSERT INTO members (email, password) VALUES
                                           ('test2@example.com', 'password2');
 
 -- 상품 데이터 삽입
-INSERT INTO products (name, price, imgUrl, category_id) VALUES
+INSERT INTO products (name, price, img_url, category_id) VALUES
                                                             ('T-shirt', 10000, 'https://www.google.com', 1),
                                                             ('Apple', 2000, 'https://www.google.com', 2);
