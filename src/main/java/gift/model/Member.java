@@ -3,7 +3,7 @@ package gift.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "members")
+@Table(name = "member")
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +15,8 @@ public class Member {
     @Column
     private String activeToken;
 
-    protected Member() {}
+    protected Member() {
+    }
 
     public Member(Member member, String activeToken) {
         this.id = member.id;

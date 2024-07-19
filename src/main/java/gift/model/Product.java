@@ -3,7 +3,7 @@ package gift.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,10 +15,14 @@ public class Product {
     private int price;
     @Column(name = "image_url")
     private String imageUrl;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
-    public Product() {}
+    public Product() {
+    }
 
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, String name, int price, String imageUrl, Category category) {
         if (name.contains("카카오") || name.equalsIgnoreCase("kakao")) {
             throw new IllegalArgumentException("\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에 사용 가능합니다.");
         }
@@ -26,15 +30,17 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         if (name.contains("카카오") || name.equalsIgnoreCase("kakao")) {
             throw new IllegalArgumentException("\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에 사용 가능합니다.");
         }
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -51,5 +57,9 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

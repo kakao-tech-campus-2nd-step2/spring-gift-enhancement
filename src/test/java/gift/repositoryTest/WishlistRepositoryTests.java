@@ -1,8 +1,10 @@
 package gift.repositoryTest;
 
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wishlist;
+import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishlistRepository;
@@ -24,12 +26,16 @@ public class WishlistRepositoryTests {
     private MemberRepository memberRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Test
     void testSaveAndFindWishList() {
+        Category category = new Category("TestCategory");
+        categoryRepository.save(category);
         Member member = new Member("jiu@gmail.com", "password123");
         memberRepository.save(member);
-        Product product = new Product("지우", 1000, "http://example.com/image.jpg");
+        Product product = new Product("지우", 1000, "http://example.com/image.jpg",category);
         productRepository.save(product);
         Wishlist wishList = new Wishlist(member, product);
         wishListRepository.save(wishList);
@@ -42,9 +48,11 @@ public class WishlistRepositoryTests {
 
     @Test
     void testRemoveProductFromWishList() {
+        Category category = new Category("TestCategory");
+        categoryRepository.save(category);
         Member member = new Member("jiu@gmail.com", "password123");
         memberRepository.save(member);
-        Product product = new Product("지우", 1000, "http://example.com/image.jpg");
+        Product product = new Product("지우", 1000, "http://example.com/image.jpg",category);
         productRepository.save(product);
         Wishlist wishList = new Wishlist(member, product);
         wishListRepository.save(wishList);

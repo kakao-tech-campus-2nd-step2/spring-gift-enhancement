@@ -15,7 +15,8 @@ public class Wishlist {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    protected Wishlist() {}
+    protected Wishlist() {
+    }
 
     public Wishlist(Member member, Product product) {
         this.member = member;

@@ -7,7 +7,7 @@
 <body>
 <div class="container">
   <h1>Manage Products</h1>
-  <a class="btn btn-primary" th:href="@{/api/products/add}">Add New Product</a>
+  <a class="btn btn-primary" th:href="@{/web/products/add}">Add New Product</a>
   <table class="table table-striped">
     <thead>
     <tr>
@@ -15,6 +15,7 @@
       <th>Price</th>
       <th>Image URL</th>
       <th>Actions</th>
+      <th>Category</th>
     </tr>
     </thead>
     <tbody>
@@ -23,8 +24,9 @@
       <td th:text="${product.price}">Product Price</td>
       <td th:text="${product.imageUrl}">Product Image URL</td>
       <td>
-        <a class="btn btn-warning" th:href="@{/api/products/edit/{id}(id=${product.id})}">Edit</a>
-        <a class="btn btn-danger" th:href="@{/api/products/delete/{id}(id=${product.id})}">Delete</a>
+        <a class="btn btn-warning" th:href="@{/web/products/edit/{id}(id=${product.id})}">Edit</a>
+        <a class="btn btn-danger" th:href="@{/web/products/delete/{id}(id=${product.id})}">Delete</a>
+      <td th:text="${product.category}">Product Category</td>
       </td>
     </tr>
     </tbody>
