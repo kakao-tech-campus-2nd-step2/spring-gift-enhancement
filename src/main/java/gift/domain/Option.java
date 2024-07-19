@@ -29,10 +29,23 @@ public class Option {
 
     public Option() { }
 
+    public Option(String name, int quantity, Product product) {
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
     public Option(OptionRequest optionRequest) {
         ProductValidationUtil.isValidOptionQuantity(optionRequest.getQuantity());
         this.name = optionRequest.getName();
         this.quantity = optionRequest.getQuantity();
+    }
+
+    public Option(OptionRequest optionRequest, Product product) {
+        ProductValidationUtil.isValidOptionQuantity(optionRequest.getQuantity());
+        this.name = optionRequest.getName();
+        this.quantity = optionRequest.getQuantity();
+        this.product = product;
     }
 
     public Long getId() {

@@ -54,5 +54,10 @@ public class ProductController {
         return ResponseEntity.ok(productService.getOptions(productId));
     }
 
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<String> addOption(@PathVariable("productId") Long productId, OptionRequest optionRequest) {
+        return ResponseEntity.ok(productService.addOption(productId, optionRequest));
+    }
+
 }
 

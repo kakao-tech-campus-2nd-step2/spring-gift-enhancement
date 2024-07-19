@@ -18,6 +18,7 @@ import java.util.List;
 
 import static gift.constant.Message.*;
 import static gift.exception.ErrorCode.DATA_NOT_FOUND;
+import static gift.exception.ErrorCode.DUPLICATE_OPTION_NAME_ERROR;
 
 @Service
 public class ProductService {
@@ -62,5 +63,22 @@ public class ProductService {
     public List<Option> getOptions(Long productId) {
         Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         return optionRepository.findAllByProduct(product);
+    }
+
+    public String addOption(Long productId, OptionRequest optionRequest) {
+        Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
+        Option option = new Option(optionRequest, product);
+        List<Option> options = optionRepository.findAllByProduct(product);
+        isNewOptionName(options, option);
+        optionRepository.save(option);
+        return ADD_OPTION_SUCCESS_MSG;
+    }
+
+    private void isNewOptionName(List<Option> options, Option requestOption){
+        for (Option option : options) {
+            if (option.getName().equals(requestOption.getName())) {
+                throw new CustomException(DUPLICATE_OPTION_NAME_ERROR);
+            }
+        }
     }
 }

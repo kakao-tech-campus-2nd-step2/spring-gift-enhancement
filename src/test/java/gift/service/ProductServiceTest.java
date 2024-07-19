@@ -6,6 +6,7 @@ import gift.domain.Product;
 import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
@@ -13,10 +14,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
-import static gift.constant.Message.ADD_SUCCESS_MSG;
-import static gift.constant.Message.UPDATE_SUCCESS_MSG;
+import static gift.constant.Message.*;
+import static gift.exception.ErrorCode.DUPLICATE_OPTION_NAME_ERROR;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -75,5 +78,28 @@ class ProductServiceTest {
 
         // then
         Assertions.assertThat(successMsg).isEqualTo(UPDATE_SUCCESS_MSG);
+    }
+
+    @Test
+    void addProductOption() {
+        // given
+        Product product = new Product(1L, "name", 500, "image.image");
+        Category category1 = new Category(1L, "상품권");
+        Option option = new Option("optionName", 100, product);
+        product.setCategory(category1);
+        product.setOption(option);
+
+        Long requestId = 1L;
+        OptionRequest optionRequest = new OptionRequest("optionName", 5);
+
+        given(productRepository.findProductById(any())).willReturn(Optional.of(new Product()));
+        given(optionRepository.findAllByProduct(any())).willReturn(List.of(option));
+        given(optionRepository.save(any())).willReturn(new Option(optionRequest));
+
+        // when
+        // then
+        assertThrows(CustomException.class, () -> {
+            productService.addOption(requestId, optionRequest);
+        });
     }
 }

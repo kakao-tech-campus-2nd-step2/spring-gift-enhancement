@@ -118,4 +118,8 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public void setOption(Option option) {
+        this.options.add(option);
+    }
 }
