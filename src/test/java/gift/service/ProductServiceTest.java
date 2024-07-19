@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static gift.constant.Message.*;
-import static gift.exception.ErrorCode.DUPLICATE_OPTION_NAME_ERROR;
+import static gift.constant.Message.ADD_SUCCESS_MSG;
+import static gift.constant.Message.UPDATE_SUCCESS_MSG;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -48,7 +48,7 @@ class ProductServiceTest {
         Category category = new Category(1L, "뷰티");
         Option option = new Option(optionRequest);
 
-        given(categoryRepository.findByName(any())).willReturn(Optional.of(new Category()));
+        given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
         given(productRepository.save(any())).willReturn(new Product(productRequest, category, option));
         given(optionRepository.save(any())).willReturn(new Option(optionRequest));
 
@@ -70,8 +70,8 @@ class ProductServiceTest {
         Long requestId = 1L;
         UpdateProductRequest updateProductRequest = new UpdateProductRequest("name", 500, "image.image", "뷰티");
 
-        given(productRepository.findProductById(any())).willReturn(Optional.of(new Product()));
-        given(categoryRepository.findByName(any())).willReturn(Optional.of(new Category()));
+        given(productRepository.findProductById(any())).willReturn(Optional.of(product));
+        given(categoryRepository.findByName(any())).willReturn(Optional.of(category2));
 
         // when
         String successMsg = productService.updateProduct(requestId, updateProductRequest);
@@ -92,7 +92,7 @@ class ProductServiceTest {
         Long requestId = 1L;
         OptionRequest optionRequest = new OptionRequest("optionName", 5);
 
-        given(productRepository.findProductById(any())).willReturn(Optional.of(new Product()));
+        given(productRepository.findProductById(any())).willReturn(Optional.of(product));
         given(optionRepository.findAllByProduct(any())).willReturn(List.of(option));
         given(optionRepository.save(any())).willReturn(new Option(optionRequest));
 
