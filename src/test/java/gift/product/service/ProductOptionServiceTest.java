@@ -1,6 +1,7 @@
 package gift.product.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -11,6 +12,7 @@ import gift.product.persistence.ProductOptionRepository;
 import gift.product.persistence.ProductRepository;
 import gift.product.service.command.ProductOptionCommand;
 import gift.product.service.dto.ProductOptionInfo;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -94,4 +96,23 @@ class ProductOptionServiceTest {
         assertThat(productOptionInfo.quantity()).isEqualTo(productOption.getQuantity());
     }
 
+    @Test
+    @DisplayName("ProductOptionService Option 생성 실패 테스트[중복된 이름]")
+    void createProductOptionWithDuplicatedNameTest() {
+        //given
+        final Long productId = 1L;
+        ProductOptionCommand productOptionCommand = new ProductOptionCommand("optionName", 10);
+
+        Category category = new Category("카테고리", "색상", "이미지", "설명");
+        Product product = new Product("productName", 1000, "이미지", category);
+        ProductOption productOption = new ProductOption(1L, "optionName", 10, product);
+
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(productOptionRepository.findByProductId(any())).willReturn(List.of(productOption));
+
+        //when//then
+        assertThatThrownBy(() -> productOptionService.createProductOption(productId, productOptionCommand))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 존재하는 상품 옵션입니다.");
+    }
 }
