@@ -20,7 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class OptionRepositoryTest {
+public class OptionServiceTest {
 
     @Mock
     private OptionRepository optionRepository;
