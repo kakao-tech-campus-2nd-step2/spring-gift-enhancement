@@ -2,6 +2,7 @@ package gift.domain.entity;
 
 import gift.domain.dto.request.ProductRequest;
 import gift.domain.service.CategoryService;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -29,6 +32,10 @@ public class Product {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Category category;
+
+    //상품 삭제시 연관된 옵션은 무의미해지므로 REMOVE로 함
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Option> options;
 
     public Product(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
@@ -58,6 +65,10 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     public void setId(Long id) {

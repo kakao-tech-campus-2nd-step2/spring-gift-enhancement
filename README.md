@@ -274,7 +274,7 @@ Content-Type: application/json
     - price: int
     - image_url: string
     - category_id: int (fk, unique, not null)
-    - [ ] options: list<Option>
+    - [x] options: list<Option>
       - [ ] option과 관련되어 상품 도메인 DTO 수정 
 - [x] 상품을 저장하는 데이터베이스 연동
   - [x] Jpa Repository
@@ -456,7 +456,7 @@ Content-Type: application/json
 
 #### 모델 설계
 
-- [ ] 옵션 표현하는 도메인 객체
+- [x] 옵션 표현하는 도메인 객체
   - 옵션 구성요소
     - id: int (pk)
     - productId: int (fk, not null)
@@ -467,8 +467,8 @@ Content-Type: application/json
       - 1 이상 1억 미만 
   - 옵션이 속한 상품이 삭제되면 그 옵션도 연쇄 삭제됨
 
-- [ ] 옵션을 저장하는 데이터베이스 연동
-  - [ ] Jpa Repository
+- [x] 옵션을 저장하는 데이터베이스 연동
+  - [x] Jpa Repository
   - [ ] 엔티티 클래스 및 예제 데이터 구비
 
 #### 기능 설계(컨트롤러 및 서비스 설계)
