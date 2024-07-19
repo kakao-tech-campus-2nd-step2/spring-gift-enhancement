@@ -3,6 +3,7 @@ package gift.domain.product.controller;
 import gift.domain.option.dto.OptionRequest;
 import gift.domain.option.dto.OptionResponse;
 import gift.domain.option.service.OptionService;
+import gift.domain.product.dto.ProductCreateResponse;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.dto.ProductResponse;
 import gift.domain.product.service.ProductService;
@@ -56,8 +57,8 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
-        ProductResponse response = productService.createProduct(productRequest);
+    public ResponseEntity<ProductCreateResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
+        ProductCreateResponse response = productService.createProduct(productRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(response);
     }
