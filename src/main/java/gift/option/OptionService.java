@@ -58,7 +58,7 @@ public class OptionService {
         isOptionNameExists(productId, optionDTO.getName());
 
         Option option = getOptionById(optionDTO.getId());
-        option.updateOption(optionDTO);
+        option.update(optionDTO.getName(), optionDTO.getQuantity());
         optionRepository.save(option);
     }
 

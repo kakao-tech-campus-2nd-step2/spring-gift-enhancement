@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.util.Optional;
 
 @Entity
 public class Option {
@@ -45,17 +44,7 @@ public class Option {
     }
 
     public Option(long id, String name, int quantity, Product product) {
-        if (!name.matches("^[a-zA-Z0-9가-힣\s()\\[\\]+\\-&/_]*$")) {
-            throw new IllegalArgumentException(OPTION_NAME_ALLOWED_CHARACTER);
-        }
-
-        if (name.length() > 50) {
-            throw new IllegalArgumentException(OPTION_NAME_LENGTH);
-        }
-
-        if (quantity < 1 || quantity >= 100_000_000) {
-            throw new IllegalArgumentException(OPTION_QUANTITY_SIZE);
-        }
+        validate(name, quantity);
 
         this.id = id;
         this.name = name;
@@ -63,24 +52,32 @@ public class Option {
         this.product = product;
     }
 
-    public void updateOption(Option option) {
-        Optional.ofNullable(option.name)
-            .ifPresent(updateName -> this.name = updateName);
-        Optional.of(option.quantity)
-            .ifPresent(updateQuantity -> this.quantity = updateQuantity);
-        Optional.ofNullable(option.product)
-            .ifPresent(updateProduct -> this.product = updateProduct);
+    public void update(String name, int quantity) {
+        validate(name, quantity);
+
+        this.name = name;
+        this.quantity = quantity;
     }
 
-    public void updateOption(OptionDTO optionDTO) {
-        updateOption(
-            new Option(
-                optionDTO.getId(),
-                optionDTO.getName(),
-                optionDTO.getQuantity(),
-                product
-            )
-        );
+    private void validate(String name, int quantity) {
+        validateName(name);
+        validateQuantity(quantity);
+    }
+
+    private void validateName(String name) {
+        if (!name.matches("^[a-zA-Z0-9가-힣\s()\\[\\]+\\-&/_]*$")) {
+            throw new IllegalArgumentException(OPTION_NAME_ALLOWED_CHARACTER);
+        }
+
+        if (name.length() > 50) {
+            throw new IllegalArgumentException(OPTION_NAME_LENGTH);
+        }
+    }
+
+    private void validateQuantity(int quantity) {
+        if (quantity < 1 || quantity >= 100_000_000) {
+            throw new IllegalArgumentException(OPTION_QUANTITY_SIZE);
+        }
     }
 
     @Override
