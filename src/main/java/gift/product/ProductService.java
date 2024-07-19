@@ -15,9 +15,8 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public HttpStatus createProduct(Product newProduct) {
-        productRepository.save(newProduct);
-        return HttpStatus.CREATED;
+    public Product createProduct(Product newProduct) {
+        return productRepository.save(newProduct);
     }
 
     public HttpStatus updateProduct(Product changeProduct) throws NotFoundException {

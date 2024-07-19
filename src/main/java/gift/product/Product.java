@@ -62,7 +62,6 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
-        addDefaultOption();
     }
 
     public void update(String name, int price, String imageUrl, Long categoryId){
@@ -79,7 +78,4 @@ public class Product {
         }
     }
 
-    private void addDefaultOption(){
-        this.options.add(new Option(null, "default", 1, this.id));
-    }
 }
