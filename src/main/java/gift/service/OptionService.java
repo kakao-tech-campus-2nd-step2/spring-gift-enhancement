@@ -4,8 +4,10 @@ import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.DataNotFoundException;
 import gift.repository.OptionRepository;
+
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +23,7 @@ public class OptionService {
 
     private boolean isDuplicateName(Option option) {
         Optional<Option> options = optionRepository.findByIdAndName(
-            option.getProduct().getId(), option.getName()
+                option.getProduct().getId(), option.getName()
         );
         return options.isPresent();
     }
@@ -60,6 +62,16 @@ public class OptionService {
 
     public List<Option> getOptionByProductId(Long productId) {
         return optionRepository.getOptionByProductId(productId);
+    }
+
+    public Option subtractOption(Long id) {
+        Option option = getOptionById(id);
+        int quantity = option.getQuantity();
+        if (quantity < 1) {
+            throw new IllegalStateException("상품 수량 부족");
+        }
+        option.setQuantity(quantity - 1);
+        return optionRepository.save(option);
     }
 
 }
