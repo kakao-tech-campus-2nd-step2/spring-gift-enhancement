@@ -50,7 +50,7 @@ public class ItemController {
         return ResponseEntity.ok(list);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Long> createItem(@Valid @RequestBody ItemForm form, BindingResult result)
         throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
