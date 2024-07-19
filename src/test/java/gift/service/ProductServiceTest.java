@@ -13,6 +13,7 @@ import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
 import gift.domain.option.dto.OptionRequest;
 import gift.domain.option.dto.OptionResponse;
+import gift.domain.option.repository.OptionRepository;
 import gift.domain.option.service.OptionService;
 import gift.domain.product.dto.ProductCreateResponse;
 import gift.domain.product.dto.ProductRequest;
@@ -46,6 +47,9 @@ class ProductServiceTest {
 
     @Mock
     CategoryRepository categoryRepository;
+
+    @Mock
+    OptionRepository optionRepository;
 
     @Mock
     OptionService optionService;
@@ -178,13 +182,15 @@ class ProductServiceTest {
         // given
         Long id = 1L;
         Product savedProduct = createProduct();
-        doReturn(Optional.of(savedProduct)).when(productRepository).findById(id);
 
+        doReturn(Optional.of(savedProduct)).when(productRepository).findById(any(Long.class));
+        doNothing().when(optionRepository).deleteByProduct(any(Product.class));
         // when
         productService.deleteProduct(id);
 
         // then
-        verify(productRepository, times(1)).delete(savedProduct);
+        verify(optionRepository, times(1)).deleteByProduct(any(Product.class));
+        verify(productRepository, times(1)).delete(any(Product.class));
     }
 
     private ProductResponse entityToDto(Product product) {
