@@ -1,8 +1,8 @@
 package gift.service;
 
 import static gift.util.constants.CategoryConstants.CATEGORY_NOT_FOUND;
-import static gift.util.constants.OptionConstants.OPTION_NOT_FOUND;
 import static gift.util.constants.ProductConstants.INVALID_PRICE;
+import static gift.util.constants.OptionConstants.OPTION_REQUIRED;
 import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 
 import gift.dto.product.ProductCreateRequest;
@@ -16,7 +16,7 @@ import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
-import java.util.List;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -55,13 +55,12 @@ public class ProductService {
             .orElseThrow(() -> new ProductNotFoundException(
                 CATEGORY_NOT_FOUND + productCreateRequest.categoryId()));
 
-        List<Option> options = productCreateRequest.options().stream()
-            .map(optionId -> optionRepository.findById(optionId)
-                .orElseThrow(() -> new ProductNotFoundException(OPTION_NOT_FOUND + optionId)))
-            .toList();
-
-        Product product = convertToEntity(productCreateRequest, category, options);
+        Product product = convertToEntity(productCreateRequest, category);
         Product savedProduct = productRepository.save(product);
+
+        Option defaultOption = new Option(null, "Default Option", 1, savedProduct);
+        optionRepository.save(defaultOption);
+
         return convertToDTO(savedProduct);
     }
 
@@ -75,13 +74,8 @@ public class ProductService {
             .orElseThrow(() -> new ProductNotFoundException(
                 CATEGORY_NOT_FOUND + productUpdateRequest.categoryId()));
 
-        List<Option> options = productUpdateRequest.options().stream()
-            .map(optionId -> optionRepository.findById(optionId)
-                .orElseThrow(() -> new ProductNotFoundException(OPTION_NOT_FOUND + optionId)))
-            .toList();
-
         product.update(productUpdateRequest.name(), productUpdateRequest.price(),
-            productUpdateRequest.imageUrl(), category, options);
+            productUpdateRequest.imageUrl(), category);
         Product updatedProduct = productRepository.save(product);
         return convertToDTO(updatedProduct);
     }
@@ -106,22 +100,18 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategoryId(),
-            product.getOptions().stream()
-                .map(Option::getId)
-                .toList()
+            product.getCategoryId()
         );
     }
 
     private static Product convertToEntity(ProductCreateRequest productCreateRequest,
-        Category category, List<Option> options) {
+        Category category) {
         return new Product(
             null,
             productCreateRequest.name(),
             productCreateRequest.price(),
             productCreateRequest.imageUrl(),
-            category,
-            options
+            category
         );
     }
 
@@ -130,18 +120,12 @@ public class ProductService {
             .orElseThrow(() -> new ProductNotFoundException(
                 CATEGORY_NOT_FOUND + productResponse.categoryId()));
 
-        List<Option> options = productResponse.options().stream()
-            .map(optionId -> optionRepository.findById(optionId)
-                .orElseThrow(() -> new ProductNotFoundException(OPTION_NOT_FOUND + optionId)))
-            .toList();
-
         return new Product(
             productResponse.id(),
             productResponse.name(),
             productResponse.price(),
             productResponse.imageUrl(),
-            category,
-            options
+            category
         );
     }
 }

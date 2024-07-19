@@ -3,7 +3,8 @@ package gift.dto.option;
 public record OptionResponse(
     Long id,
     String name,
-    int quantity
+    int quantity,
+    Long productId
 ) {
 
 }

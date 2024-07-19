@@ -7,6 +7,4 @@ public class ProductConstants {
     public static final String NAME_SIZE_LIMIT = "상품 이름은 공백을 포함하여 최대 15자까지 입력할 수 있습니다.";
     public static final String NAME_INVALID_CHARACTERS = "상품 이름에는 다음 특수 문자의 사용만 허용됩니다: ( ), [ ], +, -, &, /, _";
     public static final String NAME_REQUIRES_APPROVAL = "\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.";
-    public static final String OPTION_REQUIRED = "상품에는 항상 하나 이상의 옵션이 있어야 합니다.";
-    public static final String OPTION_NAME_DUPLICATE = "동일한 상품 내의 옵션 이름은 중복될 수 없습니다.";
 }

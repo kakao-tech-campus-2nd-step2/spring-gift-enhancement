@@ -81,6 +81,10 @@ public class Option {
         return Objects.equals(this.product.getId(), productId);
     }
 
+    public boolean isNameMatching(String name) {
+        return this.name.equals(name);
+    }
+
     public void setProduct(Product product) {
         this.product = product;
     }
