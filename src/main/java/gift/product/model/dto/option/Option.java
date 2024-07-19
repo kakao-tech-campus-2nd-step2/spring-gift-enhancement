@@ -57,47 +57,33 @@ public class Option {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
     public int getAdditionalCost() {
         return additionalCost;
-    }
-
-    public void setAdditionalCost(Integer additionalCost) {
-        this.additionalCost = additionalCost;
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public boolean isActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void updateOption(String name, int quantity, int additionalCost) {
+        this.name = name;
+        this.quantity = quantity;
+        this.additionalCost = additionalCost;
+    }
+
+    public void incative(boolean active) {
         isActive = active;
     }
 

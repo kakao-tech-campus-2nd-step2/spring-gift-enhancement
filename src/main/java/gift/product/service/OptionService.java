@@ -48,9 +48,8 @@ public class OptionService {
     public void updateOption(Product product, Long optionId, UpdateOptionRequest updateOptionRequest) {
         Option option = getOption(optionId);
         checkOptionOwner(product, option);
-        option.setName(updateOptionRequest.name());
-        option.setQuantity(updateOptionRequest.quantity());
-        option.setAdditionalCost(updateOptionRequest.additionalCost());
+        option.updateOption(updateOptionRequest.name(), updateOptionRequest.quantity(),
+                updateOptionRequest.additionalCost());
         optionRepository.save(option);
     }
 
@@ -61,7 +60,7 @@ public class OptionService {
         if (optionRepository.countByProductIdAndIsActiveTrue(product.getId()) <= 1) {
             throw new IllegalStateException("상품은 하나 이상의 옵션을 가지고 있어야 합니다.");
         }
-        option.setActive(false);
+        option.incative(false);
         optionRepository.save(option);
     }
 
