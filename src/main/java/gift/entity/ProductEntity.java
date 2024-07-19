@@ -37,6 +37,9 @@ public class ProductEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OptionEntity> options;
+
     public ProductEntity() {}
 
     public ProductEntity(Long id, String name, int price, String imageUrl, CategoryEntity category) {}

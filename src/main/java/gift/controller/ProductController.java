@@ -55,7 +55,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
         productService.editProduct(id, productDTO);
-        return ResponseEntity.ok("상품이 추기 되었습니다.");
+        return ResponseEntity.ok("상품이 수정 되었습니다.");
     }
 
     // 상품 삭제(Delete)
