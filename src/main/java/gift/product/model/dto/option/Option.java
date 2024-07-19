@@ -90,4 +90,12 @@ public class Option {
     public boolean isOwner(Long productId) {
         return product.getId().equals(productId);
     }
+
+    public void subtract(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("남은 수량이 없습니다.");
+        }
+        this.quantity -= quantity;
+    }
+
 }

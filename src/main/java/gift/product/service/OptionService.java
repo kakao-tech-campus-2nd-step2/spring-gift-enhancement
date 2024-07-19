@@ -75,4 +75,13 @@ public class OptionService {
             throw new EntityNotFoundException("Option");
         }
     }
+
+    @Transactional
+    public void subtractOptionQuantity(Long optionId, int quantity) throws IllegalArgumentException {
+        Option option = optionRepository.findByIdAndIsActiveTrue(optionId)
+                .orElseThrow(() -> new EntityNotFoundException("Option"));
+
+        option.subtract(quantity);
+        optionRepository.save(option);
+    }
 }
