@@ -23,8 +23,8 @@ public class ProductOptionService {
                 .orElseThrow(() -> ProductNotFoundException.of(productId));
         var productOption = command.toEntity(product);
 
-        productOptionRepository.save(productOption);
-        return productOption.getId();
+        var savedProduct = productOptionRepository.save(productOption);
+        return savedProduct.getId();
     }
 
     @Transactional
