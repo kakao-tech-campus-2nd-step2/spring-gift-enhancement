@@ -3,6 +3,7 @@ package gift.main.service;
 import gift.main.Exception.CustomException;
 import gift.main.Exception.ErrorCode;
 import gift.main.dto.OptionListRequest;
+import gift.main.dto.OptionQuantityRequest;
 import gift.main.dto.OptionRequest;
 import gift.main.dto.OptionResponse;
 import gift.main.entity.Option;
@@ -24,8 +25,7 @@ public class OptionService {
     }
 
     public List<OptionResponse> findOptionAll(long productId) {
-        List<OptionResponse> options = optionRepository.findAllByProductId(productId)
-                .orElseThrow(() -> new CustomException(ErrorCode.FAILED_OPTION_LOADING))
+        List<OptionResponse> options = validOptions(productId)
                 .stream().map(option -> new OptionResponse(option))
                 .collect(Collectors.toList());
 
@@ -41,23 +41,19 @@ public class OptionService {
 
     @Transactional
     public void deleteOption(long productId, long optionId) {
-        List<Option> options = optionRepository.findAllByProductId(productId)
-                .orElseThrow(() -> new CustomException(ErrorCode.FAILED_OPTION_LOADING));
+        List<Option> options = validOptions(productId);
 
         if (options.size() <= 1) {
             throw new CustomException(ErrorCode.CANNOT_DELETED_OPTION);
         }
-
         optionRepository.deleteById(optionId);
     }
 
     @Transactional
     public void addOption(long productId, OptionRequest optionRequest) {
-        List<Option> options = optionRepository.findAllByProductId(productId)
-                .orElseThrow(() -> new CustomException(ErrorCode.FAILED_OPTION_LOADING));
+        List<Option> options = validOptions(productId);
 
-        options.stream()
-                .forEach(option -> option.isDuplicate(optionRequest));
+        options.stream().forEach(option -> option.isDuplicate(optionRequest));
 
         Product product = options.get(0).getProduct();
         Option newOption = new Option(optionRequest, product);
@@ -66,17 +62,33 @@ public class OptionService {
 
     @Transactional
     public void updateOption(long productId, long optionId, OptionRequest optionRequest) {
-        Option targetOption = optionRepository.findById(optionId)
-                .orElseThrow(() -> new CustomException(ErrorCode.FAILED_OPTION_LOADING));
-
-        List<Option> options = optionRepository.findAllByProductId(productId)
-                .orElseThrow(() -> new CustomException(ErrorCode.FAILED_OPTION_LOADING));
+        Option targetOption = validOption(optionId);
+        List<Option> options = validOptions(productId);
 
         options.stream()
                 .forEach(option -> option.isDuplicate(optionId, optionRequest));
 
         targetOption.updateValue(optionRequest);
+    }
 
-        optionRepository.save(targetOption);
+    public void changeOptionQuantity(
+            long optionId,
+            OptionQuantityRequest optionQuantityRequest) {
+
+        Option targetOption = validOption(optionId);
+        targetOption.changeQuantity(optionQuantityRequest);
+
+    }
+
+    private Option validOption(Long optionId) {
+        Option targetOption = optionRepository.findById(optionId)
+                .orElseThrow(() -> new CustomException(ErrorCode.FAILED_OPTION_LOADING));
+        return targetOption;
+    }
+
+    private List<Option> validOptions(Long productId) {
+        List<Option> options = optionRepository.findAllByProductId(productId)
+                .orElseThrow(() -> new CustomException(ErrorCode.FAILED_OPTION_LOADING));
+        return options;
     }
 }
