@@ -3,7 +3,8 @@ package gift.service;
 import static gift.util.CategoryFixture.createCategory;
 import static gift.util.OptionFixture.createOption;
 import static gift.util.ProductFixture.createProduct;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -87,5 +88,23 @@ public class OptionServiceTest {
         // then
         assertThatExceptionOfType(DuplicateOptionNameException.class)
             .isThrownBy(() -> optionService.addOption(product.getId(), option.toDTO()));
+    }
+
+    @DisplayName("옵션 수정")
+    @Test
+    void updateOption() {
+        // given
+        long id = 1L;
+        Option option = createOption(id, "test", product);
+        Option updatedOption = createOption(id, "updatedTest", product);
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(optionRepository.findByProductAndId(any(Product.class), anyLong())).willReturn(Optional.of(option));
+        given(optionRepository.save(any(Option.class))).willReturn(updatedOption);
+
+        // when
+        OptionDTO actual = optionService.updateOption(product.getId(), updatedOption.toDTO());
+
+        // then
+        assertThat(actual).isEqualTo(updatedOption.toDTO());
     }
 }
