@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 /**
  * 제품 옵션 엔티티. 데이터베이스 테이블과 매핑된다.
@@ -21,11 +23,17 @@ public class ProductOptionEntity {
 
     @Column(nullable = false)
     private long quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private ProductEntity productEntity;
+
     protected ProductOptionEntity() {}
 
-    public ProductOptionEntity(String name, long quantity) {
+    public ProductOptionEntity(String name, long quantity, ProductEntity productEntity) {
         this.name = name;
         this.quantity = quantity;
+        this.productEntity = productEntity;
     }
 
     public Long getId() {
@@ -50,5 +58,13 @@ public class ProductOptionEntity {
 
     public void setQuantity(long quantity) {
         this.quantity = quantity;
+    }
+
+    public ProductEntity getProductEntity() {
+        return productEntity;
+    }
+
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
     }
 }
