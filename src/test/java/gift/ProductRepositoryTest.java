@@ -1,10 +1,9 @@
-package gift.RepositoryTest;
+package gift;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.Model.Category;
-import gift.Model.Option;
 import gift.Model.Product;
 import gift.Repository.ProductRepository;
 

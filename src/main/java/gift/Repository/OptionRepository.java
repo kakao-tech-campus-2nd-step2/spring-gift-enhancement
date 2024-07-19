@@ -11,5 +11,4 @@ public interface OptionRepository extends JpaRepository<Option, Long> {
     List<Option> findAllById(@Param("id") Long id);
 
     Option findOptionById(Long id);
-
 }

@@ -46,7 +46,7 @@ public class Option {
 
     }
 
-    @ConstructorProperties({"product","id","name","quantity"})
+    @ConstructorProperties({"id","product","name","quantity"})
     public Option(Long id, Product product, String name, int quantity) {
         this.id = id;
         this.product = product;
