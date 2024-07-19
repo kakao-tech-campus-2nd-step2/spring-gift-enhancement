@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class Option {
@@ -21,6 +23,7 @@ public class Option {
     private int quantity;
 
     @ManyToOne(fetch = LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Product product;
 
     protected Option() {
