@@ -274,8 +274,7 @@ Content-Type: application/json
     - price: int
     - image_url: string
     - category_id: int (fk, unique, not null)
-    - [x] options: list<Option>
-      - [x] option과 관련된 상품 도메인 DTO 수정 
+    - options: list<Option>
 - [x] 상품을 저장하는 데이터베이스 연동
   - [x] Jpa Repository
   - [x] 엔티티 클래스 및 예제 데이터 구비
@@ -283,9 +282,9 @@ Content-Type: application/json
 #### 기능 설계(컨트롤러 설계)
 
 - [x] 상품을 추가하는 API
-  - [ ] 상품 추가시 반드시 하나의 옵션을 추가하도록 하기
+  - [x] 상품 추가시 반드시 하나의 옵션을 추가하도록 하기
 - [x] 상품 리스트를 조회하는 API
-  - [ ] 상품 옵션도 함께 조회될 수 있도록 함
+  - [x] 상품 옵션도 함께 조회될 수 있도록 함
 - [x] 상품을 수정하는 API 
 - [x] 상품을 삭제하는 API
 - [ ] 상품의 옵션을 조회하는 API
@@ -469,12 +468,12 @@ Content-Type: application/json
 
 - [x] 옵션을 저장하는 데이터베이스 연동
   - [x] Jpa Repository
-  - [ ] 엔티티 클래스 및 예제 데이터 구비
+  - [x] 엔티티 클래스 및 예제 데이터 구비
 
 #### 기능 설계(컨트롤러 및 서비스 설계)
 
-- [ ] 옵션 리스트 조회 API
-- [ ] 특정 id 옵션 조회 API
+- [x] 옵션 리스트 조회 API
+- [x] 특정 id 옵션 조회 API
 
 #### 예외, 검증 설계
 
