@@ -10,10 +10,7 @@ public record RequestOptionsDto(
 
     public List<OptionRegisterDto> toOptionRegisterDtos() {
         return options.stream()
-            .map(option -> new OptionRegisterDto(
-                option.name(),
-                option.quantity()
-            ))
+            .map(RequestOptionDto::toOptionRegisterDto)
             .toList();
     }
 }

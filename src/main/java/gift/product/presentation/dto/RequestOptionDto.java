@@ -1,5 +1,6 @@
 package gift.product.presentation.dto;
 
+import gift.product.business.dto.OptionRegisterDto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
@@ -16,5 +17,7 @@ public record RequestOptionDto(
     @Max(value = 100000000, message = "수량은 100,000,000개 이하이어야 합니다.")
     Integer quantity
 ) {
-
+    public OptionRegisterDto toOptionRegisterDto() {
+        return new OptionRegisterDto(name, quantity);
+    }
 }
