@@ -26,6 +26,16 @@
 </table>
 <div>
     <button id="prevPage">Previous</button>
+    <label for="p_sort"></label>
+    <select name="p_sort" id="p_sort">
+        <option value="asc">오름차순</option>
+        <option value="desc">내림차순</option>
+    </select>
+    <label for="p_field"></label>
+    <select name="p_field" id="p_field">
+        <option value="id">id</option>
+    </select>
+    <button id="search" onclick="getWishList(currentPage)">검색</button>
     <button id="nextPage">Next</button>
 </div>
 </body>
@@ -41,7 +51,9 @@
             contentType: "application/json",
             data : {
                 page : page,
-                size : pageSize
+                size : pageSize,
+                sort : $('#p_sort').val(),
+                field : $('#p_field').val()
             },
             headers : {
                 Authorization: 'Bearer ' + localStorage.getItem("token"),
