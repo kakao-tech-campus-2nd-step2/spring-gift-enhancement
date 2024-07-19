@@ -108,8 +108,8 @@ public class OptionServiceTest {
             );
 
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
+            when(productRepository.existsById(productId))
+                .thenReturn(true);
 
             when(optionRepository.findAllByProductId(productId))
                 .thenReturn(optionReturnValues);
@@ -128,8 +128,8 @@ public class OptionServiceTest {
             List<Option> optionReturnValues = List.of();
 
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.empty());
+            when(productRepository.existsById(productId))
+                .thenReturn(false);
 
             when(optionRepository.findAllByProductId(productId))
                 .thenReturn(optionReturnValues);

@@ -24,6 +24,18 @@ public class Option {
     @JoinColumn(name = "product")
     private Product product;
 
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
     protected Option() {
 
     }
