@@ -27,18 +27,7 @@
 
     <label for="category">Category:</label>
     <select name="category" id="category">
-        <option value="교환권">교환권</option>
-        <option value="상품권">상품권</option>
-        <option value="뷰티">뷰티</option>
-        <option value="식품">식품</option>
-        <option value="리빙/도서">리빙/도서</option>
-        <option value="레저/스포츠">레저/스포츠</option>
-        <option value="아티스트/캐릭터">아티스트/캐릭터</option>
-        <option value="유아동/반려">유아동/반려</option>
-        <option value="디지털/가전">디지털/가전</option>
-        <option value="카카오프렌즈">카카오프렌즈</option>
-        <option value="트렌드">트랜드</option>
-        <option value="선물">선물</option>
+
     </select>
 
     <input type="button" id="post" value="추가">
@@ -58,18 +47,7 @@
 
     <label for="p_category">Category:</label>
     <select name="p_category" id="p_category">
-        <option value="교환권">교환권</option>
-        <option value="상품권">상품권</option>
-        <option value="뷰티">뷰티</option>
-        <option value="식품">식품</option>
-        <option value="리빙/도서">리빙/도서</option>
-        <option value="레저/스포츠">레저/스포츠</option>
-        <option value="아티스트/캐릭터">아티스트/캐릭터</option>
-        <option value="유아동/반려">유아동/반려</option>
-        <option value="디지털/가전">디지털/가전</option>
-        <option value="카카오프렌즈">카카오프렌즈</option>
-        <option value="트렌드">트랜드</option>
-        <option value="선물">선물</option>
+
     </select>
 
     <input type="button" id="put" value="수정">
@@ -91,6 +69,19 @@
 </table>
 <div>
     <button id="prevPage">Previous</button>
+    <label for="p_sort"></label>
+    <select name="p_sort" id="p_sort">
+        <option value="asc">오름차순</option>
+        <option value="desc">내림차순</option>
+    </select>
+    <label for="p_field"></label>
+    <select name="p_field" id="p_field">
+        <option value="id">id</option>
+        <option value="name">name</option>
+        <option value="price">price</option>
+        <option value="category">category</option>
+    </select>
+    <button id="search" onclick="getProducts()">검색</button>
     <button id="nextPage">Next</button>
 </div>
 </body>
@@ -98,13 +89,48 @@
     var currentPage = 0;
     var pageSize = 5;
 
+    function getCategories(page){
+        $.ajax({
+            url: '/api/categories',
+            method: 'GET',
+            data : {
+                page : page,
+                size : pageSize
+            },
+            success: function(data) {
+                console.log(data);
+                var contents = data.content;
+                var select = $('#category');
+                var p_select = $('#p_category');
+
+                // 데이터에 따라 테이블 행을 생성
+                contents.forEach(function(category) {
+                    // 한 행의 내용
+                    var row = `
+                        <option value="${category.name}">${category.name}</option>
+                    `;
+                    select.append(row);
+                    p_select.append(row);
+                });
+
+                if(data.numberOfElements !== 0)
+                    getCategories(page + 1);
+            },
+            error: function(err) {
+                alert("error occur! [error code : " + err.status + "]");
+            }
+        });
+    }
+
     function getProducts(page){
         $.ajax({
             url: '/api/products',
             method: 'GET',
             data : {
                 page : page,
-                size : pageSize
+                size : pageSize,
+                sort : $('#p_sort').val(),
+                field : $('#p_field').val()
             },
             success: function(data) {
                 var contents = data.content;
@@ -141,6 +167,7 @@
     }
 
     $(document).ready(function() {
+        getCategories(0);
         getProducts(currentPage);
 
         $('#prevPage').click(function() {

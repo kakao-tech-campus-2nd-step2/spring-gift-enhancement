@@ -22,13 +22,24 @@ public class ProductService {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
-
     /*
-     * DB에 저장된 모든 Product 객체를 불러와 전달해주는 로직
+     * Product를 조회하는 로직 ( 오름차순 정렬 )
      */
-    public Page<ProductResponse> readAllProduct(int page, int size){
+    public Page<ProductResponse> readAllProductASC(int page, int size, String field){
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.asc("id"));
+        sorts.add(Sort.Order.asc(field));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
+
+        Page<Product> products = productRepository.findAll(pageable);
+
+        return products.map(ProductResponse::new);
+    }
+    /*
+     * Product를 조회하는 로직 ( 내림차순 정렬 )
+     */
+    public Page<ProductResponse> readAllProductDESC(int page, int size, String field){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc(field));
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
 
         Page<Product> products = productRepository.findAll(pageable);
