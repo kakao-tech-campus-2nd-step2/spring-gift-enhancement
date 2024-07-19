@@ -32,8 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public TokenResponseDto loginUser(@RequestBody UserRequestDto loginRequestDto) {
-        return userService.loginUser(loginRequestDto);
+    public ResponseEntity<TokenResponseDto> loginUser(@RequestBody UserRequestDto loginRequestDto) {
+        return ResponseEntity.ok(userService.loginUser(loginRequestDto));
     }
 }

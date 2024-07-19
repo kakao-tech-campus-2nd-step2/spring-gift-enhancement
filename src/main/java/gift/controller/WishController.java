@@ -32,30 +32,27 @@ public class WishController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Page<WishResponseDto> getWishes(@LoginUser User user,
+    public ResponseEntity<Page<WishResponseDto>> getWishes(@LoginUser User user,
         @RequestParam(defaultValue = "0") @Min(value = 0, message = "페이지 번호는 0 이상이어야 합니다.") int page,
         @RequestParam(defaultValue = "ID_DESC") WishSortBy sortBy) {
-        return wishService.getWishes(user.getEmail(), page, sortBy);
+        return ResponseEntity.ok(wishService.getWishes(user.getEmail(), page, sortBy));
     }
 
     @PostMapping("/{productId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public WishResponseDto addWish(@PathVariable Long productId,
+    public ResponseEntity<WishResponseDto> addWish(@PathVariable Long productId,
         @LoginUser User user) {
-        return wishService.addWish(user.getEmail(), productId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(wishService.addWish(user.getEmail(), productId));
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public WishResponseDto updateWish(
+    public ResponseEntity<WishResponseDto> updateWish(
         @Valid @RequestBody WishUpdateRequestDto wishUpdateRequestDto, @LoginUser User user) {
-        return wishService.updateWish(user.getEmail(), wishUpdateRequestDto);
+        return ResponseEntity.ok(wishService.updateWish(user.getEmail(), wishUpdateRequestDto));
     }
 
     @DeleteMapping("/{productId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteWish(@PathVariable Long productId, @LoginUser User user) {
+    public ResponseEntity<Void> deleteWish(@PathVariable Long productId, @LoginUser User user) {
         wishService.deleteWish(user.getEmail(), productId);
+        return ResponseEntity.noContent().build();
     }
 }

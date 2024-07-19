@@ -34,7 +34,7 @@ class CategoryTest {
         categoryController.addCategory(category2);
 
         // When
-        List<CategoryResponseDto> categories = categoryController.getAllCategories();
+        List<CategoryResponseDto> categories = categoryController.getAllCategories().getBody();
 
         // Then
         assertFalse(categories.isEmpty());
@@ -48,7 +48,7 @@ class CategoryTest {
         CategoryAddRequestDto requestDto = new CategoryAddRequestDto("New Category");
 
         // When
-        CategoryResponseDto response = categoryController.addCategory(requestDto);
+        CategoryResponseDto response = categoryController.addCategory(requestDto).getBody();
 
         // Then
         assertNotNull(response);
@@ -59,12 +59,13 @@ class CategoryTest {
     void updateCategoryTest() {
         // Given
         CategoryAddRequestDto addRequestDto = new CategoryAddRequestDto("Original Category");
-        CategoryResponseDto addedCategory = categoryController.addCategory(addRequestDto);
+        CategoryResponseDto addedCategory = categoryController.addCategory(addRequestDto).getBody();
 
         CategoryUpdateRequestDto updateRequestDto = new CategoryUpdateRequestDto(addedCategory.getId(), "Updated Category");
 
         // When
-        CategoryResponseDto updatedCategory = categoryController.updateCategory(updateRequestDto);
+        CategoryResponseDto updatedCategory = categoryController.updateCategory(updateRequestDto)
+            .getBody();
 
         // Then
         assertNotNull(updatedCategory);
@@ -75,12 +76,13 @@ class CategoryTest {
     void validDeleteCategoryTest() {
         // Given
         CategoryAddRequestDto addRequestDto = new CategoryAddRequestDto("Category to Delete");
-        CategoryResponseDto addedCategory = categoryController.addCategory(addRequestDto);
+        CategoryResponseDto addedCategory = categoryController.addCategory(addRequestDto).getBody();
 
         // When & Then
         assertDoesNotThrow(() -> categoryController.deleteCategory(addedCategory.getId()));
 
-        List<CategoryResponseDto> remainingCategories = categoryController.getAllCategories();
+        List<CategoryResponseDto> remainingCategories = categoryController.getAllCategories()
+            .getBody();
         assertFalse(remainingCategories.stream().anyMatch(c -> c.getId().equals(addedCategory.getId())));
     }
 
