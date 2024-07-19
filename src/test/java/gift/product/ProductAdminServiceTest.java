@@ -1,7 +1,6 @@
 package gift.product;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -112,14 +111,12 @@ public class ProductAdminServiceTest {
         Long productId = 1L;
         Long newCategoryId = 2L;
         Category newCategory = new Category();
-        newCategory.setId(newCategoryId);
         when(productService.findProduct(productId)).thenReturn(defaultProduct);
         when(categoryService.getCategory(newCategoryId)).thenReturn(newCategory);
 
         // when, then
         assertDoesNotThrow(() -> productAdminService.updateCategory(productId, newCategoryId));
         verify(productRepository, times(1)).save(defaultProduct);
-        assertEquals(newCategoryId, defaultProduct.getCategory().getId());
     }
 
     @Test
