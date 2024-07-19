@@ -7,7 +7,6 @@ import io.jsonwebtoken.JwtException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -54,8 +53,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponseDto> handleJdbcSQLIntegrityConstraintViolationException(
-       DataIntegrityViolationException e
-    ){
+        DataIntegrityViolationException e
+    ) {
         return ResponseMaker.createErrorResponse(HttpStatus.BAD_REQUEST, "해당 카테고리를 사용하는 상품 존재");
     }
 }

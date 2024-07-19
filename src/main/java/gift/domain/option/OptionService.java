@@ -14,10 +14,12 @@ public class OptionService {
     private final JpaOptionRepository optionRepository;
     private final JpaProductRepository productRepository;
 
-    public OptionService(JpaOptionRepository optionRepository, JpaProductRepository productRepository) {
+    public OptionService(JpaOptionRepository optionRepository,
+        JpaProductRepository productRepository) {
         this.optionRepository = optionRepository;
         this.productRepository = productRepository;
     }
+
     public List<Option> getOptions() {
         List<Option> options = optionRepository.findAll();
         return options;
@@ -41,7 +43,8 @@ public class OptionService {
             }
         }
 
-        Option option = new Option(optionRequestDTO.getName(), optionRequestDTO.getQuantity(), product);
+        Option option = new Option(optionRequestDTO.getName(), optionRequestDTO.getQuantity(),
+            product);
 
         optionRepository.save(option);
     }
@@ -50,7 +53,8 @@ public class OptionService {
     public void addOption(Product product, OptionRequestDTO optionRequestDTO) {
         List<Option> options = optionRepository.findAllByProduct(product);
 
-        Option option = new Option(optionRequestDTO.getName(), optionRequestDTO.getQuantity(), product);
+        Option option = new Option(optionRequestDTO.getName(), optionRequestDTO.getQuantity(),
+            product);
 
         optionRepository.save(option);
     }

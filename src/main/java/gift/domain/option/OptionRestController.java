@@ -51,7 +51,8 @@ public class OptionRestController {
      * 특정 상품에 옵션 추가
      */
     @PostMapping("/products/{productId}/options")
-    public ResponseEntity<SimpleResultResponseDto> addOption(@PathVariable("productId") Long productId,
+    public ResponseEntity<SimpleResultResponseDto> addOption(
+        @PathVariable("productId") Long productId,
         OptionRequestDTO optionRequestDTO) {
         optionService.addOption(productId, optionRequestDTO);
 
@@ -62,7 +63,8 @@ public class OptionRestController {
      * 특정 상품의 옵션 수정
      */
     @PostMapping("/products/{productId}/options/{optionId}")
-    public ResponseEntity<SimpleResultResponseDto> updateOption(@PathVariable("productId") Long productId,
+    public ResponseEntity<SimpleResultResponseDto> updateOption(
+        @PathVariable("productId") Long productId,
         @PathVariable("optionId") Long optionId,
         @Valid @RequestBody OptionRequestDTO optionRequestDTO) {
         optionService.updateOption(productId, optionId, optionRequestDTO);

@@ -12,12 +12,10 @@ public class CategoryDTO {
     @NotBlank
     public String description;
 
-    @JsonCreator
     public CategoryDTO(String name, String description) {
         this.name = name;
         this.description = description;
     }
-
     public String getName() {
         return name;
     }

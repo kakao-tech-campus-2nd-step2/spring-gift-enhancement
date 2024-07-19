@@ -46,7 +46,8 @@ public class CategoryRestController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<SimpleResultResponseDto> updateCategory(@PathVariable("id") Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<SimpleResultResponseDto> updateCategory(@PathVariable("id") Long id,
+        @Valid @RequestBody CategoryDTO categoryDTO) {
         categoryService.updateCategory(id, categoryDTO);
         return ResponseMaker.createSimpleResponse(HttpStatus.OK, "카테고리 수정 성공");
     }
