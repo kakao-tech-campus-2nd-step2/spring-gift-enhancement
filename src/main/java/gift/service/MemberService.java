@@ -21,23 +21,23 @@ public class MemberService {
         MemberEntity foundMember = memberRepository.findByEmail(memberDTO.getEmail());
 
         if (foundMember == null || !memberDTO.getPassword().equals(foundMember.getPassword())) {
-            return null;
+            throw new IllegalArgumentException("로그인 정보가 올바르지 않습니다.");
         }
 
         return foundMember;
     }
 
     @Transactional
-    public MemberServiceStatus save(MemberDTO memberDTO) {
+    public void save(MemberDTO memberDTO) {
         if (existsByEmail(memberDTO.getEmail())) {
-            return MemberServiceStatus.EMAIL_ALREADY_EXISTS;
+            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
 
         // DTO to Entity
         MemberEntity memberEntity = new MemberEntity(memberDTO.getEmail(), memberDTO.getPassword());
         memberRepository.save(memberEntity);
-        return MemberServiceStatus.SUCCESS;
     }
+
 
     public boolean existsByEmail(String email) {
         return memberRepository.existsByEmail(email);
