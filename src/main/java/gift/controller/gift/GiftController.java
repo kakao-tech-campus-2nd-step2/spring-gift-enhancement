@@ -47,12 +47,6 @@ public class GiftController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}/options")
-    public ResponseEntity<List<OptionResponse>> getOptions(@PathVariable Long id) {
-        List<OptionResponse> options = optionService.getOptionsByGiftId(id);
-        return ResponseEntity.ok(options);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<String> updateGift(@PathVariable Long id, @RequestBody GiftRequest giftRequest) {
         giftService.updateGift(giftRequest, id);
