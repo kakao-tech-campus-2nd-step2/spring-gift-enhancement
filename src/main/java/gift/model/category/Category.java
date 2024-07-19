@@ -19,6 +19,12 @@ public class Category {
     private String imageUrl;
     private String description;
 
+    public void update(CategoryRequest categoryRequest) {
+        this.name = categoryRequest.name();
+        this.color = categoryRequest.color();
+        this.imageUrl = categoryRequest.imageUrl();
+        this.description = categoryRequest.description();
+    }
     public Category(){}
 
 
@@ -34,46 +40,22 @@ public class Category {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getColor() {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-    public void update(CategoryRequest categoryRequest) {
-        this.name = categoryRequest.name();
-        this.color = categoryRequest.color();
-        this.imageUrl = categoryRequest.imageUrl();
-        this.description = categoryRequest.description();
-    }
+
 }

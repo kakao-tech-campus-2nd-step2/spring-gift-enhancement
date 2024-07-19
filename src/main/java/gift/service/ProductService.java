@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.common.exception.ProductNotFoundException;
 import gift.model.category.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductRequest;
@@ -21,7 +22,9 @@ public class ProductService {
 
 
     public ProductResponse getProductById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.findById(id).orElseThrow(
+            () -> new ProductNotFoundException("해당 Id의 상품은 존재하지 않습니다.")
+        );
         return ProductResponse.from(product);
     }
 
@@ -36,7 +39,9 @@ public class ProductService {
     }
 
     public ProductResponse updateProduct(Long id, ProductRequest updatedProduct) {
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.findById(id).orElseThrow(
+            () -> new ProductNotFoundException("해당 Id의 상품은 존재하지 않습니다.")
+        );
         Category category = categoryRepository.findById(updatedProduct.categoryId()).orElseThrow();
         product.update(updatedProduct, category);
         return ProductResponse.from(productRepository.save(product));

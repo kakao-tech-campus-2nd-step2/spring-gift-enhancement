@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.common.exception.WishListNotFoundException;
 import gift.model.product.Product;
 import gift.model.user.User;
 import gift.model.wishlist.WishList;
@@ -44,7 +45,9 @@ public class WishListService {
     }
 
     public WishResponse updateProductQuantity(Long wishId, Long userId, int quantity) {
-        WishList wishList = wishListRepository.findByIdAndUserId(wishId, userId).orElseThrow();
+        WishList wishList = wishListRepository.findByIdAndUserId(wishId, userId).orElseThrow(
+            () -> new WishListNotFoundException("해당 Id의 위시리스트는 존재하지 않습니다.")
+        );
         wishList.setQuantity(quantity);
         return WishResponse.from(wishListRepository.save(wishList), wishList.getProduct());
     }
