@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
+
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
@@ -78,7 +79,6 @@ public class ProductService {
         product.updateValue(productRequest, category);
         productRepository.save(product);
     }
-
 
     public ProductResponce getProduct(long id) {
         Product product = productRepository.findById(id)

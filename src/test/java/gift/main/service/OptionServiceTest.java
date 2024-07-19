@@ -77,7 +77,6 @@ class OptionServiceTest {
     @Rollback
     void findOptionAllTest() {
         //given
-
         //when
         List<?> options = optionService.findOptionAll(1l);
 
@@ -117,7 +116,6 @@ class OptionServiceTest {
         //then
         assertThatThrownBy(() -> optionService.deleteOption(saveProduct.getId(), options.get(2).getId()))
                 .isInstanceOf(CustomException.class);
-
     }
 
     @Test
@@ -134,7 +132,6 @@ class OptionServiceTest {
         //then
         assertThat(optionRepository.findAllByProductId(saveProduct.getId()).get().size())
                 .isEqualTo(4);
-
     }
 
     @Test
@@ -166,7 +163,6 @@ class OptionServiceTest {
         //then
         assertThat(optionRepository.findById(1L).get().getOptionName())
                 .isEqualTo("4번");
-
     }
 
     @Test
@@ -181,6 +177,5 @@ class OptionServiceTest {
         //then
         assertThatThrownBy(() -> optionService.updateOption(saveProduct.getId(), 1L, optionRequest))
                 .isInstanceOf(CustomException.class);
-
     }
 }

@@ -9,7 +9,6 @@ public class CustomException extends RuntimeException {
     public CustomException(String message, HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
-
     }
 
     public CustomException(ErrorCode errorCode) {
@@ -22,7 +21,6 @@ public class CustomException extends RuntimeException {
     public String getMessage() {
         return super.getMessage();
     }
-
 
     public HttpStatus getHttpStatus() {
         return httpStatus;

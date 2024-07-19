@@ -27,7 +27,6 @@ public class WishProductService {
         this.userRepository = userRepository;
     }
 
-
     public Page<WishProductResponce> getWishProductPage(UserVo sessionUser, Pageable pageable) {
         Page<WishProductResponce> wishProductResponcePage = wishProductRepository.findAllByUserId(sessionUser.getId(), pageable)
                 .map(wishProduct -> new WishProductResponce(wishProduct));
@@ -47,7 +46,6 @@ public class WishProductService {
         }
         wishProductRepository.save(new WishProduct(product, user));
     }
-
 
     public void deleteProducts(Long productId, UserVo sessionUserVo) {
         wishProductRepository.deleteByProductIdAndUserId(productId, sessionUserVo.getId());

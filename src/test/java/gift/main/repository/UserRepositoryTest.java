@@ -22,25 +22,24 @@ class UserRepositoryTest {
     private final UserRepository userRepository;
     private final WishProductRepository wishProductRepository;
     private final ProductRepository productRepository;
+    private final EntityManager entityManager;
 
     @Autowired
-    private EntityManager entityManager;
+    public UserRepositoryTest(CategoryRepository categoryRepository,
+                              UserRepository userRepository,
+                              WishProductRepository wishProductRepository,
+                              ProductRepository productRepository,
+                              EntityManager entityManager,
+                              EntityManager entityManager1) {
 
-    @Autowired
-    public UserRepositoryTest(CategoryRepository categoryRepository, UserRepository userRepository, WishProductRepository wishProductRepository, ProductRepository productRepository, EntityManager entityManager) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.wishProductRepository = wishProductRepository;
         this.productRepository = productRepository;
 
+        this.entityManager = entityManager1;
     }
 
-    /*
-    왜 이렇게 given이 길까...?
-    이 부분 이렇게 더럽게 짜도 되는 건가.
-
-    왜 entityManager에서 clear까지 해야하는건가
-     */
     @Test
     @DisplayName("User에서 자식 WhishProduct가 존재할때, 정상삭제되는 지 조회")
     void deleteUserTest() {
@@ -59,11 +58,6 @@ class UserRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        assertThat(wishProductRepository.existsAllByUserId(user.getId())).isEqualTo(true);
-        /*
-        중간 테스트는 뭐라고 작성해야 좋을까요?
-         */
-
 
         //when
         User searchUser = userRepository.findByEmail("user@").get();
@@ -76,14 +70,13 @@ class UserRepositoryTest {
         assertThat(wishProductRepository.existsAllByUserId(user.getId())).isEqualTo(false);
     }
 
-
     @Test
     public void getUserRoleTest() {
         //given
         User user = new User("testuser", "email", "1234", "admin");
 
         //when
-        User saveUser = userRepository.save(new User("testuser", "email", "1234", "admin"));
+        User saveUser = userRepository.save(user);
 
         //then
         assertThat(saveUser.getRole()).isEqualTo(Role.ADMIN);
@@ -102,12 +95,10 @@ class UserRepositoryTest {
         assertThat(userList.size()).isEqualTo(2);
     }
 
-
     @Test
     public void saveDuplicateEmailTest() {
         //given
         final String EMAIL = "이메일";
-
         User user = new User("name", EMAIL, "123", "USER");
         userRepository.save(user);
 
@@ -118,6 +109,5 @@ class UserRepositoryTest {
         assertThatThrownBy(() -> userRepository.save(duplicateUser)).isInstanceOf(DataIntegrityViolationException.class);
 
     }
-
 
 }

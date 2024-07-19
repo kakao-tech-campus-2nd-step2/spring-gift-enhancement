@@ -15,20 +15,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ProductRepositoryTest {
 
-    @Autowired
-    private EntityManager entityManager;
-
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final WishProductRepository wishProductRepository;
     private final UserRepository userRepository;
+    private final EntityManager entityManager;
 
     @Autowired
-    public ProductRepositoryTest(ProductRepository productRepository, CategoryRepository categoryRepository, WishProductRepository wishProductRepository, UserRepository userRepository) {
+    public ProductRepositoryTest(
+            ProductRepository productRepository,
+            CategoryRepository categoryRepository,
+            WishProductRepository wishProductRepository,
+            UserRepository userRepository,
+            EntityManager entityManager) {
+
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.wishProductRepository = wishProductRepository;
         this.userRepository = userRepository;
+        this.entityManager = entityManager;
     }
 
     @Test
@@ -47,6 +52,4 @@ class ProductRepositoryTest {
         assertThat(foundProduct.getWishProducts().size()).isEqualTo(1);
 
     }
-
-
 }

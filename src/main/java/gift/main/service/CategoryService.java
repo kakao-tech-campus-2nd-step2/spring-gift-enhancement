@@ -60,6 +60,4 @@ public class CategoryService {
         category.updateCategory(categoryRequest);
         categoryRepository.save(category);
     }
-
-
 }

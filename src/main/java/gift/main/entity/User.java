@@ -31,7 +31,6 @@ public class User {
     //유저가 사라진 경우 -> 위시리스트 무조건 삭제
 
     public User() {
-
     }
 
     public User(long id, String name, String email, String password, Role role) {

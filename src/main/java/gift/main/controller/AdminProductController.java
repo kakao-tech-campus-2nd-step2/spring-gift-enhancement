@@ -40,5 +40,4 @@ public class AdminProductController {
         return ResponseEntity.ok("Product deleted successfully");
     }
 
-
 }

@@ -23,7 +23,6 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
-
     public List<OptionResponse> findOptionAll(long productId) {
         List<OptionResponse> options = optionRepository.findAllByProductId(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.FAILED_OPTION_LOADING))
@@ -40,10 +39,6 @@ public class OptionService {
                 .forEach(option -> optionRepository.save(option));
     }
 
-
-    /*
-     * 삭제 옵션 : 요청은 하나씩만 받응께...
-     */
     @Transactional
     public void deleteOption(long productId, long optionId) {
         List<Option> options = optionRepository.findAllByProductId(productId)
@@ -54,7 +49,6 @@ public class OptionService {
         }
 
         optionRepository.deleteById(optionId);
-
     }
 
     @Transactional
@@ -67,10 +61,9 @@ public class OptionService {
 
         Product product = options.get(0).getProduct();
         Option newOption = new Option(optionRequest, product);
-        Option saveOption = optionRepository.save(newOption);
+        optionRepository.save(newOption);
     }
 
-    // *optionId: 옵션의 아이디
     @Transactional
     public void updateOption(long productId, long optionId, OptionRequest optionRequest) {
         Option targetOption = optionRepository.findById(optionId)

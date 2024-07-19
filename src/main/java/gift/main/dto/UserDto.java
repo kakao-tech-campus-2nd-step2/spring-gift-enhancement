@@ -8,7 +8,6 @@ public class UserDto {
     private final String password;
     private final Role role;
 
-
     public UserDto(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;

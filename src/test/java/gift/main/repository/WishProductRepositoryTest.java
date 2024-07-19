@@ -27,6 +27,4 @@ class WishProductRepositoryTest {
         this.entityManager = entityManager;
         this.wishProductRepository = wishProductRepository;
     }
-
-
 }

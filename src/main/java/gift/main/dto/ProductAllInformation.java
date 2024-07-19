@@ -4,10 +4,14 @@ import gift.main.entity.Product;
 
 import java.util.List;
 
-public record ProductAllInformation(Long id, String name, int price, String imageUrl, String seller,
-                                    String categoryName,
-                                    List<OptionResponse> optionResponses) {
-
+public record ProductAllInformation(
+        Long id,
+        String name,
+        int price,
+        String imageUrl,
+        String seller,
+        String categoryName,
+        List<OptionResponse> optionResponses) {
 
     public ProductAllInformation(Product product, List<OptionResponse> optionResponses) {
         this(

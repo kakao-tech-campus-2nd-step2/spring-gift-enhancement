@@ -70,9 +70,11 @@ class ProductServiceTest {
         options.add(new OptionRequest("3번", 3));
         OptionListRequest optionListRequest = new OptionListRequest(options);
 
+
         //when
         productService.registerProduct(productRequest, optionListRequest, userVo);
-        entityManager.clear(); //이 부분 주석 처리하면 마지막 절에서 null예외가 발생해 테스트 코드 실패합니다.
+        entityManager.clear();
+
 
         //then
         assertThat(productRepository.existsById(1L)).isTrue();

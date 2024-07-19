@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
@@ -34,7 +33,6 @@ public class UserService {
         return jwtUtil.createToken(user);
 
     }
-
 
     public String loginUser(UserLoginRequest userLoginRequest) {
         User user = userRepository.findByEmailAndPassword(userLoginRequest.email(), userLoginRequest.password())

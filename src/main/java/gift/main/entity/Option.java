@@ -40,7 +40,6 @@ public class Option {
         this.optionName = optionRequest.name();
         this.num = optionRequest.num();
         this.product = product;
-        this.product = product;
     }
 
     public long getId() {

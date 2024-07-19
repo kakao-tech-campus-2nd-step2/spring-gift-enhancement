@@ -33,13 +33,7 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private List<WishProduct> wishProducts;
 
-
-//    @Min(1)
-//    @Max(100000000)
-//    private int totalNumberOfOptions;
-
     public Product() {
-
     }
 
 
