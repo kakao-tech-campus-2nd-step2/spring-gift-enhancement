@@ -118,7 +118,7 @@ public class Product {
         private Integer price;
         private String imageUrl;
         private Category category;
-        private Set<Option> options;
+        private Set<Option> options = new HashSet<>();
 
         public Builder id(Long id) {
             this.id = id;
