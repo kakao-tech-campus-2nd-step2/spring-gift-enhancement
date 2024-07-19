@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.OptionDto;
 import gift.dto.ProductDto;
 import gift.model.Category;
 import gift.model.Option;
@@ -36,30 +37,8 @@ public class ProductService {
     }
 
     public Product addProduct(ProductDto productDto) {
-        Category category = categoryRepository.findById(productDto.getCategoryId())
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
-
-        List<Option> options = productDto.getOptions().stream()
-                .map(optionDto -> new Option(optionDto.getName(), optionDto.getQuantity()))
-                .toList();
-
-        if (options.isEmpty()) {
-            throw new IllegalArgumentException("상품에는 최소 하나의 옵션이 있어야 합니다.");
-        }
-
-        Set<String> optionNames = new HashSet<>();
-        for (Option option : options) {
-            if (option.getName().length() >= 50 || option.getName().length() <= 0) {
-                throw new IllegalArgumentException("옵션 이름은 최대 50자까지 입력 가능합니다.");
-            }
-            if (!optionNames.add(option.getName())) {
-                throw new IllegalArgumentException("옵션 이름이 중복됩니다: " + option.getName());
-            }
-            if (option.getQuantity() <= 0 || option.getQuantity() > 99999999) {
-                throw new IllegalArgumentException("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");
-            }
-        }
-
+        Category category = getCategoryById(productDto.getCategoryId());
+        List<Option> options = validateAndConvertOptions(productDto.getOptions());
         Product product = new Product(
                 productDto.getName(),
                 productDto.getPrice(),
@@ -72,20 +51,8 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, ProductDto productDto) {
-        Category category = categoryRepository.findById(productDto.getCategoryId())
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
-
-        List<Option> options = productDto.getOptions().stream()
-                .map(optionDto -> new Option(optionDto.getName(), optionDto.getQuantity()))
-                .toList();
-
-        Set<String> optionNames = new HashSet<>();
-        for (Option option : options) {
-            if (!optionNames.add(option.getName())) {
-                throw new IllegalArgumentException("옵션 이름이 중복됩니다: " + option.getName());
-            }
-        }
-
+        Category category = getCategoryById(productDto.getCategoryId());
+        List<Option> options = validateAndConvertOptions(productDto.getOptions());
         Product updateProduct = new Product(
                 id,
                 productDto.getName(),
@@ -109,11 +76,8 @@ public class ProductService {
     }
 
     public void updateProductCategoryToNone(Long id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
-
-        Category noneCategory = categoryRepository.findById(1L)
-                .orElseThrow(() -> new NoSuchElementException("없음 카테고리를 찾을 수 없습니다."));
+        Category category = getCategoryById(id);
+        Category noneCategory = getCategoryById(1L);
 
         List<Product> products = productRepository.findByCategory(category);
         for (Product product : products) {
@@ -128,4 +92,34 @@ public class ProductService {
             productRepository.save(updateProduct);
         }
     }
+
+    private Category getCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+    }
+
+    private List<Option> validateAndConvertOptions(List<OptionDto> optionDtos) {
+        if (optionDtos.isEmpty()) {
+            throw new IllegalArgumentException("상품에는 최소 하나의 옵션이 있어야 합니다.");
+        }
+
+        Set<String> optionNames = new HashSet<>();
+        return optionDtos.stream()
+                .map(optionDto -> {
+                    validateOption(optionDto, optionNames);
+                    return new Option(optionDto.getName(), optionDto.getQuantity());
+                })
+                .toList();
+    }
+
+    private void validateOption(OptionDto optionDto, Set<String> optionNames) {
+        if (optionDto.getName().length() >= 50 || optionDto.getName().length() <= 0) {
+            throw new IllegalArgumentException("옵션 이름은 최대 50자까지 입력 가능합니다.");
+        } if (!optionNames.add(optionDto.getName())) {
+            throw new IllegalArgumentException("옵션 이름이 중복됩니다: " + optionDto.getName());
+        } if (optionDto.getQuantity() <= 0 || optionDto.getQuantity() > 99999999) {
+            throw new IllegalArgumentException("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");
+        }
+    }
 }
+
