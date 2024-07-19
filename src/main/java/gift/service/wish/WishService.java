@@ -76,7 +76,7 @@ public class WishService {
         Product product = productReposiotory.findById(productId)
             .orElseThrow(() -> new ProductNotFoundException("제품이 없슴다."));
 
-        Wish wish = wishRepository.findByMember_IdAndProduct_Id(member.getId(), productId)
+        Wish wish = wishRepository.findByMemberIdAndProductId(member.getId(), productId)
             .orElseThrow(() -> new WishProductNotFoundException("위시 제품이 없슴다."));
 
         wishRepository.delete(wish);
