@@ -1,14 +1,11 @@
 package gift.DTO;
 
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
@@ -16,45 +13,48 @@ import java.util.List;
 
 @Entity
 @Table
-public class Product {
+public class Category {
 
-  @OneToMany(mappedBy = "product")
-  private final List<WishList> wishlists = new ArrayList<>();
+  @OneToMany(mappedBy = "category")
+  private final List<Product> products = new ArrayList<>();
 
-  @ManyToOne(cascade = CascadeType.MERGE)
-  @JoinColumn(name = "category_id", nullable = false)
-  private Category category;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @Column(nullable = false, unique = true)
   private String name;
-  @Column(nullable = false)
-  private int price;
+
+  @Column(nullable = false, length = 7)
+  private String color;
+
   @Column(nullable = false)
   private String imageUrl;
 
-  protected Product() {
+  @Lob
+  @Column(nullable = false, columnDefinition = "CLOB")
+  private String description;
+
+  protected Category() {
   }
 
-  public Product(Long id, String name, int price, String imageUrl, Category category) {
+  public Category(Long id, String name, String color, String imageUrl, String description) {
     this.id = id;
     this.name = name;
-    this.price = price;
+    this.color = color;
     this.imageUrl = imageUrl;
-    this.category = category;
+    this.description = description;
   }
 
-  public Product(String name, int price, String imageUrl, Category category) {
+  public Category(String name, String color, String imageUrl, String description) {
     this.name = name;
-    this.price = price;
+    this.color = color;
     this.imageUrl = imageUrl;
-    this.category = category;
+    this.description = description;
   }
 
   public Long getId() {
     return this.id;
-
   }
 
 
@@ -63,8 +63,8 @@ public class Product {
   }
 
 
-  public int getPrice() {
-    return this.price;
+  public String getColor() {
+    return this.color;
   }
 
 
@@ -72,7 +72,9 @@ public class Product {
     return this.imageUrl;
   }
 
-  public Category getCategory() {
-    return this.category;
+
+  public String getDescription() {
+    return this.description;
   }
+
 }

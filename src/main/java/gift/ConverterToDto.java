@@ -1,5 +1,7 @@
 package gift;
 
+import gift.DTO.Category;
+import gift.DTO.CategoryDto;
 import gift.DTO.Member;
 import gift.DTO.MemberDto;
 import gift.DTO.Product;
@@ -11,7 +13,7 @@ public class ConverterToDto {
 
   public static ProductDto convertToProductDto(Product product) {
     ProductDto productDto = new ProductDto(product.getId(), product.getName(),
-      product.getPrice(), product.getImageUrl());
+      product.getPrice(), product.getImageUrl(), convertToCategoryDto(product.getCategory()));
     return productDto;
   }
 
@@ -25,5 +27,11 @@ public class ConverterToDto {
     MemberDto memberDto = convertToUserDto(wishList.getMember());
     WishListDto wishListDto = new WishListDto(wishList.getId(), memberDto, productDto);
     return wishListDto;
+  }
+
+  public static CategoryDto convertToCategoryDto(Category category) {
+    CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName(),
+      category.getColor(), category.getImageUrl(), category.getDescription());
+    return categoryDto;
   }
 }

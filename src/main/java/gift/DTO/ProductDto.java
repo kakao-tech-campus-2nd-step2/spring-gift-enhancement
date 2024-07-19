@@ -23,20 +23,24 @@ public class ProductDto {
   @NotBlank
   private String imageUrl;
 
+  private CategoryDto categoryDto;
+
   public ProductDto() {
   }
 
-  public ProductDto(Long id, String name, int price, String imageUrl) {
+  public ProductDto(Long id, String name, int price, String imageUrl, CategoryDto categoryDto) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
+    this.categoryDto = categoryDto;
   }
 
-  public ProductDto(String name, int price, String imageUrl) {
+  public ProductDto(String name, int price, String imageUrl, CategoryDto categoryDto) {
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
+    this.categoryDto = categoryDto;
   }
 
   public Long getId() {
@@ -55,4 +59,9 @@ public class ProductDto {
     return imageUrl;
   }
 
+  public CategoryDto getCategoryDto() {
+    return this.categoryDto;
+  }
 }
+
+

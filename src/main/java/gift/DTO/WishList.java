@@ -1,5 +1,6 @@
 package gift.DTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,7 @@ public class WishList {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "product_id")
   private Product product;
 
@@ -24,7 +25,7 @@ public class WishList {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  public WishList() {
+  protected WishList() {
   }
 
   public WishList(Long id, Member member, Product product) {
