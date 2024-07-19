@@ -36,3 +36,19 @@ Content-Type: application/json
 - [O] 카테고리 목록 조회
 - [O] 관리자 화면에서 상품 추가 시 카테고리 지정
 - [O] 카테고리 삭제
+
+##step2
+
+Request
+GET /api/products/1/options HTTP/1.1
+Response
+HTTP/1.1 200
+Content-Type: application/json
+
+[
+{
+"id": 464946561,
+"name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+"quantity": 969
+}
+]
