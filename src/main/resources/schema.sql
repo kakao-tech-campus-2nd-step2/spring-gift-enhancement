@@ -36,8 +36,18 @@ CREATE TABLE category (
     description VARCHAR(255)
 );
 
+-- Create OPTION table
+CREATE TABLE options (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    quantity BIGINT NOT NULL,
+    product_id BIGINT NOT NULL
+);
+
 -- Add CONSTRAINT
 ALTER TABLE wish ADD CONSTRAINT fk_wish_user_id FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE wish ADD CONSTRAINT fk_wish_product_id FOREIGN KEY (product_id) REFERENCES products(id);
 
 ALTER TABLE products ADD CONSTRAINT fk_product_category_id_ref_category_id FOREIGN KEY (category_id) REFERENCES category(id);
+
+ALTER TABLE options ADD CONSTRAINT fk_options_product_id FOREIGN KEY (product_id) REFERENCES products(id);
