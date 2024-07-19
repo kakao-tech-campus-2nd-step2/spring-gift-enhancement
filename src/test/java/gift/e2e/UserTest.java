@@ -64,7 +64,7 @@ class UserTest {
         UpdateUser body = new UpdateUser("123456789");
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + commonPath +"1",
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + commonPath +"/1",
             PUT, requestEntity, String.class);
 
         System.out.println(responseEntity);
