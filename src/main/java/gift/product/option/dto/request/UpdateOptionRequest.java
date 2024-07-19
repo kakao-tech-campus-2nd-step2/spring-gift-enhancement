@@ -7,9 +7,6 @@ import org.hibernate.validator.constraints.Length;
 
 public record UpdateOptionRequest(
     @NotNull
-    Long id,
-
-    @NotNull
     @NotEmpty
     @Length(max = 50)
     String name,

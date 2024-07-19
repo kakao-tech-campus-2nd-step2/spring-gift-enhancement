@@ -53,8 +53,8 @@ public class OptionService {
     }
 
     @Transactional
-    public void updateOption(Long productId, UpdateOptionRequest request) {
-        Option option = optionRepository.findById(request.id())
+    public void updateOption(Long productId, Long id, UpdateOptionRequest request) {
+        Option option = optionRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
@@ -65,6 +65,7 @@ public class OptionService {
         option.edit(request);
     }
 
+    @Transactional
     public void deleteOption(Long productId, Long id) {
         Option option = optionRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));

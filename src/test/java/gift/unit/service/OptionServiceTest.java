@@ -150,10 +150,10 @@ public class OptionServiceTest {
         given(optionRepository.findAllByProduct(any())).willReturn(List.of());
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
-        UpdateOptionRequest request = new UpdateOptionRequest(1L, "a", 0);
+        UpdateOptionRequest request = new UpdateOptionRequest("a", 0);
 
         // when & then
-        assertThatThrownBy(() -> optionService.updateOption(1L, request))
+        assertThatThrownBy(() -> optionService.updateOption(1L, 1L, request))
             .isInstanceOf(CustomException.class);
         then(optionRepository).should().findById(any());
     }
@@ -168,10 +168,10 @@ public class OptionServiceTest {
         given(optionRepository.findAllByProduct(any())).willReturn(List.of());
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
-        UpdateOptionRequest request = new UpdateOptionRequest(1L, "a", 100_000_000);
+        UpdateOptionRequest request = new UpdateOptionRequest("a", 100_000_000);
 
         // when & then
-        assertThatThrownBy(() -> optionService.updateOption(1L, request))
+        assertThatThrownBy(() -> optionService.updateOption(1L, 1L, request))
             .isInstanceOf(CustomException.class);
         then(optionRepository).should().findById(any());
     }
@@ -187,11 +187,11 @@ public class OptionServiceTest {
         given(optionRepository.findById(any())).willReturn(Optional.of(option1));
         given(optionRepository.findAllByProduct(any())).willReturn(List.of(option1, option2));
 
-        UpdateOptionRequest newOption = new UpdateOptionRequest(1L, "b", 1000);
+        UpdateOptionRequest newOption = new UpdateOptionRequest("b", 1000);
 
         // when & then
         assertThatThrownBy(
-            () -> optionService.updateOption(1L, newOption))
+            () -> optionService.updateOption(1L, 1L, newOption))
             .isInstanceOf(CustomException.class);
     }
 
@@ -205,10 +205,10 @@ public class OptionServiceTest {
         given(optionRepository.findAllByProduct(any())).willReturn(List.of());
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
-        UpdateOptionRequest request = new UpdateOptionRequest(1L, "!@#$", 100);
+        UpdateOptionRequest request = new UpdateOptionRequest("!@#$", 100);
 
         // when & then
-        assertThatThrownBy(() -> optionService.updateOption(1L, request))
+        assertThatThrownBy(() -> optionService.updateOption(1L, 1L, request))
             .isInstanceOf(CustomException.class);
     }
 
@@ -222,10 +222,10 @@ public class OptionServiceTest {
         given(optionRepository.findAllByProduct(any())).willReturn(List.of());
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
-        UpdateOptionRequest request = new UpdateOptionRequest(1L, "updated", 1000);
+        UpdateOptionRequest request = new UpdateOptionRequest("updated", 1000);
 
         // when
-        optionService.updateOption(1L, request);
+        optionService.updateOption(1L, 1L, request);
 
         // then
         assertThat(option.getName()).isEqualTo("updated");
