@@ -26,6 +26,7 @@
       <th>Price</th>
       <th>Image</th>
       <th>Category</th>
+      <th>Options</th>
       <th>Actions</th>
     </tr>
     </thead>
@@ -36,6 +37,11 @@
       <td th:text="${product.price}"></td>
       <td><img th:src="${product.imageUrl}" alt="Product Image" style="width:100px;height:auto;"/></td>
       <td th:text="${product.category.categoryName}">Product Category</td>
+      <td>
+        <ul>
+          <li th:each="option : ${product.options}" th:text="${option.optionName} + ' (' + ${option.quantity} + ')'"></li>
+        </ul>
+      </td>
       <td>
         <button class="btn btn-warning" th:onclick="'editProduct(' + ${product.id} + ')'">수정</button>
         <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
@@ -96,6 +102,17 @@
                         th:text="${category.categoryName}"></option>
               </select>
             </div>
+            <div id="options">
+              <div class="form-group">
+                <label>Option Name</label>
+                <input type="text" class="form-control" name="optionNames" required pattern="[A-Za-z0-9\s\(\)\[\]\+\-\&\/_]{1,50}" />
+              </div>
+              <div class="form-group">
+                <label>Option Quantity</label>
+                <input type="number" class="form-control" name="optionQuantities" required min="1" max="99999999" />
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addOption()">Add Option</button>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save</button>
@@ -125,6 +142,24 @@
       document.getElementById('price').value = product.price;
       document.getElementById('imageUrl').value = product.imageUrl;
       document.getElementById('category').value = product.category.id;
+      // Clear existing options
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+
+      // Add options
+      product.options.forEach((option, index) => {
+        const optionHtml = `
+          <div class="form-group">
+            <label for="optionName">Option Name</label>
+            <input type="text" class="form-control" name="optionNames" value="${option.name}" required pattern="[A-Za-z0-9\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_]{1,50}" />
+          </div>
+          <div class="form-group">
+            <label for="optionQuantity">Option Quantity</label>
+            <input type="number" class="form-control" name="optionQuantities" value="${option.quantity}" required min="1" max="99999999" />
+          </div>`;
+        optionsDiv.insertAdjacentHTML('beforeend', optionHtml);
+      });
+
       document.getElementById('productForm').action = `/products/update`;
       $('#productModal').modal('show');
     })
@@ -147,6 +182,20 @@
         alert(error.message);
       });
     }
+  }
+
+  function addOption() {
+    const optionsDiv = document.getElementById('options');
+    const optionHtml = `
+      <div class="form-group">
+        <label for="optionName">Option Name</label>
+        <input type="text" class="form-control" name="optionNames" required pattern="[A-Za-z0-9\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_]{1,50}" />
+      </div>
+      <div class="form-group">
+        <label for="optionQuantity">Option Quantity</label>
+        <input type="number" class="form-control" name="optionQuantities" required min="1" max="99999999" />
+      </div>`;
+    optionsDiv.insertAdjacentHTML('beforeend', optionHtml);
   }
 </script>
 </body>
