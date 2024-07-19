@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import gift.common.dto.PageResponse;
 import gift.model.product.CreateProductRequest;
 import gift.model.product.ProductResponse;
+import gift.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
