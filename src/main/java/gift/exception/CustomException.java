@@ -2,9 +2,9 @@ package gift.exception;
 
 public class CustomException extends RuntimeException {
     private final ErrorCode errorCode;
-    private final Long id;
+    private final Object id;
 
-    public CustomException(ErrorCode errorCode, Long id) {
+    public CustomException(ErrorCode errorCode, Object id) {
         super(errorCode.getFormattedMessage(id));
         this.errorCode = errorCode;
         this.id = id;
@@ -14,7 +14,7 @@ public class CustomException extends RuntimeException {
         return errorCode;
     }
 
-    public Long getId() {
+    public Object getId() {
         return id;
     }
 }
