@@ -3,7 +3,8 @@ package gift.dto.request;
 import gift.validation.KakaoApproval;
 import jakarta.validation.constraints.*;
 
-import java.util.Set;
+import java.util.List;
+
 
 
 public class ProductRequest {
@@ -26,14 +27,14 @@ public class ProductRequest {
     @NotNull(message = "카테고리를 입력하세요")
     private String categoryName;
 
-    @NotNull(message = "옵션을 입력하세요.")
-    private Set<OptionRequest> options;
+    @NotEmpty(message = "옵션을 입력하세요.")
+    private List<OptionRequest> options;
 
 
     public ProductRequest(){
     }
 
-    public ProductRequest(String name, Integer price, String imageUrl, String categoryName, Set<OptionRequest> options) {
+    public ProductRequest(String name, Integer price, String imageUrl, String categoryName, List<OptionRequest> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -54,4 +55,8 @@ public class ProductRequest {
     }
 
     public String getCategoryName() {return categoryName; }
+
+    public List<OptionRequest> getOptions() {
+        return options;
+    }
 }

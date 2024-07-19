@@ -1,10 +1,12 @@
 package gift.domain;
 
 
+import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductRequest;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "product")
@@ -34,15 +36,22 @@ public class Product {
 
     public Product() { }
 
-    public Product(String name, Integer price, String imageUrl, Category category) {
-      this.name = name;
-      this.price = price;
-      this.imageUrl = imageUrl;
-      this.category = category;
+    public Product(String name, Integer price, String imageUrl, Category category, List<OptionRequest> optionRequests) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        setOptionsFromRequest(optionRequests);
     }
 
     public Product(ProductRequest productRequest, Category category){
-        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category);
+        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category, productRequest.getOptions());
+    }
+
+    private void setOptionsFromRequest(List<OptionRequest> optionRequests) {
+        this.options = optionRequests.stream()
+                .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(), this))
+                .toList();
     }
 
 
@@ -78,6 +87,7 @@ public class Product {
         this.price = productRequest.getPrice();
         this.imageUrl = productRequest.getImageUrl();
         this.category = category;
+        setOptionsFromRequest(productRequest.getOptions());
     }
 
 }

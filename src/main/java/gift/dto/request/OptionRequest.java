@@ -14,4 +14,12 @@ public class OptionRequest {
     @Max(value = 99999999, message = "옵션 수량은 최대 1억 개 미만이어야 합니다.")
     @NotNull(message = "옵션 수량을 입력하세요.")
     private Integer quantity;
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getQuantity(){
+        return quantity;
+    }
 }

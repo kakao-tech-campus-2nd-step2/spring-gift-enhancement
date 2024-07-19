@@ -39,6 +39,7 @@ public class ProductService {
                 orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
 
         Product product = new Product(productRequest, category);
+
         try {
             return productRepository.save(product);
         } catch (DataIntegrityViolationException e) {
