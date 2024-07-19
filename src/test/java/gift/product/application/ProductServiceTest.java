@@ -4,6 +4,11 @@ import gift.category.domain.Category;
 import gift.category.domain.CategoryRepository;
 import gift.exception.type.KakaoInNameException;
 import gift.exception.type.NotFoundException;
+import gift.exception.type.InvalidProductOptionException;
+import gift.option.application.command.OptionUpdateCommand;
+import gift.option.domain.Option;
+import gift.option.domain.OptionRepository;
+import gift.option.application.command.OptionCreateCommand;
 import gift.product.application.command.ProductCreateCommand;
 import gift.product.application.command.ProductUpdateCommand;
 import gift.product.domain.Product;
@@ -41,6 +46,9 @@ public class ProductServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private OptionRepository optionRepository;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -48,7 +56,7 @@ public class ProductServiceTest {
 
     @AfterEach
     public void tearDown() {
-        reset(productRepository);
+        reset(productRepository, categoryRepository, optionRepository, wishlistRepository);
     }
 
     @Test
@@ -103,9 +111,17 @@ public class ProductServiceTest {
     public void 상품_추가_테스트() {
         // Given
         Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
-        ProductCreateCommand createCommand = new ProductCreateCommand("Product1", 1000, "http://example.com/image1.jpg", category.getId());
+        OptionCreateCommand option1 = new OptionCreateCommand("Option1", 10);
+        OptionCreateCommand option2 = new OptionCreateCommand("Option2", 20);
+        ProductCreateCommand createCommand = new ProductCreateCommand(
+                "Product1",
+                1000,
+                "http://example.com/image1.jpg",
+                category.getId(),
+                List.of(option1, option2)
+        );
 
-        Product product = createCommand.toProduct(new Category("Category", "Color", "Description", "http://example.com/image.jpg"));
+        Product product = createCommand.toProduct(category);
         when(productRepository.save(any(Product.class))).thenReturn(product);
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 
@@ -120,22 +136,39 @@ public class ProductServiceTest {
     public void 상품_업데이트_테스트() {
         // Given
         Category category = new Category(1L, "Original Category", "Color", "Description", "http://example.com/image.jpg");
+
+
+
         Category newCategory = new Category(2L, "New Category", "Color", "Description", "http://example.com/image.jpg");
         Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
-        ProductUpdateCommand updateCommand = new ProductUpdateCommand(1L, "UpdatedProduct", 2000, "http://example.com/image2.jpg", newCategory.getId());
+        Option option1 = new Option(1L, "Option1", 10);
+        Option option2 = new Option(2L, "Option2", 20);
+        ProductUpdateCommand updateCommand = new ProductUpdateCommand(
+                1L,
+                "UpdatedProduct",
+                2000,
+                "http://example.com/image2.jpg",
+                newCategory.getId(),
+                List.of(new OptionUpdateCommand(1L, "Option1", 10), new OptionUpdateCommand(2L, "Option2", 20))
+        );
+
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
         when(categoryRepository.findById(2L)).thenReturn(Optional.of(newCategory));
+        when(optionRepository.findAllById(anyList())).thenReturn(List.of(option1, option2));
 
         // When
         productService.update(updateCommand);
 
         // Then
         verify(productRepository, times(1)).findById(1L);
-        verify(categoryRepository, times(1)).findById(2L); // updatedCategory 검증
+        verify(categoryRepository, times(1)).findById(2L);
+        verify(optionRepository, times(1)).findAllById(anyList());
         assertThat(product.getName()).isEqualTo("UpdatedProduct");
         assertThat(product.getPrice()).isEqualTo(2000);
         assertThat(product.getImageUrl()).isEqualTo("http://example.com/image2.jpg");
         assertThat(product.getCategory()).isEqualTo(newCategory);
+        assertThat(product.getOptions()).hasSize(2);
+        assertThat(product.getOptions().get(0).getQuantity()).isEqualTo(10);
     }
 
     @Test
@@ -143,7 +176,14 @@ public class ProductServiceTest {
         // Given
         Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.empty());
-        ProductUpdateCommand updateCommand = new ProductUpdateCommand(1L, "UpdatedProduct", 2000, "http://example.com/image2.jpg", category.getId());
+        ProductUpdateCommand updateCommand = new ProductUpdateCommand(
+                1L,
+                "UpdatedProduct",
+                2000,
+                "http://example.com/image2.jpg",
+                category.getId(),
+                List.of()
+        );
 
         // When & Then
         assertThatThrownBy(() -> productService.update(updateCommand))
@@ -174,7 +214,14 @@ public class ProductServiceTest {
     void 이름에카카오포함시_상품생성_실패_테스트() {
         // Given
         Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
-        ProductCreateCommand createCommand = new ProductCreateCommand("카카오가 포함된 이름", 1000, "http://example.com/image1.jpg", category.getId());
+        OptionCreateCommand option = new OptionCreateCommand("Option1", 10);
+        ProductCreateCommand createCommand = new ProductCreateCommand(
+                "카카오가 포함된 이름",
+                1000,
+                "http://example.com/image1.jpg",
+                category.getId(),
+                List.of(option)
+        );
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 
         // When & Then
@@ -190,11 +237,64 @@ public class ProductServiceTest {
         Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
-        ProductUpdateCommand updateCommand = new ProductUpdateCommand(1L, "카카오가 포함된 이름", 2000, "http://example.com/image2.jpg", category.getId());
+        ProductUpdateCommand updateCommand = new ProductUpdateCommand(
+                1L,
+                "카카오가 포함된 이름",
+                2000,
+                "http://example.com/image2.jpg",
+                category.getId(),
+                List.of(new OptionUpdateCommand(1L, "Option1", 10))
+        );
+
+        when(optionRepository
+                .findAllById(updateCommand.optionUpdateCommandList().stream()
+                        .map(OptionUpdateCommand::id)
+                        .toList())).thenReturn(List.of(new Option(1L, "Option1", 10)));
 
         // When & Then
         assertThatThrownBy(() -> productService.update(updateCommand))
                 .isInstanceOf(KakaoInNameException.class)
                 .hasMessage("카카오가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.");
+    }
+
+    @Test
+    void 옵션없는상품생성_실패_테스트() {
+        // Given
+        Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
+        ProductCreateCommand createCommand = new ProductCreateCommand(
+                "Product1",
+                1000,
+                "http://example.com/image1.jpg",
+                category.getId(),
+                List.of()
+        );
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+
+        // When & Then
+        assertThatThrownBy(() -> productService.save(createCommand))
+                .isInstanceOf(InvalidProductOptionException.class)
+                .hasMessage("상품은 최소 1개 이상의 옵션을 가져야 합니다.");
+    }
+
+    @Test
+    void 옵션없는상품업데이트_실패_테스트() {
+        // Given
+        Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
+        Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
+        when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        ProductUpdateCommand updateCommand = new ProductUpdateCommand(
+                1L,
+                "UpdatedProduct",
+                2000,
+                "http://example.com/image2.jpg",
+                category.getId(),
+                List.of()
+        );
+
+        // When & Then
+        assertThatThrownBy(() -> productService.update(updateCommand))
+                .isInstanceOf(InvalidProductOptionException.class)
+                .hasMessage("상품은 최소 1개 이상의 옵션을 가져야 합니다.");
     }
 }
