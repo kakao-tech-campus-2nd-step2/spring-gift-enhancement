@@ -2,7 +2,6 @@ package gift.domain;
 
 
 import gift.dto.request.ProductRequest;
-import gift.dto.response.ProductResponse;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -29,6 +28,9 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Option> options;
 
     public Product() { }
 
