@@ -1,5 +1,7 @@
 package gift.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -66,7 +68,17 @@ public class CategoryServiceTest {
 
     @Test
     void updateCategoryTest() {
-        //다시하기
+        Category category = new Category( "test", "##test", "test.jpg", "test");
+        given(categoryRepository.findById(any())).willReturn(Optional.of(category));
+
+        categoryService.updateCategory(new CategoryRequestDto("test1", "##test1", "test1.jpg", "test1"), 1L);
+
+        assertAll(
+            ()->assertThat(category.getName()).isEqualTo("test1"),
+            ()->assertThat(category.getColor()).isEqualTo("##test1"),
+            ()->assertThat(category.getImageUrl()).isEqualTo("test1.jpg"),
+            ()->assertThat(category.getDescription()).isEqualTo("test1")
+        );
     }
 
     @Test

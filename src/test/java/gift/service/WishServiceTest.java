@@ -1,6 +1,7 @@
 package gift.service;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -62,7 +63,14 @@ public class WishServiceTest {
 
     @Test
     void updateWishTest() {
-        //더티 체킹
+        Wish wish = new Wish(new Member(1L, "member1@example.com", "member1", "user"), null, 1);
+        given(wishRepository.findById(any())).willReturn(Optional.of(wish));
+        WishRequestDto wishRequestDto = getWishRequestDto();
+        LoginMemberDto loginMemberDto = getLoginMemberDto();
+
+        wishService.updateProductInWishList(1L, wishRequestDto, loginMemberDto);
+
+        assertThat(wish.getCount()).isEqualTo(3);
     }
 
     @Test
@@ -81,7 +89,7 @@ public class WishServiceTest {
     }
 
     private WishRequestDto getWishRequestDto() {
-        WishRequestDto wishRequestDto = new WishRequestDto(1L);
+        WishRequestDto wishRequestDto = new WishRequestDto(1L, 3);
         return wishRequestDto;
     }
 

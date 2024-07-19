@@ -52,10 +52,10 @@ public class Category {
         return description;
     }
 
-    public void updateInfo(Category category) {
-        this.name = category.getName();
-        this.color = category.getColor();
-        this.imageUrl = category.getImageUrl();
-        this.description = category.getDescription();
+    public void updateInfo(String name, String color, String imageUrl, String description) {
+        this.name = name;
+        this.color = color;
+        this.imageUrl = imageUrl;
+        this.description = description;
     }
 }
