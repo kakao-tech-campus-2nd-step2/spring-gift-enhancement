@@ -54,8 +54,9 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long id) {
-        Category savedCategory = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다."));
-        List< Product> productList = productRepository.findAllByCategory(savedCategory);
+        Category savedCategory = categoryRepository.findById(id)
+            .orElseThrow(() -> new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다."));
+        List<Product> productList = productRepository.findAllByCategory(savedCategory);
         productList.forEach(optionRepository::deleteByProduct);
         productRepository.deleteByCategory(savedCategory);
         categoryRepository.delete(savedCategory);
