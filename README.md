@@ -1,16 +1,16 @@
 # spring-gift-enhancement
 구현할 기능 목록
-1. Category class
-    - Product와 연관 관계 매핑
-2. Category Controller
-    - 추가
-    - 조회(전체)
-    - 조회(id)
-    - 수정
-    - 삭제
-3. Category Service
-4. Category Repository
+1. Option class
+   - Product와 연관 관계 매핑
+   - wishList 수정
+   - 허용된 특수문자만 사용가능, 중복 불가, 글자 수 제한
+2. Product Controller
+   - 옵션 추가
+   - 옵션 조회(전체)
+   - 옵션 조회(id)
+   - 옵션 수정
+   - 옵션 삭제
+3. Option Service
+4. Option Repository
 5. Product API 수정
-    - 상품 추가 시 카테고리 지정
-    - 상품 수정 시 카테고리 수정
-    - 상품 삭제 시 의존성 삭제
+   - 상품 삭제 시 의존성 삭제

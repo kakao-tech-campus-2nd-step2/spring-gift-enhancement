@@ -115,4 +115,24 @@ values ('yoonsu0325@gmail.com',
         'yoonsu0325',
         'thisIsPassword1234');
 
+INSERT INTO OPTIONS (name, quantity, product_id)
+values ('Tall',
+        100,
+        1);
+
+INSERT INTO OPTIONS (name, quantity, product_id)
+values ('Tall',
+        20,
+        2);
+
+INSERT INTO OPTIONS (name, quantity, product_id)
+values ('Grande',
+        30,
+        2);
+
+INSERT INTO OPTIONS (name, quantity, product_id)
+values ('Venti',
+        120,
+        3);
+
 

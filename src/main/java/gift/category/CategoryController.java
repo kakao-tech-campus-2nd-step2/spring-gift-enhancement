@@ -25,7 +25,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public CategoryResponse getCategoriesByID(@PathVariable Long id){
+    public CategoryResponse getCategoryByID(@PathVariable Long id){
         return categoryService.findCategoriesByID(id);
     }
 

@@ -1,5 +1,6 @@
 package gift.wishList;
 
+import gift.option.Option;
 import gift.product.Product;
 import gift.user.User;
 import jakarta.persistence.*;
@@ -13,6 +14,10 @@ public class WishList {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "option_id")
+    private Option option;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
@@ -28,10 +33,10 @@ public class WishList {
 
     }
 
-    public WishList(long id, User user, Product product, long count) {
+    public WishList(long id, User user, Option option, long count) {
         this.id = id;
         this.user = user;
-        this.product = product;
+        this.option = option;
         this.count = count;
     }
 
@@ -39,28 +44,32 @@ public class WishList {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public Option getOption() {
+        return option;
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public long getCount() {
         return count;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public void setCount(long count) {

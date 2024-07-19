@@ -1,11 +1,13 @@
 package gift.product;
 
 import gift.category.Category;
+import gift.option.Option;
 import gift.wishList.WishList;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "PRODUCTS")
@@ -21,11 +23,31 @@ public class Product {
     private String imageUrl;
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "product", orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "product", orphanRemoval = true)
     private List<WishList> wishLists = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    public void addOptions(Option option) {
+        this.options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOption(Option option) {
+        option.setProduct(null);
+        this.options.remove(option);
+    }
+
+    public void removeOptions() {
+        for (Option option : options) {
+            removeOption(option);
+        }
+    }
 
     public void addWishList(WishList wishList) {
         this.wishLists.add(wishList);
@@ -81,10 +103,6 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public List<WishList> getWishLists() {
-        return wishLists;
-    }
-
     public Category getCategory() {
         return category;
     }
@@ -92,4 +110,5 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
 }
