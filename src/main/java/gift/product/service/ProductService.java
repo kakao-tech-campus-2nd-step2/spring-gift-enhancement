@@ -7,7 +7,7 @@ import static gift.util.Utils.TUPLE_WISH_COUNT_KEY;
 import gift.category.model.dto.Category;
 import gift.category.service.CategoryService;
 import gift.product.model.ProductRepository;
-import gift.product.model.dto.option.Option;
+import gift.product.model.dto.option.OptionResponse;
 import gift.product.model.dto.product.CreateProductRequest;
 import gift.product.model.dto.product.Product;
 import gift.product.model.dto.product.ProductResponse;
@@ -102,7 +102,7 @@ public class ProductService {
     private ProductResponse mapTupleToProductResponse(Tuple tuple) {
         Product product = tuple.get(TUPLE_PRODUCT_KEY, Product.class);
         Long wishCount = tuple.get(TUPLE_WISH_COUNT_KEY, Long.class);
-        List<Option> options = optionService.findOptionsByProductId(product.getId());
+        List<OptionResponse> options = optionService.findOptionsByProductId(product.getId());
         return new ProductResponse(product, options, wishCount);
     }
 }

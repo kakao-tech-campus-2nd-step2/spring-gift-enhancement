@@ -3,11 +3,13 @@ package gift.product.service;
 import gift.product.model.OptionRepository;
 import gift.product.model.dto.option.CreateOptionRequest;
 import gift.product.model.dto.option.Option;
+import gift.product.model.dto.option.OptionResponse;
 import gift.product.model.dto.option.UpdateOptionRequest;
 import gift.product.model.dto.product.Product;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +22,11 @@ public class OptionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Option> findOptionsByProductId(Long productId) {
-        return optionRepository.findAllByProductIdAndIsActiveTrue(productId);
+    public List<OptionResponse> findOptionsByProductId(Long productId) {
+        List<Option> options = optionRepository.findAllByProductIdAndIsActiveTrue(productId);
+        return options.stream()
+                .map(o -> new OptionResponse(o.getId(), o.getName(), o.getQuantity(), o.getAdditionalCost()))
+                .collect(Collectors.toList());
     }
 
     @Transactional
