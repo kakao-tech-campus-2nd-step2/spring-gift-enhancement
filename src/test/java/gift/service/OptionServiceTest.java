@@ -13,8 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -64,19 +62,5 @@ class OptionServiceTest {
         // then
         assertThatExceptionOfType(EntityNotFoundException.class)
                 .isThrownBy(() -> optionService.updateById(request));
-    }
-
-    @Test
-    @DisplayName("옵션 최소 개수 테스트[실패] - 옵션이 1개 미만")
-    void deleteByIdAndProductId() {
-        Long id = 1L;
-        Long productId = 1L;
-        given(optionRepository.findAllByProductIdFetchJoin(eq(productId)))
-                .willReturn(new ArrayList<>());
-
-        // when
-        // then
-        assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(()->optionService.deleteByIdAndProductId(id, productId));
     }
 }

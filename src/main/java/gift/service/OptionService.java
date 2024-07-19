@@ -53,15 +53,6 @@ public class OptionService {
         return OptionResponse.from(option);
     }
 
-    @Transactional
-    public void deleteByIdAndProductId(Long id, Long productId) {
-        List<Option> options = optionRepository.findAllByProductIdFetchJoin(productId);
-        if (options.size() <= 1) {
-            throw new IllegalArgumentException("At least 1 option is required");
-        }
-        optionRepository.deleteById(id);
-    }
-
     private void checkProductExist(Long productId) {
         if(!productRepository.existsById(productId)) {
             throw new EntityNotFoundException("Product with id " + productId + " not found");

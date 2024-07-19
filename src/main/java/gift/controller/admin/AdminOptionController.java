@@ -3,6 +3,7 @@ package gift.controller.admin;
 import gift.controller.dto.request.OptionRequest;
 import gift.controller.dto.response.OptionResponse;
 import gift.service.OptionService;
+import gift.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/option")
 public class AdminOptionController {
     private final OptionService optionService;
+    private final ProductService productService;
 
-    public AdminOptionController(OptionService optionService) {
+    public AdminOptionController(OptionService optionService, ProductService productService) {
         this.optionService = optionService;
+        this.productService = productService;
     }
 
     @GetMapping("/new")
@@ -52,7 +55,7 @@ public class AdminOptionController {
     public ResponseEntity<Void> deleteOptionById(
             @PathVariable("productId") @NotNull @Min(1) Long productId,
             @PathVariable("id") @NotNull @Min(1) Long id) {
-        optionService.deleteByIdAndProductId(id, productId);
+        productService.deleteByIdAndOptionId(productId, id);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,6 +1,7 @@
 package gift.model;
 
 import gift.common.exception.DuplicateDataException;
+import gift.common.exception.EntityNotFoundException;
 import jakarta.persistence.*;
 import org.hibernate.annotations.BatchSize;
 
@@ -25,7 +26,7 @@ public class Product extends BasicEntity{
     private Category category;
 
     @BatchSize(size = 100)
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
     protected Product() {}
@@ -62,6 +63,20 @@ public class Product extends BasicEntity{
         checkDuplicateName(entity.getName());
         entity.setProduct(this);
         options.add(entity);
+    }
+
+    public void subOption(Option entity) {
+        if (options.size() <= 1) {
+            throw new IllegalArgumentException("At least 1 option is required");
+        }
+        options.remove(entity);
+    }
+
+    public Option findOptionByOptionId(Long optionId) {
+        return options.stream()
+                .filter(option -> option.getId().equals(optionId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Option with id " + optionId + " not found"));
     }
 
     public void checkDuplicateName(String theirName) {

@@ -29,14 +29,14 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public PagingResponse<ProductResponse.WithOption> findAllProductPaging(Pageable pageable) {
-        Page<ProductResponse.WithOption> pages = productRepository.findAllFetchJoin(pageable)
+        Page<ProductResponse.WithOption> pages = productRepository.findProductAndCategoryFetchJoin(pageable)
                 .map(ProductResponse.WithOption::from);
         return PagingResponse.from(pages);
     }
 
     @Transactional(readOnly = true)
     public ProductResponse.WithOption findById(Long id) {
-        Product product = productRepository.findByIdFetchJoin(id)
+        Product product = productRepository.findAllByIdFetchJoin(id)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Product with id " + id + " not found"));
         return ProductResponse.WithOption.from(product);
@@ -73,5 +73,13 @@ public class ProductService {
         return products.stream()
                 .map(ProductResponse.Info::from)
                 .toList();
+    }
+
+    @Transactional
+    public void deleteByIdAndOptionId(Long id, Long optionId) {
+        Product product = productRepository.findProductAndOptionByIdFetchJoin(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+        Option option = product.findOptionByOptionId(optionId);
+        product.subOption(option);
     }
 }

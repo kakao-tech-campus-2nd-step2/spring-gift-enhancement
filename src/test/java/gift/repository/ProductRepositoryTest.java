@@ -86,7 +86,7 @@ class ProductRepositoryTest {
 
     @Test
     @DisplayName("카테고리와 fetch join하여 모든 상품 조회 테스트[성공]")
-    void findAllFetchJoin() {
+    void findProductAndCategoryFetchJoin() {
         // given
         String[] name = {"name1", "name2"};
         int price = 1000;
@@ -105,7 +105,7 @@ class ProductRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        Page<Product> actuals = productRepository.findAllFetchJoin(pageable);
+        Page<Product> actuals = productRepository.findProductAndCategoryFetchJoin(pageable);
 
         // then
         assertThat(actuals.getTotalElements()).isEqualTo(2);

@@ -44,7 +44,7 @@ class ProductTest {
         String oName1 = "oName1";
         String oName2 = "oName2";
         Category category = new Category();
-        List<Option> options = List.of(new Option("oName1", 100), new Option("oName2", 100));
+        List<Option> options = List.of(new Option(oName1, 100), new Option(oName2, 100));
         String pname = "pname";
         int price = 1_000;
         String purl = "purl";
@@ -59,5 +59,62 @@ class ProductTest {
 
         assertThat(product.getOptions().get(0).getName()).isEqualTo(oName1);
         assertThat(product.getOptions().get(1).getName()).isEqualTo(oName2);
+    }
+
+    @Test
+    @DisplayName("Product에서 Option 찾기 테스트[성공]")
+    void findOptionByOptionId() {
+        // given
+        String oName1 = "oName1";
+        String oName2 = "oName2";
+        Category category = new Category();
+        List<Option> options = List.of(
+                new Option(1L, null, null, oName1, 100, null),
+                new Option(2L, null, null, oName2, 100, null));
+        Product product = new Product("pname", 123, "purl", category, options);
+
+        // when
+        Option option = product.findOptionByOptionId(1L);
+
+        // then
+        assertThat(option.getId()).isEqualTo(1L);
+        assertThat(option.getName()).isEqualTo(oName1);
+    }
+
+    @Test
+    @DisplayName("Product에서 Option 제거 테스트[성공]")
+    void subOption() {
+        // given
+        String oName1 = "oName1";
+        String oName2 = "oName2";
+        Category category = new Category();
+        List<Option> options = List.of(
+                new Option(1L, null, null, oName1, 100, null),
+                new Option(2L, null, null, oName2, 100, null));
+
+        Product product = new Product("pname", 123, "purl", category, options);
+        Option option = product.findOptionByOptionId(1L);
+
+        // when
+        product.subOption(option);
+
+        // then
+        assertThat(product.getOptions()).hasSize(options.size() - 1);
+    }
+
+    @Test
+    @DisplayName("Product에서 Option 제거 테스트[실패]-option은 최소 1개 이상")
+    void subOptionFail() {
+        // given
+        String oName1 = "oName1";
+        Category category = new Category();
+        List<Option> options = List.of(new Option(1L, null, null, oName1, 100, null));
+        Product product = new Product("pname", 123, "purl", category, options);
+        Option option = product.findOptionByOptionId(1L);
+
+        // when
+        // then
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> product.subOption(option));
     }
 }
