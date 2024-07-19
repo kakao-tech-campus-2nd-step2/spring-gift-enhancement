@@ -2,9 +2,12 @@ package gift.product.business.service;
 
 import gift.product.business.dto.OptionDto;
 import gift.product.business.dto.OptionRegisterDto;
+import gift.product.business.dto.OptionUpdateDto;
+import gift.product.business.pojo.PojoOptions;
 import gift.product.persistence.repository.OptionRepository;
 import gift.product.persistence.repository.ProductRepository;
 import java.util.List;
+import java.util.function.Function;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +24,7 @@ public class OptionService {
 
     @Transactional
     public List<Long> createOption(List<OptionRegisterDto> optionRegisterDtos, Long productId) {
-        if(isOptionNamesDuplicate(optionRegisterDtos)) {
+        if (isOptionNamesDuplicate(optionRegisterDtos, OptionRegisterDto::name)) {
             throw new IllegalArgumentException("옵션 이름이 중복되었습니다.");
         }
         var product = productRepository.getReferencedProduct(productId);
@@ -37,10 +40,23 @@ public class OptionService {
         return OptionDto.of(options);
     }
 
-    private boolean isOptionNamesDuplicate(List<OptionRegisterDto> optionRegisterDtos) {
-        return optionRegisterDtos.stream()
-            .map(OptionRegisterDto::name)
+    @Transactional
+    public List<Long> updateOptions(List<OptionUpdateDto> optionUpdateDtos, Long productId) {
+        if (isOptionNamesDuplicate(optionUpdateDtos, OptionUpdateDto::name)) {
+            throw new IllegalArgumentException("옵션 이름이 중복되었습니다.");
+        }
+        var options = optionRepository.getOptionsByProductId(productId);
+        var pojoOptions = new PojoOptions(options);
+        pojoOptions.updateOptions(optionUpdateDtos);
+
+        return optionRepository.saveAll(pojoOptions.getOptions());
+    }
+
+    private <T> boolean isOptionNamesDuplicate(List<T> optionDtos,
+        Function<T, String> nameExtractor) {
+        return optionDtos.stream()
+            .map(nameExtractor)
             .distinct()
-            .count() != optionRegisterDtos.size();
+            .count() != optionDtos.size();
     }
 }

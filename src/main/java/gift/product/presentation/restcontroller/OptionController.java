@@ -1,7 +1,8 @@
 package gift.product.presentation.restcontroller;
 
 import gift.product.business.service.OptionService;
-import gift.product.presentation.dto.RequestOptionsDto;
+import gift.product.presentation.dto.RequestOptionCreateDto;
+import gift.product.presentation.dto.RequestOptionUpdateDto;
 import gift.product.presentation.dto.ResponseOptionDto;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,9 +27,11 @@ public class OptionController {
 
     @PostMapping("/{id}/options")
     public ResponseEntity<List<Long>> createOption(
-        @RequestBody @Valid RequestOptionsDto requestOptionsDto,
+        @RequestBody @Valid List<RequestOptionCreateDto> requestOptionsDtos,
         @PathVariable("id") Long productId) {
-        var optionRegisterDtos = requestOptionsDto.toOptionRegisterDtos();
+        var optionRegisterDtos = requestOptionsDtos.stream()
+            .map(RequestOptionCreateDto::toOptionRegisterDto)
+            .toList();
         var optionIds = optionService.createOption(optionRegisterDtos, productId);
         return ResponseEntity.ok(optionIds);
     }
@@ -39,5 +43,17 @@ public class OptionController {
             .map(ResponseOptionDto::from)
             .toList();
         return ResponseEntity.ok(responseOptionDtos);
+    }
+
+    @PutMapping("/{id}/options")
+    public ResponseEntity<List<Long>> updateOption(
+        @RequestBody @Valid List<RequestOptionUpdateDto> requestOptionsDto,
+        @PathVariable("id") Long productId) {
+        var optionUpdateDtos = requestOptionsDto.stream()
+            .map(RequestOptionUpdateDto::toOptionUpdateDto)
+            .toList();
+
+        var optionIds = optionService.updateOptions(optionUpdateDtos, productId);
+        return ResponseEntity.ok(optionIds);
     }
 }

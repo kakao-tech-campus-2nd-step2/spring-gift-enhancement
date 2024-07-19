@@ -1,0 +1,42 @@
+package gift.product.business.pojo;
+
+import gift.product.business.dto.OptionUpdateDto;
+import gift.product.persistence.entity.Option;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class PojoOptions {
+
+    private Map<Long, Option> optionMap;
+
+    public PojoOptions(List<Option> options) {
+        this.optionMap = options.stream()
+            .collect(Collectors.toMap(Option::getId, Function.identity()));
+    }
+
+    public List<Option> getOptions() {
+        return List.copyOf(optionMap.values());
+    }
+
+    public void updateOptions(List<OptionUpdateDto> optionUpdateDtos) {
+        for (var optionUpdateDto : optionUpdateDtos) {
+            var option = optionMap.get(optionUpdateDto.id());
+            option.update(optionUpdateDto.name(), optionUpdateDto.quantity());
+        }
+        checkDuplicate();
+    }
+
+    private void checkDuplicate() {
+        int size = optionMap.size();
+
+        if (size != optionMap.values().stream()
+            .map(Option::getName)
+            .collect(Collectors.toSet())
+            .size()) {
+            throw new IllegalArgumentException("옵션 이름이 중복되었습니다.");
+        }
+    }
+
+}
