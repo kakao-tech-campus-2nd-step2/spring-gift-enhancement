@@ -7,29 +7,29 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class InitDb {
+public class InitialDBConstructor {
 
-    private final Init init;
+    private final InitDb Initdb;
 
-    public InitDb(Init init) {
-        this.init = init;
+    public InitialDBConstructor(InitDb Initdb) {
+        this.Initdb = Initdb;
     }
 
     @PostConstruct
-    public void init(){
-        init.init1();
+    public void initData(){
+        Initdb.initData();
     }
 
     @Component
     @Transactional
-    static class Init{
+    static class InitDb{
         private final EntityManager em;
 
-        public Init(EntityManager em) {
+        public InitDb(EntityManager em) {
             this.em = em;
         }
 
-        public void init1(){
+        public void initData(){
             Category category1 = new Category("고기", "#0001");
             Category category2 = new Category("생선", "#0002");
             Category category3 = new Category("음료", "#0003");
