@@ -84,7 +84,7 @@ public class ProductService {
         try {
             productRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("An error occurred while deleting the product.", e);
+            throw new RuntimeException("상품 삭제 중 오류가 발생했습니다");
         }
     }
 }

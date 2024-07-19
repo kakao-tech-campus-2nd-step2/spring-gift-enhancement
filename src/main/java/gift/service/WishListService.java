@@ -6,6 +6,7 @@ import gift.entity.ProductEntity;
 import gift.entity.WishListEntity;
 import gift.domain.WishListDTO;
 import gift.repository.WishListRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
@@ -33,10 +34,10 @@ public class WishListService {
 
     private WishListEntity dtoToEntity(Long userId, ProductDTO product) throws Exception {
         MemberEntity memberEntity = memberRepository.findById(userId)
-            .orElseThrow(() -> new Exception("유저가 존재하지 않습니다."));
+            .orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다."));
 
         ProductEntity productEntity = productRepository.findById(product.getId())
-            .orElseThrow(() -> new Exception("상품이 존재하지 않습니다."));
+            .orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
 
         return new WishListEntity(productEntity, memberEntity);
     }
