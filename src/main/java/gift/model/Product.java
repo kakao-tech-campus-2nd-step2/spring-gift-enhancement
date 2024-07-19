@@ -2,6 +2,7 @@ package gift.model;
 
 import gift.common.exception.DuplicateDataException;
 import jakarta.persistence.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Product extends BasicEntity{
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Option> options = new ArrayList<>();
 

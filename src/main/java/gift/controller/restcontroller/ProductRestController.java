@@ -34,10 +34,10 @@ public class ProductRestController {
 
     @GetMapping("/products")
     @Operation(summary = "전체 상품 조회", description = "전체 상품을 조회합니다.")
-    public ResponseEntity<PagingResponse<ProductResponse.Info>> getProducts(
+    public ResponseEntity<PagingResponse<ProductResponse.WithOption>> getProducts(
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        PagingResponse<ProductResponse.Info> responses = productService.findAllProductPaging(pageable);
+        PagingResponse<ProductResponse.WithOption> responses = productService.findAllProductPaging(pageable);
         return ResponseEntity.ok().body(responses);
     }
 

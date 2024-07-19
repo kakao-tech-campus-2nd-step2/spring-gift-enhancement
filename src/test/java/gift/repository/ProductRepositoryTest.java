@@ -92,12 +92,13 @@ class ProductRepositoryTest {
         int price = 1000;
         String imageUrl = "imageUrl1";
         Category category = categoryRepository.save(new Category("name", "#123", "url", ""));
-        List<Option> options1 = List.of(new Option("oName", 123));
-        List<Option> options2 = List.of(new Option("oName", 123));
+        List<Option>[] options = new List[2];
+        options[0] = List.of(new Option("oName", 123));
+        options[1] = List.of(new Option("oName", 123));
 
         Product[] product = {
-                new Product(name[0], price, imageUrl, category, options1),
-                new Product(name[1], price, imageUrl, category, options2)
+                new Product(name[0], price, imageUrl, category, options[0]),
+                new Product(name[1], price, imageUrl, category, options[1])
         };
         productRepository.save(product[0]);
         productRepository.save(product[1]);
@@ -112,6 +113,7 @@ class ProductRepositoryTest {
         assertThat(actuals.getNumber()).isEqualTo(0);
         for (int i = 0; i < actuals.getContent().size(); i++) {
             assertThat(actuals.getContent().get(i)).isEqualTo(product[i]);
+            assertThat(actuals.getContent().get(i).getOptions().get(0)).isEqualTo(options[i].get(0));
         }
     }
 

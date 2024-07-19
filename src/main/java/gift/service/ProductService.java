@@ -28,9 +28,9 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public PagingResponse<ProductResponse.Info> findAllProductPaging(Pageable pageable) {
-        Page<ProductResponse.Info> pages = productRepository.findAllFetchJoin(pageable)
-                .map(ProductResponse.Info::from);
+    public PagingResponse<ProductResponse.WithOption> findAllProductPaging(Pageable pageable) {
+        Page<ProductResponse.WithOption> pages = productRepository.findAllFetchJoin(pageable)
+                .map(ProductResponse.WithOption::from);
         return PagingResponse.from(pages);
     }
 
