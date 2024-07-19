@@ -6,6 +6,7 @@ import gift.domain.service.CategoryService;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 public record ProductRequest(
     @NotNull
@@ -18,11 +19,13 @@ public record ProductRequest(
     @NotNull
     String imageUrl,
     @NotNull
-    Long categoryId
+    Long categoryId,
+    @NotNull
+    List<OptionRequest> options
     ) {
 
     public static ProductRequest of(Product product) {
-        return new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getId());
+        return new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getId(), OptionRequest.of(product.getOptions()));
     }
 
     public Product toEntity(CategoryService categoryService) {

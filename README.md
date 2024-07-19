@@ -275,7 +275,7 @@ Content-Type: application/json
     - image_url: string
     - category_id: int (fk, unique, not null)
     - [x] options: list<Option>
-      - [ ] option과 관련되어 상품 도메인 DTO 수정 
+      - [x] option과 관련된 상품 도메인 DTO 수정 
 - [x] 상품을 저장하는 데이터베이스 연동
   - [x] Jpa Repository
   - [x] 엔티티 클래스 및 예제 데이터 구비
