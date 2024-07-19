@@ -30,7 +30,7 @@ public class WishListService {
     private final MemberDatabaseValidator memberDatabaseValidator;
     private final ProductDatabaseValidator productDatabaseValidator;
 
-    @Autowired
+
     public WishListService(MemberRepository memberRepository, WishRepository wishRepository,
             MemberDatabaseValidator memberDatabaseValidator, ProductDatabaseValidator productDatabaseValidator) {
         this.memberRepository = memberRepository;

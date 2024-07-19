@@ -30,7 +30,6 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final CategoryDatabaseValidator categoryDatabaseValidator;
 
-    @Autowired
     public ProductService(ProductRepository productRepository, WishRepository wishRepository,
             CategoryRepository categoryRepository,
             CategoryDatabaseValidator categoryDatabaseValidator) {
