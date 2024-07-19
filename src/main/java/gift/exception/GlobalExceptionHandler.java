@@ -2,6 +2,7 @@ package gift.exception;
 
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
@@ -32,8 +33,7 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler({AlreadyExistMemberException.class, NoSuchMemberException.class,
-        InvalidPasswordException.class, DuplicateOptionNameException.class})
+    @ExceptionHandler({AlreadyExistMemberException.class, NoSuchMemberException.class, InvalidPasswordException.class})
     public ProblemDetail handleRuntimeException(RuntimeException runtimeException) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setDetail(runtimeException.getMessage());
@@ -44,6 +44,13 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleInvalidAccessTokenException(InvalidAccessTokenException invalidAccessTokenException) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
         problemDetail.setDetail(invalidAccessTokenException.getMessage());
+        return problemDetail;
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ProblemDetail handleDataIntegrityViolationException(DataIntegrityViolationException dataIntegrityViolationException) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setDetail(dataIntegrityViolationException.getMessage());
         return problemDetail;
     }
 }

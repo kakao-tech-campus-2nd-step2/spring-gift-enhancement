@@ -9,8 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(name = "option", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"name", "product_id"})
+})
 public class Option {
 
     @Id
@@ -44,9 +49,5 @@ public class Option {
 
     public OptionDTO toDTO() {
         return new OptionDTO(id, name, quantity);
-    }
-
-    public boolean isSameName(String name) {
-        return name.equals(this.name);
     }
 }

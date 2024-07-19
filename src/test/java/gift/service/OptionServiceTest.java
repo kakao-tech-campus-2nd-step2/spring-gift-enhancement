@@ -14,7 +14,6 @@ import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.OptionDTO;
-import gift.exception.DuplicateOptionNameException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
@@ -26,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @ExtendWith(MockitoExtension.class)
 public class OptionServiceTest {
@@ -83,11 +83,11 @@ public class OptionServiceTest {
         // given
         Option option = createOption(1L, "test", product);
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
-        given(optionRepository.findByProduct(any(Product.class))).willReturn(List.of(option));
+        given(optionRepository.save(any(Option.class))).willThrow(DataIntegrityViolationException.class);
 
         // when
         // then
-        assertThatExceptionOfType(DuplicateOptionNameException.class)
+        assertThatExceptionOfType(DataIntegrityViolationException.class)
             .isThrownBy(() -> optionService.addOption(product.getId(), option.toDTO()));
     }
 
