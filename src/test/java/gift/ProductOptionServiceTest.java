@@ -53,4 +53,55 @@ public class ProductOptionServiceTest {
         assertNull(result);
         verify(productOptionRepository, times(1)).findById(1L);
     }
+    @Test
+    public void testSubtractOptionQuantity_Success() {
+        Long optionId = 1L;
+        int initialQuantity = 10;
+        int quantityToSubtract = 5;
+        ProductOption option = new ProductOption();
+        option.setId(optionId);
+        option.setName("Test Option");
+        option.setQuantity(initialQuantity);
+
+        when(productOptionRepository.findById(optionId)).thenReturn(Optional.of(option));
+
+        productOptionService.subtractOptionQuantity(optionId, quantityToSubtract);
+
+        assertEquals(initialQuantity - quantityToSubtract, option.getQuantity());
+        verify(productOptionRepository, times(1)).save(option);
+    }
+
+    @Test
+    public void testSubtractOptionQuantity_OptionNotFound() {
+        Long optionId = 1L;
+        int quantityToSubtract = 5;
+
+        when(productOptionRepository.findById(optionId)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            productOptionService.subtractOptionQuantity(optionId, quantityToSubtract);
+        });
+
+        verify(productOptionRepository, never()).save(any(ProductOption.class));
+    }
+
+    @Test
+    public void testSubtractOptionQuantity_InsufficientQuantity() {
+        Long optionId = 1L;
+        int initialQuantity = 10;
+        int quantityToSubtract = 15;
+        ProductOption option = new ProductOption();
+        option.setId(optionId);
+        option.setName("Test Option");
+        option.setQuantity(initialQuantity);
+
+        when(productOptionRepository.findById(optionId)).thenReturn(Optional.of(option));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            productOptionService.subtractOptionQuantity(optionId, quantityToSubtract);
+        });
+
+        assertEquals(initialQuantity, option.getQuantity());
+        verify(productOptionRepository, never()).save(option);
+    }
 }
