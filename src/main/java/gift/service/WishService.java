@@ -1,7 +1,7 @@
 package gift.service;
 
 import gift.domain.Member;
-import gift.domain.Products;
+import gift.domain.Product;
 import gift.domain.Wish;
 import gift.repository.WishRepository;
 import gift.repository.MemberRepository;
@@ -32,7 +32,7 @@ public class WishService {
     public void addWish(Long memberId, String productName) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
-        Products product = productRepository.findByName(productName)
+        Product product = productRepository.findByName(productName)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
         if (!wishRepository.existsByMemberAndProduct(member, product)) {
@@ -44,7 +44,7 @@ public class WishService {
     public void removeWish(Long memberId, String productName) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
-        Products product = productRepository.findByName(productName)
+        Product product = productRepository.findByName(productName)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
         wishRepository.deleteByMemberAndProduct(member, product);
     }

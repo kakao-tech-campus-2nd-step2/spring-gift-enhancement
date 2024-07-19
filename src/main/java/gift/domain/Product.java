@@ -1,15 +1,18 @@
 package gift.domain;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 public class Product extends BaseEntity {
 
     @Column(nullable = false, length = 15)
@@ -21,14 +24,32 @@ public class Product extends BaseEntity {
     @Column(nullable = false, name = "image_url")
     private String imageUrl;
 
-    public Product() {
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Option> options = new HashSet<>();
+
+
+    protected Product() {
     }
 
-    public Product(String name, int price, String imageUrl) {
+    public Product(String name, int price, String imageUrl, Category category) {
         super();
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
+    public Product(String name, int price, String imageUrl, Category category, Set<Option> options) {
+        super();
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.options = options;
     }
 
     public String getName() {
@@ -43,36 +64,41 @@ public class Product extends BaseEntity {
         return imageUrl;
     }
 
-    public static class Builder {
-        private Long id;
-        private String name;
-        private int price;
-        private String imageUrl;
+    public Category getCategory() {
+        return category;
+    }
 
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
+    public void updateName(String name) {
+        this.name = name;
+    }
 
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
+    public void updatePrice(int price) {
+        this.price = price;
+    }
 
-        public Builder price(int price) {
-            this.price = price;
-            return this;
-        }
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-        public Builder imageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
-            return this;
-        }
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
 
-        public Product build() {
-            Product product = new Product(name, price, imageUrl);
-            product.id = this.id;
-            return product;
-        }
+    public void addOption(Option option) {
+        this.options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOption(Option option) {
+        this.options.remove(option);
+        option.setProduct(null);
+    }
+
+    public Set<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(Set<Option> options) {
+        this.options = options;
     }
 }

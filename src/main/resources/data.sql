@@ -1,4 +1,4 @@
-INSERT INTO categories (name) VALUES
+INSERT INTO category (name) VALUES
 ('교환권'),
 ('상품권'),
 ('뷰티'),

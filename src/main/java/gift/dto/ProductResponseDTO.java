@@ -17,18 +17,6 @@ public class ProductResponseDTO {
         this.categoryId = categoryId;
     }
 
-
-
-    public ProductRequestDTO toRequestDTO() {
-        ProductRequestDTO dto = new ProductRequestDTO();
-        dto.setId(this.id);
-        dto.setName(this.name);
-        dto.setPrice(this.price);
-        dto.setImageUrl(this.imageUrl);
-        dto.setCategoryId(this.categoryId);
-        return dto;
-    }
-
     public Long getId() {
         return id;
     }

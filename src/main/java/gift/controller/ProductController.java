@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.dto.ProductRequestDTO;
+import gift.dto.ProductResponseDTO;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -58,7 +59,14 @@ public class ProductController {
 
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
-        ProductRequestDTO productRequestDTO = productService.getProductById(id).toRequestDTO();
+        ProductResponseDTO productResponseDTO = productService.getProductById(id);
+        ProductRequestDTO productRequestDTO = new ProductRequestDTO(
+                productResponseDTO.getName(),
+                productResponseDTO.getPrice(),
+                productResponseDTO.getImageUrl(),
+                productResponseDTO.getCategoryId()
+        );
+        productRequestDTO.setId(id); // 수정 폼에서 ID를 사용할 수 있도록 설정
         model.addAttribute("productRequestDTO", productRequestDTO);
         model.addAttribute("categories", categoryService.getAllCategories());
         return "productForm";
@@ -80,6 +88,7 @@ public class ProductController {
         productService.updateProduct(id, productRequestDTO);
         return "redirect:/api/products";
     }
+
     @DeleteMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
