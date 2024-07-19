@@ -50,17 +50,20 @@ public class WishListTest {
         token = responseEntity.getBody().substring(startIndex, endIndex);
     }
 
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(token);
+        return headers;
+    }
+
     @Test
     @DisplayName("위시리스트 추가")
     @DirtiesContext
     void addWishList() {
         Product product = new Product(3L,"Sample3", 3000L, "http://image3.jpg", 1L,null);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
-        HttpEntity<Product> requestEntity = new HttpEntity<>(product, headers);
+        HttpEntity<Product> requestEntity = new HttpEntity<>(product, getHttpHeaders());
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/wishlist", HttpMethod.POST,
             requestEntity, String.class);
 
@@ -71,11 +74,7 @@ public class WishListTest {
     @DisplayName("위시리스트 조회")
     @DirtiesContext
     void getWishList() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(getHttpHeaders());
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/wishlist", HttpMethod.GET,
             requestEntity, String.class);
 
@@ -86,14 +85,11 @@ public class WishListTest {
     @DisplayName("위시리스트 삭제")
     @DirtiesContext
     void deleteWishList() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(getHttpHeaders());
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/wishlist/4", HttpMethod.DELETE,
             requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+
 }

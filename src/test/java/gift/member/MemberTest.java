@@ -49,17 +49,20 @@ public class MemberTest {
 
     }
 
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(token);
+        return headers;
+    }
+
     @Test
     @DisplayName("로그인 확인")
     @DirtiesContext
     void login() {
         Member member = new Member("admin@example.com", "1234");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
-        HttpEntity<Member> requestEntity = new HttpEntity<>(member, headers);
+        HttpEntity<Member> requestEntity = new HttpEntity<>(member, getHttpHeaders());
         ResponseEntity<String> loginResponse = restTemplate.exchange(url + "/members/login", POST, requestEntity, String.class);
 
         assertThat(loginResponse.getStatusCode()).isEqualTo(OK);

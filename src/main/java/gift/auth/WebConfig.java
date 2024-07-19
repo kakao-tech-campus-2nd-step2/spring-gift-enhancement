@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
             .addPathPatterns("/**") // 모든 요청에 대해 인터셉터를 적용
-            .excludePathPatterns("/members/register", "/members/login", "/api/categories/**"); // 로그인 및 회원가입 요청은 제외
+            .excludePathPatterns("/members/register", "/members/login"); // 로그인 및 회원가입 요청은 제외
     }
 
     @Override

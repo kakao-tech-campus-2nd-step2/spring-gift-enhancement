@@ -30,7 +30,7 @@ public class ProductRepositoryTest {
     @DisplayName("상품 추가 기능 확인")
     void save() {
         //given
-        ProductEntity expectedEntity = new ProductEntity("아이스 아메리카노", 4500L, "https://image1.jpg",categoryEntity);
+        ProductEntity expectedEntity = new ProductEntity("아이스 아메리카노", 4500L, "https://image1.jpg",categoryEntity,null);
 
         //when
         ProductEntity actualEntity = productRepository.save(expectedEntity);
@@ -46,8 +46,8 @@ public class ProductRepositoryTest {
     @DisplayName("상품 이름으로 검색")
     void findByNameContaining() {
         //given
-        ProductEntity productEntity1 = new ProductEntity("아이스 아메리카노", 4500L, "https://image4.jpg", categoryEntity);
-        ProductEntity productEntity2 = new ProductEntity("핫 아메리카노", 4500L, "https://image5.jpg", categoryEntity);
+        ProductEntity productEntity1 = new ProductEntity("아이스 아메리카노", 4500L, "https://image4.jpg", categoryEntity,null);
+        ProductEntity productEntity2 = new ProductEntity("핫 아메리카노", 4500L, "https://image5.jpg", categoryEntity,null);
         String name = "아메리카노";
 
         //when
@@ -66,9 +66,9 @@ public class ProductRepositoryTest {
     @DisplayName("상품 전체 조회 기능 확인")
     void findAll() {
         //given
-        ProductEntity productEntity1 = new ProductEntity("아이스 아메리카노", 4500L, "https://image4.jpg", categoryEntity);
-        ProductEntity productEntity2 = new ProductEntity("핫 아메리카노", 4500L, "https://image5.jpg", categoryEntity);
-        ProductEntity productEntity3 = new ProductEntity("밀크쉐이크", 3000L, "https://image3.jpg",categoryEntity);
+        ProductEntity productEntity1 = new ProductEntity("아이스 아메리카노", 4500L, "https://image4.jpg", categoryEntity,null);
+        ProductEntity productEntity2 = new ProductEntity("핫 아메리카노", 4500L, "https://image5.jpg", categoryEntity,null);
+        ProductEntity productEntity3 = new ProductEntity("밀크쉐이크", 3000L, "https://image3.jpg",categoryEntity,null);
 
         //when
         productRepository.save(productEntity1);
