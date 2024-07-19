@@ -1,6 +1,7 @@
 package gift.repository;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.service.CategoryService;
 import org.assertj.core.api.Assertions;
@@ -23,7 +24,10 @@ public class ProductRepositoryTest {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private OptionRepository optionRepository;
     private Category category;
+    private Option option;
 
     @BeforeEach
     void init(){
@@ -51,6 +55,11 @@ public class ProductRepositoryTest {
         // when
         Product product = new Product("name", 4500, "url", category);
         Product actual = productRepository.save(product);
+
+        Option option = new Option("신규", 3L, actual);
+        optionRepository.save(option);
+
+        actual.addOption(option);
         // then
         Assertions.assertThat(actual).isNotNull();
         Assertions.assertThat(actual.getName()).isEqualTo(product.getName());
