@@ -95,3 +95,15 @@
   - 옵션 생성
   - 옵션 변경
   - 옵션 삭제
+
+## 3단계
+### 상품 옵션 수량 차감 기능 구현
+- 옵션에 대해 요구하는 수량만큼 기존 수량에서 차감한다.
+
+### Service
+- 옵션 수량 수정
+  - 예외 상황 발생 시, OptionsQuantityException 쓰로잉
+### Options
+  - quantity validation
+  - 차감하고 남은 수량 검증
+  - 실제 Entity 내 quantity 값 수정
