@@ -7,87 +7,36 @@ import java.util.Objects;
 
 @Entity
 public class WishList {
-    @Embeddable
-    public static class WishListId implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
 
-        @Column(name = "user_id")
-        private int userId;
-
-        @Column(name = "product_id")
-        private int productId;
-
-        // 기본 생성자
-        public WishListId() {
-        }
-
-        // 매개 변수가 있는 생성자
-        public WishListId(int userId, int productId) {
-            this.userId = userId;
-            this.productId = productId;
-        }
-
-        // hashCode와 equals 메서드
-        @Override
-        public int hashCode() {
-            return Objects.hash(userId, productId);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            WishListId that = (WishListId) obj;
-            return userId == that.userId && productId == that.productId;
-        }
-
-        // getters and setters
-
-        public int getUser_id() {
-            return userId;
-        }
-
-        public int getProduct_id() {
-            return productId;
-        }
-    }
-    @EmbeddedId
-    private WishListId id;
-
-
-    @MapsId("userId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
     private User user;
 
-    @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
     private Product product;
 
     // getters and setters
 
-    public WishList(WishListId id) {
-        this.id = id;
+
+    public WishList(User user, Product product) {
+        this.user = user;
+        this.product = product;
     }
 
     public WishList() {
     }
 
 
-    public void setId(WishListId id) {
-        this.id = id;
-    }
-
     public void setProduct(Product product) {
         this.product = product;
         product.addWishlist(this);
-
     }
 
     public void setUser(User user) {
         this.user = user;
         user.addWishlist(this);
-
     }
 
     public Product getProduct() {
@@ -99,7 +48,7 @@ public class WishList {
     }
 
 
-    public WishListId getId() {
+    public int getId() {
         return id;
     }
 }

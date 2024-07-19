@@ -39,7 +39,6 @@ public class WishListController {
     @DeleteMapping("/api/wishlist/{product_id}")
     public String deleteWishList(@RequestHeader("Authorization") String token, @PathVariable int product_id){
         wishListService.deleteWishList(token,product_id);
-
         return "redirect:/wishlist";
     }
 

@@ -7,7 +7,6 @@ import gift.dto.product.ProductWithOptionDTO;
 import gift.dto.product.SaveProductDTO;
 import gift.dto.product.ShowProductDTO;
 
-
 import gift.entity.Category;
 import gift.entity.Option;
 import gift.entity.Product;
@@ -26,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 
@@ -50,41 +50,42 @@ public class ProductService {
     }
 
     public void saveProduct(SaveProductDTO product) {
-        if(product.option() == null)
-            throw new BadRequestException("하나의 옵션은 필요합니다.");
         if(categoryRepository.findById(product.categoryId()).isEmpty())
             throw new NotFoundException("해당 카테고리가 없음");
+
         Category category = categoryRepository.findById(product.categoryId()).get();
         Product saveProduct = new Product(product.name(), product.price(), product.imageUrl(),category);
-
+        List<String> optionList = stream(product.option().split(",")).toList();
+        optionList= optionList.stream().distinct().collect(Collectors.toList());
+        if(optionList.isEmpty())
+            throw new BadRequestException("하나의 옵션은 필요");
 
         if(isValidProduct(saveProduct)){
             saveProduct = productRepository.save(saveProduct);
             category.addProduct(saveProduct);
         }
+    }
 
-        List<String> optionList = stream(product.option().split(",")).toList();
+    private void addOptionToProduct(List<String> optionList, Product product) {
         for(String str : optionList){
-            Option.OptionId optionId = new Option.OptionId(saveProduct.getId(), str);
-            Option option = new Option(optionId);
-            if(isValidOption(optionId)) {
-                saveProduct.addOptions(option);
+            Option option = new Option(product, str);
+            if(isValidOption(option)) {
+                product.addOptions(option);
                 optionRepository.save(option);
             }
-
         }
     }
 
-    private boolean isValidProduct(@Valid Product product){
+    private boolean isValidProduct(@Validated Product product){
         if(product.getName().contentEquals("카카오"))
-
             throw new UnAuthException("MD와 상담해주세요.");
+
         Optional<Product> productOptional = productRepository.findById(product.getId());
         return productOptional.map(value -> value.equals(product)).orElse(true);
     }
 
-    private boolean isValidOption(@Valid Option.OptionId optionID){
-        if(optionRepository.findById(optionID).isPresent())
+    private boolean isValidOption(@Validated Option option){
+        if(optionRepository.findById(option.getId()).isPresent())
             throw new BadRequestException("이미 존재하는 옵션입니다.");
         return true;
     }
@@ -116,9 +117,9 @@ public class ProductService {
         }
         return jsonProduct;
     }
-
-    public void modifyProduct(ModifyProductDTO product) {
-        if(productRepository.findById(product.id()).isEmpty())
+  
+    public void modifyProduct(Product product) {
+        if(productRepository.findById(product.getId()).isEmpty())
             throw new NotFoundException("물건이 없습니다.");
         productRepository.updateProductById(product.id(), product.name(),product.price(),product.imageUrl());
     }

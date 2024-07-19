@@ -20,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class WishListService {
@@ -37,16 +39,17 @@ public class WishListService {
         int tokenUserId = jwtUtil.getUserIdFromToken(token);
         if(!jwtUtil.validateToken(token))
             throw new UnAuthException("로그인 만료");
-        WishList.WishListId wishListId = new WishList.WishListId(tokenUserId,productId);
         if(productRepository.findById(productId).isEmpty())
             throw new NotFoundException("해당 물건이없습니다.");
-        if(wishListRepository.findById(wishListId).isPresent())
-           throw new BadRequestException("이미 추가된 물품입니다.");
         if(userRepository.findById(tokenUserId).isEmpty())
             throw new UnAuthException("인증이 잘못되었습니다");
-        WishList wishList = new WishList(wishListId);
+
         Product product = productRepository.findById(productId).get();
         User user = userRepository.findById(tokenUserId).get();
+        WishList wishList = new WishList(user,product);
+        if(wishListRepository.findByUserAndProduct(user,product).isPresent())
+            throw new BadRequestException("이미 추가된 물품입니다.");
+
         wishList.setProduct(product);
         wishList.setUser(user);
         wishListRepository.save(wishList);
@@ -68,16 +71,15 @@ public class WishListService {
             throw new NotFoundException("해당 물건이 없음");
 
         int tokenUserId = jwtUtil.getUserIdFromToken(token);
-        WishList.WishListId wishListId = new WishList.WishListId(tokenUserId,productId);
-        if(wishListRepository.findById(wishListId).isEmpty())
-            throw new NotFoundException("위시리스트에 없음");
-
         Product product = productRepository.findById(productId).get();
         User user = userRepository.findById(tokenUserId).get();
-        WishList wishList = wishListRepository.findById(wishListId).get();
-        product.deleteWishlist(wishList);
-        user.deleteWishlist(wishList);
-        wishListRepository.deleteById(wishListId);
+        Optional<WishList> wishListOptional = wishListRepository.findByUserAndProduct(user,product);
+        if(wishListOptional.isEmpty())
+            throw new NotFoundException("위시리스트에 없음");
+        WishList wishlist = wishListOptional.get();
+        product.deleteWishlist(wishlist);
+        user.deleteWishlist(wishlist);
+        wishListRepository.deleteById(wishlist.getId());
     }
 
 }

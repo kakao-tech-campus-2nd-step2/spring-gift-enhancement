@@ -29,8 +29,9 @@
                         console.log('Success:', response);
                         // 성공적으로 추가되었을 때 처리
                     },
-                    error: function(error) {
-                        console.error('Error:', error);
+                    error: function(xhr, status, error) {
+                        var errorMessage = xhr.responseText;
+                        alert('Error: ' + errorMessage); // 오류 시 alert으로 HTTP 오류 메시지 출력
                         // 오류 발생 시 처리
                     }
                 });
@@ -55,7 +56,6 @@
     <label for="category">CategoryID:</label>
     <input type="text" id="category" name="category" required>
     <br>
-
     <button type="submit">Add Product</button>
 </form>
 

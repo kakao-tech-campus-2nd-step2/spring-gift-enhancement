@@ -2,55 +2,39 @@ package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @Entity
 public class Option {
-    @Embeddable
-    public static class OptionId implements Serializable {
-        int id;
-        String option;
 
-        public int getId() {
-            return id;
-        }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
 
-        public String getOption() {
-            return option;
-        }
-
-        public OptionId(int id, String option) {
-            this.id = id;
-            this.option = option;
-        }
-
-        public OptionId() {
-        }
-
-
-    }
-
-    @EmbeddedId
-    OptionId id;
-
-    @MapsId("id")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
     Product product;
+
+    @Pattern(regexp = "^[a-zA-Z0-9()\\[\\]+\\-&/_]+$", message = "특수기호 안됨")
+    @Size(max=50)
+    String option;
+
+    int quantity;
 
     public void setProduct(Product product){
         this.product = product;
     }
 
-
-    public OptionId getId() {
-        return id;
+    public Option(Product product, String option) {
+        this.product = product;
+        this.option = option;
     }
 
-    public Option(OptionId id) {
-        this.id = id;
+    public int getId() {
+        return id;
     }
 
     public Option() {
