@@ -38,8 +38,22 @@ public class OptionServiceTest {
 
         assertNotNull(updatedOption);
         assertEquals(7, updatedOption.getQuantity());
-
         verify(optionRepository, times(1)).findById(optionId);
         verify(optionRepository, times(1)).save(updatedOption);
+    }
+
+    @Test
+    void decreaseTooManyQuantity() {
+        Long optionId = 1L;
+        Option option = new Option(optionId, "Test Option", 2);
+
+        when(optionRepository.findById(optionId)).thenReturn(Optional.of(option));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.decreaseOptionQuantity(optionId, 3);
+        });
+        assertEquals("옵션의 수량은 최소 1개 이상이어야 합니다.", exception.getMessage());
+        verify(optionRepository, times(1)).findById(optionId);
+        verify(optionRepository, times(0)).save(any(Option.class));
     }
 }
