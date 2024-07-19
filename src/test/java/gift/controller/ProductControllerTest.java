@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.ProductDto;
 import gift.exception.NonIntegerPriceException;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import gift.security.LoginMemberArgumentResolver;
 import gift.service.CategoryService;
@@ -57,9 +58,10 @@ class ProductControllerTest {
     @BeforeEach
     void setUp() {
         product = new Product("상품", 10000, "image.jpg");
-        category = new Category(1L, "카테고리", Collections.singletonList(product));
+        category = new Category(1L, "카테고리", List.of(product));
         product.setId(1L);
         product.setCategory(category);
+        product.setOptionList(List.of(new Option("option", 1)));
         productList.add(product);
     }
 
@@ -93,7 +95,7 @@ class ProductControllerTest {
     void updateProductTest() throws Exception {
         // given
         var newProduct = new Product(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl(), product.getWishList(), product.getCategory());
+            product.getImageUrl(), product.getWishList(), product.getCategory(), product.getOptionList());
         newProduct.setPrice(2000);
         given(productService.updateProduct(newProduct)).willReturn(newProduct);
 
