@@ -20,6 +20,14 @@
     <label for="imageUrl">Image URL:</label><br>
     <input type="text" id="imageUrl" th:field="*{imageUrl}"><br>
 
+    <label for="category">Category:</label>
+    <select id="category" th:field="*{categoryId}">
+        <option value="" disabled selected>-- Select Category --</option>
+        <option th:each="category : ${categories}"
+                th:value="${category.id}"
+                th:text="${category.name}">Category Name</option>
+    </select><br/>
+
     <button type="submit">Save</button>
 </form>
 
