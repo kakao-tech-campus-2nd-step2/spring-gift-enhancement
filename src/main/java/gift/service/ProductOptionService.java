@@ -75,13 +75,14 @@ public class ProductOptionService {
     }
 
     public Long deleteProductOption(long productId, long id) {
-        if (productOptionRepository.findAllByProductId(productId).size() == 1) {
-            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "상품은 최소 1개 이상의 옵션을 가져야 합니다.");
-        }
-
         ProductOptionEntity entity = productOptionRepository.findByProductIdAndId(
                 productId, id)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 상품의 옵션이 존재하지 않습니다."));
+
+        if (productOptionRepository.findAllByProductId(productId).size() >= 1) {
+            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "상품은 최소 1개 이상의 옵션을 가져야 합니다.");
+        }
+
         productOptionRepository.delete(entity);
 
         return entity.getId();
