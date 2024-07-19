@@ -7,6 +7,7 @@ public enum ErrorCode {
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이메일은 존재하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저는 존재하지 않습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "조회하신 카테고리는 삭제되었거나 존재하지 않습니다."),
+    OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "조회하신 옵션은 삭제되었거나 존재하지 않습니다."),
 
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "지원하지 않는 HTTP 메서드입니다."),
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "필수 입력값의 누락, 또는 형식과 다른 데이터 요청입니다."),
@@ -18,7 +19,7 @@ public enum ErrorCode {
     PASSWORD_MISMATCH(HttpStatus.FORBIDDEN, "비밀번호가 일치하지 않습니다."),
 
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
-    DUPLICATE_CATEGORY(HttpStatus.BAD_REQUEST, "이미 존재하는 이름입니다.");
+    DUPLICATE_NAME(HttpStatus.BAD_REQUEST, "이미 존재하는 이름입니다.");
 
     private final HttpStatus status;
     private final String message;
