@@ -95,13 +95,4 @@ public class ProductService {
 
         return new AddedOptionIdResponse(option.getId());
     }
-
-    public void subtractOptionQuantity(Long productId, Long targetOptionId, int subtractQuantity) {
-        Product product = getProduct(productId);
-
-        List<Option> options = product.getOptions();
-        Option targetOption = optionService.checkOptionIdExist(targetOptionId, options);
-
-        optionService.subtractOptionQuantity(targetOption, subtractQuantity);
-    }
 }

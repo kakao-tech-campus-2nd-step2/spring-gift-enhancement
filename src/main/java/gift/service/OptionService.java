@@ -5,12 +5,20 @@ import gift.entity.Option;
 import gift.exception.InsufficientOptionQuantityException;
 import gift.exception.OptionDuplicateException;
 import gift.exception.OptionNotFoundException;
+import gift.repository.OptionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class OptionService {
+
+    private final OptionRepository optionRepository;
+
+    public OptionService(OptionRepository optionRepository) {
+        this.optionRepository = optionRepository;
+    }
 
     public List<Option> convertToOptions(List<OptionRequest> options) {
         return options.stream()
@@ -40,7 +48,11 @@ public class OptionService {
         throw new OptionNotFoundException(targetOptionId);
     }
 
-    public void subtractOptionQuantity(Option targetOption, int subtractQuantity) {
+    @Transactional
+    public void subtractOptionQuantity(Long targetOptionId, int subtractQuantity) {
+
+        Option targetOption = optionRepository.findByIdWithPessimisticWriteLock(targetOptionId).orElseThrow(() -> new OptionNotFoundException(targetOptionId));
+
         if (targetOption.getQuantity() < subtractQuantity) {
             throw new InsufficientOptionQuantityException(subtractQuantity);
         }
