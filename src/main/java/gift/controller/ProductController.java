@@ -41,12 +41,20 @@ public class ProductController {
     }
 
     @PostMapping
-    public String addProduct(@Valid @ModelAttribute Product product, BindingResult bindingResult) {
+    public String addProduct(@Valid @ModelAttribute Product product, @RequestParam List<String> optionNames, @RequestParam List<Integer> optionQuantities, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "addProduct";
         }
 
         productService.addProduct(product);
+
+        for (int i = 0; i < optionNames.size(); i++) {
+            Option option = new Option();
+            option.setName(optionNames.get(i));
+            option.setQuantity(optionQuantities.get(i));
+            productService.addOptionToProduct(product.getId(), option);
+
+        }
 
         return REDIRECT_URL;  // 새로운 상품 추가 후 상품 조회 화면으로 리다이렉트
     }

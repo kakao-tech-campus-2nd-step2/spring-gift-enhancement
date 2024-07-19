@@ -229,3 +229,42 @@ img {
 .category-card.selected {
     border: 2px solid #FFD100;
 }
+
+.options-container {
+    margin-top: 20px;
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.option-group input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.add-option-btn,
+.delete-option-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #dddcd1;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    min-width: 40px;
+    text-align: center;
+}
+
+.add-option-btn:hover,
+.delete-option-btn:hover{
+    background-color: #FFD100;
+}
