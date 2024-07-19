@@ -2,9 +2,11 @@ package gift.global;
 
 import gift.domain.entity.Category;
 import gift.domain.entity.Member;
+import gift.domain.entity.Option;
 import gift.domain.entity.Product;
 import gift.domain.entity.Wish;
 import gift.domain.repository.CategoryRepository;
+import gift.domain.repository.OptionRepository;
 import gift.domain.repository.ProductRepository;
 import gift.domain.repository.MemberRepository;
 import gift.domain.repository.WishRepository;
@@ -18,12 +20,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class DataInitializer {
 
     @Bean
-    ApplicationRunner init(ProductRepository product, MemberRepository user, WishRepository wish, CategoryRepository category) {
-        return args -> insertInitialData(product, user, wish, category);
+    ApplicationRunner init(
+        ProductRepository product,
+        MemberRepository user,
+        WishRepository wish,
+        CategoryRepository category,
+        OptionRepository option) {
+        return args -> insertInitialData(product, user, wish, category, option);
     }
 
     @Transactional
-    public void insertInitialData(ProductRepository productRepository, MemberRepository memberRepository, WishRepository wishRepository, CategoryRepository categoryRepository) {
+    public void insertInitialData(
+        ProductRepository productRepository,
+        MemberRepository memberRepository,
+        WishRepository wishRepository,
+        CategoryRepository categoryRepository,
+        OptionRepository optionRepository
+    ) {
         Category[] categories = {
             new Category("교환권", "#6c95d1", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", ""),
             new Category("식품", "#ff0000", "red.png", ""),
@@ -41,6 +54,18 @@ public class DataInitializer {
             new Product("바나나맛 우유 240ml", 1700, "https://img.danawa.com/prod_img/500000/107/815/img/3815107_1.jpg?_v=20231212093346", categories[1])};
         for (int i = 0; i < products.length; i++) {
             products[i] = productRepository.save(products[i]);
+        }
+
+        Option[] options = {
+            new Option(products[0], "샷 추가", 500),
+            new Option(products[0], "디카페인", 752),
+                new Option(products[1], "온장보관", 49),
+                new Option(products[1], "디카페인", 150),
+            new Option(products[2], "초코크림맛", 3000),
+                new Option(products[3], "나무젓가락 추가", 299920),
+            new Option(products[4], "무설탕", 3400) };
+        for (int i = 0; i < options.length; i++) {
+            options[i] = optionRepository.save(options[i]);
         }
 
         Member[] members = {
