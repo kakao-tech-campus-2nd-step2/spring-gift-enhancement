@@ -1,12 +1,10 @@
 package gift.dto.category;
 
-import static gift.util.Constants.REQUIRED_FIELD_MISSING;
+import static gift.util.constants.GeneralConstants.REQUIRED_FIELD_MISSING;
 
 import jakarta.validation.constraints.NotNull;
 
-public record CategoryRequest(
-    Long id,
-
+public record CategoryUpdateRequest(
     @NotNull(message = REQUIRED_FIELD_MISSING)
     String name,
 

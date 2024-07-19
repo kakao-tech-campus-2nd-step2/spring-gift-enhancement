@@ -1,12 +1,10 @@
 package gift.dto.product;
 
-import static gift.util.Constants.REQUIRED_FIELD_MISSING;
+import static gift.util.constants.GeneralConstants.REQUIRED_FIELD_MISSING;
 
 import jakarta.validation.constraints.NotNull;
 
-public record ProductRequest(
-    Long id,
-
+public record ProductCreateRequest(
     @NotNull(message = REQUIRED_FIELD_MISSING)
     String name,
 

@@ -1,9 +1,11 @@
 package gift.model;
 
-import static gift.util.Constants.PRODUCT_NAME_INVALID_CHARACTERS;
-import static gift.util.Constants.PRODUCT_NAME_REQUIRES_APPROVAL;
-import static gift.util.Constants.PRODUCT_NAME_SIZE_LIMIT;
+import static gift.util.constants.OptionConstants.OPTION_NAME_DUPLICATE;
+import static gift.util.constants.ProductConstants.NAME_INVALID_CHARACTERS;
+import static gift.util.constants.ProductConstants.NAME_REQUIRES_APPROVAL;
+import static gift.util.constants.ProductConstants.NAME_SIZE_LIMIT;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -40,14 +42,15 @@ public class ProductTest {
         assertThat(product.getCategoryName()).isEqualTo("Category");
     }
 
-
     @Test
     @DisplayName("Product 모델 업데이트 테스트")
     public void testUpdateProduct() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
+
         Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
         Category newCategory = new Category("New Category", "#111111", "newImageUrl",
             "newDescription");
+
         product.update("Product2", 200, "imageUrl2", newCategory);
 
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
@@ -71,7 +74,7 @@ public class ProductTest {
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("name") &&
-                violation.getMessage().equals(PRODUCT_NAME_SIZE_LIMIT)
+                violation.getMessage().equals(NAME_SIZE_LIMIT)
         );
     }
 
@@ -86,7 +89,7 @@ public class ProductTest {
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("name") &&
-                violation.getMessage().equals(PRODUCT_NAME_INVALID_CHARACTERS)
+                violation.getMessage().equals(NAME_INVALID_CHARACTERS)
         );
     }
 
@@ -101,7 +104,7 @@ public class ProductTest {
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("name") &&
-                violation.getMessage().equals(PRODUCT_NAME_REQUIRES_APPROVAL)
+                violation.getMessage().equals(NAME_REQUIRES_APPROVAL)
         );
     }
 }

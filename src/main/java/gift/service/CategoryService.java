@@ -1,9 +1,10 @@
 package gift.service;
 
-import static gift.util.Constants.CATEGORY_NOT_FOUND;
+import static gift.util.constants.CategoryConstants.CATEGORY_NOT_FOUND;
 
-import gift.dto.category.CategoryRequest;
+import gift.dto.category.CategoryCreateRequest;
 import gift.dto.category.CategoryResponse;
+import gift.dto.category.CategoryUpdateRequest;
 import gift.exception.category.CategoryNotFoundException;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
@@ -35,19 +36,20 @@ public class CategoryService {
     }
 
     // 카테고리 추가
-    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
-        Category category = convertToEntity(categoryRequest);
+    public CategoryResponse addCategory(CategoryCreateRequest categoryCreateRequest) {
+        Category category = convertToEntity(categoryCreateRequest);
         Category addedCategory = categoryRepository.save(category);
         return convertToDTO(addedCategory);
     }
 
     // 카테고리 수정
-    public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
+    public CategoryResponse updateCategory(Long id, CategoryUpdateRequest categoryUpdateRequest) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND + id));
 
-        category.update(categoryRequest.name(), categoryRequest.color(), categoryRequest.imageUrl(),
-            categoryRequest.description());
+        category.update(categoryUpdateRequest.name(), categoryUpdateRequest.color(),
+            categoryUpdateRequest.imageUrl(),
+            categoryUpdateRequest.description());
         Category updatedCategory = categoryRepository.save(category);
         return convertToDTO(updatedCategory);
     }
@@ -63,12 +65,21 @@ public class CategoryService {
         );
     }
 
-    private static Category convertToEntity(CategoryRequest categoryRequest) {
+    private static Category convertToEntity(CategoryCreateRequest categoryCreateRequest) {
         return new Category(
-            categoryRequest.name(),
-            categoryRequest.color(),
-            categoryRequest.imageUrl(),
-            categoryRequest.description()
+            categoryCreateRequest.name(),
+            categoryCreateRequest.color(),
+            categoryCreateRequest.imageUrl(),
+            categoryCreateRequest.description()
+        );
+    }
+
+    private static Category convertToEntity(CategoryUpdateRequest categoryUpdateRequest) {
+        return new Category(
+            categoryUpdateRequest.name(),
+            categoryUpdateRequest.color(),
+            categoryUpdateRequest.imageUrl(),
+            categoryUpdateRequest.description()
         );
     }
 }

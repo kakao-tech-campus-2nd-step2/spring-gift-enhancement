@@ -1,7 +1,8 @@
 package gift.controller;
 
-import gift.dto.category.CategoryRequest;
+import gift.dto.category.CategoryCreateRequest;
 import gift.dto.category.CategoryResponse;
+import gift.dto.category.CategoryUpdateRequest;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -39,15 +40,16 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryResponse> addCategory(
-        @Valid @RequestBody CategoryRequest categoryRequest) {
-        CategoryResponse createdCategory = categoryService.addCategory(categoryRequest);
+        @Valid @RequestBody CategoryCreateRequest categoryCreateRequest) {
+        CategoryResponse createdCategory = categoryService.addCategory(categoryCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id,
-        @Valid @RequestBody CategoryRequest categoryRequest) {
-        CategoryResponse updatedCategory = categoryService.updateCategory(id, categoryRequest);
+        @Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest) {
+        CategoryResponse updatedCategory = categoryService.updateCategory(id,
+            categoryUpdateRequest);
         return ResponseEntity.ok(updatedCategory);
     }
 }

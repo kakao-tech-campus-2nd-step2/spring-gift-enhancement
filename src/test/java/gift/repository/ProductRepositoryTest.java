@@ -3,6 +3,7 @@ package gift.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -21,13 +22,23 @@ public class ProductRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private OptionRepository optionRepository;
+
     @Test
     @DisplayName("상품 저장 및 ID로 조회")
     public void testSaveAndFindById() {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
+
         Product product = new Product(null, "Test Product", 100, "test.jpg", category);
         Product savedProduct = productRepository.save(product);
+
+        Option option1 = new Option(null, "Option1", 100, savedProduct);
+        Option option2 = new Option(null, "Option2", 200, savedProduct);
+        optionRepository.save(option1);
+        optionRepository.save(option2);
+
         Optional<Product> foundProduct = productRepository.findById(savedProduct.getId());
 
         assertThat(foundProduct).isPresent();
@@ -45,9 +56,17 @@ public class ProductRepositoryTest {
 
         Product product1 = new Product(null, "Product 1", 100, "prod1.jpg", category);
         Product product2 = new Product(null, "Product 2", 200, "prod2.jpg", category);
-
         productRepository.save(product1);
         productRepository.save(product2);
+
+        Option option1 = new Option(null, "Option1", 100, product1);
+        Option option2 = new Option(null, "Option2", 200, product1);
+        Option option3 = new Option(null, "Option3", 300, product2);
+        Option option4 = new Option(null, "Option4", 400, product2);
+        optionRepository.save(option1);
+        optionRepository.save(option2);
+        optionRepository.save(option3);
+        optionRepository.save(option4);
 
         Iterable<Product> products = productRepository.findAll();
         assertThat(products).hasSize((int) initialCount + 2);
@@ -58,8 +77,14 @@ public class ProductRepositoryTest {
     public void testDelete() {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
+
         Product product = new Product(null, "Test Product", 100, "test.jpg", category);
         Product savedProduct = productRepository.save(product);
+
+        Option option1 = new Option(null, "Option1", 100, savedProduct);
+        Option option2 = new Option(null, "Option2", 200, savedProduct);
+        optionRepository.save(option1);
+        optionRepository.save(option2);
 
         productRepository.deleteById(savedProduct.getId());
         Optional<Product> foundProduct = productRepository.findById(savedProduct.getId());

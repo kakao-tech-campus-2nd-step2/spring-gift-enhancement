@@ -1,17 +1,22 @@
 package gift.service;
 
-import static gift.util.Constants.CATEGORY_NOT_FOUND;
-import static gift.util.Constants.INVALID_PRICE;
-import static gift.util.Constants.PRODUCT_NOT_FOUND;
+import static gift.util.constants.CategoryConstants.CATEGORY_NOT_FOUND;
+import static gift.util.constants.ProductConstants.INVALID_PRICE;
+import static gift.util.constants.OptionConstants.OPTION_REQUIRED;
+import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 
-import gift.dto.product.ProductRequest;
+import gift.dto.product.ProductCreateRequest;
 import gift.dto.product.ProductResponse;
+import gift.dto.product.ProductUpdateRequest;
 import gift.exception.product.InvalidProductPriceException;
 import gift.exception.product.ProductNotFoundException;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,11 +26,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     // 모든 상품 조회 (페이지네이션)
@@ -41,28 +48,34 @@ public class ProductService {
     }
 
     // 상품 추가
-    public ProductResponse addProduct(ProductRequest productRequest) {
-        validatePrice(productRequest.price());
-        Category category = categoryRepository.findById(productRequest.categoryId())
+    public ProductResponse addProduct(ProductCreateRequest productCreateRequest) {
+        validatePrice(productCreateRequest.price());
+
+        Category category = categoryRepository.findById(productCreateRequest.categoryId())
             .orElseThrow(() -> new ProductNotFoundException(
-                CATEGORY_NOT_FOUND + productRequest.categoryId()));
-        Product product = convertToEntity(productRequest, category);
+                CATEGORY_NOT_FOUND + productCreateRequest.categoryId()));
+
+        Product product = convertToEntity(productCreateRequest, category);
         Product savedProduct = productRepository.save(product);
+
+        Option defaultOption = new Option(null, "Default Option", 1, savedProduct);
+        optionRepository.save(defaultOption);
+
         return convertToDTO(savedProduct);
     }
 
     // 상품 수정
-    public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
+    public ProductResponse updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND + id));
-        validatePrice(productRequest.price());
+        validatePrice(productUpdateRequest.price());
 
-        Category category = categoryRepository.findById(productRequest.categoryId())
+        Category category = categoryRepository.findById(productUpdateRequest.categoryId())
             .orElseThrow(() -> new ProductNotFoundException(
-                CATEGORY_NOT_FOUND + productRequest.categoryId()));
+                CATEGORY_NOT_FOUND + productUpdateRequest.categoryId()));
 
-        product.update(productRequest.name(), productRequest.price(), productRequest.imageUrl(),
-            category);
+        product.update(productUpdateRequest.name(), productUpdateRequest.price(),
+            productUpdateRequest.imageUrl(), category);
         Product updatedProduct = productRepository.save(product);
         return convertToDTO(updatedProduct);
     }
@@ -87,17 +100,17 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategoryId(),
-            product.getCategoryName()
+            product.getCategoryId()
         );
     }
 
-    private static Product convertToEntity(ProductRequest productRequest, Category category) {
+    private static Product convertToEntity(ProductCreateRequest productCreateRequest,
+        Category category) {
         return new Product(
-            productRequest.id(),
-            productRequest.name(),
-            productRequest.price(),
-            productRequest.imageUrl(),
+            null,
+            productCreateRequest.name(),
+            productCreateRequest.price(),
+            productCreateRequest.imageUrl(),
             category
         );
     }
@@ -106,6 +119,7 @@ public class ProductService {
         Category category = categoryRepository.findById(productResponse.categoryId())
             .orElseThrow(() -> new ProductNotFoundException(
                 CATEGORY_NOT_FOUND + productResponse.categoryId()));
+
         return new Product(
             productResponse.id(),
             productResponse.name(),

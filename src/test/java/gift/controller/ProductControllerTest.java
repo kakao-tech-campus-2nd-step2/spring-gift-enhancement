@@ -1,7 +1,7 @@
 package gift.controller;
 
-import static gift.util.Constants.INVALID_PRICE;
-import static gift.util.Constants.PRODUCT_NOT_FOUND;
+import static gift.util.constants.ProductConstants.INVALID_PRICE;
+import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -14,8 +14,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import gift.dto.product.ProductRequest;
+import gift.dto.product.ProductCreateRequest;
 import gift.dto.product.ProductResponse;
+import gift.dto.product.ProductUpdateRequest;
 import gift.exception.product.InvalidProductPriceException;
 import gift.exception.product.ProductNotFoundException;
 import gift.service.ProductService;
@@ -50,8 +51,9 @@ public class ProductControllerTest {
 
     @BeforeEach
     public void setUp() {
-        productResponse = new ProductResponse(1L, "Test Product", 100, "test.jpg", 1L, "Category");
+        productResponse = new ProductResponse(1L, "Test Product", 100, "test.jpg", 1L);
     }
+
 
     @Test
     @DisplayName("모든 상품 조회 (페이지네이션 적용)")
@@ -94,7 +96,8 @@ public class ProductControllerTest {
     @Test
     @DisplayName("상품 추가")
     public void testAddProduct() throws Exception {
-        when(productService.addProduct(any(ProductRequest.class))).thenReturn(productResponse);
+        when(productService.addProduct(any(ProductCreateRequest.class))).thenReturn(
+            productResponse);
 
         mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +110,7 @@ public class ProductControllerTest {
     @Test
     @DisplayName("유효하지 않은 가격으로 상품 추가")
     public void testAddProductInvalidPrice() throws Exception {
-        when(productService.addProduct(any(ProductRequest.class))).thenThrow(
+        when(productService.addProduct(any(ProductCreateRequest.class))).thenThrow(
             new InvalidProductPriceException(INVALID_PRICE));
 
         mockMvc.perform(post("/api/products")
@@ -121,7 +124,7 @@ public class ProductControllerTest {
     @Test
     @DisplayName("상품 업데이트")
     public void testUpdateProduct() throws Exception {
-        when(productService.updateProduct(eq(1L), any(ProductRequest.class))).thenReturn(
+        when(productService.updateProduct(eq(1L), any(ProductUpdateRequest.class))).thenReturn(
             productResponse);
 
         mockMvc.perform(put("/api/products/1")
@@ -135,7 +138,7 @@ public class ProductControllerTest {
     @Test
     @DisplayName("존재하지 않는 상품 ID로 업데이트")
     public void testUpdateProductNotFound() throws Exception {
-        when(productService.updateProduct(eq(1L), any(ProductRequest.class))).thenThrow(
+        when(productService.updateProduct(eq(1L), any(ProductUpdateRequest.class))).thenThrow(
             new ProductNotFoundException(PRODUCT_NOT_FOUND + 1));
 
         mockMvc.perform(put("/api/products/1")

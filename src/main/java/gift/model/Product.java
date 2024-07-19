@@ -1,8 +1,8 @@
 package gift.model;
 
-import static gift.util.Constants.PRODUCT_NAME_INVALID_CHARACTERS;
-import static gift.util.Constants.PRODUCT_NAME_REQUIRES_APPROVAL;
-import static gift.util.Constants.PRODUCT_NAME_SIZE_LIMIT;
+import static gift.util.constants.ProductConstants.NAME_INVALID_CHARACTERS;
+import static gift.util.constants.ProductConstants.NAME_REQUIRES_APPROVAL;
+import static gift.util.constants.ProductConstants.NAME_SIZE_LIMIT;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,28 +24,28 @@ public class Product {
     private Long id;
 
     @Column(nullable = false, length = 15)
-    @Size(min = 1, max = 15, message = PRODUCT_NAME_SIZE_LIMIT)
+    @Size(min = 1, max = 15, message = NAME_SIZE_LIMIT)
     @Pattern(
         regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣\\(\\)\\[\\]\\+\\-\\&\\/\\_ ]*$",
-        message = PRODUCT_NAME_INVALID_CHARACTERS
+        message = NAME_INVALID_CHARACTERS
     )
     @Pattern(
         regexp = "^(?!.*카카오).*$",
-        message = PRODUCT_NAME_REQUIRES_APPROVAL
+        message = NAME_REQUIRES_APPROVAL
     )
     private String name;
 
     @Column(nullable = false)
     private int price;
 
-    @Column(nullable = false, name = "image_url")
+    @Column(nullable = false, name = "image_url", length = 255)
     private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    protected Product() {
+    public Product() {
     }
 
     public Product(Long id, String name, int price, String imageUrl, Category category) {

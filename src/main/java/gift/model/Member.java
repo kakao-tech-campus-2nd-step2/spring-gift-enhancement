@@ -1,7 +1,7 @@
 package gift.model;
 
-import static gift.util.Constants.INVALID_EMAIL;
-import static gift.util.Constants.INVALID_PASSWORD;
+import static gift.util.constants.MemberConstants.INVALID_EMAIL;
+import static gift.util.constants.MemberConstants.INVALID_PASSWORD;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,11 +20,11 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 255)
     @Email(message = INVALID_EMAIL)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     @Size(min = 4, message = INVALID_PASSWORD)
     private String password;
 

@@ -1,7 +1,7 @@
 package gift.service;
 
-import static gift.util.Constants.INVALID_PRICE;
-import static gift.util.Constants.PRODUCT_NOT_FOUND;
+import static gift.util.constants.ProductConstants.INVALID_PRICE;
+import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -10,13 +10,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import gift.dto.product.ProductRequest;
+import gift.dto.product.ProductCreateRequest;
 import gift.dto.product.ProductResponse;
+import gift.dto.product.ProductUpdateRequest;
 import gift.exception.product.InvalidProductPriceException;
 import gift.exception.product.ProductNotFoundException;
 import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
@@ -33,13 +35,16 @@ public class ProductServiceTest {
 
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
+    private OptionRepository optionRepository;
     private ProductService productService;
 
     @BeforeEach
     public void setUp() {
         productRepository = Mockito.mock(ProductRepository.class);
         categoryRepository = Mockito.mock(CategoryRepository.class);
-        productService = new ProductService(productRepository, categoryRepository);
+        optionRepository = Mockito.mock(OptionRepository.class);
+        productService = new ProductService(productRepository, categoryRepository,
+            optionRepository);
     }
 
     @Test
@@ -53,7 +58,7 @@ public class ProductServiceTest {
 
         Page<ProductResponse> products = productService.getAllProducts(pageable);
         assertEquals(1, products.getTotalElements());
-        assertEquals("Test Product", products.getContent().getFirst().name());
+        assertEquals("Test Product", products.getContent().get(0).name());
     }
 
     @Test
@@ -63,8 +68,8 @@ public class ProductServiceTest {
         Product product = new Product(1L, "Test Product", 100, "test.jpg", category);
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
-        ProductResponse productDTO = productService.getProductById(1L);
-        assertEquals("Test Product", productDTO.name());
+        ProductResponse productResponse = productService.getProductById(1L);
+        assertEquals("Test Product", productResponse.name());
     }
 
     @Test
@@ -84,22 +89,24 @@ public class ProductServiceTest {
     public void testAddProduct() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Product product = new Product(1L, "Test Product", 100, "test.jpg", category);
-        ProductRequest productDTO = new ProductRequest(null, "Test Product", 100, "test.jpg", 1L);
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest("Test Product", 100,
+            "test.jpg", 1L);
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
-        ProductResponse createdProduct = productService.addProduct(productDTO);
+        ProductResponse createdProduct = productService.addProduct(productCreateRequest);
         assertEquals("Test Product", createdProduct.name());
     }
 
     @Test
     @DisplayName("유효하지 않은 가격으로 상품 추가")
     public void testAddProductInvalidPrice() {
-        ProductRequest productDTO = new ProductRequest(null, "Test Product", -100, "test.jpg", 1L);
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest("Test Product", -100,
+            "test.jpg", 1L);
 
         InvalidProductPriceException exception = assertThrows(InvalidProductPriceException.class,
             () -> {
-                productService.addProduct(productDTO);
+                productService.addProduct(productCreateRequest);
             });
 
         assertEquals(INVALID_PRICE, exception.getMessage());
@@ -111,14 +118,14 @@ public class ProductServiceTest {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Product existingProduct = new Product(1L, "Old Product", 100, "old.jpg", category);
         Product updatedProduct = new Product(1L, "Updated Product", 200, "updated.jpg", category);
-        ProductRequest productDTO = new ProductRequest(1L, "Updated Product", 200, "updated.jpg",
-            1L);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Updated Product", 200,
+            "updated.jpg", 1L);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(productRepository.save(any(Product.class))).thenReturn(updatedProduct);
 
-        ProductResponse result = productService.updateProduct(1L, productDTO);
+        ProductResponse result = productService.updateProduct(1L, productUpdateRequest);
         assertEquals("Updated Product", result.name());
         assertEquals(200, result.price());
     }
@@ -126,13 +133,13 @@ public class ProductServiceTest {
     @Test
     @DisplayName("존재하지 않는 상품 ID로 업데이트")
     public void testUpdateProductNotFound() {
-        ProductRequest productDTO = new ProductRequest(1L, "Updated Product", 200, "updated.jpg",
-            1L);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Updated Product", 200,
+            "updated.jpg", 1L);
 
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
         ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> {
-            productService.updateProduct(1L, productDTO);
+            productService.updateProduct(1L, productUpdateRequest);
         });
 
         assertEquals(PRODUCT_NOT_FOUND + 1, exception.getMessage());
@@ -141,8 +148,6 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 삭제")
     public void testDeleteProduct() {
-        Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Product product = new Product(1L, "Test Product", 100, "test.jpg", category);
         when(productRepository.existsById(1L)).thenReturn(true);
         doNothing().when(productRepository).deleteById(1L);
 

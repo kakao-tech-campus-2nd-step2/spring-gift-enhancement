@@ -1,10 +1,11 @@
 package gift.service;
 
-import static gift.util.Constants.EMAIL_ALREADY_USED;
-import static gift.util.Constants.ID_NOT_FOUND;
-import static gift.util.Constants.INVALID_CREDENTIALS;
+import static gift.util.constants.MemberConstants.EMAIL_ALREADY_USED;
+import static gift.util.constants.MemberConstants.ID_NOT_FOUND;
+import static gift.util.constants.MemberConstants.INVALID_CREDENTIALS;
 
-import gift.dto.member.MemberRequest;
+import gift.dto.member.MemberLoginRequest;
+import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
 import gift.exception.member.EmailAlreadyUsedException;
 import gift.exception.member.ForbiddenException;
@@ -27,12 +28,13 @@ public class MemberService {
     }
 
     // 회원가입 (회원 추가)
-    public MemberResponse registerMember(MemberRequest memberDTO) {
-        if (memberRepository.existsByEmail(memberDTO.email())) {
+    public MemberResponse registerMember(MemberRegisterRequest memberRegisterRequest) {
+        if (memberRepository.existsByEmail(memberRegisterRequest.email())) {
             throw new EmailAlreadyUsedException(EMAIL_ALREADY_USED);
         }
 
-        Member member = new Member(null, memberDTO.email(), memberDTO.password());
+        Member member = new Member(null, memberRegisterRequest.email(),
+            memberRegisterRequest.password());
         Member savedMember = memberRepository.save(member);
 
         String token = jwtUtil.generateToken(savedMember.getId(), member.getEmail());
@@ -40,11 +42,11 @@ public class MemberService {
     }
 
     // 로그인 (회원 검증)
-    public MemberResponse loginMember(MemberRequest memberDTO) {
-        Member member = memberRepository.findByEmail(memberDTO.email())
+    public MemberResponse loginMember(MemberLoginRequest memberLoginRequest) {
+        Member member = memberRepository.findByEmail(memberLoginRequest.email())
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
 
-        if (!member.isPasswordMatching(memberDTO.password())) {
+        if (!member.isPasswordMatching(memberLoginRequest.password())) {
             throw new ForbiddenException(INVALID_CREDENTIALS);
         }
 
@@ -67,18 +69,18 @@ public class MemberService {
     }
 
     // 회원 수정
-    public MemberResponse updateMember(Long id, MemberRequest memberDTO) {
+    public MemberResponse updateMember(Long id, MemberRegisterRequest memberRegisterRequest) {
         Member member = memberRepository.findById(id)
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
 
-        boolean emailChanged = !member.isEmailMatching(memberDTO.email());
-        boolean emailAlreadyUsed = memberRepository.existsByEmail(memberDTO.email());
+        boolean emailChanged = !member.isEmailMatching(memberRegisterRequest.email());
+        boolean emailAlreadyUsed = memberRepository.existsByEmail(memberRegisterRequest.email());
 
         if (emailChanged && emailAlreadyUsed) {
             throw new EmailAlreadyUsedException(EMAIL_ALREADY_USED);
         }
 
-        member.update(memberDTO.email(), memberDTO.password());
+        member.update(memberRegisterRequest.email(), memberRegisterRequest.password());
         Member updatedMember = memberRepository.save(member);
         return convertToDTO(updatedMember);
     }

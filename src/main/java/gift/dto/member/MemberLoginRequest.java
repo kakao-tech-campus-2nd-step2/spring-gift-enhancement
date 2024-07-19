@@ -1,12 +1,10 @@
 package gift.dto.member;
 
-import static gift.util.Constants.REQUIRED_FIELD_MISSING;
+import static gift.util.constants.GeneralConstants.REQUIRED_FIELD_MISSING;
 
 import jakarta.validation.constraints.NotNull;
 
-public record MemberRequest(
-    Long id,
-
+public record MemberLoginRequest(
     @NotNull(message = REQUIRED_FIELD_MISSING)
     String email,
 

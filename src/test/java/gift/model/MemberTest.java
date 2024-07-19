@@ -1,7 +1,7 @@
 package gift.model;
 
-import static gift.util.Constants.INVALID_EMAIL;
-import static gift.util.Constants.INVALID_PASSWORD;
+import static gift.util.constants.MemberConstants.INVALID_EMAIL;
+import static gift.util.constants.MemberConstants.INVALID_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import jakarta.validation.ConstraintViolation;

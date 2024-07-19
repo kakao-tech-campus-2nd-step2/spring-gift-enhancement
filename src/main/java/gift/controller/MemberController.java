@@ -1,6 +1,7 @@
 package gift.controller;
 
-import gift.dto.member.MemberRequest;
+import gift.dto.member.MemberLoginRequest;
+import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
 import gift.service.MemberService;
 import jakarta.validation.Valid;
@@ -24,15 +25,16 @@ public class MemberController {
     // 회원가입 (회원 추가)
     @PostMapping("/register")
     public ResponseEntity<MemberResponse> register(
-        @Valid @RequestBody MemberRequest memberRequest) {
-        MemberResponse registeredMember = memberService.registerMember(memberRequest);
+        @Valid @RequestBody MemberRegisterRequest memberRegisterRequest) {
+        MemberResponse registeredMember = memberService.registerMember(memberRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredMember);
     }
 
     // 로그인 (회원 검증)
     @PostMapping("/login")
-    public ResponseEntity<MemberResponse> login(@RequestBody MemberRequest memberRequest) {
-        MemberResponse loggedInMember = memberService.loginMember(memberRequest);
+    public ResponseEntity<MemberResponse> login(
+        @Valid @RequestBody MemberLoginRequest memberLoginRequest) {
+        MemberResponse loggedInMember = memberService.loginMember(memberLoginRequest);
         return ResponseEntity.ok(loggedInMember);
     }
 }

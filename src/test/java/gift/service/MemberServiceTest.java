@@ -1,8 +1,8 @@
 package gift.service;
 
-import static gift.util.Constants.EMAIL_ALREADY_USED;
-import static gift.util.Constants.ID_NOT_FOUND;
-import static gift.util.Constants.INVALID_CREDENTIALS;
+import static gift.util.constants.MemberConstants.EMAIL_ALREADY_USED;
+import static gift.util.constants.MemberConstants.ID_NOT_FOUND;
+import static gift.util.constants.MemberConstants.INVALID_CREDENTIALS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,7 +12,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import gift.dto.member.MemberRequest;
+import gift.dto.member.MemberLoginRequest;
+import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
 import gift.exception.member.EmailAlreadyUsedException;
 import gift.exception.member.ForbiddenException;
@@ -42,13 +43,14 @@ public class MemberServiceTest {
     @Test
     @DisplayName("회원가입 테스트")
     public void testRegisterMember() {
-        MemberRequest memberDTO = new MemberRequest(null, "test@example.com", "password");
+        MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest("test@example.com",
+            "password");
         Member savedMember = new Member(1L, "test@example.com", "password");
         when(memberRepository.existsByEmail("test@example.com")).thenReturn(false);
         when(memberRepository.save(any(Member.class))).thenReturn(savedMember);
         when(jwtUtil.generateToken(1L, "test@example.com")).thenReturn("mockedToken");
 
-        MemberResponse response = memberService.registerMember(memberDTO);
+        MemberResponse response = memberService.registerMember(memberRegisterRequest);
         assertEquals("test@example.com", response.email());
         assertNotNull(response.token());
     }
@@ -56,11 +58,12 @@ public class MemberServiceTest {
     @Test
     @DisplayName("이미 사용 중인 이메일로 회원가입 시도")
     public void testRegisterMemberEmailAlreadyUsed() {
-        MemberRequest memberDTO = new MemberRequest(null, "test@example.com", "password");
+        MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest("test@example.com",
+            "password");
         when(memberRepository.existsByEmail("test@example.com")).thenReturn(true);
 
         EmailAlreadyUsedException exception = assertThrows(EmailAlreadyUsedException.class, () -> {
-            memberService.registerMember(memberDTO);
+            memberService.registerMember(memberRegisterRequest);
         });
 
         assertEquals(EMAIL_ALREADY_USED, exception.getMessage());
@@ -69,12 +72,13 @@ public class MemberServiceTest {
     @Test
     @DisplayName("로그인 테스트")
     public void testLoginMember() {
-        MemberRequest memberDTO = new MemberRequest(null, "test@example.com", "password");
+        MemberLoginRequest memberLoginRequest = new MemberLoginRequest("test@example.com",
+            "password");
         Member member = new Member(1L, "test@example.com", "password");
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.of(member));
         when(jwtUtil.generateToken(1L, "test@example.com")).thenReturn("mockedToken");
 
-        MemberResponse response = memberService.loginMember(memberDTO);
+        MemberResponse response = memberService.loginMember(memberLoginRequest);
         assertEquals("test@example.com", response.email());
         assertNotNull(response.token());
     }
@@ -82,11 +86,12 @@ public class MemberServiceTest {
     @Test
     @DisplayName("잘못된 이메일로 로그인 시도")
     public void testLoginMemberEmailNotFound() {
-        MemberRequest memberDTO = new MemberRequest(null, "test@example.com", "password");
+        MemberLoginRequest memberLoginRequest = new MemberLoginRequest("test@example.com",
+            "password");
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.empty());
 
         ForbiddenException exception = assertThrows(ForbiddenException.class, () -> {
-            memberService.loginMember(memberDTO);
+            memberService.loginMember(memberLoginRequest);
         });
 
         assertEquals(INVALID_CREDENTIALS, exception.getMessage());
@@ -95,12 +100,13 @@ public class MemberServiceTest {
     @Test
     @DisplayName("잘못된 비밀번호로 로그인 시도")
     public void testLoginMemberPasswordMismatch() {
-        MemberRequest memberDTO = new MemberRequest(null, "test@example.com", "wrongpassword");
+        MemberLoginRequest memberLoginRequest = new MemberLoginRequest("test@example.com",
+            "wrongpassword");
         Member member = new Member(1L, "test@example.com", "password");
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.of(member));
 
         ForbiddenException exception = assertThrows(ForbiddenException.class, () -> {
-            memberService.loginMember(memberDTO);
+            memberService.loginMember(memberLoginRequest);
         });
 
         assertEquals(INVALID_CREDENTIALS, exception.getMessage());
@@ -143,13 +149,14 @@ public class MemberServiceTest {
     @DisplayName("회원 수정")
     public void testUpdateMember() {
         Member member = new Member(1L, "old@example.com", "oldpassword");
-        MemberRequest memberDTO = new MemberRequest(1L, "new@example.com", "newpassword");
+        MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest("new@example.com",
+            "newpassword");
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
         when(memberRepository.existsByEmail("new@example.com")).thenReturn(false);
         when(memberRepository.save(any(Member.class))).thenReturn(
             new Member(1L, "new@example.com", "newpassword"));
 
-        MemberResponse response = memberService.updateMember(1L, memberDTO);
+        MemberResponse response = memberService.updateMember(1L, memberRegisterRequest);
         assertEquals("new@example.com", response.email());
     }
 
