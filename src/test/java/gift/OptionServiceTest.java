@@ -51,12 +51,13 @@ public class OptionServiceTest {
     @Test
     void addOptions(){
         // Given
-        Option expect = new Option(1L, null, "option1", 100);
+        Product product = new Product(1L,"product",1000,"test",null,null);
+        Option expect = new Option(1L, product, "option1", 100);
 
         // When mokicto는 기본적으로 null을 반환 => 아래 코드로 원래의 값을 반환 (공부필요)
         Mockito.when(optionRepository.save(any(Option.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        // Then product 객체를 넣을 경우 계속 null 이 발생 => 해결방법 찾기
+        // Then 
         Option actual = optionRepository.save(expect);
 
         assertEquals(expect.getId(), actual.getId());
