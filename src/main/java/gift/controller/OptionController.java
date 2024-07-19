@@ -33,7 +33,7 @@ public class OptionController {
         Product product = optionService.findProductById(optionDTO.getProductId());
         Option option = optionDTO.toEntity(product);
 
-        optionService.updateOption(option);
+        optionService.updateOption(option,id);
         return new ResponseEntity<>("Option 수정 완료", HttpStatus.OK);
     }
 

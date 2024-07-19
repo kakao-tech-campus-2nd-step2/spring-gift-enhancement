@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class OptionService {
 
     private final OptionRepository optionRepository;
@@ -35,16 +37,16 @@ public class OptionService {
         optionRepository.save(option);
     }
 
-    public void updateOption(Option option) {
-        Option update = getOptionById(option.getId());
+    public void updateOption(Option option,Long optionId) {
+        Option update = getOptionById(optionId);
         update.setName(option.getName());
         update.setQuantity(option.getQuantity());
         optionRepository.save(update);
     }
 
     public void deleteOption(Long id) {
-        Option option = getOptionById(id);
-        optionRepository.delete(option);
+        getOptionById(id);
+        optionRepository.deleteById(id);
     }
 
     public Product findProductById(Long id) {
@@ -64,14 +66,14 @@ public class OptionService {
         return optionRepository.getOptionByProductId(productId);
     }
 
-    public Option subtractOption(Long id) {
+    public void subtractOption(Long id) {
         Option option = getOptionById(id);
         int quantity = option.getQuantity();
         if (quantity < 1) {
             throw new IllegalStateException("상품 수량 부족");
         }
         option.setQuantity(quantity - 1);
-        return optionRepository.save(option);
+        optionRepository.saveAndFlush(option);
     }
 
 }

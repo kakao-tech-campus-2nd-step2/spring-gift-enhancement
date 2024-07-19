@@ -116,9 +116,12 @@ class ProductServiceTest {
 
         //then
         verify(productRepository).save(product);
-        assertEquals("Product1", product.getName());
-        assertEquals(10001, product.getPrice());
-        assertEquals("imageUrl.url1", product.getImageUrl());
+        assertAll(
+            () -> assertEquals("Product1", product.getName()),
+            () -> assertEquals(10001, product.getPrice()),
+            () -> assertEquals("imageUrl.url1", product.getImageUrl())
+        );
+
     }
 
     @Test
