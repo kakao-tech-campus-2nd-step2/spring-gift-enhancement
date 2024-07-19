@@ -77,9 +77,8 @@ public class ProductService {
         Product product = findProduct(id);
         checkProductOwner(appUser, product);
 
-        product.setName(updateProductRequest.name());
-        product.setPrice(updateProductRequest.price());
-        product.setImageUrl(updateProductRequest.imageUrl());
+        product.updateProduct(updateProductRequest.name(), updateProductRequest.price(),
+                updateProductRequest.imageUrl());
         productRepository.save(product);
     }
 
@@ -88,7 +87,7 @@ public class ProductService {
         Product product = findProduct(id);
         checkProductOwner(appUser, product);
 
-        product.setActive(false);
+        product.inactive(false);
         productRepository.save(product);
     }
 

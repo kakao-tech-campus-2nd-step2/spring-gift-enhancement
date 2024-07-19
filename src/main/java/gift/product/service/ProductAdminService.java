@@ -43,7 +43,7 @@ public class ProductAdminService {
     public void updateCategory(Long productId, Long categoryId) {
         Product product = productService.findProduct(productId);
         Category newCategory = categoryService.getCategory(categoryId);
-        product.setCategory(newCategory);
+        product.updateCategory(newCategory);
         productRepository.save(product);
     }
 }

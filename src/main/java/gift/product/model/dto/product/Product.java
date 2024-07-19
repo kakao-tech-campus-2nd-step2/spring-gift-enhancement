@@ -50,7 +50,6 @@ public class Product extends BaseTimeEntity {
     }
 
     public Product() {
-
     }
 
     public Long getId() {
@@ -65,48 +64,34 @@ public class Product extends BaseTimeEntity {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public AppUser getSeller() {
         return seller;
-    }
-
-    public void setSeller(AppUser seller) {
-        this.seller = seller;
     }
 
     public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void updateCategory(Category category) {
         this.category = category;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public void inactive(boolean active) {
+        isActive = active;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void updateProduct(String name, int price, String imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     public boolean isOwner(Long id) {

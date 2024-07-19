@@ -73,18 +73,18 @@ public class Option {
         return product;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
     public void updateOption(String name, int quantity, int additionalCost) {
         this.name = name;
         this.quantity = quantity;
         this.additionalCost = additionalCost;
     }
 
-    public void incative(boolean active) {
+    public void inactive(boolean active) {
         isActive = active;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 
     public boolean isOwner(Long productId) {

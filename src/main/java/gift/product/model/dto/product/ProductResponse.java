@@ -11,6 +11,7 @@ public class ProductResponse {
     private final Long categoryId;
     private final Long wishCount;
     private final List<OptionResponse> options;
+    private final Long sellerId;
 
 
     public ProductResponse(Product product, List<OptionResponse> options, Long wishCount) {
@@ -21,6 +22,7 @@ public class ProductResponse {
         this.categoryId = product.getCategory().getId();
         this.wishCount = wishCount;
         this.options = options;
+        this.sellerId = product.getSeller().getId();
     }
 
     public Long getId() {
@@ -49,5 +51,9 @@ public class ProductResponse {
 
     public List<OptionResponse> getOptions() {
         return options;
+    }
+
+    public Long getSellerId() {
+        return sellerId;
     }
 }
