@@ -152,7 +152,7 @@ class ProductOptionControllerTest {
 
     @Test
     @DisplayName("오류 상품 생성하기 - 허용되지 않은 특수문자 포함")
-    void addProductFailWithSpecialChar() throws Exception {
+    void addProductOptionFailWithSpecialChar() throws Exception {
         //given
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
