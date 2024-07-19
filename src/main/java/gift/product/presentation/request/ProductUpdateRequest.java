@@ -1,9 +1,12 @@
 package gift.product.presentation.request;
 
+import gift.option.presentation.request.OptionUpdateRequest;
 import gift.product.application.command.ProductUpdateCommand;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 public record ProductUpdateRequest(
         @NotNull @Size(max = 15, message = "상품 이름은 최대 15자까지 입력할 수 있습니다.")
@@ -11,7 +14,8 @@ public record ProductUpdateRequest(
         String name,
         Integer price,
         String imageUrl,
-        Long categoryId
+        Long categoryId,
+        List<OptionUpdateRequest> optionUpdateRequestList
 ) {
     public ProductUpdateCommand toCommand(Long productId) {
         return new ProductUpdateCommand(
@@ -19,7 +23,10 @@ public record ProductUpdateRequest(
                 name,
                 price,
                 imageUrl,
-                categoryId
+                categoryId,
+                optionUpdateRequestList.stream()
+                        .map(OptionUpdateRequest::toCommand)
+                        .toList()
         );
     }
 }

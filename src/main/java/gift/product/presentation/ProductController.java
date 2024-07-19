@@ -1,5 +1,6 @@
 package gift.product.presentation;
 
+import gift.option.application.OptionResponse;
 import gift.product.application.ProductResponse;
 import gift.product.application.ProductService;
 import gift.product.presentation.request.ProductCreateRequest;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -51,5 +54,10 @@ public class ProductController {
             @PathVariable("id") Long productId
     ) {
         productService.delete(productId);
+    }
+
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<OptionResponse>> findOptionsByProductId(@PathVariable("id") Long productId) {
+        return ResponseEntity.ok(productService.findOptionsByProductId(productId));
     }
 }
