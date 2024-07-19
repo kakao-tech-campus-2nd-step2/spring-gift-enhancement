@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import gift.dto.MemberDTO;
+import gift.dto.ProductPostRequestDTO;
 import gift.dto.ProductRequestDTO;
 import gift.dto.WishDTO;
 import gift.entity.Category;
@@ -39,6 +40,8 @@ class WishListServiceTest {
 
     MemberDTO memberDTO;
 
+    ProductPostRequestDTO productPostRequestDTO;
+
     ProductRequestDTO productRequestDTO;
 
     @Mock
@@ -55,8 +58,12 @@ class WishListServiceTest {
                 "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png",
                 "기타");
 
+        productPostRequestDTO = new ProductPostRequestDTO(1L, "제품", 1000,
+                "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png",
+                "기타", "옵션1", 10);
+
         memberService.register(memberDTO);
-        productService.addProduct(productRequestDTO);
+        productService.addProduct(productPostRequestDTO);
 
         given(pageable.getPageSize()).willReturn(5);
         given(pageable.getPageNumber()).willReturn(1);
