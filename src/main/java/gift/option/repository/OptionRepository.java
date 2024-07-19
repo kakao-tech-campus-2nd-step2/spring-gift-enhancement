@@ -10,7 +10,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OptionRepository extends JpaRepository<Option, Long> {
     List<Option> findAllByProductId(Long productId);
-
-    @Query("SELECT o.name FROM Option o WHERE o.product.id = :productId")
-    List<String> findAllNameByProductId(@Param("productId") Long productId);
 }
