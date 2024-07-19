@@ -3,12 +3,10 @@ package gift.controller;
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.entity.Product;
-import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -31,7 +29,7 @@ public class ProductController {
         List<Product> products = productService.findAll();
         List<ProductResponse> response = products.stream()
             .map(ProductResponse::from)
-            .collect(Collectors.toList());
+            .toList();
         return ResponseEntity.ok(response);
     }
 
