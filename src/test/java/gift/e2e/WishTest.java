@@ -38,6 +38,7 @@ class WishTest {
 
     private String token;
 
+    private HttpHeaders headers = new HttpHeaders();
 
     @BeforeEach
     public void setUp() {
@@ -49,20 +50,17 @@ class WishTest {
             requestEntity, String.class);
 
         int startIndex = responseEntity.getBody().indexOf("\"token\":\"") + "\"token\":\"".length();
-
         int endIndex = responseEntity.getBody().indexOf("\"", startIndex);
 
         token = responseEntity.getBody().substring(startIndex, endIndex);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(token);
 
     }
 
     @Test
     @DisplayName("위시리스트 조회(위시리스트 없음)")
     public void NotFoundGetWish() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish/9999",
             GET,
@@ -76,10 +74,6 @@ class WishTest {
     @DisplayName("위시리스트 생성")
     public void CreateWish() {
         createWish body = new createWish(3L);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
 
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish",
@@ -95,10 +89,6 @@ class WishTest {
     public void NotFoundCreateWish() {
         createWish body = new createWish(100L);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish",
             POST,
@@ -113,10 +103,6 @@ class WishTest {
     public void AlreadyCreateWish() {
         createWish body = new createWish(2L);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(body, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish",
             POST,
@@ -129,10 +115,6 @@ class WishTest {
     @Test
     @DisplayName("위시리스트 삭제")
     public void removeWish() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish/1",
             DELETE, requestEntity, String.class);
@@ -144,10 +126,6 @@ class WishTest {
     @Test
     @DisplayName("위시리스트 삭제(위시 리스트에 없음)")
     public void NotFoundRemoveWish() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
-
         HttpEntity<Long> requestEntity = new HttpEntity(null, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + port + "/api/wish/9999",
             DELETE, requestEntity, String.class);
