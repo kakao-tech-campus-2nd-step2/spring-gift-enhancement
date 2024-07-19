@@ -64,9 +64,9 @@ public class WishServiceTest {
         Member member = new Member(1L, "test@example.com", "password");
         MemberResponse memberResponse = new MemberResponse(1L, "test@example.com", null);
         ProductResponse productResponse = new ProductResponse(1L, "Product", 100, "imageUrl",
-            category.getId(), List.of(option.getId()));
+            category.getId());
         Product product = new Product(productResponse.id(), productResponse.name(),
-            productResponse.price(), productResponse.imageUrl(), category, List.of(option));
+            productResponse.price(), productResponse.imageUrl(), category);
 
         when(memberService.getMemberById(1L)).thenReturn(memberResponse);
         when(productService.getProductById(1L)).thenReturn(productResponse);
@@ -105,9 +105,9 @@ public class WishServiceTest {
         Option option = new Option(1L, "Option1", 100, null);
         Member member = new Member(1L, "test@example.com", "password");
         MemberResponse memberResponse = new MemberResponse(1L, "test@example.com", null);
-        Product product = new Product(1L, "Product", 100, "imageUrl", category, List.of(option));
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
         ProductResponse productResponse = new ProductResponse(1L, "Product", 100, "imageUrl",
-            category.getId(), List.of(option.getId()));
+            category.getId());
 
         when(memberService.getMemberById(1L)).thenReturn(memberResponse);
         when(productService.getProductById(1L)).thenReturn(productResponse);
@@ -129,7 +129,7 @@ public class WishServiceTest {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Option option = new Option(1L, "Option1", 100, null);
         Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category, List.of(option));
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
         Wish wish = new Wish(1L, member, product);
 
         when(wishRepository.findById(1L)).thenReturn(Optional.of(wish));
@@ -155,7 +155,7 @@ public class WishServiceTest {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Option option = new Option(1L, "Option1", 100, null);
         Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category, List.of(option));
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
         Wish wish = new Wish(1L, member, product);
 
         when(wishRepository.findById(1L)).thenReturn(Optional.of(wish));
@@ -173,7 +173,7 @@ public class WishServiceTest {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Option option = new Option(1L, "Option1", 100, null);
         Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category, List.of(option));
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
         Wish wish = new Wish(1L, member, product);
         Pageable pageable = PageRequest.of(0, 10);
         when(wishRepository.findAllByMember_Id(1L, pageable))

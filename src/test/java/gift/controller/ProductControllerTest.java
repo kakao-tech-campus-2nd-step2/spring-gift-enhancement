@@ -51,9 +51,9 @@ public class ProductControllerTest {
 
     @BeforeEach
     public void setUp() {
-        productResponse = new ProductResponse(1L, "Test Product", 100, "test.jpg", 1L,
-            List.of(1L, 2L));
+        productResponse = new ProductResponse(1L, "Test Product", 100, "test.jpg", 1L);
     }
+
 
     @Test
     @DisplayName("모든 상품 조회 (페이지네이션 적용)")

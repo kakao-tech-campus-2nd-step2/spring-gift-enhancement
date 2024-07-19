@@ -7,7 +7,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +26,7 @@ public class ProductUpdateRequestTest {
     @DisplayName("유효한 상품 업데이트")
     public void testUpdateProductValid() {
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Valid Name", 100,
-            "valid.jpg", 1L, List.of(1L, 2L));
+            "valid.jpg", 1L);
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);
@@ -39,7 +38,7 @@ public class ProductUpdateRequestTest {
     @DisplayName("필수 필드 누락 - 이름")
     public void testUpdateProductNameMissing() {
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest(null, 100, "valid.jpg",
-            1L, List.of(1L, 2L));
+            1L);
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);
@@ -55,7 +54,7 @@ public class ProductUpdateRequestTest {
     @DisplayName("필수 필드 누락 - 가격")
     public void testUpdateProductPriceMissing() {
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Valid Name", null,
-            "valid.jpg", 1L, List.of(1L, 2L));
+            "valid.jpg", 1L);
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);
@@ -71,7 +70,7 @@ public class ProductUpdateRequestTest {
     @DisplayName("필수 필드 누락 - 이미지 URL")
     public void testUpdateProductImageUrlMissing() {
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Valid Name", 100,
-            null, 1L, List.of(1L, 2L));
+            null, 1L);
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);
@@ -84,17 +83,17 @@ public class ProductUpdateRequestTest {
     }
 
     @Test
-    @DisplayName("필수 필드 누락 - 옵션 목록")
-    public void testUpdateProductOptionsMissing() {
+    @DisplayName("필수 필드 누락 - 카테고리 ID")
+    public void testUpdateProductCategoryIdMissing() {
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Valid Name", 100,
-            "valid.jpg", 1L, null);
+            "valid.jpg", null);
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);
 
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
-            violation.getPropertyPath().toString().equals("options") &&
+            violation.getPropertyPath().toString().equals("categoryId") &&
                 violation.getMessage().equals(REQUIRED_FIELD_MISSING)
         );
     }

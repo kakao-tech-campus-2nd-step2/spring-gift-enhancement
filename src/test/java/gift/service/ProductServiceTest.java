@@ -16,7 +16,6 @@ import gift.dto.product.ProductUpdateRequest;
 import gift.exception.product.InvalidProductPriceException;
 import gift.exception.product.ProductNotFoundException;
 import gift.model.Category;
-import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
@@ -48,30 +47,25 @@ public class ProductServiceTest {
             optionRepository);
     }
 
-
     @Test
     @DisplayName("모든 상품 조회 (페이지네이션 적용)")
     public void testGetAllProducts() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Option option = new Option(1L, "Option1", 100, null);
-        Product product = new Product(1L, "Test Product", 100, "test.jpg", category,
-            List.of(option));
+        Product product = new Product(1L, "Test Product", 100, "test.jpg", category);
         Pageable pageable = PageRequest.of(0, 10);
         when(productRepository.findAll(pageable))
             .thenReturn(new PageImpl<>(List.of(product), pageable, 1));
 
         Page<ProductResponse> products = productService.getAllProducts(pageable);
         assertEquals(1, products.getTotalElements());
-        assertEquals("Test Product", products.getContent().getFirst().name());
+        assertEquals("Test Product", products.getContent().get(0).name());
     }
 
     @Test
     @DisplayName("상품 ID로 조회")
     public void testGetProductById() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Option option = new Option(1L, "Option1", 100, null);
-        Product product = new Product(1L, "Test Product", 100, "test.jpg", category,
-            List.of(option));
+        Product product = new Product(1L, "Test Product", 100, "test.jpg", category);
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         ProductResponse productResponse = productService.getProductById(1L);
@@ -94,13 +88,10 @@ public class ProductServiceTest {
     @DisplayName("상품 추가")
     public void testAddProduct() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Option option = new Option(1L, "Option1", 100, null);
-        Product product = new Product(1L, "Test Product", 100, "test.jpg", category,
-            List.of(option));
+        Product product = new Product(1L, "Test Product", 100, "test.jpg", category);
         ProductCreateRequest productCreateRequest = new ProductCreateRequest("Test Product", 100,
-            "test.jpg", 1L, List.of(1L));
+            "test.jpg", 1L);
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
-        when(optionRepository.findById(1L)).thenReturn(Optional.of(option));
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
         ProductResponse createdProduct = productService.addProduct(productCreateRequest);
@@ -111,7 +102,7 @@ public class ProductServiceTest {
     @DisplayName("유효하지 않은 가격으로 상품 추가")
     public void testAddProductInvalidPrice() {
         ProductCreateRequest productCreateRequest = new ProductCreateRequest("Test Product", -100,
-            "test.jpg", 1L, List.of(1L));
+            "test.jpg", 1L);
 
         InvalidProductPriceException exception = assertThrows(InvalidProductPriceException.class,
             () -> {
@@ -125,17 +116,13 @@ public class ProductServiceTest {
     @DisplayName("상품 업데이트")
     public void testUpdateProduct() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Option option = new Option(1L, "Option1", 100, null);
-        Product existingProduct = new Product(1L, "Old Product", 100, "old.jpg", category,
-            List.of(option));
-        Product updatedProduct = new Product(1L, "Updated Product", 200, "updated.jpg", category,
-            List.of(option));
+        Product existingProduct = new Product(1L, "Old Product", 100, "old.jpg", category);
+        Product updatedProduct = new Product(1L, "Updated Product", 200, "updated.jpg", category);
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Updated Product", 200,
-            "updated.jpg", 1L, List.of(1L));
+            "updated.jpg", 1L);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
-        when(optionRepository.findById(1L)).thenReturn(Optional.of(option));
         when(productRepository.save(any(Product.class))).thenReturn(updatedProduct);
 
         ProductResponse result = productService.updateProduct(1L, productUpdateRequest);
@@ -147,7 +134,7 @@ public class ProductServiceTest {
     @DisplayName("존재하지 않는 상품 ID로 업데이트")
     public void testUpdateProductNotFound() {
         ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Updated Product", 200,
-            "updated.jpg", 1L, List.of(1L));
+            "updated.jpg", 1L);
 
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
 

@@ -46,7 +46,7 @@ public class WishRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Product1", 100, "imageUrl1", category, List.of());
+        Product product = new Product(null, "Product1", 100, "imageUrl1", category);
         Product savedProduct = productRepository.save(product);
 
         Option option = new Option(null, "Option1", 100, savedProduct);
@@ -69,8 +69,8 @@ public class WishRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product1 = new Product(null, "Product1", 100, "imageUrl1", category, List.of());
-        Product product2 = new Product(null, "Product2", 200, "imageUrl2", category, List.of());
+        Product product1 = new Product(null, "Product1", 100, "imageUrl1", category);
+        Product product2 = new Product(null, "Product2", 200, "imageUrl2", category);
 
         productRepository.save(product1);
         productRepository.save(product2);
@@ -102,7 +102,7 @@ public class WishRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Product1", 100, "imageUrl1", category, List.of());
+        Product product = new Product(null, "Product1", 100, "imageUrl1", category);
         Product savedProduct = productRepository.save(product);
 
         Option option = new Option(null, "Option1", 100, savedProduct);
@@ -125,7 +125,7 @@ public class WishRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Product1", 100, "imageUrl1", category, List.of());
+        Product product = new Product(null, "Product1", 100, "imageUrl1", category);
         Product savedProduct = productRepository.save(product);
 
         Option option = new Option(null, "Option1", 100, savedProduct);

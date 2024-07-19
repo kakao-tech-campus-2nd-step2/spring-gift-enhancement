@@ -1,6 +1,7 @@
 package gift.controller;
 
 import static gift.util.constants.OptionConstants.OPTION_NOT_FOUND;
+import static gift.util.constants.OptionConstants.OPTION_REQUIRED;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -45,7 +46,7 @@ public class OptionControllerTest {
 
     @BeforeEach
     public void setUp() {
-        optionResponse = new OptionResponse(1L, "Test Option", 100);
+        optionResponse = new OptionResponse(1L, "Test Option", 100, 1L);
     }
 
     @Test
@@ -137,5 +138,16 @@ public class OptionControllerTest {
         mockMvc.perform(delete("/api/products/1/options/1"))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.error").value(OPTION_NOT_FOUND + 1));
+    }
+
+    @Test
+    @DisplayName("옵션이 하나만 존재할 때 삭제")
+    public void testDeleteOptionLastOption() throws Exception {
+        doThrow(new IllegalArgumentException(OPTION_REQUIRED)).when(optionService)
+            .deleteOption(1L, 1L);
+
+        mockMvc.perform(delete("/api/products/1/options/1"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.error").value(OPTION_REQUIRED));
     }
 }

@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,18 +31,17 @@ public class OptionRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category, List.of());
-        Option option = new Option(null, "Option1", 100, product);
-        product.setOptions(List.of(option));
-        Product savedProduct = productRepository.save(product);
+        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        productRepository.save(product);
 
+        Option option = new Option(null, "Option1", 100, product);
         Option savedOption = optionRepository.save(option);
 
         Optional<Option> foundOption = optionRepository.findById(savedOption.getId());
 
         assertThat(foundOption).isPresent();
         assertThat(foundOption.get().getName()).isEqualTo("Option1");
-        assertThat(foundOption.get().getProduct().getId()).isEqualTo(savedProduct.getId());
+        assertThat(foundOption.get().getProduct().getId()).isEqualTo(product.getId());
     }
 
     @Test
@@ -52,12 +50,11 @@ public class OptionRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category, List.of());
+        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        productRepository.save(product);
+
         Option option1 = new Option(null, "Option1", 100, product);
         Option option2 = new Option(null, "Option2", 200, product);
-        product.setOptions(List.of(option1, option2));
-        Product savedProduct = productRepository.save(product);
-
         optionRepository.save(option1);
         optionRepository.save(option2);
 
@@ -71,11 +68,10 @@ public class OptionRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category, List.of());
-        Option option = new Option(null, "Option1", 100, product);
-        product.setOptions(List.of(option));
-        Product savedProduct = productRepository.save(product);
+        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        productRepository.save(product);
 
+        Option option = new Option(null, "Option1", 100, product);
         Option savedOption = optionRepository.save(option);
 
         optionRepository.deleteById(savedOption.getId());
@@ -90,14 +86,13 @@ public class OptionRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category, List.of());
-        Option option = new Option(null, "Option1", 100, product);
-        product.setOptions(List.of(option));
-        Product savedProduct = productRepository.save(product);
+        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        productRepository.save(product);
 
+        Option option = new Option(null, "Option1", 100, product);
         Option savedOption = optionRepository.save(option);
 
-        savedOption.update("Updated Option", 200, savedProduct);
+        savedOption.update("Updated Option", 200, product);
         Option updatedOption = optionRepository.save(savedOption);
 
         Optional<Option> foundOption = optionRepository.findById(updatedOption.getId());
