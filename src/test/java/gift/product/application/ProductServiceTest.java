@@ -137,6 +137,9 @@ public class ProductServiceTest {
     public void 상품_업데이트_테스트() {
         // Given
         Category category = new Category(1L, "Original Category", "Color", "Description", "http://example.com/image.jpg");
+
+
+
         Category newCategory = new Category(2L, "New Category", "Color", "Description", "http://example.com/image.jpg");
         Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
         Option option1 = new Option(1L, "Option1", 10);
