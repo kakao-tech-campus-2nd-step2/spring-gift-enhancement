@@ -26,7 +26,7 @@ public class ProductController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String getProducts(Model model, Pageable pageable) {
         Page<Product> products = productService.getProducts(pageable);
         model.addAttribute("products", products);
@@ -46,7 +46,7 @@ public class ProductController {
         return "product-add-form";
     }
 
-    @PostMapping()
+    @PostMapping
     public String addProduct(@Valid @ModelAttribute ProductRequest productRequest) {
         productService.register(productRequest);
         return "redirect:/api/products";
