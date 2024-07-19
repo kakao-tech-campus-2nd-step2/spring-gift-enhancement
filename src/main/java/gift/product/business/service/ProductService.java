@@ -1,5 +1,6 @@
 package gift.product.business.service;
 
+import gift.product.business.dto.OptionRegisterDto;
 import gift.product.business.dto.ProductPagingDto;
 import gift.product.persistence.entity.Product;
 import gift.product.persistence.repository.CategoryRepository;
@@ -11,17 +12,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionService optionService;
 
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionService = optionService;
     }
 
 
@@ -30,10 +34,13 @@ public class ProductService {
         return ProductDto.from(product);
     }
 
-    public Long createProduct(ProductRegisterDto productRegisterDto) {
+    @Transactional
+    public Long createProduct(ProductRegisterDto productRegisterDto, List<OptionRegisterDto> optionRegisterDtos) {
         var category = categoryRepository.getReferencedCategory(productRegisterDto.categoryId());
         Product product = productRegisterDto.toProduct(category);
-        return productRepository.saveProduct(product);
+        var productId = productRepository.saveProduct(product);
+        optionService.createOption(optionRegisterDtos, productId);
+        return productId;
     }
 
     public Long updateProduct(ProductRegisterDto productRegisterDto, Long id) {

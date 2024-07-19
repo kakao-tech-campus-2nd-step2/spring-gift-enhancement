@@ -2,6 +2,7 @@ package gift.product.presentation.dto;
 
 import gift.product.business.dto.ProductRegisterDto;
 import jakarta.validation.constraints.*;
+import java.util.List;
 import org.hibernate.validator.constraints.URL;
 
 public record RequestProductDto(
@@ -19,7 +20,8 @@ public record RequestProductDto(
     @NotNull @Min(0) Integer price,
     @Size(max = 255) String description,
     @URL String imageUrl,
-    @NotNull Long categoryId
+    @NotNull Long categoryId,
+    @Size(min = 1) List<RequestOptionDto> options
 ) {
 
     public ProductRegisterDto toProductRegisterDto() {
