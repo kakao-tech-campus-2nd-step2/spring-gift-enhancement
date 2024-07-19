@@ -64,6 +64,16 @@ public class Option extends BaseTimeEntity {
         return this.name.equals(name);
     }
 
+    //-- bussiness logic --//
+    public void purchase(int count) {
+        if (quantity < count) {
+            throw new IllegalArgumentException("재고가 부족합니다.");
+        }
+        quantity -= count;
+    }
+
+
+    //-- validation --//
     private static class OptionNameValidator {
 
         private static final int MAX_LENGTH = 50;
