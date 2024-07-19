@@ -20,10 +20,20 @@ public class OptionService {
 
     @Transactional
     public List<Long> createOption(List<OptionRegisterDto> optionRegisterDtos, Long productId) {
+        if(isOptionNamesDuplicate(optionRegisterDtos)) {
+            throw new IllegalArgumentException("옵션 이름이 중복되었습니다.");
+        }
         var product = productRepository.getReferencedProduct(productId);
         var options = optionRegisterDtos.stream()
             .map(optionRegisterDto -> optionRegisterDto.toOption(product))
             .toList();
         return optionRepository.saveAll(options);
+    }
+
+    private boolean isOptionNamesDuplicate(List<OptionRegisterDto> optionRegisterDtos) {
+        return optionRegisterDtos.stream()
+            .map(OptionRegisterDto::name)
+            .distinct()
+            .count() != optionRegisterDtos.size();
     }
 }
