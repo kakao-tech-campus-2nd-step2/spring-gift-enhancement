@@ -16,6 +16,10 @@ public class Option {
     @Pattern(regexp = "^[a-zA-Z0-9\\s()\\[\\]+\\-&/\\_]*$", message = "허용된 특수 문자는 (, ), [, ], +, -, &, /, _ 입니다.")
     private String name;
 
+    @Column(nullable = false)
+    @Size(min = 1, max = 100000000)
+    private Long quantity;
+
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;

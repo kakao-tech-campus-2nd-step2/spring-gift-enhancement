@@ -54,12 +54,12 @@
   - [x] option_name은 공백 포함 최대 50자
   - [x] option_name은 ( ), [ ], +, -, &, /, _ 를 제외한 특수문자 사용 불가
   - [x] 같은 Product의 option_name은 유니크 해야함
+    - [x] Option에 quantity 추가 (1개 이상 ~ 1억개 미만)
 
 - [x] Option Repository 구현
   
 - [x] Product Entity 수정
   - [x] Product에 하나 이상의 옵션을 추가하기 위해 List를 사용하여 옵션 저장
-  - [ ] Product의 Option 수량은 1개 이상 1억개 미만이다.
   
 - [x] Product Controller 수정
   - [x] Option 추가되면서 관련 내용들 확인하고 수정할 것 있다면 수정
