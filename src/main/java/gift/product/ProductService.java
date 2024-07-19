@@ -39,10 +39,10 @@ public class ProductService {
 
     @Transactional
     public Long insertProduct(ProductRequestDto productRequestDto) throws CategoryException, ProductException {
-        Category category = categoryRepository.findById(productRequestDto.getCategoryId())
+        Category category = categoryRepository.findById(productRequestDto.categoryId())
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
-        Product product = new Product(productRequestDto.getName(), productRequestDto.getPrice(),
-            productRequestDto.getImageUrl(), category);
+        Product product = new Product(productRequestDto.name(), productRequestDto.price(),
+            productRequestDto.imageUrl(), category);
         productRepository.save(product);
         return product.getId();
     }
@@ -50,12 +50,12 @@ public class ProductService {
     @Transactional
     public void updateProductById(Long id, ProductRequestDto productRequestDto)
         throws CategoryException, ProductException {
-        Category category = categoryRepository.findById(productRequestDto.getCategoryId())
+        Category category = categoryRepository.findById(productRequestDto.categoryId())
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
-        product.updateInfo(productRequestDto.getName(), productRequestDto.getPrice(),
-            productRequestDto.getImageUrl(), category);
+        product.updateInfo(productRequestDto.name(), productRequestDto.price(),
+            productRequestDto.imageUrl(), category);
     }
 
     public void deleteProductById(Long id) {

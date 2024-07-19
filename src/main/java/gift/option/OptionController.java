@@ -1,7 +1,7 @@
 package gift.option;
 
-import gift.option.model.OptionRequest;
-import gift.option.model.OptionResponse;
+import gift.option.model.OptionRequestDto;
+import gift.option.model.OptionResponseDto;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,20 +22,20 @@ public class OptionController {
     }
 
     @GetMapping("/api/products/{id}/options")
-    public List<OptionResponse> getAllOption(@PathVariable("id") Long productId) {
+    public List<OptionResponseDto> getAllOption(@PathVariable("id") Long productId) {
         return optionService.getOptions(productId);
     }
 
     @PostMapping("/api/products/{id}/options")
     public Long addOption(@PathVariable("id") Long productId,
-        @Valid @RequestBody OptionRequest optionRequest) {
-        return optionService.addOption(productId, optionRequest);
+        @Valid @RequestBody OptionRequestDto optionRequestDto) {
+        return optionService.addOption(productId, optionRequestDto);
     }
 
     @PutMapping("/api/products/{productId}/options/{optionId}")
     public void updateOption(@PathVariable("optionId") Long optionId,
-        @Valid @RequestBody OptionRequest optionRequest) {
-        optionService.updateOption(optionId, optionRequest);
+        @Valid @RequestBody OptionRequestDto optionRequestDto) {
+        optionService.updateOption(optionId, optionRequestDto);
     }
 
     @DeleteMapping("/api/products/{productId}/options/{optionId}")

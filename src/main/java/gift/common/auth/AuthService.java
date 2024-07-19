@@ -22,8 +22,8 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public MemberResponseDto getToken(MemberRequestDto memberRequestDto) throws MemberException {
-        Member member = memberRepository.findByEmail(memberRequestDto.getEmail());
-        if (!member.matchPassword(memberRequestDto.getPassword())) {
+        Member member = memberRepository.findByEmail(memberRequestDto.email());
+        if (!member.matchPassword(memberRequestDto.password())) {
             throw new MemberException(MemberErrorCode.FAILURE_LOGIN);
         }
         return new MemberResponseDto(tokenProvider.generateToken(member));

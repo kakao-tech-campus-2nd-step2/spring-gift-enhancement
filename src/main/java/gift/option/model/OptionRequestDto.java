@@ -7,25 +7,29 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class OptionRequest {
-
+public record OptionRequestDto(
     @NotBlank
     @Size(max = 50, message = "옵션 이름은 공백을 포함하여 최대 50자입니다.")
     @Pattern(regexp = "^[a-zA-Z0-9기-힣 ()\\[\\]+\\-&/_]*$")
-    private String name;
+    String name,
     @NotNull
     @Max(value = 99_999_999, message = "옵션 수량은 1억개 미만입니다.")
     @Min(value = 1, message = "옵션 수량은 최소 1개 이상입니다.")
-    private Integer quantity;
+    Integer quantity
+    ) {
 
-    public OptionRequest() {
+    public OptionRequestDto(String name, Integer quantity) {
+        this.name = name;
+        this.quantity = quantity;
     }
 
-    public String getName() {
+    @Override
+    public String name() {
         return name;
     }
 
-    public Integer getQuantity() {
+    @Override
+    public Integer quantity() {
         return quantity;
     }
 }

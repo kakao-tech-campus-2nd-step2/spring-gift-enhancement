@@ -3,43 +3,13 @@ package gift.member.model;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class MemberRequestDto {
-
+public record MemberRequestDto(
     @Email
-    private String email;
-
+    String email,
     @NotBlank(message = "비밀번호를 입력해주세요.")
-    private String password;
-
-    private String name;
-
-    private String role;
-
-    public MemberRequestDto() {
-    }
-
-    public MemberRequestDto(String email, String password, String name, String role) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.role = role;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getRole() {
-        return role;
-    }
+    String password,
+    String name,
+    String role) {
 
     public Member toEntity() {
         return new Member(
