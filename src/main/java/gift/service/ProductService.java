@@ -46,7 +46,7 @@ public class ProductService {
         var product = productRepository.findById(id)
                 .orElseThrow(() -> ProductNotFoundException.of(id));
         product.edit(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
-
+        productRepository.save(product);
     }
 
     public void deleteProduct(Long id) {
