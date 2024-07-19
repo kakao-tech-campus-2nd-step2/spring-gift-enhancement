@@ -62,12 +62,6 @@ public class Option {
         return product;
     }
 
-    public void updateAll(String name, int quantity) {
-        this.name = name;
-        this.quantity = quantity;
-        // this.product = product;
-    }
-
     public void checkDuplicateName(List<Option> optionList) {
 
         if (optionList.stream().map(Option::getName).anyMatch((name) -> name.equals(this.name))) {
