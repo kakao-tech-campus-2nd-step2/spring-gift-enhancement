@@ -15,4 +15,5 @@ public class Message {
     public static final String POSITIVE_NUMBER_REQUIRED_MSG = "0이상의 값을 입력해 주세요.";
     public static final String EMAIL_PATTERN_ERROR_MSG = "이메일 형식이 잘못되었습니다.";
     public static final String DATA_NOT_FOUND_ERROR_MSG = "데이터를 찾을 수 없습니다.";
+    public static final String INVALID_QUANTITY_ERROR_MSG = "옵션 수량은 1개 이상 1억 개 미만이어야 합니다.";
 }

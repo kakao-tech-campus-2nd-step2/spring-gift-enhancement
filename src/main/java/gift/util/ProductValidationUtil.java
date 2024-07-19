@@ -4,10 +4,9 @@ import gift.exception.CustomException;
 
 import java.util.regex.Pattern;
 
-import static gift.exception.ErrorCode.KAKAO_CONTAIN_ERROR;
-import static gift.exception.ErrorCode.SPECIAL_CHAR_ERROR;
+import static gift.exception.ErrorCode.*;
 
-public class ProductNameValidationUtil {
+public class ProductValidationUtil {
 
     private static final Pattern SPECIAL_CHAR_PATTERN = Pattern.compile("[^a-zA-Z0-9\\s()\\[\\]+\\-&/_가-힣]");
 
@@ -24,5 +23,11 @@ public class ProductNameValidationUtil {
 
     private static boolean containsKAKAO(String productName) {
         return !productName.isEmpty() & productName.contains("카카오");
+    }
+
+    public static void isValidOptionQuantity(int quantity) {
+        if (quantity < 1 || quantity >= 100_000_000) {
+            throw new CustomException(INVALID_QUANTITY_ERROR);
+        }
     }
 }

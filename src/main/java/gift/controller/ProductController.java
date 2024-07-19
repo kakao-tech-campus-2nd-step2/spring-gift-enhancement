@@ -38,7 +38,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<String> addProduct(@Valid @RequestBody AddProductRequest newProduct) {
-        return ResponseEntity.ok(productService.addProduct(newProduct));
+        return ResponseEntity.ok(productService.addProduct(newProduct.getProductRequest(), newProduct.getOptionRequest()));
     }
 
     @PutMapping("/{productId}")

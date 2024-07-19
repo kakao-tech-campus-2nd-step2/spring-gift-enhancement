@@ -1,15 +1,20 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
-import gift.dto.request.AddProductRequest;
+import gift.dto.request.OptionRequest;
+import gift.dto.request.ProductRequest;
 import gift.dto.request.UpdateProductRequest;
 import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static gift.constant.Message.*;
 import static gift.exception.ErrorCode.DATA_NOT_FOUND;
@@ -19,10 +24,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public Product getProduct(Long productId) {
@@ -33,9 +40,10 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public String addProduct(AddProductRequest requestProduct) {
+    public String addProduct(ProductRequest requestProduct, OptionRequest requestOption) {
         Category category = categoryRepository.findByName(requestProduct.getCategory()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
-        productRepository.save(new Product(requestProduct, category));
+        Option option = optionRepository.save(new Option(requestOption));
+        productRepository.save(new Product(requestProduct, category, option));
         return ADD_SUCCESS_MSG;
     }
 

@@ -1,10 +1,13 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
-import gift.dto.request.AddProductRequest;
+import gift.dto.request.OptionRequest;
+import gift.dto.request.ProductRequest;
 import gift.dto.request.UpdateProductRequest;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +17,6 @@ import java.util.Optional;
 
 import static gift.constant.Message.ADD_SUCCESS_MSG;
 import static gift.constant.Message.UPDATE_SUCCESS_MSG;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -23,25 +25,32 @@ class ProductServiceTest {
 
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
+    private OptionRepository optionRepository;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
         categoryRepository = mock(CategoryRepository.class);
-        productService = new ProductService(productRepository, categoryRepository);
+        optionRepository = mock(OptionRepository.class);
+        productService = new ProductService(productRepository, categoryRepository, optionRepository);
     }
 
     @Test
     void addProduct() {
         //given
-        AddProductRequest addProductRequest = new AddProductRequest("newProduct", 500, "image.image", "뷰티");
+        ProductRequest productRequest = new ProductRequest("newProduct", 500, "image.image", "뷰티");
+        OptionRequest optionRequest = new OptionRequest("newOption", 5);
+
         Category category = new Category(1L, "뷰티");
+        Option option = new Option(optionRequest);
+
         given(categoryRepository.findByName(any())).willReturn(Optional.of(new Category()));
-        given(productRepository.save(any())).willReturn(new Product(addProductRequest, category));
+        given(productRepository.save(any())).willReturn(new Product(productRequest, category, option));
+        given(optionRepository.save(any())).willReturn(new Option(optionRequest));
 
         // when
-        String successMsg = productService.addProduct(addProductRequest);
+        String successMsg = productService.addProduct(productRequest, optionRequest);
 
         // then
         Assertions.assertThat(successMsg).isEqualTo(ADD_SUCCESS_MSG);
