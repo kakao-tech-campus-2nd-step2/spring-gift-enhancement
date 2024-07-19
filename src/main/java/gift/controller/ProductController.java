@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.dto.ProductDto;
+import gift.dto.RequestProductDto;
 import gift.services.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -36,15 +37,14 @@ public class ProductController {
 
     // 제품 추가
     @PostMapping("/add")
-    public ProductDto addProduct(@Valid @ModelAttribute ProductDto productDto) {
-        return productService.addProduct(productDto);
+    public ProductDto addProduct(@Valid @ModelAttribute RequestProductDto requestProductDto) {
+        return productService.addProduct(requestProductDto);
     }
 
     // 제품 수정
     @PostMapping("/update/{id}")
-    public ProductDto updateProduct(@Valid @ModelAttribute ProductDto productDto) {
-        return productService.updateProduct(productDto);
-
+    public ProductDto updateProduct(@Valid @ModelAttribute RequestProductDto requestProductDto) {
+        return productService.updateProduct(requestProductDto);
     }
 
     // 제품 삭제
