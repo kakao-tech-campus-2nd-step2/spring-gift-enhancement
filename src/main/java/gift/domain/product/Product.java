@@ -1,8 +1,12 @@
 package gift.domain.product;
 
 import gift.domain.category.Category;
+import gift.domain.option.Option;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -21,6 +25,9 @@ public class Product {
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     private Category category;
+
+    @OneToMany(mappedBy = "product",cascade = CascadeType.REMOVE)
+    private List<Option> options = new ArrayList<>();
 
     protected Product() {
     }
