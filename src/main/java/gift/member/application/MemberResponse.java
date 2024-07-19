@@ -1,7 +1,6 @@
 package gift.member.application;
 
 import gift.member.domain.Member;
-import gift.member.presentation.request.ResolvedMember;
 
 public record MemberResponse(
         Long id,
