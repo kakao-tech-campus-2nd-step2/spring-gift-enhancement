@@ -4,8 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.common.dto.PageResponse;
-import gift.model.category.Category;
-import gift.model.product.ProductRequest;
+import gift.model.product.CreateProductRequest;
 import gift.model.product.ProductResponse;
 import gift.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -27,39 +26,39 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 등록")
     void save() {
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
-        ProductResponse response = productService.addProduct(productRequest);
+        CreateProductRequest createProductRequest = new CreateProductRequest("product1", 1000, "image1.jpg", 1L);
+        ProductResponse response = productService.addProduct(createProductRequest);
 
         assertAll(
             () -> assertThat(response.id()).isNotNull(),
-            () -> assertThat(response.name()).isEqualTo(productRequest.name()),
-            () -> assertThat(response.price()).isEqualTo(productRequest.price()),
-            () -> assertThat(response.imageUrl()).isEqualTo(productRequest.imageUrl())
+            () -> assertThat(response.name()).isEqualTo(createProductRequest.name()),
+            () -> assertThat(response.price()).isEqualTo(createProductRequest.price()),
+            () -> assertThat(response.imageUrl()).isEqualTo(createProductRequest.imageUrl())
         );
     }
 
     @Test
     @DisplayName("상품 조회")
     void findById() {
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
-        ProductResponse response = productService.addProduct(productRequest);
+        CreateProductRequest createProductRequest = new CreateProductRequest("product1", 1000, "image1.jpg", 1L);
+        ProductResponse response = productService.addProduct(createProductRequest);
         ProductResponse product = productService.findProduct(response.id());
 
         assertAll(
             () -> assertThat(product.id()).isNotNull(),
-            () -> assertThat(product.name()).isEqualTo(productRequest.name()),
-            () -> assertThat(product.price()).isEqualTo(productRequest.price()),
-            () -> assertThat(product.imageUrl()).isEqualTo(productRequest.imageUrl())
+            () -> assertThat(product.name()).isEqualTo(createProductRequest.name()),
+            () -> assertThat(product.price()).isEqualTo(createProductRequest.price()),
+            () -> assertThat(product.imageUrl()).isEqualTo(createProductRequest.imageUrl())
         );
     }
 
     @Test
     @DisplayName("전체 상품 조회")
     void findAll() {
-        ProductRequest productRequest1 = new ProductRequest("product1", 1000, "image1.jpg", 1L);
-        ProductRequest productRequest2 = new ProductRequest("product2", 2000, "image2.jpg", 1L);
-        productService.addProduct(productRequest1);
-        productService.addProduct(productRequest2);
+        CreateProductRequest createProductRequest1 = new CreateProductRequest("product1", 1000, "image1.jpg", 1L);
+        CreateProductRequest createProductRequest2 = new CreateProductRequest("product2", 2000, "image2.jpg", 1L);
+        productService.addProduct(createProductRequest1);
+        productService.addProduct(createProductRequest2);
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
         PageResponse<ProductResponse> products = productService.findAllProduct(pageable);
@@ -70,10 +69,10 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 수정")
     void update() {
-        ProductRequest productRequest = new ProductRequest("product1", 1000, "image1.jpg", 1L);
-        productService.addProduct(productRequest);
-        ProductRequest updateRequest = new ProductRequest("update1", 2000, "update1.jpg", 1L);
-        ProductResponse response = productService.addProduct(productRequest);
+        CreateProductRequest createProductRequest = new CreateProductRequest("product1", 1000, "image1.jpg", 1L);
+        productService.addProduct(createProductRequest);
+        CreateProductRequest updateRequest = new CreateProductRequest("update1", 2000, "update1.jpg", 1L);
+        ProductResponse response = productService.addProduct(createProductRequest);
 
         ProductResponse product = productService.updateProduct(response.id(), updateRequest);
 
@@ -87,10 +86,10 @@ public class ProductServiceTest {
     @Test
     @DisplayName("상품 삭제")
     void delete() {
-        ProductRequest productRequest1 = new ProductRequest("product1", 1000, "image1.jpg", 1L);
-        ProductRequest productRequest2 = new ProductRequest("product2", 2000, "image2.jpg", 1L);
-        productService.addProduct(productRequest1);
-        productService.addProduct(productRequest2);
+        CreateProductRequest createProductRequest1 = new CreateProductRequest("product1", 1000, "image1.jpg", 1L);
+        CreateProductRequest createProductRequest2 = new CreateProductRequest("product2", 2000, "image2.jpg", 1L);
+        productService.addProduct(createProductRequest1);
+        productService.addProduct(createProductRequest2);
 
         productService.deleteProduct(1L);
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());

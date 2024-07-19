@@ -1,6 +1,5 @@
 package gift.model.category;
 
-import gift.model.product.ProductRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

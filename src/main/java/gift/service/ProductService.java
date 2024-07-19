@@ -4,9 +4,11 @@ import gift.common.dto.PageResponse;
 import gift.common.exception.CategoryNotFoundException;
 import gift.common.exception.ProductNotFoundException;
 import gift.model.category.Category;
+import gift.model.option.Option;
 import gift.model.product.Product;
-import gift.model.product.ProductRequest;
+import gift.model.product.CreateProductRequest;
 import gift.model.product.ProductResponse;
+import gift.model.product.UpdateProductRequest;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
@@ -31,10 +33,15 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse addProduct(ProductRequest productRequest) {
-        Category category = categoryRepository.findById(productRequest.categoryId()).orElseThrow(
+    public ProductResponse addProduct(CreateProductRequest request) {
+        Category category = categoryRepository.findById(request.categoryId()).orElseThrow(
             CategoryNotFoundException::new);
-        Product product = productRepository.save(productRequest.toEntity(category));
+        Option option = new Option(request.optionName(), request.quantity());
+        Product product = request.toEntity(category);
+
+        product.addOption(option);
+        productRepository.save(product);
+
         return ProductResponse.from(product);
     }
 
@@ -54,10 +61,10 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
+    public ProductResponse updateProduct(Long id, UpdateProductRequest request) {
         Product product = productRepository.findById(id)
             .orElseThrow(ProductNotFoundException::new);
-        product.updateProduct(productRequest);
+        product.updateProduct(request.name(), request.price(), request.imageUrl());
         return ProductResponse.from(product);
     }
 
