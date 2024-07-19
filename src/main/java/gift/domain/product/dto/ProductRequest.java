@@ -1,6 +1,7 @@
 package gift.domain.product.dto;
 
-import gift.domain.product.entity.Product;
+import gift.domain.option.dto.OptionRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -22,14 +23,18 @@ public class ProductRequest {
 
     private Long categoryId;
 
+    @Valid
+    private OptionRequest optionRequest;
+
     private ProductRequest() {
     }
 
-    public ProductRequest(String name, int price, String imageUrl, Long categoryId) {
+    public ProductRequest(String name, int price, String imageUrl, Long categoryId, OptionRequest optionRequest) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+        this.optionRequest = optionRequest;
     }
 
     public String getName() {
@@ -45,5 +50,9 @@ public class ProductRequest {
     }
     public Long getCategoryId() {
         return categoryId;
+    }
+
+    public OptionRequest getOptionRequest() {
+        return optionRequest;
     }
 }
