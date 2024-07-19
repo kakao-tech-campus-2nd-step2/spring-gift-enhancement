@@ -1,10 +1,14 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
+import gift.dto.requestDto.OptionCreateRequestDTO;
+import gift.dto.requestDto.ProductCreateRequestDTO;
 import gift.dto.requestDto.ProductRequestDTO;
 import gift.dto.responseDto.ProductResponseDTO;
 import gift.repository.JpaCategoryRepository;
+import gift.repository.JpaOptionRepository;
 import gift.repository.JpaProductRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,11 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
     private final JpaProductRepository jpaProductRepository;
     private final JpaCategoryRepository jpaCategoryRepository;
+    private final JpaOptionRepository jpaOptionRepository;
 
     public ProductService(JpaProductRepository jpaProductRepository,
-        JpaCategoryRepository jpaCategoryRepository) {
+        JpaCategoryRepository jpaCategoryRepository, JpaOptionRepository jpaOptionRepository) {
         this.jpaProductRepository = jpaProductRepository;
         this.jpaCategoryRepository = jpaCategoryRepository;
+        this.jpaOptionRepository = jpaOptionRepository;
     }
 
     @Transactional(readOnly = true)
@@ -52,12 +58,16 @@ public class ProductService {
         return ProductResponseDTO.of(product);
     }
 
-    public Long addProduct(ProductRequestDTO productRequestDTO) {
+    public Long addProduct(ProductCreateRequestDTO productCreateRequestDTO) {
+        ProductRequestDTO productRequestDTO = productCreateRequestDTO.productRequestDTO();
+        OptionCreateRequestDTO optionCreateRequestDTO = productCreateRequestDTO.optionCreateRequestDTO();
+
         Category category = getCategory(productRequestDTO);
 
-        Product product = new Product(productRequestDTO.name(), productRequestDTO.price(),
-            productRequestDTO.imageUrl(), category);
+        Product product = productRequestDTO.toEntity(category);
+        Option option = optionCreateRequestDTO.toEntity(product);
 
+        jpaOptionRepository.save(option);
         return jpaProductRepository.save(product).getId();
     }
 

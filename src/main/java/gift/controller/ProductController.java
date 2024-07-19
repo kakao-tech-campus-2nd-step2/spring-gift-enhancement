@@ -4,9 +4,11 @@ import gift.auth.LoginUser;
 import gift.domain.User;
 import gift.dto.common.apiResponse.ApiResponseBody.SuccessBody;
 import gift.dto.common.apiResponse.ApiResponseGenerator;
+import gift.dto.requestDto.ProductCreateRequestDTO;
 import gift.dto.requestDto.ProductRequestDTO;
 import gift.dto.responseDto.ProductResponseDTO;
 import gift.service.AuthService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -26,10 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ProductController {
     private final ProductService productService;
+    private final OptionService optionService;
     private final AuthService authService;
 
-    public ProductController(ProductService productService, AuthService authService) {
+    public ProductController(ProductService productService, OptionService optionService,
+        AuthService authService) {
         this.productService = productService;
+        this.optionService = optionService;
         this.authService = authService;
     }
 
@@ -60,10 +65,11 @@ public class ProductController {
 
     @PostMapping("/product")
     public ResponseEntity<SuccessBody<Long>> addProduct(
-        @Valid @RequestBody ProductRequestDTO productRequestDTO,
+        @Valid @RequestBody ProductCreateRequestDTO productCreateRequestDTO,
         @LoginUser User user) {
         authService.authorizeAdminUser(user);
-        Long productId = productService.addProduct(productRequestDTO);
+        Long productId = productService.addProduct(productCreateRequestDTO);
+
         return ApiResponseGenerator.success(HttpStatus.CREATED, "상품이 등록되었습니다.", productId);
     }
 
