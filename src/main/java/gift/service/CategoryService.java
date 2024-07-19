@@ -54,7 +54,7 @@ public class CategoryService {
 
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("존재하지않는 카테코리입니다."));
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
         categoryRepository.delete(category);
     }
 

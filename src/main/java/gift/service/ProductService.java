@@ -7,6 +7,7 @@ import gift.exception.CategoryNotFoundException;
 import gift.exception.InvalidProductDataException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.category.CategorySpringDataJpaRepository;
+import gift.repository.option.OptionSpringDataJpaRepository;
 import gift.repository.product.ProductSpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,11 +24,14 @@ import static gift.exception.ErrorCode.PRODUCT_NOT_FOUND;
 public class ProductService {
     private final ProductSpringDataJpaRepository productRepository;
     private final CategorySpringDataJpaRepository categoryRepository;
+    private final OptionSpringDataJpaRepository optionRepository;
 
     @Autowired
-    public ProductService(ProductSpringDataJpaRepository productRepository, CategorySpringDataJpaRepository categoryRepository) {
+    public ProductService(ProductSpringDataJpaRepository productRepository, CategorySpringDataJpaRepository categoryRepository, OptionSpringDataJpaRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
+
     }
 
     public Product register(ProductRequest productRequest) {

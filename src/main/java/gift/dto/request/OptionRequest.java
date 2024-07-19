@@ -9,8 +9,8 @@ public class OptionRequest {
     @Pattern(regexp = "^[\\w\\s()\\[\\]+\\-&/]+$")
     private String name;
 
-    @Min(1)
-    @Max(99999999)
+    @Min(value = 1, message = "옵션 수량은 최소 1개 이상이어야 합니다.")
+    @Max(value = 99999999, message = "옵션 수량은 최대 1억 개 미만이어야 합니다.")
     @NotNull(message = "옵션 수량을 입력하세요.")
     private Integer quantity;
 }
