@@ -54,4 +54,25 @@ public class OptionService {
 
         optionRepository.save(option);
     }
+
+    // 옵션 수정
+    public void updateOption(Long productId, Long optionId, OptionRequestDTO optionRequestDTO) {
+        productRepository.findById(productId)
+            .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "옵션을 수정할 상품 존재 X"));
+
+        List<Option> options = optionRepository.findAllByProductId(productId);
+
+        for (Option option : options) {
+            if (option.getName().equals(optionRequestDTO.getName()) && option.getId() != optionId) {
+                throw new BusinessException(HttpStatus.BAD_REQUEST, "상품에 동일한 이름의 옵션 존재");
+            }
+        }
+
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "수정할 옵션 존재 X"));
+
+        option.update(optionRequestDTO.getName(), optionRequestDTO.getQuantity());
+
+        optionRepository.save(option);
+    }
 }
