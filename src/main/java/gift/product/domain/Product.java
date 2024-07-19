@@ -1,6 +1,7 @@
 package gift.product.domain;
 
 import gift.category.domain.Category;
+import gift.option.domain.Option;
 import gift.wish.domain.WishlistItem;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,9 +36,15 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<WishlistItem> wishlistItemList;
 
+    @OneToMany(mappedBy = "product")
+    @Size(min=1, message = "option은 최소한 1개 있어야한다.")
+    private List<Option> optionList;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    // Constructor
     public Product() {}
 
     public Product(long id, String name, long price, String imageUrl) {
@@ -47,6 +54,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    //getter and setter
     public long getId() {
         return id;
     }
@@ -93,5 +101,12 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+    public List<Option> getOptionList() {
+        return optionList;
+    }
+
+    public void setOptionList(List<Option> optionList) {
+        this.optionList = optionList;
     }
 }

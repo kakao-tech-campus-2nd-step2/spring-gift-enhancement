@@ -31,6 +31,9 @@ class WishlistRepositoryTest {
     @Autowired CategoryRepository categoryRepository;
 
     @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
     private WishlistRepository wishlistRepository;
     @BeforeEach
     public void setUp() {

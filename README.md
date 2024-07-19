@@ -22,3 +22,22 @@ showEditForm() -> ProductDTO로 변경
 createProduct() -> 파라미터 ProductDTO로 변경
 ### add_product
 category 반영
+---
+## 2단계 요구사항
+### Option
+- id
+- name
+- quantity
+- @ManyToOne-Product
+### OptionDTO
+- name
+- quantity
+- productId
+### CRUD
+### OptionService
+### Product_DTO
+- OptionList
+### Product
+- OneToMany-List<Option>
+### add_product
+- option 입력 추가

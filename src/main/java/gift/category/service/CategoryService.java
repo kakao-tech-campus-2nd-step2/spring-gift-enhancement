@@ -6,9 +6,6 @@ import gift.category.repository.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.swing.text.html.Option;
-import org.hibernate.query.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +21,7 @@ public class CategoryService {
         List<Category> categories = categoryRepository.findAll();
         return categories.stream()
             .map(category -> new CategoryDTO(category.getId(), category.getName()))
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public Optional<CategoryDTO> findById(Long id) {
@@ -40,12 +37,10 @@ public class CategoryService {
     }
 
     public CategoryDTO update(CategoryDTO categoryDTO) {
-        if (categoryRepository.existsById(categoryDTO.id())) {
-            Category category = categoryRepository.findById(categoryDTO.id()).get();
-            category.setName(categoryDTO.name());
-            categoryRepository.save(category);
-            return new CategoryDTO(category.getId(), category.getName());
-        }
-        throw new EntityNotFoundException("Category not found with id: " + categoryDTO.id());
+        Category category = categoryRepository.findById(categoryDTO.id())
+            .orElseThrow(() -> new EntityNotFoundException("Category Id " + categoryDTO.id() + "가 없습니다."));
+        category.setName(categoryDTO.name());
+        categoryRepository.save(category);
+        return new CategoryDTO(category.getId(), category.getName());
     }
 }

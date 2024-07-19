@@ -3,6 +3,10 @@ package gift.product.service;
 import gift.category.domain.Category;
 import gift.category.repository.CategoryRepository;
 import gift.category.service.CategoryService;
+import gift.option.domain.Option;
+import gift.option.domain.OptionDTO;
+import gift.option.repository.OptionRepository;
+import gift.option.service.OptionService;
 import gift.product.domain.Product;
 import gift.product.domain.ProductDTO;
 import gift.product.repository.ProductRepository;
@@ -22,11 +26,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionService optionService;
 
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository,
+        OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionService = optionService;
     }
 
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
@@ -37,7 +44,7 @@ public class ProductService {
     public List<ProductDTO> getAllProducts() {
         return productRepository.findAll().stream()
             .map(this::convertToDTO)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public Optional<ProductDTO> getProductDTOById(Long id) {
@@ -50,35 +57,43 @@ public class ProductService {
     }
 
     public void createProduct(@Valid ProductDTO productDTO) {
-        productRepository.save(convertToEntity(productDTO));
+        Product product = productRepository.save(convertToEntity(productDTO));
+        optionService.saveAllwithProductId(productDTO.getOptionDTOList(), product.getId());
     }
 
     public void updateProduct(Long id, @Valid ProductDTO productDTO) {
         if(productRepository.existsById(id)){
-            Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product id " + id + "가 없습니다."));
-
-            product.setName(productDTO.getName());
-            product.setPrice(productDTO.getPrice());
-            product.setImageUrl(productDTO.getImageUrl());
-
-            Category category = categoryRepository.findById(productDTO.getCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException("Category id " + productDTO.getCategoryId() + "가 없습니다."));
-            product.setCategory(category);
+            Product product = updateById(id, productDTO);
             productRepository.save(product);
         }
+    }
+
+    private Product updateById(Long id, ProductDTO productDTO) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Product id " + id + "가 없습니다."));
+        //update 함수로
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setImageUrl(productDTO.getImageUrl());
+
+        Category category = categoryRepository.findById(productDTO.getCategoryId())
+            .orElseThrow(() -> new EntityNotFoundException("Category id " + productDTO.getCategoryId() + "가 없습니다."));
+        product.setCategory(category);
+        return product;
     }
 
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
     private ProductDTO convertToDTO(Product product) {
+        List<OptionDTO> optionDTOList = optionService.findAllByProductId(product.getId());
         return new ProductDTO(
             product.getId(),
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategory().getId()
+            product.getCategory().getId(),
+            optionDTOList
         );
     }
 
@@ -91,6 +106,10 @@ public class ProductService {
         product.setImageUrl(productDTO.getImageUrl());
         product.setCategory(category);
 
+        List<Option> optionList = productDTO.getOptionDTOList().stream()
+            .map(optionService::convertToEntity)
+            .toList();
+        product.setOptionList(optionList);
         return product;
     }
 }

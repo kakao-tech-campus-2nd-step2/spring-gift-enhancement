@@ -1,6 +1,7 @@
 package gift.exception;
 
 import gift.product.domain.Product;
+import gift.product.domain.ProductDTO;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,8 +14,7 @@ public class GlobalExceptionHandler {
     public String handleConstraintViolationException(ConstraintViolationException ex, Model model) {
         String errorMessage = ex.getMessage();
         model.addAttribute("errorMessage", errorMessage);
-        model.addAttribute("product", new Product(0,"", 0, ""));
+        model.addAttribute("product", new ProductDTO());
         return "add_product";
     }
-
 }
