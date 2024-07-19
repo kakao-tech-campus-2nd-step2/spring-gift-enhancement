@@ -18,7 +18,7 @@ public class OptionEntity {
     private Long quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     private ProductEntity productEntity;
 
     public OptionEntity() {

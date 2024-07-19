@@ -66,7 +66,6 @@ public class OptionService {
         productEntity.getOptionEntities().add(optionEntity);
         optionEntity.setName(option.getName());
         optionEntity.setQuantity(option.getQuantity());
-        optionEntity.setProductEntity(productEntity);
         optionRepository.save(optionEntity);
     }
 
