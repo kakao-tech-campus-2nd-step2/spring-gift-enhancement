@@ -1,6 +1,7 @@
 package gift.controller;
 
 
+import gift.dto.product.ModifyProductDTO;
 import gift.dto.product.SaveProductDTO;
 import gift.dto.product.ShowProductDTO;
 import gift.entity.Product;
