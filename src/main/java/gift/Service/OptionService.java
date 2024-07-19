@@ -41,4 +41,10 @@ public class OptionService {
         return deletedOption;
     }
 
+    public void subtractQuantity(Long productId, Long optionId, int count){
+        Option option = optionRepository.findOptionById(optionId);
+        if(option.subtract(count) == 0 ){
+            this.deleteOption(productId,optionId);
+        }
+    }
 }
