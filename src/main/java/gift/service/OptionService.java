@@ -1,6 +1,7 @@
 package gift.service;
 
 
+import gift.dto.OptionRequestDTO;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.OptionException;
@@ -33,21 +34,25 @@ public class OptionService {
         return options;
     }
 
-    public void save(Long productId, Option option) {
+    public void save(Long productId, OptionRequestDTO optionRequestDTO) {
 
         Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new OptionException("상품이 존재하지 않습니다"));
 
-        String optionName = option.getName();
+        String optionName = optionRequestDTO.name();
         Optional<Option> existingOption = optionRepository.findByProductIdAndName(productId, optionName);
         if(existingOption.isPresent()) {
             throw new OptionException("옵션 이름이 존재합니다.");
         }
 
-        optionRepository.save(option);
+        optionRepository.save(toEntity(existingProduct, optionRequestDTO));
+    }
 
-
-
+    private Option toEntity(Product product, OptionRequestDTO optionRequestDTO ) {
+        String optionName = optionRequestDTO.name();
+        int quantity = optionRequestDTO.quantity();
+        Option option = new Option(optionName, quantity, product);
+        return option;
     }
 
 }

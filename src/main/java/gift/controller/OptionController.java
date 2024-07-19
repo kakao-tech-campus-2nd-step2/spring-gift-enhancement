@@ -1,9 +1,11 @@
 package gift.controller;
 
 
+import gift.dto.OptionRequestDTO;
 import gift.entity.Option;
 import gift.repository.OptionRepository;
 import gift.service.OptionService;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,11 +28,11 @@ public class OptionController {
         this.optionService = optionService;
     }
 
-
     @GetMapping("options")
     public ResponseEntity<List<Option>> getOptions() {
         List<Option> options = optionService.findAll();
-
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(options);
     }
 
     @GetMapping("options/{productId}")
@@ -41,8 +43,8 @@ public class OptionController {
     }
 
     @PostMapping("options/{productId}")
-    public ResponseEntity<String> createOption(@PathVariable Long productId, @RequestBody Option option) {
-        optionService.save(productId, option);
+    public ResponseEntity<String> createOption(@PathVariable Long productId, @Valid @RequestBody OptionRequestDTO optionRequestDTO) {
+        optionService.save(productId, optionRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("상품 option 등록 완료");
     }
