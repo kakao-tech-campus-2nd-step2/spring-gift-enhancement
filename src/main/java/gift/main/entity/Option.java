@@ -2,6 +2,7 @@ package gift.main.entity;
 
 import gift.main.Exception.CustomException;
 import gift.main.Exception.ErrorCode;
+import gift.main.dto.OptionQuantityRequest;
 import gift.main.dto.OptionRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -20,25 +21,24 @@ public class Option {
 
     @Min(1)
     @Max(100000000)
-    private int num;
+    private int quantity;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
     public Option() {
-
     }
 
-    public Option(String optionName, int num, Product product) {
+    public Option(String optionName, int quantity, Product product) {
         this.optionName = optionName;
-        this.num = num;
+        this.quantity = quantity;
         this.product = product;
     }
 
     public Option(OptionRequest optionRequest, Product product) {
         this.optionName = optionRequest.name();
-        this.num = optionRequest.num();
+        this.quantity = optionRequest.quantity();
         this.product = product;
     }
 
@@ -50,9 +50,6 @@ public class Option {
         return optionName;
     }
 
-    public int getNum() {
-        return num;
-    }
 
     public Product getProduct() {
         return product;
@@ -62,28 +59,21 @@ public class Option {
         if (this.id == optionId) {
             return;
         }
-        if (this.num == optionRequest.num()) {
-            throw new CustomException(ErrorCode.ALREADY_EXISTS_OPTION_NUM);
-        }
+
         if (this.optionName == optionRequest.name()) {
             throw new CustomException(ErrorCode.ALREADY_EXISTS_OPTION_NAME);
         }
-
     }
 
     public void isDuplicate(OptionRequest optionRequest) {
-        if (this.num == optionRequest.num()) {
-            throw new CustomException(ErrorCode.ALREADY_EXISTS_OPTION_NUM);
-        }
         if (this.optionName == optionRequest.name()) {
             throw new CustomException(ErrorCode.ALREADY_EXISTS_OPTION_NAME);
         }
-
     }
 
     public void updateValue(OptionRequest optionRequest) {
         this.optionName = optionRequest.name();
-        this.num = optionRequest.num();
+        this.quantity = optionRequest.quantity();
     }
 
     @Override
@@ -99,5 +89,16 @@ public class Option {
         return Objects.hash(id);
     }
 
+    public int getQuantity() {
+        return this.quantity;
+    }
 
+    public void changeQuantity(OptionQuantityRequest quantityRequest) {
+        if (this.quantity + quantityRequest.quantity() > 100000000) {
+            throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
+        }
+        if (this.quantity + quantityRequest.quantity() < 1) {
+            throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
+        }
+    }
 }
