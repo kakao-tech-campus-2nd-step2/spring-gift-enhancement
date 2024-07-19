@@ -9,7 +9,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.net.URL;
+import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -30,6 +32,9 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT), nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
+    private List<ProductOption> productOptions;
 
     protected Product() {
     }
