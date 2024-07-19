@@ -57,8 +57,9 @@ public class ProductService {
         }
         CategoryDTO categoryDTO = categoryService.getCategoryById(product.getCategoryId());
         Category category = categoryDTO.toCategory();
-        category.addProducts(toProduct(product));
-        return ProductDTO.fromProduct(productRepository.save(toProduct(product)));
+        category.addProducts(product.toProduct(product, getCategoryById(product.getCategoryId())));
+        return ProductDTO.fromProduct(productRepository.save(
+            product.toProduct(product, getCategoryById(product.getCategoryId()))));
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO) throws NotFoundException {
@@ -95,10 +96,5 @@ public class ProductService {
 
     public Category getCategoryById(long categoryId) throws NotFoundException {
         return categoryService.getCategoryById(categoryId).toCategory();
-    }
-
-    public Product toProduct(ProductDTO productDTO) throws NotFoundException {
-        return new Product(productDTO.getId(), productDTO.getName(), productDTO.getPrice(),
-            productDTO.getImageUrl(), getCategoryById(productDTO.getCategoryId()));
     }
 }

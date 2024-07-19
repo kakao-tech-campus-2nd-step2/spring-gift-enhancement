@@ -69,7 +69,8 @@ public class WishListService {
             throw new IllegalArgumentException(email + "의 위시리스트에 존재하는 상품입니다.");
         }
         ProductDTO productDTO = productService.getProductById(wishList.getProductId());
-        Product product = productService.toProduct(productDTO);
+        Product product = productDTO.toProduct(productDTO,
+            productService.getCategoryById(productDTO.getCategoryId()));
         WishList wishList1 = new WishList(user, product, wishList.getNum());
         user.addWishList(wishList1);
         product.addWishList(wishList1);
@@ -77,7 +78,8 @@ public class WishListService {
         return WishListDTO.fromWishList(wishList1);
     }
 
-    public WishListDTO updateWishList(long userId, long productId, int num) throws NotFoundException {
+    public WishListDTO updateWishList(long userId, long productId, int num)
+        throws NotFoundException {
         WishList wishList = wishListRepository.findByUserIdAndProductId(userId, productId);
         if (!wishListRepository.existsByUserIdAndProductId(userId, productId)) {
             throw new IllegalArgumentException(

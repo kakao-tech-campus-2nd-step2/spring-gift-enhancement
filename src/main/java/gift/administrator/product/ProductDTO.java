@@ -1,5 +1,6 @@
 package gift.administrator.product;
 
+import gift.administrator.category.Category;
 import jakarta.validation.constraints.*;
 
 public class ProductDTO {
@@ -64,6 +65,11 @@ public class ProductDTO {
 
     public Long getCategoryId() {
         return categoryId;
+    }
+
+    public Product toProduct(ProductDTO productDTO, Category category){
+        return new Product(productDTO.getId(), productDTO.getName(), productDTO.getPrice(),
+            productDTO.getImageUrl(), category);
     }
 
     public static ProductDTO fromProduct(Product product) {
