@@ -19,4 +19,7 @@ public class CategoryService {
         return categoryRepositoryInterface.findAll();
     }
 
+    public Category getCategoryByName(String categoryName) {
+        return categoryRepositoryInterface.findCategoryByName(categoryName);
+    }
 }
