@@ -11,19 +11,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ProductRepositoryImpl implements ProductRepository{
-    private final ProductJpaRepository productJpaRepository;
+public class ProductRepositoryImpl implements ProductRepository {
 
-    public ProductRepositoryImpl(ProductJpaRepository productJpaRepository) {
+    private final ProductJpaRepository productJpaRepository;
+    private final OptionJpaRepository optionJpaRepository;
+
+    public ProductRepositoryImpl(ProductJpaRepository productJpaRepository,
+        OptionJpaRepository optionJpaRepository) {
         this.productJpaRepository = productJpaRepository;
+        this.optionJpaRepository = optionJpaRepository;
     }
 
     @Override
     public Product getProductById(Long id) {
         return productJpaRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(
-                    ErrorCode.DB_NOT_FOUND,
-                    "Product with id " + id + " not found")
+                ErrorCode.DB_NOT_FOUND,
+                "Product with id " + id + " not found")
             );
     }
 
@@ -34,12 +38,13 @@ public class ProductRepositoryImpl implements ProductRepository{
 
     @Override
     public Long deleteProductById(Long id) {
-        if(!productJpaRepository.existsById(id)) {
+        if (!productJpaRepository.existsById(id)) {
             throw new NotFoundException(
                 ErrorCode.DB_NOT_FOUND,
                 "Product with id " + id + " not found"
             );
         }
+        optionJpaRepository.deleteAllByProductId(id);
         productJpaRepository.deleteById(id);
         return id;
     }
@@ -51,6 +56,7 @@ public class ProductRepositoryImpl implements ProductRepository{
 
     @Override
     public void deleteProductByIdList(List<Long> productIds) {
+        optionJpaRepository.deleteAllByProductIdIn(productIds);
         productJpaRepository.deleteAllById(productIds);
     }
 
@@ -62,11 +68,6 @@ public class ProductRepositoryImpl implements ProductRepository{
                 Product::getId,
                 product -> product
             ));
-    }
-
-    @Override
-    public void deleteAll() {
-        productJpaRepository.deleteAll();
     }
 
     @Override

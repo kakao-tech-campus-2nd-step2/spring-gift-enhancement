@@ -21,8 +21,6 @@ public interface ProductRepository {
 
     Map<Long, Product> getProductsByIds(List<Long> productIds);
 
-    void deleteAll();
-
     Product getReferencedProduct(Long productId);
 
     Page<Product> getProductsByPage(Pageable pageRequest);

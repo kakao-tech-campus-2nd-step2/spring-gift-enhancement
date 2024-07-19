@@ -7,4 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface OptionJpaRepository extends JpaRepository<Option, Long> {
 
     List<Option> findByProductId(Long productId);
+
+    void deleteAllByProductId(Long id);
+
+    void deleteAllByProductIdIn(List<Long> productIds);
 }
