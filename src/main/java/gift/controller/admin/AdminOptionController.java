@@ -22,7 +22,7 @@ public class AdminOptionController {
 
     @GetMapping("/new")
     public String newOption(Model model,
-            @RequestParam("productId") @NotNull @Min(1) Long ProductId) {
+            @RequestParam("product-id") @NotNull @Min(1) Long ProductId) {
         model.addAttribute("productId", ProductId);
         return "option/newOption";
     }
