@@ -25,6 +25,7 @@ public class CategoryService {
 	
 	public void createCategory(Category category, BindingResult bindingResult) {
 		validateBindingResult(bindingResult);
+		validateDuplicateCategoryName(category.getName());
 		categoryRepository.save(category);
 	}
 	
@@ -53,6 +54,12 @@ public class CategoryService {
 	private void validateCategoryId(long id) {
 		if (!categoryRepository.existsById(id)) {
 			throw new InvalidCategoryException("Category not foudn.", HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	private void validateDuplicateCategoryName(String categoryName) {
+		if (categoryRepository.existsByName(categoryName)) {
+			throw new DuplicateCategoryNameException("This is the extracted name.");
 		}
 	}
 }
