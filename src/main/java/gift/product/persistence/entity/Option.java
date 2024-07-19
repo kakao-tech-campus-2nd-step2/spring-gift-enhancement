@@ -55,4 +55,9 @@ public class Option {
     public Integer getQuantity() {
         return quantity;
     }
+
+    public void update(String name, Integer quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
 }
