@@ -27,9 +27,9 @@
   - [x] 옵션 수량은 최소 1개 이상 1억 개 미만이다.
   - [x] 동일한 상품 내의 옵션 이름은 중복될 수 없다.
 - [ ] 테스트 구현
-  - [ ] ProductControllerTest
-  - [ ] ProductRepositoryTest
-  - [ ] ProductServiceTest
+  - [x] ProductControllerTest
+  - [x] ProductRepositoryTest
+  - [x] ProductServiceTest
   - [ ] OptionRepositoryTest
   - [ ] OptionServiceTest
 - [ ] 피드백 반영

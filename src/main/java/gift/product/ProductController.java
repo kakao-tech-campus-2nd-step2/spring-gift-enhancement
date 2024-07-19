@@ -6,7 +6,6 @@ import gift.option.OptionRequest;
 import gift.option.OptionService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -54,8 +53,7 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<HttpStatus> updateProduct(@Valid @RequestBody ProductRequest changeProduct)
-        throws NotFoundException {
+    public ResponseEntity<HttpStatus> updateProduct(@Valid @RequestBody ProductRequest changeProduct) {
         return ResponseEntity.ok(productService.updateProduct(changeProduct.toEntity()));
     }
 

@@ -2,7 +2,7 @@ package gift.product;
 
 import gift.option.Option;
 import java.util.List;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +19,8 @@ public class ProductService {
         return productRepository.save(newProduct);
     }
 
-    public HttpStatus updateProduct(Product changeProduct) throws NotFoundException {
-        Product product = productRepository.findById(changeProduct.getId()).orElseThrow(
-            NotFoundException::new);
+    public HttpStatus updateProduct(Product changeProduct) {
+        Product product = findById(changeProduct.getId());
         product.update(changeProduct.getName(),changeProduct.getPrice(),changeProduct.getImageUrl(),
             changeProduct.getCategoryId());
         productRepository.save(product);
@@ -30,6 +29,10 @@ public class ProductService {
     }
 
     public HttpStatus deleteProduct(Long id) {
+        Product product = findById(id);
+        for(Option option : product.getOptions()){
+            deleteOption(product.getId(), option);
+        }
         productRepository.deleteById(id);
 
         return HttpStatus.OK;
@@ -40,15 +43,17 @@ public class ProductService {
     }
 
     public List<Option> addOption(Long productId, Option option){
-        Product product = productRepository.findById(productId).orElseThrow();
+        Product product = findById(productId);
         product.getOptions().add(option);
 
         return product.getOptions();
     }
 
     public List<Option> deleteOption(Long productId, Option option){
-        Product product = productRepository.findById(productId).orElseThrow();
-        product.getOptions().remove(option);
+        Product product = findById(productId);
+        if(!product.getOptions().remove(option)){
+            throw new NoSuchElementException("삭제하고자 하는 옵션이 Product에 없습니다.");
+        }
 
         return product.getOptions();
     }
