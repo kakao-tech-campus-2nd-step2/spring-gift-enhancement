@@ -20,6 +20,18 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
+    public void subtractOptionQuantity(Long productId, Long optionId, int quantityToSubtract) {
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid option ID: " + optionId));
+
+        if (!option.getProduct().getId().equals(productId)) {
+            throw new IllegalArgumentException("Option does not belong to the given product");
+        }
+
+        option.subtract(quantityToSubtract);
+        optionRepository.save(option);
+    }
+
     public List<OptionDTO> getOptionsByProductId(Long productId) {
         List<Option> options = optionRepository.findByProductId(productId);
         return options.stream()

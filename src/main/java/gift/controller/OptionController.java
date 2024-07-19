@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,6 +23,12 @@ public class OptionController {
 
     public OptionController(OptionService optionService) {
         this.optionService = optionService;
+    }
+
+    @PostMapping("/{optionId}/subtract")
+    public ResponseEntity<Void> subtractOptionQuantity(@PathVariable Long productId, @PathVariable Long optionId, @RequestParam int quantity) {
+        optionService.subtractOptionQuantity(productId, optionId, quantity);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
