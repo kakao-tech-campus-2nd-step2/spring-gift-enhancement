@@ -27,10 +27,10 @@ public class ProductRequest {
 
     private String imageUrl;
 
-    @NotNull
+    @NotNull(message = ErrorMessage.CATEGORY_MUST_BE_SELECTED)
     private Long categoryId;
 
-    @NotBlank
+    @NotBlank(message = ErrorMessage.CATEGORY_MUST_BE_SELECTED)
     private String categoryName;
 
     @Size(min = 1, message = ErrorMessage.OPTION_MUST_MORE_THAN_ZERO)
