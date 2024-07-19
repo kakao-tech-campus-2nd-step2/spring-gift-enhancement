@@ -35,8 +35,8 @@ public class CategoryController {
             throw new CustomArgumentNotValidException(result, ErrorCode.INVALID_INPUT);
         }
         if (categoryService.isDuplicateName(categoryForm.getName())) {
-            result.rejectValue("name", "", ErrorCode.DUPLICATE_CATEGORY.getMessage());
-            throw new CustomDuplicateException(result, ErrorCode.DUPLICATE_CATEGORY);
+            result.rejectValue("name", "", ErrorCode.DUPLICATE_NAME.getMessage());
+            throw new CustomDuplicateException(result, ErrorCode.DUPLICATE_NAME);
         }
         return ResponseEntity.ok(categoryService.insertCategory(categoryForm));
     }
@@ -54,8 +54,8 @@ public class CategoryController {
             throw new CustomArgumentNotValidException(result, ErrorCode.INVALID_INPUT);
         }
         if (categoryService.isDuplicateName(categoryForm.getName())) {
-            result.rejectValue("name", "", ErrorCode.DUPLICATE_CATEGORY.getMessage());
-            throw new CustomDuplicateException(result, ErrorCode.DUPLICATE_CATEGORY);
+            result.rejectValue("name", "", ErrorCode.DUPLICATE_NAME.getMessage());
+            throw new CustomDuplicateException(result, ErrorCode.DUPLICATE_NAME);
         }
         CategoryDTO updated = categoryService.updateCategory(
             new CategoryDTO(id, categoryForm.getName(), categoryForm.getImgUrl()));
