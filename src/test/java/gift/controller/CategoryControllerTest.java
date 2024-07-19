@@ -74,7 +74,7 @@ public class CategoryControllerTest {
         given(categoryService.isDuplicateName(any())).willReturn(true);
         mockMvc.perform(post("/category").content(content).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value(ErrorCode.DUPLICATE_CATEGORY.getMessage()))
+            .andExpect(jsonPath("$.message").value(ErrorCode.DUPLICATE_NAME.getMessage()))
             .andDo(print());
     }
 
@@ -115,7 +115,7 @@ public class CategoryControllerTest {
         given(categoryService.isDuplicateName(any())).willReturn(true);
         mockMvc.perform(post("/category").content(content).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value(ErrorCode.DUPLICATE_CATEGORY.getMessage()))
+            .andExpect(jsonPath("$.message").value(ErrorCode.DUPLICATE_NAME.getMessage()))
             .andDo(print());
     }
 }
