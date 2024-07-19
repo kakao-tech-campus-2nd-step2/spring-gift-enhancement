@@ -27,6 +27,10 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     @OneToMany(mappedBy = "product")
     private List<Option> options;
 

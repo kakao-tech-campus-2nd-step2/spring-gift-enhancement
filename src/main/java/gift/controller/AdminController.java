@@ -45,7 +45,7 @@ public class AdminController {
     @GetMapping("{productId}/option/list")
     public String optionList(Model model,
         @PathVariable long productId, Pageable pageable) {
-        List<OptionDTO> options = optionService.getOptions(productId, pageable);
+        List<OptionDTO> options = productService.getOptionsByProductId(productId, pageable);
         model.addAttribute("productId", productId);
         model.addAttribute("options", options);
         return "option-list";

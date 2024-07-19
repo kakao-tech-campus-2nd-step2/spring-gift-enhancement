@@ -46,7 +46,7 @@ public class ProductController {
 
     @GetMapping("/{productId}/options")
     public ResponseEntity<?> getAllOptions(@PathVariable long productId, Pageable pageable) {
-        List<OptionDTO> optionDTOList = optionService.getOptions(productId, pageable);
+        List<OptionDTO> optionDTOList = productService.getOptionsByProductId(productId, pageable);
         return ResponseEntity.ok(optionDTOList);
     }
 

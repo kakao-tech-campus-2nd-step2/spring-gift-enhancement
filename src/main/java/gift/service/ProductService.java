@@ -4,6 +4,7 @@ import gift.exception.ErrorCode;
 import gift.exception.RepositoryException;
 import gift.model.Category;
 import gift.model.Option;
+import gift.model.OptionDTO;
 import gift.model.Product;
 import gift.model.ProductDTO;
 import gift.model.ProductPageDTO;
@@ -37,7 +38,7 @@ public class ProductService {
             productDTO.imageUrl(), category);
         Product createdProduct = productRepository.save(product);
 
-        Option option = new Option(0L, "[기본 옵션] 추후 수정 바랍니다.", 0, product);
+        Option option = new Option("[기본 옵션] 추후 수정 바랍니다.", 0, product);
         optionRepository.save(option);
 
         return convertToDTO(createdProduct);
@@ -62,8 +63,20 @@ public class ProductService {
 
     public ProductDTO getProductById(long id) {
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, ""));
+            .orElseThrow(() -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, id));
         return convertToDTO(product);
+    }
+
+    public List<OptionDTO> getOptionsByProductId(long productId, Pageable pageable) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, productId));
+        List<OptionDTO> optionDTOList = product.getOptions()
+            .stream()
+            .map(this::convertToOptionDTO)
+            .toList();
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), optionDTOList.size());
+        return optionDTOList.subList(start, end);
     }
 
     public ProductDTO updateProduct(long id, ProductDTO productDTO) {
@@ -86,5 +99,9 @@ public class ProductService {
     private ProductDTO convertToDTO(Product product) {
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
             product.getImageUrl(), product.getCategory().getId());
+    }
+
+    private OptionDTO convertToOptionDTO(Option option) {
+        return new OptionDTO(option.getId(), option.getName(), option.getQuantity());
     }
 }
