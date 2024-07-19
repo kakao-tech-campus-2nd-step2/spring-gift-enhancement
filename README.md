@@ -1,22 +1,22 @@
 # spring-gift-enhancement
 
-# 4주차 1단계 구현 기능 명세
+# 4주차 2단계 구현 기능 명세
 
 ## 구현 기능
-### 1. 카테고리
-- 카테고리 추가
-- 카테고리 이름 수정
-- 카테고리 목록 조회
+### 1. 상품 옵션 기능
+- 옵션 추가
+- 옵션 수정
+- 옵션 조회
 
 ### 2. 상품
-- 특정 카테고리에 해당 되는 상품 목록 조회
-- 상품의 카테고리 수정
+- 하나 이상의 옵션과 함께 추가
+- 상품의 id로 옵션 조회
 
 ## 구현 상세
-### 1. category
-- category entity, dto 구현
-- repository, service, controller 구현
-- category 유효성 검증 추가
+### 1. option
+- option 엔티티, DTO 구현
+- Repository, Service
+- Controller 구현
+
 ### 2. item
-- 엔티티 객체 수정
-- repository findByCategoryId 추가
+- itme Controller 상품 추가 메서드 변경
