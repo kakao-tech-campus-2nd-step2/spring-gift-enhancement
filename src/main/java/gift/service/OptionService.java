@@ -20,4 +20,14 @@ public class OptionService {
         return optionRepositoryInterface.findOptionByName(optionName);
     }
 
+
+    public boolean checkValidOptionName(String optionName) {
+
+    }
+
+    public boolean checkValidOptionQuantity(Long optionQuantity){
+
+    }
+
+
 }
