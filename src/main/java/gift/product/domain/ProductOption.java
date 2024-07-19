@@ -56,6 +56,6 @@ public class ProductOption {
     }
 
     public boolean isSameName(String name) {
-        return product.getName().equals(name);
+        return this.getName().equals(name);
     }
 }
