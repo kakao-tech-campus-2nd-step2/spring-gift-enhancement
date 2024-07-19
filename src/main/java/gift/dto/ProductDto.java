@@ -25,7 +25,6 @@ public record ProductDto(
         if(nameKakaoErrorMessage != null) {
             throw new IllegalArgumentException(nameKakaoErrorMessage);
         }
-
         return new Product(id, category, name, price, imageUrl);
     }
 }
