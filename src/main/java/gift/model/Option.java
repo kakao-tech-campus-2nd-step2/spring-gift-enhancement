@@ -60,4 +60,16 @@ public class Option {
     public Product getProduct() {
         return product;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }
