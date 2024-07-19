@@ -4,6 +4,8 @@ import gift.member.domain.Member;
 import gift.product.domain.Product;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 public class Wishlist {
 
@@ -42,5 +44,18 @@ public class Wishlist {
 
     public Member getMember() {
         return member;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wishlist wishlist = (Wishlist) o;
+        return id.equals(wishlist.id) && member.equals(wishlist.member) && product.equals(wishlist.product);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, member, product);
     }
 }
