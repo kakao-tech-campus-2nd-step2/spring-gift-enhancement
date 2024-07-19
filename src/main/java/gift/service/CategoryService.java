@@ -7,7 +7,6 @@ import gift.exception.InternalServerExceptions.InternalServerException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ public class CategoryService {
     CategoryRepository categoryRepository;
     ProductRepository productRepository;
 
-    @Autowired
     public CategoryService(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
