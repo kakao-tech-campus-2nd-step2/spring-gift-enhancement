@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.exception.customException.OptionQuantityNotMinusException;
 import jakarta.persistence.*;
 
 @Entity
@@ -49,6 +50,11 @@ public class Option {
     }
 
     public void updateQuantity(int quantity){
+
+        if(this.quantity < quantity){
+            throw new OptionQuantityNotMinusException();
+        }
+
         this.quantity = this.quantity - quantity;
     }
 }
