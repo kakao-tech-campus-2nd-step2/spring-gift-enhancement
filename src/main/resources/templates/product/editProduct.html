@@ -28,7 +28,7 @@
     </select>
 
     <h2>옵션</h2>
-    <button><a th:href="@{/admin/option/new(product-id=${product.id})}">Add New Option</a></button>
+    <button><a th:href="@{/admin/product/option/new(id=${product.id})}">Add New Option</a></button>
     <table class="table">
         <thead>
         <tr>
@@ -44,7 +44,7 @@
             <td th:text="${option.id}"/>
             <td th:text="${option.name}"/>
             <td th:text="${option.quantity}"/>
-            <td><button><a th:href="@{/admin/option/{id}(id=${option.id})}">수정</a></button></td>
+            <td><button><a th:href="@{'/admin/product/option/' + ${product.id} + '?option-id=' + ${option.id}}">수정</a></button></td>
             <td>
                 <button type="button" class="delete-option" th:data-option-id="${option.id}" th:data-product-id="${product.id}">삭제</button>
             </td>
@@ -62,7 +62,7 @@
                 const optionId = event.target.getAttribute('data-option-id');
                 const productId = event.target.getAttribute('data-product-id');
 
-                fetch(`/admin/option/${optionId}/${productId}`, {
+                fetch(`/admin/product/option/${productId}/${optionId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'

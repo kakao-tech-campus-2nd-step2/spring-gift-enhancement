@@ -2,8 +2,6 @@ package gift.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name", "product_id"})
@@ -21,16 +19,14 @@ public class Option extends BasicEntity{
 
     protected Option() {}
 
+    public Option(Long id, String name) {
+        super(id);
+        this.name = name;
+    }
+
     public Option(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
-    }
-
-    public Option(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, int quantity, Product product) {
-        super(id, createdAt, updatedAt);
-        this.name = name;
-        this.quantity = quantity;
-        this.product = product;
     }
 
     public Option(String name, int quantity, Product product) {
@@ -50,6 +46,10 @@ public class Option extends BasicEntity{
 
     public boolean isSameName(String theirName) {
         return name.equals(theirName);
+    }
+
+    public boolean isNotSameId(Long theirId) {
+        return !getId().equals(theirId);
     }
 
     public String getName() {

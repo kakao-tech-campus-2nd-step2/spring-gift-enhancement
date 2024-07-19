@@ -5,7 +5,6 @@ import gift.controller.dto.request.OptionRequest;
 import gift.controller.dto.response.OptionResponse;
 import gift.model.Option;
 import gift.model.Product;
-import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,54 +13,50 @@ import java.util.List;
 
 @Service
 public class OptionService {
-    private final OptionRepository optionRepository;
     private final ProductRepository productRepository;
 
-    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
-        this.optionRepository = optionRepository;
+    public OptionService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     @Transactional(readOnly = true)
-    public List<OptionResponse> getAllOptions(Long id) {
-        return optionRepository.findAllByProductIdFetchJoin(id).stream()
+    public List<OptionResponse> getAllOptions(Long productId) {
+        Product product = productRepository.findProductAndOptionByIdFetchJoin(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
+        return product.getOptions().stream()
                 .map(OptionResponse::from)
                 .toList();
     }
 
     @Transactional
-    public void save(OptionRequest.Create request) {
+    public void addOption(OptionRequest.Create request) {
         checkProductExist(request.productId());
         Product product = productRepository.getReferenceById(request.productId());
         Option option = new Option(request.name(), request.quantity(), product);
-        optionRepository.save(option);
+        product.addOption(option);
     }
 
     @Transactional
-    public void updateById(OptionRequest.Update request) {
-        checkOptionExist(request.id());
-        Option option = optionRepository.getReferenceById(request.id());
-        Product product = option.getProduct();
-        product.checkDuplicateName(request.name());
+    public void updateOption(OptionRequest.Update request) {
+        Product product = productRepository.findProductAndOptionByIdFetchJoin(request.productId())
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + request.productId() + " not found"));
+        Option option = product.findOptionByOptionId(request.id());
+        product.checkDuplicateOptionName(request.id(), request.name());
         option.updateOption(request.name(), request.quantity());
     }
 
     @Transactional(readOnly = true)
-    public OptionResponse findByIdFetchJoin(Long id) {
-        Option option = optionRepository.findByIdFetchJoin(id)
-                .orElseThrow(() -> new EntityNotFoundException("Option with id " + id + " not found"));
+    public OptionResponse findOptionById(Long productId, Long optionId) {
+        Product product = productRepository.findProductAndOptionByIdFetchJoin(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
+        Option option = product.findOptionByOptionId(optionId);
         return OptionResponse.from(option);
+
     }
 
     private void checkProductExist(Long productId) {
         if(!productRepository.existsById(productId)) {
             throw new EntityNotFoundException("Product with id " + productId + " not found");
-        }
-    }
-
-    private void checkOptionExist(Long id) {
-        if(!optionRepository.existsById(id)) {
-            throw new EntityNotFoundException("Option with id " + id + " not found");
         }
     }
 }

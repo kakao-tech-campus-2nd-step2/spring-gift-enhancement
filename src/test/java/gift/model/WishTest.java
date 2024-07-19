@@ -33,7 +33,7 @@ class WishTest {
         Long productId = 1L;
         Long productId2 = 2L;
         Member member = new Member(null, null, null);
-        Product product = new Product(productId, null ,null, null, 0, null, null);
+        Product product = new Product(productId);
         Wish wish = new Wish(member, 0, product);
 
         // when

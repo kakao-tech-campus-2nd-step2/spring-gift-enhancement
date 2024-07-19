@@ -2,7 +2,6 @@ package gift.service;
 
 import gift.common.exception.EntityNotFoundException;
 import gift.controller.dto.request.OptionRequest;
-import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,12 +20,8 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class OptionServiceTest {
-
     @InjectMocks
     private OptionService optionService;
-
-    @Mock
-    private OptionRepository optionRepository;
     @Mock
     private ProductRepository productRepository;
 
@@ -44,23 +39,6 @@ class OptionServiceTest {
         // when
         // then
         assertThatExceptionOfType(EntityNotFoundException.class)
-                .isThrownBy(()->optionService.save(request));
-    }
-
-    @Test
-    @DisplayName("옵션 업데이트 테스트[실패] - 잘못된 옵션 id")
-    void updateById() {
-        // given
-        Long id = 1L;
-        String name = "name";
-        int quantity = 2;
-        Long productId = 1L;
-        var request = new OptionRequest.Update(id, name, quantity, productId);
-        given(optionRepository.existsById(eq(id)))
-                .willReturn(false);
-        // when
-        // then
-        assertThatExceptionOfType(EntityNotFoundException.class)
-                .isThrownBy(() -> optionService.updateById(request));
+                .isThrownBy(()->optionService.addOption(request));
     }
 }

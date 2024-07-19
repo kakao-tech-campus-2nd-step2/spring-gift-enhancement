@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>새 옵션 등록</h1>
-<form th:action="@{/admin/option}" method="post">
+<form th:action="@{/admin/product/option}" method="post">
     <div>
         <label for="productId">상품_id:</label>
         <input type="number" id="productId" name="productId" th:value="${productId}" readonly/>

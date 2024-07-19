@@ -13,49 +13,53 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/admin/option")
+@RequestMapping("/admin/product/option")
 public class AdminOptionController {
-    private final OptionService optionService;
-    private final ProductService productService;
 
-    public AdminOptionController(OptionService optionService, ProductService productService) {
-        this.optionService = optionService;
+    private final ProductService productService;
+    private final OptionService optionService;
+
+    public AdminOptionController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @GetMapping("/new")
     public String newOption(Model model,
-            @RequestParam("product-id") @NotNull @Min(1) Long ProductId) {
-        model.addAttribute("productId", ProductId);
+        @RequestParam("id") @NotNull @Min(1) Long id) {
+        model.addAttribute("productId", id);
         return "option/newOption";
     }
 
     @GetMapping("/{id}")
     public String editOption(Model model,
-            @PathVariable("id") @NotNull @Min(1) Long id
+        @PathVariable("id") @NotNull @Min(1) Long productId,
+        @RequestParam("option-id") @NotNull @Min(1) Long optionId
     ) {
-        OptionResponse option = optionService.findByIdFetchJoin(id);
+        OptionResponse option = optionService.findOptionById(productId, optionId);
         model.addAttribute("option", option);
         return "option/editOption";
     }
 
     @PostMapping("")
-    public String createOption(@Valid @ModelAttribute OptionRequest.Create request) {
-        optionService.save(request);
+    public String createOption(
+            @Valid @ModelAttribute OptionRequest.Create request) {
+        optionService.addOption(request);
         return "redirect:/admin/product/" + request.productId();
     }
 
     @PutMapping("")
-    public String updateOption(@Valid @ModelAttribute OptionRequest.Update request) {
-        optionService.updateById(request);
+    public String updateOption(
+            @Valid @ModelAttribute OptionRequest.Update request) {
+        optionService.updateOption(request);
         return "redirect:/admin/product/" + request.productId();
     }
 
-    @DeleteMapping("/{id}/{productId}")
+    @DeleteMapping("/{id}/{option-id}")
     public ResponseEntity<Void> deleteOptionById(
-            @PathVariable("productId") @NotNull @Min(1) Long productId,
-            @PathVariable("id") @NotNull @Min(1) Long id) {
-        productService.deleteByIdAndOptionId(productId, id);
+            @PathVariable("id") @NotNull @Min(1) Long productId,
+            @PathVariable("option-id") @NotNull @Min(1) Long optionId) {
+        productService.deleteByIdAndOptionId(productId, optionId);
         return ResponseEntity.ok().build();
     }
 }

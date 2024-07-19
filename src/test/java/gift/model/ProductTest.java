@@ -12,10 +12,12 @@ class ProductTest {
 
     @Test
     @DisplayName("옵션명 중복 체크[실패] - 중복된 이름")
-    void checkDuplicateName() {
+    void checkDuplicateOptionName() {
         // given
         Category category = new Category();
-        List<Option> options = List.of(new Option("oName", 100), new Option("oName", 1100));
+        List<Option> options = List.of(
+                new Option(1L,"oName"),
+                new Option(2L, "oName"));
 
         // when
         // then
@@ -69,8 +71,8 @@ class ProductTest {
         String oName2 = "oName2";
         Category category = new Category();
         List<Option> options = List.of(
-                new Option(1L, null, null, oName1, 100, null),
-                new Option(2L, null, null, oName2, 100, null));
+                new Option(1L, oName1),
+                new Option(2L, oName2));
         Product product = new Product("pname", 123, "purl", category, options);
 
         // when
@@ -89,8 +91,8 @@ class ProductTest {
         String oName2 = "oName2";
         Category category = new Category();
         List<Option> options = List.of(
-                new Option(1L, null, null, oName1, 100, null),
-                new Option(2L, null, null, oName2, 100, null));
+                new Option(1L, oName1),
+                new Option(2L, oName2));
 
         Product product = new Product("pname", 123, "purl", category, options);
         Option option = product.findOptionByOptionId(1L);
@@ -108,7 +110,7 @@ class ProductTest {
         // given
         String oName1 = "oName1";
         Category category = new Category();
-        List<Option> options = List.of(new Option(1L, null, null, oName1, 100, null));
+        List<Option> options = List.of(new Option(1L, oName1));
         Product product = new Product("pname", 123, "purl", category, options);
         Option option = product.findOptionByOptionId(1L);
 

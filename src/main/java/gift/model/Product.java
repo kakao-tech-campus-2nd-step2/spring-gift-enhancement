@@ -5,7 +5,6 @@ import gift.common.exception.EntityNotFoundException;
 import jakarta.persistence.*;
 import org.hibernate.annotations.BatchSize;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,10 @@ public class Product extends BasicEntity{
 
     protected Product() {}
 
+    public Product(Long id) {
+        super(id);
+    }
+
     public Product(String name, int price, String imageUrl, Category category, List<Option> options) {
         this.name = name;
         this.price = price;
@@ -39,14 +42,6 @@ public class Product extends BasicEntity{
         for (Option option : options) {
             addOption(option);
         }
-    }
-
-    public Product(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String name, int price, String imageUrl, Category category) {
-        super(id, createdAt, updatedAt);
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.category = category;
     }
 
     public void updateProduct(String name, int price, String imageUrl, Category category) {
@@ -60,7 +55,7 @@ public class Product extends BasicEntity{
         if (entity == null) {
             return;
         }
-        checkDuplicateName(entity.getName());
+        checkDuplicateOptionName(entity.getId(), entity.getName());
         entity.setProduct(this);
         options.add(entity);
     }
@@ -79,9 +74,9 @@ public class Product extends BasicEntity{
                 .orElseThrow(() -> new EntityNotFoundException("Option with id " + optionId + " not found"));
     }
 
-    public void checkDuplicateName(String theirName) {
+    public void checkDuplicateOptionName(Long theirId, String theirName) {
         for (Option option : options) {
-            if(option.isSameName(theirName)) {
+            if(option.isSameName(theirName) && option.isNotSameId(theirId)) {
                 throw new DuplicateDataException("Option with name " + theirName + " already exists");
             }
         }
