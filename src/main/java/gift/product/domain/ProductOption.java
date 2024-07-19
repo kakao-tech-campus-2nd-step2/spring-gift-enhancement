@@ -27,10 +27,15 @@ public class ProductOption {
     protected ProductOption() {
     }
 
-    public ProductOption(String name, Integer quantity, Product product) {
+    public ProductOption(Long id, String name, Integer quantity, Product product) {
+        this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+    }
+
+    public ProductOption(String name, Integer quantity, Product product) {
+        this(null, name, quantity, product);
     }
 
     public Long getId() {
