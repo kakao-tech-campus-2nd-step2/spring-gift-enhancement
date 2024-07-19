@@ -9,6 +9,7 @@ import gift.main.dto.UserVo;
 import gift.main.entity.Category;
 import gift.main.entity.Product;
 import gift.main.entity.User;
+import gift.main.entity.WishProduct;
 import gift.main.repository.CategoryRepository;
 import gift.main.repository.ProductRepository;
 import gift.main.repository.UserRepository;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -60,14 +63,12 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(long id) {
-        Product product = productRepository.findById(id)
+        productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        product.getWishProducts().stream()
-                .forEach((wishProduct) -> {
-                    wishProduct.setProductIdToNull();
-                    wishProductRepository.save(wishProduct);
-                });
         productRepository.deleteById(id);
+
+        List<WishProduct> wishProducts = wishProductRepository.findAllByProductId(id);
+        wishProductRepository.deleteAll(wishProducts);
     }
 
     @Transactional
@@ -77,7 +78,6 @@ public class ProductService {
         Category category = categoryRepository.findByUniNumber(productRequest.categoryUniNumber())
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         product.updateValue(productRequest, category);
-        productRepository.save(product);
     }
 
     public ProductResponce getProduct(long id) {
