@@ -1,17 +1,15 @@
 package gift.controller;
 
 import gift.auth.LoginUser;
-import gift.domain.Product;
 import gift.domain.User;
 import gift.dto.common.apiResponse.ApiResponseBody.SuccessBody;
 import gift.dto.common.apiResponse.ApiResponseGenerator;
-import gift.dto.requestDTO.ProductRequestDTO;
-import gift.dto.responseDTO.ProductResponseDTO;
+import gift.dto.requestDto.ProductRequestDTO;
+import gift.dto.responseDto.ProductResponseDTO;
 import gift.service.AuthService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

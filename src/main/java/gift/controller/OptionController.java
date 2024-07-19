@@ -2,9 +2,9 @@ package gift.controller;
 
 import gift.dto.common.apiResponse.ApiResponseBody.SuccessBody;
 import gift.dto.common.apiResponse.ApiResponseGenerator;
-import gift.dto.requestDTO.OptionCreateRequestDTO;
-import gift.dto.requestDTO.OptionNameUpdateRequestDTO;
-import gift.dto.responseDTO.OptionResponseDTO;
+import gift.dto.requestDto.OptionCreateRequestDTO;
+import gift.dto.requestDto.OptionNameUpdateRequestDTO;
+import gift.dto.responseDto.OptionResponseDTO;
 import gift.service.OptionService;
 import jakarta.validation.Valid;
 import java.util.List;

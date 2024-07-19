@@ -1,4 +1,4 @@
-package gift.dto.requestDTO;
+package gift.dto.requestDto;
 
 import gift.dto.common.valid.ValidProductName;
 import jakarta.validation.constraints.Min;

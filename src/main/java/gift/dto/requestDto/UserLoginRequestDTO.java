@@ -1,4 +1,4 @@
-package gift.dto.requestDTO;
+package gift.dto.requestDto;
 
 import gift.domain.User;
 import jakarta.validation.constraints.Email;

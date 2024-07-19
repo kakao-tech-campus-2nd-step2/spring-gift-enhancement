@@ -1,4 +1,4 @@
-package gift.dto.responseDTO;
+package gift.dto.responseDto;
 
 import java.util.List;
 

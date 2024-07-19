@@ -2,8 +2,8 @@ package gift.service;
 
 import gift.domain.Category;
 import gift.domain.Product;
-import gift.dto.requestDTO.ProductRequestDTO;
-import gift.dto.responseDTO.ProductResponseDTO;
+import gift.dto.requestDto.ProductRequestDTO;
+import gift.dto.responseDto.ProductResponseDTO;
 import gift.repository.JpaCategoryRepository;
 import gift.repository.JpaProductRepository;
 import java.util.List;

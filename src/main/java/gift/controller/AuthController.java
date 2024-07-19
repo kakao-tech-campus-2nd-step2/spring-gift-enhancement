@@ -2,9 +2,9 @@ package gift.controller;
 
 import gift.dto.common.apiResponse.ApiResponseBody.SuccessBody;
 import gift.dto.common.apiResponse.ApiResponseGenerator;
-import gift.dto.requestDTO.UserLoginRequestDTO;
-import gift.dto.requestDTO.UserSignupRequestDTO;
-import gift.dto.responseDTO.UserResponseDTO;
+import gift.dto.requestDto.UserLoginRequestDTO;
+import gift.dto.requestDto.UserSignupRequestDTO;
+import gift.dto.responseDto.UserResponseDTO;
 import gift.service.AuthService;
 import gift.service.UserService;
 import jakarta.validation.Valid;
