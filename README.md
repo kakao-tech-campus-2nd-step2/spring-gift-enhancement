@@ -62,8 +62,13 @@
 - 옵션 DTO 생성
 - 옵션 Repository 생성
 - 옵션 Service 생성
-- Product 엔티티 수정
-- Product DTO 수정
+- 옵션 Controller 생성
 - DB 수정
-- HTML 수정
+- productService 수정
+- Product 관련 Controller 수정
+  - AdminController
+  - ProductController
+- HTML 추가 및 수정
+  - option 관련 HTML 추가
+  - product_list 수정
 </details>
