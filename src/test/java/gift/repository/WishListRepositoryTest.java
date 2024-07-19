@@ -2,6 +2,7 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.entity.CategoryEntity;
 import gift.entity.MemberEntity;
 import gift.entity.ProductEntity;
 import gift.entity.WishListEntity;
@@ -24,6 +25,9 @@ public class WishListRepositoryTest {
     private WishListRepository wishListRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
@@ -35,12 +39,15 @@ public class WishListRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        user = new MemberEntity("admin@gmail.com", "password");
-        memberRepository.save(user);
+        CategoryEntity category = new CategoryEntity("Blue", "color", "https://example.com/image.png", "New Category");
+        categoryRepository.save(category);
 
-        product = new ProductEntity("아이스티", 3000, "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png");
+        product = new ProductEntity("아이스티", 3000, "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", category);
         productRepository.save(product);
 
+        user = new MemberEntity("admin@gmail.com", "password");
+        memberRepository.save(user);
+        
         wishListEntity = new WishListEntity(product, user);
         wishListRepository.save(wishListEntity);
     }

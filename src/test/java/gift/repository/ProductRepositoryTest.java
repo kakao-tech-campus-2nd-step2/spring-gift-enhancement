@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.entity.CategoryEntity;
 import gift.entity.ProductEntity;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
@@ -20,7 +21,7 @@ class ProductRepositoryTest {
     @Test
     void testSaveProduct() {
         // given
-        ProductEntity productEntity = new ProductEntity("아이스 아메리카노", 1000, "http://test.com/image.jpg");
+        ProductEntity productEntity = new ProductEntity("아이스 아메리카노", 1000, "http://test.com/image.jpg",new CategoryEntity());
 
         // when
         ProductEntity savedProduct = productRepository.save(productEntity);
@@ -33,7 +34,7 @@ class ProductRepositoryTest {
     @Test
     void testFindProductById() {
         // given
-        ProductEntity productEntity = new ProductEntity("아이스 아메리카노", 1000, "http://test.com/image.jpg");
+        ProductEntity productEntity = new ProductEntity("아이스 아메리카노", 1000, "http://test.com/image.jpg",new CategoryEntity());
         ProductEntity savedProduct = productRepository.save(productEntity);
 
         // when
@@ -47,7 +48,7 @@ class ProductRepositoryTest {
     @Test
     void testDeleteProduct() {
         // given
-        ProductEntity productEntity = new ProductEntity("아이스 아메리카노", 1000, "http://test.com/image.jpg");
+        ProductEntity productEntity = new ProductEntity("아이스 아메리카노", 1000, "http://test.com/image.jpg",new CategoryEntity());
         ProductEntity savedProduct = productRepository.save(productEntity);
 
         // when

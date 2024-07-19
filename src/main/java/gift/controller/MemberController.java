@@ -4,7 +4,6 @@ import gift.entity.MemberEntity;
 import gift.domain.MemberDTO;
 import gift.service.JwtUtil;
 import gift.service.MemberService;
-import gift.service.MemberServiceStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +27,8 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody MemberDTO memberDTO) {
-        MemberServiceStatus status = memberService.save(memberDTO);
-        return new ResponseEntity<>(Collections.singletonMap("status", status.name()), HttpStatus.OK);
+        memberService.save(memberDTO);
+        return new ResponseEntity<>(Collections.singletonMap("status", "SUCCESS"), HttpStatus.OK);
     }
 
     @PostMapping("/login")
