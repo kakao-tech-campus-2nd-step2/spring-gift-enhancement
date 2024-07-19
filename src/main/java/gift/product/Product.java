@@ -1,9 +1,14 @@
 package gift.product;
 
+import gift.option.Option;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -18,6 +23,10 @@ public class Product {
     private String imageUrl;
 
     private Long categoryId;
+
+    @OneToMany
+    @JoinColumn(name = "option_id")
+    private final List<Option> options = new ArrayList<>();
 
     public Long getId(){
         return this.id;
@@ -39,6 +48,11 @@ public class Product {
         return this.categoryId;
     }
 
+    public List<Option> getOptions() {
+        return this.options;
+    }
+
+
     protected Product(){
     }
     public Product(Long id, String name, int price, String imageUrl, Long categoryId){
@@ -48,6 +62,7 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+        addDefaultOption();
     }
 
     public void update(String name, int price, String imageUrl, Long categoryId){
@@ -62,5 +77,9 @@ public class Product {
         if(name.contains("카카오")){
             throw new IllegalArgumentException( "\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.");
         }
+    }
+
+    private void addDefaultOption(){
+        this.options.add(new Option(null, "default", 1, this.id));
     }
 }

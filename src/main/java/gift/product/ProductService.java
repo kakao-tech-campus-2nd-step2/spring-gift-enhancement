@@ -1,5 +1,7 @@
 package gift.product;
 
+import gift.option.Option;
+import java.util.List;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -37,4 +39,19 @@ public class ProductService {
     public Product findById(Long productId) {
         return productRepository.findById(productId).orElseThrow();
     }
+
+    public List<Option> addOption(Long productId, Option option){
+        Product product = productRepository.findById(productId).orElseThrow();
+        product.getOptions().add(option);
+
+        return product.getOptions();
+    }
+
+    public List<Option> deleteOption(Long productId, Option option){
+        Product product = productRepository.findById(productId).orElseThrow();
+        product.getOptions().remove(option);
+
+        return product.getOptions();
+    }
+
 }
