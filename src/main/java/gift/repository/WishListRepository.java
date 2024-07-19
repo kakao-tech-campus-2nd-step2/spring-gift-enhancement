@@ -1,6 +1,6 @@
 package gift.repository;
 
-import gift.domain.WishList.WishList;
+import gift.domain.wishlist.WishList;
 import gift.domain.member.Member;
 import gift.domain.product.Product;
 import java.util.List;

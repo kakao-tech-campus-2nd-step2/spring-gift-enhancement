@@ -1,10 +1,13 @@
 package gift.domain.product;
 
+import gift.domain.category.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Product {
@@ -22,6 +25,10 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private Category category;
+
     public Product() {
 
     }
@@ -36,6 +43,13 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public Product(String name, long price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
     public void update(ProductRequest productRequest) {
         this.name = productRequest.name();
         this.price = productRequest.price();
@@ -45,7 +59,6 @@ public class Product {
     public Long getId() {
         return id;
     }
-
 
     public Long getPrice() {
         return price;
@@ -57,5 +70,9 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

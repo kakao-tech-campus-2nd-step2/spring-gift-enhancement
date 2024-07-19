@@ -1,4 +1,4 @@
-package gift.domain.WishList;
+package gift.domain.wishlist;
 
 import gift.domain.member.Member;
 import gift.domain.product.Product;

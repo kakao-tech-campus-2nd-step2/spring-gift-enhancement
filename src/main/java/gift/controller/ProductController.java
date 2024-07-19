@@ -27,7 +27,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<Product> readProducts(
         @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo,
         @RequestParam(required = false, defaultValue = "10", value = "size") int pageSize) {
@@ -39,7 +39,7 @@ public class ProductController {
         return productService.findById(id);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Product> createProduct(
         @Valid @RequestBody ProductRequest productRequest) {
         Product product = productService.save(productRequest);

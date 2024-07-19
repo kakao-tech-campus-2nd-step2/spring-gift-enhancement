@@ -1,7 +1,9 @@
 package gift.domain.product;
 
+import gift.domain.category.Category;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -16,10 +18,14 @@ public record ProductRequest(
     long price,
 
     @NotBlank(message = "상품 이미지가 입력되지 않았습니다")
-    String imageUrl
+    String imageUrl,
+
+    @NotNull
+    @Min(value = 0, message = "카테고리 번호가 올바르지 않습니다")
+    long categoryId
 ) {
 
     public Product toProduct() {
-        return new Product(name, price, imageUrl);
+        return new Product(name, price, imageUrl, new Category(categoryId));
     }
 }

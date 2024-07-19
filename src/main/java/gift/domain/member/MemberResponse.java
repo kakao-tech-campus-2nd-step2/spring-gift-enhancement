@@ -1,7 +1,7 @@
 package gift.domain.member;
 
 public record MemberResponse(
-    long id,
+    Long id,
     String email
 ) {
 

@@ -1,7 +1,7 @@
 package gift.service;
 
-import gift.domain.WishList.WishList;
-import gift.domain.WishList.WishListRequest;
+import gift.domain.wishlist.WishList;
+import gift.domain.wishlist.WishListRequest;
 import gift.domain.member.Member;
 import gift.domain.product.Product;
 import gift.repository.WishListRepository;

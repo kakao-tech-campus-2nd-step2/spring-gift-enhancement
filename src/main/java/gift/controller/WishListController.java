@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.domain.WishList.WishListRequest;
+import gift.domain.wishlist.WishListRequest;
 import gift.domain.member.MemberResponse;
 import gift.domain.product.Product;
 import gift.service.WishListService;

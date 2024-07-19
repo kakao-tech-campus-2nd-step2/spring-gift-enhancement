@@ -34,6 +34,8 @@ public class ProductService {
     }
 
     public Product save(ProductRequest productRequest) {
+        System.out.println("tetetetetet");
+        System.out.println(productRequest.toProduct().getCategory().getId());
         return productRepository.save(productRequest.toProduct());
     }
 
