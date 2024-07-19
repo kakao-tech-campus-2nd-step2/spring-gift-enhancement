@@ -31,6 +31,16 @@ public class Option extends BaseEntity {
         this.product = product;
     }
 
+    public void subtract(int quantityToSubtract) {
+        if (quantityToSubtract < 0) {
+            throw new IllegalArgumentException("수량은 음수가 될 수 없습니다.");
+        }
+        if (this.quantity < quantityToSubtract) {
+            throw new IllegalArgumentException("남아있는 수량이 더 작습니다.");
+        }
+        this.quantity -= quantityToSubtract;
+    }
+
     public String getName() {
         return name;
     }
