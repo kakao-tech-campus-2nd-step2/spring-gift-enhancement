@@ -4,6 +4,7 @@ import gift.dto.WishlistDTO;
 import gift.service.WishlistService;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,12 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/web/wishlist")
@@ -50,15 +46,18 @@ public class WishlistController {
         return "wishlist";
     }
 
-
     @PostMapping("/add")
     @ResponseBody
-    public String addToWishlist(@RequestParam("productId") Long productId, @RequestParam("quantity") int quantity, Principal principal) {
+    public String addToWishlist(@RequestBody Map<String, Object> request, Principal principal) {
         if (principal == null) {
             return "회원만 찜할 수 있습니다.";
         }
         String username = principal.getName();
-        wishlistService.addToWishlist(username, productId, quantity);
+        Long productId = Long.parseLong(request.get("productId").toString());
+        int quantity = request.containsKey("quantity") ? Integer.parseInt(request.get("quantity").toString()) : 1;
+        List<Map<String, Object>> options = request.containsKey("options") ? (List<Map<String, Object>>) request.get("options") : List.of();
+
+        wishlistService.addToWishlist(username, productId, quantity, options);
         return "상품이 위시리스트에 추가되었습니다.";
     }
 
