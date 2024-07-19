@@ -3,6 +3,9 @@ package gift.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -26,6 +29,9 @@ public class Product {
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "category_id", nullable = false)
         private Category category;
+
+        @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+        private Set<Option> options = new HashSet<>();
 
         protected Product() {}
 
@@ -75,5 +81,13 @@ public class Product {
 
         public void setCategory(Category category) {
                 this.category = category;
+        }
+
+        public Set<Option> getOptions() {
+                return options;
+        }
+
+        public void setOptions(Set<Option> options) {
+                this.options = options;
         }
 }
