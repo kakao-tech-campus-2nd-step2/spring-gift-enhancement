@@ -5,9 +5,9 @@ import gift.exception.ForbiddenWordException;
 import gift.exception.NonIntegerPriceException;
 import gift.exception.ProductNotFoundException;
 import gift.exception.ResourceNotFoundException;
-import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import jakarta.validation.Valid;
 import java.math.BigDecimal;
@@ -26,11 +26,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public List<Product> getAllProducts() {
@@ -59,8 +61,14 @@ public class ProductService {
         if(categoryById.isEmpty()){
             throw new ResourceNotFoundException("존재하지 않는 카테고리입니다.");
         }
+        var optionById = optionRepository.findById(productDto.getOptionId());
+        if (optionById.isEmpty()) {
+            throw new ResourceNotFoundException("존재하지 않는 옵션입니다.");
+        }
         var category = categoryById.get();
         newProduct.setCategory(category);
+        var option = optionById.get();
+        newProduct.getOptionList().add(option);
         category.getProductList().add(newProduct);
         return productRepository.save(newProduct);
     }
