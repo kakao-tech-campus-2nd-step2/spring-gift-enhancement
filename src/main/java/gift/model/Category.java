@@ -10,17 +10,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
-@Setter
+@Entity
 public class Category {
 
     @Id
@@ -34,8 +27,17 @@ public class Category {
     @JsonIgnore
     private List<Product> productList = new ArrayList<>();
 
+    public Category() {
+    }
+
     public Category(String name) {
+        this(null, name, null);
+    }
+
+    public Category(Long id, String name, List<Product> productList) {
+        this.id = id;
         this.name = name;
+        this.productList = productList;
     }
 
     @Override
@@ -43,5 +45,20 @@ public class Category {
         return "Category{" +
             "id=" + id +
             ", name='" + name + '\'' + "}";
+    }
+
+    public Category setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Category setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Category setProductList(List<Product> productList) {
+        this.productList = productList;
+        return this;
     }
 }
