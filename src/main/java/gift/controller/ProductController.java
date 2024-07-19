@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.CreateProductDto;
 import gift.dto.UpdateProductDto;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/products")
@@ -59,5 +62,12 @@ public class ProductController {
     public ResponseEntity<Product> deleteProduct(@PathVariable Long product_id) {
         productService.deleteProduct(product_id);
         return ResponseEntity.ok().build();
+    }
+
+    // 특정 상품의 옵션 가져오기
+    @GetMapping("/{product_id}/options")
+    public ResponseEntity<List<Option>> getProductOptions(@PathVariable Long product_id) {
+        List<Option> options = productService.getPtoductOptions(product_id);
+        return ResponseEntity.ok(options);
     }
 }

@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.CreateProductDto;
 import gift.dto.UpdateProductDto;
@@ -8,13 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, OptionService optionService) {
         this.productRepository = productRepository;
+        this.optionService = optionService;
     }
 
     public Product createProduct(CreateProductDto productDto) {
@@ -43,4 +49,7 @@ public class ProductService {
         productRepository.deleteById(productId);
     }
 
+    public List<Option> getPtoductOptions(Long productId) {
+        return optionService.getProductOptions(productId);
+    }
 }

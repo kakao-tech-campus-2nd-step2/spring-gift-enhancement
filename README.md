@@ -63,6 +63,7 @@
   
 - [x] Product Controller 수정
   - [x] Option 추가되면서 관련 내용들 확인하고 수정할 것 있다면 수정
+  - [x] 특정 Product의 Option 가져오기
   
 - [ ] Option Controller 구현
   - [ ] Option 생성
