@@ -1,5 +1,6 @@
 package gift.admin.presentation;
 
+import gift.product.application.dto.request.ProductCreateRequest;
 import gift.product.application.dto.request.ProductRequest;
 import gift.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,15 +43,18 @@ public class AdminController {
     }
 
     @PostMapping("/products")
-    public String saveProduct(@RequestBody ProductRequest newProduct) {
-        productService.saveProduct(newProduct.toProductParam());
+    public String saveProduct(@RequestBody ProductCreateRequest productCreateRequest) {
+        productService.saveProduct(
+                productCreateRequest.getProductCommand(),
+                productCreateRequest.getProductOptionCommands()
+        );
 
         return "admin/list";
     }
 
     @PatchMapping("/products/{id}")
     public String modifyProduct(@PathVariable("id") Long id, @RequestBody ProductRequest modifyProduct) {
-        productService.modifyProduct(id, modifyProduct.toProductParam());
+        productService.modifyProduct(id, modifyProduct.toProductCommand());
 
         return "admin/list";
     }
