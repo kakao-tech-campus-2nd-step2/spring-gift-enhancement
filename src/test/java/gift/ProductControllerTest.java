@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -67,12 +68,14 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 추가 테스트")
     void addProductTest() throws Exception {
-        mockMvc.perform(post("/api/products")  // '/api/products' 경로로 POST 요청
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/products")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("name", "복숭아 아이스티 T")
                         .param("price", "5900")
                         .param("imageUrl", "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg")
-                        .param("category.id", String.valueOf(sampleProduct.getCategory().getId())))
+                        .param("category.id", String.valueOf(sampleProduct.getCategory().getId()))
+                        .param("optionNames", "Large")
+                        .param("optionQuantities", "10"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/api/products"));
 
