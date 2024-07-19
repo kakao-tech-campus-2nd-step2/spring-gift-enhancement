@@ -1,6 +1,5 @@
 package gift.product.service;
 
-import static java.util.Optional.of;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -11,6 +10,8 @@ import gift.product.domain.ProductOption;
 import gift.product.persistence.ProductOptionRepository;
 import gift.product.persistence.ProductRepository;
 import gift.product.service.command.ProductOptionCommand;
+import gift.product.service.dto.ProductOptionInfo;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,7 @@ class ProductOptionServiceTest {
         Product product = new Product("productName", 1000, "이미지", category);
         ProductOption productOption = new ProductOption(1L, "optionName", 10, product);
 
-        given(productRepository.findById(any())).willReturn(of(product));
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(productOptionRepository.save(any())).willReturn(productOption);
 
         //when
@@ -61,7 +62,7 @@ class ProductOptionServiceTest {
         Product product = new Product("productName", 1000, "이미지", category);
         ProductOption productOption = new ProductOption(1L, "optionName", 10, product);
 
-        given(productOptionRepository.findByProductIdAndId(any(), any())).willReturn(of(productOption));
+        given(productOptionRepository.findByProductIdAndId(any(), any())).willReturn(Optional.of(productOption));
 
         //when
         productOptionService.modifyProductOption(productId, optionId, productOptionCommand);
@@ -69,6 +70,28 @@ class ProductOptionServiceTest {
         //then
         assertThat(productOption.getName()).isEqualTo(productOptionCommand.name());
         assertThat(productOption.getQuantity()).isEqualTo(productOptionCommand.quantity());
+    }
+
+    @Test
+    @DisplayName("ProductOptionService Option정보 조회 테스트")
+    void getProductOptionInfoTest() {
+        //given
+        final Long productId = 1L;
+        final Long optionId = 1L;
+
+        Category category = new Category("카테고리", "색상", "이미지", "설명");
+        Product product = new Product("productName", 1000, "이미지", category);
+        ProductOption productOption = new ProductOption(1L, "optionName", 10, product);
+
+        given(productOptionRepository.findByProductIdAndId(any(), any())).willReturn(Optional.of(productOption));
+
+        //when
+        ProductOptionInfo productOptionInfo = productOptionService.getProductOptionInfo(productId, optionId);
+
+        //then
+        assertThat(productOptionInfo.id()).isEqualTo(productOption.getId());
+        assertThat(productOptionInfo.name()).isEqualTo(productOption.getName());
+        assertThat(productOptionInfo.quantity()).isEqualTo(productOption.getQuantity());
     }
 
 }
