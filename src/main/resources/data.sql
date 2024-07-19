@@ -7,9 +7,11 @@ INSERT INTO products (name, price, image_url, category_id) VALUES ('cake', 6500,
 INSERT INTO products (name, price, image_url, category_id) VALUES ('bread', 3000, 'www.bread.com', 1);
 INSERT INTO products (name, price, image_url, category_id) VALUES ('cookie', 2500, 'www.cookie.com', 1);
 INSERT INTO products (name, price, image_url, category_id) VALUES ('iceTea', 3000, 'www.iceTea.com', 1);
-INSERT INTO products (name, price, image_url, category_id) VALUES ('cledor', 2500, 'www.cledor.com', 1);
+INSERT INTO products (name, price, image_url, category_id) VALUES ('cledorr', 2500, 'www.cledorr.com', 1);
 INSERT INTO products (name, price, image_url, category_id) VALUES ('y-shirt', 35000, 'www.yshirt.com', 2);
 INSERT INTO products (name, price, image_url, category_id) VALUES ('TV', 600000, 'www.tv.com', 3);
+
+INSERT INTO options (name, quantity, product_id) VALUES ('아이스 아메리카노', 100, 1);
 
 INSERT INTO users (email, password, role) VALUES ('admin@admin', 'admin', 'admin');
 INSERT INTO users (email, password, role) VALUES ('user@user', 'user', 'user');
