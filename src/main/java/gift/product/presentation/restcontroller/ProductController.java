@@ -2,6 +2,7 @@ package gift.product.presentation.restcontroller;
 
 import gift.product.presentation.dto.RequestProductDto;
 import gift.product.presentation.dto.RequestProductIdsDto;
+import gift.product.presentation.dto.RequestProductUpdateDto;
 import gift.product.presentation.dto.ResponsePagingProductDto;
 import gift.product.presentation.dto.ResponseProductDto;
 import gift.product.presentation.dto.RequestOptionCreateDto;
@@ -60,8 +61,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Long> updateProduct(
-        @RequestBody @Valid RequestProductDto requestProductDto, @PathVariable("id") Long id) {
-        var productRegisterDto = requestProductDto.toProductRegisterDto();
+        @RequestBody @Valid RequestProductUpdateDto requestProductUpdateDto, @PathVariable("id") Long id) {
+        var productRegisterDto = requestProductUpdateDto.toProductUpdateDto();
         Long updatedId = productService.updateProduct(productRegisterDto, id);
         return ResponseEntity.ok(updatedId);
     }

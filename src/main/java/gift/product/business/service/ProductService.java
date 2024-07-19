@@ -2,6 +2,7 @@ package gift.product.business.service;
 
 import gift.product.business.dto.OptionRegisterDto;
 import gift.product.business.dto.ProductPagingDto;
+import gift.product.business.dto.ProductUpdateDto;
 import gift.product.persistence.entity.Product;
 import gift.product.persistence.repository.CategoryRepository;
 import gift.product.persistence.repository.ProductRepository;
@@ -44,11 +45,11 @@ public class ProductService {
     }
 
     @Transactional
-    public Long updateProduct(ProductRegisterDto productRegisterDto, Long id) {
+    public Long updateProduct(ProductUpdateDto productUpdateDto, Long id) {
         var product = productRepository.getProductById(id);
-        var category = categoryRepository.getReferencedCategory(productRegisterDto.categoryId());
-        product.update(productRegisterDto.name(), productRegisterDto.description(),
-                productRegisterDto.price(), productRegisterDto.url());
+        var category = categoryRepository.getReferencedCategory(productUpdateDto.categoryId());
+        product.update(productUpdateDto.name(), productUpdateDto.description(),
+            productUpdateDto.price(), productUpdateDto.imageUrl());
         product.updateCategory(category);
         return productRepository.saveProduct(product);
     }
