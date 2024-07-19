@@ -34,8 +34,7 @@ public class OptionService {
 
     public void insertOptionList(Long itemId, List<OptionDTO> options, BindingResult result)
         throws CustomDuplicateException {
-        if (new HashSet<>(
-            options.stream().map(OptionDTO::getName).collect(Collectors.toSet())).size()
+        if (new HashSet<>(options.stream().map(OptionDTO::getName).collect(Collectors.toSet())).size()
             != options.size()) {
             result.rejectValue("options", "", ErrorCode.DUPLICATE_NAME.getMessage());
             throw new CustomDuplicateException(result, ErrorCode.DUPLICATE_NAME);
