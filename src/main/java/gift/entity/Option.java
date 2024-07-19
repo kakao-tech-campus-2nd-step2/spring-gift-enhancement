@@ -25,6 +25,8 @@ public class Option {
     private String name;
     private int quantity;
 
+    public Option(){}
+    
     public Option(Product product, String name, int quantity) {
         this.product = product;
         this.name = name;

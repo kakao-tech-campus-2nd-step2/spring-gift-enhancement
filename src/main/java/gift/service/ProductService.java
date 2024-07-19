@@ -113,7 +113,7 @@ public class ProductService{
 
         List<WishList> wishList = wishListRepository.findByProductId(id);
         wishListRepository.deleteAll(wishList);
-
+        
         List<Option> options = optionRepository.findByProductId(id);
         optionRepository.deleteAll(options);
 
