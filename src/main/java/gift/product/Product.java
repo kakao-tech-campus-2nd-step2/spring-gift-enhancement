@@ -49,11 +49,28 @@ public class Product {
         return category;
     }
 
-    public Product() {
+    protected Product() {
     }
 
     public Product(long id, String name, int price, String imageUrl, Category category) {
         this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
+    public Product(ProductDTO productDTO, Category category) {
+        this(
+            -1L,
+            productDTO.name(),
+            productDTO.price(),
+            productDTO.imageUrl(),
+            category
+        );
+    }
+
+    public void update(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;

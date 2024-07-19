@@ -41,18 +41,16 @@ public class WishlistPageController {
         Pageable pageable
     ) {
         pageable = changePageable(pageable);
-        Page<Product> products = wishlistService.getAllWishlists(token, pageable);
-        List<Product> allProducts = productService.getAllProducts()
-            .stream()
-            .filter(e -> !products.getContent().contains(e))
-            .toList();
+        Page<Product> wishProducts = wishlistService.getAllWishlists(token, pageable);
+        List<Product> allProducts = productService.getAllProducts();
+        wishProducts.getSort().getOrderFor("product.id");
 
-        model.addAttribute("products", products);
+        model.addAttribute("wishProducts", wishProducts);
         model.addAttribute("page", pageable.getPageNumber() + 1);
-        model.addAttribute("totalProductsSize", products.getTotalElements());
-        model.addAttribute("currentPageProductSize", products.get().toList().size());
+        model.addAttribute("totalProductsSize", wishProducts.getTotalElements());
+        model.addAttribute("currentPageProductSize", wishProducts.get().toList().size());
         model.addAttribute("pageLists",
-            IntStream.range(1, products.getTotalPages() + 1).boxed().toList());
+            IntStream.range(1, wishProducts.getTotalPages() + 1).boxed().toList());
 
         model.addAttribute("allProducts", allProducts);
 

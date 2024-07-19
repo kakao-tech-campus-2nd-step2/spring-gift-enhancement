@@ -24,7 +24,7 @@ public class Wishlist {
     @ManyToOne
     private Product product;
 
-    public Wishlist() {
+    protected Wishlist() {
     }
 
     public Wishlist(Product product, Member member) {

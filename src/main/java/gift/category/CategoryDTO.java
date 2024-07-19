@@ -15,7 +15,4 @@ public class CategoryDTO {
         this.name = name;
     }
 
-    public Category toEntity() {
-        return new Category(-1L, name);
-    }
 }

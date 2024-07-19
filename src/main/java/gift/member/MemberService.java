@@ -43,7 +43,7 @@ public class MemberService {
         return jwtProvider.generateToken(memberDTO.toTokenDTO());
     }
 
-    public void verifyPassword(Member member, MemberDTO memberDTO) {
+    private void verifyPassword(Member member, MemberDTO memberDTO) {
         if (!member.isSamePassword(memberDTO.toEntity())) {
             throw new IllegalArgumentException(WRONG_PASSWORD);
         }

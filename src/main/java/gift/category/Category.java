@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.Optional;
 
 @Entity
 public class Category {
@@ -20,11 +21,24 @@ public class Category {
         return name;
     }
 
-    public Category() {
+    protected Category() {
     }
 
     public Category(long id, String name) {
         this.id = id;
         this.name = name;
     }
+
+    public void updateCategory(Category category) {
+        Optional.ofNullable(category.name)
+            .ifPresent(updateName -> this.name = updateName);
+    }
+
+    public void updateCategory(CategoryDTO categoryDTO) {
+        updateCategory(new Category(
+            -1L,
+            categoryDTO.getName()
+        ));
+    }
+
 }
