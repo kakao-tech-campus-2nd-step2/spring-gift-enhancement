@@ -4,6 +4,7 @@ import gift.domain.category.entity.Category;
 import gift.domain.category.exception.CategoryNotFoundException;
 import gift.domain.category.repository.CategoryRepository;
 import gift.domain.option.dto.OptionResponse;
+import gift.domain.option.repository.OptionRepository;
 import gift.domain.option.service.OptionService;
 import gift.domain.product.dto.ProductCreateResponse;
 import gift.domain.product.dto.ProductRequest;
@@ -23,13 +24,16 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     private final OptionService optionService;
 
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository, OptionService optionService) {
+        CategoryRepository categoryRepository,
+        OptionRepository optionRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
         this.optionService = optionService;
     }
 
@@ -77,6 +81,7 @@ public class ProductService {
         Product savedProduct = productRepository
             .findById(id)
             .orElseThrow(() -> new ProductNotFoundException("찾는 상품이 존재하지 않습니다."));
+        optionRepository.deleteByProduct(savedProduct);
         productRepository.delete(savedProduct);
     }
 
