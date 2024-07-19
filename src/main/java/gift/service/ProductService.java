@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.CategoryUpdateRequest;
 import gift.dto.ProductRequest;
+import gift.dto.ProductResponse;
 import gift.dto.ProductUpdateRequest;
 import gift.entity.Category;
 import gift.entity.Product;
@@ -26,12 +27,12 @@ public class ProductService {
 		this.categoryRepository = categoryRepository;
 	}
 	
-    public Page<Product> getProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public Page<ProductResponse> getProducts(Pageable pageable) {
+        return productRepository.findAll(pageable).map(Product::toDto);
     }
 
-    public Product getProduct(long id) {
-        return findProductById(id);
+    public ProductResponse getProduct(long id) {
+        return findProductById(id).toDto();
     }
 
     public void createProduct(ProductRequest request, BindingResult bindingResult) {
