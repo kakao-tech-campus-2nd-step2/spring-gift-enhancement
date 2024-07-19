@@ -4,8 +4,6 @@ import gift.domain.base.BaseEntity;
 import gift.domain.base.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
 
 @Entity
 public class ProductOption extends BaseEntity {
@@ -16,8 +14,7 @@ public class ProductOption extends BaseEntity {
     @Column(nullable = false)
     private Integer stock;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    private Long productId;
 
     protected ProductOption() {
     }
@@ -26,7 +23,7 @@ public class ProductOption extends BaseEntity {
 
         private String name;
         private Integer stock;
-        private Product product;
+        private Long productId;
 
         public Builder name(String name) {
             this.name = name;
@@ -38,8 +35,8 @@ public class ProductOption extends BaseEntity {
             return this;
         }
 
-        public Builder product(Product product) {
-            this.product = product;
+        public Builder productId(Long productId) {
+            this.productId = productId;
             return this;
         }
 
@@ -58,6 +55,7 @@ public class ProductOption extends BaseEntity {
         super(builder);
         name = builder.name;
         stock = builder.stock;
+        productId = builder.productId;
     }
 
     public String getName() {
@@ -68,7 +66,7 @@ public class ProductOption extends BaseEntity {
         return stock;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 }
