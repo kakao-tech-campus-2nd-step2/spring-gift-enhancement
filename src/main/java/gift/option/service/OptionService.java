@@ -5,6 +5,7 @@ import gift.option.domain.OptionDTO;
 import gift.option.repository.OptionRepository;
 import gift.product.domain.Product;
 import gift.product.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +37,26 @@ public class OptionService {
             .toList());
     }
 
+    public List<Option> saveAllwithProductId(List<OptionDTO> optionDTOList, Long productId){
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
+
+        List<Option> options = optionDTOList.stream()
+            .map(optionDTO -> {
+                Option option = convertToEntity(optionDTO);
+                option.setProduct(product); // Set the product for each option
+                return option;
+            })
+            .toList();
+
+        return optionRepository.saveAll(options);
+    }
+
     public Option save(OptionDTO optionDTO){
         return optionRepository.save(convertToEntity(optionDTO));
     }
 
-    private OptionDTO convertToDTO(Option option){
+    public OptionDTO convertToDTO(Option option){
         return new OptionDTO(
             option.getName(),
             option.getQuantity(),
@@ -48,11 +64,7 @@ public class OptionService {
         );
     }
 
-    private Option convertToEntity(OptionDTO optionDTO){
-        Option option = new Option(optionDTO.getName(), optionDTO.getQuantity());
-
-        option.setProduct(productRepository.findById(optionDTO.getProductId())
-                    .orElseThrow(() -> new IllegalArgumentException("productId" + optionDTO.getProductId() + "가 없다.")));
-        return option;
+    public Option convertToEntity(OptionDTO optionDTO){
+        return new Option(optionDTO.getName(), optionDTO.getQuantity());
     }
 }
