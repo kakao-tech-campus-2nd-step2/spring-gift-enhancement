@@ -2,6 +2,8 @@ package gift.dto;
 
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProductRegisterRequestDto {
     @Size(min = 1, max = 15, message = "상품 이름은 공백을 포함하여 최대 15자까지 입력할 수 있습니다.")
@@ -13,6 +15,7 @@ public class ProductRegisterRequestDto {
     private int price;
     private String imageUrl;
     private String categoryName;
+    private Set<OptionDto> options = new HashSet<>();
 
     public ProductRegisterRequestDto() {
     }
@@ -54,5 +57,9 @@ public class ProductRegisterRequestDto {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public Set<OptionDto> getOptions() {
+        return options;
     }
 }

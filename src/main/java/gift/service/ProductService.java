@@ -36,6 +36,11 @@ public class ProductService {
     public Long addProduct(ProductRegisterRequestDto productDto){
         Category category = categoryRepository.findByName(productDto.getCategoryName());
         Product newProduct = new Product(productDto.getName(),productDto.getPrice(),productDto.getImageUrl(), category);
+
+//        // 상품에는 항상 하나 이상의 옵션이 있어야 한다.
+//        Option defaultOption = new Option("default option", 1, newProduct);
+//        newProduct.addOption(defaultOption);
+
         Product savedProduct = productRepository.save(newProduct);
         return savedProduct.getId();
     }
@@ -48,9 +53,11 @@ public class ProductService {
         existingProduct.setPrice(productDto.getPrice());
         existingProduct.setImageUrl(productDto.getImageUrl());
         existingProduct.updateCategory(categoryRepository.findByName(productDto.getCategoryName()));
+
         Product savedProduct = productRepository.save(existingProduct);
         return savedProduct.getId();
     }
+
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
