@@ -8,6 +8,9 @@ create table if not exists member (
 create table if not exists category (
     id          BIGINT          not null AUTO_INCREMENT,
     name        VARCHAR(255)    not null,
+    color       VARCHAR(7)      not null,
+    image_url   VARCHAR(255)    not null,
+    description VARCHAR(255),
     PRIMARY KEY (id)
 );
 
