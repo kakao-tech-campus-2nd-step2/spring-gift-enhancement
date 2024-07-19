@@ -23,6 +23,13 @@ public class AddProductRequest {
     @NotBlank(message = REQUIRED_FIELD_MSG)
     private String category;
 
+    public AddProductRequest(String name, int price, String imageUrl, String category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
     public String getName() {
         return name;
     }
