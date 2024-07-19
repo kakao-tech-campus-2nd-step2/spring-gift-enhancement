@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -46,7 +46,7 @@ class OptionServiceTest {
         });
 
         // 예외 메시지가 출력되는지
-        assertEquals("옳지 않은 문자가 사용되었습니다.", exception.getMessage());
+        assertThat(exception.getMessage()).isEqualTo("옳지 않은 문자가 사용되었습니다.");
     }
 
     @Test
@@ -61,6 +61,6 @@ class OptionServiceTest {
         });
 
         // 예외 메시지가 출력되는지
-        assertEquals("해당 상품이 존재하지 않습니다.", exception.getMessage());
+        assertThat(exception.getMessage()).isEqualTo("해당 상품이 존재하지 않습니다.");
     }
 }
