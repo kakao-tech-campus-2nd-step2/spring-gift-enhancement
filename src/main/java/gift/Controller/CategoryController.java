@@ -1,11 +1,9 @@
 package gift.Controller;
 
 import gift.Model.Category;
-import gift.Model.Product;
 import gift.Service.CategoryService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

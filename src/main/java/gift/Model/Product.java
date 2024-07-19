@@ -1,5 +1,6 @@
 package gift.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +18,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.beans.ConstructorProperties;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -42,17 +45,22 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany
+    @JsonManagedReference
+    private List<Option> options;
+
     protected Product(){
 
     }
 
-    @ConstructorProperties({"id","name","price","imageUrl","category"})
-    public Product(Long id, String name, int price, String imageUrl,Category category) {
+    @ConstructorProperties({"id","name","price","imageUrl","category","options"})
+    public Product(Long id, String name, int price, String imageUrl,Category category, List<Option> options) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
     public Long getId() {
@@ -73,5 +81,9 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public void setCategoryNull(){
+        this.category = null;
     }
 }
