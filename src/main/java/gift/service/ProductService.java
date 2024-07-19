@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import gift.dto.OptionDto;
 import gift.dto.ProductDto;
+import gift.dto.request.ProductCreateRequest;
 import gift.dto.response.ProductPageResponse;
 import gift.entity.Category;
 import gift.entity.Option;
@@ -29,11 +31,14 @@ public class ProductService{
     private CategoryRepository categoryRepository;
     private OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
+    private OptionService optionService;
+
+    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository, OptionRepository optionRepository, OptionService OptionService) {
         this.productRepository = productRepository;
         this.wishListRepository = wishListRepository;
         this.categoryRepository = categoryRepository;
         this.optionRepository = optionRepository;
+        this.optionService = optionService;
     }
 
     @Transactional
@@ -64,13 +69,21 @@ public class ProductService{
     }
 
     @Transactional
-    public void addProduct(ProductDto productDto) {
+    public void addProduct(ProductCreateRequest productCreateRequest) {
   
-        if(productRepository.findById(productDto.getId()).isEmpty()){
-            Product product = toEntity(productDto);
+        if(productRepository.findById(productCreateRequest.getId()).isEmpty()){
+
+            Category category = categoryRepository.findByName(productCreateRequest.getCategory())
+                    .orElseThrow(() -> new CustomException("Category with name" + productCreateRequest.getCategory() + "NOT FOUND" , HttpStatus.NOT_FOUND));
+
+            Product product = new Product(productCreateRequest.getProductName(), 
+                                          productCreateRequest.getPrice(),
+                                          productCreateRequest.getImageUrl(),
+                                          category);
             productRepository.save(product);
+            optionService.addOption(new OptionDto(null, productCreateRequest.getOptionName(), productCreateRequest.getQuantity()), productCreateRequest.getId());
         }else{
-            throw new CustomException("Product with id " + productDto.getId() + "exists", HttpStatus.CONFLICT);
+            throw new CustomException("Product with id " + productCreateRequest.getId() + "exists", HttpStatus.CONFLICT);
         }
     }
 

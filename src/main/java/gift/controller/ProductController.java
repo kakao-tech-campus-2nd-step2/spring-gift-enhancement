@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import gift.dto.ProductDto;
+import gift.dto.request.ProductCreateRequest;
 import gift.dto.response.ProductPageResponse;
 import gift.service.CategoryService;
 import gift.service.ProductService;
@@ -38,21 +39,21 @@ public class ProductController {
 
     @GetMapping("/new")
     public String showProductForm(Model model){
-        model.addAttribute("product", new ProductDto(0, "", 0, "", ""));
+        model.addAttribute("product", new ProductCreateRequest("", 0, "", "", "", 0));
         model.addAttribute("categories", categoryService.findAll().getCategories());
         return "product_form";
     }
 
     @PostMapping("/new")
-    public String addProduct(@Valid @ModelAttribute ProductDto productDto, BindingResult bindingResult, Model model) {
+    public String addProduct(@Valid @ModelAttribute ProductCreateRequest productCreateRequest, BindingResult bindingResult, Model model) {
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("product", productDto);
+            model.addAttribute("product", productCreateRequest);
             model.addAttribute("categories",categoryService.findAll().getCategories());
             return "product_form";
         }
 
-        productService.addProduct(productDto);
+        productService.addProduct(productCreateRequest);
         return "redirect:/api/products";
     }
 
