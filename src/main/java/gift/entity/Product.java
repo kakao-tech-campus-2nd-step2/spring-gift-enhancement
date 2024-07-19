@@ -31,6 +31,9 @@ public class Product{
     private Category category;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Option> options;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<WishList> wishList;
 
     public Product() {
@@ -65,6 +68,10 @@ public class Product{
 
     public Category getCategory(){
         return category;
+    }
+
+    public List<Option> getOptions(){
+        return options;
     }
 
 }
