@@ -31,34 +31,34 @@ public class CategoryPageController {
         return "addCategory";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/new")
     public String createCategory(@Valid @ModelAttribute("category") CategoryDTO categoryDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "addCategory";
         }
-        categoryService.createCategory(categoryDTO);
+        categoryService.create(categoryDTO);
         return "redirect:/categories";
     }
 
     @GetMapping("/update/{id}")
-    public String updateCategoryForm(@PathVariable long id, Model model) {
-        CategoryDTO categoryDTO = categoryService.getCategoryById(id);
+    public String updateCategoryForm(@PathVariable Long id, Model model) {
+        CategoryDTO categoryDTO = categoryService.getById(id);
         model.addAttribute("category", categoryDTO);
         return "editCategory";
     }
 
-    @PostMapping("/update/{id}")
-    public String updateCategory(@PathVariable long id, @Valid @ModelAttribute("category") CategoryDTO categoryDTO, BindingResult result, Model model) {
+    @PutMapping("/update/{id}")
+    public String updateCategory(@PathVariable Long id, @Valid @ModelAttribute("category") CategoryDTO categoryDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "editCategory";
         }
-        categoryService.updateCategory(id, categoryDTO);
+        categoryService.update(id, categoryDTO);
         return "redirect:/categories";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable long id) {
-        categoryService.deleteCategoryById(id);
+    @DeleteMapping("/delete/{id}")
+    public String deleteCategory(@PathVariable Long id) {
+        categoryService.deleteById(id);
         return "redirect:/categories";
     }
 }

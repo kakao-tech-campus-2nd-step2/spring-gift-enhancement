@@ -3,6 +3,7 @@ package gift.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
 
 @Entity
@@ -14,9 +15,11 @@ public class Category {
     private Long id;
 
     @NotBlank(message = "카테고리 이름은 필수입니다")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
+    @NotBlank(message = "색상 코드는 필수입니다")
+    @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "유효한 색상 코드가 아닙니다")
     @Column(nullable = false)
     private String color;
 

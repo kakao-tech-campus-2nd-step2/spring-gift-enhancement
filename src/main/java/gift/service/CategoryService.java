@@ -26,21 +26,21 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryDTO getCategoryById(Long id) {
+    public CategoryDTO getById(Long id) {
         return categoryRepository.findById(id)
                 .map(this::convertToDTO)
                 .orElse(null);
     }
 
     @Transactional
-    public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+    public CategoryDTO create(CategoryDTO categoryDTO) {
         Category category = convertToEntity(categoryDTO);
         Category savedCategory = categoryRepository.save(category);
         return convertToDTO(savedCategory);
     }
 
     @Transactional
-    public CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO) {
+    public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
         Category category = convertToEntity(categoryDTO);
         category = new Category(id, category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
         Category updatedCategory = categoryRepository.save(category);
@@ -48,7 +48,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteCategoryById(Long id) {
+    public void deleteById(Long id) {
         categoryRepository.deleteById(id);
     }
 

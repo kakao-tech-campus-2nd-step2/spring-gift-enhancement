@@ -52,7 +52,7 @@ public class ProductPageController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateProductForm(@PathVariable long id, Model model) {
+    public String updateProductForm(@PathVariable Long id, Model model) {
         ProductDTO productDTO = productService.getProductById(id);
         model.addAttribute("product", productDTO);
         model.addAttribute("categories", categoryService.getAllCategories());
@@ -60,7 +60,7 @@ public class ProductPageController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateProduct(@PathVariable long id, @Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult result, Model model) {
+    public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute("product") ProductDTO productDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             return "editProduct";
@@ -70,7 +70,7 @@ public class ProductPageController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable long id) {
+    public String deleteProduct(@PathVariable Long id) {
         productService.deleteProductById(id);
         return "redirect:/products";
     }
