@@ -3,14 +3,16 @@ package gift.service;
 import static gift.util.CategoryFixture.createCategory;
 import static gift.util.OptionFixture.createOption;
 import static gift.util.ProductFixture.createProduct;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.OptionDTO;
+import gift.exception.DuplicateOptionNameException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
@@ -56,5 +58,34 @@ public class OptionServiceTest {
 
         // then
         assertThat(actual).hasSize(2);
+    }
+
+    @DisplayName("옵션 추가")
+    @Test
+    void addOption() {
+        // given
+        Option option = createOption(1L, "test", product);
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(optionRepository.save(any(Option.class))).willReturn(option);
+
+        // when
+        OptionDTO actual = optionService.addOption(product.getId(), option.toDTO());
+
+        // then
+        assertThat(actual).isEqualTo(option.toDTO());
+    }
+
+    @DisplayName("중복된 이름의 옵션 추가")
+    @Test
+    void addDuplicateOption() {
+        // given
+        Option option = createOption(1L, "test", product);
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(optionRepository.findByProduct(any(Product.class))).willReturn(List.of(option));
+
+        // when
+        // then
+        assertThatExceptionOfType(DuplicateOptionNameException.class)
+            .isThrownBy(() -> optionService.addOption(product.getId(), option.toDTO()));
     }
 }

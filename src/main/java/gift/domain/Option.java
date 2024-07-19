@@ -45,4 +45,8 @@ public class Option {
     public OptionDTO toDTO() {
         return new OptionDTO(id, name, quantity);
     }
+
+    public boolean isSameName(String name) {
+        return name.equals(this.name);
+    }
 }

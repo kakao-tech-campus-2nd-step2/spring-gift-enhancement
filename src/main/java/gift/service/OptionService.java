@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.domain.Product;
 import gift.dto.OptionDTO;
+import gift.exception.DuplicateOptionNameException;
 import gift.exception.NoSuchProductException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
@@ -26,5 +27,20 @@ public class OptionService {
             .stream()
             .map(option -> option.toDTO())
             .toList();
+    }
+
+    public OptionDTO addOption(long productId, OptionDTO optionDTO) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(NoSuchProductException::new);
+        checkNameDuplicate(product, optionDTO.name());
+        return optionRepository.save(optionDTO.toEntity(product)).toDTO();
+    }
+
+    private void checkNameDuplicate(Product product, String name) {
+        if (optionRepository.findByProduct(product)
+            .stream()
+            .anyMatch(option -> option.isSameName(name))) {
+            throw new DuplicateOptionNameException();
+        }
     }
 }
