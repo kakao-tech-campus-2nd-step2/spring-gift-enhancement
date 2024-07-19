@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +27,7 @@ public class ProductCreateRequestTest {
     @DisplayName("유효한 상품 추가")
     public void testAddProductValid() {
         ProductCreateRequest productCreateRequest = new ProductCreateRequest("Valid Name", 100,
-            "valid.jpg", 1L);
+            "valid.jpg", 1L, List.of(1L, 2L));
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
             productCreateRequest);
@@ -34,11 +35,12 @@ public class ProductCreateRequestTest {
         assertThat(violations).isEmpty();
     }
 
+
     @Test
     @DisplayName("필수 필드 누락 - 이름")
     public void testAddProductNameMissing() {
         ProductCreateRequest productCreateRequest = new ProductCreateRequest(null, 100, "valid.jpg",
-            1L);
+            1L, List.of(1L, 2L));
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
             productCreateRequest);
@@ -54,7 +56,7 @@ public class ProductCreateRequestTest {
     @DisplayName("필수 필드 누락 - 가격")
     public void testAddProductPriceMissing() {
         ProductCreateRequest productCreateRequest = new ProductCreateRequest("Valid Name", null,
-            "valid.jpg", 1L);
+            "valid.jpg", 1L, List.of(1L, 2L));
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
             productCreateRequest);
@@ -70,7 +72,7 @@ public class ProductCreateRequestTest {
     @DisplayName("필수 필드 누락 - 이미지 URL")
     public void testAddProductImageUrlMissing() {
         ProductCreateRequest productCreateRequest = new ProductCreateRequest("Valid Name", 100,
-            null, 1L);
+            null, 1L, List.of(1L, 2L));
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
             productCreateRequest);
@@ -78,6 +80,22 @@ public class ProductCreateRequestTest {
         assertThat(violations).isNotEmpty();
         assertThat(violations).anyMatch(violation ->
             violation.getPropertyPath().toString().equals("imageUrl") &&
+                violation.getMessage().equals(REQUIRED_FIELD_MISSING)
+        );
+    }
+
+    @Test
+    @DisplayName("필수 필드 누락 - 옵션 목록")
+    public void testAddProductOptionsMissing() {
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest("Valid Name", 100,
+            "valid.jpg", 1L, null);
+
+        Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
+            productCreateRequest);
+
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).anyMatch(violation ->
+            violation.getPropertyPath().toString().equals("options") &&
                 violation.getMessage().equals(REQUIRED_FIELD_MISSING)
         );
     }

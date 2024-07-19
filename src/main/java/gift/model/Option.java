@@ -80,4 +80,8 @@ public class Option {
     public boolean isProductIdMatching(Long productId) {
         return Objects.equals(this.product.getId(), productId);
     }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

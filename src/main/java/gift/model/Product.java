@@ -3,8 +3,8 @@ package gift.model;
 import static gift.util.constants.ProductConstants.NAME_INVALID_CHARACTERS;
 import static gift.util.constants.ProductConstants.NAME_REQUIRES_APPROVAL;
 import static gift.util.constants.ProductConstants.NAME_SIZE_LIMIT;
-import static gift.util.constants.ProductConstants.OPTION_REQUIRED;
 import static gift.util.constants.ProductConstants.OPTION_NAME_DUPLICATE;
+import static gift.util.constants.ProductConstants.OPTION_REQUIRED;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,7 +20,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -56,7 +55,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options;
 
-    protected Product() {
+    public Product() {
     }
 
     public Product(Long id, String name, int price, String imageUrl, Category category,

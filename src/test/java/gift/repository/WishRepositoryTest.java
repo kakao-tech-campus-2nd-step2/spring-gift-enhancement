@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.model.Category;
 import gift.model.Member;
+import gift.model.Option;
 import gift.model.Product;
 import gift.model.Wish;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +26,15 @@ public class WishRepositoryTest {
     @Autowired
     private WishRepository wishRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private OptionRepository optionRepository;
+
     @BeforeEach
     public void setUp() {
         wishRepository.deleteAll();
@@ -33,25 +44,43 @@ public class WishRepositoryTest {
     @DisplayName("위시리스트 항목 추가 및 ID로 조회")
     public void testSaveAndFindById() {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
-        Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
+        categoryRepository.save(category);
 
-        Wish wish = new Wish(null, member, product);
+        Product product = new Product(null, "Product1", 100, "imageUrl1", category, List.of());
+        Product savedProduct = productRepository.save(product);
+
+        Option option = new Option(null, "Option1", 100, savedProduct);
+        optionRepository.save(option);
+
+        Member member = new Member(1L, "test@example.com", "password");
+
+        Wish wish = new Wish(null, member, savedProduct);
         Wish savedWish = wishRepository.save(wish);
         Optional<Wish> foundWish = wishRepository.findById(savedWish.getId());
 
         assertThat(foundWish).isPresent();
         assertThat(foundWish.get().getMemberId()).isEqualTo(1L);
-        assertThat(foundWish.get().getProductId()).isEqualTo(1L);
+        assertThat(foundWish.get().getProductId()).isEqualTo(savedProduct.getId());
     }
 
     @Test
     @DisplayName("모든 위시리스트 항목 조회 (페이지네이션 적용)")
     public void testFindAllByMemberIdWithPagination() {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
+        categoryRepository.save(category);
+
+        Product product1 = new Product(null, "Product1", 100, "imageUrl1", category, List.of());
+        Product product2 = new Product(null, "Product2", 200, "imageUrl2", category, List.of());
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+
+        Option option1 = new Option(null, "Option1", 100, product1);
+        Option option2 = new Option(null, "Option2", 200, product1);
+        Option option3 = new Option(null, "Option3", 300, product2);
+        optionRepository.saveAll(List.of(option1, option2, option3));
+
         Member member = new Member(1L, "test@example.com", "password");
-        Product product1 = new Product(1L, "Product1", 100, "imageUrl1", category);
-        Product product2 = new Product(2L, "Product2", 200, "imageUrl2", category);
 
         Wish wish1 = new Wish(null, member, product1);
         Wish wish2 = new Wish(null, member, product2);
@@ -71,10 +100,17 @@ public class WishRepositoryTest {
     @DisplayName("위시리스트 항목 삭제")
     public void testDeleteById() {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
-        Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
+        categoryRepository.save(category);
 
-        Wish wish = new Wish(null, member, product);
+        Product product = new Product(null, "Product1", 100, "imageUrl1", category, List.of());
+        Product savedProduct = productRepository.save(product);
+
+        Option option = new Option(null, "Option1", 100, savedProduct);
+        optionRepository.save(option);
+
+        Member member = new Member(1L, "test@example.com", "password");
+
+        Wish wish = new Wish(null, member, savedProduct);
         Wish savedWish = wishRepository.save(wish);
 
         wishRepository.deleteById(savedWish.getId());
@@ -87,13 +123,20 @@ public class WishRepositoryTest {
     @DisplayName("회원 ID와 상품 ID로 위시리스트 항목 존재 여부 확인")
     public void testExistsByMemberIdAndProductId() {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
-        Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product1", 100, "imageUrl1", category);
+        categoryRepository.save(category);
 
-        Wish wish = new Wish(null, member, product);
+        Product product = new Product(null, "Product1", 100, "imageUrl1", category, List.of());
+        Product savedProduct = productRepository.save(product);
+
+        Option option = new Option(null, "Option1", 100, savedProduct);
+        optionRepository.save(option);
+
+        Member member = new Member(1L, "test@example.com", "password");
+
+        Wish wish = new Wish(null, member, savedProduct);
         wishRepository.save(wish);
 
-        boolean exists = wishRepository.existsByMember_IdAndProduct_Id(1L, 1L);
+        boolean exists = wishRepository.existsByMember_IdAndProduct_Id(1L, savedProduct.getId());
         assertThat(exists).isTrue();
     }
 }

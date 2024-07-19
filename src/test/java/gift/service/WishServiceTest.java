@@ -20,6 +20,7 @@ import gift.exception.wish.PermissionDeniedException;
 import gift.exception.wish.WishNotFoundException;
 import gift.model.Category;
 import gift.model.Member;
+import gift.model.Option;
 import gift.model.Product;
 import gift.model.Wish;
 import gift.repository.WishRepository;
@@ -59,12 +60,13 @@ public class WishServiceTest {
     @DisplayName("위시리스트에 상품 추가 성공 테스트")
     public void testAddWishSuccess() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Option option = new Option(1L, "Option1", 100, null);
         Member member = new Member(1L, "test@example.com", "password");
         MemberResponse memberResponse = new MemberResponse(1L, "test@example.com", null);
         ProductResponse productResponse = new ProductResponse(1L, "Product", 100, "imageUrl",
-            category.getId(), category.getName());
+            category.getId(), List.of(option.getId()));
         Product product = new Product(productResponse.id(), productResponse.name(),
-            productResponse.price(), productResponse.imageUrl(), category);
+            productResponse.price(), productResponse.imageUrl(), category, List.of(option));
 
         when(memberService.getMemberById(1L)).thenReturn(memberResponse);
         when(productService.getProductById(1L)).thenReturn(productResponse);
@@ -100,11 +102,12 @@ public class WishServiceTest {
     @DisplayName("위시리스트에 이미 존재하는 상품 추가 시도")
     public void testAddWishDuplicate() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Option option = new Option(1L, "Option1", 100, null);
         Member member = new Member(1L, "test@example.com", "password");
         MemberResponse memberResponse = new MemberResponse(1L, "test@example.com", null);
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Product product = new Product(1L, "Product", 100, "imageUrl", category, List.of(option));
         ProductResponse productResponse = new ProductResponse(1L, "Product", 100, "imageUrl",
-            category.getId(), category.getName());
+            category.getId(), List.of(option.getId()));
 
         when(memberService.getMemberById(1L)).thenReturn(memberResponse);
         when(productService.getProductById(1L)).thenReturn(productResponse);
@@ -124,8 +127,9 @@ public class WishServiceTest {
     @DisplayName("위시리스트에서 상품 삭제 성공 테스트")
     public void testDeleteWishSuccess() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Option option = new Option(1L, "Option1", 100, null);
         Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Product product = new Product(1L, "Product", 100, "imageUrl", category, List.of(option));
         Wish wish = new Wish(1L, member, product);
 
         when(wishRepository.findById(1L)).thenReturn(Optional.of(wish));
@@ -149,8 +153,9 @@ public class WishServiceTest {
     @DisplayName("위시리스트에서 다른 사용자의 상품 삭제 시도")
     public void testDeleteWishPermissionDenied() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Option option = new Option(1L, "Option1", 100, null);
         Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Product product = new Product(1L, "Product", 100, "imageUrl", category, List.of(option));
         Wish wish = new Wish(1L, member, product);
 
         when(wishRepository.findById(1L)).thenReturn(Optional.of(wish));
@@ -166,8 +171,9 @@ public class WishServiceTest {
     @DisplayName("회원의 위시리스트 조회 테스트 (페이지네이션 적용)")
     public void testGetWishlistByMemberId() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Option option = new Option(1L, "Option1", 100, null);
         Member member = new Member(1L, "test@example.com", "password");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Product product = new Product(1L, "Product", 100, "imageUrl", category, List.of(option));
         Wish wish = new Wish(1L, member, product);
         Pageable pageable = PageRequest.of(0, 10);
         when(wishRepository.findAllByMember_Id(1L, pageable))
