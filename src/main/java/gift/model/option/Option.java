@@ -42,6 +42,14 @@ public class Option {
             throw new AlreadyExistName("이미 존재하는 옵션명입니다.");
         }
     }
+    // 옵션 수량 삭제 메서드
+    public Option subtract(Option option, int amount){
+        if(option.getQuantity() < amount) {
+            throw new IllegalArgumentException("수량은 0보다 작을 수 없습니다.");
+        }
+        option.quantity = option.getQuantity() - amount;
+        return option;
+    }
 
     public Long getId() {
         return id;
