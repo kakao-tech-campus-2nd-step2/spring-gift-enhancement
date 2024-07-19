@@ -86,23 +86,31 @@ public class OptionServiceTest {
     @DisplayName("[Unit] get options test")
     class getOptionsTest {
 
-        @Test
-        @DisplayName("success")
-        void success() {
-            //given
-            long productId = 1L;
-            Product product = new Product(
+        private long productId;
+        private Product product;
+        private List<Option> options;
+
+        @BeforeEach
+        void setUp() {
+            productId = 1L;
+            product = new Product(
                 1L,
                 "product",
                 1,
                 "imageUrl",
                 new Category(1L, "category")
             );
-            List<Option> optionReturnValues = List.of(
+            options = List.of(
                 new Option(1L, "option-1", 1, product),
                 new Option(2L, "option-2", 2, product),
                 new Option(3L, "option-3", 3, product)
             );
+        }
+
+        @Test
+        @DisplayName("success")
+        void success() {
+            //given
             List<OptionDTO> expected = List.of(
                 new OptionDTO(1L, "option-1", 1),
                 new OptionDTO(2L, "option-2", 2),
@@ -114,7 +122,7 @@ public class OptionServiceTest {
                 .thenReturn(true);
 
             when(optionRepository.findAllByProductId(productId))
-                .thenReturn(optionReturnValues);
+                .thenReturn(options);
 
             List<OptionDTO> actual = optionService.getOptions(productId);
 
@@ -126,15 +134,14 @@ public class OptionServiceTest {
         @DisplayName("product not found error")
         void productNotFoundError() {
             //given
-            long productId = 1L;
-            List<Option> optionReturnValues = List.of();
+            options = List.of();
 
             //when
             when(productRepository.existsById(productId))
                 .thenReturn(false);
 
             when(optionRepository.findAllByProductId(productId))
-                .thenReturn(optionReturnValues);
+                .thenReturn(options);
 
             //then
             assertThatThrownBy(() -> optionService.getOptions(productId))
@@ -147,31 +154,38 @@ public class OptionServiceTest {
     @DisplayName("[Unit] add option test")
     class addOptionTest {
 
-        @Test
-        @DisplayName("success")
-        void success() {
-            //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
+        private long productId;
+        private OptionDTO optionDTO;
+        private Product product;
+        private Option option;
+
+        @BeforeEach
+        void setUp() {
+            productId = 1L;
+            optionDTO = new OptionDTO(
                 1L,
                 "option-1",
                 1
             );
-            Product product = new Product(
+            product = new Product(
                 1L,
                 "product",
                 1,
                 "imageUrl",
                 new Category(1L, "category")
             );
-
-            Option option = new Option(
+            option = new Option(
                 1L,
                 "option-1",
                 1,
                 product
             );
 
+        }
+
+        @Test
+        @DisplayName("success")
+        void success() {
             //when
             when(productRepository.findById(productId))
                 .thenReturn(Optional.of(product));
@@ -192,27 +206,6 @@ public class OptionServiceTest {
         @Test
         @DisplayName("product not found error")
         void productNotFoundError() {
-            //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
-                1L,
-                "option-1",
-                1
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            Option option = new Option(
-                1L,
-                "option-1",
-                1,
-                product
-            );
-
             //when
             when(productRepository.findById(productId))
                 .thenReturn(Optional.empty());
@@ -232,27 +225,6 @@ public class OptionServiceTest {
         @Test
         @DisplayName("option already exists error")
         void optionAlreadyExistsError() {
-            //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
-                1L,
-                "option-1",
-                1
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            Option option = new Option(
-                1L,
-                "option-1",
-                1,
-                product
-            );
-
             //when
             when(productRepository.findById(productId))
                 .thenReturn(Optional.of(product));
@@ -274,18 +246,10 @@ public class OptionServiceTest {
         @DisplayName("option name allowed character error")
         void optionNameAllowedCharacterError(String optionName) {
             //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
+            optionDTO = new OptionDTO(
                 1L,
                 optionName,
                 1
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
             );
 
             //when
@@ -306,18 +270,10 @@ public class OptionServiceTest {
         @DisplayName("option name length error")
         void optionNameLengthError(String optionName) {
             //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
+            optionDTO = new OptionDTO(
                 1L,
                 optionName,
                 1
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
             );
 
             //when
@@ -338,18 +294,10 @@ public class OptionServiceTest {
         @DisplayName("option quantity size error")
         void optionQuantitySizeError(int quantity) {
             //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
+            optionDTO = new OptionDTO(
                 1L,
                 "option-1",
                 quantity
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
             );
 
             //when
@@ -370,30 +318,37 @@ public class OptionServiceTest {
     @DisplayName("[Unit] update option test")
     class updateOptionTest {
 
-        @Test
-        @DisplayName("success")
-        void success() {
-            //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
+        private long productId = 1L;
+        private OptionDTO optionDTO;
+        private Product product;
+        private Option option;
+
+        @BeforeEach
+        void setUp() {
+            productId = 1L;
+            optionDTO = new OptionDTO(
                 1L,
                 "update-option",
                 1
             );
-            Product product = new Product(
+            product = new Product(
                 1L,
                 "product",
                 1,
                 "imageUrl",
                 new Category(1L, "category")
             );
-            Option option = new Option(
+            option = new Option(
                 1L,
                 "update-option",
                 1,
                 product
             );
+        }
 
+        @Test
+        @DisplayName("success")
+        void success() {
             //when
             when(productRepository.existsById(productId))
                 .thenReturn(true);
@@ -418,27 +373,6 @@ public class OptionServiceTest {
         @Test
         @DisplayName("product not found error")
         void productNotFoundError() {
-            //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
-                1L,
-                "update-option",
-                1
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            Option option = new Option(
-                1L,
-                "option",
-                1,
-                product
-            );
-
             //when
             when(productRepository.findById(productId))
                 .thenReturn(Optional.empty());
@@ -458,14 +392,6 @@ public class OptionServiceTest {
         @Test
         @DisplayName("option not found error")
         void optionNotFoundError() {
-            //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
-                1L,
-                "update-option",
-                1
-            );
-
             //when
             when(productRepository.existsById(productId))
                 .thenReturn(true);
@@ -485,27 +411,6 @@ public class OptionServiceTest {
         @Test
         @DisplayName("option already exists error")
         void optionAlreadyExistsError() {
-            //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
-                1L,
-                "update-option",
-                1
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            Option option = new Option(
-                1L,
-                "option",
-                1,
-                product
-            );
-
             //when
             when(productRepository.existsById(productId))
                 .thenReturn(true);
@@ -527,24 +432,10 @@ public class OptionServiceTest {
         @DisplayName("option name allowed character error")
         void optionNameAllowedCharacterError(String optionName) {
             //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
+            optionDTO = new OptionDTO(
                 1L,
                 optionName,
                 1
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            Option option = new Option(
-                1L,
-                "option-1",
-                1,
-                product
             );
 
             //when
@@ -568,24 +459,10 @@ public class OptionServiceTest {
         @DisplayName("option name length error")
         void optionNameLengthError(String optionName) {
             //given
-            long productId = 1L;
-            OptionDTO optionDTO = new OptionDTO(
+            optionDTO = new OptionDTO(
                 1L,
                 optionName,
                 1
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            Option option = new Option(
-                1L,
-                "option-1",
-                1,
-                product
             );
 
             //when
@@ -609,24 +486,10 @@ public class OptionServiceTest {
         @DisplayName("option quantity size error")
         void optionQuantitySizeError(int quantity) {
             //given
-            long productId = 1L;
             OptionDTO optionDTO = new OptionDTO(
                 1L,
                 "update-option",
                 quantity
-            );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-            Option option = new Option(
-                1L,
-                "option-1",
-                1,
-                product
             );
 
             //when
@@ -650,28 +513,33 @@ public class OptionServiceTest {
     @DisplayName("[Unit] delete option test")
     class deleteOptionTest {
 
-        @Test
-        @DisplayName("success")
-        void success() {
-            //given
-            long productId = 1L;
-            long optionId = 1L;
+        private long productId;
+        private long optionId;
+        private Product product;
+        private Option option;
 
-            Product product = new Product(
+        @BeforeEach
+        void setUp() {
+            productId = 1L;
+            optionId = 1L;
+            product = new Product(
                 1L,
                 "product",
                 1,
                 "imageUrl",
                 new Category(1L, "category")
             );
-
-            Option option = new Option(
+            option = new Option(
                 1L,
                 "option",
                 1,
                 product
             );
+        }
 
+        @Test
+        @DisplayName("success")
+        void success() {
             //when
             when(productRepository.existsById(productId))
                 .thenReturn(true);
@@ -690,25 +558,6 @@ public class OptionServiceTest {
         @Test
         @DisplayName("product not found error")
         void productNotFoundError() {
-            //given
-            long productId = 1L;
-            long optionId = 1L;
-
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-
-            Option option = new Option(
-                1L,
-                "option",
-                1,
-                product
-            );
-
             //when
             when(productRepository.existsById(productId))
                 .thenReturn(false);
@@ -728,25 +577,6 @@ public class OptionServiceTest {
         @Test
         @DisplayName("option not found error")
         void optionNotFoundError() {
-            //given
-            long productId = 1L;
-            long optionId = 1L;
-
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
-
-            Option option = new Option(
-                1L,
-                "option",
-                1,
-                product
-            );
-
             //when
             when(productRepository.existsById(productId))
                 .thenReturn(true);
