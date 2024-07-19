@@ -22,9 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     @Transactional(readOnly = true)
@@ -36,9 +38,14 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductResponse find(UUID id) {
+    public ProductResponse getProductResponse(UUID id) {
         Product target = productRepository.findById(id).orElseThrow(ProductNotExistsException::new);
         return toProductResponse(target);
+    }
+
+    @Transactional(readOnly = true)
+    public Product find(UUID id) {
+        return productRepository.findById(id).orElseThrow(ProductNotExistsException::new);
     }
 
     @Transactional
@@ -47,7 +54,7 @@ public class ProductService {
             product.imageUrl()).ifPresent(p -> {
             throw new ProductAlreadyExistsException();
         });
-        return toProductResponse(productRepository.save(from(product)));
+        return toProductResponse(productRepository.save(from(product, categoryService.findByName(product.categoryName()))));
     }
 
     @Transactional

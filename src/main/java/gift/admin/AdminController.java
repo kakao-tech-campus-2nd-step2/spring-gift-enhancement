@@ -62,7 +62,7 @@ public class AdminController {
 
     @GetMapping("/categories/edit/{id}")
     public String categoryEditForm(@PathVariable UUID id, Model model) {
-        model.addAttribute("category", categoryService.find(id));
+        model.addAttribute("category", categoryService.getCategoryResponse(id));
         return "category-edit-form";
     }
 
@@ -144,7 +144,7 @@ public class AdminController {
 
     @GetMapping("/products/edit/{id}")
     public String productEditForm(@PathVariable UUID id, Model model) {
-        model.addAttribute("product", productService.find(id));
+        model.addAttribute("product", productService.getProductResponse(id));
         return "product-edit-form";
     }
 

@@ -39,7 +39,7 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable UUID productId) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.find(productId));
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductResponse(productId));
     }
 
     @PostMapping

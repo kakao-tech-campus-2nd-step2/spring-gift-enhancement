@@ -11,13 +11,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
 public class Product {
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private final List<Wish> wishes = new LinkedList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -29,14 +28,19 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "catetoryId", nullable = false)
     private Category category;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private final List<Wish> wishes = new LinkedList<>();
+    @OneToMany(mappedBy = "product")
+    private final List<Option> options = new LinkedList<>();
 
     public Product() {
     }
 
-    public Product(String name, Long price, String imageUrl) {
+    public Product(String name, Long price, String imageUrl, Category category ) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public UUID getId() {

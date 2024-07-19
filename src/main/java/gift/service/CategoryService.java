@@ -36,10 +36,16 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryResponse find(UUID id) {
+    public CategoryResponse getCategoryResponse(UUID id) {
         Category target = categoryRepository.findById(id)
             .orElseThrow(CategoryNotExistsException::new);
         return toCategoryResponse(target);
+    }
+
+    @Transactional(readOnly = true)
+    public Category findByName(String categoryName) {
+        return categoryRepository.findByName(categoryName)
+            .orElseThrow(CategoryNotExistsException::new);
     }
 
     @Transactional

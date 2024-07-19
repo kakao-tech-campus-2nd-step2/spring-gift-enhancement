@@ -14,9 +14,6 @@ import java.util.UUID;
 @Entity
 public class Category {
 
-    public static Category defaultCategory;
-    @OneToMany(mappedBy = "category")
-    private final List<Product> products = new LinkedList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -28,6 +25,11 @@ public class Category {
     private String description;
     @Column
     private String image_url;
+    @OneToMany(mappedBy = "category")
+    private final List<Product> products = new LinkedList<>();
+
+    public static Category defaultCategory = new Category("default", "#FFFFFF", "default category",
+        "");
 
     public Category() {
     }
