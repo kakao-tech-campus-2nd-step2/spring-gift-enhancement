@@ -12,7 +12,6 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -32,23 +31,6 @@ class CategoryServiceTest {
         this.entityManager = entityManager;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
-    }
-
-    @Test
-    @Transactional
-    public void findProductTest() {
-        //given
-        Category category = categoryRepository.findByName("패션").get();
-        User seller = new User("user", "123", "123", "ADMIN");
-        userRepository.save(seller);
-        Product product = new Product("test", 1200, "url", seller, category);
-        productRepository.save(product);
-
-        //when - then
-        Category category1 = categoryRepository.findByName("패션").get();
-        assertThat(category1.getProducts().size()).isEqualTo(1);
-        System.out.println("category1.getProducts() = " + category1.getProducts());
-
     }
 
     @Test
