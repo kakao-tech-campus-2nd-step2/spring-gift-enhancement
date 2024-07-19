@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/products/admin")
+@RequestMapping("/api/admin/products")
 public class ProductAdminController {
 
     private final ProductService productService;
