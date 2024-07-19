@@ -87,7 +87,7 @@ public class ProductService {
         Product product = findProduct(id);
         checkProductOwner(appUser, product);
 
-        product.inactive(false);
+        product.inactive();
         productRepository.save(product);
     }
 

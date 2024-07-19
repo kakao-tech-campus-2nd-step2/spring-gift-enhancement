@@ -84,8 +84,8 @@ public class Product extends BaseTimeEntity {
         this.category = category;
     }
 
-    public void inactive(boolean active) {
-        isActive = active;
+    public void inactive() {
+        isActive = false;
     }
 
     public void updateProduct(String name, int price, String imageUrl) {

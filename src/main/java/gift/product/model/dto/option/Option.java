@@ -79,8 +79,8 @@ public class Option {
         this.additionalCost = additionalCost;
     }
 
-    public void inactive(boolean active) {
-        isActive = active;
+    public void inactive() {
+        isActive = false;
     }
 
     public boolean isActive() {

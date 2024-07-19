@@ -60,7 +60,7 @@ public class OptionService {
         if (optionRepository.countByProductIdAndIsActiveTrue(product.getId()) <= 1) {
             throw new IllegalStateException("상품은 하나 이상의 옵션을 가지고 있어야 합니다.");
         }
-        option.inactive(false);
+        option.inactive();
         optionRepository.save(option);
     }
 
