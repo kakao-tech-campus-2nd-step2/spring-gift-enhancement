@@ -50,7 +50,9 @@ class ProductControllerTest {
                         "name": "productName",
                         "price": 1234,
                         "imageUrl": "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png",
-                        "categoryName" : "categoryName"
+                        "categoryName" : "categoryName",
+                        "optionName" : "옵션",
+                        "optionQuantity" : 1234
                     }
                 """;
 
