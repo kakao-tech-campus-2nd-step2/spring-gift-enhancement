@@ -9,8 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
+@DynamicInsert
 public class Member{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +24,7 @@ public class Member{
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     @ColumnDefault("'user'")
     private String role;
 
