@@ -4,6 +4,7 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -45,13 +46,11 @@ public class ProductService {
     public void addOptionToProduct(Long productId, Option option) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("해당 product ID가 존재하지 않음"));
 
-        boolean optionExists = product.getOptions().stream()
-                .anyMatch(existingOption -> existingOption.getName().equals(option.getName()));
-        if (optionExists) {
+        try {
+            option.setProduct(product);
+            optionRepository.save(option);
+        } catch (DataIntegrityViolationException e) {
             throw new IllegalArgumentException("동일한 상품 내에 동일한 옵션 이름이 존재합니다.");
         }
-
-        option.setProduct(product);
-        optionRepository.save(option);
     }
 }
