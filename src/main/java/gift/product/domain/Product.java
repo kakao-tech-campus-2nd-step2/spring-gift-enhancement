@@ -85,6 +85,9 @@ public class Product {
         this.price = command.price();
         this.imageUrl = command.imageUrl();
         this.category = category;
+
+        this.options.clear();
+        newOptions.forEach(this::addOption);
     }
 
     public void validateKakaoInProductName() {
