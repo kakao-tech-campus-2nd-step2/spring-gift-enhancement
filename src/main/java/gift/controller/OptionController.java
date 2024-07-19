@@ -38,8 +38,9 @@ public class OptionController {
     }
 
     @DeleteMapping("/{optionId}")
-    public ResponseEntity<String> deleteOption(@PathVariable("optionId") Long optionId) {
-        optionService.deleteOption(optionId);
+    public ResponseEntity<String> deleteOption(@PathVariable("productId") Long productId,
+        @PathVariable("optionId") Long optionId) {
+        optionService.deleteOption(productId, optionId);
         return ResponseEntity.ok(SuccessMessage.DELETE_OPTION_SUCCESS_MSG);
     }
 }

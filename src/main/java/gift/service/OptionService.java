@@ -4,6 +4,7 @@ import gift.constants.ErrorMessage;
 import gift.dto.OptionDto;
 import gift.entity.Option;
 import gift.entity.Product;
+import gift.exception.ProductOptionRequiredException;
 import gift.repository.OptionJpaDao;
 import gift.repository.ProductJpaDao;
 import jakarta.transaction.Transactional;
@@ -30,8 +31,7 @@ public class OptionService {
      */
     public List<OptionDto> getProductOptionList(Long productId) {
         findProductByIdOrElseThrow(productId);
-        return optionJpaDao.findAllByProduct_Id(productId).stream().map(OptionDto::new)
-            .toList();
+        return findAllOptionsByProductId(productId);
     }
 
     /**
@@ -57,8 +57,14 @@ public class OptionService {
             .updateOption(optionDto);
     }
 
-    public void deleteOption(Long optionId) {
+    /**
+     * 상품의 옵션을 삭제하는 메서드. 단, 옵션이 1개일 때는 삭제하지 않는다.
+     */
+    public void deleteOption(Long productId, Long optionId) {
         findOptionByIdOrElseThrow(optionId);
+        if (findAllOptionsByProductId(productId).size() == 1) {
+            throw new ProductOptionRequiredException(ErrorMessage.OPTION_MUST_MORE_THAN_ZERO);
+        }
         optionJpaDao.deleteById(optionId);
     }
 
@@ -86,5 +92,13 @@ public class OptionService {
             .ifPresent(v -> {
                 throw new IllegalArgumentException(ErrorMessage.OPTION_NAME_ALREADY_EXISTS_MSG);
             });
+    }
+
+    /**
+     * 해당 상품의 옵션들을 리스트로 반환
+     */
+    private List<OptionDto> findAllOptionsByProductId(Long productId) {
+        return optionJpaDao.findAllByProduct_Id(productId).stream().map(OptionDto::new)
+            .toList();
     }
 }
