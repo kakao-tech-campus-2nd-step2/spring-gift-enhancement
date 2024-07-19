@@ -1,5 +1,6 @@
 package gift.domain.cartItem;
 
+import gift.domain.cartItem.dto.CartItemDTO;
 import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
 import gift.domain.user.JpaUserRepository;
@@ -60,41 +61,45 @@ public class CartItemService {
     /**
      * 장바구니 상품 조회 - 페이징(매개변수별)
      */
-    public Page<Product> getProductsInCartByUserIdAndPageAndSort(Long userId, int page, int size,
+    public List<CartItemDTO> getProductsInCartByUserIdAndPageAndSort(Long userId, int page, int size,
         Sort sort) {
-        List<Long> productIds = cartItemRepository.findAllByUserId(userId).stream()
-            .map(cartItem -> cartItem.getProduct().getId())
-            .collect(Collectors.toList());
-
         PageRequest pageRequest = PageRequest.of(page, size, sort);
-        Page<Product> productsPage = productRepository.findAllByIdIn(productIds,
-            pageRequest); // 영속성 컨텍스트에 이미 존재
 
-        List<Product> products = productsPage.getContent().stream()
-            .map(product -> {
-                return Product.createProductFromProxy(product);
+        Page<CartItem> cartItemsPage = cartItemRepository.findAllByUserId(userId,
+            pageRequest);
+
+        List<CartItemDTO> cartItemDTOS = cartItemsPage.getContent().stream()
+            .map(cartItem -> {
+                return new CartItemDTO(
+                    cartItem.getId(),
+                    cartItem.getProduct().getId(),
+                    cartItem.getProduct().getName(),
+                    cartItem.getProduct().getPrice(),
+                    cartItem.getProduct().getImageUrl(),
+                    cartItem.getCount()
+                );
             })
             .toList();
 
         // 새 Page 객체 생성
-        return PageableExecutionUtils.getPage(products, pageRequest,
-            productsPage::getTotalElements);
+        return cartItemDTOS;
     }
 
     /**
      * 장바구니 상품 삭제
      */
-    public void deleteCartItem(Long userId, Long productId) {
-        cartItemRepository.deleteByUserIdAndProductId(userId, productId);
+    public void deleteCartItem(Long cartItemId) {
+        cartItemRepository.deleteById(cartItemId);
     }
 
     /**
      * 장바구니 상품 수량 수정
      */
     @Transactional
-    public int updateCartItem(Long userId, Long productId, int count) {
-        CartItem findCartItem = cartItemRepository.findByUserIdAndProductId(userId, productId)
+    public int updateCartItem(Long cartItemId, int count) {
+        CartItem findCartItem = cartItemRepository.findById(cartItemId)
             .orElseThrow(() -> new BusinessException(HttpStatus.BAD_REQUEST, "해당 상품이 존재하지 않습니다."));
+
         findCartItem.updateCount(count); // 수량 수정
         return count;
     }
