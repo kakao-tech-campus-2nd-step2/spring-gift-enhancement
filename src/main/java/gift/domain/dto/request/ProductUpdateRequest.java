@@ -6,9 +6,8 @@ import gift.domain.service.CategoryService;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.util.List;
 
-public record ProductRequest(
+public record ProductUpdateRequest(
     @NotNull
     @Size(min = 1, max = 15, message = "공백을 포함하여 최대 15자까지 입력할 수 있습니다.")
     @Pattern(regexp = "^(?!.*카카오).*$", message = "'카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.")
@@ -19,13 +18,11 @@ public record ProductRequest(
     @NotNull
     String imageUrl,
     @NotNull
-    Long categoryId,
-    @NotNull
-    List<OptionRequest> options
+    Long categoryId
     ) {
 
-    public static ProductRequest of(Product product) {
-        return new ProductRequest(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getId(), OptionRequest.of(product.getOptions()));
+    public static ProductUpdateRequest of(Product product) {
+        return new ProductUpdateRequest(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getId());
     }
 
     public Product toEntity(CategoryService categoryService) {

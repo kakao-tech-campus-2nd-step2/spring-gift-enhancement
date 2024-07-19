@@ -1,6 +1,6 @@
 package gift.domain.entity;
 
-import gift.domain.dto.request.ProductRequest;
+import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.service.CategoryService;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -91,7 +91,7 @@ public class Product {
         this.category = category;
     }
 
-    public void set(ProductRequest request, CategoryService categoryService) {
+    public void set(ProductUpdateRequest request, CategoryService categoryService) {
         this.name = request.name();
         this.price = request.price();
         this.imageUrl = request.imageUrl();

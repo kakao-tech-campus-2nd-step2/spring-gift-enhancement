@@ -2,7 +2,8 @@ package gift.domain.controller;
 
 import gift.domain.controller.apiResponse.ProductAddApiResponse;
 import gift.domain.controller.apiResponse.ProductListApiResponse;
-import gift.domain.dto.request.ProductRequest;
+import gift.domain.dto.request.ProductAddRequest;
+import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.service.ProductService;
 import gift.global.apiResponse.BasicApiResponse;
 import gift.global.apiResponse.SuccessApiResponse;
@@ -34,7 +35,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductAddApiResponse> addProduct(@Valid @RequestBody ProductRequest requestDto) {
+    public ResponseEntity<ProductAddApiResponse> addProduct(@Valid @RequestBody ProductAddRequest requestDto) {
         var result = productService.addProduct(requestDto);
         return SuccessApiResponse.created(
             new ProductAddApiResponse(HttpStatus.CREATED, result),
@@ -43,8 +44,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BasicApiResponse> updateProduct(@PathVariable("id") Long id, @Valid @RequestBody ProductRequest requestDto) {
-        productService.updateProductById(id, requestDto);
+    public ResponseEntity<BasicApiResponse> updateProduct(@PathVariable("id") Long id, @Valid @RequestBody ProductUpdateRequest updateRequestDto) {
+        productService.updateProductById(id, updateRequestDto);
         return SuccessApiResponse.ok();
     }
 

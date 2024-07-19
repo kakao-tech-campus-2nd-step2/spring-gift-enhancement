@@ -1,6 +1,6 @@
 package gift.domain.repository;
 
-import gift.domain.dto.request.ProductRequest;
+import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.entity.Product;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +15,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         + "WHERE p.name = :#{#request.name()} "
         + "    AND p.price = :#{#request.price()} "
         + "    AND p.imageUrl = :#{#request.imageUrl()}")
-    Optional<Product> findByContents(ProductRequest request);
+    Optional<Product> findByContents(ProductAddRequest request);
 }
