@@ -5,10 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
-import gift.domain.option.dto.OptionRequest;
 import gift.domain.product.repository.ProductRepository;
-import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.entity.Product;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,8 @@ class ProductRepositoryTest {
     @DisplayName("findById 테스트")
     void findByIdTest() {
         // given
-        OptionRequest optionRequest = new OptionRequest("name", 100);
-        ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L, optionRequest);
-        Category savedCategory = categoryRepository.save(
-            new Category("test", "color", "image", "description"));
-        Product expected = productRepository.save(dtoToEntity(request, savedCategory));
+        Category savedCategory = categoryRepository.save(createCategory());
+        Product expected = productRepository.save(createProduct(savedCategory));
 
         // when
         Product actual = productRepository.findById(expected.getId()).orElseThrow();
@@ -44,13 +42,8 @@ class ProductRepositoryTest {
     @DisplayName("save 테스트")
     void saveTest() {
         // given
-        OptionRequest optionRequest = new OptionRequest("name", 100);
-        ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L, optionRequest);
-        Category savedCategory = categoryRepository.save(
-            new Category("test", "color", "image", "description"));
-
-        Product expected = new Product(request.getName(), request.getPrice(),
-            request.getImageUrl(), savedCategory);
+        Category savedCategory = categoryRepository.save(createCategory());
+        Product expected = createProduct(savedCategory);
 
         // when
         Product actual = productRepository.save(expected);
@@ -69,11 +62,8 @@ class ProductRepositoryTest {
     @DisplayName("delete 테스트")
     void deleteTest() {
         // given
-        OptionRequest optionRequest = new OptionRequest("name", 100);
-        ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L, optionRequest);
-        Category savedCategory = categoryRepository.save(
-            new Category("test", "color", "image", "description"));
-        Product savedProduct = productRepository.save(dtoToEntity(request, savedCategory));
+        Category savedCategory = categoryRepository.save(createCategory());
+        Product savedProduct = productRepository.save(createProduct(savedCategory));
 
         // when
         productRepository.delete(savedProduct);
@@ -81,10 +71,42 @@ class ProductRepositoryTest {
         // then
         assertTrue(productRepository.findById(savedProduct.getId()).isEmpty());
     }
+    @Test
+    @DisplayName("카테고리로 상품 전체 조회 테스트")
+    void findAllByCategoryTest() {
+        // when
+        Category category = createCategory();
+        Product product1 = createProduct(category);
+        Product product2 = createProduct(category);
 
-    private Product dtoToEntity(ProductRequest productRequest, Category savedCategory) {
-        return new Product(productRequest.getName(), productRequest.getPrice(),
-            productRequest.getImageUrl(), savedCategory);
+        categoryRepository.save(category);
+        productRepository.save(product1);
+        productRepository.save(product2);
+
+        List<Product> expected = Arrays.asList(product1, product2);
+
+        // when
+        List<Product> actual = productRepository.findAllByCategory(category);
+
+        // then
+        assertAll(
+            () -> IntStream.range(0, actual.size()).forEach(i -> {
+                assertThat(actual.get(i).getName())
+                    .isEqualTo(expected.get(i).getName());
+                assertThat(actual.get(i).getPrice())
+                    .isEqualTo(expected.get(i).getPrice());
+                assertThat(actual.get(i).getImageUrl())
+                    .isEqualTo(expected.get(i).getImageUrl());
+                assertThat(actual.get(i).getCategory())
+                    .isEqualTo(expected.get(i).getCategory());
+            })
+        );
+    }
+    private Category createCategory(){
+        return new Category("test", "color", "image", "description");
+    }
+    private Product createProduct(Category category){
+        return new Product("test", 1000, "test.jpg", category);
     }
 
 }
