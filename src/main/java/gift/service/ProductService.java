@@ -1,5 +1,6 @@
 package gift.service;
 
+
 import gift.dto.OptionDto;
 import gift.dto.ProductDto;
 import gift.model.Category;
@@ -78,7 +79,7 @@ public class ProductService {
     public void updateProductCategoryToNone(Long id) {
         Category category = getCategoryById(id);
         Category noneCategory = getCategoryById(1L);
-
+        
         List<Product> products = productRepository.findByCategory(category);
         for (Product product : products) {
             Product updateProduct = new Product(
@@ -122,4 +123,3 @@ public class ProductService {
         }
     }
 }
-
