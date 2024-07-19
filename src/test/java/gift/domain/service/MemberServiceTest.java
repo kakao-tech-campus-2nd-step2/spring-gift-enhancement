@@ -52,7 +52,7 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 - 처음 가입하는 경우")
+    @DisplayName("[UnitTest] 회원가입 - 처음 가입하는 경우")
     void registerUser() {
         //given (mocking)
         given(memberRepository.findByEmail(memberRequest.email()))
@@ -77,7 +77,7 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 실패 - 이미 회원가입 된 상황")
+    @DisplayName("[UnitTest/Fail] 회원가입: 이미 회원가입 된 상황")
     void registerUser_AlreadyExistsMember() {
         //given: 이미 존재하는 회원(mock 설정)
         given(memberRepository.findByEmail(memberRequest.email())).willReturn(Optional.of(member));
@@ -94,7 +94,7 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("로그인 - 아이디 존재하고 비밀번호 일치하는 경우")
+    @DisplayName("[UnitTest] 로그인: 아이디 존재하고 비밀번호 일치하는 경우")
     void loginUser() {
         //given
         given(memberRepository.findByEmail(memberRequest.email())).willReturn(Optional.of(member));
@@ -111,7 +111,7 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("로그인 실패 - 아이디가 존재하지 않은 경우")
+    @DisplayName("[UnitTest/Fail] 로그인: 아이디가 존재하지 않은 경우")
     void loginUser_IdNotExists() {
         //given
         given(memberRepository.findByEmail(eq(memberRequest.email()))).willReturn(Optional.empty());
@@ -124,7 +124,7 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("로그인 실패 - 비밀번호가 일치하지 않은 경우")
+    @DisplayName("[UnitTest/Fail] 로그인: 비밀번호가 일치하지 않은 경우")
     void loginUser_IncorrectPassword() {
         //given
         MemberRequest wrongPasswordRequest = new MemberRequest(memberRequest.email(), "incorrectPassword");
@@ -138,7 +138,7 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("로그인 실패 - 아이디 존재하지 않고 비밀번호가 일치하지 않은 경우")
+    @DisplayName("[UnitTest/Fail] 로그인: 아이디 존재하지 않고 비밀번호가 일치하지 않은 경우")
     void loginUser_IdNotExistsAndIncorrectPassword() {
         //given
         MemberRequest incorrectRequest = new MemberRequest("notExist@example.com", "incorrectPassword");

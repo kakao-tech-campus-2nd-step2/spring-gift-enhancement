@@ -76,4 +76,19 @@ public class GlobalExceptionHandler {
         ProductNotIncludedInWishlistException e) {
         return ErrorApiResponse.notFound(e);
     }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorApiResponse> handleCategoryNotFoundException(CategoryNotFoundException e) {
+        return ErrorApiResponse.notFound(e);
+    }
+
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<ErrorApiResponse> handleCategoryAlreadyExistsException(CategoryAlreadyExistsException e) {
+        return ErrorApiResponse.notFound(e);
+    }
+
+    @ExceptionHandler(CategoryHasProductsException.class)
+    public ResponseEntity<ErrorApiResponse> handleCategoryHasProductsException(CategoryHasProductsException e) {
+        return ErrorApiResponse.conflict(e);
+    }
 }

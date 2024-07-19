@@ -5,8 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gift.domain.controller.apiResponse.MemberLoginApiResponse;
 import gift.domain.controller.apiResponse.MemberRegisterApiResponse;
 import gift.domain.dto.request.MemberRequest;
+import gift.domain.repository.MemberRepository;
 import gift.utilForTest.TestUtil;
 import java.util.Objects;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +32,19 @@ class MemberDomainTest {
     private TestRestTemplate restTemplate;
     @Autowired
     private TestUtil testUtil;
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @BeforeEach
+    void beforeEach() {
+        memberRepository.deleteAll();
+    }
 
     @Test
-    @DisplayName("API test: register Member")
+    @DisplayName("[ApiIntegrationTest] 회원가입")
     void registerMember() {
         //given
-        MemberRequest request = new MemberRequest("test@example.com", "test");
+        MemberRequest request = new MemberRequest("testaccount@example.com", "test");
 
         //when
         var actualResponse = restTemplate.exchange(
@@ -48,7 +57,7 @@ class MemberDomainTest {
     }
 
     @Test
-    @DisplayName("API test: login Member")
+    @DisplayName("[ApiIntegrationTest] 로그인")
     void loginMember() {
         //given
         MemberRequest request = new MemberRequest("test2@example.com", "test");

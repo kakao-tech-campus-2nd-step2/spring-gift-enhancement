@@ -14,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
     @Transactional(readOnly = true)
@@ -38,14 +40,14 @@ public class ProductService {
         productRepository.findByContents(requestDto).ifPresent((p) -> {
             throw new ProductAlreadyExistsException();});
 
-        return ProductResponse.of(productRepository.save(requestDto.toEntity()));
+        return ProductResponse.of(productRepository.save(requestDto.toEntity(categoryService)));
     }
 
     @Transactional
     public ProductResponse updateProductById(Long id, ProductRequest requestDto) {
         //존재하지 않는 상품 업데이트 시도시 예외 발생
         Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
-        product.set(requestDto);
+        product.set(requestDto, categoryService);
         //상품 업데이트
         return ProductResponse.of(product);
     }

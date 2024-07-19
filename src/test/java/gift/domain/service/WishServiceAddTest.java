@@ -16,7 +16,7 @@ import gift.domain.entity.Product;
 import gift.domain.entity.Wish;
 import gift.domain.exception.ProductNotFoundException;
 import gift.domain.repository.WishRepository;
-import gift.global.util.HashUtil;
+import gift.utilForTest.MockObjectSupplier;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +25,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class WishServiceAddTest {
@@ -46,17 +45,14 @@ class WishServiceAddTest {
 
     @BeforeEach
     void beforeEach() {
-        product = new Product("name", 10000, "image.png");
-        member = new Member("test@example.com", HashUtil.hashCode("password"), "user");
-        wish = new Wish(product, member, 3L);
-        wishRequest = new WishRequest(1L, 5L);
-        ReflectionTestUtils.setField(product, "id", 1L);
-        ReflectionTestUtils.setField(member, "id", 1L);
-        ReflectionTestUtils.setField(wish, "id", 1L);
+        product = MockObjectSupplier.get(Product.class);
+        member = MockObjectSupplier.get(Member.class);
+        wish = MockObjectSupplier.get(Wish.class);
+        wishRequest = new WishRequest(product.getId(), 5L);
     }
 
     @Test
-    @DisplayName("위시리스트 추가 - 존재하지 않는 상품인 경우")
+    @DisplayName("[UnitTest/Fail] 위시리스트 추가: 존재하지 않는 상품인 경우")
     void addWishlist_ProductNotFoundException() {
         //given
         given(productService.getProductById(eq(product.getId()))).willThrow(ProductNotFoundException.class);
@@ -70,7 +66,7 @@ class WishServiceAddTest {
     }
 
     @Test
-    @DisplayName("위시리스트 추가 - 아이템 없고 추가 개수가 0 이하인 경우")
+    @DisplayName("[UnitTest/Fail] 위시리스트 추가: 아이템 없고 추가 개수가 0 이하인 경우")
     void addWishlist_resultNopeTest() {
         //given
         given(productService.getProductById(eq(product.getId()))).willReturn(product);
@@ -98,7 +94,7 @@ class WishServiceAddTest {
     }
 
     @Test
-    @DisplayName("위시리스트 추가 - 아이템 없고 추가 개수가 1 이상인 경우")
+    @DisplayName("[UnitTest/Fail] 위시리스트 추가: 아이템 없고 추가 개수가 1 이상인 경우")
     void addWishlist_resultCreateTest() {
         //given
         given(productService.getProductById(eq(product.getId()))).willReturn(product);
@@ -117,7 +113,7 @@ class WishServiceAddTest {
     }
 
     @Test
-    @DisplayName("위시리스트 추가 - 아이템 있고 수량 변화 후 결과가 양수인 경우")
+    @DisplayName("[UnitTest/Fail] 위시리스트 추가: 아이템 있고 수량 변화 후 결과가 양수인 경우")
     void addWishlist_resultAddTest() {
         //given
         given(productService.getProductById(eq(product.getId()))).willReturn(product);
@@ -136,7 +132,7 @@ class WishServiceAddTest {
     }
 
     @Test
-    @DisplayName("위시리스트 추가 - 아이템 있고 수량 변화 후 0 이하인 경우")
+    @DisplayName("[UnitTest/Fail] 위시리스트 추가: 아이템 있고 수량 변화 후 0 이하인 경우")
     void addWishlist_resultDeleteTest() {
         //given
         given(productService.getProductById(eq(product.getId()))).willReturn(product);

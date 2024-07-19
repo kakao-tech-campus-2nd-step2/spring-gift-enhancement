@@ -10,10 +10,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.domain.dto.request.ProductRequest;
+import gift.domain.dto.response.CategoryResponse;
 import gift.domain.dto.response.ProductResponse;
+import gift.domain.entity.Category;
 import gift.domain.service.MemberService;
 import gift.domain.service.ProductService;
 import gift.global.util.JwtUtil;
+import gift.utilForTest.MockObjectSupplier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +44,12 @@ public class ProductControllerValidationTest {
     private JwtUtil jwtUtil;
 
     @Test
-    @DisplayName("상품 추가 이름검증 - 이름이 문제 없는 경우")
+    @DisplayName("[UnitTest] 상품 추가 이름검증: 이름이 문제 없는 경우")
     void addProduct() throws Exception {
         //given
-        ProductRequest validRequest = new ProductRequest("ValidName", 1000, "http://example.com/image.jpg");
-        ProductResponse productResponse = new ProductResponse(1L, "ValidName", 1000, "http://example.com/image.jpg");
+        ProductRequest validRequest = new ProductRequest("ValidName", 1000, "http://example.com/image.jpg", 1L);
+        ProductResponse productResponse = new ProductResponse(1L, "ValidName", 1000, "http://example.com/image.jpg",
+            CategoryResponse.of(MockObjectSupplier.get(Category.class)));
 
         given(productService.addProduct(any(ProductRequest.class))).willReturn(productResponse);
 
@@ -65,13 +69,13 @@ public class ProductControllerValidationTest {
     }
 
     @Test
-    @DisplayName("상품 추가 이름검증 - 검증이 실패하는 3가지 경우")
+    @DisplayName("[UnitTest/Fail] 상품 추가 이름검증: 검증이 실패하는 3가지 경우")
     void addProduct_ValidationFails() throws Exception {
         //given
         ProductRequest[] invalidRequest = {
-            new ProductRequest("toooo long product name", 1000, "http://example.com/image.jpg"),
-            new ProductRequest("SpecialChar $*#", 1000, "http://example.com/image.jpg"),
-            new ProductRequest("name is 카카오", 1000, "http://example.com/image.jpg")};
+            new ProductRequest("toooo long product name", 1000, "http://example.com/image.jpg", 1L),
+            new ProductRequest("SpecialChar $*#", 1000, "http://example.com/image.jpg", 1L),
+            new ProductRequest("name is 카카오", 1000, "http://example.com/image.jpg", 1L)};
         String[] expected = {
             "상품 이름은 공백을 포함하여 최대 15자까지 입력할 수 있습니다.",
             "상품 이름에 (), [], +, -, &, /, _ 이외의 특수 문자는 사용할 수 없습니다.",

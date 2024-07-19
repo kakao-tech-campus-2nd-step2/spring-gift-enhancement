@@ -71,7 +71,7 @@ class WishDomainTest {
     }
 
     @Test
-    @DisplayName("API test: get wishlist")
+    @DisplayName("[ApiIntegrationTest] 위시리스트 조회")
     void getWishlist() {
         //given: BeforeEach 메서드에서 등록한 위시리스트가 주어짐
 
@@ -94,7 +94,7 @@ class WishDomainTest {
     }
 
     @Test
-    @DisplayName("API test: add wish")
+    @DisplayName("[ApiIntegrationTest] 위시리스트 추가")
     void addWish() {
         //given: 3번의 request 요청이 순서대로 수행됨
         WishRequest[] request = {
@@ -124,7 +124,7 @@ class WishDomainTest {
     }
 
     @Test
-    @DisplayName("API test: update wish")
+    @DisplayName("[ApiIntegrationTest] 위시리스트 수정")
     void updateWish() {
         //given
         WishRequest request = new WishRequest(1L, 10L);
@@ -141,7 +141,7 @@ class WishDomainTest {
     }
 
     @Test
-    @DisplayName("API test: delete wish")
+    @DisplayName("[ApiIntegrationTest] 위시리스트 삭제")
     void deleteWish() {
         //given
         Long idToDelete = 1L;
@@ -163,7 +163,7 @@ class WishDomainTest {
     }
 
     @Test
-    @DisplayName("API fail test: product not found exception")
+    @DisplayName("[ApiIntegrationTest/Fail] 해댱 ID 가진 상품 없는 경우")
     void addWishException() {
         //given
         WishRequest request = new WishRequest(44444L, 4L);
@@ -187,7 +187,7 @@ class WishDomainTest {
     }
 
     @Test
-    @DisplayName("API fail test: product not included exception")
+    @DisplayName("[ApiIntegrationTest/Fail] 해당 상품이 위시리스트에 없는 경우")
     void deleteWishException() {
         //given
         List<Object> requests = List.of(
