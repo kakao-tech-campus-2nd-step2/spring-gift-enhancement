@@ -42,22 +42,21 @@ public class Product {
         this.imageUrl = imageUrl;
         this.category = category;
         this.options = options;
-        this.options.forEach(option -> option.setProduct(this)); // Set the product reference in each option
+        this.options.forEach(option -> option.setProduct(this));
     }
 
+    public Product(ProductRequest productRequest, Category category, List<Option> options) {
+        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category, options);
+    }
 
-
-    public void update(ProductRequest productRequest, Category category) {
+    public void update(ProductRequest productRequest, Category category, List<Option> options) {
         this.name = productRequest.getName();
         this.price = productRequest.getPrice();
         this.imageUrl = productRequest.getImageUrl();
         this.category = category;
-        this.options = productRequest.getOptions().stream()
-                .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(), this))
-                .collect(Collectors.toList());
+        this.options = options;
+        this.options.forEach(option -> option.setProduct(this));
     }
-
-
 
     public long getId() {
         return id;

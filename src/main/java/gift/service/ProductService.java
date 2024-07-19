@@ -49,13 +49,7 @@ public class ProductService {
 
         checkForDuplicateOptions(options);
 
-        Product product = new Product(
-                productRequest.getName(),
-                productRequest.getPrice(),
-                productRequest.getImageUrl(),
-                category,
-                options
-        );
+        Product product = new Product(productRequest, category, options);
 
         try {
             return productRepository.save(product);
@@ -78,10 +72,16 @@ public class ProductService {
                 orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
         Category category = categoryRepository.findByName(productRequest.getCategoryName()).
                 orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
-        product.update(productRequest, category);
+
+        List<Option> options = productRequest.getOptions().stream()
+                .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(), null))
+                .collect(Collectors.toList());
+
+        checkForDuplicateOptions(options);
+
+        product.update(productRequest, category, options);
         productRepository.save(product);
         return product;
-
     }
 
     public Product delete(Long productId) {
