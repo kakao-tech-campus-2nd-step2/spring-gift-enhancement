@@ -1,6 +1,5 @@
 package gift.option.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import gift.product.domain.Product;
 import jakarta.persistence.*;
 import org.hibernate.Hibernate;
@@ -19,7 +18,6 @@ public class Option {
     private OptionCount count;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     private Product product;
 
     // JDBC 에서 엔티티 클래스를 인스턴스화할 때 반드시 기본 생성자와 파라미터 생성자가 필요하다
@@ -43,6 +41,10 @@ public class Option {
 
     public OptionCount getCount() {
         return count;
+    }
+
+    public Product getProduct() {
+        return product;
     }
 
     public boolean checkNew() {

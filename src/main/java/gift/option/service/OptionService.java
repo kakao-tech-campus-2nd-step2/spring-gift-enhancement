@@ -1,9 +1,9 @@
 package gift.option.service;
 
 import gift.option.domain.Option;
+import gift.option.dto.OptionListResponseDto;
+import gift.option.dto.OptionResponseDto;
 import gift.option.dto.OptionServiceDto;
-import gift.option.exception.DuplicateEmailException;
-import gift.option.exception.DuplicateNicknameException;
 import gift.option.exception.OptionNotFoundException;
 import gift.option.repository.OptionRepository;
 import gift.product.domain.Product;
@@ -22,13 +22,17 @@ public class OptionService {
         this.productService = productService;
     }
 
-    public List<Option> getAllOptions() {
-        return optionRepository.findAll();
+    public OptionListResponseDto getAllOptions() {
+        return OptionListResponseDto.optionListToOptionListResponseDto(optionRepository.findAll());
     }
 
-    public Option getOptionById(Long id) {
-        return optionRepository.findById(id)
-                .orElseThrow(OptionNotFoundException::new);
+    public OptionListResponseDto getOptionsByProductId(Long productId) {
+        return OptionListResponseDto.optionListToOptionListResponseDto(optionRepository.findByProductId(productId));
+    }
+
+    public OptionResponseDto getOptionById(Long id) {
+        return OptionResponseDto.optionToOptionResponseDto(optionRepository.findById(id)
+                .orElseThrow(OptionNotFoundException::new));
     }
 
     public Option createOption(OptionServiceDto optionServiceDto) {
@@ -58,4 +62,6 @@ public class OptionService {
     private void validateEmailAndNicknameUnique(OptionServiceDto optionServiceDto) {
 
     }
+
+
 }

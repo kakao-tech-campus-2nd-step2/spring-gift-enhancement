@@ -5,7 +5,9 @@ import gift.global.response.ResultResponseDto;
 import gift.global.response.SimpleResultResponseDto;
 import gift.global.utils.ResponseHelper;
 import gift.option.domain.Option;
+import gift.option.dto.OptionListResponseDto;
 import gift.option.dto.OptionRequestDto;
+import gift.option.dto.OptionResponseDto;
 import gift.option.service.OptionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,15 +24,21 @@ public class OptionController {
     }
 
     @GetMapping("")
-    public ResponseEntity<ResultResponseDto<List<Option>>> getAllOptions() {
-        List<Option> options = optionService.getAllOptions();
-        return ResponseHelper.createResponse(ResultCode.GET_ALL_MEMBERS_SUCCESS, options);
+    public ResponseEntity<ResultResponseDto<OptionListResponseDto>> getAllOptions() {
+        OptionListResponseDto optionListResponseDto = optionService.getAllOptions();
+        return ResponseHelper.createResponse(ResultCode.GET_ALL_MEMBERS_SUCCESS, optionListResponseDto);
+    }
+
+    @GetMapping("/products/{product_id}")
+    public ResponseEntity<ResultResponseDto<OptionListResponseDto>> getOptionsByProductId(@PathVariable(name = "product_id") Long productId) {
+        OptionListResponseDto optionListResponseDto = optionService.getOptionsByProductId(productId);
+        return ResponseHelper.createResponse(ResultCode.GET_MEMBER_BY_ID_SUCCESS, optionListResponseDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResultResponseDto<Option>> getOptionById(@PathVariable(name = "id") Long id) {
-        Option option = optionService.getOptionById(id);
-        return ResponseHelper.createResponse(ResultCode.GET_MEMBER_BY_ID_SUCCESS, option);
+    public ResponseEntity<ResultResponseDto<OptionResponseDto>> getOptionById(@PathVariable(name = "id") Long id) {
+        OptionResponseDto optionResponseDto = optionService.getOptionById(id);
+        return ResponseHelper.createResponse(ResultCode.GET_MEMBER_BY_ID_SUCCESS, optionResponseDto);
     }
 
     @PostMapping("")

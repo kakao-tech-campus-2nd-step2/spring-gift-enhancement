@@ -2,6 +2,10 @@
 GET http://localhost:8080/api/options
 Content-Type: application/json
 
+### get option list by product id
+GET http://localhost:8080/api/options/products/1
+Content-Type: application/json
+
 ### get option
 GET http://localhost:8080/api/options/1
 Content-Type: application/json
