@@ -28,7 +28,7 @@ public class ProductService {
         this.optionService = optionService;
     }
 
-
+    @Transactional(readOnly = true)
     public ProductDto getProduct(Long id) {
         Product product = productRepository.getProductById(id);
         return ProductDto.from(product);
@@ -43,6 +43,7 @@ public class ProductService {
         return productId;
     }
 
+    @Transactional
     public Long updateProduct(ProductRegisterDto productRegisterDto, Long id) {
         var product = productRepository.getProductById(id);
         var category = categoryRepository.getReferencedCategory(productRegisterDto.categoryId());
@@ -52,19 +53,23 @@ public class ProductService {
         return productRepository.saveProduct(product);
     }
 
+    @Transactional
     public Long deleteProduct(Long id) {
         return productRepository.deleteProductById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<ProductDto> getAllProducts() {
         List<Product> products = productRepository.getAllProducts();
         return ProductDto.of(products);
     }
 
+    @Transactional
     public void deleteProducts(List<Long> productIds) {
         productRepository.deleteProductByIdList(productIds);
     }
 
+    @Transactional(readOnly = true)
     public ProductPagingDto getProductsByPage(Pageable pageable) {
         Page<Product> products = productRepository.getProductsByPage(pageable);
         return ProductPagingDto.from(products);
