@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ProblemDetail> illegalArgumentException(IllegalArgumentException e) {
+    public ResponseEntity<ProblemDetail> handleIllegalArgumentException(IllegalArgumentException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setTitle("Illegal Argument");
         problemDetail.setDetail(e.getMessage());
