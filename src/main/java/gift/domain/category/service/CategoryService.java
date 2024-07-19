@@ -36,9 +36,7 @@ public class CategoryService {
         savedCategory.updateAll(request.getName(), request.getColor(), request.getImageUrl(),
             request.getDescription());
 
-        Category updatedCategory = categoryRepository.save(savedCategory);
-
-        return entityToDto(updatedCategory);
+        return entityToDto(savedCategory);
     }
 
     public void deleteCategory(Long id){
