@@ -3,9 +3,9 @@ package gift.domain.member.service;
 import gift.domain.member.dto.MemberRequest;
 import gift.domain.member.dto.MemberResponse;
 import gift.domain.member.entity.Member;
+import gift.domain.member.exception.MemberNotFoundException;
 import gift.domain.member.repository.MemberRepository;
 import gift.util.JwtUtil;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +39,7 @@ public class MemberService {
     public String login(MemberRequest memberRequest) {
         Member member = memberRepository
             .findByEmail(memberRequest.getEmail())
-            .orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다."));
+            .orElseThrow(() -> new MemberNotFoundException("유저가 존재하지 않습니다."));
 
         if (member.getPassword().equals(memberRequest.getPassword())) {
             return jwtUtil.generateToken(member);
@@ -50,7 +50,7 @@ public class MemberService {
     public void deleteMember(Long id) {
         Member member = memberRepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("삭제하려는 유저가 존재하지 않습니다."));
+            .orElseThrow(() -> new MemberNotFoundException("삭제하려는 유저가 존재하지 않습니다."));
         memberRepository.delete(member);
     }
 
@@ -60,7 +60,7 @@ public class MemberService {
         if (email != null) {
             return memberRepository
                 .findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다.")
+                .orElseThrow(() -> new MemberNotFoundException("유저가 존재하지 않습니다.")
                 );
         }
         return null;
