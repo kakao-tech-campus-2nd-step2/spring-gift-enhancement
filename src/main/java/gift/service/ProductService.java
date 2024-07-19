@@ -48,30 +48,15 @@ public class ProductService {
     }
 
     public Product addProduct(ProductDTO productDTO) {
-        try {
-            var category = categoryRepository.findById(productDTO.categoryId());
-            Product product = new Product(category, productDTO.price(), productDTO.name(), productDTO.imageUrl());
-
-            return productRepository.save(product);
-        }
-        catch (Exception e) {
-            throw new IllegalArgumentException();
-        }
+        var category = categoryRepository.findById(productDTO.categoryId()).orElseThrow(() -> new NoSuchElementException("Category not found"));
+        var product = new Product(category, productDTO.price(), productDTO.name(), productDTO.imageUrl());
+        return productRepository.save(product);
     }
 
     public Product updateProduct(int id, ProductDTO productDTO) {
-        try {
-            var category = categoryRepository.findById(productDTO.categoryId());
+        var category = categoryRepository.findById(productDTO.categoryId()).orElseThrow(() -> new NoSuchElementException("Category not found"));
             Product product = new Product(id, category, productDTO.price(), productDTO.name(), productDTO.imageUrl());
-
             return productRepository.save(product);
-        }
-        catch (NoSuchElementException e) {
-            throw new NoSuchElementException("No product found with id " + id);
-        }
-        catch (Exception e) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public void deleteProduct(int id) {
