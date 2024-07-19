@@ -6,8 +6,8 @@ import gift.domain.option.entity.Option;
 import gift.domain.option.exception.OptionNotFoundException;
 import gift.domain.option.repository.OptionRepository;
 import gift.domain.product.entity.Product;
+import gift.domain.product.exception.ProductNotFoundException;
 import gift.domain.product.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ public class OptionService {
     @Transactional
     public OptionResponse addOptionToProduct(Long id, OptionRequest request){
 
-        Product savedProduct = productRepository.findById(id).orElseThrow();
+        Product savedProduct = productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("해당 상품이 존재하지 않습니다."));
         List<Option> savedOptionList = optionRepository.findAllByProduct(savedProduct);
 
         Option newOption = dtoToEntity(request);
