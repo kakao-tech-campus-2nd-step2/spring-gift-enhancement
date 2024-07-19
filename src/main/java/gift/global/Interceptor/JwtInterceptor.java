@@ -1,11 +1,11 @@
 package gift.global.Interceptor;
 
 import gift.global.exception.BusinessException;
+import gift.global.exception.ErrorCode;
 import gift.global.jwt.JwtProvider;
 import gift.global.jwt.JwtValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -25,7 +25,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         Object handler) throws Exception {
 
         if (request.getHeader("Authorization") == null) {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+            throw new BusinessException(ErrorCode.JWT_UNAUTHORIZED, "로그인이 필요합니다.");
         }
 
         String rawToken = request.getHeader("Authorization");

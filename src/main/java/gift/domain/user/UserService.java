@@ -2,6 +2,8 @@ package gift.domain.user;
 
 import gift.domain.user.dto.UserDTO;
 import gift.global.exception.BusinessException;
+import gift.global.exception.ErrorCode;
+import gift.global.exception.user.UserDuplicateException;
 import gift.global.jwt.JwtProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class UserService {
      */
     public void join(UserDTO userDTO) {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
-            throw new BusinessException(HttpStatus.CONFLICT, "해당 이메일의 회원이 이미 존재합니다.");
+            throw new UserDuplicateException(userDTO.getEmail());
         }
 
         User user = userDTO.toUser();
@@ -34,7 +36,7 @@ public class UserService {
      */
     public String login(UserDTO userDTO) {
         User user = userRepository.findByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword())
-            .orElseThrow(() -> new BusinessException(HttpStatus.BAD_REQUEST, "입력 정보가 올바르지 않습니다."));
+            .orElseThrow(() -> new BusinessException(ErrorCode.BAD_REQUEST, "입력 정보가 올바르지 않습니다."));
 
         // jwt 토큰 생성
         String jwt = JwtProvider.generateToken(user);
