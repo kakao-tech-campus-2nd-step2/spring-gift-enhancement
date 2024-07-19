@@ -21,14 +21,8 @@ public class OptionDTO {
     public OptionDTO() {
     }
 
-    public OptionDTO(String name, int quantity) {
-        this.name = name;
-        this.quantity = quantity;
-        productId = null;
-    }
 
     public OptionDTO(String name, int quantity, Long productId) {
-        this(name, quantity);
         this.productId = productId;
     }
 

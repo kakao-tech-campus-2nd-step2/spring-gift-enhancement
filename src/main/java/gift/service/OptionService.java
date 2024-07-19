@@ -34,16 +34,14 @@ public class OptionService {
     }
 
     public void updateOption(Option option) {
-        System.out.println(option.getId());
-        System.out.println(option.getName());
-        System.out.println(option.getQuantity());
         Option update = getOptionById(option.getId());
         update.setName(option.getName());
         update.setQuantity(option.getQuantity());
         optionRepository.save(update);
     }
 
-    public void deleteOption(Option option) {
+    public void deleteOption(Long id) {
+        Option option = getOptionById(id);
         optionRepository.delete(option);
     }
 
@@ -55,7 +53,7 @@ public class OptionService {
         Optional<Option> option = optionRepository.findById(id);
 
         if (option.isEmpty()) {
-            throw new DataNotFoundException("존재하지 않는 Option: Product를 찾을 수 없습니다.");
+            throw new DataNotFoundException("존재하지 않는 Option");
         }
         return option.get();
     }
