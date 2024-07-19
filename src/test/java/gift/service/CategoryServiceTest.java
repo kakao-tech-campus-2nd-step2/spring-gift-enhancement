@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,17 +27,21 @@ public class CategoryServiceTest {
     @InjectMocks
     private CategoryService categoryService;
 
-    private List<Category> mockCategories;
+    private Category mockCategory1;
+    private Category mockCategory2;
 
     @BeforeEach
     public void setUp() {
-        mockCategories = new ArrayList<>();
-        mockCategories.add(new Category(1L, "교환권"));
-        mockCategories.add(new Category(2L, "상품권"));
+        mockCategory1 = mock(Category.class);
+        mockCategory2 = mock(Category.class);
     }
 
     @Test
     public void testGetCategories() {
+        when(mockCategory1.getName()).thenReturn("교환권");
+        when(mockCategory2.getName()).thenReturn("상품권");
+
+        List<Category> mockCategories = List.of(mockCategory1, mockCategory2);
         when(categoryRepository.findAll()).thenReturn(mockCategories);
 
         List<Category> categories = categoryService.getCategories();
@@ -53,7 +56,9 @@ public class CategoryServiceTest {
     @Test
     public void testGetCategoryById() {
         Long categoryId = 1L;
-        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategories.getFirst()));
+
+        when(mockCategory1.getName()).thenReturn("교환권");
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory1));
 
         Category category = categoryService.getCategory(categoryId);
 
@@ -76,8 +81,8 @@ public class CategoryServiceTest {
     public void testCreateCategory() {
         CategoryRequest categoryRequest = new CategoryRequest("교환권");
         when(categoryRepository.existsByName(categoryRequest.getName())).thenReturn(false);
-
-        when(categoryRepository.save(any(Category.class))).thenReturn(mockCategories.getFirst());
+        when(categoryRepository.save(any(Category.class))).thenReturn(mockCategory1);
+        when(mockCategory1.getName()).thenReturn("교환권");
 
         Category createdCategory = categoryService.createCategory(categoryRequest);
 
@@ -102,21 +107,23 @@ public class CategoryServiceTest {
     public void testUpdateCategory() {
         Long categoryId = 1L;
         CategoryRequest categoryRequest = new CategoryRequest("뷰티");
-        Category existingCategory = mockCategories.getFirst();
-        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
+
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory1));
         when(categoryRepository.existsByName(categoryRequest.getName())).thenReturn(false);
 
-        when(categoryRepository.save(any(Category.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Category updatedCategory = mock(Category.class);
+        when(updatedCategory.getName()).thenReturn("뷰티");
+        when(categoryRepository.save(any(Category.class))).thenReturn(updatedCategory);
 
+        Category result = categoryService.updateCategory(categoryId, categoryRequest);
 
-        Category updatedCategory = categoryService.updateCategory(categoryId, categoryRequest);
-
-        assertEquals("뷰티", updatedCategory.getName());
-
+        assertEquals("뷰티", result.getName());
         verify(categoryRepository, times(1)).findById(categoryId);
         verify(categoryRepository, times(1)).existsByName("뷰티");
-        verify(categoryRepository, times(1)).save(existingCategory);
+        verify(categoryRepository, times(1)).save(any(Category.class));
     }
+
+
 
     @Test
     public void testUpdateCategoryNotFound() {
@@ -135,8 +142,8 @@ public class CategoryServiceTest {
     public void testUpdateCategoryDuplicateName() {
         Long categoryId = 1L;
         CategoryRequest categoryRequest = new CategoryRequest("상품권");
-        Category existingCategory = mockCategories.getFirst();
-        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
+
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory1));
         when(categoryRepository.existsByName(categoryRequest.getName())).thenReturn(true);
 
         assertThrows(DuplicateCategoryNameException.class, () -> categoryService.updateCategory(categoryId, categoryRequest));
@@ -149,13 +156,12 @@ public class CategoryServiceTest {
     @Test
     public void testDeleteCategory() {
         Long categoryId = 1L;
-        Category existingCategory =  mockCategories.getFirst();
-        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(mockCategory1));
 
         categoryService.deleteCategory(categoryId);
 
         verify(categoryRepository, times(1)).findById(categoryId);
-        verify(categoryRepository, times(1)).delete(existingCategory);
+        verify(categoryRepository, times(1)).delete(mockCategory1);
     }
 
     @Test

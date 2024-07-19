@@ -33,20 +33,16 @@ public class Product {
     public Product() { }
 
     public Product(String name, Integer price, String imageUrl, Category category) {
-        this(null, name, price, imageUrl, category);
+      this.name = name;
+      this.price = price;
+      this.imageUrl = imageUrl;
+      this.category = category;
     }
 
     public Product(ProductRequest productRequest, Category category){
-        this(null, productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category);
+        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category);
     }
 
-    public Product(Long id, String name, Integer price, String imageUrl, Category category) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.category = category;
-    }
 
     public long getId() {
         return id;

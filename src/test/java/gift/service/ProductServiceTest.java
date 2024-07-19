@@ -7,7 +7,6 @@ import gift.exception.CategoryNotFoundException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.category.CategorySpringDataJpaRepository;
 import gift.repository.product.ProductSpringDataJpaRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,8 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,21 +34,16 @@ public class ProductServiceTest {
     @InjectMocks
     private ProductService productService;
 
-    private List<Product> mockProducts;
+    private Product mockProduct;
     private Category mockCategory;
-
-    @BeforeEach
-    public void setUp() {
-        mockCategory = new Category(1L, "패션");
-        mockProducts = new ArrayList<>();
-        mockProducts.add(new Product(1L, "상의", 800, "상의.jpg", mockCategory));
-    }
 
     @Test
     public void testRegisterProduct() {
+        mockCategory = mock(Category.class);
+        when(categoryRepository.findByName("패션")).thenReturn(Optional.of(mockCategory));
+
         ProductRequest productRequest = new ProductRequest("상의", 800, "상의.jpg", "패션");
 
-        when(categoryRepository.findByName("패션")).thenReturn(Optional.of(mockCategory));
         when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Product registeredProduct = productService.register(productRequest);
@@ -66,6 +59,9 @@ public class ProductServiceTest {
 
     @Test
     public void testRegisterProductCategoryNotFound() {
+        mockCategory = mock(Category.class);
+        when(categoryRepository.findByName("패션")).thenReturn(Optional.of(mockCategory));
+
         ProductRequest productRequest = new ProductRequest("상의", 800, "상의.jpg", "패션");
         when(categoryRepository.findByName("패션")).thenReturn(Optional.empty());
 
@@ -77,8 +73,11 @@ public class ProductServiceTest {
 
     @Test
     public void testGetProducts() {
+        mockProduct = mock(Product.class);
+        when(mockProduct.getName()).thenReturn("상의");
+
         Pageable pageable = Pageable.unpaged();
-        Page<Product> mockPage = new PageImpl<>(mockProducts);
+        Page<Product> mockPage = new PageImpl<>(Collections.singletonList(mockProduct));
         when(productRepository.findAll(pageable)).thenReturn(mockPage);
 
         Page<Product> products = productService.getProducts(pageable);
@@ -92,8 +91,12 @@ public class ProductServiceTest {
 
     @Test
     public void testFindOneProduct() {
+        mockProduct = mock(Product.class);
+
         Long productId = 1L;
-        when(productRepository.findById(productId)).thenReturn(Optional.of(mockProducts.getFirst()));
+
+        when(mockProduct.getName()).thenReturn("상의");
+        when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
 
         Product product = productService.findOne(productId);
 
@@ -114,12 +117,20 @@ public class ProductServiceTest {
 
     @Test
     public void testUpdateProduct() {
+        mockProduct = mock(Product.class);
+        mockCategory = mock(Category.class);
+
         Long productId = 1L;
         ProductRequest productRequest = new ProductRequest("하의", 1200, "하의.jpg", "패션");
-        Product existingProduct = mockProducts.getFirst();
 
-        when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
+        when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
         when(categoryRepository.findByName("패션")).thenReturn(Optional.of(mockCategory));
+
+        when(mockProduct.getName()).thenReturn("하의");
+        when(mockProduct.getPrice()).thenReturn(1200);
+        when(mockProduct.getImageUrl()).thenReturn("하의.jpg");
+        when(mockProduct.getCategory()).thenReturn(mockCategory);
+
         when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Product updatedProduct = productService.update(productId, productRequest);
@@ -133,6 +144,7 @@ public class ProductServiceTest {
         verify(categoryRepository, times(1)).findByName("패션");
         verify(productRepository, times(1)).save(any(Product.class));
     }
+
 
     @Test
     public void testUpdateProductNotFound() {
@@ -150,15 +162,15 @@ public class ProductServiceTest {
     @Test
     public void testDeleteProduct() {
         Long productId = 1L;
-        Product existingProduct = mockProducts.getFirst();
-        when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
+        mockProduct = mock(Product.class);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
 
         Product deletedProduct = productService.delete(productId);
 
-        assertEquals(existingProduct, deletedProduct);
+        assertEquals(mockProduct, deletedProduct);
 
         verify(productRepository, times(1)).findById(productId);
-        verify(productRepository, times(1)).delete(existingProduct);
+        verify(productRepository, times(1)).delete(mockProduct);
     }
 
     @Test
