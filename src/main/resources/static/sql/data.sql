@@ -61,7 +61,7 @@ values ('Merle', 6880, 'http://dummyimage.com/177x100.png/dddddd/000000', '2023-
         '2023-05-31 12:00:00', 1);
 
 insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option1', 5, 1, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
+values ('option1', 1000, 1, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
 insert into option (name, quantity, product_id, created_at, last_modified_at)
 values ('option2', 5, 2, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
 insert into option (name, quantity, product_id, created_at, last_modified_at)
