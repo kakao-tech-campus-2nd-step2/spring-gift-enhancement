@@ -24,8 +24,18 @@
 - 카테고리 기능을 가진다.
     - 상품과 카테고리를 별도의 모델로 구성하며 연관 관계를 가진다.
         - 상품과 카테고리는 N:1 연관 관계.
-    - 상품 등록시에 카테고리를 지정할 수 있다.
+    - 상품 등록시에 카테고리를 지정한다.
     - 카테고리를 조회, 추가, 수정, 삭제가 가능하다.
+- 상품은 옵션을 가진다.
+    - 상품은 반드시 하나 이상의 옵션을 가져야 한다.
+        - 상품 추가 시에 옵션을 1개 이상 등록한다.
+        - 옵션이 1개라면 삭제할 수 없다.
+    - 각 상품의 대한 옵션에 대한 CRUD를 지원한다.
+    - 옵션에는 다음과 같은 제약조건이 존재한다.
+        1. 옵션명은 공백 포함 최대 50자까지 입력 가능.
+        2. 같은 상품 내의 옵션명은 중복 불가능.
+        3. 옵션명은 영문, 한글, 숫자, (, ), [, ], +, -, &, /, _ 만 입력 가능.
+        4. 옵션 수량은 1개 이상 1억개 미만.
 
 ---
 
@@ -164,3 +174,42 @@ PUT /api/categories
 ```
 DELETE /api/categories/{id}
 ```
+
+## Option API
+
+### 옵션 조회
+
+```
+GET /api/products/product/{productId}/options
+```
+
+### 옵션 추가 페이지
+
+```
+GET /api/products/product/{productId}/options/addForm
+```
+
+### 옵션 수정 페이지
+
+```
+GET /api/products/product/{productId}/options/{optionId}
+```
+
+### 옵션 추가
+
+```
+POST /api/products/product/{productId}/options
+```
+
+### 옵션 수정
+
+```
+PUT /api/products/product/{productId}/options
+```
+
+### 옵션 삭제
+
+```
+DELETE /api/products/product/{productId}/options/{optionId}
+```
+
