@@ -12,9 +12,11 @@ import gift.exception.CustomException;
 import gift.product.category.entity.Category;
 import gift.product.category.repository.CategoryRepository;
 import gift.product.dto.request.CreateProductRequest;
+import gift.product.dto.request.NewOption;
 import gift.product.dto.request.UpdateProductRequest;
 import gift.product.dto.response.ProductResponse;
 import gift.product.entity.Product;
+import gift.product.option.service.OptionService;
 import gift.product.repository.ProductRepository;
 import gift.product.service.ProductService;
 import java.util.List;
@@ -41,6 +43,9 @@ class ProductServiceTest {
 
     @Mock
     private CategoryRepository categoryRepository;
+
+    @Mock
+    private OptionService optionService;
 
     @Test
     @DisplayName("getAllProducts empty test")
@@ -124,13 +129,15 @@ class ProductServiceTest {
     @DisplayName("Add product test")
     void createProductTest() {
         // given
+        NewOption option = new NewOption("option 1", 100);
         CreateProductRequest request = new CreateProductRequest("Product A", 1000,
-            "http://example.com/images/product_a.jpg", 1L);
+            "http://example.com/images/product_a.jpg", 1L, List.of(option));
         Category category = new Category(1L, "Category A", "#123456", "image", "");
         Product savedProduct = Product.builder().id(1L).name("Product A").price(1000)
             .imageUrl("http://example.com/images/product_a.jpg").category(category).build();
         given(productRepository.save(any(Product.class))).willReturn(savedProduct);
         given(categoryRepository.findById(any(Long.class))).willReturn(Optional.of(category));
+        given(optionService.createOption(any())).willReturn(1L);
 
         // when
         Long savedId = productService.createProduct(request);

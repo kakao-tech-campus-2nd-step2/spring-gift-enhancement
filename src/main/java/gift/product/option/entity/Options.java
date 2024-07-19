@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Options {
 
-    private List<Option> options;
+    private final List<Option> options;
 
     public Options(List<Option> options) {
         this.options = new ArrayList<>(options);
