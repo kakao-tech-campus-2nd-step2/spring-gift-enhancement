@@ -1,6 +1,7 @@
 package gift;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 import gift.Model.Category;
 import gift.Repository.CategoryRepository;
@@ -25,7 +26,7 @@ public class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
-    @InjectMocks
+    @Mock
     private CategoryService categoryService;
 
     @Test

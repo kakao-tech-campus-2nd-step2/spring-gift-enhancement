@@ -25,7 +25,7 @@ public class OptionServiceTest {
     @Mock
     private OptionRepository optionRepository;
 
-    @InjectMocks
+    @Mock
     private OptionService optionService;
 
     @Test
@@ -57,7 +57,7 @@ public class OptionServiceTest {
         // When mokicto는 기본적으로 null을 반환 => 아래 코드로 원래의 값을 반환 (공부필요)
         Mockito.when(optionRepository.save(any(Option.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        // Then 
+        // Then
         Option actual = optionRepository.save(expect);
 
         assertEquals(expect.getId(), actual.getId());
