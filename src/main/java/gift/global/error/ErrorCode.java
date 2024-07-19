@@ -15,6 +15,7 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리는 존재하지 않습니다."),
 
     // Option Error
+    OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 옵션은 존재하지 않습니다."),
     OPTION_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 옵션입니다."),
     OPTION_REMOVE_FAILED(HttpStatus.CONFLICT, "상품은 항상 하나 이상의 옵션이 있어야 합니다."),
 

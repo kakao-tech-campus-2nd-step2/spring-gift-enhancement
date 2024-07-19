@@ -97,6 +97,11 @@ public class Product {
                    .add(option);
     }
 
+    public void deleteOption(Option option) {
+        this.options
+            .remove(option);
+    }
+
     public static class ProductBuilder {
         private String name;
         private int price;

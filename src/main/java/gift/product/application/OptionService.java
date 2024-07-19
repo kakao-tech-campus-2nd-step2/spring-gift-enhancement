@@ -46,6 +46,7 @@ public class OptionService {
         return OptionMapper.toResponseDto(option);
     }
 
+    @Transactional
     public void deleteOptionFromProduct(Long id, OptionRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
@@ -53,8 +54,10 @@ public class OptionService {
                 .size() == 1) {
             throw new CustomException(ErrorCode.OPTION_REMOVE_FAILED);
         }
+        Option option = optionRepository.findByProduct_IdAndName(product.getId(), request.name())
+                .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
 
-        optionRepository.deleteByProduct_IdAndName(id, request.name());
+        product.deleteOption(option);
     }
 
 }
