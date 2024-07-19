@@ -19,6 +19,11 @@ public class CategoryService {
     public CategoryService(CategoryRepository categoryRepository){
 
         this.categoryRepository = categoryRepository;
+        Category testCategory = new Category("test", "color", "imageUrl", "");
+        Category testCategory2 = new Category("test2", "color", "imageUrl", "");
+
+        categoryRepository.save(testCategory);
+        categoryRepository.save(testCategory2);
     }
 
     public CategoryResponse findAll(){

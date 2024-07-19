@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import gift.dto.OptionDto;
 import gift.dto.response.OptionResponse;
 import gift.entity.Option;
+import gift.entity.Product;
 import gift.exception.CustomException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
@@ -43,11 +44,11 @@ public class OptionService {
     @Transactional
     public void addOption(OptionDto optionDto, Long productId){
 
-        productRepository.findById(productId)
+        Product product = productRepository.findById(productId)
             .orElseThrow(() -> new CustomException("Product with id " + productId + " not exist", HttpStatus.NOT_FOUND));
         
         if(optionRepository.findByName(optionDto.getName()).isEmpty()){
-            Option option = new Option(productId, optionDto.getName(), optionDto.getQuantity());
+            Option option = new Option(product, optionDto.getName(), optionDto.getQuantity());
             optionRepository.save(option);
         }else{
             throw new CustomException("Option with name " + optionDto.getName() + " exist", HttpStatus.CONFLICT);

@@ -19,14 +19,14 @@ public class Option {
     
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Long productId;
+    private Product product;
 
     @Column(nullable = false, unique = true)
     private String name;
     private int quantity;
 
-    public Option(Long productId, String name, int quantity) {
-        this.productId = productId;
+    public Option(Product product, String name, int quantity) {
+        this.product = product;
         this.name = name;
         this.quantity = quantity;
     }
@@ -35,8 +35,8 @@ public class Option {
         return id;
     }
 
-    public Long getProductId(){
-        return productId;
+    public Product getProduct(){
+        return product;
     }
 
     public String getName() {
