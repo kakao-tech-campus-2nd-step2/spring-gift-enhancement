@@ -1,6 +1,6 @@
 package gift.util;
 
-import gift.exception.MemberAuthorizationException;
+import gift.domain.member.exception.MemberAuthorizationException;
 import gift.domain.member.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
