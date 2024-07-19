@@ -32,7 +32,6 @@ public class Product {
             mappedBy = "product", orphanRemoval = true)
     private List<Wish> wishes;
 
-
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "product", orphanRemoval = true)

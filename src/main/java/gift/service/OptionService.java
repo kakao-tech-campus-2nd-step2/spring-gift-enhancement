@@ -6,6 +6,8 @@ import gift.repository.OptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OptionService {
 
@@ -16,8 +18,16 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
+    public List<Option> findAll() {
+        return optionRepository.findAll();
+    }
 
+    public Option findById(Long id) {
 
+    }
 
+    public void save(Option option) {
+
+    }
 
 }
