@@ -1,6 +1,6 @@
-package gift.user;
+package gift.users.user;
 
-import gift.wishlist.WishList;
+import gift.users.wishlist.WishList;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

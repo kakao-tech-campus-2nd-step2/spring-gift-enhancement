@@ -1,4 +1,4 @@
-package gift.user;
+package gift.users.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

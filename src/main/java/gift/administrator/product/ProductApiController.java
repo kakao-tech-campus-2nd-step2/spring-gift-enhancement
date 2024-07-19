@@ -1,4 +1,4 @@
-package gift.product;
+package gift.administrator.product;
 
 import gift.util.PageUtil;
 import jakarta.validation.Valid;
@@ -51,32 +51,35 @@ public class ProductApiController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addProduct(@Valid @RequestBody ProductDTO productDTO,
-        BindingResult result) {
-        if (result.hasErrors()) {
+    public ResponseEntity<?> addProduct(@Valid @RequestBody ProductDTO productDTO,
+        BindingResult bindingResult) throws NotFoundException {
+        productService.existsByNamePutResult(productDTO.getName(), bindingResult);
+        if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(result.getAllErrors().toString());
+                .body(bindingResult.getAllErrors());
         }
-        productService.addProduct(productDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("상품이 추가되었습니다.");
+        ProductDTO result = productService.addProduct(productDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateWishList(@PathVariable("id") Long id,
-        @Valid @RequestBody ProductDTO productDTO, BindingResult result) throws NotFoundException {
-        if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(result.getAllErrors().toString());
-        }
+    public ResponseEntity<?> updateProduct(@PathVariable("id") Long id,
+        @Valid @RequestBody ProductDTO productDTO, BindingResult bindingResult) throws NotFoundException {
         productDTO.setId(id);
-        productService.updateProduct(productDTO);
-        return ResponseEntity.ok().body("업데이트에 성공했습니다.");
+        productService.existsByNameAndIdPutResult(productDTO.getName(), productDTO.getId(), bindingResult);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(bindingResult.getAllErrors().toString());
+        }
+        ProductDTO result = productService.updateProduct(productDTO);
+        return ResponseEntity.ok().body(result);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteWishList(@PathVariable("id") Long id)
+    public ResponseEntity<ProductDTO> deleteProduct(@PathVariable("id") Long id)
         throws NotFoundException {
+        productService.getProductById(id);
         productService.deleteProduct(id);
-        return ResponseEntity.ok().body("삭제되었습니다.");
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,4 +1,4 @@
-package gift.product;
+package gift.administrator.product;
 
 import jakarta.validation.constraints.*;
 
@@ -18,15 +18,18 @@ public class ProductDTO {
     int price;
     @NotBlank(message = "이미지 링크를 입력하지 않았습니다.")
     String imageUrl;
+    @NotNull(message = "카테고리를 선택해야합니다.")
+    Long categoryId;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(long id, String name, int price, String imageUrl) {
+    public ProductDTO(long id, String name, int price, String imageUrl, Long categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public long getId() {
@@ -41,20 +44,30 @@ public class ProductDTO {
         return price;
     }
 
+    public void setPrice(int price){this.price = price;}
+
     public String getName() {
         return name;
     }
+
+    public void setName(String name){this.name = name;}
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public Product toProduct() {
-        return new Product(id, name, price, imageUrl);
+    public void setImageUrl(String imageUrl){this.imageUrl = imageUrl;}
+
+    public void setCategoryId(Long categoryId){
+        this.categoryId = categoryId;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
     }
 
     public static ProductDTO fromProduct(Product product) {
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl());
+            product.getImageUrl(), product.getCategory().getId());
     }
 }

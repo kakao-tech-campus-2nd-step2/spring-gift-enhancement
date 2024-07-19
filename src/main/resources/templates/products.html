@@ -18,14 +18,16 @@
       <th>이름</th>
       <th>가격</th>
       <th>이미지</th>
+      <th>카테고리</th>
     </tr>
     </thead>
 
     <tbody>
-    <tr th:each="product:${products}">
+    <tr th:each="product, status:${products}">
       <td th:text="${product.name}">NAME</td>
       <td th:text="${product.price}">PRICE</td>
       <td th:text="${product.imageUrl}">IMAGE</td>
+      <td th:text="${categories[status.index]}">CATEGORY</td>
       <td>
         <a th:href="@{/products/update/{id}(id=${product.id})}">수정</a>
         <a th:href="@{/products/delete/{id}(id=${product.id})}">삭제</a>
@@ -44,7 +46,8 @@
       </a>
     </li>
     <li class="page-item" th:classappend="${currentPage + 1 >= products.totalPages} ? 'disabled'">
-      <a class="page-link" th:href="${currentPage + 1 >= products.totalPages} ? '#' : @{'/products?page=' + (${currentPage} + 1) + '&size=' + ${products.size} + '&sortBy=' + ${sortBy} + '&sortDirection=' + ${sortDirection}}">
+      <a class="page-link"
+         th:href="${currentPage + 1 >= products.totalPages} ? '#' : @{'/products?page=' + (${currentPage} + 1) + '&size=' + ${products.size} + '&sortBy=' + ${sortBy} + '&sortDirection=' + ${sortDirection}}">
         <span>다음</span>
       </a>
     </li>

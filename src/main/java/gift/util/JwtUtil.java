@@ -1,6 +1,6 @@
 package gift.util;
 
-import gift.user.UserDTO;
+import gift.users.user.UserDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

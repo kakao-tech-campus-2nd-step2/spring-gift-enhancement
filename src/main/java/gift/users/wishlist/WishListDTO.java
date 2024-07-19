@@ -1,4 +1,4 @@
-package gift.wishlist;
+package gift.users.wishlist;
 
 public class WishListDTO {
 
