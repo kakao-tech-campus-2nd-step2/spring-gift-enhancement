@@ -13,8 +13,4 @@ public class MemberMapper {
         return new MemberResponse(member.getId(), member.getEmail(), member.getPassword(),
             member.getNickName(), member.getGrade());
     }
-
-    public static LoginRequest toLoginRequest(SignUpRequest member) {
-        return new LoginRequest(member.getEmail(), member.getPassword());
-    }
 }

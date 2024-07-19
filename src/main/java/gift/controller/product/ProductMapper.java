@@ -1,12 +1,13 @@
 package gift.controller.product;
 
+import gift.domain.Category;
 import gift.domain.Product;
 
 public class ProductMapper {
 
-    public static Product from(ProductRequest productRequest) {
+    public static Product from(ProductRequest productRequest, Category category) {
         return new Product(productRequest.name(), productRequest.price(),
-            productRequest.imageUrl());
+            productRequest.imageUrl(), category);
     }
 
     public static ProductResponse toProductResponse(Product product) {
