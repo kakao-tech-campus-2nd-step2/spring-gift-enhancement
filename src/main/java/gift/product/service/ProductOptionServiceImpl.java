@@ -8,6 +8,7 @@ import gift.core.domain.product.exception.*;
 import gift.core.exception.ErrorCode;
 import gift.core.exception.validation.InvalidArgumentException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     private final ProductOptionRepository productOptionRepository;
     private final ProductRepository productRepository;
 
+    @Autowired
     public ProductOptionServiceImpl(
             ProductOptionRepository productOptionRepository,
             ProductRepository productRepository
@@ -78,5 +80,23 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         }
 
         productOptionRepository.deleteById(optionId);
+    }
+
+    @Override
+    @Transactional
+    public void subtractQuantityFromOption(Long optionId, Integer quantity) {
+        ProductOption option = productOptionRepository
+                .findById(optionId)
+                .orElseThrow(OptionNotFoundException::new);
+        if (quantity < 0) {
+            throw new InvalidArgumentException(ErrorCode.NEGATIVE_QUANTITY);
+        }
+        if (option.quantity() < quantity) {
+            throw new InvalidArgumentException(ErrorCode.OPTION_NOT_ENOUGH_QUANTITY);
+        }
+        productOptionRepository.save(
+                optionId,
+                new ProductOption(option.id(), option.name(), option.quantity() - quantity)
+        );
     }
 }
