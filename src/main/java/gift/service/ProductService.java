@@ -14,9 +14,7 @@ import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
-import gift.util.validator.databaseValidator.CategoryDatabaseValidator;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -31,19 +29,15 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final WishRepository wishRepository;
     private final CategoryRepository categoryRepository;
-    private final CategoryDatabaseValidator categoryDatabaseValidator;
     private final OptionService optionService;
     private final OptionRepository optionRepository;
 
-    @Autowired
     public ProductService(ProductRepository productRepository, WishRepository wishRepository,
-            CategoryRepository categoryRepository,
-            CategoryDatabaseValidator categoryDatabaseValidator, OptionService optionService,
+            CategoryRepository categoryRepository, OptionService optionService,
             OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.wishRepository = wishRepository;
         this.categoryRepository = categoryRepository;
-        this.categoryDatabaseValidator = categoryDatabaseValidator;
         this.optionService = optionService;
         this.optionRepository = optionRepository;
     }
@@ -51,7 +45,8 @@ public class ProductService {
     @Transactional
     public void addProduct(ProductPostRequestDTO productPostRequestDTO) throws RuntimeException {
         try {
-            Category category = categoryDatabaseValidator.validate(productPostRequestDTO.categoryName());
+            Category category = categoryRepository.findByName(productPostRequestDTO.categoryName())
+                    .orElseThrow(() -> new BadRequestException("그러한 카테코리를 찾을 수 없습니다."));
             Product product = productPostRequestDTO.convertToProduct(category);
             categoryRepository.save(product.getCategory());
             productRepository.save(product);
