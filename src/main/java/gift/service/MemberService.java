@@ -33,17 +33,14 @@ public class MemberService {
 
     public void registerMember(MemberDto memberDto) {
         Member member = new Member(memberDto);
-        memberJpaDao.findByEmail(member.getEmail())
-            .ifPresent(user -> {
-                throw new IllegalArgumentException(ErrorMessage.EMAIL_ALREADY_EXISTS_MSG);
-            });
+        assertUserEmailNotDuplicate(member);
         memberJpaDao.save(member);
     }
 
     public String login(MemberDto memberDto) {
         Member member = new Member(memberDto);
-        Member queriedMember = memberJpaDao.findByEmail(member.getEmail())
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.MEMBER_NOT_EXISTS_MSG));
+        Member queriedMember = findMemberByEmailOrElseThrow(member.getEmail());
+
         if (!queriedMember.isCorrectPassword(member.getPassword())) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_PASSWORD_MSG);
         }
@@ -56,24 +53,47 @@ public class MemberService {
     }
 
     public void addWishlist(String email, Long productId) {
-        Member member = memberJpaDao.findByEmail(email)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.MEMBER_NOT_EXISTS_MSG));
-        Product product = productJpaDao.findById(productId)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
+        Member member = findMemberByEmailOrElseThrow(email);
+        Product product = findProductByIdOrElseThrow(productId);
 
-        wishlistJpaDao.findByMember_EmailAndProduct_Id(email, productId)
-            .ifPresent(v -> {
-                throw new IllegalArgumentException(ErrorMessage.WISHLIST_ALREADY_EXISTS_MSG);
-            });
+        assertWishlistNotDuplicate(email, productId);
         Wishlist wishlist = new Wishlist(member, product);
 
         wishlistJpaDao.save(wishlist);
     }
 
     public void deleteWishlist(String email, Long productId) {
-        wishlistJpaDao.findByMember_EmailAndProduct_Id(email, productId)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.WISHLIST_NOT_EXISTS_MSG));
+        findWishlistByEmailAndProductIdOrElseThrow(email, productId);
 
         wishlistJpaDao.deleteByMember_EmailAndProduct_Id(email, productId);
+    }
+
+    private Wishlist findWishlistByEmailAndProductIdOrElseThrow(String email, Long productId) {
+        return wishlistJpaDao.findByMember_EmailAndProduct_Id(email, productId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.WISHLIST_NOT_EXISTS_MSG));
+    }
+
+    private Member findMemberByEmailOrElseThrow(String member) {
+        return memberJpaDao.findByEmail(member)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.MEMBER_NOT_EXISTS_MSG));
+    }
+
+    private Product findProductByIdOrElseThrow(Long productId) {
+        return productJpaDao.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
+    }
+
+    private void assertWishlistNotDuplicate(String email, Long productId) {
+        wishlistJpaDao.findByMember_EmailAndProduct_Id(email, productId)
+            .ifPresent(v -> {
+                throw new IllegalArgumentException(ErrorMessage.WISHLIST_ALREADY_EXISTS_MSG);
+            });
+    }
+
+    private void assertUserEmailNotDuplicate(Member member) {
+        memberJpaDao.findByEmail(member.getEmail())
+            .ifPresent(user -> {
+                throw new IllegalArgumentException(ErrorMessage.EMAIL_ALREADY_EXISTS_MSG);
+            });
     }
 }
