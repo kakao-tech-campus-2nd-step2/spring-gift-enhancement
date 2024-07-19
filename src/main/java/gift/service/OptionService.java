@@ -48,6 +48,17 @@ public class OptionService {
         optionRepository.deleteById(id);
     }
 
+    public void decreaseQuantity(Long id, int quantity){
+        Option option = optionRepository.findById(id)
+            .orElseThrow(() -> new OptionException("옵션을 찾을 수 없습니다."));
+        if(option.getQuantity() < quantity){
+            throw new OptionException("수량이 부족합니다.");
+        }
+
+        option.setQuantity(option.getQuantity() - quantity);
+        optionRepository.save(option);
+    }
+
 
 
 
