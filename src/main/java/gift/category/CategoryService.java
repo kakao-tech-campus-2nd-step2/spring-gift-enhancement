@@ -52,7 +52,7 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(Long id) throws CategoryException {
         if(productRepository.existsByCategoryId(id)){
-            throw new CategoryException(CategoryErrorCode.CAN_NOlT_DELETE);
+            throw new CategoryException(CategoryErrorCode.CAN_NOT_DELETE);
         }
         categoryRepository.deleteById(id);
     }
