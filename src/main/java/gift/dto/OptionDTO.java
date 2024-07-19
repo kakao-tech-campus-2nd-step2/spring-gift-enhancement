@@ -3,15 +3,13 @@ package gift.dto;
 import gift.model.Option;
 
 public class OptionDTO {
-
     private Long id;
     private String name;
     private int quantity;
     private int price;
     private Long productId;
 
-    public OptionDTO() {
-    }
+    public OptionDTO() {}
 
     public OptionDTO(Long id, String name, int quantity, int price, Long productId) {
         this.id = id;
@@ -21,40 +19,42 @@ public class OptionDTO {
         this.productId = productId;
     }
 
+    // Getters and Setters
+
     public Long getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public Long getProductId() {
-        return productId;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public Long getProductId() {
+        return productId;
     }
 
     public void setProductId(Long productId) {
@@ -62,6 +62,12 @@ public class OptionDTO {
     }
 
     public static OptionDTO convertToDTO(Option option) {
-        return new OptionDTO(option.getId(), option.getName(), option.getQuantity(), option.getPrice(), option.getProduct().getId());
+        return new OptionDTO(
+            option.getId(),
+            option.getName(),
+            option.getQuantity(),
+            option.getPrice(),
+            option.getProduct().getId()
+        );
     }
 }
