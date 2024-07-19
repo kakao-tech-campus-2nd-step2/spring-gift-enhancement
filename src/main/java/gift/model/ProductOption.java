@@ -19,16 +19,17 @@ public class ProductOption extends BaseEntity {
     @Column(name = "name")
     private String name;
     @NotNull
-    @Column(name = "additional_price")
-    private Integer additionalPrice;
+    @Column(name = "quantity")
+    private Integer quantity;
 
-    public ProductOption() {
+    protected ProductOption() {
     }
 
-    public ProductOption(Product product, String name, Integer additionalPrice) {
+    public ProductOption(Product product, String name, Integer quantity) {
         this.product = product;
+        product.getProductOptionList().add(this);
         this.name = name;
-        this.additionalPrice = additionalPrice;
+        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -43,12 +44,12 @@ public class ProductOption extends BaseEntity {
         return name;
     }
 
-    public Integer getAdditionalPrice() {
-        return additionalPrice;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void updateOptionInfo(String name, Integer additionalPrice) {
+    public void updateOptionInfo(String name, Integer quantity) {
         this.name = name;
-        this.additionalPrice = additionalPrice;
+        this.quantity = quantity;
     }
 }

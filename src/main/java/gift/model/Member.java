@@ -23,7 +23,7 @@ public class Member extends BaseEntity {
     @Column(name = "role")
     private MemberRole role;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String name, String email, String password, MemberRole role) {

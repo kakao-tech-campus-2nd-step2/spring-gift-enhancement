@@ -2,16 +2,13 @@ package gift.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.dto.LoginRequest;
 import gift.dto.ProductRequest;
-import gift.dto.RegisterRequest;
+import gift.dto.ProductResponse;
 import gift.model.MemberRole;
-import gift.model.Product;
-import gift.reflection.AuthTestReflectionComponent;
-import gift.service.MemberService;
 import gift.service.ProductService;
 import gift.service.auth.AuthService;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +17,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,41 +30,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private ProductService productService;
-    @Autowired
     private ObjectMapper objectMapper;
     @Autowired
     private AuthService authService;
     @Autowired
-    private MemberService memberService;
-    @Autowired
-    private AuthTestReflectionComponent authTestReflectionComponent;
+    private ProductService productService;
     private String managerToken;
     private String memberToken;
-    private Long managerId;
-    private Long memberId;
 
     @BeforeEach
     @DisplayName("관리자, 이용자의 토큰 값 세팅하기")
     void setBaseData() {
-        var registerManagerRequest = new RegisterRequest("관리자", "admin@naver.com", "password", "ADMIN");
-        var registerMemberRequest = new RegisterRequest("멤버", "'member@naver.com'", "password", "MEMBER");
-        managerToken = authService.register(registerManagerRequest).token();
-        memberToken = authService.register(registerMemberRequest).token();
-        managerId = authTestReflectionComponent.getMemberIdWithToken(managerToken);
-        memberId = authTestReflectionComponent.getMemberIdWithToken(memberToken);
-    }
-
-    @AfterEach
-    @DisplayName("관리자, 이용자의 탈퇴하기")
-    void deleteBaseData() {
-        memberService.deleteMember(managerId);
-        memberService.deleteMember(memberId);
+        var managerLoginRequest = new LoginRequest("admin@naver.com", "password");
+        managerToken = authService.login(managerLoginRequest).token();
+        var memberLoginRequest = new LoginRequest("member@naver.com", "password");
+        memberToken = authService.login(memberLoginRequest).token();
     }
 
     @Test
@@ -74,7 +60,7 @@ class ProductControllerTest {
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductRequest("상품1", -1000, "이미지 주소")));
+                .content(objectMapper.writeValueAsString(new ProductRequest("상품1", -1000, "이미지 주소", 1L)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -89,7 +75,7 @@ class ProductControllerTest {
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거햄버거햄버거햄버거햄버거햄", 1000, "이미지 주소")));
+                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거햄버거햄버거햄버거햄버거햄", 1000, "이미지 주소", 1L)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -104,7 +90,7 @@ class ProductControllerTest {
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductRequest("카카오456", 1000, "이미지 주소")));
+                .content(objectMapper.writeValueAsString(new ProductRequest("카카오456", 1000, "이미지 주소", 1L)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -113,17 +99,19 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("카카오를 포함한 이름을 가진 오류 상품 생성하기")
+    @DisplayName("카카오를 포함한 이름을 가진 상품 매니저로 생성하기")
     void addProductSuccessWithNameKAKAO() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + managerToken)
-                .content(objectMapper.writeValueAsString(new ProductRequest("카카오456", 1000, "이미지 주소")));
+                .content(objectMapper.writeValueAsString(new ProductRequest("카카오456", 1000, "이미지 주소", 1L)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
-        result.andExpect(status().isCreated());
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        deleteProductWithCreatedHeader(createdResult);
     }
 
     @Test
@@ -133,7 +121,7 @@ class ProductControllerTest {
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductRequest("", 1000, "이미지 주소")));
+                .content(objectMapper.writeValueAsString(new ProductRequest("", 1000, "이미지 주소", 1L)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -148,11 +136,13 @@ class ProductControllerTest {
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거()[]+-&/_", 1000, "이미지 주소")));
+                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거()[]+-&/_", 1000, "이미지 주소", 1L)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
-        result.andExpect(status().isCreated());
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        deleteProductWithCreatedHeader(createdResult);
     }
 
     @Test
@@ -162,11 +152,13 @@ class ProductControllerTest {
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거 햄버거 햄버거", 1000, "이미지 주소")));
+                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거 햄버거 햄버거", 1000, "이미지 주소", 1L)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
-        result.andExpect(status().isCreated());
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        deleteProductWithCreatedHeader(createdResult);
     }
 
     @Test
@@ -176,7 +168,7 @@ class ProductControllerTest {
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거()[]+-&/_**", 1000, "이미지 주소")));
+                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거()[]+-&/_**", 1000, "이미지 주소", 1L)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -187,10 +179,12 @@ class ProductControllerTest {
     @Test
     @DisplayName("11개의 상품을 등록하였을 때, 2번째 페이지의 조회의 결과는 1개의 상품만을 반환한다.")
     void getProductsWithPageable() throws Exception {
+        List<ProductResponse> productResponseList = new ArrayList<>();
         //given
-        var productRequest = new ProductRequest("햄버거()[]+-&/_**", 1000, "이미지 주소");
+        var productRequest = new ProductRequest("햄버거()[]+-&/_**", 1000, "이미지 주소", 1L);
         for (int i = 0; i < 11; i++) {
-            productService.addProduct(productRequest, MemberRole.MEMBER);
+            var product = productService.addProduct(productRequest, MemberRole.MEMBER);
+            productResponseList.add(product);
         }
         var getRequest = get("/api/products?page=1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -200,9 +194,11 @@ class ProductControllerTest {
         //then
         var productResult = getResult.andExpect(status().isOk()).andReturn();
         var productListString = productResult.getResponse().getContentAsString();
-        var productList = objectMapper.readValue(productListString, new TypeReference<List<Product>>() {
+        var productResponseResult = objectMapper.readValue(productListString, new TypeReference<List<ProductResponse>>() {
         });
-        Assertions.assertThat(productList.size()).isEqualTo(1);
+        Assertions.assertThat(productResponseResult.size()).isEqualTo(4);
+
+        deleteProducts(productResponseList);
     }
 
     @Test
@@ -229,5 +225,17 @@ class ProductControllerTest {
         var getResult = mockMvc.perform(getRequest);
         //then
         getResult.andExpect(status().isBadRequest());
+    }
+
+    private void deleteProducts(List<ProductResponse> productResponseList) {
+        for (var product : productResponseList) {
+            productService.deleteProduct(product.id());
+        }
+    }
+
+    private void deleteProductWithCreatedHeader(MvcResult mvcResult) {
+        var location = mvcResult.getResponse().getHeader("Location");
+        var productId = location.replaceAll("/api/products/", "");
+        productService.deleteProduct(Long.parseLong(productId));
     }
 }

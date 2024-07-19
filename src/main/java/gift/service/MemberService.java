@@ -18,7 +18,7 @@ public class MemberService {
     }
 
     public void deleteMember(Long memberId) {
-        wishProductRepository.deleteWishProductsByMemberId(memberId);
+        wishProductRepository.deleteAllByMemberId(memberId);
         memberRepository.deleteById(memberId);
     }
 }

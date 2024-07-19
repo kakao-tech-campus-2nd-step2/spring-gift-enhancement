@@ -1,12 +1,10 @@
 package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.dto.LoginRequest;
 import gift.dto.ProductOptionRequest;
-import gift.dto.ProductRequest;
-import gift.dto.ProductResponse;
-import gift.model.MemberRole;
-import gift.service.ProductService;
-import org.junit.jupiter.api.AfterEach;
+import gift.service.ProductOptionService;
+import gift.service.auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class ProductOptionControllerTest {
 
     @Autowired
@@ -29,43 +30,41 @@ class ProductOptionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private ProductService productService;
-    private ProductResponse product;
+    private ProductOptionService productOptionService;
+    @Autowired
+    private AuthService authService;
+    private String memberToken;
 
     @BeforeEach
-    @DisplayName("옵션에 대한 작업을 수행하기 위한 상품 추가 작업")
+    @DisplayName("이용자의 토큰 값 세팅하기")
     void setBaseData() {
-        var productRequest = new ProductRequest("아이폰16pro", 1800000, "https://image.zdnet.co.kr/2024/03/21/29acda4f841885d2122750fbff5cbd9d.jpg");
-        product = productService.addProduct(productRequest, MemberRole.MEMBER);
-    }
-
-    @AfterEach
-    @DisplayName("추가한 상품에 대한 삭제 작업 수행")
-    void deleteBaseData() {
-        productService.deleteProduct(product.id());
+        var memberLoginRequest = new LoginRequest("member@naver.com", "password");
+        memberToken = authService.login(memberLoginRequest).token();
     }
 
     @Test
-    @DisplayName("잘못된 가격으로 된 오류 상품 옵션 생성하기")
+    @DisplayName("잘못된 수량으로 된 오류 상품 옵션 생성하기")
     void failOptionAdd() throws Exception {
         //given
-        var postRequest = post("/api/options/add")
+        var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest(product.id(), "기본", -1000)));
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest("기본", 0)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
         result.andExpect(status().isBadRequest())
-                .andExpect(content().string("추가 금액은 0보다 크거나 같아야 합니다."));
+                .andExpect(content().string("수량은 최소 1개 이상, 1억개 미만입니다."));
     }
 
     @Test
     @DisplayName("빈 이름을 가진 오류 상품 옵션 생성하기")
     void failOptionAddWithEmptyName() throws Exception {
         //given
-        var postRequest = post("/api/options/add")
+        var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest(product.id(), "", 1000)));
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest("", 1000)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -74,28 +73,101 @@ class ProductOptionControllerTest {
     }
 
     @Test
-    @DisplayName("정상 상품 옵션 생성하기")
-    void successOptionAdd() throws Exception {
+    @DisplayName("이름의 길이가 50초과인 오류 상품 생성하기")
+    void failOptionAddWithLengthOver50() throws Exception {
         //given
-        var postRequest = post("/api/options/add")
+        var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest(product.id(), "Large", 1500)));
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest("aaaaaaaaaaaaaaaaaabbbbbbbbbbbbcccccccccccccccddddddddddddddddddddwwwwwwwwwwqqqqqqqqqqqqqqq", 1000)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
-        result.andExpect(status().isCreated());
+        result.andExpect(status().isBadRequest())
+                .andExpect(content().string("이름의 길이는 50자를 초과할 수 없습니다."));
+    }
+
+    @Test
+    @DisplayName("정상 상품 옵션 생성하기")
+    void successOptionAdd() throws Exception {
+        //given
+        var postRequest = post("/api/products/1/options/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest("Large", 1500)));
+        //when
+        var result = mockMvc.perform(postRequest);
+        //then
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        deleteOptionWithCreatedHeader(1L, createdResult);
     }
 
     @Test
     @DisplayName("존재하지 않는 상품에 대한 옵션 생성하기")
     void failOptionWithNotExistProductId() throws Exception {
         //given
-        var postRequest = post("/api/options/add")
+        var postRequest = post("/api/products/1000/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest(100L, "Large", 1500)));
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest("Large", 1500)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
         result.andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("정상 옵션 생성하기 - 특수문자 포함")
+    void successAddProductOptionWithSpecialChar() throws Exception {
+        //given
+        var postRequest = post("/api/products/1/options/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest("햄버거()[]+-&/_", 1000)));
+        //when
+        var result = mockMvc.perform(postRequest);
+        //then
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        deleteOptionWithCreatedHeader(1L, createdResult);
+    }
+
+    @Test
+    @DisplayName("정상 상품 생성하기 - 공백 포함")
+    void successAddProductOptionWithEmptySpace() throws Exception {
+        //given
+        var postRequest = post("/api/products/1/options/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest("햄버거 햄버거 햄버거", 1000)));
+        //when
+        var result = mockMvc.perform(postRequest);
+        //then
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        deleteOptionWithCreatedHeader(1L, createdResult);
+
+    }
+
+    @Test
+    @DisplayName("오류 상품 생성하기 - 허용되지 않은 특수문자 포함")
+    void addProductOptionFailWithSpecialChar() throws Exception {
+        //given
+        var postRequest = post("/api/products/1/options/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductOptionRequest("햄버거()[]+-&/_**", 1000)));
+        //when
+        var result = mockMvc.perform(postRequest);
+        //then
+        result.andExpect(status().isBadRequest())
+                .andExpect(content().string("허용되지 않은 형식의 이름입니다."));
+    }
+
+    private void deleteOptionWithCreatedHeader(Long productId, MvcResult mvcResult) {
+        var location = mvcResult.getResponse().getHeader("Location");
+        var optionId = location.replaceAll("/api/products/" + productId + "/options/", "");
+        productOptionService.deleteOption(productId, Long.parseLong(optionId));
     }
 }

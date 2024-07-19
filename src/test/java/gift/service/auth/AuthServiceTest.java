@@ -47,7 +47,7 @@ class AuthServiceTest {
         var registerRequest = new RegisterRequest("테스트", "test@naver.com", "testPassword", "MEMBER");
         var auth = authService.register(registerRequest);
         var id = authTestReflectionComponent.getMemberIdWithToken(auth.token());
-        //then
+        //when, then
         Assertions.assertThatThrownBy(() -> authService.register(registerRequest)).isInstanceOf(DuplicatedEmailException.class);
 
         memberService.deleteMember(id);
@@ -77,7 +77,7 @@ class AuthServiceTest {
         var registerRequest = new RegisterRequest("테스트", "test@naver.com", "testPasswords", "MEMBER");
         var auth = authService.register(registerRequest);
         var loginRequest = new LoginRequest("test@naver.com", "testPassword");
-        //then
+        //when, then
         Assertions.assertThatThrownBy(() -> authService.login(loginRequest)).isInstanceOf(InvalidLoginInfoException.class);
 
         var id = authTestReflectionComponent.getMemberIdWithToken(auth.token());

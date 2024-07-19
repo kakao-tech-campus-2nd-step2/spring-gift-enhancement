@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/options")
+@RequestMapping("/api/products/{productId}/options")
 public class ProductOptionController {
 
     private final ProductOptionService optionService;
@@ -35,34 +34,27 @@ public class ProductOptionController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addOption(@Valid @RequestBody ProductOptionRequest productOptionRequest) {
-        var option = optionService.addOption(productOptionRequest);
-        return ResponseEntity.created(URI.create("/api/options/" + option.id())).build();
+    public ResponseEntity<Void> addOption(@PathVariable Long productId, @Valid @RequestBody ProductOptionRequest productOptionRequest) {
+        var option = optionService.addOption(productId, productOptionRequest);
+        return ResponseEntity.created(URI.create("/api/products/" + productId + "/options/" + option.id())).build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Void> updateOption(@PathVariable Long id, @Valid @RequestBody ProductOptionRequest productOptionRequest) {
-        optionService.updateOption(id, productOptionRequest);
+    public ResponseEntity<Void> updateOption(@PathVariable Long productId, @PathVariable Long id, @Valid @RequestBody ProductOptionRequest productOptionRequest) {
+        optionService.updateOption(productId, id, productOptionRequest);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductOptionResponse> getOption(@PathVariable Long id) {
-        var option = optionService.getOption(id);
-        return ResponseEntity.ok(option);
-    }
-
     @GetMapping
-    public ResponseEntity<List<ProductOptionResponse>> getOptions(@RequestParam Long productId,
-                                                                  @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<List<ProductOptionResponse>> getOptions(@PathVariable Long productId, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         pageService.pageValidation(pageable);
         var options = optionService.getOptions(productId, pageable);
         return ResponseEntity.ok(options);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        optionService.deleteOption(id);
+    public ResponseEntity<Void> deleteOption(@PathVariable Long productId, @PathVariable Long id) {
+        optionService.deleteOption(productId, id);
         return ResponseEntity.noContent().build();
     }
 }
