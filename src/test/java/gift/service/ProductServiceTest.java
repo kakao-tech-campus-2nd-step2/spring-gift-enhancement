@@ -5,12 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
+import gift.domain.option.dto.OptionRequest;
+import gift.domain.option.dto.OptionResponse;
+import gift.domain.option.service.OptionService;
+import gift.domain.product.dto.ProductCreateResponse;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.dto.ProductResponse;
 import gift.domain.product.entity.Product;
@@ -43,19 +47,22 @@ class ProductServiceTest {
     @Mock
     CategoryRepository categoryRepository;
 
+    @Mock
+    OptionService optionService;
+
     @Test
     @DisplayName("Id로 Product 조회 테스트")
     void getProductTest() {
         // given
-        Long id = 1L;
-        Category category = new Category(1L, "test", "color", "image", "description");
-        Product productList = new Product(1L, "test", 1000, "test.jpg", category);
+        Long requestId = 1L;
+        Product savedProduct = createProduct();
 
-        doReturn(Optional.of(productList)).when(productRepository).findById(id);
+        doReturn(Optional.of(savedProduct)).when(productRepository).findById(any());
 
-        ProductResponse expected = entityToDto(productList);
+        ProductResponse expected = entityToDto(savedProduct);
+
         // when
-        ProductResponse actual = productService.getProduct(id);
+        ProductResponse actual = productService.getProduct(requestId);
 
         // then
         assertAll(
@@ -70,10 +77,8 @@ class ProductServiceTest {
     @DisplayName("모든 Product 조회 테스트")
     void getAllProductsTest() {
         // given
-        Category category1 = new Category(1L, "test", "color", "image", "description");
-        Category category2 = new Category(2L, "test", "color", "image", "description");
-        Product product1 = new Product(1L, "test1", 1000, "test1.jpg", category1);
-        Product product2 = new Product(2L, "test2", 2000, "test2.jpg", category2);
+        Product product1 = createProduct();
+        Product product2 = createProduct(2L, new Category(2L, "test", "color", "image", "description"));
 
         List<Product> productList = Arrays.asList(product1, product2);
         Pageable pageable = PageRequest.of(0, 10);
@@ -108,25 +113,28 @@ class ProductServiceTest {
     @DisplayName("product 저장 테스트")
     void createProductTest() {
         // given
-        ProductRequest productRequest = new ProductRequest("test", 1000, "test.jpg", 1L);
-        Category savedCategory = new Category(1L, "test", "color", "image", "description");
-        Product savedProduct = new Product(productRequest.getName(), productRequest.getPrice(),
-            productRequest.getImageUrl(),savedCategory);
+        ProductRequest productRequest = createProductRequest();
+        Product newProduct = createProduct();
 
-        ProductResponse expected = entityToDto(savedProduct);
+        OptionResponse optionResponse = new OptionResponse(1L, "name", 10);
 
-        doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(any());
-        doReturn(savedProduct).when(productRepository).save(any(Product.class));
+        doReturn(Optional.of(newProduct.getCategory())).when(categoryRepository).findById(any());
+        doReturn(newProduct).when(productRepository).save(any());
+        doReturn(optionResponse).when(optionService).addOptionToProduct(any(), any());
+
+        ProductCreateResponse expected = new ProductCreateResponse(entityToDto(newProduct),optionResponse);
 
         // when
-        ProductResponse actual = productService.createProduct(productRequest);
+        ProductCreateResponse actual = productService.createProduct(productRequest);
 
         // then
         assertAll(
             () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
             () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
             () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl()),
-            () -> assertThat(actual.getCategoryId()).isEqualTo(expected.getCategoryId())
+            () -> assertThat(actual.getCategoryId()).isEqualTo(expected.getCategoryId()),
+            () -> assertThat(actual.getOptionResponse().getName()).isEqualTo(expected.getOptionResponse().getName()),
+            () -> assertThat(actual.getOptionResponse().getQuantity()).isEqualTo(expected.getOptionResponse().getQuantity())
         );
     }
 
@@ -134,22 +142,21 @@ class ProductServiceTest {
     @DisplayName("product 업데이트 테스트")
     void updateProductTest() {
         // given
-        Long id = 1L;
-        Category savedCategory = new Category(1L, "test", "color", "image", "description");
-        ProductRequest productRequest = new ProductRequest("update", 1000, "update.jpg", 1L);
+        Long requestId = 1L;
+        ProductRequest productRequest = createProductRequest("test");
 
-        Product savedProduct = mock(Product.class);
-        Product updatedProduct = new Product("update", 1000, "update.jpg", savedCategory);
+        Product updatedProduct = createProduct();
+        Product spyProduct = spy(updatedProduct);
 
         ProductResponse expected = entityToDto(updatedProduct);
 
-        doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(any());
-        doReturn(Optional.of(savedProduct)).when(productRepository).findById(any());
-        doNothing().when(savedProduct).updateAll(productRequest.getName(), productRequest.getPrice(),
-            productRequest.getImageUrl(), savedCategory);
-        doReturn(updatedProduct).when(productRepository).save(any(Product.class));
+        doReturn(Optional.of(updatedProduct.getCategory())).when(categoryRepository).findById(any());
+        doReturn(Optional.of(spyProduct)).when(productRepository).findById(any());
+        doNothing().when(spyProduct).updateAll(productRequest.getName(), productRequest.getPrice(),
+            productRequest.getImageUrl(), updatedProduct.getCategory());
+
         // when
-        ProductResponse actual = productService.updateProduct(id, productRequest);
+        ProductResponse actual = productService.updateProduct(requestId, productRequest);
 
         // then
         assertAll(
@@ -165,9 +172,7 @@ class ProductServiceTest {
     void deleteProductTest0() {
         // given
         Long id = 1L;
-        Category savedCategory = new Category(1L, "test", "color", "image", "description");
-        Product savedProduct = new Product("test", 1000, "test.jpg", savedCategory);
-
+        Product savedProduct = createProduct();
         doReturn(Optional.of(savedProduct)).when(productRepository).findById(id);
 
         // when
@@ -180,5 +185,18 @@ class ProductServiceTest {
     private ProductResponse entityToDto(Product product) {
         return new ProductResponse(product.getId(), product.getName(), product.getPrice(),
             product.getImageUrl(), product.getCategory().getId());
+    }
+    private ProductRequest createProductRequest(){
+        return createProductRequest("test");
+    }
+    private ProductRequest createProductRequest(String name){
+        OptionRequest optionRequest = new OptionRequest("test", 100);
+        return new ProductRequest(name, 1000, "test.jpg", 1L, optionRequest);
+    }
+    private Product createProduct(){
+        return createProduct(1L, new Category(1L, "test", "color", "image", "description"));
+    }
+    private Product createProduct(Long id, Category category){
+        return new Product(id, "test", 1000, "test.jpg", category);
     }
 }

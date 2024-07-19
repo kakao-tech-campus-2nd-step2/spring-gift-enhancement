@@ -39,8 +39,7 @@ class CategoryServiceTest {
     @Test
     @DisplayName("카테고리 전체 조회 테스트")
     void getAllCategoriesTest(){
-        List<Category> categoryList = Arrays.asList(new Category(1L,"name1", "color", "imageUrl", "description"),
-            new Category(2L,"name1", "color", "imageUrl", "description"));
+        List<Category> categoryList = Arrays.asList(createCategory(), createCategory(2L));
 
         int pageNo = 0;
         int pageSize = 10;
@@ -74,13 +73,12 @@ class CategoryServiceTest {
     @DisplayName("카테고리 생성 테스트")
     void createCategoryTest(){
         // given
-        CategoryRequest request = new CategoryRequest("name", "color", "imageUrl", "description");
+        CategoryRequest request = createCategoryRequest();
+        Category newCategory = createCategory();
 
-        Category savedCategory = new Category(1L, request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
+        doReturn(newCategory).when(categoryRepository).save(any());
 
-        doReturn(savedCategory).when(categoryRepository).save(any());
-
-        CategoryResponse expected = entityToDto(savedCategory);
+        CategoryResponse expected = entityToDto(newCategory);
 
         // when
         CategoryResponse actual = categoryService.createCategory(request);
@@ -100,16 +98,14 @@ class CategoryServiceTest {
     void updateCategoryTest(){
         // given
         Long id = 1L;
-        CategoryRequest request = new CategoryRequest("update", "color", "imageUrl", "description");
-        Category savedCategory = spy(new Category(1L, "name", "color", "imageUrl", "description"));
+        CategoryRequest request = createCategoryRequest();
+        Category updatedCategory = createCategory();
+        Category spyUpdatedCategory = spy(updatedCategory);
 
-        doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(any());
-        doNothing().when(savedCategory).updateAll(request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
+        doReturn(Optional.of(spyUpdatedCategory)).when(categoryRepository).findById(any());
+        doNothing().when(spyUpdatedCategory).updateAll(request.getName(), request.getColor(), request.getImageUrl(), request.getDescription());
 
-        Category updateCategory = new Category(1L, request.getName(), request.getColor(), request.getImageUrl(), request.getImageUrl());
-        doReturn(updateCategory).when(categoryRepository).save(any());
-
-        CategoryResponse expected = entityToDto(updateCategory);
+        CategoryResponse expected = entityToDto(updatedCategory);
 
         // when
         CategoryResponse actual = categoryService.updateCategory(id, request);
@@ -128,7 +124,7 @@ class CategoryServiceTest {
     @DisplayName("카테고리 삭제 테스트")
     void deleteCategoryTest(){
         Long id = 1L;
-        Category savedCategory = new Category(1L, "name", "color", "imageUrl", "description");
+        Category savedCategory = createCategory();
 
         doReturn(Optional.of(savedCategory)).when(categoryRepository).findById(id);
 
@@ -141,5 +137,15 @@ class CategoryServiceTest {
 
     private CategoryResponse entityToDto(Category category){
         return new CategoryResponse(category.getId(), category.getName(), category.getColor(), category.getImageUrl(), category.getDescription());
+    }
+
+    private CategoryRequest createCategoryRequest(){
+        return new CategoryRequest("name", "color", "imageUrl", "description");
+    }
+    private Category createCategory(){
+        return createCategory(1L);
+    }
+    private Category createCategory(Long id){
+        return new Category(id, "name", "color", "imageUrl", "description");
     }
 }

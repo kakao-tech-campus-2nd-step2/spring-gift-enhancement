@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
+import gift.domain.option.dto.OptionRequest;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.ProductRepository;
@@ -70,8 +71,8 @@ class ProductControllerTest {
     void createProductTest() {
         Category category = new Category("test", "color", "image", "description");
         categoryRepository.save(category);
-
-        var request = new ProductRequest("product", 1000, "image.jpg", 1L);
+        OptionRequest optionRequest = new OptionRequest("name", 100);
+        var request = new ProductRequest("product", 1000, "image.jpg", 1L, optionRequest);
 
         var url = "http://localhost:" + port + "/api/products";
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
@@ -89,8 +90,10 @@ class ProductControllerTest {
         Product product = new Product("test", 1000, "test.jpg", savedCategory);
         productRepository.save(product);
 
+        OptionRequest optionRequest = new OptionRequest("name", 100);
+
         var id = 1L;
-        var request = new ProductRequest("update", 1000, "image.jpg", 1L);
+        var request = new ProductRequest("update", 1000, "image.jpg", 1L, optionRequest);
         var url = "http://localhost:" + port + "/api/products/" + id;
         var requestEntity = new RequestEntity<>(request, HttpMethod.PUT, URI.create(url));
 

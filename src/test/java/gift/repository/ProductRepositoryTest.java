@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
+import gift.domain.option.dto.OptionRequest;
 import gift.domain.product.repository.ProductRepository;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.entity.Product;
@@ -26,7 +27,8 @@ class ProductRepositoryTest {
     @DisplayName("findById 테스트")
     void findByIdTest() {
         // given
-        ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L);
+        OptionRequest optionRequest = new OptionRequest("name", 100);
+        ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L, optionRequest);
         Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
         Product expected = productRepository.save(dtoToEntity(request, savedCategory));
 
@@ -41,7 +43,8 @@ class ProductRepositoryTest {
     @DisplayName("save 테스트")
     void saveTest() {
         // given
-        ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L);
+        OptionRequest optionRequest = new OptionRequest("name", 100);
+        ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L, optionRequest);
         Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
 
         Product expected = new Product(request.getName(), request.getPrice(),
@@ -64,7 +67,8 @@ class ProductRepositoryTest {
     @DisplayName("delete 테스트")
     void deleteTest() {
         // given
-        ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L);
+        OptionRequest optionRequest = new OptionRequest("name", 100);
+        ProductRequest request = new ProductRequest("test", 1000, "test.jpg", 1L, optionRequest);
         Category savedCategory = categoryRepository.save(new Category("test", "color", "image", "description"));
         Product savedProduct = productRepository.save(dtoToEntity(request, savedCategory));
 
