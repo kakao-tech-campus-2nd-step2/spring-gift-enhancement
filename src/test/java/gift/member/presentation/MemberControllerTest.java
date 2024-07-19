@@ -5,6 +5,7 @@ import gift.member.application.MemberResponse;
 import gift.member.application.MemberService;
 import gift.member.application.command.MemberEmailUpdateCommand;
 import gift.member.application.command.MemberPasswordUpdateCommand;
+import gift.member.domain.Member;
 import gift.member.presentation.request.MemberJoinRequest;
 import gift.member.presentation.request.MemberLoginRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,14 +49,16 @@ public class MemberControllerTest {
         email = "test@example.com";
         password = "password";
         token = "testToken";
+
+        when(tokenService.extractMemberId(eq(token))).thenReturn(memberId);
     }
 
     @Test
     void 회원가입_테스트() throws Exception {
         // Given
         MemberJoinRequest request = new MemberJoinRequest(email, password);
-        Mockito.when(memberService.join(request.toCommand())).thenReturn(memberId);
-        Mockito.when(tokenService.createToken(memberId)).thenReturn(token);
+        when(memberService.join(request.toCommand())).thenReturn(memberId);
+        when(tokenService.createToken(memberId)).thenReturn(token);
 
         // When & Then
         mockMvc.perform(post("/api/member/join")
@@ -67,8 +72,8 @@ public class MemberControllerTest {
     void 로그인_테스트() throws Exception {
         // Given
         MemberLoginRequest request = new MemberLoginRequest(email, password);
-        Mockito.when(memberService.login(request.toCommand())).thenReturn(memberId);
-        Mockito.when(tokenService.createToken(memberId)).thenReturn(token);
+        when(memberService.login(request.toCommand())).thenReturn(memberId);
+        when(tokenService.createToken(memberId)).thenReturn(token);
 
         // When & Then
         mockMvc.perform(post("/api/member/login")
@@ -82,10 +87,11 @@ public class MemberControllerTest {
     void 아이디로_찾기_테스트() throws Exception {
         // Given
         MemberResponse response = new MemberResponse(memberId, email, password);
-        Mockito.when(memberService.findById(eq(memberId))).thenReturn(response);
+        when(memberService.findById(eq(memberId))).thenReturn(response);
 
         // When & Then
-        mockMvc.perform(get("/api/member/{id}", memberId))
+        mockMvc.perform(get("/api/member/{id}", memberId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value(email))
                 .andExpect(jsonPath("$.password").value(password));
@@ -96,10 +102,11 @@ public class MemberControllerTest {
         // Given
         MemberResponse response1 = new MemberResponse(memberId, email, password);
         MemberResponse response2 = new MemberResponse(2L, "test2@example.com", "password2");
-        Mockito.when(memberService.findAll()).thenReturn(Arrays.asList(response1, response2));
+        when(memberService.findAll()).thenReturn(Arrays.asList(response1, response2));
 
         // When & Then
-        mockMvc.perform(get("/api/member"))
+        mockMvc.perform(get("/api/member")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].email").value(email))
                 .andExpect(jsonPath("$[1].email").value("test2@example.com"));
@@ -109,38 +116,58 @@ public class MemberControllerTest {
     void 이메일_업데이트_테스트() throws Exception {
         // Given
         String newEmail = "test2@example.com";
-        MemberEmailUpdateCommand expectedCommand = new MemberEmailUpdateCommand(memberId, newEmail);
+        Member member = new Member(memberId, email, password);
+        MemberEmailUpdateCommand expectedCommand = new MemberEmailUpdateCommand(newEmail);
+
+        MemberResponse memberResponse = new MemberResponse(memberId, email, password);
+        when(memberService.findById(anyLong())).thenReturn(memberResponse);
 
         // When & Then
-        mockMvc.perform(put("/api/member/{id}/email", memberId)
+        mockMvc.perform(put("/api/member/email")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"" + newEmail + "\"}"))
+                        .content("{\"email\":\"" + newEmail + "\"}")
+                        .requestAttr("member", member)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk());
 
-        Mockito.verify(memberService).updateEmail(eq(expectedCommand));
+        verify(memberService).updateEmail(eq(expectedCommand), eq(member));
     }
 
     @Test
     void 비밀번호_업데이트_테스트() throws Exception {
         // Given
         String newPassword = "newPassword";
-        MemberPasswordUpdateCommand expectedCommand = new MemberPasswordUpdateCommand(memberId, newPassword);
+        Member member = new Member(memberId, email, password);
+        MemberPasswordUpdateCommand updateCommand = new MemberPasswordUpdateCommand(newPassword);
+
+        MemberResponse memberResponse = new MemberResponse(memberId, email, password);
+        when(memberService.findById(anyLong())).thenReturn(memberResponse);
 
         // When & Then
-        mockMvc.perform(put("/api/member/{id}/password", memberId)
+        mockMvc.perform(put("/api/member/password")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"password\":\"" + newPassword + "\"}"))
+                        .content("{\"password\":\"" + newPassword + "\"}")
+                        .requestAttr("member", member)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk());
 
-        Mockito.verify(memberService).updatePassword(eq(expectedCommand));
+        verify(memberService).updatePassword(eq(updateCommand), eq(member));
     }
 
     @Test
     void 회원_삭제_테스트() throws Exception {
-        // When & Then
-        mockMvc.perform(delete("/api/member/{id}", memberId))
-                .andExpect(status().isOk());
+        // Given
+        Member member = new Member(memberId, email, password);
+        MemberResponse memberResponse = new MemberResponse(memberId, email, password);
 
-        Mockito.verify(memberService).delete(eq(memberId));
+        when(memberService.findById(anyLong())).thenReturn(memberResponse);
+
+        // When & Then
+        mockMvc.perform(delete("/api/member")
+                        .requestAttr("member", member)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isNoContent());
+
+        verify(memberService).delete(eq(member));
     }
 }

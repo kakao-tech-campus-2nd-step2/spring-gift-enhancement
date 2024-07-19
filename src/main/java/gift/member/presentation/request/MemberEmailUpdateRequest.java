@@ -5,9 +5,8 @@ import gift.member.application.command.MemberEmailUpdateCommand;
 public record MemberEmailUpdateRequest(
         String email
         ) {
-    public MemberEmailUpdateCommand toCommand(Long id) {
+    public MemberEmailUpdateCommand toCommand() {
         return new MemberEmailUpdateCommand(
-                id,
                 email
         );
     }

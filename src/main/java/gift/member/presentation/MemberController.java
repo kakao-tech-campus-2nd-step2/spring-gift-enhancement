@@ -3,6 +3,7 @@ package gift.member.presentation;
 import gift.auth.TokenService;
 import gift.member.application.MemberResponse;
 import gift.member.application.MemberService;
+import gift.member.domain.Member;
 import gift.member.presentation.request.MemberEmailUpdateRequest;
 import gift.member.presentation.request.MemberJoinRequest;
 import gift.member.presentation.request.MemberLoginRequest;
@@ -57,32 +58,35 @@ public class MemberController {
         return ResponseEntity.ok(memberService.findById(memberId));
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<MemberResponse>> findAll() {
         return ResponseEntity.ok(memberService.findAll());
     }
 
-    @PutMapping("/{id}/email")
-    public void updateEmail(
-            @PathVariable("id") Long memberId,
-            @RequestBody MemberEmailUpdateRequest request
+    @PutMapping("/email")
+    public ResponseEntity<?> updateEmail(
+            @RequestBody MemberEmailUpdateRequest request,
+            Member member
     ) {
-        memberService.updateEmail(request.toCommand(memberId));
+        memberService.updateEmail(request.toCommand(), member);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/password")
-    public void updatePassword(
-            @PathVariable("id") Long memberId,
-            @RequestBody MemberPasswordUpdateRequest request
+    @PutMapping("/password")
+    public ResponseEntity<?> updatePassword(
+            @RequestBody MemberPasswordUpdateRequest request,
+            Member member
     ) {
-        memberService.updatePassword(request.toCommand(memberId));
+        memberService.updatePassword(request.toCommand(), member);
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(
-            @PathVariable("id") Long memberId
+    @DeleteMapping
+    public ResponseEntity<?> delete(
+            Member member
     ) {
-        memberService.delete(memberId);
+        memberService.delete(member);
+        return ResponseEntity.noContent().build();
     }
 }
 

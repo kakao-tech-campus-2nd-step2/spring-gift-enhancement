@@ -1,5 +1,7 @@
 package gift.product.application;
 
+import gift.category.domain.Category;
+import gift.category.domain.CategoryRepository;
 import gift.exception.type.KakaoInNameException;
 import gift.exception.type.NotFoundException;
 import gift.product.application.command.ProductCreateCommand;
@@ -21,8 +23,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -37,6 +38,9 @@ public class ProductServiceTest {
     @Mock
     private WishlistRepository wishlistRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -50,8 +54,9 @@ public class ProductServiceTest {
     @Test
     public void 모든_상품_페이징_조회_테스트() {
         // Given
-        Product product1 = new Product("Product1", 1000, "http://example.com/image1.jpg");
-        Product product2 = new Product("Product2", 2000, "http://example.com/image2.jpg");
+        Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
+        Product product1 = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
+        Product product2 = new Product("Product2", 2000, "http://example.com/image2.jpg", category);
         Page<Product> page = new PageImpl<>(List.of(product1, product2), PageRequest.of(0, 2), 2);
         when(productRepository.findAll(any(Pageable.class))).thenReturn(page);
 
@@ -71,7 +76,7 @@ public class ProductServiceTest {
     @Test
     public void 상품_ID로_조회_테스트() {
         // Given
-        Product product = new Product("Product1", 1000, "http://example.com/image1.jpg");
+        Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", new Category("Category", "Color", "Description", "http://example.com/image.jpg"));
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
 
         // When
@@ -97,9 +102,12 @@ public class ProductServiceTest {
     @Test
     public void 상품_추가_테스트() {
         // Given
-        ProductCreateCommand createCommand = new ProductCreateCommand("Product1", 1000, "http://example.com/image1.jpg");
-        Product product = createCommand.toProduct();
+        Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
+        ProductCreateCommand createCommand = new ProductCreateCommand("Product1", 1000, "http://example.com/image1.jpg", category.getId());
+
+        Product product = createCommand.toProduct(new Category("Category", "Color", "Description", "http://example.com/image.jpg"));
         when(productRepository.save(any(Product.class))).thenReturn(product);
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 
         // When
         productService.save(createCommand);
@@ -111,27 +119,33 @@ public class ProductServiceTest {
     @Test
     public void 상품_업데이트_테스트() {
         // Given
-        Product product = new Product("Product1", 1000, "http://example.com/image1.jpg");
-        ProductUpdateCommand updateCommand = new ProductUpdateCommand(1L, "UpdatedProduct", 2000, "http://example.com/image2.jpg");
+        Category category = new Category(1L, "Original Category", "Color", "Description", "http://example.com/image.jpg");
+        Category newCategory = new Category(2L, "New Category", "Color", "Description", "http://example.com/image.jpg");
+        Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
+        ProductUpdateCommand updateCommand = new ProductUpdateCommand(1L, "UpdatedProduct", 2000, "http://example.com/image2.jpg", newCategory.getId());
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
+        when(categoryRepository.findById(2L)).thenReturn(Optional.of(newCategory));
 
         // When
         productService.update(updateCommand);
 
         // Then
         verify(productRepository, times(1)).findById(1L);
+        verify(categoryRepository, times(1)).findById(2L); // updatedCategory 검증
         assertThat(product.getName()).isEqualTo("UpdatedProduct");
         assertThat(product.getPrice()).isEqualTo(2000);
         assertThat(product.getImageUrl()).isEqualTo("http://example.com/image2.jpg");
+        assertThat(product.getCategory()).isEqualTo(newCategory);
     }
 
     @Test
     public void 상품_업데이트_실패_테스트() {
         // Given
+        Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.empty());
-        ProductUpdateCommand updateCommand = new ProductUpdateCommand(1L, "UpdatedProduct", 2000, "http://example.com/image2.jpg");
+        ProductUpdateCommand updateCommand = new ProductUpdateCommand(1L, "UpdatedProduct", 2000, "http://example.com/image2.jpg", category.getId());
 
-        // When / Then
+        // When & Then
         assertThatThrownBy(() -> productService.update(updateCommand))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("해당 상품이 존재하지 않습니다.");
@@ -141,7 +155,8 @@ public class ProductServiceTest {
     @Test
     public void 상품_삭제_테스트() {
         // Given
-        Product product = new Product(1L, "Product1", 1000, "http://example.com/image1.jpg");
+        Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
+        Product product = new Product(1L, "Product1", 1000, "http://example.com/image1.jpg", category);
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
         doNothing().when(wishlistRepository).deleteAllByProductId(product.getId());
         doNothing().when(productRepository).delete(product);
@@ -158,9 +173,11 @@ public class ProductServiceTest {
     @Test
     void 이름에카카오포함시_상품생성_실패_테스트() {
         // Given
-        ProductCreateCommand createCommand = new ProductCreateCommand("카카오가 포함된 이름", 1000, "http://example.com/image1.jpg");
+        Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
+        ProductCreateCommand createCommand = new ProductCreateCommand("카카오가 포함된 이름", 1000, "http://example.com/image1.jpg", category.getId());
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
 
-        // When / Then
+        // When & Then
         assertThatThrownBy(() -> productService.save(createCommand))
                 .isInstanceOf(KakaoInNameException.class)
                 .hasMessage("카카오가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.");
@@ -169,11 +186,13 @@ public class ProductServiceTest {
     @Test
     public void 이름에카카오포함시_상품업데이트_실패_테스트() {
         // Given
-        Product product = new Product("Product1", 1000, "http://example.com/image1.jpg");
+        Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
+        Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
-        ProductUpdateCommand updateCommand = new ProductUpdateCommand(1L, "카카오가 포함된 이름", 2000, "http://example.com/image2.jpg");
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        ProductUpdateCommand updateCommand = new ProductUpdateCommand(1L, "카카오가 포함된 이름", 2000, "http://example.com/image2.jpg", category.getId());
 
-        // When / Then
+        // When & Then
         assertThatThrownBy(() -> productService.update(updateCommand))
                 .isInstanceOf(KakaoInNameException.class)
                 .hasMessage("카카오가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.");

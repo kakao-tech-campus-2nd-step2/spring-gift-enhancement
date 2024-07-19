@@ -1,5 +1,6 @@
 package gift.member.application;
 
+import gift.exception.type.DuplicateNameException;
 import gift.exception.type.NotFoundException;
 import gift.member.application.command.MemberEmailUpdateCommand;
 import gift.member.application.command.MemberJoinCommand;
@@ -37,21 +38,15 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateEmail(MemberEmailUpdateCommand command) {
-        Member member = memberRepository.findById(command.id())
-                .orElseThrow(() -> new NotFoundException("해당 회원이 존재하지 않습니다."));
-
+    public void updateEmail(MemberEmailUpdateCommand command, Member member) {
         if (memberRepository.existsByEmail(command.email()))
-                throw new IllegalArgumentException("이미 사용중인 이메일입니다.");
+                throw new DuplicateNameException("이미 사용중인 이메일입니다.");
 
         member.updateEmail(command.email());
     }
 
     @Transactional
-    public void updatePassword(MemberPasswordUpdateCommand command) {
-        Member member = memberRepository.findById(command.id())
-                .orElseThrow(() -> new NotFoundException("해당 회원이 존재하지 않습니다."));
-
+    public void updatePassword(MemberPasswordUpdateCommand command, Member member) {
         member.updatePassword(command.password());
     }
 
@@ -67,11 +62,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void delete(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException("해당 회원이 존재하지 않습니다."));
-
-        wishlistRepository.deleteAllByMemberId(memberId);
+    public void delete(Member member) {
+        wishlistRepository.deleteAllByMemberId(member.getId());
         memberRepository.delete(member);
     }
 }

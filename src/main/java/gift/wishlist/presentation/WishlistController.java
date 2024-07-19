@@ -17,7 +17,7 @@ public class WishlistController {
     }
 
     @PostMapping("")
-    public void add(@RequestAttribute("memberId") Long memberId, @RequestParam Long productId) {
+    public void add(@RequestAttribute("memberId") Long memberId, @RequestParam("productId") Long productId) {
         wishlistService.save(memberId, productId);
     }
 
