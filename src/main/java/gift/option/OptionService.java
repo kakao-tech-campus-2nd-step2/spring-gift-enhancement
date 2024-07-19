@@ -39,6 +39,10 @@ public class OptionService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new IllegalArgumentException(PRODUCT_NOT_FOUND));
 
+        if (optionRepository.existsById(optionDTO.getId())) {
+            throw new IllegalArgumentException(OPTION_ALREADY_EXISTS);
+        }
+
         isOptionNameExists(productId, optionDTO.getName());
 
         optionRepository.save(new Option(

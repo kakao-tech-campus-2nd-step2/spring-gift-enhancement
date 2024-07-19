@@ -147,6 +147,9 @@ public class OptionServiceTest {
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
 
+            when(optionRepository.existsById(optionDTO.getId()))
+                .thenReturn(false);
+
             when(optionRepository.save(option))
                 .thenReturn(option);
         }
@@ -172,10 +175,23 @@ public class OptionServiceTest {
         }
 
         @Test
+        @DisplayName("option name already exists error")
+        void optionNameAlreadyExistsError() {
+            //when
+            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
+                .thenReturn(true);
+
+            //then
+            assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(OPTION_ALREADY_EXISTS);
+        }
+
+        @Test
         @DisplayName("option already exists error")
         void optionAlreadyExistsError() {
             //when
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
+            when(optionRepository.existsById(optionDTO.getId()))
                 .thenReturn(true);
 
             //then
