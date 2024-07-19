@@ -47,6 +47,7 @@ public class ProductOptionController {
 
     @GetMapping
     public ResponseEntity<List<ProductOptionResponse>> getOptions(@PathVariable Long productId, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        pageService.pageValidation(pageable);
         var options = optionService.getOptions(productId, pageable);
         return ResponseEntity.ok(options);
     }
