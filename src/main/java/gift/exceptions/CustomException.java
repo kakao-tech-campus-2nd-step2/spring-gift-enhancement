@@ -42,4 +42,8 @@ public class CustomException extends RuntimeException{
     public static CustomException categoryNotFoundException() {
         return new CustomException(ErrorMessage.categoryNotExists, HttpStatus.BAD_REQUEST);
     }
+
+    public static CustomException productNotFoundException() {
+        return new CustomException(ErrorMessage.productNotExists, HttpStatus.BAD_REQUEST);
+    }
 }
