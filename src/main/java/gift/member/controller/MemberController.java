@@ -3,6 +3,7 @@ package gift.member.controller;
 import gift.member.model.Member;
 import gift.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,7 +39,8 @@ public class MemberController {
     }
 
     @DeleteMapping("/{memberId}")
-    public void deleteMember(@PathVariable Long memberId) {
+    public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
         memberService.deleteMember(memberId);
+        return ResponseEntity.noContent().build();
     }
 }

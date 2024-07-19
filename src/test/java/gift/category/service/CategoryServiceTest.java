@@ -1,7 +1,7 @@
 package gift.category.service;
 
-import gift.Application;
 import gift.category.model.Category;
+
 import gift.category.repository.CategoryRepository;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = Application.class)
+@SpringBootTest
 @Transactional
 public class CategoryServiceTest {
 
