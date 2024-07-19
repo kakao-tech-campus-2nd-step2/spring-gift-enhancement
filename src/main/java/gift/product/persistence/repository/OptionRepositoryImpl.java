@@ -20,4 +20,9 @@ public class OptionRepositoryImpl implements OptionRepository{
             .map(Option::getId)
             .toList();
     }
+
+    @Override
+    public List<Option> getOptionsByProductId(Long productId) {
+        return optionJpaRepository.findByProductId(productId);
+    }
 }
