@@ -28,9 +28,10 @@ public class OptionService {
     @Transactional(readOnly = true)
     public List<OptionResponseDTO> getAllCategoriesByProductId(Long productId) {
         Product product = getProduct(productId);
-        List<Option> optionList = jpaOptionRepository.findAllByProduct(product);
+        Options optionList = new Options(jpaOptionRepository.findAllByProduct(product));
+        optionList.validOptionCount();
 
-        return optionList
+        return optionList.getOptionList()
             .stream()
             .map(OptionResponseDTO::of)
             .toList();

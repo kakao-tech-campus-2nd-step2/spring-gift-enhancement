@@ -62,9 +62,19 @@ public class Option {
             this.optionList = optionList;
         }
 
+        public List<Option> getOptionList() {
+            return optionList;
+        }
+
         public void validDuplicateName(String name) {
             if (optionList.stream().anyMatch(it -> it.name.equals(name))){
                 throw new IllegalArgumentException("같은 이름의 옵션이 존재합니다.");
+            }
+        }
+
+        public void validOptionCount() {
+            if(optionList.isEmpty()){
+                throw new IllegalStateException("상품에는 최소 한 개 이상의 옵션이 존재해야합니다.");
             }
         }
     }
