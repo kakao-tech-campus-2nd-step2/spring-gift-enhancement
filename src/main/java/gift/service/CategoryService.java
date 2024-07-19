@@ -38,7 +38,7 @@ public class CategoryService {
 
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException("해당 id의 상품 없음: " + id));;
+            .orElseThrow(() -> new NoSuchElementException("해당 id의 카테고리 없음: " + id));
         category.setName(categoryDto.getName());
         category.setColor(categoryDto.getColor());
         category.setImageUrl(categoryDto.getImageUrl());
@@ -51,7 +51,7 @@ public class CategoryService {
 
     public String deleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException("해당 id의 상품 없음: " + id));
+            .orElseThrow(() -> new NoSuchElementException("해당 id의 카테고리 없음: " + id));
 
         String categoryName = category.getName();
         categoryRepository.delete(category);
