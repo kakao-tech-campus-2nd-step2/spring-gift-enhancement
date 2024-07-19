@@ -61,4 +61,12 @@ public class OptionService {
     public OptionResponse findByOptionID(Long optionID) {
         return new OptionResponse(optionRepository.findById(optionID).orElseThrow());
     }
+
+    @Transactional
+    public OptionResponse subtractOptionQuantity(Long optionID, Long quantity){
+        Option option = optionRepository.findById(optionID).orElseThrow();
+        if(option.getQuantity() <= quantity) throw new IllegalArgumentException("현재 옵션의 수량 보다 큰 값을 뺄 수 없습니다.");
+        option.subtractQuantity(quantity);
+        return new OptionResponse(option);
+    }
 }
