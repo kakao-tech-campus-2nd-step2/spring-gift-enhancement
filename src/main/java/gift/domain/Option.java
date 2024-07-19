@@ -47,4 +47,8 @@ public class Option {
         this.product = product;
         product.getOptions().add(this);
     }
+
+    public void updateQuantity(int quantity){
+        this.quantity = this.quantity - quantity;
+    }
 }
