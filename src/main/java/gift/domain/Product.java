@@ -1,6 +1,7 @@
 package gift.domain;
 
 import gift.dto.request.AddProductRequest;
+import gift.dto.request.UpdateProductRequest;
 import gift.util.ProductNameValidationUtil;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -36,6 +37,10 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     public Product() {
     }
 
@@ -47,11 +52,21 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Product(AddProductRequest productRequest) {
+    public Product(AddProductRequest productRequest, Category category) {
         ProductNameValidationUtil.isValidProductName(productRequest.getName());
         this.name = productRequest.getName();
         this.price = productRequest.getPrice();
         this.imageUrl = productRequest.getImageUrl();
+        this.category = category;
+    }
+
+    public Product(Long id, UpdateProductRequest productRequest, Category category) {
+        ProductNameValidationUtil.isValidProductName(productRequest.getName());
+        this.id = id;
+        this.name = productRequest.getName();
+        this.price = productRequest.getPrice();
+        this.imageUrl = productRequest.getImageUrl();
+        this.category = category;
     }
 
     public Long getId() {
@@ -70,6 +85,10 @@ public class Product {
         return imageUrl;
     }
 
+    public String getCategory() {
+        return category.getName();
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -85,5 +104,9 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

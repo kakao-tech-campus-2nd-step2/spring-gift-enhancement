@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${product.name}</td>
                         <td>${product.price}</td>
                         <td><img src="${product.imageUrl}" alt="Image" width="50"/></td>
+                        <td>${product.category}</td>
                         <td>
                             <a href="/page/manage/products/update/${product.id}">Edit</a>
                             <button onclick="deleteProduct(${product.id})">Delete</button>

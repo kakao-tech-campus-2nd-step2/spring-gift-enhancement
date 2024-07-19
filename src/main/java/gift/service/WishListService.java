@@ -4,19 +4,21 @@ import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
 import gift.dto.WishProduct;
-import gift.dto.response.WishProductsResponse;
+import gift.dto.response.WishProductResponse;
+import gift.exception.CustomException;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static gift.constant.Message.ADD_SUCCESS_MSG;
 import static gift.constant.Message.DELETE_SUCCESS_MSG;
+import static gift.exception.ErrorCode.DATA_NOT_FOUND;
 
 @Service
 public class WishListService {
@@ -31,13 +33,11 @@ public class WishListService {
         this.productRepository = productRepository;
     }
 
-    public Page<WishProductsResponse> getWishList(Long memberId, int page) {
-        List<WishProductsResponse> wishProducts = getWishProducts(memberId);
-
-        PageRequest pageRequest = PageRequest.of(page, 3);
-        int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), wishProducts.size());
-        return new PageImpl<>(wishProducts.subList(start, end), pageRequest, wishProducts.size());
+    public Page<WishProductResponse> getWishList(Long memberId, Pageable pageable) {
+        List<WishProductResponse> wishProducts = getWishProducts(memberId);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), wishProducts.size());
+        return new PageImpl<>(wishProducts.subList(start, end), pageable, wishProducts.size());
     }
 
     public String addWishProduct(WishProduct wishProduct) {
@@ -51,14 +51,14 @@ public class WishListService {
     }
 
     private Wish wish(Long memberId, Long productId) {
-        Member member = memberRepository.findMemberById(memberId).get();
-        Product product = productRepository.findProductById(productId).get();
+        Member member = memberRepository.findMemberById(memberId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
+        Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         return new Wish(member, product);
     }
 
-    private List<WishProductsResponse> getWishProducts(Long memberId) {
+    private List<WishProductResponse> getWishProducts(Long memberId) {
         List<Wish> wishes = wishRepository.findWishByMemberId(memberId);
         return wishes.stream()
-                .map(wish -> new WishProductsResponse(wish.getProduct())).toList();
+                .map(wish -> new WishProductResponse(wish.getProduct())).toList();
     }
 }
