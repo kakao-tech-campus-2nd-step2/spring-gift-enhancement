@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -108,7 +109,9 @@ class ProductControllerTest {
         //when
         var result = mockMvc.perform(postRequest);
         //then
-        result.andExpect(status().isCreated());
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        deleteProductWithCreatedHeader(createdResult);
     }
 
     @Test
@@ -139,9 +142,7 @@ class ProductControllerTest {
         //then
         var createdResult = result.andExpect(status().isCreated()).andReturn();
 
-        var location = createdResult.getResponse().getHeader("Location");
-        var productId = location.replaceAll("/api/products/", "");
-        productService.deleteProduct(Long.parseLong(productId));
+        deleteProductWithCreatedHeader(createdResult);
     }
 
     @Test
@@ -155,7 +156,9 @@ class ProductControllerTest {
         //when
         var result = mockMvc.perform(postRequest);
         //then
-        result.andExpect(status().isCreated());
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        deleteProductWithCreatedHeader(createdResult);
     }
 
     @Test
@@ -228,5 +231,11 @@ class ProductControllerTest {
         for (var product : productResponseList) {
             productService.deleteProduct(product.id());
         }
+    }
+
+    private void deleteProductWithCreatedHeader(MvcResult mvcResult) {
+        var location = mvcResult.getResponse().getHeader("Location");
+        var productId = location.replaceAll("/api/products/", "");
+        productService.deleteProduct(Long.parseLong(productId));
     }
 }
