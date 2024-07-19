@@ -37,4 +37,9 @@ public class PageController {
     public String manageUser(){
         return "adminUser.html";
     }
+
+    @GetMapping("/adminCategories")
+    public String manageCategory(){
+        return "adminCategory.html";
+    }
 }

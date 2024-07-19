@@ -3,6 +3,10 @@ package gift.DTO.Category;
 public class CategoryRequest {
     String name;
 
+    public CategoryRequest(){
+
+    }
+
     public CategoryRequest(String name) {
         this.name = name;
     }
