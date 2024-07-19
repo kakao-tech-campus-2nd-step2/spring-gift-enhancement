@@ -46,4 +46,8 @@ public class Option {
         this.name = optionDTO.getName();
         this.quantity = optionDTO.getQuantity();
     }
+
+    public void subtract(int quantity) {
+        this.quantity -= quantity;
+    }
 }

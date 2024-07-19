@@ -41,4 +41,13 @@ public class OptionService {
     public void delete(Long id) {
         optionRepository.deleteById(id);
     }
+
+    public Option subtract(Long id, int amount) {
+        Option option = findById(id);
+        if (option.getQuantity() < amount) {
+            throw new IllegalArgumentException("Not enough quantity");
+        }
+        option.subtract(amount);
+        return optionRepository.save(option);
+    }
 }
