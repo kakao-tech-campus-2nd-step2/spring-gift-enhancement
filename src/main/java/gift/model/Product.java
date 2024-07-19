@@ -58,7 +58,7 @@ public class Product extends BasicEntity{
             return;
         }
         checkDuplicateName(entity.getName());
-        entity.updateOptionByProduct(this);
+        entity.setProduct(this);
         options.add(entity);
     }
 

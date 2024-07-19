@@ -35,7 +35,7 @@ public class Option extends BasicEntity{
         this.quantity = quantity;
     }
 
-    public void updateOptionByProduct(Product product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 

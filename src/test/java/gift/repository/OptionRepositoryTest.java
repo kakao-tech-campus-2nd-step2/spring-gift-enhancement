@@ -41,7 +41,7 @@ class OptionRepositoryTest {
         List<Option> options = List.of(new Option(oName, oQuantity));
         Product product = productRepository.save(
                 new Product(pName, pPrice, pImageUrl, category, options));
-        options.get(0).updateOptionByProduct(product);
+        options.get(0).setProduct(product);
 
         // when
         Option actual = optionRepository.findByIdFetchJoin(options.get(0).getId()).orElse(null);
@@ -65,7 +65,7 @@ class OptionRepositoryTest {
         int oQuantity = 123;
         List<Option> options = List.of(new Option(oName, oQuantity));
         Product product = productRepository.save(new Product(pName, pPrice, pImageUrl, category, options));
-        options.get(0).updateOptionByProduct(product);
+        options.get(0).setProduct(product);
 
         // when
         List<Option> actual = optionRepository.findAllByProductIdFetchJoin(product.getId());
