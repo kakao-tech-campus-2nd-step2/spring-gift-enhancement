@@ -15,7 +15,17 @@ Content-Type: application/json
   "imageUrl": "http://example.com/image.jpg",
   "category": {
     "name": "교환권"
-  }
+  },
+  "options": [
+    {
+      "name": "Option A",
+      "quantity": 100
+    },
+    {
+      "name": "Option B",
+      "quantity": 200
+    }
+  ]
 }
 
 ### 상품 추가 (유효하지 않은 데이터)
@@ -44,7 +54,17 @@ Content-Type: application/json
   "imageUrl": "http://example.com/updated.jpg",
   "category": {
     "name": "교환권"
-  }
+  },
+  "options": [
+    {
+      "name": "Updated Option A",
+      "quantity": 120
+    },
+    {
+      "name": "Updated Option B",
+      "quantity": 220
+    }
+  ]
 }
 
 ### 특정 상품 삭제
@@ -93,7 +113,7 @@ POST {{baseUrl}}/api/categories
 Content-Type: application/json
 
 {
-  "name": "상품권",
+  "name": "교환권",
   "color": "#0000FF",
   "imageUrl": "http://example.com/image.jpg",
   "description": ""
@@ -109,3 +129,30 @@ Content-Type: application/json
   "imageUrl": "http://example.com/image_updated.jpg",
   "description": ""
 }
+
+### 상품 옵션 조회
+GET {{baseUrl}}/api/products/1/options
+
+### 상품 옵션 추가
+POST {{baseUrl}}/api/products/1/options
+Content-Type: application/json
+
+{
+  "name": "New Option",
+  "quantity": 150
+}
+
+### 특정 옵션 조회
+GET {{baseUrl}}/api/products/1/options/1
+
+### 특정 옵션 수정
+PUT {{baseUrl}}/api/products/1/options/1
+Content-Type: application/json
+
+{
+  "name": "Updated Option",
+  "quantity": 180
+}
+
+### 특정 옵션 삭제
+DELETE {{baseUrl}}/api/products/1/options/1
