@@ -53,8 +53,8 @@ public class JpaOptionTest {
         Option option1 = new Option("옵션1", 10L, product);
         Option option2 = new Option("옵션2", 20L, product);
 
-        assertThat(option1.checkDuplicateOptionName("옵션1")).isTrue();
-        assertThat(option2.checkDuplicateOptionName("옵션2")).isTrue();
-        assertThat(option1.checkDuplicateOptionName("옵션3")).isFalse();
+        assertThat(product.checkDuplicateOptionName("옵션1")).isTrue();
+        assertThat(product.checkDuplicateOptionName("옵션2")).isTrue();
+        assertThat(product.checkDuplicateOptionName("옵션3")).isFalse();
     }
 }
