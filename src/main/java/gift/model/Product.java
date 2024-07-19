@@ -79,12 +79,4 @@ public class Product {
     public List<Option> getOptions() {
         return options;
     }
-    public boolean checkDuplicateOptionName(String optionName) {
-        for (Option option : options) {
-            if (option.getName().equals(optionName)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

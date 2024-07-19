@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Entity(name = "options")
 public class Option {
     @Id
@@ -28,12 +30,10 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public Option(String name, Long quantity) {
+    public Option(String name, Long quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
-    }
 
-    public void setProduct(Product product) {
         if (this.product != null) {
             this.product.getOptions().remove(this);
         }
@@ -54,5 +54,11 @@ public class Option {
 
     public Product getProduct() {
         return product;
+    }
+
+    public boolean checkDuplicateOptionName(String optionName) {
+        List<Option> options = this.product.getOptions();
+        return options.stream()
+                .anyMatch(option -> option.getName().equals(optionName));
     }
 }

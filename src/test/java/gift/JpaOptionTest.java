@@ -36,8 +36,7 @@ public class JpaOptionTest {
     @Test
     @DisplayName("옵션 저장 테스트")
     void saveOption() {
-        Option option = new Option("옵션 이름", 10L);
-        option.setProduct(product);
+        Option option = new Option("옵션 이름", 10L, product);
         Option savedOption = optionRepository.save(option);
 
         assertAll(
@@ -51,14 +50,11 @@ public class JpaOptionTest {
     @Test
     @DisplayName("옵션 이름 중복 확인 테스트")
     void checkDuplicateOptionName() {
-        Option option1 = new Option("옵션1", 10L);
-        Option option2 = new Option("옵션2", 20L);
+        Option option1 = new Option("옵션1", 10L, product);
+        Option option2 = new Option("옵션2", 20L, product);
 
-        option1.setProduct(product);
-        option2.setProduct(product);
-
-        assertThat(product.checkDuplicateOptionName("옵션1")).isTrue();
-        assertThat(product.checkDuplicateOptionName("옵션2")).isTrue();
-        assertThat(product.checkDuplicateOptionName("옵션3")).isFalse();
+        assertThat(option1.checkDuplicateOptionName("옵션1")).isTrue();
+        assertThat(option2.checkDuplicateOptionName("옵션2")).isTrue();
+        assertThat(option1.checkDuplicateOptionName("옵션3")).isFalse();
     }
 }
