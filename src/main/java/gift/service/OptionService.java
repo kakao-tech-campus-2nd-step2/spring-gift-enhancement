@@ -25,15 +25,15 @@ public class OptionService {
     }
 
     @Transactional
-    public void save(OptionRequest optionRequest){
+    public void save(Long productId, OptionRequest optionRequest){
         if(optionRepository.existsByName(optionRequest.name())) {
             throw new DuplicateOptionNameException(Messages.OPTION_NAME_ALREADY_EXISTS);
         }
-        ProductResponse productResponse = productService.findById(optionRequest.productId());
+        ProductResponse productResponse = productService.findById(productId);
         optionRepository.save(new Option(optionRequest.name(), optionRequest.quantity(), productResponse.toEntity()));
     }
 
-    public OptionResponse findById(Long id){
+    public OptionResponse findById(Long productId, Long id){
         return optionRepository.findById(id)
                 .map(OptionResponse::from)
                 .orElseThrow(()-> new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
