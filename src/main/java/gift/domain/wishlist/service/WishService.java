@@ -1,14 +1,16 @@
 package gift.domain.wishlist.service;
 
 import gift.domain.member.entity.Member;
+import gift.domain.member.exception.MemberNotFoundException;
 import gift.domain.member.repository.MemberRepository;
 import gift.domain.product.entity.Product;
+import gift.domain.product.exception.ProductNotFoundException;
 import gift.domain.product.repository.ProductRepository;
 import gift.domain.wishlist.dto.WishRequest;
 import gift.domain.wishlist.dto.WishResponse;
 import gift.domain.wishlist.entity.Wish;
+import gift.domain.wishlist.exception.WishNotFoundException;
 import gift.domain.wishlist.repository.WishRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,7 +49,7 @@ public class WishService {
     public void deleteWish(Long id, Member member) {
         Wish wish = wishRepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("not found entity"));
+            .orElseThrow(() -> new WishNotFoundException("not found entity"));
 
         if (wish.getMember().getId().equals(member.getId())) {
             wish.getMember().removeWish(wish);
@@ -63,11 +65,11 @@ public class WishService {
     private Wish DtoToEntity(WishRequest wishRequest) {
         Member member = memberRepository
             .findById(wishRequest.getMemberId())
-            .orElseThrow(() -> new EntityNotFoundException("해당하는 멤버가 존재하지 않습니다."));
+            .orElseThrow(() -> new MemberNotFoundException("해당하는 멤버가 존재하지 않습니다."));
 
         Product product = productRepository
             .findById(wishRequest.getProductId())
-            .orElseThrow(() -> new EntityNotFoundException("해당하는 상품이 존재하지 않습니다."));
+            .orElseThrow(() -> new ProductNotFoundException("해당하는 상품이 존재하지 않습니다."));
 
         return new Wish(member, product);
     }
