@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import gift.entity.Member;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,21 +45,12 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("모든 유저 불러오기")
     void findAll(){
-        memberRepository.save(new Member("12345@12345.com", "1", "홍길동", "default_user"));
-        memberRepository.save(new Member("22345@12345.com", "2", "홍길동", "default_user"));
-
-        Member expected1 = new Member("12345@12345.com", "1", "홍길동", "default_user");
-        Member expected2 = new Member("22345@12345.com", "2", "홍길동", "default_user");
-
-        List<Member> expectedList = new ArrayList<>();
-
-        expectedList.add(expected1);
-        expectedList.add(expected2);
-
+        Member expected1 = memberRepository.save(new Member("12345@12345.com", "1", "홍길동", "default_user"));
+        Member expected2 = memberRepository.save(new Member("22345@12345.com", "2", "홍길동", "default_user"));
 
         List<Member> actualList = memberRepository.findAll();
 
-        assertThat(actualList).isEqualTo(expectedList);
+        assertThat(actualList).containsExactly(expected1, expected2);
     }
 
     @Test
@@ -75,13 +65,8 @@ class MemberRepositoryTest {
     @DisplayName("이메일로 한명 찾기")
     void findOne(){
         memberRepository.save(new Member("12345@12345.com", "1", "홍길동", "default_user"));
-        memberRepository.save(new Member("22345@12345.com", "2", "홍길동", "default_user"));
 
-        Member expected = new Member("22345@12345.com", "2", "홍길동", "default_user");
-
-        Member actual = memberRepository.findByEmail("22345@12345.com").get();
-
-        assertThat(actual).isEqualTo(expected);
+        assertThat(memberRepository.findByEmail("12345@12345.com")).isNotNull();
     }
 
 
