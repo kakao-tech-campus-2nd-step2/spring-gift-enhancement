@@ -79,6 +79,5 @@ public class OptionService {
         }
 
         product.removeOption(option);
-        //optionRepository.deleteById(optionId); 이거 왜 안됨? 어이없을 무
     }
 }
