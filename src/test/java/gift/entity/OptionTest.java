@@ -42,4 +42,13 @@ class OptionTest {
 
         assertThat(optionRepository.save(option).getId()).isEqualTo(1L);
     }
+
+    @Test
+    @DisplayName("옵션 수량 차감")
+    void subtractSuccess() {
+        Option option = new Option("name", 100);
+        option.subtract(50);
+
+        assertThat(option.getQuantity()).isEqualTo(50);
+    }
 }
