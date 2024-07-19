@@ -38,7 +38,7 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, Category category) {
+    public Product(String name) {
         this.name = name;
         this.category = category;
     }

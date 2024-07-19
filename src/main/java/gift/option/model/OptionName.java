@@ -13,11 +13,7 @@ public class OptionName {
 
     public OptionName() {}
 
-    public OptionName(String name) {
-        this.name = this.name;
-    }
-
     public String getValue() {
-        return name;
+        return String.valueOf(name);
     }
 }

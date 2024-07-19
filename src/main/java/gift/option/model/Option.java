@@ -28,13 +28,17 @@ public class Option {
     private int quantity;
 
     // JPA에서 필요로 하는 기본 생성자
-    protected Option() {
+    protected Option(Long optionId, String name, int quantity) {
     }
 
     public Option(Product product, String name, int quantity) {
         this.product = product;
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public Option() {
+
     }
 
     public Product getProduct() {

@@ -1,0 +1,66 @@
+package gift.option.service;
+
+import gift.option.dto.OptionDto;
+import gift.option.repository.OptionRepository;
+import gift.product.model.Product;
+import gift.product.repository.ProductRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@SpringBootTest
+@Transactional
+class OptionServiceTest {
+
+    @Autowired
+    private OptionRepository optionRepository;
+
+    @Autowired
+    private OptionService optionService;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    private Product product;
+
+    @BeforeEach
+    public void setUp() {
+        product = new Product("Test Product");
+        productRepository.save(product);
+    }
+
+    @Test
+    public void 잘못된_문자를_옵션명에_사용한_경우() {
+        // Given
+        String name = "wrong@Option#Name";
+        OptionDto optionDto = new OptionDto(name, 10);
+
+        // When & Then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.addOptionToProduct(product.getProductId(), optionDto);
+        });
+
+        // 예외 메시지가 출력되는지
+        assertEquals("옳지 않은 문자가 사용되었습니다.", exception.getMessage());
+    }
+
+    @Test
+    public void 존재하지_않는_상품을_조회한_경우() {
+        // Given
+        Long nonExistentProductId = 9545669L;
+
+        // When & Then
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            productRepository.findById(nonExistentProductId)
+                    .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
+        });
+
+        // 예외 메시지가 출력되는지
+        assertEquals("해당 상품이 존재하지 않습니다.", exception.getMessage());
+    }
+}
