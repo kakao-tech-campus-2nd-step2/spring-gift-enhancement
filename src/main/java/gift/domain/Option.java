@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.dto.request.OptionRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -10,32 +11,31 @@ public class Option {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "옵션 이름은 필수 항목입니다.")
-    @Pattern(regexp = "^[\\w\\s()\\[\\]+\\-&/]+$")
-    @Size(max = 50, message = "옵션 이름은 공백을 포함하여 최대 50자입니다.")
+    @Column(nullable = false)
     private String name;
 
-    @Min(value = 1, message = "옵션 수량은 최소 1개 이상이어야 합니다.")
-    @Max(value = 99999999, message = "옵션 수량은 최대 1억 개 미만이어야 합니다.")
-    @NotNull(message = "옵션 수량은 필수 항목입니다.")
+    @Column(nullable = false)
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Option(String name, Integer quantity, Product product) {
+    public Option(String name, Integer quantity) {
         this.name = name;
         this.quantity = quantity;
-        this.product = product;
+    }
+
+    public Option(OptionRequest optionRequest){
+        this(optionRequest.getName(), optionRequest.getQuantity());
     }
 
     public Option() {
-
     }
 
     public void setProduct(Product product) {
         this.product = product;
+        product.getOptions().add(this);
     }
 
     public String getName() {
@@ -52,5 +52,9 @@ public class Option {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

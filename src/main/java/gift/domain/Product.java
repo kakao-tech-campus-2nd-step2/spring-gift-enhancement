@@ -37,26 +37,22 @@ public class Product {
 
     public Product() { }
 
-    public Product(String name, Integer price, String imageUrl, Category category, List<Option> options) {
+    public Product(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        this.options = options;
-        this.options.forEach(option -> option.setProduct(this));
     }
 
-    public Product(ProductRequest productRequest, Category category, List<Option> options) {
-        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category, options);
+    public Product(ProductRequest productRequest, Category category) {
+        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category);
     }
 
-    public void update(ProductRequest productRequest, Category category, List<Option> options) {
+    public void update(ProductRequest productRequest, Category category) {
         this.name = productRequest.getName();
         this.price = productRequest.getPrice();
         this.imageUrl = productRequest.getImageUrl();
         this.category = category;
-        this.options = options;
-        this.options.forEach(option -> option.setProduct(this));
     }
 
     public long getId() {
@@ -90,8 +86,4 @@ public class Product {
         return options;
     }
 
-    public void setOptions(List<Option> options) {
-        this.options = options;
-        this.options.forEach(option -> option.setProduct(this)); // Ensure the product reference is set in each option
-    }
 }
