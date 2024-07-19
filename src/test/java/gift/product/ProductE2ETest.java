@@ -360,6 +360,39 @@ class ProductE2ETest {
     }
 
     @Test
+    @DisplayName("상품 수정 실패 - 옵션 값 검증 실패")
+    void 상품_수정_실패_옵션_값_검증_실패() {
+        // given
+        Long productId = 1L;
+        var duplicatedOptions = List.of(
+                new OptionReqDto("", 0)
+        );
+        var reqBody = new ProductReqDto("옵션 값 검증 실패", 20000, "https://www.google.com/keyboard.png", "카테고리1", duplicatedOptions);
+        var request = TestUtils.createRequestEntity(baseUrl + "/api/products/" + productId, reqBody, HttpMethod.PUT, accessToken);
+
+        // when
+        var actual = restTemplate.exchange(request, ErrorResponse.class);
+        var errorResponse = actual.getBody();
+
+        // then
+        assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(errorResponse).isNotNull();
+        assertThat(errorResponse).isInstanceOf(ErrorResponse.class);
+
+        assertThat(errorResponse.getCode()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getCode());
+        assertThat(errorResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(errorResponse.getMessage()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getMessage());
+
+        List<ValidationError> invalidParams = errorResponse.getInvalidParams();
+        assertThat(invalidParams).isNotNull();
+        assertThat(invalidParams.size()).isEqualTo(2);
+        assertThat(invalidParams.parallelStream().map(ValidationError::message)).containsExactlyInAnyOrder(
+                "옵션 이름은 필수 입력 값입니다.",
+                "옵션 수량은 최소 1개 이상 입력해야 합니다."
+        );
+    }
+
+    @Test
     @DisplayName("상품 삭제")
     void 상품_삭제() {
         //given
