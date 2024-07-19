@@ -41,4 +41,8 @@ public class Option {
     public void associateWithProduct(Product product) {
         this.product = product;
     }
+
+    public void subtract(int quantity) {
+        this.quantity -= quantity;
+    }
 }

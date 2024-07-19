@@ -2,7 +2,9 @@ package gift.service;
 
 import gift.dto.request.OptionRequest;
 import gift.entity.Option;
+import gift.exception.InsufficientOptionQuantityException;
 import gift.exception.OptionDuplicateException;
+import gift.exception.OptionNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,5 +29,21 @@ public class OptionService {
         if (isDuplicate) {
             throw new OptionDuplicateException(newOptionName);
         }
+    }
+
+    public Option checkOptionIdExist(Long targetOptionId, List<Option> options) {
+        for (Option option : options) {
+            if (option.getId().equals(targetOptionId)) {
+                return option;
+            }
+        }
+        throw new OptionNotFoundException(targetOptionId);
+    }
+
+    public void subtractOptionQuantity(Option targetOption, int subtractQuantity) {
+        if (targetOption.getQuantity() < subtractQuantity) {
+            throw new InsufficientOptionQuantityException(subtractQuantity);
+        }
+        targetOption.subtract(subtractQuantity);
     }
 }
