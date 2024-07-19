@@ -47,8 +47,9 @@ public class OptionServiceTest {
     public void setUp() {
         Category defaultCategory = new Category("기본", "기본 카테고리");
         AppUser defaultSeller = new AppUser("aabb@kakao.com", "1234", Role.USER, "aaaa");
-        option = new Option("option", 10, 300, product);
         product = new Product("test", 100, "image", defaultSeller, defaultCategory);
+        product.setId(5L);
+        option = new Option("option", 10, 300, product);
         createRequest = new CreateOptionRequest("option", 10, 300);
         updateRequest = new UpdateOptionRequest("option2", 10, 300);
     }
@@ -79,7 +80,6 @@ public class OptionServiceTest {
     public void updateOption_ShouldThrowEntityNotFoundException_WhenOptionNotExists() {
         // given
         when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.empty());
-        ;
 
         // when,then
         assertThrows(EntityNotFoundException.class,
@@ -88,10 +88,11 @@ public class OptionServiceTest {
     }
 
     @Test
-    @DisplayName("삭제 요청 시 옵션이 존재할 때 옵션을 삭제할 수 있다.")
+    @DisplayName("삭제 요청 시 2개 이상의 옵션이 존재할 때 옵션을 삭제할 수 있다.")
     public void deleteOption_ShouldDeleteOption_WhenProductExists() {
         // given
         when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.of(option));
+        when(optionRepository.countByProductIdAndIsActiveTrue(product.getId())).thenReturn(2);
 
         // when
         optionService.deleteOption(product, option.getId());
@@ -99,6 +100,18 @@ public class OptionServiceTest {
         // then
         verify(optionRepository, times(1)).save(any(Option.class));
         assertFalse(option.isActive());
+    }
+
+    @Test
+    @DisplayName("삭제 요청 시 1개의 옵션이 존재할 때 옵션을 삭제할 수 없다.")
+    public void deleteOption_ShouldNotDeleteOption_WhenProductExists() {
+        // given
+        when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.of(option));
+        when(optionRepository.countByProductIdAndIsActiveTrue(product.getId())).thenReturn(1);
+
+        // when, then
+        assertThrows(IllegalStateException.class, () -> optionService.deleteOption(product, option.getId()));
+        verify(optionRepository, times(0)).save(any(Option.class));
     }
 
     @Test

@@ -68,11 +68,11 @@ public class OptionService {
     @Transactional(readOnly = true)
     public Option getOption(Long optionId) {
         Optional<Option> option = optionRepository.findByIdAndIsActiveTrue(optionId);
-        return option.orElseThrow(() -> new EntityNotFoundException("Category"));
+        return option.orElseThrow(() -> new EntityNotFoundException("Option"));
     }
 
     private void checkOptionOwner(Product product, Option option) {
-        if (option.isOwner(product.getId())) {
+        if (!option.isOwner(product.getId())) {
             throw new EntityNotFoundException("Option");
         }
     }
