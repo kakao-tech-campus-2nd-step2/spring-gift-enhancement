@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.domain.Category;
+import gift.domain.CategoryName;
 import gift.domain.Product;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -24,11 +26,17 @@ public class ProductDTO {
 
     private String description;
 
+    @NotNull(message = "카테고리는 필수 입력 항목입니다.")
+    private CategoryName categoryName;
+
+    public ProductDTO() {}
+
     private ProductDTO(ProductDTOBuilder builder) {
         this.name = builder.name;
         this.price = builder.price;
         this.imageUrl = builder.imageUrl;
         this.description = builder.description;
+        this.categoryName = builder.categoryName;
     }
 
     public String getName() {
@@ -47,11 +55,16 @@ public class ProductDTO {
         return description;
     }
 
+    public CategoryName getCategoryName() {
+        return categoryName;
+    }
+
     public static class ProductDTOBuilder {
         private String name;
         private BigDecimal price;
         private String imageUrl;
         private String description;
+        private CategoryName categoryName;
 
         public ProductDTOBuilder name(String name) {
             this.name = name;
@@ -73,17 +86,23 @@ public class ProductDTO {
             return this;
         }
 
+        public ProductDTOBuilder categoryName(CategoryName categoryName) {
+            this.categoryName = categoryName;
+            return this;
+        }
+
         public ProductDTO build() {
             return new ProductDTO(this);
         }
     }
 
-    public Product toEntity() {
+    public Product toEntity(Category category) {
         return new Product.ProductBuilder()
             .name(this.name)
             .price(this.price)
             .imageUrl(this.imageUrl)
             .description(this.description)
+            .category(category)
             .build();
     }
 }

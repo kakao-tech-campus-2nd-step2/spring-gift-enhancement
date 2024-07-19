@@ -31,6 +31,10 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     protected Product() {
     }
 
@@ -41,6 +45,7 @@ public class Product {
         this.imageUrl = builder.imageUrl;
         this.description = builder.description;
         this.wishes = builder.wishes;
+        this.category = builder.category;
     }
 
     public Long getId() {
@@ -67,6 +72,10 @@ public class Product {
         return wishes;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     public static class ProductBuilder {
         private Long id;
         private String name;
@@ -74,6 +83,7 @@ public class Product {
         private String imageUrl;
         private String description;
         private List<Wish> wishes;
+        private Category category;
 
         public ProductBuilder id(Long id) {
             this.id = id;
@@ -102,6 +112,11 @@ public class Product {
 
         public ProductBuilder wishes(List<Wish> wishes) {
             this.wishes = wishes;
+            return this;
+        }
+
+        public ProductBuilder category(Category category) {
+            this.category = category;
             return this;
         }
 
