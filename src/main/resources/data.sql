@@ -6,4 +6,5 @@ INSERT INTO product (name, price, image_url, category_id) VALUES
 INSERT INTO member (email, password) VALUES
     ('admin@email.com', 'cGFzc3dvcmQ='); -- Base64 encoded 'password'
 
-
+INSERT INTO options (name, quantity, product_id) VALUES
+    ('01. [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 1);
