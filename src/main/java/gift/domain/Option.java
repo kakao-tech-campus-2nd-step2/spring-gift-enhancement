@@ -77,5 +77,11 @@ public class Option {
                 throw new IllegalStateException("상품에는 최소 한 개 이상의 옵션이 존재해야합니다.");
             }
         }
+
+        public void validDelete(){
+            if(options.size() == 1){
+                throw new IllegalStateException("옵션이 한 개 있을 때는 삭제 할 수 없습니다.");
+            }
+        }
     }
 }

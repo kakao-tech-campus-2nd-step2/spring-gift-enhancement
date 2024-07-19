@@ -54,6 +54,9 @@ public class OptionService {
 
     public Long deleteOption(Long optionId) {
         Option option = getOption(optionId);
+        Options optionList = new Options(
+            jpaOptionRepository.findAllByProduct(option.getProduct()));
+        optionList.validDelete();
         jpaOptionRepository.delete(option);
         return option.getId();
     }
