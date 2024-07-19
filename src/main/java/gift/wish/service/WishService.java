@@ -1,5 +1,4 @@
 package gift.wish.service;
-
 import gift.product.dto.ProductDto;
 import gift.user.dto.UserDto;
 import gift.product.entity.Product;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class WishService {
