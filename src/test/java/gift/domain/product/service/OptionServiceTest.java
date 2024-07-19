@@ -14,6 +14,7 @@ import gift.domain.product.entity.Product;
 import gift.domain.product.repository.OptionJpaRepository;
 import gift.domain.product.repository.ProductJpaRepository;
 import gift.exception.DuplicateOptionNameException;
+import gift.exception.InvalidOptionInfoException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -95,5 +96,61 @@ class OptionServiceTest {
             () -> assertThat(actual).hasSize(1),
             () -> assertThat(actual.get(0)).isEqualTo(OptionDto.from(option))
         );
+    }
+
+    @Test
+    @DisplayName("옵션 수정 서비스 테스트")
+    void update() {
+        // given
+        OptionDto optionDto = new OptionDto(1L, "수박맛", 969);
+        product.addOption(optionDto.toOption(product));
+
+        OptionDto optionUpdateDto = new OptionDto(1L, "자두맛", 90);
+        Option expected = optionUpdateDto.toOption(product);
+
+        given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(optionJpaRepository.save(any(Option.class))).willReturn(expected);
+
+        // when
+        OptionDto actual = optionService.update(1L, optionUpdateDto);
+
+        // then
+        assertThat(actual).isEqualTo(OptionDto.from(expected));
+    }
+
+    @Test
+    @DisplayName("옵션 수정 서비스 중복 옵션 테스트")
+    void update_fail_duplicate_name() {
+        // given
+        OptionDto optionDto = new OptionDto(1L, "수박맛", 969);
+        product.addOption(optionDto.toOption(product));
+        OptionDto optionDto2 = new OptionDto(2L, "자두맛", 80);
+        product.addOption(optionDto2.toOption(product));
+
+        OptionDto optionUpdateDto = new OptionDto(1L, "자두맛", 90);
+        Option expected = optionUpdateDto.toOption(product);
+
+        given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(optionJpaRepository.save(any(Option.class))).willReturn(expected);
+
+        // when & then
+        assertThrows(DuplicateOptionNameException.class, () -> optionService.update(1L, optionUpdateDto));
+    }
+
+    @Test
+    @DisplayName("옵션 수정 서비스 존재하지 않는 옵션 테스트")
+    void update_fail_wrong_id() {
+        // given
+        OptionDto optionDto = new OptionDto(1L, "수박맛", 969);
+        product.addOption(optionDto.toOption(product));
+
+        OptionDto optionUpdateDto = new OptionDto(2L, "자두맛", 90);
+        Option expected = optionUpdateDto.toOption(product);
+
+        given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(optionJpaRepository.save(any(Option.class))).willReturn(expected);
+
+        // when & then
+        assertThrows(InvalidOptionInfoException.class, () -> optionService.update(1L, optionUpdateDto));
     }
 }

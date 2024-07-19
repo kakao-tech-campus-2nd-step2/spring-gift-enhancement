@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -133,6 +134,24 @@ class OptionRestControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(objectMapper.writeValueAsString(optionDtos)))
+            .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("옵션을 수정에 성공하는 경우")
+    void update_success() throws Exception {
+        // given
+        OptionDto optionDto = new OptionDto(1L, "01 [Best] 시어버터 핸드 & 시어 스틱 립 밤", 969);
+        String jsonContent = objectMapper.writeValueAsString(optionDto);
+
+        given(optionService.update(anyLong(), any(OptionDto.class))).willReturn(optionDto);
+
+        // when & then
+        mockMvc.perform(put(DEFAULT_URL + "/1")
+            .content(jsonContent)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().json(objectMapper.writeValueAsString(optionDto)))
             .andDo(print());
     }
 }
