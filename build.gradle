@@ -23,14 +23,8 @@ repositories {
  * runtimeOnly : 런타임 시에만 필요
  * **/
 dependencies {
-    // JPA 표준 API
-    implementation 'jakarta.persistence:jakarta.persistence-api:3.0.0'
-
     // Spring Web 스타터
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    // Spring Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-crypto'
     // Spring Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     // Spring JDBC 스타터, JDBC 사용에 필요
@@ -51,8 +45,6 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     // JUnit
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    // Hibernate
-    implementation 'org.hibernate.orm:hibernate-core:5.6.14.Final'
 }
 
 tasks.named('test') {
