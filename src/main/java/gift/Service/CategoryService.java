@@ -1,7 +1,6 @@
 package gift.Service;
 
 import gift.Model.Category;
-import gift.Model.Product;
 import gift.Repository.CategoryRepository;
 import gift.Repository.ProductRepository;
 import java.util.List;
@@ -20,12 +19,12 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Category addCategory(Category category){
-        return categoryRepository.save(category);
-    }
-
     public Category getCategoryById(Long id){
         return categoryRepository.findCategoryById(id);
+    }
+
+    public Category addCategory(Category category){
+        return categoryRepository.save(category);
     }
 
     public Category updateCategory(Category category){

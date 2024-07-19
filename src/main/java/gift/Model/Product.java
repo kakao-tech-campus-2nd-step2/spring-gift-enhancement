@@ -1,7 +1,6 @@
 package gift.Model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -83,7 +82,4 @@ public class Product {
         return category;
     }
 
-    public void setCategoryNull(){
-        this.category = null;
-    }
 }

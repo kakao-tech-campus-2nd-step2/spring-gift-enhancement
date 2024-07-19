@@ -2,12 +2,10 @@ package gift.Service;
 
 import gift.Model.Member;
 import gift.Model.Product;
-import gift.Model.Wishlist;
 import gift.Repository.MemberRepository;
 import gift.Repository.ProductRepository;
 import gift.Repository.WishlistRepository;
 
-import java.util.List;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;

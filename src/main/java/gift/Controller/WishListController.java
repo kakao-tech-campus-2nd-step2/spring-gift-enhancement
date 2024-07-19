@@ -4,12 +4,10 @@ package gift.Controller;
 import gift.Model.Member;
 import gift.Model.Product;
 
-import gift.Model.Wishlist;
 import gift.Service.WishlistService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Controller;

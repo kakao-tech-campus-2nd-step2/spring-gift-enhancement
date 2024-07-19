@@ -1,9 +1,10 @@
-package gift;
+package gift.RepositoryTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.Model.Category;
+import gift.Model.Option;
 import gift.Model.Product;
 import gift.Repository.ProductRepository;
 
@@ -19,13 +20,13 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
     //데이터 sql로 이미 값이 존재하는 상태이므로 똑같은 값 만들기
-    private final Category category = new Category(1L, "교환권","#6c95d1","https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png","");
+    private final Category category = new Category(1L, "교환권","#6c95d1","https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png","",null);
 
     @DirtiesContext
     @Test
     void findAll(){
-        Product expected1 = new Product(1L,"A",1000,"A",category);
-        Product expected2 = new Product(2L,"B",2000,"B",category);
+        Product expected1 = new Product(1L,"A",1000,"A",category,null);
+        Product expected2 = new Product(2L,"B",2000,"B",category,null);
 
         productRepository.save(expected1);
         productRepository.save(expected2);
@@ -57,12 +58,13 @@ public class ProductRepositoryTest {
             () -> assertThat(actual2.getCategory().getColor()).isEqualTo(category.getColor()),
             () -> assertThat(actual2.getCategory().getImageUrl()).isEqualTo(category.getImageUrl()),
             () -> assertThat(actual2.getCategory().getDescription()).isEqualTo(category.getDescription())
+
         );
 
     }
     @Test
     void findProductById(){
-        Product expected = new Product(1L,"A",1000,"A",category);
+        Product expected = new Product(1L,"A",1000,"A",category,null);
         Product product = productRepository.save(expected);
         Product actual = productRepository.findProductById(product.getId());
         assertAll(
@@ -80,7 +82,7 @@ public class ProductRepositoryTest {
     }
     @Test
     void save(){
-        Product expected = new Product(1L,"A",1000,"A",category);
+        Product expected = new Product(1L,"A",1000,"A",category,null);
         Product actual = productRepository.save(expected);
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -97,7 +99,7 @@ public class ProductRepositoryTest {
     }
     @Test
     void deleteById(){
-        Product expected = new Product(1L,"A",1000,"A",category);
+        Product expected = new Product(1L,"A",1000,"A",category,null);
         Product product = productRepository.save(expected);
         productRepository.deleteById(product.getId());
         assertAll(
