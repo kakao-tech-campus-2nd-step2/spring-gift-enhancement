@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "option")
@@ -28,7 +27,8 @@ public class Option {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Option() {}
+    public Option() {
+    }
 
     public Option(String name, int quantity, Product product) {
         this.name = name;
@@ -52,11 +52,15 @@ public class Option {
         return quantity;
     }
 
+    public void updateQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public Product getProduct() {
         return product;
     }
 
-    public void updateQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
