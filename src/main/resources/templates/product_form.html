@@ -10,6 +10,8 @@
 <form th:action="${productDto.id} != null ? '/api/products/update/' + ${productDto.id} : '/api/products/create'"
       method="post">
     <input type="hidden" th:if="${productDto.id}" th:value="${productDto.id}" name="id"/>
+
+    <h2>Product Information</h2>
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" th:value="${productDto.name}" required/>
     <br>
@@ -19,19 +21,20 @@
         <option th:each="category : ${categories}"
                 th:value="${category.id}"
                 th:text="${category.name}"
-                th:selected="${category.id == productDto.categoryId}"> </option>
+                th:selected="${category.id == productDto.categoryId}"></option>
     </select>
     <br>
     <label for="price">Price:</label>
     <input type="number" id="price" name="price" th:value="${productDto.price}" required/>
     <br>
     <label for="imageUrl">Image URL:</label>
-    <input type="url" id="imageUrl" name="imageUrl" th:value="${productDto.imageUrl}" required/>
+    <input type="url" id="imageUrl" name="imageUrl" th:value="${product.imageUrl}" required/>
     <br>
-    <!-- 에러 메시지 표시 -->
+
     <div th:if="${error}" style="color: red;">
         <p th:text="${error}"></p>
     </div>
+
     <button type="submit" th:text="${productDto.id} != null ? 'Update' : 'Save'">Save</button>
     <a href="#" th:href="@{/api/products}">Cancel</a>
 </form>
