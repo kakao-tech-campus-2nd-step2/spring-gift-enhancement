@@ -1,7 +1,8 @@
 package gift.service;
 
-
+import gift.domain.category.Category;
 import gift.domain.product.Product;
+import gift.repository.category.CategoryRepository;
 import gift.repository.product.ProductRepository;
 import gift.service.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,9 @@ class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository; // Mock the category repository
+
     @InjectMocks
     private ProductService productService;
 
@@ -36,8 +40,8 @@ class ProductServiceTest {
     @Test
     void getAllProducts() {
         List<Product> productList = new ArrayList<>();
-        productList.add(new Product("Product 1", 1000L, "Description 1", "image1.jpg"));
-        productList.add(new Product("Product 2", 2000L, "Description 2", "image2.jpg"));
+        productList.add(new Product("Product 1", 1000L, "Description 1", "image1.jpg", null));
+        productList.add(new Product("Product 2", 2000L, "Description 2", "image2.jpg", null));
         Page<Product> page = new PageImpl<>(productList);
 
         when(productRepository.findAll(any(PageRequest.class))).thenReturn(page);
@@ -49,70 +53,55 @@ class ProductServiceTest {
         assertEquals("Product 2", products.getContent().get(1).getName());
     }
 
-
-
     @Test
     void getProductById_ProductNotFound() {
-        // Given
         Long productId = 1L;
-
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
-
-        // Then
         assertThrows(IllegalArgumentException.class, () -> productService.getProductById(productId));
     }
 
     @Test
     void addProduct() {
-        // Given
-        Product product = new Product("New Product", 1500L, "New Description", "new_image.jpg");
+        Product product = new Product("New Product", 1500L, "New Description", "new_image.jpg", null);
+        Long categoryId = 1L;
+        Category category = mock(Category.class); // Use Mockito to create a mock Category
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
 
-        // When
-        productService.addProduct(product);
+        productService.addProduct(product, categoryId);
 
-        // Then
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
     @Test
     void addProduct_InvalidProductName() {
-        // Given
-        Product product = new Product( null, 1500L, "New Description", "new_image.jpg");
-
-        // Then
-        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(product));
+        Product product = new Product(null, 1500L, "New Description", "new_image.jpg", null);
+        Long categoryId = 1L;
+        assertThrows(IllegalArgumentException.class, () -> productService.addProduct(product, categoryId));
     }
 
     @Test
     void updateProduct() {
-        // Given
-        Product product = new Product( "Updated Product", 2000L, "Updated Description", "updated_image.jpg");
+        Product product = new Product("Updated Product", 2000L, "Updated Description", "updated_image.jpg", null);
+        Long categoryId = 1L;
+        Category category = mock(Category.class); // Use Mockito to create a mock Category
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
 
-        // When
-        productService.updateProduct(product);
+        productService.updateProduct(product, categoryId);
 
-        // Then
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
     @Test
     void updateProduct_InvalidProductName() {
-        // Given
-        Product product = new Product(null, 2000L, "Updated Description", "updated_image.jpg");
-
-        // Then
-        assertThrows(IllegalArgumentException.class, () -> productService.updateProduct(product));
+        Product product = new Product(null, 2000L, "Updated Description", "updated_image.jpg", null);
+        Long categoryId = 1L;
+        assertThrows(IllegalArgumentException.class, () -> productService.updateProduct(product, categoryId));
     }
 
     @Test
     void deleteProduct() {
-        // Given
         Long productId = 1L;
-
-        // When
         productService.deleteProduct(productId);
-
-        // Then
         verify(productRepository, times(1)).deleteById(productId);
     }
 }

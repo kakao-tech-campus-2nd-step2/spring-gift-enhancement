@@ -8,7 +8,7 @@ public class ProductRequestDTO {
     @NotBlank(message = "상품 이름은 필수입니다.")
     @Size(max = 15, message = "상품 이름은 최대 15자까지 입력할 수 있습니다.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣()\\[\\]+\\-&/_]*$", message = "상품 이름에 허용되지 않는 특수 문자가 포함되어 있습니다.")
-    @ValidProductName //카카오 검증
+    @ValidProductName
     private String name;
 
     @NotNull(message = "상품 가격은 필수입니다.")
@@ -20,19 +20,12 @@ public class ProductRequestDTO {
 
     private String imageUrl; // 이미지 URL
 
+    @NotNull(message = "카테고리는 필수입니다.")
+    private Long categoryId;
 
-    public ProductRequestDTO(String name, Long price, String description, String imageUrl) {
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        this.imageUrl = imageUrl;
-    }
+    public Long getCategoryId() { return categoryId; }
+    public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
 
-    public Product toProduct() {
-        return new Product(this.name, this.price, this.description, this.imageUrl);
-    }
-
-    // Getters and Setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 

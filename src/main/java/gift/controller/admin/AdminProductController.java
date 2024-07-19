@@ -1,7 +1,9 @@
 package gift.controller.admin;
 
+import gift.domain.category.Category;
 import gift.domain.product.Product;
 import gift.domain.product.ProductRequestDTO;
+import gift.service.category.CategoryService;
 import gift.service.product.ProductService;
 import gift.util.ImageStorageUtil;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,15 +22,20 @@ import org.springframework.data.domain.Pageable;
 @RequestMapping("/admin/products")
 public class AdminProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public AdminProductController(ProductService productService) {
+    public AdminProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
     public String getAllProducts(Model model, Pageable pageable) {
         Page<Product> productsPage = productService.getAllProducts(pageable);
         model.addAttribute("productsPage", productsPage);
+
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "product";
     }
 
@@ -38,8 +47,8 @@ public class AdminProductController {
         String imageUrl = ImageStorageUtil.encodeImagePathToBase64(imagePath);
 
         Product product = new Product(productRequestDTO.getName(), productRequestDTO.getPrice(),
-                productRequestDTO.getDescription(), imageUrl);
-        productService.addProduct(product);
+                productRequestDTO.getDescription(), imageUrl, null);
+        productService.addProduct(product, productRequestDTO.getCategoryId());
 
         return "redirect:/admin/products";
     }
@@ -59,9 +68,9 @@ public class AdminProductController {
         String imageUrl = ImageStorageUtil.encodeImagePathToBase64(imagePath);
 
         product.update(productRequestDTO.getName(), productRequestDTO.getPrice(),
-                productRequestDTO.getDescription(), imageUrl);
+                productRequestDTO.getDescription(), imageUrl, null);
 
-        productService.updateProduct(product);
+        productService.updateProduct(product, productRequestDTO.getCategoryId());
 
         return "redirect:/admin/products";
     }
