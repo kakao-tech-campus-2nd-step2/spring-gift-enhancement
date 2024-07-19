@@ -10,16 +10,16 @@ INSERT INTO category VALUES (908, '아티스트/캐릭터');
 
 -- product data for test
 INSERT INTO product (id, name, price, image_url, category_id) VALUES (1, '아이스 카페 아메리카노 T', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (2, '아이스 카페 아메리카노 G', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (3, '아이스 카페 아메리카노 V', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (4, '아이스 카페 라테 T', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (5, '아이스 카페 라테 G', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (6, '아이스 카페 라테 V', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (7, '아이스 카푸치노 T', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (8, '아이스 카푸치노 G', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (9, '아이스 카푸치노 V', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (10, '자바칩 프라푸치노 T', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
--- INSERT INTO product (id, name, price, image_url, category_id) VALUES (11, '시그니처 초콜릿 T', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (2, '아이스 카페 아메리카노 G', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (3, '아이스 카페 아메리카노 V', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (4, '아이스 카페 라테 T', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (5, '아이스 카페 라테 G', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (6, '아이스 카페 라테 V', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (7, '아이스 카푸치노 T', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (8, '아이스 카푸치노 G', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (9, '아이스 카푸치노 V', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (10, '자바칩 프라푸치노 T', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
+INSERT INTO product (id, name, price, image_url, category_id) VALUES (11, '시그니처 초콜릿 T', 4500, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg', 901);
 
 -- member data for test
 INSERT INTO member VALUES (1, 'member1.com', 'asdf');
