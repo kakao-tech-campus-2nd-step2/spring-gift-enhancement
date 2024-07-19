@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const productData = {
             name: document.getElementById('name').value,
             price: document.getElementById('price').value,
-            imageUrl: document.getElementById('imageUrl').value
+            imageUrl: document.getElementById('imageUrl').value,
+            categoryId: document.getElementById('categoryId').value
         };
 
         fetch(url, {

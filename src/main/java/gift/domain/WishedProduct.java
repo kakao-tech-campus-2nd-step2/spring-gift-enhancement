@@ -42,6 +42,7 @@ public class WishedProduct {
     public WishedProductDTO toDTO() {
         return new WishedProductDTO(id, member.getEmail(), product.getId(), amount);
     }
+
     public Long getId() {
         return id;
     }

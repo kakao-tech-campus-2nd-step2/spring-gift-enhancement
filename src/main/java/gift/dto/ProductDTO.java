@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -19,10 +20,13 @@ public record ProductDTO(
     int price,
 
     @NotNull
-    String imageUrl
+    String imageUrl,
+
+    @NotNull
+    long categoryId
 ) {
 
-    public Product toEntity() {
-        return new Product(name, price, imageUrl);
+    public Product toEntity(Category category) {
+        return new Product(name, price, imageUrl, category);
     }
 }

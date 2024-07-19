@@ -1,5 +1,6 @@
 package gift.repository;
 
+import static gift.util.MemberFixture.createMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -20,7 +21,7 @@ public class MemberRepositoryTest {
     @Test
     void save() {
         // given
-        Member expected = new Member("admin@gmail.com", "admin");
+        Member expected = createMember();
 
         // when
         Member actual = memberRepository.save(expected);
@@ -36,8 +37,7 @@ public class MemberRepositoryTest {
     @Test
     void findById() {
         // given
-        Member member = new Member("admin@gmail.com", "admin");
-        Member expected = memberRepository.save(member);
+        Member expected = memberRepository.save(createMember());
 
         // when
         Member actual = memberRepository.findById(expected.getEmail())
@@ -51,9 +51,8 @@ public class MemberRepositoryTest {
     @Test
     void update() {
         // given
-        Member member = new Member("admin@gmail.com", "admin");
-        memberRepository.save(member);
-        Member expected = new Member("admin@gmail.com", "test");
+        memberRepository.save(createMember());
+        Member expected = createMember("test");
 
         // when
         Member actual = memberRepository.save(expected);
