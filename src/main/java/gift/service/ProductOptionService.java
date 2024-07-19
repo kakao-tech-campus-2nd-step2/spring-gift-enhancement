@@ -47,7 +47,7 @@ public class ProductOptionService {
     public Long createProductOption(long productId, CreateOption create) {
         if (productOptionRepository.findByNameAndProductId(create.getName(), productId)
             .isPresent()) {
-            throw new BaseHandler(HttpStatus.UNAUTHORIZED, "옵션의 이름이 중복됩니다.");
+            throw new BaseHandler(HttpStatus.FORBIDDEN, "옵션의 이름이 중복됩니다.");
         }
 
         ProductEntity productEntity = productRepository.findById(productId)
