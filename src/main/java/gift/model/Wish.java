@@ -9,12 +9,16 @@ public class Wish {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_option_id", nullable = false)
+    private ProductOption productOption;
 
     public Wish() {
     }
@@ -37,5 +41,13 @@ public class Wish {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public ProductOption getProductOption() {
+        return productOption;
+    }
+
+    public void setProductOption(ProductOption productOption) {
+        this.productOption = productOption;
     }
 }

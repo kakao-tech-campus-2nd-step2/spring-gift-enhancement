@@ -1,17 +1,23 @@
 package gift.controller;
 
-import gift.annotation.LoginMember;
 import gift.dto.WishRequest;
 import gift.dto.WishResponse;
 import gift.model.Member;
 import gift.model.Product;
+import gift.model.ProductOption;
 import gift.model.Wish;
 import gift.service.ProductService;
+import gift.service.ProductOptionService;
 import gift.service.WishService;
+import gift.annotation.LoginMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/wishes")
@@ -23,6 +29,9 @@ public class WishController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ProductOptionService productOptionService;
+
     @GetMapping
     public Page<WishResponse> getWishes(@LoginMember Member member, Pageable pageable) {
         return wishService.getWishesByMemberId(member.getId(), pageable);
@@ -31,9 +40,14 @@ public class WishController {
     @PostMapping
     public Wish addWish(@RequestBody WishRequest wishRequest, @LoginMember Member member) {
         Product product = productService.findById(wishRequest.getProductId());
+        ProductOption productOption = productOptionService.findById(wishRequest.getOptionId());
+        if (productOption == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid product option");
+        }
         Wish wish = new Wish();
         wish.setMember(member);
         wish.setProduct(product);
+        wish.setProductOption(productOption);
         return wishService.addWish(wish);
     }
 

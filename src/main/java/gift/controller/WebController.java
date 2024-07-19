@@ -2,8 +2,10 @@ package gift.controller;
 
 import gift.model.Category;
 import gift.model.Product;
+import gift.model.ProductOption;
 import gift.service.CategoryService;
-import gift.service.WishService;
+import gift.service.ProductService;
+import gift.service.ProductOptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,11 @@ public class WebController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ProductOptionService productOptionService;
 
     @GetMapping("/register")
     public String showRegisterForm() {
@@ -89,6 +96,7 @@ public class WebController {
             model.addAttribute("categories", categories);
             return "product/new";
         }
+        setProductOptions(product);
         ResponseEntity<Object> response = productController.addProduct(product, bindingResult);
         if (response.getStatusCode() == HttpStatus.BAD_REQUEST) {
             Map<String, Object> errors = (Map<String, Object>) response.getBody();
@@ -122,6 +130,7 @@ public class WebController {
             model.addAttribute("categories", categories);
             return "product/edit";
         }
+        setProductOptions(product);
         ResponseEntity<Object> response = productController.updateProduct(id, product, bindingResult);
         if (response.getStatusCode() == HttpStatus.BAD_REQUEST) {
             Map<String, Object> errors = (Map<String, Object>) response.getBody();
@@ -140,5 +149,24 @@ public class WebController {
             return "error/500";
         }
         return "redirect:/products";
+    }
+
+    @GetMapping("/products/{id}/options")
+    public String viewProductOptions(@PathVariable Long id, Model model) {
+        Product product = productService.findById(id);
+        if (product == null) {
+            return "error/404";
+        }
+        model.addAttribute("product", product);
+        model.addAttribute("options", product.getOptions());
+        return "product/options";
+    }
+
+    private void setProductOptions(Product product) {
+        if (product.getOptions() != null) {
+            for (ProductOption option : product.getOptions()) {
+                option.setProduct(product);
+            }
+        }
     }
 }

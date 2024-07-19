@@ -11,3 +11,10 @@
     - html 카테고리 기능 추가 : product/new,product/index,product/edit,user-products,user-wishes
 3. 카테고리 테스트 코드 : CategoryServiceTest
 4. setter 수정 및 Category 기능 추가에 따른 기존 테스트 코드들 수정
+
+### Step2
+
+1. ProductOption 기능 추가
+2. product_option 테이블 추가
+3. product/options.html 추가 및 기존 view 수정
+4. option 기능에 대한 ProductOptionServiceTest 추가

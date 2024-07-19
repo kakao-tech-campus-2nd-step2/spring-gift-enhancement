@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +32,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Wish> wishes;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductOption> options = new ArrayList<>();
 
     public Product() {
     }
@@ -66,6 +71,7 @@ public class Product {
         return wishes;
     }
 
+
     public void setWishes(List<Wish> wishes) {
         this.wishes = wishes;
     }
@@ -76,5 +82,17 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+    public List<ProductOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<ProductOption> options) {
+        this.options = options;
+        if (options != null) {
+            for (ProductOption option : options) {
+                option.setProduct(this);
+            }
+        }
     }
 }
