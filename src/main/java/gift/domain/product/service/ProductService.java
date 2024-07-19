@@ -1,8 +1,11 @@
 package gift.domain.product.service;
 
 import gift.domain.category.entity.Category;
+import gift.domain.category.exception.CategoryNotFoundException;
 import gift.domain.category.repository.CategoryRepository;
+import gift.domain.option.dto.OptionResponse;
 import gift.domain.option.service.OptionService;
+import gift.domain.product.dto.ProductCreateResponse;
 import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.dto.ProductResponse;
 import gift.domain.product.entity.Product;
@@ -42,12 +45,12 @@ public class ProductService {
         return productRepository.findAll(pageable).map(this::entityToDto);
     }
     @Transactional
-    public ProductResponse createProduct(ProductRequest productRequest) {
-        Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
+    public ProductCreateResponse createProduct(ProductRequest productRequest) {
+        Category savedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow(() -> new CategoryNotFoundException("해당 카테고리가 존재하지 않습니다."));
         Product savedProduct = productRepository.save(dtoToEntity(productRequest, savedCategory));
-        optionService.addOptionToProduct(savedProduct.getId(), productRequest.getOptionRequest());
+        OptionResponse optionResponse = optionService.addOptionToProduct(savedProduct.getId(), productRequest.getOptionRequest());
 
-        return entityToDto(savedProduct);
+        return new ProductCreateResponse(entityToDto(savedProduct),optionResponse);
     }
     @Transactional
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
