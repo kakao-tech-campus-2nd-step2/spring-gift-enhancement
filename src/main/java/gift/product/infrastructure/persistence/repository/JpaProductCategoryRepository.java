@@ -1,5 +1,6 @@
-package gift.product.infrastructure.persistence;
+package gift.product.infrastructure.persistence.repository;
 
+import gift.product.infrastructure.persistence.entity.ProductCategoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

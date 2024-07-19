@@ -1,5 +1,6 @@
 package gift.user;
 
+import gift.core.domain.user.UserAccount;
 import gift.user.infrastructure.persistence.JpaUserAccountRepository;
 import gift.user.infrastructure.persistence.UserAccountEntity;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ public class UserAccountRepositoryTests {
 
     @Test
     public void saveUserAccount() {
-        UserAccountEntity userAccount = new UserAccountEntity(0L, "test", "test");
+        UserAccountEntity userAccount = UserAccountEntity.of(0L, sampleUserAccount());
 
         userAccount = jpaUserAccountRepository.save(userAccount);
 
@@ -27,7 +28,7 @@ public class UserAccountRepositoryTests {
 
     @Test
     public void findByEmail() {
-        UserAccountEntity userAccount = new UserAccountEntity(0L, "test", "test");
+        UserAccountEntity userAccount = UserAccountEntity.of(0L, sampleUserAccount());
         jpaUserAccountRepository.save(userAccount);
 
         assertThat(jpaUserAccountRepository.findByEmail("test")).isPresent();
@@ -35,9 +36,13 @@ public class UserAccountRepositoryTests {
 
     @Test
     public void existsByEmail() {
-        UserAccountEntity userAccount = new UserAccountEntity(0L, "test", "test");
+        UserAccountEntity userAccount = UserAccountEntity.of(0L, sampleUserAccount());
         jpaUserAccountRepository.save(userAccount);
 
         assertThat(jpaUserAccountRepository.existsByEmail("test")).isTrue();
+    }
+
+    private UserAccount sampleUserAccount() {
+        return new UserAccount("test", "test");
     }
 }

@@ -1,13 +1,14 @@
-package gift.product.infrastructure.persistence;
+package gift.product.infrastructure.persistence.repository;
 
 import gift.core.PagedDto;
 import gift.core.domain.product.Product;
 import gift.core.domain.product.ProductCategory;
 import gift.core.domain.product.ProductRepository;
+import gift.product.infrastructure.persistence.entity.ProductCategoryEntity;
+import gift.product.infrastructure.persistence.entity.ProductEntity;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -37,7 +38,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void save(@Nonnull Product product) {
-        jpaProductRepository.save(mapToProductEntity(product));
+        jpaProductRepository.save(ProductEntity.fromDomain(product));
     }
 
     @Override
@@ -70,15 +71,5 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public void remove(Long id) {
         jpaProductRepository.deleteById(id);
-    }
-
-    private ProductEntity mapToProductEntity(Product product) {
-        return new ProductEntity(
-                product.id(),
-                product.name(),
-                product.price(),
-                product.imageUrl(),
-                ProductCategoryEntity.toEntity(ProductCategory.of(product.category()))
-        );
     }
 }

@@ -1,7 +1,7 @@
 package gift.wishes.infrastructure.persistence;
 
 import gift.core.BaseEntity;
-import gift.product.infrastructure.persistence.ProductEntity;
+import gift.product.infrastructure.persistence.entity.ProductEntity;
 import gift.user.infrastructure.persistence.UserEntity;
 import jakarta.persistence.*;
 
@@ -16,18 +16,22 @@ public class WishEntity extends BaseEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
 
-    public WishEntity() {
+    protected WishEntity() {
     }
 
-    public WishEntity(Long id, UserEntity user, ProductEntity product) {
+    protected WishEntity(Long id, UserEntity user, ProductEntity product) {
         super(id);
         this.user = user;
         this.product = product;
     }
 
-    public WishEntity(UserEntity user, ProductEntity product) {
+    protected WishEntity(UserEntity user, ProductEntity product) {
         this.user = user;
         this.product = product;
+    }
+
+    public static WishEntity of(UserEntity user, ProductEntity product) {
+        return new WishEntity(user, product);
     }
 
     public UserEntity getUser() {

@@ -7,4 +7,8 @@ public record ProductCategory(
     public static ProductCategory of(String name) {
         return new ProductCategory(0L, name);
     }
+
+    public static ProductCategory from(ProductCategory category) {
+        return new ProductCategory(category.id(), category.name());
+    }
 }

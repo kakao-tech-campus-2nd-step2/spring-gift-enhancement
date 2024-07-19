@@ -15,6 +15,11 @@ public class APIExceptionHandler {
         return errorResponse(exception.getCode());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException exception) {
+        return errorResponse(ErrorCode.INVALID_REQUEST, exception.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         FieldError error = exception.getBindingResult().getFieldErrors().getFirst();

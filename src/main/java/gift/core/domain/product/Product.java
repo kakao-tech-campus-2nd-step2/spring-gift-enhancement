@@ -39,8 +39,12 @@ public class Product {
         return imageUrl;
     }
 
-    public String category() {
+    public String categoryName() {
         return category.name();
+    }
+
+    public ProductCategory category() {
+        return category;
     }
 
     public Product applyUpdate(

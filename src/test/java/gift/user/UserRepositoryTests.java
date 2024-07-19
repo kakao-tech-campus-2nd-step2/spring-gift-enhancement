@@ -1,5 +1,7 @@
 package gift.user;
 
+import gift.core.domain.user.User;
+import gift.core.domain.user.UserAccount;
 import gift.user.infrastructure.persistence.JpaUserRepository;
 import gift.user.infrastructure.persistence.UserEntity;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,7 @@ public class UserRepositoryTests {
     @Test
     public void saveTest() {
         // Given
-        UserEntity user = new UserEntity("test");
+        UserEntity user = UserEntity.fromDomain(sampleUser());
 
         // When
         user = jpaUserRepository.save(user);
@@ -30,7 +32,7 @@ public class UserRepositoryTests {
     @Test
     public void deleteTest() {
         // Given
-        UserEntity user = new UserEntity("test");
+        UserEntity user = UserEntity.fromDomain(sampleUser());
         user = jpaUserRepository.save(user);
 
         // When
@@ -43,7 +45,7 @@ public class UserRepositoryTests {
     @Test
     public void findByIdTest() {
         // Given
-        UserEntity user = new UserEntity("test");
+        UserEntity user = UserEntity.fromDomain(sampleUser());
         user = jpaUserRepository.save(user);
 
         // When
@@ -52,5 +54,9 @@ public class UserRepositoryTests {
         // Then
         assertThat(foundUser.getId()).isEqualTo(user.getId());
         assertThat(foundUser.getName()).isEqualTo(user.getName());
+    }
+
+    private User sampleUser() {
+        return new User("test", new UserAccount("test", "test"));
     }
 }
