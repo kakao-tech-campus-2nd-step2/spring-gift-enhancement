@@ -17,6 +17,10 @@ public class OptionEntity {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "fk_option_product", foreignKeyDefinition = "FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE"))
+    private ProductEntity productEntity;
+
     public OptionEntity() {
 
     }

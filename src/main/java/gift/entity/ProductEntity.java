@@ -27,10 +27,10 @@ public class ProductEntity {
     private List<WishListEntity> wishListEntities;
 
     @ManyToOne(targetEntity = CategoryEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "fk_products_category_id_refer_categories_id", foreignKeyDefinition = "FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE"))
     private CategoryEntity categoryEntity;
 
-    @OneToMany(mappedBy = "productEntity")
+    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OptionEntity> optionEntities;
 
     public ProductEntity() {

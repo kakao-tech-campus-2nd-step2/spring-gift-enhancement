@@ -13,6 +13,11 @@ INSERT INTO products (id, name, price, image_url, category_id) VALUES (2, 'Sampl
 INSERT INTO products (id, name, price, image_url, category_id) VALUES (3, 'Sample3', 3000, 'http://image3.jpg', 2);
 ALTER TABLE products ALTER COLUMN id RESTART WITH 4;
 
+INSERT INTO options (id, name, quantity, product_id) VALUES (1, 'Option1', 10, 1);
+INSERT INTO options (id, name, quantity, product_id) VALUES (2, 'Option2', 20, 1);
+INSERT INTO options (id, name, quantity, product_id) VALUES (3, 'Option3', 30, 2);
+ALTER TABLE options ALTER COLUMN id RESTART WITH 4;
+
 INSERT INTO wish_lists (id, product_id, member_id) VALUES (1, 1, 1);
 INSERT INTO wish_lists (id, product_id, member_id) VALUES (2, 2, 1);
 INSERT INTO wish_lists (id, product_id, member_id) VALUES (3, 1, 2);
