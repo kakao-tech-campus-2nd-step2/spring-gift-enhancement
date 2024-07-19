@@ -4,12 +4,12 @@ import gift.product.business.dto.OptionRegisterDto;
 import java.util.List;
 
 public record RequestOptionsDto(
-    List<RequestOptionDto> options
+    List<RequestOptionCreateDto> options
 ) {
 
     public List<OptionRegisterDto> toOptionRegisterDtos() {
         return options.stream()
-            .map(RequestOptionDto::toOptionRegisterDto)
+            .map(RequestOptionCreateDto::toOptionRegisterDto)
             .toList();
     }
 }

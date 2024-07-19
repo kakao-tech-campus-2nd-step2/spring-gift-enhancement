@@ -21,7 +21,7 @@ public record RequestProductDto(
     @Size(max = 255) String description,
     @URL String imageUrl,
     @NotNull Long categoryId,
-    @Size(min = 1) List<RequestOptionDto> options
+    @Size(min = 1) List<RequestOptionCreateDto> options
 ) {
 
     public ProductRegisterDto toProductRegisterDto() {

@@ -4,7 +4,7 @@ import gift.product.presentation.dto.RequestProductDto;
 import gift.product.presentation.dto.RequestProductIdsDto;
 import gift.product.presentation.dto.ResponsePagingProductDto;
 import gift.product.presentation.dto.ResponseProductDto;
-import gift.product.presentation.dto.RequestOptionDto;
+import gift.product.presentation.dto.RequestOptionCreateDto;
 import gift.product.business.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
@@ -52,7 +52,7 @@ public class ProductController {
         @RequestBody @Valid RequestProductDto requestProductDto) {
         var productRegisterDto = requestProductDto.toProductRegisterDto();
         var optionRegisterDtos = requestProductDto.options().stream()
-            .map(RequestOptionDto::toOptionRegisterDto)
+            .map(RequestOptionCreateDto::toOptionRegisterDto)
             .toList();
         Long createdId = productService.createProduct(productRegisterDto, optionRegisterDtos);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdId);
