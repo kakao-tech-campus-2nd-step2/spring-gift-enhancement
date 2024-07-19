@@ -138,4 +138,18 @@ public class Option {
                 ", option=" + option +
                 '}';
     }
+
+    public Option remove(int num) {
+        List<String> options = this.option;
+        if(options.size() - num > 0){
+            List<String> newOptions = new ArrayList<>();
+            newOptions.addAll(options);
+            for(int i=0; i<num; i++){
+                newOptions.removeFirst();
+            }
+            this.option = newOptions;
+            return this;
+        }
+        throw new IllegalStateException("옵션은 하나 이상 존재해야 합니다.");
+    }
 }

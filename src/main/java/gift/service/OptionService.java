@@ -34,4 +34,11 @@ public class OptionService {
         Option newOption = updateOption.update(oldName, newName);
         optionReposityory.save(newOption);
     }
+
+    public void removeOption(Long id, int num){
+        Option removeOption = optionReposityory.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("해당 옵션이 없습니다."));
+        Option newOption = removeOption.remove(num);
+        optionReposityory.save(newOption);
+    }
 }
