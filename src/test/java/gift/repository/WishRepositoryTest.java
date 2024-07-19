@@ -3,9 +3,11 @@ package gift.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.domain.Category;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
+import gift.repository.fixture.CategoryFixture;
 import gift.repository.fixture.MemberFixture;
 import gift.repository.fixture.ProductFixture;
 import gift.repository.fixture.WishFixture;
@@ -33,15 +35,20 @@ class WishRepositoryTest {
     private ProductRepository productRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private EntityManager em;
 
     @Test
     @DisplayName("Create Test")
     void save(){
         // given
+        Category category = CategoryFixture.createCategory("categoryName","color","description","url");
+        categoryRepository.save(category);
         Member member = MemberFixture.createMember("user@example.com", "password");
         memberRepository.save(member);
-        Product product = ProductFixture.createProduct("test",100,"kkk");
+        Product product = ProductFixture.createProduct("test",100,"kkk",category);
         productRepository.save(product);
         Wish expected = WishFixture.createWish(member,product,5);
         // when
@@ -59,9 +66,11 @@ class WishRepositoryTest {
     @DisplayName("Find Wishes By Member ID Test")
     void findByMemberId() {
         // given
+        Category category = CategoryFixture.createCategory("categoryName","color","description","url");
+        categoryRepository.save(category);
         Member member = MemberFixture.createMember("user@example.com", "password");
         memberRepository.save(member);
-        Product product = ProductFixture.createProduct("test",100,"kkk");
+        Product product = ProductFixture.createProduct("test",100,"kkk",category);
         productRepository.save(product);
 
         Wish expected = WishFixture.createWish(member,product,5);
@@ -83,9 +92,11 @@ class WishRepositoryTest {
     @DisplayName("Find Wish By Member ID And Product Name Test")
     void findByMemberIdAndProductId() {
         // given
+        Category category = CategoryFixture.createCategory("categoryName","color","description","url");
+        categoryRepository.save(category);
         Member member = MemberFixture.createMember("user@example.com", "password");
         memberRepository.save(member);
-        Product product = ProductFixture.createProduct("test",100,"kkk");
+        Product product = ProductFixture.createProduct("test",100,"kkk",category);
         productRepository.save(product);
 
         Wish expected = WishFixture.createWish(member,product,5);
@@ -106,11 +117,13 @@ class WishRepositoryTest {
     @Test
     void findAllByMemberInOrderByCreatedAt(){
         // given
+        Category category = CategoryFixture.createCategory("categoryName","color","description","url");
+        categoryRepository.save(category);
         Member member = MemberFixture.createMember("user@example.com", "password");
         memberRepository.save(member);
-        Product product1 = ProductFixture.createProduct("test1",100,"@.@");
+        Product product1 = ProductFixture.createProduct("test1",100,"@.@",category);
         productRepository.save(product1);
-        Product product2 = ProductFixture.createProduct("test2",100,"@.@");
+        Product product2 = ProductFixture.createProduct("test2",100,"@.@",category);
         productRepository.save(product2);
 
         Wish expected1 = WishFixture.createWish(member,product1,5);
@@ -136,9 +149,11 @@ class WishRepositoryTest {
     @Test
     void delteById(){
         // given
+        Category category = CategoryFixture.createCategory("categoryName","color","description","url");
+        categoryRepository.save(category);
         Member member = MemberFixture.createMember("user@example.com", "password");
         memberRepository.save(member);
-        Product product = ProductFixture.createProduct("test",100,"kkk");
+        Product product = ProductFixture.createProduct("test",100,"kkk",category);
         productRepository.save(product);
 
         Wish expected = WishFixture.createWish(member,product,5);
