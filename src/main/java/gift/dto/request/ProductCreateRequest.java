@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Size;
 
 public class ProductCreateRequest {
     
-    private Long id;
-
     @Size(max = 15, message = "Product name is too long!")
     @Pattern(regexp = "^[a-zA-Z0-9 ()\\[\\]+\\-\\&\\/\\_가-힣]*$", message = "Product name has invalid character")
     @Pattern(regexp = "^(?!.*카카오).*$", message = "'카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용 가능합니다")
@@ -34,9 +32,6 @@ public class ProductCreateRequest {
         this.quantity = quantity;
     }
 
-    public Long getId(){
-        return id;
-    }
 
     public String getProductName(){
         return productName;

@@ -33,11 +33,12 @@ public class ProductService{
 
     private OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
+    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository, OptionRepository optionRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.wishListRepository = wishListRepository;
         this.categoryRepository = categoryRepository;
         this.optionRepository = optionRepository;
+        this.optionService = optionService;
     }
 
     @Transactional
@@ -70,19 +71,23 @@ public class ProductService{
     @Transactional
     public void addProduct(ProductCreateRequest productCreateRequest) {
   
-        if(productRepository.findById(productCreateRequest.getId()).isEmpty()){
-
+        if(productRepository.findByNameAndPriceAndImageUrl(productCreateRequest.getProductName(), 
+                                                            productCreateRequest.getPrice(),
+                                                            productCreateRequest.getImageUrl()).isEmpty()){
+        
             Category category = categoryRepository.findByName(productCreateRequest.getCategory())
                     .orElseThrow(() -> new CustomException("Category with name" + productCreateRequest.getCategory() + "NOT FOUND" , HttpStatus.NOT_FOUND));
-
+            
             Product product = new Product(productCreateRequest.getProductName(), 
                                           productCreateRequest.getPrice(),
                                           productCreateRequest.getImageUrl(),
                                           category);
-            productRepository.save(product);
-            optionService.addOption(new OptionDto(1L, productCreateRequest.getOptionName(), productCreateRequest.getQuantity()), productCreateRequest.getId());
+            
+            Product savedProduct = productRepository.save(product);
+            
+            optionService.addOption(new OptionDto(0L, productCreateRequest.getOptionName(), productCreateRequest.getQuantity()), savedProduct.getId());
         }else{
-            throw new CustomException("Product with id " + productCreateRequest.getId() + "exists", HttpStatus.CONFLICT);
+            throw new CustomException("Product with name " + productCreateRequest.getProductName() + "exists", HttpStatus.CONFLICT);
         }
     }
 
