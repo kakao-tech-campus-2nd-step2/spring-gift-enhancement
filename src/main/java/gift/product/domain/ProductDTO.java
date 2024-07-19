@@ -1,5 +1,7 @@
 package gift.product.domain;
 
+import gift.option.domain.OptionDTO;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDTO {
@@ -10,20 +12,21 @@ public class ProductDTO {
     private String imageUrl;
     private Long categoryId;
 
-    private List<String> optionNameList;
+    private List<OptionDTO> optionDTOList;
 
     public ProductDTO() {
         id = 0L;
+        optionDTOList = new ArrayList<>();
     }
 
     public ProductDTO(Long id, String name, Long price, String imageUrl, Long categoryId,
-        List<String> optionNameList) {
+        List<OptionDTO> optionDTOList) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
-        this.optionNameList = optionNameList;
+        this.optionDTOList = optionDTOList;
     }
 
     public Long getId() {
@@ -64,5 +67,13 @@ public class ProductDTO {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<OptionDTO> getOptionDTOList() {
+        return optionDTOList;
+    }
+
+    public void setOptionDTOList(List<OptionDTO> optionDTOList) {
+        this.optionDTOList = optionDTOList;
     }
 }
