@@ -24,7 +24,7 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
-    public List<OptionResponse> findOptionAll(long productId) {
+    public List<OptionResponse> findAllOption(long productId) {
         List<OptionResponse> options = validOptions(productId)
                 .stream().map(option -> new OptionResponse(option))
                 .collect(Collectors.toList());

@@ -32,7 +32,7 @@ public class OptionController {
     // 옵션리스트 반환
     @GetMapping("/{id}/options")
     public ResponseEntity<?> findOptionAll(@PathVariable(value = "id") long productId) {
-        List<OptionResponse> options = optionService.findOptionAll(productId);
+        List<OptionResponse> options = optionService.findAllOption(productId);
         return ResponseEntity.ok(options);
     }
 
