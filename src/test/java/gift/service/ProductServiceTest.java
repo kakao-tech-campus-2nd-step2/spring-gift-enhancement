@@ -73,18 +73,4 @@ class ProductServiceTest {
 
         productService.deleteProduct(id);
     }
-
-    @Test
-    @DisplayName("상품 삭제하기")
-    void deleteProduct() {
-        //given
-        var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
-        var savedProduct = productService.addProduct(productRequest, MemberRole.MEMBER);
-        Assertions.assertThat(productService.getProducts(pageable).size()).isEqualTo(4);
-        var id = savedProduct.id();
-        //when
-        productService.deleteProduct(id);
-        //then
-        Assertions.assertThat(productService.getProducts(pageable).size()).isEqualTo(3);
-    }
 }

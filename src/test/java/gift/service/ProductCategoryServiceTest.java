@@ -31,7 +31,7 @@ class ProductCategoryServiceTest {
 
         productCategoryService.deleteCategory(savedProductCategory.id());
     }
-    
+
     @Test
     @DisplayName("중복된 이름의 카테고리 추가하기")
     void addProductCategoryFailWithDuplicatedCategoryName() {

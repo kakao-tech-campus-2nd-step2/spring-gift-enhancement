@@ -1,13 +1,13 @@
 package gift.service;
 
-import gift.dto.ProductBasicInformation;
 import gift.dto.ProductOptionRequest;
 import gift.dto.ProductOptionResponse;
+import gift.exception.BadRequestException;
 import gift.exception.NotFoundElementException;
+import gift.model.Product;
 import gift.model.ProductOption;
 import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,50 +26,54 @@ public class ProductOptionService {
         this.productRepository = productRepository;
     }
 
-    public ProductOptionResponse addOption(ProductOptionRequest productOptionRequest) {
-        var productOption = saveOptionWithOptionRequest(productOptionRequest);
+    public ProductOptionResponse addOption(Long productId, ProductOptionRequest productOptionRequest) {
+        var productOption = saveOptionWithOptionRequest(productId, productOptionRequest);
         return getOptionResponseFromOption(productOption);
     }
 
-    public void updateOption(Long id, ProductOptionRequest productOptionRequest) {
+    public void updateOption(Long productId, Long id, ProductOptionRequest productOptionRequest) {
         var productOption = findOptionById(id);
-        productOption.updateOptionInfo(productOptionRequest.name(), productOptionRequest.additionalPrice());
+        if (!productOption.getProduct().getId().equals(productId)) {
+            throw new BadRequestException("잘못된 상품 옵션 수정 요청입니다.");
+        }
+        productOption.updateOptionInfo(productOptionRequest.name(), productOptionRequest.quantity());
         productOptionRepository.save(productOption);
     }
 
     @Transactional(readOnly = true)
-    public ProductOptionResponse getOption(Long id) {
-        var productOption = findOptionById(id);
-        return getOptionResponseFromOption(productOption);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProductOptionResponse> getOptions(Long productId, Pageable pageable) {
-        return productOptionRepository.findAllByProductId(productId, pageable)
+    public List<ProductOptionResponse> getOptions(Long productId) {
+        return productOptionRepository.findAllByProductId(productId)
                 .stream()
                 .map(this::getOptionResponseFromOption)
                 .toList();
     }
 
-    public void deleteOption(Long id) {
+    public void deleteOption(Long productId, Long id) {
+        var product = findProductById(productId);
+        var productOption = findOptionById(id);
+        product.getProductOptionList().remove(productOption);
         productOptionRepository.deleteById(id);
     }
 
-    private ProductOption saveOptionWithOptionRequest(ProductOptionRequest productOptionRequest) {
-        var product = productRepository.findById(productOptionRequest.productId())
-                .orElseThrow(() -> new NotFoundElementException(productOptionRequest.productId() + "를 가진 상품이 존재하지 않습니다."));
-        var productOption = new ProductOption(product, productOptionRequest.name(), productOptionRequest.additionalPrice());
+    private ProductOption saveOptionWithOptionRequest(Long productId, ProductOptionRequest productOptionRequest) {
+        var product = findProductById(productId);
+        var productOption = new ProductOption(product, productOptionRequest.name(), productOptionRequest.quantity());
         return productOptionRepository.save(productOption);
     }
 
     private ProductOptionResponse getOptionResponseFromOption(ProductOption productOption) {
         var product = productOption.getProduct();
-        var productBasicInformation = ProductBasicInformation.of(product.getId(), product.getName(), product.getPrice());
-        return ProductOptionResponse.of(productOption.getId(), productBasicInformation, productOption.getName(), productOption.getAdditionalPrice());
+        return ProductOptionResponse.of(productOption.getId(), productOption.getName(), productOption.getQuantity());
+    }
+
+    private Product findProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품이 존재하지 않습니다."));
+
     }
 
     private ProductOption findOptionById(Long id) {
         return productOptionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품옵션이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품 옵션이 존재하지 않습니다."));
     }
 }

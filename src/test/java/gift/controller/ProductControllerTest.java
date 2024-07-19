@@ -17,7 +17,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class ProductControllerTest {
 
     @Autowired
@@ -173,10 +176,12 @@ class ProductControllerTest {
     @Test
     @DisplayName("11개의 상품을 등록하였을 때, 2번째 페이지의 조회의 결과는 1개의 상품만을 반환한다.")
     void getProductsWithPageable() throws Exception {
+        List<ProductResponse> productResponseList = new ArrayList<>();
         //given
         var productRequest = new ProductRequest("햄버거()[]+-&/_**", 1000, "이미지 주소", 1L);
         for (int i = 0; i < 11; i++) {
-            productService.addProduct(productRequest, MemberRole.MEMBER);
+            var product = productService.addProduct(productRequest, MemberRole.MEMBER);
+            productResponseList.add(product);
         }
         var getRequest = get("/api/products?page=1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -186,9 +191,9 @@ class ProductControllerTest {
         //then
         var productResult = getResult.andExpect(status().isOk()).andReturn();
         var productListString = productResult.getResponse().getContentAsString();
-        var productResponseList = objectMapper.readValue(productListString, new TypeReference<List<ProductResponse>>() {
+        var productResponseResult = objectMapper.readValue(productListString, new TypeReference<List<ProductResponse>>() {
         });
-        Assertions.assertThat(productResponseList.size()).isEqualTo(4);
+        Assertions.assertThat(productResponseResult.size()).isEqualTo(4);
 
         deleteProducts(productResponseList);
     }

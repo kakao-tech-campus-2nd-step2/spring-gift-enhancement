@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class ProductCategoryControllerTest {
 
     @Autowired
@@ -134,6 +136,7 @@ class ProductCategoryControllerTest {
 
         var location = createdResult.getResponse().getHeader("Location");
         var categoryId = location.replaceAll("/api/categories/", "");
+
         productCategoryService.deleteCategory(Long.parseLong(categoryId));
     }
 }
