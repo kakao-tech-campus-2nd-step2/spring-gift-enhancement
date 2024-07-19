@@ -32,4 +32,8 @@ public class OptionRequestDTO {
     public Option toEntity(Product product) {
         return new Option(this.name, this.quantity, product);
     }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 }
