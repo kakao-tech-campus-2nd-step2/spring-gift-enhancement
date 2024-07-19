@@ -3,7 +3,6 @@ package gift.main.entity;
 import gift.main.dto.UserJoinRequest;
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,10 +25,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<WishProduct> wishProducts;
-    //유저가 사라진 경우 -> 위시리스트 무조건 삭제
-
     public User() {
     }
 
@@ -47,7 +42,6 @@ public class User {
         this.password = password;
         this.role = role;
     }
-
 
     public User(long id, String name, String email, String password, String role) {
         this.id = id;
@@ -70,7 +64,6 @@ public class User {
         this.password = password;
         this.role = Role.valueOf(role.toUpperCase());
     }
-
 
     public long getId() {
         return id;

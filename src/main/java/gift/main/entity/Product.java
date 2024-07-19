@@ -3,7 +3,6 @@ package gift.main.entity;
 import gift.main.dto.ProductRequest;
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -29,9 +28,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    private List<WishProduct> wishProducts;
 
     public Product() {
     }
@@ -103,9 +99,6 @@ public class Product {
         return category;
     }
 
-    public List<WishProduct> getWishProducts() {
-        return wishProducts;
-    }
 
     @Override
     public boolean equals(Object o) {
