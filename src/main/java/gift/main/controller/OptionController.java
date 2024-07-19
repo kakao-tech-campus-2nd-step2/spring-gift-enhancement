@@ -1,5 +1,6 @@
 package gift.main.controller;
 
+import gift.main.dto.OptionQuantityRequest;
 import gift.main.dto.OptionRequest;
 import gift.main.dto.OptionResponse;
 import gift.main.service.OptionService;
@@ -28,20 +29,23 @@ public class OptionController {
         this.optionService = optionService;
     }
 
+    // 옵션리스트 반환
     @GetMapping("/{id}/options")
     public ResponseEntity<?> findOptionAll(@PathVariable(value = "id") long productId) {
         List<OptionResponse> options = optionService.findOptionAll(productId);
         return ResponseEntity.ok(options);
     }
 
-    @DeleteMapping("/{productId}/options/{optionId}")
+    //특정 옵션 완전 삭제
+    @DeleteMapping("/{productId}/option/{optionId}")
     public ResponseEntity<?> deleteOption(@PathVariable(value = "productId") long productId,
                                           @PathVariable(value = "productId") long optionId) {
         optionService.deleteOption(productId, optionId);
         return ResponseEntity.ok("Option deleted successfully");
     }
 
-    @PostMapping("/{productId}/options")
+    //
+    @PostMapping("/{productId}/option")
     public ResponseEntity<?> addOption(@PathVariable(value = "productId") long productId,
                                        @PathVariable(value = "productId") long optionId,
                                        @Valid @RequestBody OptionRequest optionRequest) {
@@ -49,11 +53,19 @@ public class OptionController {
         return ResponseEntity.ok("Option added successfully");
     }
 
-    @PutMapping("/{productId}/options/{optionId}")
+    @PutMapping("/{productId}/option/{optionId}")
     public ResponseEntity<?> updateOption(@PathVariable(value = "productId") long productId,
                                           @PathVariable(value = "productId") long optionId,
                                           @Valid @RequestBody OptionRequest optionRequest) {
         optionService.updateOption(productId, optionId, optionRequest);
         return ResponseEntity.ok("Option updated successfully");
+    }
+
+    @PutMapping("/{productId}/option/{optionId}/quantity")
+    public ResponseEntity<?> changeOnionQuantity(@PathVariable(value = "productId") long productId,
+                                                 @PathVariable(value = "productId") long optionId,
+                                                 @Valid @RequestBody OptionQuantityRequest optionQuantityRequest) {
+        optionService.changeOptionQuantity(optionId, optionQuantityRequest );
+        return ResponseEntity.ok("Option Quantity changed successfully");
     }
 }
