@@ -56,24 +56,24 @@ public class Option {
     }
 
     public static class Options {
-        List<Option> optionList;
+        List<Option> options;
 
-        public Options(List<Option> optionList) {
-            this.optionList = optionList;
+        public Options(List<Option> options) {
+            this.options = options;
         }
 
         public List<Option> getOptionList() {
-            return optionList;
+            return options;
         }
 
         public void validDuplicateName(String name) {
-            if (optionList.stream().anyMatch(it -> it.name.equals(name))){
+            if (options.stream().anyMatch(it -> it.name.equals(name))){
                 throw new IllegalArgumentException("같은 이름의 옵션이 존재합니다.");
             }
         }
 
         public void validOptionCount() {
-            if(optionList.isEmpty()){
+            if(options.isEmpty()){
                 throw new IllegalStateException("상품에는 최소 한 개 이상의 옵션이 존재해야합니다.");
             }
         }
