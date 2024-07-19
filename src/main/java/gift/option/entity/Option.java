@@ -51,4 +51,8 @@ public class Option {
     public void changeProduct(Product product) {
         this.product = product;
     }
+
+    public void subtractStock(int quantity) {
+        this.quantity -= quantity;
+    }
 }
