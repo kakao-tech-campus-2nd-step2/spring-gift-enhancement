@@ -11,9 +11,7 @@ import gift.exception.InternalServerExceptions.InternalServerException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
-import gift.util.validator.databaseValidator.CategoryDatabaseValidator;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -28,21 +26,20 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final WishRepository wishRepository;
     private final CategoryRepository categoryRepository;
-    private final CategoryDatabaseValidator categoryDatabaseValidator;
 
     public ProductService(ProductRepository productRepository, WishRepository wishRepository,
-            CategoryRepository categoryRepository,
-            CategoryDatabaseValidator categoryDatabaseValidator) {
+            CategoryRepository categoryRepository) {
+
         this.productRepository = productRepository;
         this.wishRepository = wishRepository;
         this.categoryRepository = categoryRepository;
-        this.categoryDatabaseValidator = categoryDatabaseValidator;
     }
 
     @Transactional
     public void addProduct(ProductRequestDTO productRequestDTO) throws RuntimeException {
         try {
-            Category category = categoryDatabaseValidator.validate(productRequestDTO.categoryName());
+            Category category = categoryRepository.findByName(productRequestDTO.categoryName())
+                    .orElseThrow(() -> new BadRequestException("그러한 카테코리를 찾을 수 없습니다."));
             Product product = productRequestDTO.convertToProduct(category);
             categoryRepository.save(product.getCategory());
             productRepository.save(product);
