@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.util.Optional;
 
 @Entity
 public class Product {
@@ -71,19 +70,11 @@ public class Product {
         );
     }
 
-    public void updateProduct(Product product) {
-        Optional.ofNullable(product.name)
-            .ifPresent(updateName -> this.name = updateName);
-        Optional.of(product.price)
-            .ifPresent(updatePrice -> this.price = updatePrice);
-        Optional.ofNullable(product.imageUrl)
-            .ifPresent(updateImageUrl -> this.imageUrl = updateImageUrl);
-        Optional.ofNullable(product.category)
-            .ifPresent(categoryDTO -> category.updateCategory(category));
-    }
-
-    public void updateProduct(ProductDTO productDTO, Category category) {
-        updateProduct(new Product(productDTO, category));
+    public void update(String name, int price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     @Override
