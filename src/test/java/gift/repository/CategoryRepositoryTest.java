@@ -1,12 +1,15 @@
 package gift.repository;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.entity.Category;
 import gift.exception.DataNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,7 +21,7 @@ class CategoryRepositoryTest {
     CategoryRepository categoryRepository;
 
     @Test
-    void save() {
+    void testSaveCategory() {
         //given
         Category expected = new Category("카테고리");
 
@@ -54,13 +57,19 @@ class CategoryRepositoryTest {
     @Test
     void findAll() {
         //given
-        //data.sql에 삽입한 데이터로 조회
+
+        List<String> expected = Arrays.asList("교환권", "상품권", "뷰티", "패션", "식품", "리빙/도서", "레저/스포츠",
+            "아티스트/캐릭터", "유아동/반려", "디지털/가전", "카카오프렌즈", "트렌드 선물", "백화점"
+        );
         //when
         List<Category> actual = categoryRepository.findAll();
+        List<String> actualNames = actual.stream()
+            .map(Category::getName)
+            .collect(Collectors.toList());
 
         //then
-        assertThat(actual.size()).isEqualTo(13);
-
-
+        Collections.sort(actualNames);
+        Collections.sort(expected);
+        assertEquals(actualNames, expected);
     }
 }

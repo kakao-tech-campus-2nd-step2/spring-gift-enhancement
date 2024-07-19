@@ -23,7 +23,7 @@ public class OptionService {
 
     private boolean isDuplicateName(Option option) {
         Optional<Option> options = optionRepository.findByIdAndName(
-                option.getProduct().getId(), option.getName()
+            option.getProduct().getId(), option.getName()
         );
         return options.isPresent();
     }
