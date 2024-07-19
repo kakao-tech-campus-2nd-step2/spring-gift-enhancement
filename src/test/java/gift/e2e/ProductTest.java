@@ -58,7 +58,7 @@ class ProductTest {
     @Test
     @DisplayName("상품 생성")
     public void CreateProduct() {
-        CreateProduct body = new CreateProduct("test1", 1000, "test1", 1L,"option",100L);
+        CreateProduct body = new CreateProduct("test1", 1000, "test1", 1L, "option", 100L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

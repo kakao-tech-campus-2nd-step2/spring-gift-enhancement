@@ -26,16 +26,17 @@ public class ProductOrderService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public optionDetail decreaseProductOption(Long productId, Long optionId, decreaseProductOption decrease) {
+    public optionDetail decreaseProductOption(Long productId, Long optionId,
+        decreaseProductOption decrease) {
         ProductOptionEntity entity = productOptionRepository.findByProductIdAndId(
                 productId, optionId)
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 상품의 옵션이 존재하지 않습니다."));
 
-        if (entity.getQuantity()<decrease.getQuantity()){
+        if (entity.getQuantity() < decrease.getQuantity()) {
             throw new BaseHandler(HttpStatus.BAD_REQUEST, "재고가 부족합니다.");
         }
 
-        entity.setQuantity(entity.getQuantity()-decrease.getQuantity());
+        entity.setQuantity(entity.getQuantity() - decrease.getQuantity());
 
         return productOptionMapper.toDetail(entity);
     }

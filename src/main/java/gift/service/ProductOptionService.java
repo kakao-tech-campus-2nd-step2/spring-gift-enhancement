@@ -65,7 +65,8 @@ public class ProductOptionService {
             .orElseThrow(() -> new BaseHandler(HttpStatus.NOT_FOUND, "해당 상품의 옵션이 존재하지 않습니다."));
 
         if (entity.getName() != update.getName() &&
-            productOptionRepository.findByNameAndProductId(update.getName(), productId).isPresent()) {
+            productOptionRepository.findByNameAndProductId(update.getName(), productId)
+                .isPresent()) {
             throw new BaseHandler(HttpStatus.UNAUTHORIZED, "옵션의 이름이 중복됩니다.");
         }
 
