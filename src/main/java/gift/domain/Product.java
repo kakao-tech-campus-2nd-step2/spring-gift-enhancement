@@ -1,5 +1,6 @@
 package gift.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -13,6 +14,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -37,20 +40,10 @@ public class Product {
     @ManyToOne(optional = false)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
     public Product() {}
-
-    public Product(String name, int price, String imageUrl) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
-
-    public Product(long id, String name, int price, String imageUrl) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
 
     public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
@@ -58,7 +51,7 @@ public class Product {
         this.imageUrl = imageUrl;
         this.category = category;
     }
-
+    // getter
     public long getId() {
         return id;
     }
@@ -75,6 +68,13 @@ public class Product {
         return imageUrl;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public List<Option> getOptions(){ return  options;}
+
+    // setter
     public void setId(long id) {
         this.id = id;
     }
@@ -91,11 +91,9 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public void setOptions(Option option){this.options.add(option);}
 }

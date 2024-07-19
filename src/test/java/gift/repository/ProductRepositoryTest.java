@@ -3,7 +3,9 @@ package gift.repository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.domain.Category;
 import gift.domain.Product;
+import gift.repository.fixture.CategoryFixture;
 import gift.repository.fixture.ProductFixture;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -18,13 +20,17 @@ class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
     private EntityManager em;
 
     @Test
     @DisplayName("Create Test")
     void save() {
         // given
-        Product expected = ProductFixture.createProduct("test",100,"test.url");
+        Category category = CategoryFixture.createCategory("categoryName","color","description","url");
+        categoryRepository.save(category);
+        Product expected = ProductFixture.createProduct("test",100,"test.url",category);
 
         // when
         Product actual = productRepository.save(expected);
@@ -44,7 +50,9 @@ class ProductRepositoryTest {
     @DisplayName("Read By Id Test")
     void findById() {
         // given
-        Product expected = ProductFixture.createProduct("test",100,"test.url");
+        Category category = CategoryFixture.createCategory("categoryName","color","description","url");
+        categoryRepository.save(category);
+        Product expected = ProductFixture.createProduct("test",100,"test.url",category);
         productRepository.save(expected);
         em.flush();
         em.clear();
@@ -64,8 +72,10 @@ class ProductRepositoryTest {
     @DisplayName("Read All Test")
     void findAll() {
         // given
-        productRepository.save(ProductFixture.createProduct("test1",100,"test1.url"));
-        productRepository.save(ProductFixture.createProduct("test2",200,"test2.url"));
+        Category category = CategoryFixture.createCategory("categoryName","color","description","url");
+        categoryRepository.save(category);
+        productRepository.save(ProductFixture.createProduct("test1",100,"test1.url",category));
+        productRepository.save(ProductFixture.createProduct("test2",200,"test2.url",category));
         em.flush();
         em.clear();
 
@@ -82,7 +92,9 @@ class ProductRepositoryTest {
     @DisplayName("Delete By Id Test")
     void deleteById() {
         // given
-        Product expected = ProductFixture.createProduct("test",100,"test.url");
+        Category category = CategoryFixture.createCategory("categoryName","color","description","url");
+        categoryRepository.save(category);
+        Product expected = ProductFixture.createProduct("test",100,"test.url",category);
         productRepository.save(expected);
         em.flush();
         em.clear();
