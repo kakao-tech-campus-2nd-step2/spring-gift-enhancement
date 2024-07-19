@@ -48,15 +48,12 @@ public class ProductViewController
     public String showCreateForm(Model model) {
         model.addAttribute("product", new ProductDTO());
         model.addAttribute("categories", categoryService.findAll());
-        model.addAttribute("optionDTOList", new ArrayList<OptionDTO>());
         return "add_product";
     }
 
     @PostMapping("")
-    public String createProduct(@ModelAttribute ProductDTO productDTO,
-                                @ModelAttribute List<OptionDTO> optionDTOList) {
+    public String createProduct(@ModelAttribute ProductDTO productDTO) {
         productService.createProduct(productDTO);
-        optionService.saveAll(optionDTOList);
         return "redirect:/admin/products";
     }
 
