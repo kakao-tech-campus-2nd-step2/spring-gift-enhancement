@@ -31,21 +31,17 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    //FetchType.LAZY는 객체를 getter쓸때 가져온다
     private List<WishProduct> wishProducts;
-    //물건을 삭제하는 경우 -> 위시리스트 삭제...?
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "option_list_id",nullable = true)
-    private OptionList optionList;
+
+//    @Min(1)
+//    @Max(100000000)
+//    private int totalNumberOfOptions;
 
     public Product() {
 
     }
 
-    public void setOptionList(OptionList optionList) {
-        this.optionList = optionList;
-    }
 
     public Product(ProductRequest productRequest, User seller, Category category) {
         this.name = productRequest.name();
