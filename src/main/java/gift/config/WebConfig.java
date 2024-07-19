@@ -24,7 +24,7 @@ public class WebConfig {
         FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(jwtTokenFilter);
 
-        registrationBean.addUrlPatterns("/api/products/edit/*");
+
         registrationBean.addUrlPatterns("/api/products/delete/*");
         return registrationBean;
     }

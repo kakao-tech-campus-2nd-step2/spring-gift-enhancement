@@ -1,11 +1,13 @@
 package gift.controller;
 
+import gift.dto.ProductDto;
 import gift.entity.Product;
 import gift.service.WishlistService;
 import gift.util.JwtTokenProvider;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +34,22 @@ public class WishlistController {
     public ResponseEntity<Map<String, Object>> getWishlistItems(
             @RequestParam("email") String email,
             Pageable pageable) {
-        Page<Product> items = wishlistService.getWishlistByEmail(email, pageable);
+        Page<Product> productPage = wishlistService.getWishlistByEmail(email, pageable);
         Map<String, Object> response = new HashMap<>();
-        response.put("content", items.getContent());
-        response.put("currentPage", items.getNumber() + 1);
-        response.put("totalPages", items.getTotalPages());
-        response.put("hasNext", items.hasNext());
-        response.put("hasPrevious", items.hasPrevious());
+        var data = productPage.getContent();
+
+        List<ProductDto> productDtos = data.stream().map(v -> {
+            ProductDto dto = new ProductDto(v);
+            dto.setCategoryId(v.getCategory().getId());
+            dto.setCategoryName(v.getCategory().getName());
+            return dto;
+        }).collect(Collectors.toList());
+
+        response.put("content", productDtos);
+        response.put("currentPage", productPage.getNumber() + 1);
+        response.put("totalPages", productPage.getTotalPages());
+        response.put("hasNext", productPage.hasNext());
+        response.put("hasPrevious", productPage.hasPrevious());
         return ResponseEntity.ok(response);
     }
 

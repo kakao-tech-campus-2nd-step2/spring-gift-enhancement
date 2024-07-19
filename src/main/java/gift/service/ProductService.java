@@ -1,11 +1,11 @@
 package gift.service;
 
-
+import gift.entity.Category;
 import gift.dto.ProductDto;
 import gift.entity.Product;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
-
+import gift.repository.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +23,9 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
 
@@ -38,20 +41,33 @@ public class ProductService {
     }
 
     public void addProduct(ProductDto productDto) {
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
         Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
+        product.setCategory(category);
+        category.addProduct(product);
         productRepository.save(product);
     }
 
     public void updateProduct(Long id, ProductDto productDto) {
-        var product = productRepository.findById(id)
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> ProductNotFoundException.of(id));
         product.edit(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
-
+        product.setCategory(category);
+        productRepository.save(product);
     }
 
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> ProductNotFoundException.of(id));
+
+        Category category = product.getCategory();
+        if (category != null) {
+            category.removeProduct(product); // Remove product from category
+        }
         productRepository.delete(product);
     }
 }
