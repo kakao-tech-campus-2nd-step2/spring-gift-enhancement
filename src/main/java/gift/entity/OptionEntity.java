@@ -18,7 +18,7 @@ public class OptionEntity {
     private Long quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "fk_option_product", foreignKeyDefinition = "FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE"))
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "fk_options_product_id_refer_products_id", foreignKeyDefinition = "FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE"))
     private ProductEntity productEntity;
 
     public OptionEntity() {
@@ -54,6 +54,10 @@ public class OptionEntity {
 
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
+    }
+
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
     }
 
 

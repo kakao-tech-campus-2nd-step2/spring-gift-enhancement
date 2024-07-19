@@ -60,10 +60,14 @@ public class OptionService {
     @Transactional
     public void addOption(Long productId, Option option) {
         validateOptionUniqueness(option, null);
-        OptionEntity optionEntity = optionRepository.save(new OptionEntity(option.getName(), option.getQuantity()));
+        OptionEntity optionEntity = new OptionEntity();
         ProductEntity productEntity = productRepository.findById(productId)
             .orElseThrow(() -> new NotFoundException("Product not found"));
         productEntity.getOptionEntities().add(optionEntity);
+        optionEntity.setName(option.getName());
+        optionEntity.setQuantity(option.getQuantity());
+        optionEntity.setProductEntity(productEntity);
+        optionRepository.save(optionEntity);
     }
 
     //카테고리 수정 기능
