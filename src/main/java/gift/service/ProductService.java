@@ -1,8 +1,10 @@
 package gift.service;
 
 import gift.dto.CategoryDTO;
+import gift.dto.OptionDTO;
 import gift.dto.ProductDTO;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -51,6 +55,16 @@ public class ProductService {
         }
 
         Product product = new Product(null, productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(), category);
+
+        // 상품에 최소 하나 이상의 옵션이 있는지 검증
+        if (productDTO.getOptions() == null || productDTO.getOptions().isEmpty()) {
+            throw new IllegalArgumentException("Product must have at least one option.");
+        }
+
+        product.setOptions(productDTO.getOptions().stream()
+                .map(optionDTO -> new Option(null, optionDTO.getName(), optionDTO.getQuantity(), product))
+                .collect(Collectors.toSet()));
+
         productRepository.save(product);
     }
 
@@ -61,6 +75,16 @@ public class ProductService {
         product.setPrice(productDTO.getPrice());
         product.setImageUrl(productDTO.getImageUrl());
         product.setCategory(category);
+
+        // 상품에 최소 하나 이상의 옵션이 있는지 검증
+        if (productDTO.getOptions() == null || productDTO.getOptions().isEmpty()) {
+            throw new IllegalArgumentException("Product must have at least one option.");
+        }
+
+        product.setOptions(productDTO.getOptions().stream()
+                .map(optionDTO -> new Option(optionDTO.getId(), optionDTO.getName(), optionDTO.getQuantity(), product))
+                .collect(Collectors.toSet()));
+
         productRepository.save(product);
     }
 
