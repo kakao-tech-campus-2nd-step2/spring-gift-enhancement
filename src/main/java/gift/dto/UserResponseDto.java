@@ -1,6 +1,6 @@
 package gift.dto;
 
-import gift.entity.User;
+import gift.entity.Member;
 
 public class UserResponseDto {
 
@@ -26,8 +26,8 @@ public class UserResponseDto {
         return password;
     }
 
-    public static UserResponseDto fromEntity(User user) {
-        return new UserResponseDto(user.getId(), user.getEmail(), user.getPassword());
+    public static UserResponseDto fromEntity(Member member) {
+        return new UserResponseDto(member.getId(), member.getEmail(), member.getPassword());
 
     }
 }

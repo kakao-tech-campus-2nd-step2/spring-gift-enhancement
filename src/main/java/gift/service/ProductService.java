@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.dto.ProductResponseDto;
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.repository.ProductRepositoryInterface;
 import jakarta.transaction.Transactional;
@@ -22,9 +23,9 @@ public class ProductService {
         this.productRepositoryInterface = productRepositoryInterface;
     }
 
-    public ProductResponseDto createProductDto(String name, Long price, String url) {
-        Product newProduct = productRepositoryInterface.save(new Product(name, price, url));
-        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl());
+    public ProductResponseDto createProductDto(String name, Integer price, String url, Category category) {
+        Product newProduct = productRepositoryInterface.save(new Product(name, price, url, category));
+        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory());
     }
 
     public List<Product> getAll() {
@@ -33,12 +34,12 @@ public class ProductService {
 
     public ProductResponseDto getOneById(Long id) {
         Product newProduct = productRepositoryInterface.findById(id).get();
-        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl());
+        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory());
     }
 
-    public void update(Long id, String name, Long price, String url) {
+    public void update(Long id, String name, Integer price, String url, Category category) {
         Product actualProduct = productRepositoryInterface.findById(id).orElseThrow(() -> new RuntimeException("상품을 찾지 못했습니다."));
-        actualProduct.update(name, price, url);
+        actualProduct.update(name, price, url, category);
     }
 
     public void delete(Long id) {

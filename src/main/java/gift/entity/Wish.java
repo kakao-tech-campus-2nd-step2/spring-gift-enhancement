@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "wish")
 public class Wish {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -22,15 +23,15 @@ public class Wish {
 
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     public Wish() {
     }
 
-    public Wish(Product product, User user) {
+    public Wish(Product product, Member member) {
         this.product = product;
-        this.user = user;
+        this.member = member;
     }
 
     public Long getId() {
@@ -42,15 +43,15 @@ public class Wish {
     }
 
     public Long getUserId() {
-        return user.getId();
+        return member.getId();
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public User getUser() {
-        return user;
+    public Member getMember() {
+        return member;
     }
 
 

@@ -1,29 +1,33 @@
 package gift.dto;
 
+import gift.entity.Category;
 import gift.entity.Product;
 
 public class ProductResponseDto {
 
     private final String name;
     private final String url;
-    private final Long price;
+    private final Integer price;
     private Long id;
+    private Category category;
 
-    public ProductResponseDto(Long id, String name, Long price, String url) {
+    public ProductResponseDto(Long id, String name, Integer price, String url, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.url = url;
+        this.category=category;
     }
 
-    public ProductResponseDto(String name, Long price, String url) {
+    public ProductResponseDto(String name, Integer price, String url, Category category) {
         this.name = name;
         this.price = price;
         this.url = url;
+        this.category=category;
     }
 
     public static ProductResponseDto fromEntity(Product product) {
-        return new ProductResponseDto(product.getName(), product.getPrice(), product.getUrl());
+        return new ProductResponseDto(product.getName(), product.getPrice(), product.getUrl(), product.getCategory());
     }
 
     public Long getId() {
@@ -34,7 +38,7 @@ public class ProductResponseDto {
         return name;
     }
 
-    public Long getPrice() {
+    public Integer getPrice() {
         return price;
     }
 

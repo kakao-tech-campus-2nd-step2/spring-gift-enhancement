@@ -1,11 +1,12 @@
 package gift.entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 
@@ -13,23 +14,28 @@ import jakarta.persistence.Table;
 @Table(name = "product")
 public class Product {
 
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private String url;
     @Column(nullable = false)
-    private Long price;
+    private Integer price;
+
+    @ManyToOne
+    @JoinColumn(name="category_id")
+    private Category category;
 
     public Product() {
     }
 
-    public Product(String name, Long price, String url) {
+    public Product(String name, Integer price, String url, Category category) {
         this.name = name;
         this.price = price;
         this.url = url;
+        this.category = category;
     }
 
     public Long getId() {
@@ -40,7 +46,7 @@ public class Product {
         return name;
     }
 
-    public Long getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
@@ -48,10 +54,15 @@ public class Product {
         return url;
     }
 
-    public void update(String name, Long price, String url) {
+    public Category getCategory() {
+        return category;
+    }
+
+    public void update(String name, Integer price, String url, Category category) {
         this.name = name;
         this.price = price;
         this.url = url;
+        this.category = category;
     }
 
 }

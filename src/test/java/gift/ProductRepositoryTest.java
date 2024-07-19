@@ -1,6 +1,8 @@
 package gift;
 
+import gift.entity.Category;
 import gift.entity.Product;
+import gift.repository.CategoryRepositoryInterface;
 import gift.repository.ProductRepositoryInterface;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -12,15 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 public class ProductRepositoryTest {
 
-    private final ProductRepositoryInterface products;
-
-    public ProductRepositoryTest(ProductRepositoryInterface products) {
-        this.products = products;
-    }
+    ProductRepositoryInterface products;
+    CategoryRepositoryInterface categorys;
 
     @Test
     void save() {
-        final Product product = new Product("사과", 500L, "naver.com");
+        Category category = categorys.findCategoryByName("식품");
+        final Product product = new Product("사과", 500, "naver.com", category);
         assertThat(product.getId()).isNull();
         var actualProduct = products.save(product);
         assertThat(actualProduct.getId()).isNotNull();
@@ -28,7 +28,8 @@ public class ProductRepositoryTest {
 
     @Test
     void findByName() {
-        products.save(new Product("사과", 500L, "naver.com"));
+        Category category = categorys.findCategoryByName("과일");
+        products.save(new Product("사과", 500, "naver.com", category ));
         final Product actualProduct = products.findByName("사과");
         assertThat(actualProduct.getId()).isNotNull();
         assertThat(actualProduct.getName()).isEqualTo("사과");

@@ -13,26 +13,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "member")
+public class Member {
 
-
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
 
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
     private String password;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Wish> wishes = new ArrayList<>();
 
 
-    public User() {
+    public Member() {
     }
 
-    public User(String email, String password) {
+    public Member(String email, String password) {
         this.email = email;
         this.password = password;
     }
