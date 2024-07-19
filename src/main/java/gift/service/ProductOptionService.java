@@ -21,6 +21,7 @@ public class ProductOptionService {
         this.productOptionRepository = productOptionRepository;
     }
 
+    @Transactional
     public CreateProductOptionResponse createOption(Long productId, CreateProductOptionRequest request) {
         String optionName = request.getName();
         validateOptionNameExists(productId, optionName);
@@ -50,4 +51,6 @@ public class ProductOptionService {
             .toList();
         return ReadAllProductOptionsResponse.from(options);
     }
+
+
 }
