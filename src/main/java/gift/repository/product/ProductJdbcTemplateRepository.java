@@ -70,4 +70,9 @@ public class ProductJdbcTemplateRepository implements ProductRepository {
         return null;
     }
 
+    @Override
+    public Page<Product> findByCategoryId(String searchValue, Pageable pageable) {
+        return null;
+    }
+
 }
