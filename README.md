@@ -1,10 +1,17 @@
 # spring-gift-enhancement
 
 ---
-## 0단계 - 기본 코드 준비
+<details>
+<summary><strong>0단계 - 기본 코드 준비</strong></summary>
+
 - 3주차 코드 옮기기
+</details>
+
 ---
-## 1단계 - 상품 카테고리
+
+<details>
+<summary><strong>1단계 - 상품 카테고리</strong></summary>
+
 - 카테고리 엔티티 만들기
   - 필드는 id, name(unique)
 - 카테고리 DTO 만들기
@@ -38,3 +45,25 @@
   - WishlistRepositoryTest
   - WishlistRepositoryN1Test
   - CategoryRepositoryTest
+</details>
+
+---
+<details>
+<summary><strong>2단계 - 상품 옵션</strong></summary>
+
+- 옵션 엔티티 생성
+  - id
+  - name
+    - 공백 포함 최대 50자
+    - (),[],+,-,&,/,_ 외 사용 불가
+    - 동일한 상품 내의 옵션 이름은 중복 불가
+  - quantity
+    - 최소 1개 이상 1억 개 미만
+- 옵션 DTO 생성
+- 옵션 Repository 생성
+- 옵션 Service 생성
+- Product 엔티티 수정
+- Product DTO 수정
+- DB 수정
+- HTML 수정
+</details>
