@@ -52,8 +52,4 @@ public class ProductOption extends BaseEntity {
         this.name = name;
         this.quantity = quantity;
     }
-
-    public void subtract(Integer subQuantity) {
-        this.quantity = this.quantity - subQuantity;
-    }
 }
