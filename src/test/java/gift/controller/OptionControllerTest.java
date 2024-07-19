@@ -10,7 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constants.ErrorMessage;
 import gift.dto.CategoryDto;
 import gift.dto.OptionDto;
-import gift.dto.ProductResponse;
+import gift.dto.ProductRequest;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,8 +40,10 @@ class OptionControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(category));
 
-        ProductResponse productDto = new ProductResponse(null, "케잌", 50000L, "http", 1L, "생일 선물");
-        String product = new ObjectMapper().writeValueAsString(productDto);
+        ProductRequest request = new ProductRequest(null, "선물", 4500L, "https", 1L, "생일 선물",
+            List.of(new OptionDto(null, "케잌", 30, null)));
+
+        String product = new ObjectMapper().writeValueAsString(request);
         mockMvc.perform(post("/api/products/product")
             .contentType(MediaType.APPLICATION_JSON)
             .content(product));
@@ -49,7 +52,7 @@ class OptionControllerTest {
     @Test
     @DisplayName("옵션 추가 테스트")
     void addOption() throws Exception {
-        OptionDto optionDto = new OptionDto(null, "초코 케익", 30, 1L);
+        OptionDto optionDto = new OptionDto(null, "초코 케잌", 30, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
         mockMvc.perform(post("/api/products/product/1/options")
@@ -61,8 +64,7 @@ class OptionControllerTest {
     @Test
     @DisplayName("옵션 수정 테스트")
     void editOption() throws Exception {
-        addOption();
-        OptionDto optionDto = new OptionDto(1L, "초코 케익", 15, 1L);
+        OptionDto optionDto = new OptionDto(1L, "초코 케잌", 15, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
         mockMvc.perform(put("/api/products/product/1/options")
@@ -80,10 +82,17 @@ class OptionControllerTest {
     }
 
     @Test
+    @DisplayName("옵션이 1개 있을 때, 삭제 실패 테스트")
+    void deleteOptionFail() throws Exception {
+        mockMvc.perform(delete("/api/products/product/1/options/1"))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(ErrorMessage.OPTION_MUST_MORE_THAN_ZERO));
+    }
+
+    @Test
     @DisplayName("옵션 이름 중복 실패 테스트")
     void optionDuplicate() throws Exception {
-        addOption();
-        OptionDto optionDto = new OptionDto(null, "초코 케익", 15, 1L);
+        OptionDto optionDto = new OptionDto(null, "케잌", 15, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
         mockMvc.perform(post("/api/products/product/1/options")

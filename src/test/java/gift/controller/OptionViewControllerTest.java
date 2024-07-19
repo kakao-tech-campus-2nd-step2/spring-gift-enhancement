@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.CategoryDto;
 import gift.dto.OptionDto;
 import gift.dto.ProductRequest;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,9 +35,10 @@ class OptionViewControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(category));
 
-        ProductRequest productDto = new ProductRequest(null, "케잌", 50000L, "http", 1L, "생일 선물",
-            null);
-        String product = new ObjectMapper().writeValueAsString(productDto);
+        ProductRequest request = new ProductRequest(null, "선물", 4500L, "https", 1L, "생일 선물",
+            List.of(new OptionDto(null, "케잌", 30, null)));
+
+        String product = new ObjectMapper().writeValueAsString(request);
         mockMvc.perform(post("/api/products/product")
             .contentType(MediaType.APPLICATION_JSON)
             .content(product));
