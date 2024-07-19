@@ -26,6 +26,12 @@ public class OptionService {
         return optionRepository.findAllByProductId(productId);
     }
 
+    public Option findOptionByIdAndProductId(Long optionId, Long productId) {
+        return optionRepository.findById(optionId)
+            .filter(option -> option.getProduct().getId().equals(productId))
+            .orElseThrow(() -> new IllegalArgumentException("유효한 옵션 ID가 아닙니다."));
+    }
+
     @Transactional
     public void saveOption(OptionDTO optionDTO) {
         Product product = productRepository.findById(optionDTO.productId()).orElseThrow(() -> new IllegalArgumentException("유효한 옵션 ID가 아닙니다."));
