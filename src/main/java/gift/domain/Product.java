@@ -20,11 +20,7 @@ public class Product extends BaseEntity{
             foreignKey = @ForeignKey(name = "fk_product_category_id_ref_category_id"),
             nullable = false)
     private Category category;
-    @OneToMany
-    @JoinColumn(
-            name = "option_id",
-            foreignKey = @ForeignKey(name = "fk_product_option_id_ref_option_id"),
-            nullable = false)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
     protected Product(){
@@ -67,5 +63,9 @@ public class Product extends BaseEntity{
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public void addOption(Option option){
+        this.options.add(option);
     }
 }
