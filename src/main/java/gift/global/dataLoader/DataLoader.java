@@ -1,10 +1,9 @@
 package gift.global.dataLoader;
 
-import gift.domain.category.Category;
-import gift.domain.category.JpaCategoryRepository;
 import gift.domain.cartItem.CartItem;
 import gift.domain.cartItem.JpaCartItemRepository;
-
+import gift.domain.category.Category;
+import gift.domain.category.JpaCategoryRepository;
 import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
 import gift.domain.user.JpaUserRepository;
@@ -39,8 +38,10 @@ public class DataLoader {
     @PostConstruct
     public void init() {
         // Category
-        Category ethiopia = jpaCategoryRepository.saveAndFlush(new Category("에티오피아산", "에티오피아 산 원두를 사용했습니다."));
-        Category jamaica = jpaCategoryRepository.saveAndFlush(new Category("자메이카산", "자메이카산 원두를 사용했습니다."));
+        Category ethiopia = jpaCategoryRepository.saveAndFlush(
+            new Category("에티오피아산", "에티오피아 산 원두를 사용했습니다."));
+        Category jamaica = jpaCategoryRepository.saveAndFlush(
+            new Category("자메이카산", "자메이카산 원두를 사용했습니다."));
 
         // Product
         Product americano = new Product("아이스 아메리카노 T", ethiopia, 4500,

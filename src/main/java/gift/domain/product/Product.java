@@ -4,7 +4,6 @@ import gift.domain.BaseTimeEntity;
 import gift.domain.category.Category;
 import gift.domain.option.Option;
 import gift.global.annotation.NotContainsValue;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +38,7 @@ public class Product extends BaseTimeEntity {
     private List<Option> options = new ArrayList<>();
     private int price;
     private String imageUrl;
+
     protected Product() {
 
     }

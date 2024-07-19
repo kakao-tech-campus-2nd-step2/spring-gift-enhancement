@@ -1,7 +1,5 @@
 package gift.domain.category;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
 public class CategoryDTO {
@@ -16,6 +14,7 @@ public class CategoryDTO {
         this.name = name;
         this.description = description;
     }
+
     public String getName() {
         return name;
     }
