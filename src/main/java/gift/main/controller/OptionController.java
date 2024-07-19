@@ -39,7 +39,7 @@ public class OptionController {
     //특정 옵션 완전 삭제
     @DeleteMapping("/{productId}/option/{optionId}")
     public ResponseEntity<?> deleteOption(@PathVariable(value = "productId") long productId,
-                                          @PathVariable(value = "productId") long optionId) {
+                                          @PathVariable(value = "optionId") long optionId) {
         optionService.deleteOption(productId, optionId);
         return ResponseEntity.ok("Option deleted successfully");
     }
@@ -47,7 +47,7 @@ public class OptionController {
     //
     @PostMapping("/{productId}/option")
     public ResponseEntity<?> addOption(@PathVariable(value = "productId") long productId,
-                                       @PathVariable(value = "productId") long optionId,
+                                       @PathVariable(value = "optionId") long optionId,
                                        @Valid @RequestBody OptionRequest optionRequest) {
         optionService.addOption(productId, optionRequest);
         return ResponseEntity.ok("Option added successfully");
@@ -55,16 +55,16 @@ public class OptionController {
 
     @PutMapping("/{productId}/option/{optionId}")
     public ResponseEntity<?> updateOption(@PathVariable(value = "productId") long productId,
-                                          @PathVariable(value = "productId") long optionId,
+                                          @PathVariable(value = "optionId") long optionId,
                                           @Valid @RequestBody OptionRequest optionRequest) {
         optionService.updateOption(productId, optionId, optionRequest);
         return ResponseEntity.ok("Option updated successfully");
     }
 
     @PutMapping("/{productId}/option/{optionId}/quantity")
-    public ResponseEntity<?> changeOnionQuantity(@PathVariable(value = "productId") long productId,
-                                                 @PathVariable(value = "productId") long optionId,
-                                                 @Valid @RequestBody OptionQuantityRequest optionQuantityRequest) {
+    public ResponseEntity<?> changeOptionQuantity(@PathVariable(value = "productId") long productId,
+                                                  @PathVariable(value = "optionId") long optionId,
+                                                  @Valid @RequestBody OptionQuantityRequest optionQuantityRequest) {
         optionService.changeOptionQuantity(optionId, optionQuantityRequest );
         return ResponseEntity.ok("Option Quantity changed successfully");
     }
