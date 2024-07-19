@@ -73,7 +73,7 @@ public class ProductRepositoryTest {
     void update() {
         // given
         long id = productRepository.save(createProduct(category)).getId();
-        Product expected = createProduct("핫 아메리카노", category);
+        Product expected = createProduct(id, "핫 아메리카노", category);
 
         // when
         Product actual = productRepository.save(expected);

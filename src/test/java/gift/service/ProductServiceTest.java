@@ -1,6 +1,7 @@
 package gift.service;
 
 import static gift.util.CategoryFixture.createCategory;
+import static gift.util.ProductFixture.createProduct;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -35,14 +36,15 @@ public class ProductServiceTest {
 
     @BeforeEach
     void setup() {
-        category = createCategory();
+        category = createCategory(1L, "test");
     }
 
     @DisplayName("상품 추가")
     @Test
     void addProduct() {
         // given
-        Product product = new Product(1L, "test", 1234, "testImage", category);
+        Product product = createProduct(1L, "아이스 아메리카노", category);
+        System.out.println(product.getId());
         given(categoryService.getCategory(anyLong())).willReturn(category.toDTO());
         given(productRepository.save(any(Product.class))).willReturn(product);
 
@@ -58,7 +60,7 @@ public class ProductServiceTest {
     void getProduct() {
         // given
         long id = 1L;
-        Product product = new Product(id, "test", 1234, "testImage", category);
+        Product product = createProduct(id, "아이스 아메리카노", category);
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         // when
@@ -73,8 +75,8 @@ public class ProductServiceTest {
     void updateProduct() {
         // given
         long id = 1L;
-        Product product = new Product(id, "test", 1234, "testImage", category);
-        Product updatedProduct = new Product(id, "updatedTest", 12345, "updatedTestImage", category);
+        Product product = createProduct(id, "아이스 아메리카노", category);
+        Product updatedProduct = createProduct(id, "핫 아메리카노", category);
         given(categoryService.getCategory(anyLong())).willReturn(category.toDTO());
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
         given(productRepository.save(any(Product.class))).willReturn(updatedProduct);
@@ -91,7 +93,7 @@ public class ProductServiceTest {
     void deleteProduct() {
         // given
         long id = 1L;
-        Product product = new Product(id, "test", 1234, "testImage", category);
+        Product product = createProduct(id, "아이스 아메리카노", category);
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         // when
