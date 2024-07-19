@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import gift.entity.Category;
+import gift.exception.DuplicateCategoryNameException;
 import gift.exception.InvalidCategoryException;
 import gift.repository.CategoryRepository;
 
