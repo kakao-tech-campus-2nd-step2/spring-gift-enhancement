@@ -73,6 +73,7 @@ public class WishListService {
             wishList.getProductId())) {
             throw new IllegalArgumentException(email + "의 위시리스트에 존재하는 상품입니다.");
         }
+        validateOptionId(wishList.getProductId(), wishList.getOptionId());
         ProductDTO productDTO = productService.getProductById(wishList.getProductId());
         Product product = productDTO.toProduct(productDTO,
             productService.getCategoryById(productDTO.getCategoryId()));
@@ -85,6 +86,14 @@ public class WishListService {
         return WishListDTO.fromWishList(wishList1);
     }
 
+    public void validateOptionId(long productId, long optionId){
+        if (!optionService.existsByOptionIdAndProductId(optionId,
+            productId)) {
+            throw new IllegalArgumentException(
+                optionId + " 옵션은 " + productId + " 상품에 존재하지 않는 옵션입니다.");
+        }
+    }
+
     public WishListDTO updateWishList(long userId, long productId, WishListDTO wishListDTO)
         throws NotFoundException {
         WishList wishList = wishListRepository.findByUserIdAndProductId(userId, productId);
@@ -94,6 +103,7 @@ public class WishListService {
                     productId).getName()
                     + " 상품이 존재하지 않습니다.");
         }
+        validateOptionId(productId, wishListDTO.getOptionId());
         ProductDTO productDTO = productService.getProductById(wishList.getProduct().getId());
         Product product = productDTO.toProduct(productDTO,
             productService.getCategoryById(productDTO.getCategoryId()));

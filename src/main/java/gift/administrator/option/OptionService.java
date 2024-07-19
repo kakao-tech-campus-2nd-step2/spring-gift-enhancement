@@ -24,6 +24,10 @@ public class OptionService {
         return optionRepository.findAll().stream().map(OptionDTO::fromOption).toList();
     }
 
+    public boolean existsByOptionIdAndProductId(long optionId, long productId){
+        return optionRepository.existsByIdAndProductId(optionId, productId);
+    }
+
     public OptionDTO findOptionById(long optionId) throws NotFoundException {
         return OptionDTO.fromOption(optionRepository.findById(optionId).orElseThrow(NotFoundException::new));
     }

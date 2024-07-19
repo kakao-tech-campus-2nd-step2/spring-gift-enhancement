@@ -4,7 +4,6 @@ import gift.administrator.category.Category;
 import gift.administrator.category.CategoryDTO;
 import gift.administrator.category.CategoryService;
 import gift.administrator.option.Option;
-import gift.administrator.option.OptionDTO;
 import gift.administrator.option.OptionService;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +53,9 @@ public class ProductService {
         return ProductDTO.fromProduct(product);
     }
 
+    public boolean existsById(long productId){
+        return productRepository.existsById(productId);
+    }
     public boolean existsByName(String name) {
         return productRepository.existsByName(name);
     }

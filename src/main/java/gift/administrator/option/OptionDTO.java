@@ -4,7 +4,6 @@ import gift.administrator.product.Product;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -23,10 +22,15 @@ public class OptionDTO {
 
     public OptionDTO(){}
 
-    public OptionDTO(String name, int quantity, long productId) {
+    public OptionDTO(long id, String name, int quantity, long productId) {
+        this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.productId = productId;
+    }
+
+    public long getId(){
+        return id;
     }
 
     public String getName() {
@@ -46,7 +50,7 @@ public class OptionDTO {
     }
 
     public static OptionDTO fromOption(Option option) {
-        return new OptionDTO(option.getName(), option.getQuantity(),
+        return new OptionDTO(option.getId(), option.getName(), option.getQuantity(),
             option.getProduct().getId());
     }
 }
