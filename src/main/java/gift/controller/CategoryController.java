@@ -19,7 +19,10 @@ public class CategoryController {
     }
 
     @GetMapping("api/categories")
-    public ResponseEntity<Page<CategoryResponse>> readCategory(@RequestParam int page, @RequestParam int size){
+    public ResponseEntity<Page<CategoryResponse>> readCategory(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size
+    ){
         Page<CategoryResponse> categories = categoryService.findAll(page, size);
 
         return new ResponseEntity<>(categories, HttpStatus.OK);
