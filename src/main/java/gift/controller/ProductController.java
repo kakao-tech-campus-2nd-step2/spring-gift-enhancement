@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,12 +24,39 @@ public class ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
     @Autowired
-    public ProductController(ProductService productService, CategoryService categoryService) {
+    public ProductController(ProductService productService, CategoryService categoryService, OptionService optionService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
+
+    @GetMapping("/{productId}/options")
+    public ResponseEntity<List<Option>> getOptions(@PathVariable Long productId) {
+        List<Option> options = optionService.getOptionsByProductId(productId);
+        return ResponseEntity.ok(options);
+    }
+
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<Option> addOption(@PathVariable Long productId, @RequestBody Option option) {
+        Option createdOption = optionService.addOptionToProduct(productId, option);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdOption);
+    }
+
+    @PutMapping("/options/{optionId}")
+    public ResponseEntity<Option> updateOption(@PathVariable Long optionId, @RequestBody Option optionDetails) {
+        Option updatedOption = optionService.updateOption(optionId, optionDetails);
+        return ResponseEntity.ok(updatedOption);
+    }
+
+    @DeleteMapping("/options/{optionId}")
+    public ResponseEntity<Void> deleteOption(@PathVariable Long optionId) {
+        optionService.deleteOption(optionId);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @GetMapping
     public String getProducts(Model model, Pageable pageable) {
