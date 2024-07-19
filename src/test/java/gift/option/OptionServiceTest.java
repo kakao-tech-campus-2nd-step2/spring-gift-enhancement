@@ -2,7 +2,6 @@ package gift.option;
 
 import static gift.exception.ErrorMessage.OPTION_ALREADY_EXISTS;
 import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
-import static gift.exception.ErrorMessage.OPTION_NAME_DUPLICATED_IN_PRODUCT;
 import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
 import static gift.exception.ErrorMessage.OPTION_NOT_FOUND;
 import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
@@ -373,8 +372,8 @@ public class OptionServiceTest {
             );
 
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
+            when(productRepository.existsById(productId))
+                .thenReturn(true);
 
             when(optionRepository.findById(optionDTO.getId()))
                 .thenReturn(Optional.of(option));
@@ -441,17 +440,10 @@ public class OptionServiceTest {
                 "update-option",
                 1
             );
-            Product product = new Product(
-                1L,
-                "product",
-                1,
-                "imageUrl",
-                new Category(1L, "category")
-            );
 
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
+            when(productRepository.existsById(productId))
+                .thenReturn(true);
 
             when(optionRepository.findById(optionDTO.getId()))
                 .thenReturn(Optional.empty());
@@ -466,8 +458,8 @@ public class OptionServiceTest {
         }
 
         @Test
-        @DisplayName("option name duplicated in product error")
-        void optionNameDuplicatedInProductError() {
+        @DisplayName("option already exists error")
+        void optionAlreadyExistsError() {
             //given
             long productId = 1L;
             OptionDTO optionDTO = new OptionDTO(
@@ -490,8 +482,8 @@ public class OptionServiceTest {
             );
 
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
+            when(productRepository.existsById(productId))
+                .thenReturn(true);
 
             when(optionRepository.findById(optionDTO.getId()))
                 .thenReturn(Optional.of(option));
@@ -502,7 +494,7 @@ public class OptionServiceTest {
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(OPTION_NAME_DUPLICATED_IN_PRODUCT);
+                .hasMessage(OPTION_ALREADY_EXISTS);
         }
 
         @ParameterizedTest
@@ -531,8 +523,8 @@ public class OptionServiceTest {
             );
 
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
+            when(productRepository.existsById(productId))
+                .thenReturn(true);
 
             when(optionRepository.findById(optionDTO.getId()))
                 .thenReturn(Optional.of(option));
@@ -572,8 +564,8 @@ public class OptionServiceTest {
             );
 
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
+            when(productRepository.existsById(productId))
+                .thenReturn(true);
 
             when(optionRepository.findById(optionDTO.getId()))
                 .thenReturn(Optional.of(option));
@@ -613,8 +605,8 @@ public class OptionServiceTest {
             );
 
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
+            when(productRepository.existsById(productId))
+                .thenReturn(true);
 
             when(optionRepository.findById(optionDTO.getId()))
                 .thenReturn(Optional.of(option));
