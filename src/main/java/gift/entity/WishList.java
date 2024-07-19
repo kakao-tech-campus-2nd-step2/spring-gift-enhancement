@@ -16,7 +16,6 @@ public class WishList {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
-
     public WishList() {
     }
 
