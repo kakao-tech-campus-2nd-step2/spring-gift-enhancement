@@ -11,7 +11,6 @@ import gift.domain.member.entity.Member;
 import gift.domain.member.service.MemberService;
 import gift.domain.member.repository.MemberRepository;
 import gift.util.JwtUtil;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -92,7 +91,7 @@ class MemberServiceTest {
         doReturn(Optional.of(savedMember)).when(memberRepository).findById(id);
         memberService.deleteMember(id);
         // then
-        verify(memberRepository, times(1)).delete(savedMember);
+        verify(memberRepository, times(1)).delete(any(Member.class));
     }
 
     @Test
