@@ -32,3 +32,4 @@ option.subtract(quantity)
 - [ ] pageRequest 작성
 - [ ] pageResponse 함수형 인터페이스 사용하는 부분 수정
 - [ ] 상품 조회 API 테스트 코드 수정
+- [ ] gateProductService 제작 필요성
