@@ -32,14 +32,14 @@ public class OptionService {
     public Option makeOption(Long productId, OptionRequest request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("해당 id의 상품이 존재하지 않습니다."));
+        if (product.checkDuplicateOptionName(request.name())) {
+            throw new AlreadyExistsException("해당 상품에 등록된 옵션과 동일한 이름이 존재합니다.");
+        }
         Option option = new Option(
                 request.name(),
                 request.quantity(),
                 product
         );
-        if (option.checkDuplicateOptionName(request.name())) {
-            throw new AlreadyExistsException("해당 상품에 등록된 옵션과 동일한 이름이 존재합니다.");
-        }
         return optionRepository.save(option);
     }
 }
