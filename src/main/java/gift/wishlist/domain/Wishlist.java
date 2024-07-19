@@ -51,11 +51,11 @@ public class Wishlist {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Wishlist wishlist = (Wishlist) o;
-        return id.equals(wishlist.id) && member.equals(wishlist.member) && product.equals(wishlist.product);
+        return id.equals(wishlist.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, member, product);
+        return Objects.hash(id);
     }
 }

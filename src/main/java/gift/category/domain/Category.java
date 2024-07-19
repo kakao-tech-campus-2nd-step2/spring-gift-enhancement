@@ -70,12 +70,11 @@ public class Category {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Category category = (Category) o;
-        return id.equals(category.id) && name.equals(category.name) && color.equals(category.color) && Objects.equals(description, category.description) && imageUrl.equals(category.imageUrl);
+        return id.equals(category.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, color, description, imageUrl);
+        return Objects.hash(id);
     }
-
 }
