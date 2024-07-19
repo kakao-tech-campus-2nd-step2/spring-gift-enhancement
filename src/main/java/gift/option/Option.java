@@ -1,5 +1,9 @@
 package gift.option;
 
+import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
+import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
+import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
+
 import gift.product.Product;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,6 +45,18 @@ public class Option {
     }
 
     public Option(long id, String name, int quantity, Product product) {
+        if (!name.matches("^[a-zA-Z0-9가-힣\s()\\[\\]+\\-&/_]*$")) {
+            throw new IllegalArgumentException(OPTION_NAME_ALLOWED_CHARACTER);
+        }
+
+        if (name.length() > 50) {
+            throw new IllegalArgumentException(OPTION_NAME_LENGTH);
+        }
+
+        if (quantity < 1 || quantity >= 100_000_000) {
+            throw new IllegalArgumentException(OPTION_QUANTITY_SIZE);
+        }
+
         this.id = id;
         this.name = name;
         this.quantity = quantity;

@@ -233,10 +233,10 @@ public class OptionServiceTest {
 
             //when
             when(productRepository.findById(productId))
-                .thenReturn(Optional.empty());
+                .thenReturn(Optional.of(product));
 
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
-                .thenReturn(false);
+                .thenReturn(true);
 
             when(optionRepository.save(optionDTO.toEntity(product)))
                 .thenReturn(optionDTO.toEntity(product));
@@ -273,9 +273,6 @@ public class OptionServiceTest {
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
 
-            when(optionRepository.save(optionDTO.toEntity(product)))
-                .thenReturn(optionDTO.toEntity(product));
-
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -308,9 +305,6 @@ public class OptionServiceTest {
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
 
-            when(optionRepository.save(optionDTO.toEntity(product)))
-                .thenReturn(optionDTO.toEntity(product));
-
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -342,9 +336,6 @@ public class OptionServiceTest {
 
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(false);
-
-            when(optionRepository.save(optionDTO.toEntity(product)))
-                .thenReturn(optionDTO.toEntity(product));
 
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))

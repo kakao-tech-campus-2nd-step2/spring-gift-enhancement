@@ -1,5 +1,7 @@
 package gift.option;
 
+import static gift.exception.ErrorMessage.OPTION_ALREADY_EXISTS;
+import static gift.exception.ErrorMessage.OPTION_NAME_DUPLICATED_IN_PRODUCT;
 import static gift.exception.ErrorMessage.PRODUCT_NOT_FOUND;
 
 import gift.product.Product;
@@ -37,7 +39,19 @@ public class OptionService {
     }
 
     public void addOption(long productId, OptionDTO optionDTO) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new IllegalArgumentException(PRODUCT_NOT_FOUND));
 
+        if(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId)){
+            throw new IllegalArgumentException(OPTION_ALREADY_EXISTS);
+        }
+
+        optionRepository.save(new Option(
+            optionDTO.getId(),
+            optionDTO.getName(),
+            optionDTO.getQuantity(),
+            product
+        ));
     }
 
     public void updateOption(long productId, OptionDTO optionDTO) {
