@@ -60,6 +60,7 @@
         <th scope="col">Price</th>
         <th scope="col">Image</th>
         <th scope="col">Category</th>
+        <th scope="col">BasicOption</th>
         <th scope="col">Option</th>
     </tr>
     </thead>
@@ -184,7 +185,9 @@
             var inline = $('#header');
             inline.empty();
             inline.append('<a href="" onclick="logoutFunction()" className="header-link">로그아웃</a>\n' +
-                '            <a href="adminUsers" className="header-link">유저관리</a>');
+                '            <a href="adminProducts" className="header-link">상품관리</a>' +
+                '            <a href="adminUsers" className="header-link">유저관리</a>' +
+                '            <a href="adminCategories" className="header-link">카테고리관리</a>');
         }
     });
 
@@ -193,7 +196,8 @@
             name : $("#name").val(),
             price : $("#price").val(),
             imageUrl : $("#image").val(),
-            categoryName : $("#category").val()
+            categoryName : $("#category").val(),
+            basicOption : $("#")
         }
 
         $.ajax({
