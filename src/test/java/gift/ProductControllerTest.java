@@ -1,7 +1,10 @@
 package gift;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -21,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class ProductControllerTest {
+class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;  // Spring MockMvc 프레임워크를 사용하여 HTTP 요청 및 응답 테스트
@@ -31,6 +36,12 @@ public class ProductControllerTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private OptionRepository optionRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private Product sampleProduct;
 
@@ -55,7 +66,7 @@ public class ProductControllerTest {
 
     @Test
     @DisplayName("상품 추가 테스트")
-    public void addProductTest() throws Exception {
+    void addProductTest() throws Exception {
         mockMvc.perform(post("/api/products")  // '/api/products' 경로로 POST 요청
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("name", "복숭아 아이스티 T")
@@ -109,6 +120,45 @@ public class ProductControllerTest {
                 .andExpect(model().attributeExists("products"))
                 .andExpect(model().attribute("products", not(hasItem(hasProperty("name", is(productName))))));
 
+    }
+
+    @Test
+    @DisplayName("옵션 추가 테스트")
+    void addOptionToProductTest() throws Exception {
+        Option newOption = new Option();
+        newOption.setName("옵션1");
+        newOption.setQuantity(100);
+
+        mockMvc.perform(post("/api/products/" + sampleProduct.getId() + "/options")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newOption)))
+                .andExpect(status().isCreated())
+                .andExpect(content().string(containsString("옵션 추가 완료!")));
+
+        List<Option> options = optionRepository.findAll();
+        assert options.size() == 1;
+        assert options.get(0).getName().equals("옵션1");
+        assert options.get(0).getQuantity().equals(100);
+    }
+
+    @Test
+    @DisplayName("옵션 추가 시 동일한 이름의 옵션이 존재할 경우 테스트")
+    void addOptionWithDuplicateNameTest() throws Exception {
+        Option existingOption = new Option();
+        existingOption.setName("중복옵션");
+        existingOption.setQuantity(100);
+        existingOption.setProduct(sampleProduct);
+        optionRepository.save(existingOption);
+
+        Option newOption = new Option();
+        newOption.setName("중복옵션");
+        newOption.setQuantity(200);
+
+        mockMvc.perform(post("/api/products/" + sampleProduct.getId() + "/options")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newOption)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("동일한 상품 내에 동일한 옵션 이름이 존재합니다.")));
     }
 
 }

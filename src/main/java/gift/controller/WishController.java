@@ -28,7 +28,7 @@ public class WishController {
                                                         @RequestParam(defaultValue = "0") int page,
                                                         @RequestParam(defaultValue = "10") int size) {
         Page<WishResponse> wishes = wishService.getWishes(member.getId(), PageRequest.of(page, size));
-//        List<WishResponse> wishes = wishService.getWishes(member.getId());
+
         return ResponseEntity.ok(wishes);
     }
 

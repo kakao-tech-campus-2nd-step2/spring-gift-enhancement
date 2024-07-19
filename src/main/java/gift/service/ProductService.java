@@ -1,7 +1,10 @@
 package gift.service;
 
+import gift.domain.Option;
 import gift.domain.Product;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -12,9 +15,11 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
+        this.optionRepository = optionRepository;
     }
 
     public Page<Product> getAllProducts(PageRequest pageRequest) {
@@ -36,5 +41,16 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
+    }
+
+    public void addOptionToProduct(Long productId, Option option) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("해당 product ID가 존재하지 않음"));
+
+        try {
+            option.setProduct(product);
+            optionRepository.save(option);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("동일한 상품 내에 동일한 옵션 이름이 존재합니다.");
+        }
     }
 }
