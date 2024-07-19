@@ -24,9 +24,7 @@ public class OptionService {
     }
 
     public List<OptionDTO> getOptions(long productId) {
-        if (!productRepository.existsById(productId)) {
-            throw new IllegalArgumentException(PRODUCT_NOT_FOUND);
-        }
+        isProductExists(productId);
 
         return optionRepository.findAllByProductId(productId)
             .stream()
@@ -34,17 +32,14 @@ public class OptionService {
                 option.getId(),
                 option.getName(),
                 option.getQuantity()
-            ))
-            .toList();
+            )).toList();
     }
 
     public void addOption(long productId, OptionDTO optionDTO) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new IllegalArgumentException(PRODUCT_NOT_FOUND));
 
-        if (optionRepository.existsByNameAndProductId(optionDTO.getName(), productId)) {
-            throw new IllegalArgumentException(OPTION_ALREADY_EXISTS);
-        }
+        isOptionNameExists(productId, optionDTO.getName());
 
         optionRepository.save(new Option(
             optionDTO.getId(),
@@ -55,29 +50,35 @@ public class OptionService {
     }
 
     public void updateOption(long productId, OptionDTO optionDTO) {
-        if (!productRepository.existsById(productId)) {
-            throw new IllegalArgumentException(PRODUCT_NOT_FOUND);
-        }
+        isProductExists(productId);
+        isOptionNameExists(productId, optionDTO.getName());
 
-        Option option = optionRepository.findById(optionDTO.getId())
-            .orElseThrow(() -> new IllegalArgumentException(OPTION_NOT_FOUND));
-
-        if (optionRepository.existsByNameAndProductId(optionDTO.getName(), productId)) {
-            throw new IllegalArgumentException(OPTION_ALREADY_EXISTS);
-        }
-
+        Option option = getOptionById(optionDTO.getId());
         option.updateOption(optionDTO);
         optionRepository.save(option);
     }
 
     public void deleteOption(long productId, long optionId) {
+        isProductExists(productId);
+
+        Option option = getOptionById(optionId);
+        optionRepository.delete(option);
+    }
+
+    private void isProductExists(long productId) {
         if (!productRepository.existsById(productId)) {
             throw new IllegalArgumentException(PRODUCT_NOT_FOUND);
         }
+    }
 
-        Option option = optionRepository.findById(optionId)
+    private void isOptionNameExists(long productId, String optionName) {
+        if (optionRepository.existsByNameAndProductId(optionName, productId)) {
+            throw new IllegalArgumentException(OPTION_ALREADY_EXISTS);
+        }
+    }
+
+    private Option getOptionById(long optionId) {
+        return optionRepository.findById(optionId)
             .orElseThrow(() -> new IllegalArgumentException(OPTION_NOT_FOUND));
-
-        optionRepository.delete(option);
     }
 }
