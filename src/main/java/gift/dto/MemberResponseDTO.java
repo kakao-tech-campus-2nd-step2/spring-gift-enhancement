@@ -1,5 +1,7 @@
 package gift.dto;
 
+import gift.model.Member;
+
 public class MemberResponseDTO {
     private Long id;
     private String email;
@@ -16,4 +18,9 @@ public class MemberResponseDTO {
     public String getEmail() {
         return email;
     }
+
+    public static MemberResponseDTO fromEntity(Member member) {
+        return new MemberResponseDTO(member.getId(), member.getEmail());
+    }
+
 }

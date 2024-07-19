@@ -41,4 +41,8 @@ public class Category {
     public Set<Product> getProducts() {
         return products;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
