@@ -1,31 +1,40 @@
 package gift.product;
 
+import gift.global.exception.custrom.NotFoundException;
 import gift.member.business.dto.JwtToken;
 import gift.member.presentation.dto.RequestMemberDto;
 import gift.product.persistence.entity.Category;
 import gift.product.persistence.entity.Product;
 import gift.product.persistence.repository.CategoryJpaRepository;
+import gift.product.persistence.repository.OptionJpaRepository;
+import gift.product.persistence.repository.ProductJpaRepository;
+import gift.product.presentation.dto.RequestOptionCreateDto;
 import gift.product.presentation.dto.RequestProductDto;
 import gift.product.presentation.dto.RequestProductIdsDto;
+import gift.product.presentation.dto.RequestProductUpdateDto;
 import gift.product.presentation.dto.ResponseProductDto;
-import gift.global.exception.custrom.NotFoundException;
 import gift.product.persistence.repository.ProductRepository;
 import java.util.List;
-import java.util.Objects;
-import org.junit.jupiter.api.AfterEach;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
 public class ProductControllerApiTest {
     @LocalServerPort
     private int port;
@@ -42,11 +51,16 @@ public class ProductControllerApiTest {
 
     private static Category category;
 
+    private static Product dummyProduct;
+
     @BeforeAll
     static void setUp(@Autowired TestRestTemplate restTemplate,
         @Autowired CategoryJpaRepository categoryRepository,
+        @Autowired ProductJpaRepository productRepository,
+        @Autowired OptionJpaRepository optionRepository,
         @LocalServerPort int port
     ) {
+        //set token
         RequestMemberDto requestMemberDto = new RequestMemberDto(
             "test@example.com",
             "test");
@@ -60,224 +74,156 @@ public class ProductControllerApiTest {
         headers.setBearerAuth(accessToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        //set category
         category = categoryRepository.save(new Category("카테고리"));
-    }
 
-    @AfterEach
-    void tearDown() {
-        productRepository.deleteAll();
+        //set product
+        dummyProduct = productRepository.save(new Product("이름", "설명", 1000, "http://test.com", category));
     }
 
     @Test
     void testCreateProduct() {
         // given
-        String name = "테스트 상품_()[]+-";
-        Integer price = 1000;
-        String description = "테스트 상품 설명";
-        String imageUrl = "http://test.com";
+        RequestProductDto requestProductDto = new RequestProductDto(
+            "테스트 상품_()[]+-",
+            1000,
+            "테스트 상품 설명",
+            "http://test.com",
+            category.getId(),
+            List.of(new RequestOptionCreateDto("옵션", 10))
+        );
 
-        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl, category.getId());
         String url = "http://localhost:"+port+"/api/products";
-
         var entity = new HttpEntity<>(requestProductDto, headers);
 
         // when
-        var responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, Long.class);
+        var response = restTemplate.exchange(url, HttpMethod.POST, entity, Long.class);
 
         // then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(responseEntity.getBody()).isNotNull();
-        Long id = responseEntity.getBody();
+        assertAll(
+            () -> assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED),
+            () -> assertThat(response.getBody()).isNotNull()
+        );
 
-        Product product = productRepository.getProductById(id);
-        assertThat(product.getName()).isEqualTo(name);
-        assertThat(product.getPrice()).isEqualTo(price);
-        assertThat(product.getDescription()).isEqualTo(description);
-        assertThat(product.getUrl()).isEqualTo(imageUrl);
-
-        productRepository.deleteProductById(id);
+        Product product = productRepository.getProductById(response.getBody());
+        assertAll(
+            () -> assertThat(product.getName()).isEqualTo(requestProductDto.name()),
+            () -> assertThat(product.getPrice()).isEqualTo(requestProductDto.price()),
+            () -> assertThat(product.getDescription()).isEqualTo(requestProductDto.description()),
+            () -> assertThat(product.getUrl()).isEqualTo(requestProductDto.imageUrl())
+        );
+        productRepository.deleteProductById(response.getBody());
     }
 
     @Test
     void testGetProduct(){
         // given
-        String name = "테스트 상품";
-        Integer price = 1000;
-        String description = "테스트 상품 설명";
-        String imageUrl = "http://test.com";
-
-        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl, category.getId());
-        String url = "http://localhost:"+port+"/api/products";
-
-        var entity = new HttpEntity<>(requestProductDto, headers);
-
-        var responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, Long.class);
-
-        Long id = responseEntity.getBody();
+        String getUrl = "http://localhost:"+port+"/api/products/"+dummyProduct.getId();
+        var entity = new HttpEntity<>(headers);
 
         // when
-        String getUrl = "http://localhost:"+port+"/api/products/"+id;
-
-        entity = new HttpEntity<>(headers);
-
-        var getResponseEntity = restTemplate.exchange(getUrl, HttpMethod.GET, entity, ResponseProductDto.class);
-
+        var response = restTemplate.exchange(getUrl, HttpMethod.GET, entity, ResponseProductDto.class);
 
         // then
-        assertThat(getResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(getResponseEntity.getBody()).isNotNull();
-        ResponseProductDto responseProductDto = getResponseEntity.getBody();
-        assertThat(responseProductDto.name()).isEqualTo(name);
-        assertThat(responseProductDto.price()).isEqualTo(price);
-        assertThat(responseProductDto.description()).isEqualTo(description);
-        assertThat(responseProductDto.imageUrl()).isEqualTo(imageUrl);
-
-        productRepository.deleteProductById(id);
+        assertAll(
+            () -> assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK),
+            () -> assertThat(response.getBody()).isNotNull()
+        );
+        ResponseProductDto responseProductDto = response.getBody();
+        assertAll(
+            () -> assertThat(responseProductDto.id()).isEqualTo(dummyProduct.getId()),
+            () -> assertThat(responseProductDto.name()).isEqualTo(dummyProduct.getName()),
+            () -> assertThat(responseProductDto.price()).isEqualTo(dummyProduct.getPrice()),
+            () -> assertThat(responseProductDto.description()).isEqualTo(dummyProduct.getDescription()),
+            () -> assertThat(responseProductDto.imageUrl()).isEqualTo(dummyProduct.getUrl())
+        );
     }
 
     @Test
     void testUpdateProduct(){
         // given
-        String name = "테스트 상품";
-        Integer price = 1000;
-        String description = "테스트 상품 설명";
-        String imageUrl = "http://test.com";
+        RequestProductUpdateDto updateProductDto = new RequestProductUpdateDto(
+            "수정",
+            2000,
+            "수정 설명",
+            "http://updated.com",
+            category.getId()
+        );
 
-        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl, category.getId());
-        String url = "http://localhost:"+port+"/api/products";
+        String updateUrl = "http://localhost:"+port+"/api/products/"+dummyProduct.getId();
 
-        var entity = new HttpEntity<>(requestProductDto, headers);
-
-        var responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, Long.class);
-
-        Long id = responseEntity.getBody();
-
-        String updatedName = "수정된 상품";
-        Integer updatedPrice = 2000;
-        String updatedDescription = "수정된 상품 설명";
-        String updatedImageUrl = "http://updated.com";
-
-        RequestProductDto updateProductDto = new RequestProductDto(updatedName, updatedPrice, updatedDescription, updatedImageUrl, category.getId());
-        String updateUrl = "http://localhost:"+port+"/api/products/"+id;
-
-        entity = new HttpEntity<>(updateProductDto, headers);
+        var entity = new HttpEntity<>(updateProductDto, headers);
 
         // when
-        var updateResponseEntity = restTemplate.exchange(updateUrl, HttpMethod.PUT, entity, Long.class);
+        var response = restTemplate.exchange(updateUrl, HttpMethod.PUT, entity, Long.class);
 
 
         // then
-        assertThat(updateResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(updateResponseEntity.getBody()).isNotNull();
-        Long updatedId = updateResponseEntity.getBody();
-
+        assertAll(
+            () -> assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK),
+            () -> assertThat(response.getBody()).isNotNull()
+        );
+        Long updatedId = response.getBody();
         Product product = productRepository.getProductById(updatedId);
-        assertThat(product.getName()).isEqualTo(updatedName);
-        assertThat(product.getPrice()).isEqualTo(updatedPrice);
-        assertThat(product.getDescription()).isEqualTo(updatedDescription);
-        assertThat(product.getUrl()).isEqualTo(updatedImageUrl);
+        assertAll(
+            () -> assertThat(product.getName()).isEqualTo(updateProductDto.name()),
+            () -> assertThat(product.getPrice()).isEqualTo(updateProductDto.price()),
+            () -> assertThat(product.getDescription()).isEqualTo(updateProductDto.description()),
+            () -> assertThat(product.getUrl()).isEqualTo(updateProductDto.imageUrl())
 
-        productRepository.deleteProductById(updatedId);
+        );
+        productRepository.saveProduct(dummyProduct);
     }
 
     @Test
     void testDeleteProduct() {
         // given
-        String name = "테스트 상품";
-        Integer price = 1000;
-        String description = "테스트 상품 설명";
-        String imageUrl = "http://test.com";
-
-        RequestProductDto requestProductDto = new RequestProductDto(name, price, description, imageUrl, category.getId());
-        String url = "http://localhost:" + port + "/api/products";
-
-        var entity = new HttpEntity<>(requestProductDto, headers);
-
-        var responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, Long.class);
-
-        Long id = responseEntity.getBody();
-
         String deleteUrl = "http://localhost:" + port + "/api/products";
 
-        RequestProductIdsDto requestProductIdsDto = new RequestProductIdsDto(List.of(id));
+        RequestProductIdsDto requestProductIdsDto = new RequestProductIdsDto(List.of(dummyProduct.getId()));
         var deleteEntity = new HttpEntity<>(requestProductIdsDto, headers);
 
         // when
-        var deleteResponseEntity = restTemplate.exchange(deleteUrl, HttpMethod.DELETE, deleteEntity, Void.class);
+        var response = restTemplate.exchange(deleteUrl, HttpMethod.DELETE, deleteEntity, Void.class);
 
         // then
-        assertThrows(NotFoundException.class, () -> productRepository.getProductById(id));
+        assertThrows(NotFoundException.class, () -> productRepository.getProductById(dummyProduct.getId()));
+
+        // rollback
+        productRepository.saveProduct(dummyProduct);
     }
 
-    @Test
-    void testCreateProduct_Failure() {
+    @ParameterizedTest
+    @MethodSource("provideTestCases")
+    void testCreateProduct_Failure(String name, String imageUrl) {
         // given
         String url = "http://localhost:" + port + "/api/products";
 
-        String requestJson = """
-                {
-                    "name": null,
-                    "price": 1000,
-                    "description": "테스트 상품 설명",
-                    "imageUrl": "http://test.com"
-                }
-                """;
+        RequestProductDto requestProductDto = new RequestProductDto(
+            name,
+            1000,
+            "테스트 상품 설명",
+            imageUrl,
+            category.getId(),
+            List.of(new RequestOptionCreateDto("옵션", 10))
+        );
 
-        var requestEntity = new HttpEntity<>(requestJson, headers);
+        var entity = new HttpEntity<>(requestProductDto, headers);
 
         // when
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        var response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
         // then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
 
-        // 특수문자
-        requestJson = """
-                {
-                    "name": "#@",
-                    "price": 1000,
-                    "description": "테스트 상품 설명",
-                    "imageUrl": "http://test.com"
-                }
-                """;
-
-        requestEntity = new HttpEntity<>(requestJson, headers);
-
-        responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
-        // 카카오 검증
-        requestJson = """
-                {
-                    "name": "카카오",
-                    "price": 1000,
-                    "description": "테스트 상품 설명",
-                    "imageUrl": "http://test.com"
-                }
-                """;
-
-        requestEntity = new HttpEntity<>(requestJson, headers);
-
-        responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
-        requestJson = """
-                {
-                    "name": "asdf",
-                    "price": 1000,
-                    "description": "테스트 상품 설명",
-                    "imageUrl": "url 형식 아님"
-                }
-                """;
-
-        requestEntity = new HttpEntity<>(requestJson, headers);
-
-        responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-
-        assertThat(Objects.requireNonNull(responseEntity.getBody()).contains("imageUrl")).isTrue();
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    private static Stream<Arguments> provideTestCases() {
+        return Stream.of(
+            Arguments.of(null, "http://test.com"),
+            Arguments.of("#@", "http://test.com"),
+            Arguments.of("카카오", "http://test.com"),
+            Arguments.of("asdf", "url 형식 아님")
+        );
     }
 
     @Test
@@ -299,7 +245,7 @@ public class ProductControllerApiTest {
     void testUpdateProduct_NotFound() {
         // given
         Long nonExistentId = 999L;
-        RequestProductDto updateProductDto = new RequestProductDto("수정된 상품", 2000, "수정된 상품 설명", "http://updated.com", category.getId());
+        var updateProductDto = new RequestProductUpdateDto("수정된 상품", 2000, "수정된 상품 설명", "http://updated.com", category.getId());
         String updateUrl = "http://localhost:" + port + "/api/products/" + nonExistentId;
         var entity = new HttpEntity<>(updateProductDto, headers);
 
