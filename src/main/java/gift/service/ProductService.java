@@ -80,7 +80,7 @@ public class ProductService{
                                           productCreateRequest.getImageUrl(),
                                           category);
             productRepository.save(product);
-            optionService.addOption(new OptionDto(null, productCreateRequest.getOptionName(), productCreateRequest.getQuantity()), productCreateRequest.getId());
+            optionService.addOption(new OptionDto(1L, productCreateRequest.getOptionName(), productCreateRequest.getQuantity()), productCreateRequest.getId());
         }else{
             throw new CustomException("Product with id " + productCreateRequest.getId() + "exists", HttpStatus.CONFLICT);
         }
