@@ -32,10 +32,10 @@
   - [x] ProductServiceTest
   - [x] OptionRepositoryTest
   - [x] OptionServiceTest
-- [ ] 피드백 반영
+- [x] 피드백 반영
   - [x] gson 버전 정보 삭제
   - [x] API 요청 url을 복수형으로 변경
   - [x] 제네릭을 구체적으로 변경
   - [x] 불필요한 setter 최소화
   - [x] mockito의 verify 기능을 활용하여 deleteCategoryTest() 구현
-  - [ ] addCategoryController 수정
+  - [x] addCategoryController 수정
