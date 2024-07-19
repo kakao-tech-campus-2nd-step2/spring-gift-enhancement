@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
@@ -24,16 +25,17 @@ public class Category {
   @Column(nullable = false, unique = true)
   private String name;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 7)
   private String color;
 
   @Column(nullable = false)
   private String imageUrl;
 
-  @Column(nullable = false)
+  @Lob
+  @Column(nullable = false, columnDefinition = "CLOB")
   private String description;
 
-  public Category() {
+  protected Category() {
   }
 
   public Category(Long id, String name, String color, String imageUrl, String description) {

@@ -11,38 +11,38 @@ public class CategoryDto {
   public CategoryDto() {
   }
 
-  public CategoryDto(Long id, String name, String color, String imageUrl, String description){
-    this.id=id;
-    this.name=name;
-    this.color=color;
-    this.imageUrl=imageUrl;
-    this.description=description;
+  public CategoryDto(Long id, String name, String color, String imageUrl, String description) {
+    this.id = id;
+    this.name = name;
+    this.color = color;
+    this.imageUrl = imageUrl;
+    this.description = description;
   }
 
-  public CategoryDto(String name, String color, String imageUrl, String description){
-    this.name=name;
-    this.color=color;
-    this.imageUrl=imageUrl;
-    this.description=description;
+  public CategoryDto(String name, String color, String imageUrl, String description) {
+    this.name = name;
+    this.color = color;
+    this.imageUrl = imageUrl;
+    this.description = description;
   }
 
-  public void setId(Long id){this.id=id;}
+  public Long getId() {
+    return this.id;
+  }
 
-  public Long getId(){return this.id;}
+  public String getName() {
+    return this.name;
+  }
 
-  public void setName(String name){this.name=name;}
+  public String getColor() {
+    return this.color;
+  }
 
-  public String getName(){return this.name;}
+  public String getImageUrl() {
+    return this.imageUrl;
+  }
 
-  public void setColor(String color){this.color=color;}
-
-  public String getColor(){return this.color;}
-
-  public void setImageUrl(String imageUrl){this.imageUrl=imageUrl;}
-
-  public String getImageUrl(){return this.imageUrl;}
-
-  public void setDescription(String description){this.description=description;}
-
-  public String getDescription(){return this.description;}
+  public String getDescription() {
+    return this.description;
+  }
 }

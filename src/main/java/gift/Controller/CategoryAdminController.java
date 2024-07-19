@@ -1,8 +1,6 @@
 package gift.Controller;
 
-import gift.DTO.Category;
 import gift.DTO.CategoryDto;
-import gift.DTO.ProductDto;
 import gift.Service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,30 +37,30 @@ public class CategoryAdminController {
 
   @PostMapping("/add")
   public String addCategory(@RequestParam String name, @RequestParam String color,
-    @RequestParam String imageUrl, @RequestParam String description){
-    CategoryDto categoryDto = new CategoryDto(name,color,imageUrl,description);
+    @RequestParam String imageUrl, @RequestParam String description) {
+    CategoryDto categoryDto = new CategoryDto(name, color, imageUrl, description);
     categoryService.addCategory(categoryDto);
 
     return "redirect:/admin/categories";
   }
 
   @GetMapping("/category/{id}")
-  public String editCategoryForm(@PathVariable Long id, Model model){
+  public String editCategoryForm(@PathVariable Long id, Model model) {
     CategoryDto categoryDto = categoryService.getCategoryById(id);
-    model.addAttribute("category",categoryDto);
+    model.addAttribute("category", categoryDto);
 
     return "category-form";
   }
 
   @PostMapping("/category/{id}")
-  public String updateCategory(@PathVariable Long id, @ModelAttribute CategoryDto categoryDto){
-    categoryService.updateCategory(id,categoryDto);
+  public String updateCategory(@PathVariable Long id, @ModelAttribute CategoryDto categoryDto) {
+    categoryService.updateCategory(id, categoryDto);
 
     return "redirect:/admin/categories";
   }
 
   @PostMapping("/{id}")
-  public String delteCategory(@PathVariable Long id){
+  public String delteCategory(@PathVariable Long id) {
     categoryService.deleteCategory(id);
 
     return "redirect:/admin/categories";

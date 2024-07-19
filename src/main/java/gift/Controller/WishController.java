@@ -28,7 +28,8 @@ public class WishController {
   }
 
   @GetMapping
-  public ResponseEntity<Page<WishListDto>> getWishList(@PageableDefault(size=5) Pageable pageable) {
+  public ResponseEntity<Page<WishListDto>> getWishList(
+    @PageableDefault(size = 5) Pageable pageable) {
     Page<WishListDto> wishList = wishListService.getWishList(pageable);
 
     return ResponseEntity.ok(wishList);
