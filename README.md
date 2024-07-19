@@ -72,12 +72,12 @@ Content-Type: application/json
   - [x] 상품에는 하나 이상의 옵션이 존재할 필요가 있음
     - [x] 상품을 최초 생성할 때, 옵션도 함께 생성
       * 최소 생성 이외에는 Option CRUD로 처리 가능
-    - [ ] 옵션 삭제 시, 해당 옵션이 상품의 유일한 옵션이라면 삭제 불가
+    - [x] 옵션 삭제 시, 해당 옵션이 상품의 유일한 옵션이라면 삭제 불가
 - [ ] Option CRUD
   - [x] Create
   - [x] Read
   - [x] Update
-  - [ ] Delete
+  - [x] Delete
 - [ ] (선택) 관리자 화면에서 옵션 추가
 
 

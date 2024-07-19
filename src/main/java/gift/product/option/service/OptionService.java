@@ -64,4 +64,14 @@ public class OptionService {
 
         option.edit(request);
     }
+
+    public void deleteOption(Long productId, Long id) {
+        Option option = optionRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        product.removeOption(option);
+        optionRepository.delete(option);
+    }
 }

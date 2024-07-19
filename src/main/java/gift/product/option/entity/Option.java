@@ -4,9 +4,9 @@ import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.product.entity.Product;
 import gift.product.option.dto.request.UpdateOptionRequest;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,7 +31,7 @@ public class Option {
     @Column
     private Integer quantity;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false,
         foreignKey = @ForeignKey(name = "fk_options_product_id_ref_products_id"))
     private Product product;

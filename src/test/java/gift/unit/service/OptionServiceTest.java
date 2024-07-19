@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 
 import gift.exception.CustomException;
 import gift.product.category.entity.Category;
@@ -231,6 +232,53 @@ public class OptionServiceTest {
         assertThat(option.getQuantity()).isEqualTo(1000);
     }
 
+    @Test
+    @DisplayName("유일한 옵션 삭제 불가")
+    void deleteLastOption() {
+        // given
+        Option option = new Option(1L, 100);
+        Product product = createProductWithOptions(option);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findById(any())).willReturn(Optional.of(option));
+
+        // when & then
+        assertThatThrownBy(() -> optionService.deleteOption(1L, 1L)).isInstanceOf(
+            CustomException.class);
+    }
+
+    @Test
+    @DisplayName("해당 상품의 옵션이 아닌 경우")
+    void deleteOtherProductOption() {
+        // given
+        Option option = new Option(1L, 100);
+        Option productOption = new Option(2L, 100);
+        Product product = createProductWithOptions(productOption);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findById(any())).willReturn(Optional.of(option));
+
+        // when & then
+        assertThatThrownBy(() -> optionService.deleteOption(1L, 1L)).isInstanceOf(
+            CustomException.class);
+    }
+
+    @Test
+    @DisplayName("deleteOption test")
+    void deleteOptionTest() {
+        // given
+        Option option1 = new Option(1L, 100);
+        Option option2 = new Option(2L, 100);
+        Product product = createProductWithOptions(option1, option2);
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findById(any())).willReturn(Optional.of(option1));
+        willDoNothing().given(optionRepository).delete(any());
+
+        // when
+        optionService.deleteOption(1L, 1L);
+
+        // then
+        then(optionRepository).should().delete(any());
+    }
+
     private Product createProduct() {
         return createProduct("Product 1");
     }
@@ -246,7 +294,7 @@ public class OptionServiceTest {
             .build();
     }
 
-    private Product createProductWithOptions(Option option) {
+    private Product createProductWithOptions(Option... option) {
         return Product.builder()
             .id(1L)
             .name("Product 1")

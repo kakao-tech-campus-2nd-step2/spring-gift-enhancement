@@ -1,8 +1,11 @@
 package gift.product.entity;
 
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.product.category.entity.Category;
 import gift.product.dto.request.UpdateProductRequest;
 import gift.product.option.entity.Option;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -38,7 +41,7 @@ public class Product {
         foreignKey = @ForeignKey(name = "fk_products_category_id_ref_categories_id"))
     private Category category;
 
-    @OneToMany
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Option> options = new HashSet<>();
 
     protected Product() {
@@ -50,7 +53,7 @@ public class Product {
         this.price = builder.price;
         this.imageUrl = builder.imageUrl;
         this.category = builder.category;
-        this.options = builder.options;
+        this.options = new HashSet<>(builder.options);
     }
 
     public static Builder builder() {
@@ -66,6 +69,18 @@ public class Product {
 
     public void addOption(Option option) {
         options.add(option);
+    }
+
+    public void removeOption(Option option) {
+        if (!options.contains(option)) {
+            throw new CustomException(ErrorCode.OPTION_NOT_FOUND);
+        }
+
+        if (options.size() == 1 && options.contains(option)) {
+            throw new CustomException(ErrorCode.LAST_OPTION);
+        }
+
+        options.remove(option);
     }
 
     public Long getId() {
