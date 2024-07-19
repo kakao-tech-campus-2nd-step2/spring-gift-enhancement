@@ -23,6 +23,11 @@ public class OptionRequest {
     private OptionRequest(){
     }
 
+    public OptionRequest(String name, int quantity){
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public String getName() {
         return name;
     }
