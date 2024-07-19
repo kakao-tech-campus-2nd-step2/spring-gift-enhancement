@@ -3,6 +3,8 @@ package gift.product.service;
 import gift.category.domain.Category;
 import gift.category.repository.CategoryRepository;
 import gift.category.service.CategoryService;
+import gift.option.domain.Option;
+import gift.option.domain.OptionDTO;
 import gift.option.repository.OptionRepository;
 import gift.option.service.OptionService;
 import gift.product.domain.Product;
@@ -24,14 +26,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final OptionRepository optionRepository;
+    private final OptionService optionService;
 
     public ProductService(ProductRepository productRepository,
         CategoryRepository categoryRepository,
-        OptionRepository optionRepository) {
+        OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.optionRepository = optionRepository;
+        this.optionService = optionService;
     }
 
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
@@ -55,7 +57,8 @@ public class ProductService {
     }
 
     public void createProduct(@Valid ProductDTO productDTO) {
-        productRepository.save(convertToEntity(productDTO));
+        Product product = productRepository.save(convertToEntity(productDTO));
+        optionService.saveAllwithProductId(productDTO.getOptionDTOList(), product.getId());
     }
 
     public void updateProduct(Long id, @Valid ProductDTO productDTO) {
@@ -83,15 +86,18 @@ public class ProductService {
         productRepository.deleteById(id);
     }
     private ProductDTO convertToDTO(Product product) {
+        List<OptionDTO> optionDTOList = optionService.findAllByProductId(product.getId());
+
         return new ProductDTO(
             product.getId(),
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
             product.getCategory().getId(),
-            optionRepository.findAllNameByProductId(product.getId())
+            optionDTOList
         );
     }
+
 
     private Product convertToEntity(ProductDTO productDTO) {
         Category category = categoryRepository.findById(productDTO.getCategoryId()).get();
@@ -102,6 +108,10 @@ public class ProductService {
         product.setImageUrl(productDTO.getImageUrl());
         product.setCategory(category);
 
+        List<Option> optionList = productDTO.getOptionDTOList().stream()
+            .map(optionService::convertToEntity)
+            .toList();
+        product.setOptionList(optionList);
         return product;
     }
 }
