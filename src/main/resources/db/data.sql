@@ -12,3 +12,7 @@ INSERT INTO member (name, email, password, role)
 VALUES ('사용자', 'member@email.com', 'password', 'user');
 INSERT INTO member (name, email, password, role)
 VALUES ('카카오', 'kakaouser@email.com', 'password', 'kakaouser');
+
+INSERT INTO options (name, quantity, product_id)
+VALUES ('임시 옵션',1,1),
+       ('임시 옵션',1,2);
