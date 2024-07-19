@@ -1,5 +1,7 @@
 package gift.option.model;
 
+import gift.common.exception.OptionException;
+import gift.option.OptionErrorCode;
 import gift.product.model.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,13 +53,13 @@ public class Option {
         return product;
     }
 
-    public void validateDuplicated(Option other) {
+    public void validateDuplicated(Option other) throws OptionException {
         if (name.equals(other.getName())) {
-            throw new IllegalArgumentException();
+            throw new OptionException(OptionErrorCode.NAME_DUPLICATED);
         }
     }
 
-    public void updateInfo(String name, Integer quantity) {
+    public void updateInfo(String name, Integer quantity) throws OptionException {
         validateDuplicated(new Option(name, quantity, null));
         this.name = name;
         this.quantity = quantity;

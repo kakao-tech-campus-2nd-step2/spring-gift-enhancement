@@ -1,5 +1,6 @@
 package gift.option.model;
 
+import gift.common.exception.OptionException;
 import java.util.List;
 
 public class Options {
@@ -18,7 +19,7 @@ public class Options {
         return options;
     }
 
-    public void validate(Option option) {
+    public void validate(Option option) throws OptionException {
         options.forEach((it) -> it.validateDuplicated(option));
     }
 }

@@ -30,11 +30,11 @@ public class OptionService {
             .stream()
             .map(OptionResponse::from)
             .toList();
-
     }
 
     @Transactional
-    public Long addOption(Long productId, OptionRequest optionRequest) throws ProductException {
+    public Long addOption(Long productId, OptionRequest optionRequest)
+        throws ProductException, OptionException {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductException(
                 ProductErrorCode.NOT_FOUND));
