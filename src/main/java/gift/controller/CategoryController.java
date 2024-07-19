@@ -24,14 +24,14 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/category")
+    @GetMapping("/categories")
     public ResponseEntity<List<CategoryResponseDTO>> getCategory () {
         List<CategoryResponseDTO> categoryList = categoryService.findAll();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(categoryList);
     }
 
-    @PostMapping("/category")
+    @PostMapping("/categories")
     public ResponseEntity<String> createCategory (@RequestBody CategoryRequestDTO categoryRequestDTO) {
         categoryService.addCategory(categoryRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
