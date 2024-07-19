@@ -2,8 +2,8 @@ package gift.controller;
 
 import gift.dto.CategoryUpdateRequest;
 import gift.dto.ProductRequest;
+import gift.dto.ProductResponse;
 import gift.dto.ProductUpdateRequest;
-import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -25,14 +25,14 @@ public class ProductController {
     }
     
     @GetMapping
-    public ResponseEntity<Page<Product>> getAllProducts(@PageableDefault(sort="name") Pageable pageable) {
-    	Page<Product> products = productService.getProducts(pageable);
+    public ResponseEntity<Page<ProductResponse>> getProducts(@PageableDefault(sort="name") Pageable pageable) {
+    	Page<ProductResponse> products = productService.getProducts(pageable);
     	return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") long id) {
-        Product product = productService.getProduct(id);
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") long id) {
+    	ProductResponse product = productService.getProduct(id);
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
