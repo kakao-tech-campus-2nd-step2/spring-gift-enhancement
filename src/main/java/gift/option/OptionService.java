@@ -1,5 +1,6 @@
 package gift.option;
 
+import gift.common.exception.OptionException;
 import gift.common.exception.ProductException;
 import gift.option.model.Option;
 import gift.option.model.OptionRequest;
@@ -46,7 +47,8 @@ public class OptionService {
 
     @Transactional
     public void updateOption(Long optionId, OptionRequest optionRequest) {
-        Option option = optionRepository.findById(optionId).orElseThrow();
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
         option.updateInfo(optionRequest.getName(), optionRequest.getQuantity());
     }
 

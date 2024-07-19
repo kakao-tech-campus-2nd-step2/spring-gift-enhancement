@@ -3,6 +3,7 @@ package gift.category;
 import gift.category.model.Category;
 import gift.category.model.CategoryRequestDto;
 import gift.category.model.CategoryResponseDto;
+import gift.common.exception.CategoryException;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryResponseDto getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Category 가 잘못되었습니다."));
+            .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         return CategoryResponseDto.from(category);
     }
 
@@ -40,7 +41,7 @@ public class CategoryService {
     @Transactional
     public void updateCategory(CategoryRequestDto categoryRequestDto, Long id) {
         Category category = categoryRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Category 가 잘못되었습니다."));
+            .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         category.updateInfo(categoryRequestDto.toEntity());
     }
 

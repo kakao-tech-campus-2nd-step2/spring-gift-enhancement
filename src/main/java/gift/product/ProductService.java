@@ -1,7 +1,9 @@
 package gift.product;
 
+import gift.category.CategoryErrorCode;
 import gift.category.CategoryRepository;
 import gift.category.model.Category;
+import gift.common.exception.CategoryException;
 import gift.common.exception.ProductException;
 import gift.product.model.Product;
 import gift.product.model.ProductRequestDto;
@@ -38,7 +40,7 @@ public class ProductService {
     @Transactional
     public Long insertProduct(ProductRequestDto productRequestDto) throws ProductException {
         Category category = categoryRepository.findById(productRequestDto.getCategoryId())
-            .orElseThrow(() -> new IllegalArgumentException("wish 가 잘못되었습니다."));
+            .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         Product product = new Product(productRequestDto.getName(), productRequestDto.getPrice(),
             productRequestDto.getImageUrl(), category);
         productRepository.save(product);
@@ -49,7 +51,7 @@ public class ProductService {
     public void updateProductById(Long id, ProductRequestDto productRequestDto)
         throws ProductException {
         Category category = categoryRepository.findById(productRequestDto.getCategoryId())
-            .orElseThrow(() -> new IllegalArgumentException("Category 값이 잘못되었습니다."));
+            .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
         product.updateInfo(productRequestDto.getName(), productRequestDto.getPrice(),
