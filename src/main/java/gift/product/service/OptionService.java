@@ -21,6 +21,7 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
+
     @Transactional(readOnly = true)
     public List<OptionResponse> findOptionsByProductId(Long productId) {
         List<Option> options = optionRepository.findAllByProductIdAndIsActiveTrue(productId);
@@ -44,8 +45,9 @@ public class OptionService {
     }
 
     @Transactional
-    public void updateOption(Long optionId, UpdateOptionRequest updateOptionRequest) {
+    public void updateOption(Product product, Long optionId, UpdateOptionRequest updateOptionRequest) {
         Option option = getOption(optionId);
+        checkOptionOwner(product, option);
         option.setName(updateOptionRequest.name());
         option.setQuantity(updateOptionRequest.quantity());
         option.setAdditionalCost(updateOptionRequest.additionalCost());
@@ -53,15 +55,25 @@ public class OptionService {
     }
 
     @Transactional
-    public void deleteOption(Long optionId) {
-        Optional<Option> optionOptional = optionRepository.findByIdAndIsActiveTrue(optionId);
-        Option existingOption = optionOptional.orElseThrow(() -> new EntityNotFoundException("Option"));
-        existingOption.setActive(false);
-        optionRepository.save(existingOption);
+    public void deleteOption(Product product, Long optionId) {
+        Option option = getOption(optionId);
+        checkOptionOwner(product, option);
+        if (optionRepository.countByProductIdAndIsActiveTrue(product.getId()) <= 1) {
+            throw new IllegalStateException("상품은 하나 이상의 옵션을 가지고 있어야 합니다.");
+        }
+        option.setActive(false);
+        optionRepository.save(option);
     }
 
+    @Transactional(readOnly = true)
     public Option getOption(Long optionId) {
         Optional<Option> option = optionRepository.findByIdAndIsActiveTrue(optionId);
         return option.orElseThrow(() -> new EntityNotFoundException("Category"));
+    }
+
+    private void checkOptionOwner(Product product, Option option) {
+        if (option.isOwner(product.getId())) {
+            throw new EntityNotFoundException("Option");
+        }
     }
 }

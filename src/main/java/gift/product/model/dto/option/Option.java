@@ -100,4 +100,8 @@ public class Option {
     public void setActive(boolean active) {
         isActive = active;
     }
+
+    public boolean isOwner(Long productId) {
+        return product.getId().equals(productId);
+    }
 }

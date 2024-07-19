@@ -69,7 +69,7 @@ public class OptionServiceTest {
         when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.of(option));
 
         // when, then
-        assertDoesNotThrow(() -> optionService.updateOption(option.getId(), updateRequest));
+        assertDoesNotThrow(() -> optionService.updateOption(product, option.getId(), updateRequest));
         verify(optionRepository, times(1)).save(any(Option.class));
         assertEquals(updateRequest.name(), option.getName());
     }
@@ -82,7 +82,8 @@ public class OptionServiceTest {
         ;
 
         // when,then
-        assertThrows(EntityNotFoundException.class, () -> optionService.updateOption(option.getId(), updateRequest));
+        assertThrows(EntityNotFoundException.class,
+                () -> optionService.updateOption(product, option.getId(), updateRequest));
         verify(optionRepository, times(0)).save(any(Option.class));
     }
 
@@ -93,7 +94,7 @@ public class OptionServiceTest {
         when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.of(option));
 
         // when
-        optionService.deleteOption(option.getId());
+        optionService.deleteOption(product, option.getId());
 
         // then
         verify(optionRepository, times(1)).save(any(Option.class));
@@ -107,7 +108,7 @@ public class OptionServiceTest {
         when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.empty());
 
         // when,then
-        assertThrows(EntityNotFoundException.class, () -> optionService.deleteOption(option.getId()));
+        assertThrows(EntityNotFoundException.class, () -> optionService.deleteOption(product, option.getId()));
         verify(optionRepository, times(0)).save(any(Option.class));
     }
 }
