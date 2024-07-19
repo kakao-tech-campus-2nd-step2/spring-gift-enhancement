@@ -26,4 +26,10 @@ public class OptionsExceptionHandler {
     public ErrorResult deleteExHandle(DeleteOptionsException e) {
         return new ErrorResult("상품 옵션 에러", e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(OptionsQuantityException.class)
+    public ErrorResult optionsQuantityExHandle(OptionsQuantityException e) {
+        return new ErrorResult("상품 옵션 수량 에러", e.getMessage());
+    }
 }
