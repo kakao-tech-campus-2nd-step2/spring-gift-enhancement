@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductRequest;
 import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
@@ -62,4 +63,31 @@ public class ProductRestController {
         productService.findById(id);
         return ResponseEntity.ok().body(optionService.findByProductId(id));
     }
+
+    @PostMapping("/{id}/options")
+    public ResponseEntity<Void> addProductOption(@PathVariable Long id, @Valid @RequestBody OptionRequest optionRequest){
+        optionService.save(id, optionRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+
+    /*
+    @GetMapping("/{id}/options/{optionId}")
+    public ResponseEntity<OptionResponse> getProductOptionById(@PathVariable Long id){
+        OptionResponse foundOption = optionService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(foundOption);
+    }
+
+
+    @DeleteMapping("/{id}/options/{optionId}")
+    public ResponseEntity<Void> deleteOptionById(@PathVariable Long id){
+        optionService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/options/{optionId}")
+    public ResponseEntity<Void> updateOptionById(@PathVariable Long id, @PathVariable Long optionId, @RequestBody OptionRequest optionRequest){
+        optionService.updateById(id,optionRequest);
+        return ResponseEntity.ok().build();
+    }*/
 }
