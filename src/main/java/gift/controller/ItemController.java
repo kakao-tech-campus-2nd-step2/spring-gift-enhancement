@@ -5,6 +5,7 @@ import gift.exception.customException.CustomArgumentNotValidException;
 import gift.model.item.ItemDTO;
 import gift.model.item.ItemForm;
 import gift.service.ItemService;
+import gift.service.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ItemController {
 
     private final ItemService itemService;
+    private final OptionService optionService;
 
-    public ItemController(ItemService itemService) {
+    public ItemController(ItemService itemService, OptionService optionService) {
         this.itemService = itemService;
+        this.optionService = optionService;
     }
 
     @GetMapping("/list")
@@ -51,9 +54,13 @@ public class ItemController {
     public ResponseEntity<Long> createItem(@Valid @RequestBody ItemForm form, BindingResult result)
         throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new CustomArgumentNotValidException(result, ErrorCode.BAD_REQUEST);
+            throw new CustomArgumentNotValidException(result, ErrorCode.INVALID_INPUT);
         }
-        return ResponseEntity.ok(itemService.insertItem(form));
+        ItemDTO itemDTO = new ItemDTO(form.getName(), form.getPrice(), form.getImgUrl(),
+            form.getCategoryId());
+        Long itemId = itemService.insertItem(itemDTO);
+        optionService.insertOptionList(itemId, form.getOptions(), result);
+        return ResponseEntity.ok(itemId);
     }
 
 
