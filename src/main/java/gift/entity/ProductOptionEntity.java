@@ -9,8 +9,8 @@ import jakarta.persistence.Id;
 /**
  * 제품 옵션 엔티티. 데이터베이스 테이블과 매핑된다.
  */
-@Entity
-public class ProductOption {
+@Entity(name = "product_option")
+public class ProductOptionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +21,9 @@ public class ProductOption {
 
     @Column(nullable = false)
     private long quantity;
-    protected ProductOption() {}
+    protected ProductOptionEntity() {}
 
-    public ProductOption(String name, long quantity) {
+    public ProductOptionEntity(String name, long quantity) {
         this.name = name;
         this.quantity = quantity;
     }
