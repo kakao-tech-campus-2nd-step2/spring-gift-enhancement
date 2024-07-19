@@ -8,13 +8,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import gift.dto.OptionDto;
 import gift.dto.ProductDto;
+import gift.dto.request.ProductCreateRequest;
 import gift.dto.response.ProductPageResponse;
 import gift.entity.Category;
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.entity.WishList;
 import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishListRepository;
 import jakarta.transaction.Transactional;
@@ -25,11 +29,16 @@ public class ProductService{
     private ProductRepository productRepository;
     private WishListRepository wishListRepository;
     private CategoryRepository categoryRepository;
+    private OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository) {
+    private OptionService optionService;
+
+    public ProductService(ProductRepository productRepository, WishListRepository wishListRepository, CategoryRepository categoryRepository, OptionRepository optionRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.wishListRepository = wishListRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
+        this.optionService = optionService;
     }
 
     @Transactional
@@ -60,13 +69,25 @@ public class ProductService{
     }
 
     @Transactional
-    public void addProduct(ProductDto productDto) {
+    public void addProduct(ProductCreateRequest productCreateRequest) {
   
-        if(productRepository.findById(productDto.getId()).isEmpty()){
-            Product product = toEntity(productDto);
-            productRepository.save(product);
+        if(productRepository.findByNameAndPriceAndImageUrl(productCreateRequest.getProductName(), 
+                                                            productCreateRequest.getPrice(),
+                                                            productCreateRequest.getImageUrl()).isEmpty()){
+        
+            Category category = categoryRepository.findByName(productCreateRequest.getCategory())
+                    .orElseThrow(() -> new CustomException("Category with name" + productCreateRequest.getCategory() + "NOT FOUND" , HttpStatus.NOT_FOUND));
+            
+            Product product = new Product(productCreateRequest.getProductName(), 
+                                          productCreateRequest.getPrice(),
+                                          productCreateRequest.getImageUrl(),
+                                          category);
+            
+            Product savedProduct = productRepository.save(product);
+            
+            optionService.addOption(new OptionDto(0L, productCreateRequest.getOptionName(), productCreateRequest.getQuantity()), savedProduct.getId());
         }else{
-            throw new CustomException("Product with id " + productDto.getId() + "exists", HttpStatus.CONFLICT);
+            throw new CustomException("Product with name " + productCreateRequest.getProductName() + "exists", HttpStatus.CONFLICT);
         }
     }
 
@@ -92,6 +113,9 @@ public class ProductService{
 
         List<WishList> wishList = wishListRepository.findByProductId(id);
         wishListRepository.deleteAll(wishList);
+        
+        List<Option> options = optionRepository.findByProductId(id);
+        optionRepository.deleteAll(options);
 
         productRepository.deleteById(id);
     }
