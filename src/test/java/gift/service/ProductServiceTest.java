@@ -1,7 +1,9 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
+import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductRequest;
 import gift.exception.CategoryNotFoundException;
 import gift.exception.ProductNotFoundException;
@@ -31,6 +33,9 @@ public class ProductServiceTest {
     @Mock
     private CategorySpringDataJpaRepository categoryRepository;
 
+    @Mock
+    private OptionService optionService;
+
     @InjectMocks
     private ProductService productService;
 
@@ -43,10 +48,21 @@ public class ProductServiceTest {
         when(categoryRepository.findByName("패션")).thenReturn(Optional.of(mockCategory));
 
         ProductRequest productRequest = new ProductRequest("상의", 800, "상의.jpg", "패션");
+        OptionRequest optionRequest = new OptionRequest("옵션1", 10);
 
-        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Product mockProduct = mock(Product.class);
+        when(mockProduct.getId()).thenReturn(1L);
+        when(mockProduct.getName()).thenReturn("상의");
+        when(mockProduct.getPrice()).thenReturn(800);
+        when(mockProduct.getImageUrl()).thenReturn("상의.jpg");
+        when(mockProduct.getCategory()).thenReturn(mockCategory);
 
-        Product registeredProduct = productService.register(productRequest);
+        when(productRepository.save(any(Product.class))).thenReturn(mockProduct);
+
+        when(optionService.addOptionToProduct(any(Long.class), any(OptionRequest.class)))
+                .thenReturn(new Option());
+
+        Product registeredProduct = productService.register(productRequest, optionRequest);
 
         assertEquals("상의", registeredProduct.getName());
         assertEquals(800, registeredProduct.getPrice());
@@ -55,20 +71,21 @@ public class ProductServiceTest {
 
         verify(categoryRepository, times(1)).findByName("패션");
         verify(productRepository, times(1)).save(any(Product.class));
+        verify(optionService, times(1)).addOptionToProduct(eq(1L), any(OptionRequest.class));
     }
 
     @Test
     public void testRegisterProductCategoryNotFound() {
-        mockCategory = mock(Category.class);
-        when(categoryRepository.findByName("패션")).thenReturn(Optional.of(mockCategory));
-
         ProductRequest productRequest = new ProductRequest("상의", 800, "상의.jpg", "패션");
+        OptionRequest optionRequest = new OptionRequest("옵션1", 10);
+
         when(categoryRepository.findByName("패션")).thenReturn(Optional.empty());
 
-        assertThrows(CategoryNotFoundException.class, () -> productService.register(productRequest));
+        assertThrows(CategoryNotFoundException.class, () -> productService.register(productRequest, optionRequest));
 
         verify(categoryRepository, times(1)).findByName("패션");
         verify(productRepository, never()).save(any());
+        verify(optionService, never()).addOptionToProduct(any(Long.class), any(OptionRequest.class));
     }
 
     @Test
@@ -92,9 +109,7 @@ public class ProductServiceTest {
     @Test
     public void testFindOneProduct() {
         mockProduct = mock(Product.class);
-
         Long productId = 1L;
-
         when(mockProduct.getName()).thenReturn("상의");
         when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
 
@@ -117,19 +132,28 @@ public class ProductServiceTest {
 
     @Test
     public void testUpdateProduct() {
-        mockProduct = mock(Product.class);
-        mockCategory = mock(Category.class);
-
         Long productId = 1L;
         ProductRequest productRequest = new ProductRequest("하의", 1200, "하의.jpg", "패션");
+
+        Category mockCategory = mock(Category.class);
+        Product mockProduct = mock(Product.class);
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
         when(categoryRepository.findByName("패션")).thenReturn(Optional.of(mockCategory));
 
-        when(mockProduct.getName()).thenReturn("하의");
-        when(mockProduct.getPrice()).thenReturn(1200);
-        when(mockProduct.getImageUrl()).thenReturn("하의.jpg");
+        when(mockProduct.getName()).thenReturn("상의");
+        when(mockProduct.getPrice()).thenReturn(800);
+        when(mockProduct.getImageUrl()).thenReturn("상의.jpg");
         when(mockProduct.getCategory()).thenReturn(mockCategory);
+
+        doAnswer(invocation -> {
+            ProductRequest req = invocation.getArgument(0);
+            when(mockProduct.getName()).thenReturn(req.getName());
+            when(mockProduct.getPrice()).thenReturn(req.getPrice());
+            when(mockProduct.getImageUrl()).thenReturn(req.getImageUrl());
+            when(mockProduct.getCategory()).thenReturn(mockCategory);
+            return null;
+        }).when(mockProduct).update(eq(productRequest), eq(mockCategory));
 
         when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -142,8 +166,10 @@ public class ProductServiceTest {
 
         verify(productRepository, times(1)).findById(productId);
         verify(categoryRepository, times(1)).findByName("패션");
+        verify(mockProduct, times(1)).update(eq(productRequest), eq(mockCategory));
         verify(productRepository, times(1)).save(any(Product.class));
     }
+
 
 
     @Test

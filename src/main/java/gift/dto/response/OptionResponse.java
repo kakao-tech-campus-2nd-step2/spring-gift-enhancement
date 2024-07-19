@@ -11,4 +11,11 @@ public class OptionResponse {
         this.quantity = quantity;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
 }
