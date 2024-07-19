@@ -22,10 +22,13 @@ public class Option {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Min(1)
+    @Min(0)
     @Max(99999999)
     @Column(nullable = false)
     private Long quantity;
+
+    @Version
+    private Long version;
 
     protected Option() {
     }
@@ -36,6 +39,10 @@ public class Option {
 
     public String getName() {
         return name;
+    }
+
+    public Long getQuantity() {
+        return quantity;
     }
 
     public void setProduct(Product product) {
@@ -59,7 +66,7 @@ public class Option {
         if (quantity == null || quantity <= 0) {
             throw new GiftException(ErrorCode.INVALID_QUANTITY);
         }
-        if (this.quantity <= quantity) {
+        if (this.quantity < quantity) {
             throw new GiftException(ErrorCode.QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
         }
         this.quantity -= quantity;
