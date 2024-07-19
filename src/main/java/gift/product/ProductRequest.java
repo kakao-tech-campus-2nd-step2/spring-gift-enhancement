@@ -1,5 +1,6 @@
 package gift.product;
 
+import gift.option.OptionRequest;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -19,6 +20,9 @@ public class ProductRequest {
 
     @NotNull(message = "카테고리는 필수 값 입니다.")
     private Long categoryId;
+
+    @NotNull(message = "반드시 옵션 하나는 있어야 합니다.")
+    private OptionRequest optionRequest;
 
     public Long getId() {
         return id;
@@ -58,6 +62,10 @@ public class ProductRequest {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public OptionRequest getOptionRequest(){
+        return optionRequest;
     }
 
     public Product toEntity(){
