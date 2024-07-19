@@ -1,9 +1,11 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.ProductRequest;
 import gift.exception.CategoryNotFoundException;
+import gift.exception.DuplicateOptionNameException;
 import gift.exception.InvalidProductDataException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.category.CategorySpringDataJpaRepository;
@@ -16,8 +18,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static gift.exception.ErrorCode.CATEGORY_NOT_FOUND;
-import static gift.exception.ErrorCode.PRODUCT_NOT_FOUND;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static gift.exception.ErrorCode.*;
 
 @Service
 @Transactional()
@@ -31,14 +37,25 @@ public class ProductService {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.optionRepository = optionRepository;
-
     }
 
     public Product register(ProductRequest productRequest) {
         Category category = categoryRepository.findByName(productRequest.getCategoryName()).
                 orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
 
-        Product product = new Product(productRequest, category);
+        List<Option> options = productRequest.getOptions().stream()
+                .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(), null))
+                .collect(Collectors.toList());
+
+        checkForDuplicateOptions(options);
+
+        Product product = new Product(
+                productRequest.getName(),
+                productRequest.getPrice(),
+                productRequest.getImageUrl(),
+                category,
+                options
+        );
 
         try {
             return productRepository.save(product);
@@ -72,5 +89,22 @@ public class ProductService {
                 orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
         productRepository.delete(product);
         return product;
+    }
+
+    private void checkForDuplicateOptions(List<Option> newOptions) {
+        List<Option> allOptions = optionRepository.findAll();
+        Set<String> existingOptionNames = allOptions.stream()
+                .map(Option::getName)
+                .collect(Collectors.toSet());
+
+        Set<String> newOptionNames = new HashSet<>();
+        for (Option option : newOptions) {
+            if (!newOptionNames.add(option.getName())) {
+                throw new DuplicateOptionNameException(DUPLICATE_OPTION_NAME);
+            }
+            if (existingOptionNames.contains(option.getName())) {
+                throw new DuplicateOptionNameException(DUPLICATE_OPTION_NAME);
+            }
+        }
     }
 }

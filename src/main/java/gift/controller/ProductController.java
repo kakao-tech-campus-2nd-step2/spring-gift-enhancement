@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.ProductRequest;
 import gift.dto.response.ProductResponse;
@@ -9,9 +10,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/products")
@@ -71,6 +75,11 @@ public class ProductController {
     public String deleteProduct(@PathVariable Long id) {
         productService.delete(id);
         return "redirect:/api/products";
+    }
 
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<Option>> getOptionsByProductId(@PathVariable("id") Long id) {
+        Product product = productService.findOne(id);
+        return ResponseEntity.ok(product.getOptions());
     }
 }

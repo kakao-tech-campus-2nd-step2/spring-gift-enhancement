@@ -36,23 +36,27 @@ public class Product {
 
     public Product() { }
 
-    public Product(String name, Integer price, String imageUrl, Category category, List<OptionRequest> optionRequests) {
+    public Product(String name, Integer price, String imageUrl, Category category, List<Option> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        setOptionsFromRequest(optionRequests);
+        this.options = options;
+        this.options.forEach(option -> option.setProduct(this)); // Set the product reference in each option
     }
 
-    public Product(ProductRequest productRequest, Category category){
-        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category, productRequest.getOptions());
-    }
 
-    private void setOptionsFromRequest(List<OptionRequest> optionRequests) {
-        this.options = optionRequests.stream()
+
+    public void update(ProductRequest productRequest, Category category) {
+        this.name = productRequest.getName();
+        this.price = productRequest.getPrice();
+        this.imageUrl = productRequest.getImageUrl();
+        this.category = category;
+        this.options = productRequest.getOptions().stream()
                 .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(), this))
-                .toList();
+                .collect(Collectors.toList());
     }
+
 
 
     public long getId() {
@@ -82,12 +86,12 @@ public class Product {
 
     public Category getCategory() { return category; }
 
-    public void update(ProductRequest productRequest, Category category){
-        this.name = productRequest.getName();
-        this.price = productRequest.getPrice();
-        this.imageUrl = productRequest.getImageUrl();
-        this.category = category;
-        setOptionsFromRequest(productRequest.getOptions());
+    public List<Option> getOptions() {
+        return options;
     }
 
+    public void setOptions(List<Option> options) {
+        this.options = options;
+        this.options.forEach(option -> option.setProduct(this)); // Ensure the product reference is set in each option
+    }
 }

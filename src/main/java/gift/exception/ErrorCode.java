@@ -10,7 +10,8 @@ public enum ErrorCode {
     UNAUTHORIZED("인증되지 않은 사용자입니다.", 401, HttpStatus.UNAUTHORIZED),
     INVALID_CREDENTIAL("잘못된 비빌번호 입니다.", 401, HttpStatus.UNAUTHORIZED),
     DUPLICATE_MEMBER_EMAIL("이미 등록된 이메일입니다.", 409, HttpStatus.CONFLICT),
-    DUPLICATE_CATEGORY_NAME("중복된 카테고리 이름입니다.", 409, HttpStatus.CONFLICT);
+    DUPLICATE_CATEGORY_NAME("중복된 카테고리 이름입니다.", 409, HttpStatus.CONFLICT),
+    DUPLICATE_OPTION_NAME("중복된 옵션 이름입니다.", 409, HttpStatus.CONFLICT);
 
     private final String message;
     private final int statusCode;

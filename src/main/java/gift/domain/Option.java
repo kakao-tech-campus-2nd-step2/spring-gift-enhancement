@@ -37,4 +37,8 @@ public class Option {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    public String getName() {
+        return name;
+    }
 }
