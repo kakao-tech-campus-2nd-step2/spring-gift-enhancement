@@ -33,7 +33,7 @@ public class MemberService {
 
     public void registerMember(MemberDto memberDto) {
         Member member = new Member(memberDto);
-        assertUserEmailNotDuplicate(member);
+        assertUserEmailNotDuplicate(member.getEmail());
         memberJpaDao.save(member);
     }
 
@@ -90,8 +90,8 @@ public class MemberService {
             });
     }
 
-    private void assertUserEmailNotDuplicate(Member member) {
-        memberJpaDao.findByEmail(member.getEmail())
+    private void assertUserEmailNotDuplicate(String memberEmail) {
+        memberJpaDao.findByEmail(memberEmail)
             .ifPresent(user -> {
                 throw new IllegalArgumentException(ErrorMessage.EMAIL_ALREADY_EXISTS_MSG);
             });
