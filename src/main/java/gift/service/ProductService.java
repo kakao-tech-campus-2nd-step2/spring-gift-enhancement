@@ -33,12 +33,8 @@ public class ProductService {
      * 상품을 먼저 등록한 뒤, 옵션들을 추가. 상품 등록이 실패하여 savedProduct가 null이면 옵션을 추가하지 않음.
      */
     public void addProduct(ProductRequest productRequest) {
-        productJpaDao.findByName(productRequest.getName())
-            .ifPresent(v -> {
-                throw new IllegalArgumentException(ErrorMessage.PRODUCT_ALREADY_EXISTS_MSG);
-            });
-        Category category = categoryJpaDao.findById(productRequest.getCategoryId())
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
+        assertProductNotDuplicate(productRequest.getName());
+        Category category = findCategoryByIdOrElseThrow(productRequest.getCategoryId());
         Product savedProduct = productJpaDao.save(new Product(productRequest, category));
         addOptions(productRequest, savedProduct);
     }
@@ -49,8 +45,7 @@ public class ProductService {
     @Transactional
     public void editProduct(ProductRequest productRequest) {
         Product targetProduct = findProductByIdOrElseThrow(productRequest.getId());
-        Category category = categoryJpaDao.findById(productRequest.getCategoryId())
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
+        Category category = findCategoryByIdOrElseThrow(productRequest.getCategoryId());
         targetProduct.updateProduct(productRequest, category);
     }
 
@@ -66,14 +61,6 @@ public class ProductService {
     public ProductResponse getProduct(Long id) {
         Product product = findProductByIdOrElseThrow(id);
         return new ProductResponse(product);
-    }
-
-    /**
-     * 해당 상품이 존재하면 반환. 아니면 NoSuchElementException
-     */
-    private Product findProductByIdOrElseThrow(Long id) {
-        return productJpaDao.findById(id)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
     }
 
     /**
@@ -93,5 +80,25 @@ public class ProductService {
                 });
             optionJpaDao.save(new Option(optionDto, savedProduct));
         });
+    }
+
+    /**
+     * 해당 상품이 존재하면 반환. 아니면 NoSuchElementException
+     */
+    private Product findProductByIdOrElseThrow(Long id) {
+        return productJpaDao.findById(id)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
+    }
+
+    private Category findCategoryByIdOrElseThrow(Long categoryId) {
+        return categoryJpaDao.findById(categoryId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
+    }
+
+    private void assertProductNotDuplicate(String productName) {
+        productJpaDao.findByName(productName)
+            .ifPresent(v -> {
+                throw new IllegalArgumentException(ErrorMessage.PRODUCT_ALREADY_EXISTS_MSG);
+            });
     }
 }
