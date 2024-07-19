@@ -9,10 +9,14 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
-import gift.domain.dto.request.ProductRequest;
+import gift.domain.dto.request.OptionRequest;
+import gift.domain.dto.request.ProductAddRequest;
+import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.CategoryResponse;
+import gift.domain.dto.response.OptionResponse;
 import gift.domain.dto.response.ProductResponse;
 import gift.domain.entity.Category;
+import gift.domain.entity.Option;
 import gift.domain.entity.Product;
 import gift.domain.exception.ProductAlreadyExistsException;
 import gift.domain.exception.ProductNotFoundException;
@@ -43,13 +47,19 @@ class ProductServiceTest {
 
     private Product product;
     private Category category;
+    private List<Option> options;
     private CategoryResponse categoryResponse;
+    private List<OptionRequest> optionRequests;
+    private List<OptionResponse> optionResponses;
 
     @BeforeEach
     public void beforeEach() {
         product = MockObjectSupplier.get(Product.class);
         category = MockObjectSupplier.get(Category.class);
+        options = List.of(MockObjectSupplier.get(Option.class));
         categoryResponse = CategoryResponse.of(category);
+        optionRequests = OptionRequest.of(options);
+        optionResponses = OptionResponse.of(options);
     }
 
     @Test
@@ -85,13 +95,14 @@ class ProductServiceTest {
             new Product("name1", 1000, "image1.png", category),
             new Product("name2", 2000, "image2.png", category),
             new Product("name3", 3000, "image3.png", category));
-        ReflectionTestUtils.setField(productList.get(0), "id", 1L);
-        ReflectionTestUtils.setField(productList.get(1), "id", 2L);
-        ReflectionTestUtils.setField(productList.get(2), "id", 3L);
+        for (int i = 0; i < productList.size(); i++) {
+            ReflectionTestUtils.setField(productList.get(i), "id", i + 1L);
+            ReflectionTestUtils.setField(productList.get(i), "options", options);
+        }
         List<ProductResponse> expected = List.of(
-            new ProductResponse(1L, "name1", 1000, "image1.png", categoryResponse),
-            new ProductResponse(2L, "name2", 2000, "image2.png", categoryResponse),
-            new ProductResponse(3L, "name3", 3000, "image3.png", categoryResponse));
+            new ProductResponse(1L, "name1", 1000, "image1.png", categoryResponse, optionResponses),
+            new ProductResponse(2L, "name2", 2000, "image2.png", categoryResponse, optionResponses),
+            new ProductResponse(3L, "name3", 3000, "image3.png", categoryResponse, optionResponses));
         given(productRepository.findAll()).willReturn(productList);
 
         //when
@@ -105,9 +116,9 @@ class ProductServiceTest {
     @DisplayName("[UnitTest] 상품 추가")
     void addProduct() {
         //given
-        ProductRequest request = ProductRequest.of(product);
+        ProductAddRequest request = ProductAddRequest.of(product);
         ProductResponse expected = ProductResponse.of(product);
-        given(productRepository.findByContents(any(ProductRequest.class))).willReturn(Optional.empty());
+        given(productRepository.findByContents(any(ProductAddRequest.class))).willReturn(Optional.empty());
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(categoryService.findById(eq(request.categoryId()))).willReturn(category);
 
@@ -125,8 +136,8 @@ class ProductServiceTest {
     @DisplayName("[UnitTest/Fail] 상품 추가: 이미 있는 상품 등록시")
     void addProduct_AlreadyExists() {
         //given
-        ProductRequest request = new ProductRequest("name", 1000,"image.png", 1L);
-        given(productRepository.findByContents(any(ProductRequest.class)))
+        ProductAddRequest request = new ProductAddRequest("name", 1000,"image.png", 1L, optionRequests);
+        given(productRepository.findByContents(any(ProductAddRequest.class)))
             .willReturn(Optional.of(product));
 
         //when & then
@@ -140,10 +151,10 @@ class ProductServiceTest {
     void updateProductById() {
         //given
         Long id = 1L;
-        ProductRequest request = new ProductRequest("newName", 10000, "newImage.jpg", 1L);
+        ProductUpdateRequest request = new ProductUpdateRequest("newName", 10000, "newImage.jpg", 1L);
         given(productRepository.findById(any(Long.class))).willReturn(Optional.of(product));
         given(categoryService.findById(eq(request.categoryId()))).willReturn(category);
-        ProductResponse expected = new ProductResponse(1L, "newName", 10000, "newImage.jpg", categoryResponse);
+        ProductResponse expected = new ProductResponse(1L, "newName", 10000, "newImage.jpg", categoryResponse, optionResponses);
 
         //when
         ProductResponse actual = productService.updateProductById(id, request);

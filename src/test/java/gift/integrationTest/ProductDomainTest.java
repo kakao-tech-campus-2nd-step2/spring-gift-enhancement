@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.domain.controller.apiResponse.ProductAddApiResponse;
 import gift.domain.controller.apiResponse.ProductListApiResponse;
-import gift.domain.dto.request.ProductRequest;
+import gift.domain.dto.request.OptionRequest;
+import gift.domain.dto.request.ProductAddRequest;
+import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.ProductResponse;
 import gift.global.apiResponse.BasicApiResponse;
 import gift.utilForTest.TestUtil;
@@ -26,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.transaction.annotation.Transactional;
 
+//TODO: 옵션 관련 기능 구현 후 테스트 고치기
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
 class ProductDomainTest {
@@ -43,15 +46,28 @@ class ProductDomainTest {
             ProductListApiResponse.class).getBody()).getProducts();
     }
 
+    private ProductAddRequest getProductRequest() {
+        return new ProductAddRequest(
+            "product",
+            1_000,
+            "image.jpg",
+            1L,
+            List.of(new OptionRequest("옵션1", 300)));
+    }
+
     @Test
     @DisplayName("[ApiIntegrationTest] 상품 리스트 조회")
     void getProducts() {
         //given
-        List<ProductRequest> request = new ArrayList<>(List.of(
-            new ProductRequest("product1", 1_000, "image1.jpg", 1L),
-            new ProductRequest("product2", 2_000, "image2.jpg", 1L),
-            new ProductRequest("product3", 3_000, "image3.jpg", 1L)));
-        request.sort(Comparator.comparing(ProductRequest::name));
+        List<List<OptionRequest>> optionRequests = new ArrayList<>(List.of(
+            List.of(new OptionRequest("옵션1", 300)),
+            List.of(new OptionRequest("옵션1", 400)),
+                List.of(new OptionRequest("옵션2", 500))));
+        List<ProductAddRequest> request = new ArrayList<>(List.of(
+            new ProductAddRequest("product1", 1_000, "image1.jpg", 1L, optionRequests.get(0)),
+            new ProductAddRequest("product2", 2_000, "image2.jpg", 1L, optionRequests.get(1)),
+            new ProductAddRequest("product3", 3_000, "image3.jpg", 1L, optionRequests.get(2))));
+        request.sort(Comparator.comparing(ProductAddRequest::name));
         for (var req: request) {
             // request로 상품 등록 API 호출해 상품들을 등록함
             restTemplate.exchange(
@@ -74,7 +90,7 @@ class ProductDomainTest {
             assertThat(actual.name()).isEqualTo(req.name());
             assertThat(actual.price()).isEqualTo(req.price());
             assertThat(actual.imageUrl()).isEqualTo(req.imageUrl());
-            //TODO: 카테고리 응답에 대한 검증 필요 (카테고리 컨트롤러 구현필요)
+            //TODO: 카테고리, 옵션응답에 대한 검증 필요 (카테고리 컨트롤러 구현필요)
             //assertThat(actual.category()).isEqualTo()
         }
     }
@@ -83,7 +99,7 @@ class ProductDomainTest {
     @DisplayName("[ApiIntegrationTest] 상품 추가")
     void addProduct() {
         //given
-        ProductRequest request = new ProductRequest("product", 1_000, "image.jpg", 1L);
+        ProductAddRequest request = getProductRequest();
 
         //when
         var actualResponse = restTemplate.exchange(
@@ -106,11 +122,11 @@ class ProductDomainTest {
     @DisplayName("[ApiIntegrationTest] 상품 수정")
     void updateProduct() {
         //given
-        ProductRequest request = new ProductRequest("product", 1_000, "image.jpg", 1L);
+        ProductAddRequest request = getProductRequest();
         Long createdId = Objects.requireNonNull(restTemplate.exchange(
             new RequestEntity<>(request, HttpMethod.POST, testUtil.getUri(port, "/api/products")),
             ProductAddApiResponse.class).getBody()).getCreatedProduct().id();
-        ProductRequest toUpdateRequest = new ProductRequest("newProductName", 5_000, "newImage.jpg", 1L);
+        ProductUpdateRequest toUpdateRequest = new ProductUpdateRequest("newProductName", 5_000, "newImage.jpg", 1L);
 
         //when
         var actualResponse = restTemplate.exchange(
@@ -127,16 +143,17 @@ class ProductDomainTest {
         assertThat(updatedProduct.name()).isEqualTo(toUpdateRequest.name());
         assertThat(updatedProduct.price()).isEqualTo(toUpdateRequest.price());
         assertThat(updatedProduct.imageUrl()).isEqualTo(toUpdateRequest.imageUrl());
-        //TODO: 카테고리 검증 필요
+        //TODO: 카테고리, 옵션 검증 필요
     }
 
     //TODO: 카테고리 수정 테스트 필요
+    //TODO: 옵션 CRUD 테스트 필요
 
     @Test
     @DisplayName("[ApiIntegrationTest] 상품 삭제")
     void deleteProduct() {
         //given
-        ProductRequest request = new ProductRequest("product", 1_000, "image.jpg", 1L);
+        ProductAddRequest request = getProductRequest();
         Long createdId = Objects.requireNonNull(restTemplate.exchange(
             new RequestEntity<>(request, HttpMethod.POST, testUtil.getUri(port, "/api/products")),
             ProductAddApiResponse.class).getBody()).getCreatedProduct().id();
