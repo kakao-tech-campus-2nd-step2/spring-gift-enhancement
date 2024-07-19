@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ProductOptionRepository extends JpaRepository<ProductOption, Long> {
     List<ProductOption> findByProductId(Long productId);
+    boolean existsByProductIdAndName(Long productId, String name);
 }

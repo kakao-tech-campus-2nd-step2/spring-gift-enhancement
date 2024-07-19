@@ -22,7 +22,7 @@ public class ProductOptionController {
 
         int quantityToSubtract = request.get("quantity");
         try {
-            productOptionService.subtractOptionQuantity(optionId, quantityToSubtract);
+            productOptionService.subtractProductOptionQuantity(optionId, quantityToSubtract);
             return ResponseEntity.ok("Quantity 차감 성공");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

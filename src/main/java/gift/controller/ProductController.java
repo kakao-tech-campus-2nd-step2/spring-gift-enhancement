@@ -24,13 +24,11 @@ public class ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
-    private final ProductOptionService productOptionService;
 
     @Autowired
-    public ProductController(ProductService productService, CategoryService categoryService, ProductOptionService productOptionService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
         this.categoryService = categoryService;
-        this.productOptionService = productOptionService;
     }
 
     @PostMapping
@@ -40,13 +38,6 @@ public class ProductController {
         }
         product.setCategory(categoryService.findById(product.getCategory().getId()));
         productService.save(product);
-
-
-        for (ProductOption option : product.getOptions()) {
-            option.setProduct(product);
-            productOptionService.save(option);
-        }
-
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -69,15 +60,7 @@ public class ProductController {
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setPrice(updatedProduct.getPrice());
         existingProduct.setImageurl(updatedProduct.getImageurl());
-
-
-        productOptionService.deleteByProductId(existingProduct.getId());
-
-
-        for (ProductOption option : updatedProduct.getOptions()) {
-            option.setProduct(existingProduct);
-            productOptionService.save(option);
-        }
+        existingProduct.setOptions(updatedProduct.getOptions());
 
         productService.update(existingProduct);
         return new ResponseEntity<>(existingProduct, HttpStatus.OK);

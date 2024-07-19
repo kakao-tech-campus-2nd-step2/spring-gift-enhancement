@@ -18,22 +18,34 @@ public class ProductOptionService {
         return productOptionRepository.findByProductId(productId);
     }
 
-    public ProductOption findById(Long id) {
+    public ProductOption findProductOptionById(Long id) {
         Optional<ProductOption> productOption = productOptionRepository.findById(id);
         return productOption.orElse(null);
     }
 
-    public void save(ProductOption option) {
+    public void saveProductOption(ProductOption option) {
         productOptionRepository.save(option);
     }
 
-    public void deleteByProductId(Long productId) {
+    public void saveProductOptions(List<ProductOption> options) {
+        for (ProductOption option : options) {
+            if (!existsByProductIdAndName(option.getProduct().getId(), option.getName())) {
+                productOptionRepository.save(option);
+            }
+        }
+    }
+
+    public boolean existsByProductIdAndName(Long productId, String name) {
+        return productOptionRepository.existsByProductIdAndName(productId, name);
+    }
+
+    public void deleteProductOptionsByProductId(Long productId) {
         List<ProductOption> options = productOptionRepository.findByProductId(productId);
         productOptionRepository.deleteAll(options);
     }
 
-    public void subtractOptionQuantity(Long optionId, int quantityToSubtract) {
-        ProductOption option = findById(optionId);
+    public void subtractProductOptionQuantity(Long optionId, int quantityToSubtract) {
+        ProductOption option = findProductOptionById(optionId);
         if (option == null) {
             throw new IllegalArgumentException("Option not found");
         }

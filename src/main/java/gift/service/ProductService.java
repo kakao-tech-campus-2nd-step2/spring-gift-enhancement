@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,6 +28,16 @@ public class ProductService {
     public void save(Product product) {
         validateProductOptions(product);
         productRepository.save(product);
+        List<ProductOption> options = product.getOptions().stream()
+                .map(option -> {
+                    ProductOption newOption = new ProductOption();
+                    newOption.setName(option.getName());
+                    newOption.setQuantity(option.getQuantity());
+                    newOption.setProduct(product);
+                    return newOption;
+                })
+                .collect(Collectors.toList());
+        productOptionService.saveProductOptions(options);
     }
 
     public ResponseEntity<Page<Product>> getAllProducts(Pageable pageable) {
@@ -36,6 +47,17 @@ public class ProductService {
 
     public void update(Product updatedProduct) {
         validateProductOptions(updatedProduct);
+        productOptionService.deleteProductOptionsByProductId(updatedProduct.getId());
+        List<ProductOption> options = updatedProduct.getOptions().stream()
+                .map(option -> {
+                    ProductOption newOption = new ProductOption();
+                    newOption.setName(option.getName());
+                    newOption.setQuantity(option.getQuantity());
+                    newOption.setProduct(updatedProduct);
+                    return newOption;
+                })
+                .collect(Collectors.toList());
+        productOptionService.saveProductOptions(options);
         productRepository.save(updatedProduct);
     }
 
@@ -45,9 +67,7 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-
-        productOptionService.deleteByProductId(id);
-
+        productOptionService.deleteProductOptionsByProductId(id);
         productRepository.deleteById(id);
     }
 
