@@ -42,7 +42,7 @@ public class WishController {
         @Valid @RequestBody WishRequest.Register request
     ) {
         wishService.addWish(loginInfo.memberId(), request.toCommand());
-        return ResponseEntity.ok().body("Wish insert successfully.");
+        return ResponseEntity.ok("Wish insert successfully.");
     }
 
     @Authorization(role = Role.USER)
@@ -52,7 +52,7 @@ public class WishController {
         @PathVariable("wishId") Long wishId
     ) {
         wishService.deleteWish(loginInfo.memberId(), wishId);
-        return ResponseEntity.ok().body("Wish removed successfully.");
+        return ResponseEntity.ok("Wish removed successfully.");
     }
 
     @Authorization(role = Role.USER)
@@ -63,7 +63,7 @@ public class WishController {
     ) {
         Page<WishModel.Info> page = wishService.getWishesPaging(loginInfo.memberId(), pageable);
         var response = PageResponse.from(page, WishResponse.Info::from);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
     @Authorization(role = Role.USER)
@@ -73,6 +73,6 @@ public class WishController {
         @Valid @RequestBody WishRequest.Update request
     ) {
         wishService.updateWish(loginInfo.memberId(), request.toCommand());
-        return ResponseEntity.ok().body("Wish updated successfully.");
+        return ResponseEntity.ok("Wish updated successfully.");
     }
 }
