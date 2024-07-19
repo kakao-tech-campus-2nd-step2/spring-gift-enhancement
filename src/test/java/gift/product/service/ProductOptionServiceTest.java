@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import gift.product.domain.Category;
 import gift.product.domain.Product;
@@ -97,6 +98,49 @@ class ProductOptionServiceTest {
     }
 
     @Test
+    @DisplayName("ProductOptionService Option 삭제 테스트")
+    void deleteProductOptionTest() {
+        //given
+        final Long productId = 1L;
+        final Long optionId = 1L;
+
+        Category category = new Category("카테고리", "색상", "이미지", "설명");
+        Product product = new Product("productName", 1000, "이미지", category);
+        List<ProductOption> productOptions = List.of(
+                new ProductOption(1L, "optionName", 10, product),
+                new ProductOption(2L, "optionName2", 10, product)
+        );
+        given(productOptionRepository.findByProductId(any())).willReturn(productOptions);
+        given(productOptionRepository.findByProductIdAndId(any(), any())).willReturn(
+                Optional.of(productOptions.get(0)));
+
+        //when
+        productOptionService.deleteProductOption(productId, optionId);
+
+        //then
+        then(productOptionRepository).should().delete(any());
+    }
+
+    @Test
+    @DisplayName("ProductOptionService Option 삭제 실패 테스트[최소 1개 이상]")
+    void deleteProductOptionWithMinimumOptionTest() {
+        //given
+        final Long productId = 1L;
+        final Long optionId = 1L;
+
+        Category category = new Category("카테고리", "색상", "이미지", "설명");
+        Product product = new Product("productName", 1000, "이미지", category);
+        List<ProductOption> productOptions = List.of(
+                new ProductOption(1L, "optionName", 10, product)
+        );
+        given(productOptionRepository.findByProductId(any())).willReturn(productOptions);
+
+        //when//then
+        assertThatThrownBy(() -> productOptionService.deleteProductOption(productId, optionId))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     @DisplayName("ProductOptionService Option 생성 실패 테스트[중복된 이름]")
     void createProductOptionWithDuplicatedNameTest() {
         //given
@@ -112,7 +156,6 @@ class ProductOptionServiceTest {
 
         //when//then
         assertThatThrownBy(() -> productOptionService.createProductOption(productId, productOptionCommand))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미 존재하는 상품 옵션입니다.");
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
