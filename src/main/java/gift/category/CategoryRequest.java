@@ -37,24 +37,12 @@ public class CategoryRequest {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Category toEntity(){

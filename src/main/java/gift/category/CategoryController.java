@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/category")
+@RequestMapping("/categorys")
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -27,19 +27,19 @@ public class CategoryController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> addCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<Category> addCategory(@RequestBody CategoryRequest categoryRequest){
         Category category = categoryService.createCategory(categoryRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
 
     @PutMapping()
-    public ResponseEntity<?> updateCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<HttpStatus> updateCategory(@RequestBody CategoryRequest categoryRequest){
         categoryService.updateCategory(categoryRequest);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @DeleteMapping()
-    public ResponseEntity<?> deleteCategory(@RequestParam Long id){
+    public ResponseEntity<HttpStatus> deleteCategory(@RequestParam Long id){
         categoryService.deleteCategory(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
