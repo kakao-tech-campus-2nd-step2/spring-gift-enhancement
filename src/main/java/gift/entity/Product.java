@@ -17,7 +17,10 @@ public class Product extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
+    
+    @OneToMany(mappedBy = "product")
+    private List<Option> options = new ArrayList<>();
+    
     @OneToMany(mappedBy = "product")
     private List<Wish> wishes = new ArrayList<>();
 
@@ -69,6 +72,14 @@ public class Product extends BaseEntity {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 
     public List<Wish> getWishes() {
