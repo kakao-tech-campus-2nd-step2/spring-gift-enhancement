@@ -7,15 +7,18 @@ public class ProductDTO {
     private String name;
     private int price;
     private String imageUrl;
+    private CategoryDTO category;
 
-    public ProductDTO() {
-    }
+    public ProductDTO() {}
 
     public ProductDTO(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
+        if (product.getCategory() != null) {
+            this.category = new CategoryDTO(product.getCategory());
+        }
     }
 
     public Long getId() {
@@ -48,5 +51,13 @@ public class ProductDTO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public CategoryDTO getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryDTO category) {
+        this.category = category;
     }
 }
