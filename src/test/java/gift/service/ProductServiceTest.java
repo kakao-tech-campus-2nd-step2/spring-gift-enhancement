@@ -2,23 +2,24 @@ package gift.service;
 
 import gift.dto.ProductRequest;
 import gift.exception.InvalidProductNameWithKAKAOException;
+import gift.exception.NotFoundElementException;
 import gift.model.MemberRole;
+import gift.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
 class ProductServiceTest {
 
-    private final Pageable pageable = PageRequest.of(0, 10);
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Test
     @DisplayName("정상 상품 추가하기")
@@ -72,5 +73,21 @@ class ProductServiceTest {
         Assertions.assertThat(savedProduct.id()).isEqualTo(updatedProduct.id());
 
         productService.deleteProduct(id);
+    }
+
+    @Test
+    @DisplayName("정상 상품 추가시 기본 옵션이 추가되어있다.")
+    void addProductSuccessThenHaveDefaultOption() {
+        //given
+        var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
+        var savedProduct = productService.addProduct(productRequest, MemberRole.MEMBER);
+        var product = productRepository.findById(savedProduct.id())
+                .orElseThrow(() -> new NotFoundElementException(savedProduct.id() + "를 가진 상품이 존재하지 않습니다."));
+        //when
+        var productOptionList = product.getProductOptionList();
+        //then
+        Assertions.assertThat(productOptionList.get(0).getName()).isEqualTo("기본");
+
+        productService.deleteProduct(savedProduct.id());
     }
 }

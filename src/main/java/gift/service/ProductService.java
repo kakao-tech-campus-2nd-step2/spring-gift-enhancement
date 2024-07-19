@@ -8,7 +8,9 @@ import gift.exception.NotFoundElementException;
 import gift.model.MemberRole;
 import gift.model.Product;
 import gift.model.ProductCategory;
+import gift.model.ProductOption;
 import gift.repository.ProductCategoryRepository;
+import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishProductRepository;
 import org.springframework.data.domain.Pageable;
@@ -24,16 +26,19 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final WishProductRepository wishProductRepository;
+    private final ProductOptionRepository productOptionRepository;
 
-    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository, WishProductRepository wishProductRepository) {
+    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository, WishProductRepository wishProductRepository, ProductOptionRepository productOptionRepository) {
         this.productRepository = productRepository;
         this.productCategoryRepository = productCategoryRepository;
         this.wishProductRepository = wishProductRepository;
+        this.productOptionRepository = productOptionRepository;
     }
 
     public ProductResponse addProduct(ProductRequest productRequest, MemberRole memberRole) {
         productNameValidation(productRequest, memberRole);
         var product = saveProductWithProductRequest(productRequest);
+        makeDefaultProductOption(product);
         return getProductResponseFromProduct(product);
     }
 
@@ -91,5 +96,10 @@ public class ProductService {
 
     private ProductCategoryInformation getProductCategoryInformationFromProductCategory(ProductCategory productCategory) {
         return ProductCategoryInformation.of(productCategory.getId(), productCategory.getName());
+    }
+
+    private ProductOption makeDefaultProductOption(Product product) {
+        var productOption = new ProductOption(product, "기본", 1000);
+        return productOptionRepository.save(productOption);
     }
 }
