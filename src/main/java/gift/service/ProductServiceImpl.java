@@ -2,7 +2,9 @@ package gift.service;
 
 import gift.exception.ForbiddenWordException;
 import gift.exception.ProductNotFoundException;
+import gift.model.Category;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
@@ -16,11 +18,12 @@ import java.util.Map;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
-
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -51,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
                 existingProduct.setName(product.getName());
                 existingProduct.setPrice(product.getPrice());
                 existingProduct.setImageUrl(product.getImageUrl());
+                existingProduct.setCategory(product.getCategory());
                 productRepository.save(existingProduct);
                 return true;
             })
@@ -105,6 +109,13 @@ public class ProductServiceImpl implements ProductService {
         }
         if ("imageUrl".equals(key)) {
             product.setImageUrl((String) value);
+            return;
+        }
+        if ("category".equals(key)) {
+            Long categoryId = Long.valueOf((String) value);
+            Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + categoryId));
+            product.setCategory(category);
             return;
         }
         throw new IllegalArgumentException("Invalid field: " + key);
