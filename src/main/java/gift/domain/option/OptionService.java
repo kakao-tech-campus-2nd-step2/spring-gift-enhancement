@@ -4,6 +4,7 @@ import gift.domain.option.dto.OptionRequestDTO;
 import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
 import gift.global.exception.BusinessException;
+import gift.global.exception.ErrorCode;
 import gift.global.exception.option.OptionDuplicateException;
 import gift.global.exception.option.OptionNotFoundException;
 import gift.global.exception.product.ProductNotFoundException;
@@ -81,5 +82,16 @@ public class OptionService {
         option.update(optionRequestDTO.getName(), optionRequestDTO.getQuantity());
 
         optionRepository.save(option);
+    }
+
+    // 상품의 수량 수정 - 지정된 숫자만큼 차감
+    public void decreaseOptionQuantity(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new OptionNotFoundException(optionId));
+
+        if (option.getQuantity() - quantity <= 0) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "차감할 수량의 숫자가 기존 수량의 숫자보다 큽니다.");
+        }
+
     }
 }
