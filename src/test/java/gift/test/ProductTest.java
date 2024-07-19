@@ -1,6 +1,6 @@
 package gift.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -21,7 +21,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import gift.controller.ProductController;
-import gift.model.Product;
+import gift.dto.CategoryUpdateRequest;
+import gift.dto.ProductRequest;
+import gift.dto.ProductUpdateRequest;
+import gift.entity.Category;
+import gift.entity.Product;
 import gift.service.ProductService;
 
 public class ProductTest {
@@ -35,9 +39,21 @@ public class ProductTest {
     @Mock
     private BindingResult bindingResult;
 
+    private Category category;
+    private Product product;
+    private ProductRequest productRequest;
+    private ProductUpdateRequest productUpdateRequest;
+    private CategoryUpdateRequest categoryUpdateRequest;
+    
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        category = new Category("교환권", "#6c95d1", "https://example.com/image.jpg", "");
+        product = new Product("아이스 아메리카노 T", 4500, "https://example.com/image.jpg", category);
+        
+        productRequest = new ProductRequest("아이스 아메리카노 T", 4500, "https://example.com/image.jpg", "교환권");
+        productUpdateRequest = new ProductUpdateRequest("아이스 아메리카노 T", 4500, "https://example.com/image.jpg");
+        categoryUpdateRequest = new CategoryUpdateRequest("교환권");
     }
 
     @Test
@@ -45,58 +61,58 @@ public class ProductTest {
     	Pageable pageable = PageRequest.of(0, 10);
     	Page<Product> productPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
     	
-        when(productService.getAllProducts(pageable)).thenReturn(productPage);
+        when(productService.getProducts(pageable)).thenReturn(productPage);
 
         ResponseEntity<Page<Product>> response = productController.getAllProducts(pageable);
 
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(productPage, response.getBody());
-        assertEquals(Collections.emptyList(), response.getBody().getContent());
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getBody()).isEqualTo(productPage);
+        assertThat(response.getBody().getContent()).isEmpty();
     }
 
     @Test
     public void testGetProduct() {
-        Product product = new Product("아이스 아메리카노 T", 4500, "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
-
         when(productService.getProduct(1L)).thenReturn(product);
 
         ResponseEntity<Product> response = productController.getProduct(1L);
 
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(product, response.getBody());
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getBody()).isEqualTo(product);
     }
 
     @Test
     public void testAddProduct() {
-        Product product = new Product("아이스 아메리카노 T", 4500, "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
+    	doNothing().when(productService).createProduct(any(ProductRequest.class), any(BindingResult.class));
 
-        when(productService.createProduct(any(Product.class), any(BindingResult.class))).thenReturn(product);
+        ResponseEntity<Void> response = productController.addProduct(productRequest, bindingResult);
 
-        ResponseEntity<Product> response = (ResponseEntity<Product>) productController.addProduct(product, bindingResult);
-
-        assertEquals(201, response.getStatusCodeValue());
-        assertEquals(product, response.getBody());
+        assertThat(response.getStatusCodeValue()).isEqualTo(201);
     }
 
     @Test
     public void testUpdateProduct() {
-        Product product = new Product("아이스 아메리카노 T", 5000, "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
+        doNothing().when(productService).updateProduct(eq(1L), any(ProductUpdateRequest.class), any(BindingResult.class));
 
-        doNothing().when(productService).updateProduct(eq(1L), any(Product.class), any(BindingResult.class));
+        ResponseEntity<Void> response = productController.updateProduct(1L, productUpdateRequest, bindingResult);
 
-        ResponseEntity<String> response = productController.updateProduct(1L, product, bindingResult);
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Product updated successfylly.", response.getBody());
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+    }
+    
+    @Test
+    public void testUpdateProductCategory() {
+    	doNothing().when(productService).updateProductCategory(eq(1L), any(CategoryUpdateRequest.class), any(BindingResult.class));
+    	
+    	ResponseEntity<Void> response = productController.updateProductCategory(1L, categoryUpdateRequest, bindingResult);
+    	
+    	assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
 
     @Test
     public void testDeleteProduct() {
         doNothing().when(productService).deleteProduct(1L);
 
-        ResponseEntity<String> response = productController.deleteProduct(1L);
+        ResponseEntity<Void> response = productController.deleteProduct(1L);
 
-        assertEquals(204, response.getStatusCodeValue());
-        assertEquals("Product deleted successfully.", response.getBody());
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
 }

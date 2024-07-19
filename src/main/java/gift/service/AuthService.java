@@ -4,15 +4,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import gift.entity.User;
 import gift.exception.InvalidUserException;
 import gift.exception.UnauthorizedException;
 import gift.exception.UserNotFoundException;
-import gift.model.User;
 import gift.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -20,8 +19,11 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class AuthService {
 	
-	@Autowired
-	private UserRepository userRespository;
+	private final UserRepository userRespository;
+	
+	public AuthService(UserRepository userRespository) {
+		this.userRespository = userRespository;
+	}
 	
 	private final String secret = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
 	
@@ -64,7 +66,7 @@ public class AuthService {
     }
 	
 	private void validateBindingResult(BindingResult bindingResult) {
-		if(bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors()) {
 			String errorMessage = bindingResult
 					.getFieldError()
 					.getDefaultMessage();
@@ -73,7 +75,7 @@ public class AuthService {
 	}
 	
 	private void validatePassword(String inputPassword, String storedPassword) {
-		if(!inputPassword.equals(storedPassword)) {
+		if (!inputPassword.equals(storedPassword)) {
 			throw new InvalidUserException("The email doesn't or thr password is incorrect.", HttpStatus.FORBIDDEN);
 		}
 	}

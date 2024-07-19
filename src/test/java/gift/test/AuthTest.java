@@ -1,6 +1,6 @@
 package gift.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import gift.controller.AuthController;
-import gift.model.User;
+import gift.entity.User;
 import gift.service.AuthService;
 
 public class AuthTest {
@@ -28,33 +28,33 @@ public class AuthTest {
 	@InjectMocks
 	private AuthController authController;
 	
-	@Mock BindingResult bindingResult;
+	@Mock
+	BindingResult bindingResult;
+	
+	private User user;
 	
 	@BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        user = new User("test@test.com", "pw");
     }
 	
 	@Test
     public void testRegister() {
-		User user = new User("test@test.com", "pw");
         doNothing().when(authService).createUser(any(User.class), any(BindingResult.class));
-        ResponseEntity<String> response = authController.register(user, bindingResult);
+        ResponseEntity<Void> response = authController.register(user, bindingResult);
         
-        assertEquals("User registered successfully", response.getBody());
-        assertEquals(200, response.getStatusCodeValue());
+        assertThat(response.getStatusCodeValue()).isEqualTo(201);
     }
 	
 	@Test
     public void testLogin() {
-		User user = new User("test@test.com", "pw");
-		
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", "dummyToken");
         when(authService.loginUser(any(User.class), any(BindingResult.class))).thenReturn(tokenMap);
         ResponseEntity<Map<String, String>> response = authController.login(user, bindingResult);
 
-        assertEquals("dummyToken", response.getBody().get("token"));
-        assertEquals(200, response.getStatusCodeValue());
+        assertThat(response.getBody().get("token")).isEqualTo("dummyToken");
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
     }
 }

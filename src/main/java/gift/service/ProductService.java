@@ -1,25 +1,32 @@
 package gift.service;
 
+import gift.dto.CategoryUpdateRequest;
+import gift.dto.ProductRequest;
+import gift.dto.ProductUpdateRequest;
+import gift.entity.Category;
+import gift.entity.Product;
 import gift.exception.InvalidProductException;
 import gift.exception.InvalidUserException;
-import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.util.List;
-
 @Service
 public class ProductService {
 
-	@Autowired
-	private ProductRepository productRepository;
-
-    public Page<Product> getAllProducts(Pageable pageable) {
+	private final ProductRepository productRepository;
+	private final CategoryRepository categoryRepository;
+	
+	public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+		this.productRepository = productRepository;
+		this.categoryRepository = categoryRepository;
+	}
+	
+    public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
 
@@ -27,16 +34,27 @@ public class ProductService {
         return findProductById(id);
     }
 
-    public Product createProduct(Product product, BindingResult bindingResult) {
+    public void createProduct(ProductRequest request, BindingResult bindingResult) {
     	validateBindingResult(bindingResult);
-        return productRepository.save(product);
+    	Category category = validateCategory(request.getCategoryName());
+    	Product product = request.toEntity(category);
+        productRepository.save(product);
     }
 
-    public void updateProduct(long id, Product updatedProduct, BindingResult bindingResult) {
+    public void updateProduct(long id, ProductUpdateRequest request, BindingResult bindingResult) {
     	validateBindingResult(bindingResult);
-    	validProductId(id, updatedProduct);
-    	validateProductId(id);
-    	productRepository.save(updatedProduct);
+    	Product updateProduct = findProductById(id);
+    	request.updateEntity(updateProduct);
+    	productRepository.save(updateProduct);
+    }
+    
+    public void updateProductCategory(long id, CategoryUpdateRequest request, 
+    		BindingResult bindingResult) {
+    	validateBindingResult(bindingResult);
+    	Product updateProduct = findProductById(id);
+    	Category category = validateCategory(request.getCategoryName());
+    	updateProduct.setCategory(category);
+    	productRepository.save(updateProduct);
     }
 
     public void deleteProduct(long id) {
@@ -45,7 +63,7 @@ public class ProductService {
     }
     
     private void validateBindingResult(BindingResult bindingResult) {
-    	if(bindingResult.hasErrors()) {
+    	if (bindingResult.hasErrors()) {
     		String errorMessage = bindingResult
 					.getFieldError()
 					.getDefaultMessage();
@@ -53,14 +71,8 @@ public class ProductService {
     	}
     }
     
-    private void validProductId(long id, Product updatedProduct) {
-    	if(!updatedProduct.getId().equals(id)) {
-    		throw new InvalidProductException("Product Id mismatch.");
-    	}
-    }
-    
     private void validateProductId(long id) {
-    	if(!productRepository.existsById(id)) {
+    	if (!productRepository.existsById(id)) {
     		throw new InvalidProductException("Product not found");
     	}
     }
@@ -68,5 +80,10 @@ public class ProductService {
     public Product findProductById(long id) {
 	    return productRepository.findById(id)
 	    		.orElseThrow(() -> new InvalidProductException("Product not found"));
+    }
+    
+    public Category validateCategory(String categoryName) {
+    	return categoryRepository.findByName(categoryName)
+    			.orElseThrow(() -> new InvalidProductException("Category not found"));
     }
 }

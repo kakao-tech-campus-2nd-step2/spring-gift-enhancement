@@ -4,34 +4,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import gift.model.User;
+import gift.entity.User;
 import gift.repository.UserRepository;
 
 @DataJpaTest
 public class UserRepositoryTest {
 
+    private final UserRepository userRepository;
+    
     @Autowired
-    private UserRepository userRepository;
+    public UserRepositoryTest(UserRepository userRepository) {
+    	this.userRepository = userRepository;
+    }
+    
+    private User user;
+    
+    @BeforeEach
+    void setUp() {
+    	user = new User("test@test.com", "pw");
+    }
 
     @Test
     void save() {
-    	User expected = new User("test@test.com", "pw");
-        User actual = userRepository.save(expected);
+        User actual = userRepository.save(user);
         assertThat(actual.getId()).isNotNull();
-        assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
+        assertThat(actual.getEmail()).isEqualTo(user.getEmail());
     }
 
     @Test
     void findByEmail() {
-        String expectedEmail = "test@test.com";
-        User user = new User(expectedEmail, "pw");
         userRepository.save(user);
-        Optional<User> actual = userRepository.findByEmail(expectedEmail);
+        Optional<User> actual = userRepository.findByEmail(user.getEmail());
         assertThat(actual).isPresent();
-        assertThat(actual.get().getEmail()).isEqualTo(expectedEmail);
+        assertThat(actual.get().getEmail()).isEqualTo(user.getEmail());
     }
 }

@@ -1,32 +1,33 @@
 package gift.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import gift.entity.Product;
+import gift.entity.User;
+import gift.entity.Wishlist;
 import gift.exception.InvalidProductException;
 import gift.exception.InvalidUserException;
 import gift.exception.UnauthorizedException;
-import gift.model.Product;
-import gift.model.User;
-import gift.model.Wishlist;
 import gift.repository.ProductRepository;
 import gift.repository.WishlistRepository;
 
 @Service
 public class WishlistService {
 	
-	@Autowired
-	private WishlistRepository wishlistRepository;
+	private final WishlistRepository wishlistRepository;
+	private final ProductRepository productRepository;
+	private final AuthService authService;
 	
-	@Autowired
-	private ProductRepository productRepository;
-	
-	@Autowired
-	private AuthService authService;
+	public WishlistService(WishlistRepository wishlistRepository, ProductRepository productRepository,
+			AuthService authService) {
+		this.wishlistRepository = wishlistRepository;
+		this.productRepository = productRepository;
+		this.authService = authService;
+	}
 	
 	public Page<Wishlist> getWishlist(String token, BindingResult bindingResult, Pageable pageable) {
         User user = getUserFormToekn(token, bindingResult);
@@ -54,7 +55,7 @@ public class WishlistService {
 		User user = getUserFormToekn(token, bindingResult);
         Wishlist updateWishlist = findWishlistById(wishlist.getId());
         validateUserPermission(updateWishlist, user);
-        if(wishlist.getQuantity() == 0) {
+        if (wishlist.getQuantity() == 0) {
         	wishlistRepository.delete(updateWishlist);
         	return;
         }
@@ -77,7 +78,7 @@ public class WishlistService {
 	}
 	
 	private void validateUserPermission(Wishlist wishlist, User user) {
-		if(!wishlist.getUser().equals(user)) {
+		if (!wishlist.getUser().equals(user)) {
 			throw new UnauthorizedException("You do not have permission to perform this action on the wishlist item.");
 		}
 	}
