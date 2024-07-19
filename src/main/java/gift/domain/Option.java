@@ -25,6 +25,11 @@ public class Option extends BaseEntity {
     public Option() {
     }
 
+    public Option(Long id, String name, int quantity, Product product) {
+        this(name, quantity, product);
+        this.id = id;
+    }
+
     public Option(String name, int quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
