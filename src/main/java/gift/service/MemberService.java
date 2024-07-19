@@ -56,7 +56,7 @@ public class MemberService {
         return repository.findAll();
     }
 
-    public Member toEntity(MemberDTO dto) {
+    private Member toEntity(MemberDTO dto) {
         Member member = new Member();
         member.setEmail(dto.email());
         member.setPassword(dto.password());

@@ -40,10 +40,8 @@ public class OptionService {
     }
 
     public void save(Long productId, OptionRequestDTO optionRequestDTO) {
-
         Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new OptionException("상품이 존재하지 않습니다"));
-
         String optionName = optionRequestDTO.name();
         Optional<Option> existingOption = optionRepository.findByProductIdAndName(productId, optionName);
         if(existingOption.isPresent()) {
@@ -51,6 +49,16 @@ public class OptionService {
         }
 
         optionRepository.save(toEntity(existingProduct, optionRequestDTO));
+    }
+
+    public void updateOption(Long productId, Long optionId, OptionRequestDTO optionRequestDTO) {
+        Optional<Option> option = optionRepository.findById(productId);
+        //
+
+    }
+
+    public void removeOption(Long productId, Long optionId) {
+
     }
 
     @Description("request DTO -> entity")
