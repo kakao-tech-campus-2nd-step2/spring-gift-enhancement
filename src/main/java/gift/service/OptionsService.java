@@ -58,6 +58,18 @@ public class OptionsService {
     }
 
     @Transactional
+    public Options subtractQuantity(Long id, Integer subQuantity, Long productId) {
+        productRepository.findById(productId)
+            .orElseThrow(NotFoundProductException::new);
+
+        return optionsRepository.findById(id)
+            .map(options -> {
+                options.subtractQuantity(subQuantity);
+                return options;
+            }).orElseThrow(NotFoundOptionsException::new);
+    }
+
+    @Transactional
     public Long deleteOption(Long id, Long productId) {
         if (optionsRepository.optionsCountByProductId(productId) < 2) {
             throw new DeleteOptionsException();
