@@ -46,6 +46,12 @@ public class OptionServiceTest {
     @Autowired
     private OptionService optionService;
 
+    // given values
+    private long productId;
+    private Product product;
+    private OptionDTO optionDTO;
+    private Option option;
+
     static class OptionQuantitySizeError implements ArgumentsProvider {
 
         @Override
@@ -83,12 +89,6 @@ public class OptionServiceTest {
         }
     }
 
-    // given values
-    private long productId;
-    private Product product;
-    private OptionDTO optionDTO;
-    private Option option;
-
     @BeforeEach
     void setUp() {
         productId = 1L;
@@ -123,11 +123,19 @@ public class OptionServiceTest {
 
         @BeforeEach
         void setUp() {
+            //given
             options = List.of(
                 new Option(1L, "option-1", 1, product),
                 new Option(2L, "option-2", 2, product),
                 new Option(3L, "option-3", 3, product)
             );
+
+            //when
+            when(productRepository.existsById(productId))
+                .thenReturn(true);
+
+            when(optionRepository.findAllByProductId(productId))
+                .thenReturn(options);
         }
 
         @Test
@@ -141,12 +149,6 @@ public class OptionServiceTest {
             );
 
             //when
-            when(productRepository.existsById(productId))
-                .thenReturn(true);
-
-            when(optionRepository.findAllByProductId(productId))
-                .thenReturn(options);
-
             List<OptionDTO> actual = optionService.getOptions(productId);
 
             //then
@@ -163,9 +165,6 @@ public class OptionServiceTest {
             when(productRepository.existsById(productId))
                 .thenReturn(false);
 
-            when(optionRepository.findAllByProductId(productId))
-                .thenReturn(options);
-
             //then
             assertThatThrownBy(() -> optionService.getOptions(productId))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -177,9 +176,8 @@ public class OptionServiceTest {
     @DisplayName("[Unit] add option test")
     class addOptionTest {
 
-        @Test
-        @DisplayName("success")
-        void success() {
+        @BeforeEach
+        void setUp() {
             //when
             when(productRepository.findById(productId))
                 .thenReturn(Optional.of(product));
@@ -189,11 +187,13 @@ public class OptionServiceTest {
 
             when(optionRepository.save(option))
                 .thenReturn(option);
+        }
 
+        @Test
+        @DisplayName("success")
+        void success() {
             //then
-            assertDoesNotThrow(
-                () -> optionService.addOption(productId, optionDTO)
-            );
+            assertDoesNotThrow(() -> optionService.addOption(productId, optionDTO));
             verify(optionRepository, times(1)).save(option);
         }
 
@@ -203,13 +203,6 @@ public class OptionServiceTest {
             //when
             when(productRepository.findById(productId))
                 .thenReturn(Optional.empty());
-
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
-                .thenReturn(false);
-
-            when(optionRepository.save(option))
-                .thenReturn(option);
-
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -220,14 +213,8 @@ public class OptionServiceTest {
         @DisplayName("option already exists error")
         void optionAlreadyExistsError() {
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
-
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(true);
-
-            when(optionRepository.save(option))
-                .thenReturn(option);
 
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
@@ -246,13 +233,6 @@ public class OptionServiceTest {
                 1
             );
 
-            //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
-
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
-                .thenReturn(false);
-
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -269,13 +249,6 @@ public class OptionServiceTest {
                 optionName,
                 1
             );
-
-            //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
-
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
-                .thenReturn(false);
 
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
@@ -294,13 +267,6 @@ public class OptionServiceTest {
                 quantity
             );
 
-            //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.of(product));
-
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
-                .thenReturn(false);
-
             //then
             assertThatThrownBy(() -> optionService.addOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -314,16 +280,13 @@ public class OptionServiceTest {
 
         @BeforeEach
         void setUp() {
+            //given
             optionDTO = new OptionDTO(
                 1L,
                 "update-option",
                 2
             );
-        }
 
-        @Test
-        @DisplayName("success")
-        void success() {
             //when
             when(productRepository.existsById(productId))
                 .thenReturn(true);
@@ -336,7 +299,11 @@ public class OptionServiceTest {
 
             when(optionRepository.save(option))
                 .thenReturn(option);
+        }
 
+        @Test
+        @DisplayName("success")
+        void success() {
             //then
             assertAll(
                 () -> assertDoesNotThrow(() -> optionService.updateOption(productId, optionDTO)),
@@ -352,13 +319,7 @@ public class OptionServiceTest {
         @DisplayName("product not found error")
         void productNotFoundError() {
             //when
-            when(productRepository.findById(productId))
-                .thenReturn(Optional.empty());
-
-            when(optionRepository.findById(optionDTO.getId()))
-                .thenReturn(Optional.of(option));
-
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
+            when(productRepository.existsById(productId))
                 .thenReturn(false);
 
             //then
@@ -371,14 +332,8 @@ public class OptionServiceTest {
         @DisplayName("option not found error")
         void optionNotFoundError() {
             //when
-            when(productRepository.existsById(productId))
-                .thenReturn(true);
-
             when(optionRepository.findById(optionDTO.getId()))
                 .thenReturn(Optional.empty());
-
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
-                .thenReturn(false);
 
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
@@ -390,12 +345,6 @@ public class OptionServiceTest {
         @DisplayName("option already exists error")
         void optionAlreadyExistsError() {
             //when
-            when(productRepository.existsById(productId))
-                .thenReturn(true);
-
-            when(optionRepository.findById(optionDTO.getId()))
-                .thenReturn(Optional.of(option));
-
             when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
                 .thenReturn(true);
 
@@ -416,16 +365,6 @@ public class OptionServiceTest {
                 1
             );
 
-            //when
-            when(productRepository.existsById(productId))
-                .thenReturn(true);
-
-            when(optionRepository.findById(optionDTO.getId()))
-                .thenReturn(Optional.of(option));
-
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
-                .thenReturn(false);
-
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -442,16 +381,6 @@ public class OptionServiceTest {
                 optionName,
                 1
             );
-
-            //when
-            when(productRepository.existsById(productId))
-                .thenReturn(true);
-
-            when(optionRepository.findById(optionDTO.getId()))
-                .thenReturn(Optional.of(option));
-
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
-                .thenReturn(false);
 
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
@@ -470,16 +399,6 @@ public class OptionServiceTest {
                 quantity
             );
 
-            //when
-            when(productRepository.existsById(productId))
-                .thenReturn(true);
-
-            when(optionRepository.findById(optionDTO.getId()))
-                .thenReturn(Optional.of(option));
-
-            when(optionRepository.existsByNameAndProductId(optionDTO.getName(), productId))
-                .thenReturn(false);
-
             //then
             assertThatThrownBy(() -> optionService.updateOption(productId, optionDTO))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -495,12 +414,9 @@ public class OptionServiceTest {
 
         @BeforeEach
         void setUp() {
+            //given
             optionId = 1L;
-        }
 
-        @Test
-        @DisplayName("success")
-        void success() {
             //when
             when(productRepository.existsById(productId))
                 .thenReturn(true);
@@ -510,7 +426,11 @@ public class OptionServiceTest {
 
             doNothing().when(optionRepository)
                 .delete(option);
+        }
 
+        @Test
+        @DisplayName("success")
+        void success() {
             //then
             assertDoesNotThrow(() -> optionService.deleteOption(productId, optionId));
             verify(optionRepository, times(1)).delete(option);
@@ -523,12 +443,6 @@ public class OptionServiceTest {
             when(productRepository.existsById(productId))
                 .thenReturn(false);
 
-            when(optionRepository.findById(optionId))
-                .thenReturn(Optional.of(option));
-
-            doNothing().when(optionRepository)
-                .delete(option);
-
             //then
             assertThatThrownBy(() -> optionService.deleteOption(productId, optionId))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -539,14 +453,8 @@ public class OptionServiceTest {
         @DisplayName("option not found error")
         void optionNotFoundError() {
             //when
-            when(productRepository.existsById(productId))
-                .thenReturn(true);
-
             when(optionRepository.findById(optionId))
                 .thenReturn(Optional.empty());
-
-            doNothing().when(optionRepository)
-                .delete(option);
 
             //then
             assertThatThrownBy(() -> optionService.deleteOption(productId, optionId))
