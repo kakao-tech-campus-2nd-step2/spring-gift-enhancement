@@ -5,6 +5,7 @@ import gift.global.security.JwtFilter;
 import gift.global.security.JwtUtil;
 import gift.product.application.OptionService;
 import gift.product.dto.OptionRequest;
+import gift.product.dto.OptionResponse;
 import gift.product.entity.Category;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
@@ -29,9 +30,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -219,6 +223,60 @@ class ProductControllerTest {
                 .andDo(print());
 
         verify(productService).updateProduct(productId, request);
+    }
+
+    @Test
+    @DisplayName("상품 옵션 조회 테스트")
+    void getProductOptions() throws Exception {
+        Long productId = 1L;
+        Set<OptionResponse> options = new HashSet<>();
+        options.add(new OptionResponse(1L, "옵션1", 10));
+        options.add(new OptionResponse(2L, "옵션2", 20));
+        String responseJson = objectMapper.writeValueAsString(options);
+        when(optionService.getProductOptionsByIdOrThrow(anyLong())).thenReturn(options);
+
+        mockMvc.perform(get("/api/products/{id}/options", productId)
+                        .header(HttpHeaders.AUTHORIZATION, bearerToken))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseJson));
+
+        verify(optionService).getProductOptionsByIdOrThrow(productId);
+    }
+
+    @Test
+    @DisplayName("상품 옵션 추가 테스트")
+    void addOptionToProduct() throws Exception {
+        Long productId = 1L;
+        OptionRequest request = new OptionRequest("옵션", 10);
+        OptionResponse response = new OptionResponse(1L, request.name(), request.quantity());
+        String requestJson = objectMapper.writeValueAsString(request);
+        String responseJson = objectMapper.writeValueAsString(response);
+        when(optionService.addOptionToProduct(anyLong(), any())).thenReturn(response);
+
+        mockMvc.perform(post("/api/products/{id}/options", productId)
+                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseJson));
+
+        verify(optionService).addOptionToProduct(productId, request);
+    }
+
+    @Test
+    @DisplayName("상품 옵션 삭제 테스트")
+    void deleteOptionFromProduct() throws Exception {
+        Long productId = 1L;
+        OptionRequest request = new OptionRequest("옵션", 10);
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(delete("/api/products/{id}/options", productId)
+                        .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk());
+
+        verify(optionService).deleteOptionFromProduct(productId, request);
     }
 
 }
