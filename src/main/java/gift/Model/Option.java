@@ -69,4 +69,14 @@ public class Option {
     public int getQuantity() {
         return quantity;
     }
+
+    public int subtract(int count) {
+        if (count < 0 ){
+            throw new IllegalArgumentException("음수는 뺼 수 없습니다.");
+        }
+        if(quantity < count){
+            throw new IllegalArgumentException("빼려는 수보다 옵션의 수량이 작습니다.");
+        }
+        return quantity -= count;
+    }
 }
