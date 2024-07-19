@@ -112,9 +112,9 @@ public class ProductApiController {
         return ResponseEntity.created(location).body(response);
     }
 
-//    @DeleteMapping("/{id}/options/{optionId}")
-//    public ResponseEntity<Void> deleteOption(@PathVariable Long id, @PathVariable Long optionId) {
-//        productOptionService.deleteOption(id, optionId);
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("/{id}/options/{optionId}")
+    public ResponseEntity<Void> deleteOption(@PathVariable Long optionId) {
+        productOptionService.deleteOption(optionId);
+        return ResponseEntity.noContent().build();
+    }
 }
