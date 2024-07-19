@@ -44,8 +44,4 @@ public class OptionServiceTest {
         option = optionRepository.saveAndFlush(new Option("에티오피아 커피 옵션1", 289L, product));
     }
 
-
-    @Test
-    @Description("옵션 조회")
-    void a
 }
