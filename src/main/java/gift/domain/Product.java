@@ -1,13 +1,10 @@
 package gift.domain;
 
-
-import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductRequest;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "product")
@@ -79,11 +76,5 @@ public class Product {
         return imageUrl;
     }
 
-
     public Category getCategory() { return category; }
-
-    public List<Option> getOptions() {
-        return options;
-    }
-
 }

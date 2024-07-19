@@ -75,8 +75,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public String addProduct(@Valid @ModelAttribute ProductRequest productRequest) {
-        productService.register(productRequest);
+    public String addProduct(@Valid @ModelAttribute ProductRequest productRequest, @Valid @ModelAttribute OptionRequest optionRequest) {
+        productService.register(productRequest, optionRequest);
         return "redirect:/api/products";
     }
 
@@ -101,9 +101,4 @@ public class ProductController {
         return "redirect:/api/products";
     }
 
-    @GetMapping("/{id}/options")
-    public ResponseEntity<List<Option>> getOptionsByProductId(@PathVariable("id") Long id) {
-        Product product = productService.findOne(id);
-        return ResponseEntity.ok(product.getOptions());
-    }
 }

@@ -29,6 +29,10 @@ public class OptionService {
     private OptionSpringDataJpaRepository optionRepository;
 
     public List<OptionResponse> getOptionsByProductId(Long productId) {
+        if(!productRepository.existsById(productId)){
+            throw new ProductNotFoundException(PRODUCT_NOT_FOUND);
+        }
+
         List<Option> options = optionRepository.findByProductId(productId);
         return options.stream()
                 .map(option -> new OptionResponse(option.getId(), option.getName(), option.getQuantity()))
@@ -50,6 +54,10 @@ public class OptionService {
     }
 
     public void deleteOption(Long productId, Long optionId) {
+        if(!productRepository.existsById(productId)){
+            throw new ProductNotFoundException(PRODUCT_NOT_FOUND);
+        }
+
         Option option = optionRepository.findById(optionId)
                 .orElseThrow(() -> new OptionNotFoundException(OPTION_NOT_FOUND));
 
