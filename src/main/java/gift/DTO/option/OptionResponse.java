@@ -24,4 +24,8 @@ public class OptionResponse {
             option.getQuantity()
         );
     }
+
+    public String getName() {
+        return name;
+    }
 }

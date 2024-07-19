@@ -9,9 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.Pattern;
-import javax.validation.constraints.Min;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "option", uniqueConstraints = {
@@ -39,9 +36,10 @@ public class Option {
     public Option() {
     }
 
-    public Option(String name, Long quantity) {
+    public Option(String name, Long quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
+        this.product = product;
     }
 
     public Long getId() {

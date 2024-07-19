@@ -3,6 +3,7 @@ package gift.controller.option;
 import gift.DTO.option.OptionRequest;
 import gift.DTO.option.OptionResponse;
 import gift.service.OptionService;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,5 +32,14 @@ public class OptionController {
     ) {
         List<OptionResponse> options = optionService.getAllOptionsByProductId(productId);
         return ResponseEntity.status(HttpStatus.OK).body(options);
+    }
+
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<OptionResponse> addOption(
+        @PathVariable("productId") Long productId,
+        @RequestBody @Valid OptionRequest optionRequest
+    ) {
+        OptionResponse option = optionService.addOption(productId, optionRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(option);
     }
 }
