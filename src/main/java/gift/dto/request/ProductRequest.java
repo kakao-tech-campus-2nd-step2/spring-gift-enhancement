@@ -1,8 +1,9 @@
 package gift.dto.request;
 
-import gift.domain.Product;
 import gift.validation.KakaoApproval;
 import jakarta.validation.constraints.*;
+
+import java.util.Set;
 
 
 public class ProductRequest {
@@ -25,14 +26,19 @@ public class ProductRequest {
     @NotNull(message = "카테고리를 입력하세요")
     private String categoryName;
 
+    @NotNull(message = "옵션을 입력하세요.")
+    private Set<OptionRequest> options;
+
+
     public ProductRequest(){
     }
 
-    public ProductRequest(String name, Integer price, String imageUrl, String categoryName) {
+    public ProductRequest(String name, Integer price, String imageUrl, String categoryName, Set<OptionRequest> options) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryName = categoryName;
+        this.options = options;
     }
 
     public String getName() {
