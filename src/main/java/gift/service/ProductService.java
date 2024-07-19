@@ -52,7 +52,9 @@ public class ProductService {
         Product product = new Product(productRequest, category, options);
 
         try {
-            return productRepository.save(product);
+            Product savedProduct = productRepository.save(product);
+            optionRepository.saveAll(options);
+            return savedProduct;
         } catch (DataIntegrityViolationException e) {
             throw new InvalidProductDataException("상품 데이터가 유효하지 않습니다: " + e.getMessage(), e);
         }
@@ -73,15 +75,23 @@ public class ProductService {
         Category category = categoryRepository.findByName(productRequest.getCategoryName()).
                 orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
 
-        List<Option> options = productRequest.getOptions().stream()
-                .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(), null))
+        List<Option> newOptions = productRequest.getOptions().stream()
+                .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(), product))
                 .collect(Collectors.toList());
 
-        checkForDuplicateOptions(options);
+        optionRepository.deleteAll(product.getOptions());
 
-        product.update(productRequest, category, options);
-        productRepository.save(product);
-        return product;
+        checkForDuplicateOptions(newOptions);
+
+        product.update(productRequest, category, newOptions);
+
+        try {
+            Product savedProduct = productRepository.save(product);
+            optionRepository.saveAll(newOptions);
+            return savedProduct;
+        } catch (DataIntegrityViolationException e) {
+            throw new InvalidProductDataException("상품 데이터가 유효하지 않습니다: " + e.getMessage(), e);
+        }
     }
 
     public Product delete(Long productId) {
