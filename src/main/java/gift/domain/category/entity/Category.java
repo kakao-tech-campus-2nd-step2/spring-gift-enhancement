@@ -29,9 +29,6 @@ public class Category {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Product> products;
-
     protected Category() {
     }
 
