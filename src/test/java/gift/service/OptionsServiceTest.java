@@ -12,6 +12,7 @@ import gift.exception.InputException;
 import gift.exception.option.DeleteOptionsException;
 import gift.exception.option.DuplicateOptionsException;
 import gift.exception.option.NotFoundOptionsException;
+import gift.exception.option.OptionsQuantityException;
 import gift.exception.product.NotFoundProductException;
 import gift.model.Category;
 import gift.model.Options;
@@ -72,7 +73,7 @@ class OptionsServiceTest {
     void findById() {
         //given
         Product product = demoProduct();
-        Long id  = 1L;
+        Long id = 1L;
         Options option = demoOptions(id, product);
 
         given(optionsRepository.findById(any(Long.class)))
@@ -161,7 +162,8 @@ class OptionsServiceTest {
         given(optionsRepository.findById(any(Long.class)))
             .willReturn(Optional.of(savedOption));
         //when //then
-        assertDoesNotThrow(() -> optionsService.updateOption(id, newName, newQuantity, product.getId()));
+        assertDoesNotThrow(
+            () -> optionsService.updateOption(id, newName, newQuantity, product.getId()));
         then(productRepository).should().findById(product.getId());
         then(optionsRepository).should().findById(id);
         then(savedOption).should().updateOption(newName, newQuantity);
@@ -183,7 +185,8 @@ class OptionsServiceTest {
             .willReturn(Optional.of(savedOption));
         doThrow(InputException.class).when(savedOption).updateOption(errorName, errorQuantity);
         //when //then
-        assertThatThrownBy(() -> optionsService.updateOption(id, errorName, errorQuantity, product.getId()))
+        assertThatThrownBy(
+            () -> optionsService.updateOption(id, errorName, errorQuantity, product.getId()))
             .isInstanceOf(InputException.class);
         then(productRepository).should().findById(product.getId());
         then(optionsRepository).should().findById(id);
@@ -202,7 +205,8 @@ class OptionsServiceTest {
         given(productRepository.findById(product.getId()))
             .willReturn(Optional.empty());
         //when //then
-        assertThatThrownBy(() -> optionsService.updateOption(id, newName, newQuantity, product.getId()))
+        assertThatThrownBy(
+            () -> optionsService.updateOption(id, newName, newQuantity, product.getId()))
             .isInstanceOf(NotFoundProductException.class);
         then(productRepository).should().findById(product.getId());
     }
@@ -221,10 +225,56 @@ class OptionsServiceTest {
         given(optionsRepository.findById(any(Long.class)))
             .willReturn(Optional.empty());
         //when //then
-        assertThatThrownBy(() -> optionsService.updateOption(id, newName, newQuantity, product.getId()))
+        assertThatThrownBy(
+            () -> optionsService.updateOption(id, newName, newQuantity, product.getId()))
             .isInstanceOf(NotFoundOptionsException.class);
         then(productRepository).should().findById(product.getId());
         then(optionsRepository).should().findById(id);
+    }
+
+    @DisplayName("옵션 수량 변경 테스트")
+    @Test
+    void quantityUpdate() {
+        //given
+        Options savedOption = mock(Options.class);
+        Long id = 1L;
+        Integer subQuantity = 1;
+        Product product = demoProduct();
+
+        given(productRepository.findById(any(Long.class)))
+            .willReturn(Optional.of(product));
+        given(optionsRepository.findById(any(Long.class)))
+            .willReturn(Optional.of(savedOption));
+        //when //then
+        assertDoesNotThrow(() -> optionsService.subtractQuantity(id,
+            subQuantity, product.getId()));
+        then(productRepository).should().findById(product.getId());
+        then(optionsRepository).should().findById(id);
+        then(savedOption).should().subtractQuantity(subQuantity);
+    }
+
+    @DisplayName("옵션 수량 변경 실패 테스트")
+    @Test
+    void quantityFailUpdate() {
+        //given
+        Options savedOption = mock(Options.class);
+        Long id = 1L;
+        Integer subQuantity = 455;
+        Product product = demoProduct();
+
+        given(productRepository.findById(any(Long.class)))
+            .willReturn(Optional.of(product));
+        given(optionsRepository.findById(any(Long.class)))
+            .willReturn(Optional.of(savedOption));
+        doThrow(OptionsQuantityException.class)
+            .when(savedOption).subtractQuantity(subQuantity);
+        //when //then
+        assertThatThrownBy(() -> optionsService.subtractQuantity(id,
+            subQuantity, product.getId()))
+            .isInstanceOf(OptionsQuantityException.class);
+        then(productRepository).should().findById(product.getId());
+        then(optionsRepository).should().findById(id);
+        then(savedOption).should().subtractQuantity(subQuantity);
     }
 
     @DisplayName("옵션 삭제 테스트")
@@ -279,8 +329,6 @@ class OptionsServiceTest {
         then(optionsRepository).should().optionsCountByProductId(productId);
         then(optionsRepository).should().findById(id);
     }
-
-
 
 
     private static Options demoOptions(Long id, Product product) {
