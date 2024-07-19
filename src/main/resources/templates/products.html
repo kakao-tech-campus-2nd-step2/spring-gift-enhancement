@@ -15,6 +15,7 @@
         <th>Name</th>
         <th>Price</th>
         <th>Image</th>
+        <th>Options</th> <!-- New column for options -->
         <th>Actions</th>
     </tr>
     </thead>
@@ -24,6 +25,12 @@
         <td th:text="${productDto.name}">Name</td>
         <td th:text="${productDto.price}">Price</td>
         <td><img th:src="${productDto.imageUrl}" alt="Product Image" width="100"/></td>
+        <td>
+            <!-- Button to manage options for each product -->
+            <form th:action="@{|/api/products/${productDto.id}/options|}" method="get" style="display:inline">
+                <button type="submit">Edit Option</button>
+            </form>
+        </td>
         <td>
             <a th:href="@{|/api/products/update/${productDto.id}|}">Update</a>
             <form th:action="@{|/api/products/delete/${productDto.id}|}" method="post" style="display:inline">
