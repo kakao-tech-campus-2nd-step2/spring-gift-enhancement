@@ -25,12 +25,13 @@
             <th>Name</th>
             <th>Price</th>
             <th>ImageUrl</th>
+            <th>Category</th>
             <th class="actions-column">Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr th:if="${#lists.isEmpty(products)}">
-            <td colspan="5">데이터가 존재하지 않습니다</td>
+            <td colspan="6">데이터가 존재하지 않습니다</td>
         </tr>
         <tr th:each="product : ${products}" th:attr="data-id=${product.id}">
             <td th:text="${product.id}">0</td>
@@ -45,6 +46,10 @@
             <td>
                 <span class="display-text" th:text="${product.imageUrl}">Sample Url</span>
                 <input class="edit-input" type="text" th:value="${product.imageUrl}" />
+            </td>
+            <td>
+                <span class="display-text" th:text="${product.category.name}">Sample Category</span>
+                <select class="edit-input" style="display: none;"></select>
             </td>
             <td class="actions-column">
                 <div class="button-group">
@@ -80,6 +85,10 @@
         <div class="form-group">
             <label for="imageUrl">ImageUrl:</label>
             <input type="text" id="imageUrl" name="imageUrl" />
+        </div>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select id="category" name="category"></select>
         </div>
     </form>
 </div>
