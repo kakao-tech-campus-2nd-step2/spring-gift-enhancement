@@ -82,6 +82,15 @@ public class OptionService {
 	private void checkOptions(Long id, List<OptionRequest> optionRequests) {
 		List<Option> options = optionRepository.findAllByProductId(id);
 
+		// List<OptionRequest>에서 중복되는 optionRequest.name이 중복되는 값이 있는지 확인
+		optionRequests.stream()
+			.forEach(optionRequest -> {
+				if (optionRequests.stream().filter(request -> request.name().equals(optionRequest.name())).count() > 1) {
+					throw new DuplicateOptionNameException(optionRequest.name());
+				}
+			});
+
+
 		// 이미 존재하는 옵션이라면 에러 반환
 		optionRequests.stream()
 			.forEach(optionRequest -> {
