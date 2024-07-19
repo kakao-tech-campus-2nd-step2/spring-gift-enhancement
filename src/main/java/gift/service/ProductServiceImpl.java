@@ -3,8 +3,10 @@ package gift.service;
 import gift.exception.ForbiddenWordException;
 import gift.exception.ProductNotFoundException;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
@@ -19,11 +21,15 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
+
+
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -40,7 +46,15 @@ public class ProductServiceImpl implements ProductService {
         if (product.getName().contains("카카오")) {
             throw new ForbiddenWordException("상품 이름에 '카카오'가 포함된 경우 담당 MD와 협의가 필요합니다.");
         }
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+
+        // 옵션을 추가하는 로직
+        if (product.getOptions() != null && !product.getOptions().isEmpty()) {
+            for (Option option : product.getOptions()) {
+                option.setProduct(savedProduct);
+                optionRepository.save(option);
+            }
+        }
         return true;
     }
 
@@ -55,6 +69,13 @@ public class ProductServiceImpl implements ProductService {
                 existingProduct.setPrice(product.getPrice());
                 existingProduct.setImageUrl(product.getImageUrl());
                 existingProduct.setCategory(product.getCategory());
+
+                optionRepository.deleteAll(existingProduct.getOptions());
+                for (Option option : product.getOptions()) {
+                    option.setProduct(existingProduct);
+                    optionRepository.save(option);
+                }
+
                 productRepository.save(existingProduct);
                 return true;
             })
