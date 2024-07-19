@@ -1,16 +1,20 @@
 package gift.Service;
 
 import gift.Model.Category;
+import gift.Model.Product;
 import gift.Repository.CategoryRepository;
+import gift.Repository.ProductRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
-    public CategoryService(CategoryRepository categoryRepository){
+    public CategoryService(CategoryRepository categoryRepository, ProductRepository productRepository){
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     }
     public List<Category> getAllCategory(){
         return categoryRepository.findAll();
@@ -29,6 +33,7 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long id){
+        productRepository.changeCategoryNull(id);
         categoryRepository.deleteById(id);
     }
 }
