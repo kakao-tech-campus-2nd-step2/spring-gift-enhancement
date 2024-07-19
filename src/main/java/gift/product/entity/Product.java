@@ -38,7 +38,7 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<Option> options = new HashSet<>();
 
     protected Product() {
@@ -90,6 +90,11 @@ public class Product {
         this.price = request.price();
         this.imageUrl = request.imageUrl();
         this.category = category;
+    }
+
+    public boolean addOption(Option option) {
+        return this.options
+                   .add(option);
     }
 
     public static class ProductBuilder {

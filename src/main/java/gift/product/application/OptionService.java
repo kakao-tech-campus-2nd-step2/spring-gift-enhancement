@@ -6,6 +6,7 @@ import gift.product.dao.OptionRepository;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.OptionRequest;
 import gift.product.dto.OptionResponse;
+import gift.product.entity.Option;
 import gift.product.entity.Product;
 import gift.product.util.OptionMapper;
 import gift.product.util.ProductMapper;
@@ -37,13 +38,14 @@ public class OptionService {
     public OptionResponse addOptionToProduct(Long id, OptionRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        Option option = OptionMapper.toEntity(request, product);
+        if (!product.addOption(option)) {
+            throw new CustomException(ErrorCode.OPTION_ALREADY_EXISTS);
+        }
 
-        return OptionMapper.toResponseDto(
-                optionRepository.save(OptionMapper.toEntity(request, product))
-        );
+        return OptionMapper.toResponseDto(option);
     }
 
-    @Transactional
     public void deleteOptionFromProduct(Long id, OptionRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
