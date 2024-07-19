@@ -36,13 +36,17 @@ Content-Type: application/json
 - 구현한 기능에 대해 적절한 테스트 전략을 생각하고 작성한다.
 
 ### 과제 수행 내용
-- category entity
+- **Category entity**
   - product와 category -> **N:1** 관계.
   - product가 **category_id를 fk**로 가지며 관리.
   - 현재 요구사항에서, category에서는 product를 참조하는 경우가 없으므로   
     product에서 `@ManyToOne`, `@JoinColumn`을 통해 **category 참조용 필드**를 가짐.
 - 선택할 수 있는 카테고리 종류 DB에 저장
 - `/api/categories` - DB의 모든 카테고리의 List 반환
-- 상품 정보에 카테고리 포함
-  - 새로운 상품 등록 시 카테고리 선택
+- **상품 정보에 카테고리 포함**
+  - 새로운 상품 등록 시 카테고리 선택하여 추가
   - 기존 상품 정보 수정 시 카테고리 수정 가능
+- **Test**
+  - `CategoryServiceTest` - `getCategories()` : 전체 카테고리 종류 조회
+  - `ProductServiceTest` - `addProduct()` : 새상품 추가(카테고리 포함)
+  - `ProductServiceTest` - `updateProductCategory()` : 기존 상품 정보 수정(카테고리 정보 수정한 경우)
