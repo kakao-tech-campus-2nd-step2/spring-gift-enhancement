@@ -72,4 +72,11 @@ public class Option {
     public void addProduct(Product product) {
         this.product = product;
     }
+
+    public void subtractQuantity(int count) {
+        if (quantity < count) {
+            throw new IllegalArgumentException("현재 재고보다 많이 삭제할 수 없습니다.");
+        }
+        quantity -= count;
+    }
 }
