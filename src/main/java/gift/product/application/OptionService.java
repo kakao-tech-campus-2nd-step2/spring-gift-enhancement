@@ -39,7 +39,7 @@ public class OptionService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Option option = OptionMapper.toEntity(request, product);
-        if (!product.addOption(option)) {
+        if (!product.addOptionOrElseFalse(option)) {
             throw new CustomException(ErrorCode.OPTION_ALREADY_EXISTS);
         }
 
@@ -50,8 +50,7 @@ public class OptionService {
     public void deleteOptionFromProduct(Long id, OptionRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        if (product.getOptions()
-                .size() == 1) {
+        if (product.hasOnlyOneOption()) {
             throw new CustomException(ErrorCode.OPTION_REMOVE_FAILED);
         }
         Option option = optionRepository.findByProduct_IdAndName(product.getId(), request.name())

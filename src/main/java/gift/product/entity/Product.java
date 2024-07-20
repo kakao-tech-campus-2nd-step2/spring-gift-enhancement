@@ -92,7 +92,15 @@ public class Product {
         this.category = category;
     }
 
-    public boolean addOption(Option option) {
+    /**
+     * Option Set에 주어진 option을 추가하는 메서드
+     * Set option 추가 여부를 반환
+     *
+     * @param option Set에 추가되려는 option
+     * @return option이 Set에 성공적으로 추가되면 true 반환
+     *         Set에 option이 이미 존재하여 추가되지 않으면 false 반환
+     */
+    public boolean addOptionOrElseFalse(Option option) {
         return this.options
                    .add(option);
     }
@@ -100,6 +108,11 @@ public class Product {
     public void deleteOption(Option option) {
         this.options
             .remove(option);
+    }
+
+    public boolean hasOnlyOneOption() {
+        return this.options
+                   .size() == 1;
     }
 
     public static class ProductBuilder {

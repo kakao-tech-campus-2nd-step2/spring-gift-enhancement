@@ -45,7 +45,7 @@ public class ProductService {
         Category category = categoryRepository.findByName(request.categoryName())
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         Product product = productRepository.save(ProductMapper.toEntity(request, category));
-        product.addOption(OptionMapper.toEntity(request.option(), product));
+        product.addOptionOrElseFalse(OptionMapper.toEntity(request.option(), product));
 
         return ProductMapper.toResponseDto(product);
     }

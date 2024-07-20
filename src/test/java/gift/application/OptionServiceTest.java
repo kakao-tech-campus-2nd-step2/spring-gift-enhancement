@@ -66,8 +66,8 @@ class OptionServiceTest {
     void getProductOptionsByIdOrThrow() {
         Option option1 = new Option("옵션1", 10, product);
         Option option2 = new Option("옵션2", 20, product);
-        product.addOption(option1);
-        product.addOption(option2);
+        product.addOptionOrElseFalse(option1);
+        product.addOptionOrElseFalse(option2);
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         Set<OptionResponse> responses = optionService.getProductOptionsByIdOrThrow(productId);
@@ -94,7 +94,7 @@ class OptionServiceTest {
     @DisplayName("상품 옵션 추가 실패 테스트")
     void addOptionToProductFailed() {
         OptionRequest request = new OptionRequest("옵션", 10);
-        product.addOption(OptionMapper.toEntity(request, product));
+        product.addOptionOrElseFalse(OptionMapper.toEntity(request, product));
         given(productRepository.findById(anyLong()))
                 .willReturn(Optional.of(product));
 
@@ -110,8 +110,8 @@ class OptionServiceTest {
         OptionRequest request = new OptionRequest("옵션1", 10);
         Option option1 = OptionMapper.toEntity(request, product);
         Option option2 = new Option("옵션2", 100, product);
-        product.addOption(option1);
-        product.addOption(option2);
+        product.addOptionOrElseFalse(option1);
+        product.addOptionOrElseFalse(option2);
         given(productRepository.findById(anyLong()))
                 .willReturn(Optional.of(product));
         given(optionRepository.findByProduct_IdAndName(any(), anyString()))
@@ -127,7 +127,7 @@ class OptionServiceTest {
     @DisplayName("상품 옵션 삭제 실패 테스트")
     void deleteOptionFromProductFailed() {
         OptionRequest request = new OptionRequest("옵션1", 10);
-        product.addOption(OptionMapper.toEntity(request, product));
+        product.addOptionOrElseFalse(OptionMapper.toEntity(request, product));
         given(productRepository.findById(anyLong()))
                 .willReturn(Optional.of(product));
 
