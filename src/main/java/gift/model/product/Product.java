@@ -61,13 +61,13 @@ public class Product {
             .anyMatch(opt -> opt.getName().equals(name));
     }
     public Product(){}
-    public Product(String name, int price, String imageUrl, Category category, List<Option> options) {
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
         if(options.isEmpty())
-            throw new OptionNotFoundException("상품 생성 시 최소 하나 이상의 옵션이 있어야 합니다.");
+            throw new OptionNotFoundException("상품에는 최소 하나 이상의 옵션이 있어야 합니다.");
     }
 
     // getters, setters
