@@ -3,7 +3,6 @@ package gift.controller;
 import gift.dto.CategoryRequest;
 import gift.dto.CategoryResponse;
 import gift.service.CategoryService;
-import gift.service.facade.ProductAndCategoryFacade;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,11 +25,9 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final ProductAndCategoryFacade productAndCategoryFacade;
 
-    public CategoryController(CategoryService categoryService, ProductAndCategoryFacade productAndCategoryFacade) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
-        this.productAndCategoryFacade = productAndCategoryFacade;
     }
 
     @PostMapping("/add")
@@ -60,7 +57,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        productAndCategoryFacade.deleteCategory(id);
+        categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 }

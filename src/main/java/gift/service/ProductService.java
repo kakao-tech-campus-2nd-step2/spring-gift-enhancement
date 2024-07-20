@@ -26,17 +26,20 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final WishProductRepository wishProductRepository;
     private final OptionRepository optionRepository;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, WishProductRepository wishProductRepository, OptionRepository optionRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, WishProductRepository wishProductRepository, OptionRepository optionRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.wishProductRepository = wishProductRepository;
         this.optionRepository = optionRepository;
+        this.optionService = optionService;
     }
 
     public ProductResponse addProduct(ProductRequest productRequest, MemberRole memberRole) {
         productNameValidation(productRequest, memberRole);
         var product = saveProductWithProductRequest(productRequest);
+        optionService.makeDefaultOption(product);
         return getProductResponseFromProduct(product);
     }
 
@@ -71,6 +74,13 @@ public class ProductService {
         optionRepository.deleteAllByProductId(productId);
         wishProductRepository.deleteAllByProductId(productId);
         productRepository.deleteById(productId);
+    }
+
+    public void deleteAllProductWithCategoryId(Long categoryId) {
+        var products = productRepository.findAllByCategoryId(categoryId);
+        for (var product : products) {
+            deleteProduct(product.getId());
+        }
     }
 
     private Product saveProductWithProductRequest(ProductRequest productRequest) {

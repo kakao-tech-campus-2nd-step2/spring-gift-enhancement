@@ -2,7 +2,6 @@ package gift.service;
 
 import gift.dto.OptionRequest;
 import gift.dto.OptionResponse;
-import gift.dto.ProductResponse;
 import gift.exception.BadRequestException;
 import gift.exception.DuplicatedNameException;
 import gift.exception.NotFoundElementException;
@@ -60,9 +59,7 @@ public class OptionService {
         optionRepository.deleteById(id);
     }
 
-    public void makeDefaultOption(ProductResponse productResponse) {
-        var product = productRepository.findById(productResponse.id())
-                .orElseThrow(() -> new NotFoundElementException(productResponse.id() + "를 가진 상품이 존재하지 않습니다."));
+    public void makeDefaultOption(Product product) {
         var option = new Option(product, "기본", 1000);
         optionRepository.save(option);
     }

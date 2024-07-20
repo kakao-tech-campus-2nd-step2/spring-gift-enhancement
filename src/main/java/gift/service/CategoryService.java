@@ -17,9 +17,11 @@ import java.util.List;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductService productService;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, ProductService productService) {
         this.categoryRepository = categoryRepository;
+        this.productService = productService;
     }
 
     public CategoryResponse addCategory(CategoryRequest categoryRequest) {
@@ -50,6 +52,7 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long id) {
+        productService.deleteAllProductWithCategoryId(id);
         categoryRepository.deleteById(id);
     }
 
