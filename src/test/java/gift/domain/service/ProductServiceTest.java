@@ -9,7 +9,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
-import gift.domain.dto.request.OptionRequest;
+import gift.domain.dto.request.OptionAddRequest;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.CategoryResponse;
@@ -52,7 +52,7 @@ class ProductServiceTest {
     private Category category;
     private List<Option> options;
     private CategoryResponse categoryResponse;
-    private List<OptionRequest> optionRequests;
+    private List<OptionAddRequest> optionAddRequests;
     private List<OptionResponse> optionResponses;
 
     @BeforeEach
@@ -61,7 +61,7 @@ class ProductServiceTest {
         category = MockObjectSupplier.get(Category.class);
         options = List.of(MockObjectSupplier.get(Option.class));
         categoryResponse = CategoryResponse.of(category);
-        optionRequests = OptionRequest.of(options);
+        optionAddRequests = OptionAddRequest.of(options);
         optionResponses = OptionResponse.of(options);
     }
 
@@ -141,7 +141,7 @@ class ProductServiceTest {
     @DisplayName("[UnitTest/Fail] 상품 추가: 이미 있는 상품 등록시")
     void addProduct_AlreadyExists() {
         //given
-        ProductAddRequest request = new ProductAddRequest("name", 1000,"image.png", 1L, optionRequests);
+        ProductAddRequest request = new ProductAddRequest("name", 1000,"image.png", 1L, optionAddRequests);
         given(productRepository.findByContents(any(ProductAddRequest.class)))
             .willReturn(Optional.of(product));
 

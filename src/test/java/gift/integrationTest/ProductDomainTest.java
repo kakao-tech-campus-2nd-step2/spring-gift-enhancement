@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.domain.controller.apiResponse.ProductAddApiResponse;
 import gift.domain.controller.apiResponse.ProductListApiResponse;
-import gift.domain.dto.request.OptionRequest;
+import gift.domain.dto.request.OptionAddRequest;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.ProductResponse;
@@ -53,17 +53,17 @@ class ProductDomainTest {
             1_000,
             "image.jpg",
             1L,
-            List.of(new OptionRequest("옵션1", 300)));
+            List.of(new OptionAddRequest("옵션1", 300)));
     }
 
     @Test
     @DisplayName("[ApiIntegrationTest] 상품 리스트 조회")
     void getProducts() {
         //given
-        List<List<OptionRequest>> optionRequests = new ArrayList<>(List.of(
-            List.of(new OptionRequest("옵션1", 300)),
-            List.of(new OptionRequest("옵션1", 400)),
-                List.of(new OptionRequest("옵션2", 500))));
+        List<List<OptionAddRequest>> optionRequests = new ArrayList<>(List.of(
+            List.of(new OptionAddRequest("옵션1", 300)),
+            List.of(new OptionAddRequest("옵션1", 400)),
+                List.of(new OptionAddRequest("옵션2", 500))));
         List<ProductAddRequest> request = new ArrayList<>(List.of(
             new ProductAddRequest("product1", 1_000, "image1.jpg", 1L, optionRequests.get(0)),
             new ProductAddRequest("product2", 2_000, "image2.jpg", 1L, optionRequests.get(1)),

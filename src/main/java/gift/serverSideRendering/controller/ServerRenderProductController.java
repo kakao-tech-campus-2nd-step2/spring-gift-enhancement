@@ -1,6 +1,6 @@
 package gift.serverSideRendering.controller;
 
-import gift.domain.dto.request.OptionRequest;
+import gift.domain.dto.request.OptionAddRequest;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.ProductResponse;
@@ -54,7 +54,7 @@ public class ServerRenderProductController {
         Product product = service.getProductById(id);
         ProductResponse productResponse = ProductResponse.of(product);
         //TODO: category ID, options를 처리할 수 있게 수정하기
-        ProductAddRequest dto = new ProductAddRequest(product.getName(), product.getPrice(), product.getImageUrl(), 0L, OptionRequest.of(product.getOptions()));
+        ProductAddRequest dto = new ProductAddRequest(product.getName(), product.getPrice(), product.getImageUrl(), 0L, OptionAddRequest.of(product.getOptions()));
         model.addAttribute("productRequestDto", dto);
         model.addAttribute("productId", id);
         return "updateProduct";

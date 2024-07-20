@@ -1,6 +1,6 @@
 package gift.domain.service;
 
-import gift.domain.dto.request.OptionRequest;
+import gift.domain.dto.request.OptionAddRequest;
 import gift.domain.dto.response.OptionDetailedResponse;
 import gift.domain.entity.Option;
 import gift.domain.entity.Product;
@@ -23,7 +23,7 @@ public class OptionService {
     }
 
     // request가 기존 상품 옵션들과 겹치지 않음을 검증하기
-    private void validateOptionIsUniqueInProduct(Product product, OptionRequest request) {
+    private void validateOptionIsUniqueInProduct(Product product, OptionAddRequest request) {
         Objects.requireNonNullElse(product.getOptions(), new ArrayList<Option>()).stream()
             .filter(o -> o.getName().equals(request.name()))
             .findAny()
@@ -51,7 +51,7 @@ public class OptionService {
     }
 
     @Transactional
-    public Option addOption(Product product, OptionRequest request) {
+    public Option addOption(Product product, OptionAddRequest request) {
         validateOptionIsUniqueInProduct(product, request);
         Option option = optionRepository.save(request.toEntity(product));
         product.addOption(option);
@@ -59,12 +59,12 @@ public class OptionService {
     }
 
     @Transactional
-    public List<Option> addOptions(Product product, List<OptionRequest> request) {
+    public List<Option> addOptions(Product product, List<OptionAddRequest> request) {
         List<String> optionNames = new ArrayList<>(product.getOptions().stream()
             .map(Option::getName)
             .toList());
         optionNames.addAll(request.stream()
-            .map(OptionRequest::name)
+            .map(OptionAddRequest::name)
             .toList());
         List<String> distinctOptionNames = optionNames.stream().distinct().toList();
 
@@ -79,7 +79,7 @@ public class OptionService {
     }
 
     @Transactional
-    public Option updateOptionById(Product product, Long optionId, OptionRequest request) {
+    public Option updateOptionById(Product product, Long optionId, OptionAddRequest request) {
         validateOptionIsInProduct(product, optionId);
         Option option = getOptionById(optionId);
         if (!option.getName().equals(request.name())) {

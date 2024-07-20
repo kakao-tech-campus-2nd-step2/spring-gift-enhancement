@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.domain.dto.request.OptionRequest;
+import gift.domain.dto.request.OptionAddRequest;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.response.CategoryResponse;
 import gift.domain.dto.response.OptionResponse;
@@ -56,7 +56,7 @@ public class ProductControllerValidationTest {
             1000,
             "http://example.com/image.jpg",
             1L,
-            List.of(OptionRequest.of(MockObjectSupplier.get(Option.class))));
+            List.of(OptionAddRequest.of(MockObjectSupplier.get(Option.class))));
         ProductResponse productResponse = new ProductResponse(
             1L,
             validRequest.name(),
@@ -105,7 +105,7 @@ public class ProductControllerValidationTest {
                         1000,
                         "http://example.com/image.jpg",
                         1L,
-                        List.of(OptionRequest.of(MockObjectSupplier.get(Option.class))))))
+                        List.of(OptionAddRequest.of(MockObjectSupplier.get(Option.class))))))
                 )
 
             //TODO: 카테고리, 옵션도 검증하기

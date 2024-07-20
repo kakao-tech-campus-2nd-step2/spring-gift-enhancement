@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import org.hibernate.validator.constraints.Range;
 
-public record OptionRequest(
+public record OptionAddRequest(
     @NotNull
     @Size(min = 1, max = 50)
     @RestrictedSpecialChars
@@ -18,13 +18,13 @@ public record OptionRequest(
     Integer quantity
 ) {
 
-    public static OptionRequest of(Option option) {
-        return new OptionRequest(option.getName(), option.getQuantity());
+    public static OptionAddRequest of(Option option) {
+        return new OptionAddRequest(option.getName(), option.getQuantity());
     }
 
-    public static List<OptionRequest> of(List<Option> options) {
+    public static List<OptionAddRequest> of(List<Option> options) {
         return options.stream()
-            .map(OptionRequest::of)
+            .map(OptionAddRequest::of)
             .toList();
     }
 

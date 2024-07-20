@@ -21,11 +21,11 @@ public record ProductAddRequest(
     @NotNull
     Long categoryId,
     @NotNull
-    List<OptionRequest> options
+    List<OptionAddRequest> options
     ) {
 
     public static ProductAddRequest of(Product product) {
-        return new ProductAddRequest(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getId(), OptionRequest.of(product.getOptions()));
+        return new ProductAddRequest(product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory().getId(), OptionAddRequest.of(product.getOptions()));
     }
 
     public Product toEntity(CategoryService categoryService) {

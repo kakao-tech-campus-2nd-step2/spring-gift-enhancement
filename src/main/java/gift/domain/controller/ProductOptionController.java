@@ -1,7 +1,7 @@
 package gift.domain.controller;
 
 import gift.domain.controller.apiResponse.ProductOptionsGetApiResponse;
-import gift.domain.dto.request.OptionRequest;
+import gift.domain.dto.request.OptionAddRequest;
 import gift.domain.service.ProductService;
 import gift.global.apiResponse.BasicApiResponse;
 import gift.global.apiResponse.SuccessApiResponse;
@@ -33,17 +33,17 @@ public class ProductOptionController {
     }
 
     @PostMapping("/{productId}/options")
-    public ResponseEntity<BasicApiResponse> addProductOption(@PathVariable("productId") Long productId, @Valid @RequestBody OptionRequest optionRequest) {
-        productService.addProductOption(productId, optionRequest);
+    public ResponseEntity<BasicApiResponse> addProductOption(@PathVariable("productId") Long productId, @Valid @RequestBody OptionAddRequest optionAddRequest) {
+        productService.addProductOption(productId, optionAddRequest);
         return SuccessApiResponse.ok();
     }
 
     @PutMapping("/{productId}/options/{optionId}")
     public ResponseEntity<BasicApiResponse> updateProduct(@PathVariable("productId") Long productId,
                                                           @PathVariable("optionId") Long optionId,
-                                                          @Valid @RequestBody OptionRequest optionRequest
+                                                          @Valid @RequestBody OptionAddRequest optionAddRequest
     ) {
-        productService.updateProductOptionById(productId, optionId, optionRequest);
+        productService.updateProductOptionById(productId, optionId, optionAddRequest);
         return SuccessApiResponse.ok();
     }
 
