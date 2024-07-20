@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class AdminAccessAspect {
+public class AdminControllerAspect {
 
-    @Before("@annotation(AdminOnly) && args(appUser,..)")
+    @Before("within(@gift.aspect.AdminController *) && args(appUser,..)")
     public void verifyAdminAccess(AppUser appUser) {
         if (!appUser.isAdmin()) {
             throw new ForbiddenException("해당 요청에 대한 관리자 권한이 없습니다.");
