@@ -15,13 +15,15 @@ import gift.model.Options;
 import gift.model.Product;
 import gift.model.Role;
 import gift.request.ProductAddRequest;
-import gift.service.CategoryService;
+import gift.response.OptionResponse;
+import gift.response.ProductOptionsResponse;
 import gift.service.OptionsService;
 import gift.service.ProductService;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +32,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -57,6 +58,49 @@ public class ProductApiControllerTest {
             new Member("abc123@a.com", "1234", Role.ROLE_ADMIN));
     }
 
+    @DisplayName("모든 옵션과 함께 상품 조회 요청 테스트")
+    @Test
+    void getProductWithAllOptions() throws Exception {
+        //given
+        Product product = demoProduct();
+        List<OptionResponse> options = new ArrayList<>();
+        ProductOptionsResponse response = new ProductOptionsResponse(product, options);
+
+        given(productService.getProduct(any(Long.class)))
+            .willReturn(product);
+        given(optionsService.getAllProductOptions(any(Product.class)))
+            .willReturn(response);
+
+        //when //then
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/products/{id}/all", product.getId())
+                    .header("Authorization", "Bearer " + token))
+            .andExpect(status().isOk())
+            .andDo(print());
+    }
+
+    @DisplayName("하나의 옵션과 함께 상품 조회 요청 테스트")
+    @Test
+    void getProductWithOption() throws Exception {
+        //given
+        Long optionId = 1L;
+        Product product = demoProduct();
+        List<OptionResponse> options = new ArrayList<>();
+        ProductOptionsResponse response = new ProductOptionsResponse(product, options);
+
+        given(productService.getProduct(any(Long.class)))
+            .willReturn(product);
+        given(optionsService.getProductOption(any(Product.class), any(Long.class)))
+            .willReturn(response);
+
+        //when //then
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/products/{id}", product.getId())
+                    .param("option_id", String.valueOf(optionId))
+                    .header("Authorization", "Bearer " + token))
+            .andExpect(status().isOk())
+            .andDo(print());
+    }
 
     @DisplayName("옵션과 함게 상품 생성 요청 테스트")
     @Test
@@ -76,10 +120,10 @@ public class ProductApiControllerTest {
 
         //when //then
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/products")
-                .header("Authorization", "Bearer " + token)
-                .content(content)
-                .contentType(MediaType.APPLICATION_JSON))
+                MockMvcRequestBuilders.post("/api/products")
+                    .header("Authorization", "Bearer " + token)
+                    .content(content)
+                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated())
             .andDo(print());
     }
@@ -107,28 +151,21 @@ public class ProductApiControllerTest {
     void delete() throws Exception {
         //given
         Long productId = 1L;
-        given(productService.deleteProduct(productId))
-            .willReturn(productId);
+        doNothing().when(productService).deleteProduct(productId);
         doNothing().when(optionsService).deleteAllOptions(productId);
 
         //when //then
-            mockMvc.perform(
-            MockMvcRequestBuilders.delete("/api/products")
-                .param("id", productId.toString())
-                .header("Authorization", "Bearer " + token)
-                .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNoContent())
-        .andDo(print());
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/products")
+                    .param("id", productId.toString())
+                    .header("Authorization", "Bearer " + token)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent())
+            .andDo(print());
 
         then(productService).should().deleteProduct(productId);
         then(optionsService).should().deleteAllOptions(productId);
     }
-
-
-
-
-
-
 
 
     private ProductAddRequest demoAddRequest() {

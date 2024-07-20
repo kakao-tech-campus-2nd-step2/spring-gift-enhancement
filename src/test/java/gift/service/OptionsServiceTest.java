@@ -19,17 +19,12 @@ import gift.model.Options;
 import gift.model.Product;
 import gift.repository.OptionsRepository;
 import gift.repository.ProductRepository;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import javax.swing.text.html.Option;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -60,7 +55,7 @@ class OptionsServiceTest {
             .willReturn(options);
 
         // when
-        List<Options> allOptions = optionsService.getAllOptions(product.getId());
+        List<Options> allOptions = optionsRepository.findAllByProductId(product.getId());
 
         // then
         then(optionsRepository).should().findAllByProductId(product.getId());
@@ -79,11 +74,12 @@ class OptionsServiceTest {
         given(optionsRepository.findById(any(Long.class)))
             .willReturn(Optional.of(option));
         //when
-        Options foundOption = optionsService.getOption(id);
+        Optional<Options> foundOption = optionsRepository.findById(id);
         //then
         then(optionsRepository).should().findById(id);
-        assertThat(foundOption.getProduct()).isEqualTo(product);
-        assertThat(foundOption.getId()).isEqualTo(id);
+        assertThat(foundOption.isPresent()).isTrue();
+        assertThat(foundOption.get().getProduct()).isEqualTo(product);
+        assertThat(foundOption.get().getId()).isEqualTo(id);
     }
 
     @DisplayName("옵션 생성 테스트")

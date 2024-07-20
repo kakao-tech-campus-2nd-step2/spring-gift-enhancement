@@ -200,9 +200,7 @@ class CategoryApiControllerTest {
     void remove() throws Exception {
         //given
         Long categoryId = 1L;
-        given(categoryService.deleteCategory(categoryId))
-            .willReturn(categoryId);
-
+        doNothing().when(categoryService).deleteCategory(categoryId);
         //when //then
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/categories")

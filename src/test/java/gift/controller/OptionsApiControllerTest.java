@@ -2,6 +2,7 @@ package gift.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -147,9 +148,7 @@ class OptionsApiControllerTest {
         //given
         Long optionId = 1L;
         Product product = demoProduct();
-        Options options = demoOptions(optionId, product);
-        given(optionsService.deleteOption(optionId, product.getId()))
-            .willReturn(options.getId());
+        doNothing().when(optionsService).deleteOption(optionId, product.getId());
 
         //when //then
         mockMvc.perform(

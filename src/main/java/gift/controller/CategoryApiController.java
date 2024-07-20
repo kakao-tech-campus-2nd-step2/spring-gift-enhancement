@@ -37,7 +37,7 @@ public class CategoryApiController {
 
     @CheckRole("ROLE_ADMIN")
     @GetMapping("/api/categories/{id}")
-    public ResponseEntity<Category> getCategory(@PathVariable Long id) {
+    public ResponseEntity<Category> getCategory(@PathVariable("id") Long id) {
         return new ResponseEntity<>(categoryService.getCategory(id), HttpStatus.OK);
     }
 
