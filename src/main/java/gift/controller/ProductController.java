@@ -69,10 +69,6 @@ public class ProductController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
-//        Optional<Category> category = categoryService.findById(productRequestDto.getCategoryId());
-//        if(category.isEmpty()) {
-//            throw new CategoryException("올바르지 않은 카테고리");
-//        }
         Category category = categoryService.findById(productRequestDto.getCategoryId())
             .orElseThrow(() -> new CategoryException("올바르지 않은 카테고리"));
         Product product = productRequestDto.toEntity(category);

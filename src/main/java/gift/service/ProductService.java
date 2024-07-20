@@ -2,6 +2,8 @@ package gift.service;
 
 import gift.dto.ProductResponseDto;
 import gift.entity.Product;
+import gift.entity.Option;
+import gift.exception.ProductException;
 import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +15,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, OptionService optionService) {
         this.productRepository=productRepository;
+        this.optionService=optionService;
     }
 
     public List<ProductResponseDto> findAll() {
@@ -36,6 +40,14 @@ public class ProductService {
     }
 
     public Product save(Product product) {
+        if(product.getOptions().isEmpty()){
+            throw new ProductException("상품에는 최소 하나 이상의 옵션이 있어야합니다.");
+        }
+        List<String> optionNames = product.getOptions().stream().map(Option::getName).collect(Collectors.toList());
+        Long distinctSize = optionNames.stream().distinct().count();
+        if(optionNames.size()!=distinctSize){
+            throw new ProductException("동일한 상품 내에 중복된 옵션이 있습니다.");
+        }
         return productRepository.save(product);
     }
 
