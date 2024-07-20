@@ -31,4 +31,12 @@ public class Option extends BaseEntity {
         this.name = name;
         this.quantity = quantity;
     }
+
+    public void substract(Long minus){
+        if(this.quantity - minus < 0L) {
+            this.quantity = 0L;
+            return;
+        }
+        this.quantity -= minus;
+    }
 }
