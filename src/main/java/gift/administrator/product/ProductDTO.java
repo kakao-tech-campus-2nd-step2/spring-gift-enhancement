@@ -25,6 +25,7 @@ public class ProductDTO {
     private String imageUrl;
     @NotNull(message = "카테고리를 선택해야합니다.")
     private Long categoryId;
+    @Size(min = 1, message = "상품에는 적어도 하나의 옵션이 있어야 합니다.")
     private List<OptionDTO> options = new ArrayList<>();
 
     public ProductDTO() {

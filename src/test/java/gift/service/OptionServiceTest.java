@@ -219,10 +219,10 @@ public class OptionServiceTest {
     void subtractOptionQuantity() throws NotFoundException {
         //given
         given(optionRepository.findById(1L)).willReturn(Optional.ofNullable(option));
-        OptionDTO expected = new OptionDTO(1L, "L", 1, null);
+        Option expected = new Option(1L, "L", 1, null);
 
         //when
-        OptionDTO actual = optionService.subtractOptionQuantity(1L, 2);
+        Option actual = optionService.subtractOptionQuantity(1L, 2);
 
         //then
         assertThat(actual.getQuantity()).isEqualTo(expected.getQuantity());

@@ -102,9 +102,21 @@ public class Product {
         option.setProduct(this);
     }
 
+    public void addOptions(List<Option> options) {
+        for(Option option : options){
+            addOption(option);
+        }
+    }
+
     public void removeOption(Option option) {
         options.remove(option);
         option.setProduct(null);
+    }
+
+    public void removeOptions(List<Option> options) {
+        for(Option option : options){
+            removeOption(option);
+        }
     }
 
     public List<Option> getOptions(){

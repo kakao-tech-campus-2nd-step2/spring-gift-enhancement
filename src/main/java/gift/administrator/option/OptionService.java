@@ -4,6 +4,7 @@ import gift.administrator.product.Product;
 import java.util.List;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -42,16 +43,16 @@ public class OptionService {
         return OptionDTO.fromOption(savedOption);
     }
 
-    public OptionDTO subtractOptionQuantity(long optionId, int quantity) throws NotFoundException {
+    public Option subtractOptionQuantity(long optionId, int quantity) throws NotFoundException {
         Option option = optionRepository.findById(optionId).orElseThrow(NotFoundException::new);
-        OptionDTO optionDTO = OptionDTO.fromOption(option);
-        if(optionDTO.getQuantity()<quantity){
+        if(option.getQuantity()<quantity){
             throw new IllegalArgumentException("옵션의 수량이 부족합니다.");
         }
-        optionDTO.subtract(quantity);
-        return optionDTO;
+        option.subtract(quantity);
+        return option;
     }
 
+    @Transactional
     public void deleteOptionByProductId(long productId){
         optionRepository.deleteByProductId(productId);
     }
