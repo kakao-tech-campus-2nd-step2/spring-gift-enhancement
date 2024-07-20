@@ -297,4 +297,24 @@ public class ProductServiceTest {
                 .isInstanceOf(InvalidProductOptionException.class)
                 .hasMessage("상품은 최소 1개 이상의 옵션을 가져야 합니다.");
     }
+
+    @Test
+    void 옵션이름이50이상인상품_추가_테스트() {
+        // Given
+        Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
+        OptionCreateCommand option = new OptionCreateCommand("옵션이름이50자를초과하는경우옵션생성실패테스트옵션이름이50자를초과하는경우옵션생성실패테스트옵션이름이50자를초과", 10);
+        ProductCreateCommand createCommand = new ProductCreateCommand(
+                "Product1",
+                1000,
+                "http://example.com/image1.jpg",
+                category.getId(),
+                List.of(option)
+        );
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+
+        // When & Then
+        assertThatThrownBy(() -> productService.save(createCommand))
+                .isInstanceOf(InvalidProductOptionException.class)
+                .hasMessage("옵션 이름은 공백을 포함하여 최대 50자까지 입력 할 수 있습니다.");
+    }
 }

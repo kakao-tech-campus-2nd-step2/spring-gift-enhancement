@@ -4,6 +4,7 @@ import gift.auth.TokenService;
 import gift.category.application.CategoryService;
 import gift.category.domain.Category;
 import gift.member.application.MemberService;
+import gift.option.application.OptionResponse;
 import gift.product.application.ProductResponse;
 import gift.product.application.ProductService;
 import gift.product.application.command.ProductCreateCommand;
@@ -65,7 +66,9 @@ public class ProductControllerTest {
                 {
                     "name": "이름이너무길어서유효성검사에걸리는경우",
                     "price": 1000,
-                    "imageUrl": "http://example.com/image.jpg"
+                    "imageUrl": "http://example.com/image.jpg",
+                    "categoryId": 1,
+                    "optionCreateRequestList": []
                 }
                 """;
 
@@ -86,8 +89,10 @@ public class ProductControllerTest {
     void 모든상품조회시_상품목록반환() throws Exception {
         // Given
         Category category = new Category(1L, "Category", "#FFFFFF", "Description", "http://example.com/image.jpg");
-        ProductResponse response1 = new ProductResponse(1L, "Product1", 1000, "http://example.com/image1.jpg", category.getId());
-        ProductResponse response2 = new ProductResponse(2L, "Product2", 2000, "http://example.com/image2.jpg", category.getId());
+        OptionResponse option1 = new OptionResponse(1L, "Option1", 10);
+        OptionResponse option2 = new OptionResponse(2L, "Option2", 20);
+        ProductResponse response1 = new ProductResponse(1L, "Product1", 1000, "http://example.com/image1.jpg", category.getId(), List.of(option1, option2));
+        ProductResponse response2 = new ProductResponse(2L, "Product2", 2000, "http://example.com/image2.jpg", category.getId(), List.of(option1, option2));
         Page<ProductResponse> page = new PageImpl<>(List.of(response1, response2), PageRequest.of(0, 2), 2);
         when(productService.findAll(any(Pageable.class))).thenReturn(page);
 
@@ -104,13 +109,16 @@ public class ProductControllerTest {
         String responseContent = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         Assertions.assertTrue(responseContent.contains("\"id\":1,\"name\":\"Product1\",\"price\":1000,\"imageUrl\":\"http://example.com/image1.jpg\",\"categoryId\":1"));
         Assertions.assertTrue(responseContent.contains("\"id\":2,\"name\":\"Product2\",\"price\":2000,\"imageUrl\":\"http://example.com/image2.jpg\",\"categoryId\":1"));
+        Assertions.assertTrue(responseContent.contains("\"optionResponseList\":[{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}]"));
     }
 
     @Test
     void 상품아이디로조회시_상품반환() throws Exception {
         // Given
         Category category = new Category(1L, "Category", "#FFFFFF", "Description", "http://example.com/image.jpg");
-        ProductResponse productResponse = new ProductResponse(1L, "Valid", 1000, "http://example.com/image.jpg", 1L);
+        OptionResponse option1 = new OptionResponse(1L, "Option1", 10);
+        OptionResponse option2 = new OptionResponse(2L, "Option2", 20);
+        ProductResponse productResponse = new ProductResponse(1L, "Valid", 1000, "http://example.com/image.jpg", category.getId(), List.of(option1, option2));
         when(productService.findById(1L)).thenReturn(productResponse);
 
         // When
@@ -127,6 +135,7 @@ public class ProductControllerTest {
         Assertions.assertTrue(responseContent.contains("\"price\":1000"));
         Assertions.assertTrue(responseContent.contains("\"imageUrl\":\"http://example.com/image.jpg\""));
         Assertions.assertTrue(responseContent.contains("\"categoryId\":1"));
+        Assertions.assertTrue(responseContent.contains("\"optionResponseList\":[{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}]"));
     }
 
     @Test
@@ -137,7 +146,8 @@ public class ProductControllerTest {
                     "name": "Updated",
                     "price": 2000,
                     "imageUrl": "http://example.com/updated-image.jpg",
-                    "categoryId": 1
+                    "categoryId": 1,
+                    "optionUpdateRequestList": []
                 }
                 """;
 
@@ -160,7 +170,9 @@ public class ProductControllerTest {
                 {
                     "name": "Valid",
                     "price": 1000,
-                    "imageUrl": "http://example.com/image.jpg"
+                    "imageUrl": "http://example.com/image.jpg",
+                    "categoryId": 1,
+                    "optionCreateRequestList": []
                 }
                 """;
 
@@ -184,7 +196,8 @@ public class ProductControllerTest {
                     "name": "이름이너무길어서유효성검사에걸리는경우",
                     "price": 2000,
                     "imageUrl": "http://example.com/updated-image.jpg",
-                    "categoryId": 1
+                    "categoryId": 1,
+                    "optionUpdateRequestList": []
                 }
                 """;
 
