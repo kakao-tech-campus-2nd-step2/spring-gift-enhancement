@@ -87,6 +87,11 @@ public class ProductService {
         return productMapper.toProductDTO(productEntity);
     }
 
+    public void updateProductEntity(Long id, ProductEntity productEntity) {
+        productEntity.setId(id);
+        productRepository.save(productEntity);
+    }
+
     /**
      * 사용자 ID를 통해 사용자의 상품 목록을 가져옵니다.
      *

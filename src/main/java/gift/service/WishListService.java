@@ -7,6 +7,7 @@ import gift.aspect.CheckProductExists;
 import gift.entity.WishListEntity;
 import gift.mapper.WishListMapper;
 import gift.repository.WishListRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +21,14 @@ import java.util.stream.Collectors;
 @Service
 public class WishListService {
 
-    private final WishListRepository wishListRepository;
+    @Autowired
+    private WishListRepository wishListRepository;
 
-    private final WishListMapper wishListMapper;
+    @Autowired
+    private WishListMapper wishListMapper;
+
+    @Autowired
+    private ProductService productService;
 
     /**
      * WhishListService 생성자
@@ -46,6 +52,11 @@ public class WishListService {
     public ProductDTO addWishList(long productId, MemberDTO memberDTO) {
         var wishListEntity = wishListMapper.toWishListEntity(productId, memberDTO);
         wishListRepository.save(wishListEntity);
+
+        var productEntity = productService.getProductEntity(productId);
+        productEntity.getWishListEntities().add(wishListEntity);
+        productService.updateProductEntity(productId, productEntity);
+
         return wishListMapper.toWishListDTO(wishListEntity).productDTO();
     }
 
