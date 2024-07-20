@@ -66,4 +66,15 @@ public class OptionService {
 
     return ConverterToDto.convertToOptionDto(updatedOption);
   }
+
+  public boolean optionQuantitySubtract(Long id, int amount) {
+    Option option = optionRepository.findById(id)
+      .orElseThrow(() -> new EmptyResultDataAccessException("해당 데이터가 없습니다", 1));
+
+    if (option.subtract(amount)) {
+      optionRepository.save(option);
+      return true;
+    }
+    return false;
+  }
 }
