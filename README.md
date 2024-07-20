@@ -13,3 +13,7 @@
 2. option entity, DTO, repository 작성
 3. option service, controller 작성
 4. Product 수정
+
+### step 3
+1. Option, OptionService 수정
+2. test 수정

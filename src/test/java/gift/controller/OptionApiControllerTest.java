@@ -2,7 +2,6 @@ package gift.controller;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -12,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.administrator.category.Category;
-import gift.administrator.category.CategoryDTO;
 import gift.administrator.option.Option;
 import gift.administrator.option.OptionApiController;
 import gift.administrator.option.OptionDTO;
@@ -25,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -40,8 +37,6 @@ public class OptionApiControllerTest {
     private OptionApiController optionApiController;
     private OptionDTO optionDTO;
     private OptionDTO optionDTO1;
-    private OptionDTO expected;
-    private OptionDTO expected1;
 
     @BeforeEach
     void beforeEach(){
@@ -57,8 +52,6 @@ public class OptionApiControllerTest {
         optionDTO1 = new OptionDTO(2L, "XL", 5, 1L);
         option.setProduct(product);
         optionDTO = OptionDTO.fromOption(option);
-        expected = new OptionDTO(1L, "L", 3, product.getId());
-        expected1 = new OptionDTO(2L, "XL", 5, product.getId());
     }
 
     @Test
