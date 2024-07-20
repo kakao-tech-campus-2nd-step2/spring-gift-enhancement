@@ -5,7 +5,6 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.OptionRequest;
 import gift.dto.response.OptionResponse;
-import gift.exception.CannotDeleteLastOptionException;
 import gift.exception.DuplicateOptionNameException;
 import gift.exception.OptionNotFoundException;
 import gift.exception.ProductNotFoundException;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OptionService {
