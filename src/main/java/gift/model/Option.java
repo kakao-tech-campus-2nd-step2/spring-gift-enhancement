@@ -9,62 +9,58 @@ import java.util.List;
 
 @Entity
 public class Option {
+    private static final double MAX_OPTION_NUM = 100000000;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "Option", columnDefinition = "varchar(1000)")
+    @Column(name = "optionListList", columnDefinition = "varchar(1000)")
     @Convert(converter = ListStringConverter.class)
-    private List<String> option = new ArrayList<>();
+    private List<String> optionList = new ArrayList<>();
 
     protected Option() {
-        this.option = new ArrayList<>();
+        this.optionList = new ArrayList<>();
     }
 
-    public Option(String option){
-        List<String> options = List.of(option.split(","));
-        if(isCorrectOptionSize(options) && isCorrectOptionList(options) && isNotDuplicate(options)){
-            this.option = options;
-        }
+    public Option(String optionList){
+        List<String> optionLists = List.of(optionList.split(","));
+        ifAllcorrectUpdateOption(optionLists);
     }
 
-    public Option(List<String> options){
-        if(isCorrectOptionSize(options) && isCorrectOptionList(options) && isNotDuplicate(options)){
-            this.option = options;
-        }
+    public Option(List<String> optionLists){
+        ifAllcorrectUpdateOption(optionLists);
     }
 
-    public Option(Long id, List<String> options){
+    public Option(Long id, List<String> optionLists){
         this.id = id;
-        if(isCorrectOptionSize(options) && isCorrectOptionList(options) && isNotDuplicate(options)){
-            this.option = options;
-        }
+        ifAllcorrectUpdateOption(optionLists);
     }
 
     public List<String> getOptionList() {
-        return option;
+        return optionList;
     }
 
     public long getId() {
         return id;
     }
 
-    private boolean isCorrectOptionSize(List<String> options){
-        if(options.isEmpty() || options.size() >= 100000000){
+    private boolean isCorrectOptionSize(List<String> optionLists){
+        if(optionLists.isEmpty() || optionLists.size() >= MAX_OPTION_NUM){
             throw new IllegalArgumentException("옵션은 1개 이상 1억개 미만이어야 합니다.");
 
         }
         return true;
     }
 
-    private boolean isCorrectOptionName(String option){
-        if(option.length()>50){
+    private boolean isCorrectOptionName(String optionList){
+        if(optionList.length()>50){
             throw new IllegalArgumentException("옵션은 최대 50자까지만 입력이 가능합니다.");
         }
         String letters = "()[]+-&/_ ";
-        for(int i=0; i<option.length(); i++){
-            char one = option.charAt(i);
+        for(int i=0; i<optionList.length(); i++){
+            char one = optionList.charAt(i);
             if(!Character.isLetterOrDigit(one) && !letters.contains(Character.toString(one))){
                 throw new IllegalArgumentException("옵션 내 특수문자로는 (),[],+,-,&,/,_만 사용 가능합니다.");
 
@@ -73,8 +69,8 @@ public class Option {
         return true;
     }
 
-    private boolean isCorrectOptionList(List<String> options) {
-        for (String s : options) {
+    private boolean isCorrectOptionList(List<String> optionLists) {
+        for (String s : optionLists) {
             if (!isCorrectOptionName(s)) {
                 throw new IllegalArgumentException("옵션은 최대 50자 이내이어야 하며, 특수문자로는 (),[],+,-,&,/,_만 사용 가능합니다.");
             }
@@ -82,74 +78,80 @@ public class Option {
         return true;
     }
 
-    private boolean isNotDuplicate(List<String> options){
-        if(options.size() != new HashSet<>(options).size()){
+    private boolean isNotDuplicate(List<String> optionLists){
+        if(optionLists.size() != new HashSet<>(optionLists).size()){
             throw new IllegalArgumentException("옵션은 중복될 수 없습니다.");
         }
         return true;
     }
 
-    public Option delete(String optionName) {
-        List<String> options = this.option;
-        if(!isCorrectOptionName(optionName)){
+    private void ifAllcorrectUpdateOption(List<String> optionLists){
+        if(isCorrectOptionSize(optionLists) && isCorrectOptionList(optionLists) && isNotDuplicate(optionLists)){
+            this.optionList = optionLists;
+        }
+    }
+
+    public Option delete(String optionListName) {
+        List<String> optionLists = this.optionList;
+        if(!isCorrectOptionName(optionListName)){
             throw new IllegalArgumentException("옵션은 최대 50자 이내이어야 하며, 특수문자로는 (),[],+,-,&,/,_만 사용 가능합니다.");
         }
-        if(options.size() > 1){
+        if(optionLists.size() > 1){
             List<String> newOptions = new ArrayList<>();
-            newOptions.addAll(options);
-            newOptions.remove(optionName);
-            this.option = newOptions;
+            newOptions.addAll(optionLists);
+            newOptions.remove(optionListName);
+            this.optionList = newOptions;
             return this;
         }
         throw new IllegalStateException("옵션은 하나 이상 존재해야 합니다.");
     }
 
-    public Option add(String optionName){
-        List<String> options = this.option;
-        if(!isCorrectOptionName(optionName)){
+    public Option add(String optionListName){
+        List<String> optionLists = this.optionList;
+        if(!isCorrectOptionName(optionListName)){
             throw new IllegalArgumentException("옵션은 최대 50자 이내이어야 하며, 특수문자로는 (),[],+,-,&,/,_만 사용 가능합니다.");
         }
-        if(options.size() < 100000000){
+        if(optionLists.size() < MAX_OPTION_NUM){
             List<String> newOptions = new ArrayList<>();
-            newOptions.addAll(options);
-            newOptions.add(optionName);
-            this.option = newOptions;
+            newOptions.addAll(optionLists);
+            newOptions.add(optionListName);
+            this.optionList = newOptions;
             return this;
         }
         throw new IllegalStateException("옵션은 1억개 이하여야 합니다.");
     }
 
     public Option update(String oldName, String newName){
-        List<String> options = this.option;
+        List<String> optionLists = this.optionList;
         List<String> newOptions = new ArrayList<>();
-        newOptions.addAll(options);
+        newOptions.addAll(optionLists);
         if(isCorrectOptionName(newName)){
-            newOptions.set(option.indexOf(oldName), newName);
-            this.option = newOptions;
+            newOptions.set(optionList.indexOf(oldName), newName);
+            this.optionList = newOptions;
             return this;
         }
         throw new IllegalStateException("잘못된 옵션입니다.");
+    }
+
+    public Option remove(int num) {
+        List<String> optionLists = this.optionList;
+        if(optionLists.size() - num > 0){
+            List<String> newOptions = new ArrayList<>();
+            newOptions.addAll(optionLists);
+            for(int i=0; i<num; i++){
+                newOptions.removeFirst();
+            }
+            this.optionList = newOptions;
+            return this;
+        }
+        throw new IllegalStateException("옵션은 하나 이상 존재해야 합니다.");
     }
 
     @Override
     public String toString() {
         return "Option{" +
                 "id=" + id +
-                ", option=" + option +
+                ", optionList=" + optionList +
                 '}';
-    }
-
-    public Option remove(int num) {
-        List<String> options = this.option;
-        if(options.size() - num > 0){
-            List<String> newOptions = new ArrayList<>();
-            newOptions.addAll(options);
-            for(int i=0; i<num; i++){
-                newOptions.removeFirst();
-            }
-            this.option = newOptions;
-            return this;
-        }
-        throw new IllegalStateException("옵션은 하나 이상 존재해야 합니다.");
     }
 }
