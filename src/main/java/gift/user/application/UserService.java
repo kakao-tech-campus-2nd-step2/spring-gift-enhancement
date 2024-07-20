@@ -19,9 +19,16 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElseThrow(
+            () -> new UserException(ErrorCode.USER_NOT_FOUND)
+        );
     }
 
     @Transactional
