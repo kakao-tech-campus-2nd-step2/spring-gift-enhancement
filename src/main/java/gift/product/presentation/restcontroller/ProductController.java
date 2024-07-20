@@ -97,7 +97,7 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}/options/options")
+    @DeleteMapping("/{id}/options")
     public ResponseEntity<List<Long>> deleteOption(@RequestBody List<Long> optionIds,
         @PathVariable("id") Long productId) {
         productService.deleteOptions(optionIds, productId);
