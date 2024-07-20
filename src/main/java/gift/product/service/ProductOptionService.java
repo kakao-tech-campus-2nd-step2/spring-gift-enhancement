@@ -86,8 +86,7 @@ public class ProductOptionService {
 
     @Transactional
     public void buyProduct(final Long productId, final Long optionId, final int quantity) {
-        var productOption = productOptionRepository.findByProductIdAndIdForUpdate(productId, optionId)
-                .orElseThrow(() -> ProductOptionNotFoundException.of(productId, optionId));
+        var productOption = getExistsProductOptionForUpdate(productId, optionId);
 
         productOption.buy(quantity);
     }
