@@ -57,7 +57,7 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/{id}")
     public String showEditProductForm(@PathVariable("id") long id, Model model) {
         Product product = productService.findProductsById(id);
         model.addAttribute("productDTO", ProductService.toDTO(product));

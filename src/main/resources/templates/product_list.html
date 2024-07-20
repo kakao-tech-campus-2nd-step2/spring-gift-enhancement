@@ -94,7 +94,7 @@
 <form th:action="@{/admin/products/add}" method="get" style="display:none;" class="auth-required">
   <button type="submit">상품 추가</button>
 </form>
-<form th:action="@{/members/login}" method="get" style="display:inline;" class="login-required">
+<form th:action="@{/members/auth}" method="get" style="display:inline;" class="login-required">
   <button type="submit">로그인</button>
 </form>
 <button onclick="goToWishlist()">위시리스트로 이동</button>
@@ -121,7 +121,7 @@
     <td th:text="${product.getCategory().getName()}">category</td>
     <td><a th:href="${product.imageUrl}" th:text="${product.imageUrl}">imageurl</a></td>
     <td style="display: none;" class="auth-required">
-      <form th:action="@{/admin/products/{id}/edit(id=${product.id})}" method="get"
+      <form th:action="@{/admin/products/{id}(id=${product.id})}" method="get"
             style="display:none;" class="auth-required">
         <button type="submit">수정</button>
       </form>

@@ -55,7 +55,7 @@ public class CategoryController {
         return "redirect:/admin/categories";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/{id}")
     public String showEditCategoryForm(@PathVariable("id") long id, Model model) {
         Category category = categoryService.findCategoryById(id);
         model.addAttribute("categoryDTO", CategoryService.toDTO(category));

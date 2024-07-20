@@ -26,13 +26,13 @@ public class MemberController {
         this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping("/register")
+    @GetMapping("/new")
     public String showRegistrationForm(Model model) {
         model.addAttribute("memberDTO", new MemberDTO("", "", ""));
         return "register_member_form";
     }
 
-    @PostMapping("/register")
+    @PostMapping
     public String registerUser(@ModelAttribute @Valid MemberDTO memberDTO, BindingResult result,
         Model model) {
         if (result.hasErrors()) {
@@ -52,13 +52,13 @@ public class MemberController {
         return "register_success";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/auth")
     public String showLoginForm(Model model) {
         model.addAttribute("loginDTO", new LoginDTO("", ""));
         return "login_member_form";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth")
     public String loginUser(@ModelAttribute @Valid LoginDTO loginDTO, BindingResult result,
         Model model) {
         if (result.hasErrors()) {
