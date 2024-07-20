@@ -9,8 +9,6 @@ public class ProductOption {
     private Long id;
     private String name;
 
-    private Long price;
-
     private Long quentity;
 
     @ManyToOne(fetch = FetchType.LAZY)

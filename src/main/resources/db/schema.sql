@@ -38,7 +38,6 @@ CREATE TABLE product_option
 (
     product_option_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name              VARCHAR(255) NOT NULL,
-    price DOUBLE NOT NULL,
     product_id        BIGINT       NOT NULL,
     quentity          BIGINT       NOT NULL,
     FOREIGN KEY (product_id) REFERENCES product (product_id)
