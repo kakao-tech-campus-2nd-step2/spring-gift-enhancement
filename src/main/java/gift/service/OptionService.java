@@ -1,7 +1,8 @@
 package gift.service;
 
-import gift.domain.model.dto.OptionRequestDto;
+import gift.domain.model.dto.OptionAddRequestDto;
 import gift.domain.model.dto.OptionResponseDto;
+import gift.domain.model.dto.OptionUpdateRequestDto;
 import gift.domain.model.entity.Option;
 import gift.domain.model.entity.Product;
 import gift.domain.repository.OptionRepository;
@@ -28,24 +29,24 @@ public class OptionService {
             .collect(Collectors.toList());
     }
 
-    public OptionResponseDto addOption(Long productId, OptionRequestDto optionRequestDto) {
-        validateOptionName(optionRequestDto.getName());
+    public OptionResponseDto addOption(Long productId, OptionAddRequestDto optionAddRequestDto) {
+        validateOptionName(optionAddRequestDto.getName());
 
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다."));
-        Option option = new Option(product, optionRequestDto.getName(),
-            optionRequestDto.getQuantity());
+        Option option = new Option(product, optionAddRequestDto.getName(),
+            optionAddRequestDto.getQuantity());
 
         Option savedOption = optionRepository.save(option);
         return OptionResponseDto.toDto(savedOption);
     }
 
     public OptionResponseDto updateOption(Long id,
-        OptionRequestDto optionRequestDto) {
+        OptionUpdateRequestDto optionUpdateRequestDto) {
         Option option = optionRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("해당 상품 옵션이 존재하지 않습니다."));
 
-        option.update(id, optionRequestDto.getName(), optionRequestDto.getQuantity());
+        option.update(id, optionUpdateRequestDto.getName(), optionUpdateRequestDto.getQuantity());
         Option savedOption = optionRepository.save(option);
 
         return OptionResponseDto.toDto(savedOption);

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class OptionRequestDto {
+public class OptionAddRequestDto {
 
     @NotBlank
     @Size(max = 50, message = "옵션 이름은 최대 50자까지 입력 가능합니다.")
@@ -19,7 +19,7 @@ public class OptionRequestDto {
     @Max(value = 99999999)
     private int quantity;
 
-    public OptionRequestDto(String name, int quantity) {
+    public OptionAddRequestDto(String name, int quantity) {
         this.name = name;
         this.quantity = quantity;
     }

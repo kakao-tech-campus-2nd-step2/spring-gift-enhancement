@@ -1,6 +1,6 @@
 package gift;
 
-import gift.domain.model.dto.OptionRequestDto;
+import gift.domain.model.dto.OptionAddRequestDto;
 import gift.domain.model.dto.OptionResponseDto;
 import gift.domain.model.entity.Option;
 import gift.domain.model.entity.Product;
@@ -62,7 +62,7 @@ class OptionServiceTest {
         Product mockProduct = mock(Product.class);
         when(mockProduct.getId()).thenReturn(productId);
 
-        OptionRequestDto requestDto = new OptionRequestDto("New Option", 30);
+        OptionAddRequestDto requestDto = new OptionAddRequestDto("New Option", 30);
         Option savedOption = new Option(mockProduct, "New Option", 30);
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
@@ -78,7 +78,7 @@ class OptionServiceTest {
     @Test
     void invalidAddOptionTest() {
         Long productId = 1L;
-        OptionRequestDto requestDto = new OptionRequestDto("New Option", 30);
+        OptionAddRequestDto requestDto = new OptionAddRequestDto("New Option", 30);
 
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
@@ -90,7 +90,7 @@ class OptionServiceTest {
         Long optionId = 1L;
         Product mockProduct = mock(Product.class);
         Option existingOption = new Option(mockProduct, "Old Option", 10);
-        OptionRequestDto requestDto = new OptionRequestDto("Updated Option", 20);
+        OptionAddRequestDto requestDto = new OptionAddRequestDto("Updated Option", 20);
 
         when(optionRepository.findById(optionId)).thenReturn(Optional.of(existingOption));
         when(optionRepository.save(any(Option.class))).thenReturn(existingOption);
@@ -105,7 +105,7 @@ class OptionServiceTest {
     @Test
     void invalidUpdateOptionTest() {
         Long optionId = 1L;
-        OptionRequestDto requestDto = new OptionRequestDto("Updated Option", 20);
+        OptionAddRequestDto requestDto = new OptionAddRequestDto("Updated Option", 20);
 
         when(optionRepository.findById(optionId)).thenReturn(Optional.empty());
 
