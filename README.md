@@ -128,3 +128,12 @@ Content-Type: application/json
   - void delete(Long id)
 - Repository
   - JpaRepository를 extends
+
+## STEP-3 기능 요구 사항
+- 상품 옵션의 수량을 지정된 숫자만큼 빼는 기능을 구현한다.
+- 별도의 HTTP API를 만들 필요는 없다.
+- 서비스 클래스 또는 엔티티 클래스에서 기능을 구현하고 나중에 사용할 수 있도록 한다.
+
+## STEP-3 기능 구현 목록
+- OptionService
+  - void subQuantity(Option option); 
