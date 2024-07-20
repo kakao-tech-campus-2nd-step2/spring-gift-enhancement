@@ -30,7 +30,8 @@ public class ProductOptionEntity {
 
     protected ProductOptionEntity() {}
 
-    public ProductOptionEntity(String name, long quantity, ProductEntity productEntity) {
+    public ProductOptionEntity(Long id, String name, long quantity, ProductEntity productEntity) {
+        this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.productEntity = productEntity;

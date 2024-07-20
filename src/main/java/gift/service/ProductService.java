@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.DTO.ProductDTO;
 import gift.aspect.CheckProductExists;
+import gift.entity.ProductEntity;
 import gift.mapper.ProductMapper;
 import gift.repository.ProductRepository;
 import java.util.List;
@@ -43,6 +44,12 @@ public class ProductService {
     public ProductDTO getProduct(Long id) {
         var productEntity = productRepository.findById(id).get();
         return productMapper.toProductDTO(productEntity);
+    }
+
+    @CheckProductExists
+    @Transactional(readOnly = true)
+    public ProductEntity getProductEntity(Long id) {
+        return productRepository.findById(id).get();
     }
 
     /**
