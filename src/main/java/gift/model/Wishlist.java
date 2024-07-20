@@ -1,13 +1,7 @@
 package gift.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "wishlist")
@@ -26,10 +20,14 @@ public class Wishlist {
     private SiteUser user;
 
     @Column(name = "quantity", nullable = false)
-    private int quantity; // 수량 추가
+    private int quantity;
 
     @Column(name = "price", nullable = false)
-    private int price; // 가격 추가
+    private int price;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "wishlist_id")
+    private List<Option> options;
 
     public Long getId() {
         return id;
@@ -47,6 +45,14 @@ public class Wishlist {
         return quantity;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -62,11 +68,12 @@ public class Wishlist {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    public int getPrice() {
-        return price;
-    }
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 }
