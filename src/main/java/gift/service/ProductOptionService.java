@@ -27,11 +27,21 @@ public class ProductOptionService {
     @Transactional
     public CreateProductOptionResponse createOption(Long productId, CreateProductOptionRequest request) {
         String optionName = request.getName();
-        validateOptionNameExists(null, productId, optionName);
+        validateOptionNameExists(productId, optionName);
 
         ProductOption createdOption = productOptionRepository.save(request.toEntity(productId));
 
         return CreateProductOptionResponse.fromEntity(createdOption);
+    }
+
+    /**
+     * 상품 옵션 이름이 이미 존재하는지 확인합니다.<br>
+     * 이미 존재한다면 {@link AlreadyExistsException} 을 발생시킵니다.
+     * @param productId 상품 아이디
+     * @param name 상품 옵션 이름
+     */
+    private void validateOptionNameExists(Long productId, String name) {
+        validateOptionNameExists(null, productId, name);
     }
 
     public ReadAllProductOptionsResponse readAllOptions(Long productId) {
