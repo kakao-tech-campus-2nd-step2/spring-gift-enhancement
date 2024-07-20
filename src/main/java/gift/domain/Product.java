@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -45,6 +46,7 @@ public class Product extends BaseEntity {
         private Integer price;
         private URL imageUrl;
         private Category category;
+        private List<ProductOption> productOptions;
 
         public Builder name(String name) {
             this.name = name;
@@ -66,6 +68,11 @@ public class Product extends BaseEntity {
             return this;
         }
 
+        public Builder productOptions(List<ProductOption> productOptions) {
+            this.productOptions = productOptions;
+            return this;
+        }
+
         @Override
         protected Builder self() {
             return this;
@@ -73,7 +80,14 @@ public class Product extends BaseEntity {
 
         @Override
         public Product build() {
+            validateProductOptionsPresence(productOptions);
             return new Product(this);
+        }
+
+        private void validateProductOptionsPresence(List<ProductOption> productOptions) {
+            if (productOptions == null || productOptions.isEmpty()) {
+                throw new IllegalArgumentException("상품 옵션은 최소 1개 이상이어야 합니다.");
+            }
         }
     }
 
@@ -90,6 +104,7 @@ public class Product extends BaseEntity {
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
         this.category = product.getCategory();
+        this.productOptions = product.getProductOptions();
         return this;
     }
 
@@ -107,5 +122,9 @@ public class Product extends BaseEntity {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<ProductOption> getProductOptions() {
+        return Collections.unmodifiableList(productOptions);
     }
 }
