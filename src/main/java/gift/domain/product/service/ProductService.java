@@ -35,8 +35,8 @@ public class ProductService {
         Category category = categoryService.readById(productRequest.categoryId());
         Product product = productRequest.toProduct(category);
 
-        Product savedProduct = productJpaRepository.save(product);
         optionService.create(product, productRequest.options());
+        Product savedProduct = productJpaRepository.save(product);
         return ProductResponse.from(savedProduct);
     }
 
@@ -72,7 +72,6 @@ public class ProductService {
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
 
         wishlistService.deleteAllByProductId(productId);
-        optionService.deleteAllByProduct(product);
         productJpaRepository.delete(product);
     }
 }

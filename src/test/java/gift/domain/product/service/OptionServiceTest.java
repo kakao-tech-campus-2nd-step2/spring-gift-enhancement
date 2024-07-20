@@ -8,8 +8,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import gift.domain.product.dto.OptionRequest;
 import gift.domain.product.dto.OptionResponse;
@@ -64,7 +62,6 @@ class OptionServiceTest {
         optionService.create(product, optionRequestDtos);
 
         // then
-        verify(optionJpaRepository, times(optionRequestDtos.size())).save(any(Option.class));
         assertEquals(optionRequestDtos.size(), product.getOptions().size());
     }
 
@@ -116,7 +113,6 @@ class OptionServiceTest {
         optionService.update(product, List.of(optionUpdateDto));
 
         // then
-        verify(optionJpaRepository, times(1)).save(any(Option.class));
         assertEquals(1, product.getOptions().size());
     }
 
@@ -134,24 +130,5 @@ class OptionServiceTest {
 
         // when & then
         assertThrows(DuplicateOptionNameException.class, () -> optionService.update(product, optionUpdateDtos));
-    }
-
-    @Test
-    @DisplayName("상품 옵션 전체 삭제 서비스 테스트")
-    void delete_success() {
-        // given
-        List<OptionRequest> optionRequestDtos = List.of(
-            new OptionRequest( "자두맛", 90),
-            new OptionRequest("자두맛", 70)
-        );
-        optionRequestDtos.forEach(optionRequestDto -> product.addOption(optionRequestDto.toOption(product)));
-
-        doNothing().when(optionJpaRepository).deleteAllByProductId(anyLong());
-
-        // when
-        optionService.deleteAllByProduct(product);
-
-        // then
-        verify(optionJpaRepository).deleteAllByProductId(anyLong());
     }
 }

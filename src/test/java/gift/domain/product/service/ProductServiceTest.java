@@ -177,7 +177,6 @@ class ProductServiceTest {
 
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
         willDoNothing().given(wishlistService).deleteAllByProductId(anyLong());
-        willDoNothing().given(optionService).deleteAllByProduct(any(Product.class));
         willDoNothing().given(productJpaRepository).delete(any(Product.class));
 
         // when

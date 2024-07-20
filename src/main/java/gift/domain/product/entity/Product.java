@@ -87,11 +87,12 @@ public class Product {
     }
 
     public void addOption(Option option) {
+        validateOption(option);
         options.add(option);
         option.setProduct(this);
     }
 
-    public void validateOption(Option option) {
+    private void validateOption(Option option) {
         options.stream()
             .filter(existingOption -> existingOption.getName().equals(option.getName()))
             .findFirst()

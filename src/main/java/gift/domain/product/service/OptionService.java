@@ -26,9 +26,7 @@ public class OptionService {
     public void create(Product product, List<OptionRequest> optionRequestDtos) {
         for (OptionRequest optionRequest : optionRequestDtos) {
             Option option = optionRequest.toOption(product);
-            product.validateOption(option);
-            Option savedOption = optionJpaRepository.save(option);
-            product.addOption(savedOption);
+            product.addOption(option);
         }
     }
 
@@ -41,13 +39,8 @@ public class OptionService {
 
     @Transactional
     public void update(Product product, List<OptionRequest> optionRequestDtos) {
-        optionJpaRepository.deleteAll(product.getOptions());
+        optionJpaRepository.deleteAllByProductId(product.getId());
         product.removeOptions();
         create(product, optionRequestDtos);
-    }
-
-    public void deleteAllByProduct(Product product) {
-        product.removeOptions();
-        optionJpaRepository.deleteAllByProductId(product.getId());
     }
 }
