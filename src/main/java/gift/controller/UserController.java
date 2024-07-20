@@ -51,11 +51,17 @@ public class UserController {
     @GetMapping("/api/users")
     public ResponseEntity<Page<UserResponse>> readUsers(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "sort", defaultValue = "asc") String sort,
+            @RequestParam(value = "field", defaultValue = "id") String field
     ) {
-        Page<UserResponse> all = userService.findAll(page, size);
+        if(sort.equals("asc")) {
+            Page<UserResponse> users = userService.findAllASC(page, size,field);
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
 
-        return new ResponseEntity<>(all, HttpStatus.OK);
+        Page<UserResponse> users = userService.findAllDESC(page, size,field);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
     /*
      * 유저 정보 수정하기

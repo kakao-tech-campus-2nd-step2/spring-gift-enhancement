@@ -3,8 +3,10 @@ package gift.service;
 import gift.DTO.Product.ProductRequest;
 import gift.DTO.Product.ProductResponse;
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.*;
@@ -17,18 +19,32 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository){
+    public ProductService(
+            ProductRepository productRepository, CategoryRepository categoryRepository, OptionRepository optionRepository){
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
-
     /*
-     * DB에 저장된 모든 Product 객체를 불러와 전달해주는 로직
+     * Product를 조회하는 로직 ( 오름차순 정렬 )
      */
-    public Page<ProductResponse> readAllProduct(int page, int size){
+    public Page<ProductResponse> readAllProductASC(int page, int size, String field){
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.asc("id"));
+        sorts.add(Sort.Order.asc(field));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
+
+        Page<Product> products = productRepository.findAll(pageable);
+
+        return products.map(ProductResponse::new);
+    }
+    /*
+     * Product를 조회하는 로직 ( 내림차순 정렬 )
+     */
+    public Page<ProductResponse> readAllProductDESC(int page, int size, String field){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc(field));
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
 
         Page<Product> products = productRepository.findAll(pageable);
@@ -48,7 +64,6 @@ public class ProductService {
     @Transactional
     public void createProduct(ProductRequest productRequest){
         Category category = categoryRepository.findByName(productRequest.getCategoryName());
-
         Product productEntity = new Product(
                 productRequest.getName(),
                 productRequest.getPrice(),
@@ -56,6 +71,10 @@ public class ProductService {
                 category
         );
         productRepository.save(productEntity);
+
+        Option basicOption = new Option(productRequest.getBasicOption(), 1L, productEntity);
+        optionRepository.save(basicOption);
+        productEntity.addOption(basicOption);
     }
     /*
      * DB에 있는 특정한 ID의 객체를 삭제해주는 로직

@@ -13,7 +13,7 @@
 </div>
 <h1>Administrator User Manage Page</h1>
 <div class="form-inline">
-    <<label for="id">Id:</label>
+    <label for="id">Id:</label>
     <input type="text" id="id" name="id" disabled>
 
     <label for="userId">UserId:</label>
@@ -28,7 +28,7 @@
     <input type="button" id="post" value="추가">
 </div>
 <div class="form-inline">
-    <<label for="p_id">Id:</label>
+    <label for="p_id">Id:</label>
     <input type="text" id="p_id" name="p_id" required>
 
     <label for="p_userId">UserId:</label>
@@ -58,6 +58,18 @@
 </table>
 <div>
     <button id="prevPage">Previous</button>
+    <label for="p_sort"></label>
+    <select name="p_sort" id="p_sort">
+        <option value="asc">오름차순</option>
+        <option value="desc">내림차순</option>
+    </select>
+    <label for="p_field"></label>
+    <select name="p_field" id="p_field">
+        <option value="id">id</option>
+        <option value="userId">userId</option>
+        <option value="Email">Email</option>
+    </select>
+    <button id="search" onclick="getUsers(currentPage)">검색</button>
     <button id="nextPage">Next</button>
 </div>
 </body>
@@ -71,7 +83,9 @@
             method: 'GET',
             data : {
                 page : page,
-                size : pageSize
+                size : pageSize,
+                sort : $('#p_sort').val(),
+                field : $('#p_field').val()
             },
             success: function(data) {
                 var contents = data.content;
@@ -124,7 +138,9 @@
             var inline = $('#header');
             inline.empty();
             inline.append('<a href="" onclick="logoutFunction()" className="header-link">로그아웃</a>\n' +
-                '            <a href="adminProducts" className="header-link">상품관리</a>');
+                '            <a href="adminProducts" className="header-link">상품관리</a>' +
+                '            <a href="adminUsers" className="header-link">유저관리</a>' +
+                '            <a href="adminCategories" className="header-link">카테고리관리</a>');
         }
     });
 

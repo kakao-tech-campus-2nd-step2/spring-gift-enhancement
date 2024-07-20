@@ -48,10 +48,15 @@ public class WishListController {
     public ResponseEntity<Page<WishProductResponse>> getWishList(
             @AuthenticateMember UserResponse user,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "sort", defaultValue = "asc") String sort,
+            @RequestParam(value = "field", defaultValue = "id") String field
     ){
-        Page<WishProductResponse> wishList = wishListService.loadWishList(user.getId(), page, size);
-
+        if(sort.equals("asc")){
+            Page<WishProductResponse> wishList = wishListService.loadWishListASC(user.getId(), page, size, field);
+            return new ResponseEntity<>(wishList, HttpStatus.OK);
+        }
+        Page<WishProductResponse> wishList = wishListService.loadWishListDESC(user.getId(), page, size, field);
         return new ResponseEntity<>(wishList, HttpStatus.OK);
     }
     /*

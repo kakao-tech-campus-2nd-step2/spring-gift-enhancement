@@ -33,11 +33,23 @@ public class CategoryService {
         categoryRepository.save(category);
     }
     /*
-     * 카테고리를 전부 불러오는 로직
+     * 카테고리를 오름차순으로 조회하는 로직
      */
-    public Page<CategoryResponse> findAll(int page, int size){
+    public Page<CategoryResponse> findAllASC(int page, int size, String field){
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.asc("id"));
+        sorts.add(Sort.Order.asc(field));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
+
+        Page<Category> categories = categoryRepository.findAll(pageable);
+
+        return categories.map(CategoryResponse::new);
+    }
+    /*
+     * 카테고리를 내림차순으로 조회하는 로직
+     */
+    public Page<CategoryResponse> findAllDESC(int page, int size, String field){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc(field));
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
 
         Page<Category> categories = categoryRepository.findAll(pageable);

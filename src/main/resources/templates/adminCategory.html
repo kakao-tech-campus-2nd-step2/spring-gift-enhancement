@@ -11,27 +11,13 @@
 <div class="header" id="header">
 
 </div>
-<h1>Administrator Product Manage Page</h1>
+<h1>Administrator Category Manage Page</h1>
 <div class="form-inline">
     <label for="id">Id:</label>
     <input type="text" id="id" name="id" disabled>
 
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
-
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" required>
-
-    <label for="image">Image:</label>
-    <input type="text" id="image" name="imageUrl" required>
-
-    <label for="category">Category:</label>
-    <select name="category" id="category" >
-
-    </select>
-
-    <label for="basicOption">BasicOption:</label>
-    <input type="text" id="basicOption" name="basicOption" required>
 
     <input type="button" id="post" value="추가">
 </div>
@@ -42,20 +28,6 @@
     <label for="p_name">Name:</label>
     <input type="text" id="p_name" name="name" required>
 
-    <label for="p_price">Price:</label>
-    <input type="number" id="p_price" name="price" required>
-
-    <label for="p_image">Image:</label>
-    <input type="text" id="p_image" name="imageUrl" required>
-
-    <label for="p_category">Category:</label>
-    <select name="p_category" id="p_category">
-
-    </select>
-
-    <label for="p_basicOption">BasicOption:</label>
-    <input type="text" id="p_basicOption" name="p_basicOption" required>
-
     <input type="button" id="put" value="수정">
 </div>
 <table id="product-table">
@@ -63,14 +35,10 @@
     <tr>
         <th scope="col">Id</th>
         <th scope="col">Name</th>
-        <th scope="col">Price</th>
-        <th scope="col">Image</th>
-        <th scope="col">Category</th>
-        <th scope="col">BasicOption</th>
         <th scope="col">Option</th>
     </tr>
     </thead>
-    <tbody id="product-tbody">
+    <tbody id="category-tbody">
     <!-- AJAX를 통해 데이터를 로드 -->
     </tbody>
 </table>
@@ -85,10 +53,8 @@
     <select name="p_field" id="p_field">
         <option value="id">id</option>
         <option value="name">name</option>
-        <option value="price">price</option>
-        <option value="category">category</option>
     </select>
-    <button id="search" onclick="getProducts(currentPage)">검색</button>
+    <button id="search" onclick="getCategories(currentPage)">검색</button>
     <button id="nextPage">Next</button>
 </div>
 </body>
@@ -102,63 +68,24 @@
             method: 'GET',
             data : {
                 page : page,
-                size : pageSize
-            },
-            success: function(data) {
-                console.log(data);
-                var contents = data.content;
-                var select = $('#category');
-                var p_select = $('#p_category');
-
-                // 데이터에 따라 테이블 행을 생성
-                contents.forEach(function(category) {
-                    // 한 행의 내용
-                    var row = `
-                        <option value="${category.name}">${category.name}</option>
-                    `;
-                    select.append(row);
-                    p_select.append(row);
-                });
-
-                if(data.numberOfElements !== 0)
-                    getCategories(page + 1);
-            },
-            error: function(err) {
-                alert("error occur! [error code : " + err.status + "]");
-            }
-        });
-    }
-
-    function getProducts(page){
-        $.ajax({
-            url: '/api/products',
-            method: 'GET',
-            data : {
-                page : page,
                 size : pageSize,
                 sort : $('#p_sort').val(),
                 field : $('#p_field').val()
             },
             success: function(data) {
                 var contents = data.content;
-                var tbody = $('#product-tbody');
+                var tbody = $('#category-tbody');
                 tbody.empty(); // 초기화
 
                 // 데이터에 따라 테이블 행을 생성
-                contents.forEach(function(product) {
+                contents.forEach(function(category) {
                     // 한 행의 내용
                     var row = `
                         <tr>
-                            <td>${product.id}</td>
-                            <td>${product.name}</td>
-                            <td>${product.price}</td>
-                            <td><img src="${product.imageUrl}" alt="image"/></td>
-                            <td>${product.category.name}</td>
+                            <td>${category.id}</td>
+                            <td>${category.name}</td>
                             <td>
-                                <a href="/adminOptions?product_id=${product.id}">옵션</a>
-                            </td>
-                            <td>
-                                <a href="#" onclick="deleteFunction(${product.id})">삭제</a>
+                                <a href="#" onclick="deleteFunction(${category.id})">삭제</a>
                             </td>
                         </tr>
                     `;
@@ -177,17 +104,16 @@
     }
 
     $(document).ready(function() {
-        getCategories(0);
-        getProducts(currentPage);
+        getCategories(currentPage);
 
         $('#prevPage').click(function() {
             if (currentPage > 0) {
-                getProducts(currentPage - 1);
+                getCategories(currentPage - 1);
             }
         });
 
         $('#nextPage').click(function() {
-            getProducts(currentPage + 1);
+            getCategories(currentPage + 1);
         });
 
         if(localStorage.getItem('token')){
@@ -201,20 +127,16 @@
     });
 
     $("#post").click(function () {
-        var product = {
+        var category = {
             name : $("#name").val(),
-            price : $("#price").val(),
-            imageUrl : $("#image").val(),
-            categoryName : $("#category").val(),
-            basicOption : $("#basicOption").val()
         }
 
         $.ajax({
             type : "POST",
-            url : "api/products",
+            url : "api/categories",
             contentType: "application/json",
             datatype : "json",
-            data : JSON.stringify(product),
+            data : JSON.stringify(category),
             headers : {
                 Authorization: 'Bearer ' + localStorage.getItem("token"),
             },
@@ -228,7 +150,7 @@
                     alert("[Name error : " + error + "]");
                 }
                 else{
-                    alert("상품을 추가할 수 없습니다!");
+                    alert("카테고리를 추가할 수 없습니다!");
                 }
             }
         })
@@ -237,10 +159,10 @@
     function deleteFunction(id){
         $.ajax({
             type: "DELETE",
-            url: "api/products/" + id,
+            url: "api/categories/" + id,
             success : function(res){
                 $('#product-table').find('tr[data-id="' + id + '"]').remove();
-                alert("상품 ID : " + id + "가 삭제되었습니다.");
+                alert("카테고리 ID : " + id + "가 삭제되었습니다.");
                 location.reload();
             },
             error : function(error){
@@ -250,20 +172,16 @@
     }
 
     $("#put").click(function(){
-        var product ={
+        var category ={
             name : $("#p_name").val(),
-            price : $("#p_price").val(),
-            imageUrl : $("#p_image").val(),
-            categoryName: $("#p_category").val(),
-            basicOption: $("#p_basicOption").val()
         }
 
         $.ajax({
             type : "PUT",
-            url : "api/products/" + $("#p_id").val(),
+            url : "api/categories/" + $("#p_id").val(),
             contentType: "application/json",
             datatype : "json",
-            data : JSON.stringify(product),
+            data : JSON.stringify(category),
             success : function(res){
                 location.reload();
             },

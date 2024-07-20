@@ -22,11 +22,23 @@ public class UserService {
         this.userRepository = userRepository;
     }
     /*
-     * 모든 User의 정보를 반환하는 로직
+     * User의 정보를 오름차순으로 조회하는 로직
      */
-    public Page<UserResponse> findAll(int page, int size){
+    public Page<UserResponse> findAllASC(int page, int size, String field){
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.asc("id"));
+        sorts.add(Sort.Order.asc(field));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
+
+        Page<User> users = userRepository.findAll(pageable);
+
+        return users.map(UserResponse::new);
+    }
+    /*
+     * User의 정보를 오름차순으로 조회하는 로직
+     */
+    public Page<UserResponse> findAllDESC(int page, int size, String field){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc(field));
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
 
         Page<User> users = userRepository.findAll(pageable);

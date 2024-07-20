@@ -31,9 +31,16 @@ public class ProductController {
     @GetMapping("/api/products")
     public ResponseEntity<Page<ProductResponse>> getProducts(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "sort", defaultValue = "asc") String sort,
+            @RequestParam(value = "field", defaultValue = "id") String field
     ) {
-        Page<ProductResponse> products = productService.readAllProduct(page, size);
+        if(sort.equals("asc")) {
+            Page<ProductResponse> products = productService.readAllProductASC(page, size, field);
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        }
+
+        Page<ProductResponse> products = productService.readAllProductDESC(page, size, field);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 

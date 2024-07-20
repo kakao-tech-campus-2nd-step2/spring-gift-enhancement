@@ -19,22 +19,30 @@ public class CategoryController {
     }
 
     @GetMapping("api/categories")
-    public ResponseEntity<Page<CategoryResponse>> readCategory(@RequestParam int page, @RequestParam int size){
-        Page<CategoryResponse> categories = categoryService.findAll(page, size);
-
+    public ResponseEntity<Page<CategoryResponse>> readCategory(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "sort", defaultValue = "asc") String sort,
+            @RequestParam(value = "field", defaultValue = "id") String field
+    ){
+        if(sort.equals("asc")){
+            Page<CategoryResponse> categories = categoryService.findAllASC(page, size, field);
+            return new ResponseEntity<>(categories, HttpStatus.OK);
+        }
+        Page<CategoryResponse> categories = categoryService.findAllDESC(page, size, field);
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
     @PostMapping("/api/categories")
-    public ResponseEntity<Void> createCategory(@RequestBody CategoryRequest category){
-        categoryService.save(category);
+    public ResponseEntity<Void> createCategory(@RequestBody CategoryRequest categoryRequest){
+        categoryService.save(categoryRequest);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @PutMapping("/api/categories/{category_id}")
     public ResponseEntity<Void> updateCategory(
-            @PathVariable Long category_id, @RequestBody CategoryRequest category
+            @PathVariable Long category_id, @RequestBody CategoryRequest categoryRequest
     ){
-        categoryService.update(category_id, category);
+        categoryService.update(category_id, categoryRequest);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
