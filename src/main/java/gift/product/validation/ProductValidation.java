@@ -46,7 +46,7 @@ public class ProductValidation {
         System.out.println("[ProductValidation] deleteValidation()");
         validateExistProductId(id);
         if(isExistOptions(id))
-            optionRepository.deleteAllByProductId(id);
+            optionRepository.deleteByProductId(id);
     }
 
     private void validateIncludeNameKakao(String name) {

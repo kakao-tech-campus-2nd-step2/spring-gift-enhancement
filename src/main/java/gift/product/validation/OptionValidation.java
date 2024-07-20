@@ -43,7 +43,7 @@ public class OptionValidation {
 
     public void delete(Long id) {
         validateExistId(id);
-        validateLastOption(optionRepository.countAllByProduct(id));
+        validateLastOption(optionRepository.countByProduct(id));
     }
 
     private void validateExistId(Long id) {
