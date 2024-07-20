@@ -44,11 +44,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(DUPLICATED_NAME_MESSAGE, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(value = InvalidPageRequestException.class)
-    public ResponseEntity<String> invalidPageRequestExceptionHandling() {
-        return new ResponseEntity<>(INVALID_PAGE_REQUEST_MESSAGE, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(value = InvalidLoginInfoException.class)
     public ResponseEntity<String> invalidLoginInfoExceptionHandling() {
         return new ResponseEntity<>(INVALID_LOGIN_INFO_MESSAGE, HttpStatus.UNAUTHORIZED);
