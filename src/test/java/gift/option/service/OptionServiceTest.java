@@ -35,7 +35,7 @@ class OptionServiceTest {
     }
 
     @Test
-    public void 잘못된_문자를_옵션명에_사용한_경우() {
+    public void use_wring_text_in_optionName() {
         // Given
         String name = "wrong@Option#Name";
         OptionDto optionDto = new OptionDto(name, 10);
@@ -48,7 +48,7 @@ class OptionServiceTest {
     }
 
     @Test
-    public void 존재하지_않는_상품을_조회한_경우() {
+    public void find_by_noExit_id() {
         // Given
         Long nonExistentProductId = 9545669L;
 

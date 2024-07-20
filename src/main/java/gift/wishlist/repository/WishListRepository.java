@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface WishListRepository extends JpaRepository<WishList, String> {
-    Page<WishList> findById(Long id);
+    Page<WishList> findById(Long id, Pageable pageable);
 
     WishList findByMember(Member member);
 

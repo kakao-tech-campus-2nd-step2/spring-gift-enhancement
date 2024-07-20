@@ -33,7 +33,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void 카테고리_생성_성공여부() {
+    public void make_category_successful() {
         // Given
         Category category1 = new Category("Adidas", "black", "https://www.google.com");
         categoryRepository.save(category1);

@@ -25,8 +25,8 @@ public class WishListController {
     }
 
     @GetMapping("/{memberId}")
-    public WishList getWishList(@PathVariable Long id) {
-        return (WishList) wishListRepository.findById(id);
+    public WishList getWishList(@PathVariable Long id, Pageable pageable) {
+        return (WishList) wishListRepository.findById(id, pageable);
     }
 
     /** 페이지네이션된 위시리스트 데이터를 반환
@@ -49,7 +49,7 @@ public class WishListController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy)); // Pageable 객체를 생성
 
-        return wishListRepository.findById(id); // 페이지네이션된 위시리스트 데이터를 반환
+        return wishListRepository.findById(id, pageable); // 페이지네이션된 위시리스트 데이터를 반환
     }
 
     // 해당 위시리스트에 상품 추가 연결
