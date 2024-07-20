@@ -1,9 +1,9 @@
 package gift.product.model;
 
 import gift.exception.KakaoProductException;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
 
 public class ProductName {
 

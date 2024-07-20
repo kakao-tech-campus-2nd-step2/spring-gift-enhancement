@@ -1,6 +1,7 @@
 package gift.product.model;
 
 import gift.category.model.Category;
+import gift.option.model.Option;
 import gift.wishlist.model.WishList;
 import jakarta.persistence.*;
 
@@ -8,11 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "products")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long productId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -24,19 +26,20 @@ public class Product {
     private String imgUrl;
 
     @ManyToOne
-    @JoinColumn(name = "categoryId", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishList> wishLists = new ArrayList<>();
 
-    // JPA에서 필요로 하는 기본 생성자
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options;
+
     protected Product() {
     }
 
-    public Product(String name, Category category) {
+    public Product(String name) {
         this.name = name;
-        this.category = category;
     }
 
     public Product(String name, int price, String imgUrl, Category category) {
@@ -46,17 +49,20 @@ public class Product {
         this.category = category;
     }
 
-    // ID를 포함한 생성자
-    public Product(Long productId, String name, String imgUrl, int price, Category category) {
-        this.productId = productId;
+    public Product(Long id, String name, String imgUrl, int price, Category category) {
+        this.id = id;
         this.name = name;
         this.imgUrl = imgUrl;
         this.price = price;
         this.category = category;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getId() {
+        return id;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public String getName() {
@@ -71,20 +77,23 @@ public class Product {
         return imgUrl;
     }
 
-    public Category getCategory() {
-        return category;
+    public List<Option> getOptions() {
+        return options;
     }
 
-    // 카테고리 ID를 반환하는 메소드 추가
-    public Long getCategoryId() {
-        return category.getCategoryId();
-    }
-
-    // update 메소드 추가
     public void update(String name, int price, String imgUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
         this.category = category;
     }
+
+//    public Object entityToDto() {
+//        return new ProductDto(
+//                product.getId(),
+//                product.getName(),
+//                product.getPrice(),
+//                product.getImgUrl(),
+//                product.getCategory());
+//    }
 }

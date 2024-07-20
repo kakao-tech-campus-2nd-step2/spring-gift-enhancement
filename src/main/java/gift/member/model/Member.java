@@ -3,19 +3,18 @@ package gift.member.model;
 import gift.wishlist.model.WishList;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name="members")
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
-    @SequenceGenerator(name = "member_seq", sequenceName = "member_seq", allocationSize = 1)
-    private Long memberId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String email;
@@ -26,19 +25,17 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<WishList> wishLists = new ArrayList<>();
 
-    // 기본 생성자
-    public Member() {
-    }
-
-    // 매개변수가 있는 생성자
     public Member(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    // Getter methods
-    public Long getMemberId() {
-        return memberId;
+    public Member() {
+
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public List<WishList> getWishLists() {
@@ -69,15 +66,14 @@ public class Member {
         this.password = newPassword;
     }
 
-    // 비밀번호 검증 메소드
-    public boolean checkPassword(String rawPassword, PasswordEncoder passwordEncoder) {
-        return passwordEncoder.matches(rawPassword, this.password);
+    public boolean checkPassword(String rawPassword) {
+        // PasswordEncoder 없이 구현
+        return this.password.equals(rawPassword); // 단순 문자열 비교
     }
 
-    // 로그인 검증 메소드
-    public void validateLogin(String rawPassword, PasswordEncoder passwordEncoder) {
-        if (!checkPassword(rawPassword, passwordEncoder)) {
-            throw new IllegalArgumentException("옳지 않은 이메일이나 비밀번호 입니다.");
+    public void validateLogin(String rawPassword) {
+        if (!this.checkPassword(rawPassword)) {
+            throw new IllegalArgumentException("옳지 않은 비밀번호 입니다.");
         }
     }
 }

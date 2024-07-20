@@ -6,9 +6,8 @@ import gift.product.dto.ProductDto;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
@@ -16,44 +15,24 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    @Autowired
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
 
+    @Transactional
     public void save(ProductDto productDto) {
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
+
         Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImgUrl(), category);
         productRepository.save(product);
-    }
-
-    public Page<ProductDto> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable)
-                .map(product -> new ProductDto(
-                        product.getProductId(),
-                        product.getName(),
-                        product.getPrice(),
-                        product.getImgUrl(),
-                        product.getCategoryId()));
-    }
-
-    public ProductDto findById(Long categoryId) {
-        return productRepository.findById(categoryId)
-                .map(product -> new ProductDto(
-                        product.getProductId(),
-                        product.getName(),
-                        product.getPrice(),
-                        product.getImgUrl(),
-                        product.getCategoryId()))
-                .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
     }
 
     public void update(Long productId, ProductDto productDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
-        Category category = categoryRepository.findById(productDto.getCategoryId())
+        Category category = categoryRepository.findById(productDto.getId())
                 .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
         product.update(productDto.getName(), productDto.getPrice(), productDto.getImgUrl(), category);
         productRepository.save(product);
@@ -62,4 +41,12 @@ public class ProductService {
     public void deleteById(Long productId) {
         productRepository.deleteById(productId);
     }
+
+//    public List<ProductDto> getAllProducts() {
+//        List<Product> response = productRepository.findAll();
+//        return response.stream()
+//                .map(Product::entityToDto)
+//                .collect(Collectors.toList());
+//    }
+
 }

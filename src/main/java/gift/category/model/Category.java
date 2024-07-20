@@ -3,11 +3,12 @@ package gift.category.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "category")
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long categoryId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -15,21 +16,25 @@ public class Category {
     @Column(nullable = false)
     private String color;
 
-    @Column(name = "imgUrl")
+    @Column(name = "img_url")
     private String imgUrl;
 
-    // JPA에서 필요로 하는 기본 생성자
-    protected Category() {
-    }
+//    // JPA에서 필요로 하는 기본 생성자
+//    protected Category() {
+//    }
 
-    public Category(String name, String color, String imgUrl) {
+    public Category(String name) {
         this.name = name;
         this.color = color;
         this.imgUrl = imgUrl;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Category() {
+
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

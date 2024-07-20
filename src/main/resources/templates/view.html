@@ -8,7 +8,7 @@
 <body>
 <h1>상품 상세 정보</h1>
 <p><strong>ID:</strong> <span th:text="${product.productId}">0</span></p>
-<p><strong>Name:</strong> <span th:text="${product.name}">name</span></p>
+<p><strong>Name:</strong> <span th:text="${product.optionName}">optionName</span></p>
 <p><strong>Price:</strong> <span th:text="${product.price}">0</span></p>
 <p><strong>Category:</strong> <span th:text="${product.imgUrl}">image</span></p>
 <img th:src="${product.imageUrl}" alt="Product Image" />
