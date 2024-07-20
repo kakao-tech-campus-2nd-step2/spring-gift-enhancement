@@ -151,6 +151,7 @@
       <a th:href="@{/web/products/detail/{id}(id=${product.id})}" class="btn">상세보기</a>
       <a th:href="@{/web/products/edit/{id}(id=${product.id})}" class="btn">수정</a>
       <a th:href="@{/web/products/delete/{id}(id=${product.id})}" class="btn btn-secondary">삭제</a>
+      <a th:href="@{/web/products/{id}/options(id=${product.id})}" class="btn">옵션</a>
     </td>
   </tr>
   </tbody>

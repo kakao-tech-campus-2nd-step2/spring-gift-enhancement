@@ -1,39 +1,40 @@
 package gift.model;
 
 import gift.dto.ProductDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
+import java.util.List;
 @Entity
 @Table(name = "product")
 public class Product {
 
     @Id
-    @Column(nullable = false )
+    @Column(nullable = false)
     private Long id;
-    @Column(nullable = false , length = 20)
+
+    @Column(nullable = false, length = 20)
     @NotNull(message = "이름에 NULL 불가능")
     @Size(max = 20, message = "20자 이상 불가능")
     private String name;
+
     @Column(nullable = false)
     private int price;
+
     @Column(name = "image_url", nullable = false)
     @NotNull(message = "URL에 NULL 불가능")
     private String imageUrl;
+
     @Column(name = "category", nullable = false)
     private int category;
 
-    // 생성자
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options;
+
     public Product() {
     }
 
-    public Product(Long id, String name, int price, String imageUrl , int category) {
+    public Product(Long id, String name, int price, String imageUrl, int category) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -57,9 +58,10 @@ public class Product {
     public int getCategory() {
         return category;
     }
+    public List<Option> getOptions() {
+        return options;
+    }
 
-
-    // setter
     public void setId(Long id) {
         this.id = id;
     }
@@ -73,7 +75,13 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public  void  setCategory(int category) { this.category=category; }
+    public void setCategory(int category) {
+        this.category = category;
+    }
+    public void setOptions(List<Option> options) {
+        this.options = options;
+    }
+
 
     public Product(ProductDTO productDTO) {
         this.id = productDTO.getId();

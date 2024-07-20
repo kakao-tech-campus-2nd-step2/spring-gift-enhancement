@@ -14,4 +14,3 @@ public interface ProductService {
     Page<ProductDTO> getProducts(Pageable pageable);
 }
 
-

@@ -21,14 +21,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
-            .map(CategoryDTO::fromCategory)
+            .map(CategoryDTO::convertDTO)
             .collect(Collectors.toList());
     }
 
     @Override
     public CategoryDTO getCategoryById(int id) {
         return categoryRepository.findById(id)
-            .map(CategoryDTO::fromCategory)
+            .map(CategoryDTO::convertDTO)
             .orElse(null);
     }
 }
