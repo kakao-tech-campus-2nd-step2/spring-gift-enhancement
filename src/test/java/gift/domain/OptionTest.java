@@ -5,9 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import gift.domain.option.entity.Option;
-import gift.domain.option.exception.OptionNameDuplicateException;
-import gift.domain.option.exception.OptionNameLengthException;
-import gift.domain.option.exception.OptionQuantityRangeException;
+import gift.domain.option.exception.OptionNameValidException;
+import gift.domain.option.exception.OptionQuantityValidException;
 import gift.domain.option.exception.OptionValidException;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +22,7 @@ public class OptionTest {
         Option newOption = createOption("test1");
 
         assertThatThrownBy(() -> newOption.checkDuplicateName(optionList)).isInstanceOf(
-            OptionNameDuplicateException.class);
+            OptionNameValidException.class);
     }
 
     @Test
@@ -40,7 +39,7 @@ public class OptionTest {
     void optionNameLengthFailTest(){
         assertThatThrownBy(() -> {
             createOption("name".repeat(50));
-        }).isInstanceOf(OptionNameLengthException.class)
+        }).isInstanceOf(OptionNameValidException.class)
             .hasMessage("옵션 이름 50자 초과");
     }
 
@@ -57,7 +56,7 @@ public class OptionTest {
     void optionQuantityExceedTest(){
         assertThatThrownBy(() -> {
             createOption(100_000_000);
-        }).isInstanceOf(OptionQuantityRangeException.class)
+        }).isInstanceOf(OptionQuantityValidException.class)
             .hasMessage("수량은 1개 이상 1억개 미만으로 설정해주세요.");
     }
 
@@ -66,7 +65,7 @@ public class OptionTest {
     void optionQuantityLackTest(){
         assertThatThrownBy(() -> {
             createOption(0);
-        }).isInstanceOf(OptionQuantityRangeException.class)
+        }).isInstanceOf(OptionQuantityValidException.class)
             .hasMessage("수량은 1개 이상 1억개 미만으로 설정해주세요.");
     }
     @Test
