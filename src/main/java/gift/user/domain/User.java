@@ -2,6 +2,7 @@ package gift.user.domain;
 
 import gift.product.domain.WishList;
 import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 

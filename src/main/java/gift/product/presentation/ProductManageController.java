@@ -5,7 +5,9 @@ import gift.product.domain.CreateProductRequestDTO;
 import gift.product.domain.Product;
 import gift.util.CommonResponse;
 import jakarta.validation.Valid;
+
 import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +35,7 @@ public class ProductManageController {
 
     @PostMapping("")
     public ResponseEntity<CommonResponse<Long>> addProduct(
-        @Valid @RequestBody CreateProductRequestDTO createProductRequestDTO) {
+            @Valid @RequestBody CreateProductRequestDTO createProductRequestDTO) {
         Long productId = productService.saveProduct(createProductRequestDTO);
         return ResponseEntity.ok(new CommonResponse<>(productId, "상품이 정상적으로 추가 되었습니다", true));
     }

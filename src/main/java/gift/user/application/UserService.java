@@ -27,7 +27,7 @@ public class UserService {
 
     public User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(
-            () -> new UserException(ErrorCode.USER_NOT_FOUND)
+                () -> new UserException(ErrorCode.USER_NOT_FOUND)
         );
     }
 
@@ -45,15 +45,15 @@ public class UserService {
 
     private void validateDuplicateUser(String email) {
         userRepository.findByEmail(email).ifPresent(
-            user -> {
-                throw new UserException(ErrorCode.DUPLICATE_USER);
-            }
+                user -> {
+                    throw new UserException(ErrorCode.DUPLICATE_USER);
+                }
         );
     }
 
     public User authenticateUser(String email, String password) {
         User user = userRepository.findByEmail(email).orElseThrow(
-            () -> new UserException(ErrorCode.USER_NOT_FOUND)
+                () -> new UserException(ErrorCode.USER_NOT_FOUND)
         );
         System.out.println("user.getPassword() = " + user.getPassword());
         if (passwordEncoder.matches(password, user.getPassword())) {

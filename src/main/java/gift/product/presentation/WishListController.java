@@ -30,10 +30,10 @@ public class WishListController {
     @JwtAuthenticated
     @GetMapping("/{userId}")
     public ResponseEntity<?> getWishList(@PathVariable Long userId,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "id") String sortBy,
-        @RequestParam(defaultValue = "asc") String direction) {
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size,
+                                         @RequestParam(defaultValue = "id") String sortBy,
+                                         @RequestParam(defaultValue = "asc") String direction) {
         Page<WishList> products = wishListService.getProductsInWishList(userId, page, size, sortBy, direction);
         return ResponseEntity.ok(new CommonResponse<>(products, "위시리스트 조회 성공", true));
     }

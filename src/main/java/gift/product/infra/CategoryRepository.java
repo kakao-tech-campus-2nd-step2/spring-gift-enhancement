@@ -14,7 +14,7 @@ public class CategoryRepository {
 
     public Category findById(Long id) {
         return categoryJpaRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 카테고리가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 카테고리가 존재하지 않습니다."));
     }
 
     public Category save(Category category) {
@@ -27,7 +27,7 @@ public class CategoryRepository {
 
     public Category findByName(String name) {
         return categoryJpaRepository.findByName(name)
-            .orElseThrow(() -> new IllegalArgumentException("해당 이름의 카테고리가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 이름의 카테고리가 존재하지 않습니다."));
     }
 
     public Object findAll() {

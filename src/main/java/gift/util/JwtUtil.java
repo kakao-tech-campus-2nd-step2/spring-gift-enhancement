@@ -3,6 +3,7 @@ package gift.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -29,15 +31,15 @@ public class JwtUtil {
         LocalDateTime now = LocalDateTime.now();
         Date issuedAt = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
         Date expiryDate = Date.from(
-            now.plus(Duration.ofMillis(JWT_EXPIRATION)).atZone(ZoneId.systemDefault()).toInstant());
+                now.plus(Duration.ofMillis(JWT_EXPIRATION)).atZone(ZoneId.systemDefault()).toInstant());
 
         return Jwts.builder()
-            .setClaims(claims)
-            .setSubject(subject)
-            .setIssuedAt(issuedAt)
-            .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS256, JWT_SECRET)
-            .compact();
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(issuedAt)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS256, JWT_SECRET)
+                .compact();
     }
 
     public Boolean validateToken(String token, String email) {

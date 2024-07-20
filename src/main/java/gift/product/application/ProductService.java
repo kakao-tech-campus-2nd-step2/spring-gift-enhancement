@@ -5,8 +5,10 @@ import gift.product.domain.Product;
 import gift.product.exception.ProductException;
 import gift.product.infra.ProductRepository;
 import gift.util.ErrorCode;
+
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +28,7 @@ public class ProductService {
     @Transactional
     public Long saveProduct(CreateProductRequestDTO createProductRequestDTO) {
         Product product = new Product(createProductRequestDTO.getName(), createProductRequestDTO.getPrice(),
-            createProductRequestDTO.getImageUrl());
+                createProductRequestDTO.getImageUrl());
         validateProduct(product);
         return productRepository.save(product).getId();
     }
@@ -37,7 +39,7 @@ public class ProductService {
 
     public void updateProduct(Long id, String name, Double price, String imageUrl) {
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
         product.setName(name);
         product.setPrice(price);
         product.setImageUrl(imageUrl);

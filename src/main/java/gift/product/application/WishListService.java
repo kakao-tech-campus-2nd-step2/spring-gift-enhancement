@@ -10,8 +10,10 @@ import gift.user.application.UserService;
 import gift.user.domain.User;
 import gift.util.ErrorCode;
 import jakarta.transaction.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +28,7 @@ public class WishListService {
     private final UserService userService;
 
     public WishListService(WishListRepository wishListRepository, ProductRepository productRepository,
-        UserService userService) {
+                           UserService userService) {
         this.wishListRepository = wishListRepository;
         this.productRepository = productRepository;
         this.userService = userService;
@@ -38,7 +40,7 @@ public class WishListService {
 
     public Page<WishList> getProductsInWishList(Long userId, int page, int size, String sortBy, String direction) {
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-            : Sort.by(sortBy).descending();
+                : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
         if (wishListRepository.findByUserId(userId, pageable).isEmpty()) {
@@ -51,7 +53,7 @@ public class WishListService {
     public void addProductToWishList(Long userId, Long productId) {
         WishList wishList = wishListRepository.findByUserId(userId);
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
 
         if (wishList == null) {
             User user = userService.getUser(userId);
