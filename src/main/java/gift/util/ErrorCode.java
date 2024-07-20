@@ -22,7 +22,9 @@ public enum ErrorCode {
 
     // Wishlist ErrorMessage
     WISHLIST_NOT_FOUND("해당 위시리스트를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
-    WISHLIST_ALREADY_EXISTS("이미 위시리스트가 존재합니다.", HttpStatus.BAD_REQUEST);
+    WISHLIST_ALREADY_EXISTS("이미 위시리스트가 존재합니다.", HttpStatus.BAD_REQUEST),
+    DUPLICATED_OPTION_NAME("이미 존재하는 옵션 이름입니다.", HttpStatus.BAD_REQUEST),
+    ;
 
     private final String message;
     private final HttpStatus status;

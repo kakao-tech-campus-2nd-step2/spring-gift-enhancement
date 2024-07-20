@@ -1,19 +1,48 @@
 package gift.product.infra;
 
 import gift.product.domain.Product;
-
-import java.sql.Statement;
-import java.sql.PreparedStatement;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import gift.product.domain.ProductOption;
+import gift.product.exception.ProductException;
+import gift.util.ErrorCode;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public class ProductRepository {
+    private final ProductJpaRepository productJpaRepository;
+    private final ProductOptionJpaRepository productOptionJpaRepository;
+
+    public ProductRepository(ProductJpaRepository productJpaRepository, ProductOptionJpaRepository productOptionJpaRepository) {
+        this.productJpaRepository = productJpaRepository;
+        this.productOptionJpaRepository = productOptionJpaRepository;
+    }
+
+
+    public Product save(Product product) {
+        return productJpaRepository.save(product);
+    }
+
+    public Product findById(Long id) {
+        return productJpaRepository.findById(id).orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
+
+
+    public void deleteById(Long id) {
+        productJpaRepository.deleteById(id);
+    }
+
+    public List<Product> findAll() {
+        return productJpaRepository.findAll();
+    }
+
+    public List<ProductOption> findProductOptionsByProductId(Long productId) {
+        return productOptionJpaRepository.findByProductId(productId);
+    }
+
+    public ProductOption saveProductOption(ProductOption productOption) {
+        return productOptionJpaRepository.save(productOption);
+    }
 
 }

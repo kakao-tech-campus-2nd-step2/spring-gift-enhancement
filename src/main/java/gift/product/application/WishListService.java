@@ -4,7 +4,7 @@ import gift.product.domain.Product;
 import gift.product.domain.WishList;
 import gift.product.domain.WishListProduct;
 import gift.product.exception.ProductException;
-import gift.product.infra.ProductRepository;
+import gift.product.infra.ProductJpaRepository;
 import gift.product.infra.WishListRepository;
 import gift.user.application.UserService;
 import gift.user.domain.User;
@@ -12,7 +12,6 @@ import gift.util.ErrorCode;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +23,10 @@ import org.springframework.stereotype.Service;
 public class WishListService {
 
     private final WishListRepository wishListRepository;
-    private final ProductRepository productRepository;
+    private final ProductJpaRepository productRepository;
     private final UserService userService;
 
-    public WishListService(WishListRepository wishListRepository, ProductRepository productRepository,
+    public WishListService(WishListRepository wishListRepository, ProductJpaRepository productRepository,
                            UserService userService) {
         this.wishListRepository = wishListRepository;
         this.productRepository = productRepository;

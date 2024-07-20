@@ -1,6 +1,7 @@
 package gift.product.presentation;
 
 import gift.product.application.ProductService;
+import gift.product.domain.CreateProductOptionRequestDTO;
 import gift.product.domain.CreateProductRequestDTO;
 import gift.product.domain.Product;
 import gift.util.CommonResponse;
@@ -40,6 +41,13 @@ public class ProductManageController {
             @Valid @RequestBody CreateProductRequestDTO createProductRequestDTO) {
         Long productId = productService.saveProduct(createProductRequestDTO);
         return ResponseEntity.ok(new CommonResponse<>(productId, "상품이 정상적으로 추가 되었습니다", true));
+    }
+
+    @AdminAuthenticated
+    @PostMapping("/{id}")
+    public ResponseEntity<?> addProductOption(@PathVariable Long id, @RequestBody CreateProductOptionRequestDTO createProductOptionRequestDTO) {
+        productService.addProductOption(id, createProductOptionRequestDTO);
+        return ResponseEntity.ok(new CommonResponse<>(null, "상품 옵션이 정상적으로 추가 되었습니다", true));
     }
 
     @AdminAuthenticated
