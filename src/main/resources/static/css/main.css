@@ -39,8 +39,7 @@ tr:hover {
     background-color: #ddd;
 }
 
-/* main.css */
-.button, .delete-button, .edit-button, .option-button {
+.button {
     background-color: #4CAF50; /* Green */
     border: none;
     color: white;
@@ -53,4 +52,3 @@ tr:hover {
     cursor: pointer;
     border-radius: 4px;
 }
-

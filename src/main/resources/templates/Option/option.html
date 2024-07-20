@@ -8,6 +8,7 @@
 <body>
 <h1>옵션 정보 페이지</h1>
 <div class="top-right">
+    <a th:href="@{/api/products}" class="button">상품 목록으로 돌아가기</a>
     <a th:href="@{/api/products/{id}/options/new(id=${product.id})}" class="button">옵션 추가하기</a>
 </div>
 <table>
@@ -25,9 +26,8 @@
         <td th:text="${option.name}"></td>
         <td th:text="${option.quantity}"></td>
         <td>
-            <a th:href="@{/api/options/edit/{id}(id=${option.id})}" class="edit-button">수정</a>
-            <form th:action="@{'/options/' + ${option.id}}" method="post" style="display:inline;">
-                <input type="hidden" name="_method" value="delete"/>
+            <a th:href="@{/api/products/{productId}/options/edit/{optionId}(productId=${product.id},optionId=${option.id})}" class="edit-button">수정</a>
+            <form th:action="@{/api/options/{id}/delete(id=${option.id})}" method="post" style="display:inline;">
                 <button type="submit" class="delete-button">삭제</button>
             </form>
         </td>
@@ -35,8 +35,5 @@
     </tbody>
 </table>
 
-<div class="bottom-left">
-    <a th:href="@{/api/products}" class="button">상품 목록으로 돌아가기</a>
-</div>
 </body>
 </html>

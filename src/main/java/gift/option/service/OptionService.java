@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OptionService {
@@ -50,8 +49,8 @@ public class OptionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Option> getAllOptions() {
-        return optionJpaRepository.findAll();
+    public Option getOptionById(Long optionId) {
+        return optionJpaRepository.findById(optionId).orElse(null);
     }
 
     // 3. option update
@@ -75,11 +74,12 @@ public class OptionService {
 
     // 4. option delete
     @Transactional
-    public void deleteOption(Long optionId) {
-        Option existingOption = optionJpaRepository.findById(optionId)
-                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 다음 id의 옵션은 존재하지 않음 : " + optionId));
-
+    public Long deleteOption(Long id) {
+        Option existingOption = optionJpaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 다음 id의 옵션은 존재하지 않음 : " + id));
+        Long productId = existingOption.getProduct().getId();
         optionJpaRepository.delete(existingOption);
+        return productId;
     }
 
     // 중복성 검사

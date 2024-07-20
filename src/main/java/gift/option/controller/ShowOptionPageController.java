@@ -1,5 +1,7 @@
 package gift.option.controller;
 
+import gift.category.model.Category;
+import gift.common.exception.ProductNotFoundException;
 import gift.option.domain.Option;
 import gift.option.domain.OptionRequest;
 import gift.option.service.OptionService;
@@ -24,6 +26,16 @@ public class ShowOptionPageController {
         this.productService = productService;
     }
 
+    // 옵션 메인 페이지 반환
+    @GetMapping("/{id}/options")
+    public String showOptionsForm(@PathVariable("id") Long productId, Model model) {
+        Product product = productService.getProductById(productId);
+        List<Option> options = optionService.getAllOptionByProduct(product);
+        model.addAttribute("product", product);
+        model.addAttribute("options", options);
+        return "Option/option";
+    }
+
     // 옵션 등록 페이지 반환
     @GetMapping("/{id}/options/new")
     public String showOptionCreateForm(@PathVariable("id") Long productId, Model model) {
@@ -33,13 +45,14 @@ public class ShowOptionPageController {
         return "Option/create_option";
     }
 
-    // 옵션 메인 페이지 반환
-    @GetMapping("/{id}/options")
-    public String showOptionsForm(@PathVariable("id") Long productId, Model model) {
-        Product product = productService.getProductById(productId);
-        List<Option> options = optionService.getAllOptionByProduct(product);
-        model.addAttribute("product", product);
-        model.addAttribute("options", options);
-        return "Option/option";
+    // 옵션 수정 페이지 반환
+    @GetMapping("/{id}/options/edit/{option_id}")
+    public String showOptionEditForm(@PathVariable("option_id") Long id, Model model) {
+        Option option = optionService.getOptionById(id);
+        if (option == null) {
+            throw new ProductNotFoundException(id);
+        }
+        model.addAttribute("option", option);
+        return "Option/edit_option";
     }
 }

@@ -20,7 +20,7 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private int price;
+    private Integer price;
 
     @Column(nullable = false)
     private String imageUrl;
@@ -36,7 +36,9 @@ public class Product {
     private Category category;
 
     // 생성자
-    public Product(String name, int price, String imageUrl, Category category) {
+    public Product() {}
+
+    public Product(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -73,16 +75,9 @@ public class Product {
         wish.setProduct(null);
     }
 
-    // Constructors, Getters, and Setters
-    public Product() {}
-
-    public Product(String name, int price, String imageUrl) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
 
     // Getters and setters
+
     public Long getId() {
         return id;
     }
@@ -99,11 +94,11 @@ public class Product {
         this.name = name;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -123,19 +118,19 @@ public class Product {
         this.wishes = wishes;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     public List<Option> getOptions() {
         return options;
     }
 
     public void setOptions(List<Option> options) {
         this.options = options;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

@@ -9,7 +9,7 @@
 
 <form th:action="@{/api/options}" th:object="${option}" method="post">
     <label>옵션명 : <input type="text" th:field="*{name}" /></label>
-    <label>수량 : <input type="number" th:field="*{quantity}" /></label>
+    <label>수량 : <input type="text" th:field="*{quantity}" /></label>
     <input type="hidden" th:field="*{productId}" />
     <button type="submit" class="button">옵션 정보 등록하기</button>
 </form>
