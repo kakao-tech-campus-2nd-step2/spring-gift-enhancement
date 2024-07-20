@@ -1,29 +1,24 @@
 package gift.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.clearInvocations;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import gift.product.dto.CategoryDto;
 import gift.product.model.Category;
 import gift.product.repository.CategoryRepository;
 import gift.product.service.CategoryService;
-import java.util.Collections;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -57,7 +52,8 @@ class CategoryServiceTest {
         given(categoryRepository.save(any())).willReturn(new Category(1L, categoryDto.name()));
         Long insertedCategoryId = categoryService.insertCategory(categoryDto).getId();
 
-        given(categoryRepository.findById(insertedCategoryId)).willReturn(Optional.of(new Category(insertedCategoryId, categoryDto.name())));
+        given(categoryRepository.findById(insertedCategoryId)).willReturn(
+            Optional.of(new Category(insertedCategoryId, categoryDto.name())));
 
         //when
         categoryService.getCategory(insertedCategoryId);

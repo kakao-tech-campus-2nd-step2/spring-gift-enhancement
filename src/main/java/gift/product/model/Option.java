@@ -19,14 +19,12 @@ public class Option {
 
     @Column(nullable = false)
     private final String name;
-
-    @Column(nullable = false)
-    private int quantity;
-
     @ManyToOne
     @JoinColumn(nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private final Product product;
+    @Column(nullable = false)
+    private int quantity;
 
     protected Option() {
         this(null, null, 0, null);

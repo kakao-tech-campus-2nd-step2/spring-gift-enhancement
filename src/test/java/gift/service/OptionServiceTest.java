@@ -1,10 +1,10 @@
 package gift.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.clearInvocations;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import gift.product.dto.OptionDto;
 import gift.product.dto.OptionResponse;
@@ -16,7 +16,6 @@ import gift.product.repository.CategoryRepository;
 import gift.product.repository.OptionRepository;
 import gift.product.repository.ProductRepository;
 import gift.product.service.OptionService;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,18 +23,15 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class OptionServiceTest {
+
     @InjectMocks
     OptionService optionService;
 
@@ -54,7 +50,8 @@ class OptionServiceTest {
         Category category = new Category("테스트카테고리");
         Product product = new Product(1L, "테스트상품", 1500, "테스트주소", category);
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
-        given(optionRepository.existsByNameAndProductId("테스트옵션", product.getId())).willReturn(false);
+        given(optionRepository.existsByNameAndProductId("테스트옵션", product.getId())).willReturn(
+            false);
 
         //when
         optionService.insertOption(new OptionDto("테스트옵션", 1, product.getId()));
@@ -108,9 +105,11 @@ class OptionServiceTest {
         Product product = new Product(1L, "테스트상품", 1500, "테스트주소", category);
         Option option = new Option(1L, "테스트옵션", 1, product);
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
-        given(optionRepository.existsByNameAndProductId("테스트옵션", product.getId())).willReturn(false);
+        given(optionRepository.existsByNameAndProductId("테스트옵션", product.getId())).willReturn(
+            false);
         given(optionRepository.save(any())).willReturn(option);
-        Long insertedOptionId = optionService.insertOption(new OptionDto("테스트옵션", 1, product.getId())).getId();
+        Long insertedOptionId = optionService.insertOption(
+            new OptionDto("테스트옵션", 1, product.getId())).getId();
 
         given(optionRepository.findById(insertedOptionId)).willReturn(
             Optional.of(option));
@@ -133,7 +132,8 @@ class OptionServiceTest {
 
         OptionResponse optionResponse1 = new OptionResponse(1L, "테스트옵션1", 1);
         OptionResponse optionResponse2 = new OptionResponse(2L, "테스트옵션2", 1);
-        given(optionRepository.findAllByProductId(1L)).willReturn(List.of(optionResponse1, optionResponse2));
+        given(optionRepository.findAllByProductId(1L)).willReturn(
+            List.of(optionResponse1, optionResponse2));
 
         //when
         optionService.deleteOption(option2.getId());
@@ -214,6 +214,8 @@ class OptionServiceTest {
         given(optionRepository.findById(1L)).willReturn(Optional.of(option));
 
         //when, then
-        assertThatThrownBy(() -> optionService.subtractOption(1L, new OptionSubtractAmount(999))).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(
+            () -> optionService.subtractOption(1L, new OptionSubtractAmount(999))).isInstanceOf(
+            IllegalArgumentException.class);
     }
 }

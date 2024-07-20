@@ -3,7 +3,8 @@ package gift.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import gift.product.dto.JwtResponse;
 import gift.product.dto.MemberDto;
@@ -11,18 +12,14 @@ import gift.product.exception.LoginFailedException;
 import gift.product.model.Member;
 import gift.product.repository.AuthRepository;
 import gift.product.service.AuthService;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,19 +27,17 @@ import org.springframework.test.util.ReflectionTestUtils;
 @SuppressWarnings("NonAsciiCharacters")
 class AuthServiceTest {
 
+    final String EMAIL = "test@test.com";
+    final String PASSWORD = "test";
     @Mock
     AuthRepository authRepository;
-
     @InjectMocks
     AuthService authService;
 
-    final String EMAIL = "test@test.com";
-
-    final String PASSWORD = "test";
-
     @BeforeEach
     void 시크릿_키_셋팅() {
-        ReflectionTestUtils.setField(authService, "SECRET_KEY", "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=");
+        ReflectionTestUtils.setField(authService, "SECRET_KEY",
+            "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=");
     }
 
     @Test

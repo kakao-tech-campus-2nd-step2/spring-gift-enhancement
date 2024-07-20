@@ -1,7 +1,7 @@
 package gift.integrity;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.SoftAssertions.*;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +12,6 @@ import gift.product.repository.CategoryRepository;
 import gift.product.repository.ProductRepository;
 import java.net.URI;
 import java.util.Map;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.MethodOrderer;
@@ -82,7 +81,8 @@ class OptionIntegrityTest {
     void 옵션_조회() {
         //given
         String url = BASE_URL + port + "/api/options/1";
-        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(HttpMethod.GET, URI.create(url));
+        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(HttpMethod.GET,
+            URI.create(url));
 
         //when
         var actual = testRestTemplate.exchange(requestEntity, String.class);
@@ -96,7 +96,8 @@ class OptionIntegrityTest {
     void 옵션_전체_조회() {
         //given
         String url = BASE_URL + port + "/api/options";
-        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(HttpMethod.GET, URI.create(url));
+        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(HttpMethod.GET,
+            URI.create(url));
 
         //when
         var actual = testRestTemplate.exchange(requestEntity, String.class);
@@ -110,7 +111,8 @@ class OptionIntegrityTest {
     void 특정_상품의_옵션_전체_조회() {
         //given
         String url = BASE_URL + port + "/api/products/1/options";
-        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(HttpMethod.GET, URI.create(url));
+        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(HttpMethod.GET,
+            URI.create(url));
 
         //when
         var actual = testRestTemplate.exchange(requestEntity, String.class);
@@ -125,7 +127,8 @@ class OptionIntegrityTest {
         //given
         String url = BASE_URL + port + "/api/options/update/1";
         OptionDto updatedOptionDto = new OptionDto("테스트옵션수정", 1, 1L);
-        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(updatedOptionDto, HttpMethod.PUT, URI.create(url));
+        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(updatedOptionDto,
+            HttpMethod.PUT, URI.create(url));
 
         //when
         var actual = testRestTemplate.exchange(requestEntity, String.class);
@@ -139,7 +142,8 @@ class OptionIntegrityTest {
     void 옵션_삭제() {
         //given
         String url = BASE_URL + port + "/api/options/delete/1";
-        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(HttpMethod.DELETE, URI.create(url));
+        RequestEntity<OptionDto> requestEntity = new RequestEntity<>(HttpMethod.DELETE,
+            URI.create(url));
 
         //when
         var actual = testRestTemplate.exchange(requestEntity, String.class);
@@ -163,7 +167,7 @@ class OptionIntegrityTest {
         String responseMessage = testRestTemplate.exchange(requestEntity, String.class).getBody();
         Map<String, Object> responseMessageMap = mapper.readValue(responseMessage, Map.class);
 
-        String message = (String)responseMessageMap.get("detail");
+        String message = (String) responseMessageMap.get("detail");
 
         //then
         assertThat(message).isEqualTo("옵션 이름은 공백 포함 최대 50자까지 입력할 수 있습니다.");
@@ -184,7 +188,7 @@ class OptionIntegrityTest {
         String responseMessage = testRestTemplate.exchange(requestEntity, String.class).getBody();
         Map<String, Object> responseMessageMap = mapper.readValue(responseMessage, Map.class);
 
-        String message = (String)responseMessageMap.get("detail");
+        String message = (String) responseMessageMap.get("detail");
 
         //then
         assertThat(message).isEqualTo("사용 가능한 특수 문자는 ()[]+-&/_ 입니다.");
@@ -205,7 +209,7 @@ class OptionIntegrityTest {
         String responseMessage = testRestTemplate.exchange(requestEntity, String.class).getBody();
         Map<String, Object> responseMessageMap = mapper.readValue(responseMessage, Map.class);
 
-        String message = (String)responseMessageMap.get("detail");
+        String message = (String) responseMessageMap.get("detail");
 
         //then
         assertThat(message).isEqualTo("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");

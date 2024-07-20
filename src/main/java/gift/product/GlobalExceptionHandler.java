@@ -38,7 +38,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = CannotDeleteOnlyOneOptionException.class)
-    public ProblemDetail handleCannotDeleteOnlyOneOptionException(CannotDeleteOnlyOneOptionException e) {
+    public ProblemDetail handleCannotDeleteOnlyOneOptionException(
+        CannotDeleteOnlyOneOptionException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
