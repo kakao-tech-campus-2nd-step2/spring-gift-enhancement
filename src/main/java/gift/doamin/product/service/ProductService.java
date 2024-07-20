@@ -3,8 +3,10 @@ package gift.doamin.product.service;
 import gift.doamin.category.entity.Category;
 import gift.doamin.category.exception.CategoryNotFoundException;
 import gift.doamin.category.repository.JpaCategoryRepository;
+import gift.doamin.product.dto.OptionForm;
 import gift.doamin.product.dto.ProductForm;
 import gift.doamin.product.dto.ProductParam;
+import gift.doamin.product.entity.Options;
 import gift.doamin.product.entity.Product;
 import gift.doamin.product.exception.NotEnoughAutorityException;
 import gift.doamin.product.exception.ProductNotFoundException;
@@ -48,6 +50,11 @@ public class ProductService {
             new Product(user, category, productForm.getName(),
                 productForm.getPrice(), productForm.getImageUrl()));
 
+        Options options = new Options(productForm.getOptions().stream()
+            .map(OptionForm::toEntity)
+            .toList());
+        options.toList().forEach(product::addOption);
+
         return new ProductParam(product);
     }
 
@@ -88,6 +95,6 @@ public class ProductService {
     public boolean isOwner(Long userId, Long productId) {
         return productRepository.findById(productId)
             .map(product -> product.getUser().getId().equals(userId))
-            .orElse(false);
+            .orElseThrow(ProductNotFoundException::new);
     }
 }

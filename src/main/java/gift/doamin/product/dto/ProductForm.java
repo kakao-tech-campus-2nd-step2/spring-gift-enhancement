@@ -1,8 +1,11 @@
 package gift.doamin.product.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
+import java.util.List;
 
 public class ProductForm {
 
@@ -21,11 +24,17 @@ public class ProductForm {
     @NotNull
     private String imageUrl;
 
-    public ProductForm(Long category_id, String name, Integer price, String imageUrl) {
+    @NotEmpty
+    @Valid
+    private List<OptionForm> options;
+
+    public ProductForm(Long category_id, String name, Integer price, String imageUrl,
+        List<OptionForm> options) {
         this.category_id = category_id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.options = options;
     }
 
     public Long getUserId() {
@@ -46,6 +55,10 @@ public class ProductForm {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public List<OptionForm> getOptions() {
+        return options;
     }
 
     public void setUserId(Long userId) {
