@@ -2,8 +2,8 @@ package gift.category.controller;
 
 import gift.category.model.dto.CategoryRequest;
 import gift.category.service.CategoryService;
+import gift.resolver.LoginUser;
 import gift.user.model.dto.AppUser;
-import gift.user.resolver.LoginUser;
 import gift.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
