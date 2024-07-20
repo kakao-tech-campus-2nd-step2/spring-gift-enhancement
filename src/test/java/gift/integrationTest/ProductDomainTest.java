@@ -8,6 +8,7 @@ import gift.domain.dto.request.OptionRequest;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.ProductResponse;
+import gift.domain.dto.response.ProductWithCategoryIdResponse;
 import gift.global.apiResponse.BasicApiResponse;
 import gift.utilForTest.TestUtil;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ class ProductDomainTest {
     @Autowired
     private TestUtil testUtil;
 
-    private List<ProductResponse> getProductListByRequest() {
+    private List<ProductWithCategoryIdResponse> getProductListByRequest() {
         return Objects.requireNonNull(restTemplate.exchange(
             new RequestEntity<>(null, new HttpHeaders(), HttpMethod.GET, testUtil.getUri(port, "/api/products")),
             ProductListApiResponse.class).getBody()).getProducts();
@@ -84,9 +85,9 @@ class ProductDomainTest {
         //then
         assertThat(actualResponse.getStatusCode())
             .isEqualTo(HttpStatus.OK);
-        List<ProductResponse> response = getProductListByRequest();
+        List<ProductWithCategoryIdResponse> response = getProductListByRequest();
         for (var req: request) {
-            ProductResponse actual = response.stream().filter(r -> r.name().equals(req.name())).findAny().get();
+            ProductWithCategoryIdResponse actual = response.stream().filter(r -> r.name().equals(req.name())).findAny().get();
             assertThat(actual.name()).isEqualTo(req.name());
             assertThat(actual.price()).isEqualTo(req.price());
             assertThat(actual.imageUrl()).isEqualTo(req.imageUrl());

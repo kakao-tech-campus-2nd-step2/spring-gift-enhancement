@@ -45,6 +45,9 @@ class ProductServiceTest {
     @Mock
     private CategoryService categoryService;
 
+    @Mock
+    private OptionService optionService;
+
     private Product product;
     private Category category;
     private List<Option> options;
@@ -112,15 +115,18 @@ class ProductServiceTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    //TODO: 테스트 실패하는 것 고치기
     @Test
     @DisplayName("[UnitTest] 상품 추가")
     void addProduct() {
         //given
         ProductAddRequest request = ProductAddRequest.of(product);
+        System.out.println("request = " + request);
         ProductResponse expected = ProductResponse.of(product);
         given(productRepository.findByContents(any(ProductAddRequest.class))).willReturn(Optional.empty());
         given(productRepository.save(any(Product.class))).willReturn(product);
         given(categoryService.findById(eq(request.categoryId()))).willReturn(category);
+        given(optionService.addOptions(eq(product), eq(request.options()))).willReturn(options);
 
         //when
         ProductResponse actual = productService.addProduct(request);
@@ -146,6 +152,7 @@ class ProductServiceTest {
         then(productRepository).should(never()).save(any(Product.class));
     }
 
+    //TODO: 테스트 실패하는 것 고치기
     @Test
     @DisplayName("[UnitTest] 상품 업데이트")
     void updateProductById() {

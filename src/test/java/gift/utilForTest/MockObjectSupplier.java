@@ -6,6 +6,7 @@ import gift.domain.entity.Option;
 import gift.domain.entity.Product;
 import gift.domain.entity.Wish;
 import gift.global.util.HashUtil;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class MockObjectSupplier {
 
         ReflectionTestUtils.setField(category, "id", 1L);
         ReflectionTestUtils.setField(product, "id", 1L);
-        ReflectionTestUtils.setField(product, "options", List.of(option));
+        ReflectionTestUtils.setField(product, "options", new ArrayList<>(List.of(option)));
         ReflectionTestUtils.setField(member, "id", 1L);
         ReflectionTestUtils.setField(wish, "id", 1L);
         ReflectionTestUtils.setField(option, "id", 1L);
