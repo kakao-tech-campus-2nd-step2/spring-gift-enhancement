@@ -47,13 +47,18 @@ public class ProductService {
     }
 
     public ProductResponse addProduct(@Valid ProductRequest productRequest) {
+        if (productRepository.findByName(productRequest.getName()) != null) {
+            throw new IllegalArgumentException("같은 이름의 상품이 이미 존재합니다.");
+        }
+
         Category category = categoryService.findById(productRequest.getCategoryId())
             .orElseThrow(() -> new IllegalArgumentException("category ID를 찾을 수 없음"));
 
         Product product = ProductRequest.toEntity(productRequest, category);
 
         List<Option> options = productRequest.getOptions().stream()
-            .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(), product))
+            .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(),
+                product))
             .toList();
 
         options.forEach(product::addOption);
