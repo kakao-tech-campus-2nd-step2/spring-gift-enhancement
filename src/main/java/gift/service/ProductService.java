@@ -2,6 +2,8 @@ package gift.service;
 
 
 import gift.dto.ProductDto;
+import gift.exception.ValueAlreadyExistsException;
+import gift.exception.ValueNotFoundException;
 import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductName;
@@ -26,7 +28,7 @@ public class ProductService {
 
     public void addNewProduct(ProductDto productDto){
         if (productRepository.existsByName(new ProductName(productDto.name()))) {
-            throw new RuntimeException();
+            throw new ValueAlreadyExistsException("ProductName already exists in Database");
         }
         Category category = findCategory(productDto.categoryName());
         Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl());
@@ -37,7 +39,7 @@ public class ProductService {
     public void updateProduct(Long id, ProductDto productDto) {
         Optional<Product> product = productRepository.findById(id);
         if(product.isEmpty()){
-            throw new RuntimeException();
+            throw new ValueNotFoundException("Product not exists in Database");
         }
         Product updateProduct = product.get();
         Category category = findCategory(productDto.categoryName());
