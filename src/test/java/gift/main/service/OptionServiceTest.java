@@ -1,6 +1,7 @@
 package gift.main.service;
 
 import gift.main.Exception.CustomException;
+import gift.main.dto.OptionChangeQuantityRequest;
 import gift.main.dto.OptionRequest;
 import gift.main.entity.Category;
 import gift.main.entity.Option;
@@ -64,9 +65,9 @@ class OptionServiceTest {
         Product saveProduct = productRepository.save(product);
 
         List<Option> options = new ArrayList<>();
-        options.add(new Option("1번", 1, saveProduct));
-        options.add(new Option("2번", 2, saveProduct));
-        options.add(new Option("3번", 3, saveProduct));
+        options.add(new Option("1번", 100, saveProduct));
+        options.add(new Option("2번", 100, saveProduct));
+        options.add(new Option("3번", 100, saveProduct));
 
         options.forEach(option -> optionRepository.save(option));
 
@@ -78,7 +79,7 @@ class OptionServiceTest {
     void findOptionAllTest() {
         //given
         //when
-        List<?> options = optionService.findOptionAll(1l);
+        List<?> options = optionService.findAllOption(1l);
 
         //then
         assertThat(options.size()).isEqualTo(3);
@@ -105,7 +106,7 @@ class OptionServiceTest {
     @Test
     @Transactional
     @Rollback
-    void deleteaOptionAllTest() {
+    void deleteOptionAllTest() {
         //given\
         Product saveProduct = productRepository.findById(1l).get();
         List<Option> options = optionRepository.findAllByProductId(saveProduct.getId()).get();
@@ -134,6 +135,9 @@ class OptionServiceTest {
                 .isEqualTo(4);
     }
 
+    /*
+    * 중복되는 옵션을 넣었을때 실패하는 메서드
+     */
     @Test
     @Transactional
     @Rollback
@@ -149,6 +153,9 @@ class OptionServiceTest {
 
     }
 
+    /*
+     * 옵션 수정 검증 테스트
+     */
     @Test
     @Transactional
     @Rollback
@@ -165,6 +172,7 @@ class OptionServiceTest {
                 .isEqualTo("4번");
     }
 
+    // 중복된 옵션으로 수정할 시 오류 발생
     @Test
     @Transactional
     @Rollback
@@ -178,4 +186,39 @@ class OptionServiceTest {
         assertThatThrownBy(() -> optionService.updateOption(saveProduct.getId(), 1L, optionRequest))
                 .isInstanceOf(CustomException.class);
     }
+
+    //옵션 수량 변경 테스트 - 정상적으로
+    @Test
+    @Transactional
+    @Rollback
+    void removeOptionQuantityTest() {
+        //given
+        Product saveProduct = productRepository.findById(1l).get();
+        Option saveOption = optionRepository.findByProductIdAndOptionName(saveProduct.getId(), "1번").get();
+        OptionChangeQuantityRequest optionChangeQuantityRequest = new OptionChangeQuantityRequest(3);
+
+        //when
+        optionService.removeOptionQuantity(saveOption.getId(),optionChangeQuantityRequest);
+
+        //then
+        assertThat(saveOption.getQuantity()).isEqualTo(97);
+    }
+
+    //옵션 수량 변경 테스트 - 삭제시 음수가 되어 불가능해짐.
+    @Test
+    @Transactional
+    @Rollback
+    void RemoveInvalidOptionQuantityTest() {
+        //given
+        Product saveProduct = productRepository.findById(1l).get();
+        Option saveOption = optionRepository.findByProductIdAndOptionName(saveProduct.getId(), "1번").get();
+        OptionChangeQuantityRequest optionChangeQuantityRequest = new OptionChangeQuantityRequest(300);
+
+        //when
+        //thrn
+        assertThatThrownBy(() -> optionService.removeOptionQuantity(saveOption.getId(),optionChangeQuantityRequest))
+                .isInstanceOf(CustomException.class);
+    }
+
+
 }
