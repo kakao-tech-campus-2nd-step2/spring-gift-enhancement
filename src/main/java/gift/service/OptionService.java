@@ -29,6 +29,13 @@ public class OptionService {
         return null;
     }
 
+    public void subtract(Option option, Long quantity) {
+        Option actualOption = optionRepository.findById(option.getId()).get();
+        Long afterSubtractQuantity = actualOption.getQuantity() - quantity;
+        Option newOption = new Option(actualOption.getId(),actualOption.getName(),afterSubtractQuantity,actualOption.getProduct());
+        optionRepository.save(newOption);
+    }
+
     public void delete(Option option) {
         optionRepository.delete(option);
     }

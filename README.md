@@ -17,8 +17,8 @@
 var option = optionRepository.findByProductId(productId).orElseThrow();
 option.subtract(quantity)
 
-- [ ] 옵션의 수량 값을 받은 매개변수 값만큼 줄이는 메서드 구현 
-- [ ] Repository 에서 값을 가져올때 예외처리 구현 
+- [x] 옵션의 수량 값을 받은 매개변수 값만큼 줄이는 메서드 구현 
+- [ ] Repository 에서 값을 가져올때 예외처리 구현 => 테스트에서 할일임 
 - [ ] 단위테스트 구현 
 
 ### 코드리뷰 개선사항 :step1 
