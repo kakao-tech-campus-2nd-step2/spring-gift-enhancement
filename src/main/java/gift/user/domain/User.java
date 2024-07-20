@@ -14,7 +14,11 @@ public class User {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
+
     private String name;
+
     private String email;
     private String password;
 
@@ -63,6 +67,10 @@ public class User {
 
     public List<WishList> getWishLists() {
         return wishLists;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     public void setWishLists(List<WishList> wishLists) {

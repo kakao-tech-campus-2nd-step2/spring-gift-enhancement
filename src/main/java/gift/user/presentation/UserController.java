@@ -35,9 +35,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody User user) {
-        String token = jwtUtil.generateToken(user.getEmail());
+        String tokenResponse = jwtUtil.generateToken(user, 60L);
         return ResponseEntity.ok(
-                new CommonResponse<>(new AuthenticationResponse(token), "로그인이 정상적으로 완료되었습니다", true));
+                new CommonResponse<>(tokenResponse, "로그인이 정상적으로 완료되었습니다", true));
 
     }
 
