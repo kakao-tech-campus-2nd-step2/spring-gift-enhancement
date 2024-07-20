@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class ReponseUtility {
+public class ResponseUtility {
 
     public Map<String, String> makeResponse(String msg) {
         Map<String, String> response = new HashMap<String, String>();

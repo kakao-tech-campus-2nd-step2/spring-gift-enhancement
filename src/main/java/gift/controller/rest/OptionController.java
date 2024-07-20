@@ -3,11 +3,12 @@ package gift.controller.rest;
 import gift.entity.Option;
 import gift.entity.OptionDTO;
 import gift.service.OptionService;
+import gift.util.ResponseUtility;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,9 +17,12 @@ import java.util.Map;
 public class OptionController {
 
     private final OptionService optionService;
+    private final ResponseUtility responseUtility;
 
-    public OptionController(OptionService optionService) {
+    @Autowired
+    public OptionController(OptionService optionService, ResponseUtility responseUtility) {
         this.optionService = optionService;
+        this.responseUtility = responseUtility;
     }
 
     @GetMapping()
@@ -44,8 +48,7 @@ public class OptionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteOption(@PathVariable Long id) {
         optionService.delete(id);
-        Map<String, String> result = new HashMap<>();
-        result.put("message", "deleted successfully");
-        return ResponseEntity.ok().body(result);
+        Map<String, String> response = responseUtility.makeResponse("deleted successfully");
+        return ResponseEntity.ok().body(response);
     }
 }
