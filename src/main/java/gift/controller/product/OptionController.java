@@ -4,6 +4,7 @@ import gift.controller.product.dto.OptionRequest;
 import gift.controller.product.dto.OptionResponse;
 import gift.service.product.OptionService;
 import gift.service.product.dto.OptionModel;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +36,7 @@ public class OptionController {
     @PostMapping("/products/{id}/options")
     public ResponseEntity<OptionResponse.InfoList> createOption(
         @PathVariable("id") Long productId,
-        @RequestBody OptionRequest.Register request
+        @RequestBody @Valid OptionRequest.Register request
     ) {
         List<OptionModel.Info> models = optionService.createOption(productId, request.toCommand());
         OptionResponse.InfoList response = OptionResponse.InfoList.from(models);
@@ -46,7 +47,7 @@ public class OptionController {
     public ResponseEntity<OptionResponse.Info> updateOption(
         @PathVariable("optionId") Long optionId,
         @PathVariable("productId") Long productId,
-        @RequestBody OptionRequest.Update request
+        @RequestBody @Valid OptionRequest.Update request
     ) {
         OptionModel.Info model = optionService.updateOption(optionId, productId,
             request.toCommand());
