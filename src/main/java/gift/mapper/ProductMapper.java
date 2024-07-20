@@ -22,13 +22,13 @@ public class ProductMapper {
      */
     public ProductDTO toProductDTO(ProductEntity productEntity) {
         return new ProductDTO(
-            productEntity.getId(),
-            productEntity.getName(),
-            productEntity.getPrice(),
-            categoryMapper.toCategoryDTO(
-                productEntity.getCategoryEntity()
-            ),
-            productEntity.getImageUrl()
+                productEntity.getId(),
+                productEntity.getName(),
+                productEntity.getPrice(),
+                categoryMapper.toCategoryDTO(
+                        productEntity.getCategoryEntity()
+                ),
+                productEntity.getImageUrl()
         );
     }
 
@@ -47,9 +47,9 @@ public class ProductMapper {
         productEntity.setName(productDTO.name());
         productEntity.setPrice(productDTO.price());
         productEntity.setCategoryEntity(
-            categoryMapper.toCategoryEntity(
-                productDTO.categoryDTO()
-            )
+                categoryMapper.toCategoryEntity(
+                        productDTO.categoryDTO()
+                )
         );
         productEntity.setImageUrl(productDTO.imageUrl());
         return productEntity;

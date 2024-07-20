@@ -28,7 +28,7 @@ public class AuthInterceptor implements HandlerInterceptor {
      * @throws Exception in case of errors
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-        Object handler) throws Exception {
+                             Object handler) throws Exception {
         String token = request.getHeader("Authorization");
 
         if (token == null || !token.startsWith("Bearer ")) {

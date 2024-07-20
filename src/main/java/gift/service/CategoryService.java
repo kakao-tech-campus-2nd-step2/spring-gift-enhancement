@@ -1,12 +1,13 @@
 package gift.service;
 
 import gift.DTO.CategoryDTO;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import gift.mapper.CategoryMapper;
 import gift.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -24,7 +25,7 @@ public class CategoryService {
     public List<CategoryDTO> getAllCategories() {
         var categories = categoryRepository.findAll();
         return categories.stream()
-            .map(categoryMapper::toCategoryDTO)
-            .collect(Collectors.toList());
+                .map(categoryMapper::toCategoryDTO)
+                .collect(Collectors.toList());
     }
 }

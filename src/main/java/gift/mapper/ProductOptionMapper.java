@@ -31,8 +31,8 @@ public class ProductOptionMapper {
      * ProductOptionDTO를 ProductOptionEntity로 변환하는 메서드
      *
      * @param productOptionDTO 변환할 ProductOptionDTO 객체
-     * @param productEntity 상품 엔티티
-     * @param idRequired ID 필요 여부
+     * @param productEntity    상품 엔티티
+     * @param idRequired       ID 필요 여부
      * @return 변환된 ProductOptionEntity 객체
      */
     public ProductOptionEntity toProductOptionEntity(ProductOptionDTO productOptionDTO, ProductEntity productEntity, boolean idRequired) {
@@ -45,7 +45,7 @@ public class ProductOptionMapper {
                 productOptionDTO.name(),
                 productOptionDTO.quantity(),
                 productEntity
-            );
+        );
     }
 
 }

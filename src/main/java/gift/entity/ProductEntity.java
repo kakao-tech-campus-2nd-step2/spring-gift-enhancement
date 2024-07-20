@@ -2,12 +2,12 @@ package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "product")
 @EntityListeners(value = AuditingEntityListener.class)
@@ -44,7 +44,8 @@ public class ProductEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public ProductEntity() {}
+    public ProductEntity() {
+    }
 
     public ProductEntity(String name, long price, String imageUrl) {
         this.name = name;

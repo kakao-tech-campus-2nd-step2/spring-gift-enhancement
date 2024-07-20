@@ -1,12 +1,6 @@
 package gift.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 /**
  * 제품 옵션 엔티티. 데이터베이스 테이블과 매핑된다.
@@ -28,7 +22,8 @@ public class ProductOptionEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity productEntity;
 
-    protected ProductOptionEntity() {}
+    protected ProductOptionEntity() {
+    }
 
     public ProductOptionEntity(Long id, String name, long quantity, ProductEntity productEntity) {
         this.id = id;

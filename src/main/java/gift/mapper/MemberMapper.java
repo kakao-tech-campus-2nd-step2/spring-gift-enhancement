@@ -18,9 +18,9 @@ public class MemberMapper {
      */
     public MemberDTO toMemberDTO(MemberEntity memberEntity) {
         return new MemberDTO(
-            memberEntity.getId(),
-            memberEntity.getEmail(),
-            memberEntity.getPassword()
+                memberEntity.getId(),
+                memberEntity.getEmail(),
+                memberEntity.getPassword()
         );
     }
 

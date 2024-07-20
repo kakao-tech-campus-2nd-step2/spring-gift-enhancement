@@ -4,19 +4,14 @@ import gift.DTO.MemberDTO;
 import gift.DTO.ProductDTO;
 import gift.auth.LoginMember;
 import gift.service.WishListService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * WishListController 클래스는 위시리스트에 대한 RESTful API를 제공함
@@ -41,7 +36,7 @@ public class WishListController {
      */
     @PostMapping()
     public ResponseEntity<ProductDTO> createWishList(@RequestParam Long productId,
-        @LoginMember MemberDTO memberDTO) {
+                                                     @LoginMember MemberDTO memberDTO) {
         ProductDTO newWishListIds = wishListService.addWishList(productId, memberDTO);
         return ResponseEntity.ok(newWishListIds);
     }
@@ -70,14 +65,14 @@ public class WishListController {
      */
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getWishListsByUserId(@LoginMember MemberDTO memberDTO,
-        @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-        @RequestParam(required = false, defaultValue = "10", value = "size") int size,
-        @RequestParam(required = false, defaultValue = "createdAt", value = "criteria") String criteria,
-        @RequestParam(required = false, defaultValue = "desc", value = "direction") String direction) {
+                                                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+                                                                 @RequestParam(required = false, defaultValue = "10", value = "size") int size,
+                                                                 @RequestParam(required = false, defaultValue = "createdAt", value = "criteria") String criteria,
+                                                                 @RequestParam(required = false, defaultValue = "desc", value = "direction") String direction) {
         Pageable pageable = PageRequest.of(page, size,
-            Sort.by(Sort.Direction.valueOf(direction.toUpperCase()), criteria));
+                Sort.by(Sort.Direction.valueOf(direction.toUpperCase()), criteria));
         List<ProductDTO> productIds = wishListService.getWishListsByUserId(memberDTO.getId(),
-            pageable);
+                pageable);
         return ResponseEntity.ok(productIds);
     }
 
@@ -104,7 +99,7 @@ public class WishListController {
      */
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteWishListByUserIdAndProductId(@PathVariable Long productId,
-        @LoginMember MemberDTO memberDTO) {
+                                                                   @LoginMember MemberDTO memberDTO) {
         wishListService.deleteWishListByUserIdAndProductId(productId, memberDTO.getId());
         return ResponseEntity.noContent().build();
     }
@@ -118,7 +113,7 @@ public class WishListController {
      */
     @PostMapping("/{productId}")
     public ResponseEntity<Void> addWishListByUserIdAndProductId(@PathVariable Long productId,
-        @LoginMember MemberDTO memberDTO) {
+                                                                @LoginMember MemberDTO memberDTO) {
         wishListService.addWishList(productId, memberDTO);
         return ResponseEntity.ok().build();
     }

@@ -7,11 +7,12 @@ import gift.aspect.CheckProductExists;
 import gift.entity.WishListEntity;
 import gift.mapper.WishListMapper;
 import gift.repository.WishListRepository;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * WhishListService 클래스는 WishList 관련 비즈니스 로직을 처리하는 서비스 클래스입니다
@@ -59,9 +60,9 @@ public class WishListService {
         List<WishListEntity> wishListEntities = wishListRepository.findAllByMemberEntityId(userId);
 
         return wishListEntities.stream()
-            .map(wishListMapper::toWishListDTO)
-            .map(WishListDTO::productDTO)
-            .collect(Collectors.toList());
+                .map(wishListMapper::toWishListDTO)
+                .map(WishListDTO::productDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -74,11 +75,11 @@ public class WishListService {
     @Transactional(readOnly = true)
     public List<ProductDTO> getWishListsByUserId(Long userId, Pageable pageable) {
         List<WishListEntity> wishListEntities = wishListRepository.findAllByMemberEntityId(userId,
-            pageable);
+                pageable);
         return wishListEntities.stream()
-            .map(wishListMapper::toWishListDTO)
-            .map(WishListDTO::productDTO)
-            .collect(Collectors.toList());
+                .map(wishListMapper::toWishListDTO)
+                .map(WishListDTO::productDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -103,7 +104,7 @@ public class WishListService {
     @Transactional
     public boolean deleteWishListByUserIdAndProductId(long productId, long userId) {
         return
-            wishListRepository.deleteWishListByMemberEntityIdAndProductEntityId(userId, productId)
-                > 0;
+                wishListRepository.deleteWishListByMemberEntityIdAndProductEntityId(userId, productId)
+                        > 0;
     }
 }

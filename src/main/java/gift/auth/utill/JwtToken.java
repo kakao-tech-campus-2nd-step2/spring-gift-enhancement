@@ -5,6 +5,7 @@ import gift.auth.DTO.TokenDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Base64;
@@ -16,7 +17,7 @@ import java.util.Date;
 public class JwtToken {
 
     private final String secretKey = Base64.getEncoder()
-        .encodeToString("kaTeCamABCDEFGHIJKLmnoPQRSTUVWXYZ".getBytes());
+            .encodeToString("kaTeCamABCDEFGHIJKLmnoPQRSTUVWXYZ".getBytes());
     private final long tokenExpTime = 3600L; // 1시간
 
     public JwtToken() {
@@ -37,11 +38,11 @@ public class JwtToken {
         ZonedDateTime expirationDateTime = now.plusSeconds(tokenExpTime);
 
         return new TokenDTO(Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(Date.from(now.toInstant()))
-            .setExpiration(Date.from(expirationDateTime.toInstant()))
-            .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
-            .compact());
+                .setClaims(claims)
+                .setIssuedAt(Date.from(now.toInstant()))
+                .setExpiration(Date.from(expirationDateTime.toInstant()))
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
+                .compact());
     }
 
     /**
@@ -53,10 +54,10 @@ public class JwtToken {
     public Claims validateToken(String token) {
         try {
             return Jwts.parserBuilder()
-                .setSigningKey(secretKey.getBytes())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+                    .setSigningKey(secretKey.getBytes())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid token", e);
         }
@@ -70,7 +71,7 @@ public class JwtToken {
      */
     public String getEmail(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(secretKey.getBytes()).build()
-            .parseClaimsJws(token).getBody();
+                .parseClaimsJws(token).getBody();
         return claims.get("email", String.class);
     }
 
@@ -82,7 +83,7 @@ public class JwtToken {
      */
     public Long getId(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(secretKey.getBytes()).build()
-            .parseClaimsJws(token).getBody();
+                .parseClaimsJws(token).getBody();
         return claims.get("id", Long.class);
     }
 }
