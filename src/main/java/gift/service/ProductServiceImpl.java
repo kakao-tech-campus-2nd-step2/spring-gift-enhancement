@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
         jpaProductRepository.save(product);
 
         Category category = checkCategory(dto.getCategoryId());
-        product.setCategory(category);
+        product.updateCategory(category);
     }
 
 
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = new Product(id, dto.getName(), dto.getPrice(), dto.getImageUrl());
         Category category = checkCategory(dto.getCategoryId());
 
-        product.setCategory(category);
+        product.updateCategory(category);
         jpaProductRepository.save(product);
     }
 

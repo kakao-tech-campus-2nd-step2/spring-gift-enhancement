@@ -1,5 +1,6 @@
 package gift.model;
 
+import gift.exceptionAdvisor.exceptions.GiftException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.http.HttpStatus;
 
 @Entity
 @Table(name = "PRODUCT_TABLE")
@@ -31,6 +36,10 @@ public class Product {
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_ID")
     private Category category;
 
+    @OneToMany(mappedBy = "product")
+    private List<GiftOption> giftOptionList = new ArrayList<>();
+
+
 
     public Product(Long id, String name, Integer price, String imageUrl) {
         this.id = id;
@@ -43,25 +52,20 @@ public class Product {
 
     }
 
-    //setter - 타임리프 사용을 위해 필요
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void setCategory(Category category) {
+    public void updateCategory(Category category) {
         this.category = category;
+    }
+
+    public void addGiftOption(GiftOption giftOption) {
+        giftOptionList.add(giftOption);
+    }
+
+    public void deleteGiftOption(GiftOption giftOption) {
+        if (giftOptionList.size()<=1) {
+            throw new GiftException("옵션은 1개 이상이여야합니다.", HttpStatus.BAD_REQUEST);
+            //TODO : exception 정리하기
+        }
+        giftOptionList.remove(giftOption);
     }
 
     //getter
@@ -83,5 +87,9 @@ public class Product {
 
     public Long getCategoryId() {
         return category.getId();
+    }
+
+    public List<GiftOption> getGiftOptionList() {
+        return giftOptionList;
     }
 }
