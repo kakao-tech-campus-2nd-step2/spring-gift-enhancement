@@ -1,6 +1,8 @@
 package gift.domain.option.entity;
 
-import gift.domain.option.exception.DuplicateOptionNameException;
+import gift.domain.option.exception.OptionNameDuplicateException;
+import gift.domain.option.exception.OptionNameLengthException;
+import gift.domain.option.exception.OptionQuantityRangeException;
 import gift.domain.product.entity.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +43,13 @@ public class Option {
     }
 
     public Option(Long id, String name, int quantity, Product product) {
+        if(quantity < 1 || quantity >= 100_000_000){
+            throw new OptionQuantityRangeException("수량은 1개 이상 1억개 미만으로 설정해주세요");
+        }
+        if(name.length() > 50){
+            throw new OptionNameLengthException("옵션 이름은 50자 이하로 설정해주세요.");
+        }
+        this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.product = product;
@@ -65,7 +74,7 @@ public class Option {
     public void checkDuplicateName(List<Option> optionList) {
 
         if (optionList.stream().map(Option::getName).anyMatch((name) -> name.equals(this.name))) {
-            throw new DuplicateOptionNameException(this.name + "은 중복된 이름입니다.");
+            throw new OptionNameDuplicateException(this.name + "은 중복된 이름입니다.");
         }
     }
 
@@ -73,4 +82,7 @@ public class Option {
         this.product = product;
     }
 
+    public void subtract(int quantity) {
+        this.quantity -= quantity;
+    }
 }
