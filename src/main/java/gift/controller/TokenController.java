@@ -21,8 +21,4 @@ public class TokenController {
         return tokenService.makeTokenFrom(userId.toString());
     }
 
-    @DeleteMapping("/{userId}")
-    public void deleteTokenOf(@RequestParam("userId") Long userId) {
-        tokenService.deleteTokenOf(userId);
-    }
 }

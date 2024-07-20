@@ -6,7 +6,7 @@
 - [x] Controller 단에서 상태코드를 포함해서 반환 
 - [x] UserResponseDto 가 도메인 계층 Member 를 의존 중 -> 변환은 서비스 로직에서 처리 !!! 
 - [x] Dto 에서 도메인 계층을 의존중인 부분 수정 (Service 에서 변환하도록)
-- [ ] WishRepositoryTest 구현 
+- [x] WishRepositoryTest 구현 
 - [x] RepositoryInterface 명칭에서 Interface 삭제
 - [x] Entity 에서 리스트를 사용하는 곳이 없는경우, 단방향 맵핑 사용하기
 

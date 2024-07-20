@@ -51,7 +51,7 @@ public class WishService {
     }
 
     public WishResponseDto fromEntity(Wish wish) {
-        String token = makeTokenFrom(wish.getUserId());
+        String token = makeTokenFrom(wish.getMemberId());
         return new WishResponseDto(wish.getProductId(), token);
     }
 
@@ -70,7 +70,7 @@ public class WishService {
 
         Long userId = translateIdFrom(token);
         Wish candidateWish = wishRepository.findById(id).get();
-        Long wishUserId = candidateWish.getUserId();
+        Long wishUserId = candidateWish.getMemberId();
         WishResponseDto wishResponseDto = new WishResponseDto(candidateWish);
 
         if (userId.equals(wishUserId)) {

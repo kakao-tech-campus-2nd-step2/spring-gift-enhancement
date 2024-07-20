@@ -25,6 +25,18 @@ public class Category {
     String description;
     @Column(nullable = false)
     String imageUrl;
+
+    public Category(Long id, String name, String color, String description, String imageUrl) {
+        Id = id;
+        this.name = name;
+        this.color = color;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
+    public Category( String name, String color, String description, String imageUrl) {
+       this(null,name,color,description,imageUrl);
+    }
+
     public Long getId() {
         return Id;
     }

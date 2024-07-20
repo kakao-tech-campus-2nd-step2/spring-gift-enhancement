@@ -40,7 +40,7 @@ public class Wish {
         return product.getId();
     }
 
-    public Long getUserId() {
+    public Long getMemberId() {
         return member.getId();
     }
 
