@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.domain.Category;
 import gift.dto.request.OptionRequest;
+import gift.dto.request.ProductOptionRequest;
 import gift.dto.request.ProductRequest;
 import gift.dto.response.CategoryResponse;
 import gift.dto.response.OptionResponse;
@@ -39,13 +40,13 @@ public class ProductController {
     public String showAddProductForm(Model model){
         List<CategoryResponse> categories = categoryService.findAll(); // 모든 카테고리를 가져오는 서비스 메서드
         model.addAttribute("categories", categories);
-        model.addAttribute("productDto", new ProductRequest(null,null, 0, null, null));
+        model.addAttribute("productOptionDto", new ProductOptionRequest(new ProductRequest(null, null, 0, null, null), new OptionRequest(null, 0)));
         return "products/add";
     }
 
     @PostMapping
-    public String addProduct(@Valid @ModelAttribute ProductRequest productDto) {
-        productService.save(productDto);
+    public String addProduct(@Valid @ModelAttribute ProductOptionRequest productOptionDto) {
+        productService.save(productOptionDto.getProductRequest(), productOptionDto.getOptionRequest());
         return "redirect:/products";
     }
 
@@ -81,22 +82,23 @@ public class ProductController {
     @GetMapping("/{productId}/options/new")
     public String showAddProductOptionForm(@PathVariable Long productId, Model model){
         model.addAttribute("productId", productId);
-        model.addAttribute("optionDto", new OptionRequest(null,0,null));
+        model.addAttribute("optionDto", new OptionRequest(null,0));
         return "options/add";
     }
 
     @PostMapping("/{productId}/options")
     public String addProductOption (@PathVariable Long productId, @Valid @ModelAttribute OptionRequest optionDto) {
-        optionService.save(optionDto);
+        optionService.save(productId, optionDto);
         return "redirect:/products/"+productId+"/options";
     }
+
 
     @GetMapping("/{productId}/options/edit/{optionId}")
     public String showEditProductOptionForm(@PathVariable Long productId, @PathVariable Long optionId, Model model){
         model.addAttribute("productId", productId);
 
         OptionResponse optionDto = optionService.findById(optionId);
-        model.addAttribute("optionDto", new OptionRequest(optionDto.name(), optionDto.quantity(), optionId));
+        model.addAttribute("optionDto", new OptionRequest(optionDto.name(), optionDto.quantity()));
         return "options/edit";
     }
 
