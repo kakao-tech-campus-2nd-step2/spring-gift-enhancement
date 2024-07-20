@@ -39,7 +39,7 @@ public class CategoryController {
         return "add_category_form";
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public String addCategory(@ModelAttribute @Valid CategoryDTO categoryDTO,
         BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -55,7 +55,7 @@ public class CategoryController {
         return "redirect:/admin/categories";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     public String showEditCategoryForm(@PathVariable("id") long id, Model model) {
         Category category = categoryService.findCategoryById(id);
         model.addAttribute("categoryDTO", CategoryService.toDTO(category));
@@ -63,7 +63,7 @@ public class CategoryController {
         return "edit_category_form";
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public String editCategory(@PathVariable("id") long id,
         @ModelAttribute @Valid CategoryDTO categoryDTO,
         BindingResult bindingResult, Model model) {
@@ -81,11 +81,10 @@ public class CategoryController {
         return "redirect:/admin/categories";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String deleteCategory(@PathVariable("id") long id) {
         categoryService.deleteCategory(id);
         return "redirect:/admin/categories";
     }
-
 
 }

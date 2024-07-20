@@ -36,11 +36,11 @@
     <td th:text="${category.id}">id</td>
     <td th:text="${category.name}">name</td>
     <td>
-      <form th:action="@{/admin/categories/edit/{id}(id=${category.id})}" method="get"
+      <form th:action="@{/admin/categories/{id}/edit(id=${category.id})}" method="get"
             style="display:none;" class="auth-required">
         <button type="submit">수정</button>
       </form>
-      <form th:action="@{/admin/categories/delete/{id}(id=${category.id})}" method="post"
+      <form th:action="@{/admin/categories/{id}(id=${category.id})}" method="post"
             style="display:none;" class="auth-required">
         <input type="hidden" name="_method" value="delete"/>
         <button type="submit">삭제</button>

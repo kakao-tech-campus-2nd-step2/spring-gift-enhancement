@@ -121,11 +121,11 @@
     <td th:text="${product.getCategory().getName()}">category</td>
     <td><a th:href="${product.imageUrl}" th:text="${product.imageUrl}">imageurl</a></td>
     <td style="display: none;" class="auth-required">
-      <form th:action="@{/admin/products/edit/{id}(id=${product.id})}" method="get"
+      <form th:action="@{/admin/products/{id}/edit(id=${product.id})}" method="get"
             style="display:none;" class="auth-required">
         <button type="submit">수정</button>
       </form>
-      <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post"
+      <form th:action="@{/admin/products/{id}(id=${product.id})}" method="post"
             style="display:none;" class="auth-required">
         <input type="hidden" name="_method" value="delete"/>
         <button type="submit">삭제</button>

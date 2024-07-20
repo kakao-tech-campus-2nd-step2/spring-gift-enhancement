@@ -45,7 +45,7 @@ public class AdminController {
         return "add_product_form";
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public String addProduct(@ModelAttribute @Valid ProductDTO productDTO, BindingResult result,
         Model model) {
         if (result.hasErrors()) {
@@ -57,7 +57,7 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     public String showEditProductForm(@PathVariable("id") long id, Model model) {
         Product product = productService.findProductsById(id);
         model.addAttribute("productDTO", ProductService.toDTO(product));
@@ -66,7 +66,7 @@ public class AdminController {
         return "edit_product_form";
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public String editProduct(@PathVariable("id") long id,
         @ModelAttribute @Valid ProductDTO updatedProductDTO,
         BindingResult result, Model model) {
@@ -79,7 +79,7 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable("id") long id) {
         productService.deleteProductAndWishlist(id);
         return "redirect:/admin/products";
