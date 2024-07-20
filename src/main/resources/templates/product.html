@@ -16,7 +16,8 @@
         <th>ID</th>
         <th>상품명</th>
         <th>상품 가격</th>
-        <th>imageUrl</th>
+        <th>이미지 URL</th>
+        <th>카테고리</th>
         <th>수정/삭제</th> <!-- 수정, 삭제를 위한 열 추가 -->
     </tr>
     </thead>
@@ -26,6 +27,7 @@
         <td th:text="${product.name}"></td>
         <td th:text="${product.price}"></td>
         <td th:text="${product.imageUrl}"></td>
+        <td th:text="${product.category.name}"></td>
         <td>
             <a th:href="@{/products/edit/{id}(id=${product.id})}" class="edit-button">수정</a>
             <form th:action="@{'/products/' + ${product.id}}" method="post" style="display:inline;">

@@ -1,5 +1,7 @@
 package gift.product;
 
+import gift.category.model.Category;
+import gift.category.repository.CategoryRepository;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
 import gift.product.service.ProductService;
@@ -24,11 +26,24 @@ public class ProductCRUDTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Product exampleProduct;
+    private Category exampleCategory;
 
     @BeforeEach
     public void setUp() {
+        // given
+        exampleCategory = new Category("Coffee");
         exampleProduct = new Product("Ice Americano", 2000, "http://example.com/example.jpg");
+        categoryRepository.save(exampleCategory);
+
+        // 양방향 관계 설정
+        exampleProduct = new Product("Ice Americano", 2000, "http://example.com/example.jpg", exampleCategory);
+        exampleCategory.addProduct(exampleProduct);
+
+        // 저장
         productRepository.save(exampleProduct);
     }
 
@@ -38,12 +53,13 @@ public class ProductCRUDTest {
         Product product = new Product("CaffeLatte", 2500, "http://example.com/image2.jpg");
 
         // When
-        productService.createProduct(product);
+        productService.createProduct(product, exampleCategory.getId());
 
         // Then
         List<Product> products = productRepository.findAll();
         assertThat(products).hasSize(2);
         assertThat(products).extracting(Product::getName).contains("CaffeLatte");
+        assertThat(products).extracting(Product::getCategory).contains(exampleCategory);
     }
 
     @Test
@@ -52,13 +68,14 @@ public class ProductCRUDTest {
         Product newProduct = new Product("UpdatedProduct", 3000, "http://example.com/updated.jpg");
 
         // When
-        productService.updateProduct(exampleProduct.getId(), newProduct);
+        productService.updateProduct(exampleProduct.getId(), newProduct, exampleCategory.getId());
 
         // Then
         Optional<Product> updatedProduct = productRepository.findById(exampleProduct.getId());
         assertThat(updatedProduct).isPresent();
         assertThat(updatedProduct.get().getName()).isEqualTo("UpdatedProduct");
         assertThat(updatedProduct.get().getPrice()).isEqualTo(3000);
+        assertThat(updatedProduct.get().getCategory()).isEqualTo(exampleCategory);
     }
 
     @Test

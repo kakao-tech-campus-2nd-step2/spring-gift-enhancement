@@ -1,10 +1,12 @@
 package gift.product.model;
 
+import gift.category.model.Category;
 import gift.wish.model.Wish;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "product")
@@ -26,6 +28,18 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    // 생성자
+    public Product(String name, int price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
     // 활용 메서드들
     @Override
     public boolean equals(Object o) {
@@ -35,6 +49,8 @@ public class Product {
                 name.equals(comparingProduct.name) &&
                 imageUrl.equals(comparingProduct.imageUrl);
     }
+
+
     public void addWish(Wish wish) {
         this.wishes.add(wish);
         wish.setProduct(this);
@@ -95,5 +111,11 @@ public class Product {
         this.wishes = wishes;
     }
 
+    public Category getCategory() {
+        return category;
+    }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
