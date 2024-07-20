@@ -2,6 +2,7 @@ package gift.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -86,4 +87,37 @@ public class OptionServiceTest {
         verify(optionRepository).deleteById(optionId);
     }
 
+    @Test
+    @DisplayName("quantity subtract 확인")
+    void quantitySubtract(){
+        //Given
+        Long optionId = 1L;
+        Option option = new Option("Test Option", 100);
+        option.setId(optionId);
+
+        // When
+        option.subtract(99);
+
+        // Then
+        assertEquals(1,option.getQuantity());
+    }
+
+    @Test
+    @DisplayName("quantity subtract 오류상황 확인")
+    void errorQuantitySubtract(){
+        //Given
+        Long optionId = 1L;
+        Option option = new Option("Test Option", 100);
+        option.setId(optionId);
+
+        // When
+        assertThrows(IllegalStateException.class, () -> {
+            option.subtract(101);
+        });
+
+        // Then
+        assertEquals(100, option.getQuantity());
+
+
+    }
 }

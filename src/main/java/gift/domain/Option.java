@@ -58,4 +58,11 @@ public class Option {
         this.product = product;
     }
 
+    public void subtract(int amount) {
+        if (this.quantity < amount) {
+            throw new IllegalStateException("Not enough quantity available");
+        }
+        this.quantity -= amount;
+    }
+
 }
