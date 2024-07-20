@@ -58,6 +58,12 @@ public class ProductOption extends BaseEntity {
         productId = builder.productId;
     }
 
+    public ProductOption update(ProductOption option) {
+        this.name = option.name;
+        this.stock = option.stock;
+        return this;
+    }
+
     public String getName() {
         return name;
     }
