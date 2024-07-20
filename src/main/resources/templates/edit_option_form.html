@@ -6,7 +6,9 @@
 </head>
 <body>
 <h1>옵션 수정</h1>
-<form th:action="@{/admin/products/{productId}/options/{optionId}(productId=${optionDTO.productId}, optionId=${optionId})}" th:object="${optionDTO}" method="post">
+<form
+    th:action="@{/admin/products/{productId}/options/{optionId}(productId=${optionDTO.productId}, optionId=${optionId})}"
+    th:object="${optionDTO}" method="post">
   <input type="hidden" name="_method" value="put"/>
   <div>
     <label for="name">옵션 이름:</label>
@@ -22,7 +24,8 @@
     <button type="submit">수정</button>
   </div>
 </form>
-<form th:action="@{/admin/products/{productId}/options(productId=${optionDTO.productId})}" method="get">
+<form th:action="@{/admin/products/{productId}/options(productId=${optionDTO.productId})}"
+      method="get">
   <button type="submit">옵션 목록으로 돌아가기</button>
 </form>
 </body>

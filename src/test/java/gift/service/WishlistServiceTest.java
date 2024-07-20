@@ -1,10 +1,7 @@
 package gift.service;
 
-
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.model.Category;
@@ -55,7 +52,7 @@ class WishlistServiceTest {
     private Product product;
     private Category category;
     private Wishlist wishlist;
-    private Pageable pageable = PageRequest.of(0,5);
+    private Pageable pageable = PageRequest.of(0, 5);
 
     @BeforeEach
     void setUp() {

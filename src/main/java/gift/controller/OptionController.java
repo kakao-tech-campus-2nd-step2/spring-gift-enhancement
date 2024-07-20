@@ -46,7 +46,8 @@ public class OptionController {
     }
 
     @PostMapping
-    public String addOption(@PathVariable Long productId, @ModelAttribute @Valid OptionDTO optionDTO,
+    public String addOption(@PathVariable Long productId,
+        @ModelAttribute @Valid OptionDTO optionDTO,
         BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("optionDTO", optionDTO);
@@ -57,7 +58,8 @@ public class OptionController {
     }
 
     @GetMapping("/{optionId}")
-    public String showEditOptionForm(@PathVariable Long productId, @PathVariable Long optionId, Model model) {
+    public String showEditOptionForm(@PathVariable Long productId, @PathVariable Long optionId,
+        Model model) {
         Option option = optionService.findOptionById(optionId);
         model.addAttribute("optionDTO", OptionService.toDTO(option));
         model.addAttribute("optionId", optionId);
@@ -76,7 +78,8 @@ public class OptionController {
     }
 
     @DeleteMapping("/{optionId}")
-    public String deleteOption(@PathVariable Long productId, @PathVariable Long optionId, Model model) {
+    public String deleteOption(@PathVariable Long productId, @PathVariable Long optionId,
+        Model model) {
         try {
             optionService.deleteOption(optionId, productId);
         } catch (IllegalArgumentException e) {

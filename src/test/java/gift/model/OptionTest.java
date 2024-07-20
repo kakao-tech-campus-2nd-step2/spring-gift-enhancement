@@ -1,6 +1,5 @@
 package gift.model;
 
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -21,7 +20,7 @@ class OptionTest {
 
     @Test
     void testCreateWithNullName() {
-        try{
+        try {
             option = new Option(null, null, 1L, product);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -30,7 +29,7 @@ class OptionTest {
 
     @Test
     void testCreateWithEmptyName() {
-        try{
+        try {
             option = new Option(null, "", 1L, product);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -39,7 +38,7 @@ class OptionTest {
 
     @Test
     void testCreateWithLengthName() {
-        try{
+        try {
             option = new Option(null, "abcde".repeat(300), 1L, product);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -48,7 +47,7 @@ class OptionTest {
 
     @Test
     void testCreateWithInvalidName() {
-        try{
+        try {
             option = new Option(null, "<>\\.", 1L, product);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -57,7 +56,7 @@ class OptionTest {
 
     @Test
     void testCreateWithNullQuantity() {
-        try{
+        try {
             option = new Option(null, "임시옵션", null, product);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -66,7 +65,7 @@ class OptionTest {
 
     @Test
     void testCreateWith0Quantity() {
-        try{
+        try {
             option = new Option(null, "임시옵션", 0L, product);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -75,7 +74,7 @@ class OptionTest {
 
     @Test
     void testCreateWith0LessQuantity() {
-        try{
+        try {
             option = new Option(null, "임시옵션", -100L, product);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -84,7 +83,7 @@ class OptionTest {
 
     @Test
     void testCreateWith1MillionGreaterQuantity() {
-        try{
+        try {
             option = new Option(null, "임시옵션", 100_000_000L, product);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);

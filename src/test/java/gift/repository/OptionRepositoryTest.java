@@ -1,6 +1,5 @@
 package gift.repository;
 
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -59,7 +58,8 @@ class OptionRepositoryTest {
 
     @Test
     void testFindAllByProductId() {
-        List<Option> options = optionRepository.findAllByProductId(savedOption1.getProduct().getId());
+        List<Option> options = optionRepository.findAllByProductId(
+            savedOption1.getProduct().getId());
         assertAll(
             () -> assertThat(options.size()).isEqualTo(2),
             () -> assertThat(options.get(0).getId()).isEqualTo(savedOption1.getId()),
@@ -79,10 +79,12 @@ class OptionRepositoryTest {
 
     @Test
     void testExistsByProductIdAndName() {
-        boolean exists = optionRepository.existsByProductIdAndName(savedProduct1.getId(), option1.getName());
+        boolean exists = optionRepository.existsByProductIdAndName(savedProduct1.getId(),
+            option1.getName());
         assertThat(exists).isTrue();
 
-        boolean notExists = optionRepository.existsByProductIdAndName(savedProduct1.getId(), "없는옵션");
+        boolean notExists = optionRepository.existsByProductIdAndName(savedProduct1.getId(),
+            "없는옵션");
         assertThat(notExists).isFalse();
     }
 

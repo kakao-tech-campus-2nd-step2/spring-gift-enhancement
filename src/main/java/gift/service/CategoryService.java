@@ -21,7 +21,8 @@ public class CategoryService {
     private final OptionRepository optionRepository;
 
     public CategoryService(CategoryRepository categoryRepository,
-        ProductRepository productRepository, WishlistRepository wishlistRepository, OptionRepository optionRepository) {
+        ProductRepository productRepository, WishlistRepository wishlistRepository,
+        OptionRepository optionRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.wishlistRepository = wishlistRepository;

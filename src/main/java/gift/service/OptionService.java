@@ -42,7 +42,8 @@ public class OptionService {
     @Transactional
     public void updateOption(OptionDTO optionDTO, Long optionId) {
         Option existingOption = optionRepository.findById(optionId).orElse(null);
-        if (!existingOption.getName().equals(optionDTO.name()) && optionRepository.existsByProductIdAndName(optionDTO.productId(), optionDTO.name())) {
+        if (!existingOption.getName().equals(optionDTO.name())
+            && optionRepository.existsByProductIdAndName(optionDTO.productId(), optionDTO.name())) {
             throw new IllegalArgumentException("동일한 상품 내의 옵션 이름은 중복될 수 없습니다.");
         }
         existingOption.setName(optionDTO.name());

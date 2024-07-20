@@ -46,9 +46,9 @@ class OptionServiceTest {
         optionRepository.deleteAll();
         category = new Category(null, "테스트카테고리");
         categoryRepository.save(category);
-        product = new Product(null, "상품","100",category,"https://kakao");
+        product = new Product(null, "상품", "100", category, "https://kakao");
         productRepository.save(product);
-        option = new Option(null, "테스트",1L,product);
+        option = new Option(null, "테스트", 1L, product);
         optionRepository.save(option);
     }
 
@@ -73,7 +73,7 @@ class OptionServiceTest {
     @Test
     @Transactional
     void saveOption() {
-        OptionDTO optionDTO = new OptionDTO("테스트2",1L,product.getId());
+        OptionDTO optionDTO = new OptionDTO("테스트2", 1L, product.getId());
         optionService.saveOption(optionDTO);
         List<Option> options = optionService.findAllByProductId(product.getId());
         assertEquals(2, options.size());
@@ -82,7 +82,7 @@ class OptionServiceTest {
     @Test
     @Transactional
     void testSaveOptionWithDuplicateName() {
-        OptionDTO optionDTO = new OptionDTO("테스트",10L,product.getId());
+        OptionDTO optionDTO = new OptionDTO("테스트", 10L, product.getId());
         assertThrows(IllegalArgumentException.class,
             () -> optionService.saveOption(optionDTO));
     }
@@ -90,29 +90,29 @@ class OptionServiceTest {
     @Test
     @Transactional
     void updateOption() {
-        OptionDTO updatedOptionDTO = new OptionDTO("테스트3",2L,product.getId());
-        optionService.updateOption(updatedOptionDTO,option.getId());
+        OptionDTO updatedOptionDTO = new OptionDTO("테스트3", 2L, product.getId());
+        optionService.updateOption(updatedOptionDTO, option.getId());
         Option updatedOption = optionService.findOptionById(option.getId());
         assertAll(
-            () -> assertEquals("테스트3",updatedOption.getName()),
-            () -> assertEquals(2L,updatedOption.getQuantity())
+            () -> assertEquals("테스트3", updatedOption.getName()),
+            () -> assertEquals(2L, updatedOption.getQuantity())
         );
     }
 
     @Test
     @Transactional
     void testUpdateOptionWithDuplicateName() {
-        OptionDTO newOptionDTO = new OptionDTO("테스트2",10L,product.getId());
+        OptionDTO newOptionDTO = new OptionDTO("테스트2", 10L, product.getId());
         optionService.saveOption(newOptionDTO);
-        OptionDTO updatedOptionDTO = new OptionDTO("테스트2",2L,product.getId());
+        OptionDTO updatedOptionDTO = new OptionDTO("테스트2", 2L, product.getId());
         assertThrows(IllegalArgumentException.class,
-            () -> optionService.updateOption(updatedOptionDTO,option.getId()));
+            () -> optionService.updateOption(updatedOptionDTO, option.getId()));
     }
 
     @Test
     @Transactional
     void deleteOption() {
-        Option newOption = new Option(null, "테스트2",2L,product);
+        Option newOption = new Option(null, "테스트2", 2L, product);
         optionRepository.save(newOption);
 
         optionService.deleteOption(option.getId(), product.getId());

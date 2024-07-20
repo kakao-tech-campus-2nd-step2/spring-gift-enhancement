@@ -29,12 +29,16 @@
     <td th:text="${option.name}">옵션 이름</td>
     <td th:text="${option.quantity}">수량</td>
     <td>
-      <form th:action="@{/admin/products/{productId}/options/{optionId}(productId=${product.id}, optionId=${option.id})}" metho="get">
+      <form
+          th:action="@{/admin/products/{productId}/options/{optionId}(productId=${product.id}, optionId=${option.id})}"
+          metho="get">
         <button type="submit">수정</button>
       </form>
     </td>
     <td>
-      <form th:action="@{/admin/products/{productId}/options/{optionId}(productId=${product.id}, optionId=${option.id})}" method="post">
+      <form
+          th:action="@{/admin/products/{productId}/options/{optionId}(productId=${product.id}, optionId=${option.id})}"
+          method="post">
         <input type="hidden" name="_method" value="delete"/>
         <button type="submit">삭제</button>
       </form>

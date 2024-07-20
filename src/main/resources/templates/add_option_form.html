@@ -6,7 +6,8 @@
 </head>
 <body>
 <h1>옵션 추가</h1>
-<form th:action="@{/admin/products/{productId}/options(productId=${optionDTO.productId})}" th:object="${optionDTO}" method="post">
+<form th:action="@{/admin/products/{productId}/options(productId=${optionDTO.productId})}"
+      th:object="${optionDTO}" method="post">
   <div>
     <label for="name">옵션 이름:</label>
     <input type="text" id="name" th:field="*{name}"/>
@@ -21,7 +22,8 @@
     <button type="submit">옵션 추가</button>
   </div>
 </form>
-<form th:action="@{/admin/products/{productId}/options(productId=${optionDTO.productId})}" method="get">
+<form th:action="@{/admin/products/{productId}/options(productId=${optionDTO.productId})}"
+      method="get">
   <button type="submit">옵션 목록으로 돌아가기</button>
 </form>
 </body>
