@@ -56,7 +56,7 @@ public class OptionService {
             .orElseThrow(() -> new NotFoundException("Option not found"));
     }
 
-    //카테고리 추가 기능
+    //옵션 추가 기능
     @Transactional
     public void addOption(Long productId, Option option) {
         validateOptionUniqueness(option, null);
@@ -69,7 +69,7 @@ public class OptionService {
         optionRepository.save(optionEntity);
     }
 
-    //카테고리 수정 기능
+    //옵션 수정 기능
     @Transactional
     public void updateOption(Long id, Option option) {
         validateOptionUniqueness(option, id);
@@ -80,7 +80,7 @@ public class OptionService {
         optionRepository.save(optionEntity);
     }
 
-    //카테고리 삭제 기능
+    //옵션 삭제 기능
     @Transactional
     public void deleteOption(Long id) {
         optionRepository.deleteById(id);
@@ -91,5 +91,7 @@ public class OptionService {
             throw new AlreadyExistsException("Already Exists Option");
         }
     }
+
+
 
 }
