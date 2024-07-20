@@ -95,4 +95,21 @@ public class OptionRepositoryTest {
         assertEquals("Updated Option", updatedOption.getName());
         assertEquals(2000, updatedOption.getPrice());
     }
+
+    @Test
+    public void testSubtractOption() {
+        //given
+        Option optionDto = new Option(1L, product1, "Existing Option", 1000, 5);
+        Option existingOption = new Option(1L, product1, "Existing Option", 1000, 10);
+        existingOption = optionJpaRepository.save(existingOption);
+
+        //when
+        Option updatedOption = optionJpaRepository.findById(existingOption.getId()).orElseThrow();
+        updatedOption.setQuantity(updatedOption.getQuantity() - optionDto.getQuantity());
+        Option finalOption = optionJpaRepository.save(updatedOption);
+
+        //then
+        assertNotNull(updatedOption);
+        assertEquals(5, finalOption.getQuantity());
+    }
 }

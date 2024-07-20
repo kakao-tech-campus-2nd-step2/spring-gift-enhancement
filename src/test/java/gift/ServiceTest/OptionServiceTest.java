@@ -87,4 +87,22 @@ public class OptionServiceTest {
         // then
         verify(optionJpaRepository, times(1)).deleteById(optionId);
     }
+
+    @Test
+    public void testSubtractOption() {
+        //given
+        OptionDto optionDto = new OptionDto(1L, 1L, "Option1", 1000, 5);
+        Option option = new Option(1L, null, "Option1", 1000, 10);
+        when(optionJpaRepository.findById(optionDto.getId())).thenReturn(java.util.Optional.of(option));
+        when(optionJpaRepository.save(any(Option.class))).thenReturn(option);
+
+        //when
+        optionService.subtractOption(optionDto);
+
+        //then
+        verify(optionJpaRepository, times(1)).findById(optionDto.getId());
+        verify(optionJpaRepository, times(1)).save(any(Option.class));
+
+
+    }
 }

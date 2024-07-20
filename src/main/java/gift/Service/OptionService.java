@@ -42,4 +42,10 @@ public class OptionService {
     public void deleteOption(long id) {
         optionJpaRepository.deleteById(id);
     }
+
+    public void subtractOption(OptionDto optionDto) {
+        Option option = optionJpaRepository.findById(optionDto.getId()).orElseThrow(); // 기존 Option 찾기
+        option.setQuantity(option.getQuantity() - optionDto.getQuantity()); //기존 수량에서 주문 수량을 빼준다.
+        optionJpaRepository.save(option); // 뺀 이후 update
+    }
 }
