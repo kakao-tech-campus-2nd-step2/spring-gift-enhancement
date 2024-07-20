@@ -73,7 +73,8 @@ public class ProductTest {
             "가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
             100,
             "imageUrl1",
-            category);
+            category
+        );
 
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
 

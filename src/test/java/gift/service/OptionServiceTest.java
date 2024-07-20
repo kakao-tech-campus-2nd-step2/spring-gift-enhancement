@@ -16,13 +16,13 @@ import static org.mockito.Mockito.when;
 import gift.dto.option.OptionCreateRequest;
 import gift.dto.option.OptionResponse;
 import gift.dto.option.OptionUpdateRequest;
+import gift.dto.product.ProductResponse;
 import gift.exception.option.OptionNotFoundException;
 import gift.exception.product.ProductNotFoundException;
 import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
 import gift.repository.OptionRepository;
-import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,14 +33,14 @@ import org.mockito.Mockito;
 public class OptionServiceTest {
 
     private OptionRepository optionRepository;
-    private ProductRepository productRepository;
+    private ProductService productService;
     private OptionService optionService;
 
     @BeforeEach
     public void setUp() {
         optionRepository = Mockito.mock(OptionRepository.class);
-        productRepository = Mockito.mock(ProductRepository.class);
-        optionService = new OptionService(optionRepository, productRepository);
+        productService = Mockito.mock(ProductService.class);
+        optionService = new OptionService(optionRepository, productService);
     }
 
     @Test
@@ -86,11 +86,29 @@ public class OptionServiceTest {
     @DisplayName("상품에 옵션 추가")
     public void testAddOptionToProduct() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
-        Option option = new Option(1L, "Option1", 100, product);
+        ProductResponse productResponse = new ProductResponse(
+            1L,
+            "Product",
+            100,
+            "imageUrl",
+            category.getId(),
+            category.getName()
+        );
+        Option option = new Option(
+            1L,
+            "Option1",
+            100,
+            new Product(
+                productResponse.id(),
+                productResponse.name(),
+                productResponse.price(),
+                productResponse.imageUrl(),
+                category
+            )
+        );
         OptionCreateRequest optionCreateRequest = new OptionCreateRequest("Option1", 100);
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productService.getProductById(1L)).thenReturn(productResponse);
         when(optionRepository.save(any(Option.class))).thenReturn(option);
 
         OptionResponse createdOption = optionService.addOptionToProduct(1L, optionCreateRequest);
@@ -102,7 +120,8 @@ public class OptionServiceTest {
     public void testAddOptionToProductNotFound() {
         OptionCreateRequest optionCreateRequest = new OptionCreateRequest("Option1", 100);
 
-        when(productRepository.findById(1L)).thenReturn(Optional.empty());
+        when(productService.getProductById(1L)).thenThrow(new ProductNotFoundException(
+            PRODUCT_NOT_FOUND + 1));
 
         ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> {
             optionService.addOptionToProduct(1L, optionCreateRequest);
@@ -115,11 +134,29 @@ public class OptionServiceTest {
     @DisplayName("중복된 옵션 이름 추가")
     public void testAddOptionWithDuplicateName() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
-        Option existingOption = new Option(1L, "Option1", 100, product);
+        ProductResponse productResponse = new ProductResponse(
+            1L,
+            "Product",
+            100,
+            "imageUrl",
+            category.getId(),
+            category.getName()
+        );
+        Option existingOption = new Option(
+            1L,
+            "Option1",
+            100,
+            new Product(
+                productResponse.id(),
+                productResponse.name(),
+                productResponse.price(),
+                productResponse.imageUrl(),
+                category
+            )
+        );
         OptionCreateRequest optionCreateRequest = new OptionCreateRequest("Option1", 200);
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productService.getProductById(1L)).thenReturn(productResponse);
         when(optionRepository.findByProductId(1L)).thenReturn(List.of(existingOption));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -133,12 +170,41 @@ public class OptionServiceTest {
     @DisplayName("옵션 업데이트")
     public void testUpdateOption() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
-        Option existingOption = new Option(1L, "Old Option", 100, product);
-        Option updatedOption = new Option(1L, "Updated Option", 200, product);
+        ProductResponse productResponse = new ProductResponse(
+            1L,
+            "Product",
+            100,
+            "imageUrl",
+            category.getId(),
+            category.getName()
+        );
+        Option existingOption = new Option(
+            1L,
+            "Old Option",
+            100,
+            new Product(
+                productResponse.id(),
+                productResponse.name(),
+                productResponse.price(),
+                productResponse.imageUrl(),
+                category
+            )
+        );
+        Option updatedOption = new Option(
+            1L,
+            "Updated Option",
+            200,
+            new Product(
+                productResponse.id(),
+                productResponse.name(),
+                productResponse.price(),
+                productResponse.imageUrl(),
+                category
+            )
+        );
         OptionUpdateRequest optionUpdateRequest = new OptionUpdateRequest("Updated Option", 200);
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productService.getProductById(1L)).thenReturn(productResponse);
         when(optionRepository.findById(1L)).thenReturn(Optional.of(existingOption));
         when(optionRepository.save(any(Option.class))).thenReturn(updatedOption);
 
@@ -151,11 +217,17 @@ public class OptionServiceTest {
     @DisplayName("존재하지 않는 옵션 ID로 업데이트")
     public void testUpdateOptionNotFound() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        ProductResponse productResponse = new ProductResponse(
+            1L,
+            "Product",
+            100,
+            "imageUrl",
+            category.getId(),
+            category.getName()
+        );
         OptionUpdateRequest optionUpdateRequest = new OptionUpdateRequest("Updated Option", 200);
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-        when(optionRepository.findById(1L)).thenReturn(Optional.empty());
+        when(productService.getProductById(1L)).thenReturn(productResponse);
         when(optionRepository.findById(1L)).thenReturn(Optional.empty());
 
         OptionNotFoundException exception = assertThrows(OptionNotFoundException.class, () -> {
@@ -169,11 +241,40 @@ public class OptionServiceTest {
     @DisplayName("옵션 삭제")
     public void testDeleteOption() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
-        Option option1 = new Option(1L, "Option1", 100, product);
-        Option option2 = new Option(2L, "Option2", 100, product);
+        ProductResponse productResponse = new ProductResponse(
+            1L,
+            "Product",
+            100,
+            "imageUrl",
+            category.getId(),
+            category.getName()
+        );
+        Option option1 = new Option(
+            1L,
+            "Option1",
+            100,
+            new Product(
+                productResponse.id(),
+                productResponse.name(),
+                productResponse.price(),
+                productResponse.imageUrl(),
+                category
+            )
+        );
+        Option option2 = new Option(
+            2L,
+            "Option2",
+            100,
+            new Product(
+                productResponse.id(),
+                productResponse.name(),
+                productResponse.price(),
+                productResponse.imageUrl(),
+                category
+            )
+        );
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productService.getProductById(1L)).thenReturn(productResponse);
         when(optionRepository.findById(1L)).thenReturn(Optional.of(option1));
         when(optionRepository.findById(2L)).thenReturn(Optional.of(option2));
         when(optionRepository.findByProductId(1L)).thenReturn(List.of(option1, option2));
@@ -187,9 +288,16 @@ public class OptionServiceTest {
     @DisplayName("존재하지 않는 옵션 ID로 삭제")
     public void testDeleteOptionNotFound() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        ProductResponse productResponse = new ProductResponse(
+            1L,
+            "Product",
+            100,
+            "imageUrl",
+            category.getId(),
+            category.getName()
+        );
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productService.getProductById(1L)).thenReturn(productResponse);
         when(optionRepository.findById(1L)).thenReturn(Optional.empty());
 
         OptionNotFoundException exception = assertThrows(OptionNotFoundException.class, () -> {
@@ -203,10 +311,28 @@ public class OptionServiceTest {
     @DisplayName("마지막 옵션 삭제")
     public void testDeleteLastOption() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
-        Product product = new Product(1L, "Product", 100, "imageUrl", category);
-        Option option = new Option(1L, "Option1", 100, product);
+        ProductResponse productResponse = new ProductResponse(
+            1L,
+            "Product",
+            100,
+            "imageUrl",
+            category.getId(),
+            category.getName()
+        );
+        Option option = new Option(
+            1L,
+            "Option1",
+            100,
+            new Product(
+                productResponse.id(),
+                productResponse.name(),
+                productResponse.price(),
+                productResponse.imageUrl(),
+                category
+            )
+        );
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productService.getProductById(1L)).thenReturn(productResponse);
         when(optionRepository.findById(1L)).thenReturn(Optional.of(option));
         when(optionRepository.findByProductId(1L)).thenReturn(List.of(option));
         doThrow(new IllegalArgumentException(OPTION_REQUIRED)).when(optionRepository)

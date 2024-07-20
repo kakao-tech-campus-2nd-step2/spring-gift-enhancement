@@ -29,21 +29,26 @@ public class OptionController {
 
     @GetMapping
     public ResponseEntity<List<OptionResponse>> getOptionsByProductId(
-        @PathVariable Long productId) {
+        @PathVariable Long productId
+    ) {
         List<OptionResponse> options = optionService.getOptionsByProductId(productId);
         return ResponseEntity.ok(options);
     }
 
     @GetMapping("/{optionId}")
-    public ResponseEntity<OptionResponse> getOptionById(@PathVariable Long productId,
-        @PathVariable Long optionId) {
+    public ResponseEntity<OptionResponse> getOptionById(
+        @PathVariable Long productId,
+        @PathVariable Long optionId
+    ) {
         OptionResponse option = optionService.getOptionById(productId, optionId);
         return ResponseEntity.ok(option);
     }
 
     @PostMapping
-    public ResponseEntity<OptionResponse> addOptionToProduct(@PathVariable Long productId,
-        @Valid @RequestBody OptionCreateRequest optionCreateRequest) {
+    public ResponseEntity<OptionResponse> addOptionToProduct(
+        @PathVariable Long productId,
+        @Valid @RequestBody OptionCreateRequest optionCreateRequest
+    ) {
         OptionResponse createdOption = optionService.addOptionToProduct(
             productId,
             optionCreateRequest
@@ -52,9 +57,11 @@ public class OptionController {
     }
 
     @PutMapping("/{optionId}")
-    public ResponseEntity<OptionResponse> updateOption(@PathVariable Long productId,
+    public ResponseEntity<OptionResponse> updateOption(
+        @PathVariable Long productId,
         @PathVariable Long optionId,
-        @Valid @RequestBody OptionUpdateRequest optionUpdateRequest) {
+        @Valid @RequestBody OptionUpdateRequest optionUpdateRequest
+    ) {
         OptionResponse updatedOption = optionService.updateOption(
             productId,
             optionId,
@@ -64,8 +71,10 @@ public class OptionController {
     }
 
     @DeleteMapping("/{optionId}")
-    public ResponseEntity<Void> deleteOption(@PathVariable Long productId,
-        @PathVariable Long optionId) {
+    public ResponseEntity<Void> deleteOption(
+        @PathVariable Long productId,
+        @PathVariable Long optionId
+    ) {
         optionService.deleteOption(productId, optionId);
         return ResponseEntity.noContent().build();
     }

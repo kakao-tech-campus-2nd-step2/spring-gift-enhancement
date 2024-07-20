@@ -115,10 +115,12 @@ public class ProductServiceTest {
             1L
         );
 
-        InvalidProductPriceException exception = assertThrows(InvalidProductPriceException.class,
+        InvalidProductPriceException exception = assertThrows(
+            InvalidProductPriceException.class,
             () -> {
                 productService.addProduct(productCreateRequest);
-            });
+            }
+        );
 
         assertEquals(INVALID_PRICE, exception.getMessage());
     }

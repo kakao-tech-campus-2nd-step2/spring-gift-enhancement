@@ -32,7 +32,8 @@ public class WishController {
     @GetMapping
     public ResponseEntity<Page<WishResponse>> getWishlist(
         @RequestAttribute("memberId") Long memberId,
-        @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
         Page<WishResponse> wishlist = wishService.getWishlistByMemberId(memberId, pageable);
         return ResponseEntity.ok(wishlist);
     }
@@ -40,14 +41,17 @@ public class WishController {
     @PostMapping
     public ResponseEntity<WishResponse> addWish(
         @Valid @RequestBody WishCreateRequest wishCreateRequest,
-        @RequestAttribute("memberId") Long memberId) {
+        @RequestAttribute("memberId") Long memberId
+    ) {
         WishResponse createdWish = wishService.addWish(wishCreateRequest, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWish);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWish(@PathVariable("id") Long id,
-        @RequestAttribute("memberId") Long memberId) {
+    public ResponseEntity<Void> deleteWish(
+        @PathVariable("id") Long id,
+        @RequestAttribute("memberId") Long memberId
+    ) {
         wishService.deleteWish(id, memberId);
         return ResponseEntity.noContent().build();
     }

@@ -3,14 +3,12 @@ package gift.service;
 import static gift.util.constants.OptionConstants.OPTION_NAME_DUPLICATE;
 import static gift.util.constants.OptionConstants.OPTION_NOT_FOUND;
 import static gift.util.constants.OptionConstants.OPTION_REQUIRED;
-import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 
 import gift.dto.option.OptionCreateRequest;
 import gift.dto.option.OptionResponse;
 import gift.dto.option.OptionUpdateRequest;
 import gift.dto.product.ProductResponse;
 import gift.exception.option.OptionNotFoundException;
-import gift.exception.product.ProductNotFoundException;
 import gift.model.Option;
 import gift.model.Product;
 import gift.repository.OptionRepository;

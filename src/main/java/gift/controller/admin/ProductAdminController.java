@@ -36,8 +36,10 @@ public class ProductAdminController {
     }
 
     @GetMapping
-    public String getAllProducts(Model model,
-        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    public String getAllProducts(
+        Model model,
+        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
         Page<ProductResponse> productPage = productService.getAllProducts(pageable);
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", pageable.getPageNumber());
@@ -56,7 +58,8 @@ public class ProductAdminController {
     @PostMapping
     public String addProduct(
         @Valid @ModelAttribute("product") ProductCreateRequest productCreateRequest,
-        BindingResult result, Model model) {
+        BindingResult result, Model model
+    ) {
         if (result.hasErrors()) {
             List<CategoryResponse> categories = categoryService.getAllCategories();
             model.addAttribute("categories", categories);
@@ -76,9 +79,11 @@ public class ProductAdminController {
     }
 
     @PutMapping("/{id}")
-    public String updateProduct(@PathVariable("id") Long id,
+    public String updateProduct(
+        @PathVariable("id") Long id,
         @Valid @ModelAttribute ProductUpdateRequest productUpdateRequest, BindingResult result,
-        Model model) {
+        Model model
+    ) {
         if (result.hasErrors()) {
             List<CategoryResponse> categories = categoryService.getAllCategories();
             model.addAttribute("categories", categories);

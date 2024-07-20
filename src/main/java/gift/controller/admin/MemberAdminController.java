@@ -40,7 +40,8 @@ public class MemberAdminController {
     @PostMapping
     public String addMember(
         @Valid @ModelAttribute("member") MemberRegisterRequest memberRegisterRequest,
-        BindingResult result) {
+        BindingResult result
+    ) {
         if (result.hasErrors()) {
             return "member_form";
         }
@@ -56,9 +57,11 @@ public class MemberAdminController {
     }
 
     @PutMapping("/{id}")
-    public String updateMember(@PathVariable("id") Long id,
+    public String updateMember(
+        @PathVariable("id") Long id,
         @Valid @ModelAttribute MemberRegisterRequest memberRegisterRequest, BindingResult result,
-        Model model) {
+        Model model
+    ) {
         if (result.hasErrors()) {
             model.addAttribute("member", memberRegisterRequest);
             model.addAttribute("org.springframework.validation.BindingResult.member", result);

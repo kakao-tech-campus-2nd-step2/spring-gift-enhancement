@@ -24,14 +24,16 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<MemberResponse> register(
-        @Valid @RequestBody MemberRegisterRequest memberRegisterRequest) {
+        @Valid @RequestBody MemberRegisterRequest memberRegisterRequest
+    ) {
         MemberResponse registeredMember = memberService.registerMember(memberRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredMember);
     }
 
     @PostMapping("/login")
     public ResponseEntity<MemberResponse> login(
-        @Valid @RequestBody MemberLoginRequest memberLoginRequest) {
+        @Valid @RequestBody MemberLoginRequest memberLoginRequest
+    ) {
         MemberResponse loggedInMember = memberService.loginMember(memberLoginRequest);
         return ResponseEntity.ok(loggedInMember);
     }

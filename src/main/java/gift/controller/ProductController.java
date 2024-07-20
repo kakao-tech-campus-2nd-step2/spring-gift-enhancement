@@ -32,7 +32,8 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> getAllProducts(
-        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
         Page<ProductResponse> products = productService.getAllProducts(pageable);
         return ResponseEntity.ok(products);
     }
@@ -45,14 +46,17 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> addProduct(
-        @Valid @RequestBody ProductCreateRequest productCreateRequest) {
+        @Valid @RequestBody ProductCreateRequest productCreateRequest
+    ) {
         ProductResponse createdProduct = productService.addProduct(productCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
-        @Valid @RequestBody ProductUpdateRequest productUpdateRequest) {
+    public ResponseEntity<ProductResponse> updateProduct(
+        @PathVariable Long id,
+        @Valid @RequestBody ProductUpdateRequest productUpdateRequest
+    ) {
         ProductResponse updatedProduct = productService.updateProduct(id, productUpdateRequest);
         return ResponseEntity.ok(updatedProduct);
     }

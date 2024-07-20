@@ -26,8 +26,11 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository, OptionRepository optionRepository) {
+    public ProductService(
+        ProductRepository productRepository,
+        CategoryRepository categoryRepository,
+        OptionRepository optionRepository
+    ) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.optionRepository = optionRepository;

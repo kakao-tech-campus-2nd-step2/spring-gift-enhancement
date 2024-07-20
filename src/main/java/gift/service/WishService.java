@@ -26,8 +26,11 @@ public class WishService {
     private final ProductService productService;
     private final MemberService memberService;
 
-    public WishService(WishRepository wishRepository, ProductService productService,
-        MemberService memberService) {
+    public WishService(
+        WishRepository wishRepository,
+        ProductService productService,
+        MemberService memberService
+    ) {
         this.wishRepository = wishRepository;
         this.productService = productService;
         this.memberService = memberService;
