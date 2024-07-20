@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,5 +26,11 @@ public class OptionsController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addOption(@PathVariable Long productId, @Valid @RequestBody OptionForm optionForm) {
         optionService.create(productId, optionForm);
+    }
+
+    @PutMapping("/{optionId}")
+    public void updateOption(@PathVariable Long productId, @PathVariable Long optionId,
+        @Valid @RequestBody OptionForm optionForm) {
+        optionService.update(productId, optionId, optionForm);
     }
 }

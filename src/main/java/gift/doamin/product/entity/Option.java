@@ -1,5 +1,6 @@
 package gift.doamin.product.entity;
 
+import gift.doamin.product.dto.OptionForm;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,5 +48,10 @@ public class Option {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public void update(OptionForm optionForm) {
+        this.name = optionForm.getName();
+        this.quantity = optionForm.getQuantity();
     }
 }
