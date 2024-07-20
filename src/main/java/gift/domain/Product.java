@@ -3,6 +3,7 @@ package gift.domain;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(name = "product")
@@ -21,10 +22,11 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 10)
     private List<Option> options = new ArrayList<>();
 
-    public Product() {
+    protected Product() {
 
     }
 
@@ -93,5 +95,10 @@ public class Product {
 
     public void addOption(Option option) {
         options.add(option);
+        option.setProduct(this);
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 }
