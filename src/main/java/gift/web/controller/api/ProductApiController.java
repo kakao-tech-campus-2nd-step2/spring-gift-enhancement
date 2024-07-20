@@ -8,6 +8,7 @@ import gift.web.dto.MemberDetails;
 import gift.web.dto.request.product.CreateProductRequest;
 import gift.web.dto.request.product.UpdateProductRequest;
 import gift.web.dto.request.productoption.CreateProductOptionRequest;
+import gift.web.dto.request.productoption.UpdateProductOptionRequest;
 import gift.web.dto.request.wishproduct.CreateWishProductRequest;
 import gift.web.dto.response.product.CreateProductResponse;
 import gift.web.dto.response.product.ReadAllProductsResponse;
@@ -15,6 +16,7 @@ import gift.web.dto.response.product.ReadProductResponse;
 import gift.web.dto.response.product.UpdateProductResponse;
 import gift.web.dto.response.productoption.CreateProductOptionResponse;
 import gift.web.dto.response.productoption.ReadAllProductOptionsResponse;
+import gift.web.dto.response.productoption.UpdateProductOptionResponse;
 import gift.web.dto.response.wishproduct.CreateWishProductResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -112,7 +114,13 @@ public class ProductApiController {
         return ResponseEntity.created(location).body(response);
     }
 
-    @DeleteMapping("/{id}/options/{optionId}")
+    @PutMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<UpdateProductOptionResponse> updateOption(@PathVariable Long productId, @PathVariable Long optionId, @Validated @RequestBody UpdateProductOptionRequest request) {
+        UpdateProductOptionResponse response = productOptionService.updateOption(optionId, productId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{productId}/options/{optionId}")
     public ResponseEntity<Void> deleteOption(@PathVariable Long optionId) {
         productOptionService.deleteOption(optionId);
         return ResponseEntity.noContent().build();
