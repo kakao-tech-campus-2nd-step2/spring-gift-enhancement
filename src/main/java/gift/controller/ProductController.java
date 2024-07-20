@@ -66,11 +66,11 @@ public class ProductController {
         return "productManage";
     }
 
-    @PutMapping("/purchase/{id}")
+    /*@PutMapping("/purchase/{id}")
     public ResponseEntity<String> purchaseProduct(@PathVariable Long id, @RequestParam int amount) {
         if (productService.purchaseProduct(id, amount)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
-    }
+    }*/
 }

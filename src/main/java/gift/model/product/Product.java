@@ -24,18 +24,14 @@ public class Product {
     @Column(nullable = false , columnDefinition = "VARCHAR(255)")
     private String imageUrl;
 
-    @Column(nullable = false, columnDefinition = "integer")
-    private int amount;
-
     protected Product(){
     }
 
-    public Product(Category category, ProductName name, int price, String imageUrl, int amount){
+    public Product(Category category, ProductName name, int price, String imageUrl){
         this.category = category;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.amount = amount;
     }
 
     public void updateProduct(Product product){
@@ -43,7 +39,6 @@ public class Product {
         this.name = product.getName();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
-        this.amount = product.getAmount();
     }
 
     public Category getCategory() {
@@ -64,16 +59,5 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public boolean isProductEnough(int purchaseAmount){
-        if(amount > purchaseAmount){
-            return true;
-        }
-        return false;
     }
 }

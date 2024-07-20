@@ -2,7 +2,6 @@ package gift.service;
 
 
 import gift.dto.ProductDto;
-import gift.exception.RepositoryRelatedException;
 import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductName;
@@ -30,7 +29,7 @@ public class ProductService {
             return false;
         }
         Category category = findCategory(productDto.categoryName());
-        Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
+        Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl());
 
         productRepository.save(product);
         return true;
@@ -42,18 +41,9 @@ public class ProductService {
             Product updateProduct = product.get();
             Category category = findCategory(productDto.categoryName());
 
-            Product newProduct = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
+            Product newProduct = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl());
             updateProduct.updateProduct(newProduct);
             productRepository.save(updateProduct);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean purchaseProduct(Long id, int amount) {
-        Product product = productRepository.findById(id).get();
-        if (product.isProductEnough(amount)) {
-            productRepository.purchaseProductById(id, amount);
             return true;
         }
         return false;
