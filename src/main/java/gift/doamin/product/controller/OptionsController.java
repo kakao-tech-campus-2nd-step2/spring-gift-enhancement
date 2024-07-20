@@ -4,6 +4,7 @@ import gift.doamin.product.dto.OptionForm;
 import gift.doamin.product.service.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,5 +33,10 @@ public class OptionsController {
     public void updateOption(@PathVariable Long productId, @PathVariable Long optionId,
         @Valid @RequestBody OptionForm optionForm) {
         optionService.update(productId, optionId, optionForm);
+    }
+
+    @DeleteMapping("/{optionId}")
+    public void deleteOption(@PathVariable Long productId, @PathVariable Long optionId) {
+        optionService.delete(productId, optionId);
     }
 }

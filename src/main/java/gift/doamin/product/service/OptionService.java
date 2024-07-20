@@ -46,6 +46,13 @@ public class OptionService {
         optionRepository.save(option);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @productService.isOwner(authentication.getName(), #productId)")
+    public void delete(Long productId, Long optionId) {
+        productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+
+        optionRepository.deleteById(optionId);
+    }
+
     private void validateDuplicatedName(Long productId, OptionForm optionForm) {
         if (optionRepository.existsByProductIdAndName(productId, optionForm.getName())) {
             throw new IllegalArgumentException("옵션 이름은 중복될 수 없습니다.");
