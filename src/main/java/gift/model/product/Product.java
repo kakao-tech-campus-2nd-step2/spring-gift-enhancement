@@ -69,6 +69,13 @@ public class Product {
         if(options.isEmpty())
             throw new OptionNotFoundException("상품에는 최소 하나 이상의 옵션이 있어야 합니다.");
     }
+    public Product(String name, int price, String imageUrl, Category category, List<Option> option) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.options = option;
+    }
 
     // getters, setters
     public Long getId() {
