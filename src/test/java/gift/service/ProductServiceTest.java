@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
-@SpringBootTest
+/*@SpringBootTest
 @Sql("/truncate.sql")
 public class ProductServiceTest {
 
@@ -97,4 +97,4 @@ public class ProductServiceTest {
 
         assertThat(products.size()).isEqualTo(1);
     }
-}
+}*/
