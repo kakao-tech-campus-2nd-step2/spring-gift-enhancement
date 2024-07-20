@@ -76,7 +76,6 @@
 - productService 수정
   - Product 생성 시 임시 옵션 추가
     - 상품 정보에 항상 하나 이상의 옵션이 있어야 한다.
-- ProductService 수정
   - 상품 지우면 그에 해당하는 옵션들도 지워지도록
 - Product 관련 Controller 수정
   - AdminController
