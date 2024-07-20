@@ -1,12 +1,12 @@
 package gift.product.model;
 
 import gift.category.model.Category;
+import gift.option.domain.Option;
 import gift.wish.model.Wish;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "product")
@@ -27,6 +27,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
@@ -50,6 +53,15 @@ public class Product {
                 imageUrl.equals(comparingProduct.imageUrl);
     }
 
+    public void addOption(Option option) {
+        this.options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOption(Option option) {
+        options.remove(option);
+        option.setProduct(null);
+    }
 
     public void addWish(Wish wish) {
         this.wishes.add(wish);
@@ -117,5 +129,13 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 }
