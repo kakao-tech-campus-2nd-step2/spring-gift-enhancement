@@ -1,16 +1,15 @@
 package gift.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-public class NameDTO {
+
+public class OptionNameDTO {
 
     @NotNull(message = "이름을 입력해주세요.")
-    @NotBlank(message = "이름은 공백일 수 없습니다.")
     private String name;
 
-    public NameDTO() {}
+    public OptionNameDTO() {}
 
-    public NameDTO(String name) {
+    public OptionNameDTO(String name) {
         this.name = name;
     }
 

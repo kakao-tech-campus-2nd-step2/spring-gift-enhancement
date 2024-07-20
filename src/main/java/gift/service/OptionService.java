@@ -4,6 +4,8 @@ import gift.converter.OptionConverter;
 import gift.dto.OptionDTO;
 import gift.dto.PageRequestDTO;
 import gift.model.Option;
+import gift.model.OptionName;
+import gift.model.OptionQuantity;
 import gift.model.Product;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
@@ -46,9 +48,9 @@ public class OptionService {
             .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
         Option option = new Option(
-            optionDTO.getId(),
-            optionDTO.getName(),
-            optionDTO.getQuantity(),
+            null,
+            new OptionName(optionDTO.getName().getName()),
+            new OptionQuantity(optionDTO.getQuantity().getQuantity()),
             product
         );
 
@@ -66,7 +68,7 @@ public class OptionService {
         Option existingOption = optionRepository.findById(optionDTO.getId())
             .orElseThrow(() -> new IllegalArgumentException("옵션을 찾을 수 없습니다."));
 
-        existingOption.update(optionDTO.getName(), optionDTO.getQuantity());
+        existingOption.update(new OptionName(optionDTO.getName().getName()), new OptionQuantity(optionDTO.getQuantity().getQuantity()));
         optionRepository.save(existingOption);
     }
 

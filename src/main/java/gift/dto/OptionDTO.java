@@ -1,27 +1,25 @@
 package gift.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 public class OptionDTO {
 
     private Long id;
 
-    @NotBlank(message = "옵션 이름을 입력해주세요.")
-    @Size(max = 50, message = "옵션 이름은 최대 50자까지 입력할 수 있습니다.")
-    private String name;
+    @Valid
+    @NotNull(message = "옵션 이름을 입력해주세요.")
+    private OptionNameDTO name;
 
-    @Min(value = 1, message = "옵션 수량은 최소 1개 이상이어야 합니다.")
-    @Max(value = 99999999, message = "옵션 수량은 1억 개 미만이어야 합니다.")
-    private int quantity;
+    @Valid
+    @NotNull(message = "옵션 수량을 입력해주세요.")
+    private OptionQuantityDTO quantity;
 
     private Long productId;
 
     public OptionDTO() {}
 
-    public OptionDTO(Long id, String name, int quantity, Long productId) {
+    public OptionDTO(Long id, OptionNameDTO name, OptionQuantityDTO quantity, Long productId) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -37,19 +35,19 @@ public class OptionDTO {
         this.id = id;
     }
 
-    public String getName() {
+    public OptionNameDTO getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(OptionNameDTO name) {
         this.name = name;
     }
 
-    public int getQuantity() {
+    public OptionQuantityDTO getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(OptionQuantityDTO quantity) {
         this.quantity = quantity;
     }
 

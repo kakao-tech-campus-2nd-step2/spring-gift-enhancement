@@ -7,6 +7,8 @@ import gift.dto.OptionDTO;
 import gift.dto.PageRequestDTO;
 import gift.dto.ProductDTO;
 import gift.model.Option;
+import gift.model.OptionName;
+import gift.model.OptionQuantity;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
@@ -44,7 +46,7 @@ public class ProductService {
         Product product = ProductConverter.convertToEntity(productDTO);
 
         // 기본 옵션 추가
-        Option defaultOption = new Option(null, "기본 옵션", 1, product);
+        Option defaultOption = new Option(null, new OptionName("기본 옵션"), new OptionQuantity(1), product);
         product.addOption(defaultOption);
 
         productRepository.save(product);
