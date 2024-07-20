@@ -53,17 +53,28 @@ public class OptionService {
     @Transactional
     public Option addOption(Product product, OptionRequest request) {
         validateOptionIsUniqueInProduct(product, request);
-        return optionRepository.save(request.toEntity(product));
+        Option option = optionRepository.save(request.toEntity(product));
+        product.addOption(option);
+        return option;
     }
 
     @Transactional
     public List<Option> addOptions(Product product, List<OptionRequest> request) {
-        request.forEach(req -> {
-            if (request.stream().filter(req2 -> req2.name().equals(req.name())).count() != 1) {
-                throw new OptionAlreadyExistsInProductException();
-            }
-            optionRepository.save(req.toEntity(product));
-        });
+        List<String> optionNames = new ArrayList<>(product.getOptions().stream()
+            .map(Option::getName)
+            .toList());
+        optionNames.addAll(request.stream()
+            .map(OptionRequest::name)
+            .toList());
+        List<String> distinctOptionNames = optionNames.stream().distinct().toList();
+
+        //OptionRequest 리스트에 이름이 같은 서로 다른 옵션이 있거나 기존 옵션들과 겹치는 경우 이름 중복으로 예외
+        if (distinctOptionNames.size() < product.getOptions().size() + request.size()) {
+            throw new OptionAlreadyExistsInProductException();
+        }
+
+        request.forEach(req -> addOption(product, req));
+
         return optionRepository.findAllByProduct(product);
     }
 

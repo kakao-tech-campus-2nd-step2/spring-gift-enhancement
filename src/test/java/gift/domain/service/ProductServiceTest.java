@@ -115,7 +115,6 @@ class ProductServiceTest {
         assertThat(actual).isEqualTo(expected);
     }
 
-    //TODO: 테스트 실패하는 것 고치기
     @Test
     @DisplayName("[UnitTest] 상품 추가")
     void addProduct() {
@@ -152,7 +151,6 @@ class ProductServiceTest {
         then(productRepository).should(never()).save(any(Product.class));
     }
 
-    //TODO: 테스트 실패하는 것 고치기
     @Test
     @DisplayName("[UnitTest] 상품 업데이트")
     void updateProductById() {

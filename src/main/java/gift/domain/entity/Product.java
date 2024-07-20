@@ -35,7 +35,7 @@ public class Product {
     private Category category;
 
     //상품 삭제시 연관된 옵션은 무의미해지므로 REMOVE로 함
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Option> options;
 
     public Product(String name, Integer price, String imageUrl, Category category) {
@@ -98,6 +98,10 @@ public class Product {
         this.price = request.price();
         this.imageUrl = request.imageUrl();
         this.category = categoryService.findById(request.categoryId());
+    }
+
+    public void addOption(Option option) {
+        options.add(option);
     }
 
     @Override

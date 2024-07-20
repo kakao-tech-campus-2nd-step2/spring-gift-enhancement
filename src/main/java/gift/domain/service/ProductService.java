@@ -69,7 +69,7 @@ public class ProductService {
         }
 
         Product product = productRepository.save(requestDto.toEntity(categoryService));
-        product.getOptions().addAll(optionService.addOptions(product, requestDto.options()));
+        optionService.addOptions(product, requestDto.options());
         return ProductResponse.of(product);
     }
 
