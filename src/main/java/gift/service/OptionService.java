@@ -71,4 +71,15 @@ public class OptionService {
         optionRepository.delete(option);
     }
 
+    public void subtractOptionQuantity(Long productId, Long optionId, int quantity) {
+        if (!productRepository.existsById(productId)) {
+            throw new ProductNotFoundException(PRODUCT_NOT_FOUND);
+        }
+
+        Option option = optionRepository.findByIdAndProductId(optionId, productId)
+                .orElseThrow(() -> new OptionNotFoundException(OPTION_NOT_FOUND));
+
+        option.subtractQuantity(quantity);
+    }
+
 }
