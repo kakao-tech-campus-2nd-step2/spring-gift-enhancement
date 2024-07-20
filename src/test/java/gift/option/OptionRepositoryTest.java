@@ -91,4 +91,17 @@ class OptionRepositoryTest {
         );
     }
 
+    @Test
+    @DisplayName("옵션 수량 차감 테스트")
+    void substract() {
+        Option option = new Option("옵션1", 100, productRepository.findById(1L).get());
+
+        option.substract(200);
+
+        assertAll(
+            () -> assertThat(option.getName()).isEqualTo("옵션1"),
+            () -> assertThat(option.getQuantity()).isEqualTo(200)
+        );
+    }
+
 }
