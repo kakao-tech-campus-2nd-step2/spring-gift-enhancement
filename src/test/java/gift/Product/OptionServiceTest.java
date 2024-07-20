@@ -54,4 +54,13 @@ public class OptionServiceTest {
         verify(optionRepository, times(0)).save(any(Option.class));
     }
 
+    @Test
+    public void testSubtractOptionNotEnoughQuantity() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.subtractOption(option, 15L);
+        });
+
+        assertEquals("감소시키기에 수량이 충분하지 않습니다! ", exception.getMessage());
+        verify(optionRepository, times(0)).save(any(Option.class));
+    }
 }
