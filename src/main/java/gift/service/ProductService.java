@@ -3,9 +3,11 @@ package gift.service;
 import gift.constants.Messages;
 import gift.domain.Category;
 import gift.domain.Product;
+import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductRequest;
 import gift.dto.response.ProductResponse;
 import gift.exception.ProductNotFoundException;
+import gift.exception.ProductOptionRequiredException;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,16 +20,24 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     @Transactional
-    public void save(ProductRequest productRequest){
+    public void save(ProductRequest productRequest, OptionRequest optionRequest){
+        if (optionRequest == null) {
+            throw new ProductOptionRequiredException(Messages.PRODUCT_OPTION_REQUIRED);
+        }
         Category category = categoryService.findById(productRequest.categoryId()).toEntity();
-        productRepository.save(productRequest.toEntity(category));
+        Product savedProduct = productRepository.save(productRequest.toEntity(category));
+
+        // option 저장
+        optionService.save(savedProduct.getId(), optionRequest);
     }
 
     @Transactional(readOnly = true)
