@@ -19,8 +19,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_three_categories.sql",
-    "/sql/insert_five_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_categories.sql",
+    "/sql/insert_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class ProductTest {
 
     @LocalServerPort

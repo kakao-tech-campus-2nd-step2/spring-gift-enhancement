@@ -17,7 +17,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {"/sql/initialize.sql",
-    "/sql/insert_three_categories.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    "/sql/insert_categories.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class CategoryTest {
 
     @LocalServerPort

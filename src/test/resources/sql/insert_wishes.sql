@@ -1,7 +1,3 @@
-DELETE
-FROM wishes;
-
-
 INSERT INTO wishes (user_id, product_id, quantity)
 VALUES (1, 1, 2);
 INSERT INTO wishes (user_id, product_id, quantity)
