@@ -5,7 +5,6 @@ import gift.category.domain.CategoryRepository;
 import gift.exception.type.NotFoundException;
 import gift.option.application.OptionResponse;
 import gift.option.application.command.OptionCreateCommand;
-import gift.option.application.command.OptionUpdateCommand;
 import gift.option.domain.Option;
 import gift.option.domain.OptionRepository;
 import gift.product.application.command.ProductCreateCommand;
@@ -84,7 +83,7 @@ public class ProductService {
     }
 
     private void updateOptions(ProductUpdateCommand command, Product product) {
-        command.optionUpdateCommandList().stream().forEach(
+        command.optionUpdateCommandList().forEach(
                 optionUpdateCommand -> {
                     Option originalOption = optionRepository.findById(optionUpdateCommand.id())
                             .orElseThrow(() -> new NotFoundException("해당 옵션이 존재하지 않습니다."));
