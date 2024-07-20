@@ -14,7 +14,8 @@
 - [x] product 의 name 길이를 15로 줄이기 (요구사항 name varchar(15) not null 반영)
 - [x] category의 color 길이를 7로 줄이기 (요구사항 color varchar(7) not null 반영)
 - [ ] JWT 공부해서 적용 
-- [ ] product Dto 에서 유효성 검증 코드는 Service로 넘기고 Service에서 Dto 를 Entity로 변환할때 유효성 검증 진행하도록 
+- [x] 토큰 저장 기능 삭제 
+- [x] product Dto 에서 유효성 검증 코드는 Service로 넘기고 Service에서 Dto 를 Entity로 변환할때 유효성 검증 진행하도록 
 - [ ] TokenInterceptor 사용 
 - [ ] 테스트 코드 작성
 
