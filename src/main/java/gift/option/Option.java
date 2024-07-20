@@ -60,4 +60,8 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public void substract(int quantity) {
+        this.quantity = quantity;
+    }
+
 }

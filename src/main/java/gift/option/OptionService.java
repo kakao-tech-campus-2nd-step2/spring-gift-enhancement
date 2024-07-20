@@ -75,4 +75,15 @@ public class OptionService {
         return option.getProduct().getId();
     }
 
+    public OptionResponseDto substractQuantity(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new NotFoundOption("해당 옵션을 찾을 수 없습니다"));
+        option.substract(quantity);
+        return new OptionResponseDto(
+            option.getId(),
+            option.getName(),
+            option.getQuantity()
+        );
+    }
+
 }
