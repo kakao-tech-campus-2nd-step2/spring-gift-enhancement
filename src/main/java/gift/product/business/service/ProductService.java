@@ -1,12 +1,11 @@
 package gift.product.business.service;
 
 import gift.product.business.dto.OptionRegisterDto;
-import gift.product.business.dto.ProductPagingDto;
+import gift.product.business.dto.ProductOut;
 import gift.product.business.dto.ProductUpdateDto;
 import gift.product.persistence.entity.Product;
 import gift.product.persistence.repository.CategoryRepository;
 import gift.product.persistence.repository.ProductRepository;
-import gift.product.business.dto.ProductDto;
 import gift.product.business.dto.ProductRegisterDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,9 +29,9 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductDto getProduct(Long id) {
+    public ProductOut.WithOptions getProduct(Long id) {
         Product product = productRepository.getProductById(id);
-        return ProductDto.from(product);
+        return ProductOut.WithOptions.from(product);
     }
 
     @Transactional
@@ -71,8 +70,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductPagingDto getProductsByPage(Pageable pageable) {
+    public ProductOut.Paging getProductsByPage(Pageable pageable) {
         Page<Product> products = productRepository.getProductsByPage(pageable);
-        return ProductPagingDto.from(products);
+        return ProductOut.Paging.from(products);
     }
 }

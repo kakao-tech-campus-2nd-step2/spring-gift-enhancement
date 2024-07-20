@@ -1,10 +1,7 @@
 package gift.product.presentation.restcontroller;
 
-import gift.product.presentation.dto.RequestProductDto;
-import gift.product.presentation.dto.RequestProductIdsDto;
-import gift.product.presentation.dto.RequestProductUpdateDto;
-import gift.product.presentation.dto.ResponsePagingProductDto;
-import gift.product.presentation.dto.ResponseProductDto;
+import gift.product.presentation.dto.ProductRequest;
+import gift.product.presentation.dto.ProductResponse;
 import gift.product.presentation.dto.RequestOptionCreateDto;
 import gift.product.business.service.ProductService;
 import jakarta.validation.Valid;
@@ -27,14 +24,14 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseProductDto> getProduct(@PathVariable("id") Long id) {
-        var productDto = productService.getProduct(id);
-        var responseProductDto = ResponseProductDto.from(productDto);
-        return ResponseEntity.ok(responseProductDto);
+    public ResponseEntity<ProductResponse.WithOptions> getProduct(@PathVariable("id") Long id) {
+        var productOutWithOptions = productService.getProduct(id);
+        var productResponseInfo = ProductResponse.WithOptions.from(productOutWithOptions);
+        return ResponseEntity.ok(productResponseInfo);
     }
 
     @GetMapping
-    public ResponseEntity<ResponsePagingProductDto> getProductsByPage(
+    public ResponseEntity<ProductResponse.PagingInfo> getProductsByPage(
         @PageableDefault(size = 20, sort = "modifiedDate", direction = Sort.Direction.DESC) Pageable pageable,
         @RequestParam(name = "size", required = false) Integer size) {
         if (size != null) {
@@ -43,16 +40,16 @@ public class ProductController {
             }
             pageable = PageRequest.of(pageable.getPageNumber(), size, pageable.getSort());
         }
-        var productPagingDto = productService.getProductsByPage(pageable);
-        var responsePagingProductDto = ResponsePagingProductDto.from(productPagingDto);
-        return ResponseEntity.ok(responsePagingProductDto);
+        var productOutPaging = productService.getProductsByPage(pageable);
+        var productResponsePagingInfo = ProductResponse.PagingInfo.from(productOutPaging);
+        return ResponseEntity.ok(productResponsePagingInfo);
     }
 
     @PostMapping
     public ResponseEntity<Long> createProduct(
-        @RequestBody @Valid RequestProductDto requestProductDto) {
-        var productRegisterDto = requestProductDto.toProductRegisterDto();
-        var optionRegisterDtos = requestProductDto.options().stream()
+        @RequestBody @Valid ProductRequest.Create productRequest) {
+        var productRegisterDto = productRequest.toProductRegisterDto();
+        var optionRegisterDtos = productRequest.options().stream()
             .map(RequestOptionCreateDto::toOptionRegisterDto)
             .toList();
         Long createdId = productService.createProduct(productRegisterDto, optionRegisterDtos);
@@ -61,8 +58,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Long> updateProduct(
-        @RequestBody @Valid RequestProductUpdateDto requestProductUpdateDto, @PathVariable("id") Long id) {
-        var productRegisterDto = requestProductUpdateDto.toProductUpdateDto();
+        @RequestBody @Valid ProductRequest.Update productRequest, @PathVariable("id") Long id) {
+        var productRegisterDto = productRequest.toProductUpdateDto();
         Long updatedId = productService.updateProduct(productRegisterDto, id);
         return ResponseEntity.ok(updatedId);
     }
@@ -74,7 +71,7 @@ public class ProductController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteProducts(@RequestBody @Valid RequestProductIdsDto ids) {
+    public ResponseEntity<Void> deleteProducts(@RequestBody @Valid ProductRequest.Ids ids) {
         productService.deleteProducts(ids.productIds());
         return ResponseEntity.ok().build();
     }
