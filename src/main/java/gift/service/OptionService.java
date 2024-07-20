@@ -3,6 +3,7 @@ package gift.service;
 import gift.exception.ProductNotFoundException;
 import gift.model.Option;
 import gift.repository.OptionRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,19 @@ public class OptionService {
         optionRepository.saveAll(option);
     }
 
+    @Transactional
     public void updateOption(Long id, Option option) {
         if (!optionRepository.existsById(id)) {
             throw new ProductNotFoundException("Option not found");
         }
-        option.setId(id);
-        optionRepository.save(option);
+
+        if (optionRepository.existsById(id)) {
+            Option option1 = optionRepository.findById(id).get();
+            option1.setOptionName(option.getOptionName());
+            option1.setQuantity(option.getQuantity());
+            optionRepository.save(option1);
+        }
+
     }
 
     public void deleteOption(Long productId) {
@@ -37,12 +45,6 @@ public class OptionService {
         optionRepository.deleteById(productId);
     }
 
-    public List<Option> getOptionByProductId(Long productId) {
-        if (!optionRepository.existsById(productId)) {
-            throw new ProductNotFoundException("Option not found");
-        }
-        return optionRepository.findByProductId(productId);
-    }
 
     public List<Option> getAllOptions() {
         return optionRepository.findAll();
