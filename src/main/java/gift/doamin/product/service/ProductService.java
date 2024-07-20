@@ -46,16 +46,17 @@ public class ProductService {
         Category category = categoryRepository.findById(productForm.getCategory_id())
             .orElseThrow(CategoryNotFoundException::new);
 
-        Product product = productRepository.save(
-            new Product(user, category, productForm.getName(),
-                productForm.getPrice(), productForm.getImageUrl()));
+        Product product = new Product(user, category, productForm.getName(), productForm.getPrice(),
+            productForm.getImageUrl());
 
         Options options = new Options(productForm.getOptions().stream()
             .map(OptionForm::toEntity)
             .toList());
         options.toList().forEach(product::addOption);
 
-        return new ProductParam(product);
+        Product actual = productRepository.save(product);
+
+        return new ProductParam(actual);
     }
 
     public Page<ProductParam> getPage(int pageNum) {
