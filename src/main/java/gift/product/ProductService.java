@@ -6,7 +6,8 @@ import gift.category.model.Category;
 import gift.common.exception.CategoryException;
 import gift.common.exception.ProductException;
 import gift.product.model.Product;
-import gift.product.model.ProductRequestDto;
+import gift.product.model.ProductRequest;
+import gift.product.model.ProductRequest.Create;
 import gift.product.model.ProductResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,24 +39,24 @@ public class ProductService {
     }
 
     @Transactional
-    public Long insertProduct(ProductRequestDto productRequestDto) throws CategoryException, ProductException {
-        Category category = categoryRepository.findById(productRequestDto.categoryId())
+    public Long insertProduct(ProductRequest.Create create) throws CategoryException, ProductException {
+        Category category = categoryRepository.findById(create.categoryId())
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
-        Product product = new Product(productRequestDto.name(), productRequestDto.price(),
-            productRequestDto.imageUrl(), category);
+        Product product = new Product(create.name(), create.price(),
+            create.imageUrl(), category);
         productRepository.save(product);
         return product.getId();
     }
 
     @Transactional
-    public void updateProductById(Long id, ProductRequestDto productRequestDto)
+    public void updateProductById(Long id, ProductRequest.Update update)
         throws CategoryException, ProductException {
-        Category category = categoryRepository.findById(productRequestDto.categoryId())
+        Category category = categoryRepository.findById(update.categoryId())
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
-        product.updateInfo(productRequestDto.name(), productRequestDto.price(),
-            productRequestDto.imageUrl(), category);
+        product.updateInfo(update.name(), update.price(),
+            update.imageUrl(), category);
     }
 
     public void deleteProductById(Long id) {

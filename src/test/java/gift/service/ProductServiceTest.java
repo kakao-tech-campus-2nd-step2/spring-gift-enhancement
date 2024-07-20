@@ -11,7 +11,8 @@ import gift.category.model.Category;
 import gift.product.ProductRepository;
 import gift.product.ProductService;
 import gift.product.model.Product;
-import gift.product.model.ProductRequestDto;
+import gift.product.model.ProductRequest;
+import gift.product.model.ProductRequest.Create;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ public class ProductServiceTest {
         given(productRepository.save(any())).willReturn(
             new Product(1L, "test", 1000, "test.jpg", category));
 
-        productService.insertProduct(new ProductRequestDto("test", 1000, "test.jpg", 1L));
+        productService.insertProduct(new ProductRequest.Create("test", 1000, "test.jpg", 1L));
 
         then(productRepository).should().save(any());
     }
@@ -80,7 +81,8 @@ public class ProductServiceTest {
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
         given(productRepository.findById(any())).willReturn(Optional.of(product));
 
-        productService.updateProductById(1L, new ProductRequestDto("test1", 1400, "test1.jpg", 1L));
+        productService.updateProductById(1L,
+            new ProductRequest.Update("test1", 1400, "test1.jpg", 1L));
 
         assertAll(
             () -> assertThat(product.getName()).isEqualTo("test1"),

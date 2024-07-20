@@ -6,7 +6,7 @@
 <body>
 <h1>상품 페이지</h1>
 <form th:action="@{/admin/products/add}"
-      th:object="${productRequestDto}" method="post">
+      th:object="${create}" method="post">
     <h3>상품 추가</h3>
     <p>Name: <input type="text" th:field="*{name}"></p>
     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>

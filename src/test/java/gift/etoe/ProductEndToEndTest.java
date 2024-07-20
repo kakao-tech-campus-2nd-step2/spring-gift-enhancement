@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.category.model.CategoryRequestDto;
 import gift.member.model.MemberRequestDto;
-import gift.product.model.ProductRequestDto;
+import gift.product.model.ProductRequest.Create;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ class ProductEndToEndTest {
 
     private void addProduct(String name, Integer price, String imageUrl, String url,
         HttpHeaders headers) {
-        var expected = new ProductRequestDto(name, price, imageUrl, 1L);
+        var expected = new Create(name, price, imageUrl, 1L);
         var expected1RequestEntity = new RequestEntity<>(expected, headers, HttpMethod.POST,
             URI.create(url));
         restTemplate.exchange(expected1RequestEntity, String.class);

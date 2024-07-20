@@ -1,7 +1,7 @@
 package gift.product;
 
 import gift.common.model.PageResponseDto;
-import gift.product.model.ProductRequestDto;
+import gift.product.model.ProductRequest;
 import gift.product.model.ProductResponseDto;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -42,16 +42,16 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Void> addProduct(
-        @Valid @RequestBody ProductRequestDto productRequestDto) {
-        Long productId = productService.insertProduct(productRequestDto);
+        @Valid @RequestBody ProductRequest.Create create) {
+        Long productId = productService.insertProduct(create);
         return ResponseEntity.created(URI.create("/api/products/" + productId)).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateProduct(
-        @Valid @RequestBody ProductRequestDto productRequestDto,
+        @Valid @RequestBody ProductRequest.Update update,
         @PathVariable("id") Long id) {
-        productService.updateProductById(id, productRequestDto);
+        productService.updateProductById(id, update);
         return ResponseEntity.ok().build();
     }
 

@@ -1,7 +1,8 @@
 package gift.product;
 
 import gift.common.exception.ProductException;
-import gift.product.model.ProductRequestDto;
+import gift.product.model.ProductRequest;
+import gift.product.model.ProductRequest.Create;
 import gift.product.model.ProductResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -42,30 +43,30 @@ public class AdminController {
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid @ModelAttribute ProductRequestDto productRequestDto,
+    public String addProduct(@Valid @ModelAttribute ProductRequest.Create create,
         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "add-product-form";
         }
-        productService.insertProduct(productRequestDto);
+        productService.insertProduct(create);
         return "redirect:/admin/products";
     }
 
     @GetMapping("/edit/{id}")
     public String updateProductForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("productRequestDto",
-            ProductRequestDto.from(productService.getProductById(id)));
+            ProductRequest.Update.from(productService.getProductById(id)));
         return "modify-product-form";
     }
 
     @PostMapping("edit/{id}")
     public String updateProduct(@PathVariable("id") Long id,
-        @Valid @ModelAttribute ProductRequestDto productRequestDto,
+        @Valid @ModelAttribute ProductRequest.Update update,
         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "modify-product-form";
         }
-        productService.updateProductById(id, productRequestDto);
+        productService.updateProductById(id, update);
         return "redirect:/admin/products";
     }
 

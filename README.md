@@ -30,7 +30,7 @@ TodoList
 - [x] product 에 category 추가
 - [x] product category 변경 기능 추가
   - [x] productService
-  - [x] productRequestDto
+  - [x] create
   - [x] adminController
 
 ### 2단계 요구사항
