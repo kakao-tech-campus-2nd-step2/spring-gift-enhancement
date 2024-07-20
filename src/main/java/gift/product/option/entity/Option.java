@@ -76,22 +76,22 @@ public class Option {
     public void edit(UpdateOptionRequest request) {
         validateName(request.name());
         validateQuantity(request.quantity());
+        this.name = request.name();
+        this.quantity = request.quantity();
     }
 
-    private void validateName(String name) {
+    public void validateName(String name) {
         Pattern pattern = Pattern.compile("^[\\w\\s()\\[\\]+\\-&/_]*$");
         Matcher matcher = pattern.matcher(name);
         if (!matcher.find() || name.length() > 50) {
             throw new CustomException(ErrorCode.INVALID_OPTION_NAME);
         }
-        this.name = name;
     }
 
-    private void validateQuantity(Integer quantity) {
+    public void validateQuantity(Integer quantity) {
         if (quantity < 1 || quantity >= 100_000_000) {
             throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
         }
-        this.quantity = quantity;
     }
 
 }
