@@ -111,7 +111,6 @@ host: localhost:8080
   "id": 2
 }
 #####
-
 POST /category/add HTTP/1.1
 content-type: application/json
 host: localhost:8080
@@ -128,3 +127,12 @@ host: localhost:8080
   "id": 1,
   "categoryName": "상품권"
 }
+####
+POST /option/add HTTP/1.1
+content-type: application/json
+host: localhost:8080
+
+{
+  "optionName": "라지 사이즈"
+}
+###

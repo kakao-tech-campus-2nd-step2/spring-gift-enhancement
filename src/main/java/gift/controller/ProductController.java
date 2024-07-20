@@ -1,14 +1,20 @@
 package gift.controller;
 
+import gift.dto.ProductRequest;
 import gift.exception.InvalidProductException;
 import gift.exception.ProductNotFoundException;
 import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.service.CategoryService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +29,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/products")
 public class ProductController {
+    @Autowired
     private final ProductService productService;
+    @Autowired
     private final CategoryService categoryService;
+    @Autowired
+    private OptionService optionService;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public ProductController( ProductService productService, CategoryService categoryService ) {
         this.productService = productService;
@@ -46,11 +58,23 @@ public class ProductController {
     public String addProduct(@RequestParam String name,
         @RequestParam int price,
         @RequestParam String imageUrl,
-        @RequestParam Long categoryId, RedirectAttributes redirectAttributes) {
+        @RequestParam Long categoryId,
+        @RequestParam List<String> optionNames,
+        @RequestParam List<Long> optionQuantities,
+        RedirectAttributes redirectAttributes) {
         Category category = categoryService.getCategoryById(categoryId);
         Product product = new Product(name, price, imageUrl, category);
-
         productService.addProduct(product);
+
+        List<Option> options = new ArrayList<>();
+        for (int i = 0; i < optionNames.size(); i++) {
+            String optionName = optionNames.get(i);
+            Long optionQuantity = optionQuantities.get(i);
+            Option option = new Option(optionName, optionQuantity, product);
+            options.add(option);
+        }
+        optionService.addOption(options);
+
         redirectAttributes.addFlashAttribute("message", "Product added successfully!");
         return "redirect:/products";
     }
@@ -78,7 +102,9 @@ public class ProductController {
     public String getProductDetails(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
         Optional<Product> product = productService.getProductById(id);
         if (product.isPresent()) {
-            model.addAttribute("product", product.get());
+            List<Category> categories = categoryRepository.findAll();
+            model.addAttribute("product", product);
+            model.addAttribute("categories", categories);
             return "product-detail"; // product-details.html 뷰 반환
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Product not found");

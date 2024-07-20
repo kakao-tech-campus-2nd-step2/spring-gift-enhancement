@@ -1,6 +1,7 @@
 package gift.Product;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import gift.initializer.CategoryInitializer;
 import gift.model.Category;
 import gift.model.Product;
