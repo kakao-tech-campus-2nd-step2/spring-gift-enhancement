@@ -3,8 +3,8 @@ package gift;
 import gift.entity.Category;
 import gift.entity.Option;
 import gift.entity.Product;
-import gift.repository.CategoryRepositoryInterface;
-import gift.repository.ProductRepositoryInterface;
+import gift.repository.CategoryRepository;
+import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 public class ProductRepositoryTest {
 
-    ProductRepositoryInterface products;
-    CategoryRepositoryInterface categorys;
+    ProductRepository products;
+    CategoryRepository categorys;
 
     @Test
     void save() {

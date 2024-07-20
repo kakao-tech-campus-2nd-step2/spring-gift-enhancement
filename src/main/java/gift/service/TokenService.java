@@ -1,21 +1,21 @@
 package gift.service;
 
-import gift.repository.TokenRepositoryInterface;
+import gift.repository.TokenRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 
 @Service
 public class TokenService {
-    private final TokenRepositoryInterface tokenRepositoryInterface;
+    private final TokenRepository tokenRepository;
 
-    public TokenService(TokenRepositoryInterface tokenRepositoryInterface) {
-        this.tokenRepositoryInterface = tokenRepositoryInterface;
+    public TokenService(TokenRepository tokenRepository) {
+        this.tokenRepository = tokenRepository;
     }
 
     public String saveToken(Long userId) {
         String newToken = makeTokenFrom(userId.toString());
-        return tokenRepositoryInterface.save(newToken);
+        return tokenRepository.save(newToken);
     }
 
     public String makeTokenFrom(String userIdStr) {
@@ -35,11 +35,11 @@ public class TokenService {
 
     public void deleteTokenOf(Long userId) {
         String newToken = makeTokenFrom(userId.toString());
-        tokenRepositoryInterface.delete(newToken);
+        tokenRepository.delete(newToken);
     }
 
     public void deleteToken(String token) {
-        tokenRepositoryInterface.delete(token);
+        tokenRepository.delete(token);
     }
 
 }

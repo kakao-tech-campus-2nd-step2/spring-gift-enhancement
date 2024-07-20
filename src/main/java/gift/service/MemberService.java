@@ -2,7 +2,7 @@ package gift.service;
 
 import gift.dto.MemberResponseDto;
 import gift.entity.Member;
-import gift.repository.MemberRepositoryInterface;
+import gift.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
@@ -10,11 +10,11 @@ import java.util.List;
 
 @Service
 public class MemberService {
-    private final MemberRepositoryInterface memberRepositoryInterface;
+    private final MemberRepository memberRepository;
     private final TokenService tokenService;
 
-    public MemberService(MemberRepositoryInterface memberRepositoryInterface, TokenService tokenService) {
-        this.memberRepositoryInterface = memberRepositoryInterface;
+    public MemberService(MemberRepository memberRepository, TokenService tokenService) {
+        this.memberRepository = memberRepository;
         this.tokenService = tokenService;
     }
 
@@ -22,14 +22,14 @@ public class MemberService {
 
         Member newMember = new Member(email, password);
 
-        Member actualMember = memberRepositoryInterface.save(newMember);
+        Member actualMember = memberRepository.save(newMember);
         String token = generateTokenFrom(actualMember.getEmail());
         return new MemberResponseDto(actualMember, token);
     }
 
 
     public List<Member> getAll() {
-        return memberRepositoryInterface.findAll();
+        return memberRepository.findAll();
     }
 
     public MemberResponseDto getAllAndReturnMemberResponseDto() {
@@ -41,11 +41,11 @@ public class MemberService {
     }
 
     private Long findUserIdFrom(String userEmail) {
-        return memberRepositoryInterface.findByEmail(userEmail).getId();
+        return memberRepository.findByEmail(userEmail).getId();
     }
 
     public boolean login(String email, String password) throws AuthenticationException {
-        MemberResponseDto dbUserDto = MemberResponseDto.fromEntity(memberRepositoryInterface.findByEmail(email));
+        MemberResponseDto dbUserDto = MemberResponseDto.fromEntity(memberRepository.findByEmail(email));
 
         return validatePassword(password, dbUserDto.getPassword());
     }

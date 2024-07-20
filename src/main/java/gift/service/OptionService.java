@@ -2,43 +2,43 @@ package gift.service;
 
 import gift.entity.Option;
 import gift.entity.Product;
-import gift.repository.OptionRepositoryInterface;
+import gift.repository.OptionRepository;
 
 import java.util.List;
 
 public class OptionService {
-    private OptionRepositoryInterface optionRepositoryInterface;
+    private OptionRepository optionRepository;
 
-    public OptionService(OptionRepositoryInterface optionRepositoryInterface) {
-        this.optionRepositoryInterface = optionRepositoryInterface;
+    public OptionService(OptionRepository optionRepository) {
+        this.optionRepository = optionRepository;
     }
 
     public Option getById(Long optionId) {
-        return optionRepositoryInterface.findById(optionId).get();
+        return optionRepository.findById(optionId).get();
     }
 
     public List<Option> getAllOptions() {
-        return optionRepositoryInterface.findAll();
+        return optionRepository.findAll();
     }
 
     public Option save(Option option,Product product) {
         if ( checkValidOptionName(option.getName(),product) &&
                 checkValidOptionQuantity(option.getQuantity())){
-            return optionRepositoryInterface.save(option);
+            return optionRepository.save(option);
         }
         return null;
     }
 
     public void delete(Option option) {
-        optionRepositoryInterface.delete(option);
+        optionRepository.delete(option);
     }
 
     public Option update(Option option) {
-        return optionRepositoryInterface.save(option);
+        return optionRepository.save(option);
     }
 
     public Option getOptionByName(String optionName) {
-        return optionRepositoryInterface.findOptionByName(optionName);
+        return optionRepository.findOptionByName(optionName);
     }
 
     public boolean checkValidOptionName(String optionName,Product product) {

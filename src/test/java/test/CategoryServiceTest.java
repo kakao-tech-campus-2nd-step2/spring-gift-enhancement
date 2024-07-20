@@ -1,7 +1,7 @@
 package test;
 
 import gift.entity.Category;
-import gift.repository.CategoryRepositoryInterface;
+import gift.repository.CategoryRepository;
 import gift.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,7 +16,7 @@ public class CategoryServiceTest {
 
     private CategoryService categoryService;
 
-    private CategoryRepositoryInterface categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Test
     void testGetAllCategories() {

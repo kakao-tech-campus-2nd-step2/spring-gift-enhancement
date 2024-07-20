@@ -1,13 +1,13 @@
 package test;
 
 
-import gift.repository.WishRepositoryInterface;
+import gift.repository.WishRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 public class WishRepositoryTest {
-    private WishRepositoryInterface wishes;
+    private WishRepository wishes;
 
     public WishRepositoryTest() {
     }
