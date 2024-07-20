@@ -1,6 +1,7 @@
 package gift.Option;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import gift.domain.category.Category;
 import gift.domain.category.JpaCategoryRepository;
@@ -10,6 +11,7 @@ import gift.domain.option.OptionService;
 import gift.domain.option.dto.OptionRequestDTO;
 import gift.domain.product.JpaProductRepository;
 import gift.domain.product.Product;
+import gift.global.exception.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -121,8 +123,8 @@ public class OptionServiceTest {
     }
 
     @Test
-    @Description("옵션 수량 정상 차감")
-    void testDecreaseQuantity() {
+    @Description("옵션 수량 차감 성공")
+    void testDecreaseQuantitySuccess() {
         // when
         optionService.decreaseOptionQuantity(product.getId(), option1.getId(), 50L);
         flushAndClear();
@@ -132,6 +134,18 @@ public class OptionServiceTest {
 
         // then
         assertThat(option.getQuantity()).isEqualTo(50L);
+    }
+
+    @Test
+    @Description("옵션 수량 차감 실패")
+    void testDecreaseQuantityFail() {
+        // when, then
+        // 음수 수량 차감
+        assertThrows(BusinessException.class,
+            () -> optionService.decreaseOptionQuantity(product.getId(), option1.getId(), -50L));
+        // 현재 수량보다 더 큰 수량 차감
+        assertThrows(BusinessException.class,
+            () -> optionService.decreaseOptionQuantity(product.getId(), option1.getId(), 150L));
     }
 
     void clear() {

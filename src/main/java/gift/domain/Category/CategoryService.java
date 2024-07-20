@@ -1,11 +1,9 @@
 package gift.domain.category;
 
-import gift.global.exception.BusinessException;
 import gift.global.exception.category.CategoryDuplicateException;
 import gift.global.exception.category.CategoryNotFoundException;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
