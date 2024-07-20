@@ -213,4 +213,44 @@ public class OptionServiceTest {
         assertThatIllegalArgumentException().isThrownBy(
             () -> optionService.deleteOptionByOptionId(1L)).withMessage("없는 아이디입니다.");
     }
+
+    @Test
+    @DisplayName("옵션 수량 차감 성공")
+    void subtractOptionQuantity() throws NotFoundException {
+        //given
+        given(optionRepository.findById(1L)).willReturn(Optional.ofNullable(option));
+        OptionDTO expected = new OptionDTO(1L, "L", 1, null);
+
+        //when
+        OptionDTO actual = optionService.subtractOptionQuantity(1L, 2);
+
+        //then
+        assertThat(actual.getQuantity()).isEqualTo(expected.getQuantity());
+    }
+
+    @Test
+    @DisplayName("옵션 수량 차감 시도 중 아이디 찾기 실패")
+    void subtractOptionQuantityIdNotFound(){
+        //given
+        given(optionRepository.findById(1L)).willReturn(Optional.empty());
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> optionService.subtractOptionQuantity(1L, 2)).isInstanceOf(
+            NotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("옵션 수량 차감 시도 중 옵션 수량보다 차감하려는 수량이 더 많을 때")
+    void subtractOptionQuantityNotEnoughQuantity(){
+        //given
+        given(optionRepository.findById(1L)).willReturn(Optional.ofNullable(option));
+
+        //when
+
+        //then
+        assertThatIllegalArgumentException().isThrownBy(
+            () -> optionService.subtractOptionQuantity(1L, 4)).withMessage("옵션의 수량이 부족합니다.");
+    }
 }
