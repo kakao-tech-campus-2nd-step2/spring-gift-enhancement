@@ -66,7 +66,11 @@
   - [x] 특정 Product의 Option 가져오기
   
 ## 2단계 피드백
-- [ ] Product에서 Update문 수정
+- [x] Product에서 Update문 수정
+  - product에서 Update문 삭제
+  - UpdateProductDto에서 update하도록 수정
 - [ ] UpdateProductDto jakarta validator 정상 작동할지?
-- [ ] UpdateProductDto DAO역할 침범하지는 않는지?
+- [x] UpdateProductDto DAO역할 침범하지는 않는지?
+  - update를 product의 service code내에서 작성 완료
+  - Option을 update시키는 코드는 Option controller에서 진행하는 것이 맞는지 고민이 된다.
 - [ ] ProductService의 getProductOptions 를 굳이 가져와야 하나?

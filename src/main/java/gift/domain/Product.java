@@ -38,14 +38,6 @@ public class Product {
         this.category = category;
     }
 
-    public Product update(Product product) {
-        this.name = product.getName();
-        this.price = product.getPrice();
-        this.imageUrl = product.getImageUrl();
-        this.category = product.getCategory();
-        return this;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -75,7 +67,7 @@ public class Product {
         this.options = optionList;
     }
 
-    public List<Option> getOption() {
+    public List<Option> getOptions() {
         return options;
     }
 }
