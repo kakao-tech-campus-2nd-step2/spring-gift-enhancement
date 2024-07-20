@@ -21,7 +21,7 @@ public class Option {
     private final String name;
 
     @Column(nullable = false)
-    private final int quantity;
+    private int quantity;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -57,5 +57,16 @@ public class Option {
 
     public Product getProduct() {
         return product;
+    }
+
+    public Option subtract(int amount) {
+        int amountResult = this.quantity - amount;
+
+        if (amountResult < 0) {
+            throw new IllegalArgumentException("차감 가능한 최대 옵션 수량을 초과하였습니다.");
+        }
+
+        this.quantity = amountResult;
+        return this;
     }
 }
