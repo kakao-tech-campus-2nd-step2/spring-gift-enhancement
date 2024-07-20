@@ -1,27 +1,52 @@
 package gift.service;
 
+import gift.dto.OptionRequestDto;
+import gift.dto.ProductRequestDto;
+import gift.dto.ProductResponseDto;
+import gift.entity.Category;
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.BusinessException;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
-    public Page<Product> findAll(int page, int size) {
+    public Page<ProductResponseDto> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.findAll(pageable);
+
+        List<ProductResponseDto> productResponseDtoList = productPage.stream()
+            .map(product -> new ProductResponseDto(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl(),
+                product.getCategory().getId()
+            ))
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(productResponseDtoList, pageable, productPage.getTotalElements());
     }
 
     public Product findById(Long id) {

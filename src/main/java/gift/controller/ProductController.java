@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.ProductResponseDto;
 import gift.entity.Product;
 import gift.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<Product> getAllProducts(@RequestParam(defaultValue = "0") int page,
+    public Page<ProductResponseDto> getAllProducts(@RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size) {
         return productService.findAll(page, size);
     }
