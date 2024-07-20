@@ -2,7 +2,6 @@ package gift.controller.gift;
 
 import gift.dto.gift.GiftRequest;
 import gift.dto.gift.GiftResponse;
-import gift.dto.option.OptionResponse;
 import gift.dto.paging.PagingRequest;
 import gift.dto.paging.PagingResponse;
 import gift.service.gift.GiftService;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/gifts")

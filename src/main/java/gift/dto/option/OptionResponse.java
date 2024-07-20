@@ -16,6 +16,10 @@ public class OptionResponse {
         this.quantity = quantity;
     }
 
+    public static OptionResponse from(Option option) {
+        return new OptionResponse(option.getId(), option.getName(), option.getQuantity());
+    }
+
     public Long getId() {
         return id;
     }
@@ -26,9 +30,5 @@ public class OptionResponse {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public static OptionResponse from(Option option) {
-        return new OptionResponse(option.getId(), option.getName(), option.getQuantity());
     }
 }

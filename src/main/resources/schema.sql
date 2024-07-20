@@ -28,7 +28,7 @@ CREATE TABLE gift_option
     `name`     VARCHAR(255) NOT NULL UNIQUE,
     `quantity` INT          NOT NULL,
     `gift_id`  BIGINT,
-    `version` INT DEFAULT 0,
+    `version`  INT DEFAULT 0,
     FOREIGN KEY (gift_id) REFERENCES gift (id)
 );
 CREATE TABLE users
