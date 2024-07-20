@@ -1,7 +1,7 @@
 package gift.service;
 
 import gift.model.Category;
-import gift.model.CategoryDto;
+import gift.dto.CategoryDto;
 import gift.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

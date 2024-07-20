@@ -5,7 +5,7 @@ import gift.exception.KakaoValidationException;
 import gift.exception.StringValidationException;
 import gift.model.Category;
 import gift.model.Product;
-import gift.model.ProductDto;
+import gift.dto.ProductDto;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,9 @@ public class ProductService {
     }
     validate(productDetails);
     return productRepository.findById(id).map(product -> {
-      product.updateFromDto(productDetails, categoryRepository);
+      Category category = categoryRepository.findById(productDetails.getCategoryId())
+              .orElseThrow(() -> new CustomNotFoundException("Category not found"));
+      product.updateFromDto(productDetails.getName(), productDetails.getPrice(), productDetails.getImageUrl(), category);
       productRepository.save(product);
       return true;
     }).orElse(false);

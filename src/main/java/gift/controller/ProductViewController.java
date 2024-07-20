@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.model.ProductDto;
+import gift.dto.ProductDto;
 import gift.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

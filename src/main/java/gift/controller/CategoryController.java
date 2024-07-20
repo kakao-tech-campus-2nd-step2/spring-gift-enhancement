@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.model.CategoryDto;
+import gift.dto.CategoryDto;
 import gift.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

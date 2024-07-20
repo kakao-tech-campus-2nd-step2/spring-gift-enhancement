@@ -66,4 +66,5 @@ public class Option {
     if (name.length() > 50) return false;
     return Pattern.matches("[\\w\\s\\(\\)\\[\\]\\+\\-&/_]+", name);
   }
+
 }

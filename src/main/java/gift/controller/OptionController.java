@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.model.Option;
+import gift.dto.OptionDto;
 import gift.service.OptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,18 +13,22 @@ import java.util.List;
 @RequestMapping("/api/products/{productId}/options")
 public class OptionController {
 
+  private final OptionService optionService;
+
   @Autowired
-  private OptionService optionService;
+  public OptionController(OptionService optionService) {
+    this.optionService = optionService;
+  }
 
   @GetMapping
-  public ResponseEntity<List<Option>> getOptionsByProductId(@PathVariable Long productId) {
-    List<Option> options = optionService.getOptionsByProductId(productId);
+  public ResponseEntity<List<OptionDto>> getOptionsByProductId(@PathVariable Long productId) {
+    List<OptionDto> options = optionService.getOptionsByProductId(productId);
     return ResponseEntity.ok(options);
   }
 
   @PostMapping
-  public ResponseEntity<Option> addOptionToProduct(@PathVariable Long productId, @RequestBody Option option) {
-    Option createdOption = optionService.addOptionToProduct(productId, option);
+  public ResponseEntity<OptionDto> addOptionToProduct(@PathVariable Long productId, @RequestBody OptionDto optionDto) {
+    OptionDto createdOption = optionService.addOptionToProduct(productId, optionDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdOption);
   }
 }
