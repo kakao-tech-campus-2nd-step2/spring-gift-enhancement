@@ -23,6 +23,10 @@ public class ProductOption {
     @Column(nullable = false, columnDefinition = "INT NOT NULL COMMENT 'Option Quantity'")
     private int quantity;
 
+    @Version
+    @Column(nullable = false, columnDefinition = "BIGINT NOT NULL COMMENT 'Version for Optimistic Locking'")
+    private Long version;
+
     protected ProductOption() {
     }
 
@@ -36,6 +40,17 @@ public class ProductOption {
     public void updateQuantity(int quantity) {
         validateQuantity(quantity);
         this.quantity = quantity;
+    }
+
+    public void decreaseQuantity(int amount) {
+        if (amount <= 0) {
+            throw new BusinessException(ErrorCode.INVALID_DECREASE_QUANTITY);
+        }
+        int decreaseQuantity = this.quantity - amount;
+        if (decreaseQuantity < 0) {
+            throw new BusinessException(ErrorCode.INSUFFICIENT_QUANTITY);
+        }
+        this.quantity = decreaseQuantity;
     }
 
     private void validateQuantity(int quantity) {

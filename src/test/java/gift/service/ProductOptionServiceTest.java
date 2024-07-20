@@ -8,6 +8,7 @@ import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -65,6 +70,14 @@ public class ProductOptionServiceTest {
         return optionRepository.save(new Option(new OptionName(optionRequestDto.getName())));
     }
 
+    private ProductOption createProductOption(String optionName, int quantity) {
+        Long categoryId = createCategory();
+        Product product = createProduct(categoryId);
+        Option option = createOption(optionName);
+
+        return productOptionRepository.save(new ProductOption(product, option, quantity));
+    }
+
     @Test
     @Rollback
     public void 상품_옵션_추가_성공() {
@@ -104,13 +117,9 @@ public class ProductOptionServiceTest {
     @Test
     @Rollback
     public void 상품_옵션_수정_성공() {
-        Long categoryId = createCategory();
-        Product product = createProduct(categoryId);
-        Option option = createOption("옵션1");
+        ProductOption productOption = createProductOption("옵션1", 10);
 
-        ProductOption productOption = productOptionRepository.save(new ProductOption(product, option, 10));
-
-        ProductOptionRequestDto updateRequestDto = new ProductOptionRequestDto(product.getId(), option.getId(), 20);
+        ProductOptionRequestDto updateRequestDto = new ProductOptionRequestDto(productOption.getProduct().getId(), productOption.getOption().getId(), 20);
         ProductOptionResponseDto updatedProductOption = productOptionService.updateProductOption(productOption.getId(), updateRequestDto);
 
         assertNotNull(updatedProductOption);
@@ -119,29 +128,79 @@ public class ProductOptionServiceTest {
 
     @Test
     @Rollback
-    public void 옵션_수량_유효성_검증_실패() {
-        Long categoryId = createCategory();
-        Product product = createProduct(categoryId);
-        Option option = createOption("옵션1");
+    public void 상품_옵션_삭제_성공() {
+        ProductOption productOption = createProductOption("옵션1", 10);
 
-        assertThrows(BusinessException.class, () -> new ProductOption(product, option, -1));
-        assertThrows(BusinessException.class, () -> new ProductOption(product, option, 100000000));
+        productOptionService.deleteProductOption(productOption.getId());
+
+        assertFalse(productOptionRepository.findById(productOption.getId()).isPresent());
     }
 
     @Test
     @Rollback
-    public void 동일_상품_내_옵션_이름_중복_방지_실패() {
-        Long categoryId = createCategory();
-        Product product = createProduct(categoryId);
-        Option option1 = createOption("옵션1");
-        Option option2 = createOption("옵션1");
+    public void 상품_옵션_수량_감소_성공() {
+        ProductOption productOption = createProductOption("옵션1", 10);
 
-        productOptionService.addProductOption(new ProductOptionRequestDto(product.getId(), option1.getId(), 10));
+        productOptionService.decreaseProductOptionQuantity(productOption.getId(), 5);
+
+        ProductOption updatedProductOption = productOptionRepository.findById(productOption.getId()).orElseThrow();
+        assertEquals(5, updatedProductOption.getQuantity());
+    }
+
+    @Test
+    @Rollback
+    public void 상품_옵션_수량_감소_실패_수량부족() {
+        ProductOption productOption = createProductOption("옵션1", 10);
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
-            productOptionService.addProductOption(new ProductOptionRequestDto(product.getId(), option2.getId(), 20));
+            productOptionService.decreaseProductOptionQuantity(productOption.getId(), 15);
         });
 
-        assertEquals(ErrorCode.DUPLICATE_OPTION, exception.getErrorCode());
+        assertEquals(ErrorCode.INSUFFICIENT_QUANTITY, exception.getErrorCode());
+    }
+
+    @Test
+    @Rollback
+    public void 상품_옵션_수량_감소_실패_음수() {
+        ProductOption productOption = createProductOption("옵션1", 10);
+
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            productOptionService.decreaseProductOptionQuantity(productOption.getId(), -1);
+        });
+
+        assertEquals(ErrorCode.INVALID_DECREASE_QUANTITY, exception.getErrorCode());
+    }
+
+    @Test
+    @Rollback
+    public void 동시성_테스트_상품_옵션_수량_감소() throws InterruptedException {
+        int initialQuantity = 100;
+        int decreaseAmount = 1;
+        int threadCount = 5;
+
+        ProductOption productOption = createProductOption("옵션1", initialQuantity);
+
+        productOptionRepository.save(productOption);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        Runnable task = () -> {
+            try {
+                productOptionService.decreaseProductOptionQuantity(productOption.getId(), decreaseAmount);
+            } finally {
+                latch.countDown();
+            }
+        };
+
+        for (int i = 0; i < threadCount; i++) {
+            executorService.execute(task);
+        }
+
+        latch.await();
+        executorService.shutdown();
+
+        ProductOption updatedProductOption = productOptionRepository.findById(productOption.getId()).orElseThrow();
+        assertEquals(initialQuantity - threadCount * decreaseAmount, updatedProductOption.getQuantity());
     }
 }
