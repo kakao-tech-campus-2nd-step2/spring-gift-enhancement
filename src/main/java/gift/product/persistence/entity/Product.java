@@ -100,4 +100,8 @@ public class Product extends BaseTimeEntity {
         options.forEach(option -> option.setProduct(this));
         this.options.addAll(options);
     }
+
+    public void deleteOptions(List<Long> optionIds) {
+        options.removeIf(option -> optionIds.contains(option.getId()));
+    }
 }

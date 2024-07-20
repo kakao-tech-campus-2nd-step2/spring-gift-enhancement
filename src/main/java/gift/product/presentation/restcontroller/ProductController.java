@@ -1,10 +1,12 @@
 package gift.product.presentation.restcontroller;
 
+import gift.product.presentation.dto.OptionRequest;
+import gift.product.presentation.dto.OptionRequest.Create;
 import gift.product.presentation.dto.ProductRequest;
 import gift.product.presentation.dto.ProductResponse;
-import gift.product.presentation.dto.RequestOptionCreateDto;
 import gift.product.business.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -73,4 +75,32 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{id}/options")
+    public ResponseEntity<Void> addOptions(
+        @RequestBody @Valid List<Create> optionRequests,
+        @PathVariable("id") Long productId) {
+        var optionInCreates = optionRequests.stream()
+            .map(OptionRequest.Create::toOptionInCreate)
+            .toList();
+        productService.addOptions(optionInCreates, productId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/options")
+    public ResponseEntity<Void> updateOption(
+        @RequestBody @Valid List<OptionRequest.Update> optionRequestUpdate,
+        @PathVariable("id") Long productId) {
+        var optionInUpdates = optionRequestUpdate.stream()
+            .map(OptionRequest.Update::toOptionInUpdate)
+            .toList();
+        productService.updateOptions(optionInUpdates, productId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/options/options")
+    public ResponseEntity<List<Long>> deleteOption(@RequestBody List<Long> optionIds,
+        @PathVariable("id") Long productId) {
+        productService.deleteOptions(optionIds, productId);
+        return ResponseEntity.ok(optionIds);
+    }
 }

@@ -1,7 +1,6 @@
 package gift.product.business.dto;
 
 import gift.product.persistence.entity.Option;
-import java.util.List;
 
 public class OptionIn {
 
@@ -13,6 +12,13 @@ public class OptionIn {
         public Option toOption() {
             return new Option(name(), quantity());
         }
+    }
+
+    public record Update(
+        Long id,
+        String name,
+        Integer quantity
+    ) {
     }
 
 }

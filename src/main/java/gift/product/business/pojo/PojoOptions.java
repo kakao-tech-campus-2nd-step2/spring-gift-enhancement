@@ -1,6 +1,6 @@
 package gift.product.business.pojo;
 
-import gift.product.business.dto.OptionUpdateDto;
+import gift.product.business.dto.OptionIn;
 import gift.product.persistence.entity.Option;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +20,19 @@ public class PojoOptions {
         return List.copyOf(optionMap.values());
     }
 
-    public void updateOptions(List<OptionUpdateDto> optionUpdateDtos) {
-        for (var optionUpdateDto : optionUpdateDtos) {
-            var option = optionMap.get(optionUpdateDto.id());
-            option.update(optionUpdateDto.name(), optionUpdateDto.quantity());
+    public void checkWithExist(List<OptionIn.Create> optionInCreates) {
+        for (var optionInCreate : optionInCreates) {
+            if (optionMap.values().stream()
+                .anyMatch(option -> option.getName().equals(optionInCreate.name()))) {
+                throw new IllegalArgumentException("옵션 이름이 중복되었습니다.");
+            }
+        }
+    }
+
+    public void updateOptions(List<OptionIn.Update> optionInUpdates) {
+        for (var optionInUpdate : optionInUpdates) {
+            var option = optionMap.get(optionInUpdate.id());
+            option.update(optionInUpdate.name(), optionInUpdate.quantity());
         }
         checkDuplicate();
     }
@@ -38,5 +47,4 @@ public class PojoOptions {
             throw new IllegalArgumentException("옵션 이름이 중복되었습니다.");
         }
     }
-
 }
