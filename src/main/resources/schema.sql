@@ -5,6 +5,12 @@ CREATE TABLE IF NOT EXISTS products (
     image_url VARCHAR(255) NULL
 ) engine=InnoDB;
 
+CREATE TABLE IF NOT EXISTS options (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    count BIGINT NOT NULL
+) engine=InnoDB;
+
 create table categories
 (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -44,3 +50,11 @@ ALTER TABLE products
 alter table products
     add constraint fk_product_category_id_ref_category_id
         foreign key (category_id) references categories (id);
+
+
+ALTER TABLE options
+    ADD COLUMN product_id BIGINT NULL;
+
+alter table options
+    add constraint fk_option_product_id_ref_product_id
+        foreign key (product_id) references products (id);

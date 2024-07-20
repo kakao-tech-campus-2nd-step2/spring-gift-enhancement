@@ -25,6 +25,14 @@ public enum ResultCode {
     CREATE_WISH_SUCCESS(HttpStatus.OK, "W002", "위시 리스트 추가 성공"),
     UPDATE_WISH_SUCCESS(HttpStatus.OK, "W003", "위시 리스트 수정 성공"),
     DELETE_WISH_SUCCESS(HttpStatus.OK, "W004", "위시 리스트 삭제 성공"),
+
+    // Options
+    GET_ALL_OPTIONS_SUCCESS(HttpStatus.OK, "O001", "모든 옵션 조회 성공"),
+    GET_OPTIONS_BY_PRODUCT_ID_SUCCESS(HttpStatus.OK, "O002", "프로젝트로 옵션 조회 성공"),
+    GET_OPTION_BY_ID_SUCCESS(HttpStatus.OK, "O002", "단일 옵션 조회 성공"),
+    CREATE_OPTION_SUCCESS(HttpStatus.OK, "O003", "옵션 생성 성공"),
+    UPDATE_OPTION_SUCCESS(HttpStatus.OK, "O004", "옵션 수정 성공"),
+    DELETE_OPTION_SUCCESS(HttpStatus.OK, "O005", "옵션 삭제 성공"),
     ;
 
     // status 를 HttpStatus 로 관리하는 것이 좋을까, 아니면 int로 관리하는 것이 좋을까?
