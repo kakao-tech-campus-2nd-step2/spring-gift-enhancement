@@ -1,7 +1,9 @@
 package gift.service;
 
 import gift.dto.OptionAddRequest;
+import gift.dto.OptionSubtractRequest;
 import gift.dto.OptionUpdateRequest;
+import gift.exception.BadRequestException;
 import gift.exception.DuplicatedNameException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 @SpringBootTest
 @Transactional
@@ -80,5 +87,34 @@ class OptionServiceTest {
         Assertions.assertThat(filteredOptions.get(0).quantity()).isEqualTo(12345);
 
         optionService.deleteOption(savedOption.id());
+    }
+
+    @Test
+    @DisplayName("동시성 테스트 - 500개의 쓰레드풀에 10000개의 요청을 보냈을 때에도 정상적으로 요청이 처리 된다.")
+    public void concurrencyTest() throws InterruptedException {
+        //given
+        var subtractOptionRequest = new OptionSubtractRequest(1);
+        int requestCount = 10000;
+        ExecutorService executorService = Executors.newFixedThreadPool(500);
+        CountDownLatch countDownLatch = new CountDownLatch(requestCount);
+        //when
+        for (int i = 0; i < requestCount; i++) {
+            executorService.execute(() -> {
+                try {
+                    optionService.subtractOptionQuantity(1L, subtractOptionRequest);
+                } catch (BadRequestException exception) {
+                    System.out.println(exception.getMessage());
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+        //then
+        var option = optionService.getOptions(3L, Pageable.unpaged()).stream()
+                .filter((op) -> op.id().equals(1L))
+                .findFirst().get();
+
+        Assertions.assertThat(option.quantity()).isEqualTo(0);
     }
 }

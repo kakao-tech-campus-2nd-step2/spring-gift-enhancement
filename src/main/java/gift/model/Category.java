@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "product_category")
+@Table(name = "category")
 public class Category extends BaseEntity {
     @NotNull
     @Column(name = "name")

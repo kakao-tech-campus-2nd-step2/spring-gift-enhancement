@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "product_option")
+@Table(name = "option")
 public class Option extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
