@@ -27,6 +27,9 @@ public class CategoryServiceImpl implements CategoryService {
     public Category updateCategory(Long id, Category updatedCategory) {
         return categoryRepository.findById(id).map(category -> {
             category.setName(updatedCategory.getName());
+            category.setColor(updatedCategory.getColor());
+            category.setImageUrl(updatedCategory.getImageUrl());
+            category.setDescription(updatedCategory.getDescription());
             return categoryRepository.save(category);
         }).orElseThrow(() -> new RuntimeException("Category not found"));
     }
