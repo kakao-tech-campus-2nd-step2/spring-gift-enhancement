@@ -43,4 +43,11 @@ public class CategoryService {
 
         return categoryMapper.toDto(category);
     }
+
+    public void deleteCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new CategoryNotFoundException("카테고리가 없슴다."));
+
+        categoryRepository.delete(category);
+    }
 }
