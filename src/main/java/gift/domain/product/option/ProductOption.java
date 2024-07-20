@@ -62,4 +62,8 @@ public class ProductOption {
 
         return Pattern.matches(regex, name);
     }
+
+    public void subtract(Long quantity) {
+        this.quantity -= quantity;
+    }
 }

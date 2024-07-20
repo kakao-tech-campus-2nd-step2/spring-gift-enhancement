@@ -35,4 +35,12 @@ public class ProductOptionService {
     public List<ProductOption> getProductOptions(Long productId) {
         return productOptionRepository.findByProductId(productId);
     }
+
+    @Transactional
+    public void subtractProductOptionQuantity(Long productId, String optionName, Long quantity) {
+        ProductOption option = productOptionRepository.findByProductIdAndName(productId, optionName)
+                .orElseThrow(() -> new IllegalArgumentException("Option not found"));
+        option.subtract(quantity);
+        productOptionRepository.save(option);
+    }
 }
