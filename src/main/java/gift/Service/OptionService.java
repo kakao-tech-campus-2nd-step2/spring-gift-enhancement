@@ -1,6 +1,7 @@
 package gift.Service;
 
-import gift.Exception.OptionException;
+import gift.Exception.Option.OptionDuplicatedException;
+import gift.Exception.Option.OptionNotFoundException;
 import gift.Exception.ProductNotFoundException;
 import gift.Model.DTO.OptionDTO;
 import gift.Model.Entity.OptionEntity;
@@ -28,7 +29,7 @@ public class OptionService {
         Optional<ProductEntity> productEntityOptional = productRepository.findById(productId);
 
         if(optionEntityOptional.isPresent()){
-            throw new OptionException();
+            throw new OptionDuplicatedException();
         }
 
         if(productEntityOptional.isEmpty()){
@@ -60,7 +61,7 @@ public class OptionService {
         Optional<ProductEntity> productEntityOptional = productRepository.findById(productId);
 
         if(optionEntityOptional.isEmpty()){
-            throw new OptionException();
+            throw new OptionNotFoundException();
         }
 
         if(productEntityOptional.isEmpty()){
@@ -78,7 +79,7 @@ public class OptionService {
         Optional<OptionEntity> optionEntityOptional = optionRepository.findById(id);
 
         if(optionEntityOptional.isEmpty()){
-            throw new OptionException();
+            throw new OptionNotFoundException();
         }
 
         optionRepository.deleteById(id);
@@ -88,14 +89,14 @@ public class OptionService {
         Optional<OptionEntity> optionEntityOptional = optionRepository.findByName(optionDTO.name());
 
         if(optionEntityOptional.isEmpty()){
-            throw new OptionException();
+            throw new OptionNotFoundException();
         }
 
         OptionEntity optionEntity = optionEntityOptional.get();
         long quantity = optionEntity.getQuantity() - count;
 
         if(quantity < 0) {
-            throw new OptionException();
+            throw new IllegalArgumentException();
         }
 
         optionEntity.setQuantity(quantity);
