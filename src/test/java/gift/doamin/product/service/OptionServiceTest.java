@@ -96,6 +96,23 @@ class OptionServiceTest {
         then(optionRepository).should().save(any(Option.class));
     }
 
+    @Test
+    void 삭제_상품이_없는_경우() {
+        given(productRepository.findById(any())).willReturn(Optional.empty());
+
+        Assertions.assertThatExceptionOfType(ProductNotFoundException.class)
+            .isThrownBy(() -> optionService.delete(1L, 1L));
+    }
+
+    @Test
+    void 삭제_성공() {
+        given(productRepository.findById(any())).willReturn(Optional.of(createProduct()));
+
+        optionService.delete(1L, 1L);
+
+        then(optionRepository).should().deleteById(any());
+    }
+
 
     Product createProduct() {
         User user = new User("user@google.com", "pw", "user", UserRole.SELLER);
