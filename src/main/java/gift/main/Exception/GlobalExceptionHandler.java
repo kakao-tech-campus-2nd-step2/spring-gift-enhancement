@@ -27,7 +27,6 @@ public class GlobalExceptionHandler {
         return "error/error";
     }
 
-
     @ResponseBody
     @ExceptionHandler(SignatureException.class)
     public ResponseEntity<?> handleTokenException(Model model, SignatureException e) {
@@ -38,7 +37,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(responseBody);
     }
-
 
     @ResponseBody
     @ExceptionHandler(IllegalArgumentException.class)
@@ -58,7 +56,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getHttpStatus())
                 .body(e.getMessage());
     }
-
 
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)

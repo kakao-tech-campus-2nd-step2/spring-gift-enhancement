@@ -3,7 +3,7 @@ package gift.main.entity;
 import gift.main.dto.ProductRequest;
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -25,16 +25,9 @@ public class Product {
     @JoinColumn(name = "seller_id")
     private User seller;
 
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    //FetchType.LAZY는 객체를 getter쓸때 가져온다
-    private List<WishProduct> wishProducts;
-    //물건을 삭제하는 경우 -> 위시리스트 삭제...?
-
 
     public Product() {
 
@@ -107,8 +100,17 @@ public class Product {
         return category;
     }
 
-    public List<WishProduct> getWishProducts() {
-        return wishProducts;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

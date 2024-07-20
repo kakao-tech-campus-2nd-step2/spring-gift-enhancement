@@ -20,7 +20,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         this.jwtUtil = jwtUtil;
     }
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         //컨트롤러 호출 전 호출되는 메서드드드드...

@@ -1,8 +1,8 @@
 package gift.main.controller;
 
 import gift.main.annotation.SessionUser;
+import gift.main.dto.OptionListRequest;
 import gift.main.dto.ProductRequest;
-import gift.main.dto.ProductResponce;
 import gift.main.dto.UserVo;
 import gift.main.service.ProductService;
 import jakarta.validation.Valid;
@@ -19,15 +19,9 @@ public class AdminProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findProduct(@PathVariable(name = "id") Long id, @SessionUser UserVo sessionUserVo) {
-        ProductResponce product = productService.getProduct(id);
-        return ResponseEntity.ok(product);
-    }
-
     @PostMapping
-    public ResponseEntity<String> addProduct(@Valid @RequestBody ProductRequest productRequest, @SessionUser UserVo sessionUserVo) {
-        productService.addProduct(productRequest, sessionUserVo);
+    public ResponseEntity<String> registerProduct(@Valid @RequestBody ProductRequest productRequest, @Valid @RequestBody OptionListRequest optionListRequest, @SessionUser UserVo sessionUserVo) {
+        productService.registerProduct(productRequest, optionListRequest, sessionUserVo);
         return ResponseEntity.ok("Product added successfully");
     }
 
@@ -46,6 +40,5 @@ public class AdminProductController {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");
     }
-
 
 }

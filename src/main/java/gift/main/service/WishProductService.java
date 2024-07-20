@@ -13,6 +13,7 @@ import gift.main.repository.WishProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WishProductService {
@@ -27,30 +28,40 @@ public class WishProductService {
         this.userRepository = userRepository;
     }
 
-
     public Page<WishProductResponce> getWishProductPage(UserVo sessionUser, Pageable pageable) {
         Page<WishProductResponce> wishProductResponcePage = wishProductRepository.findAllByUserId(sessionUser.getId(), pageable)
                 .map(wishProduct -> new WishProductResponce(wishProduct));
-
         return wishProductResponcePage;
 
     }
 
+    @Transactional
     public void addWishlistProduct(Long productId, UserVo sessionUser) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        User user = userRepository.findByEmail(sessionUser.getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        if (wishProductRepository.existsByProductIdAndUserId(productId, user.getId())) {
-            throw new CustomException(ErrorCode.ALREADY_EXISTING_WISH_LIST)
-                    ;
+        Product product = validateProduct(productId);
+        User user = validateUser(sessionUser);
+        boolean wishListExists = wishProductRepository.existsByProductIdAndUserId(productId, sessionUser.getId());
+
+        if (wishListExists) {
+            throw new CustomException(ErrorCode.ALREADY_EXISTING_WISH_LIST);
         }
         wishProductRepository.save(new WishProduct(product, user));
     }
 
-
+    @Transactional
     public void deleteProducts(Long productId, UserVo sessionUserVo) {
         wishProductRepository.deleteByProductIdAndUserId(productId, sessionUserVo.getId());
+    }
+
+    private Product validateProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        return product;
+    }
+
+    private User validateUser(UserVo sessionUser) {
+        User user = userRepository.findByEmail(sessionUser.getEmail())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return user;
     }
 
 }

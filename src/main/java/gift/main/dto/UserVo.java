@@ -10,7 +10,6 @@ public class UserVo {
     private final String email;
     private final Role role;
 
-
     public Long getId() {
         return id;
     }
