@@ -65,7 +65,7 @@ class WishlistServiceTest {
     }
 
     @Test
-    void getWishlist() {
+    void testGetWishlist() {
         wishlist = new Wishlist(null, member, product);
         wishlistRepository.save(wishlist);
         Page<Product> wishlists = wishlistService.getWishlist(member.getEmail(), pageable);
@@ -77,7 +77,7 @@ class WishlistServiceTest {
 
     @Test
     @Transactional
-    void addWishlist() {
+    void testAddWishlist() {
         wishlistService.addWishlist(member.getEmail(), product.getId());
         List<Wishlist> wishlists = wishlistRepository.findAll();
         Wishlist wishlist = wishlists.get(0);
@@ -90,7 +90,7 @@ class WishlistServiceTest {
 
     @Test
     @Transactional
-    void removeWishlist() {
+    void testRemoveWishlist() {
         wishlist = new Wishlist(null, member, product);
         wishlistRepository.save(wishlist);
 

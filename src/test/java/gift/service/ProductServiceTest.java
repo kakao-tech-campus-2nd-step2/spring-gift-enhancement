@@ -58,13 +58,13 @@ class ProductServiceTest {
     }
 
     @Test
-    void findAllProducts() {
+    void testFindAllProducts() {
         Page<Product> products = productService.findAllProducts(pageable);
         assertEquals(2, products.getTotalElements());
     }
 
     @Test
-    void findProductsById() {
+    void testFindProductsById() {
         Long productId = product1.getId();
         Product product = productService.findProductsById(productId);
         assertAll(
@@ -75,7 +75,7 @@ class ProductServiceTest {
 
     @Test
     @Transactional
-    void saveProduct() {
+    void testSaveProduct() {
         ProductDTO productDTO = new ProductDTO("상품3", "100", category.getId(), "https://kakao");
         productService.saveProduct(productDTO);
         List<Product> savedProducts = productRepository.findAll();
@@ -87,7 +87,7 @@ class ProductServiceTest {
 
     @Test
     @Transactional
-    void updateProduct() {
+    void testUpdateProduct() {
         Long productId = product1.getId();
         ProductDTO productDTO = new ProductDTO("상품3", "100", category.getId(), "https://kakao");
         productService.updateProduct(productDTO, productId);
@@ -104,7 +104,7 @@ class ProductServiceTest {
 
     @Test
     @Transactional
-    void deleteProductAndWishlist() {
+    void testDeleteProductAndWishlist() {
         Long productId = product1.getId();
         productService.deleteProductAndWishlistAndOptions(productId);
         boolean exists = productRepository.existsById(productId);

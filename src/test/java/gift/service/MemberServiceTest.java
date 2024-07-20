@@ -24,7 +24,7 @@ class MemberServiceTest {
 
     @Test
     @Transactional
-    void saveMember() {
+    void testSaveMember() {
         MemberDTO memberDTO = new MemberDTO("kbm", "kbm@kbm.com", "kbm");
         Member savedMember = memberService.saveMember(memberDTO);
 
@@ -38,8 +38,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @Transactional
-    void findMemberByEmail() {
+    void testFindMemberByEmail() {
         Member member = new Member(null, "kbm", "kbm@kbm.com", "kbm", "user");
         memberRepository.save(member);
 

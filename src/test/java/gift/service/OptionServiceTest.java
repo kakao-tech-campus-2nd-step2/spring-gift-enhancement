@@ -53,7 +53,7 @@ class OptionServiceTest {
     }
 
     @Test
-    void findAllByProductId() {
+    void testFindAllByProductId() {
         List<Option> options = optionService.findAllByProductId(product.getId());
         assertAll(
             () -> assertEquals(1, options.size()),
@@ -62,7 +62,7 @@ class OptionServiceTest {
     }
 
     @Test
-    void findOptionById() {
+    void testFindOptionById() {
         Option foundOption = optionService.findOptionById(option.getId());
         assertAll(
             () -> assertNotNull(foundOption),
@@ -72,7 +72,7 @@ class OptionServiceTest {
 
     @Test
     @Transactional
-    void saveOption() {
+    void testSaveOption() {
         OptionDTO optionDTO = new OptionDTO("테스트2", 1L, product.getId());
         optionService.saveOption(optionDTO);
         List<Option> options = optionService.findAllByProductId(product.getId());
@@ -89,7 +89,7 @@ class OptionServiceTest {
 
     @Test
     @Transactional
-    void updateOption() {
+    void testUpdateOption() {
         OptionDTO updatedOptionDTO = new OptionDTO("테스트3", 2L, product.getId());
         optionService.updateOption(updatedOptionDTO, option.getId());
         Option updatedOption = optionService.findOptionById(option.getId());
@@ -111,7 +111,7 @@ class OptionServiceTest {
 
     @Test
     @Transactional
-    void deleteOption() {
+    void testDeleteOption() {
         Option newOption = new Option(null, "테스트2", 2L, product);
         optionRepository.save(newOption);
 
