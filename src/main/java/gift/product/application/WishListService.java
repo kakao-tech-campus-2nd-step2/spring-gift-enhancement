@@ -51,7 +51,7 @@ public class WishListService {
     }
 
     @Transactional
-    public void addProductToWishList(Long userId, Long wishlistId, Long productId, Long optionId) {
+    public void addProductToWishList(Long userId, Long wishlistId, Long productId, Long optionId, int quantity) {
         WishList wishList = findById(wishlistId);
         if (!Objects.equals(wishList.getUser().getId(), userId)) {
             throw new ProductException(ErrorCode.NOT_USER_OWNED);
@@ -60,7 +60,7 @@ public class WishListService {
         Product product = productRepository.findById(productId);
         ProductOption productOption = productRepository.getProductWithOption(productId, optionId);
 
-        wishList.addWishListProduct(new WishListProduct(wishList, product, productOption));
+        wishList.addWishListProduct(new WishListProduct(wishList, product, productOption, quantity));
 
 
         wishListRepository.save(wishList);

@@ -35,7 +35,7 @@ public class PaymentService {
         for (WishListProduct product : wishList.getWishListProducts()) {
             Product wishListProduct = product.getProduct();
             ProductOption productOption = product.getProductOption();
-            productOption.decreaseQuantity(1L);// 일단 1개식 구매한다고 생각하자구..!!!
+            productOption.decreaseQuantity(product.getQuantity());
 
             productRepository.save(wishListProduct);
         }

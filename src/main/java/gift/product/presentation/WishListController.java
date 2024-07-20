@@ -46,11 +46,11 @@ public class WishListController {
     }
 
     @JwtAuthenticated
-    @PostMapping("/{wishListId}/add/{productId}/{optionId}")
-    public ResponseEntity<?> addProductToWishList(@PathVariable Long wishListId, @PathVariable Long productId, @PathVariable Long optionId) {
+    @PostMapping("/{wishListId}/add/{productId}/{optionId}/{quentity}")
+    public ResponseEntity<?> addProductToWishList(@PathVariable Long wishListId, @PathVariable Long productId, @PathVariable Long optionId, @PathVariable int quentity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = Long.valueOf(authentication.getName());
-        wishListService.addProductToWishList(userId, wishListId, productId, optionId);
+        wishListService.addProductToWishList(userId, wishListId, productId, optionId, quentity);
 
         return ResponseEntity.ok(new CommonResponse<>(null, "위시리스트에 제품 추가 성공", true));
     }
