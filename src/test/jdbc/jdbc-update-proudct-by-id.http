@@ -1,4 +1,4 @@
-### Send PUT userRequestDto with json body
+### Send PUT memberRequestDto with json body
 PUT http://localhost:8080/product/jdbc/1
 Content-Type: application/json
 
@@ -9,7 +9,7 @@ Content-Type: application/json
   "imageUrl": "url수정"
 }
 
-### Send PUT userRequestDto with json body
+### Send PUT memberRequestDto with json body
 PUT http://localhost:8080/product/jdbc/1
 Content-Type: application/json
 
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ###예외처리
 ###IllegalProductNameLengthException
-### Send PUT userRequestDto with json body
+### Send PUT memberRequestDto with json body
 PUT http://localhost:8080/product/jdbc/1
 Content-Type: application/json
 
@@ -32,7 +32,7 @@ Content-Type: application/json
 }
 
 ### IllegalProductNameKeywordException
-### Send PUT userRequestDto with json body
+### Send PUT memberRequestDto with json body
 PUT http://localhost:8080/product/jdbc/1
 Content-Type: application/json
 
@@ -43,7 +43,7 @@ Content-Type: application/json
 }
 
 ### IllegalProductNameCharacterException
-### Send PUT userRequestDto with json body
+### Send PUT memberRequestDto with json body
 PUT http://localhost:8080/product/jdbc/1
 Content-Type: application/json
 
@@ -53,7 +53,7 @@ Content-Type: application/json
   "imageUrl": "url수정"
 }
 
-### Send PUT userRequestDto with json body
+### Send PUT memberRequestDto with json body
 PUT http://localhost:8080/product/jdbc/1
 Content-Type: application/json
 

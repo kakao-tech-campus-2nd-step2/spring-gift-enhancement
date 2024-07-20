@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface WishRepositoryInterface extends JpaRepository<Wish, Long> {
-    List<Wish> findAllByUserId(Long userId);
+public interface WishRepository extends JpaRepository<Wish, Long> {
+    List<Wish> findAllByMember_id(Long member_id);
 
     Page<Wish> findAll(Pageable pageable);
 
 }
+
