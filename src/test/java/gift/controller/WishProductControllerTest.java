@@ -192,20 +192,7 @@ class WishProductControllerTest {
     @DisplayName("잘못된 정렬 데이터가 올 경우 예외를 던진다.")
     void getWishProductsInvalidPageSort() throws Exception {
         //given
-        var getRequest = get("/api/wishes?sort=id,asc")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + memberToken);
-        //when
-        var getResult = mockMvc.perform(getRequest);
-        //then
-        getResult.andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("잘못된 크기 데이터가 올 경우 예외를 던진다.")
-    void getWishProductsInvalidPageSize() throws Exception {
-        //given
-        var getRequest = get("/api/wishes?size=3")
+        var getRequest = get("/api/wishes?sort=wrong,asc")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken);
         //when

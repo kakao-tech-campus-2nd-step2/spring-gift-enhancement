@@ -4,7 +4,6 @@ import gift.dto.WishProductAddRequest;
 import gift.dto.WishProductResponse;
 import gift.dto.WishProductUpdateRequest;
 import gift.service.WishProductService;
-import gift.service.page.PageService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,11 +27,9 @@ import java.util.List;
 public class WishProductController {
 
     private final WishProductService wishProductService;
-    private final PageService pageService;
 
-    public WishProductController(WishProductService wishProductService, PageService pageService) {
+    public WishProductController(WishProductService wishProductService) {
         this.wishProductService = wishProductService;
-        this.pageService = pageService;
     }
 
     @PostMapping("/add")
@@ -50,7 +47,6 @@ public class WishProductController {
     @GetMapping
     public ResponseEntity<List<WishProductResponse>> getWishProducts(@RequestAttribute("memberId") Long memberId,
                                                                      @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        pageService.pageValidation(pageable);
         var wishProducts = wishProductService.getWishProducts(memberId, pageable);
         return ResponseEntity.ok(wishProducts);
     }

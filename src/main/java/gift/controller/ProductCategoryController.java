@@ -3,7 +3,6 @@ package gift.controller;
 import gift.dto.ProductCategoryRequest;
 import gift.dto.ProductCategoryResponse;
 import gift.service.ProductCategoryService;
-import gift.service.page.PageService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,11 +25,9 @@ import java.util.List;
 public class ProductCategoryController {
 
     private final ProductCategoryService productCategoryService;
-    private final PageService pageService;
 
-    public ProductCategoryController(ProductCategoryService productCategoryService, PageService pageService) {
+    public ProductCategoryController(ProductCategoryService productCategoryService) {
         this.productCategoryService = productCategoryService;
-        this.pageService = pageService;
     }
 
     @PostMapping("/add")
@@ -54,7 +51,6 @@ public class ProductCategoryController {
     @GetMapping
     public ResponseEntity<List<ProductCategoryResponse>> getCategories(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        pageService.pageValidation(pageable);
         var productCategories = productCategoryService.getCategories(pageable);
         return ResponseEntity.ok(productCategories);
     }

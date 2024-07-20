@@ -1,6 +1,7 @@
 package gift.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -69,7 +70,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<String> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public ResponseEntity<String> methodArgumentNotValidExceptionHandling(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
 
         StringBuilder builder = new StringBuilder();
@@ -78,6 +79,11 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity.badRequest().body(builder.toString());
+    }
+
+    @ExceptionHandler(value = PropertyReferenceException.class)
+    public ResponseEntity<String> propertyReferenceExceptionHandling() {
+        return new ResponseEntity<>(INVALID_PAGE_REQUEST_MESSAGE, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = Exception.class)
