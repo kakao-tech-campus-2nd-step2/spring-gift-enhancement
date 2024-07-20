@@ -23,7 +23,7 @@ public class Category {
 //    protected Category() {
 //    }
 
-    public Category(String name, String color, String imgUrl) {
+    public Category(String name) {
         this.name = name;
         this.color = color;
         this.imgUrl = imgUrl;

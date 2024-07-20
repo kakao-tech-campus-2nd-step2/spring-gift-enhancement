@@ -1,62 +1,76 @@
 package gift.option.service;
 
-import gift.option.dto.OptionDto;
-import gift.option.repository.OptionRepository;
-import gift.product.model.Product;
-import gift.product.repository.ProductRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
-@Transactional
-class OptionServiceTest {
+import gift.option.repository.OptionRepository;
+import gift.product.repository.ProductRepository;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-    @Autowired
+@ExtendWith(MockitoExtension.class)
+public class OptionServiceTest {
+    @Mock
     private OptionRepository optionRepository;
 
-    @Autowired
-    private OptionService optionService;
-
-    @Autowired
+    @Mock
     private ProductRepository productRepository;
 
-    private Product product;
+    @InjectMocks
+    private OptionService optionService;
 
-    @BeforeEach
-    public void setUp() {
-        product = new Product("Test Product");
-        productRepository.save(product);
+    @Test
+    // 사용할 수 없는 문자를 옵션명에 사용한 경우 -> 예외 출력
+    public void use_wrong_text_in_optionName() {
+        String wrongOptionName = "invalid!Name";
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.validateOptionName(wrongOptionName);
+        });
+
+        assertEquals("옵션명에 잘못된 문자가 있습니다.", exception.getMessage());
     }
 
     @Test
-    public void use_wring_text_in_optionName() {
-        // Given
-        String name = "wrong@Option#Name";
-        OptionDto optionDto = new OptionDto(name, 10);
+    // 옵션명 올바르게 사용
+    public void use_valid_text_in_optionName() {
+        String validOptionName = "Valid_Name(1)";
 
-        // When & Then
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> optionService.addOptionToProduct(product.getId(), optionDto));
-
-        // 예외 메시지가 출력되는지
-        assertThat(exception.getMessage()).isEqualTo("옳지 않은 문자가 사용되었습니다.");
+        optionService.validateOptionName(validOptionName);
     }
 
     @Test
-    public void find_by_noExit_id() {
-        // Given
-        Long nonExistentProductId = 9545669L;
+    // 옵션 최소 수량 미만인 경우
+    public void optionQuantity_less_than_1() {
+        int invalidQuantity = 0;
 
-        // When & Then
-        Exception exception = assertThrows(RuntimeException.class, () -> productRepository.findById(nonExistentProductId)
-                .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다.")));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.validateOptionQuantity(invalidQuantity);
+        });
 
-        // 예외 메시지가 출력되는지
-        assertThat(exception.getMessage()).isEqualTo("해당 상품이 존재하지 않습니다.");
+        assertEquals("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.", exception.getMessage());
+    }
+
+    @Test
+    // 옵션 최대 수량 초과한 경우
+    public void optionQuantity_more_than_100000000() {
+        int invalidQuantity = 100000000;
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.validateOptionQuantity(invalidQuantity);
+        });
+
+        assertEquals("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.", exception.getMessage());
+    }
+
+    @Test
+    // 옵션 수량 1개 이상 ~ 1억 개 미만
+    public void optionQuantity_valid() {
+        int validQuantity = 99999999;
+
+        optionService.validateOptionQuantity(validQuantity);
     }
 }

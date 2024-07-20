@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface OptionRepository extends JpaRepository<Option, Long> {
     List<Option> findByProductId(Long productId);
+
+    Option findByName(String name);
 }
