@@ -60,14 +60,7 @@ public class ProductController {
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
         ProductResponseDTO productResponseDTO = productService.getProductById(id);
-        ProductRequestDTO productRequestDTO = new ProductRequestDTO(
-                productResponseDTO.getName(),
-                productResponseDTO.getPrice(),
-                productResponseDTO.getImageUrl(),
-                productResponseDTO.getCategoryId()
-        );
-        productRequestDTO.setId(id); // 수정 폼에서 ID를 사용할 수 있도록 설정
-        model.addAttribute("productRequestDTO", productRequestDTO);
+        model.addAttribute("productResponseDTO", productResponseDTO);
         model.addAttribute("categories", categoryService.getAllCategories());
         return "productForm";
     }
