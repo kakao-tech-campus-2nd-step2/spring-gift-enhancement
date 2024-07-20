@@ -1,11 +1,7 @@
 package gift.user.domain;
 
 import gift.product.domain.WishList;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +15,9 @@ public class User {
 
     private String name;
     private String email;
-
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishList> wishLists = new ArrayList<>();
 
     public User() {
@@ -45,12 +40,12 @@ public class User {
         return name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {

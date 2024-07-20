@@ -10,6 +10,8 @@ import gift.user.application.UserService;
 import gift.user.domain.User;
 import gift.util.ErrorCode;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +36,6 @@ public class WishListService {
         return wishListRepository.findByUserId(userId);
     }
 
-
     public Page<WishList> getProductsInWishList(Long userId, int page, int size, String sortBy, String direction) {
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
             : Sort.by(sortBy).descending();
@@ -46,19 +47,19 @@ public class WishListService {
         return wishListRepository.findByUserId(userId, pageable);
     }
 
-
     @Transactional
     public void addProductToWishList(Long userId, Long productId) {
         WishList wishList = wishListRepository.findByUserId(userId);
-        Product product = productRepository.findById(productId).orElseThrow();
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
 
         if (wishList == null) {
-            wishList = new WishList();
+            User user = userService.getUser(userId);
+            wishList = new WishList(user, LocalDateTime.now());
             wishList = wishListRepository.save(wishList);
         }
-        product.setWishList(wishList);
 
-        WishListProduct wishListProduct = new WishListProduct(product, wishList);
+        WishListProduct wishListProduct = new WishListProduct(wishList, product);
         wishList.addWishListProduct(wishListProduct);
 
         wishListRepository.save(wishList);
@@ -69,6 +70,8 @@ public class WishListService {
         WishList wishList = wishListRepository.findByUserId(userId);
         if (wishList != null) {
             wishList.removeWishListProduct(productId);
+        } else {
+            throw new ProductException(ErrorCode.WISHLIST_NOT_FOUND);
         }
     }
 
@@ -78,8 +81,7 @@ public class WishListService {
         }
         User user = userService.getUser(userId);
 
-        WishList wishList = new WishList();
-        wishList.setUser(user);
+        WishList wishList = new WishList(user, LocalDateTime.now());
         wishListRepository.save(wishList);
     }
 }

@@ -1,42 +1,32 @@
-create table category
+CREATE TABLE users
 (
-    color       varchar(7)   not null,
-    id          bigint       not null auto_increment,
-    description varchar(255),
-    image_url   varchar(255) not null,
-    name        varchar(255) not null,
-    primary key (id)
-);
-
-create table product
-(
-    price       integer      not null,
-    category_id bigint       not null,
-    id          bigint       not null auto_increment,
-    name        varchar(15)  not null,
-    image_url   varchar(255) not null,
-    primary key (id)
-);
-
-CREATE TABLE Users
-(
-    id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id  BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name     VARCHAR(255) NOT NULL,
     email    VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE WishList
+CREATE TABLE wishlist
 (
-    id      BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users (id)
+    wishlist_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id     BIGINT    NOT NULL,
+    created_at  TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
-CREATE TABLE WishList_Product
+CREATE TABLE product
 (
-    wishlist_id BIGINT NOT NULL,
-    product_id  BIGINT NOT NULL,
-    PRIMARY KEY (wishlist_id, product_id),
-    FOREIGN KEY (wishlist_id) REFERENCES WishList (id),
-    FOREIGN KEY (product_id) REFERENCES Product (id)
+    product_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(255) NOT NULL,
+    price DOUBLE NOT NULL,
+    image_url  VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE wishlist_product
+(
+    wishlist_product_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    wishlist_id         BIGINT NOT NULL,
+    product_id          BIGINT NOT NULL,
+    FOREIGN KEY (wishlist_id) REFERENCES wishlist (wishlist_id),
+    FOREIGN KEY (product_id) REFERENCES product (product_id)
 );

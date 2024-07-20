@@ -1,19 +1,10 @@
 package gift.product.domain;
 
 import gift.user.domain.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "wishlist")
 public class WishList {
@@ -22,23 +13,25 @@ public class WishList {
     @Column(name = "wishlist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "wishList", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ArrayList<WishListProduct> wishListProducts = new ArrayList<>();
+    private List<WishListProduct> wishListProducts = new ArrayList<>();
 
     private LocalDateTime createdAt;
 
     public WishList() {
     }
 
-    public WishList(User user, ArrayList<WishListProduct> wishListProducts, LocalDateTime createdAt) {
+
+    public <E> WishList(User user, LocalDateTime now) {
         this.user = user;
-        this.wishListProducts = wishListProducts;
-        this.createdAt = createdAt;
+        this.createdAt = now;
     }
+
 
     public Long getId() {
         return id;
@@ -57,7 +50,7 @@ public class WishList {
         user.getWishLists().add(this);
     }
 
-    public ArrayList<WishListProduct> getWishListProducts() {
+    public List<WishListProduct> getWishListProducts() {
         return wishListProducts;
     }
 
@@ -67,13 +60,7 @@ public class WishList {
     }
 
     public void removeWishListProduct(Long wishListProductId) {
-        for (WishListProduct wishListProduct : wishListProducts) {
-            if (wishListProduct.getId().equals(wishListProductId)) {
-                wishListProducts.remove(wishListProduct);
-                wishListProduct.setWishList(null);
-                break;
-            }
-        }
+        wishListProducts.removeIf(wishListProduct -> wishListProduct.getId().equals(wishListProductId));
     }
 
     public LocalDateTime getCreatedAt() {

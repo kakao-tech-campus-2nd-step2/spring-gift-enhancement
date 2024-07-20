@@ -1,12 +1,8 @@
 package gift.product.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "product")
 public class Product {
@@ -15,28 +11,21 @@ public class Product {
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private Double price;
     private String imageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private WishList wishList;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WishListProduct> wishListProducts = new ArrayList<>();
+
+    public Product() {
+    }
 
     public Product(String name, Double price, String imageUrl) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-    }
-
-    public Product(Long id, String name, Double price, String imageUrl) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
-
-    public Product() {
-        this(null, null, null, null);
     }
 
     public Long getId() {
@@ -71,9 +60,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public void setWishList(WishList wishList) {
-        this.wishList = wishList;
+    public List<WishListProduct> getWishListProducts() {
+        return wishListProducts;
     }
 
+    public void setWishListProducts(List<WishListProduct> wishListProducts) {
+        this.wishListProducts = wishListProducts;
+    }
 }
-
