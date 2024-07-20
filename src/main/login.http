@@ -111,3 +111,20 @@ host: localhost:8080
   "id": 2
 }
 #####
+
+POST /category/add HTTP/1.1
+content-type: application/json
+host: localhost:8080
+
+{
+  "categoryName": "패션"
+}
+###
+POST /category/delete/1 HTTP/1.1
+content-type: application/json
+host: localhost:8080
+
+{
+  "id": 1,
+  "categoryName": "상품권"
+}

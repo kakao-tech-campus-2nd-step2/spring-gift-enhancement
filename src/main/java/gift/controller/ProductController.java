@@ -2,7 +2,9 @@ package gift.controller;
 
 import gift.exception.InvalidProductException;
 import gift.exception.ProductNotFoundException;
+import gift.model.Category;
 import gift.model.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -22,25 +24,31 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController( ProductService productService) {
+    public ProductController( ProductService productService, CategoryService categoryService ) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
     public String getProducts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productService.getAllProducts(pageable);
+        List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("productPage", productPage);
         model.addAttribute("product", new Product());
+        model.addAttribute("categories", categories);
         return "product-list";
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid @ModelAttribute Product product, BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            return "product-list";
-        }
+    public String addProduct(@RequestParam String name,
+        @RequestParam int price,
+        @RequestParam String imageUrl,
+        @RequestParam Long categoryId, RedirectAttributes redirectAttributes) {
+        Category category = categoryService.getCategoryById(categoryId);
+        Product product = new Product(name, price, imageUrl, category);
 
         productService.addProduct(product);
         redirectAttributes.addFlashAttribute("message", "Product added successfully!");
@@ -48,11 +56,13 @@ public class ProductController {
     }
 
     @PostMapping("/update")
-    public String updateProduct(@Valid @ModelAttribute Product product, BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            return "product-list";
-        }
-        productService.updateProduct(product.getId(), product);
+    public String updateProduct(@RequestParam String name,
+        @RequestParam int price,
+        @RequestParam String imageUrl,
+        @RequestParam Long categoryId,@ModelAttribute Product product, RedirectAttributes redirectAttributes) {
+        Category category = categoryService.getCategoryById(categoryId);
+        Product updatedproduct = new Product(name, price, imageUrl, category);
+        productService.updateProduct(product.getId(), updatedproduct);
         redirectAttributes.addFlashAttribute("message", "Product updated successfully!");
         return "redirect:/products";
     }
