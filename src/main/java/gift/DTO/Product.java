@@ -74,10 +74,5 @@ public class Product {
 
   public Category getCategory() {
     return this.category;
-
-  }
-
-  public Category getCategory() {
-    return this.category;
   }
 }
