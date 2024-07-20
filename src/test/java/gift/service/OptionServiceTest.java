@@ -3,6 +3,7 @@ package gift.service;
 import gift.dto.OptionAddRequest;
 import gift.dto.OptionSubtractRequest;
 import gift.dto.OptionUpdateRequest;
+import gift.exception.BadRequestException;
 import gift.exception.DuplicatedNameException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -84,6 +85,19 @@ class OptionServiceTest {
         Assertions.assertThat(filteredOptions.size()).isEqualTo(1);
         Assertions.assertThat(filteredOptions.get(0).name()).isEqualTo("수정된 옵션");
         Assertions.assertThat(filteredOptions.get(0).quantity()).isEqualTo(12345);
+
+        optionService.deleteOption(savedOption.id());
+    }
+
+    @Test
+    @DisplayName("옵션의 잔여수량이 0인 경우에 차감요청이 들어오면 예외를 발생시킨다.")
+    void failAddOptionWithZeroQuantity() {
+        //given
+        var optionRequest = new OptionAddRequest("옵션1", 0, 1L);
+        var savedOption = optionService.addOption(optionRequest);
+        var optionSubtractRequest = new OptionSubtractRequest(1);
+        //when, then
+        Assertions.assertThatThrownBy(() -> optionService.subtractOptionQuantity(savedOption.id(), optionSubtractRequest)).isInstanceOf(BadRequestException.class);
 
         optionService.deleteOption(savedOption.id());
     }
