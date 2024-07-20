@@ -25,7 +25,7 @@ public class MemberAdminController {
         this.memberService = memberService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public String getAllMembers(Model model) {
         model.addAttribute("members", memberService.getAllMembers());
         return "members";
@@ -37,7 +37,7 @@ public class MemberAdminController {
         return "member_form";
     }
 
-    @PostMapping("")
+    @PostMapping
     public String addMember(
         @Valid @ModelAttribute("member") MemberRegisterRequest memberRegisterRequest,
         BindingResult result) {

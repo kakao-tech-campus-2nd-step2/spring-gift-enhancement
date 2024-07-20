@@ -35,7 +35,7 @@ public class ProductAdminController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public String getAllProducts(Model model,
         @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<ProductResponse> productPage = productService.getAllProducts(pageable);
@@ -53,7 +53,7 @@ public class ProductAdminController {
         return "product_form";
     }
 
-    @PostMapping("")
+    @PostMapping
     public String addProduct(
         @Valid @ModelAttribute("product") ProductCreateRequest productCreateRequest,
         BindingResult result, Model model) {

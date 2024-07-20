@@ -100,7 +100,8 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategoryId()
+            product.getCategoryId(),
+            product.getCategoryName()
         );
     }
 
