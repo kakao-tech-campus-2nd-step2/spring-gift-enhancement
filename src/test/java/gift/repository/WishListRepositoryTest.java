@@ -12,6 +12,7 @@ import gift.users.user.User;
 import gift.users.user.UserRepository;
 import gift.users.wishlist.WishList;
 import gift.users.wishlist.WishListRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,17 +38,20 @@ public class WishListRepositoryTest {
     private Product product;
     private User user;
     private Option option;
+    private List<Option> options;
 
     @BeforeEach
     void beforeEach() {
         category = new Category("상품권", null, null, null);
         categoryRepository.save(category);
-        product = new Product("이춘식", 1000, "image.jpg", category);
+        option = new Option("XL", 3, product);
+        options = new ArrayList<>(List.of(option));
+        product = new Product("이춘식", 1000, "image.jpg", category, options);
+        option.setProduct(product);
         productRepository.save(product);
+        optionRepository.save(option);
         user = new User("admin@email.com", "1234");
         userRepository.save(user);
-        option = new Option("XL", 3, product);
-        optionRepository.save(option);
     }
 
     @Test
@@ -77,8 +81,10 @@ public class WishListRepositoryTest {
     @DisplayName("이메일 위시리스트 전체 찾기")
     void findAllByEmail() {
         //Given
-        Product product2 = new Product("라이언", 3000, "example.jpg", category);
+        Product product2 = new Product("라이언", 3000, "example.jpg", category, options);
         productRepository.save(product2);
+        option.setProduct(product2);
+        optionRepository.save(option);
         WishList wishList = new WishList(user, product, 3, option);
         WishList wishList1 = new WishList(user, product2, 5, option);
         wishListRepository.save(wishList);

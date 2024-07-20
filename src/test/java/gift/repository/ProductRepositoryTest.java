@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.administrator.category.Category;
 import gift.administrator.category.CategoryRepository;
+import gift.administrator.option.Option;
 import gift.administrator.product.Product;
 import gift.administrator.product.ProductRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,28 +25,37 @@ public class ProductRepositoryTest {
     private CategoryRepository categoryRepository;
     private Category category;
     private Product product;
+    private List<Option> options;
 
     @BeforeEach
     void beforeEach() {
         category = new Category("상품권", null, null, null);
         categoryRepository.save(category);
-        product = new Product("라이언", 1000, "image.jpg", category);
+        Option option = new Option("L", 3, null);
+        options = new ArrayList<>(List.of(option));
+        product = new Product("라이언", 1000, "image.jpg", category, options);
+        option.setProduct(product);
     }
 
     @Test
     @DisplayName("상품 추가 테스트")
     void save() {
         //Given
+        Product expected = new Product("라이언", 1000, "image.jpg", category, options);
 
         //When
         Product actual = productRepository.save(product);
 
         //Then
-        assertThat(actual.getId()).isNotNull();
-        assertThat(actual.getName()).isEqualTo("라이언");
-        assertThat(actual.getPrice()).isEqualTo(1000);
-        assertThat(actual.getImageUrl()).isEqualTo("image.jpg");
-        assertThat(actual.getCategory()).isEqualTo(category);
+        assertThat(actual)
+            .extracting(Product::getName, Product::getPrice, Product::getImageUrl,
+                Product::getCategory, p -> p.getOptions().getFirst().getName(),
+                p -> p.getOptions().getFirst().getQuantity(),
+                p -> p.getOptions().getFirst().getProduct())
+            .containsExactly(expected.getName(), expected.getPrice(), expected.getImageUrl(),
+                expected.getCategory(), expected.getOptions().getFirst().getName(),
+                expected.getOptions().getFirst().getQuantity(),
+                expected.getOptions().getFirst().getProduct());
     }
 
     @Test
@@ -52,7 +63,7 @@ public class ProductRepositoryTest {
     void findById() {
         //Given
         productRepository.save(product);
-        Product expected = new Product("라이언", 1000, "image.jpg", category);
+        Product expected = new Product("라이언", 1000, "image.jpg", category, options);
 
         //When
         Optional<Product> actual = productRepository.findById(product.getId());
@@ -61,9 +72,13 @@ public class ProductRepositoryTest {
         assertThat(actual).isPresent();
         assertThat(actual.get())
             .extracting(Product::getName, Product::getPrice, Product::getImageUrl,
-                Product::getCategory)
+                Product::getCategory, p -> p.getOptions().getFirst().getName(),
+                p -> p.getOptions().getFirst().getQuantity(),
+                p -> p.getOptions().getFirst().getProduct())
             .containsExactly(expected.getName(), expected.getPrice(), expected.getImageUrl(),
-                expected.getCategory());
+                expected.getCategory(), expected.getOptions().getFirst().getName(),
+                expected.getOptions().getFirst().getQuantity(),
+                expected.getOptions().getFirst().getProduct());
     }
 
     @Test
@@ -71,7 +86,7 @@ public class ProductRepositoryTest {
     void findAll() {
         //Given
         productRepository.save(product);
-        Product product2 = new Product("이춘식", 3000, "example.jpg", category);
+        Product product2 = new Product("이춘식", 3000, "example.jpg", category, options);
         productRepository.save(product2);
 
         //When

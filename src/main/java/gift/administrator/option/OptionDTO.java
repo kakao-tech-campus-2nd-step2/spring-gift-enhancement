@@ -22,8 +22,14 @@ public class OptionDTO {
 
     public OptionDTO(){}
 
-    public OptionDTO(Long id, String name, int quantity, long productId) {
+    public OptionDTO(Long id, String name, int quantity, Long productId) {
         this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.productId = productId;
+    }
+
+    public OptionDTO(String name, int quantity, Long productId) {
         this.name = name;
         this.quantity = quantity;
         this.productId = productId;
