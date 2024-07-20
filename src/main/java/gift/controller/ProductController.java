@@ -40,14 +40,14 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product postProduct(@Valid @RequestBody ProductDTO productDTO) {
+    public Product createProduct(@Valid @RequestBody ProductDTO productDTO) {
         Category category = categoryService.getCategoryByName(productDTO.getCategoryName());
         Product product = productDTO.toEntity(category);
         return productService.createProduct(product);
     }
 
     @PutMapping("/{id}")
-    public Product putProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) {
+    public Product updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) {
         Category category = categoryService.getCategoryByName(productDTO.getCategoryName());
         Product product = new Product.ProductBuilder()
             .id(id)
