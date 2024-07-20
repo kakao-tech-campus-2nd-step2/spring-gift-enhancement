@@ -1,17 +1,22 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Option;
+import gift.dto.OptionDto;
 import gift.dto.ProductRegisterRequestDto;
 import gift.domain.Product;
 import gift.dto.ProductResponseDto;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+@Transactional
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
@@ -67,5 +72,35 @@ public class ProductService {
         return productPage.map(ProductResponseDto::convertToDto);
     }
 
+    public List<OptionDto> getOptionsByProductId(Long productId) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("해당 id의 상품 없음: " + productId));
+        List<Option> options = product.getOptions();
 
+        return options.stream()
+            .map(OptionDto::convertToDto)
+            .collect(Collectors.toList());
+    }
+
+    public OptionDto saveOption(Long productId , OptionDto optionDto) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("해당 id의 상품 없음: " + productId));
+        List<Option> options = product.getOptions();
+        for(Option option: options) {
+            if(option.getName().equals(optionDto.getName())){
+                throw new IllegalStateException("옵션에 중복 이름 안됨");
+            }
+        }
+        Option newOption = new Option(optionDto.getName(), optionDto.getQuantity(), product);
+        product.addOption(newOption);
+        Product addedOptionProduct = productRepository.save(product);
+
+        // 새로 저장된 Option을 찾기
+        Option addedOption = addedOptionProduct.getOptions().stream()
+            .filter(option -> option.getName().equals(optionDto.getName()))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("저장된 옵션을 찾을 수 없습니다."));
+
+        return new OptionDto(addedOption.getId(), addedOption.getName(), addedOption.getQuantity());
+    }
 }

@@ -4,7 +4,6 @@ import gift.dto.OptionDto;
 import gift.dto.PageRequestDto;
 import gift.dto.ProductRegisterRequestDto;
 import gift.dto.ProductResponseDto;
-import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -24,11 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/products")
 public class ProductController {
     private final ProductService productService;
-    private final OptionService optionService;
 
-    public ProductController(ProductService productService, OptionService optionService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.optionService = optionService;
     }
 
     @GetMapping
@@ -58,12 +55,12 @@ public class ProductController {
 
     @GetMapping("/{productId}/options")
     public ResponseEntity<List<OptionDto>> getOptions(@PathVariable("productId") Long productId) {
-        return ResponseEntity.ok(optionService.getOptionsByProductId(productId));
+        return ResponseEntity.ok(productService.getOptionsByProductId(productId));
     }
 
     @PostMapping("/{productId}/options")
     public ResponseEntity<OptionDto> addOption(@PathVariable("productId") Long productId, @Valid @RequestBody OptionDto optionDto) {
-        OptionDto savedOption = optionService.saveOption(productId , optionDto);
+        OptionDto savedOption = productService.saveOption(productId , optionDto);
         return ResponseEntity.ok(savedOption);
     }
 }
