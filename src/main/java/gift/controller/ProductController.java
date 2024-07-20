@@ -128,7 +128,7 @@ public class ProductController {
         Optional<Product> product = productService.getProductById(id);
         if (product.isPresent()) {
             List<Category> categories = categoryRepository.findAll();
-            model.addAttribute("product", product);
+            model.addAttribute("product", product.get());
             model.addAttribute("categories", categories);
             return "product-detail"; // product-details.html 뷰 반환
         } else {
