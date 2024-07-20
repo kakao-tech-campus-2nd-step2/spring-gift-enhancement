@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.dto.ProductResponseDto;
+import gift.dto.ProductWithOptionRequest;
 import gift.entity.Product;
 import gift.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,18 +41,21 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
+    public ResponseEntity<String> createProduct(@RequestBody ProductWithOptionRequest productWithOptionRequest) {
+        productService.save(productWithOptionRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id,
+    public ResponseEntity<String> updateProduct(@PathVariable Long id,
         @RequestBody Product product) {
-        return new ResponseEntity<>(productService.update(id, product), HttpStatus.OK);
+        productService.update(id, product);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         productService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

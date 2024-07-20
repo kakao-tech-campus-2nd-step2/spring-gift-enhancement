@@ -1,16 +1,19 @@
-insert into members (email, password) values ('testuser@gmail.com', 'test123');
-insert into products (name, price, image_url) values ('1번째 상품', 1000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('2번째 상품', 2000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('3번째 상품', 3000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('4번째 상품', 4000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('5번째 상품', 5000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('6번째 상품', 6000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('7번째 상품', 7000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('8번째 상품', 8000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('9번째 상품', 9000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('10번째 상품', 10000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('11번째 상품', 11000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('12번째 상품', 12000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('13번째 상품', 13000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('14번째 상품', 14000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
-insert into products (name, price, image_url) values ('15번째 상품', 15000, 'https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg');
+insert into member (email, password) values ('testuser@gmail.com', 'test123');
+
+-- 더미 데이터: Category 삽입
+insert into category (name, image_url, color, description) values ('교환권', 'https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png', '#6c95d1', '교환권입니다.');
+insert into category (name, image_url, color, description) values ('의류', 'https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png', '#6c95d1', '의류입니다.');
+
+-- 더미 데이터: Product 삽입
+INSERT INTO product (name, price, image_url, category_id) VALUES ('카카오 선물하기 교환권', 10000.0, 'http://example.com/image1.jpg', 1);
+INSERT INTO product (name, price, image_url, category_id) VALUES ('빨간 티셔츠', 15000.0, 'http://example.com/image2.jpg', 2);
+
+-- 더미 데이터: Option 삽입 (Product 1의 옵션)
+INSERT INTO option (name, quantity, product_id) VALUES ('10000원권', 10, 1);
+INSERT INTO option (name, quantity, product_id) VALUES ('20000원권', 20, 1);
+INSERT INTO option (name, quantity, product_id) VALUES ('30000원권', 15, 1);
+
+-- 더미 데이터: Option 삽입 (Product 2의 옵션)
+INSERT INTO option (name, quantity, product_id) VALUES ('S', 5, 2);
+INSERT INTO option (name, quantity, product_id) VALUES ('M', 8, 2);
+INSERT INTO option (name, quantity, product_id) VALUES ('L', 12, 2);
