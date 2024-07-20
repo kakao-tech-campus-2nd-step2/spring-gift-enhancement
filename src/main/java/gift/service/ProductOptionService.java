@@ -44,6 +44,23 @@ public class ProductOptionService {
         validateOptionNameExists(null, productId, name);
     }
 
+    /**
+     * 상품 옵션 이름이 이미 존재하는지 확인합니다.<br>
+     * 이미 존재한다면 {@link AlreadyExistsException} 을 발생시킵니다.
+     * @param optionId 현재 상품 옵션 아이디 (옵션 새로 생성 시 null)
+     * @param productId 상품 아이디
+     * @param name 상품 옵션 이름
+     */
+    private void validateOptionNameExists(Long optionId, Long productId, String name) {
+        if(optionId == null) {
+            optionId = -1L;
+        }
+        productOptionRepository.findDuplicatedProductOption(optionId, productId, name)
+            .ifPresent(duplicatedOptionId -> {
+                throw new AlreadyExistsException(name);
+            });
+    }
+
     public ReadAllProductOptionsResponse readAllOptions(Long productId) {
         List<ReadProductOptionResponse> options = productOptionRepository.findAllByProductId(productId)
             .stream()
@@ -64,23 +81,6 @@ public class ProductOptionService {
         option.update(updateParam);
 
         return UpdateProductOptionResponse.fromEntity(option);
-    }
-
-    /**
-     * 상품 옵션 이름이 이미 존재하는지 확인합니다.<br>
-     * 이미 존재한다면 {@link AlreadyExistsException} 을 발생시킵니다.
-     * @param optionId 현재 상품 옵션 아이디 (옵션 새로 생성 시 null)
-     * @param productId 상품 아이디
-     * @param name 상품 옵션 이름
-     */
-    private void validateOptionNameExists(Long optionId, Long productId, String name) {
-        if(optionId == null) {
-            optionId = -1L;
-        }
-        productOptionRepository.findDuplicatedProductOption(optionId, productId, name)
-            .ifPresent(duplicatedOptionId -> {
-                throw new AlreadyExistsException(name);
-            });
     }
 
     @Transactional
