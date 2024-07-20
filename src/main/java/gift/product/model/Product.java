@@ -37,6 +37,11 @@ public class Product {
 
     // 생성자
     public Product() {}
+    public Product(String name, Integer price, String imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     public Product(String name, Integer price, String imageUrl, Category category) {
         this.name = name;

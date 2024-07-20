@@ -57,6 +57,10 @@ public class Option {
         this.quantity = quantity;
         this.product = product;
     }
+    public Option(String name, Long quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
 
     // Getters and setters
     public Long getId() {
