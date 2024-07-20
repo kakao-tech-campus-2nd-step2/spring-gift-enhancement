@@ -22,10 +22,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             User resolvedUser = getUserFromToken(authHeader);
-            if (resolvedUser != null) {
-                request.setAttribute("user", resolvedUser);
-                return true;
-            }
+            request.setAttribute("user", resolvedUser);
+            return true;
         }
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         return false;

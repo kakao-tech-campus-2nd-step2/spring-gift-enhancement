@@ -31,9 +31,6 @@ public class WishListController {
     @GetMapping("/wish")
     public ResponseEntity<?> getGiftList(@RequestAttribute("user") User user,
                                          @ModelAttribute PagingRequest pagingRequest) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
-        }
         PagingResponse<GiftResponse> gifts = giftService.getAllGifts(pagingRequest.getPage(), pagingRequest.getSize());
         return ResponseEntity.ok(gifts);
     }
@@ -42,10 +39,6 @@ public class WishListController {
     public ResponseEntity<String> addGiftToCart(@RequestAttribute("user") User user,
                                                 @PathVariable Long giftId,
                                                 @RequestParam(required = false, defaultValue = "1") int quantity) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
-
-        }
         wishService.addGiftToUser(user.getId(), giftId, quantity);
         return ResponseEntity.ok("위시리스트에 상품이 추가되었습니다.");
 
@@ -55,10 +48,6 @@ public class WishListController {
     public ResponseEntity<String> updateGiftQuantity(@RequestAttribute("user") User user,
                                                      @PathVariable Long giftId,
                                                      @RequestParam(name = "quantity") int quantity) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
-
-        }
         wishService.updateWishQuantity(user.getId(), giftId, quantity);
         return ResponseEntity.ok("카트에서 상품수량이 변경되었습니다.");
 
@@ -67,10 +56,6 @@ public class WishListController {
     @DeleteMapping("/wish/{giftId}")
     public ResponseEntity<String> removeGiftFromCart(@RequestAttribute("user") User user,
                                                      @PathVariable Long giftId) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
-
-        }
         wishService.removeGiftFromUser(user.getId(), giftId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("카트에서 상품이 삭제되었습니다.");
 
@@ -79,9 +64,6 @@ public class WishListController {
     @GetMapping("/mywish")
     public ResponseEntity<PagingResponse<WishResponse>> getUserGifts(@RequestAttribute("user") User user,
                                                                      @ModelAttribute PagingRequest pagingRequest) {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         PagingResponse<Wish> userWishes = wishService.getGiftsForUser(user.getId(), pagingRequest.getPage(), pagingRequest.getSize());
         List<WishResponse> wishResponses =
                 userWishes.getContent()
