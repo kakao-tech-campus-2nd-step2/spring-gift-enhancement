@@ -68,7 +68,7 @@ public class WishService {
         List<String> productNames = new ArrayList<>();
 
         for(WishEntity w : wishEntities){
-            productNames.add(productRepository.findById(w.getProduct().getId()).get().getName());
+            productNames.add(w.getProduct().getName());
         }
 
         return productNames;
