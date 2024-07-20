@@ -69,7 +69,6 @@ public class ProductOptionService {
         }
         productOptionRepository.findDuplicatedProductOption(optionId, productId, name)
             .ifPresent(duplicatedOptionId -> {
-                System.out.println("duplicatedOptionId = " + duplicatedOptionId);
                 throw new AlreadyExistsException(name);
             });
     }
