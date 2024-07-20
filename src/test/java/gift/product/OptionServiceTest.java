@@ -10,6 +10,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import gift.category.model.dto.Category;
+import gift.product.exception.ProductCustomException.NotEnoughStockException;
+import gift.product.exception.ProductCustomException.ProductMustHaveOptionException;
 import gift.product.model.OptionRepository;
 import gift.product.model.dto.option.CreateOptionRequest;
 import gift.product.model.dto.option.Option;
@@ -104,13 +106,13 @@ public class OptionServiceTest {
 
     @Test
     @DisplayName("삭제 요청 시 1개의 옵션이 존재할 때 옵션을 삭제할 수 없다.")
-    public void deleteOption_ShouldNotDeleteOption_WhenProductExists() {
+    public void deleteOption_ShouldThrowProductMustHaveOptionExceptiong_WhenProductExists() {
         // given
         when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.of(option));
         when(optionRepository.countByProductIdAndIsActiveTrue(product.getId())).thenReturn(1);
 
         // when, then
-        assertThrows(IllegalStateException.class, () -> optionService.deleteOption(product, option.getId()));
+        assertThrows(ProductMustHaveOptionException.class, () -> optionService.deleteOption(product, option.getId()));
         verify(optionRepository, times(0)).save(any(Option.class));
     }
 
@@ -150,7 +152,7 @@ public class OptionServiceTest {
         when(optionRepository.findByIdAndIsActiveTrue(option.getId())).thenReturn(Optional.of(option));
 
         //when, then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(NotEnoughStockException.class,
                 () -> optionService.subtractOptionQuantity(option.getId(), requestedQuantity));
         verify(optionRepository, times(0)).save(any(Option.class));
     }

@@ -1,6 +1,7 @@
 package gift.product.model.dto.option;
 
 
+import gift.product.exception.ProductCustomException.NotEnoughStockException;
 import gift.product.model.dto.product.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -93,7 +94,7 @@ public class Option {
 
     public void subtract(int quantity) {
         if (this.quantity < quantity) {
-            throw new IllegalArgumentException("남은 수량이 없습니다.");
+            throw new NotEnoughStockException();
         }
         this.quantity -= quantity;
     }

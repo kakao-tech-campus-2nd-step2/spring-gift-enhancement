@@ -1,5 +1,6 @@
 package gift.product.service;
 
+import gift.product.exception.ProductCustomException.ProductMustHaveOptionException;
 import gift.product.model.OptionRepository;
 import gift.product.model.dto.option.CreateOptionRequest;
 import gift.product.model.dto.option.Option;
@@ -39,6 +40,10 @@ public class OptionService {
 
     @Transactional
     public void addOptionList(Product product, List<CreateOptionRequest> createOptionRequests) {
+        if (createOptionRequests.isEmpty()) {
+            throw new ProductMustHaveOptionException();
+        }
+
         for (CreateOptionRequest request : createOptionRequests) {
             addOption(product, request);
         }
@@ -58,7 +63,7 @@ public class OptionService {
         Option option = getOption(optionId);
         checkOptionOwner(product, option);
         if (optionRepository.countByProductIdAndIsActiveTrue(product.getId()) <= 1) {
-            throw new IllegalStateException("상품은 하나 이상의 옵션을 가지고 있어야 합니다.");
+            throw new ProductMustHaveOptionException();
         }
         option.inactive();
         optionRepository.save(option);
@@ -77,7 +82,7 @@ public class OptionService {
     }
 
     @Transactional
-    public void subtractOptionQuantity(Long optionId, int quantity) throws IllegalArgumentException {
+    public void subtractOptionQuantity(Long optionId, int quantity) {
         Option option = optionRepository.findByIdAndIsActiveTrue(optionId)
                 .orElseThrow(() -> new EntityNotFoundException("Option"));
 
