@@ -6,6 +6,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import gift.product.dto.OptionDto;
 import gift.product.dto.OptionResponse;
+import gift.product.dto.OptionSubtractAmount;
 import gift.product.model.Category;
 import gift.product.model.Option;
 import gift.product.model.Product;
@@ -133,6 +134,24 @@ class OptionServiceTest {
     }
 
     @Test
+    void 옵션_수량_차감() {
+        //given
+        int QUANTITY = 10;
+        int SUBTRACT_AMOUNT = 3;
+
+        Category category = categoryRepository.save(new Category("테스트카테고리"));
+        Product product = productRepository.save(new Product("테스트상품", 1500, "테스트주소", category));
+
+        Option insertedOption = optionService.insertOption(new OptionDto("테스트옵션", QUANTITY, product.getId()));
+
+        //when
+        Option subtractedOption = optionService.subtractOption(insertedOption.getId(), new OptionSubtractAmount(SUBTRACT_AMOUNT));
+
+        //then
+        assertThat(subtractedOption.getQuantity()).isEqualTo(QUANTITY - SUBTRACT_AMOUNT);
+    }
+
+    @Test
     void 존재하지_않는_상품에_대한_옵션_추가() {
         assertThatThrownBy(
             () -> optionService.insertOption(new OptionDto("테스트옵션", 1, -1L))).isInstanceOf(
@@ -171,5 +190,17 @@ class OptionServiceTest {
         assertThatThrownBy(
             () -> optionService.insertOption(new OptionDto("테스트옵션중복명", 1, product.getId()))).isInstanceOf(
             IllegalArgumentException.class);
+    }
+
+    @Test
+    void 옵션_수량보다_더_많이_차감() {
+        //given
+        Category category = categoryRepository.save(new Category("테스트카테고리"));
+        Product product = productRepository.save(new Product("테스트상품", 1500, "테스트주소", category));
+
+        Option insertedOption = optionService.insertOption(new OptionDto("테스트옵션", 1, product.getId()));
+
+        //when, then
+        assertThatThrownBy(() -> optionService.subtractOption(insertedOption.getId(), new OptionSubtractAmount(999))).isInstanceOf(IllegalArgumentException.class);
     }
 }
