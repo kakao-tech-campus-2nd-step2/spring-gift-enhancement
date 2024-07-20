@@ -8,6 +8,10 @@ public class UserResponse {
     String email;
     String password;
 
+    public UserResponse(){
+
+    }
+
     public UserResponse(User user) {
         this.id = user.getId();
         this.userId = user.getUserId();

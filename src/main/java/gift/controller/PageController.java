@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class PageController {
     @GetMapping("/")
-    public String start() {
+    public String main() {
         return "index.html";
     }
 

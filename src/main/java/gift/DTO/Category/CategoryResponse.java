@@ -6,6 +6,10 @@ public class CategoryResponse {
     Long id;
     String name;
 
+    public CategoryResponse(){
+
+    }
+
     public CategoryResponse(Category category) {
         this.id = category.getId();
         this.name = category.getName();

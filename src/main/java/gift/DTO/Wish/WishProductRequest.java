@@ -7,6 +7,10 @@ public class WishProductRequest {
     UserResponse user;
     ProductResponse product;
 
+    public WishProductRequest(){
+
+    }
+
     public WishProductRequest(UserResponse user, ProductResponse product) {
         this.user = user;
         this.product = product;

@@ -20,7 +20,7 @@ public class OptionController {
     }
 
     @GetMapping("/api/products/{product_id}/options")
-    public ResponseEntity<Page<OptionResponse>> getOption(
+    public ResponseEntity<Page<OptionResponse>> readOption(
             @PathVariable("product_id") Long product_id,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "5") int size,

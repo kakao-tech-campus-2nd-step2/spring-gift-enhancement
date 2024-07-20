@@ -22,7 +22,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
     /*
-     * User의 정보를 오름차순으로 조회하는 로직
+     * 유저 정보를 오름차순으로 조회하는 로직
      */
     public Page<UserResponse> findAllASC(int page, int size, String field){
         List<Sort.Order> sorts = new ArrayList<>();
@@ -34,7 +34,7 @@ public class UserService {
         return users.map(UserResponse::new);
     }
     /*
-     * User의 정보를 오름차순으로 조회하는 로직
+     * 유저 정보를 내림차순으로 조회하는 로직
      */
     public Page<UserResponse> findAllDESC(int page, int size, String field){
         List<Sort.Order> sorts = new ArrayList<>();
@@ -46,36 +46,32 @@ public class UserService {
         return users.map(UserResponse::new);
     }
     /*
-     * User의 정보를 userId를 기준으로 찾는 로직
+     * userId를 기준으로 한 유저를 조회하는 로직
      */
-    public UserResponse loadOneUser(String userId){
+    public UserResponse findByUserId(String userId){
         User user = userRepository.findByUserId(userId);
         return new UserResponse(user);
     }
     /*
-     * 위와 동일, 오버로딩
+     * id를 기준으로 한 유저를 조회하는 로직
      */
-    public UserResponse loadOneUser(Long id){
+    public UserResponse findById(Long id){
         User user = userRepository.findById(id).orElseThrow(NullPointerException::new);
         return new UserResponse(user);
     }
     /*
-     * User의 정보를 저장하는 로직
+     * 유저 정보를 저장하는 로직
      */
     @Transactional
-    public void createUser(UserRequest userRequest){
+    public void save(UserRequest userRequest){
         userRepository.save(new User(
                 userRequest.getUserId(),
                 userRequest.getEmail(),
                 userRequest.getPassword()
         ));
     }
-    @Transactional
-    public void delete(Long id){
-        userRepository.deleteById(id);
-    }
     /*
-     * user 정보를 업데이트하는 로직
+     * 유저 정보를 갱신하는 로직
      */
     @Transactional
     public void update(UserRequest userRequest){
@@ -89,18 +85,16 @@ public class UserService {
         return userRepository.existsByUserId(userRequest.getUserId());
     }
     /*
-     * 위와 동일 ( overloading )
-     */
-    public boolean isDuplicate(Long id){
-        return userRepository.existsById(id);
-    }
-    /*
      * 로그인을 위한 확인을 해주는 로직
      */
     public boolean login(UserRequest userRequest){
         return userRepository.existsByUserIdAndPassword(userRequest.getUserId(), userRequest.getPassword());
     }
     /*
-     * user 정보를 삭제하는 로직
+     * 유저 정보를 삭제하는 로직
      */
+    @Transactional
+    public void delete(Long id){
+        userRepository.deleteById(id);
+    }
 }

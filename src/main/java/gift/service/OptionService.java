@@ -23,9 +23,8 @@ public class OptionService {
         this.optionRepository = optionRepository;
         this.productRepository = productRepository;
     }
-
     /*
-     * 새로운 옵션을 저장하는 로직
+     * 한 상품에 대한 새로운 옵션을 저장하는 로직
      */
     @Transactional
     public void save(Long product_id, OptionRequest optionRequest){

@@ -28,7 +28,7 @@ public class WishListController {
      * 실패 시 : Exception Handler에서 처리
      */
     @PostMapping("api/wishes/{productId}")
-    public ResponseEntity<Void> addWishList(
+    public ResponseEntity<Void> createWishList(
             @PathVariable("productId") Long id, @AuthenticateMember UserResponse userRes
     ){
         ProductResponse productRes = ps.readOneProduct(id);
@@ -45,7 +45,7 @@ public class WishListController {
      * 실패 시 : Exception Handler에서 처리
      */
     @GetMapping("api/wishes")
-    public ResponseEntity<Page<WishProductResponse>> getWishList(
+    public ResponseEntity<Page<WishProductResponse>> readWishList(
             @AuthenticateMember UserResponse user,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "5") int size,
@@ -53,14 +53,17 @@ public class WishListController {
             @RequestParam(value = "field", defaultValue = "id") String field
     ){
         if(sort.equals("asc")){
-            Page<WishProductResponse> wishList = wishListService.loadWishListASC(user.getId(), page, size, field);
+            Page<WishProductResponse> wishList = wishListService.findWishListASC(user.getId(), page, size, field);
             return new ResponseEntity<>(wishList, HttpStatus.OK);
         }
-        Page<WishProductResponse> wishList = wishListService.loadWishListDESC(user.getId(), page, size, field);
+        Page<WishProductResponse> wishList = wishListService.findWishListDESC(user.getId(), page, size, field);
         return new ResponseEntity<>(wishList, HttpStatus.OK);
     }
     /*
      * 위시리스트 수량 수정하기
+     * productId와 수량을 받아 위시리스트 내부 물품의 수량을 수정
+     * 성공 시 : 200, 성공
+     * 실패 시 : Exception Handler에서 처리
      */
     @PutMapping("api/wishes/{productId}")
     public ResponseEntity<Void> updateWishProduct(
@@ -76,7 +79,7 @@ public class WishListController {
     /*
      * 위시리스트 내용 삭제
      * email, productId를 받아 위시리스트에 상품을 추가
-     * 성공 시 : 200, 성공
+     * 성공 시 : 204, 성공
      * 실패 시 : Exception Handler에서 처리
      */
     @DeleteMapping("api/wishes/{wishId}")
@@ -86,6 +89,6 @@ public class WishListController {
     ){
         wishListService.deleteWishProduct(wishId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -10,6 +10,10 @@ public class WishProductResponse {
     ProductResponse product;
     int count;
 
+    public WishProductResponse(){
+
+    }
+
     public WishProductResponse(WishProduct wishProduct) {
         this.id = wishProduct.getId();
         this.user = new UserResponse(wishProduct.getUser());

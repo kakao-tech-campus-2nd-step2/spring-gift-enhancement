@@ -5,6 +5,10 @@ public class UserRequest {
     String email;
     String password;
 
+    public UserRequest(){
+
+    }
+
     public UserRequest(String userId, String email, String password){
         this.userId = userId;
         this.email = email;

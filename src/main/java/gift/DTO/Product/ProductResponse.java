@@ -10,6 +10,10 @@ public class ProductResponse {
     String imageUrl;
     CategoryResponse category;
 
+    public ProductResponse(){
+
+    }
+
     public ProductResponse(Product product) {
         this.id = product.getId();
         this.name = product.getName();

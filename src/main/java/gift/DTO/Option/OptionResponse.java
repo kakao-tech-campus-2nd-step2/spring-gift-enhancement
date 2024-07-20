@@ -7,6 +7,10 @@ public class OptionResponse {
     String name;
     Long quantity;
 
+    public OptionResponse(){
+
+    }
+
     public OptionResponse(Option option) {
         this.id = option.getId();
         this.name = option.getName();
