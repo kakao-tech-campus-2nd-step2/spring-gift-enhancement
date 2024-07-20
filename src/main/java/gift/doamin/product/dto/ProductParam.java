@@ -1,6 +1,7 @@
 package gift.doamin.product.dto;
 
 import gift.doamin.product.entity.Product;
+import java.util.List;
 
 public class ProductParam {
 
@@ -8,7 +9,7 @@ public class ProductParam {
 
     private Long userId;
 
-    private Long category_id;
+    private Long categoryId;
 
     private String name;
 
@@ -16,13 +17,18 @@ public class ProductParam {
 
     private String imageUrl;
 
+    private List<OptionParam> options;
+
     public ProductParam(Product product) {
         this.id = product.getId();
         this.userId = product.getUser().getId();
-        this.category_id = product.getCategory().getId();
+        this.categoryId = product.getCategory().getId();
         this.name = product.getName();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
+        this.options = product.getOptions().stream()
+            .map(option -> new OptionParam(option.getId(), option.getName()))
+            .toList();
     }
 
     public Long getId() {
@@ -33,8 +39,8 @@ public class ProductParam {
         return userId;
     }
 
-    public Long getCategory_id() {
-        return category_id;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
     public String getName() {
@@ -47,5 +53,9 @@ public class ProductParam {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public List<OptionParam> getOptions() {
+        return options;
     }
 }

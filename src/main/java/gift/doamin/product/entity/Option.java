@@ -37,8 +37,8 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

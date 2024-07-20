@@ -76,6 +76,10 @@ public class Product extends AuditingEntity {
         return imageUrl;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void updateAll(ProductForm productForm, Category category) {
         this.category = category;
         this.name = productForm.getName();
