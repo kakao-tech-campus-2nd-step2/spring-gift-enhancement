@@ -1,6 +1,8 @@
 package gift.controller;
 
 import gift.dto.OptionDTO;
+import gift.dto.OptionRequestDTO;
+import gift.dto.OptionResponseDTO;
 import gift.service.OptionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +34,14 @@ public class OptionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OptionDTO>> getOptions(@PathVariable Long productId) {
-        List<OptionDTO> options = optionService.getOptionsByProductId(productId);
+    public ResponseEntity<List<OptionResponseDTO>> getOptions(@PathVariable Long productId) {
+        List<OptionResponseDTO> options = optionService.getOptionsByProductId(productId);
         return new ResponseEntity<>(options, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<OptionDTO> addOption(@PathVariable Long productId, @RequestBody OptionDTO optionDTO) {
-        OptionDTO createdOption = optionService.addOption(productId, optionDTO);
+    public ResponseEntity<OptionResponseDTO> addOption(@PathVariable Long productId, @RequestBody OptionRequestDTO optionRequestDTO) {
+        OptionResponseDTO createdOption = optionService.addOption(productId, optionRequestDTO);
         return new ResponseEntity<>(createdOption, HttpStatus.CREATED);
     }
 

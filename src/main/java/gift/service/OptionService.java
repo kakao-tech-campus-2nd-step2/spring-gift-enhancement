@@ -3,6 +3,8 @@ package gift.service;
 import gift.domain.Product;
 import gift.domain.Option;
 import gift.dto.OptionDTO;
+import gift.dto.OptionRequestDTO;
+import gift.dto.OptionResponseDTO;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -32,25 +34,25 @@ public class OptionService {
         optionRepository.save(option);
     }
 
-    public List<OptionDTO> getOptionsByProductId(Long productId) {
+    public List<OptionResponseDTO> getOptionsByProductId(Long productId) {
         List<Option> options = optionRepository.findByProductId(productId);
         return options.stream()
-                .map(option -> new OptionDTO(option.getId(), option.getName(), option.getQuantity()))
+                .map(option -> new OptionResponseDTO(option.getId(), option.getName(), option.getQuantity()))
                 .collect(Collectors.toList());
     }
 
-    public OptionDTO addOption(Long productId, OptionDTO optionDTO) {
+    public OptionResponseDTO addOption(Long productId, OptionRequestDTO optionRequestDTO) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
 
-        if (optionRepository.existsByProductIdAndName(productId, optionDTO.getName())) {
+        if (optionRepository.existsByProductIdAndName(productId, optionRequestDTO.getName())) {
             throw new IllegalArgumentException("Option name already exists for this product");
         }
 
-        Option option = new Option(optionDTO.getName(), optionDTO.getQuantity(), product);
+        Option option = new Option(optionRequestDTO.getName(), optionRequestDTO.getQuantity(), product);
         Option savedOption = optionRepository.save(option);
 
-        return new OptionDTO(savedOption.getId(), savedOption.getName(), savedOption.getQuantity());
+        return new OptionResponseDTO(savedOption.getId(), savedOption.getName(), savedOption.getQuantity());
     }
 
     public void deleteOption(Long optionId) {

@@ -39,8 +39,8 @@ public class OptionServiceTest {
         int quantityToSubtract = 5;
 
         Category category = new Category("Test Category");
-        Product product = new Product(productId, "Test Product", 1000, "test.jpg", category); // 설정된 ID 추가
-        Option option = new Option(optionId, "Test Option", 10, product); // 설정된 ID 추가
+        Product product = new Product(productId, "Test Product", 1000, "test.jpg", category);
+        Option option = new Option(optionId, "Test Option", 10, product);
 
         when(optionRepository.findById(optionId)).thenReturn(Optional.of(option));
 
@@ -57,8 +57,8 @@ public class OptionServiceTest {
         int quantityToSubtract = 15;
 
         Category category = new Category("Test Category");
-        Product product = new Product(productId, "Test Product", 1000, "test.jpg", category); // 설정된 ID 추가
-        Option option = new Option(optionId, "Test Option", 10, product); // 설정된 ID 추가
+        Product product = new Product(productId, "Test Product", 1000, "test.jpg", category);
+        Option option = new Option(optionId, "Test Option", 10, product);
 
         when(optionRepository.findById(optionId)).thenReturn(Optional.of(option));
 
@@ -76,8 +76,8 @@ public class OptionServiceTest {
         int quantityToSubtract = 5;
 
         Category category = new Category("Test Category");
-        Product product = new Product(1L, "Test Product", 1000, "test.jpg", category); // 다른 ID 설정
-        Option option = new Option(optionId, "Test Option", 10, product); // 설정된 ID 추가
+        Product product = new Product(1L, "Test Product", 1000, "test.jpg", category);
+        Option option = new Option(optionId, "Test Option", 10, product);
 
         when(optionRepository.findById(optionId)).thenReturn(Optional.of(option));
 
