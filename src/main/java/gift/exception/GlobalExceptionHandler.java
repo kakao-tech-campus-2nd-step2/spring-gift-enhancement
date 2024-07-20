@@ -64,6 +64,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(InsufficientQuantityException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientQuantityException(InsufficientQuantityException ex, WebRequest request) {
+        String path = request.getDescription(false).replace("uri=", "");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<MultipleErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request) {
         String path = request.getDescription(false).replace("uri=", "");
