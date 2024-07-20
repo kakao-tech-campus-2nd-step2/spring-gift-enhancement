@@ -41,8 +41,15 @@ public class ProductService {
 
     @Transactional
     public void updateProduct(ProductDTO productDTO, Long id) {
-        Category category = categoryService.findCategoryById(productDTO.categoryId());
-        productRepository.save(toEntity(productDTO, id, category));
+        Product existingProduct = productRepository.findById(id).orElse(null);
+        if (existingProduct != null) {
+            Category category = categoryService.findCategoryById(productDTO.categoryId());
+            existingProduct.setName(productDTO.name());
+            existingProduct.setPrice(productDTO.price());
+            existingProduct.setCategory(category);
+            existingProduct.setImageUrl(productDTO.imageUrl());
+            productRepository.save(existingProduct);
+        }
     }
 
     @Transactional

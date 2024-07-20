@@ -44,7 +44,11 @@ public class CategoryService {
 
     @Transactional
     public void updateCategory(CategoryDTO categoryDTO, Long id) {
-        categoryRepository.save(toEntity(categoryDTO, id));
+        Category existingCategory = categoryRepository.findById(id).orElse(null);
+        if (existingCategory != null) {
+            existingCategory.setName(categoryDTO.name());
+            categoryRepository.save(existingCategory);
+        }
     }
 
     @Transactional
