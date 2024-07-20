@@ -1,5 +1,6 @@
 package gift.domain.annotation;
 
+import gift.global.WebConfig.Constants.Constraints;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.ElementType;
@@ -22,5 +23,5 @@ public @interface RestrictedSpecialChars {
     Class<? extends Payload>[] payload() default {};
 
     // 허용할 특수문자
-    String value() default "()[]+-&/_";
+    String value() default Constraints.DEFAULT_ALLOWED_SPECIAL_CHARS;
 }

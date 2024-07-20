@@ -1,6 +1,5 @@
 package gift.domain.entity;
 
-import gift.domain.dto.request.OptionAddRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

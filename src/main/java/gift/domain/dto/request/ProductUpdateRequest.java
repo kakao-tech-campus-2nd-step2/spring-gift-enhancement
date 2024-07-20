@@ -3,14 +3,18 @@ package gift.domain.dto.request;
 import gift.domain.annotation.RestrictedSpecialChars;
 import gift.domain.entity.Product;
 import gift.domain.service.CategoryService;
+import gift.global.WebConfig.Constants.Domain;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record ProductUpdateRequest(
     @NotNull
-    @Size(min = 1, max = 15, message = "공백을 포함하여 최대 15자까지 입력할 수 있습니다.")
-    @Pattern(regexp = "^(?!.*카카오).*$", message = "'카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.")
+    @Size(
+        min = Domain.Product.NAME_LENGTH_MIN,
+        max = Domain.Product.NAME_LENGTH_MAX,
+        message = Domain.Product.NAME_LENGTH_INVALID_MSG)
+    @Pattern(regexp = "^(?!.*카카오).*$", message = Domain.Product.NAME_INCLUDE_KAKAO_MSG)
     @RestrictedSpecialChars
     String name,
     @NotNull

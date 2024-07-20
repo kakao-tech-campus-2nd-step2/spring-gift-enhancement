@@ -7,17 +7,15 @@ import gift.domain.exception.conflict.MemberAlreadyExistsException;
 import gift.domain.exception.forbidden.MemberIncorrectLoginInfoException;
 import gift.domain.exception.notFound.MemberNotFoundException;
 import gift.domain.repository.MemberRepository;
+import gift.global.WebConfig.Constants.Domain.Member.Permission;
 import gift.global.util.HashUtil;
 import gift.global.util.JwtUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
 
@@ -34,7 +32,7 @@ public class MemberService {
             throw new MemberAlreadyExistsException();
         });
 
-        return new MemberResponse(jwtUtil.generateToken(memberRepository.save(requestDto.toEntity("member"))));
+        return new MemberResponse(jwtUtil.generateToken(memberRepository.save(requestDto.toEntity(Permission.MEMBER))));
     }
 
     @Transactional(readOnly = true)

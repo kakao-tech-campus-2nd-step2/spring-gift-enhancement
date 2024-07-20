@@ -10,6 +10,8 @@ import gift.domain.exception.badRequest.OptionUpdateActionInvalidException;
 import gift.domain.exception.conflict.OptionAlreadyExistsInProductException;
 import gift.domain.exception.notFound.OptionNotFoundException;
 import gift.domain.repository.OptionRepository;
+import gift.global.WebConfig.Constants.Domain;
+import gift.global.WebConfig.Constants.Domain.Option.QuantityUpdateAction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -90,9 +92,9 @@ public class OptionService {
             validateOptionIsUniqueInProduct(product, request.name());
         }
 
-        if (request.action().equals("add")) {
+        if (request.action().equals(QuantityUpdateAction.ADD)) {
             int updatedQuantity = option.getQuantity() + request.quantity();
-            if (updatedQuantity > 100_000_000) {
+            if (updatedQuantity > Domain.Option.QUANTITY_RANGE_MAX) {
                 throw new OptionQuantityOutOfRangeException();
             }
             option.setName(request.name());
@@ -100,9 +102,9 @@ public class OptionService {
             return option;
         }
 
-        if (request.action().equals("subtract")) {
+        if (request.action().equals(QuantityUpdateAction.SUBTRACT)) {
             int updatedQuantity = option.getQuantity() - request.quantity();
-            if (updatedQuantity < 1) {
+            if (updatedQuantity < Domain.Option.QUANTITY_RANGE_MIN) {
                 throw new OptionQuantityOutOfRangeException();
             }
             option.setName(request.name());

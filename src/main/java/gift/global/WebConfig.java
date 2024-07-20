@@ -25,4 +25,57 @@ public class WebConfig implements WebMvcConfigurer {
         resolvers.add(new ValidMemberArgumentResolver(memberService, jwtUtil));
         resolvers.add(new ValidAdminMemberArgumentResolver(memberService, jwtUtil));
     }
+
+    public static class Constants {
+
+        public static class Constraints {
+
+            public static final String DEFAULT_ALLOWED_SPECIAL_CHARS = "()[]+-&/_";
+        }
+
+        public static class Domain {
+
+            public static class Member {
+
+                public static class Permission {
+
+                    public static final String MEMBER = "member";
+                    public static final String ADMIN = "admin";
+                }
+            }
+
+            public static class Product {
+
+                public static final int NAME_LENGTH_MIN = 1;
+                public static final int NAME_LENGTH_MAX = 15;
+                public static final String NAME_LENGTH_INVALID_MSG = "공백을 포함하여 최대 15자까지 입력할 수 있습니다.";
+                public static final String NAME_INCLUDE_KAKAO_MSG = "'카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.";
+            }
+
+            public static class Option {
+
+                public static final int NAME_LENGTH_MIN = 1;
+                public static final int NAME_LENGTH_MAX = 50;
+                public static final int QUANTITY_RANGE_MIN = 1;
+                public static final int QUANTITY_RANGE_MAX = 99_999_999;
+
+                public static class QuantityUpdateAction {
+
+                    public static final String ADD = "add";
+                    public static final String SUBTRACT = "subtract";
+                }
+            }
+
+            public static class Wish {
+
+                public static class QuantityUpdateAction {
+
+                    public static final String NOPE = "nope";
+                    public static final String CREATE = "create";
+                    public static final String DELETE = "delete";
+                    public static final String ADD = "add";
+                }
+            }
+        }
+    }
 }
