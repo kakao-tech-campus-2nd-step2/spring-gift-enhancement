@@ -79,4 +79,11 @@ public class OptionService {
         foundOption.updateOption(optionRequest.name(),optionRequest.quantity(),foundOption.getProduct());
         optionRepository.save(foundOption);
     }
+
+    public void subtractQuantityById(Long id, int quantity){
+        Option foundOption = optionRepository.findById(id)
+                .orElseThrow(()->new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
+        foundOption.subtract(quantity);
+        optionRepository.save(foundOption);
+    }
 }
