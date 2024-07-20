@@ -70,10 +70,10 @@ class ProductServiceTest {
 
         // then
         assertAll(
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl()),
-            () -> assertThat(actual.getCategoryId()).isEqualTo(expected.getCategoryId())
+            () -> assertThat(actual.name()).isEqualTo(expected.name()),
+            () -> assertThat(actual.price()).isEqualTo(expected.price()),
+            () -> assertThat(actual.imageUrl()).isEqualTo(expected.imageUrl()),
+            () -> assertThat(actual.categoryId()).isEqualTo(expected.categoryId())
         );
     }
 
@@ -101,14 +101,14 @@ class ProductServiceTest {
         assertAll(
             () -> assertThat(actual).isNotNull(),
             () -> IntStream.range(0, actual.getContent().size()).forEach(i -> {
-                assertThat(actual.getContent().get(i).getName())
-                    .isEqualTo(expected.getContent().get(i).getName());
-                assertThat(actual.getContent().get(i).getPrice())
-                    .isEqualTo(expected.getContent().get(i).getPrice());
-                assertThat(actual.getContent().get(i).getImageUrl())
-                    .isEqualTo(expected.getContent().get(i).getImageUrl());
-                assertThat(actual.getContent().get(i).getCategoryId())
-                    .isEqualTo(expected.getContent().get(i).getCategoryId());
+                assertThat(actual.getContent().get(i).name())
+                    .isEqualTo(expected.getContent().get(i).name());
+                assertThat(actual.getContent().get(i).price())
+                    .isEqualTo(expected.getContent().get(i).price());
+                assertThat(actual.getContent().get(i).imageUrl())
+                    .isEqualTo(expected.getContent().get(i).imageUrl());
+                assertThat(actual.getContent().get(i).categoryId())
+                    .isEqualTo(expected.getContent().get(i).categoryId());
             })
         );
 
@@ -135,14 +135,14 @@ class ProductServiceTest {
 
         // then
         assertAll(
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl()),
-            () -> assertThat(actual.getCategoryId()).isEqualTo(expected.getCategoryId()),
-            () -> assertThat(actual.getOptionResponse().getName()).isEqualTo(
-                expected.getOptionResponse().getName()),
-            () -> assertThat(actual.getOptionResponse().getQuantity()).isEqualTo(
-                expected.getOptionResponse().getQuantity())
+            () -> assertThat(actual.name()).isEqualTo(expected.name()),
+            () -> assertThat(actual.price()).isEqualTo(expected.price()),
+            () -> assertThat(actual.imageUrl()).isEqualTo(expected.imageUrl()),
+            () -> assertThat(actual.categoryId()).isEqualTo(expected.categoryId()),
+            () -> assertThat(actual.optionResponse().name()).isEqualTo(
+                expected.optionResponse().name()),
+            () -> assertThat(actual.optionResponse().quantity()).isEqualTo(
+                expected.optionResponse().quantity())
         );
     }
 
@@ -169,10 +169,10 @@ class ProductServiceTest {
 
         // then
         assertAll(
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl()),
-            () -> assertThat(actual.getCategoryId()).isEqualTo(expected.getCategoryId())
+            () -> assertThat(actual.name()).isEqualTo(expected.name()),
+            () -> assertThat(actual.price()).isEqualTo(expected.price()),
+            () -> assertThat(actual.imageUrl()).isEqualTo(expected.imageUrl()),
+            () -> assertThat(actual.categoryId()).isEqualTo(expected.categoryId())
         );
     }
 
