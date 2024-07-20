@@ -1,12 +1,20 @@
 package gift.dto;
 
+import gift.model.GiftOption;
+
 public class GiftOptionResponse {
 
     private Long id;
     private String name;
-    private Long quantity;
+    private Integer quantity;
 
-    public GiftOptionResponse(Long id, String name, Long quantity) {
+    public GiftOptionResponse(GiftOption giftOption) {
+        this.id = giftOption.getId();
+        this.name = giftOption.getName();
+        this.quantity = giftOption.getQuantity();
+    }
+
+    public GiftOptionResponse(Long id, String name, Integer quantity) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -20,7 +28,7 @@ public class GiftOptionResponse {
         return name;
     }
 
-    public Long getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 }
