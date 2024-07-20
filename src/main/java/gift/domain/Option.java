@@ -1,5 +1,7 @@
 package gift.domain;
 
+import gift.constants.Messages;
+import gift.exception.InsufficientQuantityException;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -74,6 +76,13 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+    }
+
+    public void subtract(int subtractQuantity){
+        if(subtractQuantity >= this.quantity){
+            throw new InsufficientQuantityException(Messages.INSUFFICIENT_QUANTITY);
+        }
+        this.quantity = this.quantity - subtractQuantity;
     }
 
     public static class Builder {
