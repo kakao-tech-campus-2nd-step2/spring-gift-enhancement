@@ -58,6 +58,7 @@
                     }
 
                     products.forEach(product => {
+                        const options = product.options.map(option => `<option value="${option.id}">${option.name} (Quantity: ${option.quantity})</option>`).join('');
                         const productCard = `
                             <div class="col-md-4 mb-3">
                                 <div class="card">
@@ -66,6 +67,10 @@
                                         <h5 class="card-title">${product.name}</h5>
                                         <h6 class="card-category">${product.categoryName}</h6>
                                         <p class="card-text">${product.description}</p>
+                                        <select class="form-control mb-2 option-select">
+                                            <option value="" disabled selected>-- Select Option --</option>
+                                            ${options}
+                                        </select>
                                         <button class="btn btn-primary add-to-wishlist" data-id="${product.id}">Add to Wishlist</button>
                                     </div>
                                 </div>
@@ -78,13 +83,20 @@
                     $('.add-to-wishlist').click(function() {
                         const productId = $(this).data('id');
                         const email = getEmailFromToken();
+                        const selectedOptionId = $(this).siblings('.option-select').val();
+                        if (!selectedOptionId) {
+                            alert('Please select an option.');
+                            return;
+                        }
+
                         if (!email) return;
 
                         $.ajax({
                             url: `/api/wishlist/${productId}`,
                             method: 'POST',
                             data: {
-                                email: email
+                                email: email,
+                                optionId: selectedOptionId
                             },
                             success: function() {
                                 alert('Product added to wishlist!');
