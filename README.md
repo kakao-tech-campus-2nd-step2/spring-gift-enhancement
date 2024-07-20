@@ -2,6 +2,19 @@
 
 ## 기능 목록 
 
+### 코드리뷰 개선사항 :step1 
+- [ ] Controller 단에서 상태코드를 포함해서 반환 
+- [ ] UserResponseDto 가 도메인 계층 Member 를 의존 중 -> 변환은 서비스 로직에서 처리 !!! 
+- [ ] Dto 에서 도메인 계층을 의존중인 부분 수정 (Service 에서 변환하도록)
+- [ ] WishRepositoryTst 구현 
+- [ ] RepositoryInterface 명칭에서 Interface 삭제
+- [ ] Entity 에서 리스트를 사용하는 곳이 없는경우, 단방향 맵핑 사용하기
+
+### 추가 개선사항 : step1
+- [ ] product 의 name 길이를 15로 줄이기 (name varchar(15) not null 반영)
+- [ ] category의 color 길이를 7로 줄이기 (color varchar(7) not null 반영)
+- [ ] JWT 공부해서 적용 
+
 ### step2 : 상품 옵션 추가 
 - [ ] 상품 정보에 옵션을 추가한다. 상품과 옵션 모델 간의 관계를 고려하여 설계하고 구현한다.
 - - [x] 상품에는 항상 하나 이상의 옵션이 있어야 한다.
