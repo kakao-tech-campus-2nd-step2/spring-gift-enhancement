@@ -20,6 +20,6 @@ public record CategoryDTO(
 ) {
 
     public Category toEntity() {
-        return new Category(name, color, imageUrl, description);
+        return new Category(id, name, color, imageUrl, description);
     }
 }

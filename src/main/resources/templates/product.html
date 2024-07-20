@@ -31,6 +31,17 @@
                 <th>Price</th>
                 <td th:text="${product.price}"></td>
             </tr>
+            <tr>
+                <th>Option</th>
+                <td>
+                    <table>
+                        <tr th:each="option: ${options}">
+                            <td th:text="${option.name}"></td>
+                            <td th:text="${option.quantity}"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
         </table>
     </div>
 </body>

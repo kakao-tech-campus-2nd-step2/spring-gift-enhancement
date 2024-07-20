@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.service.CategoryService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -9,18 +10,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin/products")
 public class AdminController {
 
     private final ProductService productService;
+    private final OptionService optionService;
     private final CategoryService categoryService;
 
     @Autowired
-    public AdminController(ProductService productService, CategoryService categoryService) {
+    public AdminController(ProductService productService, CategoryService categoryService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
         this.categoryService = categoryService;
     }
 
@@ -33,6 +35,7 @@ public class AdminController {
     @GetMapping("/{id}")
     public String getProduct(@PathVariable("id") Long id, Model model) {
         model.addAttribute("product", productService.getProduct(id));
+        model.addAttribute("options", optionService.getOptions(id));
         return "product";
     }
 
