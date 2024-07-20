@@ -47,4 +47,8 @@ public class Option extends BaseEntity {
         this.name = name;
         this.quantity = quantity;
     }
+
+    public void subtract(Integer subQuantity) {
+        this.quantity = quantity - subQuantity;
+    }
 }

@@ -1,7 +1,9 @@
 package gift.controller;
 
-import gift.dto.OptionRequest;
+import gift.dto.OptionAddRequest;
 import gift.dto.OptionResponse;
+import gift.dto.OptionSubtractRequest;
+import gift.dto.OptionUpdateRequest;
 import gift.service.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products/{productId}/options")
+@RequestMapping("/api/options")
 public class OptionController {
 
     private final OptionService optionService;
@@ -31,26 +34,32 @@ public class OptionController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addOption(@PathVariable Long productId, @Valid @RequestBody OptionRequest optionRequest) {
-        var option = optionService.addOption(productId, optionRequest);
-        return ResponseEntity.created(URI.create("/api/products/" + productId + "/options/" + option.id())).build();
+    public ResponseEntity<Void> addOption(@Valid @RequestBody OptionAddRequest optionAddRequest) {
+        var option = optionService.addOption(optionAddRequest);
+        return ResponseEntity.created(URI.create("/api/options/" + option.id())).build();
+    }
+
+    @PostMapping("/subtract/{id}")
+    public ResponseEntity<Void> subtractOptionQuantity(@PathVariable Long id, @RequestBody OptionSubtractRequest optionSubtractRequest) {
+        optionService.subtractOptionQuantity(id, optionSubtractRequest);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Void> updateOption(@PathVariable Long productId, @PathVariable Long id, @Valid @RequestBody OptionRequest optionRequest) {
-        optionService.updateOption(productId, id, optionRequest);
+    public ResponseEntity<Void> updateOption(@PathVariable Long id, @Valid @RequestBody OptionUpdateRequest optionUpdateRequest) {
+        optionService.updateOption(id, optionUpdateRequest);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<OptionResponse>> getOptions(@PathVariable Long productId, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<List<OptionResponse>> getOptions(@RequestParam Long productId, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         var options = optionService.getOptions(productId, pageable);
         return ResponseEntity.ok(options);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOption(@PathVariable Long productId, @PathVariable Long id) {
-        optionService.deleteOption(productId, id);
+    public ResponseEntity<Void> deleteOption(@PathVariable Long id) {
+        optionService.deleteOption(id);
         return ResponseEntity.noContent().build();
     }
 }

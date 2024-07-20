@@ -1,7 +1,9 @@
 package gift.service;
 
-import gift.dto.OptionRequest;
+import gift.dto.OptionAddRequest;
 import gift.dto.OptionResponse;
+import gift.dto.OptionSubtractRequest;
+import gift.dto.OptionUpdateRequest;
 import gift.exception.BadRequestException;
 import gift.exception.DuplicatedNameException;
 import gift.exception.NotFoundElementException;
@@ -28,18 +30,15 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
-    public OptionResponse addOption(Long productId, OptionRequest optionRequest) {
-        optionNameValidation(productId, optionRequest.name());
-        var option = saveOptionWithOptionRequest(productId, optionRequest);
+    public OptionResponse addOption(OptionAddRequest optionAddRequest) {
+        optionNameValidation(optionAddRequest.productId(), optionAddRequest.name());
+        var option = saveOptionWithOptionRequest(optionAddRequest);
         return getOptionResponseFromOption(option);
     }
 
-    public void updateOption(Long productId, Long id, OptionRequest optionRequest) {
+    public void updateOption(Long id, OptionUpdateRequest optionUpdateRequest) {
         var option = findOptionById(id);
-        if (!option.getProduct().getId().equals(productId)) {
-            throw new BadRequestException("잘못된 상품 옵션 수정 요청입니다.");
-        }
-        option.updateOptionInfo(optionRequest.name(), optionRequest.quantity());
+        option.updateOptionInfo(optionUpdateRequest.name(), optionUpdateRequest.quantity());
         optionRepository.save(option);
     }
 
@@ -51,11 +50,7 @@ public class OptionService {
                 .toList();
     }
 
-    public void deleteOption(Long productId, Long id) {
-        var option = findOptionById(id);
-        if (!option.getProduct().getId().equals(productId)) {
-            throw new BadRequestException("잘못된 상품 옵션에 대한 요청입니다.");
-        }
+    public void deleteOption(Long id) {
         optionRepository.deleteById(id);
     }
 
@@ -64,9 +59,17 @@ public class OptionService {
         optionRepository.save(option);
     }
 
-    private Option saveOptionWithOptionRequest(Long productId, OptionRequest optionRequest) {
-        var product = findProductById(productId);
-        var option = new Option(product, optionRequest.name(), optionRequest.quantity());
+    public void subtractOptionQuantity(Long id, OptionSubtractRequest optionSubtractRequest) {
+        var option = optionRepository.findByIdWithLock(id)
+                .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품 옵션이 존재하지 않습니다."));
+        subtractValidation(option, optionSubtractRequest.quantity());
+        option.subtract(optionSubtractRequest.quantity());
+        optionRepository.save(option);
+    }
+
+    private Option saveOptionWithOptionRequest(OptionAddRequest optionAddRequest) {
+        var product = findProductById(optionAddRequest.productId());
+        var option = new Option(product, optionAddRequest.name(), optionAddRequest.quantity());
         return optionRepository.save(option);
     }
 
@@ -87,6 +90,12 @@ public class OptionService {
     private void optionNameValidation(Long productId, String name) {
         if (optionRepository.existsOptionByProductIdAndName(productId, name)) {
             throw new DuplicatedNameException("이미 존재하는 상품의 상품 옵션입니다.");
+        }
+    }
+
+    private void subtractValidation(Option option, Integer count) {
+        if (count > option.getQuantity()) {
+            throw new BadRequestException("주문량이 옵션의 잔여 갯수를 초과합니다");
         }
     }
 }
