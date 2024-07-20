@@ -24,7 +24,6 @@ public class ProductFacade {
     @Transactional
     public Long saveProduct(ProductCommand productCommand, List<ProductOptionCommand> productOptionCommands) {
         var productId = productService.saveProduct(productCommand);
-        log.info("Product Created");
         productOptionService.createProductOptions(productId, productOptionCommands);
         return productId;
     }

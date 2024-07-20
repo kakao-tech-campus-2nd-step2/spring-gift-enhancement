@@ -33,7 +33,7 @@ public class ProductService {
         Category category = categoryRepository.findByName(productRequest.categoryName())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
         Product product = productRequest.toEntity(category);
-        var newProduct = productRepository.save(product);// 이렇게 하지않으면, Stream에서 사용할 수 없다... 어떻게 해야하나
+        var newProduct = productRepository.save(product);
 
         return newProduct.getId();
     }
