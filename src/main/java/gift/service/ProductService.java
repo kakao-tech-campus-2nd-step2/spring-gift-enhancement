@@ -9,11 +9,11 @@ import gift.entity.Product;
 import gift.repository.CategoryJpaDao;
 import gift.repository.OptionJpaDao;
 import gift.repository.ProductJpaDao;
-import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
@@ -32,6 +32,7 @@ public class ProductService {
     /**
      * 상품을 먼저 등록한 뒤, 옵션들을 추가. 상품 등록이 실패하여 savedProduct가 null이면 옵션을 추가하지 않음.
      */
+    @Transactional
     public void addProduct(ProductRequest productRequest) {
         assertProductNotDuplicate(productRequest.getName());
         Category category = findCategoryByIdOrElseThrow(productRequest.getCategoryId());
