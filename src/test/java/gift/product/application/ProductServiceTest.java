@@ -137,9 +137,6 @@ public class ProductServiceTest {
     public void 상품_업데이트_테스트() {
         // Given
         Category category = new Category(1L, "Original Category", "Color", "Description", "http://example.com/image.jpg");
-
-
-
         Category newCategory = new Category(2L, "New Category", "Color", "Description", "http://example.com/image.jpg");
         Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
         Option option1 = new Option(1L, "Option1", 10);
@@ -157,7 +154,8 @@ public class ProductServiceTest {
 
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
         when(categoryRepository.findById(2L)).thenReturn(Optional.of(newCategory));
-        when(optionRepository.findAllById(anyList())).thenReturn(List.of(option1, option2));
+        when(optionRepository.findById(1L)).thenReturn(Optional.of(option1));
+        when(optionRepository.findById(2L)).thenReturn(Optional.of(option2));
 
         // When
         productService.update(updateCommand);
@@ -241,6 +239,7 @@ public class ProductServiceTest {
         // Given
         Category category = new Category(1L, "Category", "Color", "Description", "http://example.com/image.jpg");
         Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
+        product.addOption(new Option(1L, "Option1", 10));
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         ProductUpdateCommand updateCommand = new ProductUpdateCommand(
@@ -252,10 +251,7 @@ public class ProductServiceTest {
                 List.of(new OptionUpdateCommand(1L, "Option1", 10))
         );
 
-        when(optionRepository
-                .findAllById(updateCommand.optionUpdateCommandList().stream()
-                        .map(OptionUpdateCommand::id)
-                        .toList())).thenReturn(List.of(new Option(1L, "Option1", 10)));
+        when(optionRepository.findById(anyLong())).thenReturn(Optional.of(new Option(1L, "Option1", 10)));
 
         // When & Then
         assertThatThrownBy(() -> productService.update(updateCommand))
