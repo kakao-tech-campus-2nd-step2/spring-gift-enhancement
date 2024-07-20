@@ -36,7 +36,7 @@ public class OptionService {
 
     @Transactional
     public OptionResponse addOptionToProduct(Long id, OptionRequest request) {
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findProductAndOptionsById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Option option = OptionMapper.toEntity(request, product);
         if (!product.addOptionOrElseFalse(option)) {
