@@ -18,7 +18,7 @@ public class Option {
 
     @Column(nullable = false)
     @Size(min = 1, max = 100000000)
-    private Long quantity;
+    private Integer quantity;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -39,5 +39,13 @@ public class Option {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }
