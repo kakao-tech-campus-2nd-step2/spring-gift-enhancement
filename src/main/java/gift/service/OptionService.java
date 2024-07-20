@@ -1,7 +1,7 @@
 package gift.service;
 
-import static gift.util.constants.OptionConstants.OPTION_NOT_FOUND;
 import static gift.util.constants.OptionConstants.OPTION_NAME_DUPLICATE;
+import static gift.util.constants.OptionConstants.OPTION_NOT_FOUND;
 import static gift.util.constants.OptionConstants.OPTION_REQUIRED;
 import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 

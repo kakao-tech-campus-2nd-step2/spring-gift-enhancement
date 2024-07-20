@@ -2,7 +2,6 @@ package gift.service;
 
 import static gift.util.constants.CategoryConstants.CATEGORY_NOT_FOUND;
 import static gift.util.constants.ProductConstants.INVALID_PRICE;
-import static gift.util.constants.OptionConstants.OPTION_REQUIRED;
 import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 
 import gift.dto.product.ProductCreateRequest;
@@ -16,7 +15,6 @@ import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,19 +33,16 @@ public class ProductService {
         this.optionRepository = optionRepository;
     }
 
-    // 모든 상품 조회 (페이지네이션)
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable).map(ProductService::convertToDTO);
     }
 
-    // ID로 상품 조회
     public ProductResponse getProductById(Long id) {
         return productRepository.findById(id)
             .map(ProductService::convertToDTO)
             .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND + id));
     }
 
-    // 상품 추가
     public ProductResponse addProduct(ProductCreateRequest productCreateRequest) {
         validatePrice(productCreateRequest.price());
 
@@ -64,7 +59,6 @@ public class ProductService {
         return convertToDTO(savedProduct);
     }
 
-    // 상품 수정
     public ProductResponse updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND + id));

@@ -1,11 +1,9 @@
 package gift.model;
 
-import static gift.util.constants.OptionConstants.OPTION_NAME_DUPLICATE;
 import static gift.util.constants.ProductConstants.NAME_INVALID_CHARACTERS;
 import static gift.util.constants.ProductConstants.NAME_REQUIRES_APPROVAL;
 import static gift.util.constants.ProductConstants.NAME_SIZE_LIMIT;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;

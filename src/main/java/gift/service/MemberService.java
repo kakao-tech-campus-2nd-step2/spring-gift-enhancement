@@ -27,7 +27,6 @@ public class MemberService {
         this.jwtUtil = jwtUtil;
     }
 
-    // 회원가입 (회원 추가)
     public MemberResponse registerMember(MemberRegisterRequest memberRegisterRequest) {
         if (memberRepository.existsByEmail(memberRegisterRequest.email())) {
             throw new EmailAlreadyUsedException(EMAIL_ALREADY_USED);
@@ -41,7 +40,6 @@ public class MemberService {
         return new MemberResponse(savedMember.getId(), savedMember.getEmail(), token);
     }
 
-    // 로그인 (회원 검증)
     public MemberResponse loginMember(MemberLoginRequest memberLoginRequest) {
         Member member = memberRepository.findByEmail(memberLoginRequest.email())
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
@@ -54,21 +52,18 @@ public class MemberService {
         return new MemberResponse(member.getId(), member.getEmail(), token);
     }
 
-    // 모든 회원 조회
     public List<MemberResponse> getAllMembers() {
         return memberRepository.findAll().stream()
             .map(MemberService::convertToDTO)
             .collect(Collectors.toList());
     }
 
-    // ID로 회원 조회
     public MemberResponse getMemberById(Long id) {
         return memberRepository.findById(id)
             .map(MemberService::convertToDTO)
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
     }
 
-    // 회원 수정
     public MemberResponse updateMember(Long id, MemberRegisterRequest memberRegisterRequest) {
         Member member = memberRepository.findById(id)
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
@@ -85,7 +80,6 @@ public class MemberService {
         return convertToDTO(updatedMember);
     }
 
-    // 회원 삭제
     public void deleteMember(Long id) throws ForbiddenException {
         if (!memberRepository.existsById(id)) {
             throw new ForbiddenException(ID_NOT_FOUND);

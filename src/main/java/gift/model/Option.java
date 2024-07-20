@@ -84,8 +84,4 @@ public class Option {
     public boolean isNameMatching(String name) {
         return this.name.equals(name);
     }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 }

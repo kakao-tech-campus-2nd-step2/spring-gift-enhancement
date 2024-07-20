@@ -33,7 +33,6 @@ public class WishService {
         this.memberService = memberService;
     }
 
-    // 모든 위시 조회 (페이지네이션)
     public Page<WishResponse> getWishlistByMemberId(Long memberId, Pageable pageable) {
         return wishRepository.findAllByMember_Id(memberId, pageable).map(WishService::convertToDTO);
     }
