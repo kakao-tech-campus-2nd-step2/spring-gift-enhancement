@@ -9,6 +9,7 @@
 - [x] WishRepositoryTest 구현 
 - [x] RepositoryInterface 명칭에서 Interface 삭제
 - [x] Entity 에서 리스트를 사용하는 곳이 없는경우, 단방향 맵핑 사용하기
+- [x] 실행시 오류발생 해결 
 
 ### 추가 개선사항 : step1
 - [x] product 의 name 길이를 15로 줄이기 (요구사항 name varchar(15) not null 반영)
