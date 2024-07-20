@@ -1,51 +1,67 @@
 package gift.category.service;
 
 import gift.category.model.Category;
-
 import gift.category.repository.CategoryRepository;
+import gift.product.dto.ProductDto;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
+import gift.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Optional;
 
-@SpringBootTest
-@Transactional
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 public class CategoryServiceTest {
 
-    @Autowired
+    @Mock
     private CategoryRepository categoryRepository;
 
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
+    @Mock
     private ProductRepository productRepository;
+
+    @InjectMocks
+    private ProductService productService;
 
     @BeforeEach
     public void setUp() {
-        categoryRepository.deleteAll();
-        productRepository.deleteAll();
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void make_category_successful() {
+    public void save_product_successful() {
         // Given
-        Category category1 = new Category("Adidas", "black", "https://www.google.com");
-        categoryRepository.save(category1);
+        Long categoryId = 1L;
+        ProductDto productDto = new ProductDto("Shoes", 35000, "https://www.google.com", categoryId);
+        Category category = new Category("Adidas", "black", "https://www.google.com");
 
-        Product product = new Product("Product1", 35000, "https://www.google.com", category1);
-        productRepository.save(product);
+
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
 
         // When
-        Product foundProduct = productRepository.findById(product.getId()).orElse(null);
+        productService.save(productDto);
 
         // Then
-        assertThat(foundProduct).isNotNull();
-        assertThat(foundProduct.getCategory()).isEqualTo(category1);
+        verify(productRepository).save(any(Product.class));
     }
+
+//    @Test
+//    public void save_product_category_not_found() {
+//        // Given
+//        Long categoryId = 1L;
+//        ProductDto productDto = new ProductDto("Product1", 35000, "https://www.google.com", categoryId);
+//
+//        when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+//
+//        // When & Then
+//        assertThatThrownBy(() -> productService.save(productDto))
+//                .isInstanceOf(RuntimeException.class)
+//                .hasMessage("카테고리를 찾을 수 없습니다.");
+//    }
 }

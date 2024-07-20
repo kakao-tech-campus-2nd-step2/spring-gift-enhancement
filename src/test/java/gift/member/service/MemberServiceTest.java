@@ -30,7 +30,7 @@ public class MemberServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-//    @Test
+    @Test
     public void login_wrong_email() {
         // Given
         String email = "test@example.com";
@@ -53,7 +53,6 @@ public class MemberServiceTest {
                 () -> memberService.login(wrongEmail, password));
         assertThat(exception.getMessage()).isEqualTo("옳지 않은 이메일 입니다.");
     }
-
 
     @Test
     public void login_wrong_password() {

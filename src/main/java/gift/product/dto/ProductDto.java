@@ -12,6 +12,13 @@ public class ProductDto {
     public ProductDto() {
     }
 
+    public ProductDto(String name, int price, String imgUrl, Long categoryId) {
+        this.name = name;
+        this.price = price;
+        this.imgUrl = imgUrl;
+        this.categoryId = categoryId;
+    }
+
     public void ProductDTO(Long id, String name, int price, String imageUrl, Long categoryId){
         this.id = id;
         this.name = name;
@@ -39,5 +46,4 @@ public class ProductDto {
     public Long getCategoryId() {
         return categoryId;
     }
-
 }
