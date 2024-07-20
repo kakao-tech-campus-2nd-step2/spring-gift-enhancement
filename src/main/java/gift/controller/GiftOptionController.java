@@ -3,6 +3,7 @@ package gift.controller;
 import gift.dto.GiftOptionRequest;
 import gift.dto.GiftOptionResponse;
 import gift.service.GiftOptionService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class GiftOptionController {
 
     @PostMapping
     public ResponseEntity<Void> add(@PathVariable @NotNull Long productId,
-        @RequestBody GiftOptionRequest giftOptionRequest) {
+        @RequestBody @Valid GiftOptionRequest giftOptionRequest) {
         giftOptionService.create(productId, giftOptionRequest);
 
         return ResponseEntity.ok().build();
@@ -41,7 +42,7 @@ public class GiftOptionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable @NotNull Long productId, @PathVariable Long id,
-        @RequestBody GiftOptionRequest giftOptionRequest) {
+        @RequestBody @Valid GiftOptionRequest giftOptionRequest) {
         giftOptionService.update(productId,id,giftOptionRequest);
 
         return ResponseEntity.ok().build();
