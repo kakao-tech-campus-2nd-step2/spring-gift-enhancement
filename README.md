@@ -11,8 +11,8 @@
 - [ ] Entity 에서 리스트를 사용하는 곳이 없는경우, 단방향 맵핑 사용하기
 
 ### 추가 개선사항 : step1
-- [ ] product 의 name 길이를 15로 줄이기 (name varchar(15) not null 반영)
-- [ ] category의 color 길이를 7로 줄이기 (color varchar(7) not null 반영)
+- [x] product 의 name 길이를 15로 줄이기 (요구사항 name varchar(15) not null 반영)
+- [ ] category의 color 길이를 7로 줄이기 (요구사항 color varchar(7) not null 반영)
 - [ ] JWT 공부해서 적용 
 - [ ] product Dto 에서 유효성 검증 코드는 Service로 넘기고 Service에서 Dto 를 Entity로 변환할때 유효성 검증 진행하도록 
 - [ ] TokenInterceptor 사용 
