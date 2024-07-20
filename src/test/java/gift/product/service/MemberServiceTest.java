@@ -1,61 +1,88 @@
 package gift.product.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import gift.product.dto.MemberDTO;
-import gift.product.exception.DuplicateException;
 import gift.product.exception.LoginFailedException;
-import gift.product.service.MemberService;
+import gift.product.model.Member;
+import gift.product.repository.MemberRepository;
+import gift.product.util.JwtUtil;
+import gift.product.validation.MemberValidation;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class MemberServiceTest {
-    @Autowired
+    @InjectMocks
     private MemberService memberService;
+    @Mock
+    private MemberValidation memberValidation;
+    @Mock
+    private MemberRepository memberRepository;
+    @Mock
+    private JwtUtil jwtUtil;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
-    @Test
-    void testNormalSignUp() {
-        System.out.println("[MemberServiceTest] testNormalSignUp()");
-        MemberDTO member = new MemberDTO("normal@signup.test", "1234");
-        memberService.signUp(member);
+    private MemberDTO memberDTO;
+
+    @BeforeEach
+    void setUp() {
+        memberDTO = new MemberDTO("member@email.com", "1234");
     }
 
     @Test
-    void testDuplicateEmail() {
-        System.out.println("[MemberServiceTest] testDuplicateEmail()");
-        MemberDTO originMember = new MemberDTO("duplicate@email.com", "1234");
-        memberService.signUp(originMember);
-        Assertions.assertThrows(DuplicateException.class, () -> {
-            memberService.signUp(originMember);
-        });
+    void testSignUp() {
+        //given
+        doNothing().when(memberValidation).signUpValidation(anyString());
+        when(memberRepository.save(any(Member.class)))
+            .thenReturn(new Member());
+        when(passwordEncoder.encode(any(CharSequence.class)))
+            .thenReturn("encodedPassword");
+        String expectedToken = "ExpectedToken";
+        when(jwtUtil.generateToken(anyString()))
+            .thenReturn(expectedToken);
+
+        //when
+        Map<String, String> response = memberService.signUp(memberDTO);
+
+        //then
+        assertEquals(expectedToken, response.get("token"));
+
+        verify(passwordEncoder).encode(eq(memberDTO.getPassword()));
+        verify(memberRepository).save(any(Member.class));
+        verify(jwtUtil).generateToken(eq(memberDTO.getEmail()));
     }
 
     @Test
-    void testNormalLogin() {
-        System.out.println("[MemberServiceTest] testNormalLogin()");
-        MemberDTO member = new MemberDTO("normal@login.test", "1234");
-        memberService.signUp(member);
-        memberService.login(member);
-    }
+    void testLogin() {
+        //given
+        doNothing().when(memberValidation).loginValidation(memberDTO);
+        String expectedToken = "ExpectedToken";
+        when(jwtUtil.generateToken(anyString()))
+            .thenReturn(expectedToken);
 
-    @Test
-    void testLoginNotExistEmail() {
-        System.out.println("[MemberServiceTest] testLoginNotExistEmail()");
-        MemberDTO notExistMember = new MemberDTO("notexist@email.com", "1234");
-        Assertions.assertThrows(LoginFailedException.class, () -> {
-            memberService.login(notExistMember);
-        });
-    }
+        //when
+        Map<String, String> response = memberService.login(memberDTO);
 
-    @Test
-    void testLoginWrongPassword() {
-        System.out.println("[MemberServiceTest] testLoginWrongPassword()");
-        MemberDTO member = new MemberDTO("wrong@password.test", "1234");
-        memberService.signUp(member);
-        MemberDTO wrongMember = new MemberDTO(member.getEmail(), "1235");
-        Assertions.assertThrows(LoginFailedException.class, () -> {
-            memberService.login(wrongMember);
-        });
+        //then
+        assertEquals(expectedToken, response.get("token"));
+        verify(memberValidation).loginValidation(any(MemberDTO.class));
+        verify(jwtUtil).generateToken(eq(memberDTO.getEmail()));
     }
 }
