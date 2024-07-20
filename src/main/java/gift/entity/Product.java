@@ -48,7 +48,6 @@ public class Product {
         this.categoryid = categoryid;
     }
 
-
     public void setId(Long id) {
         this.id = id;
     }
