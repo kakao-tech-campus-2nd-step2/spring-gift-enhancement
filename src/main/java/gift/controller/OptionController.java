@@ -18,7 +18,7 @@ import gift.service.OptionService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/product/{id}/options")
+@RequestMapping("/api/product/{productId}/options")
 public class OptionController {
 	
 	private final OptionService optionService;
@@ -28,15 +28,15 @@ public class OptionController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<OptionResponse>> getOptions(@PathVariable("id") long id){
-		List<OptionResponse> options = optionService.getOptions(id);
+	public ResponseEntity<List<OptionResponse>> getOptions(@PathVariable("productId") Long productId){
+		List<OptionResponse> options = optionService.getOptions(productId);
 		return ResponseEntity.status(HttpStatus.OK).body(options);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Void> addOption(@PathVariable("id") long id,
+	public ResponseEntity<Void> addOption(@PathVariable("productId") Long productId,
 			@Valid @RequestBody OptionRequest request, BindingResult bindingResult){
-		optionService.addOption(id, request, bindingResult);
+		optionService.addOption(productId, request, bindingResult);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 }
