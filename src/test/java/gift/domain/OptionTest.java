@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import gift.domain.option.entity.Option;
-import gift.domain.option.exception.DuplicateOptionNameException;
+import gift.domain.option.exception.OptionNameDuplicateException;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +19,7 @@ public class OptionTest {
         Option newOption = createOption("test1");
 
         assertThatThrownBy(() -> newOption.checkDuplicateName(optionList)).isInstanceOf(
-            DuplicateOptionNameException.class);
+            OptionNameDuplicateException.class);
     }
 
     @Test
