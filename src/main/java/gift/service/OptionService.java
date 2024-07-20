@@ -1,5 +1,6 @@
 package gift.service;
 
+import static gift.util.constants.OptionConstants.INSUFFICIENT_QUANTITY;
 import static gift.util.constants.OptionConstants.OPTION_NAME_DUPLICATE;
 import static gift.util.constants.OptionConstants.OPTION_NOT_FOUND;
 import static gift.util.constants.OptionConstants.OPTION_REQUIRED;
@@ -106,6 +107,22 @@ public class OptionService {
                 throw new IllegalArgumentException(OPTION_NAME_DUPLICATE);
             }
         }
+    }
+
+    public void subtractOptionQuantity(Long productId, Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new OptionNotFoundException(OPTION_NOT_FOUND + optionId));
+
+        if (!option.isProductIdMatching(productId)) {
+            throw new OptionNotFoundException(OPTION_NOT_FOUND + optionId);
+        }
+
+        if (option.getQuantity() < quantity) {
+            throw new IllegalArgumentException(INSUFFICIENT_QUANTITY + optionId);
+        }
+
+        option.subtractQuantity(quantity);
+        optionRepository.save(option);
     }
 
     // Mapper methods
