@@ -1,5 +1,6 @@
-package gift.util;
+package gift.util.annotation;
 
+import gift.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -16,7 +17,7 @@ public class JwtAspect {
     @Autowired
     private HttpServletRequest request;
 
-    @Before("@annotation(gift.util.JwtAuthenticated)")
+    @Before("@annotation(gift.util.annotation.JwtAuthenticated)")
     public void authenticate() {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -25,9 +26,8 @@ public class JwtAspect {
 
         String token = authorizationHeader.substring(7); // "Bearer " 이후의 토큰 부분만 추출
 
-        String email = jwtUtil.extractUsername(token);
 
-        if (!jwtUtil.validateToken(token, email)) {
+        if (!jwtUtil.validateToken(token)) {
             throw new RuntimeException("JWT Token is not valid");
         }
     }

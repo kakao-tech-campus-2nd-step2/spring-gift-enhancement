@@ -4,6 +4,7 @@ import gift.product.application.ProductService;
 import gift.product.domain.CreateProductRequestDTO;
 import gift.product.domain.Product;
 import gift.util.CommonResponse;
+import gift.util.annotation.AdminAuthenticated;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class ProductManageController {
         return ResponseEntity.ok(new CommonResponse<>(productList, "상품 조회가 정상적으로 완료되었습니다", true));
     }
 
+    @AdminAuthenticated
     @PostMapping("")
     public ResponseEntity<CommonResponse<Long>> addProduct(
             @Valid @RequestBody CreateProductRequestDTO createProductRequestDTO) {
@@ -40,6 +42,7 @@ public class ProductManageController {
         return ResponseEntity.ok(new CommonResponse<>(productId, "상품이 정상적으로 추가 되었습니다", true));
     }
 
+    @AdminAuthenticated
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<CommonResponse<Void>> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);

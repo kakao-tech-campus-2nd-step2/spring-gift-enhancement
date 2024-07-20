@@ -3,10 +3,8 @@ package gift.product.presentation;
 
 import gift.product.application.WishListService;
 import gift.product.domain.WishList;
-import gift.product.exception.ProductException;
 import gift.util.CommonResponse;
-import gift.util.ErrorCode;
-import gift.util.JwtAuthenticated;
+import gift.util.annotation.JwtAuthenticated;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
