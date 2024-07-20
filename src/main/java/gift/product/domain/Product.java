@@ -20,6 +20,11 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WishListProduct> wishListProducts = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+
     public Product() {
     }
 
