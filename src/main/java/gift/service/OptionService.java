@@ -5,7 +5,6 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.OptionRequest;
 import gift.dto.response.OptionResponse;
-import gift.dto.response.ProductResponse;
 import gift.exception.CannotDeleteLastOptionException;
 import gift.exception.DuplicateOptionNameException;
 import gift.exception.OptionNotFoundException;
