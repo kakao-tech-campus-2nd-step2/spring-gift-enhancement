@@ -62,6 +62,7 @@ public class OptionService {
         Option option = optionRepository.findById(optionId)
                 .orElseThrow(() -> new NoSuchElementException("해당 옵션을 찾을 수 없습니다 id :  " + optionId));
 
+        checkOptionInGift(option, giftId);
         checkDuplicateOptionName(gift, option.getName());
 
         option.modify(optionRequest.getName(), optionRequest.getQuantity());
@@ -75,13 +76,10 @@ public class OptionService {
         Option option = optionRepository.findById(optionId)
                 .orElseThrow(() -> new NoSuchElementException("해당 옵션을 찾을 수 없습니다 id :  " + optionId));
 
-        if (!option.getGift().getId().equals(giftId)) {
-            throw new NoSuchElementException("해당 상품에 해당 옵션이 없습니다!");
-        }
+        checkOptionInGift(option, giftId);
 
         option.subtract(quantity);
         optionRepository.save(option);
-
     }
 
     @Transactional
@@ -91,9 +89,17 @@ public class OptionService {
         Option option = optionRepository.findById(optionId)
                 .orElseThrow(() -> new NoSuchElementException("해당 옵션을 찾을 수 없습니다 id :  " + optionId));
 
+        checkOptionInGift(option, giftId);
+
         gift.removeOption(option);
         giftRepository.save(gift);
         optionRepository.delete(option);
+    }
+
+    public void checkOptionInGift(Option option, Long giftId) {
+        if (!option.getGift().getId().equals(giftId)) {
+            throw new NoSuchElementException("해당 상품에 해당 옵션이 없습니다!");
+        }
     }
 
 
