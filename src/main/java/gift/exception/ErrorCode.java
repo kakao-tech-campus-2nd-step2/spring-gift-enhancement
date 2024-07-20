@@ -13,7 +13,8 @@ public enum ErrorCode {
     DUPLICATE_MEMBER_EMAIL("이미 등록된 이메일입니다.", 409, HttpStatus.CONFLICT),
     DUPLICATE_CATEGORY_NAME("중복된 카테고리 이름입니다.", 409, HttpStatus.CONFLICT),
     DUPLICATE_OPTION_NAME("중복된 옵션 이름입니다.", 409, HttpStatus.CONFLICT),
-    MINIMUM_OPTION_REQUIRED("옵션은 최소 한 개 이상입니다.",400, HttpStatus.BAD_REQUEST);
+    MINIMUM_OPTION_REQUIRED("옵션은 최소 한 개 이상입니다.",400, HttpStatus.BAD_REQUEST),
+    INSUFFICIENT_QUANTITY("수량이 부족합니다.", 400, HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final int statusCode;

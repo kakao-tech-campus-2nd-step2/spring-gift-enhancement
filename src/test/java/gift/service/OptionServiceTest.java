@@ -1,10 +1,12 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.OptionRequest;
 import gift.dto.response.OptionResponse;
 import gift.exception.DuplicateOptionNameException;
+import gift.exception.InsufficientQuantityException;
 import gift.exception.MinimumOptionRequiredException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.option.OptionSpringDataJpaRepository;
@@ -19,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -40,7 +43,7 @@ class OptionServiceTest {
     }
 
     @Test
-    void 옵션조회_제품이존재하지않는경우() {
+    public void 옵션조회_제품이존재하지않는경우() {
         Long productId = 1L;
         when(productRepository.existsById(productId)).thenReturn(false);
 
@@ -52,7 +55,7 @@ class OptionServiceTest {
     }
 
     @Test
-    void 옵션조회_제품이존재할경우() {
+    public void 옵션조회_제품이존재할경우() {
         Long productId = 1L;
         Option option1 = mock(Option.class);
         Option option2 = mock(Option.class);
@@ -92,7 +95,7 @@ class OptionServiceTest {
     }
 
     @Test
-    void 옵션추가_옵션이중등록시() {
+    public void 옵션추가_옵션이중등록시() {
         Long productId = 1L;
         OptionRequest optionRequest = new OptionRequest("중복 옵션", 5);
         Product product = mock(Product.class);
@@ -106,7 +109,7 @@ class OptionServiceTest {
     }
 
     @Test
-    void 옵션추가_성공() {
+    public void 옵션추가_성공() {
         Long productId = 1L;
         OptionRequest optionRequest = new OptionRequest("새 옵션", 5);
 
@@ -131,7 +134,7 @@ class OptionServiceTest {
 
 
     @Test
-    void 옵션삭제_제품이존재하지않는경우() {
+    public void 옵션삭제_제품이존재하지않는경우() {
         Long productId = 1L;
         Long optionId = 2L;
 
@@ -143,7 +146,7 @@ class OptionServiceTest {
     }
 
     @Test
-    void 옵션삭제_옵션수량이1개일경우() {
+    public void 옵션삭제_옵션수량이1개일경우() {
         Long productId = 1L;
         Long optionId = 2L;
 
@@ -157,7 +160,7 @@ class OptionServiceTest {
     }
 
     @Test
-    void 옵션삭제_성공() {
+    public void 옵션삭제_성공() {
         Long productId = 1L;
         Long optionId = 2L;
         Option option = mock(Option.class);
@@ -169,6 +172,35 @@ class OptionServiceTest {
         optionService.deleteOption(productId, optionId);
 
         verify(optionRepository).delete(option);
+    }
+
+    @Test
+    public void 옵션수량감소_성공() {
+        Product testProduct = new Product("테스트 상품", 1000, "test.jpg", new Category("테스트 카테고리"));
+        Option testOption = new Option("옵션1", 10);
+        testOption.setProduct(testProduct);
+
+        when(productRepository.existsById(anyLong())).thenReturn(true);
+        when(optionRepository.findByIdAndProductId(anyLong(), anyLong())).thenReturn(Optional.of(testOption));
+
+        optionService.subtractOptionQuantity(1L, 1L, 5);
+
+        assertThat(testOption.getQuantity()).isEqualTo(5);
+        verify(optionRepository, times(1)).findByIdAndProductId(anyLong(), anyLong());
+    }
+
+    @Test
+    public void testSubtractOptionQuantity_insufficientQuantity() {
+        Product testProduct = new Product("테스트 상품", 1000, "test.jpg", new Category("테스트 카테고리"));
+        Option testOption = new Option("옵션1", 10);
+        testOption.setProduct(testProduct);
+
+        when(productRepository.existsById(anyLong())).thenReturn(true);
+        when(optionRepository.findByIdAndProductId(anyLong(), anyLong())).thenReturn(Optional.of(testOption));
+
+        assertThrows(InsufficientQuantityException.class, () -> {
+            optionService.subtractOptionQuantity(1L, 1L, 15);
+        });
     }
 
 }
