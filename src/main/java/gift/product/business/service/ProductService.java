@@ -99,6 +99,13 @@ public class ProductService {
         productRepository.saveProduct(product);
     }
 
+    @Transactional
+    public void subtractOption(OptionIn.Subtract optionInSubtract, Long productId) {
+        var product = productRepository.getProductById(productId);
+        product.subtractOption(optionInSubtract.id(), optionInSubtract.quantity());
+        productRepository.saveProduct(product);
+    }
+
     private <T> void checkOptionNamesDuplicate(List<T> optionDtos, Function<T, String> nameExtractor) {
         boolean isDuplicate = optionDtos.stream()
             .map(nameExtractor)

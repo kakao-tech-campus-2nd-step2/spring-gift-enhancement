@@ -21,4 +21,10 @@ public class OptionIn {
     ) {
     }
 
+    public record Subtract(
+        Long id,
+        Integer quantity
+    ) {
+    }
+
 }

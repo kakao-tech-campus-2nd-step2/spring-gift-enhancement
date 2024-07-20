@@ -104,4 +104,12 @@ public class Product extends BaseTimeEntity {
     public void deleteOptions(List<Long> optionIds) {
         options.removeIf(option -> optionIds.contains(option.getId()));
     }
+
+    public void subtractOption(Long id, Integer quantity) {
+        var option = options.stream()
+            .filter(o -> o.getId().equals(id))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Option not found"));
+        option.subtractQuantity(quantity);
+    }
 }
