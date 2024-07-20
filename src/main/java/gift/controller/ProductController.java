@@ -48,7 +48,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOption);
     }
 
-    @DeleteMapping("/{productId}/{optionId}")
+    @DeleteMapping("/{productId}/options/{optionId}")
     public ResponseEntity<Void> deleteOption(@PathVariable Long productId, @PathVariable Long optionId) {
         optionService.deleteOption(productId, optionId);
         return ResponseEntity.noContent().build();
