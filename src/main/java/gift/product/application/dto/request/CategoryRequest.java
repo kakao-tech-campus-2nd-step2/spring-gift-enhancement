@@ -1,6 +1,6 @@
 package gift.product.application.dto.request;
 
-import gift.product.service.dto.CategoryParam;
+import gift.product.service.command.CategoryCommand;
 import jakarta.validation.constraints.NotNull;
 
 public record CategoryRequest(
@@ -11,7 +11,7 @@ public record CategoryRequest(
         String imgUrl,
         String description
 ) {
-    public CategoryParam toCategoryParam() {
-        return new CategoryParam(name, color, imgUrl, description);
+    public CategoryCommand toCategoryParam() {
+        return new CategoryCommand(name, color, imgUrl, description);
     }
 }

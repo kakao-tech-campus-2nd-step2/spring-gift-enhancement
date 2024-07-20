@@ -11,8 +11,9 @@ import gift.product.domain.Category;
 import gift.product.domain.Product;
 import gift.product.exception.ProductNotFoundException;
 import gift.product.persistence.CategoryRepository;
+import gift.product.persistence.ProductOptionRepository;
 import gift.product.persistence.ProductRepository;
-import gift.product.service.dto.ProductParam;
+import gift.product.service.command.ProductCommand;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -31,6 +32,8 @@ class ProductServiceTest {
     private ProductRepository productRepository;
     @Mock
     private CategoryRepository categoryRepository;
+    @Mock
+    private ProductOptionRepository productOptionRepository;
     @InjectMocks
     private ProductService productService;
 
@@ -38,17 +41,21 @@ class ProductServiceTest {
     @DisplayName("ProductService 생성 테스트[성공]")
     void saveProductTest() {
         //given
-        ProductParam productParam = new ProductParam("테스트 상품", 1000, "http://test.com", "카테고리");
+        ProductCommand productCommand = new ProductCommand("테스트 상품", 1000, "http://test.com", "카테고리");
+
         Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
         Product savedProduct = new Product(1L, "테스트 상품", 1000, "http://test.com", category);
+
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
         given(productRepository.save(any(Product.class))).willReturn(savedProduct);
 
         //when
-        Long savedProductId = productService.saveProduct(productParam);
+        Long savedProductId = productService.saveProduct(productCommand);
 
         //then
         verify(productRepository).save(any(Product.class));
+        verify(productOptionRepository).saveAll(any());
+
         assertThat(savedProductId).isEqualTo(1L);
     }
 
@@ -57,7 +64,7 @@ class ProductServiceTest {
     void modifyProductTest() {
         //given
         Long id = 1L;
-        ProductParam productParam = new ProductParam("수정된 상품", 2000, "http://test.com", "새 카테고리");
+        ProductCommand productCommand = new ProductCommand("수정된 상품", 2000, "http://test.com", "새 카테고리");
         Category existCategory = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
         Product product = new Product(1L, "테스트 상품", 1000, "http://test.com", existCategory);
         Category newCategory = new Category(2L, "새 카테고리", "새 카테고리 설명", "새 카테고리 이미지", "새 카테고리 썸네일 이미지");
@@ -66,7 +73,7 @@ class ProductServiceTest {
         given(productRepository.findById(id)).willReturn(Optional.of(product));
 
         //when
-        productService.modifyProduct(id, productParam);
+        productService.modifyProduct(id, productCommand);
 
         //then
         verify(productRepository).findById(id);
@@ -165,13 +172,13 @@ class ProductServiceTest {
     void modifyProductFailTest() {
         //given
         final Long id = 1L;
-        ProductParam productParam = new ProductParam("수정된 상품", 2000, "http://test.com", "새 카테고리");
+        ProductCommand productCommand = new ProductCommand("수정된 상품", 2000, "http://test.com", "새 카테고리");
 
         //when
         when(productRepository.findById(id)).thenReturn(Optional.empty());
 
         //then
-        assertThatThrownBy(() -> productService.modifyProduct(id, productParam))
+        assertThatThrownBy(() -> productService.modifyProduct(id, productCommand))
                 .isInstanceOf(ProductNotFoundException.class);
     }
 

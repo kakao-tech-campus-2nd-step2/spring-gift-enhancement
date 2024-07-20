@@ -4,7 +4,7 @@ import gift.member.domain.Member;
 import gift.member.exception.MemberAlreadyExistsException;
 import gift.member.exception.MemberNotFoundException;
 import gift.member.persistence.MemberRepository;
-import gift.member.service.dto.MemberInfoParam;
+import gift.member.service.command.MemberInfoCommand;
 import gift.member.service.dto.MemberSignInInfo;
 import gift.member.service.dto.MemberSignupInfo;
 import org.springframework.stereotype.Service;
@@ -21,14 +21,14 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberSignupInfo signUp(MemberInfoParam memberInfoParam) {
-        memberRepository.findByUsername(memberInfoParam.username())
+    public MemberSignupInfo signUp(MemberInfoCommand memberInfoCommand) {
+        memberRepository.findByUsername(memberInfoCommand.username())
                 .ifPresent(u -> {
                     throw new MemberAlreadyExistsException();
                 });
 
-        Member newMember = new Member(memberInfoParam.username(),
-                PasswordProvider.encode(memberInfoParam.username(), memberInfoParam.password()));
+        Member newMember = new Member(memberInfoCommand.username(),
+                PasswordProvider.encode(memberInfoCommand.username(), memberInfoCommand.password()));
         memberRepository.save(newMember);
 
         String token = jwtProvider.generateToken(newMember.getId(), newMember.getUsername(), newMember.getRole());
@@ -37,10 +37,10 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberSignInInfo signIn(MemberInfoParam memberInfoParam) {
-        Member savedMember = memberRepository.findByUsername(memberInfoParam.username())
+    public MemberSignInInfo signIn(MemberInfoCommand memberInfoCommand) {
+        Member savedMember = memberRepository.findByUsername(memberInfoCommand.username())
                 .orElseThrow(MemberNotFoundException::new);
-        if (PasswordProvider.match(memberInfoParam.username(), memberInfoParam.password(),
+        if (PasswordProvider.match(memberInfoCommand.username(), memberInfoCommand.password(),
                 savedMember.getPassword())) {
             throw new MemberNotFoundException();
         }

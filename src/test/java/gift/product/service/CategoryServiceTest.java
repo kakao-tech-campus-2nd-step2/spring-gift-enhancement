@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 import gift.product.domain.Category;
 import gift.product.persistence.CategoryRepository;
-import gift.product.service.dto.CategoryParam;
+import gift.product.service.command.CategoryCommand;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,12 +31,12 @@ class CategoryServiceTest {
     @DisplayName("Category 생성 테스트[성공]")
     void createCategoryTest() {
         // given
-        CategoryParam categoryParam = new CategoryParam("카테고리", "색상", "이미지 URL", "설명");
+        CategoryCommand categoryCommand = new CategoryCommand("카테고리", "색상", "이미지 URL", "설명");
         Category savedCategory = new Category(1L, "카테고리", "색상", "이미지 URL", "설명");
 
         // when
         when(categoryRepository.save(any())).thenReturn(savedCategory);
-        Long savedId = categoryService.createCategory(categoryParam);
+        Long savedId = categoryService.createCategory(categoryCommand);
 
         // then
         assertThat(savedId).isEqualTo(1L);
@@ -47,14 +47,14 @@ class CategoryServiceTest {
     @DisplayName("Category 생성 테스트[실패] 중복된 카테고리 이름")
     void createCategoryWithDuplicatedNameTest() {
         //given
-        CategoryParam categoryParam = new CategoryParam("카테고리", "색상", "이미지 URL", "설명");
+        CategoryCommand categoryCommand = new CategoryCommand("카테고리", "색상", "이미지 URL", "설명");
         Category existParam = new Category(1L, "카테고리", "색상", "이미지 URL", "설명");
 
         //when
         when(categoryRepository.findByName(any())).thenReturn(of(existParam));
 
         //then
-        assertThatThrownBy(() -> categoryService.createCategory(categoryParam))
+        assertThatThrownBy(() -> categoryService.createCategory(categoryCommand))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -62,7 +62,7 @@ class CategoryServiceTest {
     @DisplayName("Category 수정 테스트[성공]")
     void modifyCategoryTest() {
         // given
-        CategoryParam categoryParam = new CategoryParam("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
+        CategoryCommand categoryCommand = new CategoryCommand("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
         Category existCategory = new Category(1L, "카테고리", "색상", "이미지 URL", "설명");
 
         // when
@@ -70,7 +70,7 @@ class CategoryServiceTest {
         when(categoryRepository.findByName(any())).thenReturn(Optional.empty());
 
         // then
-        categoryService.modifyCategory(1L, categoryParam);
+        categoryService.modifyCategory(1L, categoryCommand);
         assertThat(existCategory).extracting("name", "color", "imgUrl", "description")
                 .containsExactly("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
     }
@@ -79,7 +79,7 @@ class CategoryServiceTest {
     @DisplayName("Category 수정 테스트[실패] 이미 존재하는 이름")
     void modifyCategoryWithDuplicatedNameTest() {
         // given
-        CategoryParam categoryParam = new CategoryParam("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
+        CategoryCommand categoryCommand = new CategoryCommand("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
         Category existCategory = new Category(1L, "카테고리", "색상", "이미지 URL", "설명");
         Category existCategory2 = new Category(2L, "새 카테고리", "색상", "이미지 URL", "설명");
 
@@ -87,7 +87,7 @@ class CategoryServiceTest {
         when(categoryRepository.findByName(any())).thenReturn(of(existCategory2));
 
         // then
-        assertThatThrownBy(() -> categoryService.modifyCategory(1L, categoryParam))
+        assertThatThrownBy(() -> categoryService.modifyCategory(1L, categoryCommand))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -95,13 +95,13 @@ class CategoryServiceTest {
     @DisplayName("Category 수정 테스트[실패] 존재하지 않는 카테고리의 Id")
     void modifyCategoryWithNotExistIdTest() {
         // given
-        CategoryParam categoryParam = new CategoryParam("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
+        CategoryCommand categoryCommand = new CategoryCommand("새 카테고리", "새 색상", "새 이미지 URL", "새 설명");
 
         // when
         when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
 
         // then
-        assertThatThrownBy(() -> categoryService.modifyCategory(1L, categoryParam))
+        assertThatThrownBy(() -> categoryService.modifyCategory(1L, categoryCommand))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

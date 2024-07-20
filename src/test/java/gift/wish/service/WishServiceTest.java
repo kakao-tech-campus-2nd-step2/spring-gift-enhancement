@@ -16,7 +16,7 @@ import gift.product.persistence.ProductRepository;
 import gift.wish.domain.Wish;
 import gift.wish.exception.WishCanNotModifyException;
 import gift.wish.persistence.WishRepository;
-import gift.wish.service.dto.WishParam;
+import gift.wish.service.command.WishCommand;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class WishServiceTest {
     @DisplayName("WishService Wish 생성 테스트[성공]")
     void saveWishTest() {
         //given
-        WishParam wishParam = new WishParam(1L, 1L, 10);
+        WishCommand wishCommand = new WishCommand(1L, 1L, 10);
         Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
         Product product = new Product("테스트 상품", 1000, "http://test.com", category);
         Member memeber = new Member("test@test.com", "test");
@@ -49,7 +49,7 @@ class WishServiceTest {
         given(memberRepository.getReferenceById(any())).willReturn(memeber);
 
         //when
-        wishService.saveWish(wishParam);
+        wishService.saveWish(wishCommand);
 
         //then
         then(wishRepository).should().save(any(Wish.class));
@@ -61,18 +61,18 @@ class WishServiceTest {
     @DisplayName("WishService Wish 생성 테스트[실패]")
     void saveWishWithNoProductTest() {
         // given
-        WishParam wishParam = new WishParam(1L, 1L, 10);
+        WishCommand wishCommand = new WishCommand(1L, 1L, 10);
         given(productRepository.findById(1L)).willReturn(Optional.empty());
 
         // when & then
-        assertThrows(ProductNotFoundException.class, () -> wishService.saveWish(wishParam));
+        assertThrows(ProductNotFoundException.class, () -> wishService.saveWish(wishCommand));
     }
 
     @Test
     @DisplayName("WishService Wish 수정 테스트[성공]")
     void modifyWishTest() {
         // given
-        WishParam wishParam = new WishParam(1L, 1L, 5);
+        WishCommand wishCommand = new WishCommand(1L, 1L, 5);
         Product product = mock(Product.class);
         Member member = mock(Member.class);
         Wish wish = new Wish(10, product, member);
@@ -84,7 +84,7 @@ class WishServiceTest {
         given(member.getId()).willReturn(1L);
 
         //when
-        wishService.updateWish(wishParam, any());
+        wishService.updateWish(wishCommand, any());
 
         //then
         then(wishRepository).should().findWishByIdWithUserAndProduct(any());
@@ -96,7 +96,7 @@ class WishServiceTest {
     @Test
     @DisplayName("WishService Wish 수정 테스트[Product 불일치]")
     void modifyWishWithUnMatchProductTest() {
-        WishParam wishParam = new WishParam(1L, 1L, 5);
+        WishCommand wishCommand = new WishCommand(1L, 1L, 5);
         Product existProduct = mock(Product.class);
         Member existMember = mock(Member.class);
         Wish wish = new Wish(10, existProduct, existMember);
@@ -111,13 +111,13 @@ class WishServiceTest {
         given(memberRepository.getReferenceById(any())).willReturn(requestMember);
 
         // when & then
-        assertThrows(WishCanNotModifyException.class, () -> wishService.updateWish(wishParam, any()));
+        assertThrows(WishCanNotModifyException.class, () -> wishService.updateWish(wishCommand, any()));
     }
 
     @Test
     @DisplayName("WishService Wish 수정 테스트[Member 불일치]")
     void modifyWishWithUnMatchMemberTest() {
-        WishParam wishParam = new WishParam(1L, 1L, 5);
+        WishCommand wishCommand = new WishCommand(1L, 1L, 5);
         Product existProduct = mock(Product.class);
         Member existMember = mock(Member.class);
         Wish wish = new Wish(10, existProduct, existMember);
@@ -134,6 +134,6 @@ class WishServiceTest {
         given(memberRepository.getReferenceById(any())).willReturn(requestMember);
 
         // when & then
-        assertThrows(WishCanNotModifyException.class, () -> wishService.updateWish(wishParam, any()));
+        assertThrows(WishCanNotModifyException.class, () -> wishService.updateWish(wishCommand, any()));
     }
 }

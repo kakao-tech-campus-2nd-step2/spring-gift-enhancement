@@ -2,9 +2,9 @@ package gift.product.service;
 
 import gift.product.domain.Category;
 import gift.product.persistence.CategoryRepository;
+import gift.product.service.command.CategoryCommand;
 import gift.product.service.dto.CategoryInfo;
 import gift.product.service.dto.CategoryPageInfo;
-import gift.product.service.dto.CategoryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,22 +17,22 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Long createCategory(CategoryParam categoryParam) {
-        checkDuplicatedCategoryName(categoryParam.name());
+    public Long createCategory(CategoryCommand categoryCommand) {
+        checkDuplicatedCategoryName(categoryCommand.name());
 
-        Category category = CategoryParam.toEntity(categoryParam);
+        Category category = categoryCommand.toEntity();
         category = categoryRepository.save(category);
         return category.getId();
     }
 
-    public void modifyCategory(Long categoryId, CategoryParam categoryParam) {
-        checkDuplicatedCategoryName(categoryParam.name());
+    public void modifyCategory(Long categoryId, CategoryCommand categoryCommand) {
+        checkDuplicatedCategoryName(categoryCommand.name());
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
 
-        category.modify(categoryParam.name(), categoryParam.color(), categoryParam.imgUrl(),
-                categoryParam.description());
+        category.modify(categoryCommand.name(), categoryCommand.color(), categoryCommand.imgUrl(),
+                categoryCommand.description());
     }
 
     private void checkDuplicatedCategoryName(String name) {

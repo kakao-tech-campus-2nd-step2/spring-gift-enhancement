@@ -8,9 +8,9 @@ import gift.product.persistence.ProductRepository;
 import gift.wish.domain.Wish;
 import gift.wish.exception.WishNotFoundException;
 import gift.wish.persistence.WishRepository;
+import gift.wish.service.command.WishCommand;
 import gift.wish.service.dto.WishInfo;
 import gift.wish.service.dto.WishPageInfo;
-import gift.wish.service.dto.WishParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class WishService {
         this.memberRepository = memberRepository;
     }
 
-    public Long saveWish(WishParam wishRequest) {
+    public Long saveWish(WishCommand wishRequest) {
         Product product = productRepository.findById(wishRequest.productId())
                 .orElseThrow(() -> ProductNotFoundException.of(wishRequest.productId()));
         Member member = memberRepository.getReferenceById(wishRequest.memberId());
@@ -42,7 +42,7 @@ public class WishService {
     }
 
     @Transactional
-    public void updateWish(WishParam wishRequest, final Long wishId) {
+    public void updateWish(WishCommand wishRequest, final Long wishId) {
         Wish wish = wishRepository.findWishByIdWithUserAndProduct(wishId)
                 .orElseThrow(() -> WishNotFoundException.of(wishId));
 
