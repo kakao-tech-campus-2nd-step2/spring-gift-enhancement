@@ -19,12 +19,6 @@ public class OptionRestController {
         this.optionService = optionService;
     }
 
-    @PostMapping
-    public ResponseEntity<Void> addOption(@Valid @RequestBody OptionRequest optionRequest){
-        optionService.save(optionRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<OptionResponse> getOptionById(@PathVariable Long id){
         OptionResponse foundOption = optionService.findById(id);
