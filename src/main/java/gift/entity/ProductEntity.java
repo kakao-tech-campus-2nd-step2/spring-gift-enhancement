@@ -26,8 +26,8 @@ public class ProductEntity {
     @Column(nullable = false)
     private String imageUrl;
 
-    @Column(nullable = false)
     @ManyToOne(targetEntity = CategoryEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
     private CategoryEntity categoryEntity;
 
     @JsonIgnore

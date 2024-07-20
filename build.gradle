@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     // MySQL
+    runtimeOnly 'com.h2database:h2' // H2 DB
     runtimeOnly 'mysql:mysql-connector-java:8.0.30' // MySQL 드라이버 의존성 추가
 
     // JPA
