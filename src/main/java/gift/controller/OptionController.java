@@ -30,22 +30,22 @@ public class OptionController{
     }
     
     @GetMapping("/{id}/options")
-    public ResponseEntity<OptionResponse> getOptions(@PathVariable Long productId){
-        OptionResponse optionResponse = optionService.findByProductId(productId);
+    public ResponseEntity<OptionResponse> getOptions(@PathVariable Long id){
+        OptionResponse optionResponse = optionService.findByProductId(id);
         return new ResponseEntity<>(optionResponse, HttpStatus.OK);
     }
 
     @PostMapping("/{id}/otions/new")
-    public ResponseEntity<?> addOption(@Valid @RequestBody OptionDto optionDto, BindingResult bindingResult, @PathVariable Long productId){
+    public ResponseEntity<?> addOption(@Valid @RequestBody OptionDto optionDto, BindingResult bindingResult, @PathVariable Long id){
         
         if(bindingResult.hasErrors()){
             Map<String, String> erros = new HashMap<>();
             for(FieldError error : bindingResult.getFieldErrors()){
                 erros.put(error.getField(), error.getDefaultMessage());
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(erros, HttpStatus.BAD_REQUEST);
         }
-        optionService.addOption(optionDto, productId);
+        optionService.addOption(optionDto, id);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -25,7 +25,6 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
-    @Transactional
     public OptionResponse findByProductId(Long productId){
 
         productRepository.findById(productId)

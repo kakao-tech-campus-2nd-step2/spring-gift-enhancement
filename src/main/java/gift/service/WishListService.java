@@ -34,7 +34,7 @@ public class WishListService {
         this.jwtUtil = jwtUtil;
     }
 
-    @Transactional
+
     public WishListPageResponse findWishListById(String token, int page, int size) {
 
         long memberId = (long)jwtUtil.extractAllClaims(token).get("id");

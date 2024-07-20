@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import gift.repository.CategoryRepository;
+import jakarta.transaction.Transactional;
 import gift.dto.CategoryDto;
 import gift.dto.response.CategoryResponse;
 import gift.entity.Category;
@@ -38,6 +39,7 @@ public class CategoryService {
         return categoryResponse;
     }
 
+    @Transactional
     public void addCategory(CategoryDto categoryDto){
 
         if(categoryRepository.findByName(categoryDto.getName()).isEmpty()){
