@@ -48,7 +48,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable(value = "id") long id) {
-        productService.deleteProductAndWishlist(id);
+        productService.deleteProductAndWishlistAndOptions(id);
     }
 
     @PutMapping("/{id}")
