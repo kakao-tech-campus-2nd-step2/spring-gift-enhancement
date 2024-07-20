@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import java.util.regex.Pattern;
 
@@ -29,6 +30,9 @@ public class Option extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @Version
+    private Long version;
 
     protected Option() {
     }
@@ -51,6 +55,10 @@ public class Option extends BaseTimeEntity {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public Long getVersion() {
+        return version;
     }
 
     public void update(String name, Integer quantity) {
@@ -98,7 +106,7 @@ public class Option extends BaseTimeEntity {
         }
 
         public static boolean isValidCount(Integer value) {
-            if (value < 0) {
+            if (value < 1) {
                 throw new IllegalArgumentException("옵션 개수는 1 이상의 값이어야 합니다.");
             }
 
