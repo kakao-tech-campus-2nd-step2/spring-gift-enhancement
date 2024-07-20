@@ -3,12 +3,10 @@ package gift.controller;
 import gift.dto.CategoryRequest;
 import gift.model.Category;
 import gift.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,7 +26,7 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(CategoryRequest request) {
+    public ResponseEntity<Void> update(@RequestBody @Valid CategoryRequest request) {
         categoryService.update(request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

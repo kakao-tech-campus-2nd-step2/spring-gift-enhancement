@@ -2,6 +2,9 @@ package gift.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name = "products")
 public class Product {
 
@@ -21,6 +24,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+    @OneToMany(mappedBy = "product")
+    private List<Option> options = new ArrayList<>();
 
     public Product() {
     }
@@ -70,5 +75,12 @@ public class Product {
     }
     public Category getCategory() {
         return category;
+    }
+    public List<Option> getOptions() {
+        return options;
+    }
+    public boolean checkDuplicateOptionName(String optionName) {
+        return options.stream()
+                .anyMatch(option -> option.getName().equals(optionName));
     }
 }

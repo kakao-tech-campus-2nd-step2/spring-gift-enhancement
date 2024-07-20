@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -26,18 +25,16 @@ public class ProductService {
     }
 
     public Product makeProduct(ProductRequest request) {
-        Optional<Category> categoryOptional = categoryRepository.findById(request.categoryId());
-        if (categoryOptional.isPresent()) {
-            Product product = new Product(
-                    request.name(),
-                    request.price(),
-                    request.imageUrl(),
-                    categoryOptional.get()
-            );
-            productRepository.save(product);
-            return product;
-        }
-        throw new NotFoundException("해당 카테고리가 존재하지 않습니다.");
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(() -> new NotFoundException("해당 카테고리가 존재하지 않습니다."));
+        Product product = new Product(
+                request.name(),
+                request.price(),
+                request.imageUrl(),
+                category
+        );
+        productRepository.save(product);
+        return product;
     }
 
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
@@ -67,20 +64,16 @@ public class ProductService {
 
     @Transactional
     public Product putProduct(ProductRequest request) {
-        Optional<Product> optionalProduct = productRepository.findById(request.id());
-        Optional<Category> optionalCategory = categoryRepository.findById(request.categoryId());
+        Product product = productRepository.findById(request.id())
+                .orElseThrow(() -> new NotFoundException("수정하려는 해당 id의 상품이 존재하지 않습니다."));
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(() -> new NotFoundException("해당 카테고리가 존재하지 않습니다."));
 
-        if (!optionalProduct.isPresent()) {
-            throw new NotFoundException("수정하려는 해당 id의 상품이 존재하지 않습니다.");
-        }
-        if (!optionalCategory.isPresent()) {
-            throw new NotFoundException("해당 카테고리가 존재하지 않습니다.");
-        }
-        Product updateProduct = optionalProduct.get().update(
+        Product updateProduct = product.update(
                 request.name(),
                 request.price(),
                 request.imageUrl(),
-                optionalCategory.get()
+                category
         );
         return updateProduct;
 

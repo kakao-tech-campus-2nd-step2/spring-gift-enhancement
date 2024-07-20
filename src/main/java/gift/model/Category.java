@@ -20,7 +20,7 @@ public class Category {
     private String color;
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^https", message = "이미지 주소가 적절하지 않습니다.")
+    @Pattern(regexp = "https://.*$", message = "이미지 주소가 적절하지 않습니다.")
     private String imageUrl;
     @NotNull
     @NotBlank
