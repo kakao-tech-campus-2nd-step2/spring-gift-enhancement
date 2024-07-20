@@ -5,6 +5,7 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.OptionRequest;
 import gift.dto.response.OptionResponse;
+import gift.dto.response.ProductResponse;
 import gift.exception.DuplicateOptionNameException;
 import gift.exception.OptionNotFoundException;
 import gift.exception.ProductNotFoundException;
@@ -18,11 +19,11 @@ import java.util.List;
 @Service
 public class OptionService {
     public final OptionRepository optionRepository;
-    public final ProductRepository productRepository;
+    public final ProductService productService;
 
-    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
+    public OptionService(OptionRepository optionRepository, ProductService productService) {
         this.optionRepository = optionRepository;
-        this.productRepository = productRepository;
+        this.productService = productService;
     }
 
     @Transactional
@@ -30,9 +31,8 @@ public class OptionService {
         if(optionRepository.existsByName(optionRequest.name())) {
             throw new DuplicateOptionNameException(Messages.OPTION_NAME_ALREADY_EXISTS);
         }
-        Product foundProduct = productRepository.findById(productId)
-                .orElseThrow(()->  new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_BY_NAME));
-        optionRepository.save(new Option(optionRequest.name(), optionRequest.quantity(), foundProduct));
+        ProductResponse foundProduct = productService.findById(productId);
+        optionRepository.save(new Option(optionRequest.name(), optionRequest.quantity(), foundProduct.toEntity()));
     }
 
     @Transactional(readOnly = true)
