@@ -4,7 +4,6 @@ import gift.main.entity.*;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,21 +17,22 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
     private final EntityManager entityManager;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final WishProductRepository wishProductRepository;
 
-    @Autowired
-    public UserRepositoryTest(CategoryRepository categoryRepository,
+
+    public UserRepositoryTest(EntityManager entityManager,
                               UserRepository userRepository,
-                              WishProductRepository wishProductRepository,
                               ProductRepository productRepository,
-                              EntityManager entityManager,
-                              EntityManager entityManager1) {
-
-        this.categoryRepository = categoryRepository;
+                              CategoryRepository categoryRepository,
+                              WishProductRepository wishProductRepository) {
+        this.entityManager = entityManager;
         this.userRepository = userRepository;
-        this.wishProductRepository = wishProductRepository;
         this.productRepository = productRepository;
-
-        this.entityManager = entityManager1;
+        this.categoryRepository = categoryRepository;
+        this.wishProductRepository = wishProductRepository;
     }
 
     @Test
