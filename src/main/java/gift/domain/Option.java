@@ -1,6 +1,7 @@
 package gift.domain;
 
 import gift.constants.Messages;
+import gift.exception.CannotDeleteLastOptionException;
 import gift.exception.InsufficientQuantityException;
 import jakarta.persistence.*;
 
@@ -51,7 +52,15 @@ public class Option {
         }
     }
 
+    public void validateOptionCountBeforeRemove(){
+        int productOptionCount = this.product.getOptions().size();
+        if(productOptionCount < 2){
+            throw new CannotDeleteLastOptionException(Messages.CANNOT_DELETE_LAST_OPTION);
+        }
+    }
+
     public void remove() {
+        validateOptionCountBeforeRemove();
         if (this.product != null) {
             this.product.removeOption(this);
         }
