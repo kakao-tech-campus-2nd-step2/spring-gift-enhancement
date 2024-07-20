@@ -2,12 +2,13 @@ package gift.entity;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class OptionDTOTest {
@@ -16,7 +17,7 @@ public class OptionDTOTest {
     private Validator validator;
 
     @Test
-    void 상품_이름이_50자가_넘는_경우() {
+    void 옵션_이름이_50자가_넘는_경우() {
         //given
         OptionDTO option = new OptionDTO("a".repeat(51), 100);
 
@@ -24,11 +25,11 @@ public class OptionDTOTest {
         Set<ConstraintViolation<OptionDTO>> violations = validator.validate(option);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
-    void 상품에_불가능한_특수문자가_있는_경우() {
+    void 옵션에_불가능한_특수문자가_있는_경우() {
         //given
         OptionDTO option = new OptionDTO("옵̶̦̞̜̹͇̳̺͚͆͐͌͗̄ͅ션̷͉̩͍̪̪̄̂̂̐̄̕", 100);
 
@@ -36,7 +37,7 @@ public class OptionDTOTest {
         Set<ConstraintViolation<OptionDTO>> violations = validator.validate(option);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -48,7 +49,7 @@ public class OptionDTOTest {
         Set<ConstraintViolation<OptionDTO>> violations = validator.validate(option);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -60,7 +61,7 @@ public class OptionDTOTest {
         Set<ConstraintViolation<OptionDTO>> violations = validator.validate(option);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -72,6 +73,6 @@ public class OptionDTOTest {
         Set<ConstraintViolation<OptionDTO>> violations = validator.validate(option);
 
         //then
-        Assertions.assertThat(violations).isEmpty();
+        assertThat(violations).isEmpty();
     }
 }

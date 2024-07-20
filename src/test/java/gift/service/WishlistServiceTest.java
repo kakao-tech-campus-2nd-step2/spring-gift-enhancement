@@ -3,7 +3,6 @@ package gift.service;
 import gift.entity.Product;
 import gift.entity.ProductDTO;
 import gift.entity.WishlistDTO;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -37,7 +38,7 @@ public class WishlistServiceTest {
 
         // then
         List<Product> products = wishlistService.getWishlistProducts(testEmail, PageRequest.of(0, 10)).getContent();
-        Assertions.assertThat(products.size()).isEqualTo(1);
+        assertThat(products.size()).isEqualTo(1);
     }
 
     @Test
@@ -61,10 +62,10 @@ public class WishlistServiceTest {
         List<Product> products1 = wishlistService.getWishlistProducts(testEmail1, PageRequest.of(0, 10)).getContent();
         List<Product> products2 = wishlistService.getWishlistProducts(testEmail2, PageRequest.of(0, 10)).getContent();
 
-        Assertions.assertThat(products1.get(0).getName()).isEqualTo("test1");
-        Assertions.assertThat(products1.get(1).getName()).isEqualTo("test2");
+        assertThat(products1.get(0).getName()).isEqualTo("test1");
+        assertThat(products1.get(1).getName()).isEqualTo("test2");
 
-        Assertions.assertThat(products2.get(0).getName()).isEqualTo("test2");
-        Assertions.assertThat(products2.get(1).getName()).isEqualTo("test3");
+        assertThat(products2.get(0).getName()).isEqualTo("test2");
+        assertThat(products2.get(1).getName()).isEqualTo("test3");
     }
 }

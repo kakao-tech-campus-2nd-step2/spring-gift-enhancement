@@ -6,7 +6,6 @@ import gift.entity.Product;
 import gift.entity.ProductDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +75,7 @@ public class CategoryServiceTest {
 
         // then
         Category expect = categoryService.findById(category.getId());
-        Assertions.assertThat(expect.getName()).isEqualTo("DefaultCategory");
+        assertThat(expect.getName()).isEqualTo("DefaultCategory");
     }
 
     @Test

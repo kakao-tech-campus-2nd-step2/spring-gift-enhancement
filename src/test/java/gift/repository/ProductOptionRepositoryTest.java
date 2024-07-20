@@ -24,7 +24,7 @@ public class ProductOptionRepositoryTest {
         // given
         Product product = productRepository.save(new Product(new ProductDTO("test", 123, "test.com", 1L)));
         Option option = optionRepository.save(new Option(new OptionDTO("test", 123)));
-        productOptionRepository.save(new ProductOption(product, option));
+        productOptionRepository.save(new ProductOption(product, option, option.getName()));
 
         // when
         productOptionRepository.deleteByProductIdAndOptionId(product.getId(), option.getId());

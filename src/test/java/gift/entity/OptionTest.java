@@ -1,7 +1,8 @@
 package gift.entity;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class OptionTest {
 
@@ -14,6 +15,6 @@ public class OptionTest {
         option.subtract(30);
 
         // then
-        Assertions.assertThat(option.getQuantity()).isEqualTo(70);
+        assertThat(option.getQuantity()).isEqualTo(70);
     }
 }

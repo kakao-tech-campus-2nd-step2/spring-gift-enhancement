@@ -2,10 +2,13 @@ package gift.service;
 
 import gift.entity.Option;
 import gift.entity.OptionDTO;
+import gift.entity.Product;
+import gift.entity.ProductDTO;
 import gift.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -15,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class OptionServiceTest {
     @Autowired
     private OptionService optionService;
+    @Autowired
+    private ProductService productService;
 
     @Test
     void save() {
@@ -71,8 +76,10 @@ public class OptionServiceTest {
         optionService.delete(saved.getId());
 
         // then
-        assertThrows(ResourceNotFoundException.class,
+        Exception exception = assertThrows(ResourceNotFoundException.class,
                 () -> optionService.findById(saved.getId()));
+        assertThat(exception.getMessage())
+                .isEqualTo("Option not found with id: " + saved.getId());
     }
 
     @Test
@@ -83,8 +90,9 @@ public class OptionServiceTest {
 
         // when
         // then
-        assertThrows(IllegalArgumentException.class,
+        Exception exception = assertThrows(IllegalArgumentException.class,
                 () -> optionService.subtract(saved.getId(), 100));
+        assertThat(exception.getMessage()).isEqualTo("Not enough quantity");
     }
 
     @Test
@@ -99,5 +107,20 @@ public class OptionServiceTest {
 
         // then
         assertThat(expect.getQuantity()).isEqualTo(3);
+    }
+
+    @Test
+    void 같은_이름의_option이_product에_있을_때() {
+        // given
+        Product product = productService.save(new ProductDTO("test", 123, "test.com", 1L));
+        Option option1 = optionService.save(new OptionDTO("test", 123));
+        Option option2 = optionService.save(new OptionDTO("test", 456));
+
+        // when
+        productService.addProductOption(product.getId(), option1.getId());
+
+        // then
+        assertThrows(DataIntegrityViolationException.class,
+                () -> productService.addProductOption(product.getId(), option2.getId()));
     }
 }
