@@ -45,4 +45,12 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
     }
+
+    public boolean hasSameName(String name){
+        return this.name.equals(name);
+    }
+
+    public boolean isBelongToProduct(Long productId){
+        return this.product.getId().equals(productId);
+    }
 }
