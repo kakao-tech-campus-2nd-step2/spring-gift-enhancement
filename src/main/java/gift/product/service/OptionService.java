@@ -38,12 +38,9 @@ public class OptionService {
 
     public void registerOption(Long productId, OptionDTO optionDTO) {
         System.out.println("[OptionService] registerOption()");
-
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
-
         optionValidation.register(product, optionDTO);
-
         optionRepository.save(
             new Option(
                 optionDTO.getName(),
@@ -55,13 +52,10 @@ public class OptionService {
 
     public void updateOption(Long id, OptionDTO optionDTO) {
         System.out.println("[OptionService] updateOption()");
-
         Product product = optionRepository.findById(id)
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
             .getProduct();
-
         optionValidation.update(product, optionDTO);
-
         optionRepository.save(
             new Option(
                 id,
@@ -72,17 +66,14 @@ public class OptionService {
         );
     }
 
-    public void deleteOption(Long id) {
+    public void deleteOption(Long id, Long productId) {
         System.out.println("[OptionService] deleteOption()");
-
-        optionValidation.delete(id);
-
+        optionValidation.delete(id, productId);
         optionRepository.deleteById(id);
     }
 
     public Option findById(Long id) {
         System.out.println("[OptionService] findById()");
-
         return optionRepository.findById(id)
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
     }

@@ -41,13 +41,13 @@ public class OptionValidation {
         validateNegative(optionDTO.getQuantity());
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, Long productId) {
         validateExistId(id);
-        validateLastOption(optionRepository.countByProduct(id));
+        validateLastOption(optionRepository.countByProduct(productId));
     }
 
     private void validateExistId(Long id) {
-        if(optionRepository.existsById(id))
+        if(!optionRepository.existsById(id))
             throw new InvalidIdException(NOT_EXIST_ID);
     }
 
