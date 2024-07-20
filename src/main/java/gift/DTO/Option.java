@@ -65,4 +65,12 @@ public class Option {
   public Product getProduct() {
     return this.product;
   }
+
+  public boolean subtract(int amount) {
+    if (amount > this.quantity) {
+      return false;
+    }
+    this.quantity -= amount;
+    return true;
+  }
 }
