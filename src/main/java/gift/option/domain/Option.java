@@ -14,7 +14,7 @@ public class Option {
 
     @Column(nullable = false)
     @Size(max = 50, message = "옵션 이름은 공백을 포함하여 최대 50자입니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9 ()\\[\\]\\+\\-\\&\\/\\_]*$", message = "특수 문자 중 ()[]+-&/_만 사용 가능합니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣 ()\\[\\]\\+\\-\\&\\/\\_]*$", message = "특수 문자 중 ()[]+-&/_만 사용 가능하며, 영어와 한국어만 허용됩니다.")
     private String name;
 
     @Column(nullable = false)
@@ -42,6 +42,10 @@ public class Option {
     public void update(String name, Long quantity) {
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void subtract(Long quantity) {
+        this.quantity -= quantity;
     }
 
     // 생성자

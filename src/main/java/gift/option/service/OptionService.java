@@ -38,6 +38,8 @@ public class OptionService {
 
         Option option = new Option(optionRequest.getName(), optionRequest.getQuantity(), product);
 
+        checkForDuplicateOption(option);
+
         return optionJpaRepository.save(option);
     }
 
@@ -67,6 +69,8 @@ public class OptionService {
         }
 
         existingOption.update(optionRequest.getName(), optionRequest.getQuantity());
+
+        checkForDuplicateOption(existingOption);
 
         return optionJpaRepository.save(existingOption);
 

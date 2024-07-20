@@ -1,6 +1,5 @@
 package gift.option.controller;
 
-import gift.category.model.Category;
 import gift.common.exception.ProductNotFoundException;
 import gift.option.domain.Option;
 import gift.option.domain.OptionRequest;

@@ -30,7 +30,7 @@ public class OptionController {
     }
 
     // 옵션 삭제
-    @PostMapping("/{id}/delete")
+    @PostMapping("/delete/{id}")
     public String deleteOption(@PathVariable Long id) {
         Long productId = optionService.deleteOption(id);
         return "redirect:/api/products/" + productId + "/options";
