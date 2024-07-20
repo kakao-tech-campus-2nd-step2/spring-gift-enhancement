@@ -115,14 +115,16 @@ public class ProductController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    public String deleteProduct(@PathVariable("id") Long id,
+        RedirectAttributes redirectAttributes) {
         productService.deleteProduct(id);
         redirectAttributes.addFlashAttribute("message", "Product deleted successfully!");
         return "redirect:/products";
     }
 
     @GetMapping("/view/{id}")
-    public String getProductDetails(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+    public String getProductDetails(@PathVariable("id") Long id, Model model,
+        RedirectAttributes redirectAttributes) {
         Optional<Product> product = productService.getProductById(id);
         if (product.isPresent()) {
             List<Category> categories = categoryRepository.findAll();
