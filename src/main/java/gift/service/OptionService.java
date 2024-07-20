@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @Service
 public class OptionService {
     private final OptionRepository optionRepository;
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
+    public OptionService(OptionRepository optionRepository, ProductService productService) {
         this.optionRepository = optionRepository;
-        this.productRepository = productRepository;
+        this.productService = productService;
     }
 
     public void subtractOptionQuantity(Long productId, Long optionId, int quantityToSubtract) {
@@ -42,16 +42,9 @@ public class OptionService {
     }
 
     public OptionResponseDTO addOption(Long productId, OptionRequestDTO optionRequestDTO) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
-
-        if (optionRepository.existsByProductIdAndName(productId, optionRequestDTO.getName())) {
-            throw new IllegalArgumentException("Option name already exists for this product");
-        }
-
+        Product product = productService.getProductEntityById(productId);
         Option option = new Option(optionRequestDTO.getName(), optionRequestDTO.getQuantity(), product);
         Option savedOption = optionRepository.save(option);
-
         return new OptionResponseDTO(savedOption.getId(), savedOption.getName(), savedOption.getQuantity());
     }
 
