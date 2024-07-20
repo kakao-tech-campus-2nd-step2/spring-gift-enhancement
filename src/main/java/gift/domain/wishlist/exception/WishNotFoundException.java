@@ -1,6 +1,8 @@
 package gift.domain.wishlist.exception;
 
-public class WishNotFoundException extends RuntimeException {
+import gift.global.exception.NotFoundException;
+
+public class WishNotFoundException extends NotFoundException {
 
     public WishNotFoundException(String message) {
         super(message);

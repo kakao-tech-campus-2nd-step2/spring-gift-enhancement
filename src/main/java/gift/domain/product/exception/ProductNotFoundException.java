@@ -1,6 +1,8 @@
 package gift.domain.product.exception;
 
-public class ProductNotFoundException extends RuntimeException {
+import gift.global.exception.NotFoundException;
+
+public class ProductNotFoundException extends NotFoundException {
 
     public ProductNotFoundException(String message) {
         super(message);
