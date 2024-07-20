@@ -40,7 +40,7 @@ tr:hover {
 }
 
 /* main.css */
-.button, .delete-button, .edit-button {
+.button, .delete-button, .edit-button, .option-button {
     background-color: #4CAF50; /* Green */
     border: none;
     color: white;

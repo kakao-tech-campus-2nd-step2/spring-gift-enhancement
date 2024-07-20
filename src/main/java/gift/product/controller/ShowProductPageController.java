@@ -3,6 +3,8 @@ package gift.product.controller;
 import gift.category.model.Category;
 import gift.category.service.CategoryService;
 import gift.common.exception.ProductNotFoundException;
+import gift.option.domain.Option;
+import gift.option.service.OptionService;
 import gift.product.model.Product;
 import gift.product.service.ProductService;
 import org.springframework.stereotype.Controller;
@@ -14,33 +16,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/products")
-public class ShowPageController {
+@RequestMapping("/api/products")
+public class ShowProductPageController {
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
-    public ShowPageController(ProductService productService, CategoryService categoryService) {
+    public ShowProductPageController(ProductService productService, CategoryService categoryService, OptionService optionService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
+    // 상품 메인 페이지 반환
     @GetMapping
-    public String showProductsForm(Model model) {
+    public String showProductForm(Model model) {
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
-        return "product";
+        return "Product/product";
     }
 
+    // 상품 등록 페이지 반환
     @GetMapping("/new")
-    public String showCreateForm(Model model) {
+    public String showProductCreateForm(Model model) {
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
         model.addAttribute("product", new Product());
-        return "crudPage/create_product";
+        return "Product/create_product";
     }
 
+    // 상품 수정 페이지 반환
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Long id, Model model) {
+    public String showProductEditForm(@PathVariable("id") Long id, Model model) {
         Product product = productService.getProductById(id);
         if (product == null) {
             throw new ProductNotFoundException(id);
@@ -48,6 +55,19 @@ public class ShowPageController {
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
         model.addAttribute("product", product);
-        return "crudPage/edit_product";
+        return "Product/edit_product";
+    }
+
+    // 옵션 메인 페이지 반환
+    @GetMapping("/{id}/options")
+    public String showOptionsForm(@PathVariable("id") Long id, Model model) {
+        Product product = productService.getProductById(id);
+        if (product == null) {
+            throw new ProductNotFoundException(id);
+        }
+
+        List<Option> option = optionService.getAllOptionByProduct(product);
+        model.addAttribute("options", option);
+        return "Option/option";
     }
 }

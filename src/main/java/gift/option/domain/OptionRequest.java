@@ -12,13 +12,16 @@ public class OptionRequest {
     @Max(value = 99999999, message = "Quantity는 최대 1억 미만 개까지 가능합니다.")
     private Long quantity;
 
+    @NotNull(message = "Product ID는 필수입니다.")
+    private Long productId;
 
     // 생성자
     public OptionRequest() {}
 
-    public OptionRequest(String name, Long quantity) {
+    public OptionRequest(String name, Long quantity, Long productId) {
         this.name = name;
         this.quantity = quantity;
+        this.productId = productId;
     }
 
     // Getters and setters
@@ -36,5 +39,13 @@ public class OptionRequest {
 
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }

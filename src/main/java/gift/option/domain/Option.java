@@ -45,11 +45,13 @@ public class Option {
     }
 
     // 생성자
-    public Option() {}
+    public Option() {
+    }
 
-    public Option(String name, Long quantity) {
+    public Option(String name, Long quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
+        this.product = product;
     }
 
     // Getters and setters

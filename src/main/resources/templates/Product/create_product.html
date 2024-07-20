@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>상품 정보 등록하기</h1>
+
 <form th:action="@{/products}" th:object="${product}" method="post">
     <label>name : <input type="text" th:field="*{name}" /></label>
     <label>price : <input type="text" th:field="*{price}" /></label>
@@ -17,6 +18,7 @@
     </label>
     <button type="submit" class="button">상품 정보 등록하기</button>
 </form>
-<a href="/products"></a>
+
+<a href="/api/products"></a>
 </body>
 </html>
