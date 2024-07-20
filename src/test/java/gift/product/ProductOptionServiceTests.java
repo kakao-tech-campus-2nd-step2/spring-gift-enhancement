@@ -16,12 +16,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductOptionRepositoryTests {
+public class ProductOptionServiceTests {
     @Mock
     private ProductOptionRepository productOptionRepository;
 
@@ -131,5 +134,47 @@ public class ProductOptionRepositoryTests {
         assertThrows(InvalidArgumentException.class, () -> {
             productOptionService.registerOptionToProduct(productId, productOption);
         });
+    }
+
+    @Test
+    @DisplayName("옵션 수량을 차감")
+    public void testSubtractQuantityFromOption() {
+        Long optionId = 1L;
+        Integer quantity = 10;
+
+        when(productOptionRepository.findById(optionId)).thenReturn(Optional.of(sampleOption()));
+
+        productOptionService.subtractQuantityFromOption(optionId, quantity);
+        verify(productOptionRepository).save(any(), any());
+    }
+
+    @Test
+    @DisplayName("옵션 수량을 음수로 차감할 경우")
+    public void testSubtractQuantityFromOptionWithNegativeQuantity() {
+        Long optionId = 1L;
+        Integer quantity = -1;
+
+        when(productOptionRepository.findById(optionId)).thenReturn(Optional.of(sampleOption()));
+
+        assertThrows(InvalidArgumentException.class, () -> {
+            productOptionService.subtractQuantityFromOption(optionId, quantity);
+        });
+    }
+
+    @Test
+    @DisplayName("옵션 수량을 초과하여 차감할 경우")
+    public void testSubtractQuantityFromOptionWithExceedingQuantity() {
+        Long optionId = 1L;
+        Integer quantity = 101;
+
+        when(productOptionRepository.findById(optionId)).thenReturn(Optional.of(sampleOption()));
+
+        assertThrows(InvalidArgumentException.class, () -> {
+            productOptionService.subtractQuantityFromOption(optionId, quantity);
+        });
+    }
+
+    private ProductOption sampleOption() {
+        return new ProductOption(1L, "test", 100);
     }
 }

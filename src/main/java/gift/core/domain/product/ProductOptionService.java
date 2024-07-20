@@ -10,4 +10,6 @@ public interface ProductOptionService {
 
     void removeOptionFromProduct(Long productId, Long optionId);
 
+    void subtractQuantityFromOption(Long optionId, Integer quantity);
+
 }
