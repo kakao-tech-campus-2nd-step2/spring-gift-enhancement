@@ -47,12 +47,10 @@ public class OptionService {
     return ConverterToDto.convertToOptionDto(option);
   }
 
-  public OptionDto deleteOption(Long id) {
+  public void deleteOption(Long id) {
     Option option = optionRepository.findById(id)
       .orElseThrow(() -> new EmptyResultDataAccessException("해당 데이터가 없습니다", 1));
     optionRepository.deleteById(id);
-
-    return ConverterToDto.convertToOptionDto(option);
   }
 
   public OptionDto updateOption(Long id, OptionDto updateOptionDto) {
