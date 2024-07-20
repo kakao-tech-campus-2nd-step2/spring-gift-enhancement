@@ -109,6 +109,7 @@
     <th>가격</th>
     <th>카테고리</th>
     <th>Image URL</th>
+    <th> 옵션 보기</th>
     <th style="display:none;" class="auth-required"> 수정 및 삭제</th>
     <th> 위시 리스트 추가</th>
   </tr>
@@ -120,6 +121,11 @@
     <td th:text="${product.price}">price</td>
     <td th:text="${product.getCategory().getName()}">category</td>
     <td><a th:href="${product.imageUrl}" th:text="${product.imageUrl}">imageurl</a></td>
+    <td>
+      <form th:action="@{/admin/products/{id}/options(id=${product.id})}" method="get">
+        <button type="submit">옵션 보기</button>
+      </form>
+    </td>
     <td style="display: none;" class="auth-required">
       <form th:action="@{/admin/products/{id}(id=${product.id})}" method="get"
             style="display:none;" class="auth-required">
