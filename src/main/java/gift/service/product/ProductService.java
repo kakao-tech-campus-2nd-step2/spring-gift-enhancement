@@ -1,9 +1,12 @@
 package gift.service.product;
 
+import gift.domain.category.Category;
+import gift.domain.category.CategoryRepository;
 import gift.domain.product.Product;
 import gift.domain.product.ProductRepository;
 import gift.mapper.ProductMapper;
 import gift.web.dto.ProductDto;
+import gift.web.exception.CategoryNotFoundException;
 import gift.web.exception.ProductNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,10 +16,13 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.categoryRepository = categoryRepository;
     }
 
     public Page<ProductDto> getProducts(Pageable pageable) {
@@ -31,19 +37,28 @@ public class ProductService {
     }
 
     public ProductDto createProduct(ProductDto productDto) {
-        Product product = productRepository.save(productMapper.toEntity(productDto));
+        Category category = categoryRepository.findById(productDto.categoryId())
+            .orElseThrow(() -> new CategoryNotFoundException("카테고리가 없슴다"));
+
+        Product product = productRepository.save(productMapper.toEntity(productDto, category));
         return productMapper.toDto(product);
     }
 
     public ProductDto updateProduct(Long id, ProductDto productDto) {
+        Category category = categoryRepository.findById(productDto.categoryId())
+            .orElseThrow(() -> new CategoryNotFoundException("카테코리가 없슴다"));
+
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException("제품이 없슴다."));
 
         product.updateProduct(
             productDto.name(),
             productDto.price(),
-            productDto.imageUrl()
+            productDto.imageUrl(),
+            category
         );
+
+        productRepository.save(product);
 
         return productMapper.toDto(product);
     }
