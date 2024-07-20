@@ -6,10 +6,13 @@ public class CreateCategoryRequest {
     private String description;
     private String imageUrl;
 
-    public CreateCategoryRequest(String name, String description, String imageUrl) {
+    private String color;
+
+    public CreateCategoryRequest(String name, String description, String imageUrl, String color) {
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.color = color;
     }
 
     public String getName() {
@@ -22,5 +25,9 @@ public class CreateCategoryRequest {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getColor() {
+        return color;
     }
 }

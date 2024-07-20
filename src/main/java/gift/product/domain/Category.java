@@ -1,10 +1,9 @@
 package gift.product.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "category")
 public class Category {
@@ -14,13 +13,27 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
+
     private String name;
+
+    private String description;
+
+    private String imageUrl;
+
+    private String color;
+
 
     public Category() {
     }
 
-    public Category(String name) {
+    public Category(String name, String description, String imageUrl, String color) {
         this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.color = color;
     }
 
     public Long getId() {

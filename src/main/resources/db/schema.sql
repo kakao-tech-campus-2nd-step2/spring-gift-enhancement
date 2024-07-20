@@ -30,3 +30,14 @@ CREATE TABLE wishlist_product
     FOREIGN KEY (wishlist_id) REFERENCES wishlist (wishlist_id),
     FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
+
+
+create table category
+(
+    color       varchar(7)   not null,
+    id          bigint       not null auto_increment,
+    description varchar(255),
+    image_url   varchar(255) not null,
+    name        varchar(255) not null,
+    primary key (id)
+);
