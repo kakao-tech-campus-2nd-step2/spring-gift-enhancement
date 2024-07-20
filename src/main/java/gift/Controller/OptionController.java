@@ -50,10 +50,10 @@ public class OptionController {
   }
 
   @DeleteMapping("products/{id}/options")
-  public ResponseEntity<OptionDto> deleteOption(@PathVariable Long id) {
-    OptionDto optionDto = optionService.deleteOption(id);
+  public ResponseEntity<Void> deleteOption(@PathVariable Long id) {
+    optionService.deleteOption(id);
 
-    return ResponseEntity.ok(optionDto);
+    return ResponseEntity.noContent().build();
   }
 
   @PutMapping("/{id}")
