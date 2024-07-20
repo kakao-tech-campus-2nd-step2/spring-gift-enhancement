@@ -87,4 +87,18 @@ public class Product extends BaseEntity {
         }
         this.wishlist.add(wishlist);
     }
+
+    public void addOption(Option newOption) {
+        if (newOption == null) {
+            throw new NullPointerException(ErrorMessage.NULL_POINTER_EXCEPTION_MSG);
+        }
+        options.add(newOption);
+    }
+
+    public boolean isOptionDuplicate(Option newOption) {
+        return options.stream()
+            .anyMatch(option ->
+                option.getName().equals(newOption.getName())
+            );
+    }
 }

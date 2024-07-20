@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constants.ErrorMessage;
 import gift.dto.OptionSaveRequest;
 import gift.dto.ProductRequest;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,6 +69,26 @@ class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("상품 등록 시점에 옵션 이름 중복 실패 테스트")
+    void addProductOptionDuplicate() throws Exception {
+        addCategory();
+        List<OptionSaveRequest> tmpOptions = new ArrayList<>();
+        tmpOptions.add(new OptionSaveRequest("케잌", 1, null));
+        tmpOptions.add(new OptionSaveRequest("케잌", 20, null));
+
+        ProductRequest request = new ProductRequest(null, "선물", 4500L, "https", 1L, "생일 선물",
+            tmpOptions);
+
+        String requestJson = new ObjectMapper().writeValueAsString(request);
+
+        mockMvc.perform(post("/api/products/product")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(ErrorMessage.OPTION_NAME_ALREADY_EXISTS_MSG));
     }
 
     @Test

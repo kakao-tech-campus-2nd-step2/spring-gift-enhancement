@@ -48,7 +48,12 @@ public class OptionService {
 
     public void saveOption(OptionSaveRequest saveRequest) {
         Product product = findProductByIdOrElseThrow(saveRequest.getProductId());
-        assertOptionNotDuplicate(saveRequest.getName(), saveRequest.getProductId());
+        Option option = saveRequest.toEntity(product);
+
+        if (product.isOptionDuplicate(option)) {
+            throw new IllegalArgumentException(ErrorMessage.OPTION_NAME_ALREADY_EXISTS_MSG);
+        }
+
         optionJpaDao.save(saveRequest.toEntity(product));
     }
 
@@ -84,16 +89,6 @@ public class OptionService {
     private Option findOptionByIdOrElseThrow(Long optionId) {
         return optionJpaDao.findById(optionId)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
-    }
-
-    /**
-     * optionName과 productId로 같은 상품에 중복된 옵션이 존재한다면 IllegalArgumentException
-     */
-    private void assertOptionNotDuplicate(String optionName, Long productId) {
-        optionJpaDao.findByNameAndProduct_Id(optionName, productId)
-            .ifPresent(v -> {
-                throw new IllegalArgumentException(ErrorMessage.OPTION_NAME_ALREADY_EXISTS_MSG);
-            });
     }
 
     /**

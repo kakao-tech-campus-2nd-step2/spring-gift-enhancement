@@ -91,7 +91,7 @@ class OptionControllerTest {
     }
 
     @Test
-    @DisplayName("옵션 이름 중복 실패 테스트")
+    @DisplayName("기존 상품에 옵션 추가 시 이름 중복 실패 테스트")
     void optionDuplicate() throws Exception {
         OptionSaveRequest optionDto = new OptionSaveRequest("케잌", 15, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
