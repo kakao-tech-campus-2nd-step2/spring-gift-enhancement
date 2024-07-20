@@ -15,8 +15,8 @@ POST http://localhost:8080/api/options
 Content-Type: application/json
 
 {
-  "name": "#$@#%",
-  "count": 123,
+  "name": "123",
+  "count": 1000,
   "productId": 1
 }
 
