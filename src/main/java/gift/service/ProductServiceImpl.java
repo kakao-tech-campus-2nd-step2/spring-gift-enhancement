@@ -36,7 +36,6 @@ public class ProductServiceImpl implements ProductService {
                 product.getImageUrl(),product.getCategoryId())).toList();
     }
 
-    //새로운 상품 추가
     @Override
     public void create(ProductDTO dto) {
         checkKakao(dto.getName());

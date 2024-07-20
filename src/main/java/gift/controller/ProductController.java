@@ -29,39 +29,23 @@ public class ProductController {
         this.productService = productService;
     }
 
-    /**
-     * 상품 전체 목록 반환
-     *
-     * @return 상품 DTO
-     */
     @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> getList() {
         return ResponseEntity.ok(productService.readAll());
     }
 
-    /**
-     * 새로운 상품 생성
-     *
-     * @param dto id가 존재하는 상태로 입력되더라도 무시됨.
-     */
     @PostMapping("/products")
     public ResponseEntity<Void> add(@RequestBody @Valid ProductDTO dto) {
         productService.create(dto);
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * 기존 상품 수정
-     *
-     * @param id  수정하고자 하는 상품의 id
-     * @param dto 수정하고자 하는 값 이외 null로 지정
-     */
     @PutMapping("/products/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody @Valid ProductDTO dto) {
         if (id == null) {
             throw new IllegalArgumentException("id를 입력해주세요");
         }
-        productService.update(id,dto);
+        productService.update(id, dto);
         return ResponseEntity.ok().build();
     }
 
@@ -72,10 +56,9 @@ public class ProductController {
     }
 
 
-
     @GetMapping("/products/{page}")
     public ResponseEntity<List<ProductDTO>> getPage(@PathVariable int page) {
-        return ResponseEntity.ok(productService.readProduct(page,10));
+        return ResponseEntity.ok(productService.readProduct(page, 10));
     }
 
 }
