@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.MemberDto;
 import gift.exception.AuthenticationException;
+import gift.exception.ValueAlreadyExistsException;
 import gift.jwt.JwtTokenProvider;
 import gift.model.member.Member;
 import gift.repository.MemberRepository;
@@ -24,7 +25,7 @@ public class MemberService {
     public void registerNewMember(MemberDto memberDto) {
         Member member = new Member(memberDto.email(),memberDto.password(), memberDto.role());
         if(!memberRepository.findByEmail(member.getEmail()).isEmpty()){
-            throw new RuntimeException("error");
+            throw new ValueAlreadyExistsException("Email already exists in Database");
         }
         memberRepository.save(member);
     }

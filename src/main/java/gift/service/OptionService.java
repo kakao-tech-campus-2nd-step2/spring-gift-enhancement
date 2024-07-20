@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.dto.OptionDto;
+import gift.exception.ValueNotFoundException;
 import gift.model.product.Option;
 import gift.model.product.Product;
 import gift.repository.OptionRepository;
@@ -32,8 +33,8 @@ public class OptionService {
 
     public void subtractAmount(Long optionId, int amount){
         Optional<Option> optionalOption = optionRepository.findById(optionId);
-        if (!optionalOption.isPresent()){
-            throw new RuntimeException("error");
+        if (optionalOption.isEmpty()){
+            throw new ValueNotFoundException("Option not found with ID");
         }
         Option option = optionalOption.get();
         if(isProductEnough(option.getAmount(), amount)){
@@ -44,6 +45,6 @@ public class OptionService {
         if(totalAmount >= purchaseAmount){
             return true;
         }
-        throw new RuntimeException("error");
+        throw new RuntimeException("Not enough product available");
     }
 }

@@ -32,4 +32,18 @@ public class GlobalExceptionHandler {
         HttpStatus status =  HttpStatus.FORBIDDEN;
         return new ResponseEntity<>(errorMessage, status);
     }
+
+    @ExceptionHandler(ValueAlreadyExistsException.class)
+    public ResponseEntity<String> handleValueAlreadyExistsException(ValueAlreadyExistsException ex){
+        String errorMessage = ex.getMessage();
+        HttpStatus status =  HttpStatus.CONFLICT;
+        return new ResponseEntity<>(errorMessage, status);
+    }
+
+    @ExceptionHandler(ValueNotFoundException.class)
+    public ResponseEntity<String> handleValueNotFoundException(ValueNotFoundException ex){
+        String errorMessage = ex.getMessage();
+        HttpStatus status =  HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(errorMessage, status);
+    }
 }
