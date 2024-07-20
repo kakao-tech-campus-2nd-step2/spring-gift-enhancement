@@ -1,25 +1,25 @@
 package gift.Exception.Option;
 
-public class OptionDuplicatedException extends RuntimeException {
+public class OptionNotFoundException extends RuntimeException {
 
-    public OptionDuplicatedException() {
+    public OptionNotFoundException() {
         super();
     }
 
-    public OptionDuplicatedException(String message) {
+    public OptionNotFoundException(String message) {
         super(message);
     }
 
-    public OptionDuplicatedException(String message, Throwable cause) {
+    public OptionNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public OptionDuplicatedException(Throwable cause) {
+    public OptionNotFoundException(Throwable cause) {
         super(cause);
     }
 
-    protected OptionDuplicatedException(String message, Throwable cause, boolean enableSuppression,
-                                        boolean writableStackTrace) {
+    protected OptionNotFoundException(String message, Throwable cause, boolean enableSuppression,
+                                      boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

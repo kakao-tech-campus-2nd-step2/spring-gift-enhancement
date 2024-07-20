@@ -1,25 +1,25 @@
-package gift.Exception;
+package gift.Exception.Option;
 
-public class OptionException extends RuntimeException {
+public class OptionDuplicatedException extends RuntimeException {
 
-    public OptionException() {
+    public OptionDuplicatedException() {
         super();
     }
 
-    public OptionException(String message) {
+    public OptionDuplicatedException(String message) {
         super(message);
     }
 
-    public OptionException(String message, Throwable cause) {
+    public OptionDuplicatedException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public OptionException(Throwable cause) {
+    public OptionDuplicatedException(Throwable cause) {
         super(cause);
     }
 
-    protected OptionException(String message, Throwable cause, boolean enableSuppression,
-                              boolean writableStackTrace) {
+    protected OptionDuplicatedException(String message, Throwable cause, boolean enableSuppression,
+                                        boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
