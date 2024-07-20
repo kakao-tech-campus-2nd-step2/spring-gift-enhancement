@@ -24,10 +24,14 @@ public class OptionService {
 
     public void subtractOptionQuantity(Long productId, Long optionId, int quantityToSubtract) {
         Option option = optionRepository.findById(optionId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid option ID: " + optionId));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid option Id:" + optionId));
 
         if (!option.getProduct().getId().equals(productId)) {
             throw new IllegalArgumentException("Option does not belong to the given product");
+        }
+
+        if (option.getQuantity() < quantityToSubtract) {
+            throw new IllegalArgumentException("남아있는 수량이 더 작습니다.");
         }
 
         option.subtract(quantityToSubtract);
@@ -41,11 +45,10 @@ public class OptionService {
                 .collect(Collectors.toList());
     }
 
-    public OptionResponseDTO addOption(Long productId, OptionRequestDTO optionRequestDTO) {
+    public void addOption(Long productId, String name, int quantity) {
         Product product = productService.getProductEntityById(productId);
-        Option option = new Option(optionRequestDTO.getName(), optionRequestDTO.getQuantity(), product);
-        Option savedOption = optionRepository.save(option);
-        return new OptionResponseDTO(savedOption.getId(), savedOption.getName(), savedOption.getQuantity());
+        Option option = new Option(null, name, quantity, product);
+        optionRepository.save(option);
     }
 
     public void deleteOption(Long optionId) {

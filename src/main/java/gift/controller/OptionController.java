@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.domain.Option;
 import gift.dto.OptionDTO;
 import gift.dto.OptionRequestDTO;
 import gift.dto.OptionResponseDTO;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products/{productId}/options")
@@ -40,9 +42,11 @@ public class OptionController {
     }
 
     @PostMapping
-    public ResponseEntity<OptionResponseDTO> addOption(@PathVariable Long productId, @RequestBody OptionRequestDTO optionRequestDTO) {
-        OptionResponseDTO createdOption = optionService.addOption(productId, optionRequestDTO);
-        return new ResponseEntity<>(createdOption, HttpStatus.CREATED);
+    public ResponseEntity<Void> addOption(@PathVariable Long productId, @RequestBody Map<String, Object> optionRequest) {
+        String name = (String) optionRequest.get("name");
+        int quantity = (Integer) optionRequest.get("quantity");
+        optionService.addOption(productId, name, quantity);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{optionId}")
