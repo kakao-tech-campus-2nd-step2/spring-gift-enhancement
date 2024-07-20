@@ -130,7 +130,7 @@ class ProductRequestTest {
 
         // then
         assertThat(1).isEqualTo(violations.size());
-        assertThat(ValidateErrorMessage.INVALID_PRODUCT_NAME_PATTERN)
+        assertThat(ValidateErrorMessage.INVALID_NAME_PATTERN)
                 .isEqualTo(violations.iterator().next().getMessage());
     }
 

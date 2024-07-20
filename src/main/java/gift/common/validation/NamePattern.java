@@ -1,6 +1,6 @@
 package gift.common.validation;
 
-import static gift.common.validation.ValidateErrorMessage.INVALID_PRODUCT_NAME_PATTERN;
+import static gift.common.validation.ValidateErrorMessage.INVALID_NAME_PATTERN;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -14,11 +14,11 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Pattern(
         regexp = "^[a-zA-Z0-9ㄱ-ㅎ가-힣 ()\\[\\]+\\-&/_]*$",
-        message = INVALID_PRODUCT_NAME_PATTERN
+        message = INVALID_NAME_PATTERN
 )
 @Constraint(validatedBy = {})
 public @interface NamePattern {
-    String message() default INVALID_PRODUCT_NAME_PATTERN;
+    String message() default INVALID_NAME_PATTERN;
 
     Class<?>[] groups() default {};
 
