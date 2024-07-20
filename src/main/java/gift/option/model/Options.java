@@ -6,14 +6,10 @@ import java.util.List;
 
 public class Options {
 
-    private List<Option> options;
+    private final List<Option> options;
 
     public Options(List<Option> options) {
         this.options = options;
-    }
-
-    public List<Option> getOptions() {
-        return options;
     }
 
     public void validateDuplicated(Option option) throws OptionException {

@@ -59,8 +59,7 @@ public class Option {
         }
     }
 
-    public void updateInfo(String name, Integer quantity) throws OptionException {
-        validateDuplicated(new Option(name, quantity, null));
+    public void updateInfo(String name, Integer quantity) {
         this.name = name;
         this.quantity = quantity;
     }
