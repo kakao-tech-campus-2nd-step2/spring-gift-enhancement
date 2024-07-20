@@ -6,6 +6,7 @@ import gift.product.model.Member;
 import gift.product.model.Product;
 import gift.product.model.Wish;
 import gift.product.repository.AuthRepository;
+import gift.product.repository.ProductRepository;
 import gift.product.repository.WishRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,13 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class WishService {
 
     private final WishRepository wishRepository;
-    private final ProductService productService;
+    private final ProductRepository productRepository;
     private final AuthRepository authRepository;
 
-    public WishService(WishRepository wishRepository, ProductService productService,
+    public WishService(WishRepository wishRepository, ProductRepository productRepository,
         AuthRepository authRepository) {
         this.wishRepository = wishRepository;
-        this.productService = productService;
+        this.productRepository = productRepository;
         this.authRepository = authRepository;
     }
 
@@ -41,7 +42,7 @@ public class WishService {
 
     @Transactional
     public Wish insertWish(WishDto wishDto, LoginMember loginMember) {
-        Product product = productService.getProduct(wishDto.productId());
+        Product product = getValidatedProduct(wishDto.productId());
 
         Member member = getMember(loginMember);
         Wish wish = new Wish(member, product);
@@ -62,5 +63,10 @@ public class WishService {
     private Wish getValidatedWish(Long id, LoginMember loginMember) {
         return wishRepository.findByIdAndMemberId(id, loginMember.id())
             .orElseThrow(() -> new NoSuchElementException("해당 ID의 위시 항목이 위시리스트에 존재하지 않습니다."));
+    }
+
+    private Product getValidatedProduct(Long id) {
+        return productRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("해당 ID의 상품이 존재하지 않습니다."));
     }
 }
