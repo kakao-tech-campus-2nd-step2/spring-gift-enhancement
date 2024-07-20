@@ -3,6 +3,7 @@ package gift.controller;
 import gift.dto.WishlistDTO;
 import gift.service.WishlistService;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class WishlistController {
         }
         String username = principal.getName();
         Long productId = Long.parseLong(request.get("productId").toString());
-        int quantity = request.containsKey("quantity") ? Integer.parseInt(request.get("quantity").toString()) : 1;
+        int quantity =  1;
         List<Map<String, Object>> options = request.containsKey("options") ? (List<Map<String, Object>>) request.get("options") : List.of();
 
         wishlistService.addToWishlist(username, productId, quantity, options);
@@ -63,9 +64,12 @@ public class WishlistController {
 
     @PostMapping("/update/{id}")
     @ResponseBody
-    public String updateQuantity(@PathVariable("id") Long id, @RequestParam("quantity") int quantity) {
-        wishlistService.updateQuantity(id, quantity);
-        return "수량이 변경되었습니다.";
+    public Map<String, Object> updateQuantity(@PathVariable("id") Long id, @RequestParam("quantity") int quantity, @RequestParam("optionId") Long optionId) {
+        wishlistService.updateQuantity(id, quantity, optionId);
+        WishlistDTO updatedWishlist = wishlistService.getWishlistById(id);
+        Map<String, Object> response = new HashMap<>();
+        response.put("totalPrice", updatedWishlist.getTotalPrice());
+        return response;
     }
 
     @PostMapping("/delete/{id}")
