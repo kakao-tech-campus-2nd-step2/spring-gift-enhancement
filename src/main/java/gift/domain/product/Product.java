@@ -72,6 +72,10 @@ public class Product {
         return wishList;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     public void addWish(Wish wish) {
         wishList.add(wish);
         wish.setProduct(this);
