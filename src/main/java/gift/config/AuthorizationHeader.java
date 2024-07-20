@@ -5,7 +5,7 @@ public class AuthorizationHeader {
 
     public AuthorizationHeader(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Invalid authorization header");
+            throw new IllegalStateException("Invalid authorization header");
         }
         this.authHeader = authHeader;
     }

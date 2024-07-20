@@ -11,6 +11,8 @@
     <input id="email" type="email" name="email" required><br><br>
     <label>Password:</label>
     <input id="password" type="password" name="password" required><br><br>
+    <label>Role:</label>
+    <input id="role" type="role" name="role" required><br><br>
     <button type="submit">Register</button>
 </form>
 
@@ -20,7 +22,8 @@
 
             var member = {
                 email: document.getElementById("email").value,
-                password: document.getElementById("password").value
+                password: document.getElementById("password").value,
+                role: document.getElementById("role").value
             };
 
             fetch('/members/register', {

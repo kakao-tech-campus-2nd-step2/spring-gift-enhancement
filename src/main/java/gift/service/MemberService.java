@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.dto.MemberDto;
+import gift.exception.AuthenticationException;
 import gift.jwt.JwtTokenProvider;
 import gift.model.member.Member;
 import gift.repository.MemberRepository;
@@ -22,7 +23,7 @@ public class MemberService {
 
     public void registerNewMember(MemberDto memberDto) {
         Member member = new Member(memberDto.email(),memberDto.password(), memberDto.role());
-        if(!memberRepository.findByEmail(member.getEmail()).isPresent()){
+        if(!memberRepository.findByEmail(member.getEmail()).isEmpty()){
             throw new RuntimeException("error");
         }
         memberRepository.save(member);
@@ -36,11 +37,11 @@ public class MemberService {
     public String loginMember(MemberDto memberDto) {
         Member member = new Member(memberDto.email(),memberDto.password(), memberDto.role());
         Optional<Member> registeredMember = memberRepository.findByEmail(member.getEmail());
-        if (registeredMember.isPresent()){
-            throw new RuntimeException();
+        if (registeredMember.isEmpty()){
+            throw new AuthenticationException("Member not exists in Database");
         }
-        if (member.isPasswordEqual(registeredMember.get().getPassword())){
-            throw new RuntimeException();
+        if (!member.isPasswordEqual(registeredMember.get().getPassword())){
+            throw new AuthenticationException("Incorrect password");
         }
         return jwtTokenProvider.generateToken(member);
     }
