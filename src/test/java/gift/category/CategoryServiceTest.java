@@ -1,7 +1,6 @@
 package gift.category;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,11 +64,11 @@ public class CategoryServiceTest {
     void findCategoryById_shouldThrowEntityNotFoundException_whenCategoryDoesNotExist() {
         // given
         Long missingId = 99L;
-        when(categoryRepository.findByIdAndIsActiveTrue(missingId)).thenReturn(Optional.empty());
+        when(categoryRepository.findById(missingId)).thenReturn(Optional.empty());
 
         // when, then
         assertThrows(EntityNotFoundException.class, () -> categoryService.findCategoryById(missingId));
-        verify(categoryRepository, times(1)).findByIdAndIsActiveTrue(missingId);
+        verify(categoryRepository, times(1)).findById(missingId);
     }
 
     @Test
@@ -103,7 +102,7 @@ public class CategoryServiceTest {
     @DisplayName("해당 Id의 카테고리가 존재할 경우 기존 카테고리를 수정한다.")
     void updateCategory_shouldUpdateExistingCategory() {
         // given
-        when(categoryRepository.findByIdAndIsActiveTrue(defaultCategory.getId())).thenReturn(
+        when(categoryRepository.findById(defaultCategory.getId())).thenReturn(
                 Optional.of(defaultCategory));
 
         // when
@@ -120,26 +119,25 @@ public class CategoryServiceTest {
     void updateCategory_shouldThrowEntityNotFoundException_whenCategoryDoesNotExist() {
         // given
         Long missingId = 99L;
-        when(categoryRepository.findByIdAndIsActiveTrue(missingId)).thenReturn(Optional.empty());
+        when(categoryRepository.findById(missingId)).thenReturn(Optional.empty());
 
         // when, then
         assertThrows(EntityNotFoundException.class, () -> categoryService.updateCategory(missingId, defaultRequest));
-        verify(categoryRepository, times(1)).findByIdAndIsActiveTrue(missingId);
+        verify(categoryRepository, times(1)).findById(missingId);
     }
 
     @Test
     @DisplayName("해당 Id의 카테고리를 삭제한다.")
     void deleteCategory_shouldMarkCategoryAsInactive() {
         // given
-        when(categoryRepository.findByIdAndIsActiveTrue(defaultCategory.getId())).thenReturn(
+        when(categoryRepository.findById(defaultCategory.getId())).thenReturn(
                 Optional.of(defaultCategory));
 
         // when
         categoryService.deleteCategory(defaultCategory.getId());
 
         // then
-        assertFalse(defaultCategory.isActive());
-        verify(categoryRepository, times(1)).save(defaultCategory);
+        verify(categoryRepository, times(1)).delete(defaultCategory);
     }
 
     @Test
@@ -147,10 +145,10 @@ public class CategoryServiceTest {
     void deleteCategory_shouldThrowEntityNotFoundException_whenCategoryDoesNotExist() {
         // given
         Long missingId = 99L;
-        when(categoryRepository.findByIdAndIsActiveTrue(missingId)).thenReturn(Optional.empty());
+        when(categoryRepository.findById(missingId)).thenReturn(Optional.empty());
 
         // when, then
         assertThrows(EntityNotFoundException.class, () -> categoryService.deleteCategory(missingId));
-        verify(categoryRepository, times(1)).findByIdAndIsActiveTrue(missingId);
+        verify(categoryRepository, times(1)).findById(missingId);
     }
 }
