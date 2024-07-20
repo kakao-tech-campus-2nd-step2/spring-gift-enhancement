@@ -22,7 +22,7 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<OptionResponse> getOptionByProductId(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new ProductNotFoundException("해당 Id의 상품은 존재하지 않습니다.")
@@ -32,29 +32,45 @@ public class OptionService {
             .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public OptionResponse addOption(Long productId, OptionRequest optionRequest) {
         Product product = productRepository.findById(productId).orElseThrow();
         Option option = toEntity(optionRequest, product);
-        if(optionRepository.existsByProductAndName(product, optionRequest.name())) {
-            throw new IllegalArgumentException("같은 상품 내 옵션 이름은 중복될 수 없습니다.");
-        }
         Option savedOption = optionRepository.save(option);
         return OptionResponse.from(savedOption);
     }
 
     public OptionResponse updateOption(Long productId, Long optionId, OptionRequest optionRequest) {
-        Option option = optionRepository.findById(optionId).orElseThrow(
+        Product product = productRepository.findById(productId).orElseThrow(
+            () -> new ProductNotFoundException("해당 Id의 상품은 존재하지 않습니다.")
+        );
+        Option option = optionRepository.findByProductAndId(product,optionId).orElseThrow(
             () -> new OptionNotFoundException("해당 Id의 옵션은 존재하지 않습니다.")
         );
         option.update(optionRequest.name(), optionRequest.quantity());
+        option = optionRepository.save(option);
         return OptionResponse.from(option);
     }
     public void deleteOption(Long productId,Long optionId) {
-        Option option = optionRepository.findById(optionId).orElseThrow(
+        Product product = productRepository.findById(productId).orElseThrow(
+            () -> new ProductNotFoundException("해당 Id의 상품은 존재하지 않습니다.")
+        );
+        Option option = optionRepository.findByProductAndId(product, optionId).orElseThrow(
             () -> new OptionNotFoundException("해당 Id의 옵션은 존재하지 않습니다.")
         );
         optionRepository.delete(option);
+    }
+
+    // 원하는 수량만큼 옵션 삭제
+    public OptionResponse subtractOption(Long productId, Long optionId, int amount) {
+        Product product = productRepository.findById(productId).orElseThrow(
+            () -> new ProductNotFoundException("해당 Id의 상품은 존재하지 않습니다.")
+        );
+        Option option = optionRepository.findByProductAndId(product, optionId).orElseThrow(
+            () -> new OptionNotFoundException("해당 Id의 옵션은 존재하지 않습니다.")
+        );
+        option = option.subtract(option, amount);
+        return OptionResponse.from(option);
     }
 
     public Option toEntity(OptionRequest optionRequest, Product product) {
