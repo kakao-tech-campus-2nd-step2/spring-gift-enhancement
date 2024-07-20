@@ -1,5 +1,6 @@
 package gift.service;
 
+import static gift.util.constants.OptionConstants.INSUFFICIENT_QUANTITY;
 import static gift.util.constants.OptionConstants.OPTION_NAME_DUPLICATE;
 import static gift.util.constants.OptionConstants.OPTION_NOT_FOUND;
 import static gift.util.constants.OptionConstants.OPTION_REQUIRED;
@@ -343,5 +344,48 @@ public class OptionServiceTest {
         });
 
         assertEquals(OPTION_REQUIRED, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("옵션 수량 차감")
+    public void testSubtractOptionQuantity() {
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Option option = new Option(1L, "Option1", 100, product);
+
+        when(optionRepository.findById(1L)).thenReturn(Optional.of(option));
+        when(optionRepository.save(any(Option.class))).thenReturn(option);
+
+        optionService.subtractOptionQuantity(1L, 1L, 10);
+
+        assertEquals(90, option.getQuantity());
+    }
+
+    @Test
+    @DisplayName("옵션 수량 차감 - 옵션 ID 불일치")
+    public void testSubtractOptionQuantityOptionIdMismatch() {
+        when(optionRepository.findById(1L)).thenReturn(Optional.empty());
+
+        OptionNotFoundException exception = assertThrows(OptionNotFoundException.class, () -> {
+            optionService.subtractOptionQuantity(1L, 1L, 10);
+        });
+
+        assertEquals(OPTION_NOT_FOUND + 1, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("옵션 수량 차감 - 수량 부족")
+    public void testSubtractOptionQuantityInsufficientQuantity() {
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Option option = new Option(1L, "Option1", 5, product);
+
+        when(optionRepository.findById(1L)).thenReturn(Optional.of(option));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.subtractOptionQuantity(1L, 1L, 10);
+        });
+
+        assertEquals(INSUFFICIENT_QUANTITY + 1, exception.getMessage());
     }
 }
