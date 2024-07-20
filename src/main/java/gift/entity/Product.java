@@ -1,5 +1,6 @@
 package gift.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,8 +33,8 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany
-    @JoinColumn(name = "option_id", nullable = false)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "option_id", nullable = false) //상품에 어떤 옵션들이 있는지 보려면 필요할듯
     private List<Option> options = new ArrayList<>();
 
     public Product() {

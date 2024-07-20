@@ -21,7 +21,6 @@ public class Wish {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -53,6 +52,5 @@ public class Wish {
     public Member getMember() {
         return member;
     }
-
 
 }

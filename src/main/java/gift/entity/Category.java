@@ -25,19 +25,12 @@ public class Category {
     String description;
     @Column(nullable = false)
     String imageUrl;
-    @OneToMany(mappedBy = "category")
-    List<Product> products = new ArrayList<>();
-
     public Long getId() {
         return Id;
     }
 
     public String getName() {
         return name;
-    }
-
-    public List<Product> getProducts() {
-        return products;
     }
 
     public String getColor() {
