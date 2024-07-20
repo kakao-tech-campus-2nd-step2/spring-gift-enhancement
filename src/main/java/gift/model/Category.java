@@ -36,10 +36,7 @@ public class Category {
     }
 
     private void validateName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("카테고리 이름을 입력하세요.");
-        }
-        if (name.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("카테고리 이름을 입력하세요.");
         }
     }

@@ -65,10 +65,7 @@ public class Product {
     }
 
     private void validateName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("상품 이름은 최소 1자 이상이어야 합니다.");
-        }
-        if (name.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("상품 이름은 최소 1자 이상이어야 합니다.");
         }
         if (name.length() > 15) {
@@ -83,10 +80,7 @@ public class Product {
     }
 
     private void validatePrice(String price) {
-        if (price == null) {
-            throw new IllegalArgumentException("가격을 입력해야 합니다.");
-        }
-        if (price.trim().isEmpty()) {
+        if (price == null || price.trim().isEmpty()) {
             throw new IllegalArgumentException("가격을 입력해야 합니다.");
         }
         if (!price.matches("^\\d+$")) {
@@ -95,10 +89,7 @@ public class Product {
     }
 
     private void validateImageUrl(String imageUrl) {
-        if (imageUrl == null) {
-            throw new IllegalArgumentException("이미지 URL을 입력해야 합니다.");
-        }
-        if (imageUrl.trim().isEmpty()) {
+        if (imageUrl == null || imageUrl.trim().isEmpty()) {
             throw new IllegalArgumentException("이미지 URL을 입력해야 합니다.");
         }
         if (!imageUrl.matches("^(http|https)://.*$")) {
