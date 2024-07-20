@@ -33,6 +33,11 @@
 ## TODO - LIST
 
 - [ ] wishlist 관리자 페이지 구현
+  - [ ] update 구현
 - [ ] 카테고리 페이지 구현
-- [ ] test code 작성하기
+  - [ ] delete 구현
+  - [ ] update 구현
 - [ ] 옵션 페이지 구현하기
+  - [ ] delete 구현
+  - [ ] update 구현
+- [ ] test code 작성하기
