@@ -37,7 +37,7 @@ public class CategoryService {
 
     @Transactional
     public Long insertCategory(CategoryRequestDto categoryRequestDto) {
-        Category category = new Category(categoryRequestDto.getName(), categoryRequestDto.getColor(), categoryRequestDto.getImageUrl(), categoryRequestDto.getDescription());
+        Category category = new Category(categoryRequestDto.name(), categoryRequestDto.color(), categoryRequestDto.imageUrl(), categoryRequestDto.description());
         category = categoryRepository.save(category);
         return category.getId();
     }
@@ -46,7 +46,7 @@ public class CategoryService {
     public void updateCategory(CategoryRequestDto categoryRequestDto, Long id) throws CategoryException {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
-        category.updateInfo(categoryRequestDto.getName(), categoryRequestDto.getColor(), categoryRequestDto.getImageUrl(), categoryRequestDto.getDescription());
+        category.updateInfo(categoryRequestDto.name(), categoryRequestDto.color(), categoryRequestDto.imageUrl(), categoryRequestDto.description());
     }
 
     @Transactional
