@@ -24,29 +24,27 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public boolean addNewProduct(ProductDto productDto){
+    public void addNewProduct(ProductDto productDto){
         if (productRepository.existsByName(new ProductName(productDto.name()))) {
-            return false;
+            throw new RuntimeException();
         }
         Category category = findCategory(productDto.categoryName());
         Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl());
 
         productRepository.save(product);
-        return true;
     }
 
-    public boolean updateProduct(Long id, ProductDto productDto) {
+    public void updateProduct(Long id, ProductDto productDto) {
         Optional<Product> product = productRepository.findById(id);
-        if(product.isPresent()){
-            Product updateProduct = product.get();
-            Category category = findCategory(productDto.categoryName());
-
-            Product newProduct = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl());
-            updateProduct.updateProduct(newProduct);
-            productRepository.save(updateProduct);
-            return true;
+        if(product.isEmpty()){
+            throw new RuntimeException();
         }
-        return false;
+        Product updateProduct = product.get();
+        Category category = findCategory(productDto.categoryName());
+
+        Product newProduct = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl());
+        updateProduct.updateProduct(newProduct);
+        productRepository.save(updateProduct);
     }
 
     public Product selectProduct(Long id) {

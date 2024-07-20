@@ -25,18 +25,14 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Void> addNewProduct(@Valid @RequestBody ProductDto productDto) {
-        if (productService.addNewProduct(productDto)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
+        productService.addNewProduct(productDto);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDto productDto) {
-        if(productService.updateProduct(id, productDto)){
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+        productService.updateProduct(id, productDto);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/edit/{id}")
