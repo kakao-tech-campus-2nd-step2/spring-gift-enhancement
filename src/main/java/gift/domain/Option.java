@@ -32,7 +32,7 @@ public class Option extends BaseEntity {
         this.quantity = quantity;
     }
 
-    public void substract(Long minus){
+    public void subtract(Long minus){
         if(this.quantity - minus < 0L) {
             this.quantity = 0L;
             return;
