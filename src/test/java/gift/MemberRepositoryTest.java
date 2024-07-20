@@ -1,15 +1,15 @@
 package gift;
 
 import gift.entity.Member;
-import gift.repository.UserRepositoryInterface;
+import gift.repository.MemberRepositoryInterface;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 public class MemberRepositoryTest {
-    private final UserRepositoryInterface users;
+    private final MemberRepositoryInterface users;
 
-    public MemberRepositoryTest(UserRepositoryInterface userRepository) {
+    public MemberRepositoryTest(MemberRepositoryInterface userRepository) {
         users = userRepository;
     }
 

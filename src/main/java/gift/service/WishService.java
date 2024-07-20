@@ -5,7 +5,7 @@ import gift.entity.Product;
 import gift.entity.Member;
 import gift.entity.Wish;
 import gift.repository.ProductRepositoryInterface;
-import gift.repository.UserRepositoryInterface;
+import gift.repository.MemberRepositoryInterface;
 import gift.repository.WishRepositoryInterface;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,17 +17,17 @@ import java.util.List;
 public class WishService {
     private final WishRepositoryInterface wishRepositoryInterface;
     private final ProductRepositoryInterface productRepositoryInterface;
-    private final UserRepositoryInterface userRepositoryInterface;
+    private final MemberRepositoryInterface memberRepositoryInterface;
     private final TokenService tokenService;
 
     public WishService(WishRepositoryInterface wishRepositoryInterface,
                        ProductRepositoryInterface productRepositoryInterface,
-                       UserRepositoryInterface userRepositoryInterface,
+                       MemberRepositoryInterface memberRepositoryInterface,
                        TokenService tokenService) {
 
         this.wishRepositoryInterface = wishRepositoryInterface;
         this.productRepositoryInterface = productRepositoryInterface;
-        this.userRepositoryInterface = userRepositoryInterface;
+        this.memberRepositoryInterface = memberRepositoryInterface;
         this.tokenService = tokenService;
 
     }
@@ -35,7 +35,7 @@ public class WishService {
     public WishResponseDto save(Long productId, String tokenValue) {
 
         Long userId = translateIdFrom(tokenValue);
-        Member member = userRepositoryInterface.findById(userId).get();
+        Member member = memberRepositoryInterface.findById(userId).get();
         Product product = productRepositoryInterface.findById(productId).get();
         Wish newWish = new Wish(product, member);
 

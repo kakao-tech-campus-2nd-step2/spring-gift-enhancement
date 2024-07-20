@@ -1,12 +1,12 @@
 package gift.dto;
 
-public class UserRequestDto {
+public class MemberRequestDto {
 
     private final Long id;
     private final String email;
     private final String password;
 
-    public UserRequestDto(Long id, String email, String password) {
+    public MemberRequestDto(Long id, String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;

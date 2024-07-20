@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.dto.UserResponseDto;
-import gift.service.UserService;
+import gift.dto.MemberResponseDto;
+import gift.service.MemberService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,14 +9,14 @@ import java.util.List;
 
 @RestController
 public class ApiUserListController {
-    UserService userService;
+    MemberService memberService;
 
-    public ApiUserListController(UserService userService) {
-        this.userService = userService;
+    public ApiUserListController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @GetMapping("/user/list")
-    public List<UserResponseDto> UserList() {
-        return userService.getAll();
+    public List<MemberResponseDto> UserList() {
+        return memberService.getAll();
     }
 }

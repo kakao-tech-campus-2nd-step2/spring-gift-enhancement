@@ -1,20 +1,20 @@
 package gift.service;
 
-import gift.dto.UserResponseDto;
+import gift.dto.MemberResponseDto;
 import gift.entity.Member;
-import gift.repository.UserRepositoryInterface;
+import gift.repository.MemberRepositoryInterface;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
 import java.util.List;
 
 @Service
-public class UserService {
-    private final UserRepositoryInterface userRepositoryInterface;
+public class MemberService {
+    private final MemberRepositoryInterface memberRepositoryInterface;
     private final TokenService tokenService;
 
-    public UserService(UserRepositoryInterface userRepositoryInterface, TokenService tokenService) {
-        this.userRepositoryInterface = userRepositoryInterface;
+    public MemberService(MemberRepositoryInterface memberRepositoryInterface, TokenService tokenService) {
+        this.memberRepositoryInterface = memberRepositoryInterface;
         this.tokenService = tokenService;
     }
 
@@ -22,13 +22,13 @@ public class UserService {
 
         Member newMember = new Member(email, password);
 
-        Member actualMember = userRepositoryInterface.save(newMember);
+        Member actualMember = memberRepositoryInterface.save(newMember);
         return generateTokenFrom(actualMember.getEmail());
     }
 
 
-    public List<UserResponseDto> getAll() {
-        return userRepositoryInterface.findAll().stream().map(UserResponseDto::fromEntity).toList();
+    public List<MemberResponseDto> getAll() {
+        return memberRepositoryInterface.findAll().stream().map(MemberResponseDto::fromEntity).toList();
     }
 
     public String generateTokenFrom(String userEmail) {
@@ -36,11 +36,11 @@ public class UserService {
     }
 
     private Long findUserIdFrom(String userEmail) {
-        return userRepositoryInterface.findByEmail(userEmail).getId();
+        return memberRepositoryInterface.findByEmail(userEmail).getId();
     }
 
     public boolean login(String email, String password) throws AuthenticationException {
-        UserResponseDto dbUserDto = UserResponseDto.fromEntity(userRepositoryInterface.findByEmail(email));
+        MemberResponseDto dbUserDto = MemberResponseDto.fromEntity(memberRepositoryInterface.findByEmail(email));
 
         return validatePassword(password, dbUserDto.getPassword());
     }
