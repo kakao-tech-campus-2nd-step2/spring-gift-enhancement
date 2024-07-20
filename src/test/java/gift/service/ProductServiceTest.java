@@ -2,7 +2,6 @@ package gift.service;
 
 import gift.dto.ProductRequest;
 import gift.exception.InvalidProductNameWithKAKAOException;
-import gift.exception.NotFoundElementException;
 import gift.model.MemberRole;
 import gift.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -20,6 +20,8 @@ class ProductServiceTest {
     private ProductService productService;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private ProductOptionService optionService;
 
     @Test
     @DisplayName("정상 상품 추가하기")
@@ -81,12 +83,10 @@ class ProductServiceTest {
         //given
         var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
         var savedProduct = productService.addProduct(productRequest, MemberRole.MEMBER);
-        var product = productRepository.findById(savedProduct.id())
-                .orElseThrow(() -> new NotFoundElementException(savedProduct.id() + "를 가진 상품이 존재하지 않습니다."));
         //when
-        var productOptionList = product.getProductOptionList();
+        var productOptionList = optionService.getOptions(savedProduct.id(), Pageable.unpaged());
         //then
-        Assertions.assertThat(productOptionList.get(0).getName()).isEqualTo("기본");
+        Assertions.assertThat(productOptionList.get(0).name()).isEqualTo("기본");
 
         productService.deleteProduct(savedProduct.id());
     }

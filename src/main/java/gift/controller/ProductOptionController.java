@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.dto.ProductOptionRequest;
-import gift.dto.ProductOptionResponse;
+import gift.dto.OptionRequest;
+import gift.dto.OptionResponse;
 import gift.service.ProductOptionService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -31,19 +31,19 @@ public class ProductOptionController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addOption(@PathVariable Long productId, @Valid @RequestBody ProductOptionRequest productOptionRequest) {
-        var option = optionService.addOption(productId, productOptionRequest);
+    public ResponseEntity<Void> addOption(@PathVariable Long productId, @Valid @RequestBody OptionRequest optionRequest) {
+        var option = optionService.addOption(productId, optionRequest);
         return ResponseEntity.created(URI.create("/api/products/" + productId + "/options/" + option.id())).build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Void> updateOption(@PathVariable Long productId, @PathVariable Long id, @Valid @RequestBody ProductOptionRequest productOptionRequest) {
-        optionService.updateOption(productId, id, productOptionRequest);
+    public ResponseEntity<Void> updateOption(@PathVariable Long productId, @PathVariable Long id, @Valid @RequestBody OptionRequest optionRequest) {
+        optionService.updateOption(productId, id, optionRequest);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductOptionResponse>> getOptions(@PathVariable Long productId, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<List<OptionResponse>> getOptions(@PathVariable Long productId, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         var options = optionService.getOptions(productId, pageable);
         return ResponseEntity.ok(options);
     }

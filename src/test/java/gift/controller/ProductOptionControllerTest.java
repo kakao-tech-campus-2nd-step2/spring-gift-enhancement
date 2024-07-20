@@ -2,7 +2,7 @@ package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.LoginRequest;
-import gift.dto.ProductOptionRequest;
+import gift.dto.OptionRequest;
 import gift.service.ProductOptionService;
 import gift.service.auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +49,7 @@ class ProductOptionControllerTest {
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest("기본", 0)));
+                .content(objectMapper.writeValueAsString(new OptionRequest("기본", 0)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -64,7 +64,7 @@ class ProductOptionControllerTest {
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest("", 1000)));
+                .content(objectMapper.writeValueAsString(new OptionRequest("", 1000)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -79,7 +79,7 @@ class ProductOptionControllerTest {
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest("aaaaaaaaaaaaaaaaaabbbbbbbbbbbbcccccccccccccccddddddddddddddddddddwwwwwwwwwwqqqqqqqqqqqqqqq", 1000)));
+                .content(objectMapper.writeValueAsString(new OptionRequest("aaaaaaaaaaaaaaaaaabbbbbbbbbbbbcccccccccccccccddddddddddddddddddddwwwwwwwwwwqqqqqqqqqqqqqqq", 1000)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -94,7 +94,7 @@ class ProductOptionControllerTest {
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest("Large", 1500)));
+                .content(objectMapper.writeValueAsString(new OptionRequest("Large", 1500)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -110,7 +110,7 @@ class ProductOptionControllerTest {
         var postRequest = post("/api/products/1000/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest("Large", 1500)));
+                .content(objectMapper.writeValueAsString(new OptionRequest("Large", 1500)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -124,7 +124,7 @@ class ProductOptionControllerTest {
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest("햄버거()[]+-&/_", 1000)));
+                .content(objectMapper.writeValueAsString(new OptionRequest("햄버거()[]+-&/_", 1000)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -140,7 +140,7 @@ class ProductOptionControllerTest {
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest("햄버거 햄버거 햄버거", 1000)));
+                .content(objectMapper.writeValueAsString(new OptionRequest("햄버거 햄버거 햄버거", 1000)));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -157,7 +157,7 @@ class ProductOptionControllerTest {
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductOptionRequest("햄버거()[]+-&/_**", 1000)));
+                .content(objectMapper.writeValueAsString(new OptionRequest("햄버거()[]+-&/_**", 1000)));
         //when
         var result = mockMvc.perform(postRequest);
         //then

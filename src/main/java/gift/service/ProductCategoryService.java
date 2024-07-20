@@ -1,10 +1,10 @@
 package gift.service;
 
-import gift.dto.ProductCategoryRequest;
-import gift.dto.ProductCategoryResponse;
+import gift.dto.CategoryRequest;
+import gift.dto.CategoryResponse;
 import gift.exception.DuplicatedNameException;
 import gift.exception.NotFoundElementException;
-import gift.model.ProductCategory;
+import gift.model.Category;
 import gift.repository.ProductCategoryRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishProductRepository;
@@ -28,27 +28,27 @@ public class ProductCategoryService {
         this.wishProductRepository = wishProductRepository;
     }
 
-    public ProductCategoryResponse addCategory(ProductCategoryRequest productCategoryRequest) {
-        categoryNameValidation(productCategoryRequest.name());
-        var productCategory = saveCategoryWithCategoryRequest(productCategoryRequest);
+    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
+        categoryNameValidation(categoryRequest.name());
+        var productCategory = saveCategoryWithCategoryRequest(categoryRequest);
         return getCategoryResponseFromCategory(productCategory);
     }
 
-    public void updateCategory(Long id, ProductCategoryRequest productCategoryRequest) {
-        categoryNameValidation(productCategoryRequest.name());
+    public void updateCategory(Long id, CategoryRequest categoryRequest) {
+        categoryNameValidation(categoryRequest.name());
         var productCategory = findCategoryById(id);
-        productCategory.updateCategory(productCategoryRequest.name(), productCategoryRequest.description(), productCategoryRequest.color(), productCategoryRequest.imageUrl());
+        productCategory.updateCategory(categoryRequest.name(), categoryRequest.description(), categoryRequest.color(), categoryRequest.imageUrl());
         productCategoryRepository.save(productCategory);
     }
 
     @Transactional(readOnly = true)
-    public ProductCategoryResponse getCategory(Long id) {
+    public CategoryResponse getCategory(Long id) {
         var productCategory = findCategoryById(id);
         return getCategoryResponseFromCategory(productCategory);
     }
 
     @Transactional(readOnly = true)
-    public List<ProductCategoryResponse> getCategories(Pageable pageable) {
+    public List<CategoryResponse> getCategories(Pageable pageable) {
         return productCategoryRepository.findAll(pageable)
                 .stream()
                 .map(this::getCategoryResponseFromCategory)
@@ -64,16 +64,16 @@ public class ProductCategoryService {
         productCategoryRepository.deleteById(id);
     }
 
-    private ProductCategory saveCategoryWithCategoryRequest(ProductCategoryRequest productCategoryRequest) {
-        var productCategory = new ProductCategory(productCategoryRequest.name(), productCategoryRequest.description(), productCategoryRequest.color(), productCategoryRequest.imageUrl());
+    private Category saveCategoryWithCategoryRequest(CategoryRequest categoryRequest) {
+        var productCategory = new Category(categoryRequest.name(), categoryRequest.description(), categoryRequest.color(), categoryRequest.imageUrl());
         return productCategoryRepository.save(productCategory);
     }
 
-    private ProductCategoryResponse getCategoryResponseFromCategory(ProductCategory productCategory) {
-        return ProductCategoryResponse.of(productCategory.getId(), productCategory.getName(), productCategory.getDescription(), productCategory.getColor(), productCategory.getImageUrl());
+    private CategoryResponse getCategoryResponseFromCategory(Category category) {
+        return CategoryResponse.of(category.getId(), category.getName(), category.getDescription(), category.getColor(), category.getImageUrl());
     }
 
-    private ProductCategory findCategoryById(Long id) {
+    private Category findCategoryById(Long id) {
         return productCategoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품 카테고리가 존재하지 않습니다."));
     }

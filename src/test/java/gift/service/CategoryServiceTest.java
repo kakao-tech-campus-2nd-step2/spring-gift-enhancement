@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.ProductCategoryRequest;
+import gift.dto.CategoryRequest;
 import gift.exception.DuplicatedNameException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class ProductCategoryServiceTest {
+class CategoryServiceTest {
 
     private final Pageable pageable = PageRequest.of(0, 10);
     @Autowired
@@ -23,7 +23,7 @@ class ProductCategoryServiceTest {
     @DisplayName("정상 카테고리 추가하기")
     void addProductCategorySuccess() {
         //given
-        var productCategoryRequest = new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
+        var productCategoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
         //when
         var savedProductCategory = productCategoryService.addCategory(productCategoryRequest);
         //then
@@ -36,7 +36,7 @@ class ProductCategoryServiceTest {
     @DisplayName("중복된 이름의 카테고리 추가하기")
     void addProductCategoryFailWithDuplicatedCategoryName() {
         //given
-        var productCategoryRequest = new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
+        var productCategoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
         var productCategory = productCategoryService.addCategory(productCategoryRequest);
         //when, then
         Assertions.assertThatThrownBy(() -> productCategoryService.addCategory(productCategoryRequest)).isInstanceOf(DuplicatedNameException.class);
@@ -68,9 +68,9 @@ class ProductCategoryServiceTest {
     @DisplayName("카테고리 정보 변경하기")
     void updateProductCategory() {
         //given
-        var productCategoryRequest = new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
+        var productCategoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
         var savedProductCategory = productCategoryService.addCategory(productCategoryRequest);
-        var updateRequest = new ProductCategoryRequest("상품카테고리-수정", "상품설명-수정", "#111111", "이미지-수정");
+        var updateRequest = new CategoryRequest("상품카테고리-수정", "상품설명-수정", "#111111", "이미지-수정");
         //when
         productCategoryService.updateCategory(savedProductCategory.id(), updateRequest);
         //then

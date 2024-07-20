@@ -1,12 +1,12 @@
 package gift.service;
 
-import gift.dto.ProductOptionRequest;
-import gift.dto.ProductOptionResponse;
+import gift.dto.OptionRequest;
+import gift.dto.OptionResponse;
 import gift.exception.BadRequestException;
 import gift.exception.DuplicatedNameException;
 import gift.exception.NotFoundElementException;
+import gift.model.Option;
 import gift.model.Product;
-import gift.model.ProductOption;
 import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Pageable;
@@ -28,23 +28,23 @@ public class ProductOptionService {
         this.productRepository = productRepository;
     }
 
-    public ProductOptionResponse addOption(Long productId, ProductOptionRequest productOptionRequest) {
-        optionNameValidation(productId, productOptionRequest.name());
-        var productOption = saveOptionWithOptionRequest(productId, productOptionRequest);
+    public OptionResponse addOption(Long productId, OptionRequest optionRequest) {
+        optionNameValidation(productId, optionRequest.name());
+        var productOption = saveOptionWithOptionRequest(productId, optionRequest);
         return getOptionResponseFromOption(productOption);
     }
 
-    public void updateOption(Long productId, Long id, ProductOptionRequest productOptionRequest) {
+    public void updateOption(Long productId, Long id, OptionRequest optionRequest) {
         var productOption = findOptionById(id);
         if (!productOption.getProduct().getId().equals(productId)) {
             throw new BadRequestException("잘못된 상품 옵션 수정 요청입니다.");
         }
-        productOption.updateOptionInfo(productOptionRequest.name(), productOptionRequest.quantity());
+        productOption.updateOptionInfo(optionRequest.name(), optionRequest.quantity());
         productOptionRepository.save(productOption);
     }
 
     @Transactional(readOnly = true)
-    public List<ProductOptionResponse> getOptions(Long productId, Pageable pageable) {
+    public List<OptionResponse> getOptions(Long productId, Pageable pageable) {
         return productOptionRepository.findAllByProductId(productId, pageable)
                 .stream()
                 .map(this::getOptionResponseFromOption)
@@ -52,20 +52,21 @@ public class ProductOptionService {
     }
 
     public void deleteOption(Long productId, Long id) {
-        var product = findProductById(productId);
-        var productOption = findOptionById(id);
-        product.getProductOptionList().remove(productOption);
+        var option = findOptionById(id);
+        if (!option.getProduct().getId().equals(productId)) {
+            throw new BadRequestException("잘못된 상품 옵션에 대한 요청입니다.");
+        }
         productOptionRepository.deleteById(id);
     }
 
-    private ProductOption saveOptionWithOptionRequest(Long productId, ProductOptionRequest productOptionRequest) {
+    private Option saveOptionWithOptionRequest(Long productId, OptionRequest optionRequest) {
         var product = findProductById(productId);
-        var productOption = new ProductOption(product, productOptionRequest.name(), productOptionRequest.quantity());
+        var productOption = new Option(product, optionRequest.name(), optionRequest.quantity());
         return productOptionRepository.save(productOption);
     }
 
-    private ProductOptionResponse getOptionResponseFromOption(ProductOption productOption) {
-        return ProductOptionResponse.of(productOption.getId(), productOption.getName(), productOption.getQuantity());
+    private OptionResponse getOptionResponseFromOption(Option option) {
+        return OptionResponse.of(option.getId(), option.getName(), option.getQuantity());
     }
 
     private Product findProductById(Long id) {
@@ -73,7 +74,7 @@ public class ProductOptionService {
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품이 존재하지 않습니다."));
     }
 
-    private ProductOption findOptionById(Long id) {
+    private Option findOptionById(Long id) {
         return productOptionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품 옵션이 존재하지 않습니다."));
     }

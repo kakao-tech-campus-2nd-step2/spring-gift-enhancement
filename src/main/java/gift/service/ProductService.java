@@ -1,14 +1,14 @@
 package gift.service;
 
-import gift.dto.ProductCategoryInformation;
+import gift.dto.CategoryInformation;
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.exception.InvalidProductNameWithKAKAOException;
 import gift.exception.NotFoundElementException;
+import gift.model.Category;
 import gift.model.MemberRole;
+import gift.model.Option;
 import gift.model.Product;
-import gift.model.ProductCategory;
-import gift.model.ProductOption;
 import gift.repository.ProductCategoryRepository;
 import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
@@ -85,7 +85,7 @@ public class ProductService {
     }
 
     private ProductResponse getProductResponseFromProduct(Product product) {
-        var productCategoryInformation = getProductCategoryInformationFromProductCategory(product.getProductCategory());
+        var productCategoryInformation = getProductCategoryInformationFromProductCategory(product.getCategory());
         return ProductResponse.of(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), productCategoryInformation);
     }
 
@@ -94,12 +94,12 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품옵션이 존재하지 않습니다."));
     }
 
-    private ProductCategoryInformation getProductCategoryInformationFromProductCategory(ProductCategory productCategory) {
-        return ProductCategoryInformation.of(productCategory.getId(), productCategory.getName());
+    private CategoryInformation getProductCategoryInformationFromProductCategory(Category category) {
+        return CategoryInformation.of(category.getId(), category.getName());
     }
 
-    private ProductOption makeDefaultProductOption(Product product) {
-        var productOption = new ProductOption(product, "기본", 1000);
+    private Option makeDefaultProductOption(Product product) {
+        var productOption = new Option(product, "기본", 1000);
         return productOptionRepository.save(productOption);
     }
 }

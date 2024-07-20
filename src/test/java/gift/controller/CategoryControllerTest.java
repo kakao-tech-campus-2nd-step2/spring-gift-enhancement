@@ -1,8 +1,8 @@
 package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.dto.CategoryRequest;
 import gift.dto.LoginRequest;
-import gift.dto.ProductCategoryRequest;
 import gift.service.ProductCategoryService;
 import gift.service.auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class ProductCategoryControllerTest {
+class CategoryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +48,7 @@ class ProductCategoryControllerTest {
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("상품카테고리", "상품설명", "#11111", "image")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("상품카테고리", "상품설명", "#11111", "image")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -63,7 +63,7 @@ class ProductCategoryControllerTest {
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("상품카테고리", "상품설명", "#111111", "")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -78,7 +78,7 @@ class ProductCategoryControllerTest {
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("", "상품설명", "#111111", "이미지")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("", "상품설명", "#111111", "이미지")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -93,7 +93,7 @@ class ProductCategoryControllerTest {
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("상품카테고리", "", "#111111", "이미지")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("상품카테고리", "", "#111111", "이미지")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -105,7 +105,7 @@ class ProductCategoryControllerTest {
     @DisplayName("카테고리는 중복되면 안된다.")
     void failCategoryAddWithDuplicatedCategory() throws Exception {
         //given
-        var productCategoryRequest = new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
+        var productCategoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
         var productCategory = productCategoryService.addCategory(productCategoryRequest);
 
         var postRequest = post("/api/categories/add")
@@ -128,7 +128,7 @@ class ProductCategoryControllerTest {
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "이미지")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
