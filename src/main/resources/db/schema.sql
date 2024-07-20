@@ -1,9 +1,21 @@
-CREATE TABLE Product
+create table category
 (
-    id       BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name     VARCHAR(255) NOT NULL,
-    price DOUBLE NOT NULL,
-    imageUrl VARCHAR(255) NOT NULL
+    color       varchar(7)   not null,
+    id          bigint       not null auto_increment,
+    description varchar(255),
+    image_url   varchar(255) not null,
+    name        varchar(255) not null,
+    primary key (id)
+);
+
+create table product
+(
+    price       integer      not null,
+    category_id bigint       not null,
+    id          bigint       not null auto_increment,
+    name        varchar(15)  not null,
+    image_url   varchar(255) not null,
+    primary key (id)
 );
 
 CREATE TABLE Users
