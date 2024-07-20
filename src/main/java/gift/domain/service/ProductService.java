@@ -72,6 +72,12 @@ public class ProductService {
     }
 
     @Transactional
+    public OptionResponse updateProductOptionById(Long productId, Long optionId, OptionRequest request) {
+        Product product = getProductById(productId);
+        return OptionResponse.of(optionService.updateOptionById(product, optionId, request));
+    }
+
+    @Transactional
     public void deleteProduct(Long id) {
         productRepository.delete(productRepository.findById(id)
             //존재하지 않는 상품 삭제 시도시 예외 발생

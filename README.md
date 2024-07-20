@@ -289,15 +289,15 @@ Content-Type: application/json
 - [x] 상품을 삭제하는 API
 - [x] 상품의 옵션을 조회하는 API
 - [x] 상품의 옵션을 추가하는 API
-- [ ] 상품의 옵션을 수정하는 API
+- [x] 상품의 옵션을 수정하는 API
 - [ ] 상품의 옵션을 삭제하는 API
 
 #### 예외, 검증 설계
 
 - [x] 커스텀 예외 및 예외 핸들링
-  - [ ] 옵션 이름/개수 검증 예외 만들기
-  - [ ] 옵션 중복 배제 만들기
-  - [ ] 특수문자 제외하는 Validator 만들기
+  - [x] 옵션 이름/개수 검증 예외 만들기
+  - [x] 옵션 중복 배제 만들기
+  - [x] 특수문자 제외하는 Validator 만들기
 - [x] 사용자 입력 검증
 
 #### Server-side Renderings
@@ -1069,7 +1069,7 @@ Content-Type: application/json
 
 #### 상품 옵션 수정 API/Response(fail)
 
-- 옵션이 존재하지 않을 경우 발생
+- 옵션이 존재하지 않거나 상품에 속한 옵션이 아닌 경우 발생
 - Status
   - 404 NOT FOUND
 - Body

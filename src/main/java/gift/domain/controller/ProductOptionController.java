@@ -43,12 +43,15 @@ public class ProductOptionController {
         return SuccessApiResponse.ok();
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<BasicApiResponse> updateProduct(@PathVariable("id") Long id, @Valid @RequestBody ProductUpdateRequest updateRequestDto) {
-//        productService.updateProductById(id, updateRequestDto);
-//        return SuccessApiResponse.ok();
-//    }
-//
+    @PutMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<BasicApiResponse> updateProduct(@PathVariable("productId") Long productId,
+                                                          @PathVariable("optionId") Long optionId,
+                                                          @Valid @RequestBody OptionRequest optionRequest
+    ) {
+        productService.updateProductOptionById(productId, optionId, optionRequest);
+        return SuccessApiResponse.ok();
+    }
+
 //    @DeleteMapping("/{id}")
 //    public ResponseEntity<BasicApiResponse> deleteProduct(@PathVariable("id") Long id) {
 //        productService.deleteProduct(id);
