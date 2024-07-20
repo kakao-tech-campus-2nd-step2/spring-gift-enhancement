@@ -193,8 +193,8 @@ class ProductControllerTest {
         var getResult = mockMvc.perform(getRequest);
         //then
         var productResult = getResult.andExpect(status().isOk()).andReturn();
-        var productListString = productResult.getResponse().getContentAsString();
-        var productResponseResult = objectMapper.readValue(productListString, new TypeReference<List<ProductResponse>>() {
+        var productsString = productResult.getResponse().getContentAsString();
+        var productResponseResult = objectMapper.readValue(productsString, new TypeReference<List<ProductResponse>>() {
         });
         Assertions.assertThat(productResponseResult.size()).isEqualTo(4);
 
@@ -214,8 +214,8 @@ class ProductControllerTest {
         getResult.andExpect(status().isBadRequest());
     }
 
-    private void deleteProducts(List<ProductResponse> productResponseList) {
-        for (var product : productResponseList) {
+    private void deleteProducts(List<ProductResponse> productResponses) {
+        for (var product : productResponses) {
             productService.deleteProduct(product.id());
         }
     }

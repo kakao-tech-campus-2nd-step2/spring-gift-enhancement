@@ -32,8 +32,8 @@ public class CategoryController {
 
     @PostMapping("/add")
     public ResponseEntity<Void> addCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
-        var productCategory = categoryService.addCategory(categoryRequest);
-        return ResponseEntity.created(URI.create("/api/categories/" + productCategory.id())).build();
+        var category = categoryService.addCategory(categoryRequest);
+        return ResponseEntity.created(URI.create("/api/categories/" + category.id())).build();
     }
 
     @PutMapping("/update/{id}")
@@ -44,15 +44,15 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getCategory(@PathVariable Long id) {
-        var productCategory = categoryService.getCategory(id);
-        return ResponseEntity.ok(productCategory);
+        var category = categoryService.getCategory(id);
+        return ResponseEntity.ok(category);
     }
 
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getCategories(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        var productCategories = categoryService.getCategories(pageable);
-        return ResponseEntity.ok(productCategories);
+        var categories = categoryService.getCategories(pageable);
+        return ResponseEntity.ok(categories);
     }
 
     @DeleteMapping("/{id}")

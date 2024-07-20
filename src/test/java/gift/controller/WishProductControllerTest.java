@@ -201,8 +201,8 @@ class WishProductControllerTest {
         getResult.andExpect(status().isBadRequest());
     }
 
-    private void deleteWishProducts(List<WishProductResponse> wishProductResponseList) {
-        for (var wishProductResponse : wishProductResponseList) {
+    private void deleteWishProducts(List<WishProductResponse> wishProductResponses) {
+        for (var wishProductResponse : wishProductResponses) {
             wishProductService.deleteWishProduct(wishProductResponse.id());
         }
     }

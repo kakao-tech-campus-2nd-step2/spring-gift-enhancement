@@ -38,8 +38,8 @@ class OptionControllerTest {
     @BeforeEach
     @DisplayName("이용자의 토큰 값 세팅하기")
     void setBaseData() {
-        var memberLoginRequest = new LoginRequest("member@naver.com", "password");
-        memberToken = authService.login(memberLoginRequest).token();
+        var loginRequest = new LoginRequest("member@naver.com", "password");
+        memberToken = authService.login(loginRequest).token();
     }
 
     @Test

@@ -3,7 +3,6 @@ package gift.service;
 import gift.dto.ProductRequest;
 import gift.exception.InvalidProductNameWithKAKAOException;
 import gift.model.MemberRole;
-import gift.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +17,6 @@ class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
-    @Autowired
-    private ProductRepository productRepository;
     @Autowired
     private OptionService optionService;
 
@@ -84,9 +81,9 @@ class ProductServiceTest {
         var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
         var savedProduct = productService.addProduct(productRequest, MemberRole.MEMBER);
         //when
-        var productOptionList = optionService.getOptions(savedProduct.id(), Pageable.unpaged());
+        var options = optionService.getOptions(savedProduct.id(), Pageable.unpaged());
         //then
-        Assertions.assertThat(productOptionList.get(0).name()).isEqualTo("기본");
+        Assertions.assertThat(options.get(0).name()).isEqualTo("기본");
 
         productService.deleteProduct(savedProduct.id());
     }
