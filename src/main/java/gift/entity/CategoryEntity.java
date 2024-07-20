@@ -32,6 +32,9 @@ public class CategoryEntity {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductEntity> products;
+
     public CategoryEntity() {
 
     }

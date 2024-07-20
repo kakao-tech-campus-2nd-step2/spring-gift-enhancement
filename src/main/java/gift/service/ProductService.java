@@ -53,11 +53,9 @@ public class ProductService {
     //상품 추가 기능
     @Transactional
     public void addProduct(Product product) {
+        validateProductUniqueness(product);
         CategoryEntity categoryEntity = categoryRepository.findById(product.getCategoryId())
             .orElseThrow(() -> new NotFoundException("Category Not Found"));
-
-        checkAlreadyExists(product);
-
         ProductEntity productEntity = new ProductEntity();
         productEntity.setName(product.getName());
         productEntity.setPrice(product.getPrice());
@@ -69,11 +67,9 @@ public class ProductService {
     //상품 수정 기능
     @Transactional
     public void updateProduct(Long id, Product product) {
+        validateProductUniqueness(product);
         ProductEntity productEntity = productRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Product not found"));
-
-        checkAlreadyExists(product);
-
         CategoryEntity categoryEntity = categoryRepository.findById(product.getCategoryId())
             .orElseThrow(() -> new NotFoundException("Category Not Found"));
 
@@ -92,13 +88,9 @@ public class ProductService {
         productRepository.delete(existingProduct);
     }
 
-    private void checkAlreadyExists(Product product) {
-        boolean exists = productRepository.findAll().stream()
-            .anyMatch(p -> p.getName().equals(product.getName()) &&
-                p.getPrice().equals(product.getPrice()) &&
-                p.getImageUrl().equals(product.getImageUrl()));
-        if (exists) {
-            throw new AlreadyExistsException("해당 상품이 이미 존재 합니다!");
+    private void validateProductUniqueness(Product product) {
+        if(productRepository.existsByNameAndPriceAndImageUrl(product.getName(), product.getPrice(), product.getImageUrl())) {
+            throw new AlreadyExistsException("Already Exists Product");
         }
     }
 

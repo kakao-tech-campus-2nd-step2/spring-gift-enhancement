@@ -55,9 +55,9 @@ public class ProductTest {
         token = responseEntity.getBody().substring(startIndex, endIndex);
     }
 
-    private HttpHeaders getHttpHeaders() {
+    private HttpHeaders getHttpHeaders(MediaType mediaType) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setContentType(mediaType);
         headers.setBearerAuth(token);
         return headers;
     }
@@ -66,16 +66,15 @@ public class ProductTest {
     @DisplayName("상품 생성")
     @DirtiesContext
     void createProduct() {
-        Product product = new Product("우유", 1000L, "https://milk.jpg", 1L);
+        Product product = new Product("우유", 1000L, "https://milk.jpg", 1L,null);
 
-        HttpHeaders headers = getHttpHeaders();
         //form data를 받기 때문에
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("name", product.getName());
         formData.add("price", String.valueOf(product.getPrice()));
         formData.add("imageUrl", product.getImageUrl());
 
-        HttpEntity<MultiValueMap> requestEntity = new HttpEntity<>(formData, headers);
+        HttpEntity<MultiValueMap> requestEntity = new HttpEntity<>(formData, getHttpHeaders(MediaType.APPLICATION_FORM_URLENCODED));
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/products", HttpMethod.POST,
             requestEntity, String.class);
 
@@ -87,10 +86,7 @@ public class ProductTest {
     @DisplayName("상품 조회")
     @DirtiesContext
     void showProductList() {
-
-        HttpHeaders headers = getHttpHeaders();
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(getHttpHeaders(MediaType.APPLICATION_JSON));
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/products", HttpMethod.GET,
             requestEntity, String.class);
 
@@ -101,17 +97,15 @@ public class ProductTest {
     @DisplayName("상품 수정")
     @DirtiesContext
     void updateProduct() {
+        Product product = new Product("우유", 1000L, "https://example1.jpg", 1L,null);
 
-        Product product = new Product("우유", 1000L, "https://example1.jpg", 1L);
-
-        HttpHeaders headers = getHttpHeaders();
         //form data를 받기 때문에
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("name", product.getName());
         formData.add("price", String.valueOf(product.getPrice()));
         formData.add("imageUrl", product.getImageUrl());
 
-        HttpEntity<MultiValueMap> requestEntity = new HttpEntity<>(formData, headers);
+        HttpEntity<MultiValueMap> requestEntity = new HttpEntity<>(formData, getHttpHeaders(MediaType.APPLICATION_FORM_URLENCODED));
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/products/1", HttpMethod.PUT,
             requestEntity, String.class);
 
@@ -122,10 +116,7 @@ public class ProductTest {
     @DisplayName("상품 삭제")
     @DirtiesContext
     void deleteProduct() {
-
-        HttpHeaders headers = getHttpHeaders();
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(getHttpHeaders(MediaType.APPLICATION_JSON));
         ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/products/1", HttpMethod.DELETE,
             requestEntity, String.class);
 

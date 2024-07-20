@@ -1,9 +1,9 @@
-package gift.wishList;
+package gift.category;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.domain.Category;
 import gift.domain.Member;
-import gift.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class WishListTest {
+public class CategoryTest {
 
     @LocalServerPort
     private int port;
@@ -58,35 +58,59 @@ public class WishListTest {
     }
 
     @Test
-    @DisplayName("위시리스트 추가")
+    @DisplayName("카테고리 추가")
     @DirtiesContext
-    void addWishList() {
-        Product product = new Product(3L,"Sample3", 3000L, "http://image3.jpg", 1L,null);
+    void addCategory() {
+        Category category = new Category("상품권","#ffffff","http://gift.jpg","상품권 카테고리");
 
-        HttpEntity<Product> requestEntity = new HttpEntity<>(product, getHttpHeaders());
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/wishlist", HttpMethod.POST,
+        HttpEntity<Category> requestEntity = new HttpEntity<>(category, getHttpHeaders());
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/api/categories", HttpMethod.POST,
             requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    @DisplayName("위시리스트 조회")
+    @DisplayName("카테고리 조회")
     @DirtiesContext
-    void getWishList() {
+    void getAllCategory() {
         HttpEntity<String> requestEntity = new HttpEntity<>(getHttpHeaders());
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/wishlist", HttpMethod.GET,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/api/categories", HttpMethod.GET,
             requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    @DisplayName("위시리스트 삭제")
+    @DisplayName("카테고리 단일 조회")
     @DirtiesContext
-    void deleteWishList() {
+    void getCategoryById() {
         HttpEntity<String> requestEntity = new HttpEntity<>(getHttpHeaders());
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/wishlist/4", HttpMethod.DELETE,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/api/categories/1", HttpMethod.GET,
+            requestEntity, String.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    @DisplayName("카테고리 수정")
+    @DirtiesContext
+    void updateCategory() {
+        Category category = new Category("상품권","#f1f1f1","http://gift2.jpg","상품권 카테고리");
+
+        HttpEntity<Category> requestEntity = new HttpEntity<>(category, getHttpHeaders());
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/api/categories/1", HttpMethod.PUT,
+            requestEntity, String.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제")
+    @DirtiesContext
+    void deleteCategory() {
+        HttpEntity<String> requestEntity = new HttpEntity<>(getHttpHeaders());
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url + "/api/categories/1", HttpMethod.DELETE,
             requestEntity, String.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);

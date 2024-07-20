@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import java.util.Objects;
 
 public class Product {
@@ -31,23 +32,27 @@ public class Product {
 //    @NotBlank(message = "카테고리를 무조건 선택해 주세요.")
     private Long categoryId;
 
+    private List<Long> optionIds;
+
     public Product() {
 
     }
 
-    public Product(String name, Long price, String imageUrl, Long categoryId) {
+    public Product(String name, Long price, String imageUrl, Long categoryId, List<Long> optionIds) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+        this.optionIds = optionIds;
     }
 
-    public Product(Long id, String name, Long price, String imageUrl, Long categoryId) {
+    public Product(Long id, String name, Long price, String imageUrl, Long categoryId, List<Long> optionIds) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+        this.optionIds = optionIds;
     }
 
     public Long getId() {
@@ -88,6 +93,10 @@ public class Product {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<Long> getOptionIds() {
+        return optionIds;
     }
 
 }
