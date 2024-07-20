@@ -28,6 +28,7 @@ public class CategoryService {
                 .map(CategoryResponse::from);
     }
 
+    @Transactional
     public void create(CategoryCreateCommand command) {
         categoryRepository.findByName(command.name())
                 .ifPresent(category -> {
