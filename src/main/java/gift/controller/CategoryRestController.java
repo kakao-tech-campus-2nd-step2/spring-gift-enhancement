@@ -28,25 +28,25 @@ public class CategoryRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
-        CategoryDTO category = categoryService.getCategoryById(id);
+        CategoryDTO category = categoryService.getById(id);
         return ResponseEntity.ok(category);
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
-        CategoryDTO savedCategory = categoryService.createCategory(categoryDTO);
+    public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryDTO categoryDTO) {
+        CategoryDTO savedCategory = categoryService.create(categoryDTO);
         return ResponseEntity.ok(savedCategory);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
-        CategoryDTO updatedCategory = categoryService.updateCategory(id, categoryDTO);
+    public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
+        CategoryDTO updatedCategory = categoryService.update(id, categoryDTO);
         return ResponseEntity.ok(updatedCategory);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategoryById(id);
+        categoryService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
