@@ -108,17 +108,17 @@ class WishControllerTest {
     void deleteWishTest() {
 
         // given
-        Category category = new Category("name", "color", "imageUrl", "description");
-        Category savedCategory = categoryRepository.save(category);
-
-        Product product = new Product("name", 1000, "imageUrl", savedCategory);
-        productRepository.save(product);
-
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-        Wish wish = transactionTemplate.execute(status -> {
+        transactionTemplate.execute(status -> {
+            Category category = new Category("name", "color", "imageUrl", "description");
+            Category savedCategory = categoryRepository.save(category);
+
+            Product product = new Product("name", 1000, "imageUrl", savedCategory);
+            productRepository.save(product);
             Wish newWish = new Wish(memberService.getMemberFromToken(token), product);
             wishRepository.save(newWish);
-            return newWish;
+
+            return null;
         });
 
         var id = 1L;
