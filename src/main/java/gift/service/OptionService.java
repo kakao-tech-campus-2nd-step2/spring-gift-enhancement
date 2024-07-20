@@ -15,8 +15,10 @@ public class OptionService {
 
     @Autowired
     private final OptionRepository optionRepository;
+
     @Autowired
     private ProductRepository productRepository;
+
 
     public OptionService(OptionRepository optionRepository) {
         this.optionRepository = optionRepository;

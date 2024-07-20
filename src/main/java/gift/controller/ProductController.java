@@ -109,7 +109,6 @@ public class ProductController {
 
         product1.setOptions(options);
         productService.updateProduct(product.getId(), product1);
-
         redirectAttributes.addFlashAttribute("message", "Product updated successfully!");
         return "redirect:/products";
     }
