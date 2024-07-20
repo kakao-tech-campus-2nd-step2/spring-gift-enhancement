@@ -39,10 +39,10 @@ public class CategoryController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<Void> updateCategory(@PathVariable("id") Long id, @Valid Category category,
+	@PutMapping("/{categoryId}")
+	public ResponseEntity<Void> updateCategory(@PathVariable("categoryId") Long categoryId, @Valid Category category,
 			BindingResult bindingResult){
-		categoryService.updateCategory(id, category, bindingResult);
+		categoryService.updateCategory(categoryId, category, bindingResult);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }
