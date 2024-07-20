@@ -54,13 +54,13 @@ public class MemberService {
 
     public List<MemberResponse> getAllMembers() {
         return memberRepository.findAll().stream()
-            .map(MemberService::convertToDTO)
+            .map(this::convertToDTO)
             .collect(Collectors.toList());
     }
 
     public MemberResponse getMemberById(Long id) {
         return memberRepository.findById(id)
-            .map(MemberService::convertToDTO)
+            .map(this::convertToDTO)
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
     }
 
@@ -92,7 +92,7 @@ public class MemberService {
         return new Member(memberResponse.id(), memberResponse.email(), null);
     }
 
-    private static MemberResponse convertToDTO(Member member) {
+    private MemberResponse convertToDTO(Member member) {
         return new MemberResponse(member.getId(), member.getEmail(), null);
     }
 }

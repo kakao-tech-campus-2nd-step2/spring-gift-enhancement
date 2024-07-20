@@ -34,7 +34,7 @@ public class WishService {
     }
 
     public Page<WishResponse> getWishlistByMemberId(Long memberId, Pageable pageable) {
-        return wishRepository.findAllByMember_Id(memberId, pageable).map(WishService::convertToDTO);
+        return wishRepository.findAllByMember_Id(memberId, pageable).map(this::convertToDTO);
     }
 
     public WishResponse addWish(WishCreateRequest wishCreateRequest, Long memberId) {
@@ -67,7 +67,7 @@ public class WishService {
     }
 
     // Mapper methods
-    private static WishResponse convertToDTO(Wish wish) {
+    private WishResponse convertToDTO(Wish wish) {
         return new WishResponse(wish.getId(), wish.getMemberId(), wish.getProductId());
     }
 }

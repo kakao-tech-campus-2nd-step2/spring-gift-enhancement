@@ -34,12 +34,12 @@ public class ProductService {
     }
 
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable).map(ProductService::convertToDTO);
+        return productRepository.findAll(pageable).map(this::convertToDTO);
     }
 
     public ProductResponse getProductById(Long id) {
         return productRepository.findById(id)
-            .map(ProductService::convertToDTO)
+            .map(this::convertToDTO)
             .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND + id));
     }
 
@@ -97,7 +97,7 @@ public class ProductService {
     }
 
     // Mapper methods
-    private static ProductResponse convertToDTO(Product product) {
+    private ProductResponse convertToDTO(Product product) {
         return new ProductResponse(
             product.getId(),
             product.getName(),
@@ -108,7 +108,7 @@ public class ProductService {
         );
     }
 
-    private static Product convertToEntity(ProductCreateRequest productCreateRequest,
+    private Product convertToEntity(ProductCreateRequest productCreateRequest,
         Category category) {
         return new Product(
             null,

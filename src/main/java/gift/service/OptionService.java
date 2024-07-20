@@ -31,7 +31,7 @@ public class OptionService {
     public List<OptionResponse> getOptionsByProductId(Long productId) {
         List<Option> options = optionRepository.findByProductId(productId);
         return options.stream()
-            .map(OptionService::convertToDTO)
+            .map(this::convertToDTO)
             .toList();
     }
 
@@ -107,7 +107,7 @@ public class OptionService {
     }
 
     // Mapper methods
-    private static OptionResponse convertToDTO(Option option) {
+    private OptionResponse convertToDTO(Option option) {
         return new OptionResponse(
             option.getId(),
             option.getName(),

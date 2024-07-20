@@ -23,13 +23,13 @@ public class CategoryService {
 
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
-            .map(CategoryService::convertToDTO)
+            .map(this::convertToDTO)
             .collect(Collectors.toList());
     }
 
     public CategoryResponse getCategoryById(Long id) {
         return categoryRepository.findById(id)
-            .map(CategoryService::convertToDTO)
+            .map(this::convertToDTO)
             .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND + id));
     }
 
@@ -54,7 +54,7 @@ public class CategoryService {
     }
 
     // Mapper methods
-    private static CategoryResponse convertToDTO(Category category) {
+    private CategoryResponse convertToDTO(Category category) {
         return new CategoryResponse(
             category.getId(),
             category.getName(),
@@ -64,7 +64,7 @@ public class CategoryService {
         );
     }
 
-    private static Category convertToEntity(CategoryCreateRequest categoryCreateRequest) {
+    private Category convertToEntity(CategoryCreateRequest categoryCreateRequest) {
         return new Category(
             categoryCreateRequest.name(),
             categoryCreateRequest.color(),
