@@ -16,12 +16,16 @@ public class CreateProductOptionRequest {
     @Range(min = 1, max = 100_000_000)
     private Integer stock;
 
-    public CreateProductOptionRequest() {
-    }
-
     public CreateProductOptionRequest(String name, Integer stock) {
         this.name = name;
         this.stock = stock;
+    }
+
+    public ProductOption toEntity() {
+        return new ProductOption.Builder()
+            .name(this.name)
+            .stock(this.stock)
+            .build();
     }
 
     public ProductOption toEntity(Long productId) {
