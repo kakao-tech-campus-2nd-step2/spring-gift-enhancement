@@ -48,8 +48,10 @@ public class ProductController {
     }
 
     @GetMapping
+
     public String getProducts(@RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size, Model model) {
+
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productService.getAllProducts(pageable);
         List<Category> categories = categoryService.getAllCategories();
@@ -109,6 +111,7 @@ public class ProductController {
 
         product1.setOptions(options);
         productService.updateProduct(product.getId(), product1);
+
 
         redirectAttributes.addFlashAttribute("message", "Product updated successfully!");
         return "redirect:/products";
