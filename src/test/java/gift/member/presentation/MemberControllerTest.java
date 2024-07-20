@@ -5,13 +5,11 @@ import gift.member.application.MemberResponse;
 import gift.member.application.MemberService;
 import gift.member.application.command.MemberEmailUpdateCommand;
 import gift.member.application.command.MemberPasswordUpdateCommand;
-import gift.member.domain.Member;
 import gift.member.presentation.request.MemberJoinRequest;
 import gift.member.presentation.request.MemberLoginRequest;
 import gift.member.presentation.request.ResolvedMember;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,7 +21,8 @@ import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

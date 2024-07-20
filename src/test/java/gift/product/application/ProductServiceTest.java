@@ -2,13 +2,13 @@ package gift.product.application;
 
 import gift.category.domain.Category;
 import gift.category.domain.CategoryRepository;
+import gift.exception.type.InvalidProductOptionException;
 import gift.exception.type.KakaoInNameException;
 import gift.exception.type.NotFoundException;
-import gift.exception.type.InvalidProductOptionException;
+import gift.option.application.command.OptionCreateCommand;
 import gift.option.application.command.OptionUpdateCommand;
 import gift.option.domain.Option;
 import gift.option.domain.OptionRepository;
-import gift.option.application.command.OptionCreateCommand;
 import gift.product.application.command.ProductCreateCommand;
 import gift.product.application.command.ProductUpdateCommand;
 import gift.product.domain.Product;
@@ -28,7 +28,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
