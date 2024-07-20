@@ -14,6 +14,7 @@ import gift.util.ErrorCode;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,16 +52,23 @@ public class WishListService {
     }
 
     @Transactional
-    public void addProductToWishList(Long userId, Long productId, Long optionId) {
-        WishList wishList = wishListRepository.findByUserId(userId);
+    public void addProductToWishList(Long userId, Long wishlistId, Long productId, Long optionId) {
+        WishList wishList = findById(wishlistId);
+        if (!Objects.equals(wishList.getUser().getId(), userId)) {
+            throw new ProductException(ErrorCode.NOT_USER_OWNED);
+        }
+
         Product product = productRepository.findById(productId);
         ProductOption productOption = productRepository.getProductWithOption(productId, optionId);
 
+        wishList.addWishListProduct(new WishListProduct(wishList, product, productOption));
 
-        WishListProduct wishListProduct = new WishListProduct(wishList, product);
-        wishList.addWishListProduct(wishListProduct);
 
         wishListRepository.save(wishList);
+    }
+
+    public WishList findById(Long id) {
+        return wishListRepository.findById(id).orElseThrow(() -> new ProductException(ErrorCode.WISHLIST_NOT_FOUND));
     }
 
     @Transactional

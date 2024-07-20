@@ -7,7 +7,6 @@ import gift.util.ErrorCode;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class ProductRepository {
@@ -45,4 +44,8 @@ public class ProductRepository {
         return productOptionJpaRepository.save(productOption);
     }
 
+    public ProductOption getProductWithOption(Long productId, Long optionId) {
+        return productOptionJpaRepository.findByProductIdAndId(productId, optionId)
+                .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_OPTION_NOT_FOUND));
+    }
 }

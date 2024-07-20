@@ -25,9 +25,10 @@ public class WishListProduct {
     public WishListProduct() {
     }
 
-    public WishListProduct(WishList wishList, Product product) {
+    public WishListProduct(WishList wishList, Product product, ProductOption productOption) {
         this.wishList = wishList;
         this.product = product;
+        this.productOption = productOption;
     }
 
     public Long getId() {
