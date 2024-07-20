@@ -14,12 +14,9 @@ import org.springframework.stereotype.Repository;
 public class ProductRepositoryImpl implements ProductRepository {
 
     private final ProductJpaRepository productJpaRepository;
-    private final OptionJpaRepository optionJpaRepository;
 
-    public ProductRepositoryImpl(ProductJpaRepository productJpaRepository,
-        OptionJpaRepository optionJpaRepository) {
+    public ProductRepositoryImpl(ProductJpaRepository productJpaRepository) {
         this.productJpaRepository = productJpaRepository;
-        this.optionJpaRepository = optionJpaRepository;
     }
 
     @Override
@@ -44,7 +41,6 @@ public class ProductRepositoryImpl implements ProductRepository {
                 "Product with id " + id + " not found"
             );
         }
-        optionJpaRepository.deleteAllByProductId(id);
         productJpaRepository.deleteById(id);
         return id;
     }
@@ -56,7 +52,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void deleteProductByIdList(List<Long> productIds) {
-        optionJpaRepository.deleteAllByProductIdIn(productIds);
         productJpaRepository.deleteAllById(productIds);
     }
 
