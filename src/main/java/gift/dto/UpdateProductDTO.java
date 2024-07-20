@@ -25,7 +25,7 @@ public class UpdateProductDTO {
 
     public void setCategory(String category) {
         if (category == null || category.trim().isEmpty()) {
-            this.category = null;
+            this.category = "NONE";
         }
         else {
             this.category = category;

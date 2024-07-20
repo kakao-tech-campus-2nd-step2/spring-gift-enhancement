@@ -82,11 +82,8 @@ public class ProductService {
     public void updateProduct(Long id, UpdateProductDTO updateProductDTO) {
         Product oldProduct = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품이 없습니다."));
-        Category category = null;
-        if (updateProductDTO.getCategory() != null) {
-            category = categoryRepository.findByName(updateProductDTO.getCategory())
-                    .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 없습니다."));
-        }
+        Category category = categoryRepository.findByName(updateProductDTO.getCategory())
+                .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 없습니다."));
         Product updatedProduct = oldProduct.update(
                 updateProductDTO.getName(),
                 updateProductDTO.getPrice(),

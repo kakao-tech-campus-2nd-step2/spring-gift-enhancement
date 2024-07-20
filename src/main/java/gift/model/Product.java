@@ -61,7 +61,7 @@ public class Product {
         if(imageUrl != null && !imageUrl.isEmpty()){
             this.imageUrl = imageUrl;
         }
-        if(category != null && !category.equals(this.category)){
+        if(!category.getName().equals("NONE")){
             this.category = category;
         }
         return this;

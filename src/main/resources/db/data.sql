@@ -33,6 +33,9 @@ VALUES ('카카오프렌즈');
 
 INSERT INTO CATEGORY (name)
 VALUES ('트렌드선물');
-INSERT INTO CATEGORY (name)
 
+INSERT INTO CATEGORY (name)
 VALUES ('백화점');
+
+INSERT INTO CATEGORY (name)
+VALUES ('NONE');
