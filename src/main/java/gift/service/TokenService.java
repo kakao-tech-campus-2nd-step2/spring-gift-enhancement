@@ -1,22 +1,13 @@
 package gift.service;
 
-import gift.repository.TokenRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 
 @Service
 public class TokenService {
-    private final TokenRepository tokenRepository;
+    public TokenService() { }
 
-    public TokenService(TokenRepository tokenRepository) {
-        this.tokenRepository = tokenRepository;
-    }
-
-    public String saveToken(Long userId) {
-        String newToken = makeTokenFrom(userId.toString());
-        return tokenRepository.save(newToken);
-    }
 
     public String makeTokenFrom(String userIdStr) {
 
@@ -33,13 +24,5 @@ public class TokenService {
         return Long.parseLong(userId);
     }
 
-    public void deleteTokenOf(Long userId) {
-        String newToken = makeTokenFrom(userId.toString());
-        tokenRepository.delete(newToken);
-    }
-
-    public void deleteToken(String token) {
-        tokenRepository.delete(token);
-    }
 
 }
