@@ -73,8 +73,8 @@ public class ProductService {
         productRepository.save(productEntity);
 
         Option basicOption = new Option(productRequest.getBasicOption(), 1L);
-        optionRepository.save(basicOption);
         productEntity.addOption(basicOption);
+        optionRepository.save(basicOption);
     }
     /*
      * 상품을 삭제하는 로직
