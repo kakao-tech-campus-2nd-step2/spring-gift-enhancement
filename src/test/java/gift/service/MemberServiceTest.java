@@ -12,6 +12,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import gift.dto.member.MemberEditRequest;
 import gift.dto.member.MemberLoginRequest;
 import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
@@ -159,7 +160,8 @@ public class MemberServiceTest {
     @DisplayName("회원 수정")
     public void testUpdateMember() {
         Member member = new Member(1L, "old@example.com", "oldpassword");
-        MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest(
+        MemberEditRequest memberEditRequest = new MemberEditRequest(
+            null,
             "new@example.com",
             "newpassword"
         );
@@ -168,7 +170,7 @@ public class MemberServiceTest {
         when(memberRepository.save(any(Member.class))).thenReturn(
             new Member(1L, "new@example.com", "newpassword"));
 
-        MemberResponse response = memberService.updateMember(1L, memberRegisterRequest);
+        MemberResponse response = memberService.updateMember(1L, memberEditRequest);
         assertEquals("new@example.com", response.email());
     }
 

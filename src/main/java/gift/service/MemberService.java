@@ -4,6 +4,7 @@ import static gift.util.constants.MemberConstants.EMAIL_ALREADY_USED;
 import static gift.util.constants.MemberConstants.ID_NOT_FOUND;
 import static gift.util.constants.MemberConstants.INVALID_CREDENTIALS;
 
+import gift.dto.member.MemberEditRequest;
 import gift.dto.member.MemberLoginRequest;
 import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
@@ -63,18 +64,18 @@ public class MemberService {
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
     }
 
-    public MemberResponse updateMember(Long id, MemberRegisterRequest memberRegisterRequest) {
+    public MemberResponse updateMember(Long id, MemberEditRequest memberEditRequest) {
         Member member = memberRepository.findById(id)
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
 
-        boolean emailChanged = !member.isEmailMatching(memberRegisterRequest.email());
-        boolean emailAlreadyUsed = memberRepository.existsByEmail(memberRegisterRequest.email());
+        boolean emailChanged = !member.isEmailMatching(memberEditRequest.email());
+        boolean emailAlreadyUsed = memberRepository.existsByEmail(memberEditRequest.email());
 
         if (emailChanged && emailAlreadyUsed) {
             throw new EmailAlreadyUsedException(EMAIL_ALREADY_USED);
         }
 
-        member.update(memberRegisterRequest.email(), memberRegisterRequest.password());
+        member.update(memberEditRequest.email(), memberEditRequest.password());
         Member updatedMember = memberRepository.save(member);
         return convertToDTO(updatedMember);
     }

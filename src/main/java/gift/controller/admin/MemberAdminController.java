@@ -1,5 +1,6 @@
 package gift.controller.admin;
 
+import gift.dto.member.MemberEditRequest;
 import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
 import gift.service.MemberService;
@@ -52,22 +53,26 @@ public class MemberAdminController {
     @GetMapping("/{id}/edit")
     public String showEditMemberForm(@PathVariable("id") Long id, Model model) {
         MemberResponse memberResponse = memberService.getMemberById(id);
-        model.addAttribute("member", new MemberRegisterRequest(memberResponse.email(), null));
+        model.addAttribute(
+            "member",
+            new MemberEditRequest(memberResponse.id(), memberResponse.email(), null)
+        );
         return "member_edit";
     }
 
     @PutMapping("/{id}")
     public String updateMember(
         @PathVariable("id") Long id,
-        @Valid @ModelAttribute MemberRegisterRequest memberRegisterRequest, BindingResult result,
+        @Valid @ModelAttribute MemberEditRequest memberEditRequest,
+        BindingResult result,
         Model model
     ) {
         if (result.hasErrors()) {
-            model.addAttribute("member", memberRegisterRequest);
+            model.addAttribute("member", memberEditRequest);
             model.addAttribute("org.springframework.validation.BindingResult.member", result);
             return "member_edit";
         }
-        memberService.updateMember(id, memberRegisterRequest);
+        memberService.updateMember(id, memberEditRequest);
         return "redirect:/admin/members";
     }
 
