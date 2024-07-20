@@ -8,12 +8,12 @@ import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 import gift.dto.option.OptionCreateRequest;
 import gift.dto.option.OptionResponse;
 import gift.dto.option.OptionUpdateRequest;
+import gift.dto.product.ProductResponse;
 import gift.exception.option.OptionNotFoundException;
 import gift.exception.product.ProductNotFoundException;
 import gift.model.Option;
 import gift.model.Product;
 import gift.repository.OptionRepository;
-import gift.repository.ProductRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +21,11 @@ import org.springframework.stereotype.Service;
 public class OptionService {
 
     private final OptionRepository optionRepository;
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
+    public OptionService(OptionRepository optionRepository, ProductService productService) {
         this.optionRepository = optionRepository;
-        this.productRepository = productRepository;
+        this.productService = productService;
     }
 
     public List<OptionResponse> getOptionsByProductId(Long productId) {
@@ -46,10 +46,12 @@ public class OptionService {
         return convertToDTO(option);
     }
 
-    public OptionResponse addOptionToProduct(Long productId,
-        OptionCreateRequest optionCreateRequest) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND + productId));
+    public OptionResponse addOptionToProduct(
+        Long productId,
+        OptionCreateRequest optionCreateRequest
+    ) {
+        ProductResponse productResponse = productService.getProductById(productId);
+        Product product = productService.convertToEntity(productResponse);
 
         validateDuplicateOptionName(productId, optionCreateRequest.name());
 
@@ -62,10 +64,13 @@ public class OptionService {
         return convertToDTO(savedOption);
     }
 
-    public OptionResponse updateOption(Long productId, Long optionId,
-        OptionUpdateRequest optionUpdateRequest) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND + productId));
+    public OptionResponse updateOption(
+        Long productId,
+        Long optionId,
+        OptionUpdateRequest optionUpdateRequest
+    ) {
+        ProductResponse productResponse = productService.getProductById(productId);
+        Product product = productService.convertToEntity(productResponse);
 
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionNotFoundException(OPTION_NOT_FOUND + optionId));

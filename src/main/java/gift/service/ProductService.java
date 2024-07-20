@@ -107,8 +107,7 @@ public class ProductService {
         );
     }
 
-    private Product convertToEntity(ProductCreateRequest productCreateRequest,
-        Category category) {
+    private Product convertToEntity(ProductCreateRequest productCreateRequest, Category category) {
         return new Product(
             productCreateRequest.name(),
             productCreateRequest.price(),
