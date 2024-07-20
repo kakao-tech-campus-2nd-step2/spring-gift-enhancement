@@ -2,6 +2,8 @@ package gift.repositoryTest;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import gift.domain.category.Category;
+import gift.domain.category.CategoryRepository;
 import gift.domain.member.Member;
 import gift.domain.member.MemberRepository;
 import gift.domain.product.Product;
@@ -17,7 +19,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 @DataJpaTest
 public class WishRepositoryTest {
     @Autowired
@@ -29,14 +30,21 @@ public class WishRepositoryTest {
     @Autowired
     private ProductRepository products;
 
+    @Autowired
+    private CategoryRepository categories;
+
     private Pageable pageable = PageRequest.of(0, 10);
+
 
     @Test
     public void save() {
         Member member = new Member("wjdghtjd06@kakao.com", "1234");
         members.save(member);
 
-        Product product = new Product("물건1", 1000L, "image.url");
+        Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
+
+        Product product = new Product("물건1", 1000L, "image.url", category);
         products.save(product);
 
         Wish expected = new Wish(member,product,1L);
@@ -47,17 +55,20 @@ public class WishRepositoryTest {
         Assertions.assertThat(actual.getProduct()).isEqualTo(expected.getProduct());
         Assertions.assertThat(actual.getCount()).isEqualTo(expected.getCount());
         Assertions.assertThat(actual.getMember()).isEqualTo(expected.getMember());
+        Assertions.assertThat(actual.getProduct().getCategory()).isEqualTo(expected.getProduct().getCategory());
 
     }
 
     @Test
     public void findAllWithPageable() {
+        Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
 
         for (int i = 0; i < 10; i++) {
             Member member = new Member("wjdghtjd" + i + "@kakao.com", "1234");
             members.save(member);
             for(int j = 0; j < 10; j++) {
-                Product product = new Product("product" + j, 1000L, "image.url");
+                Product product = new Product("product" + j, 1000L, "image.url", category);
                 products.save(product);
                 wishes.save(new Wish(member,product,1L));
             }
@@ -76,12 +87,14 @@ public class WishRepositoryTest {
 
     @Test
     public void findAllByMemberIdWithPageable() {
+        Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
 
         for (int i = 0; i < 10; i++) {
             Member member = new Member("wjdghtjd" + i + "@kakao.com", "1234");
             members.save(member);
             for(int j = 0; j < 10; j++) {
-                Product product = new Product("product" + j, 1000L, "image.url");
+                Product product = new Product("product" + j, 1000L, "image.url", category);
                 products.save(product);
                 wishes.save(new Wish(member,product,1L));
             }
@@ -98,10 +111,13 @@ public class WishRepositoryTest {
 
     @Test
     public void updateWish() {
+        Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
+
         Member member = new Member("wjdghtjd06@kakao.com", "1234");
         members.save(member);
 
-        Product product = new Product("물건1", 1000L, "image.url");
+        Product product = new Product("물건1", 1000L, "image.url", category);
         products.save(product);
 
         Wish expected = new Wish(member,product,1L);
@@ -114,10 +130,13 @@ public class WishRepositoryTest {
 
     @Test
     public void deleteWish() {
+        Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
+
         Member member = new Member("wjdghtjd06@kakao.com", "1234");
         members.save(member);
 
-        Product product = new Product("물건1", 1000L, "image.url");
+        Product product = new Product("물건1", 1000L, "image.url", category);
         products.save(product);
 
         Wish expected = new Wish(member,product,1L);
@@ -130,6 +149,9 @@ public class WishRepositoryTest {
     @Test
     void nPlusOneTest() {
         List<Member> memberList = new ArrayList<>();
+        Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
+
         for (int i = 0; i < 10; i++) {
             memberList.add(new Member("정호성" + i, "1234"));
         }
@@ -137,7 +159,7 @@ public class WishRepositoryTest {
 
         List<Product> productList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            productList.add(new Product("상품" + i, 2000L, "image.url"));
+            productList.add(new Product("상품" + i, 2000L, "image.url", category));
         }
         products.saveAll(productList);
 
