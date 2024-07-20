@@ -3,6 +3,7 @@ package gift.repository;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wishlist;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -21,4 +22,6 @@ public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
     void deleteByMemberAndProduct(Member member, Product product);
 
     void deleteByProduct(Product product);
+
+    void deleteByProductIn(List<Product> products);
 }
