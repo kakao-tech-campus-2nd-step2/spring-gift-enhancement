@@ -62,7 +62,4 @@ public class CategoryResponseDto {
         this.httpStatus = httpStatus;
     }
 
-    public static CategoryResponseDto fromEntity (Category category) {
-        return new CategoryResponseDto(category.getId(), category.getName(),category.getColor(), category.getDescription(), category.getImageUrl());
-    }
 }

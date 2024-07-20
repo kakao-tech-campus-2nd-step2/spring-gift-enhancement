@@ -45,9 +45,13 @@ public class MemberService {
     }
 
     public boolean login(String email, String password) throws AuthenticationException {
-        MemberResponseDto dbUserDto = MemberResponseDto.fromEntity(memberRepository.findByEmail(email));
+        MemberResponseDto dbUserDto = fromEntity(memberRepository.findByEmail(email));
 
         return validatePassword(password, dbUserDto.getPassword());
+    }
+
+    public MemberResponseDto fromEntity(Member member) {
+        return new MemberResponseDto(member.getId(), member.getEmail(), member.getPassword(),member.getWishes(),null);
     }
 
     private boolean validatePassword(String inputPassword, String dbUserPassword) throws AuthenticationException {

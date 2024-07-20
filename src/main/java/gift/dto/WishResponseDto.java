@@ -49,11 +49,6 @@ public class WishResponseDto {
         return Base64.getEncoder().encodeToString(userId.toString().getBytes());
     }
 
-    public static WishResponseDto fromEntity(Wish wish) {
-        String token = makeTokenFrom(wish.getUserId());
-        return new WishResponseDto(wish.getProductId(), token);
-    }
-
     public Long getId() {
         return id;
     }

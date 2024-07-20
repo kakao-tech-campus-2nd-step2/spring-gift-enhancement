@@ -9,8 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 public class MemberRepositoryTest {
     private final MemberRepository users;
 
-    public MemberRepositoryTest(MemberRepository userRepository) {
-        users = userRepository;
+    public MemberRepositoryTest(MemberRepository memberRepository) {
+        users = memberRepository;
     }
 
     @Test

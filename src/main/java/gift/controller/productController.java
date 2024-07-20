@@ -65,7 +65,7 @@ public class productController {
 
     @GetMapping("/{name}")
     public ProductResponseDto getOneByName(@PathVariable("name") String name) {
-        return ProductResponseDto.fromEntity(productService.findProductByName(name));
+        return productService.fromEntity(productService.findProductByName(name));
     }
 
     @GetMapping("/products")

@@ -34,6 +34,10 @@ public class CategoryService {
         Product product = productService.findById(productId);
         Long categoryId= product.getCategory().getId();
         Category category= categoryRepository.getById(categoryId);
-        return CategoryResponseDto.fromEntity(category);
+        return fromEntity(category);
+    }
+
+    public CategoryResponseDto fromEntity (Category category) {
+        return new CategoryResponseDto(category.getId(), category.getName(),category.getColor(), category.getDescription(), category.getImageUrl());
     }
 }

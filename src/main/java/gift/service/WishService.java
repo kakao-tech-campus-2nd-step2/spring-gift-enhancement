@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -40,7 +41,7 @@ public class WishService {
         Product product = productRepository.findById(productId).get();
         Wish newWish = new Wish(product, member);
 
-        return WishResponseDto.fromEntity(wishRepository.save(newWish));
+        return fromEntity(wishRepository.save(newWish));
     }
 
     public List<Wish> getAll(String tokenValue) {
@@ -48,6 +49,16 @@ public class WishService {
         List<Wish> wishes = wishRepository.findAllByUserId(userId);
         return wishes;
     }
+
+    public WishResponseDto fromEntity(Wish wish) {
+        String token = makeTokenFrom(wish.getUserId());
+        return new WishResponseDto(wish.getProductId(), token);
+    }
+
+    private String makeTokenFrom(Long userId) {
+        return Base64.getEncoder().encodeToString(userId.toString().getBytes());
+    }
+
 
     public WishResponseDto getAllAndMakeWishResponseDto(String tokenValue) {
         WishResponseDto wishResponseDto = new WishResponseDto(getAll(tokenValue));
@@ -76,6 +87,6 @@ public class WishService {
     }
 
     public Page<WishResponseDto> getWishes(Pageable pageable) {
-        return wishRepository.findAll(pageable).map(WishResponseDto::fromEntity);
+        return wishRepository.findAll(pageable).map(this::fromEntity);
     }
 }

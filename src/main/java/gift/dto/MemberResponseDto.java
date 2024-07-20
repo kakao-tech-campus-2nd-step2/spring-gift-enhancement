@@ -61,10 +61,6 @@ public class MemberResponseDto {
         this.token = actualMember.getToken();
     }
 
-    public static MemberResponseDto fromEntity(Member member) {
-        return new MemberResponseDto(member.getId(), member.getEmail(), member.getPassword(),member.getWishes(),null);
-    }
-
     public Long getId() {
         return id;
     }

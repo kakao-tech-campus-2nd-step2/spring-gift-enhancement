@@ -62,6 +62,10 @@ public class ProductService {
         return newProduct.map(ProductResponseDto::fromEntity);
     }
 
+    public ProductResponseDto fromEntity(Product product) {
+        return new ProductResponseDto(product.getName(), product.getPrice(), product.getUrl(), product.getCategory(), product.getOptions());
+    }
+
     public Product findById(Long productId) {
         return productRepository.findById(productId).get();
     }
