@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class WishLIstRepository {
+public class WishListRepository {
     private final WishListJpaRepository wishListJpaRepository;
 
-    public WishLIstRepository(WishListJpaRepository wishListJpaRepository) {
+    public WishListRepository(WishListJpaRepository wishListJpaRepository) {
         this.wishListJpaRepository = wishListJpaRepository;
     }
 
@@ -28,7 +28,11 @@ public class WishLIstRepository {
         wishListJpaRepository.save(wishList);
     }
 
-    public Optional<WishList> findById(Long id) {
-        return wishListJpaRepository.findById(id);
+    public WishList findById(Long id) {
+        return wishListJpaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 ID의 위시리스트가 존재하지 않습니다."));
+    }
+
+    public void delete(WishList wishList) {
+        wishListJpaRepository.delete(wishList);
     }
 }

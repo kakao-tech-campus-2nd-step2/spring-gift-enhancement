@@ -19,7 +19,7 @@ public class WishList {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "wishList", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "wishList")
     private List<WishListProduct> wishListProducts = new ArrayList<>();
 
     private LocalDateTime createdAt;
@@ -70,5 +70,9 @@ public class WishList {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void clearProducts() {
+        wishListProducts.clear();
     }
 }

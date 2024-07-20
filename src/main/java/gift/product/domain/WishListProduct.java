@@ -2,6 +2,9 @@ package gift.product.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name = "wishlist_product")
 public class WishListProduct {
 
@@ -53,5 +56,10 @@ public class WishListProduct {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+
+    public ProductOption getProductOption() {
+        return productOption;
     }
 }

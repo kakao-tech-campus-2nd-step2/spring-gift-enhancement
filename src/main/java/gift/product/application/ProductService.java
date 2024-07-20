@@ -39,14 +39,8 @@ public class ProductService {
     public void addProductOption(Long id, CreateProductOptionRequestDTO createProductOptionRequestDTO) {
         Product product = productRepository.findById(id);
 
-        productRepository.findProductOptionsByProductId(id).forEach(productOption -> {
-            if (productOption.getName().equals(createProductOptionRequestDTO.getName())) {
-                throw new ProductException(ErrorCode.DUPLICATED_OPTION_NAME);
-            }
-        });
+        product.addProductOption(createProductOptionRequestDTO.getName(), createProductOptionRequestDTO.getQuantity());
 
-        ProductOption productOption = productRepository.saveProductOption(new ProductOption(createProductOptionRequestDTO.getName(),
-                createProductOptionRequestDTO.getQuantity(), product));
         productRepository.save(product);
     }
 

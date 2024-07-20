@@ -71,18 +71,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public List<WishListProduct> getWishListProducts() {
-        return wishListProducts;
-    }
-
-    public void setWishListProducts(List<WishListProduct> wishListProducts) {
-        this.wishListProducts = wishListProducts;
-    }
-
     public void addProductOption(String name, Long quentity) {
         ProductOption productOption = new ProductOption(name, quentity, this);
         productOptions.add(productOption);
     }
+
 
     public void addProductOption(ProductOption productOption) {
         productOptions.add(productOption);
