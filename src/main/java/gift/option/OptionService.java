@@ -5,7 +5,6 @@ import gift.common.exception.ProductException;
 import gift.option.model.Option;
 import gift.option.model.OptionRequest;
 import gift.option.model.OptionResponse;
-import gift.option.model.Options;
 import gift.product.ProductErrorCode;
 import gift.product.ProductRepository;
 import gift.product.model.Product;
@@ -38,7 +37,8 @@ public class OptionService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
         Option option = new Option(optionRequest.name(), optionRequest.quantity(), product);
-        option.validateDuplicated(optionRepository.findAllByProductId(productId));
+        Option.Validator.validateDuplicated(option, optionRepository.findAllByProductId(productId));
+        optionRepository.save(option);
         return option.getId();
     }
 
@@ -46,7 +46,8 @@ public class OptionService {
     public void updateOption(Long optionId, OptionRequest optionRequest) throws OptionException {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
-        option.validateDuplicated(optionRepository.findAllByProductId(option.getProduct().getId()));
+        Option.Validator.validateDuplicated(option,
+            optionRepository.findAllByProductId(option.getProduct().getId()));
         option.updateInfo(optionRequest.name(), optionRequest.quantity());
     }
 
@@ -54,9 +55,8 @@ public class OptionService {
     public void deleteOption(Long optionId) {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
-        Options options = new Options(
+        Option.Validator.validateOptionCount(
             optionRepository.findAllByProductId(option.getProduct().getId()));
-        options.validateOptionSize();
         optionRepository.deleteById(optionId);
     }
 }

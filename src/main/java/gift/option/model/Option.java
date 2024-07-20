@@ -64,4 +64,20 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
     }
+
+    public static class Validator {
+
+        public static void validateDuplicated(Option newOption, List<Option> options)
+            throws OptionException {
+            if (options.stream().anyMatch(option -> option.getName().equals(newOption.getName()))) {
+                throw new OptionException(OptionErrorCode.NAME_DUPLICATED);
+            }
+        }
+
+        public static void validateOptionCount(List<Option> options) throws OptionException {
+            if (options.size() <= 1) {
+                throw new OptionException(OptionErrorCode.OPTION_COUNT_ONE);
+            }
+        }
+    }
 }

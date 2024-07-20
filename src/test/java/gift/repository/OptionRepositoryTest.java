@@ -6,7 +6,6 @@ import gift.category.CategoryRepository;
 import gift.category.model.Category;
 import gift.option.OptionRepository;
 import gift.option.model.Option;
-import gift.option.model.Options;
 import gift.product.ProductRepository;
 import gift.product.model.Product;
 import java.util.List;
