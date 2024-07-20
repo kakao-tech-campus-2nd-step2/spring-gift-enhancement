@@ -1,6 +1,7 @@
 package gift.domain;
 
 import gift.dto.OptionDTO;
+import gift.exception.InsufficientQuantityException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -47,7 +48,18 @@ public class Option {
         this(null, name, quantity, product);
     }
 
+    public void subtract(int quantity){
+        if(this.quantity <= quantity) {
+            throw new InsufficientQuantityException();
+        }
+        this.quantity -= quantity;
+    }
+
     public OptionDTO toDTO() {
         return new OptionDTO(id, name, quantity);
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }

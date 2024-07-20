@@ -53,7 +53,7 @@ public class OptionServiceTest {
         // given
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
         given(optionRepository.findByProduct(any(Product.class)))
-            .willReturn(List.of(createOption(1L, "test1", product), createOption(2L, "test2", product)));
+            .willReturn(List.of(createOption(1L, "test1", 1, product), createOption(2L, "test2", 1, product)));
 
         // when
         List<OptionDTO> actual = optionService.getOptions(product.getId());
@@ -66,7 +66,7 @@ public class OptionServiceTest {
     @Test
     void addOption() {
         // given
-        Option option = createOption(1L, "test", product);
+        Option option = createOption(1L, "test", 1, product);
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
         given(optionRepository.save(any(Option.class))).willReturn(option);
 
@@ -81,7 +81,7 @@ public class OptionServiceTest {
     @Test
     void addDuplicateOption() {
         // given
-        Option option = createOption(1L, "test", product);
+        Option option = createOption(1L, "test", 1, product);
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
         given(optionRepository.save(any(Option.class))).willThrow(DataIntegrityViolationException.class);
 
@@ -96,8 +96,8 @@ public class OptionServiceTest {
     void updateOption() {
         // given
         long id = 1L;
-        Option option = createOption(id, "test", product);
-        Option updatedOption = createOption(id, "updatedTest", product);
+        Option option = createOption(id, "test", 1, product);
+        Option updatedOption = createOption(id, "updatedTest", 1, product);
         given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
         given(optionRepository.findByProductAndId(any(Product.class), anyLong())).willReturn(Optional.of(option));
         given(optionRepository.save(any(Option.class))).willReturn(updatedOption);
@@ -114,7 +114,7 @@ public class OptionServiceTest {
     void deleteOption() {
         // given
         long id = 1L;
-        Option option = createOption(id, "test", product);
+        Option option = createOption(id, "test", 1, product);
         given(optionRepository.findById(anyLong())).willReturn(Optional.of(option));
 
         // when
