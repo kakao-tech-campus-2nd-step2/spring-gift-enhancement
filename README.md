@@ -32,3 +32,10 @@
 # step 2
 
 - 리뷰 반영
+
+- option 컨트롤러 만들기 - GET,POST,PUT,DELETE
+- option DTO 만들기
+- option 서비스 추가 - findAll
+- option entity 추가
+- option 리포지토리 추가
+- 테스트 추가
