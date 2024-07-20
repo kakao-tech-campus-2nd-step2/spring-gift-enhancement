@@ -1,9 +1,7 @@
 package gift.domain.option.entity;
 
-import gift.domain.option.exception.OptionNameDuplicateException;
-import gift.domain.option.exception.OptionNameLengthException;
-import gift.domain.option.exception.OptionNameNotAllowCharacterException;
-import gift.domain.option.exception.OptionQuantityRangeException;
+import gift.domain.option.exception.OptionNameValidException;
+import gift.domain.option.exception.OptionQuantityValidException;
 import gift.domain.product.entity.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,13 +44,13 @@ public class Option {
 
     public Option(Long id, String name, int quantity, Product product) {
         if(!name.matches(regex)){
-            throw new OptionNameNotAllowCharacterException("특수 문자는 '(), [], +, -, &, /, _ '만 사용가능 합니다.");
+            throw new OptionNameValidException("특수 문자는 '(), [], +, -, &, /, _ '만 사용가능 합니다.");
         }
         if(quantity < 1 || quantity >= 100_000_000){
-            throw new OptionQuantityRangeException("수량은 1개 이상 1억개 미만으로 설정해주세요.");
+            throw new OptionQuantityValidException("수량은 1개 이상 1억개 미만으로 설정해주세요.");
         }
         if(name.length() > 50){
-            throw new OptionNameLengthException("옵션 이름 50자 초과");
+            throw new OptionNameValidException("옵션 이름 50자 초과");
         }
 
         this.id = id;
@@ -80,7 +78,7 @@ public class Option {
     public void checkDuplicateName(List<Option> optionList) {
 
         if (optionList.stream().map(Option::getName).anyMatch((name) -> name.equals(this.name))) {
-            throw new OptionNameDuplicateException(this.name + "은 중복된 이름입니다.");
+            throw new OptionNameValidException(this.name + "은 중복된 이름입니다.");
         }
     }
 
@@ -89,6 +87,9 @@ public class Option {
     }
 
     public void subtract(int quantity) {
+        if (this.quantity < quantity){
+            throw new OptionQuantityValidException("수량이 부족합니다.");
+        }
         this.quantity -= quantity;
     }
 
