@@ -1,6 +1,5 @@
 package gift.service;
 
-import gift.dto.OptionDTO;
 import gift.dto.WishlistDTO;
 import gift.model.Option;
 import gift.model.Product;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,7 +37,7 @@ public class WishlistServiceImpl implements WishlistService {
     public List<WishlistDTO> getWishlistByUser(String username) {
         List<Wishlist> wishlistEntities = wishlistRepository.findByUserUsername(username);
         return wishlistEntities.stream()
-            .map(this::convertToDTO)
+            .map(WishlistDTO::convertToDTO)
             .collect(Collectors.toList());
     }
 
@@ -53,21 +51,18 @@ public class WishlistServiceImpl implements WishlistService {
         wishlist.setProduct(product);
         wishlist.setQuantity(quantity);
         wishlist.setPrice(product.getPrice());
+
+        List<Option> optionEntities = options.stream()
+            .map(option -> {
+                Long optionId = Long.parseLong(option.get("id").toString());
+                Option optionEntity = optionRepository.findById(optionId).orElseThrow(() -> new IllegalArgumentException("Invalid option ID: " + optionId));
+                optionEntity.setQuantity(Integer.parseInt(option.get("quantity").toString()));
+                return optionEntity;
+            }).collect(Collectors.toList());
+
+        wishlist.setOptions(optionEntities);
+
         wishlistRepository.save(wishlist);
-
-        options.forEach(option -> {
-            Long optionId = Long.parseLong(option.get("id").toString());
-            int optionQuantity = Integer.parseInt(option.get("quantity").toString());
-            Option optionEntity = optionRepository.findById(optionId).orElseThrow(() -> new IllegalArgumentException("Invalid option ID: " + optionId));
-
-            // 옵션을 Wishlist에 추가하는 로직 수정
-            Wishlist optionWishlist = new Wishlist();
-            optionWishlist.setUser(user);
-            optionWishlist.setProduct(product); // 옵션의 상품으로 설정
-            optionWishlist.setQuantity(optionQuantity);
-            optionWishlist.setPrice(optionEntity.getPrice() * optionQuantity); // 옵션의 총 가격 설정
-            wishlistRepository.save(optionWishlist);
-        });
     }
 
     @Override
@@ -76,33 +71,30 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public void updateQuantity(Long id, int quantity) {
+    public void updateQuantity(Long id, int quantity, Long optionId) {
         Wishlist wishlist = wishlistRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid wishlist ID: " + id));
-        wishlist.setQuantity(quantity);
+
+        if (optionId != null) {
+            List<Option> options = wishlist.getOptions();
+            options.stream()
+                .filter(option -> option.getId().equals(optionId))
+                .forEach(option -> option.setQuantity(quantity));
+        } else {
+            wishlist.setQuantity(quantity);
+        }
+
         wishlistRepository.save(wishlist);
-    }
-
-    private WishlistDTO convertToDTO(Wishlist wishlist) {
-        List<OptionDTO> optionDTOs = wishlist.getProduct().getOptions().stream()
-            .map(OptionDTO::convertToDTO)
-            .collect(Collectors.toList());
-
-        WishlistDTO wishlistDTO = new WishlistDTO(
-            wishlist.getId(),
-            wishlist.getProduct().getId(),
-            wishlist.getUser().getUsername(),
-            wishlist.getQuantity(),
-            wishlist.getProduct().getName(),
-            wishlist.getPrice(),
-            wishlist.getProduct().getImageUrl()
-        );
-        wishlistDTO.setOptions(optionDTOs);
-        return wishlistDTO;
     }
 
     @Override
     public Page<WishlistDTO> getWishlistByUser1(String username, Pageable pageable) {
         Page<Wishlist> wishlistEntities = wishlistRepository.findByUserUsername(username, pageable);
-        return wishlistEntities.map(this::convertToDTO);
+        return wishlistEntities.map(WishlistDTO::convertToDTO);
+    }
+
+    @Override
+    public WishlistDTO getWishlistById(Long id) {
+        Wishlist wishlist = wishlistRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid wishlist ID: " + id));
+        return WishlistDTO.convertToDTO(wishlist);
     }
 }
