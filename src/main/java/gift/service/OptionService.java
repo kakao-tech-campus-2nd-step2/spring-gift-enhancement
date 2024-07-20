@@ -50,8 +50,6 @@ public class OptionService {
         optionRepository.deleteById(optionId);
     }
 
-
-
     private OptionDTO convertToDTO(Option option) {
         return new OptionDTO(option.getId(), option.getName(), option.getQuantity());
     }

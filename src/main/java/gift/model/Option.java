@@ -47,6 +47,7 @@ public class Option {
     public void subtract(long quantity) {
         this.quantity = this.quantity - quantity;
     }
+  
     public Long getId() {
         return id;
     }
