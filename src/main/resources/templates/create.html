@@ -27,8 +27,8 @@
     <input type="text" th:field="*{imageUrl}" id="imageUrl"></input>
   </div>
   <div>
-    <label for="category">카테고리:</label>
-    <select th:field="*{categoryDto}">
+    <label for="categoryId">카테고리:</label>
+    <select th:field="*{categoryId}">
       <option value="">====카테고리 선택====</option>
       <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
     </select>

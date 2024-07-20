@@ -1,7 +1,9 @@
 package gift.web.controller;
 
+import gift.domain.product.Product;
 import gift.service.category.CategoryService;
 import gift.service.product.ProductService;
+import gift.web.dto.CategoryDto;
 import gift.web.dto.ProductDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -46,8 +48,9 @@ public class AdminController {
     }
 
     @PostMapping("/create")
-    public String createProduct(@ModelAttribute @Valid ProductDto productDto, BindingResult bindingResult) {
+    public String createProduct(@ModelAttribute @Valid ProductDto productDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.getCategories());
             return "create";
         }
         productService.createProduct(productDto);
@@ -66,6 +69,7 @@ public class AdminController {
     public String editProduct(@PathVariable Long id, @ModelAttribute @Valid ProductDto productDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("product", productDto);
+            model.addAttribute("categories", categoryService.getCategories());
             model.addAttribute("org.springframework.validation.BindingResult.product", bindingResult);
             return "edit";
         }

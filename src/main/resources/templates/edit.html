@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>Product Create</title>
+  <title>Product Edit</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
@@ -27,10 +27,10 @@
     <input type="text" th:field="*{imageUrl}" id="imageUrl"></input>
   </div>
   <div>
-    <label>카테고리:</label>
-    <select th:field="*{categoryDto}">
+    <label for="categoryId">카테고리:</label>
+    <select th:field="*{categoryId}">
       <option value="">====카테고리 선택====</option>
-      <option th:each="category : ${category}" th:value="${category.id}" th:text="${category.name}"></option>
+      <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
     </select>
   </div>
   <div>
