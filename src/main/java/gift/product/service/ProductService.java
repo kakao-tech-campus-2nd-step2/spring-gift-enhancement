@@ -82,6 +82,8 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         productValidation.deleteValidation(id);
+        if(optionRepository.existsByProductId(id))
+            optionRepository.deleteByProductId(id);
         productRepository.deleteById(id);
     }
 

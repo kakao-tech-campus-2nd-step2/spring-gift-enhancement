@@ -45,8 +45,6 @@ public class ProductValidation {
     public void deleteValidation(Long id) {
         System.out.println("[ProductValidation] deleteValidation()");
         validateExistProductId(id);
-        if(isExistOptions(id))
-            optionRepository.deleteByProductId(id);
     }
 
     private void validateIncludeNameKakao(String name) {
@@ -68,9 +66,5 @@ public class ProductValidation {
         System.out.println("[ProductValidation] validateExistId()");
         if(!productRepository.existsById(id))
             throw new InvalidIdException(NOT_EXIST_ID);
-    }
-
-    private boolean isExistOptions(Long productId) {
-        return optionRepository.existsByProductId(productId);
     }
 }
