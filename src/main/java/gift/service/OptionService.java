@@ -37,12 +37,14 @@ public class OptionService {
         optionRepository.save(new Option(optionRequest.name(), optionRequest.quantity(), foundProduct));
     }
 
+    @Transactional(readOnly = true)
     public OptionResponse findById(Long id){
         return optionRepository.findById(id)
                 .map(OptionResponse::from)
                 .orElseThrow(()-> new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
     }
 
+    @Transactional(readOnly = true)
     public List<OptionResponse> findByProductId(Long productId){
         return optionRepository.findByProductId(productId)
                 .stream()
@@ -50,6 +52,7 @@ public class OptionService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<OptionResponse> findAll(){
         return optionRepository.findAll()
                 .stream()
@@ -57,6 +60,7 @@ public class OptionService {
                 .toList();
     }
 
+    @Transactional
     public void deleteById(Long id){
         Option foundOption = optionRepository.findById(id)
                 .orElseThrow(()->new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
@@ -64,18 +68,18 @@ public class OptionService {
         optionRepository.deleteById(id);
     }
 
+    @Transactional
     public void updateById(Long id, OptionRequest optionRequest){
         Option foundOption = optionRepository.findById(id)
                 .orElseThrow(()->new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
 
         foundOption.updateOption(optionRequest.name(),optionRequest.quantity(),foundOption.getProduct());
-        optionRepository.save(foundOption);
     }
 
+    @Transactional
     public void subtractQuantityById(Long id, int quantity){
         Option foundOption = optionRepository.findById(id)
                 .orElseThrow(()->new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
         foundOption.subtract(quantity);
-        optionRepository.save(foundOption);
     }
 }
