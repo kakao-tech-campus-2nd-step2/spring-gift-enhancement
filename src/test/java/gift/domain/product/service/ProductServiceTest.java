@@ -60,7 +60,6 @@ class ProductServiceTest {
     void create() {
         // given
         Product expected = PRODUCT_REQUEST_DTO.toProduct(category);
-        expected.setId(1L);
 
         given(categoryService.readById(anyLong())).willReturn(category);
         given(productJpaRepository.save(any(Product.class))).willReturn(expected);
@@ -138,7 +137,6 @@ class ProductServiceTest {
     void readById() {
         // given
         Product expected = PRODUCT_REQUEST_DTO.toProduct(category);
-        expected.setId(1L);
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(expected));
 
         // when
@@ -153,7 +151,6 @@ class ProductServiceTest {
     void update() {
         // given
         Product product = PRODUCT_REQUEST_DTO.toProduct(category);
-        product.setId(1L);
         List<OptionRequest> optionUpdateDtos = List.of(
           new OptionRequest("사과맛", 80),
           new OptionRequest("치즈맛", 100)
@@ -177,7 +174,6 @@ class ProductServiceTest {
     void delete() {
         // given
         Product product = PRODUCT_REQUEST_DTO.toProduct(category);
-        product.setId(1L);
 
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
         willDoNothing().given(wishlistService).deleteAllByProductId(anyLong());

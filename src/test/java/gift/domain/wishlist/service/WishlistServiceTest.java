@@ -60,7 +60,6 @@ class WishlistServiceTest {
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         WishItem wishItem = wishItemRequestDto.toWishItem(user, product);
-        wishItem.setId(1L);
         given(wishlistJpaRepository.save(any(WishItem.class))).willReturn(wishItem);
 
         // when
@@ -69,7 +68,6 @@ class WishlistServiceTest {
         // then
         assertAll(
             () -> assertThat(savedWishItem).isNotNull(),
-            () -> assertThat(savedWishItem.id()).isEqualTo(1L),
             () -> assertThat(savedWishItem.user().id()).isEqualTo(wishItem.getUserId()),
             () -> assertThat(savedWishItem.product().id()).isEqualTo(wishItem.getUserId())
         );

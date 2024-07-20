@@ -70,7 +70,6 @@ class ProductRestControllerTest {
         String jsonContent = objectMapper.writeValueAsString(productRequest);
 
         Product product = productRequest.toProduct(category);
-        product.setId(1L);
 
         ProductResponse productResponse = ProductResponse.from(product);
 
@@ -257,7 +256,6 @@ class ProductRestControllerTest {
         Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
 
         Product product = productRequest.toProduct(category);
-        product.setId(1L);
 
         given(productService.readById(anyLong())).willReturn(ProductResponse.from(product));
         String expectedResult = objectMapper.writeValueAsString(ProductResponse.from(product));
@@ -297,7 +295,6 @@ class ProductRestControllerTest {
         String jsonContent = objectMapper.writeValueAsString(productRequest);
 
         Product product = productRequest.toProduct(category);
-        product.setId(1L);
 
         given(productService.update(anyLong(), any(ProductRequest.class))).willReturn(
             ProductResponse.from(product));
