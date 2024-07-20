@@ -33,6 +33,14 @@ public class MemberEntity {
                 this.role = role;
         }
 
+        public boolean isAdmin(){
+            return role.equals(Role.ADMIN);
+        }
+
+        public boolean isConsumer(){
+            return role.equals(Role.CONSUMER);
+        }
+
         public Long getId() {
                 return id;
         }
