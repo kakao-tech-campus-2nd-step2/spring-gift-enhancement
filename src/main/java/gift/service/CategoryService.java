@@ -52,9 +52,9 @@ public class CategoryService {
         Category category = categoryRepository.findById(id).orElse(null);
         if (category != null) {
             List<Product> products = productRepository.findAllByCategoryId(id);
-            for (Product product : products) {
-                wishlistRepository.deleteByProduct(product);
-                productRepository.delete(product);
+            if (!products.isEmpty()) {
+                wishlistRepository.deleteByProductIn(products);
+                productRepository.deleteAll(products);
             }
             categoryRepository.delete(category);
         }
