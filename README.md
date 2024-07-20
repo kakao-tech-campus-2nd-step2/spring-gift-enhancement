@@ -24,5 +24,15 @@
 
 ### 구현
 - [X] Option 엔티티 및 Product와 연관관계 설정(DTO 또한 구현)
-- [] Option의 Repository, Service, Controller 구현
-- [] 테스트 코드 작성
+- [X] Option의 Repository, Service, Controller 구현
+- [X] Product 생성 시 항상 하나 이상의 Option이 존재
+- [X] 테스트 코드 작성
+
+## Step3
+- 상품 옵션의 수량을 지정된 숫자만큼 빼는 기능을 구현한다.
+  - 별도의 HTTP API를 만들 필요는 없다.
+  - 서비스 클래스 또는 엔티티 클래스에서 기능을 구현하고 나중에 사용할 수 있도록 한다.
+
+### 구현
+- [X] Option 도메인 내 수량을 감소하는 메서드 작성 및 예외 처리
+- [X] OptionService에서 해당 기능에 대한 코드 작성
