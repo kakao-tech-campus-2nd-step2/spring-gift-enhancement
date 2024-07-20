@@ -5,7 +5,8 @@ import gift.domain.Product;
 import gift.domain.TokenAuth;
 import gift.domain.WishlistItem;
 import gift.dto.request.WishlistRequest;
-import gift.exception.MemberNotFoundException;
+import gift.exception.ProductNotFoundException;
+import gift.exception.WishlistNotFoundException;
 import gift.repository.product.ProductSpringDataJpaRepository;
 import gift.repository.wishlist.WishlistSpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static gift.exception.ErrorCode.*;
 
 @Service
 @Transactional
@@ -35,7 +38,7 @@ public class WishlistService {
         TokenAuth tokenAuth = tokenService.findToken(token);
         Member member = tokenAuth.getMember();
         Product product = productRepository.findById(wishlistRequest.getProductId())
-                .orElseThrow(() -> new MemberNotFoundException("존재하지 않는 상품입니다."));
+                .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
 
         WishlistItem item = new WishlistItem(member, product);
         wishlistRepository.save(item);
@@ -46,7 +49,7 @@ public class WishlistService {
         Member member = tokenAuth.getMember();
 
         WishlistItem item = wishlistRepository.findByMemberIdAndProductId(member.getId(), productId)
-                .orElseThrow(() -> new MemberNotFoundException("해당 아이템이 존재하지 않습니다: " + productId));
+                .orElseThrow(() -> new WishlistNotFoundException(WISHLIST_NOT_FOUND));
 
         wishlistRepository.delete(item);
     }

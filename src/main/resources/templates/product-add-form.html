@@ -26,9 +26,22 @@
         </select>
     </div>
     <div>
+        <h3>Option</h3>
+        <div>
+            <label>Option Name:</label>
+            <input type="text" th:field="*{option.name}" placeholder="Option Name" />
+        </div>
+        <div>
+            <label>Option Quantity:</label>
+            <input type="number" th:field="*{option.quantity}" placeholder="Quantity" />
+        </div>
+    </div>
+    <div>
         <button type="submit">Save</button>
     </div>
 </form>
+
 <a href="/api/products">Back to Product List</a>
+
 </body>
 </html>

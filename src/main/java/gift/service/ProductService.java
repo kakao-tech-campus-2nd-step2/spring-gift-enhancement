@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.domain.Category;
 import gift.domain.Product;
+import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductRequest;
 import gift.exception.CategoryNotFoundException;
 import gift.exception.InvalidProductDataException;
@@ -15,24 +16,32 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static gift.exception.ErrorCode.*;
+
 @Service
 @Transactional()
 public class ProductService {
     private final ProductSpringDataJpaRepository productRepository;
     private final CategorySpringDataJpaRepository categoryRepository;
+    private final OptionService optionService;
 
     @Autowired
-    public ProductService(ProductSpringDataJpaRepository productRepository, CategorySpringDataJpaRepository categoryRepository) {
+    public ProductService(ProductSpringDataJpaRepository productRepository, CategorySpringDataJpaRepository categoryRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionService = optionService;
     }
 
-    public Product register(ProductRequest productRequest) {
-        Category category = categoryRepository.findByName(productRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("해당 카테고리는 존재하지 않습니다."));
+    public Product register(ProductRequest productRequest, OptionRequest optionRequest) {
+        Category category = categoryRepository.findByName(productRequest.getCategoryName()).
+                orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
 
         Product product = new Product(productRequest, category);
+
         try {
-            return productRepository.save(product);
+            Product savedProduct = productRepository.save(product);
+            optionService.addOptionToProduct(savedProduct.getId(), optionRequest);
+            return savedProduct;
         } catch (DataIntegrityViolationException e) {
             throw new InvalidProductDataException("상품 데이터가 유효하지 않습니다: " + e.getMessage(), e);
         }
@@ -44,24 +53,29 @@ public class ProductService {
     }
 
     public Product findOne(Long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
+        return productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
     }
 
     public Product update(Long productId, ProductRequest productRequest) {
         Product product = productRepository.findById(productId).
-                orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
+                orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
         Category category = categoryRepository.findByName(productRequest.getCategoryName()).
-                orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리입니다."));
-        product.update(productRequest, category);
-        productRepository.save(product);
-        return product;
+                orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
 
+        product.update(productRequest, category);
+
+        try {
+            return productRepository.save(product);
+        } catch (DataIntegrityViolationException e) {
+            throw new InvalidProductDataException("상품 데이터가 유효하지 않습니다: " + e.getMessage(), e);
+        }
     }
 
     public Product delete(Long productId) {
         Product product = productRepository.findById(productId).
-                orElseThrow(() -> new ProductNotFoundException("존재하지 않는 상품입니다."));
+                orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
         productRepository.delete(product);
         return product;
     }
+
 }

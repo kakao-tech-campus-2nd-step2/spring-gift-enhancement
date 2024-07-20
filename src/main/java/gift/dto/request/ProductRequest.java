@@ -1,8 +1,10 @@
 package gift.dto.request;
 
-import gift.domain.Product;
 import gift.validation.KakaoApproval;
 import jakarta.validation.constraints.*;
+
+import java.util.List;
+
 
 
 public class ProductRequest {
@@ -48,4 +50,5 @@ public class ProductRequest {
     }
 
     public String getCategoryName() {return categoryName; }
+
 }

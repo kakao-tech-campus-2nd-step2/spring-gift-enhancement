@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static gift.exception.ErrorCode.CATEGORY_NOT_FOUND;
+import static gift.exception.ErrorCode.DUPLICATE_CATEGORY_NAME;
+
 @Service
 @Transactional
 public class CategoryService {
@@ -28,12 +31,12 @@ public class CategoryService {
 
     public Category getCategory(Long id){
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("존재하지않는 카테코리입니다."));
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
     }
 
     public Category createCategory(CategoryRequest categoryRequest) {
         if (categoryRepository.existsByName(categoryRequest.getName())) {
-            throw new DuplicateCategoryNameException("중복된 카테고리 이름입니다.");
+            throw new DuplicateCategoryNameException(DUPLICATE_CATEGORY_NAME);
         }
         Category category = new Category(categoryRequest.getName());
         return categoryRepository.save(category);
@@ -41,9 +44,9 @@ public class CategoryService {
 
     public Category updateCategory(Long id, CategoryRequest categoryRequest) {
         Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("존재하지않는 카테코리입니다."));
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
         if (categoryRepository.existsByName(categoryRequest.getName())) {
-            throw new DuplicateCategoryNameException("중복된 카테고리 이름입니다.");
+            throw new DuplicateCategoryNameException(DUPLICATE_CATEGORY_NAME);
         }
         existingCategory.setName(categoryRequest.getName());
         return categoryRepository.save(existingCategory);
@@ -51,7 +54,7 @@ public class CategoryService {
 
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("존재하지않는 카테코리입니다."));
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
         categoryRepository.delete(category);
     }
 

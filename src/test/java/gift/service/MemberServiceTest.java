@@ -17,6 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
@@ -54,9 +55,10 @@ public class MemberServiceTest {
     @Test
     public void testAuthenticate() {
         MemberRequest memberRequest = new MemberRequest("test@example.com", "password");
-        Member member = new Member(1L, "test@example.com", "password");
+        Member member = mock(Member.class);
 
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.of(member));
+        when(member.getPassword()).thenReturn("password");
 
         Member authenticatedMember = memberService.authenticate(memberRequest);
 
@@ -66,9 +68,10 @@ public class MemberServiceTest {
     @Test
     public void testAuthenticateWithInvalidCredentials() {
         MemberRequest memberRequest = new MemberRequest("test@example.com", "wrongpassword");
-        Member member = new Member(1L, "test@example.com", "password");
+        Member member = mock(Member.class);
 
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.of(member));
+        when(member.getPassword()).thenReturn("password");
 
         assertThrows(InvalidCredentialsException.class, () -> {
             memberService.authenticate(memberRequest);

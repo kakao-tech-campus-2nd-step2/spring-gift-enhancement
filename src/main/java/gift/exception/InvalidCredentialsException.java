@@ -1,7 +1,7 @@
 package gift.exception;
 
-public class InvalidCredentialsException extends RuntimeException {
-    public InvalidCredentialsException(String message) {
-        super(message);
+public class InvalidCredentialsException extends BusinessException {
+    public InvalidCredentialsException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

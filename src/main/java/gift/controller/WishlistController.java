@@ -42,7 +42,7 @@ public class WishlistController {
         return "redirect:/wishlist";
     }
 
-    @GetMapping()
+    @GetMapping
     public String getWishlistForCurrentUser(Model model, Pageable pageable, @LoginMember TokenAuth tokenAuth) {
         Long memberId = tokenAuth.getMember().getId();
         Page<WishlistItem> wishlist = wishlistService.getWishlistByMemberId(memberId, pageable);

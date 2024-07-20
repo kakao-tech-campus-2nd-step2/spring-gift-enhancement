@@ -1,10 +1,10 @@
 package gift.domain;
 
-
 import gift.dto.request.ProductRequest;
-import gift.dto.response.ProductResponse;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -30,21 +30,26 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Option> options = new ArrayList<>();
+
     public Product() { }
 
     public Product(String name, Integer price, String imageUrl, Category category) {
-        this(null, name, price, imageUrl, category);
-    }
-
-    public Product(ProductRequest productRequest, Category category){
-        this(null, productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category);
-    }
-
-    public Product(Long id, String name, Integer price, String imageUrl, Category category) {
-        this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
+    public Product(ProductRequest productRequest, Category category) {
+        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(), category);
+    }
+
+    public void update(ProductRequest productRequest, Category category) {
+        this.name = productRequest.getName();
+        this.price = productRequest.getPrice();
+        this.imageUrl = productRequest.getImageUrl();
         this.category = category;
     }
 
@@ -72,14 +77,9 @@ public class Product {
         return imageUrl;
     }
 
-
     public Category getCategory() { return category; }
 
-    public void update(ProductRequest productRequest, Category category){
-        this.name = productRequest.getName();
-        this.price = productRequest.getPrice();
-        this.imageUrl = productRequest.getImageUrl();
-        this.category = category;
+    public List<Option> getOptions() {
+        return options;
     }
-
 }

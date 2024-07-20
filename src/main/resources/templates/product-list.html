@@ -15,6 +15,7 @@
         <th>Price</th>
         <th>Image URL</th>
         <th>Category</th>
+        <th>Options</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -25,6 +26,14 @@
         <td th:text="${product.price}"></td>
         <td><img th:src="${product.imageUrl}" alt="product image" style="width:100px;"/></td>
         <td th:text="${product.category.name}"></td>
+        <td>
+            <ul>
+                <li th:each="option : ${product.options}">
+                    <span th:text="${option.name}">Option Name</span> -
+                    <span th:text="${option.quantity}">Quantity</span>
+                </li>
+            </ul>
+        </td>
         <td>
             <a th:href="@{/api/products/edit/{id}(id=${product.id})}">Edit</a>
             <a th:href="@{/api/products/delete/{id}(id=${product.id})}">Delete</a>
