@@ -5,6 +5,7 @@ import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
 import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
 import static gift.exception.ErrorMessage.OPTION_NOT_FOUND;
 import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
+import static gift.exception.ErrorMessage.OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER;
 import static gift.exception.ErrorMessage.PRODUCT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -502,7 +503,7 @@ public class OptionServiceTest {
                     subtractOptionQuantity
                 )
             ).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(OPTION_SUBTRACT_NOT_ALLOW_NEGATIVE_NUMBER);
+                .hasMessage(OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER);
         }
 
         @Test
