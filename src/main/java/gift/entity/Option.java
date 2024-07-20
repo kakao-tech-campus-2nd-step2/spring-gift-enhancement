@@ -1,5 +1,8 @@
 package gift.entity;
 
+import org.springframework.http.HttpStatus;
+
+import gift.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,5 +50,12 @@ public class Option {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void substract(int substractQuantity){
+        if(this.quantity >= substractQuantity){
+            throw new CustomException("substract quantity is too big", HttpStatus.BAD_REQUEST);
+        }
+        this.quantity -= substractQuantity;
     }
 }

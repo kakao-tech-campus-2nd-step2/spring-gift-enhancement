@@ -54,4 +54,13 @@ public class OptionService {
         }
         
     }
+
+    @Transactional
+    public void subtractQuantity(String name, int subtractQuantity) {
+
+        Option option = optionRepository.findByName(name)
+                        .orElseThrow(() -> new CustomException("Option with name " + name + " not exists", HttpStatus.NOT_FOUND));
+        
+        option.substract(subtractQuantity);
+    }
 }
