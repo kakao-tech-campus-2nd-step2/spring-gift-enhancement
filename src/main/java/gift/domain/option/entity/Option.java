@@ -15,6 +15,7 @@ import java.util.List;
 
 @Entity
 public class Option {
+
     private final String regex = "[\\w\\s\\(\\)\\[\\]\\+\\-\\&\\/가-힣]*";
 
     @Id
@@ -43,13 +44,13 @@ public class Option {
     }
 
     public Option(Long id, String name, int quantity, Product product) {
-        if(!name.matches(regex)){
+        if (!name.matches(regex)) {
             throw new OptionNameValidException("특수 문자는 '(), [], +, -, &, /, _ '만 사용가능 합니다.");
         }
-        if(quantity < 1 || quantity >= 100_000_000){
+        if (quantity < 1 || quantity >= 100_000_000) {
             throw new OptionQuantityValidException("수량은 1개 이상 1억개 미만으로 설정해주세요.");
         }
-        if(name.length() > 50){
+        if (name.length() > 50) {
             throw new OptionNameValidException("옵션 이름 50자 초과");
         }
 
@@ -87,7 +88,7 @@ public class Option {
     }
 
     public void subtract(int quantity) {
-        if (this.quantity < quantity){
+        if (this.quantity < quantity) {
             throw new OptionQuantityValidException("수량이 부족합니다.");
         }
         this.quantity -= quantity;

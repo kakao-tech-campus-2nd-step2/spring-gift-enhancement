@@ -36,7 +36,7 @@ public class OptionTest {
 
     @Test
     @DisplayName("옵션 이름 길이 초과 검사")
-    void optionNameLengthFailTest(){
+    void optionNameLengthFailTest() {
         assertThatThrownBy(() -> {
             createOption("name".repeat(50));
         }).isInstanceOf(OptionNameValidException.class)
@@ -45,15 +45,15 @@ public class OptionTest {
 
     @Test
     @DisplayName("정상 옵션 이름 길이 검사")
-    void optionNameLengthSuccessTest(){
-        assertDoesNotThrow(()->{
+    void optionNameLengthSuccessTest() {
+        assertDoesNotThrow(() -> {
             createOption("name");
         });
     }
 
     @Test
     @DisplayName("수량 1억개 이상일 경우 테스트")
-    void optionQuantityExceedTest(){
+    void optionQuantityExceedTest() {
         assertThatThrownBy(() -> {
             createOption(100_000_000);
         }).isInstanceOf(OptionQuantityValidException.class)
@@ -62,16 +62,17 @@ public class OptionTest {
 
     @Test
     @DisplayName("수량 1개 미만일 경우 테스트")
-    void optionQuantityLackTest(){
+    void optionQuantityLackTest() {
         assertThatThrownBy(() -> {
             createOption(0);
         }).isInstanceOf(OptionQuantityValidException.class)
             .hasMessage("수량은 1개 이상 1억개 미만으로 설정해주세요.");
     }
+
     @Test
     @DisplayName("수량 정상 테스트")
-    void optionQuantitySuccessTest(){
-        assertDoesNotThrow(()->{
+    void optionQuantitySuccessTest() {
+        assertDoesNotThrow(() -> {
             createOption(100);
         });
     }
@@ -89,28 +90,30 @@ public class OptionTest {
 
     @Test
     @DisplayName("허용되지 않는 문자 테스트")
-    void notAllowCharacterTest(){
-        assertThatThrownBy(()->{
+    void notAllowCharacterTest() {
+        assertThatThrownBy(() -> {
             createOption("#@!#허용되지않는문자");
-        }).isInstanceOf(OptionValidException.class).hasMessage("특수 문자는 '(), [], +, -, &, /, _ '만 사용가능 합니다.");
+        }).isInstanceOf(OptionValidException.class)
+            .hasMessage("특수 문자는 '(), [], +, -, &, /, _ '만 사용가능 합니다.");
     }
 
     @Test
     @DisplayName("허용되는 문자 테스트")
-    void allowCharacterTest(){
-        assertDoesNotThrow(()->{
+    void allowCharacterTest() {
+        assertDoesNotThrow(() -> {
             createOption("허용되는 문자");
         });
     }
 
-    private Option createOption(int quantity){
+    private Option createOption(int quantity) {
         return createOption("test", quantity);
     }
+
     private Option createOption(String name) {
         return createOption(name, 1000);
     }
 
-    private Option createOption(String name, int quantity){
+    private Option createOption(String name, int quantity) {
         return new Option(name, quantity);
     }
 }

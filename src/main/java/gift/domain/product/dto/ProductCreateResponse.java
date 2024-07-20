@@ -10,6 +10,7 @@ public record ProductCreateResponse(
     Long categoryId,
     OptionResponse optionResponse
 ) {
+
     public ProductCreateResponse(ProductResponse response, OptionResponse optionResponse) {
         this(
             response.id(),
