@@ -43,13 +43,13 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public AppUser findUser(Long id) {
-        return userRepository.findByIdAndIsActiveTrue(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("AppUser"));
     }
 
     @Transactional(readOnly = true)
     public String findEmail(Long id) {
-        AppUser appUser = userRepository.findByIdAndIsActiveTrue(id)
+        AppUser appUser = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("AppUser"));
         return appUser.getEmail();
     }
