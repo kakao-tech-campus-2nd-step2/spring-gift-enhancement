@@ -66,9 +66,10 @@ public class ProductController {
 
     @PostMapping("/{id}/options")
     public ResponseEntity<String> saveOption(@PathVariable("id") Long id, @RequestBody OptionRequestDto request) {
-        optionService.saveOption(id,request);
+        optionService.saveOption(id, request);
         return ResponseEntity.ok("옵션이 정상적으로 등록되었습니다.");
     }
+
     @GetMapping("/{id}/options")
     public ResponseEntity<List<OptionResponseDto>> getOptions(
             @PathVariable("id") Long id) {

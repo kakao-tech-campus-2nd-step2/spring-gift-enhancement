@@ -28,7 +28,7 @@ public class Product {
     @OneToOne(fetch = FetchType.LAZY)
     private Category category;
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<Option> options = new ArrayList<>();
 
     protected Product() {
@@ -82,7 +82,7 @@ public class Product {
 
     public void addOption(Option option) {
         if (options.stream().anyMatch(o -> option.getName().equals(o.getName()))) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_OPTION,option.getName());
+            throw new CustomException(ErrorCode.ALREADY_EXIST_OPTION, option.getName());
         }
         options.add(option);
     }

@@ -28,10 +28,9 @@ public class OptionService {
     }
 
 
-
-    public void saveOption(Long id,OptionRequestDto request) {
+    public void saveOption(Long id, OptionRequestDto request) {
         Product product = getProduct(id);
-        Option option = new Option(request.getName(),request.getQuantity(),product);
+        Option option = new Option(request.getName(), request.getQuantity(), product);
         product.addOption(option);
         optionRepository.save(option);
     }
