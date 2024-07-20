@@ -63,11 +63,11 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public void add(Integer quantity) {
+    public synchronized void add(Integer quantity) {
         this.quantity += quantity;
     }
 
-    public void subtract(Integer quantity) {
+    public synchronized void subtract(Integer quantity) {
         this.quantity -= quantity;
     }
 
