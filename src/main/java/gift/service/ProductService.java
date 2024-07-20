@@ -57,7 +57,7 @@ public class ProductService {
         Option defaultOption = optionRepository.findById(1L)
                 .orElseThrow(() -> new ResourceNotFoundException("Option not found with id: 1L"));
 
-        productOptionRepository.save(new ProductOption(product, defaultOption));
+        productOptionRepository.save(new ProductOption(product, defaultOption, defaultOption.getName()));
 
         return product;
     }
@@ -85,16 +85,8 @@ public class ProductService {
     public void addProductOption(Long productId, Long optionId) {
         Option option = optionRepository.findById(optionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Option not found with id: " + optionId));
-        String optionName = option.getName();
-        // 같은 이름의 option이 product에 있는지 확인 로직
-        List<ProductOption> productOptions = productOptionRepository.findByProductId(productId);
-        if (productOptions.stream()
-                .anyMatch(productOption -> productOption.getOption().getName() == optionName)) {
-            throw new IllegalArgumentException("Option with same name already exists");
-        }
-
         Product product = findById(productId);
-        productOptionRepository.save(new ProductOption(product, option));
+        productOptionRepository.save(new ProductOption(product, option, option.getName()));
     }
 
     public void deleteProductOption(Long productId, Long optionId) {
