@@ -31,7 +31,8 @@ public class ProductService {
         ProductRepository productRepository,
         ProductValidation productValidation,
         CategoryRepository categoryRepository,
-        OptionRepository optionRepository) {
+        OptionRepository optionRepository
+    ) {
         this.productRepository = productRepository;
         this.productValidation = productValidation;
         this.categoryRepository = categoryRepository;
@@ -41,43 +42,34 @@ public class ProductService {
     public void registerProduct(ProductDTO productDTO) {
         System.out.println("[ProductService] registerProduct()");
         productValidation.registerValidation(productDTO);
-
-        Product product = productRepository.save(
-            new Product(
-                productDTO.getName(),
-                productDTO.getPrice(),
-                productDTO.getImageUrl(),
-                categoryRepository.findById(productDTO.getCategoryId())
-                    .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
-            )
+        Product product = new Product(
+            productDTO.getName(),
+            productDTO.getPrice(),
+            productDTO.getImageUrl(),
+            categoryRepository.findById(productDTO.getCategoryId())
+                .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
         );
-
-        optionRepository.save(
-            new Option(
-                product.getName(),
-                0,
-                product
-            )
+        Product registerProduct = productRepository.save(product);
+        Option option = new Option(
+            product.getName(),
+            0,
+            registerProduct
         );
+        optionRepository.save(option);
     }
 
-    public void updateProduct(
-            Long id,
-            ProductDTO productDTO
-    ) {
+    public void updateProduct(Long id, ProductDTO productDTO) {
         System.out.println("[ProductService] updateProduct()");
         productValidation.updateValidation(id, productDTO);
-
-        productRepository.save(
-                new Product(
-                        id,
-                        productDTO.getName(),
-                        productDTO.getPrice(),
-                        productDTO.getImageUrl(),
-                        categoryRepository.findById(productDTO.getCategoryId())
-                                .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
-                )
+        Product product = new Product(
+            id,
+            productDTO.getName(),
+            productDTO.getPrice(),
+            productDTO.getImageUrl(),
+            categoryRepository.findById(productDTO.getCategoryId())
+                .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
         );
+        productRepository.save(product);
     }
 
     public void deleteProduct(Long id) {
@@ -89,22 +81,14 @@ public class ProductService {
 
     public ProductDTO getDTOById(Long id) {
         System.out.println("[ProductService] getDTOById()");
-
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
-
         return convertToDTO(product);
     }
 
-    public Page<ProductDTO> searchProducts(
-            String keyword,
-            Pageable pageable
-    ) {
+    public Page<ProductDTO> searchProducts(String keyword, Pageable pageable) {
         return convertToDTOList(
-            productRepository.findByName(
-                keyword,
-                pageable
-            ),
+            productRepository.findByName(keyword, pageable),
             pageable
         );
     }
@@ -135,7 +119,6 @@ public class ProductService {
         List<ProductDTO> productDTOs = products.stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
-
         return new PageImpl<>(
             productDTOs,
             pageable,

@@ -25,7 +25,8 @@ public class OptionService {
     public OptionService(
         OptionRepository optionRepository,
         ProductRepository productRepository,
-        OptionValidation optionValidation) {
+        OptionValidation optionValidation
+    ) {
         this.optionRepository = optionRepository;
         this.productRepository = productRepository;
         this.optionValidation = optionValidation;
@@ -41,13 +42,12 @@ public class OptionService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID));
         optionValidation.register(product, optionDTO);
-        optionRepository.save(
-            new Option(
-                optionDTO.getName(),
-                optionDTO.getQuantity(),
-                product
-            )
+        Option option = new Option(
+            optionDTO.getName(),
+            optionDTO.getQuantity(),
+            product
         );
+        optionRepository.save(option);
     }
 
     public void updateOption(Long id, OptionDTO optionDTO) {
@@ -56,14 +56,13 @@ public class OptionService {
             .orElseThrow(() -> new InvalidIdException(NOT_EXIST_ID))
             .getProduct();
         optionValidation.update(product, optionDTO);
-        optionRepository.save(
-            new Option(
-                id,
-                optionDTO.getName(),
-                optionDTO.getQuantity(),
-                product
-            )
+        Option option = new Option(
+            id,
+            optionDTO.getName(),
+            optionDTO.getQuantity(),
+            product
         );
+        optionRepository.save(option);
     }
 
     public void deleteOption(Long id, Long productId) {

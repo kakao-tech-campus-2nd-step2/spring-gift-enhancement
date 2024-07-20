@@ -35,9 +35,7 @@ public class WishListService {
 
     public Page<ProductDTO> getAllProducts(String authorization, Pageable pageable) {
         System.out.println("[WishListService] getAllProducts()");
-
         Long memberId = jwtUtil.identification(authorization).getId();
-
         return  convertWishToProductDTOList(
                 wishListRepository.findAllByMemberId(memberId, pageable),
                 pageable
@@ -46,14 +44,12 @@ public class WishListService {
 
     public void registerWishProduct(String authorization, Map<String, Long> requestBody) {
         System.out.println("[WishListService] registerWishProduct()");
-
         Wish wish = wishListValidation.registerValidation(authorization, requestBody.get("productId"));
         wishListRepository.save(wish);
     }
 
     public void deleteWishProduct(String authorization, Long id) {
         System.out.println("[WishListService] deleteWishProduct()");
-
         wishListValidation.deleteValidation(authorization, id);
         wishListRepository.deleteById(id);
     }
@@ -62,7 +58,6 @@ public class WishListService {
         List<ProductDTO> productDTOs = wishList.stream()
             .map(this::convertWishToProductDTO)
             .collect(Collectors.toList());
-
         return new PageImpl<>(
             productDTOs,
             pageable,
