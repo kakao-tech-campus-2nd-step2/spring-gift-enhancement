@@ -53,7 +53,7 @@ public class Option {
     }
 
     public void substract(int substractQuantity){
-        if(this.quantity >= substractQuantity){
+        if(this.quantity <= substractQuantity){
             throw new CustomException("substract quantity is too big", HttpStatus.BAD_REQUEST);
         }
         this.quantity -= substractQuantity;
