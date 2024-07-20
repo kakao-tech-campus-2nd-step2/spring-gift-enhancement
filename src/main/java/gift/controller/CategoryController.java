@@ -34,8 +34,8 @@ public class CategoryController {
         return ResponseEntity.ok(categoryPage.categories());
     }
 
-    @GetMapping(params = "categoryId")
-    public ResponseEntity<?> getCategory(@RequestParam(required = true) long categoryId) {
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<?> getCategory(@PathVariable long categoryId) {
         CategoryDTO categoryDTO = categoryService.findCategoryById(categoryId);
         return ResponseEntity.ok(categoryDTO);
     }
@@ -43,10 +43,8 @@ public class CategoryController {
     @GetMapping("/{categoryId}/products")
     public ResponseEntity<?> getProductsInCategory(Pageable pageable,
         @PathVariable long categoryId) {
-        List<ProductDTO> products = categoryService.findProductsInCategory(categoryId);
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), products.size());
-        return ResponseEntity.ok(products.subList(start, end));
+        List<ProductDTO> products = categoryService.findProductsInCategory(categoryId, pageable);
+        return ResponseEntity.ok(products);
     }
 
     @PostMapping

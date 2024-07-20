@@ -33,8 +33,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllProduct(
-        @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<?> getAllProduct(@RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
         ProductPageDTO productsPage = productService.getAllProduct(page, size);
         return ResponseEntity.ok().body(productsPage.products());
     }
@@ -64,9 +64,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id,
-        @Valid @RequestBody ProductDTO updatedDTO) {
-        ProductDTO updatedProduct = productService.updateProduct(id, updatedDTO);
+    public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO updatedDTO) {
+        ProductDTO updatedProduct = productService.updateProduct(updatedDTO);
         return ResponseEntity.ok(updatedProduct);
     }
 
@@ -74,7 +73,6 @@ public class ProductController {
     public ResponseEntity<OptionDTO> updateOption(@PathVariable long productId,
         @PathVariable long optionId,
         @Valid @RequestBody OptionDTO optionDTO) {
-        optionService.getOption(optionId);
         OptionDTO updateOption = optionService.updateOption(productId, optionId, optionDTO);
         return ResponseEntity.status(HttpStatus.OK).body(updateOption);
     }
@@ -86,9 +84,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}/options/{optionId}")
-    public ResponseEntity<?> deleteOption(@PathVariable long productId,
-        @PathVariable long optionId) {
-        optionService.getOption(optionId);
+    public ResponseEntity<?> deleteOption(@PathVariable long optionId) {
         optionService.deleteOption(optionId);
         return ResponseEntity.noContent().build();
     }

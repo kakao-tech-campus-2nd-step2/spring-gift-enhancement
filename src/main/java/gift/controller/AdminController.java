@@ -94,9 +94,8 @@ public class AdminController {
     }
 
     @PutMapping("/edit/{id}")
-    public String updateProduct(@PathVariable Long id,
-        @Valid @ModelAttribute ProductDTO productDTO) {
-        productService.updateProduct(id, productDTO);
+    public String updateProduct(@Valid @ModelAttribute ProductDTO productDTO) {
+        productService.updateProduct(productDTO);
         return "redirect:/admin/product/list";
     }
 

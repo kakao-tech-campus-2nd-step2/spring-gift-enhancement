@@ -36,10 +36,8 @@ public class ProductService {
             () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, productDTO.categoryId()));
         Product product = new Product(productDTO.id(), productDTO.name(), productDTO.price(),
             productDTO.imageUrl(), category);
+        Option option = new Option("[기본 옵션] 추후 수정바랍니다.", 1L,  product);
         Product createdProduct = productRepository.save(product);
-
-        Option option = new Option("[기본 옵션] 추후 수정 바랍니다.", 0, product);
-        optionRepository.save(option);
 
         return convertToDTO(createdProduct);
     }
@@ -79,12 +77,15 @@ public class ProductService {
         return optionDTOList.subList(start, end);
     }
 
-    public ProductDTO updateProduct(long id, ProductDTO productDTO) {
+    public ProductDTO updateProduct(ProductDTO productDTO) {
+        Product currentProduct = productRepository.findById(productDTO.id())
+            .orElseThrow(
+                () -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, productDTO.id()));
         Category category = categoryRepository.findById(productDTO.categoryId()).orElseThrow(
             () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, productDTO.categoryId()));
-        Product product = new Product(id, productDTO.name(), productDTO.price(),
-            productDTO.imageUrl(), category);
-        return convertToDTO(productRepository.save(product));
+        currentProduct.updateProduct(productDTO.name(), productDTO.price(), productDTO.imageUrl(),
+            category);
+        return convertToDTO(productRepository.save(currentProduct));
     }
 
     public String deleteProduct(long id) {

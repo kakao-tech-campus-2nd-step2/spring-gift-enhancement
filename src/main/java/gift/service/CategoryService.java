@@ -42,23 +42,25 @@ public class CategoryService {
         return convertToDTO(category);
     }
 
-    public List<ProductDTO> findProductsInCategory(long categoryId) {
+    public List<ProductDTO> findProductsInCategory(long categoryId, Pageable pageable) {
         Category category = categoryRepository.findById(categoryId)
             .orElseThrow(() -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryId));
-        return category.getProducts().stream().map(this::productConvertToDTO).toList();
+        List<ProductDTO> products =  category.getProducts()
+            .stream()
+            .map(this::productConvertToDTO)
+            .toList();
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), products.size());
+        return products.subList(start, end);
     }
 
     public CategoryDTO updateCategory(long categoryId, CategoryDTO categoryDTO) {
-        Category currentCategory = categoryRepository.findById(categoryId).orElseThrow(
-            () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryDTO.id()));
         Category updateCategory = new Category(categoryId, categoryDTO.name(),
             categoryDTO.color(), categoryDTO.imageUrl(), categoryDTO.description());
         return convertToDTO(categoryRepository.save(updateCategory));
     }
 
     public void deleteCategory(long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-            .orElseThrow(() -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, categoryId));
         categoryRepository.deleteById(categoryId);
     }
 

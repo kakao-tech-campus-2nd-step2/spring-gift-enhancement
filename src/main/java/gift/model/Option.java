@@ -33,10 +33,15 @@ public class Option {
 
     }
 
+    public Option(String name, long quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public Option(String name, long quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
-        this.product = product;
+        setProduct(product);
     }
 
     public void subtract(long quantity) {
@@ -56,5 +61,12 @@ public class Option {
 
     public Long getQuantity() {
         return quantity;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+        if (product != null && !product.getOptions().contains(this)) {
+            product.getOptions().add(this);
+        }
     }
 }
