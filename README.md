@@ -67,6 +67,6 @@ Option
 - 서비스 클래스 또는 엔티티 클래스에서 기능을 구현하고 나중에 사용할 수 있도록 한다.
 
 ### 구현 기능 목록
-- [ ] option entity에 subtract 메서드 구현
-- [ ] option Service에 subtractQuantity 메서드 구현
-- [ ] option Service의 subtractQuantity 테스트 코드 작성
+- [X] option entity에 subtract 메서드 구현
+- [X] option Service에 subtractQuantity 메서드 구현
+- [X] option Service의 subtractQuantity 테스트 코드 작성
