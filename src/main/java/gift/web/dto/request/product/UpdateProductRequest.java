@@ -1,12 +1,13 @@
 package gift.web.dto.request.product;
 
+import gift.converter.StringToUrlConverter;
 import gift.domain.Product;
 import gift.web.validation.constraints.RequiredKakaoApproval;
 import gift.web.validation.constraints.SpecialCharacter;
 import jakarta.validation.constraints.NotBlank;
-import java.net.URL;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.URL;
 
 public class UpdateProductRequest {
 
@@ -17,9 +18,11 @@ public class UpdateProductRequest {
     private final String name;
     @Range(min = 1000, max = 10000000)
     private final Integer price;
-    private final URL imageUrl;
 
-    public UpdateProductRequest(String name, Integer price, URL imageUrl) {
+    @URL
+    private final String imageUrl;
+
+    public UpdateProductRequest(String name, Integer price, String imageUrl) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -29,7 +32,7 @@ public class UpdateProductRequest {
         return new Product.Builder()
             .name(name)
             .price(price)
-            .imageUrl(imageUrl)
+            .imageUrl(StringToUrlConverter.convert(imageUrl))
             .build();
     }
 
@@ -41,7 +44,7 @@ public class UpdateProductRequest {
         return price;
     }
 
-    public URL getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 }
