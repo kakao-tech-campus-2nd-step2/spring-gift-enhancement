@@ -126,7 +126,7 @@ class OptionServiceTest {
 
     @Test
     @DisplayName("옵션 재고 차감 성공")
-    void subtractStock_success() {
+    void subtractQuantity_success() {
         //given
         Option option = new Option("옵션1", 10);
         when(optionRepository.findById(anyLong())).thenReturn(Optional.of(option));
@@ -142,7 +142,7 @@ class OptionServiceTest {
     
     @Test
     @DisplayName("옵션 재고 차감 실패 - 재고 부족")
-    void subtractStock_fail_notEnoughStock() {
+    void subtractQuantity_fail_notEnoughQuantity() {
         //given
         Option option = new Option("옵션1", 10);
         when(optionRepository.findById(anyLong())).thenReturn(Optional.of(option));

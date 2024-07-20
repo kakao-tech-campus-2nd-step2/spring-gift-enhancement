@@ -43,7 +43,7 @@ public class OptionService {
                 if (option.getQuantity() < quantity) {
                     throw OptionNotEnoughStockException.EXCEPTION;
                 }
-                option.subtractStock(quantity);
+                option.subtractQuantity(quantity);
             });
     }
 
