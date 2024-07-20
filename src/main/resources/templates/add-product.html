@@ -3,6 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Product</title>
+    <script>
+        function addOptionField() {
+            const optionsDiv = document.getElementById('optionsDiv');
+            const optionIndex = optionsDiv.children.length;
+            const optionFieldset = document.createElement('fieldset');
+            optionFieldset.innerHTML = `
+                <legend>Option ${optionIndex + 1}</legend>
+                <label for="options[${optionIndex}].name">Name:</label>
+                <input type="text" name="options[${optionIndex}].name" /><br/>
+
+                <label for="options[${optionIndex}].quantity">Quantity:</label>
+                <input type="number" name="options[${optionIndex}].quantity" /><br/>
+            `;
+            optionsDiv.appendChild(optionFieldset);
+        }
+    </script>
 </head>
 <body>
 <h1>Add Product</h1>
@@ -23,6 +39,11 @@
                 th:value="${category.id}"
                 th:text="${category.name}">Category Name</option>
     </select><br/>
+
+    <div id="optionsDiv">
+        <!-- 옵션 필드가 추가될 위치 -->
+    </div>
+    <button type="button" onclick="addOptionField()">Add Option</button><br/>
 
     <button type="submit">Add Product</button>
 </form>

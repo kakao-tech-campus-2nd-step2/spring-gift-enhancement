@@ -1,10 +1,15 @@
 package gift.dto;
 
 import gift.entity.Product;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotEmpty;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductDto {
 
@@ -27,6 +32,10 @@ public class ProductDto {
     @Min(value = 1, message = "Category ID must be positive")
     private Long categoryId;
 
+    @NotEmpty(message = "Product must have at least one option")
+    private List<@Valid OptionDto> options;
+
+
     private String categoryName = "";
 
     // 기본 생성자
@@ -40,6 +49,7 @@ public class ProductDto {
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+
     }
 
     // Product 엔티티를 받아서 Dto로 변환하는 생성자
@@ -50,6 +60,7 @@ public class ProductDto {
         this.imageUrl = product.getImageUrl();
         this.categoryId = product.getCategory().getId();
         this.categoryName = product.getCategory().getName();
+        this.options = product.getOptions().stream().map(OptionDto::new).collect(Collectors.toList());
     }
 
     // Getters and Setters
@@ -95,5 +106,13 @@ public class ProductDto {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<OptionDto> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<OptionDto> options) {
+        this.options = options;
     }
 }
