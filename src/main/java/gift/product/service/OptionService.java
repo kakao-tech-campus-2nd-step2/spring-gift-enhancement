@@ -28,6 +28,7 @@ public class OptionService {
     }
 
     public List<OptionResponse> getOptionAllByProductId(Long productId) {
+        getValidatedProduct(productId);
         return optionRepository.findAllByProductId(productId);
     }
 
