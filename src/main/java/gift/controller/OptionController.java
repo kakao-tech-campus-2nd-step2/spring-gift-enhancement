@@ -1,7 +1,8 @@
 package gift.controller;
 
 import gift.constants.SuccessMessage;
-import gift.dto.OptionDto;
+import gift.dto.OptionEditRequest;
+import gift.dto.OptionSaveRequest;
 import gift.service.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,15 +26,15 @@ public class OptionController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addOption(@RequestBody @Valid OptionDto optionDto) {
-        optionService.addOption(optionDto);
+    public ResponseEntity<String> addOption(@RequestBody @Valid OptionSaveRequest saveRequest) {
+        optionService.saveOption(saveRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(SuccessMessage.ADD_OPTION_SUCCESS_MSG);
     }
 
     @PutMapping
-    public ResponseEntity<String> editOption(@RequestBody @Valid OptionDto optionDto) {
-        optionService.editOption(optionDto);
+    public ResponseEntity<String> editOption(@RequestBody @Valid OptionEditRequest editRequest) {
+        optionService.editOption(editRequest);
         return ResponseEntity.ok(SuccessMessage.EDIT_OPTION_SUCCESS_MSG);
     }
 

@@ -9,7 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constants.ErrorMessage;
 import gift.dto.CategoryDto;
-import gift.dto.OptionDto;
+import gift.dto.OptionEditRequest;
+import gift.dto.OptionSaveRequest;
 import gift.dto.ProductRequest;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ class OptionControllerTest {
             .content(category));
 
         ProductRequest request = new ProductRequest(null, "선물", 4500L, "https", 1L, "생일 선물",
-            List.of(new OptionDto(null, "케잌", 30, null)));
+            List.of(new OptionSaveRequest("케잌", 30, null)));
 
         String product = new ObjectMapper().writeValueAsString(request);
         mockMvc.perform(post("/api/products/product")
@@ -52,7 +53,7 @@ class OptionControllerTest {
     @Test
     @DisplayName("옵션 추가 테스트")
     void addOption() throws Exception {
-        OptionDto optionDto = new OptionDto(null, "초코 케잌", 30, 1L);
+        OptionSaveRequest optionDto = new OptionSaveRequest("초코 케잌", 30, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
         mockMvc.perform(post("/api/products/product/1/options")
@@ -64,7 +65,7 @@ class OptionControllerTest {
     @Test
     @DisplayName("옵션 수정 테스트")
     void editOption() throws Exception {
-        OptionDto optionDto = new OptionDto(1L, "초코 케잌", 15, 1L);
+        OptionEditRequest optionDto = new OptionEditRequest(1L, "초코 케잌", 15, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
         mockMvc.perform(put("/api/products/product/1/options")
@@ -92,7 +93,7 @@ class OptionControllerTest {
     @Test
     @DisplayName("옵션 이름 중복 실패 테스트")
     void optionDuplicate() throws Exception {
-        OptionDto optionDto = new OptionDto(null, "케잌", 15, 1L);
+        OptionSaveRequest optionDto = new OptionSaveRequest("케잌", 15, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
         mockMvc.perform(post("/api/products/product/1/options")
@@ -105,7 +106,7 @@ class OptionControllerTest {
     @Test
     @DisplayName("옵션 이름 50자 초과 실패 테스트")
     void optionNameLength() throws Exception {
-        OptionDto optionDto = new OptionDto(null,
+        OptionSaveRequest optionDto = new OptionSaveRequest(
             "012345678901234567890123456789012345678901234567890", 15, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
@@ -119,7 +120,7 @@ class OptionControllerTest {
     @Test
     @DisplayName("옵션 이름 null 실패 테스트")
     void optionNameNull() throws Exception {
-        OptionDto optionDto = new OptionDto(null, null, 15, 1L);
+        OptionSaveRequest optionDto = new OptionSaveRequest(null, 15, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
         mockMvc.perform(post("/api/products/product/1/options")
@@ -133,7 +134,7 @@ class OptionControllerTest {
     @DisplayName("옵션 이름 특수문자 실패 테스트")
     @ValueSource(strings = {"생일선물!", "카카오{}", "kakao@", "talk^^", "mod%"})
     void optionNamePattern(String name) throws Exception {
-        OptionDto optionDto = new OptionDto(null, name, 15, 1L);
+        OptionSaveRequest optionDto = new OptionSaveRequest(name, 15, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
         mockMvc.perform(post("/api/products/product/1/options")
@@ -147,7 +148,7 @@ class OptionControllerTest {
     @DisplayName("옵션 수량 실패 테스트")
     @ValueSource(ints = {0, 100_000_000, 100_000_001})
     void optionQuantity(int quantity) throws Exception {
-        OptionDto optionDto = new OptionDto(null, "생일 선물", quantity, 1L);
+        OptionSaveRequest optionDto = new OptionSaveRequest("생일 선물", quantity, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
 
         mockMvc.perform(post("/api/products/product/1/options")

@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constants.ErrorMessage;
-import gift.dto.OptionDto;
+import gift.dto.OptionSaveRequest;
 import gift.dto.ProductRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +32,8 @@ class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    private final List<OptionDto> options = List.of(new OptionDto(null, "케잌", 30, null));
+    private final List<OptionSaveRequest> options = List.of(
+        new OptionSaveRequest("케잌", 30, null));
 
     void addCategory() throws Exception {
         String category = """ 

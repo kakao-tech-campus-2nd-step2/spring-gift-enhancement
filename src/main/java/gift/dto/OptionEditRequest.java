@@ -2,7 +2,6 @@ package gift.dto;
 
 import gift.constants.ErrorMessage;
 import gift.constants.RegularExpression;
-import gift.entity.Option;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class OptionDto {
+public class OptionEditRequest {
 
     private Long id;
 
@@ -26,14 +25,10 @@ public class OptionDto {
     @NotNull(message = ErrorMessage.NULL_POINTER_EXCEPTION_MSG)
     private Long productId;
 
-    protected OptionDto() {
+    protected OptionEditRequest() {
     }
 
-    public OptionDto(Option option) {
-        this(option.getId(), option.getName(), option.getQuantity(), option.getProduct().getId());
-    }
-
-    public OptionDto(Long id, String name, int quantity, Long productId) {
+    public OptionEditRequest(Long id, String name, int quantity, Long productId) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;

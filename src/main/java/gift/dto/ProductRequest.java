@@ -34,13 +34,13 @@ public class ProductRequest {
     private String categoryName;
 
     @Size(min = 1, message = ErrorMessage.OPTION_MUST_MORE_THAN_ZERO)
-    private List<OptionDto> options;
+    private List<OptionSaveRequest> options;
 
     protected ProductRequest() {
     }
 
     public ProductRequest(Long id, String name, long price, String imageUrl, Long categoryId,
-        String categoryName, List<OptionDto> options) {
+        String categoryName, List<OptionSaveRequest> options) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -74,7 +74,7 @@ public class ProductRequest {
         return categoryName;
     }
 
-    public List<OptionDto> getOptions() {
+    public List<OptionSaveRequest> getOptions() {
         return options;
     }
 }

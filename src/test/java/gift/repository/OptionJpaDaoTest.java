@@ -2,7 +2,7 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.OptionDto;
+import gift.dto.OptionEditRequest;
 import gift.entity.Category;
 import gift.entity.Option;
 import gift.entity.Product;
@@ -57,7 +57,7 @@ class OptionJpaDaoTest {
     @DisplayName("옵션 수정 테스트")
     void optionUpdate() {
         Option option = optionJpaDao.save(new Option("초코 케익", 77, product));
-        OptionDto updatedOption = new OptionDto(option.getId(), "딸기 케익", 10, null);
+        OptionEditRequest updatedOption = new OptionEditRequest(option.getId(), "딸기 케익", 10, null);
         option.updateOption(updatedOption);
 
         entityManager.flush();

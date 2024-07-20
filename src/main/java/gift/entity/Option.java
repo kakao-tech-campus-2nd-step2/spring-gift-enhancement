@@ -1,6 +1,6 @@
 package gift.entity;
 
-import gift.dto.OptionDto;
+import gift.dto.OptionEditRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,10 +25,6 @@ public class Option extends BaseEntity {
     protected Option() {
     }
 
-    public Option(OptionDto optionDto, Product product) {
-        this(optionDto.getName(), optionDto.getQuantity(), product);
-    }
-
     public Option(String name, int quantity, Product product) {
         this.name = name;
         this.quantity = quantity;
@@ -47,8 +43,8 @@ public class Option extends BaseEntity {
         return product;
     }
 
-    public void updateOption(OptionDto optionDto) {
-        name = optionDto.getName();
-        quantity = optionDto.getQuantity();
+    public void updateOption(OptionEditRequest editRequest) {
+        name = editRequest.getName();
+        quantity = editRequest.getQuantity();
     }
 }

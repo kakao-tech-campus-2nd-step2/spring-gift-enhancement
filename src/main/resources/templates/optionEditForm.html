@@ -37,11 +37,11 @@
         <div class="row">
             <div class="col">
                 <button type="submit" class="btn btn-primary"
-                        th:onclick="editOption([[${option.productId}]])">등록
+                        th:onclick="editOption([[${productId}]])">등록
                 </button>
                 <button type="button"
                         class="btn btn-danger"
-                        th:onclick="|location.href='@{/api/products/product/{pid}/options(pid=${option.productId})}'|">
+                        th:onclick="|location.href='@{/api/products/product/{pid}/options(pid=${productId})}'|">
                     취소
                 </button>
             </div>

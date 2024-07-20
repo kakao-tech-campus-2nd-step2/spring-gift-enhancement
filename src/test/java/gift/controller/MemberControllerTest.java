@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constants.ErrorMessage;
 import gift.dto.MemberDto;
-import gift.dto.OptionDto;
+import gift.dto.OptionSaveRequest;
 import gift.dto.ProductRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -52,7 +52,7 @@ class MemberControllerTest {
 
     void addProduct() throws Exception {
         ProductRequest request = new ProductRequest(null, "커피", 4500L, "https", 1L, "음식",
-            List.of(new OptionDto(null, "선물", 30, null)));
+            List.of(new OptionSaveRequest("선물", 30, null)));
 
         String product = new ObjectMapper().writeValueAsString(request);
         mockMvc.perform(post("/api/products/product")

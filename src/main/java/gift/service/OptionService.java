@@ -1,16 +1,18 @@
 package gift.service;
 
 import gift.constants.ErrorMessage;
-import gift.dto.OptionDto;
+import gift.dto.OptionEditRequest;
+import gift.dto.OptionResponse;
+import gift.dto.OptionSaveRequest;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.ProductOptionRequiredException;
 import gift.repository.OptionJpaDao;
 import gift.repository.ProductJpaDao;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -29,7 +31,7 @@ public class OptionService {
      * @param productId
      * @return List
      */
-    public List<OptionDto> getProductOptionList(Long productId) {
+    public List<OptionResponse> getProductOptionList(Long productId) {
         findProductByIdOrElseThrow(productId);
         return findAllOptionsByProductId(productId);
     }
@@ -40,21 +42,21 @@ public class OptionService {
      * @param optionId
      * @return OptionDto
      */
-    public OptionDto findOptionById(Long optionId) {
-        return new OptionDto(findOptionByIdOrElseThrow(optionId));
+    public OptionResponse findOptionById(Long optionId) {
+        return new OptionResponse(findOptionByIdOrElseThrow(optionId));
     }
 
-    public void addOption(OptionDto optionDto) {
-        Product product = findProductByIdOrElseThrow(optionDto.getProductId());
-        assertOptionNotDuplicate(optionDto.getName(), optionDto.getProductId());
-        optionJpaDao.save(new Option(optionDto, product));
+    public void saveOption(OptionSaveRequest saveRequest) {
+        Product product = findProductByIdOrElseThrow(saveRequest.getProductId());
+        assertOptionNotDuplicate(saveRequest.getName(), saveRequest.getProductId());
+        optionJpaDao.save(saveRequest.toEntity(product));
     }
 
     @Transactional
-    public void editOption(OptionDto optionDto) {
-        findProductByIdOrElseThrow(optionDto.getProductId());
-        findOptionByIdOrElseThrow(optionDto.getId())
-            .updateOption(optionDto);
+    public void editOption(OptionEditRequest editRequest) {
+        findProductByIdOrElseThrow(editRequest.getProductId());
+        findOptionByIdOrElseThrow(editRequest.getId())
+            .updateOption(editRequest);
     }
 
     /**
@@ -97,8 +99,8 @@ public class OptionService {
     /**
      * 해당 상품의 옵션들을 리스트로 반환
      */
-    private List<OptionDto> findAllOptionsByProductId(Long productId) {
-        return optionJpaDao.findAllByProduct_Id(productId).stream().map(OptionDto::new)
+    private List<OptionResponse> findAllOptionsByProductId(Long productId) {
+        return optionJpaDao.findAllByProduct_Id(productId).stream().map(OptionResponse::new)
             .toList();
     }
 }

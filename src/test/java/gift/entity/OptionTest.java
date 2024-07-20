@@ -2,7 +2,7 @@ package gift.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.OptionDto;
+import gift.dto.OptionEditRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +14,10 @@ class OptionTest {
         Category category = new Category("생일선물", "Red", "http", "생일선물 카테고리");
         Product product = new Product("kakao", 5000L, "https", category);
         Option option = new Option("Large", 100, product);
-        OptionDto optionDto = new OptionDto(null, "Medium", 30, null);
+        OptionEditRequest editRequest = new OptionEditRequest(null, "Medium", 30, null);
 
-        option.updateOption(optionDto);
-        assertThat(option.getName()).isEqualTo(optionDto.getName());
-        assertThat(option.getQuantity()).isEqualTo(optionDto.getQuantity());
+        option.updateOption(editRequest);
+        assertThat(option.getName()).isEqualTo(editRequest.getName());
+        assertThat(option.getQuantity()).isEqualTo(editRequest.getQuantity());
     }
 }

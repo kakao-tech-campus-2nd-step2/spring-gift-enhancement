@@ -4,7 +4,6 @@ import gift.constants.ErrorMessage;
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.entity.Category;
-import gift.entity.Option;
 import gift.entity.Product;
 import gift.repository.CategoryJpaDao;
 import gift.repository.OptionJpaDao;
@@ -74,12 +73,12 @@ public class ProductService {
         if (savedProduct == null) {
             throw new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG);
         }
-        productRequest.getOptions().forEach(optionDto -> {
-            optionJpaDao.findByNameAndProduct_Id(optionDto.getName(), savedProduct.getId())
+        productRequest.getOptions().forEach(optionSaveRequest -> {
+            optionJpaDao.findByNameAndProduct_Id(optionSaveRequest.getName(), savedProduct.getId())
                 .ifPresent(v -> {
                     throw new IllegalArgumentException(ErrorMessage.OPTION_NAME_ALREADY_EXISTS_MSG);
                 });
-            optionJpaDao.save(new Option(optionDto, savedProduct));
+            optionJpaDao.save(optionSaveRequest.toEntity(savedProduct));
         });
     }
 

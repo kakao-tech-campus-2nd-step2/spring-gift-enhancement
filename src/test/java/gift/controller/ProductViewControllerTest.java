@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.dto.OptionDto;
+import gift.dto.OptionSaveRequest;
 import gift.dto.ProductRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +51,7 @@ class ProductViewControllerTest {
     @DisplayName("상품 수정 폼 페이지 테스트")
     void editProductForm() throws Exception {
         ProductRequest request = new ProductRequest(null, "선물", 4500L, "https", 1L, "생일 선물",
-            List.of(new OptionDto(null, "케잌", 30, null)));
+            List.of(new OptionSaveRequest("케잌", 30, null)));
         String requestJson = new ObjectMapper().writeValueAsString(request);
 
         addCategory();

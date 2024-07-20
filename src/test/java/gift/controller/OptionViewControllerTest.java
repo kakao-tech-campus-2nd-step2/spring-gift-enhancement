@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.CategoryDto;
-import gift.dto.OptionDto;
+import gift.dto.OptionSaveRequest;
 import gift.dto.ProductRequest;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ class OptionViewControllerTest {
             .content(category));
 
         ProductRequest request = new ProductRequest(null, "선물", 4500L, "https", 1L, "생일 선물",
-            List.of(new OptionDto(null, "케잌", 30, null)));
+            List.of(new OptionSaveRequest("케잌", 30, null)));
 
         String product = new ObjectMapper().writeValueAsString(request);
         mockMvc.perform(post("/api/products/product")
@@ -61,7 +61,7 @@ class OptionViewControllerTest {
     @Test
     @DisplayName("옵션 수정 페이지 테스트")
     void getOptionEditForm() throws Exception {
-        OptionDto optionDto = new OptionDto(null, "초코 케익", 30, 1L);
+        OptionSaveRequest optionDto = new OptionSaveRequest("초코 케익", 30, 1L);
         String option = new ObjectMapper().writeValueAsString(optionDto);
         mockMvc.perform(post("/api/products/product/1/options")
             .contentType(MediaType.APPLICATION_JSON)

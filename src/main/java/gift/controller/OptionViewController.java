@@ -18,8 +18,7 @@ public class OptionViewController {
     }
 
     /**
-     * productId에 해당하는 상품에 대한 옵션 리스트와 productId를 담아 뷰를 반환. optionDto 객체에 productId가 포함되어있지만, List가
-     * 비어있는 경우에도 프론트에서의 요청 URI에 productId가 포함되어야 하므로 productId를 따로 포함시킴.
+     * productId에 해당하는 상품에 대한 옵션 리스트와 productId를 담아 뷰를 반환.
      */
     @GetMapping
     public String getOptions(@PathVariable("productId") Long productId, Model model) {
@@ -38,8 +37,10 @@ public class OptionViewController {
      * optionDto 객체에 productId가 포함되어있으므로 따로 productId를 포함시키지 않음.
      */
     @GetMapping("/{optionId}")
-    public String getOptionEditForm(@PathVariable("optionId") Long optionId, Model model) {
+    public String getOptionEditForm(@PathVariable("productId") Long productId,
+        @PathVariable("optionId") Long optionId, Model model) {
         model.addAttribute("option", optionService.findOptionById(optionId));
+        model.addAttribute("productId", productId);
         return "optionEditForm";
     }
 }

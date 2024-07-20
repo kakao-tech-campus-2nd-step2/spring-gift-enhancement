@@ -8,7 +8,6 @@ function getOptionsArray() {
 
         if (optionName && optionQuantity) {
             var optionObject = {
-                id: null,
                 name: optionName,
                 quantity: optionQuantity,
                 productId: null
