@@ -110,12 +110,8 @@ public class OptionService {
     }
 
     public void subtractOptionQuantity(Long productId, Long optionId, int quantity) {
-        Option option = optionRepository.findById(optionId)
+        Option option = optionRepository.findByIdAndProductIdWithLock(productId, optionId)
             .orElseThrow(() -> new OptionNotFoundException(OPTION_NOT_FOUND + optionId));
-
-        if (!option.isProductIdMatching(productId)) {
-            throw new OptionNotFoundException(OPTION_NOT_FOUND + optionId);
-        }
 
         if (option.getQuantity() < quantity) {
             throw new IllegalArgumentException(INSUFFICIENT_QUANTITY + optionId);

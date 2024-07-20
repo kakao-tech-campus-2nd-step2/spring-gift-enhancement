@@ -7,6 +7,7 @@ import static gift.util.constants.OptionConstants.OPTION_REQUIRED;
 import static gift.util.constants.ProductConstants.PRODUCT_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -26,10 +27,14 @@ import gift.model.Product;
 import gift.repository.OptionRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.dao.PessimisticLockingFailureException;
 
 public class OptionServiceTest {
 
@@ -353,7 +358,7 @@ public class OptionServiceTest {
         Product product = new Product(1L, "Product", 100, "imageUrl", category);
         Option option = new Option(1L, "Option1", 100, product);
 
-        when(optionRepository.findById(1L)).thenReturn(Optional.of(option));
+        when(optionRepository.findByIdAndProductIdWithLock(1L, 1L)).thenReturn(Optional.of(option));
         when(optionRepository.save(any(Option.class))).thenReturn(option);
 
         optionService.subtractOptionQuantity(1L, 1L, 10);
@@ -380,12 +385,180 @@ public class OptionServiceTest {
         Product product = new Product(1L, "Product", 100, "imageUrl", category);
         Option option = new Option(1L, "Option1", 5, product);
 
-        when(optionRepository.findById(1L)).thenReturn(Optional.of(option));
+        when(optionRepository.findByIdAndProductIdWithLock(1L, 1L)).thenReturn(Optional.of(option));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             optionService.subtractOptionQuantity(1L, 1L, 10);
         });
 
         assertEquals(INSUFFICIENT_QUANTITY + 1, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("동시성 문제 - 옵션 수량 차감 동시 요청 처리")
+    public void testConcurrentSubtractOptionQuantity() throws InterruptedException {
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Option option = new Option(1L, "Option1", 100, product);
+
+        when(optionRepository.findByIdAndProductIdWithLock(1L, 1L)).thenReturn(Optional.of(option));
+        when(optionRepository.save(any(Option.class))).thenReturn(option);
+
+        int numberOfThreads = 10;
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            executorService.submit(() -> {
+                try {
+                    optionService.subtractOptionQuantity(1L, 1L, 10);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        assertEquals(0, option.getQuantity());
+        executorService.shutdown();
+    }
+
+    @Test
+    @DisplayName("동시성 문제 - 수량 부족으로 예외 발생")
+    public void testConcurrentSubtractOptionQuantityInsufficientQuantity()
+        throws InterruptedException {
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Option option = new Option(1L, "Option1", 50, product);
+
+        when(optionRepository.findByIdAndProductIdWithLock(1L, 1L)).thenReturn(Optional.of(option));
+        when(optionRepository.save(any(Option.class))).thenReturn(option);
+
+        int numberOfThreads = 10;
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            executorService.submit(() -> {
+                try {
+                    optionService.subtractOptionQuantity(1L, 1L, 10);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        assertTrue(option.getQuantity() >= 0);
+        executorService.shutdown();
+    }
+
+    @Test
+    @DisplayName("동시성 문제 - 중간에 수량 부족으로 예외 발생")
+    public void testConcurrentSubtractOptionQuantityMixed() throws InterruptedException {
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Option option = new Option(1L, "Option1", 60, product);
+
+        when(optionRepository.findByIdAndProductIdWithLock(1L, 1L)).thenReturn(Optional.of(option));
+        when(optionRepository.save(any(Option.class))).thenReturn(option);
+
+        int numberOfThreads = 10;
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            executorService.submit(() -> {
+                try {
+                    optionService.subtractOptionQuantity(1L, 1L, 10);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        assertTrue(option.getQuantity() >= 0);
+        executorService.shutdown();
+    }
+
+    @Test
+    @DisplayName("동시성 문제 - 예외 발생 후 재시도")
+    public void testConcurrentSubtractOptionQuantityWithRetry() throws InterruptedException {
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Option option = new Option(1L, "Option1", 100, product);
+
+        when(optionRepository.findByIdAndProductIdWithLock(1L, 1L)).thenReturn(Optional.of(option));
+        when(optionRepository.save(any(Option.class))).thenReturn(option);
+
+        int numberOfThreads = 10;
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            executorService.submit(() -> {
+                boolean success = false;
+                while (!success) {
+                    try {
+                        optionService.subtractOptionQuantity(1L, 1L, 10);
+                        success = true;
+                    } catch (PessimisticLockingFailureException e) {
+                        System.out.println("재시도: " + e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        success = true;
+                    }
+                }
+                latch.countDown();
+            });
+        }
+
+        latch.await();
+
+        assertEquals(0, option.getQuantity());
+        executorService.shutdown();
+    }
+
+    @Test
+    @DisplayName("동시성 문제 - PessimisticLockingFailureException 발생")
+    public void testPessimisticLockingFailureException() throws InterruptedException {
+        Category category = new Category("Category", "#000000", "imageUrl", "description");
+        Product product = new Product(1L, "Product", 100, "imageUrl", category);
+        Option option = new Option(1L, "Option1", 100, product);
+
+        when(optionRepository.findByIdAndProductIdWithLock(1L, 1L)).thenAnswer(invocation -> {
+            throw new PessimisticLockingFailureException("Locking failed");
+        });
+
+        int numberOfThreads = 10;
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            executorService.submit(() -> {
+                try {
+                    optionService.subtractOptionQuantity(1L, 1L, 10);
+                } catch (PessimisticLockingFailureException e) {
+                    System.out.println("Locking 실패 " + e.getMessage());
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        assertEquals(100, option.getQuantity());
+        executorService.shutdown();
     }
 }
