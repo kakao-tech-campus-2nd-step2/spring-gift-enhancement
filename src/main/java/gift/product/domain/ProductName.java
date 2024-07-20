@@ -1,6 +1,5 @@
 package gift.product.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gift.global.response.ErrorCode;
 import gift.product.exception.ProductValidException;
