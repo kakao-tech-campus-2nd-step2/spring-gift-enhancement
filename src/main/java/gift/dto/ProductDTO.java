@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Min;
 import org.hibernate.validator.constraints.URL;
 
+import java.util.List;
+
 public class ProductDTO {
 
     private Long id;
@@ -29,6 +31,9 @@ public class ProductDTO {
     private Long categoryId;
 
     private String categoryName;
+
+    @NotNull
+    private List<OptionDTO> options;
 
     public Long getId() {
         return id;
@@ -76,5 +81,13 @@ public class ProductDTO {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public List<OptionDTO> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<OptionDTO> options) {
+        this.options = options;
     }
 }
