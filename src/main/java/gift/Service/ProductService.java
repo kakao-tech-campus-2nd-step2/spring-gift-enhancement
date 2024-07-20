@@ -1,7 +1,7 @@
 package gift.Service;
 
 import gift.Exception.AuthorizedException;
-import gift.Exception.CategoryException;
+import gift.Exception.Category.CategoryDuplicatedException;
 import gift.Exception.ProductNotFoundException;
 import gift.Model.DTO.ProductDTO;
 import gift.Model.Entity.CategoryEntity;
@@ -46,7 +46,7 @@ public class ProductService {
 
         Optional<CategoryEntity> categoryEntityOptional = categoryRepository.findByName(productDTO.categoryName());
         if(categoryEntityOptional.isEmpty()){
-            throw new CategoryException();
+            throw new CategoryDuplicatedException();
         }
 
         CategoryEntity categoryEntity = categoryEntityOptional.get();
@@ -82,7 +82,7 @@ public class ProductService {
 
         Optional<CategoryEntity> categoryEntityOptional = categoryRepository.findByName(productDTO.categoryName());
         if(categoryEntityOptional.isEmpty()){
-            throw new CategoryException();
+            throw new CategoryDuplicatedException();
         }
 
         CategoryEntity categoryEntity = categoryEntityOptional.get();
