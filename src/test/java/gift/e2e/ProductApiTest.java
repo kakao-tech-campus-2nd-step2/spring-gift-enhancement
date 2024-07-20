@@ -5,10 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gift.auth.JwtTokenProvider;
 import gift.model.Category;
 import gift.model.Member;
+import gift.model.Options;
 import gift.model.Product;
 import gift.model.Role;
 import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
+import gift.repository.OptionsRepository;
 import gift.repository.ProductRepository;
 import gift.request.ProductAddRequest;
 import gift.request.ProductUpdateRequest;
@@ -58,6 +60,9 @@ class ProductApiTest {
     CategoryRepository categoryRepository;
 
     @Autowired
+    OptionsRepository optionsRepository;
+
+    @Autowired
     JwtTokenProvider jwtTokenProvider;
 
     Member member;
@@ -68,20 +73,26 @@ class ProductApiTest {
     @BeforeEach
     void before() {
         category = categoryRepository.save(new Category("카테고리"));
-        List<Product> products = new ArrayList<>();
+        savedProducts = new ArrayList<>();
         IntStream.range(0, 10)
             .forEach(i -> {
-                products.add(new Product("product" + i, 1000, "https://a.com", category));
+                Product product = new Product("product" + i, 1000,
+                    "https://a.com", category);
+                Product saved = productRepository.save(product);
+                savedProducts.add(saved);
+                optionsRepository.save(new Options("option1-"+i, Integer.valueOf(i+1), saved));
+                optionsRepository.save(new Options("option2-"+i, Integer.valueOf(i+1), saved));
             });
-        savedProducts = productRepository.saveAll(products);
         member = memberService.join("aaa123@a.com", "1234");
         member.makeAdminMember();
         token = jwtTokenProvider.generateToken(member);
+
     }
 
     @AfterEach
     void after() {
         memberRepository.delete(member);
+        optionsRepository.deleteAll();
         productRepository.deleteAll();
         categoryRepository.deleteAll();
     }
@@ -126,7 +137,7 @@ class ProductApiTest {
         headers.setBearerAuth(token);
 
         ProductAddRequest productAddRequest = new ProductAddRequest("product11", 1500,
-            "https://b.com", "카테고리");
+            "https://b.com", "카테고리", "옵션", 1);
         RequestEntity<ProductAddRequest> request = new RequestEntity<>(
             productAddRequest, headers, HttpMethod.POST, URI.create(url));
 
@@ -178,6 +189,7 @@ class ProductApiTest {
         //when
         ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
         //then
+        assertThat(savedProducts.get(0).getId()).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 

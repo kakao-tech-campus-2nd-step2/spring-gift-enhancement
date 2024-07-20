@@ -38,20 +38,17 @@ public class ProductService {
     }
 
     @Transactional
-    public void addProduct(String name, Integer price, String imageUrl, String categoryName) {
-        categoryRepository.findByName(categoryName)
-            .ifPresentOrElse(
-                category -> productRepository.save(new Product(name, price, imageUrl, category)),
-                () -> {
-                    throw new NotFoundCategoryException();
-                }
-            );
+    public Product addProduct(String name, Integer price, String imageUrl, String categoryName) {
+        return categoryRepository.findByName(categoryName)
+            .map(
+                category -> productRepository.save(new Product(name, price, imageUrl, category))
+            ).orElseThrow(NotFoundCategoryException::new);
     }
 
     @Transactional
-    public void updateProduct(Long id, String name, Integer price, String imageUrl,
+    public Product updateProduct(Long id, String name, Integer price, String imageUrl,
         String categoryName) {
-        productRepository.findById(id)
+        return productRepository.findById(id)
             .map(product -> {
                 if (product.getCategory() == null) {
                     throw new NotFoundCategoryException();
@@ -63,12 +60,12 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(Long id) {
-        productRepository.findById(id)
-            .ifPresentOrElse(productRepository::delete
-                , () -> {
-                    throw new NotFoundProductException();
-                }
-            );
+    public Long deleteProduct(Long id) {
+        return productRepository.findById(id)
+            .map(product -> {
+                productRepository.delete(product);
+                return product.getId();
+            })
+            .orElseThrow(NotFoundProductException::new);
     }
 }

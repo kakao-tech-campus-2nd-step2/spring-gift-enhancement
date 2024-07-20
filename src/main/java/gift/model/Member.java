@@ -1,6 +1,7 @@
 package gift.model;
 
 
+import gift.exception.InputException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.util.StringUtils;
 
 @Entity
 @Table(name = "member")
@@ -29,6 +31,8 @@ public class Member extends BaseEntity {
     }
 
     public Member(Long id, String email, String password, Role role) {
+        validEmail(email);
+        validPassword(password);
         this.id = id;
         this.email = email;
         this.password = password;
@@ -37,12 +41,16 @@ public class Member extends BaseEntity {
 
     // 회원가입 시 ROLE 기본값은 일반 유저로 한다.
     public Member(String email, String password) {
+        validEmail(email);
+        validPassword(password);
         this.email = email;
         this.password = password;
         this.role = Role.ROLE_USER;
     }
 
     public Member(String email, String password, Role role) {
+        validEmail(email);
+        validPassword(password);
         this.email = email;
         this.password = password;
         this.role = role;
@@ -70,5 +78,17 @@ public class Member extends BaseEntity {
 
     public boolean validating(String email, String password) {
         return this.email.equals(email) && this.password.equals(password);
+    }
+
+    private void validEmail(String email) {
+        if(!StringUtils.hasText(email)) {
+            throw new InputException("알 수 없는 오류가 발생하였습니다.");
+        }
+    }
+
+    private void validPassword(String password) {
+        if(!StringUtils.hasText(password)) {
+            throw new InputException("알 수 없는 오류가 발생하였습니다.");
+        }
     }
 }

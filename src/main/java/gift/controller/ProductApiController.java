@@ -1,13 +1,18 @@
 package gift.controller;
 
 import gift.auth.CheckRole;
+import gift.model.Options;
 import gift.request.ProductAddRequest;
+import gift.response.OptionResponse;
+import gift.response.ProductOptionsResponse;
 import gift.response.ProductResponse;
 import gift.request.ProductUpdateRequest;
 import gift.exception.InputException;
 import gift.model.Product;
+import gift.service.OptionsService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductApiController {
 
     private final ProductService productService;
+    private final OptionsService optionsService;
 
-    public ProductApiController(ProductService productService) {
+    public ProductApiController(ProductService productService, OptionsService optionsService) {
         this.productService = productService;
+        this.optionsService = optionsService;
     }
 
     @CheckRole("ROLE_ADMIN")
@@ -44,14 +51,25 @@ public class ProductApiController {
 
     @CheckRole("ROLE_ADMIN")
     @GetMapping("/api/products/{id}")
-    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
-
+    public ResponseEntity<ProductOptionsResponse> getProductWithOptions(
+        @PathVariable Long id, @RequestParam("option_id") Long optionId) {
         Product product = productService.getProduct(id);
         if (product == null) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        ProductResponse productResponse = new ProductResponse(product);
-        return new ResponseEntity<>(productResponse, HttpStatus.OK);
+        // optionId가 존재하면 단건 옵션 조회, 아니면 전체 옵션 조회
+        if (optionId != null) {
+            Options option = optionsService.getOption(optionId);
+            ProductOptionsResponse dto = new ProductOptionsResponse(product,
+                List.of(new OptionResponse(option.getId(), option.getName(), option.getQuantity())));
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        }
+
+        List<OptionResponse> options = optionsService.getAllOptions(id).stream()
+            .map(o -> new OptionResponse(o.getId(), o.getName(), o.getQuantity()))
+            .toList();
+        ProductOptionsResponse dto = new ProductOptionsResponse(product, options);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @CheckRole("ROLE_ADMIN")
@@ -62,7 +80,9 @@ public class ProductApiController {
             throw new InputException(bindingResult.getAllErrors());
         }
 
-        productService.addProduct(dto.name(), dto.price(), dto.imageUrl(), dto.categoryName());
+        Product savedProduct = productService.addProduct(dto.name(), dto.price(), dto.imageUrl(),
+            dto.categoryName());
+        optionsService.addOption(dto.optionName(), dto.quantity(), savedProduct.getId());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -82,6 +102,7 @@ public class ProductApiController {
     @CheckRole("ROLE_ADMIN")
     @DeleteMapping("/api/products")
     public ResponseEntity<Void> deleteProduct(@RequestParam("id") Long id) {
+        optionsService.deleteAllOptions(id);
         productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

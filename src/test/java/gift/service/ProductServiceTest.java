@@ -5,7 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.mock;
 
+import gift.exception.InputException;
 import gift.exception.category.NotFoundCategoryException;
+import gift.exception.product.NotFoundProductException;
 import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
@@ -90,15 +92,16 @@ class ProductServiceTest {
     @Test
     void failUpdate() {
         //given
-        Category newCategory = new Category("변경된 카테고리");
-        Product product = new Product(1L, "name", 1000, "http://a.com", null);
+        Category category = new Category(1L, "변경된 카테고리");
+        Product product = new Product(1L, "name", 1000, "http://a.com", category);
 
         given(productRepository.findById(any(Long.class)))
-            .willReturn(Optional.of(product));
+            .willReturn(Optional.empty());
+
         //when //then
-        assertThatThrownBy(() -> productService.updateProduct(product.getId(), product.getName(),
-            product.getPrice(), product.getImageUrl(), newCategory.getName()))
-            .isInstanceOf(NotFoundCategoryException.class);
+        assertThatThrownBy(() -> productService.updateProduct(product.getId(),
+            product.getName(), product.getPrice(), product.getImageUrl(), product.getCategoryName()))
+            .isInstanceOf(NotFoundProductException.class);
     }
 
 
