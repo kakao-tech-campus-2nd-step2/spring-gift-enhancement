@@ -2,7 +2,7 @@ package gift.domain.product.dto;
 
 import gift.domain.product.entity.Category;
 
-public record CategoryResponseDto(
+public record CategoryResponse(
     Long id,
     String name,
     String color,
@@ -10,8 +10,8 @@ public record CategoryResponseDto(
     String description
 ) {
 
-    public static CategoryResponseDto from(Category category) {
-        return new CategoryResponseDto(
+    public static CategoryResponse from(Category category) {
+        return new CategoryResponse(
             category.getId(),
             category.getName(),
             category.getColor(),

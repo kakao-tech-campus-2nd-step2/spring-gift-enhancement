@@ -1,6 +1,6 @@
 package gift.domain.product.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -8,13 +8,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doNothing;
 
-import gift.domain.product.dto.OptionDto;
-import gift.domain.product.dto.ProductDetailResponseDto;
-import gift.domain.product.dto.ProductRequestDto;
-import gift.domain.product.dto.ProductResponseDto;
-import gift.domain.product.repository.ProductJpaRepository;
+import gift.domain.product.dto.OptionRequest;
+import gift.domain.product.dto.ProductReadAllResponse;
+import gift.domain.product.dto.ProductRequest;
+import gift.domain.product.dto.ProductResponse;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
+import gift.domain.product.repository.ProductJpaRepository;
 import gift.domain.wishlist.service.WishlistService;
 import java.util.List;
 import java.util.Optional;
@@ -48,11 +48,11 @@ class ProductServiceTest {
     @MockBean
     private WishlistService wishlistService;
 
-    private static final List<OptionDto> optionRequestDtos = List.of(
-        new OptionDto(1L, "수박맛", 969),
-        new OptionDto(2L, "자두맛", 90)
+    private static final List<OptionRequest> optionRequestDtos = List.of(
+        new OptionRequest("수박맛", 969),
+        new OptionRequest("자두맛", 90)
     );
-    private static final ProductRequestDto PRODUCT_REQUEST_DTO = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionRequestDtos);
+    private static final ProductRequest PRODUCT_REQUEST_DTO = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionRequestDtos);
     private static final Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
 
     @Test
@@ -67,10 +67,10 @@ class ProductServiceTest {
         doNothing().when(optionService).create(any(Product.class), any());
 
         // when
-        ProductDetailResponseDto actual = productService.create(PRODUCT_REQUEST_DTO);
+        ProductResponse actual = productService.create(PRODUCT_REQUEST_DTO);
 
         // then
-        assertThat(actual).isEqualTo(ProductDetailResponseDto.from(expected));
+        assertThat(actual).isEqualTo(ProductResponse.from(expected));
     }
 
     @Test
@@ -121,8 +121,8 @@ class ProductServiceTest {
             new PageImpl<>(products, PageRequest.of(0, 5), products.size()));
 
         // when
-        Page<ProductResponseDto> actual = productService.readAll(PageRequest.of(0, 5));
-        List<String> actualNames = actual.getContent().stream().map(ProductResponseDto::name).toList();
+        Page<ProductReadAllResponse> actual = productService.readAll(PageRequest.of(0, 5));
+        List<String> actualNames = actual.getContent().stream().map(ProductReadAllResponse::name).toList();
 
         // then
         assertAll(
@@ -142,10 +142,10 @@ class ProductServiceTest {
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(expected));
 
         // when
-        ProductDetailResponseDto actual = productService.readById(1L);
+        ProductResponse actual = productService.readById(1L);
 
         // then
-        assertThat(actual).isEqualTo(ProductDetailResponseDto.from(expected));
+        assertThat(actual).isEqualTo(ProductResponse.from(expected));
     }
 
     @Test
@@ -154,22 +154,22 @@ class ProductServiceTest {
         // given
         Product product = PRODUCT_REQUEST_DTO.toProduct(category);
         product.setId(1L);
-        List<OptionDto> optionUpdateDtos = List.of(
-          new OptionDto(1L, "사과맛", 80),
-          new OptionDto(2L, "치즈맛", 100)
+        List<OptionRequest> optionUpdateDtos = List.of(
+          new OptionRequest("사과맛", 80),
+          new OptionRequest("치즈맛", 100)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "아이스 카페 라떼 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg", optionUpdateDtos);
-        Product expected = productRequestDto.toProduct(category);
+        ProductRequest productRequest = new ProductRequest(1L, "아이스 카페 라떼 T", 4500, "https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[110563]_20210426095937947.jpg", optionUpdateDtos);
+        Product expected = productRequest.toProduct(category);
 
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
         given(categoryService.readById(anyLong())).willReturn(category);
         given(productJpaRepository.save(any(Product.class))).willReturn(expected);
 
         // when
-        ProductDetailResponseDto actual = productService.update(1L, productRequestDto);
+        ProductResponse actual = productService.update(1L, productRequest);
 
         // then
-        assertThat(actual).isEqualTo(ProductDetailResponseDto.from(expected));
+        assertThat(actual).isEqualTo(ProductResponse.from(expected));
     }
 
     @Test
@@ -188,7 +188,7 @@ class ProductServiceTest {
         productService.delete(1L);
 
         // then
-        Page<ProductResponseDto> productList = productService.readAll(PageRequest.of(0, 10));
+        Page<ProductReadAllResponse> productList = productService.readAll(PageRequest.of(0, 10));
         assertThat(productList).isEmpty();
     }
 }

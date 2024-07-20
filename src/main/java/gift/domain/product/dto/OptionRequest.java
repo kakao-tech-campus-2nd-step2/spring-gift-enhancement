@@ -7,8 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Range;
 
-public record OptionDto(
-    Long id,
+public record OptionRequest(
 
     @NotBlank(message = "옵션 이름은 필수 입력 필드이며 공백으로만 구성될 수 없습니다.")
     @Size(max = 50, message = "옵션 이름은 50자를 초과할 수 없습니다.")
@@ -19,13 +18,6 @@ public record OptionDto(
     int quantity
 ) {
     public Option toOption(Product product) {
-        return new Option(id, product, name, quantity);
-    }
-
-    public static OptionDto from(Option option) {
-        return new OptionDto(
-            option.getId(),
-            option.getName(),
-            option.getQuantity());
+        return new Option(null, product, name, quantity);
     }
 }

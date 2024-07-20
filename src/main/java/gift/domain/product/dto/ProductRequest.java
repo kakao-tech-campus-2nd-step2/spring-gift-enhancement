@@ -12,7 +12,7 @@ import java.util.List;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
-public record ProductRequestDto(
+public record ProductRequest(
 
     @NotNull(message = "카테고리를 지정해주세요.")
     Long categoryId,
@@ -31,7 +31,7 @@ public record ProductRequestDto(
     String imageUrl,
 
     @NotEmpty(message = "상품 옵션을 하나 이상 입력해주세요.")
-    List<@Valid OptionDto> options
+    List<@Valid OptionRequest> options
 ) {
     public Product toProduct(Category category) {
         return new Product(null, category, name, price, imageUrl);

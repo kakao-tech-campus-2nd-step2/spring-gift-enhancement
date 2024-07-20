@@ -14,10 +14,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.domain.product.dto.OptionDto;
-import gift.domain.product.dto.ProductDetailResponseDto;
-import gift.domain.product.dto.ProductRequestDto;
-import gift.domain.product.dto.ProductResponseDto;
+import gift.domain.product.dto.OptionRequest;
+import gift.domain.product.dto.ProductResponse;
+import gift.domain.product.dto.ProductRequest;
+import gift.domain.product.dto.ProductReadAllResponse;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import gift.domain.product.service.ProductService;
@@ -60,21 +60,22 @@ class ProductRestControllerTest {
     @DisplayName("상품 생성에 성공하는 경우")
     void create_success() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, "사과맛", 90),
-            new OptionDto(2L, "자두맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest("사과맛", 90),
+            new OptionRequest("자두맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
+        ProductRequest productRequest = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
         Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
-        Product product = productRequestDto.toProduct(category);
+        Product product = productRequest.toProduct(category);
         product.setId(1L);
 
-        ProductDetailResponseDto productDetailResponseDto = ProductDetailResponseDto.from(product);
+        ProductResponse productResponse = ProductResponse.from(product);
 
-        given(productService.create(any(ProductRequestDto.class))).willReturn(productDetailResponseDto);
-        String expectedResult = objectMapper.writeValueAsString(ProductDetailResponseDto.from(product));
+        given(productService.create(any(ProductRequest.class))).willReturn(productResponse);
+        String expectedResult = objectMapper.writeValueAsString(ProductResponse.from(product));
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -89,12 +90,13 @@ class ProductRestControllerTest {
     @DisplayName("상품 생성에 실패하는 경우 - 상품 이름이 NULL인 경우")
     void create_fail_null_name_error() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, "사과맛", 90),
-            new OptionDto(2L, "자두맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest("사과맛", 90),
+            new OptionRequest("자두맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, null, 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        ProductRequest productRequest = new ProductRequest(1L, null, 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -122,8 +124,8 @@ class ProductRestControllerTest {
     @DisplayName("상품 생성에 실패하는 경우 - 옵션이 없는 경우")
     void create_fail_option_error() throws Exception {
         // given
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", null);
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        ProductRequest productRequest = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", null);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -138,12 +140,13 @@ class ProductRestControllerTest {
     @DisplayName("상품 생성에 실패하는 경우 - 옵션 이름이 null인 경우")
     void create_fail_option_null_name_error() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, null, 90),
-            new OptionDto(2L, "사과맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest(null, 90),
+            new OptionRequest("사과맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        ProductRequest productRequest = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -158,12 +161,13 @@ class ProductRestControllerTest {
     @DisplayName("상품 생성에 실패하는 경우 - 옵션 이름이 50자를 초과하는 경우")
     void create_fail_option_name_size_error() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, "포도맛".repeat(30), 90),
-            new OptionDto(2L, "사과맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest("포도맛".repeat(30), 90),
+            new OptionRequest("사과맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        ProductRequest productRequest = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -178,12 +182,13 @@ class ProductRestControllerTest {
     @DisplayName("상품 생성에 실패하는 경우 - 옵션 이름에 불가능한 특수 문자를 포함하는 경우")
     void create_fail_option_name_special_char_error() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, "포도맛#", 90),
-            new OptionDto(2L, "사과맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest("포도맛#", 90),
+            new OptionRequest("사과맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        ProductRequest productRequest = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -198,12 +203,13 @@ class ProductRestControllerTest {
     @DisplayName("상품 생성에 실패하는 경우 - 옵션 수량이 범위를 벗어나는 경우")
     void create_fail_option_quantity_range_error() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, "포도맛", -1),
-            new OptionDto(2L, "사과맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest("포도맛", -1),
+            new OptionRequest("사과맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        ProductRequest productRequest = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
         // when & then
         mockMvc.perform(post(DEFAULT_URL)
@@ -226,9 +232,9 @@ class ProductRestControllerTest {
         Page<Product> expectedPage = new PageImpl<>(productList, PageRequest.of(0, 5), productList.size());
 
         given(productService.readAll(any(Pageable.class))).willReturn(expectedPage.map(
-            ProductResponseDto::from));
+            ProductReadAllResponse::from));
         String expectedResult = objectMapper.writeValueAsString(expectedPage.map(
-            ProductResponseDto::from));
+            ProductReadAllResponse::from));
 
         // when & then
         mockMvc.perform(get(DEFAULT_URL)
@@ -242,18 +248,19 @@ class ProductRestControllerTest {
     @DisplayName("상품 ID로 조회 성공하는 경우")
     void readById_success() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, "사과맛", 90),
-            new OptionDto(2L, "자두맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest("사과맛", 90),
+            new OptionRequest("자두맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
+        ProductRequest productRequest = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
         Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
 
-        Product product = productRequestDto.toProduct(category);
+        Product product = productRequest.toProduct(category);
         product.setId(1L);
 
-        given(productService.readById(anyLong())).willReturn(ProductDetailResponseDto.from(product));
-        String expectedResult = objectMapper.writeValueAsString(ProductDetailResponseDto.from(product));
+        given(productService.readById(anyLong())).willReturn(ProductResponse.from(product));
+        String expectedResult = objectMapper.writeValueAsString(ProductResponse.from(product));
 
         // when & then
         mockMvc.perform(get(PATH_VAR_URL, 1L))
@@ -280,20 +287,21 @@ class ProductRestControllerTest {
     @DisplayName("상품 수정에 성공하는 경우")
     void update_success() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, "사과맛", 90),
-            new OptionDto(2L, "자두맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest("사과맛", 90),
+            new OptionRequest("자두맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
+        ProductRequest productRequest = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
         Category category = new Category(1L, "교환권", "#FFFFFF", "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "test");
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
-        Product product = productRequestDto.toProduct(category);
+        Product product = productRequest.toProduct(category);
         product.setId(1L);
 
-        given(productService.update(anyLong(), any(ProductRequestDto.class))).willReturn(
-            ProductDetailResponseDto.from(product));
-        String expectedResult = objectMapper.writeValueAsString(ProductDetailResponseDto.from(product));
+        given(productService.update(anyLong(), any(ProductRequest.class))).willReturn(
+            ProductResponse.from(product));
+        String expectedResult = objectMapper.writeValueAsString(ProductResponse.from(product));
 
         // when & then
         mockMvc.perform(put(PATH_VAR_URL, 1L)
@@ -307,14 +315,15 @@ class ProductRestControllerTest {
     @DisplayName("상품 수정에 실패하는 경우 - 존재하지 않는 ID")
     void update_fail_id_error() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, "사과맛", 90),
-            new OptionDto(2L, "자두맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest("사과맛", 90),
+            new OptionRequest("자두맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        ProductRequest productRequest = new ProductRequest(1L, "탕종 블루베리 베이글", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
-        given(productService.update(anyLong(), any(ProductRequestDto.class)))
+        given(productService.update(anyLong(), any(ProductRequest.class)))
             .willThrow(new InvalidProductInfoException("error.invalid.product.id"));
 
         // when & then
@@ -330,12 +339,13 @@ class ProductRestControllerTest {
     @DisplayName("상품 수정에 실패하는 경우 - 이름에 \"카카오\"가 포함")
     void update_fail_kakao_name_error() throws Exception {
         // given
-        List<OptionDto> optionDtos = List.of(
-            new OptionDto(1L, "사과맛", 90),
-            new OptionDto(2L, "자두맛", 80)
+        List<OptionRequest> optionRequests = List.of(
+            new OptionRequest("사과맛", 90),
+            new OptionRequest("자두맛", 80)
         );
-        ProductRequestDto productRequestDto = new ProductRequestDto(1L, "카카오빵", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg", optionDtos);
-        String jsonContent = objectMapper.writeValueAsString(productRequestDto);
+        ProductRequest productRequest = new ProductRequest(1L, "카카오빵", 3500, "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004823]_20230911131337469.jpg",
+            optionRequests);
+        String jsonContent = objectMapper.writeValueAsString(productRequest);
 
         // when & then
         mockMvc.perform(put(PATH_VAR_URL, 1L)

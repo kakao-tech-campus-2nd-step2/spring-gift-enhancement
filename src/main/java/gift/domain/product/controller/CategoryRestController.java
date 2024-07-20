@@ -1,6 +1,6 @@
 package gift.domain.product.controller;
 
-import gift.domain.product.dto.CategoryResponseDto;
+import gift.domain.product.dto.CategoryResponse;
 import gift.domain.product.service.CategoryService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -20,8 +20,8 @@ public class CategoryRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponseDto>> readAll() {
-        List<CategoryResponseDto> categories = categoryService.readAll();
+    public ResponseEntity<List<CategoryResponse>> readAll() {
+        List<CategoryResponse> categories = categoryService.readAll();
         return ResponseEntity.status(HttpStatus.OK).body(categories);
     }
 }

@@ -11,7 +11,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import gift.domain.product.dto.OptionDto;
+import gift.domain.product.dto.OptionRequest;
+import gift.domain.product.dto.OptionResponse;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Option;
 import gift.domain.product.entity.Product;
@@ -53,9 +54,9 @@ class OptionServiceTest {
     @DisplayName("옵션 생성 서비스 테스트")
     void create() {
         // given
-        List<OptionDto> optionRequestDtos = List.of(
-            new OptionDto(1L, "수박맛", 969),
-            new OptionDto(2L, "자두맛", 90)
+        List<OptionRequest> optionRequestDtos = List.of(
+            new OptionRequest("수박맛", 969),
+            new OptionRequest("자두맛", 90)
         );
         given(optionJpaRepository.save(any(Option.class))).willAnswer(invocation -> invocation.getArgument(0));
 
@@ -73,7 +74,7 @@ class OptionServiceTest {
         // given
         product.addOption(new Option(1L, product, "자두맛", 80));
 
-        OptionDto optionRequestDto = new OptionDto(2L, "자두맛", 969);
+        OptionRequest optionRequestDto = new OptionRequest("자두맛", 969);
 
         given(optionJpaRepository.save(any(Option.class))).willAnswer(invocation -> invocation.getArgument(0));
 
@@ -90,12 +91,12 @@ class OptionServiceTest {
         given(productJpaRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         // when
-        List<OptionDto> actual = optionService.readAll(1L);
+        List<OptionResponse> actual = optionService.readAll(1L);
 
         // then
         assertAll(
             () -> assertThat(actual).hasSize(1),
-            () -> assertThat(actual.get(0)).isEqualTo(OptionDto.from(option))
+            () -> assertThat(actual.get(0)).isEqualTo(OptionResponse.from(option))
         );
     }
 
@@ -103,10 +104,10 @@ class OptionServiceTest {
     @DisplayName("옵션 수정 서비스 테스트")
     void update() {
         // given
-        OptionDto optionDto = new OptionDto(1L, "수박맛", 969);
-        product.addOption(optionDto.toOption(product));
+        OptionRequest optionRequest = new OptionRequest("수박맛", 969);
+        product.addOption(optionRequest.toOption(product));
 
-        OptionDto optionUpdateDto = new OptionDto(1L, "자두맛", 90);
+        OptionRequest optionUpdateDto = new OptionRequest("자두맛", 90);
 
         doNothing().when(optionJpaRepository).deleteAll(any());
         given(optionJpaRepository.save(any(Option.class))).willAnswer(invocation -> invocation.getArgument(0));
@@ -123,9 +124,9 @@ class OptionServiceTest {
     @DisplayName("옵션 수정 서비스 중복 옵션 테스트")
     void update_fail_duplicate_name() {
         // given
-        List<OptionDto> optionUpdateDtos = List.of(
-            new OptionDto(1L, "자두맛", 90),
-            new OptionDto(2L, "자두맛", 70)
+        List<OptionRequest> optionUpdateDtos = List.of(
+            new OptionRequest("자두맛", 90),
+            new OptionRequest("자두맛", 70)
         );
 
         given(optionJpaRepository.save(any(Option.class))).willAnswer(invocation -> invocation.getArgument(0));
@@ -139,9 +140,9 @@ class OptionServiceTest {
     @DisplayName("상품 옵션 전체 삭제 서비스 테스트")
     void delete_success() {
         // given
-        List<OptionDto> optionRequestDtos = List.of(
-            new OptionDto(1L, "자두맛", 90),
-            new OptionDto(2L, "자두맛", 70)
+        List<OptionRequest> optionRequestDtos = List.of(
+            new OptionRequest( "자두맛", 90),
+            new OptionRequest("자두맛", 70)
         );
         optionRequestDtos.forEach(optionRequestDto -> product.addOption(optionRequestDto.toOption(product)));
 
