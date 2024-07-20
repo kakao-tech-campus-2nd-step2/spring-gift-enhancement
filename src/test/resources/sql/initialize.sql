@@ -1,4 +1,6 @@
 DELETE
+FROM options;
+DELETE
 FROM wishes;
 DELETE
 FROM products;
@@ -8,6 +10,8 @@ DELETE
 FROM categories;
 
 ALTER TABLE products
+    ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE options
     ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE wishes
     ALTER COLUMN id RESTART WITH 1;

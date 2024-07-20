@@ -1,7 +1,7 @@
 package gift.resolver;
 
 import gift.annotation.LoginUserId;
-import gift.service.UserService;
+import gift.user.service.UserService;
 import gift.util.auth.JwtUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

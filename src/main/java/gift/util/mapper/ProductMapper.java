@@ -1,10 +1,9 @@
 package gift.util.mapper;
 
-import gift.dto.product.request.CreateProductRequest;
-import gift.dto.product.request.UpdateProductRequest;
-import gift.dto.product.response.ProductResponse;
-import gift.entity.Category;
-import gift.entity.Product;
+import gift.product.category.entity.Category;
+import gift.product.dto.request.CreateProductRequest;
+import gift.product.dto.response.ProductResponse;
+import gift.product.entity.Product;
 
 public class ProductMapper {
 
@@ -15,14 +14,6 @@ public class ProductMapper {
             .imageUrl(createProductRequest.imageUrl())
             .category(category)
             .build();
-    }
-
-    public static void updateProduct(Product product, UpdateProductRequest request,
-        Category category) {
-        product.changeName(request.name());
-        product.changePrice(request.price());
-        product.changeImageUrl(request.imageUrl());
-        product.changeCategory(category);
     }
 
     public static ProductResponse toResponse(Product product) {

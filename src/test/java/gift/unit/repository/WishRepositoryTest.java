@@ -3,11 +3,12 @@ package gift.unit.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.entity.Product;
-import gift.entity.Wish;
-import gift.repository.ProductRepository;
-import gift.repository.UserRepository;
-import gift.repository.WishRepository;
+import gift.product.entity.Product;
+import gift.product.repository.ProductRepository;
+import gift.user.repository.UserRepository;
+import gift.wish.dto.request.UpdateWishRequest;
+import gift.wish.entity.Wish;
+import gift.wish.repository.WishRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,9 +18,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 @DataJpaTest
-@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_three_categories.sql",
-    "/sql/insert_five_products.sql", "/sql/insert_three_users.sql",
-    "/sql/insert_four_wishes.sql"},
+@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_categories.sql",
+    "/sql/insert_products.sql", "/sql/insert_users.sql",
+    "/sql/insert_wishes.sql"},
     executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 class WishRepositoryTest {
 
@@ -98,15 +99,15 @@ class WishRepositoryTest {
     @DisplayName("wish update test")
     void updateWishTest() {
         // given
-        Integer newQuantity = 50;
+        UpdateWishRequest request = new UpdateWishRequest(1L, 1L, 50);
 
         // when
         final Wish wish = wishRepository.findById(1L).get();
-        wish.changeQuantity(newQuantity);
+        wish.changeQuantity(request);
         final Wish actual = wishRepository.findById(1L).get();
 
         // then
-        assertThat(actual.getQuantity()).isEqualTo(newQuantity);
+        assertThat(actual.getQuantity()).isEqualTo(request.quantity());
     }
 
     @Test

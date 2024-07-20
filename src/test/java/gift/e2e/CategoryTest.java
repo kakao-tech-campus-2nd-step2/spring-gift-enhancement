@@ -2,8 +2,8 @@ package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.category.request.CreateCategoryRequest;
-import gift.dto.category.response.CategoryResponse;
+import gift.product.category.dto.request.CreateCategoryRequest;
+import gift.product.category.dto.response.CategoryResponse;
 import java.net.URI;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {"/sql/initialize.sql",
-    "/sql/insert_three_categories.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    "/sql/insert_categories.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class CategoryTest {
 
     @LocalServerPort
@@ -81,7 +81,7 @@ public class CategoryTest {
     @DisplayName("create category test")
     void createCategoryTest() {
         // given
-        var createBody = new CreateCategoryRequest("Category 4");
+        var createBody = new CreateCategoryRequest("Category 4", "#123456", "image", "");
         var url = "http://localhost:" + port + "/api/categories";
         var request = new RequestEntity<>(createBody, HttpMethod.POST, URI.create(url));
 
@@ -100,7 +100,7 @@ public class CategoryTest {
     @DisplayName("create exist category test")
     void createExistCategoryTest() {
         // given
-        var createBody = new CreateCategoryRequest("Category 1");
+        var createBody = new CreateCategoryRequest("Category 1", "#123456", "image", "");
         var url = "http://localhost:" + port + "/api/categories";
         var request = new RequestEntity<>(createBody, HttpMethod.POST, URI.create(url));
 

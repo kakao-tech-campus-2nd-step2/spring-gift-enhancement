@@ -1,8 +1,8 @@
 package gift.util.mapper;
 
-import gift.dto.wish.response.WishResponse;
-import gift.entity.Product;
-import gift.entity.Wish;
+import gift.product.entity.Product;
+import gift.wish.dto.response.WishResponse;
+import gift.wish.entity.Wish;
 
 public class WishMapper {
 

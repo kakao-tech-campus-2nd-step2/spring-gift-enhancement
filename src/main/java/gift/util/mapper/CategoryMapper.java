@@ -1,7 +1,7 @@
 package gift.util.mapper;
 
-import gift.dto.category.response.CategoryResponse;
-import gift.entity.Category;
+import gift.product.category.dto.response.CategoryResponse;
+import gift.product.category.entity.Category;
 
 public class CategoryMapper {
 

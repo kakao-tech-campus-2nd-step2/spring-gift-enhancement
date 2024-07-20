@@ -8,41 +8,30 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
-import gift.dto.category.request.CreateCategoryRequest;
-import gift.dto.category.request.UpdateCategoryRequest;
-import gift.dto.category.response.CategoryResponse;
-import gift.entity.Category;
-import gift.exception.category.CategoryNotFoundException;
-import gift.repository.CategoryRepository;
-import gift.service.CategoryService;
+import gift.exception.CustomException;
+import gift.product.category.dto.request.CreateCategoryRequest;
+import gift.product.category.dto.request.UpdateCategoryRequest;
+import gift.product.category.dto.response.CategoryResponse;
+import gift.product.category.entity.Category;
+import gift.product.category.repository.CategoryRepository;
+import gift.product.category.service.CategoryService;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public class CategoryServiceTest implements AutoCloseable {
+@ExtendWith(MockitoExtension.class)
+public class CategoryServiceTest {
 
     @InjectMocks
     private CategoryService categoryService;
 
     @Mock
     private CategoryRepository categoryRepository;
-
-    private AutoCloseable closeable;
-
-    @Override
-    public void close() throws Exception {
-        closeable.close();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     @DisplayName("get all categories test")
@@ -81,7 +70,7 @@ public class CategoryServiceTest implements AutoCloseable {
     @DisplayName("get category by id test")
     void getCategoryByIdTest() {
         // given
-        Category category = new Category(1L, "Category 1");
+        Category category = new Category(1L, "Category 1", "#123456", "image", "");
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
 
         // when
@@ -102,7 +91,7 @@ public class CategoryServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> categoryService.getCategory(999L)).isInstanceOf(
-            CategoryNotFoundException.class);
+            CustomException.class);
         then(categoryRepository).should(times(1)).findById(any());
     }
 
@@ -110,10 +99,11 @@ public class CategoryServiceTest implements AutoCloseable {
     @DisplayName("create category test")
     void createCategoryTest() {
         // given
-        CreateCategoryRequest request = new CreateCategoryRequest("Category 1");
-        given(categoryRepository.existsByName(any())).willReturn(false);
-        given(categoryRepository.save(any(Category.class))).willReturn(
-            new Category(1L, "Category 1"));
+        Category category = new Category(1L, "Category 1", "#123456", "image", "");
+        CreateCategoryRequest request = new CreateCategoryRequest("new category", "#123456",
+            "image", "");
+        given(categoryRepository.findAll()).willReturn(List.of(category));
+        given(categoryRepository.save(any(Category.class))).willReturn(category);
 
         Long expectedId = 1L;
 
@@ -124,7 +114,6 @@ public class CategoryServiceTest implements AutoCloseable {
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expectedId);
         then(categoryRepository).should(times(1)).save(any(Category.class));
-        then(categoryRepository).should(times(1)).existsByName(any());
     }
 
     @Test
@@ -132,9 +121,9 @@ public class CategoryServiceTest implements AutoCloseable {
     void updateCategoryTest() {
         // given
         String newName = "update category";
-        UpdateCategoryRequest request = new UpdateCategoryRequest(newName);
+        UpdateCategoryRequest request = new UpdateCategoryRequest(newName, "#123456", "image", "");
 
-        Category existingCategory = new Category(1L, "Category 1");
+        Category existingCategory = new Category(1L, "Category 1", "#123456", "image", "");
         given(categoryRepository.findById(any())).willReturn(Optional.of(existingCategory));
 
         // when
@@ -150,12 +139,12 @@ public class CategoryServiceTest implements AutoCloseable {
     void updateNotExistCategoryTest() {
         // given
         String newName = "update category";
-        UpdateCategoryRequest request = new UpdateCategoryRequest(newName);
+        UpdateCategoryRequest request = new UpdateCategoryRequest(newName, "#123456", "image", "");
         given(categoryRepository.findById(any())).willReturn(Optional.empty());
 
         // when & then
         assertThatThrownBy(() -> categoryService.updateCategory(1L, request))
-            .isInstanceOf(CategoryNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(categoryRepository).should(times(1)).findById(any());
     }
 
@@ -182,8 +171,10 @@ public class CategoryServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> categoryService.deleteCategory(1L))
-            .isInstanceOf(CategoryNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(categoryRepository).should(times(1)).existsById(any());
         then(categoryRepository).should(times(0)).deleteById(any());
     }
+
+
 }

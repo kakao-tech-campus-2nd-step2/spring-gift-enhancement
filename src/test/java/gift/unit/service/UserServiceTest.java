@@ -7,26 +7,31 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 
-import gift.dto.user.request.UserLoginRequest;
-import gift.dto.user.request.UserRegisterRequest;
-import gift.dto.user.response.UserResponse;
-import gift.entity.User;
-import gift.exception.InvalidTokenException;
-import gift.exception.user.UserAlreadyExistException;
-import gift.exception.user.UserNotFoundException;
-import gift.repository.UserRepository;
-import gift.service.UserService;
+import gift.exception.CustomException;
+import gift.user.dto.request.UserLoginRequest;
+import gift.user.dto.request.UserRegisterRequest;
+import gift.user.dto.response.UserResponse;
+import gift.user.entity.User;
+import gift.user.entity.UserRole;
+import gift.user.repository.RoleRepository;
+import gift.user.repository.UserRepository;
+import gift.user.service.UserService;
 import gift.util.auth.JwtUtil;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-class UserServiceTest implements AutoCloseable {
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
@@ -35,20 +40,10 @@ class UserServiceTest implements AutoCloseable {
     private UserRepository userRepository;
 
     @Mock
+    private RoleRepository roleRepository;
+
+    @Mock
     private JwtUtil jwtUtil;
-
-    private AutoCloseable closeable;
-
-    @BeforeEach
-    void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-    }
-
-    @Override
-    public void close() throws Exception {
-        closeable.close();
-    }
-
 
     @Test
     @DisplayName("register user test")
@@ -62,8 +57,9 @@ class UserServiceTest implements AutoCloseable {
             .email(request.email())
             .password(request.password())
             .build();
+        List<String> roles = new ArrayList<>();
         given(userRepository.save(any(User.class))).willReturn(user);
-        given(jwtUtil.generateToken(user.getId(), user.getEmail())).willReturn("token");
+        given(jwtUtil.generateToken(user.getId(), user.getEmail(), roles)).willReturn("token");
 
         //when
         UserResponse actual = userService.registerUser(request);
@@ -72,7 +68,7 @@ class UserServiceTest implements AutoCloseable {
         assertThat(actual.token()).isEqualTo("token");
         then(userRepository).should(times(1)).findByEmail(request.email());
         then(userRepository).should(times(1)).save(any(User.class));
-        then(jwtUtil).should(times(1)).generateToken(user.getId(), user.getEmail());
+        then(jwtUtil).should(times(1)).generateToken(user.getId(), user.getEmail(), roles);
     }
 
     @Test
@@ -86,7 +82,7 @@ class UserServiceTest implements AutoCloseable {
 
         //when&then
         assertThatThrownBy(() -> userService.registerUser(request))
-            .isInstanceOf(UserAlreadyExistException.class);
+            .isInstanceOf(CustomException.class);
         then(userRepository).should(times(1)).findByEmail(request.email());
     }
 
@@ -96,14 +92,18 @@ class UserServiceTest implements AutoCloseable {
     void userLoginTest() {
         //given
         UserLoginRequest loginRequest = new UserLoginRequest("user1@example.com", "password1");
+        Set<UserRole> roles = new HashSet<>();
         User user = User.builder()
             .id(1L)
             .email(loginRequest.email())
             .password(loginRequest.password())
+            .userRoles(roles)
             .build();
+        List<String> rolesName = new ArrayList<>();
         given(userRepository.findByEmailAndPassword(loginRequest.email(), loginRequest.password()))
             .willReturn(Optional.of(user));
-        given(jwtUtil.generateToken(user.getId(), user.getEmail())).willReturn("token");
+        given(jwtUtil.generateToken(user.getId(), user.getEmail(), rolesName)).willReturn("token");
+        given(roleRepository.findAllById(any())).willReturn(List.of());
 
         //when
         UserResponse actual = userService.loginUser(loginRequest);
@@ -126,7 +126,7 @@ class UserServiceTest implements AutoCloseable {
 
         //when & then
         assertThatThrownBy(() -> userService.loginUser(request))
-            .isInstanceOf(UserNotFoundException.class);
+            .isInstanceOf(CustomException.class);
     }
 
     @Test
@@ -141,7 +141,7 @@ class UserServiceTest implements AutoCloseable {
 
         //when & then
         assertThatThrownBy(() -> userService.loginUser(request))
-            .isInstanceOf(UserNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(userRepository).should(times(1)).findByEmailAndPassword(request.email(),
             request.password());
     }
@@ -174,7 +174,7 @@ class UserServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> userService.getUserById(1L))
-            .isInstanceOf(UserNotFoundException.class);
+            .isInstanceOf(CustomException.class);
         then(userRepository).should(times(1)).findById(1L);
     }
 
@@ -204,7 +204,7 @@ class UserServiceTest implements AutoCloseable {
 
         // when & then
         assertThatThrownBy(() -> userService.getUserIdByToken(token))
-            .isInstanceOf(InvalidTokenException.class);
+            .isInstanceOf(CustomException.class);
         then(jwtUtil).should(times(1)).extractUserId(token);
     }
 }

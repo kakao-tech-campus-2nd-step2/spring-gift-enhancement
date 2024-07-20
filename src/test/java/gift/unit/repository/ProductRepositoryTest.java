@@ -2,11 +2,12 @@ package gift.unit.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.entity.Category;
-import gift.entity.Product;
-import gift.exception.product.ProductNotFoundException;
-import gift.repository.CategoryRepository;
-import gift.repository.ProductRepository;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
+import gift.product.category.entity.Category;
+import gift.product.category.repository.CategoryRepository;
+import gift.product.entity.Product;
+import gift.product.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -16,8 +17,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
-@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_three_categories.sql",
-    "/sql/insert_five_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_categories.sql",
+    "/sql/insert_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class ProductRepositoryTest {
 
     @Autowired
@@ -94,7 +95,7 @@ class ProductRepositoryTest {
     void updateTest() {
         // given
         final Product updateProduct = productRepository.findById(1L)
-            .orElseThrow(() -> new ProductNotFoundException(""));
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
         // when
         updateProduct.changeName("update product");

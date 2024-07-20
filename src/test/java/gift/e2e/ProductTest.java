@@ -2,9 +2,11 @@ package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.product.request.CreateProductRequest;
-import gift.dto.product.response.ProductResponse;
+import gift.product.dto.request.CreateProductRequest;
+import gift.product.dto.request.NewOption;
+import gift.product.dto.response.ProductResponse;
 import java.net.URI;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_three_categories.sql",
-    "/sql/insert_five_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/initialize.sql", "/sql/insert_categories.sql",
+    "/sql/insert_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class ProductTest {
 
     @LocalServerPort
@@ -86,8 +88,10 @@ public class ProductTest {
     @DisplayName("create product test")
     void createProductTest() {
         // given
+        NewOption option = new NewOption("option 1", 100);
         var url = "http://localhost:" + port + "/api/products";
-        var requestBody = new CreateProductRequest("new product", 10000, "link", 2L);
+        var requestBody = new CreateProductRequest("new product", 10000, "link", 2L,
+            List.of(option));
         var request = new RequestEntity<>(requestBody, HttpMethod.POST, URI.create(url));
 
         var expectedLocation = URI.create("/api/products/6");
