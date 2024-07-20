@@ -109,7 +109,7 @@ class ProductServiceTest {
     @Transactional
     void deleteProductAndWishlist() {
         Long productId = product1.getId();
-        productService.deleteProductAndWishlist(productId);
+        productService.deleteProductAndWishlistAndOptions(productId);
         boolean exists = productRepository.existsById(productId);
         assertThat(exists).isFalse();
     }
