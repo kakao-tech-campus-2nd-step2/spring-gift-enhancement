@@ -58,6 +58,7 @@ public class Option {
     public void subtract(Long quantity) {
         if (this.quantity - quantity >= 0) {
             this.quantity -= quantity;
+            return;
         }
         throw new OutOfStockException("해당 옵션의 수량이 부족합니다.");
     }
