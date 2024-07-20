@@ -42,6 +42,28 @@
                         <input id="imageUrl" type="text" th:value="${product.imageUrl}" required>
                     </td>
                 </tr>
+                <tr>
+                    <th>Option</th>
+                    <td>
+                        <table>
+                            <tr th:each="option: ${options}">
+                                <td th:text="${option.name}"></td>
+                                <td th:text="${option.quantity}"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input id="optionName" type="text">
+                                </td>
+                                <td>
+                                    <input id="optionQuantity" type="text">
+                                </td>
+                                <td>
+                                    <button class="btn primary-btn" type="button" th:onclick="addOption([[${product.id}]])">Add</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
             </table>
             <div class="btn-container">
                 <button class="btn primary-btn" type="submit">Edit</button>

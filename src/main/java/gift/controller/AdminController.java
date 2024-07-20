@@ -49,6 +49,7 @@ public class AdminController {
     public String updateProduct(@PathVariable("id") Long id, Model model) {
         model.addAttribute("product", productService.getProduct(id));
         model.addAttribute("categories", categoryService.getCategories());
+        model.addAttribute("options", optionService.getOptions(id));
         return "edit-product";
     }
 }
