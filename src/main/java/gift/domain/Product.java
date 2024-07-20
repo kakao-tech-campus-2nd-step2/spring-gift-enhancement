@@ -97,6 +97,7 @@ public class Product extends BaseEntity {
         price = builder.price;
         imageUrl = builder.imageUrl;
         category = builder.category;
+        productOptions = builder.productOptions;
     }
 
     public Product update(Product product) {
@@ -125,6 +126,6 @@ public class Product extends BaseEntity {
     }
 
     public List<ProductOption> getProductOptions() {
-        return Collections.unmodifiableList(productOptions);
+        return productOptions;
     }
 }
