@@ -26,4 +26,6 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, Lo
         + " WHERE po.id != :id AND po.productId = :productId AND po.name = :name"
         )
     Optional<Long> findDuplicatedProductOption(Long id, Long productId, String name);
+
+    void deleteAllByProductId(Long productId);
 }
