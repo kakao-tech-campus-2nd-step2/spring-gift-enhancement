@@ -12,6 +12,7 @@ import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -94,5 +95,15 @@ public class ProductService {
         productRepository.flush();
 
         return new AddedOptionIdResponse(option.getId());
+    }
+
+    @Cacheable (cacheNames = "options")
+    @Transactional
+    public List<String> getOptionNames(Long productId) {
+        Product product = getProduct(productId);
+        return product.getOptions()
+                .stream()
+                .map(Option::getName)
+                .toList();
     }
 }
