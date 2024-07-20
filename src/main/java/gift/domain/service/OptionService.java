@@ -2,7 +2,7 @@ package gift.domain.service;
 
 import gift.domain.dto.response.OptionDetailedResponse;
 import gift.domain.entity.Option;
-import gift.domain.exception.unauthorized.OptionNotFoundException;
+import gift.domain.exception.notFound.OptionNotFoundException;
 import gift.domain.repository.OptionRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
