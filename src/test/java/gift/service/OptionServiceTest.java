@@ -96,4 +96,18 @@ public class OptionServiceTest {
         NotFoundException thrown = assertThrows(NotFoundException.class, () -> optionService.makeOption(3L, request));
         assertEquals("해당 id의 상품이 존재하지 않습니다.", thrown.getMessage());
     }
+
+    @Test
+    @DisplayName("subtract 성공 테스트")
+    void testSubtractSuccess() {
+        option.subtract(5L);
+        assertEquals(5L, option.getQuantity());
+    }
+
+    @Test
+    @DisplayName("quantity 정확히 0의 값으로 만드는 테스트")
+    void testSubtractExactQuantity() {
+        option.subtract(10L);
+        assertEquals(0L, option.getQuantity());
+    }
 }
