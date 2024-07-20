@@ -1,5 +1,6 @@
 package gift.service.category;
 
+import gift.domain.category.Category;
 import gift.domain.category.CategoryRepository;
 import gift.mapper.CategoryMapper;
 import gift.web.dto.CategoryDto;
@@ -21,5 +22,10 @@ public class CategoryService {
             .stream()
             .map(categoryMapper::toDto)
             .toList();
+    }
+
+    public CategoryDto createCategory(CategoryDto categoryDto) {
+        Category category = categoryRepository.save(categoryMapper.toEntity(categoryDto));
+        return categoryMapper.toDto(category);
     }
 }

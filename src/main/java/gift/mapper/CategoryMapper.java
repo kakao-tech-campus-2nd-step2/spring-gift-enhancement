@@ -13,4 +13,11 @@ public class CategoryMapper {
             category.getImageUrl(),
             category.getDescription());
     }
+
+    public Category toEntity(CategoryDto categoryDto) {
+        return new Category(categoryDto.name(),
+            categoryDto.color(),
+            categoryDto.description(),
+            categoryDto.imageUrl());
+    }
 }
