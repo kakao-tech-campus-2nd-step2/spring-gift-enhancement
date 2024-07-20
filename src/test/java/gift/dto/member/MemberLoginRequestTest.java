@@ -25,8 +25,10 @@ public class MemberLoginRequestTest {
     @Test
     @DisplayName("유효한 회원 로그인 요청")
     public void testLoginMemberValid() {
-        MemberLoginRequest memberLoginRequest = new MemberLoginRequest("valid@example.com",
-            "validpassword");
+        MemberLoginRequest memberLoginRequest = new MemberLoginRequest(
+            "valid@example.com",
+            "validpassword"
+        );
 
         Set<ConstraintViolation<MemberLoginRequest>> violations = validator.validate(
             memberLoginRequest);

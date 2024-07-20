@@ -44,8 +44,10 @@ public class OptionController {
     @PostMapping
     public ResponseEntity<OptionResponse> addOptionToProduct(@PathVariable Long productId,
         @Valid @RequestBody OptionCreateRequest optionCreateRequest) {
-        OptionResponse createdOption = optionService.addOptionToProduct(productId,
-            optionCreateRequest);
+        OptionResponse createdOption = optionService.addOptionToProduct(
+            productId,
+            optionCreateRequest
+        );
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOption);
     }
 
@@ -53,8 +55,11 @@ public class OptionController {
     public ResponseEntity<OptionResponse> updateOption(@PathVariable Long productId,
         @PathVariable Long optionId,
         @Valid @RequestBody OptionUpdateRequest optionUpdateRequest) {
-        OptionResponse updatedOption = optionService.updateOption(productId, optionId,
-            optionUpdateRequest);
+        OptionResponse updatedOption = optionService.updateOption(
+            productId,
+            optionId,
+            optionUpdateRequest
+        );
         return ResponseEntity.ok(updatedOption);
     }
 

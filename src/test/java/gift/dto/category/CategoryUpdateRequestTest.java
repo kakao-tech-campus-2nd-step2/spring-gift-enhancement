@@ -25,8 +25,12 @@ public class CategoryUpdateRequestTest {
     @Test
     @DisplayName("유효한 카테고리 수정")
     public void testValidCategoryUpdateRequest() {
-        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Category",
-            "#000000", "imageUrl", "description");
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(
+            "Category",
+            "#000000",
+            "imageUrl",
+            "description"
+        );
 
         Set<ConstraintViolation<CategoryUpdateRequest>> violations = validator.validate(
             categoryUpdateRequest);
@@ -37,8 +41,12 @@ public class CategoryUpdateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이름")
     public void testUpdateRequestNoName() {
-        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(null, "#000000",
-            "imageUrl", "description");
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(
+            null,
+            "#000000",
+            "imageUrl",
+            "description"
+        );
 
         Set<ConstraintViolation<CategoryUpdateRequest>> violations = validator.validate(
             categoryUpdateRequest);
@@ -53,8 +61,12 @@ public class CategoryUpdateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 색상 코드")
     public void testUpdateRequestNoColor() {
-        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Category", null,
-            "imageUrl", "description");
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(
+            "Category",
+            null,
+            "imageUrl",
+            "description"
+        );
 
         Set<ConstraintViolation<CategoryUpdateRequest>> violations = validator.validate(
             categoryUpdateRequest);
@@ -69,8 +81,12 @@ public class CategoryUpdateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이미지 URL")
     public void testUpdateRequestNoImageUrl() {
-        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Category",
-            "#000000", null, "description");
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(
+            "Category",
+            "#000000",
+            null,
+            "description"
+        );
 
         Set<ConstraintViolation<CategoryUpdateRequest>> violations = validator.validate(
             categoryUpdateRequest);

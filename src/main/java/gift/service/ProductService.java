@@ -53,7 +53,12 @@ public class ProductService {
         Product product = convertToEntity(productCreateRequest, category);
         Product savedProduct = productRepository.save(product);
 
-        Option defaultOption = new Option(null, "Default Option", 1, savedProduct);
+        Option defaultOption = new Option(
+            null,
+            "Default Option",
+            1,
+            savedProduct
+        );
         optionRepository.save(defaultOption);
 
         return convertToDTO(savedProduct);
@@ -68,8 +73,12 @@ public class ProductService {
             .orElseThrow(() -> new ProductNotFoundException(
                 CATEGORY_NOT_FOUND + productUpdateRequest.categoryId()));
 
-        product.update(productUpdateRequest.name(), productUpdateRequest.price(),
-            productUpdateRequest.imageUrl(), category);
+        product.update(
+            productUpdateRequest.name(),
+            productUpdateRequest.price(),
+            productUpdateRequest.imageUrl(),
+            category
+        );
         Product updatedProduct = productRepository.save(product);
         return convertToDTO(updatedProduct);
     }

@@ -53,8 +53,12 @@ public class OptionService {
 
         validateDuplicateOptionName(productId, optionCreateRequest.name());
 
-        Option option = new Option(null, optionCreateRequest.name(), optionCreateRequest.quantity(),
-            product);
+        Option option = new Option(
+            null,
+            optionCreateRequest.name(),
+            optionCreateRequest.quantity(),
+            product
+        );
         Option savedOption = optionRepository.save(option);
         return convertToDTO(savedOption);
     }
@@ -79,8 +83,6 @@ public class OptionService {
     }
 
     public void deleteOption(Long productId, Long optionId) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND + productId));
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionNotFoundException(OPTION_NOT_FOUND + optionId));
 

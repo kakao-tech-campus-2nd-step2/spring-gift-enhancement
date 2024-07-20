@@ -42,7 +42,8 @@ public class WishService {
         Member member = memberService.convertToEntity(memberResponse);
 
         ProductResponse productResponse = productService.getProductById(
-            wishCreateRequest.productId());
+            wishCreateRequest.productId()
+        );
         Product product = productService.convertToEntity(productResponse);
 
         if (wishRepository.existsByMember_IdAndProduct_Id(member.getId(), product.getId())) {

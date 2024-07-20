@@ -43,9 +43,12 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND + id));
 
-        category.update(categoryUpdateRequest.name(), categoryUpdateRequest.color(),
+        category.update(
+            categoryUpdateRequest.name(),
+            categoryUpdateRequest.color(),
             categoryUpdateRequest.imageUrl(),
-            categoryUpdateRequest.description());
+            categoryUpdateRequest.description()
+        );
         Category updatedCategory = categoryRepository.save(category);
         return convertToDTO(updatedCategory);
     }

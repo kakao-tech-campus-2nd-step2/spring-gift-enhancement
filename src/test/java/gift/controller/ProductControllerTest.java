@@ -51,7 +51,14 @@ public class ProductControllerTest {
 
     @BeforeEach
     public void setUp() {
-        productResponse = new ProductResponse(1L, "Test Product", 100, "test.jpg", 1L);
+        productResponse = new ProductResponse(
+            1L,
+            "Test Product",
+            100,
+            "test.jpg",
+            1L,
+            "categoryName"
+        );
     }
 
 

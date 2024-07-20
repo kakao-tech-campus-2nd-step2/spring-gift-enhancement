@@ -25,8 +25,12 @@ public class ProductUpdateRequestTest {
     @Test
     @DisplayName("유효한 상품 업데이트")
     public void testUpdateProductValid() {
-        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Valid Name", 100,
-            "valid.jpg", 1L);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest(
+            "Valid Name",
+            100,
+            "valid.jpg",
+            1L
+        );
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);
@@ -37,8 +41,12 @@ public class ProductUpdateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이름")
     public void testUpdateProductNameMissing() {
-        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest(null, 100, "valid.jpg",
-            1L);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest(
+            null,
+            100,
+            "valid.jpg",
+            1L
+        );
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);
@@ -53,8 +61,12 @@ public class ProductUpdateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 가격")
     public void testUpdateProductPriceMissing() {
-        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Valid Name", null,
-            "valid.jpg", 1L);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest(
+            "Valid Name",
+            null,
+            "valid.jpg",
+            1L
+        );
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);
@@ -69,8 +81,12 @@ public class ProductUpdateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이미지 URL")
     public void testUpdateProductImageUrlMissing() {
-        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Valid Name", 100,
-            null, 1L);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest(
+            "Valid Name",
+            100,
+            null,
+            1L
+        );
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);
@@ -85,8 +101,12 @@ public class ProductUpdateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 카테고리 ID")
     public void testUpdateProductCategoryIdMissing() {
-        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Valid Name", 100,
-            "valid.jpg", null);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest(
+            "Valid Name",
+            100,
+            "valid.jpg",
+            null
+        );
 
         Set<ConstraintViolation<ProductUpdateRequest>> violations = validator.validate(
             productUpdateRequest);

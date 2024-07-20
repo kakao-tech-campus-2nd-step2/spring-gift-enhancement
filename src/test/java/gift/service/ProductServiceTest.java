@@ -43,8 +43,11 @@ public class ProductServiceTest {
         productRepository = Mockito.mock(ProductRepository.class);
         categoryRepository = Mockito.mock(CategoryRepository.class);
         optionRepository = Mockito.mock(OptionRepository.class);
-        productService = new ProductService(productRepository, categoryRepository,
-            optionRepository);
+        productService = new ProductService(
+            productRepository,
+            categoryRepository,
+            optionRepository
+        );
     }
 
     @Test
@@ -89,8 +92,12 @@ public class ProductServiceTest {
     public void testAddProduct() {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Product product = new Product(1L, "Test Product", 100, "test.jpg", category);
-        ProductCreateRequest productCreateRequest = new ProductCreateRequest("Test Product", 100,
-            "test.jpg", 1L);
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest(
+            "Test Product",
+            100,
+            "test.jpg",
+            1L
+        );
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
@@ -101,8 +108,12 @@ public class ProductServiceTest {
     @Test
     @DisplayName("유효하지 않은 가격으로 상품 추가")
     public void testAddProductInvalidPrice() {
-        ProductCreateRequest productCreateRequest = new ProductCreateRequest("Test Product", -100,
-            "test.jpg", 1L);
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest(
+            "Test Product",
+            -100,
+            "test.jpg",
+            1L
+        );
 
         InvalidProductPriceException exception = assertThrows(InvalidProductPriceException.class,
             () -> {
@@ -118,8 +129,12 @@ public class ProductServiceTest {
         Category category = new Category("Category", "#000000", "imageUrl", "description");
         Product existingProduct = new Product(1L, "Old Product", 100, "old.jpg", category);
         Product updatedProduct = new Product(1L, "Updated Product", 200, "updated.jpg", category);
-        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Updated Product", 200,
-            "updated.jpg", 1L);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest(
+            "Updated Product",
+            200,
+            "updated.jpg",
+            1L
+        );
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
@@ -133,8 +148,12 @@ public class ProductServiceTest {
     @Test
     @DisplayName("존재하지 않는 상품 ID로 업데이트")
     public void testUpdateProductNotFound() {
-        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest("Updated Product", 200,
-            "updated.jpg", 1L);
+        ProductUpdateRequest productUpdateRequest = new ProductUpdateRequest(
+            "Updated Product",
+            200,
+            "updated.jpg",
+            1L
+        );
 
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
