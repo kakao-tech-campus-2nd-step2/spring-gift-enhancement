@@ -2,6 +2,7 @@ package gift.domain.option.entity;
 
 import gift.domain.option.exception.OptionNameDuplicateException;
 import gift.domain.option.exception.OptionNameLengthException;
+import gift.domain.option.exception.OptionNameNotAllowCharacterException;
 import gift.domain.option.exception.OptionQuantityRangeException;
 import gift.domain.product.entity.Product;
 import jakarta.persistence.Column;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Entity
 public class Option {
+    private final String regex = "[\\w\\s\\(\\)\\[\\]\\+\\-\\&\\/가-힣]*";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,12 +45,16 @@ public class Option {
     }
 
     public Option(Long id, String name, int quantity, Product product) {
+        if(!name.matches(regex)){
+            throw new OptionNameNotAllowCharacterException("특수 문자는 '(), [], +, -, &, /, _ '만 사용가능 합니다.");
+        }
         if(quantity < 1 || quantity >= 100_000_000){
             throw new OptionQuantityRangeException("수량은 1개 이상 1억개 미만으로 설정해주세요.");
         }
         if(name.length() > 50){
             throw new OptionNameLengthException("옵션 이름 50자 초과");
         }
+
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -85,4 +91,5 @@ public class Option {
     public void subtract(int quantity) {
         this.quantity -= quantity;
     }
+
 }
