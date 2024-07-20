@@ -47,7 +47,7 @@ class OptionControllerTest {
 
     @Test
     @DisplayName("잘못된 수량으로 된 오류 상품 옵션 생성하기")
-    void failOptionAdd() throws Exception {
+    void failAddOptionWithWrongQuantity() throws Exception {
         //given
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -62,7 +62,7 @@ class OptionControllerTest {
 
     @Test
     @DisplayName("빈 이름을 가진 오류 상품 옵션 생성하기")
-    void failOptionAddWithEmptyName() throws Exception {
+    void failAddOptionWithEmptyName() throws Exception {
         //given
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +77,7 @@ class OptionControllerTest {
 
     @Test
     @DisplayName("이름의 길이가 50초과인 오류 상품 생성하기")
-    void failOptionAddWithLengthOver50() throws Exception {
+    void failAddOptionWithNameOverLength() throws Exception {
         //given
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +92,7 @@ class OptionControllerTest {
 
     @Test
     @DisplayName("정상 상품 옵션 생성하기")
-    void successOptionAdd() throws Exception {
+    void successAddOption() throws Exception {
         //given
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +108,7 @@ class OptionControllerTest {
 
     @Test
     @DisplayName("존재하지 않는 상품에 대한 옵션 생성하기")
-    void failOptionWithNotExistProductId() throws Exception {
+    void failAddOptionWithNotExistProductId() throws Exception {
         //given
         var postRequest = post("/api/products/1000/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -122,7 +122,7 @@ class OptionControllerTest {
 
     @Test
     @DisplayName("정상 옵션 생성하기 - 특수문자 포함")
-    void successAddProductOptionWithSpecialChar() throws Exception {
+    void successAddOptionWithSpecialChar() throws Exception {
         //given
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -154,7 +154,7 @@ class OptionControllerTest {
 
     @Test
     @DisplayName("오류 상품 생성하기 - 허용되지 않은 특수문자 포함")
-    void addOptionFailWithSpecialChar() throws Exception {
+    void failAddOptionWithSpecialChar() throws Exception {
         //given
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -56,7 +56,7 @@ class WishProductControllerTest {
 
     @Test
     @DisplayName("잘못된 수량으로 된 위시 리스트 상품 추가하기")
-    void addWishProductFailWithZeroCount() throws Exception {
+    void failAddWishProductWithZeroCount() throws Exception {
         //given
         var postRequest = post("/api/wishes/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +71,7 @@ class WishProductControllerTest {
 
     @Test
     @DisplayName("위시 리스트 상품 추가하기")
-    void addWishProductSuccess() throws Exception {
+    void successAddWishProduct() throws Exception {
         //given
         var postRequest = post("/api/wishes/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -85,7 +85,7 @@ class WishProductControllerTest {
 
     @Test
     @DisplayName("위시 리스트 상품 조회하기")
-    void readWishProductSuccess() throws Exception {
+    void successGetWishProducts() throws Exception {
         //given
         var wishProduct = wishProductService
                 .addWishProduct(new WishProductAddRequest(1L, 10), 1L);
@@ -106,7 +106,7 @@ class WishProductControllerTest {
 
     @Test
     @DisplayName("이미 위시 리스트에 저장된 상품 추가로 저장시 수량이 늘어난다")
-    void addWishProductAlreadyExistWishProductSuccess() throws Exception {
+    void successAddWishProductAlreadyExists() throws Exception {
         //given
         var wishProductAddRequest = new WishProductAddRequest(1L, 10);
         var wishProduct = wishProductService.addWishProduct(wishProductAddRequest, 1L);
@@ -127,7 +127,7 @@ class WishProductControllerTest {
 
     @Test
     @DisplayName("이용자끼리의 위시리스트가 다르다")
-    void addWishProductAndReadMemberAndManagerSuccess() throws Exception {
+    void successGetDifferentWishProducts() throws Exception {
         //given
         var wishProduct1AddRequest = new WishProductAddRequest(1L, 10);
         var wishProduct2AddRequest = new WishProductAddRequest(2L, 10);
@@ -150,7 +150,7 @@ class WishProductControllerTest {
 
     @Test
     @DisplayName("위시 리스트 수량 변경하기")
-    void addWishProductAndUpdateCountSuccess() throws Exception {
+    void successUpdateCount() throws Exception {
         //given
         var wishProduct = wishProductService
                 .addWishProduct(new WishProductAddRequest(1L, 10), 1L);
@@ -171,7 +171,7 @@ class WishProductControllerTest {
 
     @Test
     @DisplayName("위시 리스트 상품 추가후 수량 0으로 변경하기")
-    void addWishProductAndUpdateCountZeroSuccess() throws Exception {
+    void successUpdateCountZero() throws Exception {
         //given
         var wishProduct = wishProductService
                 .addWishProduct(new WishProductAddRequest(1L, 10),
@@ -190,7 +190,7 @@ class WishProductControllerTest {
 
     @Test
     @DisplayName("잘못된 정렬 데이터가 올 경우 예외를 던진다.")
-    void getWishProductsInvalidPageSort() throws Exception {
+    void failGetWishProductsWithInvalidPageSort() throws Exception {
         //given
         var getRequest = get("/api/wishes?sort=wrong,asc")
                 .contentType(MediaType.APPLICATION_JSON)

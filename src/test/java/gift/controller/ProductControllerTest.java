@@ -59,7 +59,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("잘못된 가격으로 된 오류 상품 생성하기")
-    void addProductFailWithPrice() throws Exception {
+    void failAddProductWithWrongPrice() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("이름의 길이가 15초과인 오류 상품 생성하기")
-    void addProductFailWithNameLength() throws Exception {
+    void failAddProductWithNameOverLength() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +89,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("카카오를 포함한 이름을 가진 오류 상품 생성하기")
-    void addProductFailWithNameKAKAO() throws Exception {
+    void failAddProductWithNameKakao() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +104,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("카카오를 포함한 이름을 가진 상품 매니저로 생성하기")
-    void addProductSuccessWithNameKAKAO() throws Exception {
+    void successAddProductWithNameKakao() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -120,7 +120,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("빈 이름을 가진 오류 상품 생성하기")
-    void addProductFailWithEmptyName() throws Exception {
+    void failAddProductWithEmptyName() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +135,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("정상 상품 생성하기 - 특수문자 포함")
-    void addProductSuccessWithSpecialChar() throws Exception {
+    void successAddProductWithSpecialChar() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -151,7 +151,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("정상 상품 생성하기 - 공백 포함")
-    void addProductSuccessWithEmptySpace() throws Exception {
+    void successAddProductWithEmptySpace() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -167,7 +167,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("오류 상품 생성하기 - 허용되지 않은 특수문자 포함")
-    void addProductFailWithSpecialChar() throws Exception {
+    void failAddProductWithSpecialChar() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -182,7 +182,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("11개의 상품을 등록하였을 때, 2번째 페이지의 조회의 결과는 1개의 상품만을 반환한다.")
-    void getProductsWithPageable() throws Exception {
+    void successGetProductsWithPageable() throws Exception {
         List<ProductResponse> productResponseList = new ArrayList<>();
         //given
         var productRequest = new ProductRequest("햄버거()[]+-&/_**", 1000, "이미지 주소", 1L);
@@ -207,7 +207,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("잘못된 정렬 데이터가 올 경우 예외를 던진다.")
-    void getProductsInvalidPageSort() throws Exception {
+    void failGetProductsWithInvalidPageSort() throws Exception {
         //given
         var getRequest = get("/api/products?sort=wrong,desc")
                 .contentType(MediaType.APPLICATION_JSON)

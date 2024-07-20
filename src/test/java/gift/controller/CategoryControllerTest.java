@@ -43,7 +43,7 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("잘못된 색상코드로 된 카테고리 생성하기")
-    void failCategoryAddWithWrongColorPattern() throws Exception {
+    void failAddCategoryWithWrongColorPattern() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +58,7 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("카테고리 이미지는 공백이 입력되면 안된다")
-    void failCategoryAddWithBlankCategoryImage() throws Exception {
+    void failAddCategoryWithBlankCategoryImage() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +73,7 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("카테고리 이름은 공백이 입력되면 안된다")
-    void failCategoryAddWithBlankCategoryName() throws Exception {
+    void failAddCategoryWithBlankCategoryName() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,7 +88,7 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("카테고리 설명은 공백이 입력되면 안된다")
-    void failCategoryAddWithBlankCategoryDescription() throws Exception {
+    void failAddCategoryWithBlankCategoryDescription() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -103,7 +103,7 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("카테고리는 중복되면 안된다.")
-    void failCategoryAddWithDuplicatedCategory() throws Exception {
+    void failAddCategoryWithDuplicatedCategory() throws Exception {
         //given
         var productCategoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
         var productCategory = categoryService.addCategory(productCategoryRequest);
@@ -123,7 +123,7 @@ class CategoryControllerTest {
 
     @Test
     @DisplayName("정상 상품 카테고리 생성")
-    void successCategoryAdd() throws Exception {
+    void successAddCategory() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
