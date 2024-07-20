@@ -18,6 +18,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import testFixtures.CategoryFixture;
+import testFixtures.OptionFixture;
+import testFixtures.ProductFixture;
 
 import java.util.Optional;
 import java.util.Set;
@@ -40,35 +43,26 @@ class OptionServiceTest {
     @Mock
     private ProductRepository productRepository;
 
-    private final Category category = new Category.CategoryBuilder()
-            .setName("상품권")
-            .setColor("#ffffff")
-            .setImageUrl("https://product-shop.com")
-            .setDescription("")
-            .build();
-
-    private final Long productId = 1L;
+    private Long productId;
 
     private Product product;
 
     @BeforeEach
     void setUp() {
-        product = new Product.ProductBuilder()
-                .setName("product")
-                .setPrice(1000)
-                .setCategory(category)
-                .setImageUrl("https://product-shop.com")
-                .build();
+        productId = 1L;
+        Category category = CategoryFixture.createCategory("상품권");
+        product = ProductFixture.createProduct("product", category);
     }
 
     @Test
     @DisplayName("상품 옵션 조회 기능 테스트")
     void getProductOptionsByIdOrThrow() {
-        Option option1 = new Option("옵션1", 10, product);
-        Option option2 = new Option("옵션2", 20, product);
+        Option option1 = OptionFixture.createOption("옵션1", product);
+        Option option2 = OptionFixture.createOption("옵션2", product);
         product.addOptionOrElseFalse(option1);
         product.addOptionOrElseFalse(option2);
-        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(productRepository.findById(anyLong()))
+                .willReturn(Optional.of(product));
 
         Set<OptionResponse> responses = optionService.getProductOptionsByIdOrThrow(productId);
 
@@ -82,7 +76,8 @@ class OptionServiceTest {
     @DisplayName("상품 옵션 추가 기능 테스트")
     void addOptionToProduct() {
         OptionRequest request = new OptionRequest("옵션", 10);
-        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+        given(productRepository.findById(anyLong()))
+                .willReturn(Optional.of(product));
 
         OptionResponse response = optionService.addOptionToProduct(productId, request);
 
@@ -109,7 +104,7 @@ class OptionServiceTest {
     void deleteOptionFromProduct() {
         OptionRequest request = new OptionRequest("옵션1", 10);
         Option option1 = OptionMapper.toEntity(request, product);
-        Option option2 = new Option("옵션2", 100, product);
+        Option option2 = OptionFixture.createOption("옵션2", product);
         product.addOptionOrElseFalse(option1);
         product.addOptionOrElseFalse(option2);
         given(productRepository.findById(anyLong()))

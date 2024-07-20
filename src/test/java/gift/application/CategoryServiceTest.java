@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import testFixtures.CategoryFixture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,21 +39,12 @@ class CategoryServiceTest {
     @DisplayName("카테고리 리스트 조회 서비스 테스트")
     void getAllCategories() {
         List<Category> categoryList = new ArrayList<>();
-        Category category1 = new Category.CategoryBuilder()
-                .setName("상품권")
-                .setColor("#ffffff")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
-        Category category2 = new Category.CategoryBuilder()
-                .setName("교환권")
-                .setColor("#123456")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
+        Category category1 = CategoryFixture.createCategory("상품권");
+        Category category2 = CategoryFixture.createCategory("교환권");
         categoryList.add(category1);
         categoryList.add(category2);
-        given(categoryRepository.findAll()).willReturn(categoryList);
+        given(categoryRepository.findAll())
+                .willReturn(categoryList);
 
         List<CategoryResponse> responses = categoryService.getAllCategories();
 
@@ -62,13 +54,9 @@ class CategoryServiceTest {
     @Test
     @DisplayName("카테고리 ID 조회 서비스 테스트")
     void getCategoryByIdOrThrow() {
-        Category category = new Category.CategoryBuilder()
-                .setName("상품권")
-                .setColor("#ffffff")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
-        given(categoryRepository.findById(any())).willReturn(Optional.of(category));
+        Category category = CategoryFixture.createCategory("상품권");
+        given(categoryRepository.findById(any()))
+                .willReturn(Optional.of(category));
 
         CategoryResponse response = categoryService.getCategoryByIdOrThrow(1L);
 
@@ -79,7 +67,8 @@ class CategoryServiceTest {
     @DisplayName("카테고리 ID 조회 실패 테스트")
     void getCategoryByIdOrThrowFailed() {
         Long categoryId = 1L;
-        given(categoryRepository.findById(any())).willReturn(Optional.empty());
+        given(categoryRepository.findById(any()))
+                .willReturn(Optional.empty());
 
         assertThatThrownBy(() -> categoryService.getCategoryByIdOrThrow(categoryId))
                 .isInstanceOf(CustomException.class)
@@ -97,7 +86,8 @@ class CategoryServiceTest {
                 ""
         );
         Category category = CategoryMapper.toEntity(request);
-        given(categoryRepository.save(any())).willReturn(category);
+        given(categoryRepository.save(any()))
+                .willReturn(category);
 
         CategoryResponse response = categoryService.createCategory(request);
 
@@ -123,13 +113,9 @@ class CategoryServiceTest {
                 "https://product-shop.com",
                 ""
         );
-        Category category = new Category.CategoryBuilder()
-                .setName("교환권")
-                .setColor(request.color())
-                .setImageUrl(request.imageUrl())
-                .setDescription(request.description())
-                .build();
-        given(categoryRepository.findById(any())).willReturn(Optional.of(category));
+        Category category = CategoryFixture.createCategory("교환권");
+        given(categoryRepository.findById(any()))
+                .willReturn(Optional.of(category));
 
         categoryService.updateCategory(category.getId(), request);
 
@@ -146,7 +132,8 @@ class CategoryServiceTest {
                 "https://product-shop.com",
                 ""
         );
-        given(categoryRepository.findById(any())).willReturn(Optional.empty());
+        given(categoryRepository.findById(any()))
+                .willReturn(Optional.empty());
 
         assertThatThrownBy(() -> categoryService.updateCategory(categoryId, request))
                 .isInstanceOf(CustomException.class)

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import testFixtures.MemberFixture;
 
 import java.util.Optional;
 
@@ -40,8 +41,10 @@ class MemberServiceTest {
     void registerMember() {
         MemberDto memberDto = new MemberDto("test@email.com", "password");
         Member member = MemberMapper.toEntity(memberDto);
-        given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
-        given(memberRepository.save(any())).willReturn(member);
+        given(memberRepository.findByEmail(any()))
+                .willReturn(Optional.empty());
+        given(memberRepository.save(any()))
+                .willReturn(member);
 
         memberService.registerMember(memberDto);
 
@@ -54,7 +57,8 @@ class MemberServiceTest {
     void registerMemberFailed() {
         MemberDto memberDto = new MemberDto("test@email.com", "password");
         Member member = MemberMapper.toEntity(memberDto);
-        given(memberRepository.findByEmail(any())).willReturn(Optional.of(member));
+        given(memberRepository.findByEmail(any()))
+                .willReturn(Optional.of(member));
 
         assertThatThrownBy(() -> memberService.registerMember(memberDto))
                 .isInstanceOf(CustomException.class)
@@ -68,8 +72,10 @@ class MemberServiceTest {
         MemberDto memberDto = new MemberDto("test@email.com", "password");
         Member member = MemberMapper.toEntity(memberDto);
         String token = "token";
-        given(jwtUtil.generateToken(any())).willReturn(token);
-        given(memberRepository.findByEmail(any())).willReturn(Optional.of(member));
+        given(jwtUtil.generateToken(any()))
+                .willReturn(token);
+        given(memberRepository.findByEmail(any()))
+                .willReturn(Optional.of(member));
 
         String authToken = memberService.authenticate(memberDto);
 
@@ -80,7 +86,8 @@ class MemberServiceTest {
     @DisplayName("존재하지 않는 회원 검증 실패 테스트")
     void authenticateMemberNotFound() {
         MemberDto memberDto = new MemberDto("test@email.com", "password");
-        given(memberRepository.findByEmail(any())).willReturn(Optional.empty());
+        given(memberRepository.findByEmail(any()))
+                .willReturn(Optional.empty());
 
         assertThatThrownBy(() -> memberService.authenticate(memberDto))
                 .isInstanceOf(CustomException.class)
@@ -91,9 +98,10 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원 비밀번호 검증 실패 테스트")
     void authenticateIncorrectPassword() {
-        Member member = new Member("test@email.com", "password");
-        MemberDto memberDto = new MemberDto("test@email.com", "incorrect_password");
-        given(memberRepository.findByEmail(any())).willReturn(Optional.of(member));
+        Member member = MemberFixture.createMember("test@email.com");
+        MemberDto memberDto = new MemberDto("test@email.com", "incorrect " + member.getPassword());
+        given(memberRepository.findByEmail(any()))
+                .willReturn(Optional.of(member));
 
         assertThatThrownBy(() -> memberService.authenticate(memberDto))
                 .isInstanceOf(CustomException.class)
