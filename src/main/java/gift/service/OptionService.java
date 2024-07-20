@@ -7,7 +7,7 @@ import gift.exception.DuplicatedNameException;
 import gift.exception.NotFoundElementException;
 import gift.model.Option;
 import gift.model.Product;
-import gift.repository.ProductOptionRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,35 +17,35 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ProductOptionService {
+public class OptionService {
 
-    private final ProductOptionRepository productOptionRepository;
+    private final OptionRepository optionRepository;
     private final ProductRepository productRepository;
 
 
-    public ProductOptionService(ProductOptionRepository productOptionRepository, ProductRepository productRepository) {
-        this.productOptionRepository = productOptionRepository;
+    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
+        this.optionRepository = optionRepository;
         this.productRepository = productRepository;
     }
 
     public OptionResponse addOption(Long productId, OptionRequest optionRequest) {
         optionNameValidation(productId, optionRequest.name());
-        var productOption = saveOptionWithOptionRequest(productId, optionRequest);
-        return getOptionResponseFromOption(productOption);
+        var option = saveOptionWithOptionRequest(productId, optionRequest);
+        return getOptionResponseFromOption(option);
     }
 
     public void updateOption(Long productId, Long id, OptionRequest optionRequest) {
-        var productOption = findOptionById(id);
-        if (!productOption.getProduct().getId().equals(productId)) {
+        var option = findOptionById(id);
+        if (!option.getProduct().getId().equals(productId)) {
             throw new BadRequestException("잘못된 상품 옵션 수정 요청입니다.");
         }
-        productOption.updateOptionInfo(optionRequest.name(), optionRequest.quantity());
-        productOptionRepository.save(productOption);
+        option.updateOptionInfo(optionRequest.name(), optionRequest.quantity());
+        optionRepository.save(option);
     }
 
     @Transactional(readOnly = true)
     public List<OptionResponse> getOptions(Long productId, Pageable pageable) {
-        return productOptionRepository.findAllByProductId(productId, pageable)
+        return optionRepository.findAllByProductId(productId, pageable)
                 .stream()
                 .map(this::getOptionResponseFromOption)
                 .toList();
@@ -56,13 +56,13 @@ public class ProductOptionService {
         if (!option.getProduct().getId().equals(productId)) {
             throw new BadRequestException("잘못된 상품 옵션에 대한 요청입니다.");
         }
-        productOptionRepository.deleteById(id);
+        optionRepository.deleteById(id);
     }
 
     private Option saveOptionWithOptionRequest(Long productId, OptionRequest optionRequest) {
         var product = findProductById(productId);
-        var productOption = new Option(product, optionRequest.name(), optionRequest.quantity());
-        return productOptionRepository.save(productOption);
+        var option = new Option(product, optionRequest.name(), optionRequest.quantity());
+        return optionRepository.save(option);
     }
 
     private OptionResponse getOptionResponseFromOption(Option option) {
@@ -75,12 +75,12 @@ public class ProductOptionService {
     }
 
     private Option findOptionById(Long id) {
-        return productOptionRepository.findById(id)
+        return optionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품 옵션이 존재하지 않습니다."));
     }
 
     private void optionNameValidation(Long productId, String name) {
-        if (productOptionRepository.existsProductOptionByProductIdAndName(productId, name)) {
+        if (optionRepository.existsOptionByProductIdAndName(productId, name)) {
             throw new DuplicatedNameException("이미 존재하는 상품의 상품 옵션입니다.");
         }
     }

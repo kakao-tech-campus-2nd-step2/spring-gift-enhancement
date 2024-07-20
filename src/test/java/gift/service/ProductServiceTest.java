@@ -21,7 +21,7 @@ class ProductServiceTest {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private ProductOptionService optionService;
+    private OptionService optionService;
 
     @Test
     @DisplayName("정상 상품 추가하기")

@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class ProductOptionServiceTest {
+class OptionServiceTest {
 
     private final Pageable pageable = PageRequest.of(0, 10);
     @Autowired
-    private ProductOptionService productOptionService;
+    private OptionService optionService;
 
     @Test
     @DisplayName("정상 옵션 추가하기")
@@ -25,12 +25,12 @@ class ProductOptionServiceTest {
         //given
         var productOptionRequest = new OptionRequest("옵션1", 1000);
         //when
-        var savedProductOption = productOptionService.addOption(1L, productOptionRequest);
+        var savedProductOption = optionService.addOption(1L, productOptionRequest);
         //then
-        var productOptionResponseList = productOptionService.getOptions(1L, pageable);
+        var productOptionResponseList = optionService.getOptions(1L, pageable);
         Assertions.assertThat(productOptionResponseList.size()).isEqualTo(1);
 
-        productOptionService.deleteOption(1L, savedProductOption.id());
+        optionService.deleteOption(1L, savedProductOption.id());
     }
 
     @Test
@@ -40,14 +40,14 @@ class ProductOptionServiceTest {
         var productOption1Request = new OptionRequest("옵션1", 1000);
         var productOption2Request = new OptionRequest("옵션2", 1000);
         //when
-        var savedProductOption1 = productOptionService.addOption(1L, productOption1Request);
-        var savedProductOption2 = productOptionService.addOption(1L, productOption2Request);
+        var savedProductOption1 = optionService.addOption(1L, productOption1Request);
+        var savedProductOption2 = optionService.addOption(1L, productOption2Request);
         //then
-        var productOptionResponseList = productOptionService.getOptions(1L, pageable);
+        var productOptionResponseList = optionService.getOptions(1L, pageable);
         Assertions.assertThat(productOptionResponseList.size()).isEqualTo(2);
 
-        productOptionService.deleteOption(1L, savedProductOption1.id());
-        productOptionService.deleteOption(1L, savedProductOption2.id());
+        optionService.deleteOption(1L, savedProductOption1.id());
+        optionService.deleteOption(1L, savedProductOption2.id());
     }
 
     @Test
@@ -55,11 +55,11 @@ class ProductOptionServiceTest {
     void failAddOptionWithDuplicatedName() {
         //given
         var productOptionRequest = new OptionRequest("옵션1", 1000);
-        var savedProductOption = productOptionService.addOption(1L, productOptionRequest);
+        var savedProductOption = optionService.addOption(1L, productOptionRequest);
         //when, then
-        Assertions.assertThatThrownBy(() -> productOptionService.addOption(1L, productOptionRequest)).isInstanceOf(DuplicatedNameException.class);
+        Assertions.assertThatThrownBy(() -> optionService.addOption(1L, productOptionRequest)).isInstanceOf(DuplicatedNameException.class);
 
-        productOptionService.deleteOption(1L, savedProductOption.id());
+        optionService.deleteOption(1L, savedProductOption.id());
     }
 
     @Test
@@ -67,17 +67,17 @@ class ProductOptionServiceTest {
     void successUpdateOption() {
         //given
         var productOptionRequest = new OptionRequest("옵션1", 1000);
-        var savedOption = productOptionService.addOption(1L, productOptionRequest);
+        var savedOption = optionService.addOption(1L, productOptionRequest);
         var optionUpdateDto = new OptionRequest("수정된 옵션", 12345);
         //when
-        productOptionService.updateOption(1L, savedOption.id(), optionUpdateDto);
+        optionService.updateOption(1L, savedOption.id(), optionUpdateDto);
         //then
-        var productOptionResponseList = productOptionService.getOptions(1L, pageable);
+        var productOptionResponseList = optionService.getOptions(1L, pageable);
         var filteredProductOptionResponseList = productOptionResponseList.stream().filter(productOptionResponse -> productOptionResponse.id().equals(savedOption.id())).toList();
         Assertions.assertThat(filteredProductOptionResponseList.size()).isEqualTo(1);
         Assertions.assertThat(filteredProductOptionResponseList.get(0).name()).isEqualTo("수정된 옵션");
         Assertions.assertThat(filteredProductOptionResponseList.get(0).quantity()).isEqualTo(12345);
 
-        productOptionService.deleteOption(1L, savedOption.id());
+        optionService.deleteOption(1L, savedOption.id());
     }
 }

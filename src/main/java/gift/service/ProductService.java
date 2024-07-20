@@ -9,8 +9,8 @@ import gift.model.Category;
 import gift.model.MemberRole;
 import gift.model.Option;
 import gift.model.Product;
-import gift.repository.ProductCategoryRepository;
-import gift.repository.ProductOptionRepository;
+import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishProductRepository;
 import org.springframework.data.domain.Pageable;
@@ -24,15 +24,15 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ProductCategoryRepository productCategoryRepository;
+    private final CategoryRepository categoryRepository;
     private final WishProductRepository wishProductRepository;
-    private final ProductOptionRepository productOptionRepository;
+    private final OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository, WishProductRepository wishProductRepository, ProductOptionRepository productOptionRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, WishProductRepository wishProductRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
-        this.productCategoryRepository = productCategoryRepository;
+        this.categoryRepository = categoryRepository;
         this.wishProductRepository = wishProductRepository;
-        this.productOptionRepository = productOptionRepository;
+        this.optionRepository = optionRepository;
     }
 
     public ProductResponse addProduct(ProductRequest productRequest, MemberRole memberRole) {
@@ -67,9 +67,9 @@ public class ProductService {
     }
 
     private Product saveProductWithProductRequest(ProductRequest productRequest) {
-        var productCategory = productCategoryRepository.findById(productRequest.categoryId())
+        var category = categoryRepository.findById(productRequest.categoryId())
                 .orElseThrow(() -> new NotFoundElementException(productRequest.categoryId() + "를 가진 상품 카테고리가 존재하지 않습니다."));
-        var product = new Product(productRequest.name(), productRequest.price(), productRequest.imageUrl(), productCategory);
+        var product = new Product(productRequest.name(), productRequest.price(), productRequest.imageUrl(), category);
         return productRepository.save(product);
     }
 
@@ -85,8 +85,8 @@ public class ProductService {
     }
 
     private ProductResponse getProductResponseFromProduct(Product product) {
-        var productCategoryInformation = getProductCategoryInformationFromProductCategory(product.getCategory());
-        return ProductResponse.of(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), productCategoryInformation);
+        var categoryInformation = getProductCategoryInformationFromProductCategory(product.getCategory());
+        return ProductResponse.of(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), categoryInformation);
     }
 
     private Product findProductById(Long id) {
@@ -98,8 +98,8 @@ public class ProductService {
         return CategoryInformation.of(category.getId(), category.getName());
     }
 
-    private Option makeDefaultProductOption(Product product) {
-        var productOption = new Option(product, "기본", 1000);
-        return productOptionRepository.save(productOption);
+    private void makeDefaultProductOption(Product product) {
+        var option = new Option(product, "기본", 1000);
+        optionRepository.save(option);
     }
 }

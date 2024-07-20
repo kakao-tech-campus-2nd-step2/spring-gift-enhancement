@@ -3,7 +3,7 @@ package gift.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.CategoryRequest;
 import gift.dto.LoginRequest;
-import gift.service.ProductCategoryService;
+import gift.service.CategoryService;
 import gift.service.auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +31,7 @@ class CategoryControllerTest {
     @Autowired
     private AuthService authService;
     @Autowired
-    private ProductCategoryService productCategoryService;
+    private CategoryService categoryService;
     private String memberToken;
 
     @BeforeEach
@@ -106,7 +106,7 @@ class CategoryControllerTest {
     void failCategoryAddWithDuplicatedCategory() throws Exception {
         //given
         var productCategoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
-        var productCategory = productCategoryService.addCategory(productCategoryRequest);
+        var productCategory = categoryService.addCategory(productCategoryRequest);
 
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -118,7 +118,7 @@ class CategoryControllerTest {
         result.andExpect(status().isConflict())
                 .andExpect(content().string("이미 존재하는 이름입니다."));
 
-        productCategoryService.deleteCategory(productCategory.id());
+        categoryService.deleteCategory(productCategory.id());
     }
 
     @Test
@@ -137,6 +137,6 @@ class CategoryControllerTest {
         var location = createdResult.getResponse().getHeader("Location");
         var categoryId = location.replaceAll("/api/categories/", "");
 
-        productCategoryService.deleteCategory(Long.parseLong(categoryId));
+        categoryService.deleteCategory(Long.parseLong(categoryId));
     }
 }

@@ -2,7 +2,7 @@ package gift.controller;
 
 import gift.dto.CategoryRequest;
 import gift.dto.CategoryResponse;
-import gift.service.ProductCategoryService;
+import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,42 +22,42 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
-public class ProductCategoryController {
+public class CategoryController {
 
-    private final ProductCategoryService productCategoryService;
+    private final CategoryService categoryService;
 
-    public ProductCategoryController(ProductCategoryService productCategoryService) {
-        this.productCategoryService = productCategoryService;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @PostMapping("/add")
     public ResponseEntity<Void> addCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
-        var productCategory = productCategoryService.addCategory(categoryRequest);
+        var productCategory = categoryService.addCategory(categoryRequest);
         return ResponseEntity.created(URI.create("/api/categories/" + productCategory.id())).build();
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Void> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequest categoryRequest) {
-        productCategoryService.updateCategory(id, categoryRequest);
+        categoryService.updateCategory(id, categoryRequest);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getCategory(@PathVariable Long id) {
-        var productCategory = productCategoryService.getCategory(id);
+        var productCategory = categoryService.getCategory(id);
         return ResponseEntity.ok(productCategory);
     }
 
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getCategories(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        var productCategories = productCategoryService.getCategories(pageable);
+        var productCategories = categoryService.getCategories(pageable);
         return ResponseEntity.ok(productCategories);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        productCategoryService.deleteCategory(id);
+        categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 }

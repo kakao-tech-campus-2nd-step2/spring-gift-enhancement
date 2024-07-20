@@ -3,7 +3,7 @@ package gift.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.LoginRequest;
 import gift.dto.OptionRequest;
-import gift.service.ProductOptionService;
+import gift.service.OptionService;
 import gift.service.auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,14 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class ProductOptionControllerTest {
+class OptionControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private ProductOptionService productOptionService;
+    private OptionService optionService;
     @Autowired
     private AuthService authService;
     private String memberToken;
@@ -168,6 +168,6 @@ class ProductOptionControllerTest {
     private void deleteOptionWithCreatedHeader(Long productId, MvcResult mvcResult) {
         var location = mvcResult.getResponse().getHeader("Location");
         var optionId = location.replaceAll("/api/products/" + productId + "/options/", "");
-        productOptionService.deleteOption(productId, Long.parseLong(optionId));
+        optionService.deleteOption(productId, Long.parseLong(optionId));
     }
 }

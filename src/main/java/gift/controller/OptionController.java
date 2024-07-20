@@ -2,7 +2,7 @@ package gift.controller;
 
 import gift.dto.OptionRequest;
 import gift.dto.OptionResponse;
-import gift.service.ProductOptionService;
+import gift.service.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,11 +22,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products/{productId}/options")
-public class ProductOptionController {
+public class OptionController {
 
-    private final ProductOptionService optionService;
+    private final OptionService optionService;
 
-    public ProductOptionController(ProductOptionService optionService) {
+    public OptionController(OptionService optionService) {
         this.optionService = optionService;
     }
 
