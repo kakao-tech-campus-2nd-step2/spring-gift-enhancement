@@ -5,6 +5,7 @@ import gift.dto.ProductResponseDto;
 import gift.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,22 +29,33 @@ public class productController {
 
     @PostMapping("")
     public ProductResponseDto createProductDto(@RequestBody ProductRequestDto productRequestDto) {
-        return productService.createProductDto(productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl(), productRequestDto.getCategory(), productRequestDto.getOptions());
+        ProductResponseDto productResponseDto = productService.createProductDto(
+                productRequestDto.getName(),
+                productRequestDto.getPrice(),
+                productRequestDto.getUrl(),
+                productRequestDto.getCategory(),
+                productRequestDto.getOptions()
+        );
+        productResponseDto.setHttpStatus(HttpStatus.OK);
+        return productResponseDto;
     }
 
     @GetMapping("")
-    public List<ProductResponseDto> getAll() {
-        return productService.getAll().stream().map(ProductResponseDto::fromEntity).toList();
+    public ProductResponseDto getAll() {
+        ProductResponseDto productResponseDto = productService.getAllAndMakeProductResponseDto();
+        productResponseDto.setHttpStatus(HttpStatus.OK);
+        return productResponseDto;
     }
 
     @GetMapping("/{id}")
     public ProductResponseDto getOneById(@PathVariable("id") Long id) {
-        return productService.getOneById(id);
+        return productService.getProductResponseDtoById(id);
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable("id") Long id, @RequestBody ProductRequestDto productRequestDto) {
+    public ProductResponseDto update(@PathVariable("id") Long id, @RequestBody ProductRequestDto productRequestDto) {
         productService.update(id, productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl(), productRequestDto.getCategory(),productRequestDto.getOptions());
+        return new ProductResponseDto(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

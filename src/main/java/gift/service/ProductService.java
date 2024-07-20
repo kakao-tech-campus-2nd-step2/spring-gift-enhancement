@@ -33,10 +33,15 @@ public class ProductService {
         return productRepositoryInterface.findAll();
     }
 
-    public ProductResponseDto getOneById(Long id) {
+    public ProductResponseDto getAllAndMakeProductResponseDto() {
+        return new ProductResponseDto(getAll());
+    }
+
+    public ProductResponseDto getProductResponseDtoById(Long id) {
         Product newProduct = productRepositoryInterface.findById(id).get();
         return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory(), newProduct.getOptions());
     }
+
 
     public void update(Long id, String name, Integer price, String url, Category category,List<Option> options) {
         Product actualProduct = productRepositoryInterface.findById(id).orElseThrow(() -> new RuntimeException("상품을 찾지 못했습니다."));
@@ -55,5 +60,9 @@ public class ProductService {
     public Page<ProductResponseDto> getProducts(Pageable pageable) {
         Page<Product> newProduct = productRepositoryInterface.findAll(pageable);
         return newProduct.map(ProductResponseDto::fromEntity);
+    }
+
+    public Product findById(Long productId) {
+        return productRepositoryInterface.findById(productId).get();
     }
 }

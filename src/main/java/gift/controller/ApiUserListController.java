@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.dto.MemberResponseDto;
 import gift.service.MemberService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,9 @@ public class ApiUserListController {
     }
 
     @GetMapping("/user/list")
-    public List<MemberResponseDto> UserList() {
-        return memberService.getAll();
+    public MemberResponseDto UserList() {
+        MemberResponseDto memberResponseDto=  memberService.getAllAndReturnMemberResponseDto();
+        memberResponseDto.setHttpStatus(HttpStatus.OK);
+        return memberResponseDto;
     }
 }

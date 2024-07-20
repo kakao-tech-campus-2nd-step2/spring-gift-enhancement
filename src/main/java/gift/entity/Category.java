@@ -39,4 +39,16 @@ public class Category {
     public List<Product> getProducts() {
         return products;
     }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }

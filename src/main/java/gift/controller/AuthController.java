@@ -1,7 +1,9 @@
 package gift.controller;
 
 import gift.dto.MemberRequestDto;
+import gift.dto.MemberResponseDto;
 import gift.service.MemberService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,8 +37,10 @@ public class AuthController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute MemberRequestDto memberRequestDto) {
-        return memberService.save(memberRequestDto.getEmail(), memberRequestDto.getPassword());
+    public MemberResponseDto save(@ModelAttribute MemberRequestDto memberRequestDto) {
+        MemberResponseDto memberResponseDto = memberService.save(memberRequestDto.getEmail(), memberRequestDto.getPassword());
+        memberResponseDto.setHttpStatus(HttpStatus.OK);
+        return memberResponseDto;
     }
 
     @PostMapping("/user/login")

@@ -18,17 +18,22 @@ public class MemberService {
         this.tokenService = tokenService;
     }
 
-    public String save(String email, String password) {
+    public MemberResponseDto save(String email, String password) {
 
         Member newMember = new Member(email, password);
 
         Member actualMember = memberRepositoryInterface.save(newMember);
-        return generateTokenFrom(actualMember.getEmail());
+        String token = generateTokenFrom(actualMember.getEmail());
+        return new MemberResponseDto(actualMember, token);
     }
 
 
-    public List<MemberResponseDto> getAll() {
-        return memberRepositoryInterface.findAll().stream().map(MemberResponseDto::fromEntity).toList();
+    public List<Member> getAll() {
+        return memberRepositoryInterface.findAll();
+    }
+
+    public MemberResponseDto getAllAndReturnMemberResponseDto() {
+        return new MemberResponseDto(getAll());
     }
 
     public String generateTokenFrom(String userEmail) {
