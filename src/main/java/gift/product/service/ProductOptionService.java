@@ -2,6 +2,9 @@ package gift.product.service;
 
 import gift.product.domain.ProductOption;
 import gift.product.exception.ProductNotFoundException;
+import gift.product.exception.ProductOptionDuplicatedException;
+import gift.product.exception.ProductOptionNotDeletedException;
+import gift.product.exception.ProductOptionNotFoundException;
 import gift.product.persistence.ProductOptionRepository;
 import gift.product.persistence.ProductRepository;
 import gift.product.service.command.ProductOptionCommand;
@@ -61,7 +64,7 @@ public class ProductOptionService {
     public void deleteProductOption(Long productId, Long optionId) {
         var productOption = productOptionRepository.findByProductId(productId);
         if (productOption.size() == 1) {
-            throw new IllegalArgumentException("상품 옵션은 최소 1개 이상이어야 합니다.");
+            throw ProductOptionNotDeletedException.of(productId, optionId);
         }
 
         var option = getExistsProductOption(productId, optionId);
@@ -70,7 +73,8 @@ public class ProductOptionService {
 
     private ProductOption getExistsProductOption(Long productId, Long optionId) {
         var option = productOptionRepository.findByProductIdAndId(productId, optionId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품 옵션입니다."));
+                .orElseThrow(() -> ProductOptionNotFoundException.of(productId, optionId));
+
         return option;
     }
 
@@ -78,7 +82,7 @@ public class ProductOptionService {
         var productOption = productOptionRepository.findByProductId(productId);
 
         if (productOption.stream().anyMatch(option -> option.isSameName(name))) {
-            throw new IllegalArgumentException("이미 존재하는 상품 옵션입니다.");
+            throw ProductOptionDuplicatedException.of(productId, name);
         }
     }
 }

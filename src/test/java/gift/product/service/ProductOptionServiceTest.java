@@ -9,6 +9,8 @@ import static org.mockito.BDDMockito.then;
 import gift.product.domain.Category;
 import gift.product.domain.Product;
 import gift.product.domain.ProductOption;
+import gift.product.exception.ProductOptionDuplicatedException;
+import gift.product.exception.ProductOptionNotDeletedException;
 import gift.product.persistence.ProductOptionRepository;
 import gift.product.persistence.ProductRepository;
 import gift.product.service.command.ProductOptionCommand;
@@ -137,7 +139,7 @@ class ProductOptionServiceTest {
 
         //when//then
         assertThatThrownBy(() -> productOptionService.deleteProductOption(productId, optionId))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(ProductOptionNotDeletedException.class);
     }
 
     @Test
@@ -156,6 +158,6 @@ class ProductOptionServiceTest {
 
         //when//then
         assertThatThrownBy(() -> productOptionService.createProductOption(productId, productOptionCommand))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(ProductOptionDuplicatedException.class);
     }
 }
