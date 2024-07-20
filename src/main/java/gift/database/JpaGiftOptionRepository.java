@@ -14,7 +14,7 @@ public interface JpaGiftOptionRepository extends JpaRepository<GiftOption, Long>
 
     Optional<GiftOption> findById(Long id);
 
-    void delete(Long id);
+    void deleteGiftOptionById(Long id);
 
     List<GiftOption> findAllByProduct(Product product);
 

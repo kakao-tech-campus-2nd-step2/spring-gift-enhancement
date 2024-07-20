@@ -53,7 +53,7 @@ public class GiftOptionService {
 
 
     public void delete(Long productId, Long id) {
-        jpaGiftOptionRepository.deleteById(id);
+        jpaGiftOptionRepository.deleteGiftOptionById(id);
     }
 
     private Product getProduct(Long productId) {
