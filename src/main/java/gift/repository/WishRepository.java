@@ -7,4 +7,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface WishRepository extends JpaRepository<Wish, Long> {
     Page<Wish> findAll(Pageable pageable);
+    Page<Wish> findAllByMemberId(Long memberId, Pageable pageable);
 }

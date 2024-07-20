@@ -1,7 +1,8 @@
 package gift.service;
 
-import gift.dto.LoginResultDto;
 import gift.dto.MemberDto;
+import gift.exception.AuthenticationException;
+import gift.exception.ValueAlreadyExistsException;
 import gift.jwt.JwtTokenProvider;
 import gift.model.member.Member;
 import gift.repository.MemberRepository;
@@ -21,13 +22,12 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public boolean registerNewMember(MemberDto memberDto) {
+    public void registerNewMember(MemberDto memberDto) {
         Member member = new Member(memberDto.email(),memberDto.password(), memberDto.role());
-        if(memberRepository.findByEmail(member.getEmail()).isEmpty()){
-            memberRepository.save(member);
-            return true;
+        if(!memberRepository.findByEmail(member.getEmail()).isEmpty()){
+            throw new ValueAlreadyExistsException("Email already exists in Database");
         }
-        return false;
+        memberRepository.save(member);
     }
 
     public String returnToken(MemberDto memberDto){
@@ -35,15 +35,16 @@ public class MemberService {
         return jwtTokenProvider.generateToken(member);
     }
 
-    public LoginResultDto loginMember(MemberDto memberDto) {
+    public String loginMember(MemberDto memberDto) {
         Member member = new Member(memberDto.email(),memberDto.password(), memberDto.role());
         Optional<Member> registeredMember = memberRepository.findByEmail(member.getEmail());
-        if (registeredMember.isPresent() && member.isPasswordEqual(registeredMember.get().getPassword())) {
-            String token = jwtTokenProvider.generateToken(member);
-
-            return new LoginResultDto(token, true);
+        if (registeredMember.isEmpty()){
+            throw new AuthenticationException("Member not exists in Database");
         }
-        return new LoginResultDto(null, false);
+        if (!member.isPasswordEqual(registeredMember.get().getPassword())){
+            throw new AuthenticationException("Incorrect password");
+        }
+        return jwtTokenProvider.generateToken(member);
     }
 
     public Optional<Member> findByEmail(String email){

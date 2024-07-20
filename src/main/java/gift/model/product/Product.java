@@ -14,28 +14,24 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false, length = 15, columnDefinition = "VARCHAR(15)")
     @Embedded
-    private  ProductName name;
+    private ProductName name;
 
-    @Column(nullable = false)
-    private  int price;
+    @Column(nullable = false, columnDefinition = "integer")
+    private int price;
 
-    @Column(nullable = false)
+    @Column(nullable = false , columnDefinition = "VARCHAR(255)")
     private String imageUrl;
-
-    @Column(nullable = false)
-    private  int amount;
 
     protected Product(){
     }
 
-    public Product(Category category, ProductName name, int price, String imageUrl, int amount){
+    public Product(Category category, ProductName name, int price, String imageUrl){
         this.category = category;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.amount = amount;
     }
 
     public void updateProduct(Product product){
@@ -43,7 +39,6 @@ public class Product {
         this.name = product.getName();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
-        this.amount = product.getAmount();
     }
 
     public Category getCategory() {
@@ -64,16 +59,5 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public boolean isProductEnough(int purchaseAmount){
-        if(amount > purchaseAmount){
-            return true;
-        }
-        return false;
     }
 }

@@ -25,18 +25,14 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Void> addNewProduct(@Valid @RequestBody ProductDto productDto) {
-        if (productService.addNewProduct(productDto)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
+        productService.addNewProduct(productDto);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDto productDto) {
-        if(productService.updateProduct(id, productDto)){
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+        productService.updateProduct(id, productDto);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/edit/{id}")
@@ -66,11 +62,11 @@ public class ProductController {
         return "productManage";
     }
 
-    @PutMapping("/purchase/{id}")
+    /*@PutMapping("/purchase/{id}")
     public ResponseEntity<String> purchaseProduct(@PathVariable Long id, @RequestParam int amount) {
         if (productService.purchaseProduct(id, amount)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
-    }
+    }*/
 }

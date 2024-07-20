@@ -17,12 +17,12 @@ public class Option {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(255)")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣\\s()\\[\\]+\\-&/_]*$")
     @Size(max = 50)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer")
     @Min(value = 1)
     @Max(value = 100000000 - 1)
     private  int amount;
