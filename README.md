@@ -7,11 +7,11 @@
   - [x] 특수 문자 ( ), [], +, -, &, /, _만 허용
   - [x] 옵션 수량을 최소 1개 이상 1억 개 미만
   - [x] 옵션 : 상품 = N : 1 (ManyToOne)
-- [ ] create 구현
-- [ ] read 구현
-- [ ] update 구현
-- [ ] delete 구현
-- [ ] 중복된 옵션 관리 
+- [x] create 구현
+- [x] read 구현
+- [x] update 구현
+- [x] delete 구현
+- [x] 중복된 옵션 관리 
 
 2. 상품에 옵션 추가 기능 구현
 - [ ] 상품에 옵션 추가 기능 구현 (OptionService.java)

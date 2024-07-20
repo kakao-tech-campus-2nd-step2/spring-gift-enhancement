@@ -39,13 +39,17 @@ public class Option {
         return getClass().hashCode();
     }
 
+    public void update(String name, Long quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     // 생성자
     public Option() {}
 
-    public Option(String name, Long quantity, Product product) {
+    public Option(String name, Long quantity) {
         this.name = name;
         this.quantity = quantity;
-        this.product = product;
     }
 
     // Getters and setters
