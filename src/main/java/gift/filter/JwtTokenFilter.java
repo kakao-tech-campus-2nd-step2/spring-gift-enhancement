@@ -35,8 +35,6 @@ public class JwtTokenFilter implements Filter {
         if (token == null || !jwtTokenProvider.validateToken(token)) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
             return;
-        } else {
-            // 필요한 경우 추가 작업 수행 가능
         }
         chain.doFilter(request, response);
     }

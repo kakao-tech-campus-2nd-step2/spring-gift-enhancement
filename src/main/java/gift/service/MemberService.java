@@ -31,7 +31,7 @@ public class MemberService {
 
     public String login(String email, String password) {
 
-        Member member = memberRepository.findByEmail(email);
+        Member member = getMember(email);
 
         // 비밀번호 검증
         if (member != null && password.equals(member.getPassword())) {

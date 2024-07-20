@@ -24,7 +24,7 @@ public class Member {
     @NotNull
     private Role role;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Wishlist> wishlists;
 
     // 기본 생성자

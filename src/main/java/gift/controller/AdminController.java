@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.Role;
 import gift.entity.Member;
 import gift.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,9 @@ public class AdminController {
 
     @GetMapping
     public String adminPage(HttpSession session, Model model) {
-        String user = (String) session.getAttribute("user");
-        if ("admin@kakao.com".equals(user)) {
+        String email = (String) session.getAttribute("user");
+        Member member = memberService.getMember(email);
+        if (member.getRole() == Role.ADMIN) {
             List<Member> members = memberService.getAllMembers();
             model.addAttribute("members", members);
             return "admin";

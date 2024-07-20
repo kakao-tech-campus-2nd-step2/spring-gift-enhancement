@@ -20,30 +20,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    public  ProductService(ProductRepository productRepository, CategoryService categoryService){
+        this.productRepository = productRepository;
+        this.categoryService = categoryService;
+    }
 
     public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
-
     }
 
     public Product getProductById(Long id) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
-            return optionalProduct.get();
-        } else {
-            throw ProductNotFoundException.of(id);
-        }
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     public void addProduct(ProductDto productDto) {
-        Category category = categoryRepository.findById(productDto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-
+        Category category = categoryService.getCategory(productDto.getCategoryId());
         Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
         product.setCategory(category);
         category.addProduct(product);
@@ -51,8 +47,7 @@ public class ProductService {
     }
 
     public void updateProduct(Long id, ProductDto productDto) {
-        Category category = categoryRepository.findById(productDto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+        Category category = categoryService.getCategory(productDto.getCategoryId());
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> ProductNotFoundException.of(id));
         product.edit(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
