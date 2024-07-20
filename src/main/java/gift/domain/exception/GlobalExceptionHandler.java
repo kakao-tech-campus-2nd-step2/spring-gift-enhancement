@@ -4,6 +4,7 @@ import gift.domain.exception.conflict.CategoryAlreadyExistsException;
 import gift.domain.exception.conflict.CategoryHasProductsException;
 import gift.domain.exception.conflict.ConflictException;
 import gift.domain.exception.conflict.MemberAlreadyExistsException;
+import gift.domain.exception.conflict.OptionAlreadyExistsInProductException;
 import gift.domain.exception.conflict.ProductAlreadyExistsException;
 import gift.domain.exception.forbidden.ForbiddenException;
 import gift.domain.exception.forbidden.MemberIncorrectLoginInfoException;
@@ -55,7 +56,8 @@ public class GlobalExceptionHandler {
         ProductAlreadyExistsException.class,
         MemberAlreadyExistsException.class,
         CategoryAlreadyExistsException.class,
-        CategoryHasProductsException.class
+        CategoryHasProductsException.class,
+        OptionAlreadyExistsInProductException.class
     })
     public ResponseEntity<ErrorApiResponse> handleConflictException(ConflictException e) {
         return ErrorApiResponse.conflict(e);

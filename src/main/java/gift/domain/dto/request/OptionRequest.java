@@ -6,6 +6,7 @@ import gift.domain.entity.Product;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
+import org.hibernate.validator.constraints.Range;
 
 public record OptionRequest(
     @NotNull
@@ -13,7 +14,7 @@ public record OptionRequest(
     @RestrictedSpecialChars
     String name,
     @NotNull
-    @Size(min = 1, max = 100_000_000)
+    @Range(min = 1, max = 100_000_000)
     Integer quantity
 ) {
 

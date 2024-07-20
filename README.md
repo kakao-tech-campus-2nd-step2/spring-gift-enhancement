@@ -288,7 +288,7 @@ Content-Type: application/json
 - [x] 상품을 수정하는 API 
 - [x] 상품을 삭제하는 API
 - [x] 상품의 옵션을 조회하는 API
-- [ ] 상품의 옵션을 추가하는 API
+- [x] 상품의 옵션을 추가하는 API
 - [ ] 상품의 옵션을 수정하는 API
 - [ ] 상품의 옵션을 삭제하는 API
 

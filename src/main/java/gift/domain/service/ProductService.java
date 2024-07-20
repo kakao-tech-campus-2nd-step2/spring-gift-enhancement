@@ -1,5 +1,6 @@
 package gift.domain.service;
 
+import gift.domain.dto.request.OptionRequest;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.OptionResponse;
@@ -17,10 +18,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     @Transactional(readOnly = true)
@@ -50,6 +53,12 @@ public class ProductService {
             throw new ProductAlreadyExistsException();});
 
         return ProductResponse.of(productRepository.save(requestDto.toEntity(categoryService)));
+    }
+
+    @Transactional
+    public OptionResponse addProductOption(Long productId, OptionRequest request) {
+        Product product = getProductById(productId);
+        return OptionResponse.of(optionService.addOption(product, request));
     }
 
     @Transactional
