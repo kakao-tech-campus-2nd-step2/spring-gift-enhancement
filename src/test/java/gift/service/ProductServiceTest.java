@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -17,12 +16,10 @@ class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
-    @Autowired
-    private OptionService optionService;
 
     @Test
     @DisplayName("정상 상품 추가하기")
-    void addProductSuccess() {
+    void successAddProduct() {
         //given
         var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
         //when
@@ -35,7 +32,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("이용자로 카카오가 포함된 상품 추가하기")
-    void addProductFailWithKAKAOName() {
+    void failAddProductWithNameKakao() {
         //given
         var productRequest = new ProductRequest("카카오상품", 10000, "이미지 주소", 1L);
         //when, then
@@ -45,7 +42,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("관리자로 카카오가 포함된 상품 추가하기")
-    void addProductSuccessWithKAKAOName() {
+    void successAddProductWithNameKakao() {
         //given
         var productRequest = new ProductRequest("카카오상품", 10000, "이미지 주소", 1L);
         //when
@@ -58,7 +55,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("상품 수정하기")
-    void updateProduct() {
+    void successUpdateProduct() {
         //given
         var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
         var savedProduct = productService.addProduct(productRequest, MemberRole.MEMBER);
@@ -72,19 +69,5 @@ class ProductServiceTest {
         Assertions.assertThat(savedProduct.id()).isEqualTo(updatedProduct.id());
 
         productService.deleteProduct(id);
-    }
-
-    @Test
-    @DisplayName("정상 상품 추가시 기본 옵션이 추가되어있다.")
-    void addProductSuccessThenHaveDefaultOption() {
-        //given
-        var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
-        var savedProduct = productService.addProduct(productRequest, MemberRole.MEMBER);
-        //when
-        var options = optionService.getOptions(savedProduct.id(), Pageable.unpaged());
-        //then
-        Assertions.assertThat(options.get(0).name()).isEqualTo("기본");
-
-        productService.deleteProduct(savedProduct.id());
     }
 }

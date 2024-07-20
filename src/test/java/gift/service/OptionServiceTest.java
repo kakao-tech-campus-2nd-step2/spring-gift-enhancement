@@ -73,10 +73,10 @@ class OptionServiceTest {
         optionService.updateOption(1L, savedOption.id(), optionUpdateDto);
         //then
         var options = optionService.getOptions(1L, pageable);
-        var filterdOptions = options.stream().filter(productOptionResponse -> productOptionResponse.id().equals(savedOption.id())).toList();
-        Assertions.assertThat(filterdOptions.size()).isEqualTo(1);
-        Assertions.assertThat(filterdOptions.get(0).name()).isEqualTo("수정된 옵션");
-        Assertions.assertThat(filterdOptions.get(0).quantity()).isEqualTo(12345);
+        var filteredOptions = options.stream().filter(productOptionResponse -> productOptionResponse.id().equals(savedOption.id())).toList();
+        Assertions.assertThat(filteredOptions.size()).isEqualTo(1);
+        Assertions.assertThat(filteredOptions.get(0).name()).isEqualTo("수정된 옵션");
+        Assertions.assertThat(filteredOptions.get(0).quantity()).isEqualTo(12345);
 
         optionService.deleteOption(1L, savedOption.id());
     }

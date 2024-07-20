@@ -6,6 +6,7 @@ import gift.dto.LoginRequest;
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.model.MemberRole;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import gift.service.auth.AuthService;
 import org.assertj.core.api.Assertions;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -41,6 +43,8 @@ class ProductControllerTest {
     private AuthService authService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private OptionService optionService;
     private String managerToken;
     private String memberToken;
 
@@ -212,6 +216,28 @@ class ProductControllerTest {
         var getResult = mockMvc.perform(getRequest);
         //then
         getResult.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("상품이 추가되면 옵션이 자동적으로 생성된다.")
+    void successAddDefaultOption() throws Exception {
+        //given
+        var postRequest = post("/api/products/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거", 1000, "이미지 주소", 1L)));
+        //when
+        var result = mockMvc.perform(postRequest);
+        //then
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        var location = createdResult.getResponse().getHeader("Location");
+        var productId = Long.parseLong(location.replaceAll("/api/products/", ""));
+
+        var optionResponses = optionService.getOptions(productId, Pageable.unpaged());
+        Assertions.assertThat(optionResponses.size()).isEqualTo(1);
+        Assertions.assertThat(optionResponses.get(0).name()).isEqualTo("기본");
+        productService.deleteProduct(productId);
     }
 
     private void deleteProducts(List<ProductResponse> productResponses) {

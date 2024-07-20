@@ -31,10 +31,6 @@ public class Option extends BaseEntity {
         this.quantity = quantity;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public Product getProduct() {
         return product;
     }

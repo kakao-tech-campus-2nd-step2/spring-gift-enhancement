@@ -6,8 +6,6 @@ import gift.exception.DuplicatedNameException;
 import gift.exception.NotFoundElementException;
 import gift.model.Category;
 import gift.repository.CategoryRepository;
-import gift.repository.ProductRepository;
-import gift.repository.WishProductRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +17,9 @@ import java.util.List;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
-    private final WishProductRepository wishProductRepository;
 
-    public CategoryService(CategoryRepository categoryRepository, ProductRepository productRepository, WishProductRepository wishProductRepository) {
+    public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.productRepository = productRepository;
-        this.wishProductRepository = wishProductRepository;
     }
 
     public CategoryResponse addCategory(CategoryRequest categoryRequest) {
@@ -56,11 +50,6 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long id) {
-        var productList = productRepository.findAllByCategoryId(id);
-        for (var product : productList) {
-            wishProductRepository.deleteAllByProductId(product.getId());
-        }
-        productRepository.deleteAllByCategoryId(id);
         categoryRepository.deleteById(id);
     }
 

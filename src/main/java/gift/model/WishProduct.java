@@ -32,10 +32,6 @@ public class WishProduct extends BaseEntity {
         this.count = count;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public Product getProduct() {
         return product;
     }

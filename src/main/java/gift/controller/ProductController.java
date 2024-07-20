@@ -4,6 +4,7 @@ import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.model.MemberRole;
 import gift.service.ProductService;
+import gift.service.facade.ProductAndOptionFacade;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,14 +28,16 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductAndOptionFacade productAndOptionFacade;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ProductAndOptionFacade productAndOptionFacade) {
         this.productService = productService;
+        this.productAndOptionFacade = productAndOptionFacade;
     }
 
     @PostMapping("/add")
     public ResponseEntity<Void> addProduct(@Valid @RequestBody ProductRequest productRequest, @RequestAttribute("memberRole") String memberRole) {
-        var product = productService.addProduct(productRequest, MemberRole.valueOf(memberRole));
+        var product = productAndOptionFacade.addProduct(productRequest, MemberRole.valueOf(memberRole));
         return ResponseEntity.created(URI.create("/api/products/" + product.id())).build();
     }
 

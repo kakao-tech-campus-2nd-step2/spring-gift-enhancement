@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.LoginRequest;
 import gift.dto.OptionRequest;
 import gift.service.OptionService;
+import gift.service.ProductService;
 import gift.service.auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +34,8 @@ class OptionControllerTest {
     private OptionService optionService;
     @Autowired
     private AuthService authService;
+    @Autowired
+    private ProductService productService;
     private String memberToken;
 
     @BeforeEach
@@ -134,8 +137,8 @@ class OptionControllerTest {
     }
 
     @Test
-    @DisplayName("정상 상품 생성하기 - 공백 포함")
-    void successAddProductOptionWithEmptySpace() throws Exception {
+    @DisplayName("정상 옵션 생성하기 - 공백 포함")
+    void successAddOptionWithEmptySpace() throws Exception {
         //given
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -147,12 +150,11 @@ class OptionControllerTest {
         var createdResult = result.andExpect(status().isCreated()).andReturn();
 
         deleteOptionWithCreatedHeader(1L, createdResult);
-
     }
 
     @Test
     @DisplayName("오류 상품 생성하기 - 허용되지 않은 특수문자 포함")
-    void addProductOptionFailWithSpecialChar() throws Exception {
+    void addOptionFailWithSpecialChar() throws Exception {
         //given
         var postRequest = post("/api/products/1/options/add")
                 .contentType(MediaType.APPLICATION_JSON)

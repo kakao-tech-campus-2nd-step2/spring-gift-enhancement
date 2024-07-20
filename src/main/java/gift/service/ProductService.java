@@ -7,7 +7,6 @@ import gift.exception.InvalidProductNameWithKAKAOException;
 import gift.exception.NotFoundElementException;
 import gift.model.Category;
 import gift.model.MemberRole;
-import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
@@ -38,7 +37,6 @@ public class ProductService {
     public ProductResponse addProduct(ProductRequest productRequest, MemberRole memberRole) {
         productNameValidation(productRequest, memberRole);
         var product = saveProductWithProductRequest(productRequest);
-        makeDefaultProductOption(product);
         return getProductResponseFromProduct(product);
     }
 
@@ -61,7 +59,16 @@ public class ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<ProductResponse> getProductsWithCategoryId(Long categoryId) {
+        return productRepository.findAllByCategoryId(categoryId)
+                .stream()
+                .map(this::getProductResponseFromProduct)
+                .toList();
+    }
+
     public void deleteProduct(Long productId) {
+        optionRepository.deleteAllByProductId(productId);
         wishProductRepository.deleteAllByProductId(productId);
         productRepository.deleteById(productId);
     }
@@ -85,7 +92,7 @@ public class ProductService {
     }
 
     private ProductResponse getProductResponseFromProduct(Product product) {
-        var categoryInformation = getProductCategoryInformationFromProductCategory(product.getCategory());
+        var categoryInformation = getCategoryInformationFromCategory(product.getCategory());
         return ProductResponse.of(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), categoryInformation);
     }
 
@@ -94,12 +101,7 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품옵션이 존재하지 않습니다."));
     }
 
-    private CategoryInformation getProductCategoryInformationFromProductCategory(Category category) {
+    private CategoryInformation getCategoryInformationFromCategory(Category category) {
         return CategoryInformation.of(category.getId(), category.getName());
-    }
-
-    private void makeDefaultProductOption(Product product) {
-        var option = new Option(product, "기본", 1000);
-        optionRepository.save(option);
     }
 }
