@@ -3,15 +3,26 @@ package gift.product.infra;
 import gift.product.domain.WishList;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WishListRepository extends JpaRepository<WishList, Long> {
+public class WishLIstRepository {
+    private final WishListJpaRepository wishListJpaRepository;
 
-    WishList findByUserId(Long userId);
+    public WishLIstRepository(WishListJpaRepository wishListJpaRepository) {
+        this.wishListJpaRepository = wishListJpaRepository;
+    }
 
+    public WishList findByUserId(Long userId) {
+        return wishListJpaRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 위시리스트가 존재하지 않습니다."));
+    }
 
-    Page<WishList> findByUserId(Long userId, Pageable pageable);
+    public Page<WishList> findByUserId(Long userId, Pageable pageable) {
+        return wishListJpaRepository.findByUserId(userId, pageable);
+    }
 
+    public void save(WishList wishList) {
+        wishListJpaRepository.save(wishList);
+    }
 }

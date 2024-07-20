@@ -1,11 +1,13 @@
 package gift.product.application;
 
 import gift.product.domain.Product;
+import gift.product.domain.ProductOption;
 import gift.product.domain.WishList;
 import gift.product.domain.WishListProduct;
 import gift.product.exception.ProductException;
-import gift.product.infra.ProductJpaRepository;
-import gift.product.infra.WishListRepository;
+import gift.product.infra.ProductRepository;
+import gift.product.infra.WishLIstRepository;
+import gift.product.infra.WishListJpaRepository;
 import gift.user.application.UserService;
 import gift.user.domain.User;
 import gift.util.ErrorCode;
@@ -22,11 +24,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class WishListService {
 
-    private final WishListRepository wishListRepository;
-    private final ProductJpaRepository productRepository;
+    private final WishLIstRepository wishListRepository;
+    private final ProductRepository productRepository;
     private final UserService userService;
 
-    public WishListService(WishListRepository wishListRepository, ProductJpaRepository productRepository,
+    public WishListService(WishLIstRepository wishListRepository, ProductRepository productRepository,
                            UserService userService) {
         this.wishListRepository = wishListRepository;
         this.productRepository = productRepository;
@@ -49,16 +51,11 @@ public class WishListService {
     }
 
     @Transactional
-    public void addProductToWishList(Long userId, Long productId) {
+    public void addProductToWishList(Long userId, Long productId, Long optionId) {
         WishList wishList = wishListRepository.findByUserId(userId);
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = productRepository.findById(productId);
+        ProductOption productOption = productRepository.getProductWithOption(productId, optionId);
 
-        if (wishList == null) {
-            User user = userService.getUser(userId);
-            wishList = new WishList(user, LocalDateTime.now());
-            wishList = wishListRepository.save(wishList);
-        }
 
         WishListProduct wishListProduct = new WishListProduct(wishList, product);
         wishList.addWishListProduct(wishListProduct);

@@ -18,6 +18,10 @@ public class WishListProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_option_id")
+    private ProductOption productOption;
+
     public WishListProduct() {
     }
 
