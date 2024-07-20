@@ -45,8 +45,8 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
         Product product = new Product(productRequestDTO.getName(), productRequestDTO.getPrice(),
-                productRequestDTO.getDescription(), productRequestDTO.getImageUrl());
-        productService.addProduct(product);
+                productRequestDTO.getDescription(), productRequestDTO.getImageUrl(), null);
+        productService.addProduct(product, productRequestDTO.getCategoryId());
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
@@ -58,9 +58,9 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
         product.update(productRequestDTO.getName(), productRequestDTO.getPrice(),
-                productRequestDTO.getDescription(), productRequestDTO.getImageUrl());
+                productRequestDTO.getDescription(), productRequestDTO.getImageUrl(), null);
 
-        productService.updateProduct(product);
+        productService.updateProduct(product, productRequestDTO.getCategoryId());
 
         return ResponseEntity.ok(product);
     }
@@ -97,7 +97,7 @@ public class ProductController {
         String imagePath = ImageStorageUtil.saveImage(imageFile);
         String imageUrl = ImageStorageUtil.encodeImagePathToBase64(imagePath);
         product.updateImage(imageUrl);
-        productService.updateProduct(product);
+        productService.updateProduct(product, product.getCategory().getId());
         return ResponseEntity.ok(product);
     }
 

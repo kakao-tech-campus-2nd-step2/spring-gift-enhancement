@@ -4,6 +4,7 @@ import gift.domain.category.Category;
 import gift.repository.category.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,10 +27,12 @@ public class CategoryService {
                 .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + id));
     }
 
+    @Transactional
     public Category addCategory(Category category) {
         return categoryRepository.save(category);
     }
 
+    @Transactional
     public Category updateCategory(Long id, Category updatedCategory) {
         Category existingCategory = getCategoryById(id);
 
@@ -38,8 +41,9 @@ public class CategoryService {
         existingCategory.changeImageUrl(updatedCategory.getImageUrl());
         existingCategory.changeDescription(updatedCategory.getDescription());
 
-        return categoryRepository.save(existingCategory);
+        return existingCategory;  // JPA가 트랜잭션 커밋 시 자동으로 업데이트
     }
+
 
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);

@@ -1,6 +1,8 @@
 package gift.service.product;
 
+import gift.domain.category.Category;
 import gift.domain.product.Product;
+import gift.repository.category.CategoryRepository;
 import gift.repository.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,11 +12,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository; // Inject the category repository
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
+
 
     public Page<Product> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
@@ -25,13 +30,19 @@ public class ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product product, Long categoryId) {
         validateProduct(product);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId));
+        product.setCategory(category);
         productRepository.save(product);
     }
 
-    public void updateProduct(Product product) {
+    public void updateProduct(Product product, Long categoryId) {
         validateProduct(product);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId));
+        product.setCategory(category);
         productRepository.save(product);
     }
 
