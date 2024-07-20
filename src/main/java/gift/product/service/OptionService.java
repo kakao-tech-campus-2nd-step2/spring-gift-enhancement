@@ -25,7 +25,7 @@ public class OptionService {
 
     @Transactional(readOnly = true)
     public List<OptionResponse> findOptionsByProductId(Long productId) {
-        List<Option> options = optionRepository.findAllByProductIdAndIsActiveTrue(productId);
+        List<Option> options = optionRepository.findAllByProductId(productId);
         return options.stream()
                 .map(o -> new OptionResponse(o.getId(), o.getName(), o.getQuantity(), o.getAdditionalCost()))
                 .collect(Collectors.toList());
@@ -62,16 +62,15 @@ public class OptionService {
     public void deleteOption(Product product, Long optionId) {
         Option option = getOption(optionId);
         checkOptionOwner(product, option);
-        if (optionRepository.countByProductIdAndIsActiveTrue(product.getId()) <= 1) {
+        if (optionRepository.countByProductId(product.getId()) <= 1) {
             throw new ProductMustHaveOptionException();
         }
-        option.inactive();
-        optionRepository.save(option);
+        optionRepository.delete(option);
     }
 
     @Transactional(readOnly = true)
     public Option getOption(Long optionId) {
-        Optional<Option> option = optionRepository.findByIdAndIsActiveTrue(optionId);
+        Optional<Option> option = optionRepository.findById(optionId);
         return option.orElseThrow(() -> new EntityNotFoundException("Option"));
     }
 
@@ -83,7 +82,7 @@ public class OptionService {
 
     @Transactional
     public void subtractOptionQuantity(Long optionId, int quantity) {
-        Option option = optionRepository.findByIdAndIsActiveTrue(optionId)
+        Option option = optionRepository.findById(optionId)
                 .orElseThrow(() -> new EntityNotFoundException("Option"));
 
         option.subtract(quantity);
