@@ -87,6 +87,8 @@ public class OptionService {
      */
     @Transactional
     public void delete(Long id){
-        optionRepository.deleteById(id);
+        Option savedOption = optionRepository.findById(id).orElseThrow(NoSuchFieldError::new);
+        if(savedOption.getQuantity() != 1)
+            optionRepository.deleteById(id);
     }
 }
