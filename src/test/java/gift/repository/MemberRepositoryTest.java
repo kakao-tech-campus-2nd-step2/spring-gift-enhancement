@@ -1,7 +1,8 @@
 package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.domain.member.dto.MemberRequest;
 import gift.domain.member.entity.Member;

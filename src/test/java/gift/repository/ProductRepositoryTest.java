@@ -1,12 +1,13 @@
 package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
-import gift.domain.product.repository.ProductRepository;
 import gift.domain.product.entity.Product;
+import gift.domain.product.repository.ProductRepository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;

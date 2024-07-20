@@ -8,8 +8,8 @@ import static org.mockito.Mockito.verify;
 
 import gift.domain.member.dto.MemberRequest;
 import gift.domain.member.entity.Member;
-import gift.domain.member.service.MemberService;
 import gift.domain.member.repository.MemberRepository;
+import gift.domain.member.service.MemberService;
 import gift.util.JwtUtil;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;

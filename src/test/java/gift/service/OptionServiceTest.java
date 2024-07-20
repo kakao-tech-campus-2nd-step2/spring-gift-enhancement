@@ -3,9 +3,7 @@ package gift.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
 
 import gift.domain.category.entity.Category;
 import gift.domain.option.dto.OptionRequest;

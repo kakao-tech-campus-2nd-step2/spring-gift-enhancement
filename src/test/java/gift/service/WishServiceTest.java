@@ -8,13 +8,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import gift.domain.category.entity.Category;
-import gift.domain.wishlist.dto.WishRequest;
 import gift.domain.member.entity.Member;
+import gift.domain.member.repository.MemberRepository;
 import gift.domain.product.entity.Product;
+import gift.domain.product.repository.ProductRepository;
+import gift.domain.wishlist.dto.WishRequest;
 import gift.domain.wishlist.dto.WishResponse;
 import gift.domain.wishlist.entity.Wish;
-import gift.domain.member.repository.MemberRepository;
-import gift.domain.product.repository.ProductRepository;
 import gift.domain.wishlist.repository.WishRepository;
 import gift.domain.wishlist.service.WishService;
 import java.util.Arrays;
