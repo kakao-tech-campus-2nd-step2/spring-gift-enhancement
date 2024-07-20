@@ -69,8 +69,13 @@ public class WishServiceTest {
             category.getId(),
             "categoryName"
         );
-        Product product = new Product(productResponse.id(), productResponse.name(),
-            productResponse.price(), productResponse.imageUrl(), category);
+        Product product = new Product(
+            productResponse.id(),
+            productResponse.name(),
+            productResponse.price(),
+            productResponse.imageUrl(),
+            category
+        );
 
         when(memberService.getMemberById(1L)).thenReturn(memberResponse);
         when(productService.getProductById(1L)).thenReturn(productResponse);

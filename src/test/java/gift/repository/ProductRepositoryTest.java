@@ -31,11 +31,11 @@ public class ProductRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        Product product = new Product("Test Product", 100, "test.jpg", category);
         Product savedProduct = productRepository.save(product);
 
-        Option option1 = new Option(null, "Option1", 100, savedProduct);
-        Option option2 = new Option(null, "Option2", 200, savedProduct);
+        Option option1 = new Option("Option1", 100, savedProduct);
+        Option option2 = new Option("Option2", 200, savedProduct);
         optionRepository.save(option1);
         optionRepository.save(option2);
 
@@ -54,15 +54,15 @@ public class ProductRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product1 = new Product(null, "Product 1", 100, "prod1.jpg", category);
-        Product product2 = new Product(null, "Product 2", 200, "prod2.jpg", category);
+        Product product1 = new Product("Product 1", 100, "prod1.jpg", category);
+        Product product2 = new Product("Product 2", 200, "prod2.jpg", category);
         productRepository.save(product1);
         productRepository.save(product2);
 
-        Option option1 = new Option(null, "Option1", 100, product1);
-        Option option2 = new Option(null, "Option2", 200, product1);
-        Option option3 = new Option(null, "Option3", 300, product2);
-        Option option4 = new Option(null, "Option4", 400, product2);
+        Option option1 = new Option("Option1", 100, product1);
+        Option option2 = new Option("Option2", 200, product1);
+        Option option3 = new Option("Option3", 300, product2);
+        Option option4 = new Option("Option4", 400, product2);
         optionRepository.save(option1);
         optionRepository.save(option2);
         optionRepository.save(option3);
@@ -78,11 +78,11 @@ public class ProductRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        Product product = new Product("Test Product", 100, "test.jpg", category);
         Product savedProduct = productRepository.save(product);
 
-        Option option1 = new Option(null, "Option1", 100, savedProduct);
-        Option option2 = new Option(null, "Option2", 200, savedProduct);
+        Option option1 = new Option("Option1", 100, savedProduct);
+        Option option2 = new Option("Option2", 200, savedProduct);
         optionRepository.save(option1);
         optionRepository.save(option2);
 

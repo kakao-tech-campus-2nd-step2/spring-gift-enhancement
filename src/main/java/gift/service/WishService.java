@@ -50,7 +50,7 @@ public class WishService {
             throw new DuplicateWishException(ALREADY_EXISTS);
         }
 
-        Wish wish = new Wish(null, member, product);
+        Wish wish = new Wish(member, product);
         Wish savedWish = wishRepository.save(wish);
         return convertToDTO(savedWish);
     }

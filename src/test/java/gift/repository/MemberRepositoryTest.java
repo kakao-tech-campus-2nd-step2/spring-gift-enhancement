@@ -20,7 +20,7 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("회원 저장 및 ID로 조회")
     public void testSaveAndFindById() {
-        Member member = new Member(null, "test@example.com", "password");
+        Member member = new Member("test@example.com", "password");
         Member savedMember = memberRepository.save(member);
         Optional<Member> foundMember = memberRepository.findById(savedMember.getId());
 
@@ -33,8 +33,8 @@ public class MemberRepositoryTest {
     public void testFindAll() {
         long initialCount = memberRepository.count();
 
-        Member member1 = new Member(null, "user1@example.com", "password1");
-        Member member2 = new Member(null, "user2@example.com", "password2");
+        Member member1 = new Member("user1@example.com", "password1");
+        Member member2 = new Member("user2@example.com", "password2");
 
         memberRepository.save(member1);
         memberRepository.save(member2);
@@ -46,7 +46,7 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("회원 삭제")
     public void testDelete() {
-        Member member = new Member(null, "test@example.com", "password");
+        Member member = new Member("test@example.com", "password");
         Member savedMember = memberRepository.save(member);
 
         memberRepository.deleteById(savedMember.getId());
@@ -58,7 +58,7 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("이메일로 회원 조회")
     public void testFindByEmail() {
-        Member member = new Member(null, "test@example.com", "password");
+        Member member = new Member("test@example.com", "password");
         memberRepository.save(member);
 
         Optional<Member> foundMember = memberRepository.findByEmail("test@example.com");
@@ -70,7 +70,7 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("이메일 존재 여부 확인")
     public void testExistsByEmail() {
-        Member member = new Member(null, "test@example.com", "password");
+        Member member = new Member("test@example.com", "password");
         memberRepository.save(member);
 
         boolean exists = memberRepository.existsByEmail("test@example.com");

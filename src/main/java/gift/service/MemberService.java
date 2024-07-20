@@ -32,8 +32,7 @@ public class MemberService {
             throw new EmailAlreadyUsedException(EMAIL_ALREADY_USED);
         }
 
-        Member member = new Member(null, memberRegisterRequest.email(),
-            memberRegisterRequest.password());
+        Member member = new Member(memberRegisterRequest.email(), memberRegisterRequest.password());
         Member savedMember = memberRepository.save(member);
 
         String token = jwtUtil.generateToken(savedMember.getId(), member.getEmail());

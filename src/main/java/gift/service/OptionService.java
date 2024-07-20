@@ -54,7 +54,6 @@ public class OptionService {
         validateDuplicateOptionName(productId, optionCreateRequest.name());
 
         Option option = new Option(
-            null,
             optionCreateRequest.name(),
             optionCreateRequest.quantity(),
             product

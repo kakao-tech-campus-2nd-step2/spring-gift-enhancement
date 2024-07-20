@@ -54,6 +54,12 @@ public class Option {
         this.product = product;
     }
 
+    public Option(String name, int quantity, Product product) {
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
     public Long getId() {
         return id;
     }

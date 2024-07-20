@@ -54,7 +54,6 @@ public class ProductService {
         Product savedProduct = productRepository.save(product);
 
         Option defaultOption = new Option(
-            null,
             "Default Option",
             1,
             savedProduct
@@ -111,7 +110,6 @@ public class ProductService {
     private Product convertToEntity(ProductCreateRequest productCreateRequest,
         Category category) {
         return new Product(
-            null,
             productCreateRequest.name(),
             productCreateRequest.price(),
             productCreateRequest.imageUrl(),

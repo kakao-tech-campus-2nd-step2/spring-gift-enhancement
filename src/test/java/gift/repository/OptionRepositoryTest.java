@@ -31,10 +31,10 @@ public class OptionRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        Product product = new Product("Test Product", 100, "test.jpg", category);
         productRepository.save(product);
 
-        Option option = new Option(null, "Option1", 100, product);
+        Option option = new Option("Option1", 100, product);
         Option savedOption = optionRepository.save(option);
 
         Optional<Option> foundOption = optionRepository.findById(savedOption.getId());
@@ -50,11 +50,11 @@ public class OptionRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        Product product = new Product("Test Product", 100, "test.jpg", category);
         productRepository.save(product);
 
-        Option option1 = new Option(null, "Option1", 100, product);
-        Option option2 = new Option(null, "Option2", 200, product);
+        Option option1 = new Option("Option1", 100, product);
+        Option option2 = new Option("Option2", 200, product);
         optionRepository.save(option1);
         optionRepository.save(option2);
 
@@ -68,10 +68,10 @@ public class OptionRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        Product product = new Product("Test Product", 100, "test.jpg", category);
         productRepository.save(product);
 
-        Option option = new Option(null, "Option1", 100, product);
+        Option option = new Option("Option1", 100, product);
         Option savedOption = optionRepository.save(option);
 
         optionRepository.deleteById(savedOption.getId());
@@ -86,10 +86,10 @@ public class OptionRepositoryTest {
         Category category = new Category("Test Category", "#000000", "imageUrl", "description");
         categoryRepository.save(category);
 
-        Product product = new Product(null, "Test Product", 100, "test.jpg", category);
+        Product product = new Product("Test Product", 100, "test.jpg", category);
         productRepository.save(product);
 
-        Option option = new Option(null, "Option1", 100, product);
+        Option option = new Option("Option1", 100, product);
         Option savedOption = optionRepository.save(option);
 
         savedOption.update("Updated Option", 200, product);
