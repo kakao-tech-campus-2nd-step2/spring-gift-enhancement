@@ -18,19 +18,10 @@ public class OptionService {
         return optionRepository.getOptionsByProductId(product_id);
     }
 
-    public void decreaseQuantity(Long option_id, Integer quantity) {
+    public void decreaseQuantity(Long option_id, Integer amount) {
         Option option = optionRepository.findById(option_id)
                 .orElseThrow(() -> new EntityNotFoundException("옵션을 찾을 수 없습니다."));
-        decreaseQuantity(option, quantity);
+        option.subtract(amount);
         optionRepository.save(option); // 수량 감소 후 업데이트
-    }
-
-    private void decreaseQuantity(Option option, Integer quantity) {
-        Integer originQuantity = option.getQuantity();
-        int temp = (originQuantity - quantity);
-        if(temp < 0) {
-            throw new IllegalArgumentException(option.getName()+"의 수량은 " + originQuantity + "개 남았습니다.");
-        }
-        option.setQuantity(temp);
     }
 }

@@ -29,6 +29,16 @@ public class Option {
         this.product = product;
     }
 
+    public void subtract(Integer amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("감소할 수량은 0보다 커야 합니다.");
+        }
+        if (this.quantity < amount) {
+            throw new IllegalArgumentException("재고 수량이 부족합니다.");
+        }
+        this.quantity -= amount;
+    }
+
     public String getName() {
         return name;
     }
