@@ -27,17 +27,17 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryResponseDto addCateogory(@RequestBody CategoryRequestDto categoryRequestDto) {
+    public CategoryResponseDto addCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
         return categoryService.postCategory(categoryRequestDto);
     }
 
     @PutMapping("/{id}")
-    public CategoryResponseDto updateCategory(@PathVariable Long id, @RequestBody CategoryRequestDto categoryRequestDto) {
+    public CategoryResponseDto updateCateory(@PathVariable Long id, @RequestBody CategoryRequestDto categoryRequestDto) {
         return categoryService.putCategory(id, categoryRequestDto);
     }
 
     @DeleteMapping("/{id}")
-    public HttpEntity<String> deleteCategory(@PathVariable Long id) {
+    public HttpEntity<String> deleteCategry(@PathVariable Long id) {
         return categoryService.deleteCategoryById(id);
     }
 

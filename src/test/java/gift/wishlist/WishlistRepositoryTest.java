@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.category.CategoryRepository;
-import gift.category.Cateogory;
+import gift.category.Category;
 import gift.member.Member;
 import gift.member.MemberRepository;
 import gift.product.Product;
@@ -35,9 +35,9 @@ class WishlistRepositoryTest {
 
     @BeforeEach
     void setCategoryRepository() {
-        categoryRepository.save(new Cateogory("교환권","쌈@뽕한 블루","www","여름"));
-        categoryRepository.save(new Cateogory("과제면제권","방학","www.com","학교"));
-        categoryRepository.save(new Cateogory("라우브","스틸더","www.show","키야"));
+        categoryRepository.save(new Category("교환권","쌈@뽕한 블루","www","여름"));
+        categoryRepository.save(new Category("과제면제권","방학","www.com","학교"));
+        categoryRepository.save(new Category("라우브","스틸더","www.show","키야"));
     }
 
     @BeforeEach

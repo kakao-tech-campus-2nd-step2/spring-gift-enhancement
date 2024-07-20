@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.category.CategoryRepository;
-import gift.category.Cateogory;
+import gift.category.Category;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,9 +25,9 @@ class ProductRepositoryTest {
 
     @BeforeEach
     void setCategoryRepository() {
-        categoryRepository.save(new Cateogory("교환권","쌈@뽕한 블루","www","여름"));
-        categoryRepository.save(new Cateogory("과제면제권","방학","www.com","학교"));
-        categoryRepository.save(new Cateogory("라우브","스틸더","www.show","키야"));
+        categoryRepository.save(new Category("교환권","쌈@뽕한 블루","www","여름"));
+        categoryRepository.save(new Category("과제면제권","방학","www.com","학교"));
+        categoryRepository.save(new Category("라우브","스틸더","www.show","키야"));
     }
 
     @Test
@@ -44,8 +44,8 @@ class ProductRepositoryTest {
         String expectedName = "사과";
         int expectedPrice = 2000;
         String expectedImageUrl = "www";
-        Cateogory cateogory = categoryRepository.findById(1L).get();
-        Product expected = new Product(expectedName, expectedPrice, expectedImageUrl, cateogory);
+        Category category = categoryRepository.findById(1L).get();
+        Product expected = new Product(expectedName, expectedPrice, expectedImageUrl, category);
         productRepository.save(expected);
         Product actual = productRepository.findById(expected.getId()).get();
         assertThat(actual).isEqualTo(expected);
@@ -56,7 +56,7 @@ class ProductRepositoryTest {
             () -> assertThat(actual.getName()).isEqualTo(expectedName),
             () -> assertThat(actual.getPrice()).isEqualTo(expectedPrice),
             () -> assertThat(actual.getImageUrl()).isEqualTo(expectedImageUrl),
-            () -> assertThat(actual.getCateogory()).isEqualTo(cateogory)
+            () -> assertThat(actual.getCategory()).isEqualTo(category)
         );
     }
 
@@ -88,7 +88,7 @@ class ProductRepositoryTest {
             () -> assertThat(product.getName()).isEqualTo("바나나"),
             () -> assertThat(product.getPrice()).isEqualTo(3000),
             () -> assertThat(product.getImageUrl()).isEqualTo("www.com"),
-            () -> assertThat(product.getCateogory()).isEqualTo(categoryRepository.findById(1L).get())
+            () -> assertThat(product.getCategory()).isEqualTo(categoryRepository.findById(1L).get())
         );
     }
 

@@ -33,67 +33,67 @@ public class CategoryService {
     }
 
     public CategoryResponseDto postCategory(CategoryRequestDto categoryRequestDto) {
-        Cateogory cateogory = new Cateogory(
+        Category category = new Category(
             categoryRequestDto.name(),
             categoryRequestDto.color(),
             categoryRequestDto.imageUrl(),
             categoryRequestDto.description()
         );
-        if (categoryRepository.findByName(cateogory.getName()).isPresent()) {
+        if (categoryRepository.findByName(category.getName()).isPresent()) {
             throw new AlreadyExistCategory("동일한 카테고리가 이미 존재합니다.");
         }
 
-        categoryRepository.saveAndFlush(cateogory);
+        categoryRepository.saveAndFlush(category);
 
         return new CategoryResponseDto(
-            cateogory.getId(),
-            cateogory.getName(),
-            cateogory.getColor(),
-            cateogory.getImageUrl(),
-            cateogory.getDescription()
+            category.getId(),
+            category.getName(),
+            category.getColor(),
+            category.getImageUrl(),
+            category.getDescription()
         );
     }
 
     public CategoryResponseDto putCategory(Long id, CategoryRequestDto categoryRequestDto) {
-        Cateogory cateogory = categoryRepository.findById(id)
+        Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new InvalidCategory("유효하지 않은 카테고리입니다."));
 
-        cateogory.update(categoryRequestDto.name(), categoryRequestDto.color(), categoryRequestDto.imageUrl(), categoryRequestDto.description());
-        categoryRepository.saveAndFlush(cateogory);
+        category.update(categoryRequestDto.name(), categoryRequestDto.color(), categoryRequestDto.imageUrl(), categoryRequestDto.description());
+        categoryRepository.saveAndFlush(category);
 
         return new CategoryResponseDto(
-            cateogory.getId(),
-            cateogory.getName(),
-            cateogory.getColor(),
-            cateogory.getImageUrl(),
-            cateogory.getDescription()
+            category.getId(),
+            category.getName(),
+            category.getColor(),
+            category.getImageUrl(),
+            category.getDescription()
         );
     }
 
     public HttpEntity<String> deleteCategoryById(Long id) {
-        Cateogory cateogory = categoryRepository.findById(id)
+        Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new InvalidCategory("유효하지 않은 카테고리입니다."));
 
-        categoryRepository.delete(cateogory);
+        categoryRepository.delete(category);
 
         return ResponseEntity.ok("성공적으로 삭제되었습니다");
     }
 
     public CategoryResponseDto getCategoryById(Long id) {
-        Cateogory cateogory = categoryRepository.findById(id)
+        Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new InvalidCategory("유효하지 않은 카테고리입니다."));
 
         return new CategoryResponseDto(
-            cateogory.getId(),
-            cateogory.getName(),
-            cateogory.getColor(),
-            cateogory.getImageUrl(),
-            cateogory.getDescription()
+            category.getId(),
+            category.getName(),
+            category.getColor(),
+            category.getImageUrl(),
+            category.getDescription()
         );
     }
 
     public List<Long> getProductsInCategory(Long id) {
-        List<Product> products = productRepository.findAllByCateogory_Id(id);
+        List<Product> products = productRepository.findAllByCategory_Id(id);
 
         return products.stream()
             .map(Product::getId)

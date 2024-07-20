@@ -8,13 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "category")
-public class Cateogory {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,14 +30,10 @@ public class Cateogory {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToMany
-    @JoinColumn
-    private List<Product> products = new ArrayList<>();
-
-    protected Cateogory() {
+    protected Category() {
     }
 
-    public Cateogory(String name, String color, String imageUrl, String description) {
+    public Category(String name, String color, String imageUrl, String description) {
         this.name = name;
         this.color = color;
         this.imageUrl = imageUrl;

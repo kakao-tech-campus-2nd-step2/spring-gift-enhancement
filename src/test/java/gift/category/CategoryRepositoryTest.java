@@ -1,7 +1,6 @@
 package gift.category;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
@@ -26,16 +25,16 @@ class CategoryRepositoryTest {
 
     @BeforeEach
     void setCategoryRepository() {
-        categoryRepository.save(new Cateogory("교환권","쌈@뽕한 블루","www","여름"));
-        categoryRepository.save(new Cateogory("과제면제권","방학","www.com","학교"));
-        categoryRepository.save(new Cateogory("라우브","스틸더","www.show","키야"));
+        categoryRepository.save(new Category("교환권","쌈@뽕한 블루","www","여름"));
+        categoryRepository.save(new Category("과제면제권","방학","www.com","학교"));
+        categoryRepository.save(new Category("라우브","스틸더","www.show","키야"));
     }
 
     @Test
     @DisplayName("카테고리 저장 테스트")
     void save() {
-        Cateogory expected = new Cateogory("교환권","쌈@뽕한 블루","www","여름");
-        Cateogory actual = categoryRepository.save(expected);
+        Category expected = new Category("교환권","쌈@뽕한 블루","www","여름");
+        Category actual = categoryRepository.save(expected);
 
         assertAll(
             () -> assertThat(actual).isEqualTo(expected)
@@ -45,9 +44,9 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("단일 카테고리 조회 테스트")
     void findById() {
-        Cateogory expected = new Cateogory("교환권","쌈@뽕한 블루","www","여름");
+        Category expected = new Category("교환권","쌈@뽕한 블루","www","여름");
         categoryRepository.save(expected);
-        Cateogory actual = categoryRepository.findById(expected.getId()).get();
+        Category actual = categoryRepository.findById(expected.getId()).get();
 
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -62,14 +61,14 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("모든 카테고리 조회 테스트")
     void findAll() {
-        Cateogory cateogory1 = new Cateogory("교환권","쌈@뽕한 블루","www","여름");
-        Cateogory cateogory2 = new Cateogory("과제면제권","방학","www.com","학교");
-        Cateogory cateogory3 = new Cateogory("라우브","스틸더","www.show","키야");
-        categoryRepository.save(cateogory1);
-        categoryRepository.save(cateogory2);
-        categoryRepository.save(cateogory3);
+        Category category1 = new Category("교환권","쌈@뽕한 블루","www","여름");
+        Category category2 = new Category("과제면제권","방학","www.com","학교");
+        Category category3 = new Category("라우브","스틸더","www.show","키야");
+        categoryRepository.save(category1);
+        categoryRepository.save(category2);
+        categoryRepository.save(category3);
 
-        List<Cateogory> categoryList = categoryRepository.findAll();
+        List<Category> categoryList = categoryRepository.findAll();
 
         assertAll(
             ()-> assertThat(categoryList.size()).isEqualTo(3)
@@ -79,7 +78,7 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("카테고리 수정 테스트")
     void update() {
-        Cateogory category = new Cateogory("교환권","쌈@뽕한 블루","www","여름");
+        Category category = new Category("교환권","쌈@뽕한 블루","www","여름");
 
         category.update("과제면제권","방학","www.com","학교");
 
@@ -94,11 +93,11 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("카테고리 삭제 테스트")
     void delete() {
-        Cateogory category = new Cateogory("교환권","쌈@뽕한 블루","www","여름");
+        Category category = new Category("교환권","쌈@뽕한 블루","www","여름");
         categoryRepository.save(category);
         categoryRepository.deleteById(category.getId());
 
-        List<Cateogory> isCategory = categoryRepository.findById(category.getId()).stream().toList();
+        List<Category> isCategory = categoryRepository.findById(category.getId()).stream().toList();
 
         assertAll(
             () -> assertThat(isCategory.size()).isEqualTo(0)
@@ -108,12 +107,12 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("카테고리 속 상품 조회 테스트")
     void findProductInCategory() {
-        Cateogory cateogory = new Cateogory("교환권","쌈@뽕한 블루","www","여름");
-        categoryRepository.save(cateogory);
-        productRepository.save(new Product("사과", 2000, "www", cateogory));
-        productRepository.save(new Product("참외",4000,"달다!", cateogory));
+        Category category = new Category("교환권","쌈@뽕한 블루","www","여름");
+        categoryRepository.save(category);
+        productRepository.save(new Product("사과", 2000, "www", category));
+        productRepository.save(new Product("참외",4000,"달다!", category));
 
-        List<Product> productList = productRepository.findAllByCateogory_Id(cateogory.getId());
+        List<Product> productList = productRepository.findAllByCategory_Id(category.getId());
 
         assertAll(
             () -> assertThat(productList.size()).isEqualTo(2)

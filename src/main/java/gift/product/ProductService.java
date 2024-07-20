@@ -32,7 +32,7 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCateogory().getId()));
+            product.getCategory().getId()));
     }
 
     public Optional<ProductResponseDto> getProductById(Long id) {
@@ -42,7 +42,7 @@ public class ProductService {
                 product.getName(),
                 product.getPrice(),
                 product.getImageUrl(),
-                product.getCateogory().getId()));
+                product.getCategory().getId()));
     }
 
     public ProductResponseDto postProduct(ProductRequestDto productRequestDto) {
@@ -57,7 +57,7 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCateogory().getId()
+            product.getCategory().getId()
         );
     }
 
@@ -73,7 +73,7 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCateogory().getId()
+            product.getCategory().getId()
         );
     }
 
@@ -91,7 +91,7 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCateogory().getId()
+            product.getCategory().getId()
         );
     }
 
