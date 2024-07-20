@@ -44,4 +44,14 @@ public class OptionServiceTest {
         verify(optionRepository, times(1)).save(any(Option.class));
     }
 
+    @Test
+    public void testSubtractOptionNegativeQuantity() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.subtractOption(option, -5L);
+        });
+
+        assertEquals("Subtract quantities는 양수여야 합니다!", exception.getMessage());
+        verify(optionRepository, times(0)).save(any(Option.class));
+    }
+
 }
