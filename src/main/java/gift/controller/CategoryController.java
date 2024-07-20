@@ -33,7 +33,7 @@ public class CategoryController {
         return "category_list";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/new")
     public String showAddCategoryForm(Model model) {
         model.addAttribute("categoryDTO", new CategoryDTO(""));
         return "add_category_form";

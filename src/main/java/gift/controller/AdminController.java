@@ -38,7 +38,7 @@ public class AdminController {
         return "product_list";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/new")
     public String showAddProductForm(Model model) {
         model.addAttribute("productDTO", new ProductDTO("", "0", null, ""));
         model.addAttribute("categories", categoryService.findAllCategories());
