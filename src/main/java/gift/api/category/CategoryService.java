@@ -2,6 +2,7 @@ package gift.api.category;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,14 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getCategories(Pageable pageable) {
-        Page<Category> allCategories = categoryRepository.findAll(pageable);
-        return allCategories.hasContent() ? allCategories.getContent() : Collections.emptyList();
+    public List<CategoryResponse> getCategories(Pageable pageable) {
+        Page<Category> categories = categoryRepository.findAll(pageable);
+        if (categories.hasContent()) {
+            return categories.getContent()
+                    .stream()
+                    .map(CategoryResponse::of)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 }

@@ -18,7 +18,7 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Category>> getCategories(Pageable pageable) {
+    public ResponseEntity<List<CategoryResponse>> getCategories(Pageable pageable) {
         return ResponseEntity.ok().body(categoryService.getCategories(pageable));
     }
 }

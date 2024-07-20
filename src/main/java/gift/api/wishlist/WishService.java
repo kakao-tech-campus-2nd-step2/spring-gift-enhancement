@@ -4,6 +4,11 @@ import gift.api.member.Member;
 import gift.api.member.MemberRepository;
 import gift.api.product.Product;
 import gift.api.product.ProductRepository;
+import gift.api.wishlist.domain.Wish;
+import gift.api.wishlist.domain.WishId;
+import gift.api.wishlist.dto.WishAddUpdateRequest;
+import gift.api.wishlist.dto.WishDeleteRequest;
+import gift.api.wishlist.dto.WishResponse;
 import gift.global.exception.NoSuchEntityException;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
@@ -29,28 +34,34 @@ public class WishService {
         this.wishRepository = wishRepository;
     }
 
-    public List<Wish> getItems(Long memberId, Pageable pageable) {
+    public List<WishResponse> getItems(Long memberId, Pageable pageable) {
         Member member = findMemberById(memberId);
-        Page<Wish> allWishes = wishRepository.findAllByMember(member, createPageableWithProduct(pageable));
-        return allWishes.hasContent() ? allWishes.getContent() : Collections.emptyList();
+        Page<Wish> wishes = wishRepository.findAllByMember(member, createPageableWithProduct(pageable));
+        if (wishes.hasContent()) {
+            return wishes.getContent()
+                    .stream()
+                    .map(WishResponse::of)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
-    public void add(Long memberId, WishRequest wishRequest) {
+    public void add(Long memberId, WishAddUpdateRequest wishAddUpdateRequest) {
         Member member = findMemberById(memberId);
-        Product product = productRepository.findById(wishRequest.productId())
+        Product product = productRepository.findById(wishAddUpdateRequest.productId())
             .orElseThrow(() -> new NoSuchEntityException("product"));
-        wishRepository.save(wishRequest.toEntity(member, product));
+        wishRepository.save(wishAddUpdateRequest.toEntity(member, product));
     }
 
     @Transactional
-    public void update(Long memberId, WishRequest wishRequest) {
-        Wish wish = wishRepository.findById(new WishId(memberId, wishRequest.productId()))
+    public void update(Long memberId, WishAddUpdateRequest wishAddUpdateRequest) {
+        Wish wish = wishRepository.findById(new WishId(memberId, wishAddUpdateRequest.productId()))
             .orElseThrow(() -> new NoSuchEntityException("wish"));
-        wish.updateQuantity(wishRequest.quantity());
+        wish.updateQuantity(wishAddUpdateRequest.quantity());
     }
 
-    public void delete(Long memberId, WishRequest wishRequest) {
-        wishRepository.deleteById(new WishId(memberId, wishRequest.productId()));
+    public void delete(Long memberId, WishDeleteRequest wishDeleteRequest) {
+        wishRepository.deleteById(new WishId(memberId, wishDeleteRequest.productId()));
     }
 
     private Pageable createPageableWithProduct(Pageable pageable) {

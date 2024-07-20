@@ -1,4 +1,4 @@
-package gift.global;
+package gift.global.advice;
 
 import gift.global.exception.GlobalException;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,12 @@
-package gift.api.wishlist;
+package gift.api.wishlist.dto;
 
 import gift.api.member.Member;
 import gift.api.product.Product;
+import gift.api.wishlist.domain.Wish;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record WishRequest(
+public record WishAddUpdateRequest(
     @NotNull(message = "Product id is mandatory")
     @Positive(message = "Product id must be greater than zero")
     Long productId,

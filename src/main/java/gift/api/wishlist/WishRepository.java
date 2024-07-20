@@ -1,6 +1,8 @@
 package gift.api.wishlist;
 
 import gift.api.member.Member;
+import gift.api.wishlist.domain.Wish;
+import gift.api.wishlist.domain.WishId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

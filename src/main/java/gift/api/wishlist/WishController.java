@@ -1,6 +1,9 @@
 package gift.api.wishlist;
 
-import gift.global.LoginMember;
+import gift.api.wishlist.dto.WishAddUpdateRequest;
+import gift.api.wishlist.dto.WishDeleteRequest;
+import gift.api.wishlist.dto.WishResponse;
+import gift.global.resolver.LoginMember;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -25,25 +28,25 @@ public class WishController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Wish>> getItems(@LoginMember Long memberId, Pageable pageable) {
+    public ResponseEntity<List<WishResponse>> getItems(@LoginMember Long memberId, Pageable pageable) {
         return ResponseEntity.ok().body(wishService.getItems(memberId, pageable));
     }
 
     @PostMapping()
-    public ResponseEntity<Void> add(@RequestBody @Valid WishRequest wishRequest, @LoginMember Long memberId) {
-        wishService.add(memberId, wishRequest);
+    public ResponseEntity<Void> add(@RequestBody @Valid WishAddUpdateRequest wishAddUpdateRequest, @LoginMember Long memberId) {
+        wishService.add(memberId, wishAddUpdateRequest);
         return ResponseEntity.created(URI.create("/api/wishes/" + memberId)).build();
     }
 
     @PutMapping()
-    public ResponseEntity<Void> update(@RequestBody @Valid WishRequest wishRequest, @LoginMember Long memberId) {
-        wishService.update(memberId, wishRequest);
+    public ResponseEntity<Void> update(@RequestBody @Valid WishAddUpdateRequest wishAddUpdateRequest, @LoginMember Long memberId) {
+        wishService.update(memberId, wishAddUpdateRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping()
-    public ResponseEntity<Void> delete(@RequestBody @Valid WishRequest wishRequest, @LoginMember Long memberId) {
-        wishService.delete(memberId, wishRequest);
+    public ResponseEntity<Void> delete(@RequestBody @Valid WishDeleteRequest wishDeleteRequest, @LoginMember Long memberId) {
+        wishService.delete(memberId, wishDeleteRequest);
         return ResponseEntity.noContent().build();
     }
 }
