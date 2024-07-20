@@ -31,6 +31,7 @@ public class CategoryService {
     }
 
     public void addCategory(CategoryRequestDTO categoryRequestDTO) {
+        System.out.println("add categoty");
         Category category = toEntity(categoryRequestDTO);
         categoryRepository.save(category);
     }
@@ -51,7 +52,7 @@ public class CategoryService {
         );
     }
 
-    public Category toEntity(CategoryRequestDTO categoryRequestDTO) {
+    private Category toEntity(CategoryRequestDTO categoryRequestDTO) {
         Category category = new Category(
                 categoryRequestDTO.name(),
                 categoryRequestDTO.color(),

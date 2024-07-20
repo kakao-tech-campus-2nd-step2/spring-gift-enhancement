@@ -85,7 +85,7 @@ public class WishService {
     }
 
 
-    public List<WishResponseDTO> WishToDto(List<Wish> wishlist){
+    public List<WishResponseDTO> wishToDto(List<Wish> wishlist){
         List<WishResponseDTO> wishResponseDtoList = new ArrayList<>();
         for(Wish wish : wishlist){
             Product product = wish.getProduct();
@@ -106,7 +106,7 @@ public class WishService {
         String email = tokenLoginRequestDTO.getEmail();
         Long memberId = findByEmail(email);
         List<Wish> wishlist = wishRepository.findByMemberId(memberId);
-        return WishToDto(wishlist);
+        return wishToDto(wishlist);
     }
 
 

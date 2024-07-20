@@ -32,6 +32,11 @@ public class Product {
             mappedBy = "product", orphanRemoval = true)
     private List<Wish> wishes;
 
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "product", orphanRemoval = true)
+    private List<Option> options;
+
     public Product() {}
 
     public Product(Long id, String name, int price, String imageUrl, Category category) {
