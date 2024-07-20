@@ -77,10 +77,13 @@ public class CategoryRepositoryTest {
         assertThat(actual.getFirst().getId()).isNotNull();
         assertThat(actual.get(1).getId()).isNotNull();
         assertThat(actual)
-            .extracting(Category::getName, Category::getColor, Category::getImageUrl, Category::getDescription)
+            .extracting(Category::getName, Category::getColor, Category::getImageUrl,
+                Category::getDescription)
             .containsExactly(
-                tuple(expected.getName(), expected.getColor(), expected.getImageUrl(), expected.getDescription()),
-                tuple(expected1.getName(), expected1.getColor(), expected1.getImageUrl(), expected1.getDescription())
+                tuple(expected.getName(), expected.getColor(), expected.getImageUrl(),
+                    expected.getDescription()),
+                tuple(expected1.getName(), expected1.getColor(), expected1.getImageUrl(),
+                    expected1.getDescription())
             );
     }
 
@@ -124,7 +127,7 @@ public class CategoryRepositoryTest {
         categoryRepository.save(category);
 
         //When
-        Boolean actual = categoryRepository.existsByName(category.getName());
+        boolean actual = categoryRepository.existsByName(category.getName());
 
         //Then
         assertThat(actual).isEqualTo(true);
@@ -137,7 +140,7 @@ public class CategoryRepositoryTest {
         categoryRepository.save(category);
 
         //When
-        Boolean actual = categoryRepository.existsByName("이춘식");
+        boolean actual = categoryRepository.existsByName("이춘식");
 
         //Then
         assertThat(actual).isEqualTo(false);

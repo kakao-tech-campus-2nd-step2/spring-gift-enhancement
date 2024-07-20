@@ -5,9 +5,9 @@ import jakarta.validation.constraints.Pattern;
 
 public class CategoryDTO {
 
-    Long id;
+    private Long id;
     @NotBlank(message = "이름을 입력하지 않았습니다.")
-    String name;
+    private String name;
     @Pattern(regexp = "(^#(([0-9a-fA-F]{2}){3}|([0-9a-fA-F]){3})$)"
         + "|(^#[0-9a-fA-F]{8}$|#[0-9a-fA-F]{6}$|#[0-9a-fA-F]{4}$|#[0-9a-fA-F]{3}$)"
         , message = "컬러코드가 아닙니다.")

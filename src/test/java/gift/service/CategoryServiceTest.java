@@ -108,6 +108,7 @@ public class CategoryServiceTest {
         CategoryDTO categoryDTO = new CategoryDTO(1L, "이름", "색상", "이미지링크", "설명");
         given(categoryRepository.existsByName(any())).willReturn(false);
         given(categoryRepository.save(any())).willReturn(categoryDTO.toCategory());
+
         //when
         categoryService.addCategory(categoryDTO);
 

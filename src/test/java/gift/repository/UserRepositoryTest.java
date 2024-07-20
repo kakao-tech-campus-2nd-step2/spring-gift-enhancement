@@ -43,7 +43,7 @@ public class UserRepositoryTest {
         userRepository.save(user);
 
         //When
-        Boolean actual = userRepository.existsByEmailAndPassword(user.getEmail(),
+        boolean actual = userRepository.existsByEmailAndPassword(user.getEmail(),
             user.getPassword());
 
         //Then
@@ -57,7 +57,7 @@ public class UserRepositoryTest {
         userRepository.save(user);
 
         //When
-        Boolean actual = userRepository.existsByEmailAndPassword("admin@email.com", "2222");
+        boolean actual = userRepository.existsByEmailAndPassword("admin@email.com", "2222");
 
         //Then
         assertThat(actual).isEqualTo(false);
@@ -70,7 +70,7 @@ public class UserRepositoryTest {
         userRepository.save(user);
 
         //When
-        Boolean actual = userRepository.existsByEmail(user.getEmail());
+        boolean actual = userRepository.existsByEmail(user.getEmail());
 
         //Then
         assertThat(actual).isEqualTo(true);
@@ -83,7 +83,7 @@ public class UserRepositoryTest {
         userRepository.save(user);
 
         //When
-        Boolean actual = userRepository.existsByEmail("example@email.com");
+        boolean actual = userRepository.existsByEmail("example@email.com");
 
         //Then
         assertThat(actual).isEqualTo(false);

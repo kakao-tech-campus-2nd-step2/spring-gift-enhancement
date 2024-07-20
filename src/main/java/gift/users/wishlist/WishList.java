@@ -1,5 +1,6 @@
 package gift.users.wishlist;
 
+import gift.administrator.option.Option;
 import gift.administrator.product.Product;
 import gift.users.user.User;
 import jakarta.persistence.*;
@@ -21,14 +22,18 @@ public class WishList {
     @Column(nullable = false)
     @Min(value = 1)
     private int num;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "option_id")
+    private Option option;
 
     public WishList() {
     }
 
-    public WishList(User user, Product product, int num) {
+    public WishList(User user, Product product, int num, Option option) {
         this.user = user;
         this.product = product;
         this.num = num;
+        this.option = option;
     }
 
     public void update(int num) {
@@ -57,5 +62,15 @@ public class WishList {
 
     public int getNum() {
         return num;
+    }
+
+    public void setNum(int num){this.num = num;}
+
+    public Option getOption() {
+        return option;
+    }
+
+    public void setOption(Option option) {
+        this.option = option;
     }
 }

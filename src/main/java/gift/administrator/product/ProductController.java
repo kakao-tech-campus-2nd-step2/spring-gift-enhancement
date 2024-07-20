@@ -84,7 +84,7 @@ public class ProductController {
         Model model)
         throws NotFoundException {
         ProductDTO product1 = new ProductDTO(id, product.getName(), product.getPrice(),
-            product.getImageUrl(), product.getCategoryId());
+            product.getImageUrl(), product.getCategoryId(), product.getOptions());
         productService.existsByNameAndIdPutResult(product1.getName(), product1.getId(), result);
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());

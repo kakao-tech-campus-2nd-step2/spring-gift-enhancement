@@ -1,6 +1,7 @@
 package gift.administrator.product;
 
 import gift.administrator.category.Category;
+import gift.administrator.option.Option;
 import gift.users.wishlist.WishList;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -18,35 +19,40 @@ public class Product {
     private String name;
     @Column(nullable = false)
     private String imageUrl;
-    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product")
     private List<WishList> wishes = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+    @OneToMany(mappedBy = "product")
+    private List<Option> options = new ArrayList<>();
 
     public Product() {
     }
 
-    public Product(String name, int price, String imageUrl, Category category) {
+    public Product(String name, int price, String imageUrl, Category category, List<Option> options) {
         this.price = price;
         this.name = name;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
-    public Product(long id, String name, int price, String imageUrl, Category category) {
+    public Product(Long id, String name, int price, String imageUrl, Category category, List<Option> options) {
         this.id = id;
         this.price = price;
         this.name = name;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
-    public void update(String name, int price, String imageUrl, Category category) {
+    public void update(String name, int price, String imageUrl, Category category, List<Option> options) {
         this.price = price;
         this.name = name;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
     public Long getId() {
@@ -77,13 +83,43 @@ public class Product {
         this.category = category;
     }
 
+    public void setOption(List<Option> options){
+        this.options = options;
+    }
+
     public void addWishList(WishList wishList) {
-        this.wishes.add(wishList);
+        wishes.add(wishList);
         wishList.setProduct(this);
     }
 
     public void removeWishList(WishList wishList) {
         wishes.remove(wishList);
         wishList.setProduct(null);
+    }
+
+    public void addOption(Option option) {
+        options.add(option);
+        option.setProduct(this);
+    }
+
+    public void addOptions(List<Option> options) {
+        for(Option option : options){
+            addOption(option);
+        }
+    }
+
+    public void removeOption(Option option) {
+        options.remove(option);
+        option.setProduct(null);
+    }
+
+    public void removeOptions(List<Option> options) {
+        for(Option option : options){
+            removeOption(option);
+        }
+    }
+
+    public List<Option> getOptions(){
+        return options;
     }
 }
