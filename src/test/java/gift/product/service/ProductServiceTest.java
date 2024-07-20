@@ -9,13 +9,11 @@ import static org.mockito.Mockito.when;
 
 import gift.product.domain.Category;
 import gift.product.domain.Product;
-import gift.product.domain.ProductOption;
 import gift.product.exception.ProductNotFoundException;
 import gift.product.persistence.CategoryRepository;
 import gift.product.persistence.ProductOptionRepository;
 import gift.product.persistence.ProductRepository;
 import gift.product.service.command.ProductCommand;
-import gift.product.service.command.ProductOptionCommand;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -44,18 +42,15 @@ class ProductServiceTest {
     void saveProductTest() {
         //given
         ProductCommand productCommand = new ProductCommand("테스트 상품", 1000, "http://test.com", "카테고리");
-        List<ProductOptionCommand> productOptionCommands = List.of(new ProductOptionCommand("옵션1", 10));
 
         Category category = new Category(1L, "카테고리", "카테고리 설명", "카테고리 이미지", "카테고리 썸네일 이미지");
         Product savedProduct = new Product(1L, "테스트 상품", 1000, "http://test.com", category);
-        ProductOption productOption = new ProductOption("옵션1", 10, savedProduct);
 
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
         given(productRepository.save(any(Product.class))).willReturn(savedProduct);
-        given(productOptionRepository.saveAll(any())).willReturn(List.of(productOption));
 
         //when
-        Long savedProductId = productService.saveProduct(productCommand, productOptionCommands);
+        Long savedProductId = productService.saveProduct(productCommand);
 
         //then
         verify(productRepository).save(any(Product.class));

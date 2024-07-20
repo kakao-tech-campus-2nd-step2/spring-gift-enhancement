@@ -38,7 +38,7 @@ class ProductOptionControllerTest {
         final String requestURI = "/api/products/" + productId + "/options";
         final String requestBody = "{\n" +
                 "  \"name\": \"optionName\",\n" +
-                "  \"price\": 1000\n" +
+                "  \"quantity\": 1000\n" +
                 "}";
 
         given(productOptionService.createProductOption(eq(productId), any())).willReturn(1L);
@@ -60,7 +60,7 @@ class ProductOptionControllerTest {
         final String requestURI = "/api/products/" + productId + "/options/" + optionId;
         final String requestBody = "{\n" +
                 "  \"name\": \"optionName\",\n" +
-                "  \"price\": 1000\n" +
+                "  \"quantity\": 1000\n" +
                 "}";
 
         //when//then

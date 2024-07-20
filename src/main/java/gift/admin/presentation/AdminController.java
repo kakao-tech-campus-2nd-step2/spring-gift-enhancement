@@ -3,6 +3,7 @@ package gift.admin.presentation;
 import gift.product.application.dto.request.ProductCreateRequest;
 import gift.product.application.dto.request.ProductRequest;
 import gift.product.service.ProductService;
+import gift.product.service.facade.ProductFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
     private final ProductService productService;
+    private final ProductFacade productFacade;
 
     @Autowired
-    public AdminController(ProductService productService) {
+    public AdminController(ProductService productService, ProductFacade productFacade) {
         this.productService = productService;
+        this.productFacade = productFacade;
     }
 
     @GetMapping()
@@ -44,7 +47,7 @@ public class AdminController {
 
     @PostMapping("/products")
     public String saveProduct(@RequestBody ProductCreateRequest productCreateRequest) {
-        productService.saveProduct(
+        productFacade.saveProduct(
                 productCreateRequest.getProductCommand(),
                 productCreateRequest.getProductOptionCommands()
         );

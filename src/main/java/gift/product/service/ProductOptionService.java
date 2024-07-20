@@ -24,15 +24,30 @@ public class ProductOptionService {
     }
 
     @Transactional
-    public Long createProductOption(final Long productId, ProductOptionCommand command) {
+    public Long createProductOption(final Long productId, ProductOptionCommand productOptionCommand) {
         var product = productRepository.findById(productId)
                 .orElseThrow(() -> ProductNotFoundException.of(productId));
-        validateDuplicatedProductName(productId, command.name());
+        validateDuplicatedProductName(productId, List.of(productOptionCommand.name()));
 
-        var productOption = command.toEntity(product);
+        var productOption = productOptionCommand.toEntity(product);
 
         var savedProduct = productOptionRepository.save(productOption);
         return savedProduct.getId();
+    }
+
+    @Transactional
+    public void createProductOptions(final Long productId, final List<ProductOptionCommand> productOptionCommand) {
+        var product = productRepository.findById(productId)
+                .orElseThrow(() -> ProductNotFoundException.of(productId));
+
+        var names = productOptionCommand.stream().map(ProductOptionCommand::name).toList();
+        validateDuplicatedProductName(productId, names);
+
+        List<ProductOption> productOptions = productOptionCommand.stream()
+                .map(productOptionRequest -> productOptionRequest.toEntity(product))
+                .toList();
+        //배치처리가 안됨.
+        productOptionRepository.saveAll(productOptions);
     }
 
     @Transactional
@@ -78,11 +93,13 @@ public class ProductOptionService {
         return option;
     }
 
-    private void validateDuplicatedProductName(Long productId, String name) {
-        var productOption = productOptionRepository.findByProductId(productId);
+    private void validateDuplicatedProductName(Long productId, List<String> names) {
+        var productOptions = productOptionRepository.findByProductId(productId);
 
-        if (productOption.stream().anyMatch(option -> option.isSameName(name))) {
-            throw ProductOptionDuplicatedException.of(productId, name);
-        }
+        names.forEach(name -> {
+            if (productOptions.stream().anyMatch(option -> option.isSameName(name))) {
+                throw ProductOptionDuplicatedException.of(productId, name);
+            }
+        });
     }
 }

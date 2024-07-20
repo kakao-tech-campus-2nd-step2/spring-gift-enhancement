@@ -7,6 +7,7 @@ import gift.product.application.dto.request.ProductRequest;
 import gift.product.application.dto.response.ProductPageResponse;
 import gift.product.application.dto.response.ProductResponse;
 import gift.product.service.ProductService;
+import gift.product.service.facade.ProductFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -34,10 +35,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/products")
 public class ProductController {
     private final ProductService productService;
+    private final ProductFacade productFacade;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ProductFacade productFacade) {
         this.productService = productService;
+        this.productFacade = productFacade;
     }
 
     @Operation(summary = "상품 등록", description = "상품을 등록합니다.")
@@ -47,7 +50,7 @@ public class ProductController {
     @Authorized(Role.USER)
     @PostMapping
     public ResponseEntity<Void> saveProduct(@RequestBody @Valid ProductCreateRequest productCreateRequest) {
-        var createdProductId = productService.saveProduct(
+        var createdProductId = productFacade.saveProduct(
                 productCreateRequest.getProductCommand(),
                 productCreateRequest.getProductOptionCommands()
         );
