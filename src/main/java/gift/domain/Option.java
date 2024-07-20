@@ -23,6 +23,11 @@ public class Option {
     protected Option() {
     }
 
+    public Option(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public Option(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
@@ -79,7 +84,7 @@ public class Option {
     }
 
     public void subtract(int subtractQuantity){
-        if(subtractQuantity >= this.quantity){
+        if(subtractQuantity > this.quantity){
             throw new InsufficientQuantityException(Messages.INSUFFICIENT_QUANTITY);
         }
         this.quantity = this.quantity - subtractQuantity;
