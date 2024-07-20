@@ -3,7 +3,6 @@ package gift.product.domain;
 import gift.category.domain.Category;
 import gift.exception.type.InvalidProductOptionException;
 import gift.exception.type.KakaoInNameException;
-import gift.exception.type.NotFoundException;
 import gift.option.domain.Option;
 import gift.product.application.command.ProductUpdateCommand;
 import jakarta.persistence.*;
