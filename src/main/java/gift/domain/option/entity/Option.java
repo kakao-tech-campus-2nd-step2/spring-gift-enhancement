@@ -44,10 +44,10 @@ public class Option {
 
     public Option(Long id, String name, int quantity, Product product) {
         if(quantity < 1 || quantity >= 100_000_000){
-            throw new OptionQuantityRangeException("수량은 1개 이상 1억개 미만으로 설정해주세요");
+            throw new OptionQuantityRangeException("수량은 1개 이상 1억개 미만으로 설정해주세요.");
         }
         if(name.length() > 50){
-            throw new OptionNameLengthException("옵션 이름은 50자 이하로 설정해주세요.");
+            throw new OptionNameLengthException("옵션 이름 50자 초과");
         }
         this.id = id;
         this.name = name;
