@@ -1,6 +1,6 @@
 package gift.product.exception;
 
-import gift.exception.BaseErrorCode;
+import gift.globalException.BaseErrorCode;
 import org.springframework.http.HttpStatus;
 
 public enum ProductErrorCode implements BaseErrorCode {

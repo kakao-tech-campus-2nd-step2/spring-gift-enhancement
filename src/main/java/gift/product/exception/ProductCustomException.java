@@ -1,7 +1,7 @@
 package gift.product.exception;
 
-import gift.exception.BaseErrorCode;
-import gift.exception.CustomException;
+import gift.globalException.BaseErrorCode;
+import gift.globalException.CustomException;
 
 public class ProductCustomException extends CustomException {
     public ProductCustomException(BaseErrorCode errorCode) {
