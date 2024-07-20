@@ -1,6 +1,7 @@
 package gift.domain.service;
 
 import gift.domain.dto.request.OptionAddRequest;
+import gift.domain.dto.request.OptionUpdateRequest;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.CategoryResponse;
@@ -90,7 +91,7 @@ public class ProductService {
     }
 
     @Transactional
-    public OptionResponse updateProductOptionById(Long productId, Long optionId, OptionAddRequest request) {
+    public OptionResponse updateProductOptionById(Long productId, Long optionId, OptionUpdateRequest request) {
         Product product = getProductById(productId);
         return OptionResponse.of(optionService.updateOptionById(product, optionId, request));
     }

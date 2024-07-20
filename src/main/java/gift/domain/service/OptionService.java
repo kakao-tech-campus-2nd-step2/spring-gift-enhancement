@@ -1,9 +1,12 @@
 package gift.domain.service;
 
 import gift.domain.dto.request.OptionAddRequest;
+import gift.domain.dto.request.OptionUpdateRequest;
 import gift.domain.dto.response.OptionDetailedResponse;
 import gift.domain.entity.Option;
 import gift.domain.entity.Product;
+import gift.domain.exception.badRequest.OptionQuantityOutOfRangeException;
+import gift.domain.exception.badRequest.OptionUpdateActionInvalidException;
 import gift.domain.exception.conflict.OptionAlreadyExistsInProductException;
 import gift.domain.exception.notFound.OptionNotFoundException;
 import gift.domain.repository.OptionRepository;
@@ -23,9 +26,9 @@ public class OptionService {
     }
 
     // request가 기존 상품 옵션들과 겹치지 않음을 검증하기
-    private void validateOptionIsUniqueInProduct(Product product, OptionAddRequest request) {
+    private void validateOptionIsUniqueInProduct(Product product, String optionName) {
         Objects.requireNonNullElse(product.getOptions(), new ArrayList<Option>()).stream()
-            .filter(o -> o.getName().equals(request.name()))
+            .filter(o -> o.getName().equals(optionName))
             .findAny()
             .ifPresent(o -> {
                 throw new OptionAlreadyExistsInProductException();
@@ -52,7 +55,7 @@ public class OptionService {
 
     @Transactional
     public Option addOption(Product product, OptionAddRequest request) {
-        validateOptionIsUniqueInProduct(product, request);
+        validateOptionIsUniqueInProduct(product, request.name());
         Option option = optionRepository.save(request.toEntity(product));
         product.addOption(option);
         return option;
@@ -79,15 +82,35 @@ public class OptionService {
     }
 
     @Transactional
-    public Option updateOptionById(Product product, Long optionId, OptionAddRequest request) {
+    public Option updateOptionById(Product product, Long optionId, OptionUpdateRequest request) {
         validateOptionIsInProduct(product, optionId);
         Option option = getOptionById(optionId);
+
         if (!option.getName().equals(request.name())) {
-            validateOptionIsUniqueInProduct(product, request);
+            validateOptionIsUniqueInProduct(product, request.name());
         }
 
-        option.set(request);
-        return option;
+        if (request.action().equals("add")) {
+            int updatedQuantity = option.getQuantity() + request.quantity();
+            if (updatedQuantity > 100_000_000) {
+                throw new OptionQuantityOutOfRangeException();
+            }
+            option.setName(request.name());
+            option.add(request.quantity());
+            return option;
+        }
+
+        if (request.action().equals("subtract")) {
+            int updatedQuantity = option.getQuantity() - request.quantity();
+            if (updatedQuantity < 1) {
+                throw new OptionQuantityOutOfRangeException();
+            }
+            option.setName(request.name());
+            option.subtract(request.quantity());
+            return option;
+        }
+
+        throw new OptionUpdateActionInvalidException();
     }
 
     @Transactional

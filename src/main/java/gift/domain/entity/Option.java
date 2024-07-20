@@ -63,9 +63,12 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public void set(OptionAddRequest optionRequest) {
-        setName(optionRequest.name());
-        setQuantity(optionRequest.quantity());
+    public void add(Integer quantity) {
+        this.quantity += quantity;
+    }
+
+    public void subtract(Integer quantity) {
+        this.quantity -= quantity;
     }
 
     @Override
