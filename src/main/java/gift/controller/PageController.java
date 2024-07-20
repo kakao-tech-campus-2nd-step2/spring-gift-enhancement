@@ -3,6 +3,7 @@ package gift.controller;
 import gift.domain.Product;
 import gift.dto.CategoryDto;
 import gift.dto.ProductDto;
+import gift.dto.RequestProductDto;
 import gift.repositories.ProductRepository;
 import gift.services.CategoryService;
 import gift.services.ProductService;
@@ -56,7 +57,7 @@ public class PageController {
 
     @GetMapping("/add") // 주소 매핑
     public String addPageGet(Model model) {
-        Product product = new Product(null, "", 0.0, "", null);
+        Product product = new Product(null, "", 0.0, "", null, null);
         List<CategoryDto> categories = categoryService.getAllCategories();
         model.addAttribute("product", product);
         model.addAttribute("category", categories);
@@ -69,7 +70,7 @@ public class PageController {
         List<CategoryDto> categories = categoryService.getAllCategories();
 
         if (product.isEmpty()) {
-            product = Optional.of(new Product(null, "", 0.0, "", null));
+            product = Optional.of(new Product(null, "", 0.0, "", null, null));
         }
         model.addAttribute("product", product);
         model.addAttribute("category", categories);

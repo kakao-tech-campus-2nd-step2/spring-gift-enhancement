@@ -1,13 +1,19 @@
 package gift.services;
 
+import gift.classes.Exceptions.ProductException;
+import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.ProductDto;
+import gift.dto.RequestOptionDto;
+import gift.dto.RequestProductDto;
+import gift.repositories.CategoryRepository;
+import gift.repositories.OptionRepository;
 import gift.repositories.ProductRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,12 +21,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
 
-    private long currentId = 1;
+    private final OptionService optionService;
     private final ProductRepository productRepository;
+    private final OptionRepository optionRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(OptionService optionService, ProductRepository productRepository,
+        OptionRepository optionRepository, CategoryRepository categoryRepository) {
+        this.optionService = optionService;
         this.productRepository = productRepository;
+        this.optionRepository = optionRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     // 모든 제품 조회
@@ -31,7 +42,8 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategory()
+            product.getCategoryDto(),
+            product.getOptionDtos()
         )).toList();
 
         return productDtos;
@@ -45,7 +57,8 @@ public class ProductService {
             product.getName(),
             product.getPrice(),
             product.getImageUrl(),
-            product.getCategory()
+            product.getCategoryDto(),
+            product.getOptionDtos()
         ));
 
         return productDtos;
@@ -53,44 +66,63 @@ public class ProductService {
 
     // 특정 제품 조회
     public ProductDto getProductById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty()) {
-            throw new NoSuchElementException("Product not found with id " + id);
-        }
-        ProductDto productDto = new ProductDto(product.get().getId(), product.get().getName(),
-            product.get().getPrice(), product.get().getImageUrl(), product.get().getCategory());
+
+        Product product = productRepository.findById(id).orElseThrow(
+            () -> new NoSuchElementException("Product not found with id " + id));
+
+        ProductDto productDto = new ProductDto(product.getId(), product.getName(),
+            product.getPrice(), product.getImageUrl(), product.getCategoryDto(), product.getOptionDtos());
         return productDto;
     }
 
     // 제품 추가
-    public ProductDto addProduct(@Valid ProductDto productDto) {
-        Product product = new Product(
-            null,
-            productDto.getName(),
-            productDto.getPrice(),
-            productDto.getImageUrl(),
-            productDto.getCategory()
-        );
-        
-        if (product.getId() == null) {
-            product.setId(currentId++);
+    public ProductDto addProduct(@Valid RequestProductDto requestProductDto) {
+        if (requestProductDto.getOptionDtos().isEmpty()) {
+            throw new ProductException("One or more options are required to add a product.");
         }
+
+        Product product = new Product(
+            requestProductDto.getName(),
+            requestProductDto.getPrice(),
+            requestProductDto.getImageUrl(),
+            new Category(requestProductDto.getCategoryDto().getName(),
+                requestProductDto.getCategoryDto().getColor(),
+                requestProductDto.getCategoryDto().getImageUrl(),
+                requestProductDto.getCategoryDto().getDescription())
+        );
+
+        for (RequestOptionDto requestOptionDto : requestProductDto.getOptionDtos()) {
+            optionService.addOption(product.getId(), requestOptionDto);
+        }
+        List<Option> options = optionRepository.findAllByProductId(product.getId());
+        product.setOptions(options);
+
         productRepository.save(product);
 
-        ProductDto savedProductDto = new ProductDto(product.getId(), product.getName(),
-            product.getPrice(), product.getImageUrl(), product.getCategory());
-
-        return savedProductDto;
+        return new ProductDto(product.getId(), product.getName(), product.getPrice(),
+            product.getImageUrl(), product.getCategoryDto(), product.getOptionDtos());
     }
 
     // 제품 수정
-    public ProductDto updateProduct(@Valid ProductDto productDto) {
-        Product product = productRepository.findById(productDto.getId())
+    public ProductDto updateProduct(@Valid RequestProductDto requestProductDto) {
+        Product product = productRepository.findById(requestProductDto.getId())
             .orElseThrow(() -> new NoSuchElementException(
-                "Product not found with id " + productDto.getId()));
-        product.update(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
+                "Product not found with id " + requestProductDto.getId()));
+
+        Category category = categoryRepository.findById(requestProductDto.getCategoryDto().getId())
+            .orElseThrow(() -> new NoSuchElementException(
+                "Category not found"));
+
+        for (RequestOptionDto requestOptionDto : requestProductDto.getOptionDtos()) {
+            optionService.addOption(product.getId(), requestOptionDto);
+        }
+        List<Option> options = optionRepository.findAllByProductId(product.getId());
+        product.setOptions(options);
+
+        product.update(requestProductDto.getName(), requestProductDto.getPrice(),
+            requestProductDto.getImageUrl(), category, options);
         return new ProductDto(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl(), product.getCategory());
+            product.getImageUrl(), product.getCategoryDto(), product.getOptionDtos());
     }
 
     // 제품 삭제
@@ -103,3 +135,4 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 }
+
