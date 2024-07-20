@@ -30,48 +30,52 @@ public class MemberServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+//    @Test
     public void login_wrong_email() {
         // Given
         String email = "test@example.com";
         String password = "password";
         String wrongEmail = "wrong@example.com";
 
-        // Given setup for register
+        // 회원 등록
         when(memberRepository.findByEmail(email)).thenReturn(Optional.empty());
         Member member = new Member(email, password);
         when(memberRepository.save(member)).thenReturn(member);
 
         memberService.register(email, password);
 
-        // Given setup for login with wrong email
+        // 옳지 않은 이메일로 로그인 -> 예외부터 던짐
         doThrow(new IllegalArgumentException("옳지 않은 이메일 입니다."))
                 .when(memberService).login(wrongEmail, password);
 
-        // When & Then
+        // 출력되는지 확인
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> memberService.login(wrongEmail, password));
         assertThat(exception.getMessage()).isEqualTo("옳지 않은 이메일 입니다.");
     }
 
 
-//    @Test
-//    public void login_wrong_password() {
-//        // Given
-//        String email = "test@example.com";
-//        String password = "password";
-//        String wrongPassword = "wrongPassword";
-//
-//        doNothing().when(memberService).register(email, password);
-//
-//        memberService.register(email, password);
-//
-//        doThrow(new IllegalArgumentException("옳지 않은 비밀번호 입니다."))
-//                .when(memberService).login(email, wrongPassword);
-//
-//        // When & Then
-//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-//                () -> memberService.login(email, wrongPassword));
-//        assertThat(exception.getMessage()).isEqualTo("옳지 않은 비밀번호 입니다.");
-//    }
+    @Test
+    public void login_wrong_password() {
+        // Given
+        String email = "test@example.com";
+        String password = "password";
+        String wrongPassword = "wrongPassword";
+
+        // 회원 등록
+        when(memberRepository.findByEmail(email)).thenReturn(Optional.empty());
+        Member member = new Member(email, password);
+        when(memberRepository.save(member)).thenReturn(member);
+
+        memberService.register(email, password);
+
+        // 옳지 않은 비밀번호로 로그인 -> 예외부터 던짐
+        doThrow(new IllegalArgumentException("옳지 않은 비밀번호 입니다."))
+                .when(memberService).login(email, wrongPassword);
+
+        // 출력되는지 확인
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> memberService.login(email, wrongPassword));
+        assertThat(exception.getMessage()).isEqualTo("옳지 않은 비밀번호 입니다.");
+    }
 }
