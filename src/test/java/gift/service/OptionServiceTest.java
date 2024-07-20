@@ -46,7 +46,7 @@ class OptionServiceTest {
 
     @Test
     void addNewOption() {
-        Product product = new Product(new Category("category1"),new ProductName("product1"),1000,"qwer.com",1000);
+        Product product = new Product(new Category("category1"),new ProductName("product1"),1000,"qwer.com");
         OptionDto optionDto = new OptionDto("option1",1234);
 
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));

@@ -27,12 +27,16 @@ class WishRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     void save(){
         Member expectedMember = new Member("qwer@gmail.com","1234","root");
         Category category = new Category("category1");
-        Product expectedProduct = new Product(category,new ProductName("product1"),1000,"qwer.com",1000);
+        Product expectedProduct = new Product(category,new ProductName("product1"),1000,"qwer.com");
         memberRepository.save(expectedMember);
+        categoryRepository.save(category);
         productRepository.save(expectedProduct);
 
         Wish newWish = new Wish(expectedProduct, expectedMember, 123);
@@ -46,9 +50,12 @@ class WishRepositoryTest {
     @Test
     void delete(){
         Member expectedMember = new Member("qwer@gmail.com","1234","root");
-        Category category = new Category("category1");
-        Product expectedProduct = new Product(category,new ProductName("product1"),1000,"qwer.com",1000);
         memberRepository.save(expectedMember);
+
+        Category category = new Category("category1");
+        categoryRepository.save(category);
+
+        Product expectedProduct = new Product(category,new ProductName("product1"),1000,"qwer.com");
         productRepository.save(expectedProduct);
 
         Wish newWish = new Wish(expectedProduct, expectedMember, 123);
@@ -56,5 +63,23 @@ class WishRepositoryTest {
         wishRepository.delete(newWish);
         Optional<Wish> actual = wishRepository.findById(1L);
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    public void updateWishTest(){
+        Member expectedMember = new Member("qwer@gmail.com","1234","root");
+        memberRepository.save(expectedMember);
+
+        Category category = new Category("category1");
+        categoryRepository.save(category);
+
+        Product expectedProduct = new Product(category,new ProductName("product1"),1000,"qwer.com");
+        productRepository.save(expectedProduct);
+
+        Wish originWish = new Wish(expectedProduct,expectedMember,1000 );
+        Wish newWish = new Wish(expectedProduct, expectedMember,2000);
+        originWish.updateWish(newWish);
+
+        assertEquals(2000, originWish.getAmount());
     }
 }
