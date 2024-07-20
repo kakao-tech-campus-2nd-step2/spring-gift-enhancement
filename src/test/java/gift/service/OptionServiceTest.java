@@ -3,7 +3,6 @@ package gift.service;
 import gift.dto.OptionAddRequest;
 import gift.dto.OptionSubtractRequest;
 import gift.dto.OptionUpdateRequest;
-import gift.exception.BadRequestException;
 import gift.exception.DuplicatedNameException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -102,8 +101,6 @@ class OptionServiceTest {
             executorService.execute(() -> {
                 try {
                     optionService.subtractOptionQuantity(1L, subtractOptionRequest);
-                } catch (BadRequestException exception) {
-                    System.out.println(exception.getMessage());
                 } finally {
                     countDownLatch.countDown();
                 }
