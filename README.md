@@ -106,3 +106,30 @@ step-3의 구현 사항
       => category의 Long id를 매핑 없이 하고, ProductEntity에 OneToOne으로 카테고리 추가 (2)
    2. 테스트 코드 추가
       => 이전의 Repository들처럼 create, read 기능에 대한 테스트 코드 작성
+      
+2. step-2의 구현사항
+   1. 상품 정보에 옵션 추가
+      1. 상품에는 항상 하나 이상의 옵션이 있어야 한다.
+      2. 옵션 이름은 최대 50글자까지 가능, 중복 불가
+      3. 특수 문자는 ( ), [ ], +, -, &, /, _ 만 가능
+      4. 옵션 수량은 1개 이상 1억개 미만
+   => OptionDTO 클래스 추가(Long id, String name, Long quantity)
+   => OptionEntity 클래스 추가(Long id, ProductEntity product, String name, Long quantity)
+   => OptionRepository 클래스 추가
+   => OptionException 예외 추가
+   => ~~ProductEntity 및 ProductDTO에 옵션 추가(이거 꼭 해야하나?? 오히려 나중에 사용자가 위시리스트에 제품을 담을 때 옵션을 선택해야 하므로 위시리스트에 연결이 맞지 않을까)~~
+   => data.sql 및 schma.sql에 데이터 및 테이블(options) 추가
+   => OptionService 클래스 추가(기본적인 CRUD 지원)
+   => OptionRestController 클래스 추가
+   2. 테스트 코드 추가
+      => Repository 단계에 대한 테스트 코드 작성 (+시간 남을 경우 Controller 단계에 대한 테스트 코드 추가로 작성, Mockito 이용)
+
+3. step-3의 구현사항
+   1. 옵션의 수량 차감 기능 구현
+      => 별도의 http api 필요 x
+      => 서비스 또는 엔티티 클래스에서 기능 구현 후 나중에 사용 (서비스 클래스 단계에서 구현)
+   2. 구현 방법
+      => 파라미터로 옵션 및 차감 개수를 받음
+      => 해당 옵션을 데이터베이스에서 불러옴
+      => 옵션의 수량에서 차감한 후, 0보다 큰지 확인, 0보다 작으면 exception 발생
+      => 다시 데이터베이스에 해당 옵션 저장

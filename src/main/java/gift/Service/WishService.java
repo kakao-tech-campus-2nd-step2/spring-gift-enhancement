@@ -33,7 +33,7 @@ public class WishService {
         this.productRepository = productRepository;
     }
 
-    public void add(String email, String name){
+    public void create(String email, String name){
         Optional<MemberEntity> memberOptional = memberRepository.findByEmail(email);
         Optional<ProductEntity> productOptional = productRepository.findByName(name);
         if(memberOptional.isEmpty()) {
@@ -50,6 +50,28 @@ public class WishService {
             throw new AuthorizedException();
 
         wishRepository.save(new WishEntity(memberEntity, productEntity));
+    }
+
+    public List<String> read(String email){
+        Optional<MemberEntity> memberOptional = memberRepository.findByEmail(email);
+
+        if(memberOptional.isEmpty()) {
+            throw new AuthorizedException();
+        }
+        MemberEntity memberEntity = memberOptional.get();
+
+        if(!memberEntity.getRole().equals(Role.ADMIN) && !memberEntity.getRole().equals(Role.CONSUMER)) {
+            throw new AuthorizedException();
+        }
+
+        List<WishEntity> wishEntities = wishRepository.findByMemberId(memberEntity.getId());
+        List<String> productNames = new ArrayList<>();
+
+        for(WishEntity w : wishEntities){
+            productNames.add(w.getProduct().getName());
+        }
+
+        return productNames;
     }
 
     public void delete(String email, String name){
@@ -73,30 +95,8 @@ public class WishService {
         wishRepository.delete(wishRepository.findByMemberIdAndProductId(memberEntity.getId(), productEntity.getId()));
     }
 
-    public List<String> getAll(String email){
-        Optional<MemberEntity> memberOptional = memberRepository.findByEmail(email);
-
-        if(memberOptional.isEmpty()) {
-            throw new AuthorizedException();
-        }
-        MemberEntity memberEntity = memberOptional.get();
-
-        if(!memberEntity.getRole().equals(Role.ADMIN) && !memberEntity.getRole().equals(Role.CONSUMER)) {
-            throw new AuthorizedException();
-        }
-
-        List<WishEntity> wishEntities = wishRepository.findByMemberId(memberEntity.getId());
-        List<String> productNames = new ArrayList<>();
-
-        for(WishEntity w : wishEntities){
-            productNames.add(productRepository.findById(w.getProduct().getId()).get().getName());
-        }
-
-        return productNames;
-    }
-
     public Page<String> getPage(String email, int page){
-        List<String> dtoList = getAll(email);
+        List<String> dtoList = read(email);
         Pageable pageable = PageRequest.of(page, 10);
 
         int start = (int) pageable.getOffset();

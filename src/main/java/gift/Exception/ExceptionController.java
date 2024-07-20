@@ -1,5 +1,9 @@
 package gift.Exception;
 
+import gift.Exception.Category.CategoryDuplicatedException;
+import gift.Exception.Category.CategoryNotFoundException;
+import gift.Exception.Option.OptionDuplicatedException;
+import gift.Exception.Option.OptionNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,8 +26,28 @@ public class ExceptionController {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(CategoryException.class)
-    public ResponseEntity<?> handleCategoryDuplicatedException(CategoryException e) {
+    @ExceptionHandler(CategoryDuplicatedException.class)
+    public ResponseEntity<?> handleCategoryException(CategoryDuplicatedException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<?> handleCategoryNotFoundException(CategoryNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(OptionDuplicatedException.class)
+    public ResponseEntity<?> handleOptionException(OptionDuplicatedException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<?> handleOptionNotFoundException(OptionNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public  ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,6 +1,5 @@
-package gift;
+package gift.RepositoryTest;
 
-import gift.Model.Entity.CategoryEntity;
 import gift.Model.Entity.MemberEntity;
 import gift.Model.Entity.ProductEntity;
 import gift.Model.Entity.WishEntity;
@@ -12,7 +11,6 @@ import gift.Repository.WishRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -28,11 +26,6 @@ public class WishEntityRepositoryTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
-
-    @BeforeTestClass
-    public void setup(){
-        categoryRepository.save(new CategoryEntity("testName","testColor","testImageUrl","testDescription"));
-    }
 
     @Test
     void save(){

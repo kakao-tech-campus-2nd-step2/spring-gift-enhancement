@@ -28,7 +28,7 @@ public class ProductRestController {
     @ResponseBody
     public void addProduct(@RequestAttribute("Email") String email, @RequestBody ProductDTO productDTO, BindingResult bindingResult){
         if(!bindingResult.hasErrors())
-            productService.add(email, productDTO);
+            productService.create(email, productDTO);
 
     }
 
@@ -42,12 +42,12 @@ public class ProductRestController {
     @ResponseBody
     public void updateProduct(@RequestAttribute("Email") String email, @PathVariable Long id, @RequestBody ProductDTO productDTO, BindingResult bindingResult){
         if(!bindingResult.hasErrors())
-            productService.edit(email, id, productDTO);
+            productService.update(email, id, productDTO);
     }
 
     @GetMapping("/products")
     public List<ProductDTO> viewAllProducts(@RequestAttribute("Email") String email){
-        return productService.getAll(email);
+        return productService.read(email);
     }
 
     @GetMapping("/products/{id}")
