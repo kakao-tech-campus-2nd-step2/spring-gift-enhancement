@@ -1,70 +1,125 @@
 package gift.util;
 
+import gift.user.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 
-import java.time.Duration;
+import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.Optional;
+import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String JWT_SECRET;
-    private static final long JWT_EXPIRATION = 1000 * 60 * 60 * 10;
+    @Value("${jwt.secret.key}")
+    private String jwtSecretKey;
+    private static final long ACCESS_TOKEN_VALIDITY_MINUTES = 60;
+    private static final long REFRESH_TOKEN_VALIDITY_DAYS = 30;
 
-    public String generateToken(String email) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email);
+    public TokenResponse generateTokenResponse(User user) {
+        return new TokenResponse
+                .Builder()
+                .accessToken(generateAccessToken(user))
+                .refreshToken(generateRefreshToken(user))
+                .build();
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    public String generateAccessToken(User user) {
+        return generateToken(user, ACCESS_TOKEN_VALIDITY_MINUTES);
+    }
+
+    public String generateRefreshToken(User user) {
+        return generateToken(user, REFRESH_TOKEN_VALIDITY_DAYS * 24 * 60);
+    }
+
+    public String generateToken(User user, Long validityMinutes) {
         LocalDateTime now = LocalDateTime.now();
         Date issuedAt = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
         Date expiryDate = Date.from(
-                now.plus(Duration.ofMillis(JWT_EXPIRATION)).atZone(ZoneId.systemDefault()).toInstant());
+                now.plusMinutes(validityMinutes).atZone(ZoneId.systemDefault()).toInstant());
+
+        Claims claims = Jwts.claims()
+                .subject(user.getId().toString())
+                .add("id", user.getId())
+                .add("name", user.getName())
+                .add("role", user.getRole())
+                .build();
+
+        Key key = generateKey();
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(issuedAt)
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS256, JWT_SECRET)
+                .claims(claims)
+                .issuedAt(issuedAt)
+                .expiration(expiryDate)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public Boolean validateToken(String token, String email) {
-        final String username = extractUsername(token);
-        return (username.equals(email) && !isTokenExpired(token));
+
+    public SecretKey generateKey() {
+        return Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
     }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(generateKey()).build().parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    public Optional<Long> getUserId(String token) {
+        if (token == null || token.isEmpty()) {
+            return Optional.empty();
+        }
+        Claims claims = Jwts.parser().setSigningKey(generateKey()).build().parseClaimsJws(token).getBody();
+        Object idObj = claims.get("id");
+
+        if (idObj instanceof Integer) {
+            return Optional.of(((Integer) idObj).longValue());
+        } else if (idObj instanceof Long) {
+            return Optional.of((Long) idObj);
+        } else {
+            return Optional.empty();
+        }
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody();
+
+    public String getUsername(String token) {
+        return Jwts.parser().setSigningKey(generateKey()).build().parseClaimsJws(token).getBody().getSubject();
     }
 
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    public Long getKakaoUserId(String token) {
+        Claims claims = Jwts.parser().setSigningKey(generateKey()).build().parseClaimsJws(token).getBody();
+        return (Long) claims.get("kakaoUserId");
     }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+    public String getRole(String token) {
+        Claims claims = Jwts.parser().setSigningKey(generateKey()).build().parseClaimsJws(token).getBody();
+        return (String) claims.get("role");
     }
+
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    public String resolveToken(String token) {
+        return token.substring(7);
+    }
+
 }
