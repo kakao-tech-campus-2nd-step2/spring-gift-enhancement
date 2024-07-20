@@ -65,8 +65,8 @@
   - [x] Option 추가되면서 관련 내용들 확인하고 수정할 것 있다면 수정
   - [x] 특정 Product의 Option 가져오기
   
-- [ ] Option Controller 구현
-  - [ ] Option 생성
-  - [ ] 특정 상품의 모든 Option 불러오기
-  - [ ] Option 내용 수정
-  - [ ] Option 삭제
+## 2단계 피드백
+- [ ] Product에서 Update문 수정
+- [ ] UpdateProductDto jakarta validator 정상 작동할지?
+- [ ] UpdateProductDto DAO역할 침범하지는 않는지?
+- [ ] ProductService의 getProductOptions 를 굳이 가져와야 하나?
