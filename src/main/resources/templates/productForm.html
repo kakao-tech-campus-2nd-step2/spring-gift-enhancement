@@ -6,8 +6,8 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1 th:text="${productResponseDTO.id == null ? 'Create Product' : 'Edit Product'}">Product Form</h1>
-    <form th:action="@{${productResponseDTO.id == null ? '/api/products' : '/api/products/edit/' + productResponseDTO.id}}" th:object="${productResponseDTO}" method="post">
+    <h1 th:text="${productFormDTO.id == null ? 'Create Product' : 'Edit Product'}">Product Form</h1>
+    <form th:action="@{${productFormDTO.id == null ? '/api/products' : '/api/products/edit/' + productFormDTO.id}}" th:object="${productFormDTO}" method="post">
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" th:field="*{name}" required>

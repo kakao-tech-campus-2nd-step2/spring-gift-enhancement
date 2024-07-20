@@ -35,13 +35,13 @@ public class ProductController {
 
     @GetMapping("/new")
     public String newProductForm(Model model) {
-        model.addAttribute("productRequestDTO", new ProductRequestDTO());
+        model.addAttribute("productFormDTO", new ProductRequestDTO());
         model.addAttribute("categories", categoryService.getAllCategories());
         return "productForm";
     }
 
     @PostMapping
-    public String createProduct(@Valid @ModelAttribute("productRequestDTO") ProductRequestDTO productRequestDTO, BindingResult bindingResult, Model model) {
+    public String createProduct(@Valid @ModelAttribute("productFormDTO") ProductRequestDTO productRequestDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             return "productForm";
@@ -60,13 +60,13 @@ public class ProductController {
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
         ProductResponseDTO productResponseDTO = productService.getProductById(id);
-        model.addAttribute("productResponseDTO", productResponseDTO);
+        model.addAttribute("productFormDTO", productResponseDTO);
         model.addAttribute("categories", categoryService.getAllCategories());
         return "productForm";
     }
 
     @PostMapping("/edit/{id}")
-    public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute("productRequestDTO") ProductRequestDTO productRequestDTO, BindingResult bindingResult, Model model) {
+    public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute("productFormDTO") ProductRequestDTO productRequestDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             return "productForm";
