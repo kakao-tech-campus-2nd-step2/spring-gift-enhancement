@@ -6,6 +6,7 @@ import gift.model.MemberRole;
 import gift.service.MemberService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,16 +25,17 @@ public class MemberController {
     }
 
     @PutMapping
-    public void register(@RequestBody @Valid MemberDTO memberDTO) {
+    public ResponseEntity<Void> register(@RequestBody @Valid MemberDTO memberDTO) {
         if (memberDTO.getRole() == null) {
             memberDTO.setRole(MemberRole.COMMON_MEMBER);
         }
         memberService.register(memberDTO);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/login")
-    public LoginMemberToken login(@RequestParam("email") @NotBlank String email,
+    public ResponseEntity<LoginMemberToken> login(@RequestParam("email") @NotBlank String email,
         @RequestParam("password") @NotBlank String password) {
-        return memberService.login(new MemberDTO(email, password, null));
+        return ResponseEntity.ok(memberService.login(new MemberDTO(email, password, null)));
     }
 }

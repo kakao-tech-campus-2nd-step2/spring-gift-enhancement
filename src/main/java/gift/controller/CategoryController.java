@@ -31,21 +31,21 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<Void> add(@RequestBody CategoryDTO categoryDTO) {
         categoryService.create(categoryDTO);
 
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody CategoryDTO categoryDTO) {
         categoryService.update(id, categoryDTO);
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         categoryService.delete(id);
 
         return ResponseEntity.ok().build();

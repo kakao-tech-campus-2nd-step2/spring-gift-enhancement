@@ -4,6 +4,7 @@ import gift.dto.ProductDTO;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,8 +35,8 @@ public class ProductController {
      * @return 상품 DTO
      */
     @GetMapping("/products")
-    public List<ProductDTO> getList() {
-        return productService.readAll();
+    public ResponseEntity<List<ProductDTO>> getList() {
+        return ResponseEntity.ok(productService.readAll());
     }
 
     /**
@@ -44,8 +45,9 @@ public class ProductController {
      * @param dto id가 존재하는 상태로 입력되더라도 무시됨.
      */
     @PostMapping("/products")
-    public void add(@RequestBody @Valid ProductDTO dto) {
+    public ResponseEntity<Void> add(@RequestBody @Valid ProductDTO dto) {
         productService.create(dto);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -55,23 +57,25 @@ public class ProductController {
      * @param dto 수정하고자 하는 값 이외 null로 지정
      */
     @PutMapping("/products/{id}")
-    public void update(@PathVariable Long id, @RequestBody @Valid ProductDTO dto) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody @Valid ProductDTO dto) {
         if (id == null) {
             throw new IllegalArgumentException("id를 입력해주세요");
         }
         productService.update(id,dto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/products/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         productService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 
 
     @GetMapping("/products/{page}")
-    public List<ProductDTO> getPage(@PathVariable int page) {
-        return productService.readProduct(page,10);
+    public ResponseEntity<List<ProductDTO>> getPage(@PathVariable int page) {
+        return ResponseEntity.ok(productService.readProduct(page,10));
     }
 
 }
