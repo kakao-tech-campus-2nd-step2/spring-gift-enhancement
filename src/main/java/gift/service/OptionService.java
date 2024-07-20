@@ -42,6 +42,7 @@ public class OptionService {
     public Option addOptionToProduct(Long productId, OptionRequest optionRequest) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(PRODUCT_NOT_FOUND));
+
         optionRepository.findOptionByName(optionRequest.getName())
                 .ifPresent(option -> {
                     throw new DuplicateOptionNameException(DUPLICATE_OPTION_NAME);
@@ -58,14 +59,14 @@ public class OptionService {
             throw new ProductNotFoundException(PRODUCT_NOT_FOUND);
         }
 
-        Option option = optionRepository.findById(optionId)
-                .orElseThrow(() -> new OptionNotFoundException(OPTION_NOT_FOUND));
-
         Long count = optionRepository.countOptionByProductId(productId);
 
         if(count <= 1){
             throw new MinimumOptionRequiredException(MINIMUM_OPTION_REQUIRED);
         }
+
+        Option option = optionRepository.findByIdAndProductId(optionId, productId)
+                .orElseThrow(() -> new OptionNotFoundException(OPTION_NOT_FOUND));
 
         optionRepository.delete(option);
     }

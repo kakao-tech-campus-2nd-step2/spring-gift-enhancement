@@ -2,7 +2,6 @@ package gift.domain;
 
 import gift.dto.request.OptionRequest;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 @Entity
 public class Option {
