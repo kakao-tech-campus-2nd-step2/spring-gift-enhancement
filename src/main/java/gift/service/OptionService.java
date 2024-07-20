@@ -38,4 +38,16 @@ public class OptionService {
             .toList();
     }
 
+    public void deleteOption(Long optionId, Long productId) {
+        Option option = optionRepository.findByIdAndProductId(optionId, productId)
+            .orElseThrow(() -> new IllegalArgumentException("옵션을 찾을 수 없습니다."));
+
+        List<Option> options = optionRepository.findByProductId(option.getProduct().getId());
+        if(options.size() == 1) {
+            throw new IllegalArgumentException("상품 당 하나의 옵션은 있어야 합니다.");
+        }
+
+        optionRepository.delete(option);
+    }
+
 }

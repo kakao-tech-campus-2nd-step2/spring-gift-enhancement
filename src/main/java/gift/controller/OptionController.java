@@ -6,6 +6,7 @@ import gift.service.OptionService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,11 @@ public class OptionController {
         @Validated @RequestBody OptionRequest optionRequest) {
         OptionResponse optionResponse = optionService.addOption(productId, optionRequest);
         return ResponseEntity.status(201).body(optionResponse);
+    }
+
+    @DeleteMapping("/{optionId}")
+    public void deleteOption(@PathVariable Long optionId, @PathVariable Long productId) {
+        optionService.deleteOption(optionId, productId);
     }
 
 }
