@@ -3,8 +3,10 @@ package gift.option;
 import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
 import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
 import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
+import static gift.exception.ErrorMessage.OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -42,7 +44,7 @@ public class OptionEntityTest {
         );
         optionId = 1L;
         optionName = "optionName";
-        optionQuantity = 1;
+        optionQuantity = 100;
         option = new Option(
             optionId,
             optionName,
@@ -175,6 +177,43 @@ public class OptionEntityTest {
                 () -> option.update(optionName, updateQuantity)
             ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(OPTION_QUANTITY_SIZE);
+        }
+    }
+
+    @Nested
+    @DisplayName("[Unit] subtract test")
+    class subtractTest {
+
+        private int subtractQuantity;
+
+        @BeforeEach
+        void setUp() {
+            subtractQuantity = 10;
+        }
+
+        @Test
+        @DisplayName("success")
+        void success() {
+            //given
+            int prevQuantity = option.getQuantity();
+
+            //then
+            assertAll(
+                () -> assertDoesNotThrow(() -> option.subtract(subtractQuantity)),
+                () -> assertEquals(option.getQuantity(), prevQuantity - subtractQuantity)
+            );
+        }
+
+        @Test
+        @DisplayName("subtract number not allowed negative number")
+        void subtractNumberNotAllowedNegativeNumber() {
+            //given
+            subtractQuantity = -1;
+
+            //then
+            assertThatThrownBy(() -> option.subtract(subtractQuantity))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER);
         }
     }
 

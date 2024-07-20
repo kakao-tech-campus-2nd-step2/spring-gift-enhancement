@@ -2,7 +2,6 @@ package gift.option;
 
 import static gift.exception.ErrorMessage.OPTION_ALREADY_EXISTS;
 import static gift.exception.ErrorMessage.OPTION_NOT_FOUND;
-import static gift.exception.ErrorMessage.OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER;
 import static gift.exception.ErrorMessage.PRODUCT_NOT_FOUND;
 
 import gift.product.Product;
@@ -71,13 +70,10 @@ public class OptionService {
     }
 
     public void subtract(long productId, long optionId, int subtractOptionQuantity) {
-        if (subtractOptionQuantity < 0) {
-            throw new IllegalArgumentException(OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER);
-        }
         validateProductExists(productId);
 
         Option option = getOptionById(optionId);
-        option.update(option.getName(), option.getQuantity() - subtractOptionQuantity);
+        option.subtract(subtractOptionQuantity);
         optionRepository.save(option);
     }
 
