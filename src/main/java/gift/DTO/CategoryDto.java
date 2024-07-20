@@ -1,9 +1,12 @@
 package gift.DTO;
 
+import jakarta.validation.constraints.Size;
+
 public class CategoryDto {
 
   private Long id;
   private String name;
+  @Size(min = 7, max = 7)
   private String color;
   private String imageUrl;
   private String description;
