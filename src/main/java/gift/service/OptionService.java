@@ -2,26 +2,30 @@ package gift.service;
 
 import gift.constants.Messages;
 import gift.domain.Option;
+import gift.domain.Product;
 import gift.dto.request.OptionRequest;
 import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
 import gift.exception.CannotDeleteLastOptionException;
 import gift.exception.DuplicateOptionNameException;
 import gift.exception.OptionNotFoundException;
+import gift.exception.ProductNotFoundException;
 import gift.repository.OptionRepository;
+import gift.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OptionService {
     public final OptionRepository optionRepository;
-    public final ProductService productService;
+    public final ProductRepository productRepository;
 
-    public OptionService(OptionRepository optionRepository, ProductService productService) {
+    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
         this.optionRepository = optionRepository;
-        this.productService = productService;
+        this.productRepository = productRepository;
     }
 
     @Transactional
@@ -29,11 +33,12 @@ public class OptionService {
         if(optionRepository.existsByName(optionRequest.name())) {
             throw new DuplicateOptionNameException(Messages.OPTION_NAME_ALREADY_EXISTS);
         }
-        ProductResponse productResponse = productService.findById(productId);
-        optionRepository.save(new Option(optionRequest.name(), optionRequest.quantity(), productResponse.toEntity()));
+        Product foundProduct = productRepository.findById(productId)
+                .orElseThrow(()->  new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_BY_NAME));
+        optionRepository.save(new Option(optionRequest.name(), optionRequest.quantity(), foundProduct));
     }
 
-    public OptionResponse findById(Long productId, Long id){
+    public OptionResponse findById(Long id){
         return optionRepository.findById(id)
                 .map(OptionResponse::from)
                 .orElseThrow(()-> new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
@@ -71,7 +76,7 @@ public class OptionService {
         Option foundOption = optionRepository.findById(id)
                 .orElseThrow(()->new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
 
-        ProductResponse foundProductResponse = productService.findById(optionRequest.productId());
-        foundOption.updateOption(optionRequest.name(),optionRequest.quantity(),foundProductResponse.toEntity());
+        foundOption.updateOption(optionRequest.name(),optionRequest.quantity(),foundOption.getProduct());
+        optionRepository.save(foundOption);
     }
 }
