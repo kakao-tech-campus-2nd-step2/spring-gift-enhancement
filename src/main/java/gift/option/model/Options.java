@@ -17,7 +17,7 @@ public class Options {
     }
 
     public void validateDuplicated(Option option) throws OptionException {
-        options.forEach((it) -> it.validateDuplicated(option));
+        options.forEach(it -> it.validateDuplicated(option));
     }
 
     public void validateOptionSize() throws OptionException {

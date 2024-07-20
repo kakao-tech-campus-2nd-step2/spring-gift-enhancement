@@ -53,8 +53,10 @@ public class OptionService {
     }
 
     @Transactional
-    public void deleteOption(Long productId, Long optionId) {
-        Options options = new Options(optionRepository.findAllByProductId(productId));
+    public void deleteOption(Long optionId) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
+        Options options = new Options(optionRepository.findAllByProductId(option.getProduct().getId()));
         options.validateOptionSize();
         optionRepository.deleteById(optionId);
     }
