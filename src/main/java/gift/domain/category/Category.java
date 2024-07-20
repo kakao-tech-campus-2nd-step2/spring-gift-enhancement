@@ -23,6 +23,13 @@ public class Category {
         this.description = description;
         this.imageUrl = imageUrl;
     }
+
+    public void updateCategory(String name, String color, String description, String imageUrl) {
+        this.name = name;
+        this.color = color;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
     protected Category() {
 
     }

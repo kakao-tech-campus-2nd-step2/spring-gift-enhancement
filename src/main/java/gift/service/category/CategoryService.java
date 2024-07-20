@@ -4,6 +4,7 @@ import gift.domain.category.Category;
 import gift.domain.category.CategoryRepository;
 import gift.mapper.CategoryMapper;
 import gift.web.dto.CategoryDto;
+import gift.web.exception.CategoryNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,20 @@ public class CategoryService {
 
     public CategoryDto createCategory(CategoryDto categoryDto) {
         Category category = categoryRepository.save(categoryMapper.toEntity(categoryDto));
+        return categoryMapper.toDto(category);
+    }
+
+    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new CategoryNotFoundException("카테고리가 없슴다."));
+
+        category.updateCategory(
+            categoryDto.name(),
+            categoryDto.color(),
+            categoryDto.description(),
+            categoryDto.imageUrl()
+        );
+
         return categoryMapper.toDto(category);
     }
 }
