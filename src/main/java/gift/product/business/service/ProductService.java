@@ -1,12 +1,12 @@
 package gift.product.business.service;
 
-import gift.product.business.dto.OptionRegisterDto;
+import gift.product.business.dto.OptionIn;
+import gift.product.business.dto.ProductIn;
 import gift.product.business.dto.ProductOut;
 import gift.product.business.dto.ProductUpdateDto;
 import gift.product.persistence.entity.Product;
 import gift.product.persistence.repository.CategoryRepository;
 import gift.product.persistence.repository.ProductRepository;
-import gift.product.business.dto.ProductRegisterDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,13 +19,10 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository, OptionService optionService) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.optionService = optionService;
     }
 
     @Transactional(readOnly = true)
@@ -35,12 +32,14 @@ public class ProductService {
     }
 
     @Transactional
-    public Long createProduct(ProductRegisterDto productRegisterDto, List<OptionRegisterDto> optionRegisterDtos) {
-        var category = categoryRepository.getReferencedCategory(productRegisterDto.categoryId());
-        Product product = productRegisterDto.toProduct(category);
-        var productId = productRepository.saveProduct(product);
-        optionService.createOption(optionRegisterDtos, productId);
-        return productId;
+    public Long createProduct(ProductIn.Create productInCreate) {
+        var category = categoryRepository.getReferencedCategory(productInCreate.categoryId());
+        var product = productInCreate.toProduct(category);
+        var options = productInCreate.options().stream()
+            .map(OptionIn.Create::toOption)
+            .toList();
+        product.addOptions(options);
+        return productRepository.saveProduct(product);
     }
 
     @Transactional

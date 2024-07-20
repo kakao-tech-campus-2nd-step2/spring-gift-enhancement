@@ -48,11 +48,8 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Long> createProduct(
         @RequestBody @Valid ProductRequest.Create productRequest) {
-        var productRegisterDto = productRequest.toProductRegisterDto();
-        var optionRegisterDtos = productRequest.options().stream()
-            .map(RequestOptionCreateDto::toOptionRegisterDto)
-            .toList();
-        Long createdId = productService.createProduct(productRegisterDto, optionRegisterDtos);
+        var productInCreate = productRequest.toProductInCreate();
+        Long createdId = productService.createProduct(productInCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdId);
     }
 

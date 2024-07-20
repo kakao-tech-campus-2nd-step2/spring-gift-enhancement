@@ -1,6 +1,7 @@
 package gift.product.persistence.entity;
 
 import gift.global.domain.BaseTimeEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,8 +11,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(name = "product",
@@ -36,6 +41,15 @@ public class Product extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @BatchSize(size = 20)
+    @OneToMany(
+        mappedBy = "product",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<Option> options = new ArrayList<>();
 
     public Product(String name, String description, Integer price, String url, Category category) {
         this.name = name;
@@ -76,5 +90,14 @@ public class Product extends BaseTimeEntity {
 
     public void updateCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void addOptions(List<Option> options) {
+        options.forEach(option -> option.setProduct(this));
+        this.options.addAll(options);
     }
 }

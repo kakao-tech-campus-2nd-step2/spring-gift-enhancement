@@ -1,6 +1,6 @@
 package gift.product.presentation.dto;
 
-import gift.product.business.dto.ProductRegisterDto;
+import gift.product.business.dto.ProductIn;
 import gift.product.business.dto.ProductUpdateDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -33,11 +33,19 @@ public class ProductRequest {
         @Size(max = 255) String description,
         @URL String imageUrl,
         @NotNull Long categoryId,
-        @Size(min = 1) List<RequestOptionCreateDto> options
+        @Size(min = 1) List<OptionRequest.Create> options
     ) {
-
-        public ProductRegisterDto toProductRegisterDto() {
-            return new ProductRegisterDto(name, description, price, imageUrl, categoryId);
+        public ProductIn.Create toProductInCreate() {
+            return new ProductIn.Create(
+                name,
+                description,
+                price,
+                imageUrl,
+                categoryId,
+                options.stream()
+                    .map(OptionRequest.Create::toOptionInCreate)
+                    .toList()
+                );
         }
     }
 

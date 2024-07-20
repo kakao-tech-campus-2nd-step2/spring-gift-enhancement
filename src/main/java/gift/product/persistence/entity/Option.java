@@ -34,10 +34,9 @@ public class Option {
     private Product product;
 
 
-    public Option(String name, Integer quantity, Product product) {
+    public Option(String name, Integer quantity) {
         this.name = name;
         this.quantity = quantity;
-        this.product = product;
     }
 
     protected Option() {
@@ -59,5 +58,9 @@ public class Option {
     public void update(String name, Integer quantity) {
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
