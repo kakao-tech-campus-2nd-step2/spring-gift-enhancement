@@ -4,26 +4,21 @@ import gift.model.member.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.bind.ConstructorBinding;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.crypto.SecretKey;
 
 
-@Component
 @ConfigurationProperties(prefix = "jwt")
 public class JwtTokenProvider {
-    private String secretKey;
-    private SecretKey key;
+    private final String secretKey;
+    private final SecretKey key;
 
-    @PostConstruct
-    public void init() {
-        key = Keys.hmacShaKeyFor(secretKey.getBytes());
-    }
-
-    public void setSecretKey(String secretKey) {
+    @ConstructorBinding
+    public JwtTokenProvider(String secretKey) {
         this.secretKey = secretKey;
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
     public String generateToken(Member member) {

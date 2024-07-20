@@ -1,6 +1,7 @@
 package gift.repository;
 
 import gift.model.member.Member;
+import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductName;
 import gift.model.wish.Wish;
@@ -29,7 +30,8 @@ class WishRepositoryTest {
     @Test
     void save(){
         Member expectedMember = new Member("qwer@gmail.com","1234","root");
-        Product expectedProduct = new Product(new ProductName("product1"),1000,"qwer.com",1000);
+        Category category = new Category("category1");
+        Product expectedProduct = new Product(category,new ProductName("product1"),1000,"qwer.com",1000);
         memberRepository.save(expectedMember);
         productRepository.save(expectedProduct);
 
@@ -44,7 +46,8 @@ class WishRepositoryTest {
     @Test
     void delete(){
         Member expectedMember = new Member("qwer@gmail.com","1234","root");
-        Product expectedProduct = new Product(new ProductName("product1"),1000,"qwer.com",1000);
+        Category category = new Category("category1");
+        Product expectedProduct = new Product(category,new ProductName("product1"),1000,"qwer.com",1000);
         memberRepository.save(expectedMember);
         productRepository.save(expectedProduct);
 

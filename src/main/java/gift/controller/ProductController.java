@@ -48,7 +48,7 @@ public class ProductController {
 
     @GetMapping
     public String getProductList(@RequestParam(defaultValue = "0") int page, Model model) {
-        Page<Product> productPage = productService.selectAllProducts(PageRequest.of(page, 20));
+        Page<Product> productPage = productService.getAllProducts(PageRequest.of(page, 20));
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("currentPage", page);

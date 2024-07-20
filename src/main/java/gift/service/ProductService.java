@@ -2,6 +2,7 @@ package gift.service;
 
 
 import gift.dto.ProductDto;
+import gift.exception.RepositoryRelatedException;
 import gift.model.product.Category;
 import gift.model.product.Product;
 import gift.model.product.ProductName;
@@ -25,12 +26,12 @@ public class ProductService {
     }
 
     public boolean addNewProduct(ProductDto productDto){
-        Category category = findCategory(productDto.categoryName());
-
-        Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
-        if (productRepository.existsByName(product.getName())) {
+        if (productRepository.existsByName(new ProductName(productDto.name()))) {
             return false;
         }
+        Category category = findCategory(productDto.categoryName());
+        Product product = new Product(category,new ProductName(productDto.name()),productDto.price(),productDto.imageUrl(),productDto.amount());
+
         productRepository.save(product);
         return true;
     }
@@ -62,7 +63,7 @@ public class ProductService {
         return productRepository.findById(id).get();
     }
 
-    public Page<Product> selectAllProducts(Pageable pageable){
+    public Page<Product> getAllProducts(Pageable pageable){
         return productRepository.findAll(pageable);
     }
 

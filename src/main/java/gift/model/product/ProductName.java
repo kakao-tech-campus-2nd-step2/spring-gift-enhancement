@@ -27,7 +27,6 @@ public class ProductName {
         return name;
     }
 
-
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
