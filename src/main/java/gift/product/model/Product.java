@@ -2,7 +2,6 @@ package gift.product.model;
 
 import gift.category.model.Category;
 import gift.option.model.Option;
-import gift.product.dto.ProductDto;
 import gift.wishlist.model.WishList;
 import jakarta.persistence.*;
 

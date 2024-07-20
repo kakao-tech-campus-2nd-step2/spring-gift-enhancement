@@ -41,9 +41,7 @@ class OptionServiceTest {
         OptionDto optionDto = new OptionDto(name, 10);
 
         // When & Then
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            optionService.addOptionToProduct(product.getId(), optionDto);
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> optionService.addOptionToProduct(product.getId(), optionDto));
 
         // 예외 메시지가 출력되는지
         assertThat(exception.getMessage()).isEqualTo("옳지 않은 문자가 사용되었습니다.");
@@ -55,10 +53,8 @@ class OptionServiceTest {
         Long nonExistentProductId = 9545669L;
 
         // When & Then
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            productRepository.findById(nonExistentProductId)
-                    .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
-        });
+        Exception exception = assertThrows(RuntimeException.class, () -> productRepository.findById(nonExistentProductId)
+                .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다.")));
 
         // 예외 메시지가 출력되는지
         assertThat(exception.getMessage()).isEqualTo("해당 상품이 존재하지 않습니다.");

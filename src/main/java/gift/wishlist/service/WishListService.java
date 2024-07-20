@@ -7,7 +7,6 @@ import gift.product.repository.ProductRepository;
 import gift.wishlist.model.WishList;
 import gift.wishlist.repository.WishListRepository;
 import gift.member.model.Member;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
