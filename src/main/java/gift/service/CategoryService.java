@@ -30,10 +30,10 @@ public class CategoryService {
 		categoryRepository.save(category);
 	}
 	
-	public void updateCategory(Long id, Category updatedCategory, BindingResult bindingResult) {
+	public void updateCategory(Long categoryId, Category updatedCategory, BindingResult bindingResult) {
 		validateBindingResult(bindingResult);
-		validCategoryId(id, updatedCategory);
-		validateCategoryId(id);
+		validCategoryId(categoryId, updatedCategory);
+		validateCategoryId(categoryId);
 		categoryRepository.save(updatedCategory);
 	}
 	
@@ -46,14 +46,14 @@ public class CategoryService {
 		}
 	}
 	
-	private void validCategoryId(long id, Category updatedCategory) {
-		if (!updatedCategory.getId().equals(id)) {
+	private void validCategoryId(Long categoryId, Category updatedCategory) {
+		if (!updatedCategory.getId().equals(categoryId)) {
 			throw new InvalidCategoryException("Category Id mismath.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	private void validateCategoryId(long id) {
-		if (!categoryRepository.existsById(id)) {
+	private void validateCategoryId(Long categoryId) {
+		if (!categoryRepository.existsById(categoryId)) {
 			throw new InvalidCategoryException("Category not foudn.", HttpStatus.NOT_FOUND);
 		}
 	}
