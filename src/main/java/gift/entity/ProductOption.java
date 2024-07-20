@@ -18,9 +18,13 @@ public class ProductOption {
     @JoinColumn(name = "option_id")
     private Option option;
 
-    public ProductOption(Product product, Option option) {
+    @Column(name = "option_name")
+    private String optionName;
+
+    public ProductOption(Product product, Option option, String optionName) {
         this.product = product;
         this.option = option;
+        this.optionName = optionName;
     }
 
     public ProductOption() {

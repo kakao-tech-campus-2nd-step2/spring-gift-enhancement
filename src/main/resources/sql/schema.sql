@@ -68,9 +68,11 @@ VALUES ('DefaultOption', 1);
 drop table if exists product_option CASCADE;
 create table product_option
 (
-    id         bigint AUTO_INCREMENT PRIMARY KEY,
-    product_id bigint,
-    option_id  bigint,
+    id          bigint AUTO_INCREMENT PRIMARY KEY,
+    product_id  bigint,
+    option_id   bigint,
+    option_name varchar(50),
     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE,
-    FOREIGN KEY (option_id) REFERENCES option (id) ON DELETE CASCADE
+    FOREIGN KEY (option_id) REFERENCES option (id) ON DELETE CASCADE,
+    UNIQUE (product_id, option_name)
 );
