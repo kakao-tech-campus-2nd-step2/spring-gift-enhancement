@@ -4,12 +4,13 @@ package gift.util;
 import gift.entity.UserDTO;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class UserEmailValidatorTest {
@@ -26,7 +27,7 @@ public class UserEmailValidatorTest {
         Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
 
         //then
-        Assertions.assertThat(violations).isEmpty();
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -38,6 +39,6 @@ public class UserEmailValidatorTest {
         Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 }

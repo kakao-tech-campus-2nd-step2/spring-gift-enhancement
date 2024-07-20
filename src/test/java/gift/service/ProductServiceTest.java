@@ -3,7 +3,6 @@ package gift.service;
 import gift.entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 @Transactional
 public class ProductServiceTest {
 
     @PersistenceContext
     private EntityManager em;
-  
     @Autowired
     private ProductService productService;
     @Autowired
@@ -33,10 +33,8 @@ public class ProductServiceTest {
     void productDeleteCascadeWishlistTest() {
         // given
         String testEmail = "test@gmail.com";
-
         Category category = categoryService.save(new CategoryDTO("test", "#test", "test.com", ""));
         Product product = productService.save(new ProductDTO("test", 123, "test.com", category.getId()));
-
         wishlistService.addWishlistProduct(testEmail, new WishlistDTO(product.getId()));
 
         // when
@@ -44,7 +42,7 @@ public class ProductServiceTest {
 
         // then
         Page<Product> products = wishlistService.getWishlistProducts(testEmail, PageRequest.of(0, 10));
-        Assertions.assertThat(products).hasSize(0);
+        assertThat(products).hasSize(0);
     }
 
     @Test
@@ -62,6 +60,6 @@ public class ProductServiceTest {
 
         // then
         List<Wishlist> wishlists = productService.getProductWishlist(product.getId());
-        Assertions.assertThat(wishlists).hasSize(2);
+        assertThat(wishlists).hasSize(2);
     }
 }

@@ -2,12 +2,12 @@ package gift.repository;
 
 import gift.entity.User;
 import gift.entity.UserDTO;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 public class UserRepositoryTest {
@@ -24,7 +24,7 @@ public class UserRepositoryTest {
         User expect = userRepository.save(new User(actual));
 
         // then
-        Assertions.assertAll(
+        assertAll(
                 () -> assertThat(expect.getId()).isNotNull(),
                 () -> assertThat(expect.getEmail()).isEqualTo(actual.getEmail()),
                 () -> assertThat(expect.getPassword()).isEqualTo(actual.getPassword())

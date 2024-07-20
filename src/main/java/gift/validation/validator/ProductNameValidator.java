@@ -17,7 +17,7 @@ public class ProductNameValidator implements ConstraintValidator<NameConstraint,
     @Override
     public boolean isValid(String nameField, ConstraintValidatorContext cxt) {
         boolean nameLengthInvalid = nameField.length() > 15;
-        boolean containSpecialChar = !nameField.matches("^[a-zA-Z가-힣()\\[\\]\\+\\-&/_]+$");
+        boolean containSpecialChar = !nameField.matches("^[a-zA-Z가-힣()\\[\\]\\+\\-&/_\s]+$");
         boolean containKakaoChar = nameField.contains("카카오");
         String returnMsg = "";
         if (nameLengthInvalid) {

@@ -49,3 +49,57 @@ Content-Type: application/json
 - [x] category가 삭제될 때 product의 category 테스트 &uarr;
 - [x] product의 category가 변경될 때 -> 이전 category에 접근해서 product 삭제 & 새 category에 해당 product add
 - [x] product의 category가 변경될 때 테스트 &uarr;
+
+---
+
+## step 2
+
+### 기능 요구 사항
+
+* 상품 정보에 옵션 추가하기
+* 상품과 옵션 모델 간의 관계를 고려하여 설계하기
+
+* 상품에는 항상 하나 이상의 옵션이 있어야 한다.
+* 옵션 이름은 공백을 포함하여 최대 50자까지 입력할 수 있다.
+* 특수 문자 : ( ), [ ], +, -, &, /, _ 만 가능
+    * 그 외 특수 문자 사용 불가
+* 옵션 수량은 최소 1개 이상 1억 개 미만이다.
+* 동일한 상품 내의 옵션 이름은 중복될 수 없다.
+
+#### Request
+
+```
+GET /api/products/1/options HTTP/1.1
+```
+
+#### Response
+
+```
+HTTP/1.1 200
+Content-Type: application/json
+
+[
+  {
+    "id": 464946561,
+    "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+    "quantity": 969
+  }
+]
+```
+
+- [x] option CRUD 구현
+- [x] product - option ManyToMany
+- [x] product에 항상 하나 이상의 옵션이 있어야
+- [x] product에 중복된 이름의 옵션 존재 x
+- [x] 테스트 작성
+    - [x] mock 객체로 테스팅 해보기 (MockBean)
+
+---
+
+## step 3
+
+### 기능 요구 사항
+상품 옵션의 수량을 지정된 숫자만큼 빼는 기능을 구현한다.
+
+* 별도의 HTTP API를 만들 필요는 없다.
+* 서비스 클래스 또는 엔티티 클래스에서 기능을 구현하고 나중에 사용할 수 있도록 한다.

@@ -1,10 +1,8 @@
 package gift.util;
 
 import gift.entity.ProductDTO;
-import gift.service.ProductService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,15 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 @Transactional
 public class ProductNameValidatorTest {
 
     @Autowired
     private Validator validator;
-
-    @Autowired
-    private ProductService productService;
 
     @Test
     public void save_nameSuccess() {
@@ -31,7 +28,7 @@ public class ProductNameValidatorTest {
         Set<ConstraintViolation<ProductDTO>> violations = validator.validate(product);
 
         //then
-        Assertions.assertThat(violations).isEmpty();
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -44,7 +41,7 @@ public class ProductNameValidatorTest {
         Set<ConstraintViolation<ProductDTO>> violations = validator.validate(product);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -57,7 +54,7 @@ public class ProductNameValidatorTest {
         Set<ConstraintViolation<ProductDTO>> violations = validator.validate(product);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -70,7 +67,7 @@ public class ProductNameValidatorTest {
         Set<ConstraintViolation<ProductDTO>> violations = validator.validate(product);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -83,6 +80,6 @@ public class ProductNameValidatorTest {
         Set<ConstraintViolation<ProductDTO>> violations = validator.validate(product);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 }

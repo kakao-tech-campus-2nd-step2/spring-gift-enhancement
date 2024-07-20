@@ -13,7 +13,7 @@ public class CategoryService {
 
     Long defaultCategoryId = 1L;
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
@@ -28,7 +28,7 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public Category findOne(Long id) {
+    public Category findById(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isEmpty()) {
             return categoryRepository.findById(1L).get(); // return defaultCategory
@@ -37,13 +37,13 @@ public class CategoryService {
     }
 
     public Category update(Long id, CategoryDTO categoryDTO) {
-        Category category = findOne(id);
+        Category category = findById(id);
         category.setCategory(categoryDTO);
         return categoryRepository.save(category);
     }
 
     public void delete(Long id) {
-        Category category = findOne(id);
+        Category category = findById(id);
         categoryRepository.delete(category);
     }
 }
