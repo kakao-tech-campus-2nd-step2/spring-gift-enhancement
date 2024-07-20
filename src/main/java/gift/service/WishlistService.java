@@ -16,26 +16,26 @@ import org.springframework.stereotype.Service;
 public class WishlistService {
 
     private final WishlistRepository wishlistRepository;
-    private final ProductRepository productRepository;
-    private final MemberRepository memberRepository;
+    private final ProductService productService;
     private final MemberService memberService;
 
     @Autowired
-    public WishlistService(WishlistRepository wishlistRepository, ProductRepository productRepository,
-                           MemberRepository memberRepository, MemberService memberService) {
+    public WishlistService(WishlistRepository wishlistRepository, ProductService productService,
+                           MemberService memberService) {
         this.wishlistRepository = wishlistRepository;
-        this.productRepository = productRepository;
-        this.memberRepository = memberRepository;
+        this.productService = productService;
         this.memberService = memberService;
     }
 
     public Page<Product> getWishlistByEmail(String email, Pageable pageable) {
-        Page<Wishlist> wishlist = wishlistRepository.findByMemberEmail(email, pageable);
+        Long memberId = memberService.getMember(email).getId();
+        Page<Wishlist> wishlist = wishlistRepository.findByMemberId(memberId, pageable);
         return wishlist.map(Wishlist::getProduct);
     }
 
     public void deleteWishlistItem(String email, Long productId) {
-        Wishlist wish = wishlistRepository.findByMemberEmailAndProductId(email, productId);
+        Long memberId = memberService.getMember(email).getId();
+        Wishlist wish = wishlistRepository.findByMemberIdAndProductId(memberId, productId);
         if (wish != null) {
             wishlistRepository.delete(wish);
         }
@@ -43,8 +43,7 @@ public class WishlistService {
 
     public void addWishlistItem(String email, Long productId) {
         Member member = memberService.getMember(email);
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productService.getProductById(productId);
         wishlistRepository.save(new Wishlist(member, product));
     }
 }
