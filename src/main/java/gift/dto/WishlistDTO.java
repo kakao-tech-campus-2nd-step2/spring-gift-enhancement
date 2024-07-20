@@ -1,7 +1,6 @@
 package gift.dto;
 
 import gift.model.Wishlist;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,10 +13,11 @@ public class WishlistDTO {
     private int price;
     private String imageUrl;
     private List<OptionDTO> options;
+    private int totalPrice;
 
     public WishlistDTO() {}
 
-    public WishlistDTO(Long id, Long productId, String username, int quantity, String productName, int price, String imageUrl) {
+    public WishlistDTO(Long id, Long productId, String username, int quantity, String productName, int price, String imageUrl, List<OptionDTO> options) {
         this.id = id;
         this.productId = productId;
         this.username = username;
@@ -25,6 +25,8 @@ public class WishlistDTO {
         this.productName = productName;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.options = options;
+        this.totalPrice = calculateTotalPrice();
     }
 
     public Long getId() {
@@ -59,6 +61,10 @@ public class WishlistDTO {
         return options;
     }
 
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -91,21 +97,33 @@ public class WishlistDTO {
         this.options = options;
     }
 
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    private int calculateTotalPrice() {
+        int optionsTotalPrice = options.stream()
+            .mapToInt(option -> option.getPrice() * option.getQuantity())
+            .sum();
+        return optionsTotalPrice;
+    }
+
+
     public static WishlistDTO convertToDTO(Wishlist wishlist) {
-        List<OptionDTO> optionDTOs = wishlist.getProduct().getOptions().stream()
+        List<OptionDTO> optionDTOs = wishlist.getOptions().stream()
             .map(OptionDTO::convertToDTO)
             .collect(Collectors.toList());
 
-        WishlistDTO wishlistDTO = new WishlistDTO(
+        return new WishlistDTO(
             wishlist.getId(),
             wishlist.getProduct().getId(),
             wishlist.getUser().getUsername(),
             wishlist.getQuantity(),
             wishlist.getProduct().getName(),
             wishlist.getPrice(),
-            wishlist.getProduct().getImageUrl()
+            wishlist.getProduct().getImageUrl(),
+            optionDTOs
         );
-        wishlistDTO.setOptions(optionDTOs);
-        return wishlistDTO;
     }
 }
+
