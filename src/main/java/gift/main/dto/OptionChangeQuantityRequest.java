@@ -3,9 +3,9 @@ package gift.main.dto;
 import gift.main.Exception.CustomException;
 import gift.main.Exception.ErrorCode;
 
-public record OptionQuantityRequest(int quantity) {
+public record OptionChangeQuantityRequest(int quantity) {
 
-    public OptionQuantityRequest {
+    public OptionChangeQuantityRequest {
         if (quantity < 1 || quantity > 100000000) {
             throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
         }
