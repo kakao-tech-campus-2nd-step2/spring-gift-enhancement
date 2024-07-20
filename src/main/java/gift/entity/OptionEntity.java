@@ -60,6 +60,9 @@ public class OptionEntity {
         this.productEntity = productEntity;
     }
 
+    public void subtract(Long quantity) {
+        this.quantity-=quantity;
+    }
 
     public static Option toDto(OptionEntity optionEntity) {
         return new Option(

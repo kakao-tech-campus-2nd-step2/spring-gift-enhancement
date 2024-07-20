@@ -88,7 +88,7 @@ public class OptionService {
         if(optionEntity.getQuantity() < quantity) {
             throw new IllegalArgumentException("옵션 수량이 줄이고자 하는 수량보다 적습니다.");
         }
-        optionEntity.setQuantity(quantity);
+        optionEntity.subtract(quantity);
         optionRepository.save(optionEntity);
     }
 
