@@ -42,6 +42,16 @@ public class OptionService {
         return OptionDTO.fromOption(savedOption);
     }
 
+    public OptionDTO subtractOptionQuantity(long optionId, int quantity) throws NotFoundException {
+        Option option = optionRepository.findById(optionId).orElseThrow(NotFoundException::new);
+        OptionDTO optionDTO = OptionDTO.fromOption(option);
+        if(optionDTO.getQuantity()<quantity){
+            throw new IllegalArgumentException("옵션의 수량이 부족합니다.");
+        }
+        optionDTO.subtract(quantity);
+        return optionDTO;
+    }
+
     public void deleteOptionByProductId(long productId){
         optionRepository.deleteByProductId(productId);
     }

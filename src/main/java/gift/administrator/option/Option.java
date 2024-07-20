@@ -51,23 +51,27 @@ public class Option {
         this.product = product;
     }
 
-    public Long getId(){
+    public void subtract(int quantity) {
+        this.quantity -= quantity;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public int getQuantity(){
+    public int getQuantity() {
         return quantity;
     }
 
-    public Product getProduct(){
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(Product product){
+    public void setProduct(Product product) {
         this.product = product;
     }
 
