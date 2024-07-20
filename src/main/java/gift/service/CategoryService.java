@@ -4,6 +4,7 @@ import gift.dto.CategoryDTO;
 import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishlistRepository;
 import java.util.List;
@@ -17,12 +18,14 @@ public class CategoryService {
     private final ProductRepository productRepository;
     private final WishlistRepository wishlistRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     public CategoryService(CategoryRepository categoryRepository,
-        ProductRepository productRepository, WishlistRepository wishlistRepository) {
+        ProductRepository productRepository, WishlistRepository wishlistRepository, OptionRepository optionRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.wishlistRepository = wishlistRepository;
+        this.optionRepository = optionRepository;
     }
 
     public List<Category> findAllCategories() {
@@ -57,7 +60,9 @@ public class CategoryService {
         if (category != null) {
             List<Product> products = productRepository.findAllByCategoryId(id);
             if (!products.isEmpty()) {
+                List<Long> productIds = products.stream().map(Product::getId).toList();
                 wishlistRepository.deleteByProductIn(products);
+                optionRepository.deleteAllByProductIdIn(productIds);
                 productRepository.deleteAll(products);
             }
             categoryRepository.delete(category);
