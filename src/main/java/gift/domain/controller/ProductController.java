@@ -4,6 +4,7 @@ import gift.domain.controller.apiResponse.ProductAddApiResponse;
 import gift.domain.controller.apiResponse.ProductListApiResponse;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
+import gift.domain.dto.response.ProductWithCategoryIdResponse;
 import gift.domain.service.ProductService;
 import gift.global.apiResponse.BasicApiResponse;
 import gift.global.apiResponse.SuccessApiResponse;
@@ -31,7 +32,12 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<ProductListApiResponse> getProducts() {
-        return SuccessApiResponse.ok(new ProductListApiResponse(HttpStatus.OK, productService.getAllProducts()));
+        return SuccessApiResponse.ok(new ProductListApiResponse(
+            HttpStatus.OK,
+            productService.getAllProductsCategories(),
+            productService.getAllProducts().stream()
+                .map(ProductWithCategoryIdResponse::of)
+                .toList()));
     }
 
     @PostMapping

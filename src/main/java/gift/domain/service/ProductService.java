@@ -3,6 +3,7 @@ package gift.domain.service;
 import gift.domain.dto.request.OptionRequest;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
+import gift.domain.dto.response.CategoryResponse;
 import gift.domain.dto.response.OptionResponse;
 import gift.domain.dto.response.ProductResponse;
 import gift.domain.entity.Product;
@@ -37,6 +38,15 @@ public class ProductService {
     public List<ProductResponse> getAllProducts() {
         return productRepository.findAll().stream()
             .map(ProductResponse::of)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> getAllProductsCategories() {
+        return productRepository.findAll().stream()
+            .map(Product::getCategory)
+            .map(CategoryResponse::of)
+            .distinct()
             .toList();
     }
 
