@@ -60,6 +60,10 @@ public class Option {
         this.quantity = optionRequest.getQuantity();
     }
 
+    public void subtractQuantity(Long quantity){
+        this.quantity -= quantity;
+    }
+
     public Long getId() {
         return id;
     }

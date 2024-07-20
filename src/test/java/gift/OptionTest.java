@@ -39,7 +39,6 @@ public class OptionTest {
         productService.insertNewProduct(new ProductRequest("상품1", 1000L, "이미지URL2", categoryResponse.id()), option);
     }
 
-    //옵션 추가
     @Test
     @Transactional
     @DisplayName("옵션 저장 테스트 - 한개, 성공")
@@ -48,7 +47,7 @@ public class OptionTest {
         OptionResponse optionResponse = optionService.insertProductNewOption(1L, option);
         assertThat(optionService.findByOptionID(optionResponse.id())).isEqualTo(optionResponse);
     }
-    //옵션 추가(여러개)
+
     @Test
     @Transactional
     @DisplayName("옵션 저장 테스트 - 여러개, 성공")
@@ -62,7 +61,7 @@ public class OptionTest {
         assertThat(optionService.findByOptionID(responses.get(0).id())).isEqualTo(responses.get(0));
         assertThat(optionService.findByOptionID(responses.get(1).id())).isEqualTo(responses.get(1));
     }
-    //옵션 추가 실패(이름 중복)
+
     @Test
     @Transactional
     @DisplayName("옵션 저장 테스트 - 실패 (이름 중복)")
@@ -72,7 +71,7 @@ public class OptionTest {
         OptionRequest option2 = new OptionRequest("옵션1", 200L);
         assertThrows(IllegalArgumentException.class, () -> optionService.insertProductNewOption(1L, option2));
     }
-    //옵션 수정
+
     @Test
     @Transactional
     @DisplayName("옵션 수정 테스트 - 성공")
@@ -83,7 +82,7 @@ public class OptionTest {
         OptionResponse expected = new OptionResponse(optionResponse.id(), "옵션2", 200L);
         assertThat(optionService.updateOption(1L, optionResponse.id(), update)).isEqualTo(expected);
     }
-    //옵션 수정 실패(이름 중복)
+
     @Test
     @Transactional
     @DisplayName("옵션 수정 테스트 - 실패 (이름 중복)")
@@ -95,5 +94,24 @@ public class OptionTest {
         OptionRequest update = new OptionRequest("옵션1", 200L);
         assertThrows(IllegalArgumentException.class, () -> optionService.updateOption(1L, optionResponse.id(), update));
 
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("옵션 수량 빼기 테스트 - 성공")
+    public void subtractOptionQuantitySuccess(){
+        OptionRequest option = new OptionRequest("옵션1", 100L);
+        OptionResponse optionResponse = optionService.insertProductNewOption(1L, option);
+        optionService.subtractOptionQuantity(optionResponse.id(), 20L);
+        assertThat(optionService.findByOptionID(optionResponse.id()).quantity()).isEqualTo(80L);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("옵션 수량 빼기 테스트 - 실패")
+    public void subtractOptionQuantityFail(){
+        OptionRequest option = new OptionRequest("옵션1", 100L);
+        OptionResponse optionResponse = optionService.insertProductNewOption(1L, option);
+        assertThrows(IllegalArgumentException.class, () -> optionService.subtractOptionQuantity(optionResponse.id(), 120L));
     }
 }
