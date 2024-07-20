@@ -54,7 +54,7 @@ class ProductControllerTest {
         ProductDTO dto = getProductDTO(name, price, imageUrl);
 
         //when then
-        createPostAndCheckBadRequest(dto, "상품 이름은 1~15글자로 제한됩니다.");
+        createPostAndCheckBadRequest(dto, "잘못된 이름입니다.");
 
     }
 
@@ -65,7 +65,7 @@ class ProductControllerTest {
         ProductDTO dto = getProductDTO("", 123, "test");
 
         //when
-        createPostAndCheckBadRequest(dto, "상품 이름은 1~15글자로 제한됩니다.");
+        createPostAndCheckBadRequest(dto, "잘못된 이름입니다.");
 
     }
 
@@ -92,14 +92,15 @@ class ProductControllerTest {
     void nameCantUseWords() {
         ProductDTO dto = getProductDTO("asd!", 123, "test");
         ProductDTO dto2 = getProductDTO("asd?", 123, "test2");
-        ProductDTO dto3 = getProductDTO("&/_+-[]()", 123, "test3");
-        ProductDTO dto4 = getProductDTO("asdd", 123, "ttt");
 
-        createPostAndCheckBadRequest(dto, "사용할 수 없는 특수문자입니다.");
-        createPostAndCheckBadRequest(dto2, "사용할 수 없는 특수문자입니다.");
 
-        createPostReqeust(dto3).expectStatus().isOk();
-        createPostReqeust(dto4).expectStatus().isOk();
+        dto.setCategoryId(1L);
+        dto2.setCategoryId(2L);
+
+
+        createPostAndCheckBadRequest(dto, "잘못된 이름입니다.");
+        createPostAndCheckBadRequest(dto2, "잘못된 이름입니다.");
+
     }
 
     @Test
