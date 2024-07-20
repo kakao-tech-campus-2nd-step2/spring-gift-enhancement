@@ -1,7 +1,7 @@
 package gift.dto;
 
 public class WishAddRequestDto {
-    private final long productId;
+    private final Long productId;
     private int quantity = 1;
 
     public WishAddRequestDto(long productId, int quantity) {
@@ -9,7 +9,7 @@ public class WishAddRequestDto {
         this.quantity = quantity;
     }
 
-    public long getProductId() {
+    public Long getProductId() {
         return productId;
     }
 

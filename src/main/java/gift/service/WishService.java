@@ -66,28 +66,28 @@ public class WishService {
 
     private void checkProductValidation(Long productId) {
         if (!productRepository.existsById(productId)) {
-            throw new CustomException(ErrorCode.INVALID_PRODUCT);
+            throw new CustomException(ErrorCode.INVALID_PRODUCT, productId);
         }
     }
 
     private void checkMemberValidation(Long memberId) {
         if (!memberRepository.existsById(memberId)) {
-            throw new CustomException(ErrorCode.INVALID_MEMBER);
+            throw new CustomException(ErrorCode.INVALID_MEMBER, memberId);
         }
     }
 
     private Member getMember(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER));
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER, id));
     }
 
     private Product getProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_PRODUCT));
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_PRODUCT, id));
     }
 
     private Wish getWish(Long id) {
         return wishRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_WISH));
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_WISH, id));
     }
 }

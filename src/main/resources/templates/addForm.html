@@ -38,6 +38,15 @@
                     <input type="text" id="imgUrl" name="imgUrl" class="form-control" placeholder="사진 링크를 입력하세요" th:class="${#fields.hasErrors('imgUrl')} ? 'form-control fieldError' : 'form-control'">
                     <p th:if = "${#fields.hasErrors('imgUrl')}" class="errorMessage" th:errors="*{imgUrl}">Incorrect data</p>
                 </div>
+                <div>
+                    <label for="category">카테고리</label>
+                    <select id="category" name="category" class="form-control" th:class="${#fields.hasErrors('category')} ? 'form-control fieldError' : 'form-control'">
+                            <option value="">-- 카테고리 선택 --</option>
+                            <option th:each="val : ${list}" th:value="${val?.id}"
+                                    th:utext="${val?.name}">
+                            </option>
+                    </select>
+                </div>
 
                 <hr class="my-4">
 

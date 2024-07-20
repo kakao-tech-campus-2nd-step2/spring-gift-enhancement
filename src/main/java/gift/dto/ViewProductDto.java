@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
-public class ProductChangeRequestDto {
+public class ViewProductDto {
     @Length(min = 1, max = 15, message = "상품의 이름은 공백을 포함하여 최대 15자까지 입력할 수 있습니다.")
     @Pattern(
             regexp = "^[a-zA-Z0-9가-힣()\\[\\]+\\-&/_]*$",
@@ -20,7 +20,7 @@ public class ProductChangeRequestDto {
 
     @NotNull(message = "상품 가격은 필수항목입니다.")
     @Min(value = 0, message = "상품의 가격은 0원 이상이어야합니다.")
-    private int price;
+    private Integer price;
 
     @NotNull(message = "상품 카테고리는 필수항목입니다.")
     private Long category;
@@ -33,11 +33,27 @@ public class ProductChangeRequestDto {
         return imgUrl;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
     public Long getCategory() {
         return category;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setCategory(Long category) {
+        this.category = category;
     }
 }

@@ -1,9 +1,8 @@
 package gift.controller;
 
-import gift.dto.ProductChangeRequestDto;
+import gift.dto.*;
+import gift.service.OptionService;
 import gift.service.ProductService;
-import gift.dto.ProductRequestDto;
-import gift.dto.ProductResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +18,16 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public ProductController(ProductService productService) {
+
+    public ProductController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@Valid @RequestBody ProductRequestDto requestDto) {
+    public ResponseEntity<String> saveProduct(@Valid @RequestBody ProductRequestDto requestDto) {
         productService.addProduct(requestDto);
         return ResponseEntity.ok("상품이 성공적으로 등록되었습니다.");
     }
@@ -60,5 +62,18 @@ public class ProductController {
             @PathVariable("id") Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/{id}/options")
+    public ResponseEntity<String> saveOption(@PathVariable("id") Long id, @RequestBody OptionRequestDto request) {
+        optionService.saveOption(id, request);
+        return ResponseEntity.ok("옵션이 정상적으로 등록되었습니다.");
+    }
+
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<OptionResponseDto>> getOptions(
+            @PathVariable("id") Long id) {
+        var result = optionService.getOptions(id);
+        return ResponseEntity.ok(result);
     }
 }

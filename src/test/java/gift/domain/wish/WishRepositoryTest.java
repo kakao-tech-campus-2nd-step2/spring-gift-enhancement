@@ -1,5 +1,6 @@
 package gift.domain.wish;
 
+import gift.domain.category.Category;
 import gift.domain.member.Member;
 import gift.domain.product.Product;
 import jakarta.persistence.EntityManager;
@@ -13,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -30,7 +31,7 @@ class WishRepositoryTest {
         //given
         Member member = createMember();
         Product product = createProduct();
-        Wish expected = new Wish(member,product,1);
+        Wish expected = new Wish(member, product, 1);
         wishRepository.save(expected);
 
         //when
@@ -48,7 +49,7 @@ class WishRepositoryTest {
         //given
         Member member = createMember();
         Product product = createProduct();
-        Wish expected = new Wish(member,product,1);
+        Wish expected = new Wish(member, product, 1);
         wishRepository.save(expected);
 
         //when
@@ -61,16 +62,23 @@ class WishRepositoryTest {
     }
 
     private Member createMember() {
-        Member member = new Member("tester@gmail.com","더미","password",1);
+        Member member = new Member("tester@gmail.com", "더미", "password", 1);
         entityManager.persist(member);
         entityManager.flush();
         return member;
     }
 
     private Product createProduct() {
-        Product product = new Product("커피",10000,"image");
+        Product product = new Product("커피", 10000, "image", createCategory());
         entityManager.persist(product);
         entityManager.flush();
         return product;
+    }
+
+    private Category createCategory() {
+        Category category = new Category("음식", "red", "음식임", "test.jpg");
+        entityManager.persist(category);
+        entityManager.flush();
+        return category;
     }
 }
