@@ -14,5 +14,6 @@ public record ProductRequestDto(
     @Min(value = 1,message = "상품 가격을 입력해주세요")
     int price,
     @NotBlank(message = "상품 url을 등록해주세요")
-    String url) { }
+    String url,
+    Long categoryId) { }
 
