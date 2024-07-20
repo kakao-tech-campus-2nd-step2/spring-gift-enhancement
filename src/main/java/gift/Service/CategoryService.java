@@ -1,6 +1,7 @@
 package gift.Service;
 
-import gift.Exception.CategoryException;
+import gift.Exception.Category.CategoryDuplicatedException;
+import gift.Exception.Category.CategoryNotFoundException;
 import gift.Model.DTO.CategoryDTO;
 import gift.Model.Entity.CategoryEntity;
 import gift.Repository.CategoryRepository;
@@ -22,7 +23,7 @@ public class CategoryService {
         Optional<CategoryEntity> categoryEntityOptional = categoryRepository.findByName(categoryDTO.name());
 
         if(categoryEntityOptional.isPresent()){
-            throw new CategoryException();
+            throw new CategoryDuplicatedException();
         }
 
         categoryRepository.save(new CategoryEntity(categoryDTO.name(), categoryDTO.color(), categoryDTO.imageUrl(), categoryDTO.description()));
@@ -44,7 +45,7 @@ public class CategoryService {
         Optional<CategoryEntity> categoryEntityOptional = categoryRepository.findByName(categoryDTO.name());
 
         if(categoryEntityOptional.isEmpty()){
-            throw new CategoryException();
+            throw new CategoryNotFoundException();
         }
         CategoryEntity categoryEntity = new CategoryEntity(categoryDTO.name(), categoryDTO.color(), categoryDTO.imageUrl(), categoryDTO.description());
         categoryEntity.setId(categoryEntityOptional.get().getId());
@@ -55,7 +56,7 @@ public class CategoryService {
         Optional<CategoryEntity> categoryEntityOptional = categoryRepository.findById(id);
 
         if(categoryEntityOptional.isEmpty()){
-            throw new CategoryException();
+            throw new CategoryNotFoundException();
         }
 
         categoryRepository.deleteById(id);
