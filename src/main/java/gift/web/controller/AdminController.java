@@ -1,4 +1,4 @@
-package gift.web;
+package gift.web.controller;
 
 import gift.service.product.ProductService;
 import gift.web.dto.ProductDto;

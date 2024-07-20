@@ -1,9 +1,8 @@
-package gift.web;
+package gift.web.controller;
 
 import gift.service.product.ProductService;
 import gift.web.dto.ProductDto;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
