@@ -14,7 +14,6 @@ public class ProductIn {
         Long categoryId,
         List<OptionIn.Create> options
     ) {
-
         public Product toProduct(Category category) {
             return new Product(
                 name,
@@ -26,6 +25,13 @@ public class ProductIn {
         }
     }
 
-
+    public record Update(
+        String name,
+        Integer price,
+        String description,
+        String imageUrl,
+        Long categoryId
+    ) {
+    }
 
 }

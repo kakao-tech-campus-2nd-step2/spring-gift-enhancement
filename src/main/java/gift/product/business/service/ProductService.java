@@ -31,6 +31,12 @@ public class ProductService {
         return ProductOut.WithOptions.from(product);
     }
 
+    @Transactional(readOnly = true)
+    public ProductOut.Paging getProductsByPage(Pageable pageable) {
+        Page<Product> products = productRepository.getProductsByPage(pageable);
+        return ProductOut.Paging.from(products);
+    }
+
     @Transactional
     public Long createProduct(ProductIn.Create productInCreate) {
         var category = categoryRepository.getReferencedCategory(productInCreate.categoryId());
@@ -43,11 +49,11 @@ public class ProductService {
     }
 
     @Transactional
-    public Long updateProduct(ProductUpdateDto productUpdateDto, Long id) {
+    public Long updateProduct(ProductIn.Update productInUpdate, Long id) {
         var product = productRepository.getProductById(id);
-        var category = categoryRepository.getReferencedCategory(productUpdateDto.categoryId());
-        product.update(productUpdateDto.name(), productUpdateDto.description(),
-            productUpdateDto.price(), productUpdateDto.imageUrl());
+        var category = categoryRepository.getReferencedCategory(productInUpdate.categoryId());
+        product.update(productInUpdate.name(), productInUpdate.description(),
+            productInUpdate.price(), productInUpdate.imageUrl());
         product.updateCategory(category);
         return productRepository.saveProduct(product);
     }
@@ -66,11 +72,5 @@ public class ProductService {
     @Transactional
     public void deleteProducts(List<Long> productIds) {
         productRepository.deleteProductByIdList(productIds);
-    }
-
-    @Transactional(readOnly = true)
-    public ProductOut.Paging getProductsByPage(Pageable pageable) {
-        Page<Product> products = productRepository.getProductsByPage(pageable);
-        return ProductOut.Paging.from(products);
     }
 }

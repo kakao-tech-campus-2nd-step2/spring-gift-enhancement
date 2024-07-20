@@ -66,9 +66,8 @@ public class ProductRequest {
         @URL String imageUrl,
         @NotNull Long categoryId
     ) {
-
-        public ProductUpdateDto toProductUpdateDto() {
-            return new ProductUpdateDto(name, price, description, imageUrl, categoryId);
+        public ProductIn.Update toProductInUpdate() {
+            return new ProductIn.Update(name, price, description, imageUrl, categoryId);
         }
     }
 
