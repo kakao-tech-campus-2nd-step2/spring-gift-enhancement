@@ -2,100 +2,125 @@ package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.*;
 
 import gift.product.dto.CategoryDto;
 import gift.product.model.Category;
+import gift.product.repository.CategoryRepository;
 import gift.product.service.CategoryService;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class CategoryServiceTest {
 
-    @Autowired
+    @Mock
+    CategoryRepository categoryRepository;
+
+    @InjectMocks
     CategoryService categoryService;
 
     @Test
     void 카테고리_추가() {
         //given
-        CategoryDto categoryDto = new CategoryDto("테스트카테고리1");
+        CategoryDto categoryDto = new CategoryDto("테스트카테고리");
+        given(categoryRepository.findByName(categoryDto.name())).willReturn(Optional.empty());
 
         //when
-        Category insertedCategory = categoryService.insertCategory(categoryDto);
+        categoryService.insertCategory(categoryDto);
 
         //then
-        assertThat(insertedCategory.getId()).isNotNull();
+        then(categoryRepository).should().save(any());
     }
 
     @Test
     void 카테고리_조회() {
         //given
-        CategoryDto categoryDto = new CategoryDto("테스트카테고리1");
-        Category insertedCategory = categoryService.insertCategory(categoryDto);
+        CategoryDto categoryDto = new CategoryDto("테스트카테고리");
+        given(categoryRepository.findByName(categoryDto.name())).willReturn(Optional.empty());
+        given(categoryRepository.save(any())).willReturn(new Category(1L, categoryDto.name()));
+        Long insertedCategoryId = categoryService.insertCategory(categoryDto).getId();
+
+        given(categoryRepository.findById(insertedCategoryId)).willReturn(Optional.of(new Category(insertedCategoryId, categoryDto.name())));
 
         //when
-        Category category = categoryService.getCategory(insertedCategory.getId());
+        categoryService.getCategory(insertedCategoryId);
 
         //then
-        assertThat(category.getId()).isEqualTo(insertedCategory.getId());
+        then(categoryRepository).should().findById(insertedCategoryId);
     }
 
     @Test
     void 카테고리_전체_조회() {
-        //given
-        CategoryDto categoryDto1 = new CategoryDto("테스트카테고리1");
-        CategoryDto categoryDto2 = new CategoryDto("테스트카테고리2");
-        categoryService.insertCategory(categoryDto1);
-        categoryService.insertCategory(categoryDto2);
-
         //when
-        List<Category> categories = categoryService.getCategoryAll();
+        categoryService.getCategoryAll();
 
         //then
-        assertThat(categories).hasSize(2);
+        then(categoryRepository).should().findAll();
     }
 
     @Test
     void 카테고리_수정() {
         //given
-        CategoryDto categoryDto = new CategoryDto("테스트카테고리1");
-        Category insertedCategory = categoryService.insertCategory(categoryDto);
+        CategoryDto categoryDto = new CategoryDto("테스트카테고리");
+        given(categoryRepository.findByName(categoryDto.name())).willReturn(Optional.empty());
+        given(categoryRepository.save(any())).willReturn(new Category(1L, categoryDto.name()));
+        Long insertedCategoryId = categoryService.insertCategory(categoryDto).getId();
+        clearInvocations(categoryRepository);
+
+        given(categoryRepository.findById(insertedCategoryId)).willReturn(
+            Optional.of(new Category(insertedCategoryId, categoryDto.name())));
 
         //when
-        CategoryDto updatedCategoryDto = new CategoryDto("테스트카테고리2");
-        Category updatedCategory = categoryService.updateCategory(insertedCategory.getId(),
-            updatedCategoryDto);
+        CategoryDto updatedCategoryDto = new CategoryDto("테스트카테고리수정");
+        categoryService.updateCategory(insertedCategoryId, updatedCategoryDto);
 
         //then
-        assertThat(updatedCategory.getName()).isEqualTo(updatedCategoryDto.name());
+        then(categoryRepository).should().save(any());
     }
 
     @Test
     void 카테고리_삭제() {
         //given
-        CategoryDto categoryDto = new CategoryDto("테스트카테고리1");
-        Category insertedCategory = categoryService.insertCategory(categoryDto);
+        CategoryDto categoryDto = new CategoryDto("테스트카테고리");
+        given(categoryRepository.findByName(categoryDto.name())).willReturn(Optional.empty());
+        given(categoryRepository.save(any())).willReturn(new Category(1L, categoryDto.name()));
+        Long insertedCategoryId = categoryService.insertCategory(categoryDto).getId();
+        clearInvocations(categoryRepository);
+
+        given(categoryRepository.findById(insertedCategoryId)).willReturn(
+            Optional.of(new Category(insertedCategoryId, categoryDto.name())));
 
         //when
-        categoryService.deleteCategory(insertedCategory.getId());
+        categoryService.deleteCategory(insertedCategoryId);
 
         //then
-        assertThatThrownBy(
-            () -> categoryService.getCategory(insertedCategory.getId())).isInstanceOf(
-            NoSuchElementException.class);
+        then(categoryRepository).should().deleteById(insertedCategoryId);
     }
 
     @Test
     void 존재하지_않는_카테고리_조회() {
+        //given
+        given(categoryRepository.findById(-1L)).willReturn(
+            Optional.empty());
+
+        //when, then
         assertThatThrownBy(() -> categoryService.getCategory(-1L)).isInstanceOf(
             NoSuchElementException.class);
     }
@@ -103,8 +128,13 @@ class CategoryServiceTest {
     @Test
     void 이미_존재하는_카테고리_추가() {
         //given
-        CategoryDto categoryDto = new CategoryDto("테스트카테고리1");
-        categoryService.insertCategory(categoryDto);
+        CategoryDto categoryDto = new CategoryDto("테스트카테고리");
+        given(categoryRepository.findByName(categoryDto.name())).willReturn(Optional.empty());
+        given(categoryRepository.save(any())).willReturn(new Category(1L, categoryDto.name()));
+        Long insertedCategoryId = categoryService.insertCategory(categoryDto).getId();
+
+        given(categoryRepository.findByName(categoryDto.name())).willReturn(
+            Optional.of(new Category(insertedCategoryId, categoryDto.name())));
 
         //when, then
         assertThatThrownBy(
