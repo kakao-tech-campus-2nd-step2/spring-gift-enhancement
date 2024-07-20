@@ -7,7 +7,9 @@ import gift.domain.entity.Product;
 import gift.domain.exception.conflict.OptionAlreadyExistsInProductException;
 import gift.domain.exception.notFound.OptionNotFoundException;
 import gift.domain.repository.OptionRepository;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +24,7 @@ public class OptionService {
 
     // request가 기존 상품 옵션들과 겹치지 않음을 검증하기
     private void validateOptionIsUniqueInProduct(Product product, OptionRequest request) {
-        product.getOptions().stream()
+        Objects.requireNonNullElse(product.getOptions(), new ArrayList<Option>()).stream()
             .filter(o -> o.getName().equals(request.name()))
             .findAny()
             .ifPresent(o -> {
@@ -52,6 +54,17 @@ public class OptionService {
     public Option addOption(Product product, OptionRequest request) {
         validateOptionIsUniqueInProduct(product, request);
         return optionRepository.save(request.toEntity(product));
+    }
+
+    @Transactional
+    public List<Option> addOptions(Product product, List<OptionRequest> request) {
+        request.forEach(req -> {
+            if (request.stream().filter(req2 -> req2.name().equals(req.name())).count() != 1) {
+                throw new OptionAlreadyExistsInProductException();
+            }
+            optionRepository.save(req.toEntity(product));
+        });
+        return optionRepository.findAllByProduct(product);
     }
 
     @Transactional

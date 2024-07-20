@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,6 +43,7 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = new ArrayList<>();
     }
 
     protected Product() {

@@ -1,5 +1,7 @@
 package gift.domain.exception;
 
+import gift.domain.exception.badRequest.BadRequestException;
+import gift.domain.exception.badRequest.ProductOptionsEmptyException;
 import gift.domain.exception.conflict.CategoryAlreadyExistsException;
 import gift.domain.exception.conflict.CategoryHasProductsException;
 import gift.domain.exception.conflict.ConflictException;
@@ -79,5 +81,12 @@ public class GlobalExceptionHandler {
     })
     public ResponseEntity<ErrorApiResponse> handleUnauthorizedException(UnauthorizedException e) {
         return ErrorApiResponse.unauthorized(e);
+    }
+
+    @ExceptionHandler({
+        ProductOptionsEmptyException.class
+    })
+    public ResponseEntity<ErrorApiResponse> handleBadRequestException(BadRequestException e) {
+        return ErrorApiResponse.of(e, HttpStatus.BAD_REQUEST);
     }
 }

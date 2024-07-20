@@ -6,6 +6,7 @@ import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.OptionResponse;
 import gift.domain.dto.response.ProductResponse;
 import gift.domain.entity.Product;
+import gift.domain.exception.badRequest.ProductOptionsEmptyException;
 import gift.domain.exception.conflict.ProductAlreadyExistsException;
 import gift.domain.exception.notFound.ProductNotFoundException;
 import gift.domain.repository.ProductRepository;
@@ -52,7 +53,14 @@ public class ProductService {
         productRepository.findByContents(requestDto).ifPresent((p) -> {
             throw new ProductAlreadyExistsException();});
 
-        return ProductResponse.of(productRepository.save(requestDto.toEntity(categoryService)));
+        //상품 옵션이 하나도 없는 경우 예외 발생
+        if (requestDto.options().isEmpty()) {
+            throw new ProductOptionsEmptyException();
+        }
+
+        Product product = productRepository.save(requestDto.toEntity(categoryService));
+        product.getOptions().addAll(optionService.addOptions(product, requestDto.options()));
+        return ProductResponse.of(product);
     }
 
     @Transactional
