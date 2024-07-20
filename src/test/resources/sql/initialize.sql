@@ -1,4 +1,6 @@
 DELETE
+FROM options;
+DELETE
 FROM wishes;
 DELETE
 FROM products;
