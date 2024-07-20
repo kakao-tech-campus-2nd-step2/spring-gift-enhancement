@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.constants.Messages;
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.OptionRequest;
 import gift.dto.request.ProductRequest;
@@ -20,12 +21,10 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
-    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService, OptionService optionService) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
-        this.optionService = optionService;
     }
 
     @Transactional
@@ -34,10 +33,8 @@ public class ProductService {
             throw new ProductOptionRequiredException(Messages.PRODUCT_OPTION_REQUIRED);
         }
         Category category = categoryService.findById(productRequest.categoryId()).toEntity();
-        Product savedProduct = productRepository.save(productRequest.toEntity(category));
-
-        // option 저장
-        optionService.save(savedProduct.getId(), optionRequest);
+        Option option = new Option(optionRequest.name(), optionRequest.quantity());
+        productRepository.save(productRequest.toEntity(category, option));
     }
 
     @Transactional(readOnly = true)
