@@ -13,7 +13,7 @@ public class Wishlist {
     private Long id;
     private String email;
 
-    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductWishlist> productWishlist = new ArrayList<>();
 
     public Wishlist() {
