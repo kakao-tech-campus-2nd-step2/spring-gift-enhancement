@@ -22,7 +22,6 @@ public class Wish {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     public Wish() {
