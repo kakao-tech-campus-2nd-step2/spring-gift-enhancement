@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
     private final WishlistRepository wishlistRepository;
@@ -26,7 +25,6 @@ public class MemberService {
         this.wishlistRepository = wishlistRepository;
     }
 
-    @Transactional
     public Long join(MemberJoinCommand command) {
         return memberRepository.save(command.toMember()).getId();
     }
