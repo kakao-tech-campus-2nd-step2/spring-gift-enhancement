@@ -23,7 +23,7 @@ public class OptionKeeperService {
                 .filter(it->it.getName().equals(name))
                 .findFirst()
                 .ifPresent(it -> { // 옵션이 존재할 경우
-                    throw new DataIntegrityViolationException("이미 해당 상품내에 동일한 이름의 옵션이 존재합니다");
+                    throw new OptionValidationException("이미 해당 상품내에 동일한 이름의 옵션이 존재합니다");
                 });
     }
 
