@@ -1,8 +1,6 @@
 package gift.product.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -11,13 +9,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import gift.product.dto.MemberDTO;
-import gift.product.exception.LoginFailedException;
 import gift.product.model.Member;
 import gift.product.repository.MemberRepository;
 import gift.product.util.JwtUtil;
 import gift.product.validation.MemberValidation;
 import java.util.Map;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
