@@ -2,6 +2,7 @@ package gift.domain.service;
 
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
+import gift.domain.dto.response.OptionResponse;
 import gift.domain.dto.response.ProductResponse;
 import gift.domain.entity.Product;
 import gift.domain.exception.conflict.ProductAlreadyExistsException;
@@ -32,6 +33,13 @@ public class ProductService {
     public List<ProductResponse> getAllProducts() {
         return productRepository.findAll().stream()
             .map(ProductResponse::of)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<OptionResponse> getOptionsByProductId(Long id) {
+        return getProductById(id).getOptions().stream()
+            .map(OptionResponse::of)
             .toList();
     }
 
