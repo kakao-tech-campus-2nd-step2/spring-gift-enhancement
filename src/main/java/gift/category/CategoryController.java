@@ -1,7 +1,7 @@
 package gift.category;
 
-import gift.category.model.CategoryRequestDto;
-import gift.category.model.CategoryResponseDto;
+import gift.category.model.CategoryRequest;
+import gift.category.model.CategoryResponse;
 import gift.common.model.PageResponseDto;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -29,30 +29,29 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponseDto<CategoryResponseDto>> getAllCategories(
+    public ResponseEntity<PageResponseDto<CategoryResponse>> getAllCategories(
         @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok()
-            .body(PageResponseDto.of(categoryService.getAllCategories(pageable), pageable));
+        return ResponseEntity.ok(
+            PageResponseDto.of(categoryService.getAllCategories(pageable), pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponseDto> getCategory(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok()
-            .body(categoryService.getCategoryById(id));
+    public ResponseEntity<CategoryResponse> getCategory(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @PostMapping
     public ResponseEntity<Void> addCategory(
-        @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
-        Long id = categoryService.insertCategory(categoryRequestDto);
+        @Valid @RequestBody CategoryRequest categoryRequest) {
+        Long id = categoryService.insertCategory(categoryRequest);
         return ResponseEntity.created(URI.create("/api/categories/" + id)).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCategory(
-        @Valid @RequestBody CategoryRequestDto categoryRequestDto,
+        @Valid @RequestBody CategoryRequest categoryRequest,
         @PathVariable(name = "id") Long id) {
-        categoryService.updateCategory(categoryRequestDto, id);
+        categoryService.updateCategory(categoryRequest, id);
         return ResponseEntity.ok().build();
     }
 

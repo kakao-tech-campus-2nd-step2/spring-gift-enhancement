@@ -1,6 +1,7 @@
 package gift.service;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -12,7 +13,8 @@ import gift.product.ProductRepository;
 import gift.product.model.Product;
 import gift.wish.WishRepository;
 import gift.wish.WishService;
-import gift.wish.model.WishRequestDto;
+import gift.wish.model.Wish;
+import gift.wish.model.WishRequest;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,27 +53,34 @@ public class WishServiceTest {
     void addProductTest() {
         given(productRepository.findById(any())).willReturn(Optional.of(
             new Product("gamza", 1000, "gamza.jpg", new Category("식품", "##111", "식품.jpg", "식품"))));
-        WishRequestDto wishRequestDto = getWishRequestDto();
+        WishRequest wishRequest = getWishRequestDto();
         LoginMemberDto loginMemberDto = getLoginMemberDto();
 
-        wishService.addProductToWishList(wishRequestDto, loginMemberDto);
+        wishService.addProductToWishList(wishRequest, loginMemberDto);
 
         then(wishRepository).should().save(any());
     }
 
     @Test
     void updateWishTest() {
-        //더티 체킹
+        Wish wish = new Wish(new Member(1L, "member1@example.com", "member1", "user"), null, 1);
+        given(wishRepository.findById(any())).willReturn(Optional.of(wish));
+        WishRequest wishRequest = getWishRequestDto();
+        LoginMemberDto loginMemberDto = getLoginMemberDto();
+
+        wishService.updateProductInWishList(1L, wishRequest, loginMemberDto);
+
+        assertThat(wish.getCount()).isEqualTo(3);
     }
 
     @Test
     void deleteWishTest() {
-        WishRequestDto wishRequestDto = getWishRequestDto();
+        given(wishRepository.findById(any())).willReturn(Optional.of(new Wish(new Member(1L, "email", "name", "role"), null, 1)));
         LoginMemberDto loginMemberDto = getLoginMemberDto();
 
-        wishService.deleteProductInWishList(wishRequestDto, loginMemberDto);
+        wishService.deleteProductInWishList(1L, loginMemberDto);
 
-        then(wishRepository).should().deleteByMemberIdAndProductId(any(), any());
+        then(wishRepository).should().deleteById(any());
     }
 
     private LoginMemberDto getLoginMemberDto() {
@@ -79,10 +88,9 @@ public class WishServiceTest {
             new Member(1L, "member1@example.com", "member1", "user"));
     }
 
-    private WishRequestDto getWishRequestDto() {
-        WishRequestDto wishRequestDto = new WishRequestDto();
-        wishRequestDto.setProductId(1L);
-        return wishRequestDto;
+    private WishRequest getWishRequestDto() {
+        WishRequest wishRequest = new WishRequest(1L, 3);
+        return wishRequest;
     }
 
 

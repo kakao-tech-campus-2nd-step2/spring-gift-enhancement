@@ -1,8 +1,8 @@
 package gift.product;
 
 import gift.common.exception.ProductException;
-import gift.product.model.ProductRequestDto;
-import gift.product.model.ProductResponseDto;
+import gift.product.model.ProductRequest;
+import gift.product.model.ProductResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,42 +31,41 @@ public class AdminController {
     @GetMapping
     public String getAllProducts(Model model,
         @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
-        Page<ProductResponseDto> productList = productService.getAllProducts(pageable);
+        Page<ProductResponse> productList = productService.getAllProducts(pageable);
         model.addAttribute("productList", productList);
         return "products";
     }
 
     @GetMapping("/add")
     public String addProductForm(Model model) {
-        model.addAttribute("productRequestDto", new ProductRequestDto());
         return "add-product-form";
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid @ModelAttribute ProductRequestDto productRequestDto,
+    public String addProduct(@Valid @ModelAttribute ProductRequest.Create create,
         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "add-product-form";
         }
-        productService.insertProduct(productRequestDto);
+        productService.insertProduct(create);
         return "redirect:/admin/products";
     }
 
     @GetMapping("/edit/{id}")
     public String updateProductForm(@PathVariable("id") Long id, Model model) {
         model.addAttribute("productRequestDto",
-            ProductRequestDto.from(productService.getProductById(id)));
+            ProductRequest.Update.from(productService.getProductById(id)));
         return "modify-product-form";
     }
 
     @PostMapping("edit/{id}")
     public String updateProduct(@PathVariable("id") Long id,
-        @Valid @ModelAttribute ProductRequestDto productRequestDto,
+        @Valid @ModelAttribute ProductRequest.Update update,
         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "modify-product-form";
         }
-        productService.updateProductById(id, productRequestDto);
+        productService.updateProductById(id, update);
         return "redirect:/admin/products";
     }
 

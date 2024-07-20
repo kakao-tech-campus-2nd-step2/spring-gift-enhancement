@@ -1,8 +1,9 @@
 package gift.member;
 
 import gift.common.auth.LoginMemberDto;
+import gift.common.exception.MemberException;
 import gift.member.model.Member;
-import gift.member.model.MemberRequestDto;
+import gift.member.model.MemberRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,15 +17,15 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public LoginMemberDto selectLoginMemberById(Long id) {
+    public LoginMemberDto selectLoginMemberById(Long id) throws MemberException {
         return memberRepository.findById(id)
             .map(LoginMemberDto::from)
-            .orElseThrow(() -> new IllegalArgumentException("member 값이 잘못되었습니다."));
+            .orElseThrow(() -> new MemberException(MemberErrorCode.FAILURE_LOGIN));
     }
 
     @Transactional
-    public Long insertMember(MemberRequestDto memberRequestDto) {
-        Member member = memberRepository.save(memberRequestDto.toEntity());
+    public Long insertMember(MemberRequest memberRequest) {
+        Member member = memberRepository.save(memberRequest.toEntity());
         return member.getId();
     }
 }

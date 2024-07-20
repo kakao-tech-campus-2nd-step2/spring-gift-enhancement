@@ -2,7 +2,7 @@ package gift.etoe;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.member.model.MemberRequestDto;
+import gift.member.model.MemberRequest;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ class MemberEndToEndTest {
     @Test
     void register() {
         var url = "http://localhost:" + port + "/api/members/register";
-        var request = new MemberRequestDto("member2@example.com", "password2", "member2", "user");
+        var request = new MemberRequest("member2@example.com", "password2", "member2", "user");
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
 
         var actual = restTemplate.exchange(requestEntity, String.class);
@@ -37,7 +37,7 @@ class MemberEndToEndTest {
     @Test
     void login() {
         var url = "http://localhost:" + port + "/api/members/register";
-        var request = new MemberRequestDto("member1@example.com", "password", "member1", "user");
+        var request = new MemberRequest("member1@example.com", "password", "member1", "user");
         var requestEntity = new RequestEntity<>(request, HttpMethod.POST, URI.create(url));
         restTemplate.exchange(requestEntity, String.class);
 

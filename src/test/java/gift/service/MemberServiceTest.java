@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.then;
 import gift.member.MemberRepository;
 import gift.member.MemberService;
 import gift.member.model.Member;
-import gift.member.model.MemberRequestDto;
+import gift.member.model.MemberRequest;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ public class MemberServiceTest {
     void insertMemberTest() {
         given(memberRepository.save(any())).willReturn(new Member("test", "test", "test", "test"));
 
-        memberService.insertMember(new MemberRequestDto("test", "test", "test", "test"));
+        memberService.insertMember(new MemberRequest("test", "test", "test", "test"));
 
         then(memberRepository).should().save(any());
     }

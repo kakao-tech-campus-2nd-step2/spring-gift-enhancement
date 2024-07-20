@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.category.model.CategoryRequestDto;
-import gift.member.model.MemberRequestDto;
-import gift.product.model.ProductRequestDto;
+import gift.category.model.CategoryRequest;
+import gift.member.model.MemberRequest;
+import gift.option.model.OptionRequest;
+import gift.product.model.ProductRequest.Create;
 import java.net.URI;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,7 +49,7 @@ class ProductEndToEndTest {
 
     private HttpHeaders getToken() throws JsonProcessingException {
         var tokenUrl = "http://localhost:" + port + "/api/members/register";
-        var tokenRequest = new MemberRequestDto("member1@example.com", "password", "member1",
+        var tokenRequest = new MemberRequest("member1@example.com", "password", "member1",
             "user");
         var tokenRequestEntity = new RequestEntity<>(tokenRequest, HttpMethod.POST,
             URI.create(tokenUrl));
@@ -61,7 +63,7 @@ class ProductEndToEndTest {
 
     private void addProduct(String name, Integer price, String imageUrl, String url,
         HttpHeaders headers) {
-        var expected = new ProductRequestDto(name, price, imageUrl, 1L);
+        var expected = new Create(name, price, imageUrl, 1L, List.of(new OptionRequest("option", 1)));
         var expected1RequestEntity = new RequestEntity<>(expected, headers, HttpMethod.POST,
             URI.create(url));
         restTemplate.exchange(expected1RequestEntity, String.class);
@@ -69,7 +71,7 @@ class ProductEndToEndTest {
 
     private void saveCategory(HttpHeaders headers) {
         var categoryUrl = "http://localhost:" + port + "/api/categories";
-        var categoryRequest = new CategoryRequestDto("test", "##test", "test.jpg", "test");
+        var categoryRequest = new CategoryRequest("test", "##test", "test.jpg", "test");
         var categoryRequestEntity = new RequestEntity<>(categoryRequest, headers, HttpMethod.POST,
             URI.create(categoryUrl));
         var categoryResponseEntity = restTemplate.exchange(categoryRequestEntity, String.class);

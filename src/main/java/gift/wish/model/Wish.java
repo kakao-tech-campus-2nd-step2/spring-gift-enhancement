@@ -1,8 +1,10 @@
 package gift.wish.model;
 
+import gift.common.exception.WishException;
 import gift.common.model.BaseEntity;
 import gift.member.model.Member;
 import gift.product.model.Product;
+import gift.wish.WishErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -43,5 +45,11 @@ public class Wish extends BaseEntity {
 
     public void changeCount(Integer count) {
         this.count = count;
+    }
+
+    public void validateMember(Long memberId) throws WishException {
+        if (!member.getId().equals(memberId)) {
+            throw new WishException(WishErrorCode.NOT_FOUND);
+        }
     }
 }

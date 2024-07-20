@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.test.annotation.DirtiesContext;
 
 @DataJpaTest
 class ProductRepositoryTest {
@@ -49,5 +50,21 @@ class ProductRepositoryTest {
         List<Product> actual = productRepository.findAll(
             PageRequest.of(0, 10, Sort.by(Direction.ASC, "id"))).getContent();
         assertThat(actual).containsExactly(expected1, expected2);
+    }
+
+    @Test
+    void 카테고리를_사용하는_PRODUCT가_존재하는_경우() {
+        Product product = new Product("kimchi", 5000, "kimchi.jpg", category);
+        productRepository.save(product);
+
+        boolean actual = productRepository.existsByCategoryId(1L);
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    @DirtiesContext
+    void 카테고리를_사용하는_PRODUCT가_존재하지_않는_경우() {
+        boolean actual = productRepository.existsByCategoryId(1L);
+        assertThat(actual).isFalse();
     }
 }

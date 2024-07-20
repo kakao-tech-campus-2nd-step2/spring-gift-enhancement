@@ -1,5 +1,6 @@
 package gift.common.exception;
 
+import gift.option.model.Option;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,12 +19,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductException.class)
     public ResponseEntity<String> handleProductException(ProductException productException) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(productException.getMessage());
+        return ResponseEntity.status(productException.getHttpStatus())
+            .body(productException.getMessage());
     }
 
     @ExceptionHandler(MemberException.class)
     public ResponseEntity<String> handleMemberException(MemberException memberException) {
-        return ResponseEntity.status(memberException.getMemberErrorCode().getHttpStatus())
+        return ResponseEntity.status(memberException.getHttpStatus())
             .body(memberException.getMessage());
+    }
+
+    @ExceptionHandler(CategoryException.class)
+    public ResponseEntity<String> handleCategoryException(CategoryException categoryException) {
+        return ResponseEntity.status(categoryException.getHttpStatus())
+            .body(categoryException.getMessage());
+    }
+
+    @ExceptionHandler(OptionException.class)
+    public ResponseEntity<String> handleOptionException(OptionException optionException) {
+        return ResponseEntity.status(optionException.getHttpStatus())
+            .body(optionException.getMessage());
     }
 }

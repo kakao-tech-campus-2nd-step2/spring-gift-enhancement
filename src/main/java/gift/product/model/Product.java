@@ -58,6 +58,7 @@ public class Product extends BaseEntity {
     }
 
     public void updateInfo(String name, Integer price, String imageUrl, Category category) {
+        validateKakaoWord(name);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;

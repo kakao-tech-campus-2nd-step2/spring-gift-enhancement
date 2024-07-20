@@ -6,10 +6,10 @@
 <body>
 <h1>상품 페이지</h1>
 <form
-    th:action="@{/admin/products/edit/{id}(id = ${productRequestDto.id})}"
-    th:object="${productRequestDto}" method="post">
+    th:action="@{/admin/products/edit/{id}(id = ${create.id})}"
+    th:object="${create}" method="post">
     <h3>상품 정보 수정</h3>
-    <p>ID: <span th:text="${productRequestDto.id}"></span></p>
+    <p>ID: <span th:text="${create.id}"></span></p>
     <p>Name: <input type="text" th:field="*{name}"></p>
     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
     <p>Price: <input type="number" th:field="*{price}"></p>

@@ -1,6 +1,7 @@
 package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.category.CategoryRepository;
@@ -12,6 +13,8 @@ import gift.product.model.Product;
 import gift.wish.WishRepository;
 import gift.wish.model.Wish;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +85,7 @@ class WishRepositoryTest {
         wishRepository.save(expected);
 
         Wish actual = wishRepository.findByMemberIdAndProductId(expectedMember.getId(),
-            expectedProduct1.getId());
+            expectedProduct1.getId()).orElseThrow();
 
         assertAll(
             () -> assertThat(actual.getMember().getId()).isEqualTo(expectedMember.getId()),
@@ -101,9 +104,9 @@ class WishRepositoryTest {
         wishRepository.deleteByMemberIdAndProductId(expected.getMember().getId(),
             expected.getProduct().getId());
 
-        Wish actual = wishRepository.findByMemberIdAndProductId(expected.getMember().getId(),
-            expected.getProduct().getId());
-        assertThat(actual).isNull();
+        Optional<Wish> actual = wishRepository.findByMemberIdAndProductId(expectedMember.getId(), expectedProduct1.getId());
+
+        assertThat(actual).isEmpty();
     }
 
     private Wish createWish(Member expectedMember, Product expectedProduct) {

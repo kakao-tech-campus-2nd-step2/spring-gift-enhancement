@@ -1,8 +1,8 @@
 package gift.product;
 
 import gift.common.model.PageResponseDto;
-import gift.product.model.ProductRequestDto;
-import gift.product.model.ProductResponseDto;
+import gift.product.model.ProductRequest;
+import gift.product.model.ProductResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import org.springframework.data.domain.Pageable;
@@ -29,31 +29,29 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponseDto<ProductResponseDto>> getAllProducts(
+    public ResponseEntity<PageResponseDto<ProductResponse>> getAllProducts(
         @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok()
-            .body(
-                PageResponseDto.of(productService.getAllProducts(pageable).getContent(), pageable));
+        return ResponseEntity.ok(
+            PageResponseDto.of(productService.getAllProducts(pageable).getContent(), pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> getProduct(@PathVariable("id") Long id) {
-        return ResponseEntity.ok()
-            .body(productService.getProductById(id));
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PostMapping
     public ResponseEntity<Void> addProduct(
-        @Valid @RequestBody ProductRequestDto productRequestDto) {
-        Long productId = productService.insertProduct(productRequestDto);
+        @Valid @RequestBody ProductRequest.Create create) {
+        Long productId = productService.insertProduct(create);
         return ResponseEntity.created(URI.create("/api/products/" + productId)).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateProduct(
-        @Valid @RequestBody ProductRequestDto productRequestDto,
+        @Valid @RequestBody ProductRequest.Update update,
         @PathVariable("id") Long id) {
-        productService.updateProductById(id, productRequestDto);
+        productService.updateProductById(id, update);
         return ResponseEntity.ok().build();
     }
 

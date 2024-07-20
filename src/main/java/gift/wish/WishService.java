@@ -1,11 +1,14 @@
 package gift.wish;
 
 import gift.common.auth.LoginMemberDto;
+import gift.common.exception.ProductException;
+import gift.common.exception.WishException;
+import gift.product.ProductErrorCode;
 import gift.product.ProductRepository;
 import gift.product.model.Product;
 import gift.wish.model.Wish;
-import gift.wish.model.WishRequestDto;
-import gift.wish.model.WishResponseDto;
+import gift.wish.model.WishRequest;
+import gift.wish.model.WishResponse;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,39 +26,42 @@ public class WishService {
     }
 
     @Transactional(readOnly = true)
-    public List<WishResponseDto> getWishList(LoginMemberDto loginMemberDto, Pageable pageable) {
+    public List<WishResponse> getWishList(LoginMemberDto loginMemberDto, Pageable pageable) {
         return wishRepository.findAllByMemberId(loginMemberDto.getId(),
                 pageable)
-            .map(WishResponseDto::from)
+            .map(WishResponse::from)
             .getContent();
     }
 
     @Transactional
-    public Long addProductToWishList(WishRequestDto wishRequestDto, LoginMemberDto loginMemberDto) {
-        Product product = productRepository.findById(wishRequestDto.getProductId())
-            .orElseThrow(() -> new IllegalArgumentException("Wish 값이 잘못되었습니다."));
-        Wish wish = new Wish(loginMemberDto.toEntity(), product, wishRequestDto.getCount());
+    public Long addProductToWishList(WishRequest wishRequest, LoginMemberDto loginMemberDto)
+        throws ProductException {
+        Product product = productRepository.findById(wishRequest.productId())
+            .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
+        Wish wish = new Wish(loginMemberDto.toEntity(), product, wishRequest.count());
         wishRepository.save(wish);
         return wish.getId();
     }
 
     @Transactional
-    public void updateProductInWishList(WishRequestDto wishRequestDto,
-        LoginMemberDto loginMemberDto) {
-        if (wishRequestDto.isCountZero()) {
-            wishRepository.deleteByMemberIdAndProductId(loginMemberDto.getId(),
-                wishRequestDto.getProductId());
+    public void updateProductInWishList(Long wishId, WishRequest wishRequest,
+        LoginMemberDto loginMemberDto) throws WishException {
+        Wish wish = wishRepository.findById(wishId)
+            .orElseThrow(() -> new WishException(WishErrorCode.NOT_FOUND));
+        wish.validateMember(loginMemberDto.getId());
+        if (wishRequest.isCountZero()) {
+            wishRepository.deleteById(wishId);
             return;
         }
-        Wish wish = wishRepository.findByMemberIdAndProductId(loginMemberDto.getId(),
-            wishRequestDto.getProductId());
-        wish.changeCount(wishRequestDto.getCount());
+        wish.changeCount(wishRequest.count());
     }
 
     @Transactional
-    public void deleteProductInWishList(WishRequestDto wishRequestDto,
-        LoginMemberDto loginMemberDto) {
-        wishRepository.deleteByMemberIdAndProductId(loginMemberDto.getId(),
-            wishRequestDto.getProductId());
+    public void deleteProductInWishList(Long wishId,
+        LoginMemberDto loginMemberDto) throws WishException {
+        Wish wish = wishRepository.findById(wishId)
+            .orElseThrow(() -> new WishException(WishErrorCode.NOT_FOUND));
+        wish.validateMember(loginMemberDto.getId());
+        wishRepository.deleteById(wishId);
     }
 }

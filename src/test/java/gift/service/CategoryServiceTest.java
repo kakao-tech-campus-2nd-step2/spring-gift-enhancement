@@ -1,5 +1,7 @@
 package gift.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -7,7 +9,8 @@ import static org.mockito.BDDMockito.then;
 import gift.category.CategoryRepository;
 import gift.category.CategoryService;
 import gift.category.model.Category;
-import gift.category.model.CategoryRequestDto;
+import gift.category.model.CategoryRequest;
+import gift.product.ProductRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,11 +29,14 @@ public class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private ProductRepository productRepository;
+
     private CategoryService categoryService;
 
     @BeforeEach
     void setup() {
-        categoryService = new CategoryService(categoryRepository);
+        categoryService = new CategoryService(productRepository, categoryRepository);
     }
 
     @Test
@@ -56,17 +62,27 @@ public class CategoryServiceTest {
     @Test
     void insertCategoryTest() {
         given(categoryRepository.save(any())).willReturn(
-            new Category(1L, "test", "##test", "test.jpg", "test"));
+            new Category( "test", "##test", "test.jpg", "test"));
 
         categoryService.insertCategory(
-            new CategoryRequestDto("test", "##test", "test.jpg", "test"));
+            new CategoryRequest("test", "##test", "test.jpg", "test"));
 
         then(categoryRepository).should().save(any());
     }
 
     @Test
     void updateCategoryTest() {
-        //더티 체킹
+        Category category = new Category( "test", "##test", "test.jpg", "test");
+        given(categoryRepository.findById(any())).willReturn(Optional.of(category));
+
+        categoryService.updateCategory(new CategoryRequest("test1", "##test1", "test1.jpg", "test1"), 1L);
+
+        assertAll(
+            ()->assertThat(category.getName()).isEqualTo("test1"),
+            ()->assertThat(category.getColor()).isEqualTo("##test1"),
+            ()->assertThat(category.getImageUrl()).isEqualTo("test1.jpg"),
+            ()->assertThat(category.getDescription()).isEqualTo("test1")
+        );
     }
 
     @Test

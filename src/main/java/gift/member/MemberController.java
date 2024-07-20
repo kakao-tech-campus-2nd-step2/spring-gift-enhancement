@@ -1,8 +1,8 @@
 package gift.member;
 
 import gift.common.auth.AuthService;
-import gift.member.model.MemberRequestDto;
-import gift.member.model.MemberResponseDto;
+import gift.member.model.MemberRequest;
+import gift.member.model.MemberResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +24,16 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<MemberResponseDto> register(
-        @Valid @RequestBody MemberRequestDto memberRequestDto) {
-        Long memberId = memberService.insertMember(memberRequestDto);
+    public ResponseEntity<MemberResponse> register(
+        @Valid @RequestBody MemberRequest memberRequest) {
+        Long memberId = memberService.insertMember(memberRequest);
         return ResponseEntity.created(URI.create("/api/members/" + memberId))
-            .body(authService.getToken(memberRequestDto));
+            .body(authService.getToken(memberRequest));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MemberResponseDto> login(
-        @Valid @RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok()
-            .body(authService.getToken(memberRequestDto));
+    public ResponseEntity<MemberResponse> login(
+        @Valid @RequestBody MemberRequest memberRequest) {
+        return ResponseEntity.ok(authService.getToken(memberRequest));
     }
 }
