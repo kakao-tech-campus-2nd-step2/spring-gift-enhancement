@@ -89,20 +89,6 @@ public class Product extends BaseEntity {
         this.category = category;
     }
 
-    public void addOption(Option option) {
-        this.options.add(option);
-        option.setProduct(this);
-    }
-
-    public void removeOption(Option option) {
-        this.options.remove(option);
-        option.setProduct(null);
-    }
-
-    public Set<Option> getOptions() {
-        return options;
-    }
-
     public void setOptions(Set<Option> options) {
         this.options = options;
     }
