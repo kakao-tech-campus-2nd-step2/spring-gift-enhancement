@@ -5,9 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.category.model.CategoryRequest;
+import gift.common.model.PageResponseDto;
 import gift.member.model.MemberRequest;
 import gift.option.model.OptionRequest;
 import gift.product.model.ProductRequest.Create;
+import gift.product.model.ProductResponse;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -16,9 +18,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class ProductEndToEndTest {
@@ -41,9 +45,13 @@ class ProductEndToEndTest {
         addProduct("goguma", 1000, "goguma.jpg", url, headers);
 
         var requestEntity = new RequestEntity<>(headers, HttpMethod.GET, URI.create(url));
-        var actual = restTemplate.exchange(requestEntity, String.class);
+        var actual = restTemplate.exchange(
+            requestEntity,
+            new ParameterizedTypeReference<PageResponseDto<ProductResponse>>() {
+            });
         assertThat(actual.getBody()).isEqualTo(
-            "{\"response\":[{\"id\":1,\"name\":\"gamza\",\"price\":500,\"imageUrl\":\"gamza.jpg\",\"categoryId\":1},{\"id\":2,\"name\":\"goguma\",\"price\":1000,\"imageUrl\":\"goguma.jpg\",\"categoryId\":1}],\"pageNumber\":0,\"pageSize\":10}"
+            new PageResponseDto<>(List.of(new ProductResponse(1L, "gamza", 500, "gamza.jpg", 1L),
+                new ProductResponse(2L, "goguma", 1000, "goguma.jpg", 1L)), 0, 10)
         );
     }
 
@@ -63,7 +71,8 @@ class ProductEndToEndTest {
 
     private void addProduct(String name, Integer price, String imageUrl, String url,
         HttpHeaders headers) {
-        var expected = new Create(name, price, imageUrl, 1L, List.of(new OptionRequest("option", 1)));
+        var expected = new Create(name, price, imageUrl, 1L,
+            List.of(new OptionRequest("option", 1)));
         var expected1RequestEntity = new RequestEntity<>(expected, headers, HttpMethod.POST,
             URI.create(url));
         restTemplate.exchange(expected1RequestEntity, String.class);
