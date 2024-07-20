@@ -59,3 +59,14 @@ Option
 - [X] 상품 옵션 등록 페이지 추가
 - [X] 상품 옵션 변경 페이지 추가
 - [X] 상품 옵션 삭제 기능 추가
+
+## step3
+### 기능 요구 사항
+상품 옵션의 수량을 지정된 숫자만큼 빼는 기능을 구현한다.
+- 별도의 HTTP API를 만들 필요는 없다.
+- 서비스 클래스 또는 엔티티 클래스에서 기능을 구현하고 나중에 사용할 수 있도록 한다.
+
+### 구현 기능 목록
+- [ ] option entity에 subtract 메서드 구현
+- [ ] option Service에 subtractQuantity 메서드 구현
+- [ ] option Service의 subtractQuantity 테스트 코드 작성
