@@ -52,6 +52,33 @@
       <button type="submit" class="btn btn-warning">수정</button>
     </div>
   </form>
+  <hr>
+  <h2 class="mt-4">옵션 목록</h2>
+  <a th:href="@{'/admin/products/' + ${product.id} + '/options/new'}" class="btn btn-primary mb-3">새 옵션 추가</a>
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+    <tr>
+      <th>ID</th>
+      <th>이름</th>
+      <th>수량</th>
+      <th>수정/삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="option : ${options}">
+      <td th:text="${option.id}">ID</td>
+      <td th:text="${option.name}">Name</td>
+      <td th:text="${option.quantity}">Quantity</td>
+      <td>
+        <a th:href="@{'/admin/products/' + ${product.id} + '/options/' + ${option.id} + '/edit'}" class="btn btn-warning btn-sm">수정</a>
+        <form th:action="@{'/admin/products/' + ${product.id} + '/options/' + ${option.id}}" method="post" style="display:inline">
+          <input type="hidden" name="_method" value="delete">
+          <button type="submit" class="btn btn-danger btn-sm deleteBtn">삭제</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 </body>
 

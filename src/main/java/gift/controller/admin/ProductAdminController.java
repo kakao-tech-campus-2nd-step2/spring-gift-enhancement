@@ -1,10 +1,14 @@
 package gift.controller.admin;
 
 import gift.dto.category.CategoryResponse;
+import gift.dto.option.OptionCreateRequest;
+import gift.dto.option.OptionResponse;
+import gift.dto.option.OptionUpdateRequest;
 import gift.dto.product.ProductCreateRequest;
 import gift.dto.product.ProductResponse;
 import gift.dto.product.ProductUpdateRequest;
 import gift.service.CategoryService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -29,10 +33,16 @@ public class ProductAdminController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
-    public ProductAdminController(ProductService productService, CategoryService categoryService) {
+    public ProductAdminController(
+        ProductService productService,
+        CategoryService categoryService,
+        OptionService optionService
+    ) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     @GetMapping
@@ -73,8 +83,10 @@ public class ProductAdminController {
     public String showEditProductForm(@PathVariable("id") Long id, Model model) {
         ProductResponse productResponse = productService.getProductById(id);
         List<CategoryResponse> categories = categoryService.getAllCategories();
+        List<OptionResponse> options = optionService.getOptionsByProductId(id);
         model.addAttribute("categories", categories);
         model.addAttribute("product", productResponse);
+        model.addAttribute("options", options);
         return "product_edit";
     }
 
@@ -99,5 +111,61 @@ public class ProductAdminController {
     public String deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
         return "redirect:/admin/products";
+    }
+
+    @GetMapping("/{id}/options/new")
+    public String showAddOptionForm(@PathVariable Long id, Model model) {
+        model.addAttribute("option", new OptionCreateRequest("", 0));
+        model.addAttribute("productId", id);
+        return "option_form";
+    }
+
+    @PostMapping("/{id}/options")
+    public String addOption(
+        @PathVariable Long id,
+        @Valid @ModelAttribute("option") OptionCreateRequest optionCreateRequest,
+        BindingResult result,
+        Model model
+    ) {
+        if (result.hasErrors()) {
+            model.addAttribute("productId", id);
+            return "option_form";
+        }
+        optionService.addOptionToProduct(id, optionCreateRequest);
+        return "redirect:/admin/products/" + id + "/edit";
+    }
+
+    @GetMapping("/{productId}/options/{optionId}/edit")
+    public String showEditOptionForm(
+        @PathVariable Long productId,
+        @PathVariable Long optionId, Model model
+    ) {
+        OptionResponse optionResponse = optionService.getOptionById(productId, optionId);
+        model.addAttribute("option", optionResponse);
+        model.addAttribute("productId", productId);
+        return "option_edit";
+    }
+
+    @PutMapping("/{productId}/options/{optionId}")
+    public String updateOption(
+        @PathVariable Long productId,
+        @PathVariable Long optionId,
+        @Valid @ModelAttribute OptionUpdateRequest optionUpdateRequest,
+        BindingResult result,
+        Model model
+    ) {
+        if (result.hasErrors()) {
+            model.addAttribute("option", optionUpdateRequest);
+            model.addAttribute("productId", productId);
+            return "option_edit";
+        }
+        optionService.updateOption(productId, optionId, optionUpdateRequest);
+        return "redirect:/admin/products/" + productId + "/edit";
+    }
+
+    @DeleteMapping("/{productId}/options/{optionId}")
+    public String deleteOption(@PathVariable Long productId, @PathVariable Long optionId) {
+        optionService.deleteOption(productId, optionId);
+        return "redirect:/admin/products/" + productId + "/edit";
     }
 }
