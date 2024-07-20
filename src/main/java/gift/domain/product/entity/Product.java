@@ -1,7 +1,6 @@
 package gift.domain.product.entity;
 
 import gift.exception.DuplicateOptionNameException;
-import gift.exception.InvalidOptionInfoException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,14 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapKey;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Entity
 @Table
@@ -97,10 +92,11 @@ public class Product {
     }
 
     public void validateOption(Option option) {
-        for (Option o : options) {
-            if (o.getName().equals(option.getName())) {
+        options.stream()
+            .filter(existingOption -> existingOption.getName().equals(option.getName()))
+            .findFirst()
+            .ifPresent(sameNameOption -> {
                 throw new DuplicateOptionNameException("error.duplicate.option.name");
-            }
-        }
+            });
     }
 }
