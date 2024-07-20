@@ -1,19 +1,20 @@
 package gift.product.controller;
 
-import gift.option.domain.Option;
-import gift.option.domain.OptionRequest;
 import gift.product.model.Product;
 import gift.product.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.beans.PropertyEditorSupport;
-import java.util.List;
 
 @Controller
 @RequestMapping("/products")
+@Validated
 // crud를 진행하고 다시 api/products로 보내는 역할
 public class ProductController {
     private final ProductService productService;
@@ -22,19 +23,9 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                setValue(text == null || text.trim().isEmpty() ? null : text);
-            }
-        });
-    }
-
     // 1. product create
     @PostMapping
-    public String createProduct(@ModelAttribute Product product) {
+    public String createProduct(@Valid @ModelAttribute Product product) {
         productService.createProduct(product, product.getCategory().getId());
         return "redirect:/api/products";
     }

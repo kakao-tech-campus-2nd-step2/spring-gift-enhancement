@@ -9,7 +9,7 @@
 
 <form th:action="@{/products}" th:object="${product}" method="post">
     <label>name : <input type="text" th:field="*{name}" /></label>
-    <label>price : <input type="text" th:field="*{price}" /></label>
+    <label>price : <input type="number" th:field="*{price}" step="1" /></label>
     <label>imageurl: <input type="text" th:field="*{imageUrl}" /></label>
     <label>category:
         <select th:field="*{category.id}">

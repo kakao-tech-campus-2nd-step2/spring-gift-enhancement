@@ -4,6 +4,8 @@ import gift.category.model.Category;
 import gift.option.domain.Option;
 import gift.wish.model.Wish;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,8 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
+    @NotNull(message = "Price는 null일 수 없습니다.")
+    @Range(min = 0, message = "Price는 0 이상이어야 합니다.")
     private Integer price;
 
     @Column(nullable = false)

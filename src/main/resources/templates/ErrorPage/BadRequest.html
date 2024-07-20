@@ -7,8 +7,8 @@
 <body>
 <h1>ERROR!!!!</h1>
 <div>
-    <p th:each="error : ${validationErrors}" th:text="${error.value}"></p>
+    <p th:text="${errorMessage}"></p>
 </div>
-<a href="/products" class="button">상품 정보 페이지로 돌아가기</a>
+<a href="/api/products" class="button">상품 정보 페이지로 돌아가기</a>
 </body>
 </html>
