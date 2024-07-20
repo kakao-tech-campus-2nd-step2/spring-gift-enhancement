@@ -21,7 +21,7 @@ public class Options {
     }
 
     public void validateOptionSize() throws OptionException {
-        if(options.size() <= 1) {
+        if (options.size() <= 1) {
             throw new OptionException(OptionErrorCode.OPTION_COUNT_ONE);
         }
     }

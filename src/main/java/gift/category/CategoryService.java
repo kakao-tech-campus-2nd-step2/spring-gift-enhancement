@@ -16,7 +16,8 @@ public class CategoryService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public CategoryService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public CategoryService(ProductRepository productRepository,
+        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
@@ -37,7 +38,8 @@ public class CategoryService {
 
     @Transactional
     public Long insertCategory(CategoryRequest categoryRequest) {
-        Category category = new Category(categoryRequest.name(), categoryRequest.color(), categoryRequest.imageUrl(), categoryRequest.description());
+        Category category = new Category(categoryRequest.name(), categoryRequest.color(),
+            categoryRequest.imageUrl(), categoryRequest.description());
         category = categoryRepository.save(category);
         return category.getId();
     }
@@ -46,12 +48,13 @@ public class CategoryService {
     public void updateCategory(CategoryRequest categoryRequest, Long id) throws CategoryException {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
-        category.updateInfo(categoryRequest.name(), categoryRequest.color(), categoryRequest.imageUrl(), categoryRequest.description());
+        category.updateInfo(categoryRequest.name(), categoryRequest.color(),
+            categoryRequest.imageUrl(), categoryRequest.description());
     }
 
     @Transactional
     public void deleteCategory(Long id) throws CategoryException {
-        if(productRepository.existsByCategoryId(id)){
+        if (productRepository.existsByCategoryId(id)) {
             throw new CategoryException(CategoryErrorCode.CAN_NOT_DELETE);
         }
         categoryRepository.deleteById(id);
