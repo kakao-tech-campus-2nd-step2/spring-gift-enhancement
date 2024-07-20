@@ -90,4 +90,9 @@ public class ProductOptionService {
 
         productOptionRepository.delete(option);
     }
+
+    @Transactional
+    public void deleteAllOptionsByProductId(Long productId) {
+        productOptionRepository.deleteAllByProductId(productId);
+    }
 }
