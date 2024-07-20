@@ -24,6 +24,10 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany
+    @JoinColumn(name = "product_id")
+    private List<ProductOption> productOptions = new ArrayList<>();
+
 
     public Product() {
     }

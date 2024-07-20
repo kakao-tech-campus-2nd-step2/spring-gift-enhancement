@@ -15,12 +15,33 @@ CREATE TABLE wishlist
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
+CREATE TABLE category
+(
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(255) NOT NULL,
+    color       VARCHAR(7)   NOT NULL,
+    description VARCHAR(255),
+    image_url   VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE product
 (
-    product_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name       VARCHAR(255) NOT NULL,
+    product_id  BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(255) NOT NULL,
     price DOUBLE NOT NULL,
-    image_url  VARCHAR(255) NOT NULL
+    image_url   VARCHAR(255) NOT NULL,
+    category_id BIGINT       NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES category (id)
+);
+
+CREATE TABLE product_option
+(
+    product_option_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name              VARCHAR(255) NOT NULL,
+    price DOUBLE NOT NULL,
+    product_id        BIGINT       NOT NULL,
+    quentity          BIGINT       NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
 
 CREATE TABLE wishlist_product
@@ -30,15 +51,4 @@ CREATE TABLE wishlist_product
     product_id          BIGINT NOT NULL,
     FOREIGN KEY (wishlist_id) REFERENCES wishlist (wishlist_id),
     FOREIGN KEY (product_id) REFERENCES product (product_id)
-);
-
-
-create table category
-(
-    color       varchar(7)   not null,
-    id          bigint       not null auto_increment,
-    description varchar(255),
-    image_url   varchar(255) not null,
-    name        varchar(255) not null,
-    primary key (id)
 );
