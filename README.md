@@ -21,6 +21,16 @@ option.subtract(quantity)
 - [ ] Repository 에서 값을 가져올때 예외처리 구현 => 테스트에서 할일임 
 - [ ] 단위테스트 구현 
 
+### 추가 개선사항 : step2  코드리뷰 반영 
+- [ ] sql 하이버네이트 로그에서 뜨는 오류 해결
+- [ ] Dto에서 도메인 Entity를 의존하지 않도록 코드 변경 
+  - [ ] ProductResponseDto
+  - [ ] 그외
+- [ ] Service 에서 Entity 를 반환하는것이 아닌, Response 객체를 반환하도록 
+  - [ ] OptionService 
+  - [ ] 그외
+- [ ] 테스트 코드 돌아가도록 수정 
+
 ### 코드리뷰 개선사항 :step1 
 - [x] Controller 단에서 상태코드를 포함해서 반환 
 - [x] UserResponseDto 가 도메인 계층 Member 를 의존 중 -> 변환은 서비스 로직에서 처리 !!! 
