@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.List;
 
 @Entity
 public class Option {
@@ -53,8 +54,8 @@ public class Option {
         return product;
     }
 
-    public void validateDuplicated(Option other) throws OptionException {
-        if (name.equals(other.getName())) {
+    public void validateDuplicated(List<Option> options) throws OptionException {
+        if (options.stream().anyMatch(option -> option.name.equals(name))) {
             throw new OptionException(OptionErrorCode.NAME_DUPLICATED);
         }
     }

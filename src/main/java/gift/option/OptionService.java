@@ -36,12 +36,9 @@ public class OptionService {
     public Long addOption(Long productId, OptionRequest optionRequest)
         throws ProductException, OptionException {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ProductException(
-                ProductErrorCode.NOT_FOUND));
-        Options options = new Options(optionRepository.findAllByProductId(productId));
+            .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
         Option option = new Option(optionRequest.name(), optionRequest.quantity(), product);
-        options.validateDuplicated(option);
-        option = optionRepository.save(option);
+        option.validateDuplicated(optionRepository.findAllByProductId(productId));
         return option.getId();
     }
 
@@ -49,8 +46,7 @@ public class OptionService {
     public void updateOption(Long optionId, OptionRequest optionRequest) throws OptionException {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
-        Options options = new Options(optionRepository.findAllByProductId(option.getProduct().getId()));
-        options.validateDuplicated(option);
+        option.validateDuplicated(optionRepository.findAllByProductId(option.getProduct().getId()));
         option.updateInfo(optionRequest.name(), optionRequest.quantity());
     }
 
@@ -58,7 +54,8 @@ public class OptionService {
     public void deleteOption(Long optionId) {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
-        Options options = new Options(optionRepository.findAllByProductId(option.getProduct().getId()));
+        Options options = new Options(
+            optionRepository.findAllByProductId(option.getProduct().getId()));
         options.validateOptionSize();
         optionRepository.deleteById(optionId);
     }

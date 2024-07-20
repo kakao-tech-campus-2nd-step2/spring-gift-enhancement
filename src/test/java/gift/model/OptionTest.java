@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import gift.common.exception.OptionException;
 import gift.option.model.Option;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class OptionTest {
@@ -14,7 +15,7 @@ class OptionTest {
         Option option = new Option("test", 1, null);
 
         assertThatExceptionOfType(OptionException.class).isThrownBy(
-            () -> option.validateDuplicated(new Option("test", 1, null)));
+            () -> option.validateDuplicated(List.of(new Option("test", 1, null))));
     }
 
     @Test

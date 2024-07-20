@@ -12,10 +12,6 @@ public class Options {
         this.options = options;
     }
 
-    public void validateDuplicated(Option option) throws OptionException {
-        options.forEach(it -> it.validateDuplicated(option));
-    }
-
     public void validateOptionSize() throws OptionException {
         if (options.size() <= 1) {
             throw new OptionException(OptionErrorCode.OPTION_COUNT_ONE);
