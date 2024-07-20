@@ -1,7 +1,9 @@
-package gift.config;
+package gift.resolver;
 
-import gift.exception.InvalidTokenException;
-import gift.exception.MissingTokenException;
+import gift.config.JwtProvider;
+import gift.config.LoginMember;
+import gift.exception.ErrorCode;
+import gift.exception.GiftException;
 import gift.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
@@ -14,10 +16,12 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
     private final MemberService memberService;
     private final JwtProvider jwtProvider;
+    private final AuthHeaderManager authHeaderManager;
 
-    public LoginMemberArgumentResolver(MemberService memberService, JwtProvider jwtProvider) {
+    public LoginMemberArgumentResolver(MemberService memberService, JwtProvider jwtProvider, AuthHeaderManager authHeaderManager) {
         this.memberService = memberService;
         this.jwtProvider = jwtProvider;
+        this.authHeaderManager = authHeaderManager;
     }
 
     @Override
@@ -29,16 +33,10 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        String token = request.getHeader("Authorization");
-
-        if (token == null || !token.startsWith(jwtProvider.PREFIX)) {
-            throw new MissingTokenException();
-        }
-
-        token = token.replace(jwtProvider.PREFIX, "");
+        String token = authHeaderManager.extractToken(request);
 
         if (!jwtProvider.isVerified(token)) {
-            throw new InvalidTokenException();
+            throw new GiftException(ErrorCode.INVALID_TOKEN);
         }
 
         Long memberId = Long.parseLong(jwtProvider.getClaims(token).getSubject());

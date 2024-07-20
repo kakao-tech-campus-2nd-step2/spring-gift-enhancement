@@ -2,7 +2,7 @@ package gift.domain;
 
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import gift.request.ProductRequest;
+import gift.dto.request.ProductUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +70,7 @@ class ProductRepositoryTest {
         Product savedProduct = productRepository.save(product);
         Long productId = savedProduct.getId();
 
-        ProductRequest request = new ProductRequest("망고 스무디", 5000, "https://test.com", category.getId());
+        ProductUpdateRequest request = new ProductUpdateRequest("망고 스무디", 5000, "https://test.com", category.getId());
 
         //when
         savedProduct.changeName(request.getName());

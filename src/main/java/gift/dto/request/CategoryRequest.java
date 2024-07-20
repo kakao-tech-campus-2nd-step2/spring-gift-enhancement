@@ -1,4 +1,4 @@
-package gift.request;
+package gift.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;

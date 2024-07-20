@@ -1,4 +1,4 @@
-package gift.response;
+package gift.dto.response;
 
 public class JwtResponse {
 

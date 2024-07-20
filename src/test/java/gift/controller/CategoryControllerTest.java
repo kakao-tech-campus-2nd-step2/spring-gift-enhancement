@@ -1,7 +1,7 @@
 package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gift.request.CategoryRequest;
+import gift.dto.CategoryDto;
 import gift.service.CategoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,9 +53,9 @@ class CategoryControllerTest {
     @Test
     void categoryAdd() throws Exception {
         //given
-        CategoryRequest request = new CategoryRequest("교환권");
+        CategoryDto request = new CategoryDto("교환권");
 
-        willDoNothing().given(categoryService).addCategory(any(CategoryRequest.class));
+        willDoNothing().given(categoryService).addCategory(any(CategoryDto.class));
 
         //when
         ResultActions result = mvc.perform(post("/api/categories")
@@ -66,7 +66,7 @@ class CategoryControllerTest {
         result
                 .andExpect(status().isCreated());
 
-        then(categoryService).should().addCategory(any(CategoryRequest.class));
+        then(categoryService).should().addCategory(any(CategoryDto.class));
     }
 
     @DisplayName("[PUT] 카테고리 정보를 수정한다.")
@@ -74,9 +74,9 @@ class CategoryControllerTest {
     void categoryEdit() throws Exception {
         //given
         Long categoryId = 1L;
-        CategoryRequest request = new CategoryRequest("교환권");
+        CategoryDto request = new CategoryDto("교환권");
 
-        willDoNothing().given(categoryService).editCategory(anyLong(), any(CategoryRequest.class));
+        willDoNothing().given(categoryService).editCategory(anyLong(), any(CategoryDto.class));
 
         //when
         ResultActions result = mvc.perform(put("/api/categories/{categoryId}", categoryId)
@@ -87,7 +87,7 @@ class CategoryControllerTest {
         result
                 .andExpect(status().isOk());
 
-        then(categoryService).should().editCategory(anyLong(), any(CategoryRequest.class));
+        then(categoryService).should().editCategory(anyLong(), any(CategoryDto.class));
     }
 
     @DisplayName("[DELETE] 카테고리 하나를 삭제한다.")

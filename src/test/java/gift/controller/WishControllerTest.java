@@ -3,7 +3,7 @@ package gift.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.config.JwtProvider;
 import gift.domain.member.Member;
-import gift.request.WishCreateRequest;
+import gift.dto.request.WishCreateRequest;
 import gift.service.MemberService;
 import gift.service.WishService;
 import io.jsonwebtoken.Claims;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -58,7 +57,7 @@ class WishControllerTest {
         given(jwtProvider.isVerified(anyString())).willReturn(true);
         given(memberService.getMember(anyLong())).willReturn(new Member());
 
-        given(wishService.getProducts(any(Member.class), any(Pageable.class))).willReturn(new PageImpl<>(List.of()));
+        given(wishService.getProducts(any(Member.class), any(Pageable.class))).willReturn(List.of());
 
         //when
         ResultActions result = mvc.perform(get("/api/wishes")

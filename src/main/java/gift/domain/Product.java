@@ -1,7 +1,12 @@
 package gift.domain;
 
-import gift.response.ProductResponse;
+import gift.exception.ErrorCode;
+import gift.dto.ProductDto;
+import gift.exception.GiftException;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -23,6 +28,9 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
+
     public Product() {
     }
 
@@ -38,12 +46,16 @@ public class Product {
         return price;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public ProductResponse toDto() {
-        return new ProductResponse(this.getId(), this.getName(), this.getPrice(),
+    public ProductDto toDto() {
+        return new ProductDto(this.getId(), this.getName(), this.getPrice(),
                 this.getImageUrl());
     }
 
@@ -72,6 +84,31 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public void addOption(Option option) {
+        option.setProduct(this);
+        options.add(option);
+    }
+
+    public void validateOptionNameUnique(String optionName) {
+        if (options.stream().anyMatch(option -> option.getName().equals(optionName))) {
+            throw new GiftException(ErrorCode.DUPLICATE_OPTION);
+        }
+    }
+
+    public void removeOptionById(Long optionId) {
+        boolean optionExists = options.stream().anyMatch(option -> option.getId().equals(optionId));
+
+        if (!optionExists) {
+            throw new GiftException(ErrorCode.OPTION_NOT_FOUND);
+        }
+
+        if (options.size() == 1) {
+            throw new GiftException(ErrorCode.AT_LEAST_ONE_OPTION_REQUIRED);
+        }
+
+        options.removeIf(option -> option.getId().equals(optionId));
     }
 
 }

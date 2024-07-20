@@ -1,7 +1,8 @@
 package gift.controller;
 
-import gift.request.CategoryRequest;
-import gift.response.CategoryResponse;
+import gift.dto.CategoryDto;
+import gift.dto.request.CategoryRequest;
+import gift.dto.response.CategoryResponse;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,13 +23,20 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> categoryList() {
+        List<CategoryDto> categoryDtoList = categoryService.getCategories();
+        List<CategoryResponse> categoryResponseList = categoryDtoList.stream()
+                .map(CategoryDto::toResponseDto)
+                .toList();
+
         return ResponseEntity.ok()
-                .body(categoryService.getCategories());
+                .body(categoryResponseList);
     }
 
     @PostMapping
     public ResponseEntity<Void> categoryAdd(@RequestBody @Valid CategoryRequest request) {
-        categoryService.addCategory(request);
+        CategoryDto categoryDto = new CategoryDto(request.getName());
+
+        categoryService.addCategory(categoryDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
@@ -36,7 +44,8 @@ public class CategoryController {
 
     @PutMapping("/{categoryId}")
     public ResponseEntity<Void> categoryEdit(@PathVariable Long categoryId, @RequestBody @Valid CategoryRequest request) {
-        categoryService.editCategory(categoryId, request);
+        CategoryDto categoryDto = new CategoryDto(request.getName());
+        categoryService.editCategory(categoryId, categoryDto);
 
         return ResponseEntity.ok()
                 .build();

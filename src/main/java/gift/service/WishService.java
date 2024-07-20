@@ -1,16 +1,14 @@
 package gift.service;
 
+import gift.exception.ErrorCode;
 import gift.domain.Product;
 import gift.domain.Wish;
 import gift.domain.member.Member;
-import gift.exception.ProductAlreadyInWishlistException;
-import gift.exception.ProductNotFoundException;
-import gift.exception.ProductNotInWishlistException;
+import gift.dto.ProductDto;
+import gift.exception.GiftException;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
-import gift.response.ProductResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,23 +25,21 @@ public class WishService {
         this.productRepository = productRepository;
     }
 
-    public Page<ProductResponse> getProducts(Member member, Pageable pageable) {
+    public List<ProductDto> getProducts(Member member, Pageable pageable) {
         Page<Wish> wishes = wishRepository.findByMember(member, pageable);
 
-        List<ProductResponse> response = wishes.stream()
+        return wishes.stream()
                 .map(Wish::getProduct)
                 .map(Product::toDto)
                 .toList();
-
-        return new PageImpl<>(response, pageable, response.size());
     }
 
     public void addProduct(Member member, Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
 
         if (wishRepository.existsByMemberIdAndProductId(member.getId(), productId)) {
-            throw new ProductAlreadyInWishlistException();
+            throw new GiftException(ErrorCode.PRODUCT_ALREADY_IN_WISHLIST);
         }
 
         Wish wish = new Wish(member, product);
@@ -53,12 +49,12 @@ public class WishService {
 
     public void removeProduct(Member member, Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
 
         Wish wish = wishRepository.findByMemberAndProduct(member, product)
-                .orElseThrow(ProductNotInWishlistException::new);
+                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_IN_WISHLIST));
 
         wishRepository.delete(wish);
     }
-    
+
 }

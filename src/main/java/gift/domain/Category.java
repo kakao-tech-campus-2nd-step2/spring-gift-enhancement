@@ -1,6 +1,6 @@
 package gift.domain;
 
-import gift.response.CategoryResponse;
+import gift.dto.CategoryDto;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ public class Category {
         this.name = name;
     }
 
-    public CategoryResponse toDto() {
-        return new CategoryResponse(this.id, this.name);
+    public CategoryDto toDto() {
+        return new CategoryDto(this.id, this.name);
     }
 
     public Category(String name) {

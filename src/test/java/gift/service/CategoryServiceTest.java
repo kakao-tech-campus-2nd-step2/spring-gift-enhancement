@@ -1,8 +1,8 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.dto.CategoryDto;
 import gift.repository.CategoryRepository;
-import gift.request.CategoryRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,13 +43,13 @@ class CategoryServiceTest {
     @Test
     void addCategory() throws Exception {
         //given
-        CategoryRequest request = new CategoryRequest("교환권");
+        CategoryDto dto = new CategoryDto("교환권");
 
         given(categoryRepository.save(any(Category.class))).willReturn(new Category());
         given(categoryRepository.existsByName(anyString())).willReturn(false);
 
         //when
-        categoryService.addCategory(request);
+        categoryService.addCategory(dto);
 
         //then
         then(categoryRepository).should().save(any(Category.class));
@@ -61,13 +61,13 @@ class CategoryServiceTest {
     void editCategory() throws Exception {
         //given
         Long categoryId = 1L;
-        CategoryRequest request = new CategoryRequest("교환권");
+        CategoryDto dto = new CategoryDto("교환권");
 
         given(categoryRepository.findById(categoryId)).willReturn(Optional.of(new Category("상품권")));
         given(categoryRepository.existsByName(anyString())).willReturn(false);
 
         //when
-        categoryService.editCategory(categoryId, request);
+        categoryService.editCategory(categoryId, dto);
 
         //then
         then(categoryRepository).should().findById(categoryId);

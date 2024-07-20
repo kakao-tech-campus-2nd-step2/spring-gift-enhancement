@@ -1,12 +1,12 @@
-package gift.request;
+package gift.dto.request;
 
-import gift.validation.product.KakaoNotAllowed;
+import gift.validation.KakaoNotAllowed;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
-public class ProductRequest {
+public class ProductUpdateRequest {
 
     @NotBlank
     @Length(max = 15)
@@ -23,7 +23,7 @@ public class ProductRequest {
     @NotNull
     private Long categoryId;
 
-    public ProductRequest(String name, Integer price, String imageUrl, Long categoryId) {
+    public ProductUpdateRequest(String name, Integer price, String imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
