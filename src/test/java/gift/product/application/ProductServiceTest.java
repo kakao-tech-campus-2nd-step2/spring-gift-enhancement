@@ -144,13 +144,15 @@ public class ProductServiceTest {
         Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
         Option option1 = new Option(1L, "Option1", 10);
         Option option2 = new Option(2L, "Option2", 20);
+        OptionUpdateCommand newOption1 = new OptionUpdateCommand(1L, "newOption1", 100);
+        OptionUpdateCommand newOption2 = new OptionUpdateCommand(2L, "newOption2", 200);
         ProductUpdateCommand updateCommand = new ProductUpdateCommand(
                 1L,
                 "UpdatedProduct",
                 2000,
                 "http://example.com/image2.jpg",
                 newCategory.getId(),
-                List.of(new OptionUpdateCommand(1L, "Option1", 10), new OptionUpdateCommand(2L, "Option2", 20))
+                List.of(newOption1, newOption2)
         );
 
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
@@ -169,7 +171,10 @@ public class ProductServiceTest {
         assertThat(product.getImageUrl()).isEqualTo("http://example.com/image2.jpg");
         assertThat(product.getCategory()).isEqualTo(newCategory);
         assertThat(product.getOptions()).hasSize(2);
-        assertThat(product.getOptions().get(0).getQuantity()).isEqualTo(10);
+        assertThat(product.getOptions().get(0).getQuantity()).isEqualTo(100);
+        assertThat(product.getOptions().get(1).getQuantity()).isEqualTo(200);
+        assertThat(product.getOptions().get(0).getName()).isEqualTo("newOption1");
+        assertThat(product.getOptions().get(1).getName()).isEqualTo("newOption2");
     }
 
     @Test
