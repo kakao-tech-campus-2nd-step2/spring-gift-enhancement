@@ -58,4 +58,12 @@ public class OptionService {
         }
         targetOption.subtract(subtractQuantity);
     }
+
+    @Transactional
+    public void updateOptionName(Long targetOptionId, String changedName) {
+        Option targetOption = optionRepository.findById(targetOptionId)
+                .orElseThrow(() -> new OptionNotFoundException(targetOptionId));
+
+        targetOption.updateName(changedName);
+    }
 }

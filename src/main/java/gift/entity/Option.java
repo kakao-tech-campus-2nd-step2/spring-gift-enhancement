@@ -45,4 +45,8 @@ public class Option {
     public void subtract(int quantity) {
         this.quantity -= quantity;
     }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
 }

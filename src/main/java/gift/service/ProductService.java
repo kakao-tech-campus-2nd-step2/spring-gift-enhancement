@@ -12,6 +12,8 @@ import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,9 +66,10 @@ public class ProductService {
         product.update(request.name(), request.price(), request.imageUrl(), category);
     }
 
+    @CacheEvict(cacheNames = "options", key = "#productId")
     @Transactional
-    public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id)
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
         productRepository.delete(product);
     }
@@ -97,10 +100,21 @@ public class ProductService {
         return new AddedOptionIdResponse(option.getId());
     }
 
-    @Cacheable (cacheNames = "options")
+    @Cacheable(cacheNames = "options", key = "#productId")
     @Transactional
     public List<String> getOptionNames(Long productId) {
         Product product = getProduct(productId);
+        return product.getOptions()
+                .stream()
+                .map(Option::getName)
+                .toList();
+    }
+
+    @CachePut(cacheNames = "options", key = "#productId")
+    @Transactional
+    public List<String> updateOptionNames(Long productId, Long optionId, String changedName) {
+        Product product = getProduct(productId);
+        optionService.updateOptionName(optionId, changedName);
         return product.getOptions()
                 .stream()
                 .map(Option::getName)
