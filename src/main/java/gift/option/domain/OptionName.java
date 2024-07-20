@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 @Embeddable
 public class OptionName {
-    private static final int MAX_LENGTH = 50;
-    private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣 ()\\[\\]+\\-&/_]*$");
+    public static final int MAX_LENGTH = 50;
+    public static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣 ()\\[\\]+\\-&/_]*$");
 
     @Column(name = "name")
     private String optionNameValue;
