@@ -40,9 +40,10 @@ public class Product {
     @JsonProperty("category")
     private Category category;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<Option> options = new ArrayList<>();
-
 
     // 기본 생성자
     public Product() {

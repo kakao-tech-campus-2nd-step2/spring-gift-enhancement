@@ -7,6 +7,7 @@ import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
+import gift.repository.ProductRepository;
 import gift.service.CategoryService;
 import gift.service.OptionService;
 import gift.service.ProductService;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/products")
 public class ProductController {
+
     @Autowired
     private final ProductService productService;
     @Autowired
@@ -37,14 +39,19 @@ public class ProductController {
     private OptionService optionService;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
-    public ProductController( ProductService productService, CategoryService categoryService ) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
         this.categoryService = categoryService;
     }
 
     @GetMapping
-    public String getProducts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, Model model) {
+
+    public String getProducts(@RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size, Model model) {
+
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productService.getAllProducts(pageable);
         List<Category> categories = categoryService.getAllCategories();
@@ -81,29 +88,50 @@ public class ProductController {
 
     @PostMapping("/update")
     public String updateProduct(@RequestParam String name,
-        @RequestParam int price,
-        @RequestParam String imageUrl,
-        @RequestParam Long categoryId,@ModelAttribute Product product, RedirectAttributes redirectAttributes) {
+                                @RequestParam int price,
+                                @RequestParam String imageUrl,
+                                @RequestParam Long categoryId,
+                                @ModelAttribute Product product,
+                                @ModelAttribute Option option,
+                                @RequestParam("optionNames") List<String> optionNames,
+                                @RequestParam("optionQuantities") List<Long> optionQuantities,
+                                RedirectAttributes redirectAttributes) {
+
+        List<Option> options = new ArrayList<>();
         Category category = categoryService.getCategoryById(categoryId);
-        Product updatedproduct = new Product(name, price, imageUrl, category);
-        productService.updateProduct(product.getId(), updatedproduct);
+        Product product1 = new Product(name, price, imageUrl, category);
+        for (int i = 0; i < optionNames.size(); i++) {
+            Option newOption = new Option(optionNames.get(i), optionQuantities.get(i), product1);
+            options.add(newOption);
+        }
+
+        options.stream().forEach(eachOptions -> optionService.updateOption(option.getId(),eachOptions));
+
+
+
+        product1.setOptions(options);
+        productService.updateProduct(product.getId(), product1);
+
+
         redirectAttributes.addFlashAttribute("message", "Product updated successfully!");
         return "redirect:/products";
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    public String deleteProduct(@PathVariable("id") Long id,
+        RedirectAttributes redirectAttributes) {
         productService.deleteProduct(id);
         redirectAttributes.addFlashAttribute("message", "Product deleted successfully!");
         return "redirect:/products";
     }
 
     @GetMapping("/view/{id}")
-    public String getProductDetails(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
+    public String getProductDetails(@PathVariable("id") Long id, Model model,
+        RedirectAttributes redirectAttributes) {
         Optional<Product> product = productService.getProductById(id);
         if (product.isPresent()) {
             List<Category> categories = categoryRepository.findAll();
-            model.addAttribute("product", product);
+            model.addAttribute("product", product.get());
             model.addAttribute("categories", categories);
             return "product-detail"; // product-details.html 뷰 반환
         } else {

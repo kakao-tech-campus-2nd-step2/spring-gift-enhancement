@@ -34,7 +34,6 @@ public class ProductService  {
     }
 
 
-
     public Product addProduct(Product product) {
         validateProduct(product);
         return productRepository.save(product);

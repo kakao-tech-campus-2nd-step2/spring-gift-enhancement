@@ -142,22 +142,31 @@
       document.getElementById('price').value = product.price;
       document.getElementById('imageUrl').value = product.imageUrl;
       document.getElementById('category').value = product.category.id;
-      // Clear existing options
-      const optionsDiv = document.getElementById('options');
-      optionsDiv.innerHTML = '';
 
-      // Add options
-      product.options.forEach((option, index) => {
-        const optionHtml = `
-          <div class="form-group">
-            <label for="optionName">Option Name</label>
-            <input type="text" class="form-control" name="optionNames" value="${option.name}" required pattern="[A-Za-z0-9\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_]{1,50}" />
-          </div>
-          <div class="form-group">
-            <label for="optionQuantity">Option Quantity</label>
+
+      // 옵션 추가
+      const options = product.options || [];
+      options.forEach(option => {
+        const optionContainer = document.createElement('div');
+        optionContainer.classList.add('option-group');
+
+        const optionNameDiv = document.createElement('div');
+        optionNameDiv.classList.add('form-group');
+        optionNameDiv.innerHTML = `
+            <label>Option Name</label>
+            <input type="text" class="form-control" name="optionNames" value="${option.optionName}" required pattern="[A-Za-z0-9\s\(\)\[\]\+\-\&\/_\u3131-\uD79D]{1,50}" />
+          `;
+        optionContainer.appendChild(optionNameDiv);
+
+        const optionQuantityDiv = document.createElement('div');
+        optionQuantityDiv.classList.add('form-group');
+        optionQuantityDiv.innerHTML = `
+            <label>Option Quantity</label>
             <input type="number" class="form-control" name="optionQuantities" value="${option.quantity}" required min="1" max="99999999" />
-          </div>`;
-        optionsDiv.insertAdjacentHTML('beforeend', optionHtml);
+          `;
+        optionContainer.appendChild(optionQuantityDiv);
+
+        optionsDiv.appendChild(optionContainer);
       });
 
       document.getElementById('productForm').action = `/products/update`;
