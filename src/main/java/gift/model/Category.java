@@ -35,6 +35,11 @@ public class Category {
         return name;
     }
 
+    public void setName(String name) {
+        validateName(name);
+        this.name = name;
+    }
+
     private void validateName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("카테고리 이름을 입력하세요.");

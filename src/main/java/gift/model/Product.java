@@ -52,16 +52,35 @@ public class Product {
         return name;
     }
 
+    public void setName(String name) {
+        validateName(name);
+        this.name = name;
+    }
+
     public String getPrice() {
         return price;
+    }
+
+    public void setPrice(String price) {
+        validatePrice(price);
+        this.price = price;
     }
 
     public Category getCategory() {
         return category;
     }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        validateImageUrl(imageUrl);
+        this.imageUrl = imageUrl;
     }
 
     private void validateName(String name) {
