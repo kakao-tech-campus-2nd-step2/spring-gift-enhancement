@@ -3,6 +3,8 @@ package gift.product;
 import gift.global.exception.custrom.NotFoundException;
 import gift.member.business.dto.JwtToken;
 import gift.member.presentation.dto.RequestMemberDto;
+import gift.product.business.dto.OptionIn;
+import gift.product.business.service.ProductService;
 import gift.product.persistence.entity.Category;
 import gift.product.persistence.entity.Option;
 import gift.product.persistence.entity.Product;
@@ -42,6 +44,9 @@ public class ProductControllerApiTest {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductService productService;
 
     private static HttpHeaders headers;
 
@@ -370,5 +375,25 @@ public class ProductControllerApiTest {
 
         //rollback
         productRepository.saveProduct(dummyProduct);
+    }
+
+    @Test
+    @Transactional
+    void testSubtractOption() {
+        //given
+        OptionIn.Subtract optionInSubtract = new OptionIn.Subtract(
+            dummyProduct.getOptions().getFirst().getId(),
+            1
+        );
+
+        //when
+        productService.subtractOption(optionInSubtract, dummyProduct.getId());
+
+        //then
+        assertThat(productRepository.getProductById(dummyProduct.getId())
+            .getOptions()
+            .getFirst()
+            .getQuantity())
+            .isEqualTo(9);
     }
 }
