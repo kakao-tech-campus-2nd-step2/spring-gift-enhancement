@@ -17,8 +17,9 @@ public class CreateProductRequestDTO {
     @Size(max = MAX_INPUT_LENGTH, message = "이미지 URL은 255자를 넘을 수 없습니다.")
     private String imageUrl;
 
-    @NotBlank(message = "색상은 필수 입력 값입니다.")
-    private String color;
+    @NotBlank(message = "카테고리는 필수 입력 값입니다.")
+    private String category;
+
 
     public String getName() {
         return name;
@@ -32,7 +33,7 @@ public class CreateProductRequestDTO {
         return imageUrl;
     }
 
-    public String getColor() {
-        return color;
+    public String getCategory() {
+        return category;
     }
 }

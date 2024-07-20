@@ -3,6 +3,8 @@ package gift.product.infra;
 import gift.product.domain.Category;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class CategoryRepository {
 
@@ -30,7 +32,7 @@ public class CategoryRepository {
                 .orElseThrow(() -> new IllegalArgumentException("해당 이름의 카테고리가 존재하지 않습니다."));
     }
 
-    public Object findAll() {
+    public List<Category> findAll() {
         return categoryJpaRepository.findAll();
     }
 }

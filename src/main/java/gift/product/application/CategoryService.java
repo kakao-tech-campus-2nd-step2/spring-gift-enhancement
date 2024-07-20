@@ -5,6 +5,9 @@ import gift.product.domain.CreateCategoryRequest;
 import gift.product.infra.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CategoryService {
 
@@ -18,13 +21,13 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
-    public Category addCategory(CreateCategoryRequest request) {
+    public void addCategory(CreateCategoryRequest request) {
         if (categoryRepository.findByName(request.getName()) != null) {
             throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
         }
         Category category = new Category(request.getName(), request.getDescription(), request.getImageUrl(), request.getColor());
 
-        return categoryRepository.save(category);
+        categoryRepository.save(category);
     }
 
     public void deleteById(Long id) {
@@ -35,7 +38,11 @@ public class CategoryService {
         return categoryRepository.findByName(name);
     }
 
-    public Object getCategory() {
+    public List<Category> getCategory() {
         return categoryRepository.findAll();
+    }
+
+    public Category getCategoryByName(String category) {
+        return Optional.ofNullable(categoryRepository.findByName(category)).orElseThrow(() -> new IllegalArgumentException("해당 이름의 카테고리가 존재하지 않습니다."));
     }
 }

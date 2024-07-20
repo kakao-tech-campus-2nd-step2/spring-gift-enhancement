@@ -1,5 +1,6 @@
 package gift.product.application;
 
+import gift.product.domain.Category;
 import gift.product.domain.CreateProductRequestDTO;
 import gift.product.domain.Product;
 import gift.product.exception.ProductException;
@@ -17,19 +18,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    public CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
+
 
     private static final int MAX_PRODUCT_NAME_LENGTH = 15;
     private static final String RESERVED_KEYWORD = "카카오";
 
     @Transactional
     public Long saveProduct(CreateProductRequestDTO createProductRequestDTO) {
+        Category category = categoryService.getCategoryByName(createProductRequestDTO.getCategory());
         Product product = new Product(createProductRequestDTO.getName(), createProductRequestDTO.getPrice(),
-                createProductRequestDTO.getImageUrl());
+                createProductRequestDTO.getImageUrl(), category);
         validateProduct(product);
+
         return productRepository.save(product).getId();
     }
 

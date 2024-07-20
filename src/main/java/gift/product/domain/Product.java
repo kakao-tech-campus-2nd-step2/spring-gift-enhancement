@@ -28,10 +28,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, Double price, String imageUrl) {
+    public Product(String name, Double price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
