@@ -16,20 +16,6 @@ public record OptionRequestDto(
     @Max(value = 99_999_999, message = "옵션 수량은 1억개 미만입니다.")
     @Min(value = 1, message = "옵션 수량은 최소 1개 이상입니다.")
     Integer quantity
-    ) {
+) {
 
-    public OptionRequestDto(String name, Integer quantity) {
-        this.name = name;
-        this.quantity = quantity;
-    }
-
-    @Override
-    public String name() {
-        return name;
-    }
-
-    @Override
-    public Integer quantity() {
-        return quantity;
-    }
 }

@@ -20,33 +20,6 @@ public record ProductRequestDto(
     Long categoryId
 ) {
 
-    public ProductRequestDto(String name, Integer price, String imageUrl, Long categoryId) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.categoryId = categoryId;
-    }
-
-    @Override
-    public String name() {
-        return name;
-    }
-
-    @Override
-    public Integer price() {
-        return price;
-    }
-
-    @Override
-    public String imageUrl() {
-        return imageUrl;
-    }
-
-    @Override
-    public Long categoryId() {
-        return categoryId;
-    }
-
     public static ProductRequestDto from(ProductResponseDto productResponseDto) {
         return new ProductRequestDto(
             productResponseDto.name(),
