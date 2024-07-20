@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OptionService {
@@ -29,13 +28,10 @@ public class OptionService {
     @Transactional
     public void save(Long product_id, OptionRequest optionRequest){
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchFieldError::new);
-
-        Option option = optionRepository.save(new Option(
-                optionRequest.getName(),
-                optionRequest.getQuantity()
-        ));
-
+        Option option = new Option(optionRequest.getName(), optionRequest.getQuantity());
         product.getOptions().add(option);
+
+        optionRepository.save(option);
     }
     /*
      * 한 상품의 옵션을 오름차순으로 가져오는 로직
@@ -85,9 +81,11 @@ public class OptionService {
      * 옵션을 삭제하는 로직
      */
     @Transactional
-    public void delete(Long id){
-        Option savedOption = optionRepository.findById(id).orElseThrow(NoSuchFieldError::new);
-        if(savedOption.getQuantity() != 1)
-            optionRepository.deleteById(id);
+    public void delete(Long productId, Long optionId){
+        Product savedProduct = productRepository.findById(productId).orElseThrow(NoSuchFieldError::new);
+
+        if(savedProduct.getOptions().size() == 1)
+            return;
+        optionRepository.deleteById(optionId);
     }
 }

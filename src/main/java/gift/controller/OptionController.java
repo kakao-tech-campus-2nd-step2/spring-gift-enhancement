@@ -3,13 +3,12 @@ package gift.controller;
 import gift.DTO.Option.OptionRequest;
 import gift.DTO.Option.OptionResponse;
 import gift.service.OptionService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 public class OptionController {
@@ -37,7 +36,7 @@ public class OptionController {
 
     @PostMapping("/api/products/{product_id}/options")
     public ResponseEntity<Void> createOption(
-            @PathVariable("product_id") Long product_id, @RequestBody OptionRequest optionRequest
+            @PathVariable("product_id") Long product_id, @Valid @RequestBody OptionRequest optionRequest
     ){
         optionService.save(product_id, optionRequest);
 
@@ -47,7 +46,7 @@ public class OptionController {
     @PutMapping("/api/products/{product_id}/options/{option_id}")
     public ResponseEntity<Void> updateOption(
             @PathVariable("option_id") Long option_id,
-            @RequestBody OptionRequest optionRequest
+            @Valid @RequestBody OptionRequest optionRequest
     ){
         optionService.update(option_id, optionRequest);
 
@@ -56,9 +55,10 @@ public class OptionController {
 
     @DeleteMapping("/api/products/{product_id}/options/{option_id}")
     public ResponseEntity<Void> deleteOption(
-            @PathVariable("option_id") Long option_id
+            @PathVariable("product_id") Long productId,
+            @PathVariable("option_id") Long optionId
     ){
-        optionService.delete(option_id);
+        optionService.delete(productId, optionId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
