@@ -42,7 +42,7 @@ class OptionControllerTest {
     void testGetAllOptions() throws Exception {
         Mockito.when(optionService.getAllOptions()).thenReturn(Arrays.asList(optionResponse));
 
-        mockMvc.perform(get("/api/options"))
+        mockMvc.perform(get("/api/gifts/options"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].id").value(optionResponse.getId()))
@@ -60,7 +60,7 @@ class OptionControllerTest {
                 "\"quantity\": 10 " +
                 "}";
 
-        mockMvc.perform(post("/api/options/gifts/{id}", 1L)
+        mockMvc.perform(post("/api/gifts/options/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(optionRequestJson))
                 .andExpect(status().isOk())
@@ -77,7 +77,7 @@ class OptionControllerTest {
                 " \"quantity\": 15" +
                 "}";
 
-        mockMvc.perform(put("/api/options/gifts/{giftId}/{optionId}", 1L, 1L)
+        mockMvc.perform(put("/api/gifts/options/{giftId}/{optionId}", 1L, 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(optionRequestJson))
                 .andExpect(status().isOk())
@@ -89,7 +89,7 @@ class OptionControllerTest {
     void testDeleteOptionFromGift() throws Exception {
         Mockito.doNothing().when(optionService).deleteOptionFromGift(anyLong(), anyLong());
 
-        mockMvc.perform(delete("/api/options/gifts/{giftId}/{optionId}", 1L, 1L))
+        mockMvc.perform(delete("/api/gifts/options/{giftId}/{optionId}", 1L, 1L))
                 .andExpect(status().isNoContent())
                 .andExpect(content().string("1번 상품에서1번 옵션이 삭제되었습니다!"));
     }
