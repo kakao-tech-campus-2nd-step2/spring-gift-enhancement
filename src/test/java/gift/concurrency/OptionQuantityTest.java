@@ -3,7 +3,9 @@ package gift.concurrency;
 import gift.entity.Option;
 import gift.exception.InsufficientOptionQuantityException;
 import gift.repository.OptionRepository;
+import gift.repository.ProductRepository;
 import gift.service.OptionService;
+import gift.service.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +29,17 @@ public class OptionQuantityTest {
     OptionService optionService;
     @Autowired
     OptionRepository optionRepository;
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    ProductService productService;
+
 
     @Test
     @DisplayName("100개 스레드가 비동기식으로 차감 시도")
     void whenSubtractTwoThread0() throws InterruptedException {
         //Given
-        //초기 데이터를 이용. Option의 ID=1L의 수량은 1000개
+        Long testOptionId = optionRepository.save(new Option("optionName", 1000)).getId();
         int subtractQuantity = 10;
         int threadCount = 100;
 
@@ -41,7 +48,7 @@ public class OptionQuantityTest {
         //When
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() ->
-                    optionService.subtractOptionQuantity(1L, subtractQuantity)
+                    optionService.subtractOptionQuantity(testOptionId, subtractQuantity)
             );
         }
 
@@ -49,7 +56,7 @@ public class OptionQuantityTest {
         executorService.awaitTermination(1, TimeUnit.MINUTES);
 
         //Then
-        Option updatedOption = optionRepository.findById(1L).orElseThrow();
+        Option updatedOption = optionRepository.findById(testOptionId).orElseThrow();
         assertEquals(0, updatedOption.getQuantity());
     }
 
@@ -57,7 +64,7 @@ public class OptionQuantityTest {
     @DisplayName("100개 스레드가 비동기식으로 차감 시도 - 0개가 되면 예외처리 하는가")
     void whenSubtractTwoThread1() throws InterruptedException {
         //Given
-        //초기 데이터를 이용. Option의 ID=1L의 수량은 1000개
+        Long testOptionId = optionRepository.save(new Option("optionName", 1000)).getId();
         int subtractQuantity = 100;
         int threadCount = 100;
 
@@ -69,7 +76,7 @@ public class OptionQuantityTest {
         for (int i = 0; i < threadCount; i++) {
             futures.add(executorService.submit(() -> {
                 try {
-                    optionService.subtractOptionQuantity(1L, subtractQuantity);
+                    optionService.subtractOptionQuantity(testOptionId, subtractQuantity);
                 } catch (Exception e) {
                     exceptions.add(e);
                 }
@@ -88,7 +95,7 @@ public class OptionQuantityTest {
         }
 
         //Then
-        Option updatedOption = optionRepository.findById(1L).orElseThrow();
+        Option updatedOption = optionRepository.findById(testOptionId).orElseThrow();
 
         assertThat(updatedOption.getQuantity()).isEqualTo(0);
         assertThat(exceptions).hasSize(90)
