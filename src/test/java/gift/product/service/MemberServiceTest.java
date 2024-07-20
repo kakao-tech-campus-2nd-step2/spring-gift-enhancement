@@ -1,4 +1,4 @@
-package gift.service;
+package gift.product.service;
 
 import gift.product.dto.MemberDTO;
 import gift.product.exception.DuplicateException;

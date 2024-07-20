@@ -1,4 +1,4 @@
-package gift.repository;
+package gift.product.repository;
 
 import gift.product.model.Member;
 import gift.product.repository.MemberRepository;
