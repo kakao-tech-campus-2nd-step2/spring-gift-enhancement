@@ -20,7 +20,7 @@ class WishProductServiceTest {
 
     @Test
     @DisplayName("위시 리스트 상품 추가하기")
-    void addProduct1ToManager() {
+    void successAddWishProduct() {
         //given
         var wishProductAddRequest = new WishProductAddRequest(1L, 5);
         Assertions.assertThat(wishProductService.getWishProducts(1L, PageRequest.of(0, 10)).size()).isEqualTo(0);
@@ -34,7 +34,7 @@ class WishProductServiceTest {
 
     @Test
     @DisplayName("위시 리스트 상품 삭제하기")
-    void addProduct1AndProduct2ToManagerAndRemoveWishProduct2() {
+    void successDeleteWishProduct() {
         //given
         var wishProductAddRequest = new WishProductAddRequest(1L, 5);
         var wishProduct = wishProductService.addWishProduct(wishProductAddRequest, 1L);
@@ -47,7 +47,7 @@ class WishProductServiceTest {
 
     @Test
     @DisplayName("위시리스트 수량 0으로 변경하기")
-    void addProduct1AndProduct2ToManagerAndUpdateWishProduct2WithZeroCount() {
+    void successUpdateWishProductWithZeroCount() {
         //given
         var wishProductAddRequest = new WishProductAddRequest(1L, 5);
         var wishProduct = wishProductService.addWishProduct(wishProductAddRequest, 1L);
@@ -61,7 +61,7 @@ class WishProductServiceTest {
 
     @Test
     @DisplayName("이용자끼리 위시 리스트가 다르다")
-    void addProduct1AndProduct2ToManagerAndAddProduct2AndProduct3ToMember() {
+    void successGetDifferentWishProducts() {
         //given
         var wishProduct1AddRequest = new WishProductAddRequest(1L, 5);
         var wishProduct2AddRequest = new WishProductAddRequest(2L, 5);
@@ -78,7 +78,7 @@ class WishProductServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 상품 ID 로 위시 리스트 상품 추가 요청시 예외 발생")
-    void addWishProductFailWithInvalidProductId() {
+    void failAddWishProductWithNotExistsProductId() {
         //given
         var invalidWishProductAddRequest = new WishProductAddRequest(10L, 5);
         //when, then
@@ -88,7 +88,7 @@ class WishProductServiceTest {
 
     @Test
     @DisplayName("이미 존재하는 상품 위시 리스트에 추가시 수량 변경")
-    void addWishProductAlreadyExistProduct() {
+    void successAddWishProductAlreadyExistsWishProduct() {
         //given
         var wishProduct1AddRequest = new WishProductAddRequest(1L, 5);
         wishProductService.addWishProduct(wishProduct1AddRequest, 1L);
@@ -104,7 +104,7 @@ class WishProductServiceTest {
 
     @Test
     @DisplayName("2개의 상품이 추가된 상황에서 size 가 1인 페이지로 조회하면 결과의 길이는 1이다.")
-    void getProductsWishPageSize1() {
+    void successGetProductsWishPageSizeOne() {
         //given
         var wishProduct1AddRequest = new WishProductAddRequest(1L, 5);
         var wishProduct1 = wishProductService.addWishProduct(wishProduct1AddRequest, 1L);

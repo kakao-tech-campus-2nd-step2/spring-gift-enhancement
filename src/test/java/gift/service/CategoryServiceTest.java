@@ -21,7 +21,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("정상 카테고리 추가하기")
-    void addProductCategorySuccess() {
+    void successAddCategory() {
         //given
         var categoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
         //when
@@ -34,7 +34,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("중복된 이름의 카테고리 추가하기")
-    void addProductCategoryFailWithDuplicatedCategoryName() {
+    void failAddCategoryWithExistsName() {
         //given
         var categoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
         var category = categoryService.addCategory(categoryRequest);
@@ -46,7 +46,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("단일 카테고리 조회하기")
-    void findProductCategory() {
+    void successGetCategory() {
         //given
         var CategoryId = 1L;
         //when
@@ -57,7 +57,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("전체 카테고리 조회하기")
-    void findProductCategories() {
+    void successGatCategories() {
         //given, when
         var categories = categoryService.getCategories(pageable);
         //then
@@ -66,7 +66,7 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("카테고리 정보 변경하기")
-    void updateProductCategory() {
+    void successUpdateCategory() {
         //given
         var categoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
         var savedCategory = categoryService.addCategory(categoryRequest);

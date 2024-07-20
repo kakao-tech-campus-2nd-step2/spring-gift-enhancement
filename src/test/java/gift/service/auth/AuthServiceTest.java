@@ -27,7 +27,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("회원가입 시도하기 - 성공")
-    void registerSuccess() {
+    void successRegister() {
         //given
         var registerRequest = new RegisterRequest("테스트", "test@naver.com", "testPassword", "MEMBER");
         //when
@@ -42,7 +42,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("중복된 이메일로 회원가입 시도하기 - 실패")
-    void registerFailWithDuplicatedEmail() {
+    void failRegisterWithDuplicatedEmail() {
         //given
         var registerRequest = new RegisterRequest("테스트", "test@naver.com", "testPassword", "MEMBER");
         var auth = authService.register(registerRequest);
@@ -55,7 +55,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("로그인 실행하기 - 성공")
-    void loginSuccess() {
+    void successLogin() {
         //given
         var registerRequest = new RegisterRequest("테스트", "test@naver.com", "testPassword", "MEMBER");
         authService.register(registerRequest);
@@ -72,7 +72,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("로그인 실행하기 - 실패")
-    void loginFailWithWrongPassword() {
+    void failLoginWithWrongPassword() {
         //given
         var registerRequest = new RegisterRequest("테스트", "test@naver.com", "testPasswords", "MEMBER");
         var auth = authService.register(registerRequest);
