@@ -1,4 +1,4 @@
-package gift;
+package gift.service;
 
 import gift.dto.OptionRequest;
 import gift.exception.AlreadyExistsException;
@@ -7,7 +7,6 @@ import gift.model.Option;
 import gift.model.Product;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
-import gift.service.OptionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
