@@ -35,6 +35,7 @@ public class ProductService {
         return Collections.emptyList();
     }
 
+    @Transactional
     public Long add(ProductRequest productRequest) {
         Category category = findCategoryById(productRequest.categoryId());
         Product product = productRequest.toEntity(category);
@@ -52,6 +53,7 @@ public class ProductService {
                 productRequest.imageUrl());
     }
 
+    @Transactional
     public void delete(Long id) {
         productRepository.deleteById(id);
     }

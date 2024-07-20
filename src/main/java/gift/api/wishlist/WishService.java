@@ -46,6 +46,7 @@ public class WishService {
         return Collections.emptyList();
     }
 
+    @Transactional
     public void add(Long memberId, WishAddUpdateRequest wishAddUpdateRequest) {
         Member member = findMemberById(memberId);
         Product product = productRepository.findById(wishAddUpdateRequest.productId())
@@ -60,6 +61,7 @@ public class WishService {
         wish.updateQuantity(wishAddUpdateRequest.quantity());
     }
 
+    @Transactional
     public void delete(Long memberId, WishDeleteRequest wishDeleteRequest) {
         wishRepository.deleteById(new WishId(memberId, wishDeleteRequest.productId()));
     }

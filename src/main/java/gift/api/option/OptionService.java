@@ -7,6 +7,7 @@ import gift.api.option.dto.OptionResponse;
 import gift.api.product.Product;
 import gift.api.product.ProductRepository;
 import gift.global.exception.NoSuchEntityException;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class OptionService {
             .collect(Collectors.toList());
     }
 
+    @Transactional
     public void add(Long productId, OptionRequest optionRequest) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new NoSuchEntityException("product"));

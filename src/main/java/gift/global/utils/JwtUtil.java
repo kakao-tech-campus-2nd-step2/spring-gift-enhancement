@@ -16,7 +16,7 @@ public class JwtUtil {
     }
 
     public static String getTokenFromHeader(String header) throws NullPointerException {
-        var headerValue = header.split(" ");
+        String[] headerValue = header.split(" ");
         if (!headerValue[0].equals(AUTHORIZATION_TYPE)) {
             throw new UnsupportedOperationException();
         }
