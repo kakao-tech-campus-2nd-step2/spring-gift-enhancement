@@ -93,6 +93,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
             .orElseThrow(NoSuchElementException::new);
         wishProductRepository.deleteAllByProductId(id);
+        productOptionService.deleteAllOptionsByProductId(id);
         productRepository.delete(product);
     }
 }
