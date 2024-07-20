@@ -21,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class OptionServiceTest {
     @InjectMocks
-    private OptionService optionService;
+    private ProductService productService;
     @Mock
     private ProductRepository productRepository;
 
@@ -39,6 +39,6 @@ class OptionServiceTest {
         // when
         // then
         assertThatExceptionOfType(EntityNotFoundException.class)
-                .isThrownBy(()->optionService.addOption(request));
+                .isThrownBy(()->productService.addOption(request));
     }
 }
