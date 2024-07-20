@@ -88,7 +88,7 @@ public class Product {
         this.category = category;
     }
 
-    public Product(String name, int price, String imageUrl, Category category){
+    public Product(String name, int price, String imageUrl, Category category, Option option){
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -96,6 +96,7 @@ public class Product {
         if(this.category != null){
             this.category.addProduct(this);
         }
+        addOption(option);
     }
 
     public Long getId() {
