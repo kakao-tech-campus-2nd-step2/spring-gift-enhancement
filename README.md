@@ -75,3 +75,11 @@
   - Option을 update시키는 코드는 Option controller에서 진행하는 것이 맞는지 고민이 된다.
 - [x] ProductService의 Optionservice.getProductOptions 를 굳이 가져와야 하나?
   - controller에서 바로 OptionService.getProductOptions를 호출하도록 수정
+
+# 3단계
+
+## 구현할 기능 목록
+- [ ] 상품 옵션 수량을 지정된 숫자만큼 빼는 기능
+  - [ ] OptionService에서 해당 기능 구현
+    - [ ] 남은 수량보다 지정된 숫자가 더 큰 경우 오류 출력
+    - [ ] (남은 수량 - 지정된 숫자)를 다시 남은 수량에 저장
