@@ -34,6 +34,11 @@ public class OptionService {
     public OptionDTO createOption(Long productId, OptionDTO optionDTO) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
+
+        if (optionRepository.existsByNameAndProductId(optionDTO.getName(), productId)) {
+            throw new IllegalArgumentException("Option name already exists for this product");
+        }
+
         Option option = new Option(optionDTO.getName(), optionDTO.getQuantity(), product);
         Option savedOption = optionRepository.save(option);
         return convertToDTO(savedOption);
