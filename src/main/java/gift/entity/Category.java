@@ -26,6 +26,9 @@ public class Category {
     @Column(nullable = false)
     String imageUrl;
 
+    public Category() {
+    }
+
     public Category(Long id, String name, String color, String description, String imageUrl) {
         Id = id;
         this.name = name;

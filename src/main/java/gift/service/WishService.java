@@ -45,8 +45,8 @@ public class WishService {
     }
 
     public List<Wish> getAll(String tokenValue) {
-        Long userId = translateIdFrom(tokenValue);
-        List<Wish> wishes = wishRepository.findAllByUserId(userId);
+        Long memberId = translateIdFrom(tokenValue);
+        List<Wish> wishes = wishRepository.findAllByMember_id(memberId);
         return wishes;
     }
 
