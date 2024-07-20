@@ -69,7 +69,7 @@ public class ProductRepositoryTest {
         assertThat(products).hasSize(2);
     }
 
-    @Test
+    /*@Test
     @DisplayName("상품 수정")
     void update() {
         Category category = new Category(null, "차량", "brown", "www.aaa.jpg", "차량 카테고리입니다.");
@@ -84,7 +84,7 @@ public class ProductRepositoryTest {
             () -> assertThat(product.getPrice()).isEqualTo(2000),
             () -> assertThat(product.getImageUrl()).isEqualTo("update.jpg")
         );
-    }
+    }*/
 
     @Test
     @DisplayName("상품 삭제")

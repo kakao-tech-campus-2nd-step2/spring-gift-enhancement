@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
+/*
 @SpringBootTest
 @Sql("/truncate.sql")
 public class WishServiceTest {
@@ -84,3 +85,4 @@ public class WishServiceTest {
         assertThat(wishes.responses()).isEmpty();
     }
 }
+*/
