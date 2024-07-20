@@ -70,27 +70,27 @@ public class ProductApiController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ReadProductResponse> readProduct(@PathVariable Long id) {
+    @GetMapping("/{productId}")
+    public ResponseEntity<ReadProductResponse> readProduct(@PathVariable Long productId) {
         ReadProductResponse response;
-        response = productService.readProductById(id);
+        response = productService.readProductById(productId);
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UpdateProductResponse> updateProduct(@PathVariable Long id, @Validated @RequestBody UpdateProductRequest request) {
+    @PutMapping("/{productId}")
+    public ResponseEntity<UpdateProductResponse> updateProduct(@PathVariable Long productId, @Validated @RequestBody UpdateProductRequest request) {
         UpdateProductResponse response;
         try {
-            response = productService.updateProduct(id, request);
+            response = productService.updateProduct(productId, request);
         } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
     }
 
@@ -100,17 +100,17 @@ public class ProductApiController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}/options")
-    public ResponseEntity<ReadAllProductOptionsResponse> readOptions(@PathVariable Long id) {
-        ReadAllProductOptionsResponse response = productOptionService.readAllOptions(id);
+    @GetMapping("/{productId}/options")
+    public ResponseEntity<ReadAllProductOptionsResponse> readOptions(@PathVariable Long productId) {
+        ReadAllProductOptionsResponse response = productOptionService.readAllOptions(productId);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{id}/options")
-    public ResponseEntity<CreateProductOptionResponse> createOption(@PathVariable Long id, @Validated @RequestBody CreateProductOptionRequest request) {
-        CreateProductOptionResponse response = productOptionService.createOption(id, request);
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<CreateProductOptionResponse> createOption(@PathVariable Long productId, @Validated @RequestBody CreateProductOptionRequest request) {
+        CreateProductOptionResponse response = productOptionService.createOption(productId, request);
 
-        URI location = URI.create("http://localhost:8080/api/products/" + id + "/options/" + response.getId());
+        URI location = URI.create("http://localhost:8080/api/products/" + productId + "/options/" + response.getId());
         return ResponseEntity.created(location).body(response);
     }
 
