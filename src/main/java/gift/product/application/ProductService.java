@@ -76,13 +76,21 @@ public class ProductService {
         Category category = categoryRepository.findById(command.categoryId())
                 .orElseThrow(() -> new NotFoundException("해당 카테고리가 존재하지 않습니다."));
 
-        List<Option> newOptions = command.optionUpdateCommandList().stream()
-                .map(OptionUpdateCommand::toOption).toList();
-
-        product.update(command, category, newOptions);
+        product.update(category, command);
+        updateOptions(command, product);
 
         product.validateHasAtLeastOneOption();
         product.validateKakaoInProductName();
+    }
+
+    private void updateOptions(ProductUpdateCommand command, Product product) {
+        command.optionUpdateCommandList().stream().forEach(
+                optionUpdateCommand -> {
+                    Option originalOption = optionRepository.findById(optionUpdateCommand.id())
+                            .orElseThrow(() -> new NotFoundException("해당 옵션이 존재하지 않습니다."));
+                    originalOption.update(optionUpdateCommand.name(), optionUpdateCommand.quantity(), product);
+                }
+        );
     }
 
     @Transactional

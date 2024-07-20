@@ -87,4 +87,13 @@ public class Option {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public void update(String name, Integer quantity, Product product) {
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
+
+        validateName();
+        validateQuantity();
+    }
 }

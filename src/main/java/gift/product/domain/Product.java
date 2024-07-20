@@ -3,6 +3,7 @@ package gift.product.domain;
 import gift.category.domain.Category;
 import gift.exception.type.InvalidProductOptionException;
 import gift.exception.type.KakaoInNameException;
+import gift.exception.type.NotFoundException;
 import gift.option.domain.Option;
 import gift.product.application.command.ProductUpdateCommand;
 import jakarta.persistence.*;
@@ -80,14 +81,11 @@ public class Product {
         option.setProduct(this);
     }
 
-    public void update(ProductUpdateCommand command, Category category, List<Option> newOptions) {
+    public void update(Category category, ProductUpdateCommand command) {
         this.name = command.name();
         this.price = command.price();
         this.imageUrl = command.imageUrl();
         this.category = category;
-
-        this.options.clear();
-        newOptions.forEach(this::addOption);
     }
 
     public void validateKakaoInProductName() {
