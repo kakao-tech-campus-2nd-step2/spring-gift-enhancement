@@ -24,13 +24,15 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final WishProductRepository wishProductRepository;
+    private final ProductOptionService productOptionService;
 
     public ProductService(ProductRepository productRepository,
         CategoryRepository categoryRepository,
-        WishProductRepository wishProductRepository) {
+        WishProductRepository wishProductRepository, ProductOptionService productOptionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.wishProductRepository = wishProductRepository;
+        this.productOptionService = productOptionService;
     }
 
     @Transactional
@@ -39,7 +41,12 @@ public class ProductService {
             .orElseThrow(NoSuchElementException::new);
 
         Product product = request.toEntity(category);
-        return CreateProductResponse.fromEntity(productRepository.save(product));
+        Product savedProduct = productRepository.save(product);
+
+        request.getProductOptions().stream()
+            .forEach(productOptionRequest -> productOptionService.createOption(savedProduct.getId(), productOptionRequest));
+
+        return CreateProductResponse.fromEntity(savedProduct);
     }
 
     public ReadProductResponse readProductById(Long id) {
