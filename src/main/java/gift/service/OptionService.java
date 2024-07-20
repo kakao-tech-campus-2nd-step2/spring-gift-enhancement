@@ -60,13 +60,6 @@ public class OptionService {
     public void deleteById(Long id){
         Option foundOption = optionRepository.findById(id)
                 .orElseThrow(()->new OptionNotFoundException(Messages.NOT_FOUND_OPTION));
-
-        int productOptionCount = foundOption.getProduct().getOptions().size();
-
-        if(productOptionCount < 2){
-            throw new CannotDeleteLastOptionException(Messages.CANNOT_DELETE_LAST_OPTION);
-        }
-
         foundOption.remove();
         optionRepository.deleteById(id);
     }
