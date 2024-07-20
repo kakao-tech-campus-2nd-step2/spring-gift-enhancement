@@ -76,12 +76,10 @@ public class ProductService {
         Category category = categoryRepository.findById(command.categoryId())
                 .orElseThrow(() -> new NotFoundException("해당 카테고리가 존재하지 않습니다."));
 
-        List<Option> options = optionRepository
-                .findAllById(command.optionUpdateCommandList().stream()
-                .map(OptionUpdateCommand::id)
-                .toList());
+        List<Option> newOptions = command.optionUpdateCommandList().stream()
+                .map(OptionUpdateCommand::toOption).toList();
 
-        product.update(command, category, options);
+        product.update(command, category, newOptions);
 
         product.validateHasAtLeastOneOption();
         product.validateKakaoInProductName();
