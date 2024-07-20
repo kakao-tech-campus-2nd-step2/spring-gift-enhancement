@@ -63,12 +63,6 @@ public class ProductService {
         return productRepository.deleteProductById(id);
     }
 
-    @Transactional(readOnly = true)
-    public List<ProductDto> getAllProducts() {
-        List<Product> products = productRepository.getAllProducts();
-        return ProductDto.of(products);
-    }
-
     @Transactional
     public void deleteProducts(List<Long> productIds) {
         productRepository.deleteProductByIdList(productIds);
