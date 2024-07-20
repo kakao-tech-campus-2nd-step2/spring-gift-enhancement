@@ -32,8 +32,7 @@ public class OptionService {
 
         Option option = optionRepository.save(new Option(
                 optionRequest.getName(),
-                optionRequest.getQuantity(),
-                product
+                optionRequest.getQuantity()
         ));
 
         product.getOptions().add(option);

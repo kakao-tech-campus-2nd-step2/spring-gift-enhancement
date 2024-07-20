@@ -56,10 +56,10 @@ public class ProductRepositoryTest {
         Product product = new Product("name", 4500, "url", category);
         Product actual = productRepository.save(product);
 
-        Option option = new Option("신규", 3L, actual);
-        optionRepository.save(option);
-
+        Option option = new Option("신규", 3L);
         actual.addOption(option);
+
+        optionRepository.save(option);
         // then
         Assertions.assertThat(actual).isNotNull();
         Assertions.assertThat(actual.getName()).isEqualTo(product.getName());
