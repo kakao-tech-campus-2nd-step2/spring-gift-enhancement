@@ -1,15 +1,10 @@
 package gift.domain.controller;
 
-import gift.domain.controller.apiResponse.ProductAddApiResponse;
-import gift.domain.controller.apiResponse.ProductListApiResponse;
 import gift.domain.controller.apiResponse.ProductOptionsGetApiResponse;
 import gift.domain.dto.request.OptionRequest;
-import gift.domain.dto.request.ProductAddRequest;
-import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.service.ProductService;
 import gift.global.apiResponse.BasicApiResponse;
 import gift.global.apiResponse.SuccessApiResponse;
-import jakarta.validation.Path;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +47,9 @@ public class ProductOptionController {
         return SuccessApiResponse.ok();
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<BasicApiResponse> deleteProduct(@PathVariable("id") Long id) {
-//        productService.deleteProduct(id);
-//        return SuccessApiResponse.ok();
-//    }
+    @DeleteMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<BasicApiResponse> deleteProduct(@PathVariable("productId") Long productId, @PathVariable("optionId") Long optionId) {
+        productService.deleteProductOption(productId, optionId);
+        return SuccessApiResponse.ok();
+    }
 }

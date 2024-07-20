@@ -290,14 +290,11 @@ Content-Type: application/json
 - [x] 상품의 옵션을 조회하는 API
 - [x] 상품의 옵션을 추가하는 API
 - [x] 상품의 옵션을 수정하는 API
-- [ ] 상품의 옵션을 삭제하는 API
+- [x] 상품의 옵션을 삭제하는 API
 
 #### 예외, 검증 설계
 
 - [x] 커스텀 예외 및 예외 핸들링
-  - [x] 옵션 이름/개수 검증 예외 만들기
-  - [x] 옵션 중복 배제 만들기
-  - [x] 특수문자 제외하는 Validator 만들기
 - [x] 사용자 입력 검증
 
 #### Server-side Renderings

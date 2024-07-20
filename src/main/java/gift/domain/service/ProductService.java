@@ -83,4 +83,10 @@ public class ProductService {
             //존재하지 않는 상품 삭제 시도시 예외 발생
             .orElseThrow(ProductNotFoundException::new));
     }
+
+    @Transactional
+    public void deleteProductOption(Long productId, Long optionId) {
+        Product product = getProductById(productId);
+        optionService.deleteOptionById(product, optionId);
+    }
 }

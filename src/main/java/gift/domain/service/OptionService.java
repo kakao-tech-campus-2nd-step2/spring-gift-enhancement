@@ -20,7 +20,7 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
-    // request가 기존 상품 옵션과 겹치지 않음을 검증하기
+    // request가 기존 상품 옵션들과 겹치지 않음을 검증하기
     private void validateOptionIsUniqueInProduct(Product product, OptionRequest request) {
         product.getOptions().stream()
             .filter(o -> o.getName().equals(request.name()))
@@ -28,6 +28,14 @@ public class OptionService {
             .ifPresent(o -> {
                 throw new OptionAlreadyExistsInProductException();
             });
+    }
+
+    // 옵션이 상품에 포함되어 있음을 검증하기
+    private void validateOptionIsInProduct(Product product, Long optionId) {
+        product.getOptions().stream()
+            .filter(o -> o.getId().equals(optionId))
+            .findAny()
+            .orElseThrow(OptionNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
@@ -42,27 +50,26 @@ public class OptionService {
 
     @Transactional
     public Option addOption(Product product, OptionRequest request) {
-        // 상품 옵션 중 같은 이름이 있는 경우를 배제하기
         validateOptionIsUniqueInProduct(product, request);
-
         return optionRepository.save(request.toEntity(product));
     }
 
     @Transactional
     public Option updateOptionById(Product product, Long optionId, OptionRequest request) {
-        //상품 옵션 중 optionId를 가진 옵션이 없는경우 예외
-        product.getOptions().stream()
-            .filter(o -> o.getId().equals(optionId))
-            .findAny()
-            .orElseThrow(OptionNotFoundException::new);
-
+        validateOptionIsInProduct(product, optionId);
         Option option = getOptionById(optionId);
         if (!option.getName().equals(request.name())) {
-            //상품 옵션 중 이름이 같은 경우 배제하기
             validateOptionIsUniqueInProduct(product, request);
         }
 
         option.set(request);
         return option;
+    }
+
+    @Transactional
+    public void deleteOptionById(Product product, Long optionId) {
+        validateOptionIsInProduct(product, optionId);
+        Option option = getOptionById(optionId);
+        optionRepository.delete(option);
     }
 }
