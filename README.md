@@ -244,6 +244,11 @@ Content-Type: application/json
 
 ### week4/step3
 
+상품 옵션의 수량을 지정된 숫자만큼 빼는 기능을 구현한다.
+
+- 별도의 HTTP API를 만들 필요는 없다.
+- 서비스 클래스 또는 엔티티 클래스에서 기능을 구현하고 나중에 사용할 수 있도록 한다.
+
 </details>
 
 ---
@@ -1027,12 +1032,25 @@ Content-Type: application/json
 
 #### 상품 옵션 수정 API/Request/Body
 
-```json
-{
-  "name": "03. 덜매운맛",
-  "quantity": 30
-}
-```
+- 상품 수량을 증가시키는 경우
+
+  ```json
+  {
+    "name": "03. 덜매운맛",
+    "action": "add",
+    "quantity": 30
+  }
+  ```
+
+- 상품 수량을 감소시키는 경우
+
+  ```json
+  {
+    "name": "03. 덜매운맛",
+    "action": "subtract",
+    "quantity": 30
+  }
+  ```
 
 #### 상품 옵션 수정 API/Response(success)
 
@@ -1040,12 +1058,12 @@ Content-Type: application/json
   - 200 OK
 - Body
 
-```json
-{
-  "timestamp": "2024-01-01T00:00:00.0000000",
-  "status": 200
-}
-```
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 200
+  }
+  ```
 
 #### 상품 옵션 수정 API/Response(fail)
 
@@ -1106,6 +1124,22 @@ Content-Type: application/json
     "timestamp": "2024-01-01T00:00:00.0000000",
     "status": 400,
     "message": "옵션 수량이 잘못되었습니다."
+  }
+  ```
+
+#### 상품 옵션 수정 API/Response(fail)
+
+수정 후 옵션 수량이 음수가 되는 경우 발생함
+
+- Status
+  - 400 Bad Request
+- Body
+
+  ```json
+  {
+    "timestamp": "2024-01-01T00:00:00.0000000",
+    "status": 400,
+    "message": "옵션 수량이 음수가 될 수 없습니다."
   }
   ```
 
