@@ -30,9 +30,9 @@ public class ProductController {
     	return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") long id) {
-    	ProductResponse product = productService.getProduct(id);
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable("productId") Long productId) {
+    	ProductResponse product = productService.getProduct(productId);
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
@@ -42,23 +42,23 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateProduct(@PathVariable("id") long id, 
+    @PutMapping("/{productId}")
+    public ResponseEntity<Void> updateProduct(@PathVariable("productId") Long productId, 
     		@Valid @RequestBody ProductUpdateRequest request, BindingResult bindingResult) {
-        productService.updateProduct(id, request, bindingResult);
+        productService.updateProduct(productId, request, bindingResult);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     
-    @PutMapping("/{id}/category")
-    public ResponseEntity<Void> updateProductCategory(@PathVariable("id") long id,
+    @PutMapping("/{product_id}/category")
+    public ResponseEntity<Void> updateProductCategory(@PathVariable("product_id") Long product_id,
     		@Valid @RequestBody CategoryUpdateRequest request, BindingResult bindingResult){
-    	productService.updateProductCategory(id, request, bindingResult);
+    	productService.updateProductCategory(product_id, request, bindingResult);
     	return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("id") long id) {
-        productService.deleteProduct(id);
+    @DeleteMapping("/{product_id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("product_id") Long product_id) {
+        productService.deleteProduct(product_id);
         return ResponseEntity.status(HttpStatus.OK).build();
     } 
 }
