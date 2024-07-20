@@ -49,17 +49,17 @@ public class OptionController {
     return ResponseEntity.ok(optionDto);
   }
 
-  @DeleteMapping("products/{id}/options")
-  public ResponseEntity<Void> deleteOption(@PathVariable Long id) {
-    optionService.deleteOption(id);
+  @DeleteMapping("products/{productId}/options")
+  public ResponseEntity<Void> deleteOption(@PathVariable Long productId) {
+    optionService.deleteOption(productId);
 
     return ResponseEntity.noContent().build();
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<OptionDto> updateOption(@PathVariable Long id,
+  @PutMapping("/{optionsId}")
+  public ResponseEntity<OptionDto> updateOption(@PathVariable Long optionsId,
     @RequestBody OptionDto optionDto) {
-    OptionDto updatedOptionDto = optionService.updateOption(id, optionDto);
+    OptionDto updatedOptionDto = optionService.updateOption(optionsId, optionDto);
 
     return ResponseEntity.ok(updatedOptionDto);
   }
