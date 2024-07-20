@@ -4,7 +4,6 @@ import gift.domain.Category;
 import gift.domain.Product;
 import gift.domain.Option;
 import gift.repository.OptionRepository;
-import gift.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,16 +12,14 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class OptionServiceTest {
 
     @Mock
     private OptionRepository optionRepository;
-
-    @Mock
-    private ProductRepository productRepository;
 
     @InjectMocks
     private OptionService optionService;
