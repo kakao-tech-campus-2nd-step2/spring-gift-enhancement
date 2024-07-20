@@ -6,8 +6,11 @@ import gift.model.Category;
 import gift.model.Product;
 import gift.repository.CategoryRepository;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,17 +23,17 @@ public class CategoryService {
     }
 
     public List<CategoryDto> getAllCategories() {
-        var allCategories = categoryRepository.findAll();
-        var categoryDtoList = new ArrayList<CategoryDto>();
-        for (Category category : allCategories) {
-            var categoryNameList = new ArrayList<String>();
-            for (Product product : category.getProductList()) {
-                categoryNameList.add(product.getName());
-            }
-            categoryDtoList.add(
-                new CategoryDto(category.getId(), category.getName(), categoryNameList));
-        }
-        return categoryDtoList;
+        var allCategories = categoryRepository.findByProductListIsNotEmpty();
+
+        return allCategories.stream()
+            .map(category -> {
+                var categoryProductNameList = category.getProductList().stream()
+                    .map(Product::getName)
+                    .collect(Collectors.toList());
+                return new CategoryDto(category.getId(), category.getName(),
+                    categoryProductNameList);
+            })
+            .collect(Collectors.toList());
     }
 
     public Category addCategory(Category category) {

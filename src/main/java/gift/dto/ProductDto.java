@@ -12,6 +12,7 @@ public class ProductDto {
     private Integer price;
     private String imageUrl;
     private Long categoryId;
+    private Long optionId;
 
     public ProductDto() {
     }
@@ -21,6 +22,11 @@ public class ProductDto {
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+    }
+
+    public ProductDto(String name, Integer price, String imageUrl, Long categoryId, Long optionId) {
+        new ProductDto(name, price, imageUrl, categoryId);
+        this.optionId = optionId;
     }
 
     public String getName() {
@@ -58,4 +64,14 @@ public class ProductDto {
         this.categoryId = categoryId;
         return this;
     }
+
+    public Long getOptionId() {
+        return optionId;
+    }
+
+    public ProductDto setOptionId(Long optionId) {
+        this.optionId = optionId;
+        return this;
+    }
 }
+
