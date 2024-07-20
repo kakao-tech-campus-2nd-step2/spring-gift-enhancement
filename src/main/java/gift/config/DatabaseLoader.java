@@ -26,13 +26,13 @@ public class DatabaseLoader {
             // 상품 및 옵션 데이터 삽입
             Product product1 = new Product(2001L, "[기프티콘] BBQ 황금올리브치킨", 20000, "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/1802204067/B.jpg?315000000", 1);
             List<Option> options1 = Arrays.asList(
+                new Option("[기프티콘] BBQ 황금올리브치킨", 1, 20000, product1),
                 new Option("01. 치즈볼 5알", 1, 6000, product1),
                 new Option(packageOption.getName(), packageOption.getQuantity(), packageOption.getPrice(), product1),
                 new Option(deliverOption.getName(), deliverOption.getQuantity(), deliverOption.getPrice(), product1)
             );
             product1.setOptions(options1);
             repository.save(product1);
-
 
             Product product2 = new Product(2002L, "스타벅스 기프트 카드", 0, "https://image.istarbucks.co.kr/cardImg/20200818/007633_WEB.png", 2);
             List<Option> options2 = Arrays.asList(
@@ -47,6 +47,7 @@ public class DatabaseLoader {
 
             Product product3 = new Product(3001L , "1025 독도 크림 80ml", 25600, "https://roundlab.co.kr/web/product/big/202207/96ab1fe05298e73355fb50b04550226b.jpg" , 3);
             List<Option> options3 = Arrays.asList(
+                new Option("1025 독도 크림 80ml", 1, 25600, product3),
                 new Option("01. [추가] 20ml 추가 구매", 1, 6000, product3),
                 new Option(packageOption.getName(), packageOption.getQuantity(), packageOption.getPrice(), product3),
                 new Option(deliverOption.getName(), deliverOption.getQuantity(), deliverOption.getPrice(), product3)
@@ -56,6 +57,7 @@ public class DatabaseLoader {
 
             Product product4 = new Product(4001L , "체크남방", 19900, "https://item.elandrs.com/upload/prd/orgimg/032/2004327032_0000001.jpg?w=1020&h=&q=100" , 4);
             List<Option> options4 = Arrays.asList(
+                new Option("체크남방", 1, 19900, product4),
                 new Option("01. 양말 1켤래", 1, 1000, product4),
                 new Option(packageOption.getName(), packageOption.getQuantity(), packageOption.getPrice(), product4),
                 new Option(deliverOption.getName(), deliverOption.getQuantity(), deliverOption.getPrice(), product4)
@@ -63,9 +65,9 @@ public class DatabaseLoader {
             product4.setOptions(options4);
             repository.save(product4);
 
-
             Product product5 = new Product(6001L , "인간실격", 8100 , "https://image.yes24.com/goods/1387488/XL" , 6);
             List<Option> options5 = Arrays.asList(
+                new Option("인간실격", 1, 8100, product5),
                 new Option("01. 책 갈피", 1, 800, product5),
                 new Option(packageOption.getName(), packageOption.getQuantity(), packageOption.getPrice(), product5),
                 new Option(deliverOption.getName(), deliverOption.getQuantity(), deliverOption.getPrice(), product5)
@@ -73,9 +75,9 @@ public class DatabaseLoader {
             product5.setOptions(options5);
             repository.save(product5);
 
-
-            Product product6 = new Product(7001L , "윌슨 NBA  콤프 농구공", 85000 , "https://kr.wilson.com/cdn/shop/products/P_WTB7100XB_view_1_1728x.png?v=1660613945" , 7);
+            Product product6 = new Product(7001L , "윌슨 NBA 콤프 농구공", 85000 , "https://kr.wilson.com/cdn/shop/products/P_WTB7100XB_view_1_1728x.png?v=1660613945" , 7);
             List<Option> options6 = Arrays.asList(
+                new Option("윌슨 NBA 콤프 농구공", 1, 85000, product6),
                 new Option("01. 휴대용 에어 펌프", 1, 4000, product6),
                 new Option(packageOption.getName(), packageOption.getQuantity(), packageOption.getPrice(), product6),
                 new Option(deliverOption.getName(), deliverOption.getQuantity(), deliverOption.getPrice(), product6)
@@ -85,6 +87,7 @@ public class DatabaseLoader {
 
             Product product7 = new Product(10001L , "삼성 드럼 세탁기 9kg", 700000 , "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT77j3eHCybMMbV-D_xMRz0WPgReRpoSnHprA&s" , 10);
             List<Option> options7 = Arrays.asList(
+                new Option("삼성 드럼 세탁기 9kg", 1, 700000, product7),
                 new Option("01. 설치비", 1, 40000, product7),
                 new Option(packageOption.getName(), packageOption.getQuantity(), packageOption.getPrice(), product7),
                 new Option(deliverOption.getName(), deliverOption.getQuantity(), deliverOption.getPrice(), product7)
@@ -92,8 +95,9 @@ public class DatabaseLoader {
             product7.setOptions(options7);
             repository.save(product7);
 
-            Product product8 =new Product(10002L , "삼성 양문형 냉장고 846 L", 1490000 , "https://images.samsung.com/kdp/goods/2022/09/05/94432d53-fbf7-4052-a68f-a355e6957783.png?$PD_GALLERY_L_PNG$" , 10);
+            Product product8 = new Product(10002L , "삼성 양문형 냉장고 846 L", 1490000 , "https://images.samsung.com/kdp/goods/2022/09/05/94432d53-fbf7-4052-a68f-a355e6957783.png?$PD_GALLERY_L_PNG$" , 10);
             List<Option> options8 = Arrays.asList(
+                new Option("삼성 양문형 냉장고 846 L", 1, 1490000, product8),
                 new Option("01. 설치비", 1, 40000, product8),
                 new Option(packageOption.getName(), packageOption.getQuantity(), packageOption.getPrice(), product8),
                 new Option(deliverOption.getName(), deliverOption.getQuantity(), deliverOption.getPrice(), product8)
@@ -101,7 +105,7 @@ public class DatabaseLoader {
             product8.setOptions(options8);
             repository.save(product8);
 
-            Product product9 =new Product(11001L , "이모티콘 ", 0 , "https://t1.kakaocdn.net/thumb/R1920x0.fwebp.q100/?fname=https%3A%2F%2Ft1.kakaocdn.net%2Fkakaocorp%2Fkakaocorp%2Fadmin%2Fservice%2Fa85d0594017900001.jpg" , 11);
+            Product product9 = new Product(11001L , "이모티콘", 0 , "https://t1.kakaocdn.net/thumb/R1920x0.fwebp.q100/?fname=https%3A%2F%2Ft1.kakaocdn.net%2Fkakaocorp%2Fkakaocorp%2Fadmin%2Fservice%2Fa85d0594017900001.jpg" , 11);
             List<Option> options9 = Arrays.asList(
                 new Option("01. 춘식이", 1, 2500, product9),
                 new Option("02. 라이언", 1, 2500, product9),
