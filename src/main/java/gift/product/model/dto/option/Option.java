@@ -15,9 +15,13 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Table(name = "Option", uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "name"})})
+@Table(name = "option", uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "name"})})
+@SQLDelete(sql = "UPDATE option SET deletion_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deletion_date IS NULL")
 public class Option {
 
     @Id

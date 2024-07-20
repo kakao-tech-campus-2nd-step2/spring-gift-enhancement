@@ -9,10 +9,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import security.SHA256Util;
 
 @Entity
 @Table(name = "app_user")
+@SQLDelete(sql = "UPDATE app_user SET deletion_date = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deletion_date IS NULL")
 public class AppUser extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
