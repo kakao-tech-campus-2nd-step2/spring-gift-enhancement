@@ -14,7 +14,7 @@ import gift.product.model.Product;
 import gift.wish.WishRepository;
 import gift.wish.WishService;
 import gift.wish.model.Wish;
-import gift.wish.model.WishRequestDto;
+import gift.wish.model.WishRequest;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,10 +53,10 @@ public class WishServiceTest {
     void addProductTest() {
         given(productRepository.findById(any())).willReturn(Optional.of(
             new Product("gamza", 1000, "gamza.jpg", new Category("식품", "##111", "식품.jpg", "식품"))));
-        WishRequestDto wishRequestDto = getWishRequestDto();
+        WishRequest wishRequest = getWishRequestDto();
         LoginMemberDto loginMemberDto = getLoginMemberDto();
 
-        wishService.addProductToWishList(wishRequestDto, loginMemberDto);
+        wishService.addProductToWishList(wishRequest, loginMemberDto);
 
         then(wishRepository).should().save(any());
     }
@@ -65,10 +65,10 @@ public class WishServiceTest {
     void updateWishTest() {
         Wish wish = new Wish(new Member(1L, "member1@example.com", "member1", "user"), null, 1);
         given(wishRepository.findById(any())).willReturn(Optional.of(wish));
-        WishRequestDto wishRequestDto = getWishRequestDto();
+        WishRequest wishRequest = getWishRequestDto();
         LoginMemberDto loginMemberDto = getLoginMemberDto();
 
-        wishService.updateProductInWishList(1L, wishRequestDto, loginMemberDto);
+        wishService.updateProductInWishList(1L, wishRequest, loginMemberDto);
 
         assertThat(wish.getCount()).isEqualTo(3);
     }
@@ -88,9 +88,9 @@ public class WishServiceTest {
             new Member(1L, "member1@example.com", "member1", "user"));
     }
 
-    private WishRequestDto getWishRequestDto() {
-        WishRequestDto wishRequestDto = new WishRequestDto(1L, 3);
-        return wishRequestDto;
+    private WishRequest getWishRequestDto() {
+        WishRequest wishRequest = new WishRequest(1L, 3);
+        return wishRequest;
     }
 
 

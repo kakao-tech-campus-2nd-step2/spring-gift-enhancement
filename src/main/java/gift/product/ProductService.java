@@ -5,10 +5,12 @@ import gift.category.CategoryRepository;
 import gift.category.model.Category;
 import gift.common.exception.CategoryException;
 import gift.common.exception.ProductException;
+import gift.option.OptionRepository;
+import gift.option.model.Option;
 import gift.product.model.Product;
 import gift.product.model.ProductRequest;
-import gift.product.model.ProductRequest.Create;
-import gift.product.model.ProductResponseDto;
+import gift.product.model.ProductResponse;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,32 +21,39 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductResponseDto> getAllProducts(Pageable pageable) {
+    public Page<ProductResponse> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
-            .map(ProductResponseDto::from);
+            .map(ProductResponse::from);
     }
 
     @Transactional(readOnly = true)
-    public ProductResponseDto getProductById(Long id) {
-        return ProductResponseDto.from(productRepository.findById(id)
+    public ProductResponse getProductById(Long id) {
+        return ProductResponse.from(productRepository.findById(id)
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND)));
     }
 
     @Transactional
-    public Long insertProduct(ProductRequest.Create create) throws CategoryException, ProductException {
+    public Long insertProduct(ProductRequest.Create create)
+        throws CategoryException, ProductException {
         Category category = categoryRepository.findById(create.categoryId())
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         Product product = new Product(create.name(), create.price(),
             create.imageUrl(), category);
+        List<Option> options = create.optionRequests().stream()
+            .map((it) -> new Option(it.name(), it.quantity(), product))
+            .toList();
         productRepository.save(product);
+        options.forEach(optionRepository::save);
         return product.getId();
     }
 

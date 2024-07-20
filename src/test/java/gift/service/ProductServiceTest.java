@@ -8,11 +8,14 @@ import static org.mockito.BDDMockito.then;
 
 import gift.category.CategoryRepository;
 import gift.category.model.Category;
+import gift.option.OptionRepository;
+import gift.option.model.Option;
+import gift.option.model.OptionRequest;
 import gift.product.ProductRepository;
 import gift.product.ProductService;
 import gift.product.model.Product;
 import gift.product.model.ProductRequest;
-import gift.product.model.ProductRequest.Create;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,11 +37,15 @@ public class ProductServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    OptionRepository optionRepository;
+
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository, categoryRepository);
+        productService = new ProductService(productRepository, categoryRepository,
+            optionRepository);
     }
 
     @Test
@@ -65,13 +72,18 @@ public class ProductServiceTest {
     @Test
     void insertProductTest() {
         Category category = new Category("test", "##test", "test.jpg", "test");
+        Product product = new Product(1L, "test", 1000, "test.jpg", category);
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
-        given(productRepository.save(any())).willReturn(
-            new Product(1L, "test", 1000, "test.jpg", category));
+        given(productRepository.save(any())).willReturn(product);
+        given(optionRepository.save(any())).willReturn(
+            new Option("option", 1, product)
+        );
 
-        productService.insertProduct(new ProductRequest.Create("test", 1000, "test.jpg", 1L));
+        productService.insertProduct(new ProductRequest.Create("test", 1000, "test.jpg", 1L,
+            List.of(new OptionRequest("option", 1))));
 
         then(productRepository).should().save(any());
+        then(optionRepository).should().save(any());
     }
 
     @Test

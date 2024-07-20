@@ -3,7 +3,7 @@ package gift.member;
 import gift.common.auth.LoginMemberDto;
 import gift.common.exception.MemberException;
 import gift.member.model.Member;
-import gift.member.model.MemberRequestDto;
+import gift.member.model.MemberRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +24,8 @@ public class MemberService {
     }
 
     @Transactional
-    public Long insertMember(MemberRequestDto memberRequestDto) {
-        Member member = memberRepository.save(memberRequestDto.toEntity());
+    public Long insertMember(MemberRequest memberRequest) {
+        Member member = memberRepository.save(memberRequest.toEntity());
         return member.getId();
     }
 }

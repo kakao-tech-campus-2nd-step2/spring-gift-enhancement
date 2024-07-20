@@ -7,8 +7,8 @@ import gift.product.ProductErrorCode;
 import gift.product.ProductRepository;
 import gift.product.model.Product;
 import gift.wish.model.Wish;
-import gift.wish.model.WishRequestDto;
-import gift.wish.model.WishResponseDto;
+import gift.wish.model.WishRequest;
+import gift.wish.model.WishResponse;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,34 +26,34 @@ public class WishService {
     }
 
     @Transactional(readOnly = true)
-    public List<WishResponseDto> getWishList(LoginMemberDto loginMemberDto, Pageable pageable) {
+    public List<WishResponse> getWishList(LoginMemberDto loginMemberDto, Pageable pageable) {
         return wishRepository.findAllByMemberId(loginMemberDto.getId(),
                 pageable)
-            .map(WishResponseDto::from)
+            .map(WishResponse::from)
             .getContent();
     }
 
     @Transactional
-    public Long addProductToWishList(WishRequestDto wishRequestDto, LoginMemberDto loginMemberDto)
+    public Long addProductToWishList(WishRequest wishRequest, LoginMemberDto loginMemberDto)
         throws ProductException {
-        Product product = productRepository.findById(wishRequestDto.productId())
+        Product product = productRepository.findById(wishRequest.productId())
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
-        Wish wish = new Wish(loginMemberDto.toEntity(), product, wishRequestDto.count());
+        Wish wish = new Wish(loginMemberDto.toEntity(), product, wishRequest.count());
         wishRepository.save(wish);
         return wish.getId();
     }
 
     @Transactional
-    public void updateProductInWishList(Long wishId, WishRequestDto wishRequestDto,
+    public void updateProductInWishList(Long wishId, WishRequest wishRequest,
         LoginMemberDto loginMemberDto) throws WishException {
         Wish wish = wishRepository.findById(wishId)
             .orElseThrow(() -> new WishException(WishErrorCode.NOT_FOUND));
         wish.validateMember(loginMemberDto.getId());
-        if (wishRequestDto.isCountZero()) {
+        if (wishRequest.isCountZero()) {
             wishRepository.deleteById(wishId);
             return;
         }
-        wish.changeCount(wishRequestDto.count());
+        wish.changeCount(wishRequest.count());
     }
 
     @Transactional

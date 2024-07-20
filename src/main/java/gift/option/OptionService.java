@@ -3,8 +3,8 @@ package gift.option;
 import gift.common.exception.OptionException;
 import gift.common.exception.ProductException;
 import gift.option.model.Option;
-import gift.option.model.OptionRequestDto;
-import gift.option.model.OptionResponseDto;
+import gift.option.model.OptionRequest;
+import gift.option.model.OptionResponse;
 import gift.option.model.Options;
 import gift.product.ProductErrorCode;
 import gift.product.ProductRepository;
@@ -25,31 +25,31 @@ public class OptionService {
     }
 
     @Transactional(readOnly = true)
-    public List<OptionResponseDto> getOptions(Long productId) {
+    public List<OptionResponse> getOptions(Long productId) {
         return optionRepository.findAllByProductId(productId)
             .stream()
-            .map(OptionResponseDto::from)
+            .map(OptionResponse::from)
             .toList();
     }
 
     @Transactional
-    public Long addOption(Long productId, OptionRequestDto optionRequestDto)
+    public Long addOption(Long productId, OptionRequest optionRequest)
         throws ProductException, OptionException {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductException(
                 ProductErrorCode.NOT_FOUND));
         Options options = new Options(optionRepository.findAllByProductId(productId));
-        Option option = new Option(optionRequestDto.name(), optionRequestDto.quantity(), product);
+        Option option = new Option(optionRequest.name(), optionRequest.quantity(), product);
         options.validateDuplicated(option);
         option = optionRepository.save(option);
         return option.getId();
     }
 
     @Transactional
-    public void updateOption(Long optionId, OptionRequestDto optionRequestDto) throws OptionException {
+    public void updateOption(Long optionId, OptionRequest optionRequest) throws OptionException {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
-        option.updateInfo(optionRequestDto.name(), optionRequestDto.quantity());
+        option.updateInfo(optionRequest.name(), optionRequest.quantity());
     }
 
     @Transactional

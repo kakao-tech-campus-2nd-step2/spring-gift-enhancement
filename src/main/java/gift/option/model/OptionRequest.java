@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record OptionRequestDto(
+public record OptionRequest(
     @NotBlank
     @Size(max = 50, message = "옵션 이름은 공백을 포함하여 최대 50자입니다.")
     @Pattern(regexp = "^[a-zA-Z0-9기-힣 ()\\[\\]+\\-&/_]*$")

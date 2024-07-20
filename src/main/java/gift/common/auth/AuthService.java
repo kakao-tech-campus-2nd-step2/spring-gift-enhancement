@@ -4,8 +4,8 @@ import gift.common.exception.MemberException;
 import gift.member.MemberErrorCode;
 import gift.member.MemberRepository;
 import gift.member.model.Member;
-import gift.member.model.MemberRequestDto;
-import gift.member.model.MemberResponseDto;
+import gift.member.model.MemberRequest;
+import gift.member.model.MemberResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +21,12 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public MemberResponseDto getToken(MemberRequestDto memberRequestDto) throws MemberException {
-        Member member = memberRepository.findByEmail(memberRequestDto.email());
-        if (!member.matchPassword(memberRequestDto.password())) {
+    public MemberResponse getToken(MemberRequest memberRequest) throws MemberException {
+        Member member = memberRepository.findByEmail(memberRequest.email());
+        if (!member.matchPassword(memberRequest.password())) {
             throw new MemberException(MemberErrorCode.FAILURE_LOGIN);
         }
-        return new MemberResponseDto(tokenProvider.generateToken(member));
+        return new MemberResponse(tokenProvider.generateToken(member));
     }
 
     public boolean validateAuthorization(String authorizationHeader) {

@@ -1,8 +1,8 @@
 package gift.category;
 
 import gift.category.model.Category;
-import gift.category.model.CategoryRequestDto;
-import gift.category.model.CategoryResponseDto;
+import gift.category.model.CategoryRequest;
+import gift.category.model.CategoryResponse;
 import gift.common.exception.CategoryException;
 import gift.product.ProductRepository;
 import java.util.List;
@@ -22,31 +22,31 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<CategoryResponseDto> getAllCategories(Pageable pageable) {
+    public List<CategoryResponse> getAllCategories(Pageable pageable) {
         return categoryRepository.findAll(pageable)
-            .map(CategoryResponseDto::from)
+            .map(CategoryResponse::from)
             .getContent();
     }
 
     @Transactional(readOnly = true)
-    public CategoryResponseDto getCategoryById(Long id) throws CategoryException {
+    public CategoryResponse getCategoryById(Long id) throws CategoryException {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
-        return CategoryResponseDto.from(category);
+        return CategoryResponse.from(category);
     }
 
     @Transactional
-    public Long insertCategory(CategoryRequestDto categoryRequestDto) {
-        Category category = new Category(categoryRequestDto.name(), categoryRequestDto.color(), categoryRequestDto.imageUrl(), categoryRequestDto.description());
+    public Long insertCategory(CategoryRequest categoryRequest) {
+        Category category = new Category(categoryRequest.name(), categoryRequest.color(), categoryRequest.imageUrl(), categoryRequest.description());
         category = categoryRepository.save(category);
         return category.getId();
     }
 
     @Transactional
-    public void updateCategory(CategoryRequestDto categoryRequestDto, Long id) throws CategoryException {
+    public void updateCategory(CategoryRequest categoryRequest, Long id) throws CategoryException {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
-        category.updateInfo(categoryRequestDto.name(), categoryRequestDto.color(), categoryRequestDto.imageUrl(), categoryRequestDto.description());
+        category.updateInfo(categoryRequest.name(), categoryRequest.color(), categoryRequest.imageUrl(), categoryRequest.description());
     }
 
     @Transactional

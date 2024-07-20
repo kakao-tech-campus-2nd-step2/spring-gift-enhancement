@@ -17,7 +17,7 @@ TodoList
   - [x] 추가하기
   - [x] 수정하기
   - [x] 삭제하기
-- [x] categoryRequestDto
+- [x] categoryRequest
 - [x] categoryResponseDto
 - [x] categoryEntity
 - [x] categoryService

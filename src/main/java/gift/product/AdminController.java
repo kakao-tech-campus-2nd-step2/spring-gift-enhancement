@@ -2,8 +2,7 @@ package gift.product;
 
 import gift.common.exception.ProductException;
 import gift.product.model.ProductRequest;
-import gift.product.model.ProductRequest.Create;
-import gift.product.model.ProductResponseDto;
+import gift.product.model.ProductResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +31,7 @@ public class AdminController {
     @GetMapping
     public String getAllProducts(Model model,
         @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
-        Page<ProductResponseDto> productList = productService.getAllProducts(pageable);
+        Page<ProductResponse> productList = productService.getAllProducts(pageable);
         model.addAttribute("productList", productList);
         return "products";
     }

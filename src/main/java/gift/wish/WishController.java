@@ -3,8 +3,8 @@ package gift.wish;
 import gift.common.auth.LoginMember;
 import gift.common.auth.LoginMemberDto;
 import gift.common.model.PageResponseDto;
-import gift.wish.model.WishRequestDto;
-import gift.wish.model.WishResponseDto;
+import gift.wish.model.WishRequest;
+import gift.wish.model.WishResponse;
 import java.net.URI;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -30,7 +30,7 @@ public class WishController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponseDto<WishResponseDto>> getWishList(
+    public ResponseEntity<PageResponseDto<WishResponse>> getWishList(
         @LoginMember LoginMemberDto loginMemberDto,
         @PageableDefault(size = 10, sort = "product", direction = Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(
@@ -38,18 +38,18 @@ public class WishController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> insertProductToWishList(@RequestBody WishRequestDto wishRequestDto,
+    public ResponseEntity<Void> insertProductToWishList(@RequestBody WishRequest wishRequest,
         @LoginMember LoginMemberDto loginMemberDto) {
-        Long wishId = wishService.addProductToWishList(wishRequestDto, loginMemberDto);
+        Long wishId = wishService.addProductToWishList(wishRequest, loginMemberDto);
         return ResponseEntity.created(URI.create("/api/wishes/" + wishId)).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateProductInWishList(
         @PathVariable("id") Long wishId,
-        @RequestBody WishRequestDto wishRequestDto,
+        @RequestBody WishRequest wishRequest,
         @LoginMember LoginMemberDto loginMemberDto) {
-        wishService.updateProductInWishList(wishId, wishRequestDto, loginMemberDto);
+        wishService.updateProductInWishList(wishId, wishRequest, loginMemberDto);
         return ResponseEntity.ok().build();
     }
 

@@ -9,7 +9,7 @@ import static org.mockito.BDDMockito.then;
 import gift.category.CategoryRepository;
 import gift.category.CategoryService;
 import gift.category.model.Category;
-import gift.category.model.CategoryRequestDto;
+import gift.category.model.CategoryRequest;
 import gift.product.ProductRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +65,7 @@ public class CategoryServiceTest {
             new Category( "test", "##test", "test.jpg", "test"));
 
         categoryService.insertCategory(
-            new CategoryRequestDto("test", "##test", "test.jpg", "test"));
+            new CategoryRequest("test", "##test", "test.jpg", "test"));
 
         then(categoryRepository).should().save(any());
     }
@@ -75,7 +75,7 @@ public class CategoryServiceTest {
         Category category = new Category( "test", "##test", "test.jpg", "test");
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
 
-        categoryService.updateCategory(new CategoryRequestDto("test1", "##test1", "test1.jpg", "test1"), 1L);
+        categoryService.updateCategory(new CategoryRequest("test1", "##test1", "test1.jpg", "test1"), 1L);
 
         assertAll(
             ()->assertThat(category.getName()).isEqualTo("test1"),

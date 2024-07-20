@@ -2,7 +2,7 @@ package gift.category.model;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record CategoryRequestDto(
+public record CategoryRequest(
     @NotBlank
     String name,
     String color,

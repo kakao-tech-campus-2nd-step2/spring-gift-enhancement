@@ -1,10 +1,12 @@
 package gift.product.model;
 
+import gift.option.model.OptionRequest;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 public class ProductRequest {
 
@@ -19,7 +21,10 @@ public class ProductRequest {
         @NotBlank
         String imageUrl,
         @NotNull
-        Long categoryId
+        Long categoryId,
+        @NotNull
+        @Size(min = 1, message = "Product 에 해당하는 Option 은 하나 이상이어야 합니다.")
+        List<OptionRequest> optionRequests
     ) {
 
     }
@@ -38,12 +43,12 @@ public class ProductRequest {
         Long categoryId
     ) {
 
-        public static Update from(ProductResponseDto productResponseDto) {
+        public static Update from(ProductResponse productResponse) {
             return new Update(
-                productResponseDto.name(),
-                productResponseDto.price(),
-                productResponseDto.imageUrl(),
-                productResponseDto.categoryId()
+                productResponse.name(),
+                productResponse.price(),
+                productResponse.imageUrl(),
+                productResponse.categoryId()
             );
         }
     }
