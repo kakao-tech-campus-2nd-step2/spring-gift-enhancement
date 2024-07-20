@@ -6,6 +6,8 @@ import gift.product.domain.WishListProduct;
 import gift.product.exception.ProductException;
 import gift.product.infra.ProductRepository;
 import gift.product.infra.WishListRepository;
+import gift.user.application.UserService;
+import gift.user.domain.User;
 import gift.util.ErrorCode;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -19,10 +21,13 @@ public class WishListService {
 
     private final WishListRepository wishListRepository;
     private final ProductRepository productRepository;
+    private final UserService userService;
 
-    public WishListService(WishListRepository wishListRepository, ProductRepository productRepository) {
+    public WishListService(WishListRepository wishListRepository, ProductRepository productRepository,
+        UserService userService) {
         this.wishListRepository = wishListRepository;
         this.productRepository = productRepository;
+        this.userService = userService;
     }
 
     public WishList getWishListByUserId(Long userId) {
@@ -65,5 +70,16 @@ public class WishListService {
         if (wishList != null) {
             wishList.removeWishListProduct(productId);
         }
+    }
+
+    public void createWishList(Long userId) {
+        if (wishListRepository.findByUserId(userId) != null) {
+            throw new ProductException(ErrorCode.WISHLIST_ALREADY_EXISTS);
+        }
+        User user = userService.getUser(userId);
+
+        WishList wishList = new WishList();
+        wishList.setUser(user);
+        wishListRepository.save(wishList);
     }
 }

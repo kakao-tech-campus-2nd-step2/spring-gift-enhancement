@@ -39,16 +39,23 @@ public class WishListController {
     }
 
     @JwtAuthenticated
+    @PostMapping("/{userId}/create")
+    public ResponseEntity<?> createWishList(@PathVariable Long userId) {
+        wishListService.createWishList(userId);
+        return ResponseEntity.ok(new CommonResponse<>(null, "위시리스트 생성 성공", true));
+    }
+
+    @JwtAuthenticated
     @PostMapping("/{userId}/add/{productId}")
     public ResponseEntity<?> addProductToWishList(@PathVariable Long userId, @PathVariable Long productId) {
         wishListService.addProductToWishList(userId, productId);
-        return ResponseEntity.ok(new CommonResponse<>(null, "위시리스트에 제품이 추가되었습니다", true));
+        return ResponseEntity.ok(new CommonResponse<>(null, "제품 추가 성공", true));
     }
 
     @JwtAuthenticated
     @DeleteMapping("/{userId}/delete/{productId}")
     public ResponseEntity<?> deleteProductFromWishList(@PathVariable Long userId, @PathVariable Long productId) {
         wishListService.deleteProductFromWishList(userId, productId);
-        return ResponseEntity.ok(new CommonResponse<>(null, "위시리스트에서 제품이 삭제되었습니다", true));
+        return ResponseEntity.ok(new CommonResponse<>(null, "제품 삭제 성공", true));
     }
 }
