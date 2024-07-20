@@ -40,7 +40,7 @@ public class ProductService {
         }
 
         MemberEntity memberEntity = memberOptional.get();
-        if(memberEntity.getRole() != Role.ADMIN) {
+        if(!memberEntity.isAdmin()) {
             throw new AuthorizedException();
         }
 
@@ -59,7 +59,7 @@ public class ProductService {
         if(memberOptional.isEmpty()) throw new AuthorizedException();
 
         MemberEntity memberEntity = memberOptional.get();
-        if(!memberEntity.getRole().equals(Role.ADMIN) && !memberEntity.getRole().equals(Role.CONSUMER))
+        if(!memberEntity.isAdmin() && !memberEntity.isConsumer())
             throw new AuthorizedException();
         List<ProductEntity> entityList = productRepository.findAll();
         List<ProductDTO> dtoList = new ArrayList<>();
@@ -77,7 +77,7 @@ public class ProductService {
         if(memberOptional.isEmpty()) throw new AuthorizedException();
 
         MemberEntity memberEntity = memberOptional.get();
-        if(memberEntity.getRole() != Role.ADMIN)
+        if(!memberEntity.isAdmin())
             throw new AuthorizedException();
 
         Optional<CategoryEntity> categoryEntityOptional = categoryRepository.findByName(productDTO.categoryName());
@@ -98,7 +98,7 @@ public class ProductService {
         if(memberOptional.isEmpty()) throw new AuthorizedException();
 
         MemberEntity memberEntity = memberOptional.get();
-        if(memberEntity.getRole() != Role.ADMIN)
+        if(!memberEntity.isAdmin())
             throw new AuthorizedException();
 
         productRepository.deleteById(id);
@@ -121,7 +121,7 @@ public class ProductService {
         if(memberOptional.isEmpty()) throw new AuthorizedException();
 
         MemberEntity memberEntity = memberOptional.get();
-        if(!memberEntity.getRole().equals(Role.ADMIN) && !memberEntity.getRole().equals(Role.CONSUMER))
+        if(!memberEntity.isAdmin() && !memberEntity.isConsumer())
             throw new AuthorizedException();
 
         Optional<ProductEntity> productEntityOptional = productRepository.findById(id);
