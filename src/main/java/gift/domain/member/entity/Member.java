@@ -26,7 +26,7 @@ public class Member {
     @Column
     private String password;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishList;
 
     protected Member() {
@@ -61,7 +61,6 @@ public class Member {
 
     public void addWish(Wish wish) {
         this.wishList.add(wish);
-        wish.updateMember(this);
     }
 
     public void removeWish(Wish wish) {
