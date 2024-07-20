@@ -12,12 +12,16 @@
         <a href="/members/login" class="btn btn-primary mr-2">로그인</a>
         <a href="/members/register" class="btn btn-secondary">회원가입</a>
     </div>
-    <a href="/products/new" class="btn btn-success mb-3">상품 추가</a>
+    <div class="mb-3">
+        <a href="/products/new" class="btn btn-success">상품 추가</a>
+        <a href="/categories" class="btn btn-info">카테고리 관리</a>
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>
             <th>Name</th>
             <th>Price</th>
+            <th>Category</th>
             <th>Image URL</th>
             <th>Actions</th>
         </tr>
@@ -26,6 +30,7 @@
         <tr th:each="product : ${productPage.content}">
             <td th:text="${product.name}"></td>
             <td th:text="${product.price}"></td>
+            <td th:text="${product.categoryName}"></td>
             <td><img th:src="${product.imageUrl}" width="100"></td>
             <td>
                 <a th:href="@{/products/update/{id}(id=${product.id})}" class="btn btn-primary">Edit</a>
