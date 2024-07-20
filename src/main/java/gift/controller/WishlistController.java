@@ -61,8 +61,10 @@ public class WishlistController {
     }
 
     @PostMapping("/{productId}")
+
     public ResponseEntity<Void> addWishlistItem( @RequestParam("email") String email, @RequestParam("optionId") Long optionId, @PathVariable Long productId) {
         wishlistService.addWishlistItem(email, optionId, productId);
+
         return ResponseEntity.ok().build();
     }
 

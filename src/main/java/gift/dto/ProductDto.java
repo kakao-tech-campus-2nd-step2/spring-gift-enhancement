@@ -1,15 +1,19 @@
 package gift.dto;
 
 import gift.entity.Product;
+
 import jakarta.validation.Valid;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
 import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 public class ProductDto {
 
@@ -61,6 +65,7 @@ public class ProductDto {
         this.categoryId = product.getCategory().getId();
         this.categoryName = product.getCategory().getName();
         this.options = product.getOptions().stream().map(OptionDto::new).collect(Collectors.toList());
+
     }
 
     // Getters and Setters
@@ -108,6 +113,7 @@ public class ProductDto {
         this.categoryId = categoryId;
     }
 
+
     public List<OptionDto> getOptions() {
         return options;
     }
@@ -115,4 +121,5 @@ public class ProductDto {
     public void setOptions(List<OptionDto> options) {
         this.options = options;
     }
+
 }

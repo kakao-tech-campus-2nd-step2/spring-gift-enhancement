@@ -4,9 +4,11 @@ import gift.exception.ProductNoConferredException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 @Entity
 public class Product {
@@ -75,6 +77,7 @@ public class Product {
     }
 
 
+
     public Set<Option> getOptions() { return options; }
 
     public void setOptions(Set<Option> options) { this.options = options; }
@@ -100,6 +103,5 @@ public class Product {
             throw new ProductNoConferredException(List.of("카카오"));
         }
     }
-
 
 }
