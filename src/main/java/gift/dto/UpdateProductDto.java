@@ -2,14 +2,12 @@ package gift.dto;
 
 import gift.domain.Category;
 import gift.domain.Option;
-import gift.domain.Product;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UpdateProductDto {
     @NotBlank

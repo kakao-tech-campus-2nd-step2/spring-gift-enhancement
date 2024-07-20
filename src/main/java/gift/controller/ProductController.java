@@ -4,6 +4,7 @@ import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.CreateProductDto;
 import gift.dto.UpdateProductDto;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -21,9 +22,11 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     // 상품 추가
@@ -67,7 +70,7 @@ public class ProductController {
     // 특정 상품의 옵션 가져오기
     @GetMapping("/{product_id}/options")
     public ResponseEntity<List<Option>> getProductOptions(@PathVariable Long product_id) {
-        List<Option> options = productService.getPtoductOptions(product_id);
+        List<Option> options = optionService.getProductOptions(product_id);
         return ResponseEntity.ok(options);
     }
 }

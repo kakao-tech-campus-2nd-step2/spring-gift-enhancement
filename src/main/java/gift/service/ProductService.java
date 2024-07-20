@@ -70,8 +70,4 @@ public class ProductService {
     public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);
     }
-
-    public List<Option> getPtoductOptions(Long productId) {
-        return optionService.getProductOptions(productId);
-    }
 }

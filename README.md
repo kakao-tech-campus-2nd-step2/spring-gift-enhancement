@@ -73,4 +73,5 @@
 - [x] UpdateProductDto DAO역할 침범하지는 않는지?
   - update를 product의 service code내에서 작성 완료
   - Option을 update시키는 코드는 Option controller에서 진행하는 것이 맞는지 고민이 된다.
-- [ ] ProductService의 getProductOptions 를 굳이 가져와야 하나?
+- [x] ProductService의 Optionservice.getProductOptions 를 굳이 가져와야 하나?
+  - controller에서 바로 OptionService.getProductOptions를 호출하도록 수정
