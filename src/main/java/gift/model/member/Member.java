@@ -21,9 +21,6 @@ public class Member {
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String role;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Wish> wishes;
-
     protected Member() {
     }
   

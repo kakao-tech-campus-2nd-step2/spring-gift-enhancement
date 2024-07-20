@@ -14,18 +14,18 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false, length = 15, columnDefinition = "VARCHAR(15)")
     @Embedded
-    private  ProductName name;
+    private ProductName name;
 
-    @Column(nullable = false)
-    private  int price;
+    @Column(nullable = false, columnDefinition = "integer")
+    private int price;
 
-    @Column(nullable = false)
+    @Column(nullable = false , columnDefinition = "VARCHAR(255)")
     private String imageUrl;
 
-    @Column(nullable = false)
-    private  int amount;
+    @Column(nullable = false, columnDefinition = "integer")
+    private int amount;
 
     protected Product(){
     }

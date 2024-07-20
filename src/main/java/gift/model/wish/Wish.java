@@ -19,7 +19,7 @@ public class Wish {
     @JoinColumn(name = "members_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer")
     private int amount;
 
     protected Wish(){
