@@ -50,4 +50,8 @@ public class Option {
     public Product getProduct() {
         return product;
     }
+
+    public void assignProduct(Product product) {
+        this.product = product;
+    }
 }

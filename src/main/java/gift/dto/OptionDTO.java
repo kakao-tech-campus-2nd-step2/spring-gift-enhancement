@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.model.Product;
 import jakarta.validation.constraints.*;
 
 public class OptionDTO {
