@@ -42,7 +42,7 @@ class OptionServiceTest {
 
         // When & Then
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            optionService.addOptionToProduct(product.getProductId(), optionDto);
+            optionService.addOptionToProduct(product.getId(), optionDto);
         });
 
         // 예외 메시지가 출력되는지

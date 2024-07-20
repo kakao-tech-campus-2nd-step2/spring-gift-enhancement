@@ -42,7 +42,7 @@ public class CategoryServiceTest {
         productRepository.save(product);
 
         // When
-        Product foundProduct = productRepository.findById(product.getProductId()).orElse(null);
+        Product foundProduct = productRepository.findById(product.getId()).orElse(null);
 
         // Then
         assertThat(foundProduct).isNotNull();

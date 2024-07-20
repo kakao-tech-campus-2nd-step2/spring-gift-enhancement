@@ -32,8 +32,8 @@ public class WishListService {
     }
 
     // id로 위시리스트 찾기 (단일 객체 반환)
-    public WishList findByMemberId(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+    public WishList findByMemberId(Long id) {
+        Member member = memberRepository.findById(id)
                 .orElseThrow();
         return wishListRepository.findByMember(member);
     }
@@ -41,16 +41,16 @@ public class WishListService {
 
     /** wishListRepository의 findByMemberId 메소드를 호출하여
      데이터베이스에서 페이지네이션된 결과를 가져옴. **/
-    public Page<WishList> findByMemberId(Long memberId, Pageable pageable) {
-        Member member = memberRepository.findById(memberId)
+    public Page<WishList> findByMemberId(Long id, Pageable pageable) {
+        Member member = memberRepository.findById(id)
                 .orElseThrow();
         return wishListRepository.findByMember(member, pageable);
     }
 
     // 위시리스트에 상품 추가
     @Transactional
-    public void addProductToWishList(Long memberId, Product product) {
-        Member member = memberService.findById(memberId)
+    public void addProductToWishList(Long id, Product product) {
+        Member member = memberService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("옳지않은 회원 id 입니다."));
         WishList wishList = new WishList(member, product);
         wishListRepository.save(wishList);
@@ -58,10 +58,10 @@ public class WishListService {
 
     // 위시리스트에 상품 삭제
     @Transactional
-    public void removeProductFromWishList(Long memberId, Long productId) {
-        Member member = memberRepository.findById(memberId)
+    public void removeProductFromWishList(Long id, Long productId) {
+        Member member = memberRepository.findById(id)
                 .orElseThrow();
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findById(id)
                 .orElseThrow();
         Optional<WishList> wishListOptional = wishListRepository.findByMemberAndProduct(member, product);
         wishListOptional.ifPresent(wishListRepository::delete);

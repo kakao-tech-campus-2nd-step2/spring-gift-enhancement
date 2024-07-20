@@ -1,7 +1,9 @@
 package gift.admin;
 
 import gift.product.dto.ProductDto;
+
 import gift.product.model.Product;
+import gift.product.repository.ProductRepository;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +16,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
     private final ProductService productService;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public AdminController(ProductService productService) {
+    public AdminController(ProductService productService, ProductRepository productRepository) {
         this.productService = productService;
+        this.productRepository = productRepository;
     }
 
     @GetMapping("/products/list")
@@ -41,8 +47,8 @@ public class AdminController {
         Sort.Direction direction = Sort.Direction.fromString(sort[1]); // sort 배열의 두 번째 요소 정렬 방향을 Sort.Direction 객체로 변환
         Pageable pageable = PageRequest.of(limitedPage, limitedSize, Sort.by(direction, sort[0])); // 제한된 페이지 번호와 페이지 크기, 정렬 기준 및 방향으로 Pageable 객체 생성
 
-        Page<ProductDto> productPage = productService.findAll(pageable);
-        model.addAttribute("상품 목록", productPage.getContent()); // 현재 페이지의 상품 목록을 모델에 추가
+        Page<Product> productPage = productRepository.findAll(pageable);
+        model.addAttribute("상품 목록", productPage.getClass()); // 현재 페이지의 상품 목록을 모델에 추가
         model.addAttribute("현재 페이지", limitedPage); // 현재 페이지 번호를 모델에 추가
         model.addAttribute("전체 페이지", productPage.getTotalPages()); // 총 페이지 수를 모델에 추가
         model.addAttribute("전체 항목", productPage.getTotalElements()); // 총 항목 수를 모델에 추가
@@ -52,7 +58,7 @@ public class AdminController {
 
     @GetMapping("/{productId}")
     public String viewProduct(@PathVariable Long id, Model model) {
-        ProductDto product = productService.findById(id);
+        Optional<Product> product = productRepository.findById(id);
         model.addAttribute("product", product);
         return "view"; // view.html 파일 보여주기
     }
@@ -74,10 +80,8 @@ public class AdminController {
 
     @GetMapping("/{productId}/edit")
     public String showEditProductForm(@PathVariable Long id, Model model) {
-        ProductDto product = productService.findById(id); // productService를 사용하여 id로 상품 찾기
-
+        Optional<Product> product = productRepository.findById(id);
         model.addAttribute("product", product); // 모델에 상품 추가
-
         return "edit"; // 렌더링할 뷰의 이름 반환
     }
 

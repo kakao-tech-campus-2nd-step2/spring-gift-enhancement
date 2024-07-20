@@ -35,26 +35,26 @@ public class MemberService {
         return member;
     }
 
-    public Optional<Member> findById(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Optional<Member> findById(Long id) {
+        return memberRepository.findById(id);
     }
 
-    public Member updateEmail(Long memberId, String newEmail) {
-        Member member = memberRepository.findById(memberId)
+    public Member updateEmail(Long id, String newEmail) {
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
         member.updateEmail(newEmail);
         return memberRepository.save(member);
     }
 
-    public Member updatePassword(Long memberId, String newPassword) {
-        Member member = memberRepository.findById(memberId)
+    public Member updatePassword(Long id, String newPassword) {
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
         member.updatePassword(newPassword);
         return memberRepository.save(member);
     }
 
-    public void deleteMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+    public void deleteMember(Long id) {
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
         memberRepository.delete(member);
     }

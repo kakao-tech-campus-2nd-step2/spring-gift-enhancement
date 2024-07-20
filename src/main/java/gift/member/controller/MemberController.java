@@ -1,6 +1,7 @@
 package gift.member.controller;
 
 import gift.member.model.Member;
+import gift.member.repository.MemberRepository;
 import gift.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @PostMapping("/register")
     public Member register(@RequestParam String email, @RequestParam String password) {
@@ -24,23 +27,23 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public Member getMemberById(@PathVariable Long memberId) {
-        return memberService.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+    public Member getMemberById(@PathVariable Long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
     }
 
     @PutMapping("/{memberId}/email")
-    public Member updateEmail(@PathVariable Long memberId, @RequestParam String newEmail) {
-        return memberService.updateEmail(memberId, newEmail);
+    public Member updateEmail(@PathVariable Long id, @RequestParam String newEmail) {
+        return memberService.updateEmail(id, newEmail);
     }
 
     @PutMapping("/{memberId}/password")
-    public Member updatePassword(@PathVariable Long memberId, @RequestParam String newPassword) {
-        return memberService.updatePassword(memberId, newPassword);
+    public Member updatePassword(@PathVariable Long id, @RequestParam String newPassword) {
+        return memberService.updatePassword(id, newPassword);
     }
 
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
-        memberService.deleteMember(memberId);
+    public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
+        memberService.deleteMember(id);
         return ResponseEntity.noContent().build();
     }
 }

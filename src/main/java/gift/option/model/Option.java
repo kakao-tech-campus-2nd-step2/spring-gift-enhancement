@@ -13,7 +13,7 @@ public class Option {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long optionId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -27,8 +27,11 @@ public class Option {
     @Column(nullable = false)
     private int quantity;
 
+    public Option() {
+    }
+
     // JPA에서 필요로 하는 기본 생성자
-    protected Option(Long optionId, String name, int quantity) {
+    protected Option(Long id, String name, int quantity) {
     }
 
     public Option(Product product, String name, int quantity) {
@@ -37,16 +40,12 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public Option() {
-
-    }
-
     public Product getProduct() {
         return product;
     }
 
-    public Long getOptionId() {
-        return optionId;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

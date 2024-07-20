@@ -2,7 +2,7 @@ package gift.option.dto;
 
 public class OptionDto {
 
-    private Long optionId;
+    private Long id;
     private String name;
     private int quantity;
 
@@ -11,8 +11,8 @@ public class OptionDto {
     }
 
     // 모든 필드를 인자로 받는 생성자
-    public OptionDto(Long optionId, String name, int quantity) {
-        this.optionId = optionId;
+    public OptionDto(Long id, String name, int quantity) {
+        this.id = id;
         this.name = name;
         this.quantity = quantity;
     }
@@ -22,8 +22,8 @@ public class OptionDto {
         this.quantity = quantity;
     }
 
-    public Long getOptionId() {
-        return optionId;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

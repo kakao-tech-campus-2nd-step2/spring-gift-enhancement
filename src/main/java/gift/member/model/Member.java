@@ -14,7 +14,7 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
+    private Long id;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String email;
@@ -29,8 +29,13 @@ public class Member {
         this.email = email;
         this.password = password;
     }
-    public Long getMemberId() {
-        return memberId;
+
+    public Member() {
+
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public List<WishList> getWishLists() {
@@ -66,9 +71,9 @@ public class Member {
         return this.password.equals(rawPassword); // 단순 문자열 비교
     }
 
-//    public void validateLogin(String rawPassword) {
-//        if (!this.checkPassword(rawPassword)) {
-//            throw new IllegalArgumentException("옳지 않은 비밀번호 입니다.");
-//        }
-//    }
+    public void validateLogin(String rawPassword) {
+        if (!this.checkPassword(rawPassword)) {
+            throw new IllegalArgumentException("옳지 않은 비밀번호 입니다.");
+        }
+    }
 }

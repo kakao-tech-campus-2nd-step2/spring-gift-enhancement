@@ -20,20 +20,20 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
-    public List<OptionDto> getOptionsByProductId(Long productId) {
-        return optionRepository.findByProductId(productId).stream()
-                .map(option -> new OptionDto(option.getOptionId(), option.getName(), option.getQuantity()))
+    public List<OptionDto> getOptionsByProductId(Long id) {
+        return optionRepository.findByProductId(id).stream()
+                .map(option -> new OptionDto(option.getId(), option.getName(), option.getQuantity()))
                 .collect(Collectors.toList());
     }
 
-    public OptionDto addOptionToProduct(Long productId, OptionDto optionDto) {
-        Product product = productRepository.findById(productId)
+    public OptionDto addOptionToProduct(Long id, OptionDto optionDto) {
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
 
         Option option = new Option(product, optionDto.getName(), optionDto.getQuantity());
         Option savedOption = optionRepository.save(option);
 
-        return new OptionDto(savedOption.getOptionId(), savedOption.getName(), savedOption.getQuantity());
+        return new OptionDto(savedOption.getId(), savedOption.getName(), savedOption.getQuantity());
     }
 
     private void validateOptionName(String name) {
