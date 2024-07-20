@@ -12,7 +12,7 @@
   <!-- CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
         rel="stylesheet">
-  <link rel="stylesheet" th:href="@{/stylesheet.css}">
+  <link rel="stylesheet" th:href="@{/css/stylesheet.css}">
 
   <!-- JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -22,7 +22,7 @@
 </head>
 
 <body>
-<div class="container mt-5">
+<div class="container product-edit-container mt-5">
   <h1 class="text-center mb-4">상품 수정</h1>
   <form th:action="@{'/admin/products/' + ${product.id}}" method="post" th:object="${product}">
     <input type="hidden" name="_method" value="put">
@@ -45,7 +45,8 @@
       <label for="category" class="form-label">카테고리</label>
       <select id="category" class="form-control" th:field="*{categoryId}">
         <option value="" disabled selected>카테고리를 선택하세요</option>
-        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+        <option th:each="category : ${categories}" th:value="${category.id}"
+                th:text="${category.name}"></option>
       </select>
     </div>
     <div class="text-center">
@@ -54,31 +55,36 @@
   </form>
   <hr>
   <h2 class="mt-4">옵션 목록</h2>
-  <a th:href="@{'/admin/products/' + ${product.id} + '/options/new'}" class="btn btn-primary mb-3">새 옵션 추가</a>
-  <table class="table table-bordered table-hover">
-    <thead class="table-light">
-    <tr>
-      <th>ID</th>
-      <th>이름</th>
-      <th>수량</th>
-      <th>수정/삭제</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="option : ${options}">
-      <td th:text="${option.id}">ID</td>
-      <td th:text="${option.name}">Name</td>
-      <td th:text="${option.quantity}">Quantity</td>
-      <td>
-        <a th:href="@{'/admin/products/' + ${product.id} + '/options/' + ${option.id} + '/edit'}" class="btn btn-warning btn-sm">수정</a>
-        <form th:action="@{'/admin/products/' + ${product.id} + '/options/' + ${option.id}}" method="post" style="display:inline">
-          <input type="hidden" name="_method" value="delete">
-          <button type="submit" class="btn btn-danger btn-sm deleteBtn">삭제</button>
-        </form>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <a th:href="@{'/admin/products/' + ${product.id} + '/options/new'}" class="btn btn-primary mb-3">새
+    옵션 추가</a>
+  <div class="scrollable-table">
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>수량</th>
+        <th>수정/삭제</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="option : ${options}">
+        <td th:text="${option.id}">ID</td>
+        <td th:text="${option.name}">Name</td>
+        <td th:text="${option.quantity}">Quantity</td>
+        <td>
+          <a th:href="@{'/admin/products/' + ${product.id} + '/options/' + ${option.id} + '/edit'}"
+             class="btn btn-warning btn-sm">수정</a>
+          <form th:action="@{'/admin/products/' + ${product.id} + '/options/' + ${option.id}}"
+                method="post" style="display:inline">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" class="btn btn-danger btn-sm deleteBtn">삭제</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 </body>
 
