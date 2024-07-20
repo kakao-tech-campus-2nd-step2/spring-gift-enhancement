@@ -21,7 +21,7 @@ public abstract class BaseTimeEntity {
     private LocalDateTime modificationDate;
 
     @Column(name = "deletion_date")
-    private LocalDateTime deletionDate;
+    private LocalDateTime deletionDate = null;
 
     public LocalDateTime getRegistrationDate() {
         return registrationDate;

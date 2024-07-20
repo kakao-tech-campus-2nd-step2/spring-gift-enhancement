@@ -1,6 +1,7 @@
 package gift.product.model.dto.option;
 
 
+import gift.BaseTimeEntity;
 import gift.product.exception.ProductCustomException.NotEnoughStockException;
 import gift.product.model.dto.product.Product;
 import jakarta.persistence.Column;
@@ -22,7 +23,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Table(name = "option", uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "name"})})
 @SQLDelete(sql = "UPDATE option SET deletion_date = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deletion_date IS NULL")
-public class Option {
+public class Option extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
