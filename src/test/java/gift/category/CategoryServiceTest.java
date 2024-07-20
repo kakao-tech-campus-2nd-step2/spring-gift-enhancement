@@ -47,7 +47,7 @@ public class CategoryServiceTest {
     @DisplayName("카테고리가 존재할 때 categoryResponse를 반환한다.")
     void findCategoryById_shouldReturnCategoryResponse_whenCategoryExists() {
         // given
-        when(categoryRepository.findByIdAndIsActiveTrue(defaultCategory.getId())).thenReturn(
+        when(categoryRepository.findById(defaultCategory.getId())).thenReturn(
                 Optional.of(defaultCategory));
 
         // when
@@ -56,7 +56,7 @@ public class CategoryServiceTest {
         // then
         assertNotNull(response);
         assertEquals(defaultCategory.getName(), response.getName());
-        verify(categoryRepository, times(1)).findByIdAndIsActiveTrue(defaultCategory.getId());
+        verify(categoryRepository, times(1)).findById(defaultCategory.getId());
     }
 
     @Test
