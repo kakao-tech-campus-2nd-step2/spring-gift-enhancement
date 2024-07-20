@@ -23,6 +23,9 @@ public class Option {
     @JoinColumn(name = "gift_id")
     private Gift gift;
 
+    @Version
+    private Integer version;
+
     protected Option() {
     }
 

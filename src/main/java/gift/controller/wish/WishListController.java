@@ -29,8 +29,7 @@ public class WishListController {
     }
 
     @GetMapping("/wish")
-    public ResponseEntity<?> getGiftList(@RequestAttribute("user") User user,
-                                         @ModelAttribute PagingRequest pagingRequest) {
+    public ResponseEntity<?> getGiftList(@ModelAttribute PagingRequest pagingRequest) {
         PagingResponse<GiftResponse> gifts = giftService.getAllGifts(pagingRequest.getPage(), pagingRequest.getSize());
         return ResponseEntity.ok(gifts);
     }
