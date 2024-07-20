@@ -1,7 +1,7 @@
 package gift.controller;
 
 import gift.dto.LoginMemberToken;
-import gift.dto.MemberDTO;
+import gift.dto.MemberRequest;
 import gift.model.MemberRole;
 import gift.service.MemberService;
 import jakarta.validation.Valid;
@@ -25,17 +25,17 @@ public class MemberController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> register(@RequestBody @Valid MemberDTO memberDTO) {
-        if (memberDTO.getRole() == null) {
-            memberDTO.setRole(MemberRole.COMMON_MEMBER);
+    public ResponseEntity<Void> register(@RequestBody @Valid MemberRequest memberRequest) {
+        if (memberRequest.getRole() == null) {
+            memberRequest.setRole(MemberRole.COMMON_MEMBER);
         }
-        memberService.register(memberDTO);
+        memberService.register(memberRequest);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/login")
     public ResponseEntity<LoginMemberToken> login(@RequestParam("email") @NotBlank String email,
         @RequestParam("password") @NotBlank String password) {
-        return ResponseEntity.ok(memberService.login(new MemberDTO(email, password, null)));
+        return ResponseEntity.ok(memberService.login(new MemberRequest(email, password, null)));
     }
 }

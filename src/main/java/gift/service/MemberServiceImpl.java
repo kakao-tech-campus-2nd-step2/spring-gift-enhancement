@@ -2,7 +2,7 @@ package gift.service;
 
 import gift.database.JpaMemberRepository;
 import gift.dto.LoginMemberToken;
-import gift.dto.MemberDTO;
+import gift.dto.MemberRequest;
 import gift.exceptionAdvisor.exceptions.MemberAuthenticationException;
 import gift.model.Member;
 import jakarta.transaction.Transactional;
@@ -24,19 +24,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void register(MemberDTO memberDTO) {
-        if (checkEmailDuplication(memberDTO.getEmail())) {
+    public void register(MemberRequest memberRequest) {
+        if (checkEmailDuplication(memberRequest.getEmail())) {
             throw new MemberAuthenticationException("사용할 수 없는 이메일입니다.");
         }
-        Member member = new Member(null, memberDTO.getEmail(), memberDTO.getPassword(), memberDTO.getRole());
+        Member member = new Member(null, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getRole());
         jpaMemberRepository.save(member);
     }
 
     @Override
-    public LoginMemberToken login(MemberDTO memberDTO) {
-        Member member = findByEmail(memberDTO.getEmail());
+    public LoginMemberToken login(MemberRequest memberRequest) {
+        Member member = findByEmail(memberRequest.getEmail());
 
-        if (memberDTO.getPassword().equals(member.getPassword())) {
+        if (memberRequest.getPassword().equals(member.getPassword())) {
             String token = authenticationTool.makeToken(member);
             return new LoginMemberToken(token);
         }
@@ -45,16 +45,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean checkRole(MemberDTO memberDTO) {
+    public boolean checkRole(MemberRequest memberRequest) {
         return false;
     }
 
     @Override
-    public MemberDTO getLoginUser(String token) {
+    public MemberRequest getLoginUser(String token) {
         long id = authenticationTool.parseToken(token);
         Member member = jpaMemberRepository.findById(id).orElseThrow(MemberAuthenticationException::new);
 
-        return new MemberDTO(id,member.getEmail(), member.getPassword(), member.getRole());
+        return new MemberRequest(id,member.getEmail(), member.getPassword(), member.getRole());
     }
 
 

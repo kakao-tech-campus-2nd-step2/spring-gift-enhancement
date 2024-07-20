@@ -1,7 +1,7 @@
 package gift.service;
 
 import gift.database.JpaCategoryRepository;
-import gift.dto.CategoryDTO;
+import gift.dto.CategoryRequest;
 import gift.dto.CategoryResponse;
 import gift.model.Category;
 import jakarta.transaction.Transactional;
@@ -28,16 +28,16 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public void create(CategoryDTO categoryDTO) {
-        Category category = getCategory(null,categoryDTO);
+    public void create(CategoryRequest categoryRequest) {
+        Category category = getCategory(null, categoryRequest);
 
         jpaCategoryRepository.save(category);
     }
 
 
     @Override
-    public void update(long id, CategoryDTO categoryDTO) {
-        Category category = getCategory(id,categoryDTO);
+    public void update(long id, CategoryRequest categoryRequest) {
+        Category category = getCategory(id, categoryRequest);
         jpaCategoryRepository.save(category);
     }
 
@@ -46,12 +46,12 @@ public class CategoryServiceImpl implements CategoryService{
         jpaCategoryRepository.deleteById(id);
     }
 
-    private static Category getCategory(Long id,CategoryDTO categoryDTO) {
+    private static Category getCategory(Long id, CategoryRequest categoryRequest) {
         return new Category(id,
-            categoryDTO.getName(),
-            categoryDTO.getColor(),
-            categoryDTO.getDescription(),
-            categoryDTO.getImageUrl());
+            categoryRequest.getName(),
+            categoryRequest.getColor(),
+            categoryRequest.getDescription(),
+            categoryRequest.getImageUrl());
     }
 
 }

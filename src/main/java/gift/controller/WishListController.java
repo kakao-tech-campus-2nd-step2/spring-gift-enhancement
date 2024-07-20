@@ -1,8 +1,8 @@
 package gift.controller;
 
 import gift.ArgumentResolver.LoginMember;
-import gift.dto.MemberDTO;
-import gift.dto.WishListDTO;
+import gift.dto.MemberRequest;
+import gift.dto.WishListResponse;
 import gift.dto.WishListRequest;
 import gift.service.WishListService;
 import org.springframework.http.ResponseEntity;
@@ -26,39 +26,39 @@ public class WishListController {
     }
 
     @GetMapping
-    public ResponseEntity<WishListDTO> getWishList(@LoginMember MemberDTO memberDTO) {
-        return ResponseEntity.ok(wishListService.getWishList(memberDTO.getId()));
+    public ResponseEntity<WishListResponse> getWishList(@LoginMember MemberRequest memberRequest) {
+        return ResponseEntity.ok(wishListService.getWishList(memberRequest.getId()));
     }
 
     //상품 추가
     @PostMapping
-    public ResponseEntity<Void> addWishList(@LoginMember MemberDTO memberDTO,
+    public ResponseEntity<Void> addWishList(@LoginMember MemberRequest memberRequest,
         @RequestBody WishListRequest wishListRequest) {
-        wishListService.addProduct(memberDTO.getId(), wishListRequest.getProductId());
+        wishListService.addProduct(memberRequest.getId(), wishListRequest.getProductId());
         return ResponseEntity.ok().build();
     }
 
     //상품 삭제
     @DeleteMapping
-    public ResponseEntity<Void> deleteWishList(@LoginMember MemberDTO memberDTO,
+    public ResponseEntity<Void> deleteWishList(@LoginMember MemberRequest memberRequest,
         @RequestBody WishListRequest wishListRequest) {
-        wishListService.deleteProduct(memberDTO.getId(), wishListRequest.getProductId());
+        wishListService.deleteProduct(memberRequest.getId(), wishListRequest.getProductId());
         return ResponseEntity.ok().build();
     }
 
     //상품 수정
     @PutMapping
-    public ResponseEntity<Void> updateWishList(@LoginMember MemberDTO memberDTO,
+    public ResponseEntity<Void> updateWishList(@LoginMember MemberRequest memberRequest,
         @RequestBody WishListRequest wishListRequest) {
-        wishListService.updateProduct(memberDTO.getId(), wishListRequest.getProductId(),
+        wishListService.updateProduct(memberRequest.getId(), wishListRequest.getProductId(),
             wishListRequest.getProductCount());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{page}")
-    public ResponseEntity<WishListDTO> getWishListPage(@LoginMember MemberDTO memberDTO,
+    public ResponseEntity<WishListResponse> getWishListPage(@LoginMember MemberRequest memberRequest,
         @PathVariable int page) {
-        return ResponseEntity.ok(wishListService.getWishListPage(memberDTO.getId(), page, 10));
+        return ResponseEntity.ok(wishListService.getWishListPage(memberRequest.getId(), page, 10));
     }
 
 

@@ -1,15 +1,15 @@
 package gift.dto;
 
-public class CategoryDTO {
+public class CategoryRequest {
     private String name;
     private String color;
     private String description;
     private String imageUrl;
 
-    public CategoryDTO() {
+    public CategoryRequest() {
     }
 
-    public CategoryDTO(String name, String color, String description, String imageUrl) {
+    public CategoryRequest(String name, String color, String description, String imageUrl) {
         this.name = name;
         this.color = color;
         this.description = description;

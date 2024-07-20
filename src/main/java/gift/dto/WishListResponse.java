@@ -3,21 +3,21 @@ package gift.dto;
 import gift.model.Wish;
 import java.util.Map;
 
-public class WishListDTO {
+public class WishListResponse {
 
     private Long memberId;
     private Map<String,Integer> wishList;
 
 
-    public WishListDTO() {
+    public WishListResponse() {
     }
 
-    public WishListDTO(Wish wish,Map<String,Integer> wishList){
+    public WishListResponse(Wish wish,Map<String,Integer> wishList){
         this.memberId = wish.getMember().getId();
         this.wishList = wishList;
     }
 
-    public WishListDTO(Long memberId, Map<String, Integer> wishList) {
+    public WishListResponse(Long memberId, Map<String, Integer> wishList) {
         this.memberId = memberId;
         this.wishList = wishList;
     }

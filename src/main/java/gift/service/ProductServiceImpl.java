@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public void update(long id,ProductDTO dto) {
+    public void update(long id, ProductDTO dto) {
         jpaProductRepository.findById(id).orElseThrow(ProductNoSuchException::new);
 
         Product product = new Product(id, dto.getName(), dto.getPrice(), dto.getImageUrl());
