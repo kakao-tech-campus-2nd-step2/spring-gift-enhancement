@@ -64,23 +64,14 @@ public class Product {
     return options;
   }
 
-  public void addOption(Option option) {
-    if (options.stream().anyMatch(o -> o.getName().equals(option.getName()))) {
-      throw new IllegalArgumentException("동일한 상품 내의 옵션 이름은 중복될 수 없습니다.");
-    }
-    options.add(option);
-    option.setProduct(this);
-  }
-
   public void removeOption(Option option) {
     options.remove(option);
     option.setProduct(null);
   }
-  public void updateFromDto(ProductDto productDto, CategoryRepository categoryRepository) {
-    this.name = productDto.getName();
-    this.imageUrl = productDto.getImageUrl();
-    this.price = productDto.getPrice();
-    this.category = categoryRepository.findById(productDto.getCategoryId())
-            .orElseThrow(() -> new CustomNotFoundException("Category not found"));
+  public void updateFromDto(String name, int price, String imageUrl, Category category) {
+    this.name = name;
+    this.price = price;
+    this.imageUrl = imageUrl;
+    this.category = category;
+    }
   }
-}
