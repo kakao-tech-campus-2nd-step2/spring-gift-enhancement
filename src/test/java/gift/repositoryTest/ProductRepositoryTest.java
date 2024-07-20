@@ -1,7 +1,7 @@
 package gift.repositoryTest;
 
 import gift.domain.product.Product;
-import gift.domain.product.ProductReposiotory;
+import gift.domain.product.ProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 public class ProductRepositoryTest {
     @Autowired
-    private ProductReposiotory products;
+    private ProductRepository products;
 
     @Test
     void save() {

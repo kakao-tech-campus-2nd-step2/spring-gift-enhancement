@@ -5,13 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import gift.domain.member.Member;
 import gift.domain.member.MemberRepository;
 import gift.domain.product.Product;
-import gift.domain.product.ProductReposiotory;
+import gift.domain.product.ProductRepository;
 import gift.domain.wish.Wish;
 import gift.domain.wish.WishRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +27,7 @@ public class WishRepositoryTest {
     private MemberRepository members;
 
     @Autowired
-    private ProductReposiotory products;
+    private ProductRepository products;
 
     private Pageable pageable = PageRequest.of(0, 10);
 
