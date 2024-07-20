@@ -15,15 +15,6 @@ public class OptionRequest {
     @NotNull(message = "Product ID는 필수입니다.")
     private Long productId;
 
-    // 생성자
-    public OptionRequest() {}
-
-    public OptionRequest(String name, Long quantity, Long productId) {
-        this.name = name;
-        this.quantity = quantity;
-        this.productId = productId;
-    }
-
     // Getters and setters
     public String getName() {
         return name;

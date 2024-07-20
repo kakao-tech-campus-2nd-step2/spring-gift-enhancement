@@ -57,17 +57,4 @@ public class ShowProductPageController {
         model.addAttribute("product", product);
         return "Product/edit_product";
     }
-
-    // 옵션 메인 페이지 반환
-    @GetMapping("/{id}/options")
-    public String showOptionsForm(@PathVariable("id") Long id, Model model) {
-        Product product = productService.getProductById(id);
-        if (product == null) {
-            throw new ProductNotFoundException(id);
-        }
-
-        List<Option> option = optionService.getAllOptionByProduct(product);
-        model.addAttribute("options", option);
-        return "Option/option";
-    }
 }

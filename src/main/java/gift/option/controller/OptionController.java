@@ -4,8 +4,9 @@ import gift.option.domain.OptionRequest;
 import gift.option.service.OptionService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/api/options")
@@ -20,6 +21,6 @@ public class OptionController {
     @PostMapping
     public String createOption(@ModelAttribute @Valid OptionRequest optionRequest) {
         optionService.createOption(optionRequest.getProductId(), optionRequest);
-        return "redirect:/api/options";
+        return "redirect:/api/products/" + optionRequest.getProductId() + "/options";
     }
 }
