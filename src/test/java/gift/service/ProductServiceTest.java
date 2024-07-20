@@ -31,10 +31,13 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
+        categoryRepository.deleteAll();
+        productRepository.deleteAll();
+
         categoryService = new CategoryService(categoryRepository);
         productService = new ProductService(productRepository, new ProductNameValidator(), categoryService);
 
-        CategoryRequest categoryRequest = new CategoryRequest("교환권","#FFFFFF","http://example.com/category1.jpg","");
+        CategoryRequest categoryRequest = new CategoryRequest("test카테고리","#FFFFFF","http://example.com/category1.jpg","");
         category = categoryService.addCategory(categoryRequest);
 
         Product product1 = new Product("Product 1", 100, "http://example.com/product1.jpg", category);
