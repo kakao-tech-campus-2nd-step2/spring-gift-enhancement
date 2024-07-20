@@ -52,7 +52,7 @@ public class OptionService {
         ProductResponse productResponse = productService.getProductById(productId);
         Product product = productService.convertToEntity(productResponse);
 
-        validateDuplicateOptionName(productId, optionCreateRequest.name());
+        validateDuplicateOptionName(productId, optionCreateRequest.name(), null);
 
         Option option = new Option(
             optionCreateRequest.name(),
@@ -78,7 +78,7 @@ public class OptionService {
             throw new OptionNotFoundException(OPTION_NOT_FOUND + optionId);
         }
 
-        validateDuplicateOptionName(productId, optionUpdateRequest.name());
+        validateDuplicateOptionName(productId, optionUpdateRequest.name(), optionId);
 
         option.update(optionUpdateRequest.name(), optionUpdateRequest.quantity(), product);
         Option updatedOption = optionRepository.save(option);
@@ -100,10 +100,10 @@ public class OptionService {
         optionRepository.delete(option);
     }
 
-    private void validateDuplicateOptionName(Long productId, String optionName) {
+    private void validateDuplicateOptionName(Long productId, String optionName, Long optionIdToExclude) {
         List<Option> options = optionRepository.findByProductId(productId);
         for (Option option : options) {
-            if (option.isNameMatching(optionName)) {
+            if (!option.getId().equals(optionIdToExclude) && option.isNameMatching(optionName)) {
                 throw new IllegalArgumentException(OPTION_NAME_DUPLICATE);
             }
         }
