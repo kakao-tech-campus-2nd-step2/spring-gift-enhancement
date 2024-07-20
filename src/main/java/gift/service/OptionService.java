@@ -80,6 +80,7 @@ public class OptionService {
                 .orElseThrow(() -> new OptionNotFoundException(OPTION_NOT_FOUND));
 
         option.subtractQuantity(quantity);
+        optionRepository.save(option);
     }
 
 }

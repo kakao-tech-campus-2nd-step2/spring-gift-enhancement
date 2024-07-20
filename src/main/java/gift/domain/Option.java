@@ -1,7 +1,10 @@
 package gift.domain;
 
 import gift.dto.request.OptionRequest;
+import gift.exception.InsufficientQuantityException;
 import jakarta.persistence.*;
+
+import static gift.exception.ErrorCode.INSUFFICIENT_QUANTITY;
 
 @Entity
 public class Option {
@@ -55,5 +58,12 @@ public class Option {
 
     public Long getId() {
         return id;
+    }
+
+    public void subtractQuantity(Integer quantity){
+        if (this.quantity < quantity) {
+            throw new InsufficientQuantityException(INSUFFICIENT_QUANTITY);
+        }
+        this.quantity -= quantity;
     }
 }
