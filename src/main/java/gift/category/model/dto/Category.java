@@ -24,9 +24,6 @@ public class Category extends BaseTimeEntity {
 
     private String description;
 
-    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
-    private boolean isActive = true; // 선물의 활성화 상태
-
     public Category() {
     }
 
@@ -47,16 +44,10 @@ public class Category extends BaseTimeEntity {
         return description;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
 
     public void updateCategory(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public void inactive() {
-        isActive = false;
-    }
 }

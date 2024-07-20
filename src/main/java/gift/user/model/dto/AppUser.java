@@ -28,9 +28,6 @@ public class AppUser extends BaseTimeEntity {
     @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
-    private Boolean isActive = true;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private Role role = Role.USER;
@@ -75,14 +72,6 @@ public class AppUser extends BaseTimeEntity {
 
     public String getSalt() {
         return salt;
-    }
-
-    public Boolean isActive() {
-        return isActive;
-    }
-
-    public void inactive() {
-        this.isActive = false;
     }
 
     public boolean isPasswordCorrect(String inputPassword) {

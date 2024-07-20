@@ -42,9 +42,6 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
-    private boolean isActive = true;
-
     public Product(String name, int price, String imageUrl, AppUser seller, Category category) {
         this.name = name;
         this.price = price;
@@ -86,10 +83,6 @@ public class Product extends BaseTimeEntity {
 
     public void updateCategory(Category category) {
         this.category = category;
-    }
-
-    public void inactive() {
-        isActive = false;
     }
 
     public void updateProduct(String name, int price, String imageUrl) {
