@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 public record OptionDTO(
     @NotBlank(message = "옵션 이름은 최소 1자 이상이어야 합니다.")
     @Size(max = 50, message = "옵션 이름은 공백 포함 최대 50자까지 입력할 수 있습니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\\\s\\\\(\\\\)\\\\[\\\\]\\\\+\\\\-\\\\&\\\\/\\\\_]*$", message = "옵션 이름에 (), [], +, -, &, /, _ 외 특수 문자는 사용할 수 없습니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_]*$", message = "옵션 이름에 (), [], +, -, &, /, _ 외 특수 문자는 사용할 수 없습니다.")
     String name,
 
     @NotNull(message = "옵션 수량을 입력해야 합니다.")

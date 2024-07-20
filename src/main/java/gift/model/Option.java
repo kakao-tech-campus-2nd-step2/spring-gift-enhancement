@@ -76,7 +76,7 @@ public class Option {
             throw new IllegalArgumentException("옵션 이름은 공백 포함 최대 50자까지 입력할 수 있습니다.");
         }
         if (!name.matches(
-            "^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\\\s\\\\(\\\\)\\\\[\\\\]\\\\+\\\\-\\\\&\\\\/\\\\_]*$")) {
+            "^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_]*$")) {
             throw new IllegalArgumentException("옵션 이름에 (), [], +, -, &, /, _ 외 특수 문자는 사용할 수 없습니다.");
         }
     }
