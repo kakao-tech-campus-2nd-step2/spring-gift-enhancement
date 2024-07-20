@@ -36,7 +36,7 @@ public class OptionService {
             .orElseThrow(() -> new NoSuchEntityException("product"));
         Option option = optionRequest.toEntity(product);
         Options.of(optionRepository.findAllByProductId(productId))
-            .validate(option);
+            .validateUniqueName(option);
         optionRepository.save(option);
     }
 }

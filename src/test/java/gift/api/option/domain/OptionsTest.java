@@ -13,7 +13,7 @@ class OptionsTest {
 
     @Test
     @DisplayName(value = "중복된_이름의_옵션_추가_테스트")
-    void validate() {
+    void validateUniqueName() {
         // given
         var product = mock(Product.class);
         var name = "option";
@@ -24,6 +24,6 @@ class OptionsTest {
         // when
         // then
         assertThatExceptionOfType(InvalidNameException.class)
-            .isThrownBy(() -> options.validate(new Option(product, name, quantity)));
+            .isThrownBy(() -> options.validateUniqueName(new Option(product, name, quantity)));
     }
 }
