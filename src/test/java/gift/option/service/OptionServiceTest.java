@@ -7,12 +7,14 @@ import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import gift.option.OptionFixture;
 import gift.option.dto.OptionReqDto;
 import gift.option.entity.Option;
 import gift.option.exception.OptionDuplicatedNameException;
 import gift.option.exception.OptionErrorCode;
 import gift.option.exception.OptionNotEnoughStockException;
 import gift.option.repository.OptionRepository;
+import gift.product.ProductFixture;
 import gift.product.entity.Product;
 import java.util.List;
 import java.util.Optional;
@@ -37,10 +39,10 @@ class OptionServiceTest {
     @DisplayName("옵션 추가 성공")
     void addOptions_success() {
         //given
-        Product product = new Product("테스트 상품", 1000, "test.png", null);
+        Product product = ProductFixture.createProduct();
         List<OptionReqDto> optionReqDtos = List.of(
-                new OptionReqDto("옵션1", 10),
-                new OptionReqDto("옵션2", 20)
+                OptionFixture.createOptionReqDto("옵션1", 10),
+                OptionFixture.createOptionReqDto("옵션2", 20)
         );
 
         //when
@@ -61,10 +63,10 @@ class OptionServiceTest {
     @DisplayName("옵션 추가 실패 - 중복된 옵션 이름")
     void addOptions_fail_duplicatedNames() {
         //given
-        Product product = new Product("테스트 상품", 1000, "test.png", null);
+        Product product = ProductFixture.createProduct();
         List<OptionReqDto> optionReqDtos = List.of(
-                new OptionReqDto("옵션1", 10),
-                new OptionReqDto("옵션1", 20)
+                OptionFixture.createOptionReqDto("옵션1", 10),
+                OptionFixture.createOptionReqDto("옵션1", 20)
         );
 
         //then
@@ -77,16 +79,16 @@ class OptionServiceTest {
     @DisplayName("옵션 수정 성공")
     void updateOptions_success() {
         //given
-        Product product = new Product("테스트 상품", 1000, "test.png", null);
+        Product product = ProductFixture.createProduct();
         List.of(
-                new OptionReqDto("기존 옵션1", 10),
-                new OptionReqDto("기존 옵션2", 20)
+                OptionFixture.createOptionReqDto("기존 옵션1", 10),
+                OptionFixture.createOptionReqDto("기존 옵션2", 20)
         ).forEach(optionReqDto -> product.addOption(optionReqDto.toEntity()));
 
         List<OptionReqDto> optionReqDtos = List.of(
-                new OptionReqDto("수정된 옵션1", 30),
-                new OptionReqDto("수정된 옵션2", 40),
-                new OptionReqDto("새로운 옵션", 50)
+                OptionFixture.createOptionReqDto("수정된 옵션1", 30),
+                OptionFixture.createOptionReqDto("수정된 옵션2", 40),
+                OptionFixture.createOptionReqDto("새로운 옵션", 50)
         );
 
         //when
@@ -107,15 +109,11 @@ class OptionServiceTest {
     @DisplayName("옵션 수정 실패 - 중복된 옵션 이름")
     void updateOptions_fail_duplicatedNames() {
         //given
-        Product product = new Product("테스트 상품", 1000, "test.png", null);
-        List.of(
-                new OptionReqDto("기존 옵션1", 10),
-                new OptionReqDto("기존 옵션2", 20)
-        ).forEach(optionReqDto -> product.addOption(optionReqDto.toEntity()));
+        Product product = ProductFixture.createProduct();
 
         List<OptionReqDto> optionReqDtos = List.of(
-                new OptionReqDto("중복된 옵션", 30),
-                new OptionReqDto("중복된 옵션", 40)
+                OptionFixture.createOptionReqDto("중복된 옵션", 10),
+                OptionFixture.createOptionReqDto("중복된 옵션", 20)
         );
 
         //then
@@ -128,7 +126,7 @@ class OptionServiceTest {
     @DisplayName("옵션 재고 차감 성공")
     void subtractQuantity_success() {
         //given
-        Option option = new Option("옵션1", 10);
+        Option option = OptionFixture.createOption("테스트 옵션", 10);
         when(optionRepository.findById(anyLong())).thenReturn(Optional.of(option));
 
         //when
@@ -144,7 +142,7 @@ class OptionServiceTest {
     @DisplayName("옵션 재고 차감 실패 - 재고 부족")
     void subtractQuantity_fail_notEnoughQuantity() {
         //given
-        Option option = new Option("옵션1", 10);
+        Option option = new Option("재고 부족한 옵션", 5);
         when(optionRepository.findById(anyLong())).thenReturn(Optional.of(option));
 
         //then

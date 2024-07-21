@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatList;
 
 import gift.auth.dto.LoginReqDto;
 import gift.auth.token.AuthToken;
-import gift.category.dto.CategoryReqDto;
 import gift.category.dto.CategoryResDto;
 import gift.category.exception.CategoryErrorCode;
 import gift.common.exception.CommonErrorCode;
@@ -63,9 +62,9 @@ class CategoryE2ETest {
         // 카테고리 추가
         var categoryUrl = baseUrl + "/api/categories";
         List.of(
-                new CategoryReqDto("카테고리1", "#f3f3f3", "http://localhost:8080/image1.jpg", "카테고리1입니다."),
-                new CategoryReqDto("카테고리2", "#223432", "http://localhost:8080/image2.jpg", "카테고리2입니다."),
-                new CategoryReqDto("카테고리3", "#5656ff", "http://localhost:8080/image3.jpg", "카테고리3입니다.")
+                CategoryFixture.createCategoryReqDto("카테고리1", "#f3f3f3", "http://localhost:8080/image1.jpg", "카테고리1입니다."),
+                CategoryFixture.createCategoryReqDto("카테고리2", "#223432", "http://localhost:8080/image2.jpg", "카테고리2입니다."),
+                CategoryFixture.createCategoryReqDto("카테고리3", "#5656ff", "http://localhost:8080/image3.jpg", "카테고리3입니다.")
         ).forEach(categoryReqDto -> {
             var request = TestUtils.createRequestEntity(categoryUrl, categoryReqDto, HttpMethod.POST, accessToken);
             restTemplate.exchange(request, String.class);
@@ -120,7 +119,7 @@ class CategoryE2ETest {
     @DisplayName("카테고리 추가")
     void addCategory() {
         //given
-        var reqbody = new CategoryReqDto("카테고리4", "#f3f3f3", "http://localhost:8080/image4.jpg", "카테고리4입니다.");
+        var reqbody = CategoryFixture.createCategory("카테고리4", "#f3f3f3", "http://localhost:8080/image4.jpg", "카테고리4입니다.");
         var request = TestUtils.createRequestEntity("/api/categories", reqbody, HttpMethod.POST, accessToken);
 
         //when
@@ -146,7 +145,7 @@ class CategoryE2ETest {
     @DisplayName("카테고리 추가 실패")
     void failAddCategory() {
         //given
-        var reqbody = new CategoryReqDto("", "", "", "생성 실패할 카테고리");
+        var reqbody = CategoryFixture.createCategory("", "", "", "생성 실패할 카테고리");
         var request = TestUtils.createRequestEntity("/api/categories", reqbody, HttpMethod.POST, accessToken);
 
         //when
@@ -178,7 +177,7 @@ class CategoryE2ETest {
         var categories = getCategoryList();
         var lastCategory = categories.getLast();
 
-        var reqbody = new CategoryReqDto("수정된 카테고리", "#fefefe", "http://localhost:8080/updated.jpg", "수정된 카테고리입니다.");
+        var reqbody = CategoryFixture.createCategory("수정된 카테고리", "#fefefe", "http://localhost:8080/updated.jpg", "수정된 카테고리입니다.");
         var request = TestUtils.createRequestEntity("/api/categories/" + lastCategory.id(), reqbody, HttpMethod.PUT, accessToken);
 
         //when
@@ -202,7 +201,7 @@ class CategoryE2ETest {
         var categories = getCategoryList();
         var lastCategory = categories.getLast();
 
-        var reqbody = new CategoryReqDto("", "", "", "수정 실패할 카테고리");
+        var reqbody = CategoryFixture.createCategory("", "", "", "수정 실패할 카테고리");
         var request = TestUtils.createRequestEntity("/api/categories/" + lastCategory.id(), reqbody, HttpMethod.PUT, accessToken);
 
         //when

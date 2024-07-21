@@ -5,18 +5,18 @@ import static org.assertj.core.api.Assertions.assertThatList;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.verify;
 
+import gift.category.CategoryFixture;
 import gift.category.entity.Category;
 import gift.category.repository.CategoryRepository;
-import gift.option.dto.OptionReqDto;
+import gift.option.OptionFixture;
 import gift.option.dto.OptionResDto;
-import gift.option.entity.Option;
 import gift.option.service.OptionService;
+import gift.product.ProductFixture;
 import gift.product.dto.ProductReqDto;
 import gift.product.dto.ProductResDto;
 import gift.product.entity.Product;
@@ -59,28 +59,30 @@ class ProductServiceTest {
     @DisplayName("전체 상품 조회")
     void getProducts() {
         //given
+        List<Product> products = List.of(
+                ProductFixture.createProduct("상품1", 1000, "product1.png"),
+                ProductFixture.createProduct("상품2", 2000, "product2.png")
+        );
+
         given(productRepository.findAll(any(Pageable.class))).willReturn(
-                new PageImpl<>(List.of(
-                        new Product("상품1", 1000, "product1.png", mock(Category.class)),
-                        new Product("상품2", 2000, "product2.png", mock(Category.class))
-                ), Pageable.ofSize(2), 2)
+                new PageImpl<>(products, Pageable.ofSize(2), 2)
         );
 
         //when
         Page<ProductResDto> productPage = productService.getProducts(Pageable.ofSize(2));
-        List<ProductResDto> products = productPage.getContent();
+        List<ProductResDto> productResDtos = productPage.getContent();
 
         //then
         assertThat(productPage.getTotalElements()).isEqualTo(2);
         assertThat(productPage.getTotalPages()).isOne();
 
         assertThatList(products).hasSize(2);
-        assertThatList(products).containsExactlyElementsOf(
-                List.of(
-                        new ProductResDto(new Product("상품1", 1000, "product1.png", mock(Category.class))),
-                        new ProductResDto(new Product("상품2", 2000, "product2.png", mock(Category.class)))
-                )
-        );
+        assertThatList(productResDtos).extracting(ProductResDto::name)
+                .containsExactly("상품1", "상품2");
+        assertThatList(productResDtos).extracting(ProductResDto::price)
+                .containsExactly(1000, 2000);
+        assertThatList(productResDtos).extracting(ProductResDto::imageUrl)
+                .containsExactly("product1.png", "product2.png");
 
         verify(productRepository).findAll(Pageable.ofSize(2));
     }
@@ -89,18 +91,17 @@ class ProductServiceTest {
     @DisplayName("단일 상품 조회 성공")
     void getProduct_success() {
         //given
-        Product product1 = new Product("상품1", 1000, "product1.png", mock(Category.class));
+        Product product = ProductFixture.createProduct("상품1", 1000, "product1.png");
 
-        given(productRepository.findById(anyLong())).willReturn(Optional.of(product1));
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         //when
-        ProductResDto product = productService.getProduct(1L);
+        ProductResDto productResDto = productService.getProduct(1L);
 
         //then
-        assertThat(product).isEqualTo(new ProductResDto(product1));
-        assertThat(product.name()).isEqualTo("상품1");
-        assertThat(product.price()).isEqualTo(1000);
-        assertThat(product.imageUrl()).isEqualTo("product1.png");
+        assertThat(productResDto.name()).isEqualTo("상품1");
+        assertThat(productResDto.price()).isEqualTo(1000);
+        assertThat(productResDto.imageUrl()).isEqualTo("product1.png");
 
         verify(productRepository).findById(1L);
     }
@@ -121,25 +122,23 @@ class ProductServiceTest {
     @DisplayName("상품 옵션 조회 성공")
     void getProductOptions_success() {
         //given
-        Product product1 = new Product("상품1", 1000, "product1.png", mock(Category.class));
+        Product product = ProductFixture.createProduct("상품1", 1000, "product1.png");
         List.of(
-                new Option("옵션1", 100),
-                new Option("옵션2", 200)
-        ).forEach(product1::addOption);
+                OptionFixture.createOption("옵션1", 100),
+                OptionFixture.createOption("옵션2", 200)
+        ).forEach(product::addOption);
 
-        given(productRepository.findById(anyLong())).willReturn(Optional.of(product1));
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
 
         //when
         List<OptionResDto> options = productService.getProductOptions(1L);
 
         //then
         assertThatList(options).hasSize(2);
-        assertThatList(options).containsExactlyElementsOf(
-                List.of(
-                        new OptionResDto(new Option("옵션1", 100)),
-                        new OptionResDto(new Option("옵션2", 200))
-                )
-        );
+        assertThatList(options).extracting(OptionResDto::name)
+                .containsExactly("옵션1", "옵션2");
+        assertThatList(options).extracting(OptionResDto::quantity)
+                .containsExactly(100, 200);
     }
 
     @Test
@@ -158,17 +157,13 @@ class ProductServiceTest {
     @DisplayName("상품 추가 성공")
     void addProduct_success() {
         // given
-        Category category = new Category("테스트 카테고리", "#FFFFFF", "test_category.png", "테스트 카테고리 설명");
-        ProductReqDto productReqDto = new ProductReqDto("테스트 상품", 1000, "test_product.png", "테스트 카테고리",
-                List.of(
-                        new OptionReqDto("옵션1", 100),
-                        new OptionReqDto("옵션2", 200)
-                )
-        );
+        Category category = CategoryFixture.createCategory("테스트 카테고리");
+        ProductReqDto productReqDto = ProductFixture.createProductReqDto("테스트 상품", 1000, "test_product.png", "테스트 카테고리", List.of(
+                OptionFixture.createOptionReqDto("옵션1", 100),
+                OptionFixture.createOptionReqDto("옵션2", 200)
+        ));
 
-        Product savedProduct = new Product("테스트 상품", 1000, "test_product.png", category);
-        savedProduct.addOption(new Option("옵션1", 100));
-        savedProduct.addOption(new Option("옵션2", 200));
+        Product savedProduct = ProductFixture.createProduct(productReqDto);
 
         given(categoryRepository.findByName("테스트 카테고리")).willReturn(Optional.of(category));
         given(productRepository.save(any(Product.class))).willReturn(savedProduct);
@@ -196,7 +191,7 @@ class ProductServiceTest {
         given(productRepository.save(any(Product.class))).willThrow(InvalidDataAccessApiUsageException.class);
 
         //then
-        assertThatThrownBy(() -> productService.addProduct(new ProductReqDto("상품1", 1000, "product1.png", "카테고리", List.of())))
+        assertThatThrownBy(() -> productService.addProduct(ProductFixture.createProductReqDto()))
                 .isInstanceOf(ProductCreateException.class)
                 .hasMessage(ProductErrorCode.PRODUCT_CREATE_FAILED.getMessage());
     }
@@ -207,35 +202,35 @@ class ProductServiceTest {
         // given
         Long productId = 1L;
 
-        Category oldCategory = new Category("old카테고리", "#000000", "old_category.png", "이전 카테고리 설명");
-        Category newCategory = new Category("new카테고리", "#FFFFFF", "new_category.png", "이후 카테고리 설명");
+        Category oldCategory = CategoryFixture.createCategory("old 카테고리");
+        Category newCategory = CategoryFixture.createCategory("new 카테고리");
 
-        Product oldProduct = new Product("old상품", 1000, "old_product.png", oldCategory);
+        Product oldProduct = ProductFixture.createProduct("old 상품", 1000, "old_product.png", oldCategory);
         List.of(
-                new Option("old옵션1", 100),
-                new Option("old옵션2", 200)
+                OptionFixture.createOption("old 옵션1", 100),
+                OptionFixture.createOption("old 옵션2", 200)
         ).forEach(oldProduct::addOption);
 
-        ProductReqDto productReqDto = new ProductReqDto("new상품", 2000, "new_product.png", "new카테고리",
+        ProductReqDto productReqDto = ProductFixture.createProductReqDto("new 상품", 2000, "new_product.png", "new 카테고리",
                 List.of(
-                        new OptionReqDto("new옵션1", 150),
-                        new OptionReqDto("new옵션2", 250)
+                        OptionFixture.createOptionReqDto("new 옵션1", 300),
+                        OptionFixture.createOptionReqDto("new 옵션2", 400)
                 )
         );
 
         given(productRepository.findById(productId)).willReturn(Optional.of(oldProduct));
-        given(categoryRepository.findByName("new카테고리")).willReturn(Optional.of(newCategory));
+        given(categoryRepository.findByName("new 카테고리")).willReturn(Optional.of(newCategory));
 
         // when
         productService.updateProduct(productId, productReqDto);
 
         // then
-        assertThat(oldProduct.getName()).isEqualTo("new상품");
+        assertThat(oldProduct.getName()).isEqualTo("new 상품");
         assertThat(oldProduct.getPrice()).isEqualTo(2000);
         assertThat(oldProduct.getImageUrl()).isEqualTo("new_product.png");
         assertThat(oldProduct.getCategory()).isEqualTo(newCategory);
 
-        verify(categoryRepository).findByName(eq("new카테고리"));
+        verify(categoryRepository).findByName(eq("new 카테고리"));
         verify(optionService).updateOptions(eq(oldProduct), eq(productReqDto.options()));
     }
 
@@ -256,7 +251,7 @@ class ProductServiceTest {
     void deleteProduct_success() {
         //given
         Long productId = 1L;
-        Product product = new Product("삭제될 상품", 1000, "delete_product.png", mock(Category.class));
+        Product product = ProductFixture.createProduct();
 
         given(productRepository.findById(productId)).willReturn(Optional.of(product));
 
@@ -280,17 +275,17 @@ class ProductServiceTest {
                 .isInstanceOf(ProductNotFoundException.class)
                 .hasMessage(ProductErrorCode.PRODUCT_NOT_FOUND.getMessage());
     }
-    
+
     @Test
     @DisplayName("상품 삭제 실패 - 상품 삭제 중 에러 발생")
     void deleteProduct_fail_deleteException() {
         //given
         Long productId = 1L;
-        Product product = new Product("삭제될 상품", 1000, "delete_product.png", mock(Category.class));
+        Product product = ProductFixture.createProduct();
 
         given(productRepository.findById(productId)).willReturn(Optional.of(product));
         willThrow(MockitoException.class).given(productRepository).delete(product);    // delete는 void 메서드이므로 예외를 발생시키기 위해 willThrow를 사용
-        
+
         //then
         assertThatThrownBy(() -> productService.deleteProduct(productId))
                 .isInstanceOf(ProductDeleteException.class)

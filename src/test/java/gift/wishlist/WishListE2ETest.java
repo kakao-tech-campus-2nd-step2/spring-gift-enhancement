@@ -4,9 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.auth.dto.LoginReqDto;
 import gift.auth.token.AuthToken;
+import gift.category.CategoryFixture;
 import gift.category.dto.CategoryReqDto;
+import gift.category.dto.CategoryResDto;
 import gift.common.exception.ErrorResponse;
+import gift.option.OptionFixture;
 import gift.option.dto.OptionReqDto;
+import gift.product.ProductFixture;
 import gift.product.dto.ProductReqDto;
 import gift.product.dto.ProductResDto;
 import gift.utils.JwtTokenProvider;
@@ -20,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,16 +65,16 @@ class WishListE2ETest {
     private static String accessToken;
 
     private static final List<OptionReqDto> options = List.of(
-            new OptionReqDto("옵션1", 1000),
-            new OptionReqDto("옵션2", 2000),
-            new OptionReqDto("옵션3", 3000)
+            OptionFixture.createOptionReqDto("옵션1", 1000),
+            OptionFixture.createOptionReqDto("옵션2", 2000),
+            OptionFixture.createOptionReqDto("옵션3", 3000)
     );
 
-    private static List<ProductReqDto> products = List.of(
-            new ProductReqDto("상품1", 1000, "keyboard.png", "위시리스트 카테고리1", options),
-            new ProductReqDto("상품2", 2000, "mouse.png", "위시리스트 카테고리2", options),
-            new ProductReqDto("상품3", 3000, "monitor.png", "위시리스트 카테고리3", options),
-            new ProductReqDto("상품4", 4000, "headset.png", "위시리스트 카테고리4", options)
+    private static final List<ProductReqDto> products = List.of(
+            ProductFixture.createProductReqDto("상품1", 1000, "keyboard.png", "위시리스트 카테고리1", options),
+            ProductFixture.createProductReqDto("상품2", 2000, "mouse.png", "위시리스트 카테고리2", options),
+            ProductFixture.createProductReqDto("상품3", 3000, "monitor.png", "위시리스트 카테고리3", options),
+            ProductFixture.createProductReqDto("상품4", 4000, "headset.png", "위시리스트 카테고리4", options)
     );
     private static List<ProductResDto> productList = new ArrayList<>();
 
@@ -84,10 +89,10 @@ class WishListE2ETest {
 
         String categoryUrl = baseUrl + "/api/categories";
         List.of(
-                new CategoryReqDto("위시리스트 카테고리1", "#FF0000", "category1.png", "카테고리1 입니다."),
-                new CategoryReqDto("위시리스트 카테고리2", "#00FF00", "category2.png", "카테고리2 입니다."),
-                new CategoryReqDto("위시리스트 카테고리3", "#0000FF", "category3.png", "카테고리3 입니다."),
-                new CategoryReqDto("위시리스트 카테고리4", "#FFFF00", "category4.png", "카테고리4 입니다.")
+                CategoryFixture.createCategoryReqDto("위시리스트 카테고리1", "#FF0000", "category1.png", "카테고리1 입니다."),
+                CategoryFixture.createCategoryReqDto("위시리스트 카테고리2", "#00FF00", "category2.png", "카테고리2 입니다."),
+                CategoryFixture.createCategoryReqDto("위시리스트 카테고리3", "#0000FF", "category3.png", "카테고리3 입니다."),
+                CategoryFixture.createCategoryReqDto("위시리스트 카테고리4", "#FFFF00", "category4.png", "카테고리4 입니다.")
         ).forEach(categoryReqDto -> {
             var categoryRequest = TestUtils.createRequestEntity(categoryUrl, categoryReqDto, HttpMethod.POST, accessToken);
             restTemplate.exchange(categoryRequest, String.class);
@@ -125,9 +130,9 @@ class WishListE2ETest {
         // 위시 리스트 초기화
         var wishListUrl = baseUrl + "/api/wish-list";
         List.of(
-                new WishListReqDto(productList.get(0).id(), 3),
-                new WishListReqDto(productList.get(1).id(), 7),
-                new WishListReqDto(productList.get(2).id(), 5)
+                WishListFixture.createWishListReqDto(productList.get(0).id(), 3),
+                WishListFixture.createWishListReqDto(productList.get(1).id(), 7),
+                WishListFixture.createWishListReqDto(productList.get(2).id(), 5)
         ).forEach(wishListReqDto -> {
             var wishListRequest = TestUtils.createRequestEntity(wishListUrl, wishListReqDto, HttpMethod.POST, accessToken);
             restTemplate.exchange(wishListRequest, String.class);
@@ -193,7 +198,7 @@ class WishListE2ETest {
         long productId = productList.get(productIndex).id();
 
         var url = baseUrl + "/api/wish-list";
-        var reqBody = new WishListReqDto(productId, quantity);
+        var reqBody = WishListFixture.createWishListReqDto(productId, quantity);
         var request = TestUtils.createRequestEntity(url, reqBody, HttpMethod.POST, accessToken);
 
         // when
@@ -218,7 +223,7 @@ class WishListE2ETest {
     void 위시_리스트_추가_실패() {
         // given
         var url = baseUrl + "/api/wish-list";
-        var reqBody = new WishListReqDto(-1L, 3);    // 존재하지 않는 상품 ID
+        var reqBody = WishListFixture.createWishListReqDto(-1L, 3);    // 존재하지 않는 상품 ID
         var request = TestUtils.createRequestEntity(url, reqBody, HttpMethod.POST, accessToken);
 
         // when
@@ -251,7 +256,7 @@ class WishListE2ETest {
 
         // 수정할 내용 준비
         var urlUpdate = baseUrl + "/api/wish-list/" + lastWishList.id();
-        var reqBodyUpdate = new WishListReqDto(lastWishList.productId(), updatedQuantity);
+        var reqBodyUpdate = WishListFixture.createWishListReqDto(lastWishList.productId(), updatedQuantity);
         var requestUpdate = TestUtils.createRequestEntity(urlUpdate, reqBodyUpdate, HttpMethod.PUT, accessToken);
 
         // when
@@ -333,7 +338,7 @@ class WishListE2ETest {
 
     private static Stream<Arguments> provideWishListModifyFailureScenarios() {
         return Stream.of(
-                Arguments.of("수정", HttpMethod.PUT, new WishListReqDto(1L, 3)),
+                Arguments.of("수정", HttpMethod.PUT, WishListFixture.createWishListReqDto(1L, 3)),
                 Arguments.of("삭제", HttpMethod.DELETE, null)
         );
     }
