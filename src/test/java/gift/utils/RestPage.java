@@ -11,4 +11,8 @@ public class RestPage<T> extends PageImpl<T> {  // Page<T> 직렬화를 위한 �
     public RestPage(List<T> content, int number, int size, long totalElements) {
         super(content, PageRequest.of(number, size), totalElements);
     }
+
+    protected RestPage() {
+        super(List.of());
+    }
 }
