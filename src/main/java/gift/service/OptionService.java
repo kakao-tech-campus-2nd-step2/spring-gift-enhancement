@@ -5,7 +5,7 @@ import gift.dto.OptionRequestDTO;
 import gift.dto.OptionResponseDTO;
 import gift.entity.Option;
 import gift.entity.Product;
-import gift.exception.OptionException;
+import gift.exception.optionException.OptionException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,8 @@ public class OptionService {
                 .collect(Collectors.toList());
     }
 
-    public void save(Long productId, OptionRequestDTO optionRequestDTO) {
+    public void addOption(OptionRequestDTO optionRequestDTO) {
+        Long productId = optionRequestDTO.productId();
         Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new OptionException("상품이 존재하지 않습니다"));
         String optionName = optionRequestDTO.name();
@@ -53,7 +54,7 @@ public class OptionService {
 
     public void updateOption(Long productId, Long optionId, OptionRequestDTO optionRequestDTO) {
         Optional<Option> option = optionRepository.findById(productId);
-        //
+
 
     }
 

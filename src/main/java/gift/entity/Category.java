@@ -5,6 +5,7 @@ import gift.dto.CategoryRequestDTO;
 import gift.dto.ProductRequestDTO;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,7 @@ public class Category {
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "category", orphanRemoval = true)
     @JsonManagedReference
-    private List<Product> products;
+    private List<Product> products = new ArrayList<Product>();
 
     public Category(){
 

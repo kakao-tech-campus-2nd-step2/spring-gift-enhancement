@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class OptionController {
 
     private final OptionService optionService;
@@ -41,19 +41,10 @@ public class OptionController {
     }
 
 
-    /*
-    * requestParam과 pathvariable 차이?
-    *
-    * */
+    @PostMapping("options/")
+    public ResponseEntity<String> createOption(@Valid @RequestBody OptionRequestDTO optionRequestDTO) {
 
-    @PostMapping("options/{productId}")
-    public ResponseEntity<String> createOption(@PathVariable("productId") Long productId, @Valid @RequestBody OptionRequestDTO optionRequestDTO) {
-
-        System.out.println("option creating ~~ ");
-        System.out.println(productId);
-
-
-        optionService.save(productId, optionRequestDTO);
+        optionService.saveOption(productId, optionRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("상품 option 등록 완료");
     }

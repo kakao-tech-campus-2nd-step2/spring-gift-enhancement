@@ -2,6 +2,7 @@ package gift.exception;
 
 import gift.dto.ErrorResponse;
 import gift.exception.categortException.CategoryNotFoundException;
+import gift.exception.optionException.OptionException;
 import gift.exception.productException.ProductNotFoundException;
 import io.jsonwebtoken.JwtException;
 import jakarta.persistence.PersistenceException;
