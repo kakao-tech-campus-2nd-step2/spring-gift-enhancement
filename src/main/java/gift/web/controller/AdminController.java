@@ -42,7 +42,7 @@ public class AdminController {
 
     @GetMapping("/create")
     public String createProductForm(Model model) {
-        model.addAttribute("product", new ProductDto(1L, "name", 0L, "image.url", null));
+        model.addAttribute("product", new ProductDto(1L, "name", 0L, "image.url", null, null));
         model.addAttribute("categories", categoryService.getCategories());
         return "create";
     }
