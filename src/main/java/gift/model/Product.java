@@ -3,7 +3,10 @@ package gift.model;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "product")
@@ -37,7 +40,7 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        this.options = options;
+        validateAndSetOptions(options);
     }
 
     public Product(String name, int price, String imageUrl, Category category, List<Option> options) {
@@ -48,7 +51,28 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        this.options = options;
+        validateAndSetOptions(options);
+    }
+
+    public void validateAndSetOptions(List<Option> options) {
+        if (options.isEmpty()) {
+            throw new IllegalArgumentException("상품에는 최소 하나의 옵션이 있어야 합니다.");
+        }
+        Set<String> optionNames = new HashSet<>();
+        this.options = options.stream()
+                .filter(option -> validateOption(option, optionNames))
+                .collect(Collectors.toList());
+    }
+
+    private boolean validateOption(Option option, Set<String> optionNames) {
+        if (option.getName().length() >= 50 || option.getName().length() <= 0) {
+            throw new IllegalArgumentException("옵션 이름은 최대 50자까지 입력 가능합니다.");
+        } if (!optionNames.add(option.getName())) {
+            throw new IllegalArgumentException("옵션 이름이 중복됩니다: " + option.getName());
+        } if (option.getQuantity() <= 0 || option.getQuantity() > 99999999) {
+            throw new IllegalArgumentException("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");
+        }
+        return true;
     }
 
     public Long getId() {

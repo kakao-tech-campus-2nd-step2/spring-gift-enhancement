@@ -87,4 +87,14 @@ public class OptionService {
             throw new IllegalArgumentException("이미 존재하는 옵션 이름입니다.");
         }
     }
+
+    @Transactional
+    public Option decreaseOptionQuantity(Long optionId, int amount) {
+        Option option = findOptionById(optionId);
+        if (option.getQuantity() <= amount) {
+            throw new IllegalArgumentException("옵션의 수량은 최소 1개 이상이어야 합니다.");
+        }
+        Option decreasedoption = new Option(option.getId(), option.getName(), option.getQuantity() - amount);
+        return optionRepository.save(decreasedoption);
+    }
 }
