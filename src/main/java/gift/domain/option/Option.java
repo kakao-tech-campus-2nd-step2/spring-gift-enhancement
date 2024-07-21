@@ -36,6 +36,15 @@ public class Option {
         this.product = product;
     }
 
+    public void setProduct(Product product) {
+        if (this.product != null) {
+            this.product.getOptionList().remove(this);
+        }
+
+        this.product = product;
+        product.getOptionList().add(this);
+    }
+
     public Long getId() {
         return id;
     }
