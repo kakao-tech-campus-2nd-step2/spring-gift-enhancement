@@ -48,9 +48,9 @@ public class Option {
         this(null, name, quantity, product);
     }
 
-    public void subtract(int quantity){
-        if(this.quantity <= quantity) {
-            throw new InsufficientQuantityException();
+    public void subtract(int quantity) {
+        if (this.quantity <= quantity) {
+            throw new InsufficientQuantityException(this.quantity);
         }
         this.quantity -= quantity;
     }
