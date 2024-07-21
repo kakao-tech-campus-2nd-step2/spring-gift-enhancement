@@ -24,46 +24,51 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public ProductResponseDto createProductDto(String name, Integer price, String url, Category category, List<Option> options) {
-        Product newProduct = productRepository.save(new Product(name, price, url, category, options));
-        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory(), newProduct.getOptions());
+    public ProductResponseDto createProductDto(String name, Integer price, String url) {
+        var newProduct = productRepository.save(new Product(name, price, url));
+        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl());
     }
 
     public List<Product> getAll() {
         return productRepository.findAll();
     }
 
-    public ProductResponseDto getAllAndMakeProductResponseDto() {
-        return new ProductResponseDto(getAll());
+    public List<ProductResponseDto> getAllAndMakeProductResponseDto() {
+        return getAll().stream().map(this::fromEntity).toList();
     }
 
     public ProductResponseDto getProductResponseDtoById(Long id) {
         Product newProduct = productRepository.findById(id).get();
-        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory(), newProduct.getOptions());
+        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl());
     }
 
 
-    public void update(Long id, String name, Integer price, String url, Category category, List<Option> options) {
+    public boolean update(Long id, String name, Integer price, String url) {
         Product actualProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("상품을 찾지 못했습니다."));
-        actualProduct.update(name, price, url, category, options);
+        Product newProduct = new Product(id,name,price,url,actualProduct.getCategory(),actualProduct.getOptions());
+        productRepository.save(newProduct);
+        return true;
     }
 
     public void delete(Long id) {
-        Product product = productRepository.findById(id).get();
-        productRepository.delete(product);
+        if(productRepository.findById(id).isPresent()) {
+            Product product = productRepository.findById(id).get();
+            productRepository.delete(product);
+        }
     }
 
-    public Product findProductByName(String name) {
-        return productRepository.findByName(name);
+    public ProductResponseDto findProductByName(String name) {
+        Product product = productRepository.findByName(name);
+        return this.fromEntity(product);
     }
 
     public Page<ProductResponseDto> getProducts(Pageable pageable) {
         Page<Product> newProduct = productRepository.findAll(pageable);
-        return newProduct.map(ProductResponseDto::fromEntity);
+        return newProduct.map(this::fromEntity);
     }
 
     public ProductResponseDto fromEntity(Product product) {
-        return new ProductResponseDto(product.getName(), product.getPrice(), product.getUrl(), product.getCategory(), product.getOptions());
+        return new ProductResponseDto(product.getName(), product.getPrice(), product.getUrl());
     }
 
     public Product findById(Long productId) {

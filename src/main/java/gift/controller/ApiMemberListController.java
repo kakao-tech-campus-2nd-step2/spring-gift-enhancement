@@ -3,8 +3,11 @@ package gift.controller;
 import gift.dto.MemberResponseDto;
 import gift.service.MemberService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class ApiMemberListController {
@@ -15,9 +18,8 @@ public class ApiMemberListController {
     }
 
     @GetMapping("/user/list")
-    public MemberResponseDto UserList() {
-        MemberResponseDto memberResponseDto = memberService.getAllAndReturnMemberResponseDto();
-        memberResponseDto.setHttpStatus(HttpStatus.OK);
-        return memberResponseDto;
+    public ResponseEntity<List<MemberResponseDto>> UserList() {
+        List<MemberResponseDto> memberResponseDto = memberService.getAllMemberResponseDto();
+        return new ResponseEntity<>(memberResponseDto,HttpStatus.OK);
     }
 }

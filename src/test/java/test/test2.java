@@ -1,6 +1,5 @@
 package test;
 
-
 import gift.entity.Category;
 import gift.entity.Member;
 import gift.entity.Option;
@@ -12,31 +11,32 @@ import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class WishRepositoryTest {
+public class test2 {
+
+    @Autowired
     private WishRepository wishes;
+
+    @Autowired
     private ProductRepository products;
+
+    @Autowired
     private CategoryRepository categories;
+
+    @Autowired
     private OptionRepository options;
+
+    @Autowired
     private MemberRepository members;
-
-    public WishRepositoryTest() {}
-
-    public WishRepositoryTest(WishRepository wishes, ProductRepository products, CategoryRepository categories, OptionRepository options, MemberRepository members) {
-        this.wishes = wishes;
-        this.products = products;
-        this.categories = categories;
-        this.options = options;
-        this.members = members;
-    }
-
 
     @Test
     public void save() {
@@ -54,9 +54,7 @@ public class WishRepositoryTest {
         assertThat(wish).isNotNull();
         assertThat(wish.getProduct()).isNotNull();
         assertThat(wish.getMember()).isNotNull();
-        assertThat(wish.getProductId()).isNotNull();
-        assertThat(wish.getMemberId()).isNotNull();
-
+        assertThat(wish.getProduct().getId()).isNotNull();
+        assertThat(wish.getMember().getId()).isNotNull();
     }
-
 }

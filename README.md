@@ -22,14 +22,15 @@ option.subtract(quantity)
 - [ ] 단위테스트 구현 
 
 ### 추가 개선사항 : step2  코드리뷰 반영 
-- [ ] sql 하이버네이트 로그에서 뜨는 오류 해결
-- [ ] Dto에서 도메인 Entity를 의존하지 않도록 코드 변경 
-  - [ ] ProductResponseDto
-  - [ ] 그외
+- [x] sql 하이버네이트 로그에서 뜨는 오류 해결
+- [x] Dto에서 도메인 Entity를 의존하지 않도록 코드 변경 
+  - [x] ProductResponseDto
+  - [x] 그외
 - [ ] Service 에서 Entity 를 반환하는것이 아닌, Response 객체를 반환하도록 
   - [ ] OptionService 
   - [ ] 그외
-- [ ] 테스트 코드 돌아가도록 수정 
+- [ ] 테스트 코드 돌아가도록 수정
+- [x] HttpStatus 반환 코드 수정
 
 ### 코드리뷰 개선사항 :step1 
 - [x] Controller 단에서 상태코드를 포함해서 반환 

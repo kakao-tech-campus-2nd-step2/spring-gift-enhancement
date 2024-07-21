@@ -4,6 +4,7 @@ import gift.dto.MemberRequestDto;
 import gift.dto.MemberResponseDto;
 import gift.service.MemberService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,16 +38,15 @@ public class AuthController {
     }
 
     @PostMapping("/save")
-    public MemberResponseDto save(@ModelAttribute MemberRequestDto memberRequestDto) {
+    public ResponseEntity<MemberResponseDto> save(@ModelAttribute MemberRequestDto memberRequestDto) {
         MemberResponseDto memberResponseDto = memberService.save(memberRequestDto.getEmail(), memberRequestDto.getPassword());
-        memberResponseDto.setHttpStatus(HttpStatus.OK);
-        return memberResponseDto;
+        return new ResponseEntity<>(memberResponseDto,HttpStatus.OK);
     }
 
     @PostMapping("/user/login")
-    public String login(@ModelAttribute MemberRequestDto memberRequestDto) throws AuthenticationException {
+    public ResponseEntity<String> login(@ModelAttribute MemberRequestDto memberRequestDto) throws AuthenticationException {
         if (memberService.login(memberRequestDto.getEmail(), memberRequestDto.getPassword())) {
-            return memberService.generateTokenFrom(memberRequestDto.getEmail());
+            return new ResponseEntity<>(memberService.generateTokenFrom(memberRequestDto.getEmail()),HttpStatus.OK);
         }
         throw new AuthenticationException("로그인 실패");
     }
