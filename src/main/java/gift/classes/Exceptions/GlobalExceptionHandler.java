@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Option 예외처리
+    @ExceptionHandler(OptionException.class)
+    public ResponseEntity<String> handleOptionException(OptionException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
     // Wish 예외처리
     @ExceptionHandler(WishException.class)
     public ResponseEntity<String> handleWishException(WishException e) {

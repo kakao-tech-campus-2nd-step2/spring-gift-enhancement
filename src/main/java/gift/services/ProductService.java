@@ -37,14 +37,7 @@ public class ProductService {
     // 모든 제품 조회
     public List<ProductDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        List<ProductDto> productDtos = products.stream().map(product -> new ProductDto(
-            product.getId(),
-            product.getName(),
-            product.getPrice(),
-            product.getImageUrl(),
-            product.getCategoryDto(),
-            product.getOptionDtos()
-        )).toList();
+        List<ProductDto> productDtos = products.stream().map(Product::toProductDto).toList();
 
         return productDtos;
     }
@@ -52,14 +45,7 @@ public class ProductService {
     //Page 반환, 모든 제품 조회
     public Page<ProductDto> getAllProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
-        Page<ProductDto> productDtos = products.map(product -> new ProductDto(
-            product.getId(),
-            product.getName(),
-            product.getPrice(),
-            product.getImageUrl(),
-            product.getCategoryDto(),
-            product.getOptionDtos()
-        ));
+        Page<ProductDto> productDtos = products.map(Product::toProductDto);
 
         return productDtos;
     }
@@ -70,8 +56,7 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(
             () -> new NoSuchElementException("Product not found with id " + id));
 
-        ProductDto productDto = new ProductDto(product.getId(), product.getName(),
-            product.getPrice(), product.getImageUrl(), product.getCategoryDto(), product.getOptionDtos());
+        ProductDto productDto = product.toProductDto();
         return productDto;
     }
 
@@ -80,16 +65,7 @@ public class ProductService {
         if (requestProductDto.getOptionDtos().isEmpty()) {
             throw new ProductException("One or more options are required to add a product.");
         }
-
-        Product product = new Product(
-            requestProductDto.getName(),
-            requestProductDto.getPrice(),
-            requestProductDto.getImageUrl(),
-            new Category(requestProductDto.getCategoryDto().getName(),
-                requestProductDto.getCategoryDto().getColor(),
-                requestProductDto.getCategoryDto().getImageUrl(),
-                requestProductDto.getCategoryDto().getDescription())
-        );
+        Product product = toProductEntity(requestProductDto);
 
         for (RequestOptionDto requestOptionDto : requestProductDto.getOptionDtos()) {
             optionService.addOption(product.getId(), requestOptionDto);
@@ -99,8 +75,7 @@ public class ProductService {
 
         productRepository.save(product);
 
-        return new ProductDto(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl(), product.getCategoryDto(), product.getOptionDtos());
+        return product.toProductDto();
     }
 
     // 제품 수정
@@ -113,16 +88,9 @@ public class ProductService {
             .orElseThrow(() -> new NoSuchElementException(
                 "Category not found"));
 
-        for (RequestOptionDto requestOptionDto : requestProductDto.getOptionDtos()) {
-            optionService.addOption(product.getId(), requestOptionDto);
-        }
-        List<Option> options = optionRepository.findAllByProductId(product.getId());
-        product.setOptions(options);
-
         product.update(requestProductDto.getName(), requestProductDto.getPrice(),
-            requestProductDto.getImageUrl(), category, options);
-        return new ProductDto(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl(), product.getCategoryDto(), product.getOptionDtos());
+            requestProductDto.getImageUrl(), category);
+        return product.toProductDto();
     }
 
     // 제품 삭제
@@ -133,6 +101,14 @@ public class ProductService {
         }
 
         productRepository.deleteById(id);
+    }
+
+    public Product toProductEntity(RequestProductDto requestProductDto) {
+        Category category = categoryRepository.findByName(
+            requestProductDto.getCategoryDto().getName());
+        return new Product(requestProductDto.getName(), requestProductDto.getPrice(),
+            requestProductDto.getImageUrl(), category);
+
     }
 }
 
