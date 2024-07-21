@@ -1,4 +1,4 @@
-package gift.test;
+package gift.test.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import gift.controller.ProductController;
 import gift.dto.CategoryUpdateRequest;
 import gift.dto.ProductRequest;
+import gift.dto.ProductResponse;
 import gift.dto.ProductUpdateRequest;
 import gift.entity.Category;
 import gift.entity.Product;
@@ -41,6 +42,7 @@ public class ProductTest {
 
     private Category category;
     private Product product;
+    private ProductResponse productResponse;
     private ProductRequest productRequest;
     private ProductUpdateRequest productUpdateRequest;
     private CategoryUpdateRequest categoryUpdateRequest;
@@ -50,6 +52,9 @@ public class ProductTest {
         MockitoAnnotations.openMocks(this);
         category = new Category("교환권", "#6c95d1", "https://example.com/image.jpg", "");
         product = new Product("아이스 아메리카노 T", 4500, "https://example.com/image.jpg", category);
+        product.setId(1L);
+        
+        productResponse = new ProductResponse(1L, "아이스 아메리카노 T", 4500, "https://example.com/image.jpg", "교환권");
         
         productRequest = new ProductRequest("아이스 아메리카노 T", 4500, "https://example.com/image.jpg", "교환권");
         productUpdateRequest = new ProductUpdateRequest("아이스 아메리카노 T", 4500, "https://example.com/image.jpg");
@@ -57,27 +62,26 @@ public class ProductTest {
     }
 
     @Test
-    public void testGetAllProducts() {
+    public void testGetProducts() {
     	Pageable pageable = PageRequest.of(0, 10);
-    	Page<Product> productPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
+    	Page<ProductResponse> productPage = new PageImpl<>(Collections.singletonList(productResponse), pageable, 1);
     	
         when(productService.getProducts(pageable)).thenReturn(productPage);
 
-        ResponseEntity<Page<Product>> response = productController.getAllProducts(pageable);
+        ResponseEntity<Page<ProductResponse>> response = productController.getProducts(pageable);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo(productPage);
-        assertThat(response.getBody().getContent()).isEmpty();
     }
 
     @Test
     public void testGetProduct() {
-        when(productService.getProduct(1L)).thenReturn(product);
+        when(productService.getProduct(1L)).thenReturn(productResponse);
 
-        ResponseEntity<Product> response = productController.getProduct(1L);
+        ResponseEntity<ProductResponse> response = productController.getProduct(1L);
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).isEqualTo(product);
+        assertThat(response.getBody()).isEqualTo(productResponse);
     }
 
     @Test

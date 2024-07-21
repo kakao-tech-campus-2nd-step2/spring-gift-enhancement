@@ -32,4 +32,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalideCategoryException(InvalidCategoryException e){
     	return new ResponseEntity<>(e.getMessage(), e.getStatus());
     }
+    
+    @ExceptionHandler(DuplicateOptionException.class)
+    public ResponseEntity<String> handleDuplicateOptionException(DuplicateOptionException e){
+    	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    
+    @ExceptionHandler(DuplicateCategoryNameException.class)
+    public ResponseEntity<String> handleDuplicateCategoryNameException(DuplicateCategoryNameException e){
+    	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

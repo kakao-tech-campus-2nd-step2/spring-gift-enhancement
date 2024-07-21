@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import gift.entity.Category;
+import gift.exception.DuplicateCategoryNameException;
 import gift.exception.InvalidCategoryException;
 import gift.repository.CategoryRepository;
 
@@ -25,13 +26,14 @@ public class CategoryService {
 	
 	public void createCategory(Category category, BindingResult bindingResult) {
 		validateBindingResult(bindingResult);
+		validateDuplicateCategoryName(category.getName());
 		categoryRepository.save(category);
 	}
 	
-	public void updateCategory(Long id, Category updatedCategory, BindingResult bindingResult) {
+	public void updateCategory(Long categoryId, Category updatedCategory, BindingResult bindingResult) {
 		validateBindingResult(bindingResult);
-		validCategoryId(id, updatedCategory);
-		validateCategoryId(id);
+		validCategoryId(categoryId, updatedCategory);
+		validateCategoryId(categoryId);
 		categoryRepository.save(updatedCategory);
 	}
 	
@@ -44,15 +46,21 @@ public class CategoryService {
 		}
 	}
 	
-	private void validCategoryId(long id, Category updatedCategory) {
-		if (!updatedCategory.getId().equals(id)) {
+	private void validCategoryId(Long categoryId, Category updatedCategory) {
+		if (!updatedCategory.getId().equals(categoryId)) {
 			throw new InvalidCategoryException("Category Id mismath.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	private void validateCategoryId(long id) {
-		if (!categoryRepository.existsById(id)) {
+	private void validateCategoryId(Long categoryId) {
+		if (!categoryRepository.existsById(categoryId)) {
 			throw new InvalidCategoryException("Category not foudn.", HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	private void validateDuplicateCategoryName(String categoryName) {
+		if (categoryRepository.existsByName(categoryName)) {
+			throw new DuplicateCategoryNameException("This is the extracted name.");
 		}
 	}
 }

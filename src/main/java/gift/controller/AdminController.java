@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import gift.dto.CategoryUpdateRequest;
 import gift.dto.ProductRequest;
+import gift.dto.ProductResponse;
 import gift.dto.ProductUpdateRequest;
-import gift.entity.Product;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -31,7 +31,7 @@ public class AdminController {
     @GetMapping
     public String adminPage(Model model,
     		@PageableDefault(sort="name") Pageable pageable) {
-        Page<Product> productList = productService.getProducts(pageable);
+        Page<ProductResponse> productList = productService.getProducts(pageable);
         model.addAttribute("products", productList);
         return "admin";
     }
@@ -51,7 +51,7 @@ public class AdminController {
 
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable("id") Long id, Model model) {
-        Product product = productService.getProduct(id);
+    	ProductResponse product = productService.getProduct(id);
         if (product == null) {
             return "redirect:/admin/products";
         }

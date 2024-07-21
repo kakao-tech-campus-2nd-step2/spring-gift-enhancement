@@ -2,8 +2,8 @@ package gift.controller;
 
 import gift.dto.CategoryUpdateRequest;
 import gift.dto.ProductRequest;
+import gift.dto.ProductResponse;
 import gift.dto.ProductUpdateRequest;
-import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -25,14 +25,14 @@ public class ProductController {
     }
     
     @GetMapping
-    public ResponseEntity<Page<Product>> getAllProducts(@PageableDefault(sort="name") Pageable pageable) {
-    	Page<Product> products = productService.getProducts(pageable);
+    public ResponseEntity<Page<ProductResponse>> getProducts(@PageableDefault(sort="name") Pageable pageable) {
+    	Page<ProductResponse> products = productService.getProducts(pageable);
     	return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") long id) {
-        Product product = productService.getProduct(id);
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable("productId") Long productId) {
+    	ProductResponse product = productService.getProduct(productId);
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
@@ -42,23 +42,23 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateProduct(@PathVariable("id") long id, 
+    @PutMapping("/{productId}")
+    public ResponseEntity<Void> updateProduct(@PathVariable("productId") Long productId, 
     		@Valid @RequestBody ProductUpdateRequest request, BindingResult bindingResult) {
-        productService.updateProduct(id, request, bindingResult);
+        productService.updateProduct(productId, request, bindingResult);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     
-    @PutMapping("/{id}/category")
-    public ResponseEntity<Void> updateProductCategory(@PathVariable("id") long id,
+    @PutMapping("/{product_id}/category")
+    public ResponseEntity<Void> updateProductCategory(@PathVariable("product_id") Long product_id,
     		@Valid @RequestBody CategoryUpdateRequest request, BindingResult bindingResult){
-    	productService.updateProductCategory(id, request, bindingResult);
+    	productService.updateProductCategory(product_id, request, bindingResult);
     	return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("id") long id) {
-        productService.deleteProduct(id);
+    @DeleteMapping("/{product_id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("product_id") Long product_id) {
+        productService.deleteProduct(product_id);
         return ResponseEntity.status(HttpStatus.OK).build();
     } 
 }

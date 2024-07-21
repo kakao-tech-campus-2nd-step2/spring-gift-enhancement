@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.CategoryUpdateRequest;
 import gift.dto.ProductRequest;
+import gift.dto.ProductResponse;
 import gift.dto.ProductUpdateRequest;
 import gift.entity.Category;
 import gift.entity.Product;
@@ -26,12 +27,12 @@ public class ProductService {
 		this.categoryRepository = categoryRepository;
 	}
 	
-    public Page<Product> getProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public Page<ProductResponse> getProducts(Pageable pageable) {
+        return productRepository.findAll(pageable).map(Product::toDto);
     }
 
-    public Product getProduct(long id) {
-        return findProductById(id);
+    public ProductResponse getProduct(Long productId) {
+        return findProductById(productId).toDto();
     }
 
     public void createProduct(ProductRequest request, BindingResult bindingResult) {
@@ -41,25 +42,25 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void updateProduct(long id, ProductUpdateRequest request, BindingResult bindingResult) {
+    public void updateProduct(Long productId, ProductUpdateRequest request, BindingResult bindingResult) {
     	validateBindingResult(bindingResult);
-    	Product updateProduct = findProductById(id);
+    	Product updateProduct = findProductById(productId);
     	request.updateEntity(updateProduct);
     	productRepository.save(updateProduct);
     }
     
-    public void updateProductCategory(long id, CategoryUpdateRequest request, 
+    public void updateProductCategory(Long productId, CategoryUpdateRequest request, 
     		BindingResult bindingResult) {
     	validateBindingResult(bindingResult);
-    	Product updateProduct = findProductById(id);
+    	Product updateProduct = findProductById(productId);
     	Category category = validateCategory(request.getCategoryName());
     	updateProduct.setCategory(category);
     	productRepository.save(updateProduct);
     }
 
-    public void deleteProduct(long id) {
-    	validateProductId(id);
-        productRepository.deleteById(id);
+    public void deleteProduct(Long productId) {
+    	validateProductId(productId);
+        productRepository.deleteById(productId);
     }
     
     private void validateBindingResult(BindingResult bindingResult) {
@@ -71,14 +72,14 @@ public class ProductService {
     	}
     }
     
-    private void validateProductId(long id) {
-    	if (!productRepository.existsById(id)) {
+    private void validateProductId(Long productId) {
+    	if (!productRepository.existsById(productId)) {
     		throw new InvalidProductException("Product not found");
     	}
     }
     
-    public Product findProductById(long id) {
-	    return productRepository.findById(id)
+    public Product findProductById(Long productId) {
+	    return productRepository.findById(productId)
 	    		.orElseThrow(() -> new InvalidProductException("Product not found"));
     }
     
