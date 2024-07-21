@@ -28,8 +28,4 @@ public record OptionRequestDTO(
     public Option convertToOption(Product product){
         return new Option(product, name, quantity);
     }
-
-    public static OptionRequestDTO convertToDTO(Option option){
-        return new OptionRequestDTO(option.getId(), option.getProduct().getId(), option.getName(), option.getQuantity());
-    }
 }
