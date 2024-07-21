@@ -50,13 +50,16 @@ public class Option {
         this.product = product;
     }
 
+    public Option(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
     // 옵션 수량 삭제 메서드
-    public Option subtract(Option option, int amount){
-        if(option.getQuantity() < amount) {
+    public void subtract(int amount){
+        if(this.quantity < amount) {
             throw new IllegalArgumentException("수량은 0보다 작을 수 없습니다.");
         }
-        option.quantity = option.getQuantity() - amount;
-        return option;
+        this.quantity -= amount;
     }
 
     public Long getId() {
