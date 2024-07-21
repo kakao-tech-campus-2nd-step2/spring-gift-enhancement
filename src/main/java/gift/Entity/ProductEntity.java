@@ -26,6 +26,10 @@ public class ProductEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OptionEntity> options;
+
+
 
     public ProductEntity() {}
 
@@ -34,6 +38,10 @@ public class ProductEntity {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public List<OptionEntity> getOptions() {
+        return options;
     }
 
     public Long getId() {
