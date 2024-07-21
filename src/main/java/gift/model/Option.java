@@ -62,4 +62,10 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public void subtractQuantity(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("Insufficient quantity");
+        }
+        this.quantity -= quantity;
+    }
 }
