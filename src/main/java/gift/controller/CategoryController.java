@@ -36,5 +36,6 @@ public class CategoryController {
             @PathVariable("id") Long id
     ){
         categoryService.deleteById(id);
+        return ResponseEntity.ok().body("successfully deleted");
     }
 }

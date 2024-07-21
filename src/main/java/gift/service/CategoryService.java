@@ -39,7 +39,7 @@ public class CategoryService {
         Category defaultCategory = categoryRepository.save(new Category(null,"기본카테고리",new LinkedList<Menu>()));
 
         for (Menu menu : menuList) {
-            menu.setCategory(defaultCategory);  // 또는 menu.setCategory(null);
+            menu.setCategory(defaultCategory);
         }
         categoryRepository.deleteById(id);
     }

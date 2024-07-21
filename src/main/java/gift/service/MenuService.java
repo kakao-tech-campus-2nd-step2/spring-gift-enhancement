@@ -5,6 +5,7 @@ import gift.domain.Menu;
 import gift.domain.MenuRequest;
 import gift.domain.MenuResponse;
 import gift.domain.Option;
+import gift.repository.CategoryRepository;
 import gift.repository.MenuRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +19,11 @@ import java.util.stream.Collectors;
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
+    private final CategoryRepository categoryRepository;
 
-    public MenuService(MenuRepository menuRepository) {
+    public MenuService(MenuRepository menuRepository, CategoryRepository categoryRepository) {
         this.menuRepository = menuRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public MenuResponse save(MenuRequest request) {
@@ -46,7 +49,10 @@ public class MenuService {
     public MenuResponse update(Long id, MenuRequest menuRequest) {
         Menu menu = menuRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("메뉴 정보가 없습니다."));
-        menu.update(new Menu(id, menuRequest));
+
+        menu.update(new Menu(id, menuRequest,
+                categoryRepository.findById(menuRequest.categoryId())
+                        .orElseThrow(() -> new NoSuchElementException("해당하는 카테고리가 존재하지 않습니다."))));
         return MapMenuToMenuResponse(menuRepository.save(menu));
     }
 
@@ -59,7 +65,7 @@ public class MenuService {
     }
 
     public Menu MapMenuRequestToMenu(MenuRequest menuRequest) {
-        return new Menu(menuRequest.name(), menuRequest.price(), menuRequest.imageUrl(),menuRequest.category(),menuRequest.options());
+        return new Menu(menuRequest.name(), menuRequest.price(), menuRequest.imageUrl(),categoryRepository.findById(menuRequest.categoryId()).get(),menuRequest.options());
     }
 
     public MenuResponse MapMenuToMenuResponse(Menu menu) {
