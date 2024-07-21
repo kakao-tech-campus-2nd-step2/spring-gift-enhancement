@@ -27,6 +27,10 @@ public class Option {
     private Option() {}
 
     public Option(String name, int quantity, Product product) {
+        validateName(name);
+        validateQuantity(quantity);
+        validateProduct(product);
+
         this.name = name;
         this.quantity = quantity;
         this.product = product;
