@@ -31,7 +31,6 @@ public class WishlistService {
 
         WishItem wishItem = wishItemRequestDto.toWishItem(user, product);
         WishItem savedWishItem = wishlistJpaRepository.save(wishItem);
-        user.addWishItem(savedWishItem);
 
         return WishItemResponseDto.from(savedWishItem);
     }
@@ -49,13 +48,10 @@ public class WishlistService {
         WishItem wishItem = wishlistJpaRepository.findById(wishItemId)
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
 
-        User user = wishItem.getUser();
-        user.removeWishItem(wishItem);
         wishlistJpaRepository.delete(wishItem);
     }
 
     public void deleteAllByUserId(User user) {
-        user.removeWishlist();
         wishlistJpaRepository.deleteAllByUserId(user.getId());
     }
 
