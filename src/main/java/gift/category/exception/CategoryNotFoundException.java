@@ -5,6 +5,6 @@ import gift.global.response.ErrorCode;
 
 public class CategoryNotFoundException extends BusinessException {
     public CategoryNotFoundException() {
-        super(ErrorCode.PRODUCT_NOT_FOUND_ERROR);
+        super(ErrorCode.CATEGORY_NOT_FOUND_ERROR);
     }
 }

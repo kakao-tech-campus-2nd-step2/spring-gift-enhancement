@@ -15,7 +15,7 @@ POST http://localhost:8080/api/products
 Content-Type: application/json
 
 {
-  "name": "아메리카노",
+  "name": "!@#!$Q@#%",
   "price": "4500",
   "imageUrl": "http://hello",
   "categoryId": 1

@@ -15,15 +15,26 @@ public enum ErrorCode {
 
     // Product
     PRODUCT_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "EP001", "Product Not Found Error"),
-
     PRODUCT_NAME_LENGTH_ERROR(HttpStatus.BAD_REQUEST, "EP002", "상품 이름은 공백이 아니고, 15자 이하여야 합니다"),
     PRODUCT_NAME_PATTER_ERROR(HttpStatus.BAD_REQUEST, "EP003", "( ), [ ], +, -, &, /, _ 이외의 특수문자는 사용 불가능합니다"),
     PRODUCT_NAME_CONTAINS_ERROR(HttpStatus.BAD_REQUEST, "EP004", "'카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다"),
     PRODUCT_PRICE_OUT_OF_RANGE_ERROR(HttpStatus.BAD_REQUEST, "EP005", "가격은 0보다 큰 값만 가능합니다"),
     PRODUCT_COUNT_OUT_OF_RANGE_ERROR(HttpStatus.BAD_REQUEST, "EP006", "개수는 0보다 큰 값만 가능합니다"),
 
+    // Category
+    CATEGORY_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "EC001", "Category Not Found Error"),
+
+
     // Wish
     WISH_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "EW001", "Wish Not Found Error"),
+
+    // Option
+    OPTION_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "EO001", "Option Not Found Error"),
+    OPTION_NAME_LENGTH_ERROR(HttpStatus.BAD_REQUEST, "EO002", "옵션 이름은 공백이 아니고, 50자 이하여야 합니다"),
+    OPTION_NAME_PATTER_ERROR(HttpStatus.BAD_REQUEST, "EO003", "( ), [ ], +, -, &, /, _ 이외의 특수문자는 사용 불가능합니다"),
+    OPTION_COUNT_OUTBOUND_ERROR(HttpStatus.BAD_REQUEST, "EO004", "옵션은 1 ~ 1억개 여야 합니다"),
+    OPTION_NOT_ENOUGH_ERROR(HttpStatus.BAD_REQUEST, "EO005", "Option Not Enough Error"),
+    DUPLICATE_OPTION_NAME_ERROR(HttpStatus.BAD_REQUEST, "EO006", "Duplicate Option Name Not Error"),
 
     ;
     private final HttpStatus status;
