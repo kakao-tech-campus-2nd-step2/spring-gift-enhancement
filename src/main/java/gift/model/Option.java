@@ -64,7 +64,7 @@ public class Option {
 
   private boolean isValidName(String name) {
     if (name.length() > 50) return false;
-    return Pattern.matches("^^[a-zA-Z0-9\\s\\(\\)\\[\\]\\+\\-\\&\\/_]+$", name);
+    return Pattern.matches("^[\\p{L}\\p{N}\\s\\(\\)\\[\\]\\+\\-\\&\\/_]+$", name);
   }
   public void subtractQuantity(int quantity) {
     if (this.quantity < quantity) {
