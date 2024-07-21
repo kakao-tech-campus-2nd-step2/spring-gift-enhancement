@@ -62,4 +62,12 @@ public class Option {
         return new OptionDTO(id, name, quantity);
     }
 
+    public boolean update(String name, Long quantity) {
+        if (quantity < 1 || quantity > 100_000_000) {
+            return false;
+        }
+        this.name = name;
+        this.quantity = quantity;
+        return true;
+    }
 }
