@@ -17,7 +17,7 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String email, String password) {
@@ -60,11 +60,11 @@ public class Member {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Member member = (Member) o;
-        return id.equals(member.id) && email.equals(member.email) && password.equals(member.password);
+        return id.equals(member.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password);
+        return Objects.hash(id);
     }
 }

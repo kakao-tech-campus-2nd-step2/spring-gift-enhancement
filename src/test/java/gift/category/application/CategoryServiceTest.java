@@ -64,7 +64,7 @@ public class CategoryServiceTest {
     public void 카테고리_생성_중복된이름_예외발생() {
         // Given
         CategoryCreateCommand command = new CategoryCreateCommand("Category", "#FFFFFF", "Description", "http://example.com/image.jpg");
-        when(categoryRepository.findByName(command.name())).thenReturn(Optional.of(new Category()));
+        when(categoryRepository.findByName(command.name())).thenReturn(Optional.of(command.toCategory()));
 
         // When & Then
         assertThatThrownBy(() -> categoryService.create(command))

@@ -7,6 +7,7 @@ import gift.member.application.command.MemberLoginCommand;
 import gift.member.application.command.MemberPasswordUpdateCommand;
 import gift.member.domain.Member;
 import gift.member.domain.MemberRepository;
+import gift.member.presentation.request.ResolvedMember;
 import gift.wishlist.domain.WishlistRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,9 +75,12 @@ public class MemberServiceTest {
     void 이메일_업데이트_테스트() {
         // Given
         MemberEmailUpdateCommand command = new MemberEmailUpdateCommand("new@example.com");
+        ResolvedMember resolvedMember = new ResolvedMember(member.getId());
+        when(memberRepository.findById(resolvedMember.id())).thenReturn(Optional.of(member));
+        when(memberRepository.existsByEmail(command.email())).thenReturn(false);
 
         // When
-        assertDoesNotThrow(() -> memberService.updateEmail(command, member));
+        assertDoesNotThrow(() -> memberService.updateEmail(command, resolvedMember));
 
         // Then
         Assertions.assertThat(member.getEmail()).isEqualTo("new@example.com");
@@ -86,12 +90,15 @@ public class MemberServiceTest {
     void 비밀번호_업데이트_테스트() {
         // Given
         MemberPasswordUpdateCommand command = new MemberPasswordUpdateCommand("newPassword");
+        ResolvedMember resolvedMember = new ResolvedMember(1L);
+        when(memberRepository.findById(resolvedMember.id())).thenReturn(Optional.of(this.member));
 
         // When
-        assertDoesNotThrow(() -> memberService.updatePassword(command, member));
+        assertDoesNotThrow(() -> memberService.updatePassword(command, resolvedMember));
 
         // Then
-        Assertions.assertThat(member.getPassword()).isEqualTo("newPassword");
+
+        Assertions.assertThat(memberService.findById(resolvedMember.id()).password()).isEqualTo("newPassword");
     }
 
     @Test
@@ -137,9 +144,10 @@ public class MemberServiceTest {
         // Given
         doNothing().when(memberRepository).delete(member);
         doNothing().when(wishlistRepository).deleteAllByMemberId(member.getId());
-
+        ResolvedMember resolvedMember = new ResolvedMember(member.getId());
+        when(memberRepository.findById(resolvedMember.id())).thenReturn(Optional.of(member));
         // When
-        assertDoesNotThrow(() -> memberService.delete(member));
+        assertDoesNotThrow(() -> memberService.delete(resolvedMember));
 
         // Then
         verify(memberRepository, times(1)).delete(member);

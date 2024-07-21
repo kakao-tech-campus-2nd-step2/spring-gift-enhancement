@@ -3,11 +3,7 @@ package gift.member.presentation;
 import gift.auth.TokenService;
 import gift.member.application.MemberResponse;
 import gift.member.application.MemberService;
-import gift.member.domain.Member;
-import gift.member.presentation.request.MemberEmailUpdateRequest;
-import gift.member.presentation.request.MemberJoinRequest;
-import gift.member.presentation.request.MemberLoginRequest;
-import gift.member.presentation.request.MemberPasswordUpdateRequest;
+import gift.member.presentation.request.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,26 +62,26 @@ public class MemberController {
     @PutMapping("/email")
     public ResponseEntity<?> updateEmail(
             @RequestBody MemberEmailUpdateRequest request,
-            Member member
+            ResolvedMember resolvedMember
     ) {
-        memberService.updateEmail(request.toCommand(), member);
+        memberService.updateEmail(request.toCommand(), resolvedMember);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/password")
     public ResponseEntity<?> updatePassword(
             @RequestBody MemberPasswordUpdateRequest request,
-            Member member
+            ResolvedMember resolvedMember
     ) {
-        memberService.updatePassword(request.toCommand(), member);
+        memberService.updatePassword(request.toCommand(), resolvedMember);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping
     public ResponseEntity<?> delete(
-            Member member
+            ResolvedMember resolvedMember
     ) {
-        memberService.delete(member);
+        memberService.delete(resolvedMember);
         return ResponseEntity.noContent().build();
     }
 }

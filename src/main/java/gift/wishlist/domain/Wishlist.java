@@ -4,6 +4,8 @@ import gift.member.domain.Member;
 import gift.product.domain.Product;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 public class Wishlist {
 
@@ -19,7 +21,7 @@ public class Wishlist {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Wishlist() {
+    protected Wishlist() {
     }
 
     public Wishlist(Member member, Product product) {
@@ -42,5 +44,18 @@ public class Wishlist {
 
     public Member getMember() {
         return member;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wishlist wishlist = (Wishlist) o;
+        return id.equals(wishlist.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

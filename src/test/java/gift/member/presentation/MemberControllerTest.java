@@ -5,12 +5,11 @@ import gift.member.application.MemberResponse;
 import gift.member.application.MemberService;
 import gift.member.application.command.MemberEmailUpdateCommand;
 import gift.member.application.command.MemberPasswordUpdateCommand;
-import gift.member.domain.Member;
 import gift.member.presentation.request.MemberJoinRequest;
 import gift.member.presentation.request.MemberLoginRequest;
+import gift.member.presentation.request.ResolvedMember;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,7 +21,8 @@ import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -116,7 +116,8 @@ public class MemberControllerTest {
     void 이메일_업데이트_테스트() throws Exception {
         // Given
         String newEmail = "test2@example.com";
-        Member member = new Member(memberId, email, password);
+//        Member member = new Member(memberId, email, password);
+        ResolvedMember resolvedMember = new ResolvedMember(memberId);
         MemberEmailUpdateCommand expectedCommand = new MemberEmailUpdateCommand(newEmail);
 
         MemberResponse memberResponse = new MemberResponse(memberId, email, password);
@@ -126,18 +127,19 @@ public class MemberControllerTest {
         mockMvc.perform(put("/api/member/email")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"" + newEmail + "\"}")
-                        .requestAttr("member", member)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk());
 
-        verify(memberService).updateEmail(eq(expectedCommand), eq(member));
+        verify(memberService).updateEmail(eq(expectedCommand), eq(resolvedMember));
+
     }
 
     @Test
     void 비밀번호_업데이트_테스트() throws Exception {
         // Given
         String newPassword = "newPassword";
-        Member member = new Member(memberId, email, password);
+//        Member member = new Member(memberId, email, password);
+        ResolvedMember member = new ResolvedMember(memberId);
         MemberPasswordUpdateCommand updateCommand = new MemberPasswordUpdateCommand(newPassword);
 
         MemberResponse memberResponse = new MemberResponse(memberId, email, password);
@@ -147,7 +149,6 @@ public class MemberControllerTest {
         mockMvc.perform(put("/api/member/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"password\":\"" + newPassword + "\"}")
-                        .requestAttr("member", member)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk());
 
@@ -157,14 +158,13 @@ public class MemberControllerTest {
     @Test
     void 회원_삭제_테스트() throws Exception {
         // Given
-        Member member = new Member(memberId, email, password);
+//        Member member = new Member(memberId, email, password);
         MemberResponse memberResponse = new MemberResponse(memberId, email, password);
-
+        ResolvedMember member = new ResolvedMember(memberId);
         when(memberService.findById(anyLong())).thenReturn(memberResponse);
 
         // When & Then
         mockMvc.perform(delete("/api/member")
-                        .requestAttr("member", member)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isNoContent());
 

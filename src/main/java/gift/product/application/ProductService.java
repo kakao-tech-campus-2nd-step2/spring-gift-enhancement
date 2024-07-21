@@ -3,6 +3,10 @@ package gift.product.application;
 import gift.category.domain.Category;
 import gift.category.domain.CategoryRepository;
 import gift.exception.type.NotFoundException;
+import gift.option.application.OptionResponse;
+import gift.option.application.command.OptionCreateCommand;
+import gift.option.domain.Option;
+import gift.option.domain.OptionRepository;
 import gift.product.application.command.ProductCreateCommand;
 import gift.product.application.command.ProductUpdateCommand;
 import gift.product.domain.Product;
@@ -13,21 +17,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class ProductService {
     private final ProductRepository productRepository;
     private final WishlistRepository wishlistRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     public ProductService(
             ProductRepository productRepository,
             WishlistRepository wishlistRepository,
-            CategoryRepository categoryRepository
+            CategoryRepository categoryRepository,
+            OptionRepository optionRepository
     ) {
         this.productRepository = productRepository;
         this.wishlistRepository = wishlistRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public Page<ProductResponse> findAll(Pageable pageable) {
@@ -47,7 +56,13 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("해당 카테고리가 존재하지 않습니다."));
 
         Product product = command.toProduct(category);
-        product.validateKakaoInName();
+        product.validateKakaoInProductName();
+
+        command.optionCreateCommandList().stream()
+                .map(OptionCreateCommand::toOption)
+                .forEach(product::addOption);
+
+        product.validateHasAtLeastOneOption();
 
         productRepository.save(product);
     }
@@ -60,8 +75,21 @@ public class ProductService {
         Category category = categoryRepository.findById(command.categoryId())
                 .orElseThrow(() -> new NotFoundException("해당 카테고리가 존재하지 않습니다."));
 
-        product.update(command, category);
-        product.validateKakaoInName();
+        product.update(category, command);
+        updateOptions(command, product);
+
+        product.validateHasAtLeastOneOption();
+        product.validateKakaoInProductName();
+    }
+
+    private void updateOptions(ProductUpdateCommand command, Product product) {
+        command.optionUpdateCommandList().forEach(
+                optionUpdateCommand -> {
+                    Option originalOption = optionRepository.findById(optionUpdateCommand.id())
+                            .orElseThrow(() -> new NotFoundException("해당 옵션이 존재하지 않습니다."));
+                    originalOption.update(optionUpdateCommand.name(), optionUpdateCommand.quantity(), product);
+                }
+        );
     }
 
     @Transactional
@@ -71,5 +99,12 @@ public class ProductService {
 
         wishlistRepository.deleteAllByProductId(productId);
         productRepository.delete(product);
+    }
+
+    public List<OptionResponse> findOptionsByProductId(Long productId) {
+        return optionRepository.findAllByProductId(productId)
+                .stream()
+                .map(OptionResponse::from)
+                .toList();
     }
 }

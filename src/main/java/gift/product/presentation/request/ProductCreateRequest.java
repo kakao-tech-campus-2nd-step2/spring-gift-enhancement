@@ -1,9 +1,12 @@
 package gift.product.presentation.request;
 
+import gift.option.presentation.request.OptionCreateRequest;
 import gift.product.application.command.ProductCreateCommand;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 public record ProductCreateRequest(
         @NotNull @Size(max = 15, message = "상품 이름은 최대 15자까지 입력할 수 있습니다.")
@@ -11,14 +14,18 @@ public record ProductCreateRequest(
         String name,
         Integer price,
         String imageUrl,
-        Long categoryId
+        Long categoryId,
+        List<OptionCreateRequest> optionCreateRequestList
 ) {
     public ProductCreateCommand toCommand() {
         return new ProductCreateCommand(
                 name,
                 price,
                 imageUrl,
-                categoryId
+                categoryId,
+                optionCreateRequestList.stream()
+                        .map(OptionCreateRequest::toCommand)
+                        .toList()
         );
     }
 }

@@ -35,7 +35,7 @@ public class ProductViewController {
 
     @GetMapping("/create")
     public String createForm(Model model) {
-        model.addAttribute("productCreateRequest", new ProductCreateRequest("", 0, "", 0L));
+        model.addAttribute("productCreateRequest", new ProductCreateRequest("", 0, "", 0L, null));
         return "product/create";
     }
 
