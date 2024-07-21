@@ -8,8 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
 public class Option {
@@ -24,7 +27,6 @@ public class Option {
     private String name;
 
     @Column(name = "quantity", nullable = false)
-    @Size(max = 9999999, min = 1, message = "수량은 1개 이상 1억개 미만이어야 합니다.")
     private int quantity;
 
     @ManyToOne
@@ -32,16 +34,17 @@ public class Option {
     @JsonIgnore
     private Product product;
 
-    public Option(Long id,
-        @Size(max = 9999999, min = 1, message = "수량은 1개 이상 1억개 미만이어야 합니다.") int quantity,
-        Product product) {
+    public Option(Long id, Product product) {
     }
 
     public Option(String name, int quantity) {
         this(name, quantity, null);
     }
 
-    @Size(max = 9999999, min = 1, message = "수량은 1개 이상 1억개 미만이어야 합니다.")
+    public Option() {
+
+    }
+
     public int getQuantity() {
         return quantity;
     }
@@ -52,14 +55,16 @@ public class Option {
 
     public Option(String name, int quantity, Product product) {
         if (name.length() > 50) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("이름은 최대 50자입니다.");
         }
-        if (name.matches("^[a-zA-Z0-9가-힣\\(\\)\\[\\]\\+\\-\\&\\/\\_\\s]*")) {
-            throw new IllegalArgumentException();
+        if (!name.matches("^[a-zA-Z0-9가-힣()\\[\\]+\\-&/_\\s]*$")) {
+            throw new IllegalArgumentException("옵션 이름에 허용되지 않는 문자가 포함되어 있습니다.");
         }
         if (quantity < 1 || quantity >= 100_000_000) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("수량은 1개 이상 1억개 미만이어야 합니다.");
         }
+        this.name = name;
+        this.quantity = quantity;
         this.product = product;
     }
 
@@ -84,5 +89,41 @@ public class Option {
             ", quantity=" + quantity +
             ", product=" + product +
             '}';
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void subtract(int quantity) {
+        this.setQuantity(this.quantity - quantity);
+    }
+
+    public Option setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Option option = (Option) o;
+        return getQuantity() == option.getQuantity() && Objects.equals(getName(),
+            option.getName()) && Objects.equals(getProduct(), option.getProduct());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getQuantity(), getProduct());
+    }
+
+    public Option setId(Long id) {
+        this.id = id;
+        return this;
     }
 }
