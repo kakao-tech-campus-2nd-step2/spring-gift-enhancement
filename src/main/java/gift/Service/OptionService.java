@@ -35,7 +35,9 @@ public class OptionService {
 
   public List<OptionDto> getAllOptions() {
     List<Option> options = optionRepository.findAll();
-    List<OptionDto> optionDtos = options.stream().map(ConverterToDto::convertToOptionDto).toList();
+    List<OptionDto> optionDtos = options.stream()
+      .map(ConverterToDto::convertToOptionDto)
+      .toList();
 
     return optionDtos;
   }
