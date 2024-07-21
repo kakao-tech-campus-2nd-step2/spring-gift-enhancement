@@ -47,7 +47,7 @@ public class AdminProductController {
         String imageUrl = ImageStorageUtil.encodeImagePathToBase64(imagePath);
 
         Product product = new Product(productRequestDTO.getName(), productRequestDTO.getPrice(),
-                productRequestDTO.getDescription(), imageUrl, null);
+                productRequestDTO.getDescription(), imageUrl);
         productService.addProduct(product, productRequestDTO.getCategoryId());
 
         return "redirect:/admin/products";
@@ -68,7 +68,7 @@ public class AdminProductController {
         String imageUrl = ImageStorageUtil.encodeImagePathToBase64(imagePath);
 
         product.update(productRequestDTO.getName(), productRequestDTO.getPrice(),
-                productRequestDTO.getDescription(), imageUrl, null);
+                productRequestDTO.getDescription(), imageUrl);
 
         productService.updateProduct(product, productRequestDTO.getCategoryId());
 
