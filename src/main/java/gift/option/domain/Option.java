@@ -59,7 +59,6 @@ public class Option {
         return id;
     }
 
-
     public String getName() {
         return name;
     }
@@ -79,7 +78,6 @@ public class Option {
     public void setProduct(Product product) {
         this.product = product;
     }
-
     // business logic
     public void subtract(Long quantity){
         setQuantity(this.quantity - quantity);
