@@ -45,24 +45,16 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+
     public void saveProduct(ProductRequestDTO productRequestDTO){
 
         String categoryName = productRequestDTO.category();
         Optional<Category> existingCategory = categoryRepository.findByName(categoryName);
         existingCategory.orElseThrow(() -> new CategoryException("카테고리를 찾을 수 없습니다. 먼저 카테고리를 등록해주세요.") );
 
-        try {
-            Product product = toEntity(productRequestDTO, existingCategory.get());
-            productRepository.save(product);
-        } catch (DataAccessException e) {
-            throw new ProductException("데이터베이스 접근 오류가 발생했습니다.");
-        } catch (PersistenceException e) {
-            throw new ProductException("영속성 오류가 발생했습니다.");
-        } catch (ConstraintViolationException e) {
-            throw new ProductException("제약 조건 위반 오류가 발생했습니다.");
-        } catch (Exception e) {
-            throw new ProductException("알 수 없는 오류가 발생했습니다.");
-        }
+        Product product = toEntity(productRequestDTO, existingCategory.get());
+        productRepository.save(product);
+
     }
 
     public void deleteProduct(Long productId) {
