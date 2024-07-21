@@ -1,70 +1,106 @@
 package gift;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.Model.Category;
 import gift.Model.Option;
 import gift.Model.Product;
 import gift.Repository.OptionRepository;
+import gift.Service.CategoryService;
 import gift.Service.OptionService;
 
-import java.util.Arrays;
+import gift.Service.ProductService;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class OptionServiceTest {
 
-    @Mock
+    @Autowired
     private OptionRepository optionRepository;
 
-    @Mock
+    @Autowired
     private OptionService optionService;
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    private final Category category = new Category(1L, "교환권","#6c95d1","https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png","",null);
+
+    @DirtiesContext
     @Test
     void getAllOptions() {
-       // Given
-        Category category = new Category(20L, "testCategory", "testColor", "testUrl",
-            "testDescription", null);// 1~14번까지 기존 데이터가 존재하므로 20으로 test객체 생성
-        Product product = new Product(1L, "test", 1000, "test", category, null);
-        Option expect1 = new Option(1L, product, "option1", 100);
-        Option expect2 = new Option(2L, product, "option2", 200);
-        List<Option> expect = Arrays.asList(expect1, expect2);
 
-        // When getAllOptions 실행되면 expect가 나오도록 설정
-        Mockito.when(optionService.getAllOptions(1L)).thenReturn(expect);
+        categoryService.addCategory(category);
 
-        // Then getAllOptions 실행 시 실제 값
-        List<Option> actual = optionService.getAllOptions(1L);
+        Product product = new Product(1L, "test", 1000, "test", category, new ArrayList<>());
+        productService.addProduct(product);
+        // 기본 옵션과 옵션 2개 생성하여 총 3개 생성
+        Option expect2 = new Option(2L, product, "option1", 100);
+        Option expect3 = new Option(3L, product, "option2", 200);
+        optionService.addOption(expect2,product.getId());
+        optionService.addOption(expect3,product.getId());
 
-        assertEquals(expect, actual);// 검증
+        List<Option> options = optionService.getAllOptions(product.getId());
 
+        Option actual1 = options.get(0);
+        Option actual2 = options.get(1);
+        Option actual3 = options.get(2);
+        assertAll(
 
+            // 옵션1(기본 옵셥) 테스트
+            () -> assertThat(actual1.getName()).isEqualTo("test"),
+            () -> assertThat(actual1.getQuantity()).isEqualTo(1),
+            // 옵션2 테스트
+            () -> assertThat(actual2.getName()).isEqualTo(expect2.getName()),
+            () -> assertThat(actual2.getQuantity()).isEqualTo(expect2.getQuantity()),
+            // 옵션3 테스트
+            () -> assertThat(actual3.getName()).isEqualTo(expect3.getName()),
+            () -> assertThat(actual3.getQuantity()).isEqualTo(expect3.getQuantity())
+
+        );
     }
+
+    @DirtiesContext
     @Test
-    void addOptions(){
-        // Given
-        Product product = new Product(1L,"product",1000,"test",null,null);
-        Option expect = new Option(1L, product, "option1", 100);
+    void addDefaultOption(){
+        categoryService.addCategory(category);
 
-        // When mokicto는 기본적으로 null을 반환 => 아래 코드로 원래의 값을 반환 (공부필요)
-        Mockito.when(optionRepository.save(any(Option.class))).thenAnswer(i -> i.getArguments()[0]);
+        Product product = new Product(1L, "test", 1000, "test", category, new ArrayList<>());
+        productService.addProduct(product);
 
-        // Then
-        Option actual = optionRepository.save(expect);
-
-        assertEquals(expect.getId(), actual.getId());
-        assertEquals(expect.getProduct(), actual.getProduct());
-        assertEquals(expect.getName(), actual.getName());
-        assertEquals(expect.getQuantity(), actual.getQuantity());
-
+        Option actual = productService.getProductById(product.getId()).getOptions().getFirst();
+        assertAll(
+            ()-> assertThat(actual.getId()).isEqualTo(1L),
+            ()-> assertThat(actual.getName()).isEqualTo(product.getName()),
+            ()-> assertThat(actual.getQuantity()).isEqualTo(1)
+        );
     }
 
+    @DirtiesContext
+    @Test
+    void addNewOption(){
+        categoryService.addCategory(category);
+
+        Product product = new Product(1L, "test", 1000, "test", category, new ArrayList<>());
+        productService.addProduct(product);
+
+        Option expect = new Option(2L, product, "option1", 100);
+        optionService.addOption(expect,product.getId());
+        Option actual = productService.getProductById(product.getId()).getOptions().get(1);
+        assertAll(
+            ()-> assertThat(actual.getId()).isEqualTo(expect.getId()),
+            ()-> assertThat(actual.getName()).isEqualTo(expect.getName()),
+            ()-> assertThat(actual.getQuantity()).isEqualTo(expect.getQuantity())
+        );
+    }
 }
