@@ -1,8 +1,10 @@
 package gift.service;
 
 import gift.dto.OptionRequest;
+import gift.dto.OptionSubtractRequest;
 import gift.exception.AlreadyExistsException;
 import gift.exception.NotFoundException;
+import gift.exception.OutOfStockException;
 import gift.model.Option;
 import gift.model.Product;
 import gift.repository.OptionRepository;
@@ -40,8 +42,10 @@ public class OptionServiceTest {
         MockitoAnnotations.openMocks(this);
         product = new Product("name", 1000,"https://asdf");
         option = new Option("OptionName", 10L, product);
-        productRepository.save(product);
-        optionRepository.save(option);
+        when(productRepository.save(product)).thenReturn(product);
+        when(optionRepository.save(option)).thenReturn(option);
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(optionRepository.findById(1L)).thenReturn(Optional.of(option));
     }
 
     @Test
@@ -68,12 +72,11 @@ public class OptionServiceTest {
     @Transactional
     @DisplayName("makeOption 성공 테스트")
     public void testMakeOption_Success() {
-        OptionRequest request = new OptionRequest(1L,"상품옵션", 123L);
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        OptionRequest request = new OptionRequest(2L,"상품옵션", 123L);
 
         optionService.makeOption(1L, request);
 
-        verify(optionRepository, times(2)).save(any(Option.class));
+        verify(optionRepository, times(1)).save(any(Option.class));
     }
 
     @Test
@@ -91,23 +94,27 @@ public class OptionServiceTest {
     @Test
     @DisplayName("makeOption 상품 못찾음 테스트")
     public void testMakeOption_ProductNotFound() {
-        OptionRequest request = new OptionRequest(1L,"name3", 123L);
+        OptionRequest request = new OptionRequest(2L, "name3", 123L);
 
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> optionService.makeOption(3L, request));
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> optionService.makeOption(10L, request));
         assertEquals("해당 id의 상품이 존재하지 않습니다.", thrown.getMessage());
     }
 
     @Test
-    @DisplayName("subtract 성공 테스트")
-    void testSubtractSuccess() {
-        option.subtract(5L);
+    @DisplayName("subtractQuantity 성공 테스트")
+    public void testSubtractQuantity_Success() {
+        OptionSubtractRequest request = new OptionSubtractRequest(1L, 5L);
+
+        optionService.subtractQuantity(request);
+
         assertEquals(5L, option.getQuantity());
     }
 
     @Test
-    @DisplayName("quantity 정확히 0의 값으로 만드는 테스트")
-    void testSubtractExactQuantity() {
-        option.subtract(10L);
-        assertEquals(0L, option.getQuantity());
+    @DisplayName("subtractQuantity 수량 부족 테스트")
+    public void testSubtractQuantity_OutOfStock() {
+        OptionSubtractRequest request = new OptionSubtractRequest(1L, 20L);
+
+        assertThrows(OutOfStockException.class, () -> optionService.subtractQuantity(request));
     }
 }
