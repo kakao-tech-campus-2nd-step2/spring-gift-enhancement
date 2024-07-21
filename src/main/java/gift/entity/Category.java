@@ -99,6 +99,12 @@ public class Category {
         this.imageUrl = categoryRequestDTO.imageUrl();
     }
 
+    public void addProduct(Product product){
+        this.products.add(product);
+        product.setCategory(this);
+    }
+
+
     public void addProduct(ProductRequestDTO productRequestDTO){
         Product product = new Product(productRequestDTO.name(),
                 productRequestDTO.price(),

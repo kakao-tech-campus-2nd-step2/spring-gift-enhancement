@@ -1,9 +1,11 @@
 package gift.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import gift.dto.OptionRequestDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="option", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "product_id"})})
