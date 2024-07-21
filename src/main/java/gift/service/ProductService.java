@@ -62,7 +62,7 @@ public class ProductService {
      * 상품을 생성하는 로직
      */
     @Transactional
-    public void createProduct(ProductRequest productRequest){
+    public ProductResponse save(ProductRequest productRequest){
         Category category = categoryRepository.findByName(productRequest.getCategoryName());
         Product productEntity = new Product(
                 productRequest.getName(),
@@ -75,6 +75,8 @@ public class ProductService {
         Option basicOption = new Option(productRequest.getBasicOption(), 1L);
         productEntity.addOption(basicOption);
         optionRepository.save(basicOption);
+
+        return new ProductResponse(productEntity);
     }
     /*
      * 상품을 삭제하는 로직
