@@ -2,8 +2,6 @@ package gift.option.model;
 
 import gift.product.model.Product;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "product_options", uniqueConstraints = {
@@ -22,17 +20,15 @@ public class Option {
     @Embedded
     private OptionName name;
 
-    @Min(value = 1, message = "옵션 수량은 최소 1개 이상이어야 합니다.")
-    @Max(value = 99999999, message = "옵션 수량은 1억 개 미만이어야 합니다.")
-    @Column(nullable = false)
-    private int quantity;
+    @Embedded
+    private OptionQuantity optionQuantity;
 
     public Option() {}
 
-    public Option(Product product, OptionName name, int quantity) {
+    public Option(Product product, OptionName name, OptionQuantity optionQuantity) {
         this.product = product;
         this.name = name;
-        this.quantity = quantity;
+        this.optionQuantity = optionQuantity;
     }
 
     public Product getProduct() {
@@ -47,7 +43,7 @@ public class Option {
         return name;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public OptionQuantity getOptionQuantity() {
+        return optionQuantity;
     }
 }

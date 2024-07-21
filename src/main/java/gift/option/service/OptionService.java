@@ -3,6 +3,7 @@ package gift.option.service;
 import gift.option.dto.OptionDto;
 import gift.option.model.Option;
 import gift.option.model.OptionName;
+import gift.option.model.OptionQuantity;
 import gift.option.repository.OptionRepository;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
@@ -26,7 +27,7 @@ public class OptionService {
     @Transactional
     public List<OptionDto> getOptionsByProductId(Long id) {
         return optionRepository.findByProductId(id).stream()
-                .map(option -> new OptionDto(option.getId(), option.getName().getValue(), option.getQuantity()))
+                .map(option -> new OptionDto(option.getId(), option.getName().getValue(), option.getOptionQuantity().getValue()))
                 .collect(Collectors.toList());
     }
 
@@ -39,10 +40,11 @@ public class OptionService {
         validateOptionQuantity(optionDto.getQuantity());
 
         OptionName optionName = new OptionName(optionDto.getName());
-        Option option = new Option(product, optionName, optionDto.getQuantity());
+        OptionQuantity quantity = new OptionQuantity(optionDto.getQuantity());
+        Option option = new Option(product, optionName, quantity);
         Option savedOption = optionRepository.save(option);
 
-        return new OptionDto(savedOption.getId(), savedOption.getName().getValue(), savedOption.getQuantity());
+        return new OptionDto(savedOption.getId(), savedOption.getName().getValue(), savedOption.getOptionQuantity().getValue());
     }
 
     @Transactional
