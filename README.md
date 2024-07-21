@@ -74,7 +74,10 @@ Key: categoryName
 Value: 교환권
 
 ### 상품 등록,수정
-POST, PUT
+```
+POST, PUT /api/prodcuts HTTP/1.1 , /api/prodcuts/1 HTTP/1.1
+```
+```
 {
 "name": "New Product",
 "price": 20.00,
@@ -88,3 +91,4 @@ POST, PUT
 }
 ]
 }
+```
