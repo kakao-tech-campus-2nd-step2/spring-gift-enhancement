@@ -3,30 +3,23 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Product;
 import gift.domain.Option;
-import gift.dto.OptionDTO;
 import gift.repository.OptionRepository;
-import gift.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class OptionServiceTest {
 
     @Mock
     private OptionRepository optionRepository;
-
-    @Mock
-    private ProductRepository productRepository;
 
     @InjectMocks
     private OptionService optionService;
@@ -37,48 +30,58 @@ public class OptionServiceTest {
     }
 
     @Test
-    public void testGetOptionsByProductId() {
+    public void testSubtractOptionQuantity() {
         Long productId = 1L;
-        Product product = new Product("Test Product", 1000, "test.jpg", new Category("Test Category"));
-        Option option1 = new Option("Option 1", 10, product);
-        Option option2 = new Option("Option 2", 20, product);
-
-        when(optionRepository.findByProductId(productId)).thenReturn(Arrays.asList(option1, option2));
-
-        List<OptionDTO> options = optionService.getOptionsByProductId(productId);
-
-        assertEquals(2, options.size());
-        assertEquals("Option 1", options.get(0).getName());
-        assertEquals(10, options.get(0).getQuantity());
-        assertEquals("Option 2", options.get(1).getName());
-        assertEquals(20, options.get(1).getQuantity());
-    }
-
-    @Test
-    public void testAddOption() {
-        Long productId = 1L;
-        Product product = new Product("Test Product", 1000, "test.jpg", new Category("Test Category"));
-        OptionDTO optionDTO = new OptionDTO("Test Option", 10);
-
-        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-        when(optionRepository.existsByProductIdAndName(productId, optionDTO.getName())).thenReturn(false);
-        when(optionRepository.save(any(Option.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        OptionDTO savedOption = optionService.addOption(productId, optionDTO);
-
-        assertNotNull(savedOption);
-        assertEquals("Test Option", savedOption.getName());
-        assertEquals(10, savedOption.getQuantity());
-    }
-
-    @Test
-    public void testDeleteOption() {
         Long optionId = 1L;
+        int quantityToSubtract = 5;
 
-        doNothing().when(optionRepository).deleteById(optionId);
+        Category category = new Category("Test Category");
+        Product product = new Product(productId, "Test Product", 1000, "test.jpg", category);
+        Option option = new Option(optionId, "Test Option", 10, product);
 
-        optionService.deleteOption(optionId);
+        when(optionRepository.findById(optionId)).thenReturn(Optional.of(option));
 
-        verify(optionRepository, times(1)).deleteById(optionId);
+        optionService.subtractOptionQuantity(productId, optionId, quantityToSubtract);
+
+        assertEquals(5, option.getQuantity());
+        verify(optionRepository, times(1)).save(option);
+    }
+
+    @Test
+    public void testSubtractOptionQuantity_NotEnoughQuantity() {
+        Long productId = 1L;
+        Long optionId = 1L;
+        int quantityToSubtract = 15;
+
+        Category category = new Category("Test Category");
+        Product product = new Product(productId, "Test Product", 1000, "test.jpg", category);
+        Option option = new Option(optionId, "Test Option", 10, product);
+
+        when(optionRepository.findById(optionId)).thenReturn(Optional.of(option));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.subtractOptionQuantity(productId, optionId, quantityToSubtract);
+        });
+
+        assertEquals("남아있는 수량이 더 작습니다.", exception.getMessage());
+    }
+
+    @Test
+    public void testSubtractOptionQuantity_InvalidProductId() {
+        Long productId = 2L;
+        Long optionId = 1L;
+        int quantityToSubtract = 5;
+
+        Category category = new Category("Test Category");
+        Product product = new Product(1L, "Test Product", 1000, "test.jpg", category);
+        Option option = new Option(optionId, "Test Option", 10, product);
+
+        when(optionRepository.findById(optionId)).thenReturn(Optional.of(option));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            optionService.subtractOptionQuantity(productId, optionId, quantityToSubtract);
+        });
+
+        assertEquals("Option does not belong to the given product", exception.getMessage());
     }
 }
