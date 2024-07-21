@@ -77,7 +77,7 @@ public class ProductService {
     public void updateProductCategoryToNone(Long id) {
         Category category = getCategoryById(id);
         Category noneCategory = getCategoryById(1L);
-      
+
         List<Product> products = productRepository.findByCategory(category);
         for (Product product : products) {
             Product updateProduct = new Product(
