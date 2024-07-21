@@ -83,7 +83,7 @@ public class Option {
         this.quantity = request.quantity();
     }
 
-    public void validateName(String name) {
+    private void validateName(String name) {
         Pattern pattern = Pattern.compile("^[\\w\\s()\\[\\]+\\-&/_]*$");
         Matcher matcher = pattern.matcher(name);
         if (!matcher.find() || name.length() > 50) {
@@ -91,7 +91,7 @@ public class Option {
         }
     }
 
-    public void validateQuantity(Integer quantity) {
+    private void validateQuantity(Integer quantity) {
         if (quantity < 1 || quantity >= 100_000_000) {
             throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
         }
