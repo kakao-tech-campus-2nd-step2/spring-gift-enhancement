@@ -3,10 +3,12 @@ package gift.service;
 import gift.domain.ProductOption;
 import gift.repository.ProductOptionRepository;
 import gift.web.dto.request.productoption.CreateProductOptionRequest;
+import gift.web.dto.request.productoption.SubtractProductOptionQuantityRequest;
 import gift.web.dto.request.productoption.UpdateProductOptionRequest;
 import gift.web.dto.response.productoption.CreateProductOptionResponse;
 import gift.web.dto.response.productoption.ReadAllProductOptionsResponse;
 import gift.web.dto.response.productoption.ReadProductOptionResponse;
+import gift.web.dto.response.productoption.SubtractProductOptionQuantityResponse;
 import gift.web.dto.response.productoption.UpdateProductOptionResponse;
 import gift.web.validation.exception.client.AlreadyExistsException;
 import gift.web.validation.exception.client.ResourceNotFoundException;
@@ -81,6 +83,16 @@ public class ProductOptionService {
         option.update(updateParam);
 
         return UpdateProductOptionResponse.fromEntity(option);
+    }
+
+    @Transactional
+    public SubtractProductOptionQuantityResponse subtractOptionStock(Long optionId, SubtractProductOptionQuantityRequest request) {
+        ProductOption option = productOptionRepository.findById(optionId)
+            .orElseThrow(() -> new ResourceNotFoundException("상품 옵션", optionId.toString()));
+
+        option.subtractQuantity(request.getQuantity());
+
+        return SubtractProductOptionQuantityResponse.fromEntity(option);
     }
 
     @Transactional
