@@ -26,8 +26,8 @@ option.subtract(quantity)
 - [x] Dto에서 도메인 Entity를 의존하지 않도록 코드 변경 
   - [x] ProductResponseDto
   - [x] 그외
-- [ ] Service 에서 Entity 를 반환하는것이 아닌, Response 객체를 반환하도록 
-  - [ ] OptionService 
+- [x] Service 에서 Entity 를 반환하는것이 아닌, Response 객체를 반환하도록 
+  - [x] OptionService 
   - [ ] 그외
 - [ ] 테스트 코드 돌아가도록 수정
 - [x] HttpStatus 반환 코드 수정

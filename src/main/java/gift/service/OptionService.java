@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.OptionResponseDto;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.repository.OptionRepository;
@@ -13,18 +14,18 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
-    public Option getById(Long optionId) {
-        return optionRepository.findById(optionId).get();
+    public OptionResponseDto getById(Long optionId) {
+        return this.fromEntity(optionRepository.findById(optionId).get());
     }
 
-    public List<Option> getAllOptions() {
-        return optionRepository.findAll();
+    public List<OptionResponseDto> getAllOptions() {
+        return optionRepository.findAll().stream().map(this::fromEntity).toList();
     }
 
-    public Option save(Option option, Product product) {
+    public OptionResponseDto save(Option option, Product product) {
         if (checkValidOptionName(option.getName(), product) &&
                 checkValidOptionQuantity(option.getQuantity())) {
-            return optionRepository.save(option);
+            return fromEntity(optionRepository.save(option));
         }
         return null;
     }
@@ -40,12 +41,16 @@ public class OptionService {
         optionRepository.delete(option);
     }
 
-    public Option update(Option option) {
-        return optionRepository.save(option);
+    public void update(Option option) {
+        optionRepository.save(option);
     }
 
-    public Option getOptionByName(String optionName) {
-        return optionRepository.findOptionByName(optionName);
+    public OptionResponseDto getOptionByName(String optionName) {
+        return fromEntity(optionRepository.findOptionByName(optionName));
+    }
+
+    public OptionResponseDto fromEntity(Option option) {
+        return new OptionResponseDto(option.getId(),option.getName(),option.getQuantity(),option.getProduct().getId());
     }
 
     public boolean checkValidOptionName(String optionName, Product product) {
