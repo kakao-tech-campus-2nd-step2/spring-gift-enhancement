@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.ProductRequestDto;
 import gift.dto.ProductResponseDto;
 import gift.dto.ProductWithOptionRequest;
 import gift.entity.Product;
@@ -48,8 +49,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateProduct(@PathVariable Long id,
-        @RequestBody Product product) {
-        productService.update(id, product);
+        @RequestBody ProductRequestDto productRequestDto) {
+        productService.update(id, productRequestDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

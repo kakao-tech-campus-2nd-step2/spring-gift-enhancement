@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.dto.OptionRequestDto;
+import gift.dto.ProductRequestDto;
 import gift.dto.ProductResponseDto;
 import gift.dto.ProductWithOptionRequest;
 import gift.entity.Category;
@@ -70,14 +71,14 @@ public class ProductService {
             optionRepository.save(new Option(option.getName(), option.getQuantity(), createdProduct)));
     }
 
-    public Product update(Long id, Product product) {
-        return productRepository.findById(id)
-            .map(existingProduct -> {
-                existingProduct.setName(product.getName());
-                existingProduct.setPrice(product.getPrice());
-                existingProduct.setImageUrl(product.getImageUrl());
-                return productRepository.save(existingProduct);
-            }).orElseThrow(() -> new BusinessException("해당 아이디에 대한 상품이 존재하지 않습니다."));
+    public void update(Long id, ProductRequestDto request) {
+        productRepository.findById(id)
+            .orElseThrow(() -> new BusinessException("해당 id에 대한 상품 정보가 없습니다."));
+
+        Product product = new Product(id, request.getName(), request.getPrice(), request.getImageUrl(),
+            request.getCategory());
+
+        productRepository.save(product);
     }
 
     public void deleteById(Long id) {
