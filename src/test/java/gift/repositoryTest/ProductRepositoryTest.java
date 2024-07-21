@@ -2,6 +2,7 @@ package gift.repositoryTest;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import gift.domain.category.Category;
+import gift.domain.category.CategoryRepository;
 import gift.domain.product.Product;
 import gift.domain.product.ProductRepository;
 import org.assertj.core.api.Assertions;
@@ -13,10 +14,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 public class ProductRepositoryTest {
     @Autowired
     private ProductRepository products;
+    @Autowired
+    private CategoryRepository categories;
 
     @Test
     void save() {
         Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
         Product expected = new Product("물건1", 2000L, "image.url", category);
         Product actual = products.save(expected);
 
@@ -30,6 +34,7 @@ public class ProductRepositoryTest {
     @Test
     void findById() {
         Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
         Product expected = new Product("물건1", 2000L, "image.url", category);
         products.save(expected);
 
@@ -40,6 +45,7 @@ public class ProductRepositoryTest {
     @Test
     void findAllProducts() {
         Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
         Product product1 = new Product("물건1", 2000L, "image.url", category);
         Product product2 = new Product("물건2", 2000L, "image.url", category);
 
@@ -55,10 +61,11 @@ public class ProductRepositoryTest {
     @Test
     void updateProduct() {
         Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
         Product product = new Product("물건1", 2000L, "image.url", category);
         products.save(product);
 
-        product.updateProduct("수정된 물건", 2000L, "image.url");
+        product.updateProduct("수정된 물건", 2000L, "image.url", category);
 
         Assertions.assertThat(products.findById(product.getId()).get().getId()).isNotNull().isEqualTo(1L);
         Assertions.assertThat(products.findById(product.getId()).get()).isEqualTo(product);
@@ -69,6 +76,7 @@ public class ProductRepositoryTest {
     @Test
     void deleteProduct() {
         Category category = new Category("교환권", "#6c95d1", "", "https://www.kakao.com");
+        categories.save(category);
         Product product = new Product("product1", 2000L, "image.url", category);
         products.save(product);
 
