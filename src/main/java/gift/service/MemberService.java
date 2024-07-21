@@ -4,6 +4,7 @@ import gift.domain.member.Member;
 import gift.domain.member.MemberRequest;
 import gift.repository.MemberRepository;
 import gift.util.JwtUtil;
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class MemberService {
         this.jwtUtil = jwtUtil;
     }
 
+    @Transactional
     public Member register(MemberRequest memberRequest) {
         if (memberRepository.findByEmail(memberRequest.email()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 가입된 이메일입니다");

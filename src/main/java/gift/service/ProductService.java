@@ -3,6 +3,7 @@ package gift.service;
 import gift.domain.product.Product;
 import gift.domain.product.ProductRequest;
 import gift.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,12 +34,14 @@ public class ProductService {
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다"));
     }
 
+    @Transactional
     public Product save(ProductRequest productRequest) {
         System.out.println("tetetetetet");
         System.out.println(productRequest.toProduct().getCategory().getId());
         return productRepository.save(productRequest.toProduct());
     }
 
+    @Transactional
     public Product update(Long id, ProductRequest productRequest) {
         Product product = productRepository.findById(id).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다"));
@@ -46,6 +49,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    @Transactional
     public void delete(Long id) {
         productRepository.deleteById(id);
     }

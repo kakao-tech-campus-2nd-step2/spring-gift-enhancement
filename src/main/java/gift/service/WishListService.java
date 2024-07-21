@@ -1,10 +1,11 @@
 package gift.service;
 
-import gift.domain.wishlist.WishList;
-import gift.domain.wishlist.WishListRequest;
 import gift.domain.member.Member;
 import gift.domain.product.Product;
+import gift.domain.wishlist.WishList;
+import gift.domain.wishlist.WishListRequest;
 import gift.repository.WishListRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,10 +38,12 @@ public class WishListService {
             .toList();
     }
 
+    @Transactional
     public void save(Long memberId, WishListRequest wishListRequest) {
         wishListRepository.save(wishListRequest.toWishList(memberId));
     }
 
+    @Transactional
     public void delete(Long memberId, WishListRequest wishListRequest) {
         WishList wishList = wishListRepository.findByMemberAndProduct(new Member(memberId),
             new Product(wishListRequest.productId())).orElseThrow(() -> new ResponseStatusException(

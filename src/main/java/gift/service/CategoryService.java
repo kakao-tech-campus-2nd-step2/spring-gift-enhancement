@@ -3,6 +3,7 @@ package gift.service;
 import gift.domain.category.Category;
 import gift.domain.category.CategoryRequest;
 import gift.repository.CategoryRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,10 +34,12 @@ public class CategoryService {
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다"));
     }
 
+    @Transactional
     public Category save(CategoryRequest request) {
         return categoryRepository.save(request.toCategory());
     }
 
+    @Transactional
     public Category update(Long id, CategoryRequest request) {
         Category category = categoryRepository.findById(id).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다"));
@@ -44,6 +47,7 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    @Transactional
     public void delete(Long id) {
         categoryRepository.deleteById(id);
     }

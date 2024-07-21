@@ -4,6 +4,7 @@ import gift.domain.option.Option;
 import gift.domain.option.OptionRequest;
 import gift.domain.product.Product;
 import gift.repository.OptionRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,12 @@ public class OptionService {
         return OptionRepository.findAllByProduct(new Product(productId));
     }
 
+    @Transactional
     public void save(Long productId, OptionRequest optionRequest) {
         OptionRepository.save(optionRequest.toOption(productId));
     }
 
+    @Transactional
     public void update(Long productId, Long optionId, OptionRequest optionRequest) {
         Option option = OptionRepository.findById(optionId).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 옵션을 찾을 수 없습니다"));
@@ -33,6 +36,7 @@ public class OptionService {
         OptionRepository.save(option);
     }
 
+    @Transactional
     public void subtractQuantity(Long productId, Long optionId, Long quantity) {
         Option option = OptionRepository.findById(optionId).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 옵션을 찾을 수 없습니다"));
@@ -43,6 +47,7 @@ public class OptionService {
         OptionRepository.save(option);
     }
 
+    @Transactional
     public void delete(Long productId, Long optionId) {
         OptionRepository.deleteById(optionId);
     }
