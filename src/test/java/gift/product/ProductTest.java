@@ -1,11 +1,8 @@
-package gift;
+package gift.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 
-import gift.product.Product;
-import gift.product.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +11,6 @@ public class ProductTest {
     @DisplayName("비즈니스 로직 테스트")
     @Test
     void domain(){
-        ProductRepository productRepository = mock(ProductRepository.class);
         //given
         String name = "카카오123";
 

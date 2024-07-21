@@ -1,6 +1,8 @@
 package gift.category;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
@@ -12,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -37,20 +38,19 @@ public class CategoryControllerTest {
         //given
         CategoryRequest categoryRequest = new CategoryRequest("category", "#6c95d1",
             "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "");
-        //String contents = new ObjectMapper().writeValueAsString(categoryRequest);
+        when(categoryService.createCategory(any(CategoryRequest.class)))
+            .thenReturn(categoryRequest.toEntity());
 
         //when
         ResultActions resultAction = mockMvc.perform(
-            MockMvcRequestBuilders.post("/category")
+            MockMvcRequestBuilders.post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new Gson().toJson(categoryRequest)));
 
         //then
-        MvcResult mvcResult = resultAction.andExpect(status().isCreated())
-            .andDo(print())
-            .andReturn();
-
-        System.out.println("MvcResult :: " + mvcResult.getResponse().getContentAsString());
+        resultAction.andExpect(status().isCreated())
+            .andExpect(jsonPath("name", categoryRequest.getName()).exists())
+            .andExpect(jsonPath("color", categoryRequest.getColor()).exists());
     }
 
 

@@ -16,11 +16,11 @@ public class CategoryService {
         return categoryRepository.save(categoryRequest.toEntity());
     }
 
-    public void updateCategory(CategoryRequest categoryRequest) {
+    public Category updateCategory(CategoryRequest categoryRequest) {
         Category category = categoryRepository.findById(categoryRequest.getId()).orElseThrow();
         category.update(categoryRequest.getName(), categoryRequest.getColor(),
             categoryRequest.getImageUrl(), categoryRequest.getDescription());
-        categoryRepository.save(category);
+        return categoryRepository.save(category);
     }
 
     public List<Category> getAllCategories(){

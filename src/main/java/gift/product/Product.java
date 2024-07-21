@@ -1,9 +1,14 @@
 package gift.product;
 
+import gift.option.Option;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -18,6 +23,12 @@ public class Product {
     private String imageUrl;
 
     private Long categoryId;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private final List<Option> options = new ArrayList<>();
+
+    /*@OneToMany(mappedBy = "product")
+    private final List<Option> options = new ArrayList<>();*/
 
     public Long getId(){
         return this.id;
@@ -38,6 +49,11 @@ public class Product {
     public Long getCategoryId(){
         return this.categoryId;
     }
+
+    public List<Option> getOptions() {
+        return this.options;
+    }
+
 
     protected Product(){
     }
@@ -63,4 +79,5 @@ public class Product {
             throw new IllegalArgumentException( "\"카카오\"가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다.");
         }
     }
+
 }

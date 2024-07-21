@@ -1,8 +1,11 @@
 package gift.product;
 
 import gift.Exception.ErrorResponse;
+import gift.option.Option;
+import gift.option.OptionRequest;
+import gift.option.OptionService;
 import jakarta.validation.Valid;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,11 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -23,10 +27,12 @@ public class ProductController {
 
     private final ProductRepository productRepository;
     private final ProductService productService;
+    private final OptionService optionService;
 
-    public ProductController(ProductRepository productRepository, ProductService productService){
+    public ProductController(ProductRepository productRepository, ProductService productService, OptionService optionService){
         this.productRepository = productRepository;
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @GetMapping()
@@ -38,19 +44,52 @@ public class ProductController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<HttpStatus> createProduct(@Valid @ModelAttribute ProductRequest newProduct) {
-        return ResponseEntity.ok(productService.createProduct(newProduct.toEntity()));
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequest newProduct) {
+        Product product = productService.createProduct(newProduct.toEntity());
+        Option option = optionService.addOption(newProduct.getOptionRequest(), product);
+        productService.addOption(product.getId(), option);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<HttpStatus> updateProduct(@Valid @ModelAttribute ProductRequest changeProduct)
-        throws NotFoundException {
+    public ResponseEntity<Product> updateProduct(@Valid @RequestBody ProductRequest changeProduct) {
         return ResponseEntity.ok(productService.updateProduct(changeProduct.toEntity()));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.deleteProduct(id));
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.ok("delete");
+    }
+
+    @GetMapping("{id}/options")
+    public ResponseEntity<List<Option>> getOptions(@PathVariable("id") Long productId){
+        return ResponseEntity.status(HttpStatus.OK).body(optionService.findAllByProductId(productId));
+    }
+
+    @PostMapping("{id}/options")
+    public ResponseEntity<List<Option>> addOption(@RequestBody @Valid OptionRequest optionRequest,
+        @PathVariable Long id){
+        Product product = productService.findById(id);
+        Option option = optionService.addOption(optionRequest, product);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.addOption(id, option));
+    }
+
+    @PutMapping("{id}/options")
+    public ResponseEntity<String> updateOption(@RequestBody @Valid OptionRequest optionRequest, @PathVariable Long id){
+        optionService.updateOption(optionRequest, id);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("update");
+    }
+
+    @DeleteMapping("{id}/options")
+    public ResponseEntity<List<Option>> deleteOption(@PathVariable("id") Long productId, @RequestParam Long optionId){
+        Option option = optionService.getOption(optionId);
+        productService.deleteOption(productId, option);
+
+        return ResponseEntity.status(HttpStatus.OK).body(productService.deleteOption(productId, option));
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)

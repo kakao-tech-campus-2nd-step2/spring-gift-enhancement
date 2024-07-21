@@ -34,7 +34,6 @@ public class WishRepositoryTest {
     void beforeEach(){
         member = new Member(null, "na", "na@gmail.com","1234");
         product = new Product(null, "test_product", 1234, null, 1L);
-
         memberRepository.save(member);
         productRepository.save(product);
     }
