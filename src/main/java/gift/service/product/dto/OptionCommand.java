@@ -1,7 +1,7 @@
 package gift.service.product.dto;
 
-import gift.controller.product.dto.OptionRequest;
 import gift.model.product.Option;
+import gift.model.product.Options;
 import gift.model.product.Product;
 import java.util.List;
 
@@ -24,14 +24,17 @@ public class OptionCommand {
 
     }
 
-    public record Register(
+    public record RegisterMany(
         List<Info> request
     ) {
 
-        public List<Option> toEntities(Product product) {
-            return request.stream()
-                .map(info -> info.toEntity(product))
-                .toList();
+        public Options toOptions(Product product) {
+            Options options = new Options(request.stream()
+                .map(info -> new Option(info.name(), info.quantity(), product))
+                .toList());
+
+            return options;
         }
+
     }
 }
