@@ -1,8 +1,8 @@
 package gift.category.presentation;
 
 import gift.auth.TokenService;
-import gift.category.application.CategoryServiceResponse;
 import gift.category.application.CategoryService;
+import gift.category.application.CategoryServiceResponse;
 import gift.category.presentation.request.CategoryCreateRequest;
 import gift.category.presentation.request.CategoryUpdateRequest;
 import gift.member.application.MemberService;

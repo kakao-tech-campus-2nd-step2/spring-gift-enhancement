@@ -2,8 +2,8 @@ package gift.wishlist.presentation;
 
 import gift.auth.TokenService;
 import gift.member.application.MemberService;
-import gift.wishlist.application.WishlistServiceResponse;
 import gift.wishlist.application.WishlistService;
+import gift.wishlist.application.WishlistServiceResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

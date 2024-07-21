@@ -5,7 +5,6 @@ import gift.option.application.command.OptionSubtractQuantityCommand;
 import gift.option.domain.Option;
 import gift.option.domain.OptionRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;

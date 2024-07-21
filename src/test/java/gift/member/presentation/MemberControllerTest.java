@@ -1,8 +1,8 @@
 package gift.member.presentation;
 
 import gift.auth.TokenService;
-import gift.member.application.MemberServiceResponse;
 import gift.member.application.MemberService;
+import gift.member.application.MemberServiceResponse;
 import gift.member.application.command.MemberEmailUpdateCommand;
 import gift.member.application.command.MemberPasswordUpdateCommand;
 import gift.member.presentation.request.MemberJoinRequest;

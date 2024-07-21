@@ -2,7 +2,6 @@ package gift.product.presentation;
 
 import gift.option.application.OptionServiceResponse;
 import gift.product.application.ProductServiceResponse;
-import gift.product.domain.Product;
 
 import java.util.List;
 
