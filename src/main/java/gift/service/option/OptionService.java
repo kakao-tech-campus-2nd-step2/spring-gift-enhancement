@@ -7,6 +7,7 @@ import gift.domain.product.ProductRepository;
 import gift.mapper.OptionMappper;
 import gift.web.dto.OptionDto;
 import gift.web.exception.ProductNotFoundException;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,5 +30,15 @@ public class OptionService {
 
         Option option = optionRepository.save(optionMapper.toEntity(optionDto, product));
         return optionMapper.toDto(option);
+    }
+
+    public List<OptionDto> getOptionsByProductId(Long productId) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ProductNotFoundException("제품이 없슴다."));
+
+        return optionRepository.findAllByProductId(productId)
+            .stream()
+            .map(optionMapper::toDto)
+            .toList();
     }
 }
