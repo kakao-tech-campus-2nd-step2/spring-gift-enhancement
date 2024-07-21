@@ -30,7 +30,7 @@ public class OptionService {
             .orElseThrow(() -> new RuntimeException("No such product with id" + productId));
 
         List<OptionResponse> responses = product.getOptions().stream()
-                                .map(op -> OptionResponse.fromEntity(op))
+                                .map(OptionResponse::fromEntity)
                                 .toList();
         return  responses;
     }
@@ -44,8 +44,7 @@ public class OptionService {
         validateOptionName(productId, optionRequest);
 
         Option option = new Option(optionRequest.name(), optionRequest.quantity(), product);
-        option.setProduct(product);
-        product.getOptions().add(option);
+        product.addOption(option);
         optionRepository.save(option);
         return OptionResponse.fromEntity(option);
     }

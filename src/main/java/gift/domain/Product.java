@@ -55,6 +55,11 @@ public class Product {
         this.category = category;
     }
 
+    public void addOption(Option option) {
+        options.add(option);
+        option.setProduct(this);
+    }
+
     public Long getId() {
         return id;
     }
