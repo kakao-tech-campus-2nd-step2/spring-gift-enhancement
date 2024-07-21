@@ -15,7 +15,7 @@ public interface OptionJpaRepository extends JpaRepository<Option, Long> {
 
     @Lock(value = LockModeType.OPTIMISTIC)
     @Query("select o from Option o where o.id = :optionId")
-    Optional<Option> findByIdWithOptimisticLock(Long optionId);
+    Optional<Option> findByIdWithOptimisticLock(@Param("optionId") Long optionId);
 
     @Query("delete from Option o where o.product.id = :productId")
     @Modifying
