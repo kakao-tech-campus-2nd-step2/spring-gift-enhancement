@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -50,21 +52,19 @@ public class ProductService {
 
     private void updateProductOptions(Product product, List<Option> updateOptions) {
         List<Option> originOptions = product.getOptions();
-        List<Option> optionList = updateOptions.stream()
-                .map(optionDto -> {
-                    Option originOption = originOptions.stream()
-                            .filter(o -> o.getId().equals(optionDto.getId()))
-                            .findFirst()
-                            .orElse(null);
-                    if (originOption != null) {
-                        originOption.setName(optionDto.getName());
-                        return originOption;
-                    } else {
-                        return new Option(optionDto.getName(), product);
-                    }
-                })
-                .collect(Collectors.toList());
-        product.setOptions(optionList);
+        Map<Long, Option> originOptionsMap = originOptions.stream()
+                .collect(Collectors.toMap(Option::getId, Function.identity()));
+
+        for (Option optionDto : updateOptions) {
+            Option originOption = originOptionsMap.get(optionDto.getId());
+            if (originOption != null) {
+                originOption.setName(optionDto.getName());
+            } else {
+                originOptions.add(new Option(optionDto.getName(), product));
+            }
+        }
+
+        product.setOptions(originOptions);
     }
 
     public void deleteProduct(Long productId) {

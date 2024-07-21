@@ -95,5 +95,5 @@
     - [ ] 옵션 수량 차감
 
 ## 3단계 피드백
-  - [ ] ProductService의 Option update 부분 N x N 호출이 아닌 다른 방식으로 호출하기
+  - [x] ProductService의 Option update 부분 N x N 호출이 아닌 다른 방식으로 호출하기
     - originOption은 HashMap으로 변환해서 ID를 키로 사용해보기 O(N)
