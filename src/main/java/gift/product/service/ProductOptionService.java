@@ -51,9 +51,8 @@ public class ProductOptionService {
     }
 
     @Transactional
-    public void modifyProductOption(Long productId, Long optionId,
-                                    ProductOptionCommand productOptionCommand) {
-        var productOption = getExistsProductOption(productId, optionId);
+    public void modifyProductOption(Long productId, Long optionId, ProductOptionCommand productOptionCommand) {
+        var productOption = getExistsProductOptionForUpdate(productId, optionId);
 
         productOption.modify(productOptionCommand.name(), productOptionCommand.quantity());
     }
@@ -69,10 +68,9 @@ public class ProductOptionService {
     public List<ProductOptionInfo> getAllProductOptions(Long productId) {
         var productOptions = productOptionRepository.findByProductId(productId);
 
-        var response = productOptions.stream()
+        return productOptions.stream()
                 .map(ProductOptionInfo::from)
                 .toList();
-        return response;
     }
 
     @Transactional
@@ -86,11 +84,24 @@ public class ProductOptionService {
         productOptionRepository.delete(option);
     }
 
+    @Transactional
+    public void buyProduct(final Long productId, final Long optionId, final int quantity) {
+        var productOption = getExistsProductOptionForUpdate(productId, optionId);
+
+        productOption.buy(quantity);
+    }
+
     private ProductOption getExistsProductOption(Long productId, Long optionId) {
         var option = productOptionRepository.findByProductIdAndId(productId, optionId)
                 .orElseThrow(() -> ProductOptionNotFoundException.of(productId, optionId));
 
         return option;
+    }
+
+    private ProductOption getExistsProductOptionForUpdate(Long productId, Long optionId) {
+
+        return productOptionRepository.findByProductIdAndIdForUpdate(productId, optionId)
+                .orElseThrow(() -> ProductOptionNotFoundException.of(productId, optionId));
     }
 
     private void validateDuplicatedProductName(Long productId, List<String> names) {

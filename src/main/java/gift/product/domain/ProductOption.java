@@ -58,4 +58,11 @@ public class ProductOption {
     public boolean isSameName(String name) {
         return this.getName().equals(name);
     }
+
+    public void buy(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("Not enough quantity");
+        }
+        this.quantity -= quantity;
+    }
 }
