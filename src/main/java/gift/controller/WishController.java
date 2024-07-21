@@ -6,6 +6,7 @@ import gift.service.WishService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.function.EntityResponse;
+
+import java.util.List;
 
 @RequestMapping("/wish")
 @Controller
@@ -25,26 +29,27 @@ public class WishController {
     }
 
     @PostMapping()
-    public WishRequestDto save(@RequestBody WishRequestDto wishRequestDto) {
+    public ResponseEntity<WishResponseDto> save(@RequestBody WishRequestDto wishRequestDto) {
         WishResponseDto wishResponseDto = wishService.save(wishRequestDto.getProductId(), wishRequestDto.getTokenValue());
-        wishResponseDto.setHttpStatus(HttpStatus.OK);
-        return wishRequestDto;
+        return new ResponseEntity<>(wishResponseDto,HttpStatus.OK);
     }
 
     @GetMapping()
-    public WishResponseDto getAll(@RequestParam("Token") String token) {
-        return new WishResponseDto(wishService.getAll(token), HttpStatus.OK);
+    public ResponseEntity<List<WishResponseDto>> getAll(@RequestParam("Token") String token) {
+        return new ResponseEntity<>(wishService.getAll(token),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public WishResponseDto delete(@PathVariable("id") Long id, @RequestParam("Token") String token) throws IllegalAccessException {
-        wishService.delete(id, token);
-        return new WishResponseDto(HttpStatus.OK);
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id, @RequestParam("Token") String token) throws IllegalAccessException {
+        if (wishService.delete(id, token)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/wishes")
-    public Page<WishResponseDto> getWishes(Pageable pageable) {
-        return wishService.getWishes(pageable);
+    public ResponseEntity<Page<WishResponseDto>> getWishes(Pageable pageable) {
+        return new ResponseEntity<>(wishService.getWishes(pageable),HttpStatus.OK);
     }
 
 }

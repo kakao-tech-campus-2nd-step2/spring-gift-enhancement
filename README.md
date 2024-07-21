@@ -2,6 +2,36 @@
 
 ## 기능 목록 
 
+### step3 : 상품옵션 수량 차감 
+
+- 기능 요구 사항
+상품 옵션의 수량을 지정된 숫자만큼 빼는 기능을 구현한다.
+별도의 HTTP API를 만들 필요는 없다.
+서비스 클래스 또는 엔티티 클래스에서 기능을 구현하고 나중에 사용할 수 있도록 한다.
+
+- 프로그래밍 요구 사항
+구현한 기능에 대해 적절한 테스트 전략을 생각하고 작성한다.
+단위 테스트하기 어려운 코드와 단위 테스트 가능한 코드를 분리해 단위 테스트 가능한 코드에 대해 단위 테스트를 구현한다.
+
+- 힌트
+var option = optionRepository.findByProductId(productId).orElseThrow();
+option.subtract(quantity)
+
+- [x] 옵션의 수량 값을 받은 매개변수 값만큼 줄이는 메서드 구현 
+- [ ] Repository 에서 값을 가져올때 예외처리 구현 => 테스트에서 할일임 
+- [ ] 단위테스트 구현 
+
+### 추가 개선사항 : step2  코드리뷰 반영 
+- [x] sql 하이버네이트 로그에서 뜨는 오류 해결
+- [x] Dto에서 도메인 Entity를 의존하지 않도록 코드 변경 
+  - [x] ProductResponseDto
+  - [x] 그외
+- [x] Service 에서 Entity 를 반환하는것이 아닌, Response 객체를 반환하도록 
+  - [x] OptionService 
+  - [ ] 그외
+- [ ] 테스트 코드 돌아가도록 수정
+- [x] HttpStatus 반환 코드 수정
+
 ### 코드리뷰 개선사항 :step1 
 - [x] Controller 단에서 상태코드를 포함해서 반환 
 - [x] UserResponseDto 가 도메인 계층 Member 를 의존 중 -> 변환은 서비스 로직에서 처리 !!! 

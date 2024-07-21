@@ -6,7 +6,8 @@ import java.util.Base64;
 
 @Service
 public class TokenService {
-    public TokenService() { }
+    public TokenService() {
+    }
 
 
     public String makeTokenFrom(String userIdStr) {

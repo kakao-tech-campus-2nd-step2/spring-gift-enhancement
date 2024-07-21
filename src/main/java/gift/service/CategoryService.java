@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class CategoryService {
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
     private ProductService productService;
 
     public CategoryService(CategoryRepository categoryRepository) {
@@ -21,9 +21,8 @@ public class CategoryService {
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
-
-    public CategoryResponseDto getDtoOfAllCategories() {
-       return new CategoryResponseDto(getAllCategories());
+    public List<CategoryResponseDto> getAllCategoryResponseDto() {
+        return  getAllCategories().stream().map(this::fromEntity).toList();
     }
 
     public Category getCategoryByName(String categoryName) {
@@ -32,12 +31,12 @@ public class CategoryService {
 
     public CategoryResponseDto getCategoryDtoByProductId(Long productId) {
         Product product = productService.findById(productId);
-        Long categoryId= product.getCategory().getId();
-        Category category= categoryRepository.getById(categoryId);
+        Long categoryId = product.getCategory().getId();
+        Category category = categoryRepository.findById(categoryId).get();
         return fromEntity(category);
     }
 
-    public CategoryResponseDto fromEntity (Category category) {
-        return new CategoryResponseDto(category.getId(), category.getName(),category.getColor(), category.getDescription(), category.getImageUrl());
+    public CategoryResponseDto fromEntity(Category category) {
+        return new CategoryResponseDto(category.getId(), category.getName(), category.getColor(), category.getDescription(), category.getImageUrl());
     }
 }

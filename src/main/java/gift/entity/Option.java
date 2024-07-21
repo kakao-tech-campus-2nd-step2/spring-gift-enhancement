@@ -28,15 +28,19 @@ public class Option {
     public Option() {
     }
 
-    public Option(String name, Long quantity, Product product) {
+    public Option(Long id, String name, Long quantity, Product product) {
+        this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.product = product;
     }
 
+    public Option(String name, Long quantity, Product product) {
+        this(null, name, quantity, product);
+    }
+
     public Option(String name, Long quantity) {
-        this.name = name;
-        this.quantity = quantity;
+        this(null, name, quantity, null);
     }
 
     public Long getId() {

@@ -32,8 +32,8 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public MemberResponseDto getAllAndReturnMemberResponseDto() {
-        return new MemberResponseDto(getAll());
+    public List<MemberResponseDto> getAllMemberResponseDto() {
+        return getAll().stream().map(this::fromEntity).toList();
     }
 
     public String generateTokenFrom(String userEmail) {
@@ -51,7 +51,7 @@ public class MemberService {
     }
 
     public MemberResponseDto fromEntity(Member member) {
-        return new MemberResponseDto(member.getId(), member.getEmail(), member.getPassword(),member.getWishes(),null);
+        return new MemberResponseDto(member.getId(), member.getEmail(), member.getPassword());
     }
 
     private boolean validatePassword(String inputPassword, String dbUserPassword) throws AuthenticationException {

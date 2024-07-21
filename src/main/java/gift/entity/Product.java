@@ -47,6 +47,21 @@ public class Product {
         this.options = options;
     }
 
+    public Product(Long id, String name, Integer price, String url, Category category, List<Option> options) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.url = url;
+        this.category = category;
+        this.options = options;
+    }
+
+    public Product(String name, Integer price, String url) {
+        this.name = name;
+        this.price = price;
+        this.url = url;
+    }
+
     public Long getId() {
         return id;
     }

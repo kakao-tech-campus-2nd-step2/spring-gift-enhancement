@@ -6,6 +6,7 @@ import gift.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,48 +29,46 @@ public class productController {
     }
 
     @PostMapping("")
-    public ProductResponseDto createProductDto(@RequestBody ProductRequestDto productRequestDto) {
+    public ResponseEntity<ProductResponseDto> createProductDto(@RequestBody ProductRequestDto productRequestDto) {
         ProductResponseDto productResponseDto = productService.createProductDto(
                 productRequestDto.getName(),
                 productRequestDto.getPrice(),
-                productRequestDto.getUrl(),
-                productRequestDto.getCategory(),
-                productRequestDto.getOptions()
+                productRequestDto.getUrl()
         );
-        productResponseDto.setHttpStatus(HttpStatus.OK);
-        return productResponseDto;
+        return new ResponseEntity<>(productResponseDto,HttpStatus.OK);
     }
 
     @GetMapping("")
-    public ProductResponseDto getAll() {
-        ProductResponseDto productResponseDto = productService.getAllAndMakeProductResponseDto();
-        productResponseDto.setHttpStatus(HttpStatus.OK);
-        return productResponseDto;
+    public ResponseEntity<List<ProductResponseDto>> getAll() {
+        return new ResponseEntity<>(productService.getAllAndMakeProductResponseDto(),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ProductResponseDto getOneById(@PathVariable("id") Long id) {
-        return productService.getProductResponseDtoById(id);
+    public ResponseEntity<ProductResponseDto> getOneById(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(productService.getProductResponseDtoById(id),HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ProductResponseDto update(@PathVariable("id") Long id, @RequestBody ProductRequestDto productRequestDto) {
-        productService.update(id, productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl(), productRequestDto.getCategory(),productRequestDto.getOptions());
-        return new ProductResponseDto(HttpStatus.OK);
+    public ResponseEntity<Void> update(@PathVariable("id") Long id, @RequestBody ProductRequestDto productRequestDto) {
+        if (productService.update(id, productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl())){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         productService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
-    public ProductResponseDto getOneByName(@PathVariable("name") String name) {
-        return productService.fromEntity(productService.findProductByName(name));
+    public ResponseEntity<ProductResponseDto> getOneByName(@PathVariable("name") String name) {
+        return new ResponseEntity<>(productService.findProductByName(name), HttpStatus.OK);
     }
 
     @GetMapping("/products")
-    public Page<ProductResponseDto> getProducts(Pageable pageable) {
-        return productService.getProducts(pageable);
+    public ResponseEntity<Page<ProductResponseDto>> getProducts(Pageable pageable) {
+        return new ResponseEntity<>(productService.getProducts(pageable),HttpStatus.OK);
     }
 }

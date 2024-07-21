@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.OptionResponseDto;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.repository.OptionRepository;
@@ -7,44 +8,55 @@ import gift.repository.OptionRepository;
 import java.util.List;
 
 public class OptionService {
-    private OptionRepository optionRepository;
+    private final OptionRepository optionRepository;
 
     public OptionService(OptionRepository optionRepository) {
         this.optionRepository = optionRepository;
     }
 
-    public Option getById(Long optionId) {
-        return optionRepository.findById(optionId).get();
+    public OptionResponseDto getById(Long optionId) {
+        return this.fromEntity(optionRepository.findById(optionId).get());
     }
 
-    public List<Option> getAllOptions() {
-        return optionRepository.findAll();
+    public List<OptionResponseDto> getAllOptions() {
+        return optionRepository.findAll().stream().map(this::fromEntity).toList();
     }
 
-    public Option save(Option option,Product product) {
-        if ( checkValidOptionName(option.getName(),product) &&
-                checkValidOptionQuantity(option.getQuantity())){
-            return optionRepository.save(option);
+    public OptionResponseDto save(Option option, Product product) {
+        if (checkValidOptionName(option.getName(), product) &&
+                checkValidOptionQuantity(option.getQuantity())) {
+            return fromEntity(optionRepository.save(option));
         }
         return null;
+    }
+
+    public void subtract(Option option, Long quantity) {
+        Option actualOption = optionRepository.findById(option.getId()).get();
+        Long afterSubtractQuantity = actualOption.getQuantity() - quantity;
+        Option newOption = new Option(actualOption.getId(), actualOption.getName(), afterSubtractQuantity, actualOption.getProduct());
+        optionRepository.save(newOption);
     }
 
     public void delete(Option option) {
         optionRepository.delete(option);
     }
 
-    public Option update(Option option) {
-        return optionRepository.save(option);
+    public void update(Option option) {
+        optionRepository.save(option);
     }
 
-    public Option getOptionByName(String optionName) {
-        return optionRepository.findOptionByName(optionName);
+    public OptionResponseDto getOptionByName(String optionName) {
+        return fromEntity(optionRepository.findOptionByName(optionName));
     }
 
-    public boolean checkValidOptionName(String optionName,Product product) {
+    public OptionResponseDto fromEntity(Option option) {
+        return new OptionResponseDto(option.getId(),option.getName(),option.getQuantity(),option.getProduct().getId());
+    }
+
+    public boolean checkValidOptionName(String optionName, Product product) {
         if (checkNameLength(optionName, 1, 50) &&
                 checkNameCharIsOkay(optionName) &&
-                checkNameRedundancy(optionName,product)) {
+                checkNameRedundancy(optionName, product)) {
             return true;
         }
         throw new IllegalArgumentException();
