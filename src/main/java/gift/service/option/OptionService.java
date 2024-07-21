@@ -106,12 +106,10 @@ public class OptionService {
     public void checkDuplicateOptionName(Gift gift, String optionName) {
         List<Option> options = gift.getOptions();
 
-        long distinctCount = options.stream()
-                .map(Option::getName)
-                .distinct()
-                .count();
+        boolean isDuplicate = options.stream()
+                .anyMatch(option -> option.getName().equals(optionName));
 
-        if (distinctCount != options.size()) {
+        if (isDuplicate) {
             throw new IllegalArgumentException("중복된 옵션 이름이 있습니다!");
         }
 
