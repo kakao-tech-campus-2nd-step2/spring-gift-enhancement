@@ -14,6 +14,7 @@ import gift.domain.product.Product;
 import gift.global.exception.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,4 +161,5 @@ public class OptionServiceTest {
         entityManager.flush();
         entityManager.clear();
     }
+
 }
