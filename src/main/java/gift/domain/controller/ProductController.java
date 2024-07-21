@@ -2,6 +2,9 @@ package gift.domain.controller;
 
 import gift.domain.controller.apiResponse.ProductAddApiResponse;
 import gift.domain.controller.apiResponse.ProductListApiResponse;
+import gift.domain.controller.apiResponse.ProductOptionsGetApiResponse;
+import gift.domain.dto.request.OptionAddRequest;
+import gift.domain.dto.request.OptionUpdateRequest;
 import gift.domain.dto.request.ProductAddRequest;
 import gift.domain.dto.request.ProductUpdateRequest;
 import gift.domain.dto.response.ProductWithCategoryIdResponse;
@@ -58,6 +61,32 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<BasicApiResponse> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
+        return SuccessApiResponse.ok();
+    }
+
+    @GetMapping("/{productId}/options")
+    public ResponseEntity<ProductOptionsGetApiResponse> getProductOptions(@PathVariable("productId") Long productId) {
+        return SuccessApiResponse.ok(new ProductOptionsGetApiResponse(HttpStatus.OK, productService.getOptionsByProductId(productId)));
+    }
+
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<BasicApiResponse> addProductOption(@PathVariable("productId") Long productId, @Valid @RequestBody OptionAddRequest optionAddRequest) {
+        productService.addProductOption(productId, optionAddRequest);
+        return SuccessApiResponse.ok();
+    }
+
+    @PutMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<BasicApiResponse> updateProduct(@PathVariable("productId") Long productId,
+        @PathVariable("optionId") Long optionId,
+        @Valid @RequestBody OptionUpdateRequest optionUpdateRequest
+    ) {
+        productService.updateProductOptionById(productId, optionId, optionUpdateRequest);
+        return SuccessApiResponse.ok();
+    }
+
+    @DeleteMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<BasicApiResponse> deleteProduct(@PathVariable("productId") Long productId, @PathVariable("optionId") Long optionId) {
+        productService.deleteProductOption(productId, optionId);
         return SuccessApiResponse.ok();
     }
 }
