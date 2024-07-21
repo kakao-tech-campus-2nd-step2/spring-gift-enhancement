@@ -7,6 +7,7 @@ import gift.product.domain.Product;
 import gift.product.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,6 +55,14 @@ public class OptionService {
 
     public Option save(OptionDTO optionDTO){
         return optionRepository.save(convertToEntity(optionDTO));
+    }
+
+    public Option subtract(OptionDTO optionDTO, Long orderedQuantity) {
+        Option option = optionRepository.findByProductIdAndName(optionDTO.getProductId(), optionDTO.getName())
+            .orElseThrow(() -> new IllegalArgumentException("option이 존재하지 않습니다."));
+
+        option.subtract(orderedQuantity);
+        return optionRepository.save(option);
     }
 
     public OptionDTO convertToDTO(Option option){
