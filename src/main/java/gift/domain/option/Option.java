@@ -39,4 +39,8 @@ public class Option {
     public int getQuantity() {
         return quantity;
     }
+
+    public boolean hasSameName(Option target) {
+        return this.getName().equals(target.getName());
+    }
 }

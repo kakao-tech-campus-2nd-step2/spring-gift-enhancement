@@ -81,9 +81,14 @@ public class Product {
     }
 
     public void addOption(Option option) {
-        if (options.stream().anyMatch(o -> option.getName().equals(o.getName()))) {
+        if (isAlreadyExistOption(option)) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_OPTION, option.getName());
         }
         options.add(option);
+    }
+
+    private boolean isAlreadyExistOption(Option option) {
+        return options.stream()
+                .noneMatch(o -> o.hasSameName(option));
     }
 }
