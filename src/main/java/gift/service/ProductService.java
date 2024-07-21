@@ -1,15 +1,18 @@
 package gift.service;
 
-import gift.exception.ErrorCode;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.OptionDto;
 import gift.dto.ProductDto;
+import gift.exception.ErrorCode;
 import gift.exception.GiftException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,10 +38,14 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductDto getProduct(Long productId) {
+    public Product getProductById(Long productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND))
-                .toDto();
+                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public ProductDto getProduct(Long productId) {
+        return getProductById(productId).toDto();
     }
 
     public void addProduct(ProductDto dto) {
@@ -56,8 +63,7 @@ public class ProductService {
     }
 
     public void editProduct(Long productId, ProductDto dto) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductById(productId);
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new GiftException(ErrorCode.CATEGORY_NOT_FOUND));
 
@@ -68,16 +74,14 @@ public class ProductService {
     }
 
     public void removeProduct(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductById(productId);
 
         productRepository.deleteById(product.getId());
     }
 
     @Transactional(readOnly = true)
     public List<OptionDto> getOptions(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductById(productId);
 
         return product.getOptions().stream()
                 .map(Option::toDto)
@@ -85,8 +89,7 @@ public class ProductService {
     }
 
     public void addOption(Long productId, OptionDto dto) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductById(productId);
 
         Option option = new Option(dto.getName(), dto.getQuantity());
 
@@ -95,10 +98,21 @@ public class ProductService {
     }
 
     public void removeOption(Long productId, Long optionId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new GiftException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProductById(productId);
 
         product.removeOptionById(optionId);
+    }
+
+    @Retryable(
+            retryFor = {ObjectOptimisticLockingFailureException.class},
+            maxAttempts = 1000,
+            backoff = @Backoff(100)
+    )
+    public void subtractOptionQuantity(Long productId, Long optionId, Long quantity) {
+        Product product = getProductById(productId);
+        Option option = product.getOptionById(optionId);
+
+        option.subtract(quantity);
     }
 
 }

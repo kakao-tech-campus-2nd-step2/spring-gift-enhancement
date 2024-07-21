@@ -10,6 +10,10 @@ public enum ErrorCode {
     /* Product */
     PRODUCT_NOT_FOUND("존재하지 않는 상품입니다.", HttpStatus.NOT_FOUND),
 
+    /* Option */
+    INVALID_QUANTITY("유효하지 않은 수량입니다.", HttpStatus.BAD_REQUEST),
+    QUANTITY_CANNOT_BE_LESS_THAN_ZERO("수량은 0보다 작을 수 없습니다.", HttpStatus.BAD_REQUEST),
+
     /* Member */
     MEMBER_NOT_FOUND("존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND),
 
