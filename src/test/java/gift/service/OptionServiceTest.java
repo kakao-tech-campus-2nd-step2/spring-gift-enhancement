@@ -29,24 +29,24 @@ public class OptionServiceTest {
     @Test
     void 동시에_100의_구매요청() throws InterruptedException {
         // given
-        int threadCount = 100;
+        int threadCount = 1000;
         ExecutorService excuterService = Executors.newFixedThreadPool(threadCount);
         CountDownLatch countDownLatch = new CountDownLatch(threadCount);
-        // then
-        assertThat(optionService.findOptionById(1L).getQuantity()).isEqualTo(1000);
         // when
 
         for (int i = 0; i < threadCount; i++) {
             excuterService.submit(() -> {
-                // 구매요청
                 try {
-                    optionService.puchaseOption(1L, 10);
-                } finally {
-                    countDownLatch.countDown();
+                    optionService.purchaseOption(1L, 1);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage() + "retry");
                 }
+
             });
         }
-        countDownLatch.await();
+
+        excuterService.shutdown();
+        excuterService.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS);
 
         // then
         assertThat(optionService.findOptionById(1L).getQuantity()).isEqualTo(0);
