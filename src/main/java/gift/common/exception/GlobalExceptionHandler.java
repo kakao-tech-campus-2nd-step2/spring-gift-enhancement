@@ -71,6 +71,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getStatus()).body(problemDetail);
     }
 
+    @ExceptionHandler(RedissonLockException.class)
+    public ResponseEntity<ProblemDetail> handleRedissonLockException(RedissonLockException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(e.getStatus());
+        problemDetail.setTitle(e.getTitle());
+        problemDetail.setDetail(e.getMessage());
+        return ResponseEntity.status(e.getStatus()).body(problemDetail);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ProblemDetail> handleIllegalArgumentException(IllegalArgumentException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);

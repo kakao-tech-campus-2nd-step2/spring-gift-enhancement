@@ -1,6 +1,7 @@
 package gift.common.aop;
 
 import gift.common.annotation.RedissonLock;
+import gift.common.exception.RedissonLockException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -36,16 +37,12 @@ public class RedissonAspect {
             boolean lockable = lock.tryLock(annotation.waitTime(), annotation.leaseTime(), TimeUnit.MILLISECONDS);
 
             if (!lockable) {
-                System.out.println("Lock 획득 실패=" + lockKey);
-                throw new Exception("Lock 획득 실패 임시 에러");
+                throw new RedissonLockException("Temporary errors failed to access the service");
             }
-            System.out.println("로직 수행");
             return joinPoint.proceed();
-        } catch (InterruptedException e) {
-            System.out.println("에러 발생");
-            throw e;
+        } catch (Exception e) {
+            throw new RedissonLockException("Temporary errors failed to access the service");
         } finally {
-            System.out.println("락 해제");
             lock.unlock();
         }
     }
