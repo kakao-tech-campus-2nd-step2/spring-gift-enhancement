@@ -1,27 +1,28 @@
 package gift.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public class OptionDTO {
     private long id;
-    private List<String> option;
+    private List<String> optionList;
+    private long productID;
 
-    public OptionDTO(String options){
-        option = List.of(options.split(","));
+    public OptionDTO(String options, long productID){
+        optionList = List.of(options.split(","));
+        this.productID = productID;
     }
 
-    public OptionDTO(Long id, List<String> option){
+    public OptionDTO(Long id, List<String> option, long productID){
         this.id = id;
-        this.option = option;
+        this.optionList = option;
+        this.productID = productID;
     }
 
-    public long getId() {
-        return id;
+    public List<String> getOptionList() {
+        return optionList;
     }
 
-    public List<String> getOption() {
-        return option;
+    public long getProductID() {
+        return productID;
     }
 }

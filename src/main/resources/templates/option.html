@@ -44,13 +44,12 @@
 </h1>
 <h3>
     product Id <td th:text="${productId}"></td>
-    option Id <td th:text="${options.id}"></td>
     <form th:action="@{/products}" method="get" style="display: inline;">
         <button type="submit">Back To List</button>
     </form>
 </h3>
 <div>
-    <form th:action="@{/options/add/{optionId}/{productId}(optionId=${options.id}, productId=${productId})}" method="post">
+    <form th:action="@{/options/add/{productId}(productId=${productId})}" method="post">
         <input type="hidden" name="productId" th:value="${productId}">
         new option: <input type="text" id="option" name="option" required>
         <button type="submit">Add</button>
@@ -65,19 +64,19 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="option : ${options.option}">
+    <tr th:each="option : ${options}">
         <td>
             <span th:text="${option}"></span>
         </td>
         <td>
-            <form th:action="@{/options/update/{optionId}/{productId}/{oldName}(optionId=${options.id}, productId=${productId}, oldName=${option})}" method="post">
+            <form th:action="@{/options/update/{productId}/{oldName}(productId=${productId}, oldName=${option})}" method="post">
                 <input type="hidden" name="productId" th:value="${productId}">
                 update option: <br> <input type="text" id="updateOption" name="newName" th:value="${option}" required>
                 <button type="submit">Update</button>
             </form>
         </td>
         <td>
-            <form th:action="@{/options/delete/{optionId}/{productId}/{optionName}(optionId=${options.id}, productId=${productId}, optionName=${option})}" method="get">
+            <form th:action="@{/options/delete/{productId}/{optionName}(productId=${productId}, optionName=${option})}" method="get">
                 <input type="hidden" name="productId" th:value="${productId}">
                 <button type="submit">Delete</button>
             </form>

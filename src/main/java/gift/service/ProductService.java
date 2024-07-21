@@ -21,12 +21,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final OptionReposityory optionReposityory;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionReposityory optionReposityory) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.optionReposityory = optionReposityory;
+        this.optionService = optionService;
     }
 
     //전체 조회
@@ -60,18 +60,20 @@ public class ProductService {
         Category category = categoryRepository.findByName(inputProductDTO.getCategory())
                 .orElseThrow(() -> new NoSuchElementException("해당 카테고리가 없습니다."));
 
-        Option option = new Option(inputProductDTO.getOption());
-        optionReposityory.save(option);
+        String optionString = inputProductDTO.getOption();
+        //Option option = new Option(inputProductDTO.getOption());
+        //optionReposityory.save(option);
 
         Product product = new Product(
                 inputProductDTO.getName(),
                 inputProductDTO.getPrice(),
                 inputProductDTO.getImageUrl(),
-                category,
-                option
+                category
                 );
-
         productRepository.save(product);
+
+        Long productID = productRepository.findByName(inputProductDTO.getName()).get().getId();
+        optionService.addOptions(optionString, productID);
     }
 
     //삭제
@@ -90,16 +92,6 @@ public class ProductService {
                 updateProductDTO.getImageUrl(),
                 category);
         productRepository.save(updatedProduct);
-    }
-
-    public OptionDTO getOptions(Long id){
-        Product product = getProductById(id);
-        Option option = product.getOption();
-        OptionDTO optionDTO = new OptionDTO(
-                option.getId(),
-                option.getOptionList()
-        );
-        return optionDTO;
     }
 
     public int getPreviousPage(Page<ProductDTO> productPage) {
