@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,11 +42,7 @@ public class ProductRestController {
     // 모든 상품 조회
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> getAllProducts(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size,
-        @RequestParam(defaultValue = "id,asc") String[] sort) {
-        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+        @PageableDefault(size = 10, sort = "id") Pageable pageable) {
         Page<ProductResponse> products = productService.getAllProducts(pageable);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
@@ -54,17 +51,13 @@ public class ProductRestController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
         ProductResponse product = productService.getProductById(id);
-        if (product != null) {
-            return new ResponseEntity<>(product, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     // 상품 추가
     @PostMapping
-    public ResponseEntity<ProductResponse> addProduct(@Valid @RequestBody ProductRequest product) {
-        ProductResponse createdProduct = productService.createProduct(product);
+    public ResponseEntity<ProductResponse> addProduct(@Valid @RequestBody ProductRequest product, @RequestBody OptionRequest option) {
+        ProductResponse createdProduct = productService.createProduct(product, option);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
 
@@ -100,7 +93,7 @@ public class ProductRestController {
         return ResponseEntity.ok(optionResponse);
     }
 
-    @PutMapping("/{id}/options{optionId}")
+    @PutMapping("/{id}/options/{optionId}")
     public ResponseEntity<OptionResponse> updateOption(@PathVariable("id") Long productId,
         @PathVariable("optionId") Long optionId, @RequestBody OptionRequest optionRequest) {
         OptionResponse optionResponse = optionService.updateOption(productId, optionId, optionRequest);

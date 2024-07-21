@@ -1,6 +1,7 @@
 package gift.controller;
 
 
+import gift.model.option.OptionRequest;
 import gift.model.product.Product;
 import gift.model.product.ProductRequest;
 import gift.service.ProductService;
@@ -54,8 +55,9 @@ public class ProductController {
 
     // 상품 추가 후 홈으로 이동
     @PostMapping("/add")
-    public String addProduct(@ModelAttribute @Valid ProductRequest product) {
-        productService.createProduct(product);
+    public String addProduct(@ModelAttribute @Valid ProductRequest product, @ModelAttribute
+        OptionRequest option) {
+        productService.createProduct(product, option);
         return "redirect:/products";
     }
 

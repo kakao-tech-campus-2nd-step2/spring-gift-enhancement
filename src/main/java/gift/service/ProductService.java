@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.common.exception.ProductNotFoundException;
 import gift.model.category.Category;
+import gift.model.option.OptionRequest;
 import gift.model.product.Product;
 import gift.model.product.ProductRequest;
 import gift.model.product.ProductResponse;
@@ -32,9 +33,10 @@ public class ProductService {
         return productRepository.findAll(pageable).map(ProductResponse::from);
     }
 
-    public ProductResponse createProduct(ProductRequest productRequest) {
+    public ProductResponse createProduct(ProductRequest productRequest, OptionRequest optionRequest) {
         Category category = categoryRepository.findById(productRequest.categoryId()).orElseThrow();
         Product product = productRequest.toEntity(category);
+        product.addOption(optionRequest.name(), optionRequest.quantity());
         return ProductResponse.from(productRepository.save(product));
     }
 
