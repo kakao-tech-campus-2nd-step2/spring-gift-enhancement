@@ -16,7 +16,7 @@ public class OptionTest {
 
     @BeforeEach
     void beforEach(){
-        Category category = new Category("식품", "#8123f3D", "식품 url", "");
+        Category category = new Category("식품", "#812f3D", "식품 url", "");
         product1 = new Product("아메리카노", 4000, "아메리카노url", category);
     }
 
@@ -40,5 +40,13 @@ public class OptionTest {
                 () -> assertThat(option.getName()).isEqualTo("옵션2"),
                 () -> assertThat(option.getQuantity()).isEqualTo(2)
         );
+    }
+
+    @Test
+    void subtractTest(){
+        Option option = new Option("옵션1", 5, product1);
+        option.subtract(3);
+
+        assertThat(option.getQuantity()).isEqualTo(2);
     }
 }

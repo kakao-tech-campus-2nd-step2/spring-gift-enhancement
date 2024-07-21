@@ -32,7 +32,7 @@ public class OptionRepositoryTest {
 
     @BeforeEach
     void beforeEach(){
-        Category category = categoryRepository.save(new Category("카테고리", "#8123f3D", "카테고리 url", "카테고리 description"));
+        Category category = categoryRepository.save(new Category("카테고리", "#812f3D", "카테고리 url", "카테고리 description"));
         product = productRepository.save(new Product("상품", 4000, "상품url", category));
     }
 

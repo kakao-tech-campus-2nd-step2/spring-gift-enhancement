@@ -19,19 +19,33 @@ public class Category {
 
     protected Category (){}
 
-    public Category(Long id, String name, String color, String imageUrl, String description) {
-        this.id = id;
+    public Category(String name, String color, String imageUrl, String description) {
+        validateName(name);
+        validateColor(color);
+        validateImageUrl(imageUrl);
+
         this.name = name;
         this.color = color;
         this.imageUrl = imageUrl;
         this.description = description;
     }
 
-    public Category(String name, String color, String imageUrl, String description) {
-        this.name = name;
-        this.color = color;
-        this.imageUrl = imageUrl;
-        this.description = description;
+    public void validateName(String name) {
+        if (name.isBlank() || name == null)
+            throw new IllegalArgumentException("카테고리 이름은 필수입니다");
+    }
+
+    public void validateColor(String color) {
+        if (color.isBlank() || color == null)
+            throw new IllegalArgumentException("카테고리 색상 값은 필수입니다");
+
+        if (color.length() != 7)
+            throw new IllegalArgumentException("카테고리 색상 값의 길이는 7입니다");
+    }
+
+    public void validateImageUrl(String imageUrl) {
+        if (imageUrl == null || imageUrl.isBlank())
+            throw new IllegalArgumentException("imageUrl를 입력해주세요");
     }
 
     public Long getId() {

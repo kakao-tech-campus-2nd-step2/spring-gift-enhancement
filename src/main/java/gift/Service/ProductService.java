@@ -1,5 +1,7 @@
 package gift.Service;
 
+import gift.Exception.CategoryNotFoundException;
+import gift.Exception.ProductNotFoundException;
 import gift.Model.*;
 import gift.Repository.CategoryRepository;
 import gift.Repository.OptionRepository;
@@ -34,7 +36,7 @@ public class ProductService {
     @Transactional
     public void addProduct(RequestProductPost requestProductPost) {
         Category category = categoryRepository.findById(requestProductPost.categoryId())
-                .orElseThrow(()-> new NoSuchElementException("매칭되는 카테고리가 없습니다"));
+                .orElseThrow(()-> new CategoryNotFoundException("매칭되는 카테고리가 없습니다"));
         Product product = new Product(requestProductPost.name(), requestProductPost.price(), requestProductPost.imageUrl(), category);
         productRepository.save(product);
         optionRepository.save(new Option(requestProductPost.name(), requestProductPost.optionQuantity(), product));
@@ -42,24 +44,24 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Product selectProduct(long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("매칭되는 product가 없습니다"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("매칭되는 product가 없습니다"));
         return product;
     }
 
     @Transactional
     public void editProduct(long id, RequestProduct requestProduct) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("매칭되는 product가 없습니다"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("매칭되는 product가 없습니다"));
         product.setName(requestProduct.name());
         product.setPrice(requestProduct.price());
         product.setImageUrl(requestProduct.imageUrl());
         Category category = categoryRepository.findById(requestProduct.categoryId())
-                        .orElseThrow(()->new NoSuchElementException("매칭되는 카테고리가 없습니다"));
+                        .orElseThrow(()->new CategoryNotFoundException("매칭되는 카테고리가 없습니다"));
         product.setCategory(category);
     }
 
     @Transactional
     public void deleteProduct(long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("매칭되는 product가 없습니다"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("매칭되는 product가 없습니다"));
         optionRepository.deleteByProduct(product);
         productRepository.deleteById(product.getId());
     }
