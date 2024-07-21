@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.dto.ProductDto;
+import gift.dto.ProductRequestDto;
 import gift.dto.ProductResponseDto;
 import gift.dto.ProductUpdateDto;
 import gift.service.ProductService;
@@ -66,12 +66,12 @@ public class ProductController {
 
     /**
      * 상품 추가
-     * @param productDto Dto로 받음
+     * @param productRequestDto Dto로 받음
      * @return ResponseEntity로 Response
      */
     @PostMapping()
-    public ResponseEntity<Void> addProduct(@Valid @RequestBody ProductDto productDto) {
-        service.addProduct(productDto);
+    public ResponseEntity<Void> addProduct(@Valid @RequestBody ProductRequestDto productRequestDto) {
+        service.addProduct(productRequestDto);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.ProductDto;
+import gift.dto.ProductRequestDto;
 import gift.dto.ProductUpdateDto;
 import gift.repository.ProductRepository;
 import gift.vo.Category;
@@ -41,8 +41,8 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다."));
     }
 
-    public void addProduct(@Valid ProductDto productDto) {
-        Product product = productDto.toProduct(getCategory(productDto.categoryId()));
+    public void addProduct(@Valid ProductRequestDto productRequestDto) {
+        Product product = productRequestDto.toProduct(getCategory(productRequestDto.categoryId()));
         productRepository.save(product);
     }
 

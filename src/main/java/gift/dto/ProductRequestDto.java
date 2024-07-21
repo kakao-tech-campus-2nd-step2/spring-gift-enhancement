@@ -6,7 +6,7 @@ import gift.vo.Category;
 import gift.vo.Product;
 import jakarta.validation.constraints.*;
 
-public record ProductDto(
+public record ProductRequestDto(
         Long id,
 
         Long categoryId,
