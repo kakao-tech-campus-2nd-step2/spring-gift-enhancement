@@ -3,6 +3,7 @@ package gift.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="options")
 public class OptionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +27,13 @@ public class OptionEntity {
         this.product = product;
     }
 
+    public OptionEntity(Long id, String name, int quantity, ProductEntity product) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
     public Long getId() {
         return id;
     }
@@ -43,6 +51,17 @@ public class OptionEntity {
     }
 
     public void update(String name, int quantity) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("옵션 이름이 적합하지 않습니다.");
+        }
+
+        if (name.length() > 50) {
+            throw new IllegalArgumentException("옵션명은 50자를 초과할 수 없습니다.");
+        }
+
+        if(quantity < 1 || quantity > 100_000_000) {
+            throw new IllegalArgumentException("수량은 1개 이상 1억개 미만이어야 합니다.");
+        }
         this.name = name;
         this.quantity = quantity;
     }
