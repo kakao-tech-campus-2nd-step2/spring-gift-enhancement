@@ -34,14 +34,10 @@ public class OptionService {
     }
 
     public OptionDTO updateOption(long productId, long optionId, OptionDTO optionDTO) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(
-                () -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, productId));
-        optionRepository.findById(optionId)
+        Option currentOption = optionRepository.findById(optionId)
             .orElseThrow(() -> new RepositoryException(ErrorCode.OPTION_NOT_FOUND, optionId));
-        Option updateOption = new Option(optionDTO.name(), optionDTO.quantity(),
-            product);
-        return convertToDTO(optionRepository.save(updateOption));
+        currentOption.update(optionDTO.name(), optionDTO.quantity());
+        return convertToDTO(optionRepository.save(currentOption));
     }
 
     public void deleteOption(long optionId) {
@@ -49,8 +45,6 @@ public class OptionService {
             .orElseThrow(() -> new RepositoryException(ErrorCode.OPTION_NOT_FOUND, optionId));
         optionRepository.deleteById(optionId);
     }
-
-
 
     private OptionDTO convertToDTO(Option option) {
         return new OptionDTO(option.getId(), option.getName(), option.getQuantity());

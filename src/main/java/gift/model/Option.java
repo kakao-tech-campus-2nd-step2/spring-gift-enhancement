@@ -9,9 +9,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Entity
-@Table(name = "options", uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "name"}))
+@Table(name = "options", uniqueConstraints = @UniqueConstraint(columnNames = {"product_id",
+    "name"}))
 public class Option {
 
     // 상품 하나에 여러개의 옵션이 대응된다. 즉, 상품과 옵션의 관계는 일대다 매핑관계!
@@ -45,8 +47,12 @@ public class Option {
     }
 
     public void subtract(long quantity) {
+        if (this.quantity - quantity < 0) {
+            this.quantity = 0L;
+        }
         this.quantity = this.quantity - quantity;
     }
+
     public Long getId() {
         return id;
     }
@@ -65,8 +71,13 @@ public class Option {
 
     public void setProduct(Product product) {
         this.product = product;
-        if (product != null && !product.getOptions().contains(this)) {
-            product.getOptions().add(this);
+        if (product != null && !product.contains(this)) {
+            product.add(this);
         }
+    }
+
+    public void update(String name, long quantity) {
+        this.name = name;
+        this.quantity = quantity;
     }
 }

@@ -81,4 +81,12 @@ public class Product {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public boolean contains(Option option) {
+        return options.contains(option);
+    }
+
+    public void add(Option option) {
+        options.add(option);
+    }
 }

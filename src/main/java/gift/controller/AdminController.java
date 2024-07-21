@@ -73,11 +73,13 @@ public class AdminController {
         return modelAndView;
     }
 
-    @GetMapping("/option/edit/{optionId}")
-    public ModelAndView showOptionEditPage(@PathVariable Long optionId) {
+    @GetMapping("{productId}/option/edit/{optionId}")
+    public ModelAndView showOptionEditPage(@PathVariable Long productId, @PathVariable long optionId) {
         ModelAndView modelAndView = new ModelAndView("option-edit");
         OptionDTO optionDTO = optionService.getOption(optionId);
         modelAndView.addObject("option", optionDTO);
+        modelAndView.addObject("productId", productId);
+        modelAndView.addObject("optionId", optionId);
         return modelAndView;
     }
 
@@ -88,7 +90,8 @@ public class AdminController {
     }
 
     @PostMapping("/{productId}/option/add")
-    public String addOption(@Valid @ModelAttribute OptionDTO optionDTO, @PathVariable long productId) {
+    public String addOption(@Valid @ModelAttribute OptionDTO optionDTO,
+        @PathVariable long productId) {
         optionService.createOption(productId, optionDTO);
         return "redirect:/admin/product/" + productId + "/option/list";
     }
@@ -97,6 +100,13 @@ public class AdminController {
     public String updateProduct(@Valid @ModelAttribute ProductDTO productDTO) {
         productService.updateProduct(productDTO);
         return "redirect:/admin/product/list";
+    }
+
+    @PutMapping("/{productId}/option/edit")
+    public String updateOption(@Valid @ModelAttribute OptionDTO optionDTO,
+        @PathVariable long productId) {
+        optionService.updateOption(productId, optionDTO.id(), optionDTO);
+        return "redirect:/admin/product/" + productId + "/option/list";
     }
 
     @DeleteMapping("/delete/{id}")
