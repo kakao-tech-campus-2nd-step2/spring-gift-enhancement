@@ -1,6 +1,7 @@
 package gift.domain.product.entity;
 
 import gift.exception.InvalidOptionInfoException;
+import gift.exception.OutOfStockException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -64,7 +65,7 @@ public class Option {
     }
 
     private void validateQuantity() {
-        if (quantity < 1 || quantity > 100000000) {
+        if (quantity < 0 || quantity > 100000000) {
             throw new InvalidOptionInfoException("error.invalid.option.quantity");
         }
     }
@@ -97,5 +98,12 @@ public class Option {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void subtract(int quantity) {
+        if (this.quantity < quantity) {
+            throw new OutOfStockException("error.option.out.of.stock");
+        }
+        this.quantity -= quantity;
     }
 }

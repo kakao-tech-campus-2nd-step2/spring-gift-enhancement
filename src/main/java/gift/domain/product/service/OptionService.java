@@ -6,6 +6,7 @@ import gift.domain.product.entity.Option;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.OptionJpaRepository;
 import gift.domain.product.repository.ProductJpaRepository;
+import gift.exception.InvalidOptionInfoException;
 import gift.exception.InvalidProductInfoException;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,11 @@ public class OptionService {
 
     public void deleteAllByProductId(long productId) {
         optionJpaRepository.deleteAllByProductId(productId);
+    }
+
+    public void subtractQuantity(long optionId, int quantity) {
+        Option option = optionJpaRepository.findById(optionId)
+            .orElseThrow(() -> new InvalidOptionInfoException("error.invalid.option.id"));
+        option.subtract(quantity);
     }
 }

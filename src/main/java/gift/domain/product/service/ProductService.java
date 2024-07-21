@@ -1,16 +1,18 @@
 package gift.domain.product.service;
 
-import gift.domain.product.dto.ProductResponse;
-import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.dto.ProductReadAllResponse;
+import gift.domain.product.dto.ProductRequest;
+import gift.domain.product.dto.ProductResponse;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.ProductJpaRepository;
 import gift.domain.wishlist.service.WishlistService;
+import gift.exception.InvalidOptionInfoException;
 import gift.exception.InvalidProductInfoException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
@@ -74,5 +76,16 @@ public class ProductService {
         optionService.deleteAllByProductId(productId);
         wishlistService.deleteAllByProductId(productId);
         productJpaRepository.delete(product);
+    }
+
+    @Transactional
+    public void buy(long productId, long optionId, int quantity) {
+        Product product = productJpaRepository.findById(productId)
+            .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
+
+        if (!product.hasOption(optionId)) {
+            throw new InvalidOptionInfoException("error.invalid.option.id");
+        }
+        optionService.subtractQuantity(optionId, quantity);
     }
 }

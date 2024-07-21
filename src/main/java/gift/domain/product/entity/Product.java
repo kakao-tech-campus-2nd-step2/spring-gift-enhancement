@@ -116,6 +116,13 @@ public class Product {
             });
     }
 
+    public boolean hasOption(long optionId) {
+        return options.stream()
+            .filter(option -> option.getId() == optionId)
+            .findFirst()
+            .isPresent();
+    }
+
     public void addOption(Option option) {
         validateOption(option);
         options.add(option);
