@@ -94,12 +94,6 @@ public class Product {
         if (imageUrl != null && !imageUrl.isEmpty()) {
             this.imageUrl = imageUrl;
         }
-        /*
-        if (category != null) {
-            this.category = category;
-        }
-
-         */
     }
 
     public void updateImage(String imageUrl) {
