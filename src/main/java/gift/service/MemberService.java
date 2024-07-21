@@ -56,7 +56,6 @@ public class MemberService {
             throw new MemberAlreadyExistsException();
         });
         try {
-            System.out.println("사인업리퀘스트멤버: " + member.getPassword());
             member.setPassword(HashUtil.hashPassword(member.getPassword()));
         } catch (Exception e) {
             throw new FailedHashException();

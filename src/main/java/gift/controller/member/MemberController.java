@@ -4,6 +4,7 @@ import gift.config.LoginMember;
 import gift.controller.auth.AuthController;
 import gift.controller.auth.LoginResponse;
 import gift.service.MemberService;
+import jakarta.validation.Valid;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +47,7 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<MemberResponse> createMember(@RequestBody SignUpRequest member) {
+    public ResponseEntity<MemberResponse> createMember(@Valid @RequestBody SignUpRequest member) {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.save(member));
     }
 

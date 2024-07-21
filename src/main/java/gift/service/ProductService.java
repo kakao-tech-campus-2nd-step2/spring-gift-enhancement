@@ -8,6 +8,7 @@ import gift.controller.product.ProductRequest;
 import gift.controller.product.ProductResponse;
 import gift.domain.Product;
 import gift.exception.ProductAlreadyExistsException;
+import gift.exception.ProductHasNotOptionException;
 import gift.exception.ProductNotExistsException;
 import gift.repository.ProductRepository;
 import java.util.List;
@@ -33,6 +34,7 @@ public class ProductService {
     public Page<ProductResponse> findAll(Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(pageable);
         List<ProductResponse> productResponses = productPage.stream()
+            .filter(product -> product.getOptions() != null && !product.getOptions().isEmpty())
             .map(ProductMapper::toProductResponse).toList();
         return new PageImpl<>(productResponses, pageable, productPage.getTotalElements());
     }
@@ -40,6 +42,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponse getProductResponse(UUID id) {
         Product target = productRepository.findById(id).orElseThrow(ProductNotExistsException::new);
+        if(target.getOptions().isEmpty()) throw new ProductHasNotOptionException();
         return toProductResponse(target);
     }
 

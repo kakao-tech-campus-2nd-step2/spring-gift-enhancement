@@ -52,8 +52,8 @@ public class OptionController {
     }
 
     @PostMapping("/options/{productId}")
-    public ResponseEntity<OptionResponse> createOption(@LoginMember LoginResponse loginMember,
-        @RequestBody OptionRequest option, @PathVariable UUID productId) {
+    public ResponseEntity<OptionResponse> createOption(@RequestBody OptionRequest option,
+        @PathVariable UUID productId) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(optionService.save(productId, option));
     }
@@ -65,8 +65,15 @@ public class OptionController {
         return ResponseEntity.status(HttpStatus.OK).body(optionService.update(optionId, option));
     }
 
+    @PutMapping("/options/{optionId}/subtract/{quantity}")
+    public ResponseEntity<OptionResponse> subtractOption(@PathVariable UUID optionId, @PathVariable Integer quantity) {
+//        AuthController.validateAdmin(loginMember);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(optionService.subtract(optionId, quantity));
+    }
+
     @DeleteMapping("/{optionId}")
-    public ResponseEntity<Void> deleteProduct(@LoginMember LoginResponse loginMember,
+    public ResponseEntity<Void> deleteOption(@LoginMember LoginResponse loginMember,
         @PathVariable UUID optionId) {
         AuthController.validateAdmin(loginMember);
         optionService.delete(optionId);

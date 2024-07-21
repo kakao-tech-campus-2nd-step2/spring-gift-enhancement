@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -36,7 +35,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, Long price, String imageUrl, Category category ) {
+    public Product(String name, Long price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -65,6 +64,14 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public UUID getCategoryID() {
+        return category.getId();
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     public void setImageUrl(String imageUrl) {

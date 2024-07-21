@@ -1,4 +1,4 @@
- 엔package gift.repository;
+package gift.repository;
 
 import gift.domain.Option;
 import gift.domain.Product;

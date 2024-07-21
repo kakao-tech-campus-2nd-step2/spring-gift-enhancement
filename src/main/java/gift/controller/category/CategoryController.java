@@ -3,8 +3,6 @@ package gift.controller.category;
 import gift.config.LoginMember;
 import gift.controller.auth.AuthController;
 import gift.controller.auth.LoginResponse;
-import gift.controller.product.ProductRequest;
-import gift.controller.product.ProductResponse;
 import gift.service.CategoryService;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -25,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
+
     CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
@@ -39,8 +38,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> createCategory(@LoginMember LoginResponse loginMember,
-        @RequestBody CategoryRequest product) {
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest product) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(product));
     }
 
@@ -48,7 +46,8 @@ public class CategoryController {
     public ResponseEntity<CategoryResponse> updateCategory(@LoginMember LoginResponse loginMember,
         @PathVariable UUID categoryId, @RequestBody CategoryRequest category) {
         AuthController.validateAdmin(loginMember);
-        return ResponseEntity.status(HttpStatus.OK).body(categoryService.update(categoryId, category));
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(categoryService.update(categoryId, category));
     }
 
     @DeleteMapping("/{categoryId}")

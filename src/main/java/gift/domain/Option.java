@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Positive;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +19,7 @@ public class Option {
     @Column(nullable = false)
     private String name;
     @Column
+    @Positive(message = "quantity must be bigger than 0")
     private Integer quantity;
     @ManyToOne
     @JoinColumn(name = "productId", nullable = false)
@@ -42,6 +44,11 @@ public class Option {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public Option subtractQuantity(Integer quantity) {
+        this.quantity -= quantity;
+        return this;
     }
 
     public UUID getProductId() {
