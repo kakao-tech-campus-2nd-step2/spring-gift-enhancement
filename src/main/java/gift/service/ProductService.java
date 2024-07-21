@@ -35,7 +35,7 @@ public class ProductService {
     @Transactional
     public void addProduct(ProductRequest productRequest) {
         assertProductNotDuplicate(productRequest.getName());
-        Category category = findCategoryByIdOrElseThrow(productRequest.getCategoryId());
+        Category category = findCategoryById(productRequest.getCategoryId());
         Product savedProduct = productJpaDao.save(new Product(productRequest, category));
         addOptions(productRequest, savedProduct);
     }
@@ -45,13 +45,13 @@ public class ProductService {
      */
     @Transactional
     public void editProduct(ProductRequest productRequest) {
-        Product targetProduct = findProductByIdOrElseThrow(productRequest.getId());
-        Category category = findCategoryByIdOrElseThrow(productRequest.getCategoryId());
+        Product targetProduct = findProductById(productRequest.getId());
+        Category category = findCategoryById(productRequest.getCategoryId());
         targetProduct.updateProduct(productRequest, category);
     }
 
     public void deleteProduct(Long id) {
-        findProductByIdOrElseThrow(id);
+        findProductById(id);
         productJpaDao.deleteById(id);
     }
 
@@ -60,7 +60,7 @@ public class ProductService {
     }
 
     public ProductResponse getProduct(Long id) {
-        Product product = findProductByIdOrElseThrow(id);
+        Product product = findProductById(id);
         return new ProductResponse(product);
     }
 
@@ -89,12 +89,12 @@ public class ProductService {
     /**
      * 해당 상품이 존재하면 반환. 아니면 NoSuchElementException
      */
-    private Product findProductByIdOrElseThrow(Long id) {
+    private Product findProductById(Long id) {
         return productJpaDao.findById(id)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
     }
 
-    private Category findCategoryByIdOrElseThrow(Long categoryId) {
+    private Category findCategoryById(Long categoryId) {
         return categoryJpaDao.findById(categoryId)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
     }

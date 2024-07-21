@@ -31,7 +31,7 @@ public class OptionService {
      * @return List
      */
     public List<OptionResponse> getProductOptionList(Long productId) {
-        Product product = findProductByIdOrElseThrow(productId);
+        Product product = findProductById(productId);
         return product.getOptions().stream()
             .map(OptionResponse::new)
             .toList();
@@ -44,7 +44,7 @@ public class OptionService {
     }
 
     public void saveOption(OptionSaveRequest saveRequest) {
-        Product product = findProductByIdOrElseThrow(saveRequest.getProductId());
+        Product product = findProductById(saveRequest.getProductId());
         Option option = saveRequest.toEntity(product);
 
         if (product.isOptionNameDuplicate(option)) {
@@ -55,7 +55,7 @@ public class OptionService {
 
     @Transactional
     public void editOption(OptionEditRequest editRequest) {
-        Product product = findProductByIdOrElseThrow(editRequest.getProductId());
+        Product product = findProductById(editRequest.getProductId());
         product.updateOption(editRequest);
     }
 
@@ -63,7 +63,7 @@ public class OptionService {
      * 상품의 옵션을 삭제하는 메서드. 단, 옵션이 1개일 때는 삭제하지 않는다.
      */
     public void deleteOption(Long productId, Long optionId) {
-        Product product = findProductByIdOrElseThrow(productId);
+        Product product = findProductById(productId);
         if (product.canDeleteOption(optionId)) {
             optionJpaDao.deleteById(optionId);
         }
@@ -72,7 +72,7 @@ public class OptionService {
     /**
      * productId에 해당하는 상품이 존재하면 반환하고 아니면 NoSuchElementException
      */
-    private Product findProductByIdOrElseThrow(Long productId) {
+    private Product findProductById(Long productId) {
         return productJpaDao.findById(productId)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
     }

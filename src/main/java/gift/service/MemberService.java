@@ -39,7 +39,7 @@ public class MemberService {
 
     public String login(MemberDto memberDto) {
         Member member = new Member(memberDto);
-        Member queriedMember = findMemberByEmailOrElseThrow(member.getEmail());
+        Member queriedMember = findMemberByEmail(member.getEmail());
 
         if (!queriedMember.isCorrectPassword(member.getPassword())) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_PASSWORD_MSG);
@@ -53,8 +53,8 @@ public class MemberService {
     }
 
     public void addWishlist(String email, Long productId) {
-        Member member = findMemberByEmailOrElseThrow(email);
-        Product product = findProductByIdOrElseThrow(productId);
+        Member member = findMemberByEmail(email);
+        Product product = findProductById(productId);
 
         assertWishlistNotDuplicate(email, productId);
         Wishlist wishlist = new Wishlist(member, product);
@@ -63,22 +63,22 @@ public class MemberService {
     }
 
     public void deleteWishlist(String email, Long productId) {
-        findWishlistByEmailAndProductIdOrElseThrow(email, productId);
+        findWishlistByEmailAndProductId(email, productId);
 
         wishlistJpaDao.deleteByMember_EmailAndProduct_Id(email, productId);
     }
 
-    private Wishlist findWishlistByEmailAndProductIdOrElseThrow(String email, Long productId) {
+    private Wishlist findWishlistByEmailAndProductId(String email, Long productId) {
         return wishlistJpaDao.findByMember_EmailAndProduct_Id(email, productId)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.WISHLIST_NOT_EXISTS_MSG));
     }
 
-    private Member findMemberByEmailOrElseThrow(String member) {
+    private Member findMemberByEmail(String member) {
         return memberJpaDao.findByEmail(member)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.MEMBER_NOT_EXISTS_MSG));
     }
 
-    private Product findProductByIdOrElseThrow(Long productId) {
+    private Product findProductById(Long productId) {
         return productJpaDao.findById(productId)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
     }
