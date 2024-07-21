@@ -30,10 +30,6 @@ public class Option {
     public Option() {
     }
 
-    // JPA에서 필요로 하는 기본 생성자
-    protected Option(Long id, String name, int quantity) {
-    }
-
     public Option(Product product, String name, int quantity) {
         this.product = product;
         this.name = name;

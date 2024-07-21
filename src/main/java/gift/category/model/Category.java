@@ -19,18 +19,13 @@ public class Category {
     @Column(name = "img_url")
     private String imgUrl;
 
-//    // JPA에서 필요로 하는 기본 생성자
-//    protected Category() {
-//    }
-
-    public Category(String name) {
+    public Category(String name, String color, String imgUrl) {
         this.name = name;
         this.color = color;
         this.imgUrl = imgUrl;
     }
 
-    public Category() {
-
+    protected Category() {
     }
 
     public Long getId() {

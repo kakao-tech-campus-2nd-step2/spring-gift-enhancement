@@ -13,6 +13,7 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
     @Autowired
     private MemberRepository memberRepository;
 
@@ -27,22 +28,22 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public Member getMemberById(@PathVariable Long id) {
+    public Member getMemberById(@PathVariable("memberId") Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
     }
 
     @PutMapping("/{memberId}/email")
-    public Member updateEmail(@PathVariable Long id, @RequestParam String newEmail) {
+    public Member updateEmail(@PathVariable("memberId") Long id, @RequestParam String newEmail) {
         return memberService.updateEmail(id, newEmail);
     }
 
     @PutMapping("/{memberId}/password")
-    public Member updatePassword(@PathVariable Long id, @RequestParam String newPassword) {
+    public Member updatePassword(@PathVariable("memberId") Long id, @RequestParam String newPassword) {
         return memberService.updatePassword(id, newPassword);
     }
 
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMember(@PathVariable("memberId") Long id) {
         memberService.deleteMember(id);
         return ResponseEntity.noContent().build();
     }

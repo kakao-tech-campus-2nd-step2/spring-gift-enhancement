@@ -37,7 +37,6 @@ public class WishListService {
         return wishListRepository.findByMember(member);
     }
 
-
     /** wishListRepository의 findByMemberId 메소드를 호출하여
      데이터베이스에서 페이지네이션된 결과를 가져옴. **/
     public Page<WishList> findByMemberId(Long id, Pageable pageable) {
@@ -46,7 +45,6 @@ public class WishListService {
         return wishListRepository.findByMember(member, pageable);
     }
 
-    // 위시리스트에 상품 추가
     @Transactional
     public void addProductToWishList(Long id, Product product) {
         Member member = memberService.findById(id)
@@ -55,7 +53,6 @@ public class WishListService {
         wishListRepository.save(wishList);
     }
 
-    // 위시리스트에 상품 삭제
     @Transactional
     public void removeProductFromWishList(Long id, Long productId) {
         Member member = memberRepository.findById(id)

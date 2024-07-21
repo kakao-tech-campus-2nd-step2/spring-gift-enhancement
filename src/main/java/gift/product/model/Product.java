@@ -87,13 +87,4 @@ public class Product {
         this.imgUrl = imgUrl;
         this.category = category;
     }
-
-//    public Object entityToDto() {
-//        return new ProductDto(
-//                product.getId(),
-//                product.getName(),
-//                product.getPrice(),
-//                product.getImgUrl(),
-//                product.getCategory());
-//    }
 }

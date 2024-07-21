@@ -16,13 +16,13 @@ public class OptionController {
     private OptionService optionService;
 
     @GetMapping("/{productId}/options")
-    public List<OptionDto> getOptionsByProductId(@PathVariable Long id) {
-        return optionService.getOptionsByProductId(id);
+    public List<OptionDto> getOptionsByProductId(@PathVariable("productId") Long productId) {
+        return optionService.getOptionsByProductId(productId);
     }
 
     @PostMapping("/{productId}/options")
-    public OptionDto addOptionToProduct(@PathVariable Long id, @RequestBody OptionDto optionDto) {
-        return optionService.addOptionToProduct(id, optionDto);
+    public OptionDto addOptionToProduct(@PathVariable("productId") Long productId, @RequestBody OptionDto optionDto) {
+        return optionService.addOptionToProduct(productId, optionDto);
     }
 
 }

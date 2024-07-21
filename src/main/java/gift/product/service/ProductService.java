@@ -15,6 +15,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
+    @Autowired
     public ProductService(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
@@ -29,6 +30,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    @Transactional
     public void update(Long productId, ProductDto productDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
@@ -38,15 +40,9 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    @Transactional
     public void deleteById(Long productId) {
         productRepository.deleteById(productId);
     }
-
-//    public List<ProductDto> getAllProducts() {
-//        List<Product> response = productRepository.findAll();
-//        return response.stream()
-//                .map(Product::entityToDto)
-//                .collect(Collectors.toList());
-//    }
 
 }

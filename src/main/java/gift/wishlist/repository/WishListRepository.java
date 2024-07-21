@@ -23,11 +23,9 @@ public interface WishListRepository extends JpaRepository<WishList, String> {
 
     Page<WishList> findByMember(Member member, Pageable pageable);
 
-    @Modifying
-    @Query("update WishList w set w.product = :product where w.member.id = :member_id")
-    void addProductToWishList(@Param("member_id") Long memberId, @Param("product") Product product);
-
-    @Modifying
-    @Query("update WishList w set w.product.id = :product_id where w.member.id = :member_id")
-    void removeProductFromWishList(@Param("member_id") Long memberId, @Param("product_id") Long productId);
+//    @Query("update WishList w set w.product = :product where w.member.id = :member_id")
+//    void addProductToWishList(@Param("member_id") Long memberId, @Param("product") Product product);
+//
+//    @Query("update WishList w set w.product.id = :product_id where w.member.id = :member_id")
+//    void removeProductFromWishList(@Param("member_id") Long memberId, @Param("product_id") Long productId);
 }
