@@ -12,6 +12,7 @@ import gift.domain.Member;
 import gift.domain.vo.Email;
 import gift.domain.vo.Password;
 import gift.repository.MemberRepository;
+import gift.repository.WishProductRepository;
 import gift.web.dto.request.LoginRequest;
 import gift.web.dto.request.member.CreateMemberRequest;
 import gift.web.dto.response.LoginResponse;
@@ -33,6 +34,9 @@ class MemberServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
+
+    @Mock
+    private WishProductRepository wishProductRepository;
 
     @Mock
     private JwtProvider jwtProvider;
