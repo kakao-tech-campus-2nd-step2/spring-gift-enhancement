@@ -52,34 +52,25 @@ public class Product {
         return name;
     }
 
-    public void updateName(String name) {
-        validateName(name);
-        this.name = name;
-    }
-
     public String getPrice() {
         return price;
-    }
-
-    public void updatePrice(String price) {
-        validatePrice(price);
-        this.price = price;
     }
 
     public Category getCategory() {
         return category;
     }
 
-    public void updateCategory(Category category) {
-        this.category = category;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void updateImageUrl(String imageUrl) {
+    public void updateProduct(String name, String price, Category category, String imageUrl) {
+        validateName(name);
+        validatePrice(price);
         validateImageUrl(imageUrl);
+        this.name = name;
+        this.price = price;
+        this.category = category;
         this.imageUrl = imageUrl;
     }
 

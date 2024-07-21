@@ -47,19 +47,17 @@ public class Option {
         return name;
     }
 
-    public void updateName(String name) {
-        validateName(name);
-        this.name = name;
-    }
-
     public Long getQuantity() {
         return quantity;
     }
 
-    public void updateQuantity(Long quantity) {
+    public void updateOption(String name, Long quantity) {
+        validateName(name);
         validateQuantity(quantity);
+        this.name = name;
         this.quantity = quantity;
     }
+
 
     public Product getProduct() {
         return product;
