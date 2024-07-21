@@ -3,7 +3,6 @@ package gift.controller;
 import gift.domain.Product;
 import gift.dto.CategoryDto;
 import gift.dto.ProductDto;
-import gift.dto.RequestProductDto;
 import gift.repositories.ProductRepository;
 import gift.services.CategoryService;
 import gift.services.ProductService;

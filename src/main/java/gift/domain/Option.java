@@ -1,7 +1,6 @@
 package gift.domain;
 
 import gift.dto.ProductDto;
-import gift.dto.RequestProductDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,10 +48,11 @@ public class Option {
     }
 
     public ProductDto getProductDto() {
-        return new ProductDto(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategoryDto(), product.getOptionDtos());
+        return new ProductDto(product.getId(), product.getName(), product.getPrice(),
+            product.getImageUrl(), product.getCategoryDto(), product.getOptionDtos());
     }
 
-    public void update(String name, int amount){
+    public void update(String name, int amount) {
         this.name = name;
         this.amount = amount;
     }
