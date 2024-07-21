@@ -4,15 +4,13 @@ import gift.dto.ProductRequestDTO;
 import gift.dto.ProductResponseDTO;
 import gift.entity.Category;
 import gift.entity.Product;
-import gift.exception.CategoryException;
+import gift.exception.categortException.CategoryNotFoundException;
 import gift.exception.ProductException;
+import gift.exception.productException.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +33,7 @@ public class ProductService {
 
     public Product getProduct(long productId) {
         Optional<Product> product = productRepository.findById(productId);
-        return product.orElseThrow(() -> new ProductException("상품을 찾을 수 없습니다."));
+        return product.orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
     public List<ProductResponseDTO> getAllProducts() {
@@ -50,7 +48,7 @@ public class ProductService {
 
         String categoryName = productRequestDTO.category();
         Optional<Category> existingCategory = categoryRepository.findByName(categoryName);
-        existingCategory.orElseThrow(() -> new CategoryException("카테고리를 찾을 수 없습니다. 먼저 카테고리를 등록해주세요.") );
+        existingCategory.orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다. 먼저 카테고리를 등록해주세요.") );
 
         Product product = toEntity(productRequestDTO, existingCategory.get());
         productRepository.save(product);

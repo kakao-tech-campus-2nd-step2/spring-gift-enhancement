@@ -6,6 +6,8 @@
 <body>
 <h1>ADD page!</h1>
 <p>등록하고자 하는 상품의 정보를 입력해주세요</p>
+
+
 <form th:action="@{/admin/post/submit}" method="post">
 
     <label for="name">Name:</label>
@@ -17,47 +19,13 @@
     <label for="imageUrl">Image URL:</label>
     <input type="text" id="imageUrl" name="imageUrl" required><br><br>
 
-    <p>Category:</p>
-    <input type="radio" id="교환권" name="category" value="교환권">
-    <label for="교환권">교환권</label><br>
 
-    <input type="radio" id="상품권" name="category" value="상품권">
-    <label for="상품권">상품권</label><br>
 
-    <input type="radio" id="뷰티" name="category" value="뷰티">
-    <label for="뷰티">뷰티</label><br>
-
-    <input type="radio" id="패션" name="category" value="패션">
-    <label for="패션">패션</label><br>
-
-    <input type="radio" id="식품" name="category" value="식품">
-    <label for="식품">식품</label><br>
-
-    <input type="radio" id="리빙_도서" name="category" value="리빙/도서">
-    <label for="리빙_도서">리빙/도서</label><br>
-
-    <input type="radio" id="레저_스포츠" name="category" value="레저/스포츠">
-    <label for="레저_스포츠">레저/스포츠</label><br>
-
-    <input type="radio" id="아티스트_캐릭터" name="category" value="아티스트/캐릭터">
-    <label for="아티스트_캐릭터">아티스트/캐릭터</label><br>
-
-    <input type="radio" id="유아동_반려" name="category" value="유아동/반려">
-    <label for="유아동_반려">유아동/반려</label><br>
-
-    <input type="radio" id="디지털_가전" name="category" value="디지털/가전">
-    <label for="디지털_가전">디지털/가전</label><br>
-
-    <input type="radio" id="카카오프렌즈" name="category" value="카카오프렌즈">
-    <label for="카카오프렌즈">카카오프렌즈</label><br>
-
-    <input type="radio" id="트렌드_선물" name="category" value="트렌드 선물">
-    <label for="트렌드_선물">트렌드 선물</label><br>
-
-    <input type="radio" id="백화점" name="category" value="백화점">
-    <label for="백화점">백화점</label><br><br>
 
     <button type="submit">Submit</button>
+
 </form>
+
+
 </body>
 </html>

@@ -1,6 +1,8 @@
 package gift.exception;
 
 import gift.dto.ErrorResponse;
+import gift.exception.categortException.CategoryNotFoundException;
+import gift.exception.productException.ProductNotFoundException;
 import io.jsonwebtoken.JwtException;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolationException;
@@ -22,6 +24,8 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+
 
     @Description("데이터베이스 접근 오류가 발생했습니다.")
     @ExceptionHandler(value = DataAccessException.class)
@@ -53,31 +57,45 @@ public class GlobalExceptionHandler {
 
 
     @Description("카테고리 서비스 exception")
-    @ExceptionHandler(value = CategoryException.class)
-    public ResponseEntity<ErrorResponse> handleCategoryException(ProductException e) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    @ExceptionHandler(value = CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryException(CategoryNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND
+                .value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
     }
 
-    @Description("option-service error")
+    @Description("옵션 서비스 exception")
     @ExceptionHandler(value = OptionException.class)
-    public ResponseEntity<ErrorResponse> handleOptionException(ProductException e) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    public ResponseEntity<ErrorResponse> handleOptionException(OptionException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND
+                .value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @Description("상품을 찾을 수 없을 때 exception")
+    @ExceptionHandler(value = ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProductNotFoundException(ProductNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND
+                .value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
     }
 
 
-    @Description("Product-service error")
+    @Description("상품 서비스 exception")
     @ExceptionHandler(value = ProductException.class)
     public ResponseEntity<ErrorResponse> handleProductNotFound(ProductException e) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND
+                .value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
     }
 
-    @Description("api exception")
+
+
+    @Description("api 서비스 exception")
     @ExceptionHandler(value = ApiException.class)
     public ResponseEntity<String> handleApiException(ApiException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -92,7 +110,7 @@ public class GlobalExceptionHandler {
     }
 
 
-    @Description("database access exception")
+    @Description("customer - database access exception")
     @ExceptionHandler(value = DatabaseAccessException.class)
     public ResponseEntity<String> handleDatabaseAccessException(DatabaseAccessException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)

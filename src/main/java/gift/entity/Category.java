@@ -1,6 +1,7 @@
 package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import gift.dto.CategoryRequestDTO;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -88,4 +89,13 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void updateCategory(CategoryRequestDTO categoryRequestDTO){
+        this.name = categoryRequestDTO.name();
+        this.color = categoryRequestDTO.color();
+        this.description = categoryRequestDTO.description();
+        this.imageUrl = categoryRequestDTO.imageUrl();
+
+    }
+
 }
