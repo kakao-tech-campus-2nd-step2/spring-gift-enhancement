@@ -33,7 +33,7 @@ public class OptionTest {
         Option option = createOption("Option", 100, null);
 
         // when
-        option.subtract(option, 50);
+        option.subtract(50);
 
         // then
         Assertions.assertThat(option.getQuantity()).isEqualTo(50);
@@ -47,7 +47,7 @@ public class OptionTest {
 
         // when
         org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
-            () -> option.subtract(option, 150));
+            () -> option.subtract(150));
     }
 
 

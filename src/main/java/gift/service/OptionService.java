@@ -69,7 +69,7 @@ public class OptionService {
         Option option = optionRepository.findByProductAndId(product, optionId).orElseThrow(
             () -> new OptionNotFoundException("해당 Id의 옵션은 존재하지 않습니다.")
         );
-        option = option.subtract(option, amount);
+        option.subtract(amount);
         return OptionResponse.from(option);
     }
 
