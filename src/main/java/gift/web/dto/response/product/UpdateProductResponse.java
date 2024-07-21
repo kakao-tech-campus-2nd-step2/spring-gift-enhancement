@@ -9,10 +9,10 @@ public class UpdateProductResponse {
     private final Long id;
     private final String name;
     private final Integer price;
-    private final URL imageUrl;
+    private final String imageUrl;
     private final ReadCategoryResponse category;
 
-    private UpdateProductResponse(Long id, String name, Integer price, URL imageUrl,
+    private UpdateProductResponse(Long id, String name, Integer price, String imageUrl,
         ReadCategoryResponse category) {
         this.id = id;
         this.name = name;
@@ -23,7 +23,7 @@ public class UpdateProductResponse {
 
     public static UpdateProductResponse from(Product product) {
         return new UpdateProductResponse(product.getId(), product.getName(), product.getPrice(),
-            product.getImageUrl(), ReadCategoryResponse.fromEntity(product.getCategory()));
+            product.getImageUrl().toString(), ReadCategoryResponse.fromEntity(product.getCategory()));
     }
 
     public Long getId() {
@@ -38,7 +38,7 @@ public class UpdateProductResponse {
         return price;
     }
 
-    public URL getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
