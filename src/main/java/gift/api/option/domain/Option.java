@@ -1,5 +1,6 @@
 package gift.api.option.domain;
 
+import gift.api.option.exception.InvalidSubtractionException;
 import gift.api.product.Product;
 import gift.global.BaseEntity;
 import jakarta.persistence.Column;
@@ -27,6 +28,13 @@ public class Option extends BaseEntity {
         this.product = product;
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void subtract(Integer quantity) {
+        if (this.quantity < quantity) {
+            throw new InvalidSubtractionException();
+        }
+        this.quantity -= quantity;
     }
 
     @Override

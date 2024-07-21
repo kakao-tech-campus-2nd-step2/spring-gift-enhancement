@@ -1,4 +1,4 @@
-package gift.api.option;
+package gift.api.option.exception;
 
 import gift.global.exception.GlobalException;
 import org.springframework.http.HttpStatus;

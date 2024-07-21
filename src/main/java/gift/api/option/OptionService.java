@@ -39,4 +39,11 @@ public class OptionService {
             .validateUniqueName(option);
         optionRepository.save(option);
     }
+
+    @Transactional
+    public void subtract(Long id, Integer quantity) {
+        Option option = optionRepository.findById(id)
+            .orElseThrow(() -> new NoSuchEntityException("option"));
+        option.subtract(quantity);
+    }
 }

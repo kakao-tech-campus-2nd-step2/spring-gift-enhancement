@@ -1,6 +1,6 @@
 package gift.api.option.domain;
 
-import gift.api.option.InvalidNameException;
+import gift.api.option.exception.InvalidNameException;
 import java.util.List;
 
 public class Options {
