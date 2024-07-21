@@ -5,11 +5,13 @@ import gift.entity.Option;
 import gift.entity.Options;
 import gift.repository.OptionRepository;
 import gift.repository.OptionsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class OptionService {
     private final OptionsRepository optionsRepository;
