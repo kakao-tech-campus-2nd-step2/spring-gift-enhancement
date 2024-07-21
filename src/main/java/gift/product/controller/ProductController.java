@@ -81,4 +81,9 @@ public class ProductController {
     public ResponseEntity<List<OptionDTO>> getOptionList(@PathVariable Long id){
         return new ResponseEntity<>(optionService.findAllByProductId(id),HttpStatus.OK);
     }
+
+    @PostMapping("/subtract")
+    public Option subtractQuantity(@RequestBody OptionDTO optionDTO, @RequestParam Long orderedQuantity) {
+        return optionService.subtract(optionDTO, orderedQuantity);
+    }
 }
