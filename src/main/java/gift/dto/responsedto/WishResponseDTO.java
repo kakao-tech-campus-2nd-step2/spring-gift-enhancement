@@ -1,4 +1,4 @@
-package gift.dto.responseDto;
+package gift.dto.responsedto;
 
 import gift.domain.Wish;
 

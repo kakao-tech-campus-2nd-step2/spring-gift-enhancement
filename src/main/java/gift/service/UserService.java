@@ -1,8 +1,8 @@
 package gift.service;
 
 import gift.domain.User;
-import gift.dto.requestDto.UserLoginRequestDTO;
-import gift.dto.requestDto.UserSignupRequestDTO;
+import gift.dto.requestdto.UserLoginRequestDTO;
+import gift.dto.requestdto.UserSignupRequestDTO;
 import gift.repository.JpaUserRepository;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;

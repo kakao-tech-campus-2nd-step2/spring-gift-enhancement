@@ -1,4 +1,4 @@
-package gift.dto.requestDto;
+package gift.dto.requestdto;
 
 import jakarta.validation.Valid;
 

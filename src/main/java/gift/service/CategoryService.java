@@ -1,8 +1,8 @@
 package gift.service;
 
 import gift.domain.Category;
-import gift.dto.requestDto.CategoryRequestDTO;
-import gift.dto.responseDto.CategoryResponseDTO;
+import gift.dto.requestdto.CategoryRequestDTO;
+import gift.dto.responsedto.CategoryResponseDTO;
 import gift.repository.JpaCategoryRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
