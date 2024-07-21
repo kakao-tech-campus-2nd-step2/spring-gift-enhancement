@@ -1,5 +1,7 @@
 package gift.user.entity;
 
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.wish.entity.Wish;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(
@@ -19,7 +22,6 @@ import java.util.Set;
     uniqueConstraints = @UniqueConstraint(columnNames = {"email"}, name = "uk_users")
 )
 public class User {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +43,7 @@ public class User {
     }
 
     private User(Builder builder) {
+        validateEmail(builder.email);
         this.email = builder.email;
         this.password = builder.password;
         this.userRoles = builder.userRoles;
@@ -64,6 +67,14 @@ public class User {
 
     public void changePassword(String password) {
         this.password = password;
+    }
+
+    private void validateEmail(String email) {
+        final String EMAIL_REGEX = "^(.+)@(\\S+)$";
+        Pattern emailPattern = Pattern.compile(EMAIL_REGEX);
+        if (!emailPattern.matcher(email).matches()) {
+            throw new CustomException(ErrorCode.INVALID_EMAIL);
+        }
     }
 
     public static class Builder {

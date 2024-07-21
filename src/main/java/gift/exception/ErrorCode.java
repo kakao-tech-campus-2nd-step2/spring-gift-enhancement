@@ -18,7 +18,8 @@ public enum ErrorCode {
         "옵션 이름은 최대 50자까지 가능하고, 특수 문자는 `( ), [ ], +, -, &, /, _`만 혀용합니다."),
     OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "옵션을 찾을 수 없습니다."),
     LAST_OPTION(HttpStatus.BAD_REQUEST,
-        "마지막 남은 옵션은 삭제할 수 없습니다. 다른 옵션을 추가한 후 삭제를 시도해 주세요.");
+        "마지막 남은 옵션은 삭제할 수 없습니다. 다른 옵션을 추가한 후 삭제를 시도해 주세요."),
+    INVALID_EMAIL(HttpStatus.BAD_REQUEST, "유효하지 않은 이메일입니다.");
 
 
     private final HttpStatusCode status;
