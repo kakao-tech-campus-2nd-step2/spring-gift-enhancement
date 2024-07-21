@@ -1,6 +1,7 @@
 package gift.controller.restcontroller;
 
 import gift.controller.dto.request.ProductRequest;
+import gift.controller.dto.response.OptionResponse;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
 import gift.service.ProductService;
@@ -12,11 +13,11 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @Tag(name = "Product", description = "상품 API")
 @RestController
@@ -30,46 +31,38 @@ public class ProductRestController {
 
     @GetMapping("/products")
     @Operation(summary = "전체 상품 조회", description = "전체 상품을 조회합니다.")
-    public ResponseEntity<PagingResponse<ProductResponse>> getProducts(
+    public ResponseEntity<PagingResponse<ProductResponse.WithOption>> getProducts(
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        PagingResponse<ProductResponse> responses = productService.findAllProductPaging(pageable);
+        PagingResponse<ProductResponse.WithOption> responses = productService.findAllProductPaging(pageable);
         return ResponseEntity.ok().body(responses);
     }
 
     @GetMapping("/product/{id}")
     @Operation(summary = "상품 조회", description = "특정 상품을 조회합니다.")
-    public ResponseEntity<ProductResponse> getProduct(
+    public ResponseEntity<ProductResponse.WithOption> getProduct(
             @PathVariable("id") @NotNull @Min(1) Long id
     ) {
-        ProductResponse response = productService.findById(id);
+        ProductResponse.WithOption response = productService.findById(id);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/product")
     @Operation(summary = "상품 추가", description = "상품을 추가합니다.")
     public ResponseEntity<Long> createProduct(
-            UriComponentsBuilder uriBuilder,
-            @Valid @RequestBody ProductRequest request
+            @Valid @RequestBody ProductRequest.Create request
     ) {
-        Long id = productService.save(request);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(
-                uriBuilder.path("/api/v1/product/{id}")
-                        .buildAndExpand(id)
-                        .toUri()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(id);
+        Long id = productService.save(request.toDto());
+        return ResponseEntity.created(URI.create("/api/v1/product" + id)).body(id);
     }
 
-    @PutMapping("/product/{id}")
+    @PutMapping("/product")
     @Operation(summary = "상품 수정", description = "상품을 수정합니다.")
-    public ResponseEntity<Long> updateProduct(
-            @PathVariable("id") @NotNull @Min(1) Long id,
-            @Valid @RequestBody ProductRequest request
+    public ResponseEntity<Void> updateProduct(
+            @Valid @RequestBody ProductRequest.Update request
     ) {
-        productService.updateById(id, request);
-        return ResponseEntity.ok().body(id);
+        productService.updateProduct(request.toDto());
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/product/{id}")
@@ -81,4 +74,12 @@ public class ProductRestController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/product/{id}/options")
+    @Operation(summary = "상품 옵션 조회", description = "상품의 옵션을 조회합니다.")
+    public ResponseEntity<List<OptionResponse>> getOptions(
+            @PathVariable("id") @NotNull @Min(1) Long id
+    ) {
+        List<OptionResponse> options = productService.getAllOptions(id);
+        return ResponseEntity.ok().body(options);
+    }
 }

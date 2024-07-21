@@ -1,52 +1,44 @@
 package gift.service;
 
-import gift.config.JpaConfig;
-import gift.controller.dto.request.ProductRequest;
-import gift.model.Category;
-import gift.model.Product;
-import gift.repository.CategoryRepository;
+import gift.common.exception.EntityNotFoundException;
+import gift.controller.dto.request.OptionRequest;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
 @ActiveProfiles("test")
-@Import(JpaConfig.class)
+@ExtendWith(MockitoExtension.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class ProductServiceTest {
-    @Autowired
+    @InjectMocks
     private ProductService productService;
-
-    @Autowired
+    @Mock
     private ProductRepository productRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-
     @Test
-    @DisplayName("상품 업데이트 테스트[성공]")
-    void updateProduct() {
+    @DisplayName("옵션 저장 테스트[실패] - 잘못된 product id")
+    void save() {
         // given
-        String name = "카테고리";
-        String name2 = "카테고리2";
-        String color = "#123456";
-        String imageUrl = "이미지url";
-        String description = "설명";
-        Category category = categoryRepository.save(new Category(name, color, imageUrl, description));
-        Category category2 = categoryRepository.save(new Category(name2, color, imageUrl, description));
-        Product saved = productRepository.save(new Product("pname", 1000, "purl", category));
-        ProductRequest request = new ProductRequest(saved.getName(), saved.getPrice(), saved.getImageUrl(), category2.getName());
+        String name = "name";
+        int quantity = 2;
+        Long productId = 1L;
+        var request = new OptionRequest.Create(name, quantity, productId);
+        given(productRepository.existsById(eq(productId)))
+                .willReturn(false);
 
         // when
-        productService.updateById(saved.getId(), request);
-        Product actual = productRepository.findByIdFetchJoin(saved.getId()).get();
-
         // then
-        assertThat(actual.getCategory().getName()).isEqualTo(name2);
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(()->productService.addOption(request));
     }
 }

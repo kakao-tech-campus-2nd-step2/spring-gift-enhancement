@@ -1,8 +1,7 @@
 package gift.controller.restcontroller;
 
 import gift.common.annotation.LoginMember;
-import gift.controller.dto.request.WishInsertRequest;
-import gift.controller.dto.request.WishPatchRequest;
+import gift.controller.dto.request.WishRequest;
 import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.WishResponse;
 import gift.service.WishService;
@@ -34,7 +33,7 @@ public class WishesRestController {
     @Operation(summary = "위시리스트 추가", description = "위시리스트를 추가합니다.")
     @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Void> insertWish(
-            @Valid @RequestBody WishInsertRequest request,
+            @Valid @RequestBody WishRequest.Create request,
             @Parameter(hidden = true) @NotNull @LoginMember Long memberId) {
         wishService.save(request, 1, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -51,23 +50,22 @@ public class WishesRestController {
         return ResponseEntity.ok().body(responses);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("")
     @Operation(summary = "위시리스트 수정", description = "위시리스트를 수정합니다.")
     @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Integer> updateWish(
-            @PathVariable("id") Long id,
-            @Valid @RequestBody WishPatchRequest request,
+            @Valid @RequestBody WishRequest.Update request,
             @Parameter(hidden = true) @NotNull @LoginMember Long memberId
     ) {
-        wishService.update(id, request, memberId);
+        wishService.update(request, memberId);
         return ResponseEntity.ok().body(request.productCount());
     }
 
-    @DeleteMapping("{product_id}")
+    @DeleteMapping("{product-id}")
     @Operation(summary = "위시리스트 삭제", description = "위시리스트를 삭제합니다.")
     @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Void> deleteWish(
-            @PathVariable("product_id") @NotNull @Min(1) Long productId,
+            @PathVariable("product-id") @NotNull @Min(1) Long productId,
             @Parameter(hidden = true) @NotNull @LoginMember Long memberId
     ) {
         wishService.deleteByProductId(productId, memberId);

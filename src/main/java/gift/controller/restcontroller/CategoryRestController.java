@@ -2,7 +2,9 @@ package gift.controller.restcontroller;
 
 import gift.controller.dto.request.CategoryRequest;
 import gift.controller.dto.response.CategoryResponse;
+import gift.controller.dto.response.ProductResponse;
 import gift.service.CategoryService;
+import gift.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -19,13 +21,16 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class CategoryRestController {
     private final CategoryService categoryService;
+    private final ProductService productService;
 
-    public CategoryRestController(CategoryService categoryService) {
+    public CategoryRestController(CategoryService categoryService, ProductService productService) {
         this.categoryService = categoryService;
+        this.productService = productService;
     }
     @PostMapping("/category")
     @Operation(summary = "카테고리 저장", description = "카테고리를 저장합니다.")
-    public ResponseEntity<Long> createCategory(@Valid @RequestBody CategoryRequest request) {
+    public ResponseEntity<Long> createCategory(@Valid @RequestBody CategoryRequest.Create request
+    ) {
         Long id = categoryService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
@@ -37,21 +42,30 @@ public class CategoryRestController {
         return ResponseEntity.ok().body(responses);
     }
 
-    @PutMapping("/category/{id}")
+    @PutMapping("/category")
     @Operation(summary = "카테고리 수정", description = "카테고리를 수정합니다.")
     public ResponseEntity<Void> updateCategory(
-            @PathVariable("id") @NotNull @Min(1) Long id,
-            @Valid @RequestBody CategoryRequest request) {
-        categoryService.updateById(id, request);
+            @Valid @RequestBody CategoryRequest.Update request
+    ) {
+        categoryService.updateById(request);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/category/{id}")
     @Operation(summary = "카테고리 삭제", description = "카테고리를 삭제합니다.")
     public ResponseEntity<Void> deleteCategory(
-            @PathVariable("id") @NotNull @Min(1) Long id) {
+            @PathVariable("id") @NotNull @Min(1) Long id
+    ) {
         categoryService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/category/{id}/products")
+    @Operation(summary = "카테고리에 해당하는 상품 조회", description = "카테고리에 해당하는 상품을 조회합니다.")
+    public ResponseEntity<List<ProductResponse.Info>> getProductsByCategoryId(
+        @PathVariable("id") @NotNull @Min(1) Long id
+    ) {
+        List<ProductResponse.Info> responses = productService.findProductsByCategoryId(id);
+        return ResponseEntity.ok().body(responses);
+    }
 }

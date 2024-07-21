@@ -6,6 +6,7 @@ import gift.controller.dto.response.PagingResponse;
 import gift.controller.dto.response.ProductResponse;
 import gift.service.CategoryService;
 import gift.service.ProductService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public class AdminProductController {
     @GetMapping("")
     public String getProducts(Model model,
               @PageableDefault(size = 10) Pageable pageable) {
-        PagingResponse<ProductResponse> products = productService.findAllProductPaging(pageable);
+        PagingResponse<ProductResponse.WithOption> products = productService.findAllProductPaging(pageable);
         model.addAttribute("products", products);
         return "product/products";
     }
@@ -45,7 +46,7 @@ public class AdminProductController {
 
     @GetMapping("/{id}")
     public String updateProduct(@PathVariable("id") @NotNull @Min(1) Long id, Model model) {
-        ProductResponse product = productService.findById(id);
+        ProductResponse.WithOption product = productService.findById(id);
         List<CategoryResponse> categories = categoryService.getAllCategories();
         model.addAttribute("product", product);
         model.addAttribute("categories", categories);
@@ -53,16 +54,14 @@ public class AdminProductController {
     }
 
     @PostMapping("")
-    public String newProduct(@ModelAttribute ProductRequest request) {
-        productService.save(request);
+    public String createProduct(@Valid @ModelAttribute ProductRequest.AdminCreate request) {
+        productService.save(request.toDto());
         return "redirect:/admin/product";
     }
 
     @PutMapping("/{id}")
-    public String updateProduct(
-            @PathVariable("id") @NotNull @Min(1) Long id,
-            @ModelAttribute ProductRequest request) {
-        productService.updateById(id, request);
+    public String updateProduct(@Valid @ModelAttribute ProductRequest.AdminUpdate request) {
+        productService.updateProduct(request.toDto());
         return "redirect:/admin/product";
     }
 

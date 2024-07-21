@@ -1,77 +1,69 @@
 package gift.service;
 
-import gift.common.enums.Role;
-import gift.config.JpaConfig;
-import gift.controller.dto.request.WishInsertRequest;
-import gift.controller.dto.request.WishPatchRequest;
-import gift.model.Category;
-import gift.model.Member;
-import gift.model.Product;
-import gift.model.Wish;
-import gift.repository.CategoryRepository;
-import gift.repository.MemberRepository;
+import gift.common.exception.DuplicateDataException;
+import gift.common.exception.EntityNotFoundException;
+import gift.controller.dto.request.WishRequest;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
 @ActiveProfiles("test")
-@Import(JpaConfig.class)
+@ExtendWith(MockitoExtension.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class WishServiceTest {
-    @Autowired
+
+    @InjectMocks
     private WishService wishService;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
+
+    @Mock
     private WishRepository wishRepository;
+    @Mock
+    private ProductRepository productRepository;
 
     @Test
-    @DisplayName("Wish 수정 테스트[성공]")
-    void update() {
+    @DisplayName("Wish 저장 테스트[실패] - 존재하지않는 Product")
+    void checkProductId() {
         // given
-        Category category = categoryRepository.save(new Category("cname", "color", "imageUrl", "description"));
-        Member member = memberRepository.save(new Member("mname", "mage", Role.USER));
-        Product product = productRepository.save(new Product("pname", 1_000, "pimage", category));
-        Wish wish = wishRepository.save(new Wish(member, 1, product));
-        int productCount = 10;
-        WishPatchRequest request = new WishPatchRequest(product.getId(), productCount);
+        Long productId = 1L;
+        int productCount = 11;
+        Long memberId = 1L;
+        var request = new WishRequest.Create(productId);
+        given(productRepository.existsById(eq(productId)))
+                .willReturn(false);
 
         // when
-        wishService.update(wish.getId(), request, member.getId());
-        Wish actual = wishRepository.findById(wish.getId()).get();
-        assertThat(actual).isNotNull();
-        assertThat(actual.getProduct().getId()).isEqualTo(product.getId());
-        assertThat(actual.getMember().getId()).isEqualTo(member.getId());
-        assertThat(actual.getProductCount()).isEqualTo(productCount);
+        // then
+        assertThatExceptionOfType(EntityNotFoundException.class)
+                .isThrownBy(() -> wishService.save(request, productCount, memberId));
     }
 
     @Test
-    @DisplayName("Wish 저장 테스트[성공]")
-    void save() {
+    @DisplayName("Wish 저장 테스트[실패] - Wish 중복")
+    void checkDuplicateWish() {
         // given
-        Category category = categoryRepository.save(new Category("cname", "color", "imageUrl", "description"));
-        Member member = memberRepository.save(new Member("mname", "mage", Role.USER));
-        Product product = productRepository.save(new Product("pname", 1_000, "pimage", category));
-        WishInsertRequest request = new WishInsertRequest(product.getId());
+        Long productId = 1L;
+        int productCount = 11;
+        Long memberId = 1L;
+        var request = new WishRequest.Create(productId);
+        given(productRepository.existsById(eq(productId)))
+                .willReturn(true);
+        given(wishRepository.existsByProductIdAndMemberId(eq(productId), eq(memberId)))
+                .willReturn(true);
 
         // when
-        wishService.save(request, 1, member.getId());
-        Wish actual = wishRepository.findByIdFetchJoin(1L).get();
-
         // then
-        assertThat(actual).isNotNull();
-        assertThat(actual.getProduct().getId()).isEqualTo(product.getId());
-        assertThat(actual.getMember().getId()).isEqualTo(member.getId());
+        assertThatExceptionOfType(DuplicateDataException.class)
+                .isThrownBy(() -> wishService.save(request, productCount, memberId));
     }
 }

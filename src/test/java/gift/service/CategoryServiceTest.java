@@ -7,12 +7,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CategoryServiceTest {
     @Autowired
     private CategoryService categoryService;
@@ -29,12 +31,12 @@ class CategoryServiceTest {
         String imageUrl = "이미지url";
         String description = "설명";
         String description2 = "설명2";
-        CategoryRequest request = new CategoryRequest(name, color, imageUrl, description);
+        var request = new CategoryRequest.Create(name, color, imageUrl, description);
         Long id = categoryService.save(request);
-        CategoryRequest request2 = new CategoryRequest(name, color, imageUrl, description2);
+        var request2 = new CategoryRequest.Update(id, name, color, imageUrl, description2);
 
         // when
-        categoryService.updateById(id, request2);
+        categoryService.updateById(request2);
         Category category = categoryRepository.findById(id).get();
 
         // then

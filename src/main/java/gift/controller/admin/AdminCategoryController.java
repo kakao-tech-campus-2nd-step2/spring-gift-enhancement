@@ -3,6 +3,7 @@ package gift.controller.admin;
 import gift.controller.dto.request.CategoryRequest;
 import gift.controller.dto.response.CategoryResponse;
 import gift.service.CategoryService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
@@ -41,15 +42,14 @@ public class AdminCategoryController {
     }
 
     @PostMapping("/category")
-    public String createCategory(@ModelAttribute CategoryRequest request) {
+    public String createCategory(@Valid @ModelAttribute CategoryRequest.Create request) {
         categoryService.save(request);
         return "redirect:/admin/categories";
     }
 
-    @PutMapping("/category/{id}")
-    public String updateMember(@PathVariable("id") @NotNull @Min(1) Long id,
-                               @ModelAttribute CategoryRequest request) {
-        categoryService.updateById(id, request);
+    @PutMapping("/category")
+    public String updateCategory(@Valid @ModelAttribute CategoryRequest.Update request) {
+        categoryService.updateById(request);
         return "redirect:/admin/categories";
     }
 
