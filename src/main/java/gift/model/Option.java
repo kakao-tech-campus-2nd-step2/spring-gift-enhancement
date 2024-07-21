@@ -58,6 +58,11 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public void subtractQuantity(Long subtractQuantity) {
+        validateQuantity(subtractQuantity);
+        this.quantity = this.quantity - subtractQuantity;
+    }
+
 
     public Product getProduct() {
         return product;
@@ -91,6 +96,18 @@ public class Option {
         }
         if (quantity > 100_000_000) {
             throw new IllegalArgumentException("옵션 수량은 최대 1억 개 미만까지 가능합니다.");
+        }
+    }
+
+    private void validateSubtractQuantity(Long subtractQuantity) {
+        if (subtractQuantity == null) {
+            throw new IllegalArgumentException("차감할 수량을 입력해야 합니다.");
+        }
+        if (subtractQuantity <= 0) {
+            throw new IllegalArgumentException("차감할 수량은 0보다 커야 합니다.");
+        }
+        if (this.quantity < subtractQuantity) {
+            throw new IllegalArgumentException("차감할 수량이 현재 수량보다 많을 수 없습니다.");
         }
     }
 }

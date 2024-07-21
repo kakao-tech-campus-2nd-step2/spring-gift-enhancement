@@ -59,6 +59,13 @@ public class OptionService {
         optionRepository.deleteById(optionId);
     }
 
+    @Transactional
+    public void subtractQuantity(Long optionId, Long subtractQuantity) {
+        Option option = optionRepository.findById(optionId).orElse(null);
+        option.subtractQuantity(subtractQuantity);
+        optionRepository.save(option);
+    }
+
     public static OptionDTO toDTO(Option option) {
         return new OptionDTO(option.getName(), option.getQuantity(), option.getProduct().getId());
     }
