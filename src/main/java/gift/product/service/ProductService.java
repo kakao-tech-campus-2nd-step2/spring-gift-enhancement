@@ -11,8 +11,8 @@ import gift.product.exception.ProductDeleteException;
 import gift.product.exception.ProductNotFoundException;
 import gift.product.exception.ProductUpdateException;
 import gift.product.repository.ProductRepository;
-import jakarta.persistence.PersistenceException;
 import java.util.List;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -69,7 +69,7 @@ public class ProductService {
             optionService.addOptions(newProduct, productReqDto.options());
 
             return new ProductResDto(productRepository.save(newProduct));
-        } catch (PersistenceException e) {
+        } catch (InvalidDataAccessApiUsageException e) {
             throw ProductCreateException.EXCEPTION;
         }
     }
@@ -84,7 +84,7 @@ public class ProductService {
                     .ifPresent(findProduct::changeCategory);
 
             optionService.updateOptions(findProduct, productReqDto.options());
-        } catch (PersistenceException e) {
+        } catch (InvalidDataAccessApiUsageException e) {
             throw ProductUpdateException.EXCEPTION;
         }
     }

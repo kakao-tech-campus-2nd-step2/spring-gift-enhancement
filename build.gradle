@@ -2,6 +2,13 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
+
+    // A Java Library
+    id 'java-library'
+    // which produces test fixtures
+    id 'java-test-fixtures'
+    // and is published
+    id 'maven-publish'
 }
 
 group = 'camp.nextstep.edu'

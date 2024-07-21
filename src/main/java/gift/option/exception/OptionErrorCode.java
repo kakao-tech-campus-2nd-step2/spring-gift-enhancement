@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public enum OptionErrorCode implements ErrorCode {
     DUPLICATED_OPTION_NAME("O001", HttpStatus.BAD_REQUEST, "상품의 옵션 이름은 중복될 수 없습니다."),
+    NOT_ENOUGH_STOCK("O002", HttpStatus.BAD_REQUEST, "재고가 부족합니다.")
     ;
 
     private final String code;

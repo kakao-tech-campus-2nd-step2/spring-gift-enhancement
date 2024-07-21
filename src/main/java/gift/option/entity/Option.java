@@ -51,4 +51,8 @@ public class Option {
     public void changeProduct(Product product) {
         this.product = product;
     }
+
+    public void subtractQuantity(Integer quantity) {
+        this.quantity -= quantity;
+    }
 }

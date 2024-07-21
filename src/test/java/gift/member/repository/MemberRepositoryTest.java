@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import gift.member.dto.MemberReqDto;
+import gift.member.MemberFixture;
 import gift.member.entity.Member;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +28,9 @@ class MemberRepositoryTest {
     void setUp() {
         // 임의의 회원 3명
         List<Member> members = List.of(
-                new Member("test1@test.com", "1234"),
-                new Member("test2@test.com", "1234"),
-                new Member("test3@test.com", "1234")
+                MemberFixture.createMember("test1@test.com", "1234"),
+                MemberFixture.createMember("test2@test.com", "1234"),
+                MemberFixture.createMember("test3@test.com", "1234")
         );
 
         memberRepository.saveAll(members);
@@ -40,7 +40,7 @@ class MemberRepositoryTest {
     @DisplayName("회원 생성")
     void addMember() {
         //given
-        Member member = new Member("abc123@test.com", "1234");
+        Member member = MemberFixture.createMember("abc123@test.com", "1234");
 
         //when
         Member savedMember = memberRepository.save(member);
@@ -79,7 +79,7 @@ class MemberRepositoryTest {
         Member member = memberRepository.findByEmail("test1@test.com").orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         // when
-        member.update(new MemberReqDto("newEmail@test.com", "4321"));
+        member.update(MemberFixture.createMemberReqDto("newEmail@test.com", "4321"));
 
         // then
         Member updatedMember = memberRepository.findById(member.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));

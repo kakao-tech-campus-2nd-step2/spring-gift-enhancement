@@ -5,10 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import gift.member.MemberFixture;
 import gift.member.entity.Member;
 import gift.member.repository.MemberRepository;
+import gift.product.ProductFixture;
 import gift.product.entity.Product;
 import gift.product.repository.ProductRepository;
+import gift.wishlist.WishListFixture;
 import gift.wishlist.entity.WishList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,22 +37,22 @@ class WishListRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        Member member =  new Member("abc123@test.com", "1234");
+        Member member = MemberFixture.createMember("wishListRepo@test.com", "password");
         memberRepository.save(member);
 
         List<Product> products = List.of(
-                new Product("상품1", 1000, "image1", null),
-                new Product("상품2", 2000, "image2", null),
-                new Product("상품3", 3000, "image3", null),
-                new Product("상품4", 4000, "image4", null)
+                ProductFixture.createProduct("상품1", 1000, "image1"),
+                ProductFixture.createProduct("상품2", 2000, "image2"),
+                ProductFixture.createProduct("상품3", 3000, "image3"),
+                ProductFixture.createProduct("상품4", 4000, "image4")
         );
         productRepository.saveAll(products);
 
         // 임의의 위시리스트 3개
         List<WishList> wishLists = List.of(
-                new WishList(member, products.get(0), 4),
-                new WishList(member, products.get(1), 1),
-                new WishList(member, products.get(2), 3)
+                WishListFixture.createWishList(member, products.get(0), 4),
+                WishListFixture.createWishList(member, products.get(1), 1),
+                WishListFixture.createWishList(member, products.get(2), 3)
         );
         wishListRepository.saveAll(wishLists);
     }
@@ -60,7 +63,7 @@ class WishListRepositoryTest {
         //given
         Member member = memberRepository.findAll().getFirst();      // 기존 회원
         Product product = productRepository.findAll().getLast();    // 아직 위시리스트에 없는 상품
-        WishList wishList = new WishList(member, product, 2);
+        WishList wishList = WishListFixture.createWishList(member, product, 2);
 
         //when
         WishList savedWishList = wishListRepository.save(wishList);

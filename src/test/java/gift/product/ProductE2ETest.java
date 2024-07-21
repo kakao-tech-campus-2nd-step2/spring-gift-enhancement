@@ -4,14 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.auth.dto.LoginReqDto;
 import gift.auth.token.AuthToken;
-import gift.category.dto.CategoryReqDto;
+import gift.category.CategoryFixture;
 import gift.common.exception.CommonErrorCode;
 import gift.common.exception.ErrorResponse;
 import gift.common.exception.ValidationError;
+import gift.option.OptionFixture;
 import gift.option.dto.OptionReqDto;
 import gift.option.dto.OptionResDto;
 import gift.option.exception.OptionErrorCode;
-import gift.product.dto.ProductReqDto;
 import gift.product.dto.ProductResDto;
 import gift.product.exception.ProductErrorCode;
 import gift.product.message.ProductInfo;
@@ -51,9 +51,9 @@ class ProductE2ETest {
     private String accessToken;
 
     private static final List<OptionReqDto> options = List.of(
-            new OptionReqDto("옵션1", 1000),
-            new OptionReqDto("옵션2", 2000),
-            new OptionReqDto("옵션3", 3000)
+            OptionFixture.createOptionReqDto("옵션1", 1000),
+            OptionFixture.createOptionReqDto("옵션2", 2000),
+            OptionFixture.createOptionReqDto("옵션3", 3000)
     );
 
     @BeforeAll
@@ -70,9 +70,9 @@ class ProductE2ETest {
         // 카테고리 초기화
         var categoryUrl = baseUrl + "/api/categories";
         List.of(
-                new CategoryReqDto("카테고리1", "#FF0000", "category1.png", "카테고리1 입니다."),
-                new CategoryReqDto("카테고리2", "#00FF00", "category2.png", "카테고리2 입니다."),
-                new CategoryReqDto("카테고리3", "#0000FF", "category3.png", "카테고리3 입니다.")
+                CategoryFixture.createCategoryReqDto("카테고리1"),
+                CategoryFixture.createCategoryReqDto("카테고리2"),
+                CategoryFixture.createCategoryReqDto("카테고리3")
         ).forEach(categoryReqDto -> {
             var categoryRequest = TestUtils.createRequestEntity(categoryUrl, categoryReqDto, HttpMethod.POST, accessToken);
             restTemplate.exchange(categoryRequest, String.class);
@@ -81,9 +81,9 @@ class ProductE2ETest {
         // 상품 초기화
         var productUrl = baseUrl + "/api/products";
         List.of(
-                new ProductReqDto("상품1", 1000, "keyboard.png", "카테고리1", options),
-                new ProductReqDto("상품2", 2000, "mouse.png", "카테고리2", options),
-                new ProductReqDto("상품3", 3000, "monitor.png", "카테고리3", options)
+                ProductFixture.createProductReqDto("상품1", 1000, "keyboard.png", "카테고리1", options),
+                ProductFixture.createProductReqDto("상품2", 2000, "mouse.png", "카테고리2", options),
+                ProductFixture.createProductReqDto("상품3", 3000, "monitor.png", "카테고리3", options)
         ).forEach(productReqDto -> {
             var productRequest = TestUtils.createRequestEntity(productUrl, productReqDto, HttpMethod.POST, accessToken);
             restTemplate.exchange(productRequest, String.class);
@@ -191,7 +191,7 @@ class ProductE2ETest {
     @DisplayName("상품 추가")
     void 상품_추가() {
         //given
-        var reqBody = new ProductReqDto("새로운 상품", 10000, "https://www.google.com/new-product.png", "카테고리1", options);
+        var reqBody = ProductFixture.createProductReqDto("새로운 상품", 10000, "https://www.google.com/new-product.png", "카테고리1", options);
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products", reqBody, HttpMethod.POST, accessToken);
 
         //when
@@ -213,7 +213,7 @@ class ProductE2ETest {
     @DisplayName("상품 추가 실패 - 상품 이름 규칙 위반")
     void 상품_추가_실패() {
         //given
-        var reqBody = new ProductReqDto("카카오 상품@테스트 오류 입니다.", 10000, "https://www.google.com/new-product.png", "카테고리1", options);
+        var reqBody = ProductFixture.createProductReqDto ("카카오 상품@테스트 오류 입니다.", options);
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products", reqBody, HttpMethod.POST, accessToken);
 
         //when
@@ -244,10 +244,10 @@ class ProductE2ETest {
     void 상품_추가_실패_옵션_이름_중복() {
         //given
         var duplicatedOptions = List.of(
-                new OptionReqDto("중복이름옵션", 1000),
-                new OptionReqDto("중복이름옵션", 2000)
+                OptionFixture.createOptionReqDto("중복이름옵션", 1000),
+                OptionFixture.createOptionReqDto("중복이름옵션", 2000)
         );
-        var reqBody = new ProductReqDto("중복 옵션 이름", 20000, "https://www.google.com/keyboard.png", "카테고리1", duplicatedOptions);
+        var reqBody = ProductFixture.createProductReqDto(duplicatedOptions);
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products", reqBody, HttpMethod.POST, accessToken);
 
         //when
@@ -273,7 +273,7 @@ class ProductE2ETest {
         var lastProduct = lastProductResponse.getBody().getContent().getLast();
         Long productId = lastProduct.id();
 
-        var reqBody = new ProductReqDto("이름 수정", 20000, "https://www.google.com/modify.png", "카테고리1", options);
+        var reqBody = ProductFixture.createProductReqDto("이름 수정", 20000, "https://www.google.com/modify.png", "카테고리1", options);
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products/" + productId, reqBody, HttpMethod.PUT, accessToken);
 
         //when
@@ -305,10 +305,9 @@ class ProductE2ETest {
         //given
         Long productId = 1L;
         var options = List.of(
-                new OptionReqDto("옵션1", 1000),
-                new OptionReqDto("옵션2", 2000)
+                OptionFixture.createOptionReqDto("옵션", 10)
         );
-        var reqBody = new ProductReqDto("카카오 수정", 20000, "https://www.google.com/keyboard.png", null, options);
+        var reqBody = ProductFixture.createProductReqDto("카카오 수정", 20000, "https://www.google.com/keyboard.png", null, options);
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products/" + productId, reqBody, HttpMethod.PUT, accessToken);
 
         //when
@@ -339,10 +338,10 @@ class ProductE2ETest {
         // given
         Long productId = 1L;
         var duplicatedOptions = List.of(
-                new OptionReqDto("중복이름옵션", 1000),
-                new OptionReqDto("중복이름옵션", 2000)
+                OptionFixture.createOptionReqDto("중복 옵션 이름", 1000),
+                OptionFixture.createOptionReqDto("중복 옵션 이름", 2000)
         );
-        var reqBody = new ProductReqDto("중복 옵션 이름", 20000, "https://www.google.com/keyboard.png", "카테고리1", duplicatedOptions);
+        var reqBody = ProductFixture.createProductReqDto("중복 옵션 이름", duplicatedOptions);
         var request = TestUtils.createRequestEntity(baseUrl + "/api/products/" + productId, reqBody, HttpMethod.PUT, accessToken);
 
         // when
@@ -357,6 +356,39 @@ class ProductE2ETest {
         assertThat(errorResponse.getCode()).isEqualTo(OptionErrorCode.DUPLICATED_OPTION_NAME.getCode());
         assertThat(errorResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(errorResponse.getMessage()).isEqualTo(OptionErrorCode.DUPLICATED_OPTION_NAME.getMessage());
+    }
+
+    @Test
+    @DisplayName("상품 수정 실패 - 옵션 값 검증 실패")
+    void 상품_수정_실패_옵션_값_검증_실패() {
+        // given
+        Long productId = 1L;
+        var duplicatedOptions = List.of(
+                OptionFixture.createOptionReqDto("", 0)
+        );
+        var reqBody = ProductFixture.createProductReqDto("옵션 값 검증 실패", duplicatedOptions);
+        var request = TestUtils.createRequestEntity(baseUrl + "/api/products/" + productId, reqBody, HttpMethod.PUT, accessToken);
+
+        // when
+        var actual = restTemplate.exchange(request, ErrorResponse.class);
+        var errorResponse = actual.getBody();
+
+        // then
+        assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(errorResponse).isNotNull();
+        assertThat(errorResponse).isInstanceOf(ErrorResponse.class);
+
+        assertThat(errorResponse.getCode()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getCode());
+        assertThat(errorResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(errorResponse.getMessage()).isEqualTo(CommonErrorCode.INVALID_INPUT_VALUE.getMessage());
+
+        List<ValidationError> invalidParams = errorResponse.getInvalidParams();
+        assertThat(invalidParams).isNotNull();
+        assertThat(invalidParams.size()).isEqualTo(2);
+        assertThat(invalidParams.parallelStream().map(ValidationError::message)).containsExactlyInAnyOrder(
+                "옵션 이름은 필수 입력 값입니다.",
+                "옵션 수량은 최소 1개 이상 입력해야 합니다."
+        );
     }
 
     @Test

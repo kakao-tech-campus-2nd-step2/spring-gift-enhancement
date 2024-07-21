@@ -28,8 +28,7 @@ public record ProductReqDto(
         String category,
 
         @Size(min = 1, message = "상품 옵션은 최소 1개 이상 입력해야 합니다.")
-        @Valid
-        List<OptionReqDto> options
+        List<@Valid OptionReqDto> options
 ) {
 
     public Product toEntity() {
