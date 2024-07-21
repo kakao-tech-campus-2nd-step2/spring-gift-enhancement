@@ -15,4 +15,8 @@ public class SuccessMessage {
     public static final String ADD_CATEGORY_SUCCESS_MSG = "카테고리가 추가되었습니다.";
     public static final String EDIT_CATEGORY_SUCCESS_MSG = "카테고리가 수정되었습니다.";
     public static final String DELETE_CATEGORY_SUCCESS_MSG = "카테고리가 삭제되었습니다.";
+
+    public static final String ADD_OPTION_SUCCESS_MSG = "옵션이 추가되었습니다.";
+    public static final String EDIT_OPTION_SUCCESS_MSG = "옵션이 수정되었습니다.";
+    public static final String DELETE_OPTION_SUCCESS_MSG = "옵션이 삭제되었습니다.";
 }

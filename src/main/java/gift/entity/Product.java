@@ -1,7 +1,9 @@
 package gift.entity;
 
 import gift.constants.ErrorMessage;
-import gift.dto.ProductDto;
+import gift.dto.OptionEditRequest;
+import gift.dto.ProductRequest;
+import gift.exception.ProductOptionRequiredException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Entity
 public class Product extends BaseEntity {
@@ -31,11 +34,15 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "category")
     private Category category;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Option> options = new ArrayList<>();
+
     protected Product() {
     }
 
-    public Product(ProductDto productDto, Category category) {
-        this(productDto.getName(), productDto.getPrice(), productDto.getImageUrl(), category);
+    public Product(ProductRequest productRequest, Category category) {
+        this(productRequest.getName(), productRequest.getPrice(), productRequest.getImageUrl(),
+            category);
     }
 
     public Product(String name, long price, String imageUrl, Category category) {
@@ -70,11 +77,23 @@ public class Product extends BaseEntity {
         return category;
     }
 
-    public void updateProduct(ProductDto productDto, Category category) {
-        this.name = productDto.getName();
-        this.price = productDto.getPrice();
-        this.imageUrl = productDto.getImageUrl();
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void updateProduct(ProductRequest productRequest, Category category) {
+        this.name = productRequest.getName();
+        this.price = productRequest.getPrice();
+        this.imageUrl = productRequest.getImageUrl();
         this.category = category;
+    }
+
+    /**
+     * 옵션은 상품에 종속된 하위 개념이므로 Product에서 Option을 수정하도록 명령.
+     */
+    public void updateOption(OptionEditRequest optionEditRequest) {
+        Option option = getOptionById(optionEditRequest.getId());
+        option.updateOption(optionEditRequest);
     }
 
     public void addWishlist(Wishlist wishlist) {
@@ -82,5 +101,42 @@ public class Product extends BaseEntity {
             throw new NullPointerException(ErrorMessage.NULL_POINTER_EXCEPTION_MSG);
         }
         this.wishlist.add(wishlist);
+    }
+
+    public void addOption(Option newOption) {
+        if (newOption == null) {
+            throw new NullPointerException(ErrorMessage.NULL_POINTER_EXCEPTION_MSG);
+        }
+        options.add(newOption);
+    }
+
+    public boolean isOptionNameDuplicate(Option newOption) {
+        return options.stream()
+            .anyMatch(option ->
+                option.getName().equals(newOption.getName())
+            );
+    }
+
+    public boolean canDeleteOption(Long optionId) {
+        if (!isOptionSizeGreaterThanOne()) {
+            throw new ProductOptionRequiredException(ErrorMessage.OPTION_MUST_MORE_THAN_ZERO);
+        }
+        return getOptionById(optionId) != null;
+    }
+
+    private boolean isOptionSizeGreaterThanOne() {
+        return options.size() > 1;
+    }
+
+    /**
+     * optionId로 옵션을 찾고, 없으면 throw까지 수행.
+     */
+    private Option getOptionById(Long optionId) {
+        return options.stream()
+            .filter(option ->
+                option.getId().equals(optionId)
+            )
+            .findFirst()
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
     }
 }

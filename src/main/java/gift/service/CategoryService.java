@@ -40,7 +40,7 @@ public class CategoryService {
     }
 
     public CategoryDto getCategory(Long id) {
-        Category category = findCategoryByIdOrElseThrow(id);
+        Category category = findCategoryById(id);
         return new CategoryDto(category);
     }
 
@@ -51,12 +51,12 @@ public class CategoryService {
 
     @Transactional
     public void editCategory(CategoryDto categoryDto) {
-        Category category = findCategoryByIdOrElseThrow(categoryDto.getId());
+        Category category = findCategoryById(categoryDto.getId());
         category.updateCategory(categoryDto);
     }
 
     public void deleteCategory(Long id) {
-        findCategoryByIdOrElseThrow(id);
+        findCategoryById(id);
         categoryJpaDao.deleteById(id);
     }
 
@@ -66,7 +66,7 @@ public class CategoryService {
      * @param id
      * @return Category 객체
      */
-    private Category findCategoryByIdOrElseThrow(Long id) {
+    private Category findCategoryById(Long id) {
         return categoryJpaDao.findById(id)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.CATEGORY_NOT_EXISTS_MSG));
     }

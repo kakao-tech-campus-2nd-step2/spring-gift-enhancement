@@ -4,6 +4,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.dto.OptionSaveRequest;
+import gift.dto.ProductRequest;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +50,9 @@ class ProductViewControllerTest {
     @Test
     @DisplayName("상품 수정 폼 페이지 테스트")
     void editProductForm() throws Exception {
-        String requestJson = """
-            {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
-            """;
+        ProductRequest request = new ProductRequest(null, "선물", 4500L, "https", 1L, "생일 선물",
+            List.of(new OptionSaveRequest("케잌", 30, null)));
+        String requestJson = new ObjectMapper().writeValueAsString(request);
 
         addCategory();
         mockMvc.perform(post("/api/products/product")

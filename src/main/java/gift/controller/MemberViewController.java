@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.dto.ProductDto;
+import gift.dto.ProductResponse;
 import gift.service.MemberService;
 import gift.utils.PageNumberListGenerator;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +36,7 @@ public class MemberViewController {
     public String getWishlist(Model model, @PageableDefault(size = 5) Pageable pageable,
         HttpServletRequest httpServletRequest) {
         String email = (String) httpServletRequest.getAttribute("email");
-        Page<ProductDto> wishlist = memberService.getAllWishlist(email, pageable);
+        Page<ProductResponse> wishlist = memberService.getAllWishlist(email, pageable);
 
         model.addAttribute("pageNumbers", PageNumberListGenerator.generatePageNumberList(wishlist));
         model.addAttribute("wishlist", wishlist);

@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.dto.ProductDto;
+import gift.dto.ProductResponse;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import gift.utils.PageNumberListGenerator;
@@ -32,7 +32,7 @@ public class ProductViewController {
      */
     @GetMapping()
     public String getAllProducts(Model model, @PageableDefault(size = 5) Pageable pageable) {
-        Page<ProductDto> products = productService.getAllProducts(pageable);
+        Page<ProductResponse> products = productService.getAllProducts(pageable);
 
         model.addAttribute("pageNumbers", PageNumberListGenerator.generatePageNumberList(products));
         model.addAttribute("products", products);

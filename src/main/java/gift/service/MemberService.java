@@ -2,7 +2,7 @@ package gift.service;
 
 import gift.constants.ErrorMessage;
 import gift.dto.MemberDto;
-import gift.dto.ProductDto;
+import gift.dto.ProductResponse;
 import gift.entity.Member;
 import gift.entity.Product;
 import gift.entity.Wishlist;
@@ -33,47 +33,67 @@ public class MemberService {
 
     public void registerMember(MemberDto memberDto) {
         Member member = new Member(memberDto);
-        memberJpaDao.findByEmail(member.getEmail())
-            .ifPresent(user -> {
-                throw new IllegalArgumentException(ErrorMessage.EMAIL_ALREADY_EXISTS_MSG);
-            });
+        assertUserEmailNotDuplicate(member.getEmail());
         memberJpaDao.save(member);
     }
 
     public String login(MemberDto memberDto) {
         Member member = new Member(memberDto);
-        Member queriedMember = memberJpaDao.findByEmail(member.getEmail())
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.MEMBER_NOT_EXISTS_MSG));
+        Member queriedMember = findMemberByEmail(member.getEmail());
+
         if (!queriedMember.isCorrectPassword(member.getPassword())) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_PASSWORD_MSG);
         }
         return jwtUtil.createJwt(member.getEmail(), 1000 * 60 * 30);
     }
 
-    public Page<ProductDto> getAllWishlist(String email, Pageable pageable) {
+    public Page<ProductResponse> getAllWishlist(String email, Pageable pageable) {
         return wishlistJpaDao.findAllByMember_Email(email, pageable)
-            .map(wishlist -> new ProductDto(wishlist.getProduct()));
+            .map(wishlist -> new ProductResponse(wishlist.getProduct()));
     }
 
     public void addWishlist(String email, Long productId) {
-        Member member = memberJpaDao.findByEmail(email)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.MEMBER_NOT_EXISTS_MSG));
-        Product product = productJpaDao.findById(productId)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
+        Member member = findMemberByEmail(email);
+        Product product = findProductById(productId);
 
-        wishlistJpaDao.findByMember_EmailAndProduct_Id(email, productId)
-            .ifPresent(v -> {
-                throw new IllegalArgumentException(ErrorMessage.WISHLIST_ALREADY_EXISTS_MSG);
-            });
+        assertWishlistNotDuplicate(email, productId);
         Wishlist wishlist = new Wishlist(member, product);
 
         wishlistJpaDao.save(wishlist);
     }
 
     public void deleteWishlist(String email, Long productId) {
-        wishlistJpaDao.findByMember_EmailAndProduct_Id(email, productId)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.WISHLIST_NOT_EXISTS_MSG));
+        findWishlistByEmailAndProductId(email, productId);
 
         wishlistJpaDao.deleteByMember_EmailAndProduct_Id(email, productId);
+    }
+
+    private Wishlist findWishlistByEmailAndProductId(String email, Long productId) {
+        return wishlistJpaDao.findByMember_EmailAndProduct_Id(email, productId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.WISHLIST_NOT_EXISTS_MSG));
+    }
+
+    private Member findMemberByEmail(String member) {
+        return memberJpaDao.findByEmail(member)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.MEMBER_NOT_EXISTS_MSG));
+    }
+
+    private Product findProductById(Long productId) {
+        return productJpaDao.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
+    }
+
+    private void assertWishlistNotDuplicate(String email, Long productId) {
+        wishlistJpaDao.findByMember_EmailAndProduct_Id(email, productId)
+            .ifPresent(v -> {
+                throw new IllegalArgumentException(ErrorMessage.WISHLIST_ALREADY_EXISTS_MSG);
+            });
+    }
+
+    private void assertUserEmailNotDuplicate(String memberEmail) {
+        memberJpaDao.findByEmail(memberEmail)
+            .ifPresent(user -> {
+                throw new IllegalArgumentException(ErrorMessage.EMAIL_ALREADY_EXISTS_MSG);
+            });
     }
 }

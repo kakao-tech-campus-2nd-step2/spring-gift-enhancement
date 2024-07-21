@@ -28,6 +28,16 @@ public class ErrorMessage {
     public static final String CATEGORY_ALREADY_EXISTS_MSG = "이미 존재하는 카테고리입니다.";
     public static final String CATEGORY_NAME_NOT_BLANK_MSG = "카테고리명을 입력해주세요.";
     public static final String CATEGORY_NAME_INVALID_LENGTH_MSG = "카테고리명은 공백 포함 최대 15자까지 입력 가능합니다.";
+    public static final String CATEGORY_MUST_BE_SELECTED = "카테고리를 지정해주세요.";
 
     public static final String NULL_POINTER_EXCEPTION_MSG = "객체가 null 입니다.";
+
+    public static final String OPTION_NOT_EXISTS_MSG = "존재하지 않는 옵션입니다.";
+    public static final String OPTION_NAME_ALREADY_EXISTS_MSG = "이미 존재하는 옵션입니다";
+    public static final String OPTION_NAME_DUPLICATE_MSG = "옵션명은 중복되면 안 됩니다.";
+    public static final String OPTION_NAME_NOT_BLANK_MSG = "옵션명을 입력해주세요";
+    public static final String OPTION_NAME_INVALID_LENGTH_MSG = "옵션명은 공백 포함 최대 50자까지 입력 가능합니다.";
+    public static final String OPTION_NAME_INVALID_PATTERN_MSG = "옵션명은 한글,영문,숫자와 특수 문자 (,),[,],+,-,&,,_ 만 입력 가능합니다.";
+    public static final String OPTION_QUANTITY_INVALID_MSG = "옵션 수량은 최소 1개 최대 1억개 미만이어야 합니다.";
+    public static final String OPTION_MUST_MORE_THAN_ZERO = "옵션은 반드시 1개 이상 있어야 합니다.";
 }

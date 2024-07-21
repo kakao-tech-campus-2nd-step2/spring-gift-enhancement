@@ -74,7 +74,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 공백 이름 입력 시, 실패 테스트")
     void categoryNameNotBlank() throws Exception {
-        CategoryDto editedCategory = new CategoryDto(null, "", "빨강", "https", "크리스마스 카테고리");
+        CategoryDto editedCategory = new CategoryDto(null, null, "빨강", "https", "크리스마스 카테고리");
         String inputJson = new ObjectMapper().writeValueAsString(editedCategory);
 
         mockMvc.perform(post("/api/categories")

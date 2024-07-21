@@ -9,6 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.constants.ErrorMessage;
 import gift.dto.MemberDto;
+import gift.dto.OptionSaveRequest;
+import gift.dto.ProductRequest;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +34,6 @@ class MemberControllerTest {
     private final String member = """
         {"email": "sgoh@naver.com", "password": "sgohpass"}
         """;
-    private final String product = """
-        {"name": "커피", "price": 5500,"imageUrl": "https://...", "categoryId": 1, "categoryName": "음식"}
-        """;
     private final String category = """ 
         {"name": "음식", "color": "Red", "imageUrl": "http", "description": "description"}
         """;
@@ -50,7 +50,11 @@ class MemberControllerTest {
             .content(member));
     }
 
-    void addProduct(String product) throws Exception {
+    void addProduct() throws Exception {
+        ProductRequest request = new ProductRequest(null, "커피", 4500L, "https", 1L, "음식",
+            List.of(new OptionSaveRequest("선물", 30, null)));
+
+        String product = new ObjectMapper().writeValueAsString(request);
         mockMvc.perform(post("/api/products/product")
             .contentType(MediaType.APPLICATION_JSON)
             .content(product));
@@ -99,7 +103,7 @@ class MemberControllerTest {
     void addWishlist() throws Exception {
         addCategory(category);
         registerMember(member);
-        addProduct(product);
+        addProduct();
         String token = loginAndGetToken(member);
 
         mockMvc.perform(post("/api/members/wishlist/1")
@@ -112,7 +116,7 @@ class MemberControllerTest {
     void deleteWishlist() throws Exception {
         addCategory(category);
         registerMember(member);
-        addProduct(product);
+        addProduct();
         String token = loginAndGetToken(member);
 
         mockMvc.perform(post("/api/members/wishlist/1")

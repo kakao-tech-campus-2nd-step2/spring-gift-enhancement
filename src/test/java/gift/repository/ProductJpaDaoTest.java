@@ -2,7 +2,7 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import gift.dto.ProductDto;
+import gift.dto.ProductRequest;
 import gift.entity.Category;
 import gift.entity.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,8 +56,8 @@ class ProductJpaDaoTest {
     @DisplayName("상품 수정 테스트")
     void update() {
         Product product1 = new Product("Tea", 4500L, "https", category);
-        ProductDto product2 = new ProductDto(null, "Tea", 7500L, "https", category.getId(),
-            category.getName());
+        ProductRequest product2 = new ProductRequest(null, "Tea", 7500L, "https",
+            category.getId(), category.getName(), null);
         productJpaDao.save(product1);
         product1.updateProduct(product2, category);
 
