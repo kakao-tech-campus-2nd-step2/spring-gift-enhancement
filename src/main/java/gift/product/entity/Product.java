@@ -1,10 +1,9 @@
 package gift.product.entity;
 
-import gift.exception.CustomException;
-import gift.exception.ErrorCode;
 import gift.product.category.entity.Category;
 import gift.product.dto.request.UpdateProductRequest;
 import gift.product.option.entity.Option;
+import gift.product.option.entity.Options;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,7 +42,9 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Option> options = new HashSet<>();
+    private Set<Option> optionSet = new HashSet<>();
+
+    private transient Options options;
 
     protected Product() {
     }
@@ -53,7 +54,8 @@ public class Product {
         this.price = builder.price;
         this.imageUrl = builder.imageUrl;
         this.category = builder.category;
-        this.options = new HashSet<>(builder.options);
+        this.optionSet = new HashSet<>(builder.options);
+        this.options = new Options(this.optionSet);
     }
 
     public static Builder builder() {
@@ -70,19 +72,13 @@ public class Product {
     public void addOption(Option option) {
         Assert.notNull(option, "Option is null");
         option.initProduct(this);
-        this.options.add(option);
+        this.options.addOption(option);
+        this.optionSet.add(option);
     }
 
     public void removeOption(Option option) {
-        if (!options.contains(option)) {
-            throw new CustomException(ErrorCode.OPTION_NOT_FOUND);
-        }
-
-        if (options.size() == 1 && options.contains(option)) {
-            throw new CustomException(ErrorCode.LAST_OPTION);
-        }
-
-        options.remove(option);
+        options.removeOption(option);
+        optionSet.remove(option);
     }
 
     public Long getId() {
@@ -106,7 +102,7 @@ public class Product {
     }
 
     public Set<Option> getOptions() {
-        return options;
+        return optionSet;
     }
 
     public void changeName(String name) {

@@ -44,9 +44,6 @@ public class OptionService {
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Option option = new Option(request.name(), request.quantity(), product);
 
-        Options options = optionRepository.findAllByProduct(product);
-        options.validate(option);
-
         product.addOption(option);
         Option saved = optionRepository.save(option);
 
