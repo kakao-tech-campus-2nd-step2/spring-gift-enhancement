@@ -46,4 +46,12 @@ public class CustomException extends RuntimeException{
     public static CustomException productNotFoundException() {
         return new CustomException(ErrorMessage.productNotExists, HttpStatus.BAD_REQUEST);
     }
+
+    public static CustomException optionNotFoundException() {
+        return new CustomException(ErrorMessage.optionNotExists, HttpStatus.BAD_REQUEST);
+    }
+
+    public static CustomException quantityInvalidException() {
+        return new CustomException(ErrorMessage.quantityInvalid, HttpStatus.BAD_REQUEST);
+    }
 }

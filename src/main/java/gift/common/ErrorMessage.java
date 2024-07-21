@@ -10,4 +10,6 @@ public class ErrorMessage {
     public static final String headerInvalid = "유효하지 않은 헤더입니다.";
     public static final String categoryNotExists = "카테고리가 존재하지 않습니다.";
     public static final String productNotExists = "상품이 존재하지 않습니다.";
+    public static final String optionNotExists = "옵션이 존재하지 않습니다.";
+    public static final String quantityInvalid = "감소량이 현재 수량보다 많습니다.";
 }
