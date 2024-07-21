@@ -1,10 +1,14 @@
 package gift.service;
 
 import gift.DTO.ProductDTO;
+import gift.DTO.ProductOptionDTO;
 import gift.aspect.CheckProductExists;
 import gift.entity.ProductEntity;
 import gift.mapper.ProductMapper;
+import gift.mapper.ProductOptionMapper;
+import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +18,17 @@ import java.util.List;
 @Service
 public class ProductService {
 
+    @Autowired
     ProductRepository productRepository;
 
+    @Autowired
     ProductMapper productMapper;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
-        this.productRepository = productRepository;
-        this.productMapper = productMapper;
-    }
+    @Autowired
+    private ProductOptionMapper productOptionMapper;
+
+    @Autowired
+    private ProductOptionRepository productOptionRepository;
 
     /**
      * 새 상품을 생성하고 맵에 저장함
@@ -101,6 +108,59 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<ProductDTO> getAllProducts(Pageable pageable) {
         var productEntities = productRepository.findAll(pageable).toList();
-        return productEntities.stream().map(productMapper::toProductDTO).toList();
+        return productEntities.stream()
+                .map(productMapper::toProductDTO).toList();
     }
+
+    /**
+     * 상품 옵션을 반환함
+     *
+     * @param id 옵션을 조회할 상품의 ID
+     */
+    @Transactional(readOnly = true)
+    public List<ProductOptionDTO> getProductOption(Long id){
+        var productEntity = productOptionRepository.findById(id).get().getProductEntity();
+        return productEntity.getProductOptions().stream()
+                .map(productOptionMapper::toProductOptionDTO).toList();
+    }
+
+    /**
+     * 상품 옵션을 추가함
+     *
+     * @param productOptionDTO 추가할 상품 옵션 객체
+     * @param productDTO       상품 객체
+     */
+    @Transactional
+    public void addProductOption(ProductOptionDTO productOptionDTO, ProductDTO productDTO){
+        var productOptionEntity = productOptionMapper.toProductOptionEntity(productOptionDTO, productMapper.toProductEntity(productDTO), false);
+        productOptionRepository.save(productOptionEntity);
+
+        var productEntity = productMapper.toProductEntity(productDTO);
+        productEntity.getProductOptions().add(productOptionEntity);
+        productRepository.save(productEntity);
+    }
+
+    /**
+     * 상품 옵션을 삭제함
+     *
+     * @param id 삭제할 상품 옵션의 ID
+     */
+    @Transactional
+    public void deleteProductOption(Long id){
+        productOptionRepository.deleteById(id);
+    }
+
+    /**
+     * 상품 옵션을 갱신함
+     *
+     * @param id               갱신할 상품 옵션의 ID
+     * @param productOptionDTO 갱신할 상품 옵션 객체
+     */
+    @Transactional
+    public void updateProductOption(Long id, ProductOptionDTO productOptionDTO) {
+        var productOptionEntity = productOptionMapper.toProductOptionEntity(productOptionDTO, getProductEntity(id));
+        productOptionEntity.setId(id);
+        productOptionRepository.save(productOptionEntity);
+    }
+
 }

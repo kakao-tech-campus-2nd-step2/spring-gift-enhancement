@@ -1,8 +1,10 @@
 package gift.controller;
 
+import gift.DTO.ProductAll;
 import gift.DTO.ProductDTO;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,7 +17,8 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     public ProductController(ProductService productService) {
         this.productService = productService;
@@ -45,7 +48,7 @@ public class ProductController {
      * 모든 상품을 반환함
      */
     @GetMapping("/all")
-    public List<ProductDTO> getProducts() {
+    public List<ProductAll> getProducts() {
         return productService.getAllProducts();
     }
 
@@ -59,14 +62,14 @@ public class ProductController {
      * @return ProductDTO 목록을 포함한 ResponseEntity
      */
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getWishListsByUserId(
+    public ResponseEntity<List<ProductAll>> getWishListsByUserId(
             @RequestParam(required = false, defaultValue = "0", value = "page") int page,
             @RequestParam(required = false, defaultValue = "10", value = "size") int size,
             @RequestParam(required = false, defaultValue = "createdAt", value = "criteria") String criteria,
             @RequestParam(required = false, defaultValue = "desc", value = "direction") String direction) {
         Pageable pageable = PageRequest.of(page, size,
                 Sort.by(Sort.Direction.valueOf(direction.toUpperCase()), criteria));
-        List<ProductDTO> productIds = productService.getAllProducts(pageable);
+        List<ProductAll> productIds = productService.getAllProducts(pageable);
         return ResponseEntity.ok(productIds);
     }
 
