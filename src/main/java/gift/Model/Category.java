@@ -39,8 +39,8 @@ public class Category {
         if (color.isBlank() || color == null)
             throw new IllegalArgumentException("카테고리 색상 값은 필수입니다");
 
-        if (color.length() > 7)
-            throw new IllegalArgumentException("카테고리 색상 값의 길이는 7이하입니다");
+        if (color.length() != 7)
+            throw new IllegalArgumentException("카테고리 색상 값의 길이는 7입니다");
     }
 
     public void validateImageUrl(String imageUrl) {
