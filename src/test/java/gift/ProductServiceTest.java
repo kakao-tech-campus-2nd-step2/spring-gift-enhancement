@@ -19,10 +19,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
-public class ProductServiceTest {
-
-    @Mock
-    private ProductRepository productRepository;
+class ProductServiceTest {
 
     @Mock
     private OptionRepository optionRepository;
@@ -32,7 +29,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("옵션 수량 차감 성공 테스트")
-    public void subtractOptionQuantityTest_Success() {
+    void subtractOptionQuantityTest_Success() {
         Long productId = 1L;
         String optionName = "Option1";
         int quantityToSubtract = 5;
@@ -52,7 +49,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("존재하는 옵션 수량보다 삭제하고자 하는 수량이 많은 경우 테스트")
-    public void subtractOptionQuantityTest_InsufficientQuantity() {
+    void subtractOptionQuantityTest_InsufficientQuantity() {
         Long productId = 1L;
         String optionName = "Option1";
         int quantityToSubtract = 15;
@@ -73,7 +70,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("수량을 차감하고자 하는 옵션이 존재하지 않는 경우")
-    public void subtractOptionQuantityTest_OptionNotFound() {
+    void subtractOptionQuantityTest_OptionNotFound() {
         Long productId = 1L;
         String optionName = "Option1";
         int quantityToSubtract = 5;
