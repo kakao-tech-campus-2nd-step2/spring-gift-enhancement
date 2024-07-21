@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.OptionRequestDTO;
 import gift.dto.OptionsPageResponseDTO;
+import gift.exceptions.CustomException;
 import gift.model.Option;
 import gift.model.Product;
 import gift.repository.OptionRepository;
@@ -30,6 +31,14 @@ public class OptionService {
         Product product = productService.getProduct(productId);
         Option option = new Option(optionRequestDTO.name(), optionRequestDTO.quantity(), product);
 
+        optionRepository.save(option);
+    }
+
+    public void subtractOptionQuantity(Long productId, int amount) {
+        Option option = optionRepository.findByProductId(productId)
+                .orElseThrow(CustomException::optionNotFoundException);
+
+        option.subtract(amount);
         optionRepository.save(option);
     }
 }
