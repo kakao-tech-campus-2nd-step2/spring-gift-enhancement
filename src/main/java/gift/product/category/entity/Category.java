@@ -1,6 +1,5 @@
 package gift.product.category.entity;
 
-import gift.product.category.dto.request.UpdateCategoryRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -63,11 +62,11 @@ public class Category {
         return name;
     }
 
-    public void edit(UpdateCategoryRequest request) {
-        this.name = request.name();
-        this.color = request.color();
-        this.description = request.description();
-        this.imageUrl = request.imageUrl();
+    public void edit(String name, String color, String description, String imageUrl) {
+        this.name = name;
+        this.color = color;
+        this.description = description;
+        this.imageUrl = imageUrl;
     }
 
 }

@@ -52,7 +52,8 @@ public class CategoryService {
     public void updateCategory(Long id, UpdateCategoryRequest request) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        category.edit(request);
+        category.edit(request.name(), request.color(), request.description(),
+            request.description());
     }
 
     @Transactional

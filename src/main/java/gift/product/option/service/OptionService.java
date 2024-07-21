@@ -62,7 +62,7 @@ public class OptionService {
         Options options = new Options(optionRepository.findAllByProduct(product));
         options.validate(request);
 
-        option.edit(request);
+        option.edit(request.name(), request.quantity());
     }
 
     @Transactional

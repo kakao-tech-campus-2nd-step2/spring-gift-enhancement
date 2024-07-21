@@ -3,7 +3,6 @@ package gift.product.option.entity;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.product.entity.Product;
-import gift.product.option.dto.request.UpdateOptionRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -76,11 +75,11 @@ public class Option {
         return quantity;
     }
 
-    public void edit(UpdateOptionRequest request) {
-        validateName(request.name());
-        validateQuantity(request.quantity());
-        this.name = request.name();
-        this.quantity = request.quantity();
+    public void edit(String name, Integer quantity) {
+        validateName(name);
+        validateQuantity(quantity);
+        this.name = name;
+        this.quantity = quantity;
     }
 
     private void validateName(String name) {
