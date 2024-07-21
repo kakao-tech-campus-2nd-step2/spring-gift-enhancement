@@ -53,4 +53,11 @@ public class Option {
     public Long getQuantity() {
         return quantity;
     }
+
+    public void subtract(Long amount) {
+        if(this.quantity < amount) {
+            throw new RuntimeException("Not enough quantity available");
+        }
+        this.quantity -= amount;
+    }
 }
