@@ -3,6 +3,7 @@ package gift;
 import gift.domain.model.dto.OptionAddRequestDto;
 import gift.domain.model.dto.OptionResponseDto;
 import gift.domain.model.dto.OptionUpdateRequestDto;
+import gift.domain.model.entity.Category;
 import gift.domain.model.entity.Option;
 import gift.domain.model.entity.Product;
 import gift.domain.repository.OptionRepository;
@@ -130,5 +131,66 @@ class OptionTest {
         when(optionRepository.existsById(optionId)).thenReturn(false);
 
         assertThrows(IllegalArgumentException.class, () -> optionService.deleteOption(optionId));
+    }
+
+    @Test
+    void validSubtractOptionQuantityTest() {
+        Long optionId = 1L;
+        int quantityToSubtract = 5;
+
+        Category mockCategory = mock(Category.class);
+        Product mockProduct = mock(Product.class);
+        when(mockProduct.getCategory()).thenReturn(mockCategory);
+
+        Option mockOption = new Option(mockProduct, "Test Option", 10);
+        when(optionRepository.findById(optionId)).thenReturn(Optional.of(mockOption));
+        when(optionRepository.save(any(Option.class))).thenReturn(mockOption);
+
+        OptionResponseDto result = optionService.subtractOptionQuantity(optionId, quantityToSubtract);
+
+        assertNotNull(result);
+        assertEquals("Test Option", result.getName());
+        assertEquals(5, result.getQuantity());
+        verify(optionRepository, times(1)).save(mockOption);
+    }
+
+    @Test
+    void invalidOptionIdSubtractOptionQuantityTest() {
+        Long optionId = 1L;
+        int quantityToSubtract = 5;
+
+        when(optionRepository.findById(optionId)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> optionService.subtractOptionQuantity(optionId, quantityToSubtract));
+    }
+
+    @Test
+    void negativeQuantitySubtractOptionQuantityTest() {
+        Long optionId = 1L;
+        int quantityToSubtract = -5;
+
+        Category mockCategory = mock(Category.class);
+        Product mockProduct = mock(Product.class);
+        when(mockProduct.getCategory()).thenReturn(mockCategory);
+
+        Option mockOption = new Option(mockProduct, "Test Option", 10);
+        when(optionRepository.findById(optionId)).thenReturn(Optional.of(mockOption));
+
+        assertThrows(IllegalArgumentException.class, () -> optionService.subtractOptionQuantity(optionId, quantityToSubtract));
+    }
+
+    @Test
+    void insufficientStockSubtractOptionQuantityTest() {
+        Long optionId = 1L;
+        int quantityToSubtract = 15;
+
+        Category mockCategory = mock(Category.class);
+        Product mockProduct = mock(Product.class);
+        when(mockProduct.getCategory()).thenReturn(mockCategory);
+
+        Option mockOption = new Option(mockProduct, "Test Option", 10);
+        when(optionRepository.findById(optionId)).thenReturn(Optional.of(mockOption));
+
+        assertThrows(IllegalStateException.class, () -> optionService.subtractOptionQuantity(optionId, quantityToSubtract));
     }
 }
