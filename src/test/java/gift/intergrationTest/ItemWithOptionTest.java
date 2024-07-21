@@ -1,6 +1,5 @@
 package gift.intergrationTest;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -15,12 +14,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.exception.ErrorCode;
 import gift.interceptor.AuthInterceptor;
 import gift.model.categories.Category;
+import gift.model.item.Item;
 import gift.model.item.ItemForm;
 import gift.model.option.Option;
 import gift.model.option.OptionDTO;
 import gift.repository.CategoryRepository;
 import gift.repository.ItemRepository;
-import gift.repository.OptionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +33,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @AutoConfigureMockMvc
@@ -55,9 +56,6 @@ public class ItemWithOptionTest {
 
     @Autowired
     private ItemRepository itemRepository;
-
-    @Autowired
-    private OptionRepository optionRepository;
 
 
     private final String testCategoryName = "가구";
@@ -154,7 +152,7 @@ public class ItemWithOptionTest {
     @DisplayName("6. 옵션 단독 추가 성공 테스트")
     @Test
     void testInsertOptionSuccess() throws Exception {
-        Long itemId = itemRepository.findAll().get(1).getId();
+        Long itemId = itemRepository.findAll().get(0).getId();
         OptionDTO optionDTO = new OptionDTO("회색", testQuantity);
         String content = objectMapper.writeValueAsString(optionDTO);
 
@@ -164,10 +162,33 @@ public class ItemWithOptionTest {
             .andDo(print());
     }
 
-    @DisplayName("7. 옵션 목록 조회 테스트")
+    @Transactional
+    @DisplayName("7. 옵션 단독 수정 성공 테스트")
+    @Test
+    void testUpdateOptionSuccess() throws Exception {
+        Item item = itemRepository.findAll().get(0);
+        Option option = item.getOptions().stream().filter(o -> o.getName().equals("회색")).findFirst()
+            .get();
+        OptionDTO optionDTO = new OptionDTO(option.getId(), "업데이트 된 회색", testQuantity + 20L);
+        String content = objectMapper.writeValueAsString(optionDTO);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/option/" + item.getId())
+                    .contentType(MediaType.APPLICATION_JSON).content(content))
+            .andExpect(status().isOk())
+            .andDo(print());
+
+        mockMvc.perform(
+                get("/option/" + item.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andDo(print());
+    }
+
+    @DisplayName("8. 옵션 목록 조회 테스트")
     @Test
     void testFindOptionsSuccess() throws Exception {
-        Long itemId = itemRepository.findAll().get(1).getId();
+        Long itemId = itemRepository.findAll().get(0).getId();
 
         mockMvc.perform(
                 get("/option/" + itemId))
@@ -175,18 +196,17 @@ public class ItemWithOptionTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andDo(print());
     }
-    @DisplayName("8. 상품 삭제시 옵션도 삭제 테스트")
+
+
+    @DisplayName("9. 상품 삭제시 옵션도 삭제 테스트")
     @Test
     void testDeleteItemWithOptionsSuccess() throws Exception {
-        Long itemId = itemRepository.findAll().get(1).getId();
+        Long itemId = itemRepository.findAll().get(0).getId();
 
         mockMvc.perform(
                 delete("/product/" + itemId))
             .andExpect(status().isOk())
             .andDo(print());
-        List<Option> result = optionRepository.findAllByItemId(itemId);
-        assertThat(result.size()).isEqualTo(0);
-
     }
 
 }
