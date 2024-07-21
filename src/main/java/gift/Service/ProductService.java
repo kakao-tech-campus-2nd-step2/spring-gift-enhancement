@@ -34,10 +34,11 @@ public class ProductService {
         return productRepository.findProductById(id);
     }
 
-    public void addProduct(Product product){
+    public Product addProduct(Product product){
+        Option defaultOption = new Option(null, product,product.getName(),1);
         productRepository.save(product);
-        optionRepository.save(new Option(null, product,product.getName(),1));
-
+        product.getOptions().add(optionRepository.save(defaultOption));
+        return productRepository.findProductById(product.getId());
     }
 
     public void updateProduct(Product product){

@@ -19,6 +19,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.beans.ConstructorProperties;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -46,7 +47,7 @@ public class Product {
     @JoinColumn(name = "category_id",nullable = false)
     private Category category;
 
-    @OneToMany
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Option> options;
 
@@ -61,7 +62,7 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        this.options = options;
+        this.options = new ArrayList<>();
     }
 
     public Long getId() {
