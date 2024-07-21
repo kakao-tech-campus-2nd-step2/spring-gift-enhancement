@@ -106,7 +106,7 @@ public class WishlistServiceTest {
         Pageable pageable = PageRequest.of(0, 2);
 
         // When
-        Page<WishlistResponse> result = wishlistService.findAllByMemberId(memberId, pageable);
+        Page<WishlistServiceResponse> result = wishlistService.findAllByMemberId(memberId, pageable);
 
         // Then
         assertThat(result.getTotalElements()).isEqualTo(2);
@@ -124,7 +124,7 @@ public class WishlistServiceTest {
         Pageable pageable = PageRequest.of(0, 2);
 
         // When
-        Page<WishlistResponse> result = wishlistService.findAllByProductId(productId, pageable);
+        Page<WishlistServiceResponse> result = wishlistService.findAllByProductId(productId, pageable);
 
         // Then
         assertThat(result.getTotalElements()).isEqualTo(2);

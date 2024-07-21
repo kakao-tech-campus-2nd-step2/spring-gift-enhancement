@@ -53,7 +53,7 @@ public class CategoryServiceTest {
         when(categoryRepository.findAll(pageable)).thenReturn(page);
 
         // When
-        Page<CategoryResponse> result = categoryService.findAll(pageable);
+        Page<CategoryServiceResponse> result = categoryService.findAll(pageable);
 
         // Then
         assertThat(result.getTotalElements()).isEqualTo(1);
@@ -102,7 +102,7 @@ public class CategoryServiceTest {
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
 
         // When
-        CategoryResponse result = categoryService.findById(categoryId);
+        CategoryServiceResponse result = categoryService.findById(categoryId);
 
         // Then
         assertThat(result.name()).isEqualTo("Category");
