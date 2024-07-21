@@ -14,6 +14,7 @@ import gift.response.OptionResponse;
 import gift.response.ProductOptionsResponse;
 import java.util.List;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.ExhaustedRetryException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -79,9 +80,7 @@ public class OptionsService {
     @Retryable( //@RetryOptions가 @Transactional보다 먼저 적용되게 설정됨
         retryFor = {ObjectOptimisticLockingFailureException.class},
         maxAttempts = 100,
-        backoff = @Backoff(100),
-        notRecoverable = {NotFoundProductException.class, NotFoundOptionsException.class,
-            OptionsQuantityException.class}
+        backoff = @Backoff(100)
     )
     public void subtractQuantity(Long id, Integer subQuantity, Long productId) {
         productRepository.findById(productId)
@@ -114,7 +113,10 @@ public class OptionsService {
     }
 
     @Recover
-    private void failedSubtractingOptionQuantity() {
-        throw new FailedRetryException();
+    private void failedSubtractingOptionQuantity(RuntimeException e) {
+        if (e instanceof ExhaustedRetryException || e instanceof ObjectOptimisticLockingFailureException) {
+            throw new FailedRetryException();
+        }
+        throw e;
     }
 }
