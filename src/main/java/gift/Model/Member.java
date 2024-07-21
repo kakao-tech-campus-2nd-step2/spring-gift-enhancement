@@ -15,9 +15,23 @@ public class Member {
     protected Member() {}
 
     public Member(String email, String password) {
+        validateEmail(email);
+        validatePassword(password);
+
         this.email = email;
         this.password = password;
     }
+
+    public void validateEmail(String email){
+        if (email.isBlank() || email == null)
+            throw new IllegalArgumentException("이메일 값은 필수입니다.");
+    }
+
+    public void validatePassword(String password) {
+        if (password.isBlank() || password == null)
+            throw new IllegalArgumentException("패스워드 값은 필수입니다");
+    }
+
 
     public Long getId() {
         return id;
