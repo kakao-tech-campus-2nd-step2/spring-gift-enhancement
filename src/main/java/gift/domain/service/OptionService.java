@@ -27,24 +27,6 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
-    // request가 기존 상품 옵션들과 겹치지 않음을 검증하기
-    private void validateOptionIsUniqueInProduct(Product product, String optionName) {
-        Objects.requireNonNullElse(product.getOptions(), new ArrayList<Option>()).stream()
-            .filter(o -> o.getName().equals(optionName))
-            .findAny()
-            .ifPresent(o -> {
-                throw new OptionAlreadyExistsInProductException();
-            });
-    }
-
-    // 옵션이 상품에 포함되어 있음을 검증하기
-    private void validateOptionIsInProduct(Product product, Long optionId) {
-        product.getOptions().stream()
-            .filter(o -> o.getId().equals(optionId))
-            .findAny()
-            .orElseThrow(OptionNotFoundException::new);
-    }
-
     @Transactional(readOnly = true)
     public List<OptionDetailedResponse> getAllOptions() {
         return OptionDetailedResponse.of(optionRepository.findAll());
@@ -65,21 +47,8 @@ public class OptionService {
 
     @Transactional
     public List<Option> addOptions(Product product, List<OptionAddRequest> request) {
-        List<String> optionNames = new ArrayList<>(product.getOptions().stream()
-            .map(Option::getName)
-            .toList());
-        optionNames.addAll(request.stream()
-            .map(OptionAddRequest::name)
-            .toList());
-        List<String> distinctOptionNames = optionNames.stream().distinct().toList();
-
-        //OptionRequest 리스트에 이름이 같은 서로 다른 옵션이 있거나 기존 옵션들과 겹치는 경우 이름 중복으로 예외
-        if (distinctOptionNames.size() < product.getOptions().size() + request.size()) {
-            throw new OptionAlreadyExistsInProductException();
-        }
-
+        validateOptionNamesDistinct(product.getOptions(), request);
         request.forEach(req -> addOption(product, req));
-
         return optionRepository.findAllByProduct(product);
     }
 
@@ -120,5 +89,40 @@ public class OptionService {
         validateOptionIsInProduct(product, optionId);
         Option option = getOptionById(optionId);
         optionRepository.delete(option);
+    }
+
+    //옵션 이름들이 중복이 없는지 검증
+    private void validateOptionNamesDistinct(List<Option> productOptions, List<OptionAddRequest> request) {
+        //프로덕트 옵션 이름 리스트, 요청 옵션 이름 리스트를 합친 뒤 distinct 처리로 중복을 제거
+        List<String> optionNames = new ArrayList<>(productOptions.stream()
+            .map(Option::getName)
+            .toList());
+        optionNames.addAll(request.stream()
+            .map(OptionAddRequest::name)
+            .toList());
+        List<String> distinctOptionNames = optionNames.stream().distinct().toList();
+
+        //이름 중복을 제거한 리스트 길이가 원래 두 옵션이름 리스트 길이 합보다 줄어들었으면 중복이 존재함
+        if (distinctOptionNames.size() < productOptions.size() + request.size()) {
+            throw new OptionAlreadyExistsInProductException();
+        }
+    }
+
+    // request가 기존 상품 옵션들과 겹치지 않음을 검증하기
+    private void validateOptionIsUniqueInProduct(Product product, String optionName) {
+        Objects.requireNonNullElse(product.getOptions(), new ArrayList<Option>()).stream()
+            .filter(o -> o.getName().equals(optionName))
+            .findAny()
+            .ifPresent(o -> {
+                throw new OptionAlreadyExistsInProductException();
+            });
+    }
+
+    // 옵션이 상품에 포함되어 있음을 검증하기
+    private void validateOptionIsInProduct(Product product, Long optionId) {
+        product.getOptions().stream()
+            .filter(o -> o.getId().equals(optionId))
+            .findAny()
+            .orElseThrow(OptionNotFoundException::new);
     }
 }
