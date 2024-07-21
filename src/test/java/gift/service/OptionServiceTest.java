@@ -126,4 +126,12 @@ class OptionServiceTest {
         assertThrows(IllegalArgumentException.class,
             () -> optionService.deleteOption(option.getId(), product.getId()));
     }
+
+    @Test
+    @Transactional
+    void testSubtractQuantity() {
+        optionService.subtractQuantity(option.getId(), 1L);
+        Option subtractedOption = optionService.findOptionById(option.getId());
+        assertEquals(0L, subtractedOption.getQuantity());
+    }
 }
