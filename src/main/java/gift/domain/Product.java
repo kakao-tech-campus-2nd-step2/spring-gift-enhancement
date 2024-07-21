@@ -3,6 +3,7 @@ package gift.domain;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.hibernate.annotations.BatchSize;
 
 @Entity
@@ -93,12 +94,24 @@ public class Product {
         this.category = category;
     }
 
-    public void addOption(Option option) {
-        options.add(option);
-        option.setProduct(this);
+    public void addOption(Option newOption) {
+        for(Option option: options) {
+            if(option.getName().equals(newOption.getName())){
+                throw new IllegalStateException("옵션에 중복 이름 안됨");
+            }
+        }
+        options.add(newOption);
+        newOption.setProduct(this);
     }
 
     public List<Option> getOptions() {
         return options;
+    }
+
+    public Option getOptionByName(String name) {
+        return options.stream()
+            .filter(option -> option.getName().equals(name))
+            .findFirst()
+            .orElseThrow(() -> new NoSuchElementException("해당 이름의 옵션 없음: " + name));
     }
 }
