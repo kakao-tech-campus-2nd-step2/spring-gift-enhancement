@@ -2,7 +2,9 @@ package gift.service;
 
 import gift.exception.option.DeleteOptionsException;
 import gift.exception.option.DuplicateOptionsException;
+import gift.exception.option.FailedRetryException;
 import gift.exception.option.NotFoundOptionsException;
+import gift.exception.option.OptionsQuantityException;
 import gift.exception.product.NotFoundProductException;
 import gift.model.Options;
 import gift.model.Product;
@@ -11,6 +13,10 @@ import gift.repository.ProductRepository;
 import gift.response.OptionResponse;
 import gift.response.ProductOptionsResponse;
 import java.util.List;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,11 +76,16 @@ public class OptionsService {
     }
 
     @Transactional
-    public Options subtractQuantity(Long id, Integer subQuantity, Long productId) {
+    @Retryable( //@RetryOptions가 @Transactional보다 먼저 적용되게 설정됨
+        retryFor = {ObjectOptimisticLockingFailureException.class},
+        maxAttempts = 100,
+        backoff = @Backoff(100)
+    )
+    public void subtractQuantity(Long id, Integer subQuantity, Long productId) {
         productRepository.findById(productId)
             .orElseThrow(NotFoundProductException::new);
 
-        return optionsRepository.findById(id)
+        optionsRepository.findByIdForUpdate(id)
             .map(options -> {
                 options.subtractQuantity(subQuantity);
                 return options;
