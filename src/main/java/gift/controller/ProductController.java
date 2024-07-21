@@ -25,40 +25,37 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @Description("get all products")
     @GetMapping("/products")
     public ResponseEntity<List<ProductResponseDTO>> getProducts() {
         List<ProductResponseDTO> products = productService.getAllProducts();
-        return ResponseEntity.ok(products);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(products);
     }
 
-    @Description("get product by id")
     @GetMapping("/products/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable("productId") Long productId) {
+    public ResponseEntity<Product> getProduct(@PathVariable("productId") Long productId) {
         Product product = productService.getProduct(productId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(product);
-        //return ResponseEntity.ok(product);
     }
 
-    @Description("add product : id는 자동 추가")
     @PostMapping("/products")
-    public ResponseEntity<String> addProduct(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
+    public ResponseEntity<String> createProduct(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
         productService.saveProduct(productRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Product added successfully");
     }
 
-
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Long productId) {
+    public ResponseEntity<String> deleteProduct(@PathVariable("productId") Long productId) {
+        System.out.println(productId);
         productService.deleteProduct(productId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Product deleted successfully");
     }
 
     @PutMapping("/products/{productId}")
-    public ResponseEntity<String> updateProduct(@PathVariable Long productId, @RequestBody @Valid ProductRequestDTO productRequestDTO) {
+    public ResponseEntity<String> updateProduct(@PathVariable("productId") Long productId, @RequestBody @Valid ProductRequestDTO productRequestDTO) {
         productService.updateProduct(productId, productRequestDTO);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Product updated successfully");

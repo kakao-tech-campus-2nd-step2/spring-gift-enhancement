@@ -11,7 +11,6 @@ public record ProductRequestDTO(
         @Min(value = 1, message = "가격은 1 이상이어야 합니다.")
         int price,
         String imageUrl,
-        String category
+        Long categoryId
 ) {
-
 }

@@ -31,7 +31,7 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Product getProduct(long productId) {
+    public Product getProduct(Long productId) {
         Optional<Product> product = productRepository.findById(productId);
         return product.orElseThrow(() -> new ProductNotFoundException(productId));
     }
@@ -43,32 +43,27 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-
+    @Transactional
     public void saveProduct(ProductRequestDTO productRequestDTO){
-
-        String categoryName = productRequestDTO.category();
-        Optional<Category> existingCategory = categoryRepository.findByName(categoryName);
-        existingCategory.orElseThrow(() -> new CategoryNotFoundException("카테고리를 찾을 수 없습니다. 먼저 카테고리를 등록해주세요.") );
-
-        Product product = toEntity(productRequestDTO, existingCategory.get());
-        productRepository.save(product);
-
+        Long categoryId = productRequestDTO.categoryId();
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+        category.addProduct(productRequestDTO);
     }
 
+
+    @Transactional
     public void deleteProduct(Long productId) {
-        Optional<Product> existingProduct = productRepository.findById(productId);
-        existingProduct.orElseThrow(() -> new ProductException("상품을 찾을 수 없어서 삭제할 수 없습니다."));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
         productRepository.deleteById(productId);
     }
 
     @Transactional
     public void updateProduct(Long productId, ProductRequestDTO productRequestDTO) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductException("상품을 찾을 수 없어서 업데이트 할 수 없습니다."));
-        product.setName(productRequestDTO.name());
-        product.setPrice(productRequestDTO.price());
-        product.setImageUrl(productRequestDTO.imageUrl());
-        productRepository.save(product);
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        product.updateProduct(productRequestDTO);
     }
 
     public static Product toEntity(ProductRequestDTO dto, Category category) {

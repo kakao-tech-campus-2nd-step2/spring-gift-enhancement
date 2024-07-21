@@ -2,6 +2,7 @@ package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import gift.dto.CategoryRequestDTO;
+import gift.dto.ProductRequestDTO;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -95,7 +96,15 @@ public class Category {
         this.color = categoryRequestDTO.color();
         this.description = categoryRequestDTO.description();
         this.imageUrl = categoryRequestDTO.imageUrl();
-
     }
+
+    public void addProduct(ProductRequestDTO productRequestDTO){
+        Product product = new Product(productRequestDTO.name(),
+                productRequestDTO.price(),
+                productRequestDTO.imageUrl(),
+                this);
+        this.products.add(product);
+    }
+
 
 }
