@@ -2,7 +2,7 @@ package gift.main.entity;
 
 import gift.main.Exception.CustomException;
 import gift.main.Exception.ErrorCode;
-import gift.main.dto.OptionQuantityRequest;
+import gift.main.dto.OptionChangeQuantityRequest;
 import gift.main.dto.OptionRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -93,12 +93,10 @@ public class Option {
         return this.quantity;
     }
 
-    public void changeQuantity(OptionQuantityRequest quantityRequest) {
-        if (this.quantity + quantityRequest.quantity() > 100000000) {
+    public void sellOption(OptionChangeQuantityRequest quantityRequest) {
+        if (this.quantity - quantityRequest.quantity() < 0) {
             throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
         }
-        if (this.quantity + quantityRequest.quantity() < 1) {
-            throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
-        }
+        this.quantity -= quantityRequest.quantity();
     }
 }

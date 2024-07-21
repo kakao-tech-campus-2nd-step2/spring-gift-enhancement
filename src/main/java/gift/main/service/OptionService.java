@@ -3,7 +3,7 @@ package gift.main.service;
 import gift.main.Exception.CustomException;
 import gift.main.Exception.ErrorCode;
 import gift.main.dto.OptionListRequest;
-import gift.main.dto.OptionQuantityRequest;
+import gift.main.dto.OptionChangeQuantityRequest;
 import gift.main.dto.OptionRequest;
 import gift.main.dto.OptionResponse;
 import gift.main.entity.Option;
@@ -71,13 +71,10 @@ public class OptionService {
         targetOption.updateValue(optionRequest);
     }
 
-    public void changeOptionQuantity(
-            long optionId,
-            OptionQuantityRequest optionQuantityRequest) {
-
+    @Transactional
+    public void removeOptionQuantity(long optionId, OptionChangeQuantityRequest optionQuantityRequest) {
         Option targetOption = validOption(optionId);
-        targetOption.changeQuantity(optionQuantityRequest);
-
+        targetOption.sellOption(optionQuantityRequest);
     }
 
     private Option validOption(Long optionId) {
