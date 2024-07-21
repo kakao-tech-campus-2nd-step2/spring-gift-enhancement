@@ -9,13 +9,13 @@ import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.UserRepository;
 import gift.repository.WishlistRepository;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class WishlistServiceImpl implements WishlistService {
@@ -52,17 +52,20 @@ public class WishlistServiceImpl implements WishlistService {
         wishlist.setQuantity(quantity);
         wishlist.setPrice(product.getPrice());
 
-        List<Option> optionEntities = options.stream()
+        List<Option> optionEntities = getOptionEntities(options);
+        wishlist.setOptions(optionEntities);
+
+        wishlistRepository.save(wishlist);
+    }
+
+    private List<Option> getOptionEntities(List<Map<String, Object>> options) {
+        return options.stream()
             .map(option -> {
                 Long optionId = Long.parseLong(option.get("id").toString());
                 Option optionEntity = optionRepository.findById(optionId).orElseThrow(() -> new IllegalArgumentException("Invalid option ID: " + optionId));
                 optionEntity.setQuantity(Integer.parseInt(option.get("quantity").toString()));
                 return optionEntity;
             }).collect(Collectors.toList());
-
-        wishlist.setOptions(optionEntities);
-
-        wishlistRepository.save(wishlist);
     }
 
     @Override
