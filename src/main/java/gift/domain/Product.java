@@ -99,4 +99,8 @@ public class Product {
     public List<Option> getOptions() {
         return options;
     }
+
+    public Long getCategoryId() {
+        return category.getId();
+    }
 }

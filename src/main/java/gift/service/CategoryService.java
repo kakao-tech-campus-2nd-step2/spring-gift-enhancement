@@ -30,7 +30,7 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public Category getCategoryById(Long id) {
+    protected Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("No such category"));
     }
@@ -42,10 +42,9 @@ public class CategoryService {
                 throw new DuplicateCategoryNameException();
             });
         Category category = categoryRequest.toEntity();
-        categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
 
-        CategoryResponse response = CategoryResponse.fromEntity(category);
-        return response;
+        return CategoryResponse.fromEntity(savedCategory);
     }
 
     @Transactional
