@@ -32,7 +32,7 @@ public class CategoryService {
     }
 
     public Category deleteCategory(Long id){
-        productRepository.changeCategoryNull(id);
+        productRepository.deleteByCategoryId(id);
         Category deleteCategories = categoryRepository.findCategoryById(id);
         categoryRepository.deleteById(id);
         return deleteCategories;
