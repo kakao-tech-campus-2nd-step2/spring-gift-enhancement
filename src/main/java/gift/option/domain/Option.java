@@ -40,7 +40,7 @@ public class Option {
     private Product product;
 
     // Constructor
-    public Option() {
+    protected Option() {
     }
 
     public Option(String name, Long quantity) {
@@ -59,16 +59,9 @@ public class Option {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Long getQuantity() {
