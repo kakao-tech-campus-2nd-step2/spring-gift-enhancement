@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.dto.ProductDto;
+import gift.dto.ProductResponseDto;
 import gift.dto.ProductUpdateDto;
 import gift.service.ProductService;
 import gift.vo.Product;
@@ -11,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products")
@@ -36,8 +39,12 @@ public class ProductController {
             @RequestParam(defaultValue = "5") int pageSize) {
         Page<Product> allProductsPaged = service.getAllProducts(pageNumber-1, pageSize);
 
+        List<ProductResponseDto> productResponseDtos = allProductsPaged.getContent().stream()
+                .map(ProductResponseDto::toProductResponseDto)
+                .collect(Collectors.toList());
+
         Map<String, Object> response = new HashMap<>();
-        response.put("content", allProductsPaged.getContent());
+        response.put("content", productResponseDtos);
         response.put("totalPages", allProductsPaged.getTotalPages());
         response.put("currentPageNumber", allProductsPaged.getNumber());
 
@@ -50,9 +57,11 @@ public class ProductController {
      * @return 조회한 product
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<ProductResponseDto> getProduct(@PathVariable(value = "id") Long id) {
         Product product = service.getProductById(id);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        ProductResponseDto productResponseDto = ProductResponseDto.toProductResponseDto(product);
+
+        return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
     }
 
     /**
