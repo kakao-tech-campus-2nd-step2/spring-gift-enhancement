@@ -52,7 +52,7 @@ public class OptionService {
             .map(OptionResponse::getName)
             .anyMatch(name -> {
                 if (name.equals(newOptionName)) {
-                    throw new RuntimeException("An option with the name " + newOption.name() +
+                    throw new RuntimeException("An option with the name " + newOptionName +
                         " already exists for this product.");
                 }
                 return false;

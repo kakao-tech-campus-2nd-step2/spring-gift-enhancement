@@ -23,26 +23,25 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryResponse> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
-        List<CategoryResponse> responses = categories.stream()
-            .map(cat -> CategoryResponse.fromEntity(cat))
+
+        return categories.stream()
+            .map(CategoryResponse::fromEntity)
             .toList();
-        return responses;
     }
 
     @Transactional(readOnly = true)
     public Category getCategoryById(Long id) {
-        Category category = categoryRepository.findById(id)
+        return categoryRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("No such category"));
-        return category;
     }
 
     @Transactional
-    public CategoryResponse addCategory(CategoryRequest newCategory) {
-        categoryRepository.findByName(newCategory.getName())
+    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
+        categoryRepository.findByName(categoryRequest.getName())
             .ifPresent(cat -> {
                 throw new DuplicateCategoryNameException();
             });
-        Category category = newCategory.toEntity();
+        Category category = categoryRequest.toEntity();
         categoryRepository.save(category);
 
         CategoryResponse response = CategoryResponse.fromEntity(category);
@@ -50,18 +49,17 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResponse updateCategory(Long id, CategoryRequest newCategory) {
+    public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequst) {
         Category category = categoryRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("No such category"));
-        category.setName(newCategory.getName());
-        category.setColor(newCategory.getColor());
-        category.setImageUrl(newCategory.getImageUrl());
-        category.setDescription(newCategory.getDescription());
+        category.setName(categoryRequst.getName());
+        category.setColor(categoryRequst.getColor());
+        category.setImageUrl(categoryRequst.getImageUrl());
+        category.setDescription(categoryRequst.getDescription());
 
-        categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
 
-        CategoryResponse response = CategoryResponse.fromEntity(category);
-        return response;
+        return CategoryResponse.fromEntity(savedCategory);
     }
 
     @Transactional
@@ -70,6 +68,4 @@ public class CategoryService {
             .orElseThrow(() -> new RuntimeException("No such category"));
         categoryRepository.delete(category);
     }
-
-
 }

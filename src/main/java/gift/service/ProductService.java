@@ -29,7 +29,7 @@ public class ProductService {
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
         List<ProductResponse> response = products.stream()
-                                        .map(p -> ProductResponse.fromEntity(p))
+                                        .map(ProductResponse::fromEntity)
                                         .toList();
         return response;
     }
@@ -39,7 +39,7 @@ public class ProductService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Product> productPage = productRepository.findAll(pageable);
         List<ProductResponse> responses = productPage.stream()
-                                        .map(p -> ProductResponse.fromEntity(p))
+                                        .map(ProductResponse::fromEntity)
                                         .toList();
         return responses;
     }
