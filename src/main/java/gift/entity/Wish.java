@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.exception.BadRequestExceptions.BadRequestException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +32,8 @@ public class Wish {
     }
 
     public Wish(Member member, Product product, Integer quantity) {
+        validateQuantity(quantity);
+
         this.member = member;
         this.product = product;
         this.quantity = quantity;
@@ -54,7 +57,15 @@ public class Wish {
 
     public void incrementQuantity() { this.quantity++; }
 
-    public void changeQuantity(Integer quantity) { this.quantity = quantity; }
+    public void changeQuantity(Integer quantity) {
+        validateQuantity(quantity);
+        this.quantity = quantity;
+    }
+
+    private void validateQuantity(Integer quantity) {
+        if(quantity == null || quantity <= 0)
+            throw new BadRequestException("상품의 개수는 0보다 커야합니다.");
+    }
 
     @Override
     public boolean equals(Object o) {
