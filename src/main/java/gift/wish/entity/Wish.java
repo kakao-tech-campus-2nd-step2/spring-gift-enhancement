@@ -55,7 +55,6 @@ public class Wish {
     }
 
     private Wish(Builder builder) {
-        this.id = builder.id;
         this.quantity = builder.quantity;
         this.user = builder.user;
         this.product = builder.product;
@@ -91,15 +90,9 @@ public class Wish {
 
     public static class Builder {
 
-        private Long id;
         private Integer quantity;
         private User user;
         private Product product;
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public Builder quantity(Integer quantity) {
             this.quantity = quantity;
