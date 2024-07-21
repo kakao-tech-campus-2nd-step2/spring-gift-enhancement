@@ -45,13 +45,14 @@ public class ProductService {
     public Product updateProduct(Long productId, UpdateProductDto productDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 product가 존재하지 않습니다."));
+        productDto.update(product);
         updateProductOptions(product,productDto.getOptions());
         productRepository.save(product);
         return product;
     }
 
     private void updateProductOptions(Product product, List<Option> updateOptions) {
-        List<Option> originOptions = product.getOptions();
+        List<Option> originOptions = new ArrayList<>(product.getOptions());
         Map<Long, Option> originOptionsMap = originOptions.stream()
                 .collect(Collectors.toMap(Option::getId, Function.identity()));
 
@@ -66,6 +67,7 @@ public class ProductService {
 
         product.setOptions(originOptions);
     }
+
 
     public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);

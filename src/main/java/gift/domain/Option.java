@@ -58,4 +58,8 @@ public class Option {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+
+    public void setId(long l) {
+        this.option_id = l;
+    }
 }

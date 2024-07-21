@@ -70,4 +70,8 @@ public class Product {
     public List<Option> getOptions() {
         return options;
     }
+
+    public void setId(long l) {
+        this.product_id = l;
+    }
 }
