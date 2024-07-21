@@ -18,39 +18,30 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-
     @OneToMany(mappedBy = "user")
     List<WishList> wishlist = new ArrayList<>();
 
     public User() {
     }
-
-    public void addWishlist(WishList wishlist){
-        this.wishlist.add(wishlist);
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
-
 
     public int getId() {
         return id;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public User(int id, String email, String password) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
+    public void addWishlist(WishList wishlist){
+        this.wishlist.add(wishlist);
     }
 
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
+    public void deleteWishlist(WishList wishList) {
+        this.wishlist.remove(wishList);
     }
 
     public void deleteWishlist(WishList wishList) {

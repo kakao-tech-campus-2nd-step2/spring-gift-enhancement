@@ -31,7 +31,7 @@ public class MyExceptionHandler {
     @ResponseBody
     @ExceptionHandler(ServerInternalException.class)
     public String exception(ServerInternalException e) {
-        return e.getMessage();
+        return "서버 오류";
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -53,6 +53,12 @@ public class MyExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public String exception(ConstraintViolationException e) {
         return "제약사항 요구 어긋남";
+    }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    @ExceptionHandler(ExpiredJwtException.class)
+    public String exception(ExpiredJwtException e) {
+        return "인증이 잘못됨";
     }
 }
 

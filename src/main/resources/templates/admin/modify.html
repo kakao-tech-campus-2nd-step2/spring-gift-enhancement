@@ -31,7 +31,8 @@
           },
           error: function(xhr, status, error) {
             var errorMessage = xhr.responseText;
-            alert('Error: ' + errorMessage); // 오류 시 alert으로 HTTP 오류 메시지 출력
+            if (status !== "parsererror")
+              alert('Error: ' + errorMessage); // 오류 시 alert으로 HTTP 오류 메시지 출력
             // 오류 발생 시 처리
           }
         });
@@ -53,12 +54,6 @@
   <br>
   <label for="imageUrl">ImageUrl:</label>
   <input type="text" id="imageUrl" name="imageUrl" required>
-  <br>
-  <label for="options">Options:</label>
-  <input type="text" id="options" name="options" required>
-  <br>
-  <label for="Category">CategoryID:</label>
-  <input type="text" id="Category" name="Category" required>
   <br>
   <button type="submit">Update Product</button>
 </form>

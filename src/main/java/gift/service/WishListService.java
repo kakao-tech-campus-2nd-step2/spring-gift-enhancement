@@ -36,47 +36,32 @@ public class WishListService {
     private UserRepository userRepository;
 
     public void add(String token, int productId) {
-        int tokenUserId = jwtUtil.getUserIdFromToken(token);
-        if(!jwtUtil.validateToken(token))
-            throw new UnAuthException("로그인 만료");
-        if(productRepository.findById(productId).isEmpty())
-            throw new NotFoundException("해당 물건이없습니다.");
-        if(userRepository.findById(tokenUserId).isEmpty())
-            throw new UnAuthException("인증이 잘못되었습니다");
-
-        Product product = productRepository.findById(productId).get();
-        User user = userRepository.findById(tokenUserId).get();
-        WishList wishList = new WishList(user,product);
+        User user = getUserFromToken(token);
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException("해당 물건이없습니다."));
         if(wishListRepository.findByUserAndProduct(user,product).isPresent())
             throw new BadRequestException("이미 추가된 물품입니다.");
 
-        wishList.setProduct(product);
-        wishList.setUser(user);
+        WishList wishList = new WishList(user,product);
         wishListRepository.save(wishList);
+    }
 
+    private User getUserFromToken(String token){
+        int tokenUserId = jwtUtil.getUserIdFromToken(token);
+        if(!jwtUtil.validateToken(token))
+            throw new UnAuthException("로그인 만료");
+        return userRepository.findById(tokenUserId).orElseThrow(()-> new UnAuthException("인증이 잘못되었습니다"));
     }
 
     public Page<ShowProductDTO> getWishList(String token, Pageable pageable) throws JsonProcessingException {
-        int tokenUserId = jwtUtil.getUserIdFromToken(token);
-        if(!jwtUtil.validateToken(token))
-            throw new UnAuthException("로그인 만료");
-        return wishListRepository.findByUserId(tokenUserId,pageable);
-
+        User user = getUserFromToken(token);
+        return wishListRepository.findByUserId(user.getId(),pageable);
     }
 
     public void deleteWishList(String token, int productId) {
-        if(!jwtUtil.validateToken(token))
-            throw new UnAuthException("로그인 만료");
-        if(productRepository.findById(productId).isEmpty())
-            throw new NotFoundException("해당 물건이 없음");
+        User user = getUserFromToken(token);
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException("해당 물건이없습니다."));
+        WishList wishlist = wishListRepository.findByUserAndProduct(user,product).orElseThrow(()->new BadRequestException("이미 추가된 물품입니다."));
 
-        int tokenUserId = jwtUtil.getUserIdFromToken(token);
-        Product product = productRepository.findById(productId).get();
-        User user = userRepository.findById(tokenUserId).get();
-        Optional<WishList> wishListOptional = wishListRepository.findByUserAndProduct(user,product);
-        if(wishListOptional.isEmpty())
-            throw new NotFoundException("위시리스트에 없음");
-        WishList wishlist = wishListOptional.get();
         product.deleteWishlist(wishlist);
         user.deleteWishlist(wishlist);
         wishListRepository.deleteById(wishlist.getId());

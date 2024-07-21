@@ -1,8 +1,7 @@
 package gift.controller;
 
-import gift.dto.category.ShowCategoryDTO;
-import gift.dto.product.ProductWithOptionDTO;
-import gift.dto.product.ShowProductDTO;
+
+import gift.dto.category.CategoryDTO;
 import gift.entity.Category;
 import gift.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class CategoryController {
 
     @GetMapping("/api/category")
     @ResponseBody
-    public Page<ShowCategoryDTO> getCategory(@RequestParam(value = "page", defaultValue = "0") int pageNum){
+    public Page<CategoryDTO> getCategory(@RequestParam(value = "page", defaultValue = "0") int pageNum){
         Pageable pageable = PageRequest.of(pageNum, 2, Sort.by(Sort.Direction.ASC, "id"));
         return categoryService.getCategory(pageable);
     }
@@ -34,8 +33,8 @@ public class CategoryController {
 
     @PutMapping("/api/category")
     @ResponseStatus(HttpStatus.OK)
-    public void updateCategory(@RequestBody Category category) {
-        categoryService.update(category);
+    public void updateCategory(@RequestBody CategoryDTO categoryDTO) {
+        categoryService.update(categoryDTO);
     }
 
     @DeleteMapping("/api/category/{id}")

@@ -16,27 +16,14 @@ public class WishList {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
-
-    // getters and setters
-
-
-    public WishList(User user, Product product) {
-        this.user = user;
-        this.product = product;
-    }
-
     public WishList() {
     }
 
-
-    public void setProduct(Product product) {
-        this.product = product;
-        product.addWishlist(this);
-    }
-
-    public void setUser(User user) {
+    public WishList(User user, Product product) {
         this.user = user;
         user.addWishlist(this);
+        this.product = product;
+        product.addWishlist(this);
     }
 
     public Product getProduct() {
@@ -46,7 +33,6 @@ public class WishList {
     public User getUser() {
         return user;
     }
-
 
     public int getId() {
         return id;
