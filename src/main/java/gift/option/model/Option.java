@@ -63,6 +63,10 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public void subtract(Integer quantity) {
+        this.quantity = this.quantity - quantity;
+    }
+
     public static class Validator {
 
         public static void validateName(List<Option> optionList, Option newOption) throws OptionException {
