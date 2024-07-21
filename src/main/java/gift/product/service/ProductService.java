@@ -69,17 +69,10 @@ public class ProductService {
     }
 
     private Product updateById(Long id, ProductDTO productDTO) {
-        Product product = productRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Product id " + id + "가 없습니다."));
-        //update 함수로
-        product.setName(productDTO.getName());
-        product.setPrice(productDTO.getPrice());
-        product.setImageUrl(productDTO.getImageUrl());
-
         Category category = categoryRepository.findById(productDTO.getCategoryId())
             .orElseThrow(() -> new EntityNotFoundException("Category id " + productDTO.getCategoryId() + "가 없습니다."));
-        product.setCategory(category);
-        return product;
+
+        return productRepository.updateProduct(id, productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(), category);
     }
 
     public void deleteProduct(Long id) {
