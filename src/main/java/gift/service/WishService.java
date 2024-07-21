@@ -63,10 +63,10 @@ public class WishService {
     }
 
     @Transactional
-    public WishResponseDto updateWish(String email,
+    public WishResponseDto updateWish(Long productId, String email,
         WishUpdateRequestDto wishUpdateRequestDto) {
-        productService.validateExistProductId(wishUpdateRequestDto.getProductId());
-        Wish wish = validateExistWishProduct(email, wishUpdateRequestDto.getProductId());
+        productService.validateExistProductId(productId);
+        Wish wish = validateExistWishProduct(email, productId);
         wish.setCount(wishUpdateRequestDto.getCount());
         return convertToWishResponseDto(wishRepository.save(wish));
     }

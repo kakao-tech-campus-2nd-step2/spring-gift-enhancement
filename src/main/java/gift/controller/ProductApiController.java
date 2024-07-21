@@ -53,10 +53,11 @@ public class ProductApiController {
     }
 
     //    상품 수정
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDto> updateProduct(
+        @PathVariable Long id,
         @Valid @RequestBody ProductUpdateRequestDto productUpdateRequestDto) {
-        return ResponseEntity.ok(productService.updateProduct(productUpdateRequestDto));
+        return ResponseEntity.ok(productService.updateProduct(id, productUpdateRequestDto));
     }
 
     //    상품 삭제

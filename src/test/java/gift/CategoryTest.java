@@ -61,10 +61,10 @@ class CategoryTest {
         CategoryAddRequestDto addRequestDto = new CategoryAddRequestDto("Original Category");
         CategoryResponseDto addedCategory = categoryController.addCategory(addRequestDto).getBody();
 
-        CategoryUpdateRequestDto updateRequestDto = new CategoryUpdateRequestDto(addedCategory.getId(), "Updated Category");
+        CategoryUpdateRequestDto updateRequestDto = new CategoryUpdateRequestDto("Updated Category");
 
         // When
-        CategoryResponseDto updatedCategory = categoryController.updateCategory(updateRequestDto)
+        CategoryResponseDto updatedCategory = categoryController.updateCategory(1L, updateRequestDto)
             .getBody();
 
         // Then

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,10 +41,11 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<CategoryResponseDto> updateCategory(
+        @PathVariable Long id,
         @Valid @RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto) {
-        return ResponseEntity.ok(categoryService.updateCategory(categoryUpdateRequestDto));
+        return ResponseEntity.ok(categoryService.updateCategory(id, categoryUpdateRequestDto));
     }
 
     @DeleteMapping("/{id}")

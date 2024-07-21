@@ -11,19 +11,14 @@ public class WishUpdateRequestDto {
     @Max(value = 100)
     private Integer count;
 
-    @NotNull
-    private Long productId;
-
     public Integer getCount() {
         return count;
     }
 
-    public Long getProductId() {
-        return productId;
+    public WishUpdateRequestDto() {
     }
 
-    public WishUpdateRequestDto(Integer count, Long productId) {
+    public WishUpdateRequestDto(Integer count) {
         this.count = count;
-        this.productId = productId;
     }
 }

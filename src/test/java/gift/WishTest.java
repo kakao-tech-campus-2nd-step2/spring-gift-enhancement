@@ -1,5 +1,6 @@
 package gift;
 
+import gift.domain.model.entity.Category;
 import gift.domain.model.entity.Product;
 import gift.domain.model.entity.User;
 import gift.domain.model.entity.Wish;
@@ -26,13 +27,16 @@ public class WishTest {
     private WishRepository wishRepository;
 
     private User user;
+    private Category category;
     private Product product;
 
     @BeforeEach
     public void setUp() {
         user = new User("test@example.com", "password123");
-        product = new Product("Test Product", 1000L, "http://example.com/image.jpg");
+        category = new Category("test Category");
+        product = new Product("Test Product", 1000L, "http://example.com/image.jpg", category);
         entityManager.persist(user);
+        entityManager.persist(category);
         entityManager.persist(product);
         entityManager.flush();
     }

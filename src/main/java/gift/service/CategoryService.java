@@ -33,12 +33,12 @@ public class CategoryService {
         return CategoryResponseDto.toDto(savedCategory);
     }
 
-    public CategoryResponseDto updateCategory(CategoryUpdateRequestDto categoryUpdateRequestDto) {
-        validateCategoryId(categoryUpdateRequestDto.getId());
+    public CategoryResponseDto updateCategory(Long id, CategoryUpdateRequestDto categoryUpdateRequestDto) {
+        validateCategoryId(id);
         validateCategoryName(categoryUpdateRequestDto.getName());
 
         Category category = categoryUpdateRequestDto.toEntity();
-        category.update(categoryUpdateRequestDto.getId(), categoryUpdateRequestDto.getName());
+        category.update(id, categoryUpdateRequestDto.getName());
         Category savedCategory = categoryRepository.save(category);
 
         return CategoryResponseDto.toDto(savedCategory);

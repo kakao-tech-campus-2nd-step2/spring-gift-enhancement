@@ -1,7 +1,8 @@
 package gift.controller;
 
-import gift.domain.model.dto.OptionRequestDto;
+import gift.domain.model.dto.OptionAddRequestDto;
 import gift.domain.model.dto.OptionResponseDto;
+import gift.domain.model.dto.OptionUpdateRequestDto;
 import gift.service.OptionService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -36,15 +37,16 @@ public class OptionController {
     @PostMapping
     public ResponseEntity<OptionResponseDto> addOption(
         @PathVariable Long productId,
-        @Valid @RequestBody OptionRequestDto optionRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(OptionService.addOption(productId, optionRequestDto));
+        @Valid @RequestBody OptionAddRequestDto optionAddRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(OptionService.addOption(productId,
+            optionAddRequestDto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<OptionResponseDto> updateOption(
         @PathVariable Long id,
-        @Valid @RequestBody OptionRequestDto optionRequestDto) {
-        return ResponseEntity.ok(OptionService.updateOption(id, optionRequestDto));
+        @Valid @RequestBody OptionUpdateRequestDto optionUpdateRequestDto) {
+        return ResponseEntity.ok(OptionService.updateOption(id, optionUpdateRequestDto));
     }
 
     @DeleteMapping("/{id}")
