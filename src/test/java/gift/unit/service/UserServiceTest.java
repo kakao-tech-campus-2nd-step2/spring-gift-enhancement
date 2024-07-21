@@ -77,7 +77,7 @@ class UserServiceTest {
         //given
         UserRegisterRequest request = new UserRegisterRequest("user1@example.com", "password1");
         given(userRepository.findByEmail(request.email())).willReturn(
-            Optional.of(User.builder().build()));
+            Optional.of(User.builder().email("user1@example.com").build()));
 
         //when&then
         assertThatThrownBy(() -> userService.registerUser(request))

@@ -1,5 +1,7 @@
 package gift.wish.entity;
 
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.product.entity.Product;
 import gift.user.entity.User;
 import gift.wish.dto.request.UpdateWishRequest;
@@ -44,7 +46,7 @@ public class Wish {
 
     public Wish(User user, Product product, int quantity) {
         if (isQuantityZero()) {
-            throw new IllegalArgumentException("수량은 0보다 큰 수이어야 합니다.");
+            throw new CustomException(ErrorCode.INVALID_WISH_QUANTITY);
         }
         this.user = user;
         this.product = product;

@@ -29,7 +29,8 @@ public enum ErrorCode {
     INVALID_EMAIL(HttpStatus.BAD_REQUEST, "유효하지 않은 이메일입니다."),
 
     /* Wish 관련 예외 */
-    WISH_NOT_FOUND(HttpStatus.NOT_FOUND, "위시리스트를 찾을 수 없습니다.");
+    WISH_NOT_FOUND(HttpStatus.NOT_FOUND, "위시리스트를 찾을 수 없습니다."),
+    INVALID_WISH_QUANTITY(HttpStatus.BAD_REQUEST, "수량은 0보다 큰 수이어야 합니다.");
 
 
     private final HttpStatusCode status;
