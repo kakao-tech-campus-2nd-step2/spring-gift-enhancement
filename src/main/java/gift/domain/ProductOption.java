@@ -1,5 +1,7 @@
 package gift.domain;
 
+import static gift.domain.validator.ProductOptionValidator.validatedRequestQuantity;
+
 import gift.domain.base.BaseEntity;
 import gift.domain.base.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -65,6 +67,7 @@ public class ProductOption extends BaseEntity {
     }
 
     public ProductOption subtractQuantity(Integer quantity) {
+        validatedRequestQuantity(stock, quantity);
         this.stock -= quantity;
         return this;
     }
