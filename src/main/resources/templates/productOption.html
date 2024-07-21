@@ -48,21 +48,7 @@
         margin-top: 20px;
     }
   </style>
-  <script>
-    function updateTotalPrice() {
-        const productPrice = parseFloat(document.getElementById('product-price').innerText);
-        let totalPrice = productPrice;
-        document.querySelectorAll('.option-row').forEach((row) => {
-            const quantity = parseFloat(row.querySelector('.quantity').value);
-            const price = parseFloat(row.querySelector('.option-price').innerText);
-            const isChecked = row.querySelector('input[name="optionSelect"]').checked;
-            if (isChecked) {
-                totalPrice += price * quantity;
-            }
-        });
-        document.getElementById('total-price').innerText = Math.round(totalPrice);
-    }
-  </script>
+  <script src="/js/productOption.js"></script>
 </head>
 <body>
 <div class="container">
@@ -79,24 +65,30 @@
   </div>
 </div>
 <div class="total-price">
-  <h2>총 가격: <span id="total-price" th:text="${product.price}">가격</span></h2>
+  <h2>총 가격: <span id="total-price">0</span></h2>
 </div>
 <h2>제품 옵션</h2>
 <table>
   <thead>
   <tr>
     <th>이름</th>
-    <th>수량</th>
     <th>가격</th>
+    <th>수량</th>
     <th>선택</th>
   </tr>
   </thead>
   <tbody>
-  <tr class="option-row" th:each="option : ${options}">
+  <tr class="option-row" th:each="option, iterStat : ${options}" th:data-option-id="${option.id}">
     <td th:text="${option.name}">옵션 이름</td>
-    <td><input type="number" min="1" th:value="1" class="quantity" style="width: 60px;" onchange="updateTotalPrice()"/></td>
     <td class="option-price" th:text="${option.price}">가격</td>
-    <td><input type="checkbox" name="optionSelect" onclick="updateTotalPrice()"></td>
+    <td>
+      <select class="option-quantity" th:attr="disabled=${iterStat.index == 0}" onchange="updateTotalPrice()">
+        <option th:each="i : ${#numbers.sequence(1, 10)}" th:value="${i}" th:text="${i}"></option>
+      </select>
+    </td>
+    <td>
+      <input type="checkbox" name="optionSelect" th:checked="${iterStat.index == 0}" th:attr="disabled=${iterStat.index == 0}" onclick="updateTotalPrice()">
+    </td>
   </tr>
   </tbody>
 </table>

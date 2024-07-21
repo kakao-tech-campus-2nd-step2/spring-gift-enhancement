@@ -42,7 +42,7 @@ public class Product {
         this.category = category;
     }
 
-    //getter
+
     public Long getId() {
         return id;
     }
