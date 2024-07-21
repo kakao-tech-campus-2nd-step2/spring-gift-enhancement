@@ -45,7 +45,7 @@ public class Product {
     private List<Option> options = new ArrayList<>();
 
     private static final String PRODUCT_NAME_REGEXP = "[a-zA-z0-9ㄱ-ㅎㅏ-ㅣ가-힣()\\[\\]+\\-&/_\\s]+";
-    private static final String IMAGE_URL_REGEXP = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#()?&//=]*)";
+    private static final String IMAGE_URL_REGEXP = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\[\\]\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\[\\]\\+.~#()?&//=]*)";
 
     @PrePersist
     public void prePersist() {
