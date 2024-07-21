@@ -21,14 +21,9 @@ public class Option {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "상품 이름을 비우거나 공백으로 설정할 수 없습니다")
-    @Size(max=50,message = "옵션명은 공백 포함하여 최대 50자까지 입력할 수 있습니다")
-    @Pattern(regexp = "^[\\w\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_가-힣]*$", message = "특수 문자는 ( ), [ ], +, -, &, /, _ 만 사용할 수 있습니다.")
     @Column(name = "name")
     private String name;
 
-    @Min(value = 1, message = "옵션 수량은 최소 1 이상이어야 합니다.")
-    @Max(value = 99999999, message = "옵션 수량은 최대 1억 미만이어야 합니다.")
     @Column(name = "quantity")
     private int quantity;
 
@@ -60,7 +55,27 @@ public class Option {
         return product;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
+        product.setOptions(this);
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void removeProduct() {
+        if (this.product != null) {
+            this.product.getOptions().remove(this);
+            this.product = null;
+        }
     }
 }

@@ -96,4 +96,13 @@ public class Product {
     }
 
     public void setOptions(Option option){this.options.add(option);}
+
+    public void deleteOption(Long optionId){
+        Option option = options.stream()
+            .filter(o -> o.getId().equals(optionId))
+            .findAny()
+            .get();
+        option.removeProduct();
+        options.remove(option);
+    }
 }
