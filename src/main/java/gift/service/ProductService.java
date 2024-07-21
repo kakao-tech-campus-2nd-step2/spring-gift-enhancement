@@ -38,7 +38,6 @@ public class ProductService {
             productDTO.imageUrl(), category);
         Option option = new Option("[기본 옵션] 추후 수정바랍니다", 1L,  product);
         Product createdProduct = productRepository.save(product);
-
         return convertToDTO(createdProduct);
     }
 

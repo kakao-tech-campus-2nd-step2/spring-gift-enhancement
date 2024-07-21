@@ -28,6 +28,7 @@
 - [x] Option Entity 와 DTO 모델 생성 / Product Entity 와 연관관계 매핑
 - [x] Option Entity 에 대한 Repository, Service, Controller 구현
 - [x] 관리자 화면에 옵션을 지정 / 수정할 수 있도록 구현 (선택사항)
+
 - [ ] 테스트 코드 작성
 ## step 3
 ### 기능 요구 사항
