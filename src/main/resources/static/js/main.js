@@ -102,3 +102,26 @@ function addOption(productId) {
         alert('Error: ' + error.message);
     });
 }
+
+function deleteOption(btn) {
+    if(confirm("해당 옵션을 삭제하시겠습니까?")) {
+        fetch(`/api/products/${btn.dataset.productId}/options/${btn.dataset.optionId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || '옵션을 처리하지 못하였습니다.');
+                });
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error.message);
+        });
+    }
+}
