@@ -93,3 +93,19 @@
   - 옵션 Repository 테스트
   - 옵션 Service 테스트
 </details>
+
+---
+
+<details>
+<summary><strong>3단계 - 옵션 수량 차감</strong></summary>
+
+- Option에 수량 차감 메서드 작성
+  - 검증 메서드 추가
+    - NotNull
+    - 차감할 수량은 0보다 커야 한다.
+    - 현재 수량보다 많으면 안된다.
+- OptionService에 수량 차감 메서드 작성
+- OptionTest 추가
+- OptionServiceTest 추가
+
+</details>
