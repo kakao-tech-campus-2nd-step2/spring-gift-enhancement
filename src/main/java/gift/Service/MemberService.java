@@ -2,7 +2,6 @@ package gift.Service;
 
 import gift.Model.Member;
 import gift.Repository.MemberRepository;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service

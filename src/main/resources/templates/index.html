@@ -53,7 +53,7 @@
       <td th:text="${product.name}"></td>
       <td th:text="${product.price}"></td>
       <td th:text="${product.imageUrl}"></td>
-      <td th:text="${product.category.name}"></td>
+      <td th:text="${product.category == null  ? 'null' : product.category.name}"></td>
       <td>
         <button class="btn btn-warning" th:onclick="'location.href=\'/api/products/update/' + ${product.id} + '\';'">Update</button>
       </td>

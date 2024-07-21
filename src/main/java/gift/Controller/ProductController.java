@@ -2,11 +2,14 @@ package gift.Controller;
 
 
 import gift.Model.Category;
+import gift.Model.Option;
 import gift.Model.Product;
 import gift.Service.ProductService;
 
 import jakarta.validation.Valid;
 
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +40,7 @@ public class ProductController {
 
     @GetMapping("/api/products/add")
     public String newProductForm(Model model) {
-        model.addAttribute("product", new Product(0L,"",0,"",new Category(0L,"","","","")));
+        model.addAttribute("product", new Product(0L,"",0,"",new Category(0L,"","","","",null),null));
         model.addAttribute("categories", productService.getAllCategory());
         return "post";
     }

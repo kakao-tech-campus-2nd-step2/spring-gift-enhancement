@@ -8,7 +8,6 @@ import gift.Service.MemberService;
 import jakarta.validation.Valid;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
