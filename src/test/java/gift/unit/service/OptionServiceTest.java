@@ -287,7 +287,6 @@ public class OptionServiceTest {
 
     private Product createProduct(String name) {
         return Product.builder()
-            .id(1L)
             .name(name)
             .imageUrl("image")
             .category(new Category("category"))

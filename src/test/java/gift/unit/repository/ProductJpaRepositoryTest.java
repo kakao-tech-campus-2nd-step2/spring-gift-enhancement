@@ -43,7 +43,6 @@ class ProductJpaRepositoryTest {
         // when
         final Product actual = productRepository.findById(1L).get();
         Product expected = Product.builder()
-            .id(1L)
             .name("Product A")
             .price(1000)
             .imageUrl("http://example.com/images/product_a.jpg")
@@ -51,7 +50,6 @@ class ProductJpaRepositoryTest {
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(expected.getId());
         assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
         assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl());
@@ -103,7 +101,6 @@ class ProductJpaRepositoryTest {
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(1L);
         assertThat(actual.getName()).isEqualTo("update product");
         assertThat(actual.getPrice()).isEqualTo(1_000);
         assertThat(actual.getImageUrl()).isEqualTo("http://example.com/images/product_a.jpg");

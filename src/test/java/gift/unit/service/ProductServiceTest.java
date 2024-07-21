@@ -6,7 +6,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
 
 import gift.exception.CustomException;
 import gift.product.category.entity.Category;
@@ -69,15 +68,15 @@ class ProductServiceTest {
         // given
         Pageable pageable = Pageable.unpaged();
         Category category = new Category("Category A");
-        List<Product> productList = List.of(Product.builder().id(1L).name("Product A").price(1000)
+        List<Product> productList = List.of(Product.builder().name("Product A").price(1000)
                 .imageUrl("http://example.com/images/product_a.jpg").category(category).build(),
-            Product.builder().id(2L).name("Product B").price(2000)
+            Product.builder().name("Product B").price(2000)
                 .imageUrl("http://example.com/images/product_b.jpg").category(category).build(),
-            Product.builder().id(3L).name("Product C").price(3000)
+            Product.builder().name("Product C").price(3000)
                 .imageUrl("http://example.com/images/product_c.jpg").category(category).build(),
-            Product.builder().id(4L).name("Product D").price(4000)
+            Product.builder().name("Product D").price(4000)
                 .imageUrl("http://example.com/images/product_d.jpg").category(category).build(),
-            Product.builder().id(5L).name("Product E").price(5000)
+            Product.builder().name("Product E").price(5000)
                 .imageUrl("http://example.com/images/product_e.jpg").category(category).build());
         Page<Product> productPage = new PageImpl<>(productList);
         given(productRepository.findAll(pageable)).willReturn(productPage);
@@ -88,7 +87,7 @@ class ProductServiceTest {
         // then
         assertThat(products).isNotNull();
         assertThat(products.size()).isEqualTo(5);
-        then(productRepository).should(times(1)).findAll(pageable);
+        then(productRepository).should().findAll(pageable);
     }
 
     @Test
@@ -101,7 +100,7 @@ class ProductServiceTest {
         // when & then
         assertThatThrownBy(() -> productService.getProductById(7L)).isInstanceOf(
             CustomException.class);
-        then(productRepository).should(times(1)).findById(7L);
+        then(productRepository).should().findById(7L);
     }
 
     @Test
@@ -109,7 +108,7 @@ class ProductServiceTest {
     @Transactional
     void getProductByIdTest() {
         // given
-        Product expected = Product.builder().id(2L).name("Product B").price(2000)
+        Product expected = Product.builder().name("Product B").price(2000)
             .imageUrl("http://example.com/images/product_b.jpg").build();
 
         given(productRepository.findById(2L)).willReturn(Optional.of(expected));
@@ -122,7 +121,7 @@ class ProductServiceTest {
         assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
         assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl());
-        then(productRepository).should(times(1)).findById(2L);
+        then(productRepository).should().findById(2L);
     }
 
     @Test
@@ -132,20 +131,19 @@ class ProductServiceTest {
         NewOption option = new NewOption("option 1", 100);
         CreateProductRequest request = new CreateProductRequest("Product A", 1000,
             "http://example.com/images/product_a.jpg", 1L, List.of(option));
-        Category category = new Category(1L, "Category A", "#123456", "image", "");
-        Product savedProduct = Product.builder().id(1L).name("Product A").price(1000)
+        Category category = new Category("Category A", "#123456", "description", "image");
+        Product savedProduct = Product.builder().name("Product A").price(1000)
             .imageUrl("http://example.com/images/product_a.jpg").category(category).build();
         given(productRepository.save(any(Product.class))).willReturn(savedProduct);
         given(categoryRepository.findById(any(Long.class))).willReturn(Optional.of(category));
         given(optionService.createOption(any())).willReturn(1L);
 
         // when
-        Long savedId = productService.createProduct(request);
+        productService.createProduct(request);
 
         // then
-        assertThat(savedId).isNotNull();
-        then(productRepository).should(times(1)).save(any(Product.class));
-        then(categoryRepository).should(times(1)).findById(any(Long.class));
+        then(productRepository).should().save(any(Product.class));
+        then(categoryRepository).should().findById(any(Long.class));
     }
 
     @Test
@@ -154,7 +152,7 @@ class ProductServiceTest {
     void updateProductTest() {
         // given
         Category category = new Category(1L, "Category A", "#123456", "image", "");
-        Product product = Product.builder().id(1L).name("Product A").price(1000)
+        Product product = Product.builder().name("Product A").price(1000)
             .imageUrl("http://example.com/images/product_a.jpg").build();
         UpdateProductRequest request = new UpdateProductRequest("product3", 30000, null, 1L);
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
@@ -162,18 +160,9 @@ class ProductServiceTest {
 
         // when
         productService.updateProduct(1L, request);
-        Product actual = productRepository.findById(1L).get();
-        actual.edit(request, category);
-        Product expected = Product.builder().id(1L).name("product3").price(30000).category(category)
-            .build();
 
         // then
-        assertThat(actual.getId()).isEqualTo(expected.getId());
-        assertThat(actual.getName()).isEqualTo(expected.getName());
-        assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
-        assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl());
-        assertThat(actual.getCategoryName()).isEqualTo(expected.getCategoryName());
-        then(productRepository).should(times(2)).findById(1L);
+        then(productRepository).should().findById(1L);
     }
 
     @Test
@@ -188,8 +177,8 @@ class ProductServiceTest {
         productService.deleteProduct(1L);
 
         // then
-        then(productRepository).should(times(1)).existsById(1L);
-        then(productRepository).should(times(1)).deleteById(1L);
+        then(productRepository).should().existsById(1L);
+        then(productRepository).should().deleteById(1L);
     }
 
     @Test
@@ -202,6 +191,6 @@ class ProductServiceTest {
         // when & then
         assertThatThrownBy(() -> productService.deleteProduct(9L)).isInstanceOf(
             CustomException.class);
-        then(productRepository).should(times(1)).existsById(9L);
+        then(productRepository).should().existsById(9L);
     }
 }

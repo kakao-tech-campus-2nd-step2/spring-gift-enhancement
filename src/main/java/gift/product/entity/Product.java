@@ -49,7 +49,6 @@ public class Product {
     }
 
     private Product(Builder builder) {
-        this.id = builder.id;
         this.name = builder.name;
         this.price = builder.price;
         this.imageUrl = builder.imageUrl;
@@ -116,17 +115,11 @@ public class Product {
 
     public static class Builder {
 
-        private Long id;
         private String name;
         private Integer price;
         private String imageUrl;
         private Category category;
         private Set<Option> options = new HashSet<>();
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public Builder name(String name) {
             this.name = name;

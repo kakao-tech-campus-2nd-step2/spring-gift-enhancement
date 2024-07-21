@@ -38,13 +38,11 @@ class WishRepositoryTest {
     void findByUserId() {
         // given
         Product product1 = Product.builder()
-            .id(1L)
             .name("Product A")
             .price(1000)
             .imageUrl("http://example.com/images/product_a.jpg")
             .build();
         Product product3 = Product.builder()
-            .id(3L)
             .name("Product C")
             .price(3000)
             .imageUrl("http://example.com/images/product_c.jpg")
@@ -58,14 +56,12 @@ class WishRepositoryTest {
         assertThat(actual.size()).isEqualTo(2);
 
         // product1, quantity: 2
-        assertThat(actual.getFirst().getProduct().getId()).isEqualTo(product1.getId());
         assertThat(actual.getFirst().getProduct().getName()).isEqualTo(product1.getName());
         assertThat(actual.getFirst().getProduct().getPrice()).isEqualTo(product1.getPrice());
         assertThat(actual.getFirst().getProduct().getImageUrl()).isEqualTo(product1.getImageUrl());
         assertThat(actual.getFirst().getQuantity()).isEqualTo(2);
 
         // product3, quantity: 1
-        assertThat(actual.get(1).getProduct().getId()).isEqualTo(product3.getId());
         assertThat(actual.get(1).getProduct().getName()).isEqualTo(product3.getName());
         assertThat(actual.get(1).getProduct().getPrice()).isEqualTo(product3.getPrice());
         assertThat(actual.get(1).getProduct().getImageUrl()).isEqualTo(product3.getImageUrl());
