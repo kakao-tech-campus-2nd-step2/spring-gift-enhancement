@@ -28,6 +28,10 @@ public class Menu {
     @OneToMany
     private Set<Option> options;
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public Menu() {
     }
 

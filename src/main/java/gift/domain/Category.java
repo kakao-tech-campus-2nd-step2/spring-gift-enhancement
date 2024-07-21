@@ -18,6 +18,10 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Menu> menus;
 
+    public List<Menu> getMenus(){
+        return this.menus;
+    }
+
     public Category(Long id, String name, LinkedList<Menu> menus) {
         this.id = id;
         this.name = name;
