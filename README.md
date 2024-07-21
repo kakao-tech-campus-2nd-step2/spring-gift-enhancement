@@ -39,3 +39,8 @@
   - [x] 불필요한 setter 최소화
   - [x] mockito의 verify 기능을 활용하여 deleteCategoryTest() 구현
   - [x] addCategoryController 수정
+
+# step3
+- [x] 상품 옵션의 숫자를 지정된 숫자 만큼 빼는 기능
+- [x] 테스트 구현
+
