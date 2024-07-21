@@ -42,9 +42,6 @@ public class Product {
     )
     private Category category;
 
-    @OneToMany(mappedBy = "product")
-    private List<Option> options = new ArrayList<>();
-  
     protected Product() {
     }
 
@@ -54,6 +51,7 @@ public class Product {
         this.imageUrl = imageUrl;
         this.category = category;
     }
+
 
     public Long getId() {
         return id;
@@ -89,9 +87,5 @@ public class Product {
 
     public Category getCategory() {
         return category;
-    }
-
-    public List<Option> getOptions() {
-        return options;
     }
 }
