@@ -144,7 +144,7 @@ class OptionServiceTest {
         Long optionId = 1L;
         Option option = new Option("TEST_OPTION", 100);
 
-        given(optionRepository.findById(optionId)).willReturn(Optional.of(option));
+        given(optionRepository.findOptionByIdForUpdate(optionId)).willReturn(Optional.of(option));
 
         //expected
         assertThatThrownBy(() -> optionService.updateOptionQuantity(optionId, 101))
@@ -160,7 +160,7 @@ class OptionServiceTest {
         Long optionId = 1L;
         Option option = new Option("TEST_OPTION", 100);
 
-        given(optionRepository.findById(optionId)).willReturn(Optional.of(option));
+        given(optionRepository.findOptionByIdForUpdate(optionId)).willReturn(Optional.of(option));
 
         //when
         OptionResponseDto optionResponseDto = optionService.updateOptionQuantity(optionId, 50);
@@ -172,6 +172,7 @@ class OptionServiceTest {
         );
 
     }
+
 
 
 
