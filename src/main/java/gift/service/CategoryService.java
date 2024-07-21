@@ -26,14 +26,14 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryResponseDTO getOneCategory(Long categoryId){
         Category category = getCategory(categoryId);
-        return CategoryResponseDTO.of(category);
+        return CategoryResponseDTO.from(category);
     }
 
     @Transactional(readOnly = true)
     public List<CategoryResponseDTO> getAllCategories(){
         return jpaCategoryRepository.findAll()
             .stream()
-            .map(CategoryResponseDTO::of)
+            .map(CategoryResponseDTO::from)
             .toList();
     }
 

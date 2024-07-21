@@ -7,11 +7,11 @@ public record WishResponseDTO(
     Long userId,
     ProductResponseDTO productResponseDTO,
     Integer count) {
-    public static WishResponseDTO of(Wish wish) {
+    public static WishResponseDTO from(Wish wish) {
         return new WishResponseDTO(
             wish.getId(),
             wish.getUser().getId(),
-            ProductResponseDTO.of(wish.getProduct()),
+            ProductResponseDTO.from(wish.getProduct()),
             wish.getCount());
     }
 }

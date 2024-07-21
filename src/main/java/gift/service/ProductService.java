@@ -38,7 +38,7 @@ public class ProductService {
 
         return jpaProductRepository.findAll()
             .stream()
-            .map(ProductResponseDTO::of)
+            .map(ProductResponseDTO::from)
             .toList();
     }
 
@@ -48,14 +48,14 @@ public class ProductService {
 
         return jpaProductRepository.findAll(pageable)
             .stream()
-            .map(ProductResponseDTO::of)
+            .map(ProductResponseDTO::from)
             .toList();
     }
 
     @Transactional(readOnly = true)
     public ProductResponseDTO getOneProduct(Long productId) {
         Product product = getProduct(productId);
-        return ProductResponseDTO.of(product);
+        return ProductResponseDTO.from(product);
     }
 
     public Long addProduct(ProductCreateRequestDTO productCreateRequestDTO) {
