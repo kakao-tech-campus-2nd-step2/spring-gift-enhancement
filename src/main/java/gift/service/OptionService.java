@@ -3,6 +3,7 @@ package gift.service;
 import gift.exception.ProductNotFoundException;
 import gift.model.Option;
 import gift.repository.OptionRepository;
+import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,10 @@ public class OptionService {
 
     @Autowired
     private final OptionRepository optionRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
 
     public OptionService(OptionRepository optionRepository) {
         this.optionRepository = optionRepository;
@@ -53,5 +58,18 @@ public class OptionService {
     public boolean existsOptionById(Long id) {
         return optionRepository.existsById(id);
     }
+
+    public Option subtractOption(Option option, Long subtractQuantities) {
+        if (subtractQuantities < 0) {
+            throw new IllegalArgumentException("Subtract quantities는 양수여야 합니다!");
+        }
+        if (option.getQuantity() < subtractQuantities) {
+            throw new IllegalArgumentException("감소시키기에 수량이 충분하지 않습니다! ");
+        }
+
+        option.setQuantity(option.getQuantity() - subtractQuantities);
+        return optionRepository.save(option);
+    }
+
 
 }
