@@ -1,35 +1,41 @@
-INSERT INTO Product (name, price, image_url)
-VALUES ('aaa', 1000, 'aaa.img');
+INSERT INTO CATEGORY (name)
+VALUES ('교환권');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('bbb', 5000, 'bbb.img');
+INSERT INTO CATEGORY (name)
+VALUES ('상품권');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('ccc', 8000, 'ccc.img');
+INSERT INTO CATEGORY (name)
+VALUES ('뷰티');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('ddd', 1000, 'aaa.img');
+INSERT INTO CATEGORY (name)
+VALUES ('패션');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('eee', 5000, 'bbb.img');
+INSERT INTO CATEGORY (name)
+VALUES ('식품');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('fff', 8000, 'ccc.img');
+INSERT INTO CATEGORY (name)
+VALUES ('리빙/도서');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('ggg', 1000, 'aaa.img');
+INSERT INTO CATEGORY (name)
+VALUES ('레저/스포츠');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('hhh', 5000, 'bbb.img');
+INSERT INTO CATEGORY (name)
+VALUES ('아티스트/캐릭터');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('iii', 8000, 'ccc.img');
+INSERT INTO CATEGORY (name)
+VALUES ('유아동/반려');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('jjj', 1000, 'aaa.img');
+INSERT INTO CATEGORY (name)
+VALUES ('디지털/가전');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('kkk', 5000, 'bbb.img');
+INSERT INTO CATEGORY (name)
+VALUES ('카카오프렌즈');
 
-INSERT INTO Product (name, price, image_url)
-VALUES ('lll', 8000, 'ccc.img');
+INSERT INTO CATEGORY (name)
+VALUES ('트렌드선물');
+
+INSERT INTO CATEGORY (name)
+VALUES ('백화점');
+
+INSERT INTO CATEGORY (name)
+VALUES ('NONE');

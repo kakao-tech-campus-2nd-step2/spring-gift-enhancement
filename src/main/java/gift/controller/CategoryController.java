@@ -22,7 +22,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getAllCategory(){
+    public List<CategoryDTO> getAllCategory(){
         return categoryService.getAllCategories();
     }
 }
