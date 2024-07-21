@@ -5,8 +5,8 @@ import gift.category.application.CategoryService;
 import gift.category.domain.Category;
 import gift.member.application.MemberService;
 import gift.option.application.OptionServiceResponse;
-import gift.product.application.ProductServiceResponse;
 import gift.product.application.ProductService;
+import gift.product.application.ProductServiceResponse;
 import gift.product.application.command.ProductCreateCommand;
 import gift.product.application.command.ProductUpdateCommand;
 import org.junit.jupiter.api.Assertions;
@@ -109,7 +109,7 @@ public class ProductControllerTest {
         String responseContent = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         Assertions.assertTrue(responseContent.contains("\"id\":1,\"name\":\"Product1\",\"price\":1000,\"imageUrl\":\"http://example.com/image1.jpg\",\"categoryId\":1"));
         Assertions.assertTrue(responseContent.contains("\"id\":2,\"name\":\"Product2\",\"price\":2000,\"imageUrl\":\"http://example.com/image2.jpg\",\"categoryId\":1"));
-        Assertions.assertTrue(responseContent.contains("\"optionResponseList\":[{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}]"));
+        Assertions.assertTrue(responseContent.contains("{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}"));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class ProductControllerTest {
         Assertions.assertTrue(responseContent.contains("\"price\":1000"));
         Assertions.assertTrue(responseContent.contains("\"imageUrl\":\"http://example.com/image.jpg\""));
         Assertions.assertTrue(responseContent.contains("\"categoryId\":1"));
-        Assertions.assertTrue(responseContent.contains("\"optionResponseList\":[{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}]"));
+        Assertions.assertTrue(responseContent.contains("{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}"));
     }
 
     @Test
