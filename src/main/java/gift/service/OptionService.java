@@ -56,7 +56,7 @@ public class OptionService {
             .orElseThrow(() -> new NotFoundException("Option not found"));
     }
 
-    //카테고리 추가 기능
+    //옵션 추가 기능
     @Transactional
     public void addOption(Long productId, Option option) {
         validateOptionUniqueness(option, null);
@@ -69,7 +69,7 @@ public class OptionService {
         optionRepository.save(optionEntity);
     }
 
-    //카테고리 수정 기능
+    //옵션 수정 기능
     @Transactional
     public void updateOption(Long id, Option option) {
         validateOptionUniqueness(option, id);
@@ -80,7 +80,19 @@ public class OptionService {
         optionRepository.save(optionEntity);
     }
 
-    //카테고리 삭제 기능
+    //옵션 수량 감소 기능
+    @Transactional
+    public void subQuantity(Long id, Long quantity) {
+        OptionEntity optionEntity = optionRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Option not found"));
+        if(optionEntity.getQuantity() < quantity) {
+            throw new IllegalArgumentException("옵션 수량이 줄이고자 하는 수량보다 적습니다.");
+        }
+        optionEntity.subtract(quantity);
+        optionRepository.save(optionEntity);
+    }
+
+    //옵션 삭제 기능
     @Transactional
     public void deleteOption(Long id) {
         optionRepository.deleteById(id);
