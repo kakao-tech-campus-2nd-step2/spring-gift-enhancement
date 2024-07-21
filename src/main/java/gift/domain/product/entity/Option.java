@@ -1,7 +1,6 @@
-package gift.domain.wishlist.entity;
+package gift.domain.product.entity;
 
-import gift.domain.product.entity.Product;
-import gift.domain.user.entity.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -14,54 +13,51 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(
-    name = "wishlist",
-    uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "product_id" }) }
+    uniqueConstraints = { @UniqueConstraint(columnNames = { "product_id", "name" }) }
 )
-public class WishItem {
+public class Option {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    protected WishItem() {
+    @Column(nullable = false)
+    private String name;
 
+    @Column(nullable = false)
+    private int quantity;
+
+    protected Option() {
     }
 
-    public WishItem(Long id, User user, Product product) {
+    public Option(Long id, Product product, String name, int quantity) {
         this.id = id;
-        this.user = user;
         this.product = product;
+        this.name = name;
+        this.quantity = quantity;
     }
 
     public Long getId() {
         return id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Product getProduct() {
         return product;
     }
 
-    public Long getUserId() {
-        return user.getId();
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public Long getProductId() {
-        return product.getId();
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }

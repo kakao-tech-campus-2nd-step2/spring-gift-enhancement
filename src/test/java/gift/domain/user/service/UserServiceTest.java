@@ -43,7 +43,6 @@ class UserServiceTest {
         UserDto userDto = new UserDto(null, "testUser", "test@test.com", "test123", null);
 
         User user = userDto.toUser();
-        user.setId(1L);
         given(userJpaRepository.save(any(User.class))).willReturn(user);
 
         Token expectedToken = new Token("token");

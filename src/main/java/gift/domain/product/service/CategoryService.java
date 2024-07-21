@@ -1,6 +1,6 @@
 package gift.domain.product.service;
 
-import gift.domain.product.dto.CategoryResponseDto;
+import gift.domain.product.dto.CategoryResponse;
 import gift.domain.product.repository.CategoryJpaRepository;
 import gift.domain.product.entity.Category;
 import gift.exception.InvalidCategoryInfoException;
@@ -16,9 +16,9 @@ public class CategoryService {
         this.categoryJpaRepository = categoryJpaRepository;
     }
 
-    public List<CategoryResponseDto> readAll() {
+    public List<CategoryResponse> readAll() {
         List<Category> categories = categoryJpaRepository.findAll();
-        return categories.stream().map(CategoryResponseDto::from).toList();
+        return categories.stream().map(CategoryResponse::from).toList();
     }
 
     public Category readById(long categoryId) {

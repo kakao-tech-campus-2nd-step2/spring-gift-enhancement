@@ -1,10 +1,11 @@
 package gift.domain.product.service;
 
-import gift.domain.product.dto.ProductRequestDto;
-import gift.domain.product.dto.ProductResponseDto;
-import gift.domain.product.repository.ProductJpaRepository;
+import gift.domain.product.dto.ProductResponse;
+import gift.domain.product.dto.ProductRequest;
+import gift.domain.product.dto.ProductReadAllResponse;
 import gift.domain.product.entity.Category;
 import gift.domain.product.entity.Product;
+import gift.domain.product.repository.ProductJpaRepository;
 import gift.domain.wishlist.service.WishlistService;
 import gift.exception.InvalidProductInfoException;
 import org.springframework.data.domain.Page;
@@ -15,49 +16,55 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductJpaRepository productJpaRepository;
+    private final OptionService optionService;
     private final CategoryService categoryService;
     private final WishlistService wishlistService;
 
-    public ProductService(ProductJpaRepository productJpaRepository,
+    public ProductService(
+        ProductJpaRepository productJpaRepository,
+        OptionService optionService,
         CategoryService categoryService,
         WishlistService wishlistService) {
         this.productJpaRepository = productJpaRepository;
+        this.optionService = optionService;
         this.categoryService = categoryService;
         this.wishlistService = wishlistService;
     }
 
-    public ProductResponseDto create(ProductRequestDto productRequestDto) {
-        Category category = categoryService.readById(productRequestDto.categoryId());
-        Product product = productRequestDto.toProduct(category);
+    public ProductResponse create(ProductRequest productRequest) {
+        Category category = categoryService.readById(productRequest.categoryId());
+        Product product = productRequest.toProduct(category);
 
+        optionService.create(product, productRequest.options());
         Product savedProduct = productJpaRepository.save(product);
-        return ProductResponseDto.from(savedProduct);
+        return ProductResponse.from(savedProduct);
     }
 
-    public Page<ProductResponseDto> readAll(Pageable pageable) {
+    public Page<ProductReadAllResponse> readAll(Pageable pageable) {
         Page<Product> foundProducts = productJpaRepository.findAll(pageable);
 
         if (foundProducts == null) {
             return Page.empty(pageable);
         }
-        return foundProducts.map(ProductResponseDto::from);
+        return foundProducts.map(ProductReadAllResponse::from);
     }
 
-    public ProductResponseDto readById(long productId) {
+    public ProductResponse readById(long productId) {
         Product foundProduct = productJpaRepository.findById(productId)
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
-        return ProductResponseDto.from(foundProduct);
+        return ProductResponse.from(foundProduct);
     }
 
-    public ProductResponseDto update(long productId, ProductRequestDto productRequestDto) {
+    public ProductResponse update(long productId, ProductRequest productRequest) {
         Product product = productJpaRepository.findById(productId)
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
-        Category category = categoryService.readById(productRequestDto.categoryId());
+        Category category = categoryService.readById(productRequest.categoryId());
 
-        product.updateInfo(category, productRequestDto.name(), productRequestDto.price(), productRequestDto.imageUrl());
+        product.updateInfo(category, productRequest.name(), productRequest.price(), productRequest.imageUrl());
+        optionService.update(product, productRequest.options());
 
         Product savedProduct = productJpaRepository.save(product);
-        return ProductResponseDto.from(savedProduct);
+        return ProductResponse.from(savedProduct);
     }
 
     public void delete(long productId) {

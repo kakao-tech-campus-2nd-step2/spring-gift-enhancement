@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
-import gift.domain.product.dto.CategoryResponseDto;
+import gift.domain.product.dto.CategoryResponse;
 import gift.domain.product.repository.CategoryJpaRepository;
 import gift.domain.product.entity.Category;
 import gift.exception.InvalidCategoryInfoException;
@@ -43,11 +43,11 @@ class CategoryServiceTest {
         given(categoryJpaRepository.findAll()).willReturn(expected);
 
         // when
-        List<CategoryResponseDto> actual = categoryService.readAll();
+        List<CategoryResponse> actual = categoryService.readAll();
 
         // then
         then(categoryJpaRepository).should().findAll();
-        assertThat(actual).isEqualTo(expected.stream().map(CategoryResponseDto::from).toList());
+        assertThat(actual).isEqualTo(expected.stream().map(CategoryResponse::from).toList());
     }
 
     @Test
