@@ -8,7 +8,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -77,6 +79,17 @@ public class Product {
 
     public static Product createWithId(Long id, String name, int price, String imageUrl, Category category, List<Option> options) {
         return new Product(id, name, price, imageUrl, category, options);
+    }
+
+    public void validateOptions() {
+        if (options != null) {
+            Set<String> optionNames = new HashSet<>();
+            for (Option option : options) {
+                if (!optionNames.add(option.getName())) {
+                    throw new IllegalArgumentException("Duplicate option name: " + option.getName());
+                }
+            }
+        }
     }
 
 }

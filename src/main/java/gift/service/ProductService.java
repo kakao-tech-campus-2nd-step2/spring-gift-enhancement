@@ -54,6 +54,7 @@ public class ProductService {
                 .collect(Collectors.toList());
         optionRepository.saveAll(options);
         savedProduct = new Product(savedProduct.getId(), savedProduct.getName(), savedProduct.getPrice(), savedProduct.getImageUrl(), savedProduct.getCategory(), options);
+        savedProduct.validateOptions();
         savedProduct = productRepository.save(savedProduct);
         return convertToDTO(savedProduct);
     }
@@ -68,6 +69,7 @@ public class ProductService {
                 .collect(Collectors.toList());
         Product product = new Product(id, productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(), category, options);
         options.forEach(option -> option.assignProduct(product));
+        product.validateOptions();
         Product updatedProduct = productRepository.save(product);
         return convertToDTO(updatedProduct);
     }

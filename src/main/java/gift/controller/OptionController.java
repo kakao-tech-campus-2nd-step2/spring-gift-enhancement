@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -29,6 +30,6 @@ public class OptionController {
     @PostMapping
     public ResponseEntity<OptionDTO> createOption(@PathVariable Long productId, @Valid @RequestBody OptionDTO optionDTO) {
         OptionDTO savedOption = optionService.createOption(productId, optionDTO);
-        return ResponseEntity.ok(savedOption);
+        return ResponseEntity.created(URI.create("/api/products/" + productId + "/options/" + savedOption.getId())).body(savedOption);
     }
 }
