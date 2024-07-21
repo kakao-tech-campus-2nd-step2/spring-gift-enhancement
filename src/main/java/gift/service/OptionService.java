@@ -12,6 +12,7 @@ import gift.dto.OptionResponse;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.DuplicateOptionException;
+import gift.exception.InvalidOptionException;
 import gift.exception.InvalidProductException;
 import gift.exception.InvalidUserException;
 import gift.repository.OptionRepository;
@@ -43,6 +44,12 @@ public class OptionService {
 		optionRepository.save(option);
 	}
 	
+	public void decreaseOptionQuantity(Long optionId, int quantity) {
+		Option option = findOptionById(optionId);
+		decreaseQuantity(option, quantity);
+		optionRepository.save(option);
+	}
+	
 	private void validateBindingResult(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
         	String errorMessage = bindingResult
@@ -56,11 +63,23 @@ public class OptionService {
     	return productRepository.findById(productId)
     			.orElseThrow(() -> new InvalidProductException("Product not found"));
     }
+	
+	private Option findOptionById(Long optionId) {
+		return optionRepository.findById(optionId)
+				.orElseThrow(() -> new InvalidOptionException("Option not found"));
+	}
 
 	private List<OptionResponse> toOptionResponses(List<Option> options) {
 		return options.stream()
 				.map(Option::toDto)
 				.collect(Collectors.toList());
+	}
+	
+	public void decreaseQuantity(Option option, int quantity) {
+		if (option.getQuantity() - quantity < 0) {
+			throw new InvalidOptionException("Option quantity cannot be less than ZERO.");
+		}
+		option.setQuantity(option.getQuantity() - quantity);
 	}
 	
 	private void validateDuplicateOption(Long productId, String optionName) {
