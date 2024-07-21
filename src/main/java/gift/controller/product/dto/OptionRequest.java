@@ -13,8 +13,8 @@ public class OptionRequest {
         List<Info> options
     ) {
 
-        public OptionCommand.Register toCommand() {
-            return new OptionCommand.Register(options.stream()
+        public OptionCommand.RegisterMany toCommand() {
+            return new OptionCommand.RegisterMany(options.stream()
                 .map(Info::toCommand)
                 .toList());
         }
