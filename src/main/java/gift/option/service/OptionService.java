@@ -65,6 +65,9 @@ public class OptionService {
     }
 
     public Option convertToEntity(OptionDTO optionDTO){
-        return new Option(optionDTO.getName(), optionDTO.getQuantity());
+        Option option = new Option(optionDTO.getName(), optionDTO.getQuantity());
+        option.setProduct(productRepository.findById(optionDTO.getProductId())
+            .orElseThrow(() -> new IllegalArgumentException("productId 없음.")));
+        return option;
     }
 }

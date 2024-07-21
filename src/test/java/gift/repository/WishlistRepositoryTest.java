@@ -28,8 +28,6 @@ class WishlistRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired CategoryRepository categoryRepository;
-
     @Autowired
     CategoryRepository categoryRepository;
 
