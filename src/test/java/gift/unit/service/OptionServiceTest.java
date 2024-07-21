@@ -13,9 +13,9 @@ import gift.product.entity.Product;
 import gift.product.option.dto.request.CreateOptionRequest;
 import gift.product.option.dto.request.UpdateOptionRequest;
 import gift.product.option.entity.Option;
-import gift.product.option.repository.OptionRepository;
+import gift.product.option.repository.OptionJpaRepository;
 import gift.product.option.service.OptionService;
-import gift.product.repository.ProductRepository;
+import gift.product.repository.ProductJpaRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -33,10 +33,10 @@ public class OptionServiceTest {
     private OptionService optionService;
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductJpaRepository productRepository;
 
     @Mock
-    private OptionRepository optionRepository;
+    private OptionJpaRepository optionRepository;
 
     @Test
     @DisplayName("옵션 이름 공백 포함 최대 50자 예외")

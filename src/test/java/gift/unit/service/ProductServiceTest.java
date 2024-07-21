@@ -10,14 +10,14 @@ import static org.mockito.Mockito.times;
 
 import gift.exception.CustomException;
 import gift.product.category.entity.Category;
-import gift.product.category.repository.CategoryRepository;
+import gift.product.category.repository.CategoryJpaRepository;
 import gift.product.dto.request.CreateProductRequest;
 import gift.product.dto.request.NewOption;
 import gift.product.dto.request.UpdateProductRequest;
 import gift.product.dto.response.ProductResponse;
 import gift.product.entity.Product;
 import gift.product.option.service.OptionService;
-import gift.product.repository.ProductRepository;
+import gift.product.repository.ProductJpaRepository;
 import gift.product.service.ProductService;
 import java.util.List;
 import java.util.Optional;
@@ -39,10 +39,10 @@ class ProductServiceTest {
     private ProductService productService;
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductJpaRepository productRepository;
 
     @Mock
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryRepository;
 
     @Mock
     private OptionService optionService;

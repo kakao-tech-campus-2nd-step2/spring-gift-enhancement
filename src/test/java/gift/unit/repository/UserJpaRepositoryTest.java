@@ -3,7 +3,7 @@ package gift.unit.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.user.entity.User;
-import gift.user.repository.UserRepository;
+import gift.user.repository.UserJpaRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,10 +14,10 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @Sql(scripts = {"/sql/initialize.sql",
     "/sql/insert_users.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-class UserRepositoryTest {
+class UserJpaRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userRepository;
 
 
     @Test

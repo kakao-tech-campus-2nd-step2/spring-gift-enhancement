@@ -3,7 +3,7 @@ package gift.product.service;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.product.category.entity.Category;
-import gift.product.category.repository.CategoryRepository;
+import gift.product.category.repository.CategoryJpaRepository;
 import gift.product.dto.request.CreateProductRequest;
 import gift.product.dto.request.NewOption;
 import gift.product.dto.request.UpdateProductRequest;
@@ -11,7 +11,7 @@ import gift.product.dto.response.ProductResponse;
 import gift.product.entity.Product;
 import gift.product.option.dto.request.CreateOptionRequest;
 import gift.product.option.service.OptionService;
-import gift.product.repository.ProductRepository;
+import gift.product.repository.ProductJpaRepository;
 import gift.util.mapper.ProductMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductService {
 
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final ProductJpaRepository productRepository;
+    private final CategoryJpaRepository categoryRepository;
     private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository,
-        CategoryRepository categoryRepository, OptionService optionService) {
+    public ProductService(ProductJpaRepository productRepository,
+        CategoryJpaRepository categoryRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.optionService = optionService;

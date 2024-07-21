@@ -4,8 +4,8 @@ package gift.unit.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.product.entity.Product;
-import gift.product.repository.ProductRepository;
-import gift.user.repository.UserRepository;
+import gift.product.repository.ProductJpaRepository;
+import gift.user.repository.UserJpaRepository;
 import gift.wish.dto.request.UpdateWishRequest;
 import gift.wish.entity.Wish;
 import gift.wish.repository.WishRepository;
@@ -28,10 +28,10 @@ class WishRepositoryTest {
     private WishRepository wishRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductJpaRepository productRepository;
 
     @Test
     @DisplayName("user id를 통해 wishes 찾기")

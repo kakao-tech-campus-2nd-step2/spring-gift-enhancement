@@ -7,8 +7,8 @@ import gift.user.dto.request.UserRegisterRequest;
 import gift.user.dto.response.UserResponse;
 import gift.user.entity.Role;
 import gift.user.entity.User;
-import gift.user.repository.RoleRepository;
-import gift.user.repository.UserRepository;
+import gift.user.repository.RoleJpaRepository;
+import gift.user.repository.UserJpaRepository;
 import gift.util.auth.JwtUtil;
 import gift.util.mapper.UserMapper;
 import java.util.ArrayList;
@@ -21,11 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final UserJpaRepository userRepository;
+    private final RoleJpaRepository roleRepository;
 
-    public UserService(JwtUtil jwtUtil, UserRepository userRepository,
-        RoleRepository roleRepository) {
+    public UserService(JwtUtil jwtUtil, UserJpaRepository userRepository,
+        RoleJpaRepository roleRepository) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;

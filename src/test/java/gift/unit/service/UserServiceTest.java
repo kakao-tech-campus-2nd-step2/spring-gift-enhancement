@@ -13,8 +13,8 @@ import gift.user.dto.request.UserRegisterRequest;
 import gift.user.dto.response.UserResponse;
 import gift.user.entity.User;
 import gift.user.entity.UserRole;
-import gift.user.repository.RoleRepository;
-import gift.user.repository.UserRepository;
+import gift.user.repository.RoleJpaRepository;
+import gift.user.repository.UserJpaRepository;
 import gift.user.service.UserService;
 import gift.util.auth.JwtUtil;
 import java.util.ArrayList;
@@ -37,10 +37,10 @@ class UserServiceTest {
     private UserService userService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserJpaRepository userRepository;
 
     @Mock
-    private RoleRepository roleRepository;
+    private RoleJpaRepository roleRepository;
 
     @Mock
     private JwtUtil jwtUtil;

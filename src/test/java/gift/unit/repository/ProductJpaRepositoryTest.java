@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.product.category.entity.Category;
-import gift.product.category.repository.CategoryRepository;
+import gift.product.category.repository.CategoryJpaRepository;
 import gift.product.entity.Product;
-import gift.product.repository.ProductRepository;
+import gift.product.repository.ProductJpaRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +19,12 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @Sql(scripts = {"/sql/initialize.sql", "/sql/insert_categories.sql",
     "/sql/insert_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-class ProductRepositoryTest {
+class ProductJpaRepositoryTest {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductJpaRepository productRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryRepository;
 
     @Test
     @DisplayName("find all test")

@@ -3,9 +3,9 @@ package gift.wish.service;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.product.entity.Product;
-import gift.product.repository.ProductRepository;
+import gift.product.repository.ProductJpaRepository;
 import gift.user.entity.User;
-import gift.user.repository.UserRepository;
+import gift.user.repository.UserJpaRepository;
 import gift.util.mapper.WishMapper;
 import gift.wish.dto.request.AddWishRequest;
 import gift.wish.dto.request.UpdateWishRequest;
@@ -22,11 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class WishService {
 
     private final WishRepository wishRepository;
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+    private final ProductJpaRepository productRepository;
+    private final UserJpaRepository userRepository;
 
-    public WishService(WishRepository wishRepository, ProductRepository productRepository,
-        UserRepository userRepository) {
+    public WishService(WishRepository wishRepository, ProductJpaRepository productRepository,
+        UserJpaRepository userRepository) {
         this.wishRepository = wishRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;

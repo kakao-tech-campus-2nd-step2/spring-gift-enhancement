@@ -8,8 +8,8 @@ import gift.product.option.dto.request.UpdateOptionRequest;
 import gift.product.option.dto.response.OptionResponse;
 import gift.product.option.entity.Option;
 import gift.product.option.entity.Options;
-import gift.product.option.repository.OptionRepository;
-import gift.product.repository.ProductRepository;
+import gift.product.option.repository.OptionJpaRepository;
+import gift.product.repository.ProductJpaRepository;
 import gift.util.mapper.OptionMapper;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OptionService {
 
-    private final ProductRepository productRepository;
-    private final OptionRepository optionRepository;
+    private final ProductJpaRepository productRepository;
+    private final OptionJpaRepository optionRepository;
 
-    public OptionService(ProductRepository productRepository, OptionRepository optionRepository) {
+    public OptionService(ProductJpaRepository productRepository, OptionJpaRepository optionRepository) {
         this.productRepository = productRepository;
         this.optionRepository = optionRepository;
     }

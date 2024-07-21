@@ -13,7 +13,7 @@ import gift.product.category.dto.request.CreateCategoryRequest;
 import gift.product.category.dto.request.UpdateCategoryRequest;
 import gift.product.category.dto.response.CategoryResponse;
 import gift.product.category.entity.Category;
-import gift.product.category.repository.CategoryRepository;
+import gift.product.category.repository.CategoryJpaRepository;
 import gift.product.category.service.CategoryService;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class CategoryServiceTest {
     private CategoryService categoryService;
 
     @Mock
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryRepository;
 
     @Test
     @DisplayName("get all categories test")
