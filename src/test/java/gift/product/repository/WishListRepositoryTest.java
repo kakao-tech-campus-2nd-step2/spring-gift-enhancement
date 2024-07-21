@@ -1,13 +1,9 @@
-package gift.repository;
+package gift.product.repository;
 
 import gift.product.model.Category;
 import gift.product.model.Member;
 import gift.product.model.Product;
 import gift.product.model.Wish;
-import gift.product.repository.CategoryRepository;
-import gift.product.repository.MemberRepository;
-import gift.product.repository.ProductRepository;
-import gift.product.repository.WishListRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -56,4 +56,7 @@ public class Option {
     public boolean isSameName(String name) {
         return this.name.equals(name);
     }
+    public void subtractQuantity(int quantity) {
+        this.quantity -= quantity;
+    }
 }

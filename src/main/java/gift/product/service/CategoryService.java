@@ -18,8 +18,10 @@ public class CategoryService {
     private final CategoryValidation categoryValidation;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository,
-        CategoryValidation categoryValidation) {
+    public CategoryService(
+        CategoryRepository categoryRepository,
+        CategoryValidation categoryValidation
+    ) {
         this.categoryRepository = categoryRepository;
         this.categoryValidation = categoryValidation;
     }

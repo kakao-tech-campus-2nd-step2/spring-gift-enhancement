@@ -36,10 +36,8 @@ public class MemberService {
     public Map<String, String> signUp(MemberDTO memberDTO) {
         System.out.println("[MemberService] signUp()");
         memberValidation.signUpValidation(memberDTO.getEmail());
-
         Member member = convertDTOToMember(memberDTO);
         memberRepository.save(member);
-
         String token = jwtUtil.generateToken(member.getEmail());
         return responseToken(token);
     }
@@ -47,7 +45,6 @@ public class MemberService {
     public Map<String, String> login(MemberDTO memberDTO) {
         System.out.println("[MemberService] login()");
         memberValidation.loginValidation(memberDTO);
-
         String token = jwtUtil.generateToken(memberDTO.getEmail());
         return responseToken(token);
     }

@@ -1,9 +1,7 @@
-package gift.repository;
+package gift.product.repository;
 
 import gift.product.model.Category;
 import gift.product.model.Product;
-import gift.product.repository.CategoryRepository;
-import gift.product.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +20,15 @@ public class ProductRepositoryTest {
     private CategoryRepository categoryRepository;
 
     private Product product;
-    private Category category;
 
     @BeforeEach
     public void setUp() {
-        category = categoryRepository.save(new Category("교환권"));
+        Category category = categoryRepository.save(new Category("교환권"));
         product = new Product(
                 "상품1",
                 1500,
                 "product1.images",
-                category
+            category
         );
     }
 
