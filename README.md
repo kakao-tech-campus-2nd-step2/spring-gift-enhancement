@@ -120,3 +120,7 @@ Content-Type: application/json
 - Option - Product : 다대일 단방향 관계
 - Product 삭제 시 Option 전부 삭제
 - Option crud api 만들기
+
+- step3
+  - Option Entity에 옵션 수 차감하는 메서드 추가
+  - OptionService에서 차감할 숫자보다 존재하는 옵션 수량이 적으면 예외
