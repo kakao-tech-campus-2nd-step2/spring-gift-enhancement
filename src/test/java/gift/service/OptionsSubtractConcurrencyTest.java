@@ -81,6 +81,8 @@ public class OptionsSubtractConcurrencyTest {
                     succeedCount.getAndIncrement();
                 } catch (OptionsQuantityException e) {
                     System.out.println("수량이 부족합니다.");
+                } catch (FailedRetryException e) {
+                    System.out.println("요청에 실패하였습니다.");
                 }
                 countDownLatch.countDown();
             });
