@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
 import org.springframework.util.StringUtils;
 
 @Entity
@@ -36,6 +37,8 @@ public class Options extends BaseEntity {
     @JoinColumn(name = "product_id", nullable = false,
         foreignKey = @ForeignKey(name = "fk_options_product_id_ref_product_id"))
     private Product product;
+    @Version
+    private Long version;
 
     protected Options() {
     }
