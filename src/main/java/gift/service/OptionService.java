@@ -61,9 +61,9 @@ public class OptionService {
         Option option = optionRepository.findByName(name)
                         .orElseThrow(() -> new CustomException("Option with name " + name + " not exists", HttpStatus.NOT_FOUND));
         
-        Option newOption = option.substract(subtractQuantity);
-        
+        Option updatedOption = option.substract(subtractQuantity);
+
         optionRepository.delete(option);
-        optionRepository.save(newOption);
+        optionRepository.save(updatedOption);
     }
 }
