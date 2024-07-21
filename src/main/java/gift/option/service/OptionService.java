@@ -1,16 +1,16 @@
 package gift.option.service;
 
+import gift.member.exception.DuplicateEmailException;
 import gift.option.domain.Option;
 import gift.option.dto.OptionListResponseDto;
 import gift.option.dto.OptionResponseDto;
 import gift.option.dto.OptionServiceDto;
+import gift.option.exception.DuplicateOptionNameException;
 import gift.option.exception.OptionNotFoundException;
 import gift.option.repository.OptionRepository;
 import gift.product.domain.Product;
 import gift.product.service.ProductService;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class OptionService {
@@ -36,14 +36,14 @@ public class OptionService {
     }
 
     public Option createOption(OptionServiceDto optionServiceDto) {
-        validateEmailAndNicknameUnique(optionServiceDto);
+        validateNameUnique(optionServiceDto);
         Product product = productService.getProductById(optionServiceDto.productId());
         return optionRepository.save(optionServiceDto.toOption(product));
     }
 
     public Option updateOption(OptionServiceDto optionServiceDto) {
         validateOptionExists(optionServiceDto.id());
-        validateEmailAndNicknameUnique(optionServiceDto);
+        validateNameUnique(optionServiceDto);
         Product product = productService.getProductById(optionServiceDto.productId());
         return optionRepository.save(optionServiceDto.toOption(product));
     }
@@ -66,7 +66,9 @@ public class OptionService {
         }
     }
 
-    private void validateEmailAndNicknameUnique(OptionServiceDto optionServiceDto) {
-
+    private void validateNameUnique(OptionServiceDto optionServiceDto) {
+        if (optionRepository.existsByName(optionServiceDto.name())) {
+            throw new DuplicateOptionNameException();
+        }
     }
 }
