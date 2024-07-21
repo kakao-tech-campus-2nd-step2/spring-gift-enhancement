@@ -58,7 +58,7 @@ public class OptionService {
 
     @Transactional
     public OptionResponseDto updateOptionQuantity(Long optionId, int quantity){
-        Option findOption = optionRepository.findById(optionId)
+        Option findOption = optionRepository.findOptionByIdForUpdate(optionId)
                 .orElseThrow(() -> new EntityNotFoundException(OPTION_NOT_FOUND));
 
         findOption.updateQuantity(quantity);
