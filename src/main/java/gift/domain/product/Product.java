@@ -25,7 +25,7 @@ public class Product {
 
     @JoinColumn(name = "category_id")
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
