@@ -1,7 +1,9 @@
 package gift.controller;
 
+import gift.dto.CategoryDTO;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
