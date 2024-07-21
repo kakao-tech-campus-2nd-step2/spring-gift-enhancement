@@ -2,7 +2,65 @@
 
 ## 기능 목록 
 
-### 카테고리 추가 
+### 코드리뷰 개선사항 :step1 
+- [x] Controller 단에서 상태코드를 포함해서 반환 
+- [x] UserResponseDto 가 도메인 계층 Member 를 의존 중 -> 변환은 서비스 로직에서 처리 !!! 
+- [x] Dto 에서 도메인 계층을 의존중인 부분 수정 (Service 에서 변환하도록)
+- [x] WishRepositoryTest 구현 
+- [x] RepositoryInterface 명칭에서 Interface 삭제
+- [x] Entity 에서 리스트를 사용하는 곳이 없는경우, 단방향 맵핑 사용하기
+- [x] 실행시 오류발생 해결 
+
+### 추가 개선사항 : step1
+- [x] product 의 name 길이를 15로 줄이기 (요구사항 name varchar(15) not null 반영)
+- [x] category의 color 길이를 7로 줄이기 (요구사항 color varchar(7) not null 반영)
+- [ ] JWT 공부해서 적용 
+- [x] 토큰 저장 기능 삭제 
+- [x] product Dto 에서 유효성 검증 코드는 Service로 넘기고 Service에서 Dto 를 Entity로 변환할때 유효성 검증 진행하도록 
+- [ ] TokenInterceptor 사용 
+- [ ] 테스트 코드 작성
+
+### step2 : 상품 옵션 추가 
+- [ ] 상품 정보에 옵션을 추가한다. 상품과 옵션 모델 간의 관계를 고려하여 설계하고 구현한다.
+- - [x] 상품에는 항상 하나 이상의 옵션이 있어야 한다.
+  - [x] 옵션 엔티티 
+  - [x] 상품에 옵션추가
+
+- [x] 옵션이름 유효성
+  - [x] 옵션 이름은 공백을 포함하여 최대 50자까지 입력할 수 있다. 
+  - [x] 특수 문자
+      * 가능: ( ), [ ], +, -, &, /, _
+      * 그 외 특수 문자 사용 불가 
+  - [x] 중복된 옵션은 구매 시 고객에게 불편을 줄 수 있다. 동일한 상품 내의 옵션 이름은 중복될 수 없다.
+
+- [x] 옵션 수량 유효성 
+    * 옵션 수량은 최소 1개 이상 1억 개 미만이다.
+
+
+- [ ] (선택) 관리자 화면에서 옵션을 추가할 수 있다.
+
+아래 예시와 같이 HTTP 메시지를 주고받도록 구현한다
+
+Request
+GET /api/products/1/options HTTP/1.1
+
+Response
+HTTP/1.1 200
+Content-Type: application/json
+
+[
+{
+"id": 464946561,
+"name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+"quantity": 969
+}
+]
+
+- [] 테스트 추가 
+
+
+
+###  step1 : 카테고리 추가 
 - [x] product 에 카테고리 추가 
 - [x] category entity 추가 
 - [x] product repository CRUD 수정 

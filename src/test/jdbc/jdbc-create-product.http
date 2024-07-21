@@ -1,5 +1,5 @@
 #정상요청
-### Send POST userRequestDto with json body
+### Send POST memberRequestDto with json body
 POST http://localhost:8080/product/jdbc
 Content-Type: application/json
 
@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ###IllegalProductNameLengthException
-### Send POST userRequestDto with json body
+### Send POST memberRequestDto with json body
 POST http://localhost:8080/product/jdbc
 Content-Type: application/json
 
@@ -21,7 +21,7 @@ Content-Type: application/json
 }
 
 ### IllegalProductNameKeywordException
-### Send POST userRequestDto with json body
+### Send POST memberRequestDto with json body
 POST http://localhost:8080/product/jdbc
 Content-Type: application/json
 
@@ -33,7 +33,7 @@ Content-Type: application/json
 
 
 ### IllegalProductNameCharacterException
-### Send POST userRequestDto with json body
+### Send POST memberRequestDto with json body
 POST http://localhost:8080/product/jdbc
 Content-Type: application/json
 

@@ -1,4 +1,4 @@
-### Send POST userRequestDto with json body
+### Send POST memberRequestDto with json body
 POST http://localhost:8080/api/products
 Content-Type: application/json
 

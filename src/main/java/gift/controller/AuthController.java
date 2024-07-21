@@ -1,7 +1,9 @@
 package gift.controller;
 
-import gift.dto.UserRequestDto;
-import gift.service.UserService;
+import gift.dto.MemberRequestDto;
+import gift.dto.MemberResponseDto;
+import gift.service.MemberService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,10 +15,10 @@ import javax.naming.AuthenticationException;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
-    private final UserService userService;
+    private final MemberService memberService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    public AuthController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @GetMapping("")
@@ -35,14 +37,16 @@ public class AuthController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute UserRequestDto userRequestDto) {
-        return userService.save(userRequestDto.getEmail(), userRequestDto.getPassword());
+    public MemberResponseDto save(@ModelAttribute MemberRequestDto memberRequestDto) {
+        MemberResponseDto memberResponseDto = memberService.save(memberRequestDto.getEmail(), memberRequestDto.getPassword());
+        memberResponseDto.setHttpStatus(HttpStatus.OK);
+        return memberResponseDto;
     }
 
     @PostMapping("/user/login")
-    public String login(@ModelAttribute UserRequestDto userRequestDto) throws AuthenticationException {
-        if (userService.login(userRequestDto.getEmail(), userRequestDto.getPassword())) {
-            return userService.generateTokenFrom(userRequestDto.getEmail());
+    public String login(@ModelAttribute MemberRequestDto memberRequestDto) throws AuthenticationException {
+        if (memberService.login(memberRequestDto.getEmail(), memberRequestDto.getPassword())) {
+            return memberService.generateTokenFrom(memberRequestDto.getEmail());
         }
         throw new AuthenticationException("로그인 실패");
     }

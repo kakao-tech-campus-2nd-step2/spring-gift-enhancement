@@ -24,9 +24,9 @@ public class Member {
     private String email;
     @Column(nullable = false)
     private String password;
+    private String token;
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Wish> wishes = new ArrayList<>();
-
 
     public Member() {
     }
@@ -52,4 +52,7 @@ public class Member {
         return wishes;
     }
 
+    public String getToken() {
+        return token;
+    }
 }

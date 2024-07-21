@@ -2,8 +2,9 @@ package gift.service;
 
 import gift.dto.ProductResponseDto;
 import gift.entity.Category;
+import gift.entity.Option;
 import gift.entity.Product;
-import gift.repository.ProductRepositoryInterface;
+import gift.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,42 +18,55 @@ import java.util.List;
 @Transactional
 public class ProductService {
 
-    private final ProductRepositoryInterface productRepositoryInterface;
+    private final ProductRepository productRepository;
 
-    public ProductService(ProductRepositoryInterface productRepositoryInterface) {
-        this.productRepositoryInterface = productRepositoryInterface;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public ProductResponseDto createProductDto(String name, Integer price, String url, Category category) {
-        Product newProduct = productRepositoryInterface.save(new Product(name, price, url, category));
-        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory());
+    public ProductResponseDto createProductDto(String name, Integer price, String url, Category category, List<Option> options) {
+        Product newProduct = productRepository.save(new Product(name, price, url, category, options));
+        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory(), newProduct.getOptions());
     }
 
     public List<Product> getAll() {
-        return productRepositoryInterface.findAll();
+        return productRepository.findAll();
     }
 
-    public ProductResponseDto getOneById(Long id) {
-        Product newProduct = productRepositoryInterface.findById(id).get();
-        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory());
+    public ProductResponseDto getAllAndMakeProductResponseDto() {
+        return new ProductResponseDto(getAll());
     }
 
-    public void update(Long id, String name, Integer price, String url, Category category) {
-        Product actualProduct = productRepositoryInterface.findById(id).orElseThrow(() -> new RuntimeException("상품을 찾지 못했습니다."));
-        actualProduct.update(name, price, url, category);
+    public ProductResponseDto getProductResponseDtoById(Long id) {
+        Product newProduct = productRepository.findById(id).get();
+        return new ProductResponseDto(newProduct.getId(), newProduct.getName(), newProduct.getPrice(), newProduct.getUrl(), newProduct.getCategory(), newProduct.getOptions());
+    }
+
+
+    public void update(Long id, String name, Integer price, String url, Category category,List<Option> options) {
+        Product actualProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("상품을 찾지 못했습니다."));
+        actualProduct.update(name, price, url, category,options);
     }
 
     public void delete(Long id) {
-        Product product = productRepositoryInterface.findById(id).get();
-        productRepositoryInterface.delete(product);
+        Product product = productRepository.findById(id).get();
+        productRepository.delete(product);
     }
 
     public Product findProductByName(String name) {
-        return productRepositoryInterface.findByName(name);
+        return productRepository.findByName(name);
     }
 
     public Page<ProductResponseDto> getProducts(Pageable pageable) {
-        Page<Product> newProduct = productRepositoryInterface.findAll(pageable);
+        Page<Product> newProduct = productRepository.findAll(pageable);
         return newProduct.map(ProductResponseDto::fromEntity);
+    }
+
+    public ProductResponseDto fromEntity(Product product) {
+        return new ProductResponseDto(product.getName(), product.getPrice(), product.getUrl(), product.getCategory(), product.getOptions());
+    }
+
+    public Product findById(Long productId) {
+        return productRepository.findById(productId).get();
     }
 }

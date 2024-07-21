@@ -1,4 +1,4 @@
-### Send PUT userRequestDto with json body
+### Send PUT memberRequestDto with json body
 PUT http://localhost:8080/api/products/999
 Content-Type: application/json
 
