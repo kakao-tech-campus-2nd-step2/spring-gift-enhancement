@@ -22,7 +22,10 @@ public class Options {
 
     protected Options() {}
 
-    public Options(Product product, List<Option> options) {}
+    public Options(Product product, List<Option> options) {
+        this.product = product;
+        this.optionList = options;
+    }
 
     public Option addOption(Option option) {
         if (optionList.stream()
