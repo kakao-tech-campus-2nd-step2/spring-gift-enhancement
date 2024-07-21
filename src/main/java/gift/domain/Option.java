@@ -1,16 +1,7 @@
 package gift.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "option", uniqueConstraints = {
@@ -43,6 +34,14 @@ public class Option {
         this.product = builder.product;
     }
 
+    public OptionBuilder toBuilder() {
+        return new OptionBuilder()
+            .id(this.id)
+            .name(this.name)
+            .quantity(this.quantity)
+            .product(this.product);
+    }
+
     public Long getId() {
         return id;
     }
@@ -59,13 +58,7 @@ public class Option {
         return product;
     }
 
-    public OptionBuilder toBuilder() {
-        return new OptionBuilder()
-            .id(this.id)
-            .name(this.name)
-            .quantity(this.quantity)
-            .product(this.product);
-    }
+
 
     public static class OptionBuilder {
         private Long id;
