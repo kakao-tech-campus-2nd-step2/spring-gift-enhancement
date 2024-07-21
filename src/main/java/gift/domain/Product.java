@@ -1,5 +1,7 @@
 package gift.domain;
 
+import static gift.domain.validator.ProductValidator.validateProductOptionsPresence;
+
 import gift.domain.base.BaseEntity;
 import gift.domain.base.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -81,12 +83,6 @@ public class Product extends BaseEntity {
         public Product build() {
             validateProductOptionsPresence(productOptions);
             return new Product(this);
-        }
-
-        private void validateProductOptionsPresence(List<ProductOption> productOptions) {
-            if (productOptions == null || productOptions.isEmpty()) {
-                throw new IllegalArgumentException("상품 옵션은 최소 1개 이상이어야 합니다.");
-            }
         }
     }
 
