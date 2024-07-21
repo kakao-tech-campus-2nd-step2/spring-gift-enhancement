@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -100,12 +99,10 @@ public class Product extends BaseEntity {
         productOptions = builder.productOptions;
     }
 
-    public Product update(Product product) {
-        this.name = product.getName();
-        this.price = product.getPrice();
-        this.imageUrl = product.getImageUrl();
-        this.category = product.getCategory();
-        this.productOptions = product.getProductOptions();
+    public Product updateBasicInfo(String name, Integer price, URL imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
         return this;
     }
 
