@@ -138,4 +138,26 @@ class ProductRepositoryTest {
         assertThat(products.get(0).getPrice()).isEqualTo(price);
         assertThat(products.get(0).getImageUrl()).isEqualTo(imageUrl);
     }
+
+    @Test
+    @DisplayName("옵선 수량 빼기 작업 테스트[성공]")
+    void subtractOptionQuantity() {
+        // given
+        int quantity = 123;
+        int subtractAmount = 10;
+        int expectedQuantity = quantity - subtractAmount;
+        Category category = categoryRepository.save(new Category("cname", "ccolor", "cImage", ""));
+        List<Option> options = List.of(new Option("oName", quantity));
+        Product product = productRepository.save(new Product("pName", 0, "purl", category, options));
+        Long id = product.getOptions().get(0).getId();
+        Option option = product.getOptions().get(0);
+        option.subtractQuantity(subtractAmount);
+
+        // when
+        product = productRepository.findProductAndOptionByIdFetchJoin(id).get();
+        Option actual = product.findOptionByOptionId(product.getOptions().get(0).getId());
+
+        // then
+        assertThat(actual.getQuantity()).isEqualTo(expectedQuantity);
+    }
 }
