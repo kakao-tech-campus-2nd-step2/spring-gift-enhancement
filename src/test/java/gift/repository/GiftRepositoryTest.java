@@ -1,16 +1,18 @@
 package gift.repository;
 
+import gift.model.category.Category;
 import gift.model.gift.Gift;
-import gift.model.gift.GiftResponse;
+import gift.model.option.Option;
+import gift.repository.gift.GiftRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 class GiftRepositoryTest {
@@ -26,7 +28,10 @@ class GiftRepositoryTest {
 
     @Test
     void saveTest() {
-        Gift gift = new Gift("test", 1000, "abc.jpg");
+        Category category = new Category(10L, "test", "test", "test", "test");
+        Option option1 = new Option("testOption", 1);
+        List<Option> option = Arrays.asList(option1);
+        Gift gift = new Gift("test", 1000, "abc.jpg", category, option);
         Gift actual = giftRepository.save(gift);
 
         assertAll(

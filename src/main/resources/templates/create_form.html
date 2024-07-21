@@ -35,7 +35,55 @@
         .btn-container .btn {
             flex: 1;
         }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .option-group label {
+            font-weight: bold;
+        }
+
+        .option-container {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+        }
     </style>
+    <script>
+        let optionIndex = 0;
+
+        function addOption() {
+            const optionsDiv = document.getElementById('options');
+            const optionContainer = document.createElement('div');
+            optionContainer.className = 'option-container';
+
+            const nameLabel = document.createElement('label');
+            nameLabel.textContent = '옵션 이름';
+            optionContainer.appendChild(nameLabel);
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.name = `options[${optionIndex}].name`;
+            nameInput.className = 'form-control';
+            optionContainer.appendChild(nameInput);
+
+            const quantityLabel = document.createElement('label');
+            quantityLabel.textContent = '수량';
+            optionContainer.appendChild(quantityLabel);
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.name = `options[${optionIndex}].quantity`;
+            quantityInput.className = 'form-control';
+            optionContainer.appendChild(quantityInput);
+
+            optionsDiv.appendChild(optionContainer);
+            optionIndex++;
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -63,6 +111,13 @@
                     </tr>
                 </select>
             </div>
+
+            <div class="option-group">
+                <h5>옵션</h5>
+                <div id="options"></div>
+                <button class="btn btn-info" onclick="addOption()" type="button">옵션 추가</button>
+            </div>
+
             <div class="btn-container">
                 <input class="btn btn-primary" type="submit" value="저장하기">
                 <a class="btn btn-secondary" th:href="@{/admin}">메인으로</a>

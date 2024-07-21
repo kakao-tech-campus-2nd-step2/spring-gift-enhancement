@@ -1,6 +1,7 @@
 package gift.model.gift;
 
 import gift.model.category.Category;
+import gift.model.option.Option;
 import gift.model.wish.Wish;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,9 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "gift")
 public class Gift {
-
-    @OneToMany(mappedBy = "gift", cascade = CascadeType.REMOVE)
-    protected List<Wish> wishes = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,16 +32,13 @@ public class Gift {
     @NotNull
     private Category category;
 
-    public Gift() {
-    }
+    @OneToMany(mappedBy = "gift", cascade = CascadeType.ALL)
+    private List<Wish> wishes = new ArrayList<>();
 
-    public Gift(String name, int price, String imageUrl) {
-        if (!isValidName(name)) {
-            throw new IllegalArgumentException("카카오 문구는 MD와 협의 후 사용가능합니다.");
-        }
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    @OneToMany(mappedBy = "gift", cascade = CascadeType.ALL)
+    private List<Option> options = new ArrayList<>();
+
+    protected Gift() {
     }
 
     public Gift(String name, int price, String imageUrl, Category category) {
@@ -54,6 +49,20 @@ public class Gift {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public Gift(String name, int price, String imageUrl, Category category, List<Option> options) {
+        if (!isValidName(name)) {
+            throw new IllegalArgumentException("카카오 문구는 MD와 협의 후 사용가능합니다.");
+        }
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.options = options;
+        for (Option option : options) {
+            option.setGift(this);
+        }
     }
 
     public Long getId() {
@@ -78,6 +87,10 @@ public class Gift {
         return category;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     private boolean isValidName(String name) {
         return name != null && !name.contains("카카오");
     }
@@ -87,5 +100,14 @@ public class Gift {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public void addOption(Option option) {
+        option.setGift(this);
+        this.options.add(option);
+    }
+
+    public void removeOption(Option option) {
+        this.options.remove(option);
     }
 }

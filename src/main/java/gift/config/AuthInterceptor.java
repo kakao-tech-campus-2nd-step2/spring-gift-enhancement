@@ -1,7 +1,7 @@
 package gift.config;
 
 import gift.model.user.User;
-import gift.service.UserService;
+import gift.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             User resolvedUser = getUserFromToken(authHeader);
-            if (resolvedUser != null) {
-                request.setAttribute("user", resolvedUser);
-                return true;
-            }
+            request.setAttribute("user", resolvedUser);
+            return true;
         }
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         return false;
