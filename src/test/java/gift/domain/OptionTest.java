@@ -19,7 +19,9 @@ public class OptionTest {
         int quantity = 100;
 
         // when
-        Option option = createOption(name, quantity, null);
+        Category category = createCategory("카테고리", "blue", "image", "description");
+        Product product = createProduct("아메리카노", 4500, "americano", category);
+        Option option = createOption(name, quantity, product);
 
         // then
         Assertions.assertThat(option.getName()).isEqualTo(name);
@@ -30,7 +32,9 @@ public class OptionTest {
     @DisplayName("옵션 수량 감소 시 테스트")
     void subtractOption() {
         // given
-        Option option = createOption("Option", 100, null);
+        Category category = createCategory("카테고리", "blue", "image", "description");
+        Product product = createProduct("아메리카노", 4500, "americano", category);
+        Option option = createOption("Option", 100, product);
 
         // when
         option.subtract(50);
@@ -43,7 +47,9 @@ public class OptionTest {
     @DisplayName("옵션 수량 감소 시 예외 발생 테스트")
     void subtractException() {
         // given
-        Option option = createOption("Option", 100, null);
+        Category category = createCategory("카테고리", "blue", "image", "description");
+        Product product = createProduct("아메리카노", 4500, "americano", category);
+        Option option = createOption("Option", 100, product);
 
         // when
         org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
@@ -53,8 +59,8 @@ public class OptionTest {
 
 
 
-    private Product createProduct(String name, int price, String url, Category category, List<Option> options) {
-        return new Product(name, price, url, category, options);
+    private Product createProduct(String name, int price, String url, Category category) {
+        return new Product(name, price, url, category);
     }
 
     private Category createCategory(String name, String color, String imageUrl, String description) {

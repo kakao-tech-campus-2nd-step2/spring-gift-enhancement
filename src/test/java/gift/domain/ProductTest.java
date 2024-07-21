@@ -23,7 +23,7 @@ public class ProductTest {
         String imageUrl = "americano";
 
         // when
-        Product product = createProduct(name, price, imageUrl, category, List.of(option));
+        Product product = createProduct(name, price, imageUrl, category);
 
 
         // then
@@ -37,7 +37,7 @@ public class ProductTest {
         // given
         Category category = createCategory("카테고리", "blue", "image", "description");
         Option option = createOption("Option", 100, null);
-        Product product = createProduct("아메리카노", 4500, "americano", category, List.of(option));
+        Product product = createProduct("아메리카노", 4500, "americano", category);
         ProductRequest request = new ProductRequest("카페라떼", 5000, "caffelatte", category.getId());
 
         // when
@@ -53,8 +53,9 @@ public class ProductTest {
     void validOptionName() {
         // given
         Category category = createCategory("카테고리", "blue", "image", "description");
-        Option option = createOption("Option", 100, null);
-        Product product = createProduct("Americano", 4500, "americano", category, List.of(option));
+        Product product = createProduct("Americano", 4500, "americano", category);
+        Option option = createOption("Option", 100, product);
+        product.addOption("Option", 50);
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(AlreadyExistName.class, () ->
@@ -62,8 +63,8 @@ public class ProductTest {
     }
 
 
-    private Product createProduct(String name, int price, String url, Category category, List<Option> options) {
-        return new Product(name, price, url, category, options);
+    private Product createProduct(String name, int price, String url, Category category) {
+        return new Product(name, price, url, category);
     }
 
     private Category createCategory(String name, String color, String imageUrl, String description) {

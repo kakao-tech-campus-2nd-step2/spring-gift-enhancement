@@ -17,7 +17,7 @@ public class WishListTest {
     void createWish() {
         // given
         User user = createUser("kakao", "kakao@kakao.com", "passowrd", "user");
-        Product product = createProduct("Product", 1000, "image", null, null);
+        Product product = createProduct("Product", 1000, "image", null);
         int quantity = 2;
 
         // when
@@ -35,7 +35,7 @@ public class WishListTest {
     void updateWishList() {
         // given
         User user = createUser("kakao", "kakao@kakao.com", "passowrd", "user");
-        Product product = createProduct("Product", 1000, "image", null, null);
+        Product product = createProduct("Product", 1000, "image", null);
         WishList wishList = createWishList(user, product, 5);
         int newQuantity = 10;
 
@@ -49,8 +49,8 @@ public class WishListTest {
         return new User(name, email, password, role);
     }
 
-    private Product createProduct(String name, int price, String url, Category category, List<Option> options) {
-        return new Product(name, price, url, category, options);
+    private Product createProduct(String name, int price, String url, Category category) {
+        return new Product(name, price, url, category);
     }
 
     private WishList createWishList(User user, Product product, int quantity) {
