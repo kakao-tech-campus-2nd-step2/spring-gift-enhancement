@@ -45,9 +45,4 @@ public class OptionController {
         return ResponseEntity.ok("성공적으로 삭제되었습니다");
     }
 
-    @GetMapping("/options/{optionId}")
-    public Long getProductOfOption(@PathVariable Long optionId) throws NotFoundOption {
-        return optionService.findPrdouctOfOption(optionId);
-    }
-
 }

@@ -3,6 +3,9 @@ package gift.product;
 import gift.category.CategoryRepository;
 import gift.exception.InvalidCategory;
 import gift.exception.InvalidProduct;
+import gift.exception.NotFoundOption;
+import gift.option.Option;
+import gift.option.OptionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -18,10 +21,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public Page<ProductResponseDto> getAllProducts(Pageable pageable) {
@@ -99,6 +104,20 @@ public class ProductService {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new InvalidProduct("유효하지 않은 상품입니다"));
         productRepository.deleteById(id);
+    }
+
+    public List<Long> getProductsInCategory(Long id) {
+        List<Product> products = productRepository.findAllByCategory_Id(id);
+
+        return products.stream()
+            .map(Product::getId)
+            .collect(Collectors.toList());
+    }
+
+    public Long findPrdouctOfOption(Long optionId) throws NotFoundOption {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new NotFoundOption("해당 옵션을 찾을 수 없습니다"));
+        return option.getProduct().getId();
     }
 
 }

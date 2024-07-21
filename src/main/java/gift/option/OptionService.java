@@ -66,12 +66,6 @@ public class OptionService {
         optionRepository.delete(option);
     }
 
-    public Long findPrdouctOfOption(Long optionId) throws NotFoundOption {
-        Option option = optionRepository.findById(optionId)
-            .orElseThrow(() -> new NotFoundOption("해당 옵션을 찾을 수 없습니다"));
-        return option.getProduct().getId();
-    }
-
     public OptionResponseDto substractQuantity(Long optionId, int quantity) {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new NotFoundOption("해당 옵션을 찾을 수 없습니다"));

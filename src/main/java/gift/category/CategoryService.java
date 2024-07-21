@@ -89,12 +89,4 @@ public class CategoryService {
         );
     }
 
-    public List<Long> getProductsInCategory(Long id) {
-        List<Product> products = productRepository.findAllByCategory_Id(id);
-
-        return products.stream()
-            .map(Product::getId)
-            .collect(Collectors.toList());
-    }
-
 }

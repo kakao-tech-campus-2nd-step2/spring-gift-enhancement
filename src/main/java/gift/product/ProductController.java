@@ -1,6 +1,7 @@
 package gift.product;
 
 import gift.exception.InvalidProduct;
+import gift.exception.NotFoundOption;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,4 +62,15 @@ public class ProductController {
     public ProductResponseDto changeCategory(@PathVariable(name="id") Long productID, @RequestParam Long categoryId) {
         return productService.putCategory(productID, categoryId);
     }
+
+    @GetMapping("/products/{id}")
+    public List<Long> getProducts(@PathVariable Long id) {
+        return productService.getProductsInCategory(id);
+    }
+
+    @GetMapping("/options/{optionId}")
+    public Long getProductOfOption(@PathVariable Long optionId) throws NotFoundOption {
+        return productService.findPrdouctOfOption(optionId);
+    }
+
 }

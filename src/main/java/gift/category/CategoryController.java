@@ -48,9 +48,4 @@ public class CategoryController {
         return categoryService.getCategoryById(id);
     }
 
-    @GetMapping("/products/{id}")
-    public List<Long> getProducts(@PathVariable Long id) {
-        return categoryService.getProductsInCategory(id);
-    }
-
 }
