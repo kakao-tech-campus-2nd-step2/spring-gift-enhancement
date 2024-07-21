@@ -12,4 +12,12 @@ public class OptionDto {
         this.amount = amount;
         ProductDto = productDto;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
 }

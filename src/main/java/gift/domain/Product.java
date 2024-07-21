@@ -96,6 +96,8 @@ public class Product {
         this.options = options;
     }
 
+    public List<Option> getOptions() { return options; }
+
     public CategoryDto getCategoryDto() {
         CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName(),
             category.getColor(), category.getImageUrl(), category.getDescription());
