@@ -1,6 +1,7 @@
 package gift.Service;
 
 import gift.Model.Category;
+import gift.Model.Option;
 import gift.Model.Product;
 import gift.Repository.CategoryRepository;
 import gift.Repository.OptionRepository;
@@ -35,6 +36,8 @@ public class ProductService {
 
     public void addProduct(Product product){
         productRepository.save(product);
+        optionRepository.save(new Option(null, product,product.getName(),1));
+
     }
 
     public void updateProduct(Product product){

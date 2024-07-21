@@ -2,11 +2,14 @@ package gift.Controller;
 
 
 import gift.Model.Category;
+import gift.Model.Option;
 import gift.Model.Product;
 import gift.Service.ProductService;
 
 import jakarta.validation.Valid;
 
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
