@@ -53,13 +53,14 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<HttpStatus> updateProduct(@Valid @RequestBody ProductRequest changeProduct) {
+    public ResponseEntity<Product> updateProduct(@Valid @RequestBody ProductRequest changeProduct) {
         return ResponseEntity.ok(productService.updateProduct(changeProduct.toEntity()));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.deleteProduct(id));
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.ok("delete");
     }
 
     @GetMapping("{id}/options")

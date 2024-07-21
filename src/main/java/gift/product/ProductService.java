@@ -3,7 +3,6 @@ package gift.product;
 import gift.option.Option;
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
@@ -19,23 +18,20 @@ public class ProductService {
         return productRepository.save(newProduct);
     }
 
-    public HttpStatus updateProduct(Product changeProduct) {
+    public Product updateProduct(Product changeProduct) {
         Product product = findById(changeProduct.getId());
         product.update(changeProduct.getName(),changeProduct.getPrice(),changeProduct.getImageUrl(),
             changeProduct.getCategoryId());
-        productRepository.save(product);
-      
-        return HttpStatus.OK;
+
+        return productRepository.save(product);
     }
 
-    public HttpStatus deleteProduct(Long id) {
+    public void deleteProduct(Long id) {
         Product product = findById(id);
         for(Option option : product.getOptions()){
             deleteOption(product.getId(), option);
         }
         productRepository.deleteById(id);
-
-        return HttpStatus.OK;
     }
 
     public Product findById(Long productId) {
