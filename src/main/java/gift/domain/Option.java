@@ -60,4 +60,8 @@ public class Option {
         }
         this.quantity -= amount;
     }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

@@ -35,14 +35,17 @@ public class OptionService {
         return  responses;
     }
 
-    public OptionResponse addOption(Long productId, OptionRequest newOption) {
+    @Transactional
+    public OptionResponse addOption(Long productId, OptionRequest optionRequest) {
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new RuntimeException("No such product with id" + productId)
         );
 
-        validateOptionName(productId, newOption);
+        validateOptionName(productId, optionRequest);
 
-        Option option = new Option(newOption.name(), newOption.quantity(), product);
+        Option option = new Option(optionRequest.name(), optionRequest.quantity(), product);
+        option.setProduct(product);
+        product.getOptions().add(option);
         optionRepository.save(option);
         return OptionResponse.fromEntity(option);
     }
