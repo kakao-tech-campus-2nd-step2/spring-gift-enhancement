@@ -9,7 +9,7 @@ public class Option extends BaseEntity {
     private String name;
     @Column(name="quantity", nullable = false)
     private Long quantity;
-
+  
     protected Option() {
         super();
     }

@@ -55,10 +55,9 @@ public class ProductRepositoryTest {
         // when
         Product product = new Product("name", 4500, "url", category);
         Product actual = productRepository.save(product);
-
         Option option = new Option("신규", 3L);
         actual.addOption(option);
-
+      
         optionRepository.save(option);
         // then
         Assertions.assertThat(actual).isNotNull();
