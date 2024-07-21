@@ -1,11 +1,13 @@
 package gift.controller;
 
-import gift.domain.Category;
 import gift.domain.CategoryName;
-import gift.domain.Product;
+import gift.dto.CategoryDTO;
+import gift.dto.OptionDTO;
+import gift.dto.ProductDTO;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,8 +30,8 @@ public class ProductWebController {
 
     @GetMapping
     public String getProductsPage(Model model) {
-        List<Product> products = productService.findAllProducts();
-        List<Category> categories = categoryService.findAllCategories();
+        List<ProductDTO> products = productService.findAllProducts();
+        List<CategoryDTO> categories = categoryService.findAllCategories();
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
         return "products";
@@ -38,16 +40,23 @@ public class ProductWebController {
     @PostMapping(consumes = "application/x-www-form-urlencoded;charset=UTF-8")
     public String postProduct(@RequestParam String name, @RequestParam BigDecimal price,
         @RequestParam String imageUrl, @RequestParam String description,
-        @RequestParam CategoryName categoryName) {
-        Category category = categoryService.getCategoryByName(categoryName);
-        Product product = new Product.ProductBuilder()
+        @RequestParam CategoryName categoryName,@RequestParam(required = false) List<String> optionNames) {
+        List<OptionDTO> options = new ArrayList<>();
+        if (optionNames != null) {
+            for (String optionName : optionNames) {
+                options.add(new OptionDTO(optionName, null));
+            }
+        }
+        CategoryDTO categoryDTO = categoryService.getCategoryByName(categoryName);
+        ProductDTO productDTO = new ProductDTO.ProductDTOBuilder()
             .name(name)
             .price(price)
             .imageUrl(imageUrl)
             .description(description)
-            .category(category)
+            .categoryName(categoryName)
+            .options(options)
             .build();
-        productService.createProduct(product);
+        productService.createProduct(productDTO);
         return "redirect:/web/products";
     }
 
@@ -61,8 +70,8 @@ public class ProductWebController {
 
     @GetMapping("/edit/{id}")
     public String getEditForm(@PathVariable Long id, Model model) {
-        Product product = productService.getProductById(id);
-        List<Category> categories = categoryService.findAllCategories();
+        ProductDTO product = productService.getProductById(id);
+        List<CategoryDTO> categories = categoryService.findAllCategories();
         model.addAttribute("product", product);
         model.addAttribute("categories", categories);
         return "productEdit";
@@ -72,15 +81,16 @@ public class ProductWebController {
     public String editProduct(@PathVariable Long id, @RequestParam String name,
         @RequestParam BigDecimal price, @RequestParam String imageUrl,
         @RequestParam CategoryName categoryName) {
-        Category category = categoryService.getCategoryByName(categoryName);
-        Product product = new Product.ProductBuilder()
+        CategoryDTO categoryDTO = categoryService.getCategoryByName(categoryName);
+        ProductDTO productDTO = new ProductDTO.ProductDTOBuilder()
             .id(id)
             .name(name)
             .price(price)
             .imageUrl(imageUrl)
-            .category(category)
+            .categoryName(categoryName)
+            .options(new ArrayList<>())
             .build();
-        productService.updateProduct(id, product);
+        productService.updateProduct(id, productDTO);
         return "redirect:/web/products";
     }
 }

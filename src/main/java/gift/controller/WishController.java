@@ -3,12 +3,14 @@ package gift.controller;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
+import gift.dto.ProductDTO;
 import gift.dto.WishDTO;
 import gift.service.ProductService;
 import gift.service.WishService;
 import gift.util.LoginMember;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -31,23 +33,24 @@ public class WishController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Wish>> getWishes(@LoginMember Member member) {
-        List<Wish> wishes = wishService.getWishesByMemberId(member.getId());
+    public ResponseEntity<List<WishDTO>> getWishes(@LoginMember Member member) {
+        List<WishDTO> wishes = wishService.getWishesByMemberId(member.getId()).stream()
+            .map(WishDTO::from)
+            .collect(Collectors.toList());
         return ResponseEntity.ok(wishes);
     }
 
     @GetMapping("/paged")
-    public ResponseEntity<Page<Wish>> getPagedWishes(@LoginMember Member member, Pageable pageable) {
-        Page<Wish> wishes = wishService.getWishesByMemberId(member.getId(), pageable);
+    public ResponseEntity<Page<WishDTO>> getPagedWishes(@LoginMember Member member, Pageable pageable) {
+        Page<WishDTO> wishes = wishService.getWishesByMemberId(member.getId(), pageable)
+            .map(WishDTO::from);
         return ResponseEntity.ok(wishes);
     }
 
-
     @PostMapping
     public ResponseEntity<String> addWish(@RequestBody @Valid WishDTO wishDTO, @LoginMember Member member) {
-        Product product = productService.getProductById(wishDTO.getProductId());
-        Wish wish = wishDTO.toEntity(member, product);
-        wishService.addWish(wish);
+        ProductDTO productDTO = productService.getProductById(wishDTO.getProductId());
+        wishService.addWish(wishDTO.toEntity(member, productDTO.toEntity(null)));
         return ResponseEntity.ok("Wish added successfully");
     }
 

@@ -21,6 +21,12 @@ public class WishDTO {
         return productId;
     }
 
+    public static WishDTO from(Wish wish) {
+        return new WishDTOBuilder()
+            .productId(wish.getProduct().getId())
+            .build();
+    }
+
     public static class WishDTOBuilder {
         private Long productId;
 
