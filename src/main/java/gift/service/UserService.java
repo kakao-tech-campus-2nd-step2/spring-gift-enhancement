@@ -63,12 +63,14 @@ public class UserService {
      * 유저 정보를 저장하는 로직
      */
     @Transactional
-    public void save(UserRequest userRequest){
-        userRepository.save(new User(
+    public UserResponse save(UserRequest userRequest){
+        User savedUser = userRepository.save(new User(
                 userRequest.getUserId(),
                 userRequest.getEmail(),
                 userRequest.getPassword()
         ));
+
+        return new UserResponse(savedUser);
     }
     /*
      * 유저 정보를 갱신하는 로직
