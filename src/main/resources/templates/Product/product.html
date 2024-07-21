@@ -8,7 +8,7 @@
 <body>
 <h1>상품 정보 페이지</h1>
 <div class="top-right">
-    <a href="/products/new" class="button">상품 정보 추가하기</a>
+    <a href="products/new" class="button">상품 등록하기</a>
 </div>
 <table>
     <thead>
@@ -18,7 +18,7 @@
         <th>상품 가격</th>
         <th>이미지 URL</th>
         <th>카테고리</th>
-        <th>수정/삭제</th> <!-- 수정, 삭제를 위한 열 추가 -->
+        <th>옵션/수정/삭제</th>
     </tr>
     </thead>
     <tbody>
@@ -29,10 +29,13 @@
         <td th:text="${product.imageUrl}"></td>
         <td th:text="${product.category.name}"></td>
         <td>
-            <a th:href="@{/products/edit/{id}(id=${product.id})}" class="edit-button">수정</a>
+            <a th:href="@{/api/products/{id}/options(id=${product.id})}" class="button">옵션</a>
+
+            <a th:href="@{/api/products/edit/{id}(id=${product.id})}" class="button">수정</a>
+
             <form th:action="@{'/products/' + ${product.id}}" method="post" style="display:inline;">
                 <input type="hidden" name="_method" value="delete"/>
-                <button type="submit" class="delete-button">삭제</button>
+                <button type="submit" class="button">삭제</button>
             </form>
         </td>
     </tr>

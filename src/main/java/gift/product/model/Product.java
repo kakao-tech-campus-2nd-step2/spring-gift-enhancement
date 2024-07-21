@@ -1,12 +1,14 @@
 package gift.product.model;
 
 import gift.category.model.Category;
+import gift.option.domain.Option;
 import gift.wish.model.Wish;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "product")
@@ -20,7 +22,9 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private int price;
+    @NotNull(message = "Price는 null일 수 없습니다.")
+    @Range(min = 0, message = "Price는 0 이상이어야 합니다.")
+    private Integer price;
 
     @Column(nullable = false)
     private String imageUrl;
@@ -28,12 +32,22 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     // 생성자
-    public Product(String name, int price, String imageUrl, Category category) {
+    public Product() {}
+    public Product(String name, Integer price, String imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    public Product(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -50,6 +64,15 @@ public class Product {
                 imageUrl.equals(comparingProduct.imageUrl);
     }
 
+    public void addOption(Option option) {
+        this.options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOption(Option option) {
+        options.remove(option);
+        option.setProduct(null);
+    }
 
     public void addWish(Wish wish) {
         this.wishes.add(wish);
@@ -61,16 +84,9 @@ public class Product {
         wish.setProduct(null);
     }
 
-    // Constructors, Getters, and Setters
-    public Product() {}
-
-    public Product(String name, int price, String imageUrl) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
 
     // Getters and setters
+
     public Long getId() {
         return id;
     }
@@ -87,11 +103,11 @@ public class Product {
         this.name = name;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -109,6 +125,14 @@ public class Product {
 
     public void setWishes(List<Wish> wishes) {
         this.wishes = wishes;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 
     public Category getCategory() {

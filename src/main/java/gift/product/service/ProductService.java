@@ -3,6 +3,9 @@ package gift.product.service;
 import gift.category.model.Category;
 import gift.category.repository.CategoryRepository;
 import gift.common.exception.ProductAlreadyExistsException;
+import gift.option.domain.Option;
+import gift.option.domain.OptionRequest;
+import gift.option.repository.OptionJpaRepository;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
 import jakarta.validation.Valid;
@@ -21,10 +24,12 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionJpaRepository optionJpaRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionJpaRepository optionJpaRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionJpaRepository = optionJpaRepository;
     }
 
     public List<Product> getAllProducts() {
@@ -118,5 +123,12 @@ public class ProductService {
     // 카테고리 목록을 반환하는 메서드 추가
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
+    }
+
+    // id에 해당하는 option들 전부 조회
+    public List<Option> getOptionsByProductId(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("[ERROR] 다음 id의 상품은 존재하지 않음 : " + id));
+        return optionJpaRepository.findAllByProduct(product);
     }
 }
