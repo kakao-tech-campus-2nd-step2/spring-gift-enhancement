@@ -14,6 +14,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
 import java.util.regex.Pattern;
 
 @Entity
@@ -35,6 +36,9 @@ public class Option {
 
     @Column(nullable = false)
     private int quantity;
+
+    @Version
+    private Long version;
 
     private static final String PRODUCT_NAME_REGEXP = "[a-zA-z0-9ㄱ-ㅎㅏ-ㅣ가-힣()\\[\\]+\\-&/_\\s]+";
 
