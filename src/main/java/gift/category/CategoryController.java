@@ -2,6 +2,7 @@ package gift.category;
 
 import java.util.List;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,8 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public HttpEntity<String> deleteCategry(@PathVariable Long id) {
-        return categoryService.deleteCategoryById(id);
+        categoryService.deleteCategoryById(id);
+        return ResponseEntity.ok("성공적으로 삭제되었습니다");
     }
 
     @GetMapping("/{id}")

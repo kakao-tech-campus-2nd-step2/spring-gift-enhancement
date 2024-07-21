@@ -70,13 +70,10 @@ public class CategoryService {
         );
     }
 
-    public HttpEntity<String> deleteCategoryById(Long id) {
+    public void deleteCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new InvalidCategory("유효하지 않은 카테고리입니다."));
-
         categoryRepository.delete(category);
-
-        return ResponseEntity.ok("성공적으로 삭제되었습니다");
     }
 
     public CategoryResponseDto getCategoryById(Long id) {

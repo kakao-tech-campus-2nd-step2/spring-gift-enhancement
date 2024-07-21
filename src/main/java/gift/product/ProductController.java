@@ -53,7 +53,8 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public HttpEntity<String> deleteProduct(@PathVariable Long id) {
-        return productService.deleteProductById(id);
+        productService.deleteProductById(id);
+        return ResponseEntity.ok("성공적으로 삭제되었습니다");
     }
 
     @PutMapping("/category/{id}")

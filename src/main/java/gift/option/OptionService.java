@@ -60,13 +60,10 @@ public class OptionService {
         );
     }
 
-    public HttpEntity<String> deleteOptionById(Long optionId) throws NotFoundOption {
+    public void deleteOptionById(Long optionId) throws NotFoundOption {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new NotFoundOption("해당 옵션을 찾을 수 없습니다"));
-
         optionRepository.delete(option);
-
-        return ResponseEntity.ok("성공적으로 삭제되었습니다");
     }
 
     public Long findPrdouctOfOption(Long optionId) throws NotFoundOption {

@@ -3,6 +3,7 @@ package gift.option;
 import gift.exception.NotFoundOption;
 import java.util.List;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +41,8 @@ public class OptionController {
 
     @DeleteMapping("/options/{optionId}")
     public HttpEntity<String> deleteOptionById(@PathVariable Long optionId) throws NotFoundOption {
-        return optionService.deleteOptionById(optionId);
+        optionService.deleteOptionById(optionId);
+        return ResponseEntity.ok("성공적으로 삭제되었습니다");
     }
 
     @GetMapping("/options/{optionId}")

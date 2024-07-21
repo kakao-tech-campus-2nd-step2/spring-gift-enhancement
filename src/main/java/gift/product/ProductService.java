@@ -95,13 +95,10 @@ public class ProductService {
         );
     }
 
-    public HttpEntity<String> deleteProductById(Long id) {
+    public void deleteProductById(Long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new InvalidProduct("유효하지 않은 상품입니다"));
-
         productRepository.deleteById(id);
-
-        return ResponseEntity.ok("성공적으로 삭제되었습니다");
     }
 
 }
