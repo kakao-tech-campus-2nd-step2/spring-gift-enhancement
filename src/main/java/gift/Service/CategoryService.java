@@ -1,5 +1,6 @@
 package gift.Service;
 
+import gift.Exception.CategoryNotFoundException;
 import gift.Model.Category;
 import gift.Model.RequestCategory;
 import gift.Model.ResponseCategoryDTO;
@@ -41,14 +42,14 @@ public class CategoryService {
     @Transactional
     public void editCategory(RequestCategory requestCategory) {
         Category category = categoryRepository.findByName(requestCategory.name())
-                .orElseThrow(()-> new NoSuchElementException("매칭되는 카테고리가 없습니다"));
+                .orElseThrow(()-> new CategoryNotFoundException("매칭되는 카테고리가 없습니다"));
         category.update(requestCategory.name(), requestCategory.color(), requestCategory.imageUrl(),requestCategory.description());;
     }
 
     @Transactional
     public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NoSuchElementException("매칭되는 카테고리가 없습니다"));
+                .orElseThrow(() -> new CategoryNotFoundException("매칭되는 카테고리가 없습니다"));
         categoryRepository.deleteById(categoryId);
     }
 }
