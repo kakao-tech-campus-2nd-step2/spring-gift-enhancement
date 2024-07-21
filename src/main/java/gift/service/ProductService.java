@@ -13,10 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -38,7 +37,7 @@ public class ProductService {
 
     public Product addProduct(ProductDto productDto) {
         Category category = getCategoryById(productDto.getCategoryId());
-        List<Option> options = validateAndConvertOptions(productDto.getOptions());
+        List<Option> options = convertOptions(productDto.getOptions());
         Product product = new Product(
                 productDto.getName(),
                 productDto.getPrice(),
@@ -52,7 +51,7 @@ public class ProductService {
 
     public Product updateProduct(Long id, ProductDto productDto) {
         Category category = getCategoryById(productDto.getCategoryId());
-        List<Option> options = validateAndConvertOptions(productDto.getOptions());
+        List<Option> options = convertOptions(productDto.getOptions());
         Product updateProduct = new Product(
                 id,
                 productDto.getName(),
@@ -98,28 +97,9 @@ public class ProductService {
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
     }
 
-    private List<Option> validateAndConvertOptions(List<OptionDto> optionDtos) {
-        if (optionDtos.isEmpty()) {
-            throw new IllegalArgumentException("상품에는 최소 하나의 옵션이 있어야 합니다.");
-        }
-
-        Set<String> optionNames = new HashSet<>();
+    private List<Option> convertOptions(List<OptionDto> optionDtos) {
         return optionDtos.stream()
-                .map(optionDto -> {
-                    validateOption(optionDto, optionNames);
-                    return new Option(optionDto.getName(), optionDto.getQuantity());
-                })
-                .toList();
-    }
-
-    private void validateOption(OptionDto optionDto, Set<String> optionNames) {
-        if (optionDto.getName().length() >= 50 || optionDto.getName().length() <= 0) {
-            throw new IllegalArgumentException("옵션 이름은 최대 50자까지 입력 가능합니다.");
-        } if (!optionNames.add(optionDto.getName())) {
-            throw new IllegalArgumentException("옵션 이름이 중복됩니다: " + optionDto.getName());
-        } if (optionDto.getQuantity() <= 0 || optionDto.getQuantity() > 99999999) {
-            throw new IllegalArgumentException("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");
-        }
+                .map(optionDto -> new Option(optionDto.getName(), optionDto.getQuantity()))
+                .collect(Collectors.toList());
     }
 }
-
