@@ -1,8 +1,8 @@
 package gift.controller.admin;
 
 import gift.DTO.category.CategoryResponse;
-import gift.DTO.product.ProductRequest;
 import gift.DTO.product.ProductResponse;
+import gift.DTO.product.ProductRequest;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;

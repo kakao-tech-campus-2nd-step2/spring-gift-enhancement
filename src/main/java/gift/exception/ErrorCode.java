@@ -1,5 +1,6 @@
 package gift.exception;
 
+import gift.exception.category.DuplicateCategoryNameException;
 import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
