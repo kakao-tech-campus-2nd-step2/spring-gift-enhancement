@@ -6,23 +6,18 @@ import jakarta.validation.constraints.NotNull;
 
 public class CategoryUpdateRequestDto {
 
-    @NotNull
-    private final Long id;
-
     @NotBlank
-    private final String name;
+    private String name;
 
-    public CategoryUpdateRequestDto(Long id, String name) {
-        this.id = id;
+    public CategoryUpdateRequestDto() {
+    }
+
+    public CategoryUpdateRequestDto(String name) {
         this.name = name;
     }
 
     public Category toEntity() {
-        return new Category(id, name);
-    }
-
-    public Long getId() {
-        return id;
+        return new Category(name);
     }
 
     public String getName() {

@@ -74,8 +74,8 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponseDto updateProduct(@Valid ProductUpdateRequestDto productAddRequestDto) {
-        Product product = productRepository.findById(productAddRequestDto.getId())
+    public ProductResponseDto updateProduct(Long id, ProductUpdateRequestDto productAddRequestDto) {
+        Product product = productRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다."));
 
         Category category = categoryRepository.findByName(productAddRequestDto.getCategoryName())

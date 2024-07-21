@@ -45,10 +45,11 @@ public class WishController {
         return ResponseEntity.status(HttpStatus.CREATED).body(wishService.addWish(user.getEmail(), productId));
     }
 
-    @PutMapping
+    @PutMapping("/{productId}")
     public ResponseEntity<WishResponseDto> updateWish(
+        @PathVariable Long productId,
         @Valid @RequestBody WishUpdateRequestDto wishUpdateRequestDto, @LoginUser User user) {
-        return ResponseEntity.ok(wishService.updateWish(user.getEmail(), wishUpdateRequestDto));
+        return ResponseEntity.ok(wishService.updateWish(productId, user.getEmail(), wishUpdateRequestDto));
     }
 
     @DeleteMapping("/{productId}")
