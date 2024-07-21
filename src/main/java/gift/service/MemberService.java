@@ -1,15 +1,15 @@
 package gift.service;
 
 import gift.dto.LoginMemberToken;
-import gift.dto.MemberDTO;
+import gift.dto.MemberRequest;
 
 public interface MemberService {
 
-    void register(MemberDTO memberDTO);
+    void register(MemberRequest memberRequest);
 
-    LoginMemberToken login(MemberDTO memberDTO);
+    LoginMemberToken login(MemberRequest memberRequest);
 
-    boolean checkRole(MemberDTO memberDTO);
+    boolean checkRole(MemberRequest memberRequest);
 
-    MemberDTO getLoginUser(String token);
+    MemberRequest getLoginUser(String token);
 }

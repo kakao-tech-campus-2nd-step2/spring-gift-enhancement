@@ -28,3 +28,14 @@
 - 관리자 화면에서 카테고리 조회,추가,수정,삭제
 
 - ~~상품 추가, 수정 시 카테고리 요구~~
+
+# step 2
+
+- 리뷰 반영
+
+- option 컨트롤러 만들기 - GET,POST,PUT,DELETE
+- option DTO 만들기
+- option 서비스 추가 - findAll
+- option entity 추가
+- option 리포지토리 추가
+- 테스트 추가

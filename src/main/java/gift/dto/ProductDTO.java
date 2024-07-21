@@ -10,15 +10,15 @@ import jakarta.validation.constraints.Size;
 public class ProductDTO {
 
     private Long id;
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9\\(\\)\\[\\]\\+\\-&/_]+$", message = "사용할 수 없는 특수문자입니다.")
-    @Size(min = 1, max = 15, message = "상품 이름은 1~15글자로 제한됩니다.")
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9\\(\\)\\[\\]\\+\\-&/_]+$", message = "잘못된 이름입니다.")
+    @Size(min = 1, max = 15, message = "잘못된 이름입니다.")
     //이 정규표현식을 만족해야지만 ok
     private String name;
     @NotNull(message = "가격을 입력해주세요")
     private Integer price;
     @NotBlank(message = "이미지 주소를 입력해주세요")
     private String imageUrl;
-    @NotBlank(message = "카테고리를 입력해주세요")
+    @NotNull(message = "카테고리를 입력해주세요")
     private Long categoryId;
 
     //타임리프 사용을 위한 기본 생성자

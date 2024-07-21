@@ -4,7 +4,7 @@ package gift.service;
 import gift.database.JpaMemberRepository;
 import gift.database.JpaProductRepository;
 import gift.database.JpaWishRepository;
-import gift.dto.WishListDTO;
+import gift.dto.WishListResponse;
 import gift.exceptionAdvisor.exceptions.MemberNoSuchException;
 import gift.exceptionAdvisor.exceptions.ProductNoSuchException;
 import gift.exceptionAdvisor.exceptions.WishNoSuchException;
@@ -65,19 +65,19 @@ public class WishListServiceImpl implements WishListService {
     }
 
     @Override
-    public WishListDTO getWishList(long memberId) {
+    public WishListResponse getWishList(long memberId) {
         Member member = jpaMemberRepository.findById(memberId)
             .orElseThrow(MemberNoSuchException::new);
         Map<String, Integer> wishList = member.getWishList().stream()
             .collect(Collectors.toMap(Wish::getProductName, Wish::getProductCount));
-        return new WishListDTO(member.getId(), wishList);
+        return new WishListResponse(member.getId(), wishList);
     }
 
     @Override
-    public WishListDTO getWishListPage(long memberId, int pageNumber, int pageSize) {
+    public WishListResponse getWishListPage(long memberId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Map<String, Integer> wishlist = jpaWishRepository.findByMemberId(memberId, pageable)
             .stream().collect(Collectors.toMap(Wish::getProductName, Wish::getProductCount));
-        return new WishListDTO(memberId, wishlist);
+        return new WishListResponse(memberId, wishlist);
     }
 }

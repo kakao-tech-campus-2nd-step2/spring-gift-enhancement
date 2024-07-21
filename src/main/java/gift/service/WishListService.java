@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.WishListDTO;
+import gift.dto.WishListResponse;
 
 public interface WishListService {
 
@@ -10,8 +10,8 @@ public interface WishListService {
 
     void updateProduct(long memberId, long productId, int productValue);
 
-    WishListDTO getWishList(long memberId);
+    WishListResponse getWishList(long memberId);
 
-    WishListDTO getWishListPage(long memberId, int pageNumber, int pageSize);
+    WishListResponse getWishListPage(long memberId, int pageNumber, int pageSize);
 
 }

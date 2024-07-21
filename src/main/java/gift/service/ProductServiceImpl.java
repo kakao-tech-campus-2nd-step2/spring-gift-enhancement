@@ -36,7 +36,6 @@ public class ProductServiceImpl implements ProductService {
                 product.getImageUrl(),product.getCategoryId())).toList();
     }
 
-    //새로운 상품 추가
     @Override
     public void create(ProductDTO dto) {
         checkKakao(dto.getName());
@@ -44,18 +43,18 @@ public class ProductServiceImpl implements ProductService {
         jpaProductRepository.save(product);
 
         Category category = checkCategory(dto.getCategoryId());
-        product.setCategory(category);
+        product.updateCategory(category);
     }
 
 
     @Override
-    public void update(long id,ProductDTO dto) {
+    public void update(long id, ProductDTO dto) {
         jpaProductRepository.findById(id).orElseThrow(ProductNoSuchException::new);
 
         Product product = new Product(id, dto.getName(), dto.getPrice(), dto.getImageUrl());
         Category category = checkCategory(dto.getCategoryId());
 
-        product.setCategory(category);
+        product.updateCategory(category);
         jpaProductRepository.save(product);
     }
 

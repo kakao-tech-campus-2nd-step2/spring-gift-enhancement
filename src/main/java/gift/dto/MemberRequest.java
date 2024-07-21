@@ -3,7 +3,7 @@ package gift.dto;
 import gift.model.MemberRole;
 import jakarta.validation.constraints.NotBlank;
 
-public class MemberDTO {
+public class MemberRequest {
 
     private Long id;
     @NotBlank(message = "이메일을 입력해주세요")
@@ -12,10 +12,10 @@ public class MemberDTO {
     private String password;
     private MemberRole role;
 
-    public MemberDTO() {
+    public MemberRequest() {
     }
 
-    public MemberDTO(String email, String password, MemberRole role) {
+    public MemberRequest(String email, String password, MemberRole role) {
         this.email = email;
         this.password = password;
         this.role = role;
@@ -24,7 +24,7 @@ public class MemberDTO {
         }
     }
 
-    public MemberDTO(Long id, String email, String password, MemberRole role) {
+    public MemberRequest(Long id, String email, String password, MemberRole role) {
         this.id = id;
         this.email = email;
         this.password = password;

@@ -1,11 +1,10 @@
 package gift.controller;
 
 
-import gift.dto.CategoryDTO;
+import gift.dto.CategoryRequest;
 import gift.dto.CategoryResponse;
 import gift.service.CategoryService;
 import java.util.List;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,21 +30,21 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody CategoryDTO categoryDTO) {
-        categoryService.create(categoryDTO);
+    public ResponseEntity<Void> add(@RequestBody CategoryRequest categoryRequest) {
+        categoryService.create(categoryRequest);
 
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CategoryDTO categoryDTO) {
-        categoryService.update(id, categoryDTO);
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody CategoryRequest categoryRequest) {
+        categoryService.update(id, categoryRequest);
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         categoryService.delete(id);
 
         return ResponseEntity.ok().build();

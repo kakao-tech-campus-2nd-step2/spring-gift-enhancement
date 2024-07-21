@@ -11,16 +11,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JpaProductRepository extends JpaRepository<Product, Long> {
 
-    @Override
     <S extends Product> S save(S entity);
 
-    @Override
     Optional<Product> findById(Long aLong);
 
-    @Override
     void delete(Product entity);
 
-    @Override
     List<Product> findAll();
 
     Page<Product> findAll(Pageable pageable);
