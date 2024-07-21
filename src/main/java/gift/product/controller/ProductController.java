@@ -1,8 +1,10 @@
 package gift.product.controller;
 
+import gift.product.dto.OptionDto;
 import gift.product.dto.ProductDto;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,5 +61,11 @@ public class ProductController {
   public ResponseEntity<?> deleteProduct(@PathVariable long id) {
     productService.deleteProduct(id);
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/{id}/options")
+  public ResponseEntity<List<OptionDto>> getProductOptions(@PathVariable long id) {
+    List<OptionDto> options = productService.getProductOptions(id);
+    return ResponseEntity.ok(options);
   }
 }

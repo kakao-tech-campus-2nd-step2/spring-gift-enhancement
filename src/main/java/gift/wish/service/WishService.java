@@ -69,7 +69,6 @@ public class WishService {
             savedWish.getUser().getRole()
         ),
         ProductDto.toDto(savedWish.getProduct())
-
     );
   }
 
