@@ -72,6 +72,27 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("여러 옵션을 가진 상품 등록 테스트")
+    void addProductWithMultipleOption() throws Exception {
+        addCategory();
+        List<OptionSaveRequest> tmpOptions = new ArrayList<>();
+        tmpOptions.add(new OptionSaveRequest("케잌1", 1, null));
+        tmpOptions.add(new OptionSaveRequest("케잌2", 20, null));
+        tmpOptions.add(new OptionSaveRequest("케잌3", 20, null));
+        tmpOptions.add(new OptionSaveRequest("케잌4", 20, null));
+
+        ProductRequest request = new ProductRequest(null, "선물", 4500L, "https", 1L, "생일 선물",
+            tmpOptions);
+
+        String requestJson = new ObjectMapper().writeValueAsString(request);
+
+        mockMvc.perform(post("/api/products/product")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+            .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("상품 등록 시점에 옵션 이름 중복 실패 테스트")
     void addProductOptionDuplicate() throws Exception {
         addCategory();
