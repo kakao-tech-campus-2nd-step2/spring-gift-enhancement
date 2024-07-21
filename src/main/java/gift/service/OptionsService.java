@@ -110,5 +110,8 @@ public class OptionsService {
         optionsRepository.deleteAllByProductId(productId);
     }
 
-
+    @Recover
+    private void failedSubtractingOptionQuantity() {
+        throw new FailedRetryException();
+    }
 }
