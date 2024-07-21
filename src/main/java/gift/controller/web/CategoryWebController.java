@@ -1,35 +1,24 @@
-package gift.controller;
+package gift.controller.web;
 
 import gift.dto.CategoryDTO;
 import gift.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/categories")
-public class CategoryController {
+@RequestMapping("/web/categories")
+public class CategoryWebController {
 
     private final CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
+    public CategoryWebController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
     @GetMapping
-    @ResponseBody
-    public List<CategoryDTO> getCategories() {
-        return categoryService.getAllCategories();
-    }
-
-    @GetMapping("/web")
     public String getCategoriesWeb(Model model) {
         model.addAttribute("categories", categoryService.getAllCategories());
         return "category";

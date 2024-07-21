@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.web;
 
 import gift.dto.ProductDTO;
 import gift.exception.ErrorCode;

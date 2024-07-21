@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.api;
 
 import gift.jwt.JwtTokenProvider;
 import gift.jwt.JwtUserDetailsService;

@@ -1,4 +1,4 @@
-package gift.controller;
+package gift.controller.api;
 
 import gift.user.UserCreateForm;
 import gift.user.UserService;
