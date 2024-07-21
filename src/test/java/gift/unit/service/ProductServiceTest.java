@@ -151,12 +151,12 @@ class ProductServiceTest {
     @Transactional
     void updateProductTest() {
         // given
-        Category category = new Category(1L, "Category A", "#123456", "image", "");
+        Category category1 = new Category("Category A", "#123456", "image", "");
         Product product = Product.builder().name("Product A").price(1000)
             .imageUrl("http://example.com/images/product_a.jpg").build();
         UpdateProductRequest request = new UpdateProductRequest("product3", 30000, null, 1L);
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
-        given(categoryRepository.findById(any(Long.class))).willReturn(Optional.of(category));
+        given(categoryRepository.findById(any(Long.class))).willReturn(Optional.of(category1));
 
         // when
         productService.updateProduct(1L, request);
