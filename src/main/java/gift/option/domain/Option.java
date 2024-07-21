@@ -70,7 +70,7 @@ public class Option {
     }
 
     public void validateQuantity() {
-        if (this.quantity < 1 || this.quantity >= 100000000) {
+        if (this.quantity < 1 || this.quantity >= 100_000_000) {
             throw new InvalidProductOptionException("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");
         }
     }
