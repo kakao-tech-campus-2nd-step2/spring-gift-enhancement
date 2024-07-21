@@ -52,7 +52,7 @@ public class ProductController {
      */
     @PostMapping("/api/products")
     public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductRequest product){
-        productService.createProduct(product);
+        productService.save(product);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
