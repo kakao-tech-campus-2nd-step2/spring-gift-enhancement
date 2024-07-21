@@ -54,15 +54,15 @@ public class MemberService {
                 .updatePassword(command.password());
     }
 
-    public MemberResponse findById(Long memberId) {
+    public MemberServiceResponse findById(Long memberId) {
         return memberRepository.findById(memberId)
-                .map(MemberResponse::from)
+                .map(MemberServiceResponse::from)
                 .orElseThrow(() -> new NotFoundException("해당 회원이 존재하지 않습니다."));
     }
 
-    public List<MemberResponse> findAll() {
+    public List<MemberServiceResponse> findAll() {
         return memberRepository.findAll()
-                .stream().map(MemberResponse::from).toList();
+                .stream().map(MemberServiceResponse::from).toList();
     }
 
     @Transactional

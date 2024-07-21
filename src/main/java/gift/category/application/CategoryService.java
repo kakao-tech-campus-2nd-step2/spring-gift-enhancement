@@ -23,9 +23,9 @@ public class CategoryService {
         this.productRepository = productRepository;
     }
 
-    public Page<CategoryResponse> findAll(Pageable pageable) {
+    public Page<CategoryServiceResponse> findAll(Pageable pageable) {
         return categoryRepository.findAll(pageable)
-                .map(CategoryResponse::from);
+                .map(CategoryServiceResponse::from);
     }
 
     @Transactional
@@ -38,9 +38,9 @@ public class CategoryService {
         categoryRepository.save(command.toCategory());
     }
 
-    public CategoryResponse findById(Long categoryId) {
+    public CategoryServiceResponse findById(Long categoryId) {
         return categoryRepository.findById(categoryId)
-                .map(CategoryResponse::from)
+                .map(CategoryServiceResponse::from)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 카테고리입니다."));
     }
 

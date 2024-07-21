@@ -1,7 +1,6 @@
 package gift.member.presentation;
 
 import gift.auth.TokenService;
-import gift.member.application.MemberResponse;
 import gift.member.application.MemberService;
 import gift.member.presentation.request.*;
 import org.springframework.http.HttpHeaders;
@@ -48,15 +47,15 @@ public class MemberController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberResponse> findById(
+    public ResponseEntity<MemberControllerResponse> findById(
             @PathVariable("id") Long memberId
     ) {
-        return ResponseEntity.ok(memberService.findById(memberId));
+        return ResponseEntity.ok(MemberControllerResponse.from(memberService.findById(memberId)));
     }
 
     @GetMapping
-    public ResponseEntity<List<MemberResponse>> findAll() {
-        return ResponseEntity.ok(memberService.findAll());
+    public ResponseEntity<List<MemberControllerResponse>> findAll() {
+        return ResponseEntity.ok(memberService.findAll().stream().map(MemberControllerResponse::from).toList());
     }
 
     @PutMapping("/email")

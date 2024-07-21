@@ -1,6 +1,5 @@
 package gift.wishlist.presentation;
 
-import gift.wishlist.application.WishlistResponse;
 import gift.wishlist.application.WishlistService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,22 +21,22 @@ public class WishlistController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<WishlistResponse>> findAll(
+    public ResponseEntity<Page<WishlistControllerResponse>> findAll(
             @RequestAttribute("memberId") Long memberId,
             Pageable pageable
     ) {
         return ResponseEntity.ok(
-                wishlistService.findAllByMemberId(memberId, pageable)
+                wishlistService.findAllByMemberId(memberId, pageable).map(WishlistControllerResponse::from)
         );
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Page<WishlistResponse>> findAllByProductId(
+    public ResponseEntity<Page<WishlistControllerResponse>> findAllByProductId(
             @PathVariable("productId") Long productId,
             Pageable pageable
     ) {
         return ResponseEntity.ok(
-                wishlistService.findAllByProductId(productId, pageable)
+                wishlistService.findAllByProductId(productId, pageable).map(WishlistControllerResponse::from)
         );
     }
 
