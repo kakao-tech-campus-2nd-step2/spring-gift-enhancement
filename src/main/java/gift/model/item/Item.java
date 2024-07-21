@@ -1,6 +1,7 @@
 package gift.model.item;
 
 import gift.model.categories.Category;
+import gift.model.option.Option;
 import gift.model.wishList.WishItem;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,6 +37,9 @@ public class Item {
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<WishItem> wishes = new ArrayList<>();
+    @BatchSize(size = 100)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
 
     protected Item() {
     }
@@ -74,6 +78,10 @@ public class Item {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     public ItemDTO toDTO() {

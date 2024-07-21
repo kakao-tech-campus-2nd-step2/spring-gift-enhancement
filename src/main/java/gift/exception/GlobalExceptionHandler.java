@@ -10,6 +10,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -22,16 +23,21 @@ public class GlobalExceptionHandler {
         return handleException(e.getErrorCode(), Collections.emptyMap());
     }
 
-    @ExceptionHandler(CustomArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDTO> handleCustomArgumentNotValidException(
-        CustomArgumentNotValidException e) {
-        ErrorCode errorCode = e.getErrorCode();
+    @ExceptionHandler({MethodArgumentNotValidException.class,
+        CustomArgumentNotValidException.class})
+    public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(
+        MethodArgumentNotValidException e) {
+        ErrorCode errorCode = ErrorCode.INVALID_INPUT;
         Map<String, String> errors = new HashMap<>();
         for (FieldError fieldError : e.getFieldErrors()) {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
+        if (e instanceof CustomArgumentNotValidException) {
+            errorCode = ((CustomArgumentNotValidException) e).getErrorCode();
+        }
         return handleException(errorCode, errors);
     }
+
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<String> handleAuthException(JwtException e) {

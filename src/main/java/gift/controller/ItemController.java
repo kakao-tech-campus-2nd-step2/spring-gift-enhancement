@@ -47,13 +47,16 @@ public class ItemController {
         return ResponseEntity.ok(list);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Long> createItem(@Valid @RequestBody ItemForm form, BindingResult result)
         throws MethodArgumentNotValidException {
         if (result.hasErrors()) {
-            throw new CustomArgumentNotValidException(result, ErrorCode.BAD_REQUEST);
+            throw new CustomArgumentNotValidException(result, ErrorCode.INVALID_INPUT);
         }
-        return ResponseEntity.ok(itemService.insertItem(form));
+        ItemDTO itemDTO = new ItemDTO(form.getName(), form.getPrice(), form.getImgUrl(),
+            form.getCategoryId());
+        Long itemId = itemService.insertItem(itemDTO,form.getOptions(),result);
+        return ResponseEntity.ok(itemId);
     }
 
 
