@@ -52,7 +52,7 @@ public class Product {
         return name;
     }
 
-    public void setName(String name) {
+    public void updateName(String name) {
         validateName(name);
         this.name = name;
     }
@@ -61,7 +61,7 @@ public class Product {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void updatePrice(String price) {
         validatePrice(price);
         this.price = price;
     }
@@ -70,7 +70,7 @@ public class Product {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void updateCategory(Category category) {
         this.category = category;
     }
 
@@ -78,7 +78,7 @@ public class Product {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void updateImageUrl(String imageUrl) {
         validateImageUrl(imageUrl);
         this.imageUrl = imageUrl;
     }

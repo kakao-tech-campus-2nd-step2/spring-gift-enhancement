@@ -46,8 +46,8 @@ public class OptionService {
             && optionRepository.existsByProductIdAndName(optionDTO.productId(), optionDTO.name())) {
             throw new IllegalArgumentException("동일한 상품 내의 옵션 이름은 중복될 수 없습니다.");
         }
-        existingOption.setName(optionDTO.name());
-        existingOption.setQuantity(optionDTO.quantity());
+        existingOption.updateName(optionDTO.name());
+        existingOption.updateQuantity(optionDTO.quantity());
         optionRepository.save(existingOption);
     }
 

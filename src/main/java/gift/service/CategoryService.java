@@ -50,7 +50,7 @@ public class CategoryService {
     public void updateCategory(CategoryDTO categoryDTO, Long id) {
         Category existingCategory = categoryRepository.findById(id).orElse(null);
         if (existingCategory != null) {
-            existingCategory.setName(categoryDTO.name());
+            existingCategory.updateName(categoryDTO.name());
             categoryRepository.save(existingCategory);
         }
     }

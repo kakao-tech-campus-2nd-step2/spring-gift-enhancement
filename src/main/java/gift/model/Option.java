@@ -47,7 +47,7 @@ public class Option {
         return name;
     }
 
-    public void setName(String name) {
+    public void updateName(String name) {
         validateName(name);
         this.name = name;
     }
@@ -56,7 +56,7 @@ public class Option {
         return quantity;
     }
 
-    public void setQuantity(Long quantity) {
+    public void updateQuantity(Long quantity) {
         validateQuantity(quantity);
         this.quantity = quantity;
     }
