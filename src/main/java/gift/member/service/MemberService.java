@@ -11,8 +11,12 @@ import java.util.Optional;
 @Service
 public class MemberService {
 
+    private final MemberRepository memberRepository;
+
     @Autowired
-    private MemberRepository memberRepository;
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     @Transactional
     public Member register(String email, String password) {

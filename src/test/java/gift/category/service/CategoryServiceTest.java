@@ -1,12 +1,12 @@
 package gift.category.service;
 
-import gift.category.model.Category;
+
 import gift.category.repository.CategoryRepository;
 import gift.product.dto.ProductDto;
-import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
 import gift.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,8 +15,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.Matchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CategoryServiceTest {
@@ -36,6 +34,7 @@ public class CategoryServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리를 찾을 수 없는 경우")
     public void save_product_category_not_found() {
         // Given
         Long categoryId = 1L;

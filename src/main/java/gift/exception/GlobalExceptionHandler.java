@@ -43,4 +43,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleForbiddenException(ForbiddenException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
     }
+
+    // 회원을 찾을 수 없는 경우 예외 처리
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ResponseEntity<String> handleMemberNotFoundException(MemberNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

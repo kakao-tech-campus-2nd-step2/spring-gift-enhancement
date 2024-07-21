@@ -1,8 +1,10 @@
 package gift.member.controller;
 
+import gift.exception.MemberNotFoundException;
 import gift.member.model.Member;
 import gift.member.repository.MemberRepository;
 import gift.member.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,7 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
 
+    @Autowired
     public MemberController(MemberService memberService, MemberRepository memberRepository) {
         this.memberService = memberService;
         this.memberRepository = memberRepository;
@@ -30,7 +33,8 @@ public class MemberController {
 
     @GetMapping("/{memberId}")
     public Member getMemberById(@PathVariable("memberId") Long id) {
-        return memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
     }
 
     @PutMapping("/{memberId}/email")
