@@ -47,4 +47,9 @@ public class Option {
     public Long getQuantity() {
         return quantity;
     }
+
+    public void updateOption(String name, Long quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
 }
