@@ -139,6 +139,18 @@ class WishListE2ETest {
         });
     }
 
+    @AfterAll
+    void afterAll() {
+        // 카테고리 삭제
+        var categoryUrl = baseUrl + "/api/categories";
+        var categoryRequest = TestUtils.createRequestEntity(categoryUrl, null, HttpMethod.GET, accessToken);
+        var categoryResponse = restTemplate.exchange(categoryRequest, new ParameterizedTypeReference<List<CategoryResDto>>() {});
+        categoryResponse.getBody().forEach(category -> {
+            var deleteRequest = TestUtils.createRequestEntity(categoryUrl + "/" + category.id(), null, HttpMethod.DELETE, accessToken);
+            restTemplate.exchange(deleteRequest, String.class);
+        });
+    }
+
     private List<ProductResDto> getProductResDtos(String productUrl) {
         var productRequest = TestUtils.createRequestEntity(productUrl, null, HttpMethod.GET, accessToken);
         var responseType = new ParameterizedTypeReference<RestPage<ProductResDto>>() {};
