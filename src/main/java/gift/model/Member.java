@@ -62,19 +62,13 @@ public class Member {
     }
 
     private void validateName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("이름을 입력하세요.");
-        }
-        if (name.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("이름을 입력하세요.");
         }
     }
 
     private void validateEmail(String email) {
-        if (email == null) {
-            throw new IllegalArgumentException("이메일을 입력하세요.");
-        }
-        if (email.trim().isEmpty()) {
+        if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("이메일을 입력하세요.");
         }
         if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
@@ -83,10 +77,7 @@ public class Member {
     }
 
     private void validatePassword(String password) {
-        if (password == null) {
-            throw new IllegalArgumentException("비밀 번호를 입력하세요.");
-        }
-        if (password.trim().isEmpty()) {
+        if (password == null || password.trim().isEmpty()) {
             throw new IllegalArgumentException("비밀 번호를 입력하세요.");
         }
     }

@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.model.Category;
 import gift.model.Product;
 import gift.dto.ProductDTO;
 import gift.repository.ProductRepository;
@@ -15,11 +16,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final WishlistRepository wishlistRepository;
+    private final CategoryService categoryService;
 
     public ProductService(ProductRepository productRepository,
-        WishlistRepository wishlistRepository) {
+        WishlistRepository wishlistRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
         this.wishlistRepository = wishlistRepository;
+        this.categoryService = categoryService;
     }
 
     public Page<Product> findAllProducts(Pageable pageable) {
@@ -32,12 +35,21 @@ public class ProductService {
 
     @Transactional
     public void saveProduct(ProductDTO productDTO) {
-        productRepository.save(toEntity(productDTO, null));
+        Category category = categoryService.findCategoryById(productDTO.categoryId());
+        productRepository.save(toEntity(productDTO, null, category));
     }
 
     @Transactional
     public void updateProduct(ProductDTO productDTO, Long id) {
-        productRepository.save(toEntity(productDTO, id));
+        Product existingProduct = productRepository.findById(id).orElse(null);
+        if (existingProduct != null) {
+            Category category = categoryService.findCategoryById(productDTO.categoryId());
+            existingProduct.setName(productDTO.name());
+            existingProduct.setPrice(productDTO.price());
+            existingProduct.setCategory(category);
+            existingProduct.setImageUrl(productDTO.imageUrl());
+            productRepository.save(existingProduct);
+        }
     }
 
     @Transactional
@@ -49,12 +61,12 @@ public class ProductService {
 
     public static ProductDTO toDTO(Product product) {
         return new ProductDTO(product.getName(), String.valueOf(product.getPrice()),
-            product.getImageUrl());
+            product.getCategory().getId(), product.getImageUrl());
     }
 
-    public static Product toEntity(ProductDTO productDTO, Long id) {
+    public static Product toEntity(ProductDTO productDTO, Long id, Category category) {
         Product product = new Product(id, productDTO.name(), productDTO.price(),
-            productDTO.imageUrl());
+            category, productDTO.imageUrl());
         return product;
     }
 }

@@ -1,6 +1,7 @@
 package gift.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -13,6 +14,8 @@ public record ProductDTO(
     @NotBlank(message = "가격을 입력해야 합니다.")
     @Pattern(regexp = "^\\d+$", message = "가격은 0이상의 숫자만 입력 가능합니다.")
     String price,
+    @NotNull(message = "카테고리를 선택해야 합니다.")
+    Long categoryId,
     @NotBlank(message = "이미지 URL을 입력해야 합니다.")
     @Pattern(regexp = "^(http|https)://.*$", message = "유효한 이미지 URL을 입력해야 합니다.")
     String imageUrl) {

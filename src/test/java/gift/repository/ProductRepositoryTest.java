@@ -3,6 +3,7 @@ package gift.repository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.model.Category;
 import gift.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,15 +19,22 @@ class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Product product1;
     private Product product2;
     private Product savedProduct;
+    private Category category;
+    private Category savedCategory;
     private Pageable pageable = PageRequest.of(0, 10);
 
     @BeforeEach
     public void setUp() {
-        product1 = new Product(1L, "상품", "100", "https://kakao");
-        product2 = new Product(2L, "상품2", "200", "https://kakao2");
+        category = new Category(1L, "교환권");
+        savedCategory = categoryRepository.save(category);
+        product1 = new Product(1L, "상품", "100", savedCategory, "https://kakao");
+        product2 = new Product(2L, "상품2", "200", savedCategory, "https://kakao2");
         savedProduct = productRepository.save(product1);
         productRepository.save(product2);
     }
@@ -37,6 +45,7 @@ class ProductRepositoryTest {
             () -> assertThat(savedProduct.getId()).isNotNull(),
             () -> assertThat(savedProduct.getName()).isEqualTo(product1.getName()),
             () -> assertThat(savedProduct.getPrice()).isEqualTo(product1.getPrice()),
+            () -> assertThat(savedProduct.getCategory().getId()).isEqualTo(category.getId()),
             () -> assertThat(savedProduct.getImageUrl()).isEqualTo(product1.getImageUrl())
         );
     }
@@ -53,9 +62,10 @@ class ProductRepositoryTest {
 
     @Test
     void testFindById() {
+        Product foundProduct = productRepository.findById(savedProduct.getId()).get();
         assertAll(
-            () -> assertThat(savedProduct).isNotNull(),
-            () -> assertThat(savedProduct.getId()).isEqualTo(product1.getId())
+            () -> assertThat(foundProduct).isNotNull(),
+            () -> assertThat(foundProduct.getId()).isEqualTo(savedProduct.getId())
         );
     }
 

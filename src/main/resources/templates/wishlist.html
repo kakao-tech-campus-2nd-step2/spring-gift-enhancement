@@ -69,6 +69,7 @@
     <th>ID</th>
     <th>상품 이름</th>
     <th>가격</th>
+    <th>카테고리</th>
     <th>Image URL</th>
     <th>삭제</th>
   </tr>
@@ -78,6 +79,7 @@
     <td th:text="${wishlistItem.id}">id</td>
     <td th:text="${wishlistItem.name}">name</td>
     <td th:text="${wishlistItem.price}">price</td>
+    <td th:text="${wishlistItem.getCategory().getName()}">category</td>
     <td><a th:href="${wishlistItem.imageUrl}" th:text="${wishlistItem.imageUrl}">imageurl</a></td>
     <td>
       <button th:attr="onclick='removeFromWishlist(' + ${wishlistItem.id} + ')'">삭제</button>

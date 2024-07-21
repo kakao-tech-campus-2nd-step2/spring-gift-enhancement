@@ -91,21 +91,25 @@
 </head>
 <body>
 <h1>상품 목록</h1>
-<form th:action="@{/admin/products/add}" method="get" style="display:none;" class="auth-required">
+<form th:action="@{/admin/products/new}" method="get" style="display:none;" class="auth-required">
   <button type="submit">상품 추가</button>
 </form>
-<form th:action="@{/members/login}" method="get" style="display:inline;" class="login-required">
+<form th:action="@{/members/auth}" method="get" style="display:inline;" class="login-required">
   <button type="submit">로그인</button>
 </form>
 <button onclick="goToWishlist()">위시리스트로 이동</button>
+<form th:action="@{/admin/categories}" method="get" style="display:none;" class="auth-required">
+  <button type="submit">카테고리 관리</button>
+</form>
 <table>
   <thead>
   <tr>
     <th>ID</th>
     <th>상품 이름</th>
     <th>가격</th>
+    <th>카테고리</th>
     <th>Image URL</th>
-    <th class="auth-required"> 수정 및 삭제</th>
+    <th style="display:none;" class="auth-required"> 수정 및 삭제</th>
     <th> 위시 리스트 추가</th>
   </tr>
   </thead>
@@ -114,13 +118,14 @@
     <td th:text="${product.id}">id</td>
     <td th:text="${product.name}">name</td>
     <td th:text="${product.price}">price</td>
+    <td th:text="${product.getCategory().getName()}">category</td>
     <td><a th:href="${product.imageUrl}" th:text="${product.imageUrl}">imageurl</a></td>
-    <td>
-      <form th:action="@{/admin/products/edit/{id}(id=${product.id})}" method="get"
+    <td style="display: none;" class="auth-required">
+      <form th:action="@{/admin/products/{id}(id=${product.id})}" method="get"
             style="display:none;" class="auth-required">
         <button type="submit">수정</button>
       </form>
-      <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post"
+      <form th:action="@{/admin/products/{id}(id=${product.id})}" method="post"
             style="display:none;" class="auth-required">
         <input type="hidden" name="_method" value="delete"/>
         <button type="submit">삭제</button>

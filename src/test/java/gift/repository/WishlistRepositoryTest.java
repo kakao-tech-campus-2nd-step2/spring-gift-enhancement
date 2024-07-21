@@ -3,6 +3,7 @@ package gift.repository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wishlist;
@@ -29,17 +30,23 @@ class WishlistRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Member savedMember;
     private Product savedProduct;
     private Wishlist savedWishlist;
     private Wishlist saved;
+    private Category savedCategory;
     private Pageable pageable = PageRequest.of(0, 10);
 
     @BeforeEach
     public void setUp() {
-        Member member = new Member(4L, "kbm", "kbm@kbm", "mbk", "user");
+        Category category = new Category(1L, "교환권");
+        savedCategory = categoryRepository.save(category);
+        Member member = new Member(4L, "kbm", "kbm@kbm.com", "mbk", "user");
         savedMember = memberRepository.save(member);
-        Product product = new Product(1L, "상품", "100", "https://kakao");
+        Product product = new Product(1L, "상품", "100", savedCategory, "https://kakao");
         savedProduct = productRepository.save(product);
         savedWishlist = new Wishlist(1L, savedMember, savedProduct);
         saved = wishlistRepository.save(savedWishlist);
@@ -49,7 +56,7 @@ class WishlistRepositoryTest {
     public void testSaveWishlist() {
         assertAll(
             () -> assertThat(saved.getId()).isNotNull(),
-            () -> assertThat(saved.getMember().getEmail()).isEqualTo("kbm@kbm"),
+            () -> assertThat(saved.getMember().getEmail()).isEqualTo("kbm@kbm.com"),
             () -> assertThat(saved.getProduct().getId()).isEqualTo(1L)
         );
     }

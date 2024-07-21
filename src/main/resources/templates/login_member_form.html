@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>로그인</h1>
-<form th:action="@{/members/login}" th:object="${loginDTO}" method="post">
+<form th:action="@{/members/auth}" th:object="${loginDTO}" method="post">
   <div>
     <label for="email">이메일:</label>
     <input type="text" id="email" th:field="*{email}"/>
@@ -23,7 +23,7 @@
   </div>
 </form>
 <div>
-  <form th:action="@{/members/register}" method="get">
+  <form th:action="@{/members/new}" method="get">
     <button type="submit">회원 가입</button>
   </form>
 </div>

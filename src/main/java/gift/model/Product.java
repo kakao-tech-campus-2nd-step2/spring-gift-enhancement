@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,19 +23,24 @@ public class Product {
     @Column(name = "price", nullable = false)
     private String price;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
     protected Product() {
     }
 
-    public Product(Long id, String name, String price, String imageUrl) {
+    public Product(Long id, String name, String price, Category category, String imageUrl) {
         validateName(name);
         validatePrice(price);
         validateImageUrl(imageUrl);
         this.id = id;
         this.name = name;
         this.price = price;
+        this.category = category;
         this.imageUrl = imageUrl;
     }
 
@@ -45,19 +52,39 @@ public class Product {
         return name;
     }
 
+    public void setName(String name) {
+        validateName(name);
+        this.name = name;
+    }
+
     public String getPrice() {
         return price;
+    }
+
+    public void setPrice(String price) {
+        validatePrice(price);
+        this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
+    public void setImageUrl(String imageUrl) {
+        validateImageUrl(imageUrl);
+        this.imageUrl = imageUrl;
+    }
+
     private void validateName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("상품 이름은 최소 1자 이상이어야 합니다.");
-        }
-        if (name.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("상품 이름은 최소 1자 이상이어야 합니다.");
         }
         if (name.length() > 15) {
@@ -72,10 +99,7 @@ public class Product {
     }
 
     private void validatePrice(String price) {
-        if (price == null) {
-            throw new IllegalArgumentException("가격을 입력해야 합니다.");
-        }
-        if (price.trim().isEmpty()) {
+        if (price == null || price.trim().isEmpty()) {
             throw new IllegalArgumentException("가격을 입력해야 합니다.");
         }
         if (!price.matches("^\\d+$")) {
@@ -84,10 +108,7 @@ public class Product {
     }
 
     private void validateImageUrl(String imageUrl) {
-        if (imageUrl == null) {
-            throw new IllegalArgumentException("이미지 URL을 입력해야 합니다.");
-        }
-        if (imageUrl.trim().isEmpty()) {
+        if (imageUrl == null || imageUrl.trim().isEmpty()) {
             throw new IllegalArgumentException("이미지 URL을 입력해야 합니다.");
         }
         if (!imageUrl.matches("^(http|https)://.*$")) {

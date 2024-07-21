@@ -3,6 +3,7 @@ package gift.controller;
 import gift.dto.ProductDTO;
 import gift.model.Product;
 
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,15 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @PostMapping
     public Product addProduct(@RequestBody ProductDTO newProductDTO) {
         productService.saveProduct(newProductDTO);
-        return productService.toEntity(newProductDTO, null);
+        return ProductService.toEntity(newProductDTO, null,
+            categoryService.findCategoryById(newProductDTO.categoryId()));
     }
 
     @GetMapping("/{id}")
@@ -52,9 +56,5 @@ public class ProductController {
         @RequestBody ProductDTO updatedProductDTO) {
         productService.updateProduct(updatedProductDTO, id);
         return productService.findProductsById(id);
-    }
-
-    private static Product toEntity(Product product, Long id) {
-        return new Product(id, product.getName(), product.getPrice(), product.getImageUrl());
     }
 }

@@ -41,7 +41,8 @@ public class WishlistController {
     }
 
     @GetMapping
-    public String getWishlist(@LoginMember Member member, Model model, @PageableDefault(size = 5) Pageable pageable) {
+    public String getWishlist(@LoginMember Member member, Model model,
+        @PageableDefault(size = 5) Pageable pageable) {
         if (member == null) {
             return "redirect:/members/login";
         }
