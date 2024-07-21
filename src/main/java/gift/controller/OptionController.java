@@ -3,6 +3,7 @@ package gift.controller;
 import gift.domain.OptionDTO;
 import gift.entity.OptionEntity;
 import gift.service.OptionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +37,14 @@ public class OptionController {
 
     // 옵션 생성
     @PostMapping
-    public ResponseEntity<?> createOption(@PathVariable Long productId, @RequestBody OptionDTO optionDTO) {
+    public ResponseEntity<?> createOption(@PathVariable Long productId, @Valid @RequestBody OptionDTO optionDTO) {
         optionService.createOption(productId, optionDTO);
         return ResponseEntity.ok("옵션이 생성 되었습니다.");
     }
 
     // 옵션 수정
     @PutMapping("/{id}")
-    public ResponseEntity<?> editOption(@PathVariable Long productId, @PathVariable Long id, @RequestBody OptionDTO optionDTO) {
+    public ResponseEntity<?> editOption(@PathVariable Long productId, @PathVariable Long id, @Valid @RequestBody OptionDTO optionDTO) {
         optionService.editOption(productId, id, optionDTO);
         return ResponseEntity.ok("옵션이 수정 되었습니다.");
     }

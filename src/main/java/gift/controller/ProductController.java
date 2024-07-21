@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.domain.ProductDTO;
 import gift.service.ProductService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ProductController {
 
     // 상품 추가(Create)
     @PostMapping
-    public ResponseEntity<?> addProduct(@RequestBody ProductDTO productDTO) {
+    public ResponseEntity<?> addProduct(@Valid @RequestBody ProductDTO productDTO) {
         productService.createProduct(productDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
