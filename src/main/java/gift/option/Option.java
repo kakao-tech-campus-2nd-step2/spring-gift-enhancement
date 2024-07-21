@@ -3,6 +3,7 @@ package gift.option;
 import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
 import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
 import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
+import static gift.exception.ErrorMessage.OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER;
 
 import gift.product.Product;
 import jakarta.persistence.Entity;
@@ -57,6 +58,14 @@ public class Option {
 
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void subtract(int quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException(OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER);
+        }
+
+        update(name, this.quantity - quantity);
     }
 
     private void validate(String name, int quantity) {

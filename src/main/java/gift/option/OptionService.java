@@ -24,7 +24,7 @@ public class OptionService {
     }
 
     public List<OptionDTO> getOptions(long productId) {
-        isProductExists(productId);
+        validateProductExists(productId);
 
         return optionRepository.findAllByProductId(productId)
             .stream()
@@ -43,7 +43,7 @@ public class OptionService {
             throw new IllegalArgumentException(OPTION_ALREADY_EXISTS);
         }
 
-        isOptionNameExists(productId, optionDTO.getName());
+        validateOptionExists(productId, optionDTO.getName());
 
         optionRepository.save(new Option(
             optionDTO.getId(),
@@ -54,8 +54,8 @@ public class OptionService {
     }
 
     public void updateOption(long productId, OptionDTO optionDTO) {
-        isProductExists(productId);
-        isOptionNameExists(productId, optionDTO.getName());
+        validateProductExists(productId);
+        validateOptionExists(productId, optionDTO.getName());
 
         Option option = getOptionById(optionDTO.getId());
         option.update(optionDTO.getName(), optionDTO.getQuantity());
@@ -63,19 +63,27 @@ public class OptionService {
     }
 
     public void deleteOption(long productId, long optionId) {
-        isProductExists(productId);
+        validateProductExists(productId);
 
         Option option = getOptionById(optionId);
         optionRepository.delete(option);
     }
 
-    private void isProductExists(long productId) {
+    public void subtract(long productId, long optionId, int subtractOptionQuantity) {
+        validateProductExists(productId);
+
+        Option option = getOptionById(optionId);
+        option.subtract(subtractOptionQuantity);
+        optionRepository.save(option);
+    }
+
+    private void validateProductExists(long productId) {
         if (!productRepository.existsById(productId)) {
             throw new IllegalArgumentException(PRODUCT_NOT_FOUND);
         }
     }
 
-    private void isOptionNameExists(long productId, String optionName) {
+    private void validateOptionExists(long productId, String optionName) {
         if (optionRepository.existsByNameAndProductId(optionName, productId)) {
             throw new IllegalArgumentException(OPTION_ALREADY_EXISTS);
         }

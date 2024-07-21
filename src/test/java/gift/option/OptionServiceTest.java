@@ -5,6 +5,7 @@ import static gift.exception.ErrorMessage.OPTION_NAME_ALLOWED_CHARACTER;
 import static gift.exception.ErrorMessage.OPTION_NAME_LENGTH;
 import static gift.exception.ErrorMessage.OPTION_NOT_FOUND;
 import static gift.exception.ErrorMessage.OPTION_QUANTITY_SIZE;
+import static gift.exception.ErrorMessage.OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER;
 import static gift.exception.ErrorMessage.PRODUCT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -66,13 +67,13 @@ public class OptionServiceTest {
         optionDTO = new OptionDTO(
             1L,
             "option-1",
-            1
+            100
         );
 
         option = new Option(
             1L,
             "option-1",
-            1,
+            100,
             product
         );
     }
@@ -371,7 +372,7 @@ public class OptionServiceTest {
         @DisplayName("option quantity size error")
         void optionQuantitySizeError(int quantity) {
             //given
-            OptionDTO optionDTO = new OptionDTO(
+            optionDTO = new OptionDTO(
                 1L,
                 "update-option",
                 quantity
@@ -438,6 +439,124 @@ public class OptionServiceTest {
             assertThatThrownBy(() -> optionService.deleteOption(productId, optionId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(OPTION_NOT_FOUND);
+        }
+    }
+
+    @Nested
+    @DisplayName("[Unit] subtract option test")
+    class subtractOptionTest {
+
+        private int prevOptionQuantity;
+        private int subtractOptionQuantity;
+        private long optionId;
+
+        @BeforeEach
+        void setUp() {
+            //given
+            prevOptionQuantity = option.getQuantity();
+            subtractOptionQuantity = 5;
+            optionId = 1L;
+
+            //when
+            when(productRepository.existsById(productId))
+                .thenReturn(true);
+
+            when(optionRepository.findById(optionDTO.getId()))
+                .thenReturn(Optional.of(option));
+
+            when(optionRepository.save(option))
+                .thenReturn(option);
+        }
+
+        @Test
+        @DisplayName("success")
+        void success() {
+            //then
+            assertAll(
+                () -> assertDoesNotThrow(
+                    () -> optionService.subtract(
+                        productId,
+                        optionId,
+                        subtractOptionQuantity
+                    )
+                ), () -> assertEquals(
+                    option.getQuantity(),
+                    prevOptionQuantity - subtractOptionQuantity
+                )
+            );
+
+            //verify
+            verify(optionRepository, times(1)).save(option);
+        }
+
+        @Test
+        @DisplayName("option subtract not allow negative number error")
+        void optionSubtractNegativeNumberError() {
+            //given
+            subtractOptionQuantity = -100;
+
+            //then
+            assertThatThrownBy(
+                () -> optionService.subtract(
+                    productId,
+                    optionId,
+                    subtractOptionQuantity
+                )
+            ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(OPTION_SUBTRACT_NOT_ALLOWED_NEGATIVE_NUMBER);
+        }
+
+        @Test
+        @DisplayName("product not found error")
+        void productNotFoundError() {
+            //when
+            when(productRepository.existsById(productId))
+                .thenReturn(false);
+
+            //then
+            assertThatThrownBy(
+                () -> optionService.subtract(
+                    productId,
+                    optionId,
+                    subtractOptionQuantity
+                )
+            ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(PRODUCT_NOT_FOUND);
+        }
+
+        @Test
+        @DisplayName("option not found error")
+        void optionNotFoundError() {
+            //when
+            when(optionRepository.findById(optionId))
+                .thenReturn(Optional.empty());
+
+            //then
+            assertThatThrownBy(
+                () -> optionService.subtract(
+                    productId,
+                    optionId,
+                    subtractOptionQuantity
+                )
+            ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(OPTION_NOT_FOUND);
+        }
+
+        @Test
+        @DisplayName("subtract quantity too big error")
+        void subtractQuantityTooBigError() {
+            //given
+            subtractOptionQuantity = 1234567;
+
+            //then
+            assertThatThrownBy(
+                () -> optionService.subtract(
+                    productId,
+                    optionId,
+                    subtractOptionQuantity
+                )
+            ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(OPTION_QUANTITY_SIZE);
         }
     }
 }
