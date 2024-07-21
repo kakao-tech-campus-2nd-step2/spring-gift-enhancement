@@ -54,4 +54,11 @@ public class Option {
         this.name = optionForm.getName();
         this.quantity = optionForm.getQuantity();
     }
+
+    public void subtract(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("차감할 상품 옵션의 수량이 부족합니다.");
+        }
+        this.quantity -= quantity;
+    }
 }

@@ -9,6 +9,7 @@ import gift.doamin.product.repository.OptionRepository;
 import java.util.NoSuchElementException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -51,6 +52,13 @@ public class OptionService {
         productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 
         optionRepository.deleteById(optionId);
+    }
+
+    @Transactional
+    public void subtractQuantity(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new NoSuchElementException("해당 옵션이 존재하지 않습니다."));
+        option.subtract(quantity);
     }
 
     private void validateDuplicatedName(Long productId, OptionForm optionForm) {
