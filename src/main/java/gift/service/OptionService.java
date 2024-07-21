@@ -40,4 +40,10 @@ public class OptionService {
     private OptionResponse convertToResponse(Option option) {
         return new OptionResponse(option.getId(), option.getName(), option.getQuantity());
     }
+
+    public void subtractQuantity(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId).orElseThrow(() -> new IllegalArgumentException("Option not found"));
+        option.subtractQuantity(quantity);
+        optionRepository.save(option);
+    }
 }
