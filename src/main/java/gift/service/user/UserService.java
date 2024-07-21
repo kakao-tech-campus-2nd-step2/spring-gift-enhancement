@@ -10,6 +10,7 @@ import gift.util.JwtTokenUtil;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +53,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
+
+    @Transactional
     public void registerUser(String email, String password) throws UserAlreadyExistsException {
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException("User already exists");

@@ -77,10 +77,6 @@ public class Product {
         return category;
     }
 
-    public void saveCategory(Category category) {
-        this.category = category;
-    }
-
     public List<ProductOption> getOptions() {
         return options;
     }
@@ -112,7 +108,28 @@ public class Product {
         }
     }
 
+    public void saveCategory(Category category) {
+        this.category = category;
+    }
+
     public void saveOptions(List<ProductOption> options) {
         this.options = options;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 }
