@@ -2,52 +2,45 @@ package gift.domain;
 
 import gift.domain.base.BaseEntity;
 import gift.domain.base.BaseTimeEntity;
+import gift.domain.vo.Color;
 import jakarta.persistence.Column;
-import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import java.net.URL;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
-@DynamicInsert
 @Entity
-public class Product extends BaseEntity {
+public class Category extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private Integer price;
+    private String description;
 
     @Column(nullable = false)
     @ColumnDefault("'https://gift-s3.s3.ap-northeast-2.amazonaws.com/default-image.png'")
     private URL imageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT), nullable = false)
-    private Category category;
+    @Column(nullable = false)
+    private Color color;
 
-    protected Product() {
+    protected Category() {
     }
 
     public static class Builder extends BaseTimeEntity.Builder<Builder> {
 
         private String name;
-        private Integer price;
+        private String description;
         private URL imageUrl;
-        private Category category;
+        private Color color;
 
         public Builder name(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder price(Integer price) {
-            this.price = price;
+        public Builder description(String description) {
+            this.description = description;
             return this;
         }
 
@@ -56,8 +49,8 @@ public class Product extends BaseEntity {
             return this;
         }
 
-        public Builder category(Category category) {
-            this.category = category;
+        public Builder color(Color color) {
+            this.color = color;
             return this;
         }
 
@@ -67,24 +60,24 @@ public class Product extends BaseEntity {
         }
 
         @Override
-        public Product build() {
-            return new Product(this);
+        public Category build() {
+            return new Category(this);
         }
     }
 
-    private Product(Builder builder) {
+    private Category(Builder builder) {
         super(builder);
         name = builder.name;
-        price = builder.price;
+        description = builder.description;
         imageUrl = builder.imageUrl;
-        category = builder.category;
+        color = builder.color;
     }
 
-    public Product update(Product product) {
-        this.name = product.getName();
-        this.price = product.getPrice();
-        this.imageUrl = product.getImageUrl();
-        this.category = product.getCategory();
+    public Category update(Category category) {
+        name = category.name;
+        description = category.description;
+        imageUrl = category.imageUrl;
+        color = category.color;
         return this;
     }
 
@@ -92,15 +85,15 @@ public class Product extends BaseEntity {
         return name;
     }
 
-    public Integer getPrice() {
-        return price;
+    public String getDescription() {
+        return description;
     }
 
     public URL getImageUrl() {
         return imageUrl;
     }
 
-    public Category getCategory() {
-        return category;
+    public Color getColor() {
+        return color;
     }
 }

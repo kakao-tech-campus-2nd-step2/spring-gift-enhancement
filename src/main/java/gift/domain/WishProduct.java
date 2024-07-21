@@ -1,5 +1,7 @@
 package gift.domain;
 
+import gift.domain.base.BaseEntity;
+import gift.domain.base.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,7 +25,7 @@ public class WishProduct extends BaseEntity {
     protected WishProduct() {
     }
 
-    public static class Builder extends BaseEntity.Builder<Builder> {
+    public static class Builder extends BaseTimeEntity.Builder<Builder> {
 
         private Member member;
         private Product product;

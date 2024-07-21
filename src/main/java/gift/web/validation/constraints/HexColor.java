@@ -2,7 +2,7 @@ package gift.web.validation.constraints;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import gift.web.validation.validator.SpecialCharacterValidator;
+import gift.web.validation.validator.HexColorValidator;
 import jakarta.validation.Constraint;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,12 +10,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RUNTIME)
-@Constraint(validatedBy = SpecialCharacterValidator.class)
-public @interface SpecialCharacter {
+@Constraint(validatedBy = HexColorValidator.class)
+public @interface HexColor {
 
-    String allowed();
-
-    String message() default "'(', ')', '[', ']', '+', '-', '&', '/', '_' 외의 특수문자는 사용할 수 없습니다.";
+    String message() default "올바른 색상 코드를 입력해주세요.";
 
     Class<?>[] groups() default {};
 

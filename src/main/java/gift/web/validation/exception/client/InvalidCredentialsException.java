@@ -1,10 +1,11 @@
 package gift.web.validation.exception.client;
 
-import static gift.web.validation.exception.code.ErrorCode.UNAUTHORIZED_INVALID_CREDENTIALS;
+import static gift.web.validation.exception.code.ErrorStatus.UNAUTHORIZED_INVALID_CREDENTIALS;
 
-import gift.web.validation.exception.code.ErrorCode;
+import gift.web.validation.exception.CustomException;
+import gift.web.validation.exception.code.ErrorStatus;
 
-public class InvalidCredentialsException extends ClientException {
+public class InvalidCredentialsException extends CustomException {
 
     private static final String ERROR_MESSAGE = "유효하지 않은 신원 정보입니다.";
 
@@ -25,7 +26,7 @@ public class InvalidCredentialsException extends ClientException {
     }
 
     @Override
-    public ErrorCode getErrorCode() {
+    public ErrorStatus getErrorStatus() {
         return UNAUTHORIZED_INVALID_CREDENTIALS;
     }
 

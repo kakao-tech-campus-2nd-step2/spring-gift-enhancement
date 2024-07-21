@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 
 @Profile("test")
 @Component
-public class ProductDummyDataProvider {
+public class CategoryDummyDataProvider {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public ProductDummyDataProvider(JdbcTemplate jdbcTemplate) {
+    public CategoryDummyDataProvider(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -24,7 +24,7 @@ public class ProductDummyDataProvider {
     }
 
     private void doRun(int quantity) {
-        String sql = "insert into product (name, price, category_id, created_at, created_by, updated_at, updated_by) values (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into category (name, description, image_url, color, created_at, created_by, updated_at, updated_by) values (?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.batchUpdate(sql, getBatchPreparedStatementSetter(quantity));
     }
 
@@ -32,13 +32,14 @@ public class ProductDummyDataProvider {
         return new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1, "product" + i);
-                ps.setInt(2, 1000 * i);
-                ps.setLong(3, 1L);
-                ps.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
-                ps.setLong(5, 1L);
-                ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
-                ps.setLong(7, 1L);
+                ps.setString(1, "Category" + i);
+                ps.setString(2, "Description" + i);
+                ps.setString(3, "https://via.placeholder.com/" + i);
+                ps.setString(4, "#FF2829");
+                ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
+                ps.setLong(6, 1L);
+                ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+                ps.setLong(8, 1L);
             }
 
             @Override

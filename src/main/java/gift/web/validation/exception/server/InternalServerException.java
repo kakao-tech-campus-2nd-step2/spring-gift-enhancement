@@ -1,10 +1,11 @@
 package gift.web.validation.exception.server;
 
-import static gift.web.validation.exception.code.ErrorCode.INTERNAL_SERVER_ERROR;
+import static gift.web.validation.exception.code.ErrorStatus.INTERNAL_SERVER_ERROR;
 
-import gift.web.validation.exception.code.ErrorCode;
+import gift.web.validation.exception.CustomException;
+import gift.web.validation.exception.code.ErrorStatus;
 
-public class InternalServerException extends ServerException {
+public class InternalServerException extends CustomException {
 
     private static final String ERROR_MESSAGE = "서버에서 오류가 발생했습니다.";
 
@@ -25,7 +26,7 @@ public class InternalServerException extends ServerException {
     }
 
     @Override
-    public ErrorCode getErrorCode() {
+    public ErrorStatus getErrorStatus() {
         return INTERNAL_SERVER_ERROR;
     }
 

@@ -9,6 +9,7 @@ import gift.web.dto.request.product.UpdateProductRequest;
 import gift.web.dto.request.wishproduct.CreateWishProductRequest;
 import gift.web.dto.response.product.CreateProductResponse;
 import gift.web.dto.response.product.ReadAllProductsResponse;
+import gift.web.dto.response.product.ReadProductResponse;
 import gift.web.dto.response.product.UpdateProductResponse;
 import gift.web.dto.response.wishproduct.CreateWishProductResponse;
 import java.net.URI;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -39,6 +41,12 @@ public class ProductApiController {
         this.wishProductService = wishProductService;
     }
 
+    @GetMapping
+    public ResponseEntity<ReadAllProductsResponse> readAllProducts(@PageableDefault Pageable pageable) {
+        ReadAllProductsResponse response = productService.readAllProducts(pageable);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping
     public ResponseEntity<CreateProductResponse> createProduct(
         @Validated @RequestBody CreateProductRequest request) throws URISyntaxException {
@@ -48,15 +56,16 @@ public class ProductApiController {
         return ResponseEntity.created(location).body(response);
     }
 
-    @PostMapping("/wish")
-    public ResponseEntity<CreateWishProductResponse> createWishProduct(@Validated @RequestBody CreateWishProductRequest request, @LoginMember MemberDetails memberDetails) {
-        CreateWishProductResponse response = wishProductService.createWishProduct(memberDetails.getId(), request);
+    @GetMapping(params = "categoryId")
+    public ResponseEntity<ReadAllProductsResponse> readProductsByCategoryId(@PageableDefault Pageable pageable, @RequestParam Long categoryId) {
+        ReadAllProductsResponse response = productService.readProductsByCategoryId(categoryId, pageable);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    public ResponseEntity<ReadAllProductsResponse> readAllProducts(@PageableDefault Pageable pageable) {
-        ReadAllProductsResponse response = productService.readAllProducts(pageable);
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadProductResponse> readProduct(@PathVariable Long id) {
+        ReadProductResponse response;
+        response = productService.readProductById(id);
         return ResponseEntity.ok(response);
     }
 
@@ -76,4 +85,11 @@ public class ProductApiController {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/wish")
+    public ResponseEntity<CreateWishProductResponse> createWishProduct(@Validated @RequestBody CreateWishProductRequest request, @LoginMember MemberDetails memberDetails) {
+        CreateWishProductResponse response = wishProductService.createWishProduct(memberDetails.getId(), request);
+        return ResponseEntity.ok(response);
+    }
+
 }

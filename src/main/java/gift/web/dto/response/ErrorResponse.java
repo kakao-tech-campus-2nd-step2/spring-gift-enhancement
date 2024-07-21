@@ -1,7 +1,7 @@
 package gift.web.dto.response;
 
-import gift.web.validation.exception.ErrorRespondable;
-import gift.web.validation.exception.code.ErrorCode;
+import gift.web.validation.exception.CustomException;
+import gift.web.validation.exception.code.ErrorStatus;
 import java.time.LocalDateTime;
 import org.springframework.validation.BindingResult;
 
@@ -19,17 +19,16 @@ public class ErrorResponse {
         this.timestamp = LocalDateTime.now();
     }
 
-    public static ErrorResponse from(ErrorRespondable exception) {
-        ErrorCode errorCode = exception.getErrorCode();
-        return new ErrorResponse(errorCode.getCode(), errorCode.getCategory().toString(), exception.getMessage());
+    public static ErrorResponse from(CustomException exception) {
+        return new ErrorResponse(exception.getErrorStatus().getCode(), exception.getErrorStatus().getCategory().getDescription(), exception.getMessage());
     }
 
     public static ErrorResponse from(BindingResult bindingResult) {
         return new ErrorResponse(-40010, "INVALID_PARAMETER", bindingResult.getFieldError().getDefaultMessage());
     }
 
-    public static ErrorResponse of(ErrorCode errorCode, String description) {
-        return new ErrorResponse(errorCode.getCode(), errorCode.getCategory().getDescription(), description);
+    public static ErrorResponse of(ErrorStatus errorStatus, String description) {
+        return new ErrorResponse(errorStatus.getCode(), errorStatus.getCategory().getDescription(), description);
     }
 
     public int getCode() {

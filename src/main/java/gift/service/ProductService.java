@@ -1,7 +1,10 @@
 package gift.service;
 
+import gift.domain.Category;
 import gift.domain.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
+import gift.repository.WishProductRepository;
 import gift.web.dto.request.product.CreateProductRequest;
 import gift.web.dto.request.product.UpdateProductRequest;
 import gift.web.dto.response.product.CreateProductResponse;
@@ -19,21 +22,38 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final WishProductRepository wishProductRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+        CategoryRepository categoryRepository,
+        WishProductRepository wishProductRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.wishProductRepository = wishProductRepository;
     }
 
     @Transactional
     public CreateProductResponse createProduct(CreateProductRequest request) {
-        Product product = request.toEntity();
+        Category category = categoryRepository.findById(request.getCategoryId())
+            .orElseThrow(NoSuchElementException::new);
+
+        Product product = request.toEntity(category);
         return CreateProductResponse.fromEntity(productRepository.save(product));
     }
 
-    public ReadProductResponse searchProduct(Long id) {
+    public ReadProductResponse readProductById(Long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(NoSuchElementException::new);
         return ReadProductResponse.fromEntity(product);
+    }
+
+    public ReadAllProductsResponse readProductsByCategoryId(Long categoryId, Pageable pageable) {
+        List<ReadProductResponse> products = productRepository.findByCategoryId(categoryId, pageable)
+            .stream()
+            .map(ReadProductResponse::fromEntity)
+            .toList();
+        return ReadAllProductsResponse.from(products);
     }
 
     public ReadAllProductsResponse readAllProducts() {
@@ -65,6 +85,7 @@ public class ProductService {
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(NoSuchElementException::new);
+        wishProductRepository.deleteAllByProductId(id);
         productRepository.delete(product);
     }
 }

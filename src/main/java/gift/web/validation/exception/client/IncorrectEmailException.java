@@ -1,10 +1,11 @@
 package gift.web.validation.exception.client;
 
-import static gift.web.validation.exception.code.ErrorCode.INCORRECT_EMAIL;
+import static gift.web.validation.exception.code.ErrorStatus.INCORRECT_EMAIL;
 
-import gift.web.validation.exception.code.ErrorCode;
+import gift.web.validation.exception.CustomException;
+import gift.web.validation.exception.code.ErrorStatus;
 
-public class IncorrectEmailException extends ClientException {
+public class IncorrectEmailException extends CustomException {
 
     private static final String ERROR_MESSAGE = "%s 는 잘못된 이메일입니다.";
 
@@ -21,7 +22,7 @@ public class IncorrectEmailException extends ClientException {
     }
 
     @Override
-    public ErrorCode getErrorCode() {
+    public ErrorStatus getErrorStatus() {
         return INCORRECT_EMAIL;
     }
 

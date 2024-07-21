@@ -1,9 +1,11 @@
 package gift.web.dto.request.product;
 
+import gift.domain.Category;
 import gift.domain.Product;
 import gift.web.validation.constraints.RequiredKakaoApproval;
 import gift.web.validation.constraints.SpecialCharacter;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.net.URL;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
@@ -15,14 +17,20 @@ public class CreateProductRequest {
     @SpecialCharacter(allowed = "(, ), [, ], +, -, &, /, _")
     @RequiredKakaoApproval
     private final String name;
+
     @Range(min = 1000, max = 10000000)
     private final Integer price;
+
     private final URL imageUrl;
 
-    public CreateProductRequest(String name, Integer price, URL imageUrl) {
+    @NotNull
+    private final Long categoryId;
+
+    public CreateProductRequest(String name, Integer price, URL imageUrl, Long categoryId) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
     }
 
     public String getName() {
@@ -37,11 +45,16 @@ public class CreateProductRequest {
         return imageUrl;
     }
 
-    public Product toEntity() {
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public Product toEntity(Category category) {
         return new Product.Builder()
             .name(this.name)
             .price(this.price)
             .imageUrl(this.imageUrl)
+            .category(category)
             .build();
     }
 }
