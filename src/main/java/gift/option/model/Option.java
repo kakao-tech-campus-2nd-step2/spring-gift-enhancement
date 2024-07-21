@@ -20,17 +20,16 @@ public class Option {
     private Product product;
 
     @Embedded
-    private String name;
+    private OptionName name;
 
     @Min(value = 1, message = "옵션 수량은 최소 1개 이상이어야 합니다.")
     @Max(value = 99999999, message = "옵션 수량은 1억 개 미만이어야 합니다.")
     @Column(nullable = false)
     private int quantity;
 
-    public Option() {
-    }
+    public Option() {}
 
-    public Option(Product product, String name, int quantity) {
+    public Option(Product product, OptionName name, int quantity) {
         this.product = product;
         this.name = name;
         this.quantity = quantity;
@@ -44,12 +43,11 @@ public class Option {
         return id;
     }
 
-    public String getName() {
+    public OptionName getName() {
         return name;
     }
 
     public int getQuantity() {
         return quantity;
     }
-
 }

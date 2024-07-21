@@ -4,6 +4,7 @@ import gift.category.model.Category;
 import gift.category.repository.CategoryRepository;
 import gift.product.dto.ProductDto;
 import gift.product.model.Product;
+import gift.product.model.ProductName;
 import gift.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,8 @@ public class ProductService {
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
 
-        Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImgUrl(), category);
+        ProductName productName = new ProductName(productDto.getName());
+        Product product = new Product(productName, productDto.getPrice(), productDto.getImgUrl(), category);
         productRepository.save(product);
     }
 
@@ -34,9 +36,12 @@ public class ProductService {
     public void update(Long productId, ProductDto productDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
-        Category category = categoryRepository.findById(productDto.getId())
+
+        Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
-        product.update(productDto.getName(), productDto.getPrice(), productDto.getImgUrl(), category);
+
+        ProductName productName = new ProductName(productDto.getName());
+        product.update(productName, productDto.getPrice(), productDto.getImgUrl(), category);
         productRepository.save(product);
     }
 
@@ -44,5 +49,4 @@ public class ProductService {
     public void deleteById(Long productId) {
         productRepository.deleteById(productId);
     }
-
 }

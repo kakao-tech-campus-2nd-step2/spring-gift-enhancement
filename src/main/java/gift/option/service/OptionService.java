@@ -2,6 +2,7 @@ package gift.option.service;
 
 import gift.option.dto.OptionDto;
 import gift.option.model.Option;
+import gift.option.model.OptionName;
 import gift.option.repository.OptionRepository;
 import gift.product.model.Product;
 import gift.product.repository.ProductRepository;
@@ -25,7 +26,7 @@ public class OptionService {
     @Transactional
     public List<OptionDto> getOptionsByProductId(Long id) {
         return optionRepository.findByProductId(id).stream()
-                .map(option -> new OptionDto(option.getId(), option.getName(), option.getQuantity()))
+                .map(option -> new OptionDto(option.getId(), option.getName().getValue(), option.getQuantity()))
                 .collect(Collectors.toList());
     }
 
@@ -37,10 +38,11 @@ public class OptionService {
         validateOptionName(optionDto.getName());
         validateOptionQuantity(optionDto.getQuantity());
 
-        Option option = new Option(product, optionDto.getName(), optionDto.getQuantity());
+        OptionName optionName = new OptionName(optionDto.getName());
+        Option option = new Option(product, optionName, optionDto.getQuantity());
         Option savedOption = optionRepository.save(option);
 
-        return new OptionDto(savedOption.getId(), savedOption.getName(), savedOption.getQuantity());
+        return new OptionDto(savedOption.getId(), savedOption.getName().getValue(), savedOption.getQuantity());
     }
 
     @Transactional
@@ -56,5 +58,4 @@ public class OptionService {
             throw new IllegalArgumentException("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");
         }
     }
-
 }

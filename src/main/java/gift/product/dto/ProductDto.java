@@ -8,22 +8,23 @@ public class ProductDto {
     private String imgUrl;
     private Long categoryId;
 
-    // 기본 생성자
     public ProductDto() {
     }
 
-    public ProductDto(String name, int price, String imgUrl, Long categoryId) {
+    // 모든 필드를 초기화하는 생성자
+    public ProductDto(Long id, String name, int price, String imgUrl, Long categoryId) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
         this.categoryId = categoryId;
     }
 
-    public void ProductDTO(Long id, String name, int price, String imageUrl, Long categoryId){
-        this.id = id;
+    // 필요한 필드만 초기화하는 생성자
+    public ProductDto(String name, int price, String imgUrl, Long categoryId) {
         this.name = name;
         this.price = price;
-        this.imgUrl = imageUrl;
+        this.imgUrl = imgUrl;
         this.categoryId = categoryId;
     }
 

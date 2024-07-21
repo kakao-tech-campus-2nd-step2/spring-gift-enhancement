@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 
 @Embeddable
 public class OptionName {
+
     @NotBlank(message = "옵션을 선택하세요.")
     @Size(max = 50, message = "옵션은 공백 포함 최대 50자")
     @Pattern(regexp = "^[\\w\\s\\(\\)\\[\\]+\\-&/_]*$", message = "옵션명에 잘못된 문자가 있습니다.")
@@ -14,7 +15,11 @@ public class OptionName {
 
     public OptionName() {}
 
+    public OptionName(String name) {
+        this.name = name;
+    }
+
     public String getValue() {
-        return String.valueOf(name);
+        return name;
     }
 }

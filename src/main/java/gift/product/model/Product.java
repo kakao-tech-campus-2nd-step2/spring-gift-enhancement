@@ -16,8 +16,8 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
     @Column(nullable = false)
     private int price;
@@ -35,25 +35,12 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options;
 
-    protected Product() {
-    }
+    protected Product() {}
 
-    public Product(String name) {
-        this.name = name;
-    }
-
-    public Product(String name, int price, String imgUrl, Category category) {
+    public Product(ProductName name, int price, String imgUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
-        this.category = category;
-    }
-
-    public Product(Long id, String name, String imgUrl, int price, Category category) {
-        this.id = id;
-        this.name = name;
-        this.imgUrl = imgUrl;
-        this.price = price;
         this.category = category;
     }
 
@@ -65,7 +52,7 @@ public class Product {
         return category;
     }
 
-    public String getName() {
+    public ProductName getName() {
         return name;
     }
 
@@ -81,7 +68,7 @@ public class Product {
         return options;
     }
 
-    public void update(String name, int price, String imgUrl, Category category) {
+    public void update(ProductName name, int price, String imgUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
