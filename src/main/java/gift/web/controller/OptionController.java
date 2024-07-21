@@ -34,7 +34,7 @@ public class OptionController {
     }
 
     @PutMapping("/{productId}/options/{optionId}")
-    public ResponseEntity<OptionDto> updateOption(@PathVariable Long productId, @PathVariable Long optionId, @RequestBody OptionDto option) {
-        return new ResponseEntity<>(optionService.updateOption(productId, option), HttpStatus.OK);
+    public ResponseEntity<OptionDto> updateOption(@PathVariable Long productId, @PathVariable Long optionId, @RequestBody OptionDto optionDto) {
+        return new ResponseEntity<>(optionService.updateOption(optionId, productId, optionDto), HttpStatus.OK);
     }
 }

@@ -43,8 +43,8 @@ public class OptionService {
             .toList();
     }
 
-    public OptionDto updateOption(Long optionId, OptionDto optionDto) {
-        Option option = optionRepository.findById(optionId)
+    public OptionDto updateOption(Long optionId, Long productId, OptionDto optionDto) {
+        Option option = optionRepository.findByIdAndProductId(optionId, productId)
             .orElseThrow(() -> new OptionNotFoundException("옵션이 없슴다."));
 
         option.updateOption(optionDto.name(), optionDto.quantity());
