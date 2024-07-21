@@ -46,7 +46,7 @@ public class ProductController {
     @PostMapping("/post")
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequest newProduct) {
         Product product = productService.createProduct(newProduct.toEntity());
-        Option option = optionService.addOption(newProduct.getOptionRequest());
+        Option option = optionService.addOption(newProduct.getOptionRequest(), product);
         productService.addOption(product.getId(), option);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
@@ -70,21 +70,23 @@ public class ProductController {
     @PostMapping("{id}/options")
     public ResponseEntity<List<Option>> addOption(@RequestBody @Valid OptionRequest optionRequest,
         @PathVariable Long id){
-        Option option = optionService.addOption(optionRequest);
+        Product product = productService.findById(id);
+        Option option = optionService.addOption(optionRequest, product);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.addOption(id, option));
     }
 
-    @PutMapping("/options")
-    public ResponseEntity<String> updateOption(@RequestBody @Valid OptionRequest optionRequest){
-        optionService.updateOption(optionRequest);
+    @PutMapping("{id}/options")
+    public ResponseEntity<String> updateOption(@RequestBody @Valid OptionRequest optionRequest, @PathVariable Long id){
+        optionService.updateOption(optionRequest, id);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("update");
     }
 
     @DeleteMapping("{id}/options")
     public ResponseEntity<List<Option>> deleteOption(@PathVariable("id") Long productId, @RequestParam Long optionId){
-        Option option = optionService.deleteOption(optionId);
+        Option option = optionService.getOption(optionId);
+        productService.deleteOption(productId, option);
 
         return ResponseEntity.status(HttpStatus.OK).body(productService.deleteOption(productId, option));
     }

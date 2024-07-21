@@ -1,10 +1,13 @@
 package gift.option;
 
+import gift.product.Product;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Option {
@@ -16,18 +19,28 @@ public class Option {
 
     private int quantity;
 
-    @NotNull
-    private Long productId;
+    /*@NotNull
+    private Long productId;*/
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     protected Option(){
 
     }
 
-    public Option(Long id, String name, int quantity, Long productId){
+    public Option(Long id, String name, int quantity, Product product){
         this.id = id;
         this.name = name;
         this.quantity = quantity;
-        this.productId = productId;
+        this.product = product;
+    }
+
+    public Option(Long id, String name, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -42,8 +55,8 @@ public class Option {
         return quantity;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
     public void update(String name, int quantity){

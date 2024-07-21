@@ -33,11 +33,12 @@ class OptionServiceTest {
     void addOption() {
         //given
         OptionRequest optionRequest = optionRequest();
-        Option expected = optionRequest.toEntity();
+        Product product = product();
+        Option expected = optionWithName(optionRequest.getName(), product);
         when(optionRepository.save(any(Option.class))).thenReturn(expected);
 
         //when
-        Option actual = optionService.addOption(optionRequest);
+        Option actual = optionService.addOption(optionRequest, product);
 
         //then
         assertThat(actual).isEqualTo(expected);
@@ -48,14 +49,14 @@ class OptionServiceTest {
     void addOptionFail() {
         //given
         OptionRequest optionRequest = optionRequest();
-        Option option = optionRequest.toEntity();
+        Option option = option(product());
         Product product = product();
         product.getOptions().add(option);
 
         when(optionRepository.findAllByProductId(any(Long.class))).thenReturn(product.getOptions());
 
         //when, then
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> optionService.addOption(optionRequest));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> optionService.addOption(optionRequest,product));
 
         //then
         assertThat(exception.getMessage()).isEqualTo(" 동일한 상품 내의 옵션 이름은 중복될 수 없습니다. ");
@@ -71,7 +72,7 @@ class OptionServiceTest {
             new NoSuchElementException());
 
         //when //then
-        assertThrows(NoSuchElementException.class, () -> optionService.updateOption(optionRequest));
+        assertThrows(NoSuchElementException.class, () -> optionService.updateOption(optionRequest, product().getId()));
     }
 
     @DisplayName("이미 있는 이름의 옵션으로 변경 하려는 경우")
@@ -79,8 +80,8 @@ class OptionServiceTest {
     void updateOptionFail2() {
         //given
         OptionRequest optionRequest = optionRequestWithName("exist");
-        Option option = option();
-        Option exist = new Option(null, "exist", 1, 1L);
+        Option option = option(product());
+        Option exist = new Option(null, "exist", 1, product());
 
         Product product = product();
         product.getOptions().add(exist);
@@ -89,7 +90,7 @@ class OptionServiceTest {
         when(optionRepository.findAllByProductId(any(Long.class))).thenReturn(product.getOptions());
 
         //when, then
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> optionService.updateOption(optionRequest));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> optionService.updateOption(optionRequest, product.getId()));
 
         //then
         assertThat(exception.getMessage()).isEqualTo(" 동일한 상품 내의 옵션 이름은 중복될 수 없습니다. ");
@@ -99,14 +100,18 @@ class OptionServiceTest {
     @Test
     void deleteOptionFail() {
         //given
-        Option option = option();
+        Option option = option(product());
         when(optionRepository.findById(any(Long.class))).thenThrow(new NoSuchElementException());
         //when// then
         assertThrows(NoSuchElementException.class, () -> optionService.deleteOption(1L));
     }
 
-    private Option option(){
-        return new Option(1L, "option", 1, 1L);
+    private Option option(Product product){
+        return optionWithName("option", product);
+    }
+
+    private Option optionWithName(String name, Product product){
+        return new Option(1L, name, 1, product);
     }
 
     private OptionRequest optionRequest(){
@@ -114,7 +119,7 @@ class OptionServiceTest {
     }
 
     private OptionRequest optionRequestWithName(String name){
-        return new OptionRequest(1L, name, 1, 1L);
+        return new OptionRequest(1L, name, 1);
     }
 
     private Product product(){

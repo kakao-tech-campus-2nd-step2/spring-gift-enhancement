@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OptionRepository extends JpaRepository<Option, Long> {
 
-    List<Option> findAllByProductId(Long id);
+    List<Option> findAllByProductId(Long productId);
 }

@@ -1,5 +1,6 @@
 package gift.option;
 
+import gift.product.Product;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -12,23 +13,21 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
-    public Option addOption(OptionRequest optionRequest){
-        isValidRequest(optionRequest);
+    public Option addOption(OptionRequest optionRequest, Product product){
+        isValidRequest(optionRequest, product.getId());
 
-        return optionRepository.save(optionRequest.toEntity());
+        return optionRepository.save(option(optionRequest, product));
     }
 
-    public Option deleteOption(Long id){
+    public void deleteOption(Long id){
         Option option = optionRepository.findById(id).orElseThrow();
         optionRepository.deleteById(option.getId());
-
-        return option;
     }
 
-    public void updateOption(OptionRequest optionRequest){
+    public void updateOption(OptionRequest optionRequest, Long productId){
         Option option = optionRepository.findById(optionRequest.getOptionId()).orElseThrow();
         if(!optionRequest.getName().equals(option.getName())){
-            isValidRequest(optionRequest);
+            isValidRequest(optionRequest, productId);
         }
         option.update(optionRequest.getName(), optionRequest.getQuantity());
 
@@ -39,17 +38,25 @@ public class OptionService {
         return optionRepository.findAllByProductId(id);
     }
 
-    private void isValidRequest(OptionRequest optionRequest){
-        if(isExistName(optionRequest)){
+    public Option getOption(Long id){
+        return optionRepository.findById(id).orElseThrow();
+    }
+
+    private void isValidRequest(OptionRequest optionRequest, Long productId){
+        if(isExistName(optionRequest, productId)){
             throw new IllegalArgumentException(" 동일한 상품 내의 옵션 이름은 중복될 수 없습니다. ");
         }
     }
 
-    private boolean isExistName(OptionRequest optionRequest){
-        return findAllByProductId(optionRequest.getProductId())
+    private boolean isExistName(OptionRequest optionRequest, Long productId){
+        return findAllByProductId(productId)
             .stream()
             .map(Option::getName)
             .anyMatch(optionRequest.getName()::equals);
+    }
+
+    private Option option(OptionRequest optionRequest, Product product){
+        return new Option(optionRequest.getOptionId(), optionRequest.getName(),optionRequest.getQuantity(),product);
     }
 
 }

@@ -19,17 +19,13 @@ public class OptionRequest {
     @Max(100_000_000)
     private int quantity;
 
-    @NotNull
-    private Long productId;
-
     protected OptionRequest(){
 
     }
-    public OptionRequest(Long optionId, String name, int quantity, Long productId) {
+    public OptionRequest(Long optionId, String name, int quantity) {
         this.optionId = optionId;
         this.name = name;
         this.quantity = quantity;
-        this.productId = productId;
     }
 
     public Long getOptionId(){
@@ -42,13 +38,5 @@ public class OptionRequest {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public Option toEntity(){
-        return new Option(this.optionId, this.name,this.quantity,this.productId);
     }
 }

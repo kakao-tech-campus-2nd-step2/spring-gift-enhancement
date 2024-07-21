@@ -1,11 +1,11 @@
 package gift.product;
 
 import gift.option.Option;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,11 @@ public class Product {
 
     private Long categoryId;
 
-    @OneToMany
-    @JoinColumn(name = "option_id")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private final List<Option> options = new ArrayList<>();
+
+    /*@OneToMany(mappedBy = "product")
+    private final List<Option> options = new ArrayList<>();*/
 
     public Long getId(){
         return this.id;
