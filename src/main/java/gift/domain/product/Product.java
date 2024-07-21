@@ -77,7 +77,7 @@ public class Product {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void saveCategory(Category category) {
         this.category = category;
     }
 
@@ -112,7 +112,7 @@ public class Product {
         }
     }
 
-    public void setOptions(List<ProductOption> options) {
+    public void saveOptions(List<ProductOption> options) {
         this.options = options;
     }
 }

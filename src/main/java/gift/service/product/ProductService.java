@@ -36,7 +36,7 @@ public class ProductService {
         validateProduct(product);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId));
-        product.setCategory(category);
+        product.saveCategory(category);
         productRepository.save(product);
     }
 
@@ -44,7 +44,7 @@ public class ProductService {
         validateProduct(product);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + categoryId));
-        product.setCategory(category);
+        product.saveCategory(category);
         productRepository.save(product);
     }
 

@@ -13,11 +13,14 @@ import java.util.List;
 @Service
 public class ProductOptionService {
 
-    @Autowired
-    private ProductOptionRepository productOptionRepository;
+    private final ProductOptionRepository productOptionRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    public ProductOptionService(ProductOptionRepository productOptionRepository, ProductRepository productRepository) {
+        this.productOptionRepository = productOptionRepository;
+        this.productRepository = productRepository;
+    }
 
     @Transactional
     public ProductOption addProductOption(Long productId, String name, Long quantity) {
