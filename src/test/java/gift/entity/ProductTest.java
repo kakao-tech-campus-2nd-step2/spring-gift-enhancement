@@ -31,4 +31,25 @@ class ProductTest {
 
         assertThat(product.getWishlist().size()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("옵션 추가 테스트")
+    void addOption() {
+        Option option = new Option("딸기", 15, product);
+        product.addOption(option);
+
+        assertThat(product.getOptions().size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("옵션 중복 확인 테스트")
+    void isOptionNameDuplicate() {
+        Option option1 = new Option("딸기", 15, product);
+        Option option2 = new Option("딸기", 15, product);
+
+        product.addOption(option1);
+
+        assertThat(product.isOptionNameDuplicate(option2)).isTrue();
+
+    }
 }
