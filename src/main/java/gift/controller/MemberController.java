@@ -49,7 +49,7 @@ public class MemberController {
                 return responseError(e, HttpStatus.CONFLICT);
             return responseError(e);
         }
-        return new ResponseEntity<>(new JwtDTO(token), HttpStatus.OK);
+        return new ResponseEntity<>(new JwtDTO(token), HttpStatus.CREATED);
     }
 
     @GetMapping("/login")

@@ -2,11 +2,10 @@ package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.entity.Category;
 import gift.entity.Product;
 import gift.entity.Member;
 import gift.entity.Wish;
-import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +25,9 @@ class WishRepositoryTest {
     @Autowired
     private WishRepository wishRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Member member;
     private Member member2;
 
@@ -36,16 +38,15 @@ class WishRepositoryTest {
         productRepository.deleteAll();
         memberRepository.deleteAll();
         wishRepository.deleteAll();
+        categoryRepository.deleteAll();
+
+        categoryRepository.save(new Category("테스트1", "#000000", "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg", ""));
 
         member = memberRepository.save(new Member("12345@12345.com", "1", "홍길동", "default_user"));
         member2 = memberRepository.save(new Member("22345@12345.com", "2", "라이언", "default_user"));
-
         product = productRepository.save(new Product("커피", 10000,
-                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"));
-        product = productRepository.save(new Product("아이스 카페라뗴", 10000,
-                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"));
-
-
+                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
+                categoryRepository.findByName("테스트1").get()));
     }
 
     @AfterEach

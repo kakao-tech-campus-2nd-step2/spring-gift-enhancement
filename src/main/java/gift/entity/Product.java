@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Size;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -16,10 +18,10 @@ import java.util.regex.Pattern;
 @Entity
 public class Product {
 
-    private final Pattern NAME_PATTERN = Pattern.compile(
+    private static final Pattern NAME_PATTERN = Pattern.compile(
             "[a-zA-Z0-9ㄱ-ㅎ가-힣()\\[\\]+\\-&/_ ]+"
     );
-    private final Pattern NAME_EXCLUDE_PATTERN = Pattern.compile(
+    private static final Pattern NAME_EXCLUDE_PATTERN = Pattern.compile(
             "^((?!카카오).)*$"
     );
 
@@ -39,16 +41,21 @@ public class Product {
     @Column(nullable = false)
     private String imageUrl;
 
-    protected Product() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
-    public Product(String name, Integer price, String imageUrl) {
+    protected Product() { }
+
+    public Product(String name, Integer price, String imageUrl, Category category) {
         validateName(name);
         validatePrice(price);
         validateImageUrl(imageUrl);
+
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -63,11 +70,13 @@ public class Product {
     public String getImageUrl() {
         return imageUrl;
     }
+    public Category getCategory() { return category; }
 
-    public void changeProduct(String name, Integer price, String imageUrl) {
+    public void changeProduct(String name, Integer price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     private void validateName(String name) {

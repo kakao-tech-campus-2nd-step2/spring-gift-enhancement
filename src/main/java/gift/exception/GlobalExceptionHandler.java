@@ -2,8 +2,12 @@ package gift.exception;
 
 import gift.dto.ResponseDTO;
 import gift.exception.BadRequestExceptions.UserNotFoundException;
+import gift.exception.InternalServerExceptions.InternalServerException;
+import gift.util.ResponseEntityUtil;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,6 +20,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(ResponseEntityUtil.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -61,5 +66,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ResponseDTO> handleValidationExceptions(UserNotFoundException ex) {
         return new ResponseEntity<>(new ResponseDTO(true, ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InternalServerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ResponseDTO> handleValidationExceptions(InternalServerException ex) {
+        logger.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(new ResponseDTO(true, "예상치 못한 에러입니다. 관리자에게 연락 주시기 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

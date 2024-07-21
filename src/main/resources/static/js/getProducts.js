@@ -58,18 +58,24 @@ function getRequestWithToken(uri) {
 function addProductRow(element) {
   const table = document.getElementById('productTable').getElementsByTagName(
       'tbody')[0];
-  const newRow = table.insertRow();
 
-  const newIdCell = newRow.insertCell(0);
-  const productNameCell = newRow.insertCell(1);
-  const productPriceCell = newRow.insertCell(2);
-  const productImageCell = newRow.insertCell(3);
-  const saveCell = newRow.insertCell(4);
-  const cancelCell = newRow.insertCell(5);
+  const newRowForProduct = table.insertRow();
+  const newIdCell = newRowForProduct.insertCell(0);
+  const productNameCell = newRowForProduct.insertCell(1);
+  const productPriceCell = newRowForProduct.insertCell(2);
+  const productImageCell = newRowForProduct.insertCell(3);
+  const categoryNameCell = newRowForProduct.insertCell(4);
+  newRowForProduct.insertCell(5);
+  newRowForProduct.insertCell(6);
+  newRowForProduct.insertCell(7);
+  const saveCell = newRowForProduct.insertCell(8);
+  const cancelCell = newRowForProduct.insertCell(9);
+
 
   productNameCell.innerHTML = '<input type="text" id="productName" class="productNAme" oninput="validate()"> <span class="nameMessage"></span>';
   productPriceCell.innerHTML = '<input type="text" id="productPrice" class="productPrice" oninput="validate()"> <span class="priceMessage"></span>';
   productImageCell.innerHTML = '<input type="text" id="productImage" class="productImage">';
+  categoryNameCell.innerHTML = '<input type="text" id="productCategoryName" class="productCategoryName" oninput="validate()"> <span class="categoryNameMessage"></span>';
   saveCell.innerHTML = '<img src="/image/save.png" alt="save" id="saveButton" class="saveButton" style="width:100px;height: auto" onclick="saveAddProduct(this)">';
   cancelCell.innerHTML = '<img src="/image/cancel.png" alt="cancel" style="width:100px;height: auto" onclick="cancelProductEditing(this)">';
 
@@ -141,13 +147,17 @@ function saveAddProduct() {
   const productName = document.getElementById('productName').value;
   const productPrice = document.getElementById('productPrice').value;
   const productImage = document.getElementById('productImage').value;
+  const categoryName = document.getElementById('productCategoryName').value;
 
 
   let requestJson = {
     "name": productName,
     "price": productPrice,
-    "imageUrl": productImage
+    "imageUrl": productImage,
+    "categoryName" : categoryName
   };
+
+  console.log(JSON.stringify(requestJson));
 
   $.ajax({
     type: 'POST',
@@ -184,17 +194,20 @@ function addWishList(button){
   const nameCell = row.querySelector('.productName');
   const priceCell = row.querySelector('.productPrice');
   const imageCell = row.querySelector('.productImage');
+  const categoryNameCell = row.querySelector('.productCategoryName');
 
   const currentId = idCell.innerText;
   const currentName = nameCell.innerText;
   const currentPrice = priceCell.innerText;
   const currentImage = imageCell.querySelector('img').src;
+  const currentCategoryName = categoryNameCell.innerText;
 
   let requestJson = {
     "id" : currentId,
     "name": currentName,
     "price": currentPrice,
-    "imageUrl": currentImage
+    "imageUrl": currentImage,
+    "categoryName" : currentCategoryName
   };
 
   $.ajax({
@@ -228,7 +241,7 @@ function addWishList(button){
 function cancelProductEditing() {
   const table = document.getElementById('productTable').getElementsByTagName(
       'tbody')[0];
-  table.deleteRow(table.rows.length - 1);
+  table.deleteRow(table.rows.length - 3);
 
   const addButton = document.getElementById('addButton');
   addButton.style.pointerEvents = 'auto';
@@ -272,14 +285,18 @@ function editProductRow(button) {
   const nameCell = row.querySelector('.productName');
   const priceCell = row.querySelector('.productPrice');
   const imageCell = row.querySelector('.productImage');
+  const categoryNameCell = row.querySelector('.productCategoryName');
 
   const currentName = nameCell.innerText;
   const currentPrice = priceCell.innerText;
   const currentImage = imageCell.querySelector('img').src;
+  const currentCategoryName = categoryNameCell.innerText;
 
   nameCell.innerHTML = `<input type="text" id="productName" class="productName" value="${currentName}" oninput="validate()"> <span class="nameMessage"></span>`;
   priceCell.innerHTML = `<input type="text" id="productPrice" class="productPrice" value="${currentPrice}" oninput="validate()"> <span class="priceMessage"></span>`;
   imageCell.innerHTML = `<input type="text" id="productImage" class="productImage" value="${currentImage}">`;
+  categoryNameCell.innerHTML = `<input type="text" id="productCategoryName" value="${currentCategoryName}" class="productCategoryName" oninput="validate()"> <span class="categoryNameMessage"></span>`;
+
 
   button.setAttribute('src', '/image/save.png');
   button.setAttribute('alt', 'save');
@@ -293,13 +310,17 @@ function savePutProductRow(button) {
   const productName = row.querySelector('.productName input').value;
   const productPrice = row.querySelector('.productPrice input').value;
   const productImage = row.querySelector('.productImage input').value;
+  const categoryName = row.querySelector('.productCategoryName input').value;
 
   let requestJson = {
     "id": productId,
     "name": productName,
     "price": productPrice,
-    "imageUrl": productImage
+    "imageUrl": productImage,
+    "categoryName" : categoryName
   };
+
+  console.log(JSON.stringify(requestJson));
 
 
   $.ajax({
@@ -337,7 +358,8 @@ function autoAddProduct(button){
     const requestJson = {
       "name": "커피" + i,
       "price": 10000 + i,
-      "imageUrl": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg"
+      "imageUrl": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
+      "categoryName" : "기타"
     };
 
     $.ajax({

@@ -30,7 +30,9 @@
 <div id="userbox">
   <div id="userInfo" style="display: none;">
     <span id="username"></span>
-    <button id="wishList" style="display:none;" onclick="getRequestWithToken('/api/products/wishes')"> 장바구니</button>
+    <button id="wishList" style="display:none;"
+            onclick="getRequestWithToken('/api/products/wishes')"> 장바구니
+    </button>
     <button id="logoutButton" style="display: none;">로그아웃</button>
   </div>
   <a href="/members/login" id="loginLink" style="display:none;">
@@ -42,23 +44,32 @@
 <table id="productTable">
   <thead>
   <tr>
-    <th>ID
-      <a id="idAsc" th:href="@{/api/products(page=${productPage.number}, sort='id,asc')}">▲</a>
-      <a id="idDesc" th:href="@{/api/products(page=${productPage.number}, sort='id,desc')}">▼</a>
-    </th>
-    <th>Name
-      <a id="nameAsc" th:href="@{/api/products(page=${productPage.number}, sort='name,asc')}">▲</a>
-      <a id="nameDesc" th:href="@{/api/products(page=${productPage.number}, sort='name,desc')}">▼</a>
-    </th>
-    <th>Price
-      <a id="priceAsc" th:href="@{/api/products(page=${productPage.number}, sort='price,asc')}">▲</a>
-      <a id="priceDesc" th:href="@{/api/products(page=${productPage.number}, sort='price,desc')}">▼</a>
-    </th>
-
-    <th>ImageUrl</th>
-    <th>저장/수정</th>
-    <th>취소/삭제</th>
-    <th>장바구니 추가</th>
+    <th colspan="4" style="text-align: center">Product</th>
+    <th colspan="4" style="text-align: center">Category</th>
+    <th colspan="3" style="text-align: center">Buttons</th>
+  </tr>
+  <tr>
+  <th>ID
+    <a id="idAsc" th:href="@{/api/products(page=${productPage.number}, sort='id,asc')}">▲</a>
+    <a id="idDesc" th:href="@{/api/products(page=${productPage.number}, sort='id,desc')}">▼</a>
+  </th>
+  <th>Name
+    <a id="nameAsc" th:href="@{/api/products(page=${productPage.number}, sort='name,asc')}">▲</a>
+    <a id="nameDesc" th:href="@{/api/products(page=${productPage.number}, sort='name,desc')}">▼</a>
+  </th>
+  <th>Price
+    <a id="priceAsc" th:href="@{/api/products(page=${productPage.number}, sort='price,asc')}">▲</a>
+    <a id="priceDesc"
+       th:href="@{/api/products(page=${productPage.number}, sort='price,desc')}">▼</a>
+  </th>
+  <th>ImageUrl</th>
+  <th>name</th>
+  <th>Color</th>
+  <th>ImageUrl</th>
+  <th>Description</th>
+  <th>저장/수정</th>
+  <th>취소/삭제</th>
+  <th>장바구니 추가</th>
   </tr>
   </thead>
   <tbody>
@@ -66,9 +77,20 @@
     <td th:text="${product.id}" class="productId">1</td>
     <td th:text="${product.name}" class="productName">Product Name</td>
     <td th:text="${product.price}" class="productPrice">1000</td>
+
     <td class="productImage">
       <img th:src="${product.imageUrl}" alt="Image" style="width:100px;height:auto;">
     </td>
+
+    <td th:text="${product.categoryDTO.name}" class="productCategoryName"></td>
+    <td th:text="${product.categoryDTO.color}" class="productCategoryColor"></td>
+
+    <td class="productCategoryImage">
+      <img th:src="${product.categoryDTO.imageUrl}" alt="Image" style="width:100px;height:auto;">
+    </td>
+
+    <td th:text="${product.categoryDTO.description}" class="productCategoryDescription"></td>
+
     <td>
       <img th:src="@{/image/edit.png}" alt="edit" style="width:100px;height: auto"
            onclick="editProductRow(this)">

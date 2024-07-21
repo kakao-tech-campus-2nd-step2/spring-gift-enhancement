@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 @Entity
 public class Member {
-    private final Pattern EMAIL_PATTERN = Pattern.compile(
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
             "^[A-Za-z0-9+_.-]+@(.+)$"
     );
 
@@ -75,15 +75,14 @@ public class Member {
             return false;
         }
         Member member = (Member) o;
-        return Objects.equals(email, member.email) &&
-                Objects.equals(password, member.password) &&
-                Objects.equals(name, member.name) &&
-                Objects.equals(role, member.role);
+        return Objects.equals(id, member.id) && Objects.equals(email, member.email)
+                && Objects.equals(password, member.password) && Objects.equals(name,
+                member.name) && Objects.equals(role, member.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, password, name, role);
+        return Objects.hash(id, email, password, name, role);
     }
 
     private void validateEmail(String email) {

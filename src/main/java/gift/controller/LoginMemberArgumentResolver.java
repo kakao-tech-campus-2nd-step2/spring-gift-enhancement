@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.annotation.LoginMember;
 import gift.exception.BadRequestExceptions.UserNotFoundException;
+import gift.exception.InternalServerExceptions.InternalServerException;
 import gift.service.MemberService;
 import gift.util.JwtUtil;
 import org.springframework.core.MethodParameter;
@@ -34,6 +35,8 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
             return memberService.getMember(email);
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException("회원이 아닙니다.");
+        } catch (Exception e) {
+            throw new InternalServerException(e.getMessage());
         }
     }
 }

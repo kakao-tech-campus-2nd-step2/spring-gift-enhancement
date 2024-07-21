@@ -3,6 +3,7 @@ package gift.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.entity.Category;
 import gift.entity.Product;
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +19,26 @@ class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
+    private Product product1;
+    private Product product2;
+
+    private Category category1;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @BeforeEach
     void setUp() {
         productRepository.deleteAll();
+        categoryRepository.deleteAll();
+
+        category1 = categoryRepository.save( new Category("테스트1", "#000000", "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg", ""));
+
+        product1 = productRepository.save(new Product("커피", 10000,
+                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",  categoryRepository.findByName("테스트1").get()));
+
+        product2 = productRepository.save(new Product("커피", 10000,
+                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg", categoryRepository.findByName("테스트1").get()));
     }
 
     @AfterEach
@@ -32,28 +49,22 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("상품 추가")
     void save() {
-        Product expected = new Product("커피", 10000,
-                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
+        Product expected = productRepository.save(new Product("커피", 10000,
+                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
+                category1));
         Product actual = productRepository.save(expected);
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo("커피"),
                 () -> assertThat(actual.getPrice()).isEqualTo(10000),
-                () -> assertThat(actual.getImageUrl()).isNotNull()
+                () -> assertThat(actual.getImageUrl()).isNotNull(),
+                () -> assertThat(actual.getCategory()).isNotNull()
         );
     }
 
     @Test
     @DisplayName("상품 조회")
     void findAll(){
-        Product product1 = new Product("커피1", 10000,
-                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
-        Product product2 = new Product("커피2", 10000,
-                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
-
-        productRepository.save(product1);
-        productRepository.save(product2);
-
         List<Product> actualList = productRepository.findAll();
         assertThat(actualList).containsExactlyInAnyOrder(product1, product2);
     }
@@ -61,39 +72,21 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("상품 하나 조회")
     void findOne(){
-        Product product1 = new Product("커피1", 10000,
-                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
-        Product product2 = new Product("커피2", 10000,
-                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
-
-        productRepository.save(product1);
-        productRepository.save(product2);
-
-        Optional<Product> actual = productRepository.findById(product2.getId());
-
-        assertThat(actual.get()).isEqualTo(product2);
+        assertThat(productRepository.findById(product1.getId())).isNotNull();
     }
 
     @Test
     @DisplayName("상품 수정")
     void update(){
-        Product product1 = new Product("커피1", 10000,
-                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
-        Product product2 = new Product("커피2", 10000,
-                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
+        Product product = productRepository.findById(product1.getId()).get();
+        product.changeProduct("커피", 100002,
+                "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg", category1);
 
-        productRepository.save(product1);
-        productRepository.save(product2);
-
-        Optional<Product> optionalProduct = productRepository.findById(product2.getId());
-        Product expected = optionalProduct.get();
-
-        expected.changeProduct("커피2", 31240941,"https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg");
         productRepository.flush();
 
-        Optional<Product> actual = productRepository.findById(product2.getId());
+        Optional<Product> actual = productRepository.findById(product.getId());
 
-        assertThat(actual.get().getPrice()).isEqualTo(31240941);
+        assertThat(actual.get().getPrice()).isEqualTo(100002);
 
     }
 

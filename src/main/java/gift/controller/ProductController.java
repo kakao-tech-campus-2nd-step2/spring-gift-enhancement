@@ -3,7 +3,8 @@ package gift.controller;
 import static gift.util.ResponseEntityUtil.responseError;
 
 import gift.constants.ResponseMsgConstants;
-import gift.dto.ProductDTO;
+import gift.dto.ProductResponseDTO;
+import gift.dto.ProductRequestDTO;
 import gift.dto.ResponseDTO;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -39,15 +40,15 @@ public class ProductController {
 
     @GetMapping
     public String getProducts(Model model, Pageable pageable) {
-        Page<ProductDTO> productPage = productService.getProductList(pageable);
+        Page<ProductResponseDTO> productPage = productService.getProductList(pageable);
         model.addAttribute("productPage", productPage);
         return "getProducts";
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> addProduct(@RequestBody @Valid ProductDTO productDTO) {
+    public ResponseEntity<ResponseDTO> addProduct(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
         try {
-            productService.addProduct(productDTO);
+            productService.addProduct(productRequestDTO);
         } catch (RuntimeException e) {
             return responseError(e);
         }
@@ -70,9 +71,9 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> updateProduct(@PathVariable @Min(1) @NotNull Long id,
-            @RequestBody @Valid ProductDTO productDTO) {
+            @RequestBody @Valid ProductRequestDTO productRequestDTO) {
         try {
-            productService.updateProduct(id, productDTO);
+            productService.updateProduct(id, productRequestDTO);
 
         } catch (RuntimeException e) {
             return responseError(e);
