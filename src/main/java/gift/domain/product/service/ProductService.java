@@ -71,6 +71,7 @@ public class ProductService {
         Product product = productJpaRepository.findById(productId)
             .orElseThrow(() -> new InvalidProductInfoException("error.invalid.product.id"));
 
+        optionService.deleteAllByProductId(productId);
         wishlistService.deleteAllByProductId(productId);
         productJpaRepository.delete(product);
     }

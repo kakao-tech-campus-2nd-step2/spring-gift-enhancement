@@ -43,4 +43,8 @@ public class OptionService {
         product.removeOptions();
         create(product, optionRequestDtos);
     }
+
+    public void deleteAllByProductId(long productId) {
+        optionJpaRepository.deleteAllByProductId(productId);
+    }
 }
