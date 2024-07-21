@@ -8,6 +8,7 @@ import gift.dto.response.OptionResponseDto;
 import gift.exception.customException.DenyDeleteException;
 import gift.exception.customException.EntityNotFoundException;
 import gift.exception.customException.NameDuplicationException;
+import gift.exception.customException.OptionQuantityNotMinusException;
 import gift.repository.option.OptionRepository;
 import gift.repository.product.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -135,5 +136,44 @@ class OptionServiceTest {
                 .hasMessage(DENY_OPTION_DELETE)
         );
     }
+
+    @Test
+    @DisplayName("옵션 수량 초과 감소 시 Exception 테스트")
+    void 옵션_수량_초과_감소_EXCEPTION_TEST(){
+        //given
+        Long optionId = 1L;
+        Option option = new Option("TEST_OPTION", 100);
+
+        given(optionRepository.findOptionByIdForUpdate(optionId)).willReturn(Optional.of(option));
+
+        //expected
+        assertThatThrownBy(() -> optionService.updateOptionQuantity(optionId, 101))
+                        .isInstanceOf(OptionQuantityNotMinusException.class)
+                        .hasMessage(OPTION_QUANTITY_NOT_MINUS);
+
+    }
+
+    @Test
+    @DisplayName("옵션 수량 감소 정상")
+    void 옵션_수량__감소_정상_TEST(){
+        //given
+        Long optionId = 1L;
+        Option option = new Option("TEST_OPTION", 100);
+
+        given(optionRepository.findOptionByIdForUpdate(optionId)).willReturn(Optional.of(option));
+
+        //when
+        OptionResponseDto optionResponseDto = optionService.updateOptionQuantity(optionId, 50);
+
+        //then
+        assertAll(
+                () -> assertThat(optionResponseDto.name()).isEqualTo(option.getName()),
+                () -> assertThat(optionResponseDto.quantity()).isEqualTo(50)
+        );
+
+    }
+
+
+
 
 }

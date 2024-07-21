@@ -16,6 +16,8 @@ public class ExceptionMessage {
     public static final String OPTION_NAME_DUPLICATION =  "중복된 옵션 이름 입니다.";
     public static final String OPTION_NOT_FOUND =  "해당 옵션은 존재하지 않습니다.";
     public static final String DENY_OPTION_DELETE =  "상품의 옵션은 항상 1개 이상이어야 합니다.";
+    public static final String OPTION_QUANTITY_NOT_MINUS =  "옵션 수량은 0보다 커야합니다.";
+
 
 
 
