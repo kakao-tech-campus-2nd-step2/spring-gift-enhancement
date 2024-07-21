@@ -25,8 +25,12 @@ public class CategoryCreateRequestTest {
     @Test
     @DisplayName("유효한 카테고리 추가")
     public void testValidCategoryCreateRequest() {
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest("Category",
-            "#000000", "imageUrl", "description");
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(
+            "Category",
+            "#000000",
+            "imageUrl",
+            "description"
+        );
 
         Set<ConstraintViolation<CategoryCreateRequest>> violations = validator.validate(
             categoryCreateRequest);
@@ -37,8 +41,12 @@ public class CategoryCreateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이름")
     public void testCreateRequestNoName() {
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(null, "#000000",
-            "imageUrl", "description");
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(
+            null,
+            "#000000",
+            "imageUrl",
+            "description"
+        );
 
         Set<ConstraintViolation<CategoryCreateRequest>> violations = validator.validate(
             categoryCreateRequest);
@@ -53,8 +61,12 @@ public class CategoryCreateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 색상 코드")
     public void testCreateRequestNoColor() {
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest("Category", null,
-            "imageUrl", "description");
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(
+            "Category",
+            null,
+            "imageUrl",
+            "description"
+        );
 
         Set<ConstraintViolation<CategoryCreateRequest>> violations = validator.validate(
             categoryCreateRequest);
@@ -69,8 +81,12 @@ public class CategoryCreateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이미지 URL")
     public void testCreateRequestNoImageUrl() {
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest("Category",
-            "#000000", null, "description");
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(
+            "Category",
+            "#000000",
+            null,
+            "description"
+        );
 
         Set<ConstraintViolation<CategoryCreateRequest>> violations = validator.validate(
             categoryCreateRequest);

@@ -1,5 +1,6 @@
 package gift.model;
 
+import static gift.util.constants.OptionConstants.INSUFFICIENT_QUANTITY;
 import static gift.util.constants.OptionConstants.NAME_INVALID_CHARACTERS;
 import static gift.util.constants.OptionConstants.NAME_SIZE_LIMIT;
 import static gift.util.constants.OptionConstants.QUANTITY_MAX;
@@ -54,6 +55,12 @@ public class Option {
         this.product = product;
     }
 
+    public Option(String name, int quantity, Product product) {
+        this.name = name;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
     public Long getId() {
         return id;
     }
@@ -81,11 +88,14 @@ public class Option {
         return Objects.equals(this.product.getId(), productId);
     }
 
-    public boolean isNameMatching(String name) {
-        return this.name.equals(name);
+    public void subtractQuantity(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException(INSUFFICIENT_QUANTITY + this.id);
+        }
+        this.quantity -= quantity;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public boolean isNameMatching(String name) {
+        return this.name.equals(name);
     }
 }

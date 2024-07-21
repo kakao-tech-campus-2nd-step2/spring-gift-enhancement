@@ -21,41 +21,40 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    // 모든 카테고리 조회
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
-            .map(CategoryService::convertToDTO)
+            .map(this::convertToDTO)
             .collect(Collectors.toList());
     }
 
-    // ID로 카테고리 조회
     public CategoryResponse getCategoryById(Long id) {
         return categoryRepository.findById(id)
-            .map(CategoryService::convertToDTO)
+            .map(this::convertToDTO)
             .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND + id));
     }
 
-    // 카테고리 추가
     public CategoryResponse addCategory(CategoryCreateRequest categoryCreateRequest) {
         Category category = convertToEntity(categoryCreateRequest);
         Category addedCategory = categoryRepository.save(category);
         return convertToDTO(addedCategory);
     }
 
-    // 카테고리 수정
     public CategoryResponse updateCategory(Long id, CategoryUpdateRequest categoryUpdateRequest) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND + id));
 
-        category.update(categoryUpdateRequest.name(), categoryUpdateRequest.color(),
+        category.update(
+            categoryUpdateRequest.name(),
+            categoryUpdateRequest.color(),
             categoryUpdateRequest.imageUrl(),
-            categoryUpdateRequest.description());
+            categoryUpdateRequest.description()
+        );
         Category updatedCategory = categoryRepository.save(category);
         return convertToDTO(updatedCategory);
     }
 
     // Mapper methods
-    private static CategoryResponse convertToDTO(Category category) {
+    private CategoryResponse convertToDTO(Category category) {
         return new CategoryResponse(
             category.getId(),
             category.getName(),
@@ -65,21 +64,12 @@ public class CategoryService {
         );
     }
 
-    private static Category convertToEntity(CategoryCreateRequest categoryCreateRequest) {
+    private Category convertToEntity(CategoryCreateRequest categoryCreateRequest) {
         return new Category(
             categoryCreateRequest.name(),
             categoryCreateRequest.color(),
             categoryCreateRequest.imageUrl(),
             categoryCreateRequest.description()
-        );
-    }
-
-    private static Category convertToEntity(CategoryUpdateRequest categoryUpdateRequest) {
-        return new Category(
-            categoryUpdateRequest.name(),
-            categoryUpdateRequest.color(),
-            categoryUpdateRequest.imageUrl(),
-            categoryUpdateRequest.description()
         );
     }
 }

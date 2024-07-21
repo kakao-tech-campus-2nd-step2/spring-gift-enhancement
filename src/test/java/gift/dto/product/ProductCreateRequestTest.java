@@ -25,8 +25,12 @@ public class ProductCreateRequestTest {
     @Test
     @DisplayName("유효한 상품 추가")
     public void testAddProductValid() {
-        ProductCreateRequest productCreateRequest = new ProductCreateRequest("Valid Name", 100,
-            "valid.jpg", 1L);
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest(
+            "Valid Name",
+            100,
+            "valid.jpg",
+            1L
+        );
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
             productCreateRequest);
@@ -37,8 +41,12 @@ public class ProductCreateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이름")
     public void testAddProductNameMissing() {
-        ProductCreateRequest productCreateRequest = new ProductCreateRequest(null, 100, "valid.jpg",
-            1L);
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest(
+            null,
+            100,
+            "valid.jpg",
+            1L
+        );
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
             productCreateRequest);
@@ -53,8 +61,12 @@ public class ProductCreateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 가격")
     public void testAddProductPriceMissing() {
-        ProductCreateRequest productCreateRequest = new ProductCreateRequest("Valid Name", null,
-            "valid.jpg", 1L);
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest(
+            "Valid Name",
+            null,
+            "valid.jpg",
+            1L
+        );
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
             productCreateRequest);
@@ -69,8 +81,12 @@ public class ProductCreateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 이미지 URL")
     public void testAddProductImageUrlMissing() {
-        ProductCreateRequest productCreateRequest = new ProductCreateRequest("Valid Name", 100,
-            null, 1L);
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest(
+            "Valid Name",
+            100,
+            null,
+            1L
+        );
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
             productCreateRequest);
@@ -85,8 +101,12 @@ public class ProductCreateRequestTest {
     @Test
     @DisplayName("필수 필드 누락 - 카테고리 ID")
     public void testAddProductCategoryIdMissing() {
-        ProductCreateRequest productCreateRequest = new ProductCreateRequest("Valid Name", 100,
-            "valid.jpg", null);
+        ProductCreateRequest productCreateRequest = new ProductCreateRequest(
+            "Valid Name",
+            100,
+            "valid.jpg",
+            null
+        );
 
         Set<ConstraintViolation<ProductCreateRequest>> violations = validator.validate(
             productCreateRequest);

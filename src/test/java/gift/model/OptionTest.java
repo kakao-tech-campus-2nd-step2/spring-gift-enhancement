@@ -1,8 +1,10 @@
 package gift.model;
 
+import static gift.util.constants.OptionConstants.INSUFFICIENT_QUANTITY;
 import static gift.util.constants.OptionConstants.NAME_INVALID_CHARACTERS;
 import static gift.util.constants.OptionConstants.NAME_SIZE_LIMIT;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -52,5 +54,29 @@ public class OptionTest {
             violation.getPropertyPath().toString().equals("name") &&
                 violation.getMessage().equals(NAME_INVALID_CHARACTERS)
         );
+    }
+
+    @Test
+    @DisplayName("옵션 수량 차감 - 유효한 경우")
+    public void testSubtractQuantityValid() {
+        Product product = new Product();
+        Option option = new Option(1L, "ValidOption", 100, product);
+
+        option.subtractQuantity(10);
+
+        assertThat(option.getQuantity()).isEqualTo(90);
+    }
+
+    @Test
+    @DisplayName("옵션 수량 차감 - 수량 부족")
+    public void testSubtractQuantityInsufficient() {
+        Product product = new Product();
+        Option option = new Option(1L, "ValidOption", 5, product);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            option.subtractQuantity(10);
+        });
+
+        assertThat(exception.getMessage()).contains(INSUFFICIENT_QUANTITY + 1);
     }
 }

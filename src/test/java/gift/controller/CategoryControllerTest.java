@@ -40,8 +40,13 @@ public class CategoryControllerTest {
 
     @BeforeEach
     public void setUp() {
-        categoryResponse = new CategoryResponse(1L, "Category", "#000000", "imageUrl",
-            "description");
+        categoryResponse = new CategoryResponse(
+            1L,
+            "Category",
+            "#000000",
+            "imageUrl",
+            "description"
+        );
     }
 
     @Test
@@ -78,9 +83,12 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 추가")
     public void testAddCategory() throws Exception {
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest("Category",
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(
+            "Category",
             "#000000",
-            "imageUrl", "description");
+            "imageUrl",
+            "description"
+        );
         when(categoryService.addCategory(categoryCreateRequest)).thenReturn(categoryResponse);
 
         mockMvc.perform(post("/api/categories")
@@ -94,11 +102,19 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("카테고리 수정")
     public void testUpdateCategory() throws Exception {
-        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Updated Category",
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(
+            "Updated Category",
             "#FFFFFF",
-            "newImageUrl", "newDescription");
-        CategoryResponse updatedCategoryResponse = new CategoryResponse(1L, "Updated Category",
-            "#FFFFFF", "newImageUrl", "newDescription");
+            "newImageUrl",
+            "newDescription"
+        );
+        CategoryResponse updatedCategoryResponse = new CategoryResponse(
+            1L,
+            "Updated Category",
+            "#FFFFFF",
+            "newImageUrl",
+            "newDescription"
+        );
         when(categoryService.updateCategory(1L, categoryUpdateRequest)).thenReturn(
             updatedCategoryResponse);
 
@@ -116,9 +132,12 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("존재하지 않는 카테고리 ID로 수정")
     public void testUpdateCategoryNotFound() throws Exception {
-        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Updated Category",
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(
+            "Updated Category",
             "#FFFFFF",
-            "newImageUrl", "newDescription");
+            "newImageUrl",
+            "newDescription"
+        );
         when(categoryService.updateCategory(1L, categoryUpdateRequest)).thenThrow(
             new CategoryNotFoundException(CategoryConstants.CATEGORY_NOT_FOUND + 1));
 

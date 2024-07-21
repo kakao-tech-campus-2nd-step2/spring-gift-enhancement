@@ -4,6 +4,7 @@ import static gift.util.constants.MemberConstants.EMAIL_ALREADY_USED;
 import static gift.util.constants.MemberConstants.ID_NOT_FOUND;
 import static gift.util.constants.MemberConstants.INVALID_CREDENTIALS;
 
+import gift.dto.member.MemberEditRequest;
 import gift.dto.member.MemberLoginRequest;
 import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
@@ -27,21 +28,18 @@ public class MemberService {
         this.jwtUtil = jwtUtil;
     }
 
-    // 회원가입 (회원 추가)
     public MemberResponse registerMember(MemberRegisterRequest memberRegisterRequest) {
         if (memberRepository.existsByEmail(memberRegisterRequest.email())) {
             throw new EmailAlreadyUsedException(EMAIL_ALREADY_USED);
         }
 
-        Member member = new Member(null, memberRegisterRequest.email(),
-            memberRegisterRequest.password());
+        Member member = new Member(memberRegisterRequest.email(), memberRegisterRequest.password());
         Member savedMember = memberRepository.save(member);
 
         String token = jwtUtil.generateToken(savedMember.getId(), member.getEmail());
         return new MemberResponse(savedMember.getId(), savedMember.getEmail(), token);
     }
 
-    // 로그인 (회원 검증)
     public MemberResponse loginMember(MemberLoginRequest memberLoginRequest) {
         Member member = memberRepository.findByEmail(memberLoginRequest.email())
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
@@ -54,38 +52,34 @@ public class MemberService {
         return new MemberResponse(member.getId(), member.getEmail(), token);
     }
 
-    // 모든 회원 조회
     public List<MemberResponse> getAllMembers() {
         return memberRepository.findAll().stream()
-            .map(MemberService::convertToDTO)
+            .map(this::convertToDTO)
             .collect(Collectors.toList());
     }
 
-    // ID로 회원 조회
     public MemberResponse getMemberById(Long id) {
         return memberRepository.findById(id)
-            .map(MemberService::convertToDTO)
+            .map(this::convertToDTO)
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
     }
 
-    // 회원 수정
-    public MemberResponse updateMember(Long id, MemberRegisterRequest memberRegisterRequest) {
+    public MemberResponse updateMember(Long id, MemberEditRequest memberEditRequest) {
         Member member = memberRepository.findById(id)
             .orElseThrow(() -> new ForbiddenException(INVALID_CREDENTIALS));
 
-        boolean emailChanged = !member.isEmailMatching(memberRegisterRequest.email());
-        boolean emailAlreadyUsed = memberRepository.existsByEmail(memberRegisterRequest.email());
+        boolean emailChanged = !member.isEmailMatching(memberEditRequest.email());
+        boolean emailAlreadyUsed = memberRepository.existsByEmail(memberEditRequest.email());
 
         if (emailChanged && emailAlreadyUsed) {
             throw new EmailAlreadyUsedException(EMAIL_ALREADY_USED);
         }
 
-        member.update(memberRegisterRequest.email(), memberRegisterRequest.password());
+        member.update(memberEditRequest.email(), memberEditRequest.password());
         Member updatedMember = memberRepository.save(member);
         return convertToDTO(updatedMember);
     }
 
-    // 회원 삭제
     public void deleteMember(Long id) throws ForbiddenException {
         if (!memberRepository.existsById(id)) {
             throw new ForbiddenException(ID_NOT_FOUND);
@@ -98,7 +92,7 @@ public class MemberService {
         return new Member(memberResponse.id(), memberResponse.email(), null);
     }
 
-    private static MemberResponse convertToDTO(Member member) {
+    private MemberResponse convertToDTO(Member member) {
         return new MemberResponse(member.getId(), member.getEmail(), null);
     }
 }

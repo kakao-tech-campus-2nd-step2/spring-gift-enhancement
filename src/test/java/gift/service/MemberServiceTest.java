@@ -12,6 +12,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import gift.dto.member.MemberEditRequest;
 import gift.dto.member.MemberLoginRequest;
 import gift.dto.member.MemberRegisterRequest;
 import gift.dto.member.MemberResponse;
@@ -43,8 +44,10 @@ public class MemberServiceTest {
     @Test
     @DisplayName("회원가입 테스트")
     public void testRegisterMember() {
-        MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest("test@example.com",
-            "password");
+        MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest(
+            "test@example.com",
+            "password"
+        );
         Member savedMember = new Member(1L, "test@example.com", "password");
         when(memberRepository.existsByEmail("test@example.com")).thenReturn(false);
         when(memberRepository.save(any(Member.class))).thenReturn(savedMember);
@@ -58,8 +61,10 @@ public class MemberServiceTest {
     @Test
     @DisplayName("이미 사용 중인 이메일로 회원가입 시도")
     public void testRegisterMemberEmailAlreadyUsed() {
-        MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest("test@example.com",
-            "password");
+        MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest(
+            "test@example.com",
+            "password"
+        );
         when(memberRepository.existsByEmail("test@example.com")).thenReturn(true);
 
         EmailAlreadyUsedException exception = assertThrows(EmailAlreadyUsedException.class, () -> {
@@ -72,8 +77,10 @@ public class MemberServiceTest {
     @Test
     @DisplayName("로그인 테스트")
     public void testLoginMember() {
-        MemberLoginRequest memberLoginRequest = new MemberLoginRequest("test@example.com",
-            "password");
+        MemberLoginRequest memberLoginRequest = new MemberLoginRequest(
+            "test@example.com",
+            "password"
+        );
         Member member = new Member(1L, "test@example.com", "password");
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.of(member));
         when(jwtUtil.generateToken(1L, "test@example.com")).thenReturn("mockedToken");
@@ -86,8 +93,10 @@ public class MemberServiceTest {
     @Test
     @DisplayName("잘못된 이메일로 로그인 시도")
     public void testLoginMemberEmailNotFound() {
-        MemberLoginRequest memberLoginRequest = new MemberLoginRequest("test@example.com",
-            "password");
+        MemberLoginRequest memberLoginRequest = new MemberLoginRequest(
+            "test@example.com",
+            "password"
+        );
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.empty());
 
         ForbiddenException exception = assertThrows(ForbiddenException.class, () -> {
@@ -100,8 +109,10 @@ public class MemberServiceTest {
     @Test
     @DisplayName("잘못된 비밀번호로 로그인 시도")
     public void testLoginMemberPasswordMismatch() {
-        MemberLoginRequest memberLoginRequest = new MemberLoginRequest("test@example.com",
-            "wrongpassword");
+        MemberLoginRequest memberLoginRequest = new MemberLoginRequest(
+            "test@example.com",
+            "wrongpassword"
+        );
         Member member = new Member(1L, "test@example.com", "password");
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.of(member));
 
@@ -149,14 +160,17 @@ public class MemberServiceTest {
     @DisplayName("회원 수정")
     public void testUpdateMember() {
         Member member = new Member(1L, "old@example.com", "oldpassword");
-        MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest("new@example.com",
-            "newpassword");
+        MemberEditRequest memberEditRequest = new MemberEditRequest(
+            null,
+            "new@example.com",
+            "newpassword"
+        );
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
         when(memberRepository.existsByEmail("new@example.com")).thenReturn(false);
         when(memberRepository.save(any(Member.class))).thenReturn(
             new Member(1L, "new@example.com", "newpassword"));
 
-        MemberResponse response = memberService.updateMember(1L, memberRegisterRequest);
+        MemberResponse response = memberService.updateMember(1L, memberEditRequest);
         assertEquals("new@example.com", response.email());
     }
 

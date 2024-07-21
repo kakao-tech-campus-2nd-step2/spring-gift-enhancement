@@ -5,7 +5,8 @@ public record ProductResponse(
     String name,
     int price,
     String imageUrl,
-    Long categoryId
+    Long categoryId,
+    String categoryName
 ) {
 
 }
