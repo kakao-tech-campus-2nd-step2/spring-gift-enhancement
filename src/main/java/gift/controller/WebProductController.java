@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.dto.ProductRequest;
 import gift.entity.Product;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class WebProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public WebProductController(ProductService productService) {
+    public WebProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/products")
@@ -32,13 +35,17 @@ public class WebProductController {
     public String showNewProducts(Model model) {
         ProductRequest productRequest = new ProductRequest();
         model.addAttribute("product", productRequest);
+        model.addAttribute("categories", categoryService.findAll());
         return "newProduct";
     }
 
     @PostMapping("/saveProducts")
-    public String saveProducts(@ModelAttribute("product") ProductRequest productRequest,
-        Model model) {
-        productService.addProduct(productRequest);
+    public String saveProducts(@ModelAttribute("product") ProductRequest productRequest) {
+        if (productRequest.getId() == null) {
+            productService.addProduct(productRequest);
+            return "redirect:/products";
+        }
+        productService.updateProduct(productRequest.getId(), productRequest);
         return "redirect:/products";
     }
 
@@ -49,6 +56,7 @@ public class WebProductController {
             return "redirect:/products";
         }
         model.addAttribute("product", ProductRequest.from(product.get()));
+        model.addAttribute("categories", categoryService.findAll());
         return "updateProduct";
     }
 

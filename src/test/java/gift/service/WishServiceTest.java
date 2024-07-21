@@ -1,15 +1,17 @@
-package gift.wishlist.service;
+package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.dto.CategoryRequest;
+import gift.entity.Category;
 import gift.entity.Member;
+import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.entity.Product;
 import gift.repository.ProductRepository;
 import gift.dto.WishResponse;
 import gift.entity.Wish;
 import gift.repository.WishRepository;
-import gift.service.WishService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +32,30 @@ class WishServiceTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private WishService wishService;
+    private CategoryService categoryService;
 
     private Member member;
     private Product product1;
     private Product product2;
+    private Category category;
 
     @BeforeEach
     void setUp() {
+        categoryService = new CategoryService(categoryRepository);
         member = new Member();
         member.setEmail("user@example.com");
         member.setPassword("password");
         member = memberRepository.save(member);
 
-        product1 = new Product("Sample Product 1", 100, "http://example.com/product1.jpg");
-        product2 = new Product("Sample Product 2", 200, "http://example.com/product2.jpg");
+        CategoryRequest categoryRequest = new CategoryRequest("교환권","#FFFFFF","http://example.com/category1.jpg","");
+        category = categoryService.addCategory(categoryRequest);
+
+        product1 = new Product("Sample Product 1", 100, "http://example.com/product1.jpg", category);
+        product2 = new Product("Sample Product 2", 200, "http://example.com/product2.jpg", category);
         product1 = productRepository.save(product1);
         product2 = productRepository.save(product2);
 

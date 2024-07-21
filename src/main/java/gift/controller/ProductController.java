@@ -7,7 +7,6 @@ import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -30,7 +29,7 @@ public class ProductController {
         List<Product> products = productService.findAll();
         List<ProductResponse> response = products.stream()
             .map(ProductResponse::from)
-            .collect(Collectors.toList());
+            .toList();
         return ResponseEntity.ok(response);
     }
 
@@ -64,9 +63,6 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
         @Valid @RequestBody ProductRequest updatedProductRequest) {
-        if (!productService.findById(id).isPresent()) {
-            return ResponseEntity.status(204).build();
-        }
         ProductResponse productResponse = productService.updateProduct(id, updatedProductRequest);
         return ResponseEntity.ok(productResponse);
     }

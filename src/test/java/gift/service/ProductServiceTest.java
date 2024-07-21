@@ -1,11 +1,13 @@
-package gift.product.service;
+package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.dto.CategoryRequest;
+import gift.entity.Category;
 import gift.entity.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import gift.validator.ProductNameValidator;
-import gift.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +21,28 @@ class ProductServiceTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private ProductService productService;
+    private CategoryService categoryService;
+
+    private Category category;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository, new ProductNameValidator());
+        categoryRepository.deleteAll();
+        productRepository.deleteAll();
 
-        Product product1 = new Product("Product 1", 100, "http://example.com/product1.jpg");
-        Product product2 = new Product("Product 2", 200, "http://example.com/product2.jpg");
-        Product product3 = new Product("Product 3", 300, "http://example.com/product3.jpg");
+        categoryService = new CategoryService(categoryRepository);
+        productService = new ProductService(productRepository, new ProductNameValidator(), categoryService);
+
+        CategoryRequest categoryRequest = new CategoryRequest("test카테고리","#FFFFFF","http://example.com/category1.jpg","");
+        category = categoryService.addCategory(categoryRequest);
+
+        Product product1 = new Product("Product 1", 100, "http://example.com/product1.jpg", category);
+        Product product2 = new Product("Product 2", 200, "http://example.com/product2.jpg", category);
+        Product product3 = new Product("Product 3", 300, "http://example.com/product3.jpg", category);
 
         productRepository.save(product1);
         productRepository.save(product2);

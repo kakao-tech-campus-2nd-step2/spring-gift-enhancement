@@ -2,12 +2,15 @@ package gift.service;
 
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
+import gift.entity.Category;
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.repository.ProductRepository;
 import gift.validator.ProductNameValidator;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -21,11 +24,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductNameValidator productNameValidator;
+    private final CategoryService categoryService;
 
     public ProductService(ProductRepository productRepository,
-        ProductNameValidator productNameValidator) {
+        ProductNameValidator productNameValidator,
+        CategoryService categoryService) {
         this.productRepository = productRepository;
         this.productNameValidator = productNameValidator;
+        this.categoryService = categoryService;
     }
 
     public List<Product> findAll() {
@@ -41,16 +47,41 @@ public class ProductService {
     }
 
     public ProductResponse addProduct(@Valid ProductRequest productRequest) {
-        Product product = ProductRequest.toEntity(productRequest);
+        if (productRepository.findByName(productRequest.getName()) != null) {
+            throw new IllegalArgumentException("같은 이름의 상품이 이미 존재합니다.");
+        }
+
+        Category category = categoryService.findById(productRequest.getCategoryId())
+            .orElseThrow(() -> new IllegalArgumentException("category ID를 찾을 수 없음"));
+
+        Product product = ProductRequest.toEntity(productRequest, category);
+
+        List<Option> options = productRequest.getOptions().stream()
+            .map(optionRequest -> new Option(optionRequest.getName(), optionRequest.getQuantity(),
+                product))
+            .toList();
+
+        options.forEach(product::addOption);
+
         validateProduct(product);
+
         Product savedProduct = productRepository.save(product);
         return ProductResponse.from(savedProduct);
     }
 
-    public ProductResponse updateProduct(Long id, @Valid ProductRequest productRequest) {
-        Product product = ProductRequest.toEntity(productRequest);
-        product.updateId(id);
+    public ProductResponse updateProduct(Long id, @Valid ProductRequest updatedProductRequest) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없음"));
+        Category category = categoryService.findById(updatedProductRequest.getCategoryId())
+            .orElseThrow(() -> new IllegalArgumentException("category ID를 찾을 수 없음"));
+
+        product.updateName(updatedProductRequest.getName());
+        product.updatePrice(updatedProductRequest.getPrice());
+        product.updateImgUrl(updatedProductRequest.getImgUrl());
+        product.updateCategory(category);
+
         validateProduct(product);
+
         Product savedProduct = productRepository.save(product);
         return ProductResponse.from(savedProduct);
     }

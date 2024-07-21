@@ -1,13 +1,11 @@
-package gift.wishlist.repository;
+package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.entity.Category;
 import gift.entity.Member;
-import gift.repository.MemberRepository;
 import gift.entity.Product;
-import gift.repository.ProductRepository;
 import gift.entity.Wish;
-import gift.repository.WishRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -33,19 +31,27 @@ class WishRepositoryTest {
     private MemberRepository memberRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private EntityManager em;
 
     private Member member;
     private Product product;
+    private Category category;
 
     @BeforeEach
     void setUp() {
+        category = new Category("교환권", "#6c95d1",
+            "https://gift-s.kakaocdn.net/dn/gift/images/m640/dimm_theme.png", "");
+        categoryRepository.save(category);
+
         member = new Member();
         member.setPassword("password");
         member.setEmail("user@example.com");
         member = memberRepository.save(member);
 
-        product = new Product("product", 5000, "http://example.com/image1.jpg");
+        product = new Product("product", 5000, "http://example.com/image1.jpg", category);
         product = productRepository.save(product);
 
         em.flush();
@@ -68,7 +74,7 @@ class WishRepositoryTest {
 
     @Test
     void testFindByMemberId() {
-        Product product2 = new Product("product2", 2000, "http://example.com/image2.jpg");
+        Product product2 = new Product("product2", 2000, "http://example.com/image2.jpg", category);
         product2 = productRepository.save(product2);
 
         Wish wish1 = new Wish(member, product);
@@ -143,7 +149,7 @@ class WishRepositoryTest {
         Wish wish = new Wish(member, product);
         wishRepository.save(wish);
 
-        Product newProduct = new Product("newProduct", 6000, "http://example.com/image2.jpg");
+        Product newProduct = new Product("newProduct", 6000, "http://example.com/image2.jpg", category);
         newProduct = productRepository.save(newProduct);
 
         wish.addProduct(newProduct);
@@ -164,7 +170,7 @@ class WishRepositoryTest {
         wishRepository.save(wish);
 
         for (int i = 1; i < 21; i++) {
-            Product newProduct = new Product("product" + i, 5000 + i, "http://example.com/image" + i + ".jpg");
+            Product newProduct = new Product("product" + i, 5000 + i, "http://example.com/image" + i + ".jpg", category);
             newProduct = productRepository.save(newProduct);
             Wish wish2 = new Wish(member, newProduct);
             wishRepository.save(wish2);
