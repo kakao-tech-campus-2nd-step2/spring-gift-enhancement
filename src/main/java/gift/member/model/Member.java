@@ -31,7 +31,6 @@ public class Member {
     }
 
     public Member() {
-
     }
 
     public Long getId() {
