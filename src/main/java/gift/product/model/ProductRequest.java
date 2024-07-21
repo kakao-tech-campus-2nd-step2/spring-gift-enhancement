@@ -24,7 +24,7 @@ public class ProductRequest {
         Long categoryId,
         @NotNull
         @Size(min = 1, message = "Product 에 해당하는 Option 은 하나 이상이어야 합니다.")
-        List<OptionRequest> optionRequests
+        List<OptionRequest.Create> optionCreates
     ) {
 
     }

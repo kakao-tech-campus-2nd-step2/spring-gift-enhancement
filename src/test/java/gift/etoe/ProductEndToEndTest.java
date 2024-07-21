@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.category.model.CategoryRequest;
 import gift.common.model.PageResponseDto;
 import gift.member.model.MemberRequest;
-import gift.option.model.OptionRequest;
-import gift.product.model.ProductRequest.Create;
+import gift.option.model.OptionRequest.Create;
+import gift.product.model.ProductRequest;
 import gift.product.model.ProductResponse;
 import java.net.URI;
 import java.util.List;
@@ -73,8 +73,8 @@ class ProductEndToEndTest {
 
     private void addProduct(String name, Integer price, String imageUrl, String url,
         HttpHeaders headers) {
-        var expected = new Create(name, price, imageUrl, 1L,
-            List.of(new OptionRequest("option", 1)));
+        var expected = new ProductRequest.Create(name, price, imageUrl, 1L,
+            List.of(new Create("option", 1)));
         var expected1RequestEntity = new RequestEntity<>(expected, headers, HttpMethod.POST,
             URI.create(url));
         restTemplate.exchange(expected1RequestEntity, String.class);

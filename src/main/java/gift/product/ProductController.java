@@ -42,16 +42,16 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Void> addProduct(
-        @Valid @RequestBody ProductRequest.Create create) {
-        Long productId = productService.insertProduct(create);
+        @Valid @RequestBody ProductRequest.Create productCreate) {
+        Long productId = productService.insertProduct(productCreate);
         return ResponseEntity.created(URI.create("/api/products/" + productId)).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateProduct(
-        @Valid @RequestBody ProductRequest.Update update,
+        @Valid @RequestBody ProductRequest.Update productUpdate,
         @PathVariable("id") Long id) {
-        productService.updateProductById(id, update);
+        productService.updateProductById(id, productUpdate);
         return ResponseEntity.ok().build();
     }
 

@@ -43,13 +43,13 @@ public class ProductService {
     }
 
     @Transactional
-    public Long insertProduct(ProductRequest.Create create)
+    public Long insertProduct(ProductRequest.Create productCreate)
         throws CategoryException, ProductException {
-        Category category = categoryRepository.findById(create.categoryId())
+        Category category = categoryRepository.findById(productCreate.categoryId())
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
-        Product product = new Product(create.name(), create.price(),
-            create.imageUrl(), category);
-        List<Option> options = create.optionRequests()
+        Product product = new Product(productCreate.name(), productCreate.price(),
+            productCreate.imageUrl(), category);
+        List<Option> options = productCreate.optionCreates()
             .stream()
             .map(it -> new Option(it.name(), it.quantity(), product))
             .toList();
@@ -60,14 +60,14 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateProductById(Long id, ProductRequest.Update update)
+    public void updateProductById(Long id, ProductRequest.Update productUpdate)
         throws CategoryException, ProductException {
-        Category category = categoryRepository.findById(update.categoryId())
+        Category category = categoryRepository.findById(productUpdate.categoryId())
             .orElseThrow(() -> new CategoryException(CategoryErrorCode.NOT_FOUND));
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
-        product.updateInfo(update.name(), update.price(),
-            update.imageUrl(), category);
+        product.updateInfo(productUpdate.name(), productUpdate.price(),
+            productUpdate.imageUrl(), category);
     }
 
     public void deleteProductById(Long id) {

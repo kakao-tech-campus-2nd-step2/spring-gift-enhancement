@@ -10,7 +10,7 @@ import gift.category.CategoryRepository;
 import gift.category.model.Category;
 import gift.option.OptionRepository;
 import gift.option.model.Option;
-import gift.option.model.OptionRequest;
+import gift.option.model.OptionRequest.Create;
 import gift.product.ProductRepository;
 import gift.product.ProductService;
 import gift.product.model.Product;
@@ -80,7 +80,7 @@ public class ProductServiceTest {
         );
 
         productService.insertProduct(new ProductRequest.Create("test", 1000, "test.jpg", 1L,
-            List.of(new OptionRequest("option", 1))));
+            List.of(new Create("option", 1))));
 
         then(productRepository).should().save(any());
         then(optionRepository).should().save(any());

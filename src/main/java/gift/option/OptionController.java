@@ -28,14 +28,14 @@ public class OptionController {
 
     @PostMapping("/api/products/{id}/options")
     public Long addOption(@PathVariable("id") Long productId,
-        @Valid @RequestBody OptionRequest optionRequest) {
-        return optionService.addOption(productId, optionRequest);
+        @Valid @RequestBody OptionRequest.Create optionCreate) {
+        return optionService.addOption(productId, optionCreate);
     }
 
     @PutMapping("/api/options/{optionId}")
     public void updateOption(@PathVariable("optionId") Long optionId,
-        @Valid @RequestBody OptionRequest optionRequest) {
-        optionService.updateOption(optionId, optionRequest);
+        @Valid @RequestBody OptionRequest.Update optionUpdate) {
+        optionService.updateOption(optionId, optionUpdate);
     }
 
     @DeleteMapping("/api/options/{optionId}")
