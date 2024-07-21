@@ -134,5 +134,13 @@ public class ProductService {
 
         productRepository.deleteById(id);
     }
+
+    public Product toProductEntity(RequestProductDto requestProductDto) {
+        Category category = categoryRepository.findByName(
+            requestProductDto.getCategoryDto().getName());
+        return new Product(requestProductDto.getName(), requestProductDto.getPrice(),
+            requestProductDto.getImageUrl(), category);
+
+    }
 }
 
