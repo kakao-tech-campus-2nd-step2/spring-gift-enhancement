@@ -1,16 +1,17 @@
 package gift.controller.web;
 
+import gift.dto.Request.AddToWishlistRequest;
+import gift.dto.Response.WishlistResponse;
 import gift.dto.WishlistDTO;
 import gift.service.WishlistService;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,33 +50,26 @@ public class WishlistController {
 
     @PostMapping("/add")
     @ResponseBody
-    public String addToWishlist(@RequestBody Map<String, Object> request, Principal principal) {
+    public ResponseEntity<WishlistResponse> addToWishlist(@RequestBody AddToWishlistRequest request, Principal principal) {
         if (principal == null) {
-            return "회원만 찜할 수 있습니다.";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new WishlistResponse(false));
         }
         String username = principal.getName();
-        Long productId = Long.parseLong(request.get("productId").toString());
-        int quantity =  1;
-        List<Map<String, Object>> options = request.containsKey("options") ? (List<Map<String, Object>>) request.get("options") : List.of();
-
-        wishlistService.addToWishlist(username, productId, quantity, options);
-        return "상품이 위시리스트에 추가되었습니다.";
+        WishlistResponse response = wishlistService.addToWishlist(username, request.getProductId(), request.getQuantity(), request.getOptions());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/update/{id}")
     @ResponseBody
-    public Map<String, Object> updateQuantity(@PathVariable("id") Long id, @RequestParam("quantity") int quantity, @RequestParam("optionId") Long optionId) {
-        wishlistService.updateQuantity(id, quantity, optionId);
-        WishlistDTO updatedWishlist = wishlistService.getWishlistById(id);
-        Map<String, Object> response = new HashMap<>();
-        response.put("totalPrice", updatedWishlist.getTotalPrice());
-        return response;
+    public ResponseEntity<WishlistResponse> updateQuantity(@PathVariable("id") Long id, @RequestParam("quantity") int quantity, @RequestParam("optionId") Long optionId) {
+        WishlistResponse response = wishlistService.updateQuantity(id, quantity, optionId);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/delete/{id}")
     @ResponseBody
-    public String removeFromWishlist(@PathVariable("id") Long id) {
-        wishlistService.removeFromWishlist(id);
-        return "상품이 위시리스트에서 삭제되었습니다.";
+    public ResponseEntity<WishlistResponse> removeFromWishlist(@PathVariable("id") Long id) {
+        WishlistResponse response = wishlistService.removeFromWishlist(id);
+        return ResponseEntity.ok(response);
     }
 }

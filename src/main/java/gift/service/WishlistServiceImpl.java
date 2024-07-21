@@ -1,5 +1,8 @@
 package gift.service;
 
+
+import gift.dto.Request.OptionRequest;
+import gift.dto.Response.WishlistResponse;
 import gift.dto.WishlistDTO;
 import gift.model.Option;
 import gift.model.Product;
@@ -10,7 +13,6 @@ import gift.repository.ProductRepository;
 import gift.repository.UserRepository;
 import gift.repository.WishlistRepository;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,7 +44,7 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public void addToWishlist(String username, Long productId, int quantity, List<Map<String, Object>> options) {
+    public WishlistResponse addToWishlist(String username, Long productId, int quantity, List<OptionRequest> options) {
         SiteUser user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("Invalid username: " + username));
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
 
@@ -56,25 +58,27 @@ public class WishlistServiceImpl implements WishlistService {
         wishlist.setOptions(optionEntities);
 
         wishlistRepository.save(wishlist);
+        return new WishlistResponse(true);
     }
 
-    private List<Option> getOptionEntities(List<Map<String, Object>> options) {
+    private List<Option> getOptionEntities(List<OptionRequest> options) {
         return options.stream()
-            .map(option -> {
-                Long optionId = Long.parseLong(option.get("id").toString());
-                Option optionEntity = optionRepository.findById(optionId).orElseThrow(() -> new IllegalArgumentException("Invalid option ID: " + optionId));
-                optionEntity.setQuantity(Integer.parseInt(option.get("quantity").toString()));
+            .map(optionRequest -> {
+                Option optionEntity = optionRepository.findById(optionRequest.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid option ID: " + optionRequest.getId()));
+                optionEntity.setQuantity(optionRequest.getQuantity());
                 return optionEntity;
             }).collect(Collectors.toList());
     }
 
     @Override
-    public void removeFromWishlist(Long id) {
+    public WishlistResponse removeFromWishlist(Long id) {
         wishlistRepository.deleteById(id);
+        return new WishlistResponse(true);
     }
 
     @Override
-    public void updateQuantity(Long id, int quantity, Long optionId) {
+    public WishlistResponse updateQuantity(Long id, int quantity, Long optionId) {
         Wishlist wishlist = wishlistRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid wishlist ID: " + id));
 
         if (optionId != null) {
@@ -87,6 +91,7 @@ public class WishlistServiceImpl implements WishlistService {
         }
 
         wishlistRepository.save(wishlist);
+        return new WishlistResponse(true);
     }
 
     @Override
