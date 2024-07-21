@@ -3,6 +3,8 @@ package gift.wishlist;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.category.CategoryRepository;
+import gift.category.Category;
 import gift.member.Member;
 import gift.member.MemberRepository;
 import gift.product.Product;
@@ -28,10 +30,20 @@ class WishlistRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @BeforeEach
+    void setCategoryRepository() {
+        categoryRepository.save(new Category("교환권","쌈@뽕한 블루","www","여름"));
+        categoryRepository.save(new Category("과제면제권","방학","www.com","학교"));
+        categoryRepository.save(new Category("라우브","스틸더","www.show","키야"));
+    }
+
     @BeforeEach
     void setProductRepository() {
-        productRepository.save(new Product("사과", 2000, "www"));
-        productRepository.save(new Product("바나나", 3000,"www.com"));
+        productRepository.save(new Product("사과", 2000, "www", categoryRepository.findById(1L).get()));
+        productRepository.save(new Product("바나나", 3000,"www.com", categoryRepository.findById(2L).get()));
     }
 
     @BeforeEach
@@ -47,7 +59,7 @@ class WishlistRepositoryTest {
             memberRepository.findById(1L).get(),
             productRepository.findById(1L).get()
         );
-      
+
         Wishlist actual = wishlistRepository.save(expected);
         assertAll(
             () -> assertThat(actual).isEqualTo(expected)

@@ -53,7 +53,8 @@ public class WishlistController {
         throws UnAuthorizationException {
         String token = authHeader.replace("Bearer ", "");
         tokenValidator.validateToken(token);
-        return wishlistService.deleteWishlist(wishId, member.getId());
+        wishlistService.deleteWishlist(wishId, member.getId());
+        return ResponseEntity.ok("장바구니에서 제거되었습니다");
     }
 
 }

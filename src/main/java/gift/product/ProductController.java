@@ -1,6 +1,7 @@
 package gift.product;
 
 import gift.exception.InvalidProduct;
+import gift.exception.NotFoundOption;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -52,6 +54,23 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public HttpEntity<String> deleteProduct(@PathVariable Long id) {
-        return productService.deleteProductById(id);
+        productService.deleteProductById(id);
+        return ResponseEntity.ok("성공적으로 삭제되었습니다");
     }
+
+    @PutMapping("/category/{id}")
+    public ProductResponseDto changeCategory(@PathVariable(name="id") Long productID, @RequestParam Long categoryId) {
+        return productService.putCategory(productID, categoryId);
+    }
+
+    @GetMapping("/products/{id}")
+    public List<Long> getProducts(@PathVariable Long id) {
+        return productService.getProductsInCategory(id);
+    }
+
+    @GetMapping("/options/{optionId}")
+    public Long getProductOfOption(@PathVariable Long optionId) throws NotFoundOption {
+        return productService.findPrdouctOfOption(optionId);
+    }
+
 }

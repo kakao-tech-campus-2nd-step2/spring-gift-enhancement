@@ -33,7 +33,7 @@ class ProductControllerTest {
     @Test
     void create() {
         var url = "http://localhost:" + port + "/api/products";
-        var request = new ProductRequestDto("사과",2000,"www");
+        var request = new ProductRequestDto("사과",2000,"www", 1L);
         var requestEntity = new RequestEntity<>(request, POST, URI.create(url));
         var actual = restTemplate.exchange(requestEntity, String.class);
         assertThat(actual.getStatusCode()).isEqualTo(OK);
@@ -54,7 +54,7 @@ class ProductControllerTest {
         baseUrl = "http://localhost:" + port + "/api/products";
 
         // 각 테스트 전에 제품 생성
-        var request = new ProductRequestDto("사과", 2000, "www");
+        var request = new ProductRequestDto("사과", 2000, "www", 1L);
         var requestEntity = new RequestEntity<>(request, POST, URI.create(baseUrl));
         var createResponse = restTemplate.exchange(requestEntity, String.class);
         assertThat(createResponse.getStatusCode()).isEqualTo(OK);
@@ -95,7 +95,7 @@ class ProductControllerTest {
         Long productId = 1L;
 
         var updateUrl = "http://localhost:" + port + "/api/products/" + productId;
-        var update = new ProductRequestDto("파김치", 10000, "www.com");
+        var update = new ProductRequestDto("파김치", 10000, "www.com", 1L);
         var requestUpdate = new RequestEntity<>(update, PUT, URI.create(updateUrl));
         var updateResponse = restTemplate.exchange(requestUpdate, String.class);
         assertThat(updateResponse.getStatusCode()).isEqualTo(OK);

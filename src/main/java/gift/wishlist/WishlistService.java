@@ -46,7 +46,7 @@ public class WishlistService {
     }
 
     @Transactional
-    public HttpEntity<String> deleteWishlist(Long productId, Long memberId) {
+    public void deleteWishlist(Long productId, Long memberId) {
         List<Wishlist> wishlist1 = wishlistRepository.findByProductId(productId);
         List<Wishlist> wishlist2 = wishlistRepository.findByMemberId(memberId);
 
@@ -60,7 +60,6 @@ public class WishlistService {
 
         if (wishlistItem != null) {
             wishlistRepository.delete(wishlistItem);
-            return ResponseEntity.ok("장바구니에서 제거되었습니다");
         } else {
             throw new InvalidProduct("잘못된 접근입니다");
         }
