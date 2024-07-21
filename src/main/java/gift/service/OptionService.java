@@ -41,7 +41,7 @@ public class OptionService {
             () -> new RuntimeException("No such product with id" + productId)
         );
 
-        validateOptionName(productId, optionRequest);
+        validateOptionNameNotDuplicated(productId, optionRequest);
 
         Option option = new Option(optionRequest.name(), optionRequest.quantity(), product);
         product.addOption(option);
@@ -59,16 +59,13 @@ public class OptionService {
         return OptionResponse.fromEntity(savedOption);
     }
 
-    private void validateOptionName(Long productId, OptionRequest newOption) {
-        String newOptionName = newOption.name();
-        getAllOptionsByProductId(productId).stream()
-            .map(OptionResponse::getName)
-            .anyMatch(name -> {
-                if (name.equals(newOptionName)) {
-                    throw new RuntimeException("An option with the name " + newOptionName +
-                        " already exists for this product.");
-                }
-                return false;
-            });
+    private void validateOptionNameNotDuplicated(Long productId, OptionRequest optionRequest) {
+        boolean exists = optionRepository.existsByProductIdAndName(productId, optionRequest.name());
+        if (exists) {
+            throw new RuntimeException(
+                String.format("Option with name %s already exists for product %d",
+                    optionRequest.name(), productId)
+            );
+        }
     }
 }
