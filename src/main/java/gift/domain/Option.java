@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.classes.Exceptions.OptionException;
 import gift.dto.ProductDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,5 +56,16 @@ public class Option {
     public void update(String name, int amount) {
         this.name = name;
         this.amount = amount;
+    }
+
+    public void decrementAmount(int quantity) {
+        if (quantity <= 0) {
+            throw new OptionException("The amount to be deducted must be greater than zero.");
+        }
+        if (amount >= quantity) {
+            amount -= quantity;
+        } else {
+            throw new OptionException("Deduction failed due to insufficient quantity.");
+        }
     }
 }

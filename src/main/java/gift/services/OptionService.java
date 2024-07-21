@@ -53,14 +53,20 @@ public class OptionService {
 
     public void updateOption(Long optionId, RequestOptionDto requestOptionDto) {
         Option option = optionRepository.findById(optionId).orElseThrow(
-            () -> new IllegalArgumentException("Product not found with id " + optionId));
+            () -> new IllegalArgumentException("Option not found with id " + optionId));
         option.update(requestOptionDto.getName(), requestOptionDto.getAmount());
     }
 
     public void deleteOption(Long optionId) {
         Option option = optionRepository.findById(optionId).orElseThrow(
-            () -> new IllegalArgumentException("Product not found with id " + optionId));
+            () -> new IllegalArgumentException("Option not found with id " + optionId));
         optionRepository.delete(option);
+    }
+
+    public void deductOption(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId).orElseThrow(
+            () -> new IllegalArgumentException("Option not found with id " + optionId));
+        option.decrementAmount(quantity);
     }
 
 }
