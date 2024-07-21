@@ -50,6 +50,10 @@ public class Option {
 		return quantity;
 	}
 	
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
 	public OptionResponse toDto() {
 		return new OptionResponse(id, name, quantity);
 	}
