@@ -72,6 +72,12 @@ public class OptionService {
     }
 
     @Transactional
+    public OptionResponse subtract(UUID optionId, Integer quantity) {
+        Option target = optionRepository.findById(optionId).orElseThrow(OptionNotExistsException::new);
+        return toOptionResponse(target.subtractQuantity(quantity));
+    }
+
+    @Transactional
     public void delete(UUID id) {
         optionRepository.findById(id).orElseThrow(OptionNotExistsException::new);
         optionRepository.deleteById(id);
