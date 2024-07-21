@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 public class ProductDTO {
     // 필드 생성
@@ -24,6 +25,8 @@ public class ProductDTO {
     @NotNull(message = "카테고리는 필수 항목입니다.")
     private Long categoryId;
 
+    private List<Long> optionId;
+
     public ProductDTO(){}
 
     /**
@@ -35,12 +38,13 @@ public class ProductDTO {
      * @param imageUrl 상품의 이미지 주소
      * @param categoryId 카테고리 고유의 ID
      */
-    public ProductDTO(Long id, String name, int price, String imageUrl, Long categoryId){
+    public ProductDTO(Long id, String name, int price, String imageUrl, Long categoryId, List<Long> optionId){
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+        this.optionId = optionId;
     }
     
 
@@ -62,6 +66,10 @@ public class ProductDTO {
     }
 
     public Long getCategoryId() {return categoryId;}
+
+    public List<Long> getOptionIds() {
+        return optionId;
+    }
 
     // Setter 메서드들
     public void setId(Long id) {

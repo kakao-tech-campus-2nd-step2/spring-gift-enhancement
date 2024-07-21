@@ -12,7 +12,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="products")
@@ -42,13 +44,27 @@ public class ProductEntity {
 
     public ProductEntity() {}
 
-    public ProductEntity(Long id, String name, int price, String imageUrl, CategoryEntity category) {}
+    public ProductEntity(Long id, String name, int price, String imageUrl, CategoryEntity category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
 
     public ProductEntity(String name, int price, String imageUrl, CategoryEntity category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public ProductEntity(String name, int price, String imageUrl, CategoryEntity category, List<OptionEntity> options) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.options = options != null ? options : new ArrayList<>();
     }
 
     public Long getId() {
@@ -73,13 +89,18 @@ public class ProductEntity {
 
     public CategoryEntity getCategory() {return category;}
 
+    public List<OptionEntity> getOptions() {
+        return options;
+    }
+
     public static ProductDTO toDTO(ProductEntity productEntity) {
         return new ProductDTO(
             productEntity.getId(),
             productEntity.getName(),
             productEntity.getPrice(),
             productEntity.getImageUrl(),
-            productEntity.getCategory().getId()
+            productEntity.getCategory() != null ? productEntity.getCategory().getId() : null,
+            productEntity.getOptions() != null ? productEntity.getOptions().stream().map(OptionEntity::getId).collect(Collectors.toList()) : new ArrayList<>()
         );
     }
 

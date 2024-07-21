@@ -45,13 +45,16 @@ public class CategoryService {
         CategoryEntity category = categoryRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다"));
 
-        category.update(categoryDTO);
+        category.update(categoryDTO.getName(), categoryDTO.getColor(), categoryDTO.getImageUrl(), categoryDTO.getDescription());
         return category.toDTO(category);
     }
 
     // 카테고리 삭제
     @Transactional
     public void deleteCategory(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new RuntimeException("카테고리를 찾을 수 없습니다");
+        }
         categoryRepository.deleteById(id);
     }
 
