@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.util.Assert;
 
 @Entity
 @Table(name = "products")
@@ -68,7 +69,9 @@ public class Product {
     }
 
     public void addOption(Option option) {
-        options.add(option);
+        Assert.notNull(option, "Option is null");
+        option.initProduct(this);
+        this.options.add(option);
     }
 
     public void removeOption(Option option) {

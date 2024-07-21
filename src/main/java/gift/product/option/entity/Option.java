@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.util.Assert;
 
 @Entity
 @Table(name = "options")
@@ -73,6 +74,11 @@ public class Option {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public void initProduct(Product product) {
+        Assert.notNull(product, "product is null");
+        this.product = product;
     }
 
     public void edit(String name, Integer quantity) {
