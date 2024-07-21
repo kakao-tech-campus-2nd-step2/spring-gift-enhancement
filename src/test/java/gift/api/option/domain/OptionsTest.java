@@ -3,7 +3,7 @@ package gift.api.option.domain;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
 
-import gift.api.option.InvalidNameException;
+import gift.api.option.exception.InvalidNameException;
 import gift.api.product.Product;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

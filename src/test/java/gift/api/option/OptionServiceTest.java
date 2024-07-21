@@ -10,6 +10,7 @@ import static org.mockito.BDDMockito.then;
 import gift.api.option.domain.Option;
 import gift.api.option.dto.OptionRequest;
 import gift.api.option.dto.OptionResponse;
+import gift.api.option.exception.InvalidNameException;
 import gift.api.product.Product;
 import gift.api.product.ProductRepository;
 import java.util.List;
@@ -79,5 +80,24 @@ class OptionServiceTest {
         // then
         assertThatExceptionOfType(InvalidNameException.class)
             .isThrownBy(() -> optionService.add(1L, optionRequest));
+    }
+
+    @Test
+    @DisplayName(value = "정상_옵션_수량_차감_테스트")
+    void subtract() {
+        // given
+        var before = 100;
+        var quantity = 20;
+        var product = mock(Product.class);
+        var option = new Option(product, "name", before);
+        given(optionRepository.findById(any()))
+            .willReturn(Optional.of(option));
+
+        // when
+        optionService.subtract(1L, quantity);
+
+        // then
+        assertThat(option.getQuantity())
+            .isEqualTo(before - quantity);
     }
 }
