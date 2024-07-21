@@ -1,5 +1,7 @@
 package gift.doamin.product.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -16,7 +18,6 @@ import gift.doamin.user.entity.User;
 import gift.doamin.user.entity.UserRole;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +36,7 @@ class OptionServiceTest {
     void 저장_상품이_없는_경우() {
         given(productRepository.findById(any())).willReturn(Optional.empty());
 
-        Assertions.assertThatExceptionOfType(ProductNotFoundException.class)
+        assertThatExceptionOfType(ProductNotFoundException.class)
             .isThrownBy(() -> optionService.create(1L, createOptionFrom()));
     }
 
@@ -44,7 +45,7 @@ class OptionServiceTest {
         given(productRepository.findById(any())).willReturn(Optional.of(createProduct()));
         given(optionRepository.existsByProductIdAndName(any(), any())).willReturn(true);
 
-        Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(IllegalArgumentException.class)
             .isThrownBy(() -> optionService.create(1L, createOptionFrom()));
     }
 
@@ -62,7 +63,7 @@ class OptionServiceTest {
     void 수정_상품이_없는_경우() {
         given(productRepository.findById(any())).willReturn(Optional.empty());
 
-        Assertions.assertThatExceptionOfType(ProductNotFoundException.class)
+        assertThatExceptionOfType(ProductNotFoundException.class)
             .isThrownBy(() -> optionService.update(1L, 1L, createOptionFrom()));
     }
 
@@ -71,7 +72,7 @@ class OptionServiceTest {
         given(productRepository.findById(any())).willReturn(Optional.of(createProduct()));
         given(optionRepository.findById(any())).willReturn(Optional.empty());
 
-        Assertions.assertThatExceptionOfType(NoSuchElementException.class)
+        assertThatExceptionOfType(NoSuchElementException.class)
             .isThrownBy(() -> optionService.update(1L, 1L, createOptionFrom()));
     }
 
@@ -81,7 +82,7 @@ class OptionServiceTest {
         given(optionRepository.findById(any())).willReturn(Optional.of(createOption()));
         given(optionRepository.existsByProductIdAndName(any(), any())).willReturn(true);
 
-        Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(IllegalArgumentException.class)
             .isThrownBy(() -> optionService.update(1L, 1L, createOptionFrom()));
     }
 
@@ -100,7 +101,7 @@ class OptionServiceTest {
     void 삭제_상품이_없는_경우() {
         given(productRepository.findById(any())).willReturn(Optional.empty());
 
-        Assertions.assertThatExceptionOfType(ProductNotFoundException.class)
+        assertThatExceptionOfType(ProductNotFoundException.class)
             .isThrownBy(() -> optionService.delete(1L, 1L));
     }
 
@@ -113,6 +114,25 @@ class OptionServiceTest {
         then(optionRepository).should().deleteById(any());
     }
 
+    @Test
+    void 수량차감_옵션이_없는_경우() {
+        given(optionRepository.findById(any())).willReturn(Optional.empty());
+
+        assertThatExceptionOfType(NoSuchElementException.class)
+            .isThrownBy(() -> optionService.subtractQuantity(1L, 1));
+    }
+
+    @Test
+    void 수량차감_성공() {
+        int quantity = 10;
+        Option option = createOption(quantity);
+        given(optionRepository.findById(any())).willReturn(Optional.of(option));
+
+        optionService.subtractQuantity(1L, quantity);
+
+        assertThat(option.getQuantity()).isZero();
+    }
+
 
     Product createProduct() {
         User user = new User("user@google.com", "pw", "user", UserRole.SELLER);
@@ -122,10 +142,14 @@ class OptionServiceTest {
     }
 
     Option createOption() {
-        return new Option("option", 1);
+        return createOption(1);
+    }
+
+    Option createOption(int quantity) {
+        return new Option("option", quantity);
     }
 
     OptionForm createOptionFrom() {
-        return new  OptionForm("option", 1);
+        return new OptionForm("option", 1);
     }
 }

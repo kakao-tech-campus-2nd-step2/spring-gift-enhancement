@@ -46,6 +46,10 @@ public class Option {
         return name;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
     }
