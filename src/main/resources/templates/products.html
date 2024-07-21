@@ -26,6 +26,9 @@
     <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
   </select><br><br>
 
+  <label for="optionNames">옵션 이름:</label>
+  <input type="text" id="optionNames" name="optionNames"><br><br>
+
   <button type="submit">상품 추가</button>
 </form>
 
