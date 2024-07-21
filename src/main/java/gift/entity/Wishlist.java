@@ -27,4 +27,26 @@ public class Wishlist {
         this.product = product;
         this.countProduct = countProduct;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public int getCountProduct() {
+        return countProduct;
+    }
+
+    public void setCountProduct(int countProduct) {
+        this.countProduct = countProduct;
+    }
+
+
 }

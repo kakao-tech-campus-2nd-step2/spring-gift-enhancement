@@ -34,7 +34,7 @@ public class CategoryService {
         if (category == null) {
             return Optional.empty();
         }
-        return Optional.of(category);
+        return category;
     }
 
     public Category add(CategoryDTO categoryDTO) {
@@ -49,7 +49,7 @@ public class CategoryService {
     }
 
     public Optional<Category> update(int id, CategoryDTO categoryDTO) {
-        Category category = categoryRepository.findById(id);
+        var category = categoryRepository.findById(id);
         if (category == null) {
             return Optional.empty();
         }

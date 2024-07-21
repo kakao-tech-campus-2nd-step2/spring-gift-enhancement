@@ -34,4 +34,6 @@ public class Member {
     }
 
     public String getToken() { return this.token; }
+
+    public int getId() { return this.id; }
 }
