@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 class OptionRepositoryTest {
@@ -109,5 +110,39 @@ class OptionRepositoryTest {
                 () -> assertThat(updatedOption.getQuantity()).isEqualTo(200),
                 () -> assertThat(updatedOption.getProduct()).isEqualTo(product)
         );
+    }
+
+    @Test
+    void subtractQuantity() {
+        Category category = new Category("Test Category", "#FFFFFF", "http://example.com/cat.jpg", "Description");
+        categoryRepository.save(category);
+
+        Product product = new Product("Test Product", 100, "http://example.com/test.jpg", category);
+        productRepository.save(product);
+
+        Option option = new Option("Test Option", 100, product);
+        optionRepository.save(option);
+
+        option.subtractQuantity(50);
+        optionRepository.save(option);
+
+        Option updatedOption = optionRepository.findById(option.getId()).orElseThrow();
+        assertThat(updatedOption.getQuantity()).isEqualTo(50);
+    }
+
+    @Test
+    void subtractQuantityExceedsAvailable() {
+        Category category = new Category("Test Category", "#FFFFFF", "http://example.com/cat.jpg", "Description");
+        categoryRepository.save(category);
+
+        Product product = new Product("Test Product", 100, "http://example.com/test.jpg", category);
+        productRepository.save(product);
+
+        Option option = new Option("Test Option", 100, product);
+        optionRepository.save(option);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            option.subtractQuantity(150);
+        });
     }
 }
