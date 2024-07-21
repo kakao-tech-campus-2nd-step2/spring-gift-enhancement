@@ -71,4 +71,40 @@ public class ProductServiceOptionTest {
         assertThatExceptionOfType(IllegalStateException.class)
             .isThrownBy(()->productService.saveOption(product.getId(), optionDto));
     }
+
+    @Test
+    public void testDecreaseOptionQuantity_Success() {
+        Option option = new Option("Test Option", 10, product);
+        product.addOption(option);
+        given(productRepository.findById(product.getId())).willReturn(Optional.of(product));
+        given(productRepository.save(product)).willReturn(product); // Save 후 다시 반환하도록 설정
+
+        productService.decreaseOptionQuantity(product.getId(), "Test Option", 5);
+
+        // 데이터베이스 상태 검증을 위해 다시 조회
+        given(productRepository.findById(product.getId())).willReturn(Optional.of(product));
+        Product savedProduct = productRepository.findById(product.getId()).orElseThrow();
+        Option savedOption = savedProduct.getOptions().stream()
+            .filter(opt -> opt.getName().equals("Test Option"))
+            .findFirst()
+            .orElseThrow();
+
+        assertEquals(5, savedOption.getQuantity());
+    }
+
+    @Test
+    public void testDecreaseOptionQuantity_ProductNotFound() {
+        given(productRepository.findById(product.getId())).willReturn(Optional.empty());
+
+        assertThatExceptionOfType(NoSuchElementException.class)
+            .isThrownBy(() -> productService.decreaseOptionQuantity(product.getId(), "Test Option", 5));
+    }
+
+    @Test
+    public void testDecreaseOptionQuantity_OptionNotFound() {
+        given(productRepository.findById(product.getId())).willReturn(Optional.of(product));
+
+        assertThatExceptionOfType(NoSuchElementException.class)
+            .isThrownBy(() -> productService.decreaseOptionQuantity(product.getId(), "Nonexistent Option", 5));
+    }
 }
