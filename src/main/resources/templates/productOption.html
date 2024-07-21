@@ -78,15 +78,17 @@
   </tr>
   </thead>
   <tbody>
-  <tr class="option-row" th:each="option : ${options}" th:data-option-id="${option.id}">
+  <tr class="option-row" th:each="option, iterStat : ${options}" th:data-option-id="${option.id}">
     <td th:text="${option.name}">옵션 이름</td>
     <td class="option-price" th:text="${option.price}">가격</td>
     <td>
-      <select class="option-quantity" onchange="updateTotalPrice()">
+      <select class="option-quantity" th:attr="disabled=${iterStat.index == 0}" onchange="updateTotalPrice()">
         <option th:each="i : ${#numbers.sequence(1, 10)}" th:value="${i}" th:text="${i}"></option>
       </select>
     </td>
-    <td><input type="checkbox" name="optionSelect" onclick="updateTotalPrice()"></td>
+    <td>
+      <input type="checkbox" name="optionSelect" th:checked="${iterStat.index == 0}" th:attr="disabled=${iterStat.index == 0}" onclick="updateTotalPrice()">
+    </td>
   </tr>
   </tbody>
 </table>
@@ -95,4 +97,3 @@
 </div>
 </body>
 </html>
-

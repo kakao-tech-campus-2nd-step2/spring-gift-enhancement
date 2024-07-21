@@ -36,6 +36,7 @@ public class DatabaseLoader {
 
             Product product2 = new Product(2002L, "스타벅스 기프트 카드", 0, "https://image.istarbucks.co.kr/cardImg/20200818/007633_WEB.png", 2);
             List<Option> options2 = Arrays.asList(
+                new Option("스타벅스 기프트 카드", 1, 0, product2),
                 new Option("01. [Gift] 스타벅스 기프트 카드 10000원 ", 1, 10000, product2),
                 new Option("01. [Gift] 스타벅스 기프트 카드 30000원 ", 1, 30000, product2),
                 new Option("01. [Gift] 스타벅스 기프트 카드 50000원", 1, 50000, product2),
@@ -107,6 +108,7 @@ public class DatabaseLoader {
 
             Product product9 = new Product(11001L , "이모티콘", 0 , "https://t1.kakaocdn.net/thumb/R1920x0.fwebp.q100/?fname=https%3A%2F%2Ft1.kakaocdn.net%2Fkakaocorp%2Fkakaocorp%2Fadmin%2Fservice%2Fa85d0594017900001.jpg" , 11);
             List<Option> options9 = Arrays.asList(
+                new Option("이모티콘", 1, 0, product9),
                 new Option("01. 춘식이", 1, 2500, product9),
                 new Option("02. 라이언", 1, 2500, product9),
                 new Option("03. 어피이", 1, 2500, product9),

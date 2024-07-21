@@ -1,9 +1,9 @@
 function updateTotalPrice() {
     let totalPrice = 0;
-    document.querySelectorAll('.option-row').forEach((row) => {
+    document.querySelectorAll('.option-row').forEach((row, index) => {
         const price = parseFloat(row.querySelector('.option-price').innerText);
         const quantity = parseInt(row.querySelector('.option-quantity').value);
-        const isChecked = row.querySelector('input[name="optionSelect"]').checked;
+        const isChecked = row.querySelector('input[name="optionSelect"]').checked; // 선택된 옵션만 포함
         if (isChecked) {
             totalPrice += price * quantity;
         }
@@ -14,7 +14,7 @@ function updateTotalPrice() {
 function addToWishlist() {
     const productId = document.querySelector('.add-to-wishlist').getAttribute('data-product-id');
     const options = Array.from(document.querySelectorAll('.option-row'))
-        .filter(row => row.querySelector('input[name="optionSelect"]').checked)
+        .filter(row => row.querySelector('input[name="optionSelect"]').checked) // 선택된 옵션만 포함
         .map(row => {
             return {
                 id: row.getAttribute('data-option-id'),
@@ -44,4 +44,5 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('input[name="optionSelect"]').forEach(checkbox => {
         checkbox.addEventListener('change', updateTotalPrice);
     });
+    updateTotalPrice(); // 페이지 로드 시 총 가격 업데이트
 });
