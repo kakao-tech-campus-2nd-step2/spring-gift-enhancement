@@ -59,17 +59,22 @@ public class OptionService {
 
     @Transactional
     public void editOption(OptionEditRequest editRequest) {
-        findProductByIdOrElseThrow(editRequest.getProductId());
-        findOptionByIdOrElseThrow(editRequest.getId())
-            .updateOption(editRequest);
+        Product product = findProductByIdOrElseThrow(editRequest.getProductId());
+        Option option = product.getOptionById(editRequest.getId())
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
+
+        option.updateOption(editRequest);
     }
 
     /**
      * 상품의 옵션을 삭제하는 메서드. 단, 옵션이 1개일 때는 삭제하지 않는다.
      */
     public void deleteOption(Long productId, Long optionId) {
-        findOptionByIdOrElseThrow(optionId);
-        if (findAllOptionsByProductId(productId).size() == 1) {
+        Product product = findProductByIdOrElseThrow(productId);
+        product.getOptionById(optionId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
+
+        if (product.getOptionSize() == 1) {
             throw new ProductOptionRequiredException(ErrorMessage.OPTION_MUST_MORE_THAN_ZERO);
         }
         optionJpaDao.deleteById(optionId);

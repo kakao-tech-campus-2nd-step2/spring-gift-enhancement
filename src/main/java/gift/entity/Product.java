@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Product extends BaseEntity {
@@ -100,5 +101,17 @@ public class Product extends BaseEntity {
             .anyMatch(option ->
                 option.getName().equals(newOption.getName())
             );
+    }
+
+    public Optional<Option> getOptionById(Long optionId) {
+        return options.stream()
+            .filter(option ->
+                option.getId().equals(optionId)
+            )
+            .findFirst();
+    }
+
+    public int getOptionSize() {
+        return options.size();
     }
 }
