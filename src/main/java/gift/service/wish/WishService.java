@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class WishService {
 
@@ -33,15 +31,17 @@ public class WishService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         Gift gift = giftRepository.findById(giftId).orElseThrow(() -> new IllegalArgumentException("Invalid gift ID"));
 
-        List<Wish> existingWishes = wishRepository.findByUserAndGift(user, gift);
-        if (!existingWishes.isEmpty()) {
-            Wish existingWish = existingWishes.get(0);
-            existingWish.increaseQuantity();
-            wishRepository.save(existingWish);
-        } else {
-            Wish userGift = new Wish(user, gift, quantity);
-            wishRepository.save(userGift);
-        }
+        wishRepository.findByUserAndGift(user, gift)
+                .ifPresentOrElse(
+                        existingWish -> {
+                            existingWish.increaseQuantity();
+                            wishRepository.save(existingWish);
+                        },
+                        () -> {
+                            Wish userGift = new Wish(user, gift, quantity);
+                            wishRepository.save(userGift);
+                        }
+                );
     }
 
     @Transactional
@@ -63,11 +63,15 @@ public class WishService {
     public void updateWishQuantity(Long userId, Long giftId, int quantity) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         Gift gift = giftRepository.findById(giftId).orElseThrow(() -> new IllegalArgumentException("Invalid gift ID"));
-        List<Wish> existingWishes = wishRepository.findByUserAndGift(user, gift);
-        if (!existingWishes.isEmpty()) {
-            existingWishes.get(0).modifyQuantity(quantity);
-            return;
-        }
-        throw new WishItemNotFoundException("해당 위시리스트 아이템을 찾을 수 없습니다.");
+        wishRepository.findByUserAndGift(user, gift)
+                .ifPresentOrElse(
+                        existingWish -> {
+                            existingWish.modifyQuantity(quantity);
+                            wishRepository.save(existingWish);
+                        },
+                        () -> {
+                            throw new WishItemNotFoundException("해당 위시리스트 아이템을 찾을 수 없습니다.");
+                        }
+                );
     }
 }

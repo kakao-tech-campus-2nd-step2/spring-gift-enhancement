@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.exception.WishItemNotFoundException;
 import gift.model.category.Category;
 import gift.model.gift.Gift;
 import gift.model.option.Option;
@@ -14,10 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
@@ -65,19 +66,18 @@ class WishRepositoryTest {
 
     @Test
     void testFindByUserAndGift() {
-        List<Wish> wishes = wishRepository.findByUserAndGift(user, gift);
+        Wish wish = wishRepository.findByUserAndGift(user, gift).orElseThrow(() -> new WishItemNotFoundException("해당 위시리스트 아이템을 찾을 수 없습니다."));
 
-        assertThat(wishes).isNotNull();
-        assertThat(wishes).hasSize(1);
-        assertThat(wishes.get(0).getQuantity()).isEqualTo(1);
+        assertThat(wish.getQuantity()).isEqualTo(1);
     }
 
     @Test
     void testDeleteByUserAndGift() {
+        Wish wish = wishRepository.findByUserAndGift(user, gift).orElseThrow(() -> new WishItemNotFoundException("해당 위시리스트 아이템을 찾을 수 없습니다."));
+
         wishRepository.deleteByUserAndGift(user, gift);
 
-        List<Wish> wishes = wishRepository.findByUserAndGift(user, gift);
-
-        assertTrue(wishes.isEmpty());
+        Optional<Wish> deletedWish = wishRepository.findByUserAndGift(user, gift);
+        assertFalse(deletedWish.isPresent());
     }
 }
