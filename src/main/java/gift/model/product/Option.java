@@ -32,6 +32,7 @@ public class Option extends BaseTimeEntity {
     private Product product;
 
     @Version
+    @Column(nullable = false)
     private Long version;
 
     protected Option() {
