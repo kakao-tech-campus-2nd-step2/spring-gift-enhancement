@@ -11,9 +11,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -43,7 +45,7 @@ class ProductServiceTest {
 
         productService.subtractOptionQuantity(productId, optionName, quantityToSubtract);
 
-        assertEquals(5, option.getQuantity());
+        assertThat(option.getQuantity()).isEqualTo(5);
         verify(optionRepository, times(1)).save(option);
     }
 
@@ -61,11 +63,10 @@ class ProductServiceTest {
 
         when(optionRepository.findByProductIdAndName(productId, optionName)).thenReturn(Optional.of(option));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        assertThatThrownBy(() -> {
             productService.subtractOptionQuantity(productId, optionName, quantityToSubtract);
-        });
-
-        assertEquals("차감할 수량이 현재 수량보다 많습니다.", exception.getMessage());
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("차감할 수량이 현재 수량보다 많습니다.");
     }
 
     @Test
@@ -77,10 +78,9 @@ class ProductServiceTest {
 
         when(optionRepository.findByProductIdAndName(productId, optionName)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        assertThatThrownBy(() -> {
             productService.subtractOptionQuantity(productId, optionName, quantityToSubtract);
-        });
-
-        assertEquals("해당 옵션이 존재하지 않습니다.", exception.getMessage());
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 옵션이 존재하지 않습니다.");
     }
 }
