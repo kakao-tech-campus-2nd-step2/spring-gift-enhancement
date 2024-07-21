@@ -16,6 +16,7 @@ class OptionTest {
     void setUp() {
         category = new Category(null, "교환권");
         product = new Product(1L, "kbm", "100", category, "https://kakao");
+        option = new Option(3L, "임시옵션", 100L, product);
     }
 
     @Test
@@ -92,13 +93,96 @@ class OptionTest {
 
     @Test
     void testCreateValidOption() {
-        option = new Option(3L, "임시옵션", 100L, product);
         assertAll(
             () -> assertThat(option.getId()).isNotNull(),
             () -> assertThat(option.getName()).isEqualTo("임시옵션"),
             () -> assertThat(option.getQuantity()).isEqualTo(100L),
             () -> assertThat(option.getProduct().getId()).isNotNull()
         );
+    }
+
+    @Test
+    void testUpdateWithValidName() {
+        option.updateName("테스트");
+        assertThat("테스트").isEqualTo(option.getName());
+    }
+
+    @Test
+    void testUpdateWithNullName() {
+        try {
+            option.updateName(null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithEmptyName() {
+        try {
+            option.updateName("");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithLengthName() {
+        try {
+            option.updateName("test".repeat(300));
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithInvalidName() {
+        try {
+            option.updateName(".<>");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateValidQuantity() {
+        option.updateQuantity(200L);
+        assertThat(200L).isEqualTo(option.getQuantity());
+    }
+
+    @Test
+    void testUpdateWithNullQuantity() {
+        try {
+            option.updateQuantity(null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWith0Quantity() {
+        try {
+            option.updateQuantity(0L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWith0LessQuantity() {
+        try {
+            option.updateQuantity(-200L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWith1MillionGreaterQuantity() {
+        try {
+            option.updateQuantity(100_000_000L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
     }
 
 }
