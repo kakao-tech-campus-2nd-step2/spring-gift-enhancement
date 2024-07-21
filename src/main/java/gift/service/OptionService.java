@@ -61,6 +61,14 @@ public class OptionService {
         return option.getId();
     }
 
+    public void subtractOptionQuantity(Long optionId, int count){
+        Option option = getOption(optionId);
+        if (option.getQuantity() < count){
+            throw new IllegalArgumentException("현재 남은 옵션 개수보다 많습니다.");
+        }
+        option.subtract(count);
+    }
+
     private Option getOption(Long optionId) {
         return jpaOptionRepository.findById(optionId)
             .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
