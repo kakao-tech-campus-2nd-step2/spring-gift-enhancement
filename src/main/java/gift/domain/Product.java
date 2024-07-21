@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,8 +16,6 @@ import java.util.UUID;
 @Entity
 public class Product {
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private final List<Wish> wishes = new LinkedList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -24,14 +24,22 @@ public class Product {
     @Column(nullable = false)
     private Long price;
     private String imageUrl;
+    @ManyToOne
+    @JoinColumn(name = "catetoryId", nullable = false)
+    private Category category;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private final List<Wish> wishes = new LinkedList<>();
+    @OneToMany(mappedBy = "product")
+    private final List<Option> options = new LinkedList<>();
 
     public Product() {
     }
 
-    public Product(String name, Long price, String imageUrl) {
+    public Product(String name, Long price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public UUID getId() {
@@ -58,6 +66,14 @@ public class Product {
         return imageUrl;
     }
 
+    public UUID getCategoryID() {
+        return category.getId();
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
@@ -66,5 +82,9 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

@@ -4,6 +4,8 @@ import gift.controller.member.MemberRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +30,8 @@ public class Member {
     @Column(nullable = false)
     private String nickName;
     @Column
-    private String grade;
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
     public Member() {
     }
@@ -42,7 +45,7 @@ public class Member {
     @PrePersist
     public void prePersist() {
         if (grade == null) {
-            grade = "normal";
+            grade = Grade.USER;
         }
     }
 
@@ -62,7 +65,7 @@ public class Member {
         return password;
     }
 
-    public String getGrade() {
+    public Grade getGrade() {
         return grade;
     }
 

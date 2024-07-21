@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WishService {
@@ -37,13 +38,15 @@ public class WishService {
         this.wishRepository = wishRepository;
     }
 
+    @Transactional(readOnly = true)
     public Page<WishResponse> findAll(Pageable pageable) {
-        Page<Wish> wishPage = wishRepository.findPageable(pageable);
+        Page<Wish> wishPage = wishRepository.findAll(pageable);
         List<WishResponse> wishResponses = wishPage.stream().map(WishMapper::toWishResponse)
             .toList();
         return new PageImpl<>(wishResponses, pageable, wishPage.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public Page<WishResponse> findAllByMemberId(UUID memberId, Pageable pageable) {
         Page<Wish> wishPage = wishRepository.findAllByMemberId(memberId, pageable);
         List<WishResponse> wishResponses = wishPage.stream().map(WishMapper::toWishResponse)
@@ -51,6 +54,7 @@ public class WishService {
         return new PageImpl<>(wishResponses, pageable, wishPage.getTotalElements());
     }
 
+    @Transactional
     public WishResponse save(UUID memberId, WishCreateRequest wish) {
         wishRepository.findByMemberIdAndProductId(memberId, wish.productId()).ifPresent(p -> {
             throw new MemberAlreadyExistsException();
@@ -63,6 +67,7 @@ public class WishService {
         return toWishResponse(wishRepository.save(new Wish(member, product, wish.count())));
     }
 
+    @Transactional
     public WishResponse update(UUID memberId, UUID productId, WishUpdateRequest wish) {
         Wish target = wishRepository.findByMemberIdAndProductId(memberId, productId)
             .orElseThrow(WishNotExistsException::new);
@@ -70,7 +75,7 @@ public class WishService {
         return toWishResponse(wishRepository.save(target));
     }
 
-    // @Transactional
+    @Transactional
     public void delete(UUID memberId, UUID productId) {
         wishRepository.findByMemberIdAndProductId(memberId, productId)
             .orElseThrow(WishNotExistsException::new);

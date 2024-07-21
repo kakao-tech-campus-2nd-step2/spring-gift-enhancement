@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.domain.Option;
 import gift.domain.Product;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,9 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, UUID> {
+public interface OptionRepository extends JpaRepository<Option, UUID> {
 
-    Optional<Product> findByNameAndPriceAndImageUrl(String name, Long price, String imageUrl);
-
-    Page<Product> findAll(Pageable pageable);
+    Page<Option> findAllByProductId(UUID productId, Pageable pageable);
+    Optional<Option> findByNameAndProduct(String optionName, Product product);
 }
