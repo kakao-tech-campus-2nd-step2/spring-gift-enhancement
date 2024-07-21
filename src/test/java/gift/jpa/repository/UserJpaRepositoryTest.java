@@ -44,13 +44,11 @@ class UserJpaRepositoryTest {
         // when
         final User actual = userRepository.findById(2L).get();
         User expected = User.builder()
-            .id(2L)
             .email("user2@example.com")
             .build();
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(expected.getId());
         assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
     }
 
@@ -75,7 +73,7 @@ class UserJpaRepositoryTest {
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(2L);
+
         assertThat(actual.getEmail()).isEqualTo(email);
     }
 

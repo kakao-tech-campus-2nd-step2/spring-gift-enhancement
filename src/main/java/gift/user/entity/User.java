@@ -41,7 +41,6 @@ public class User {
     }
 
     private User(Builder builder) {
-        this.id = builder.id;
         this.email = builder.email;
         this.password = builder.password;
         this.userRoles = builder.userRoles;
@@ -69,15 +68,9 @@ public class User {
 
     public static class Builder {
 
-        private Long id;
         private String email;
         private String password;
         private Set<UserRole> userRoles;
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public Builder email(String email) {
             this.email = email;
