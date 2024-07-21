@@ -69,7 +69,7 @@ class OptionServiceTest {
         doNothing().when(optionRepositoryKeeperService).checkUniqueOptionName(any(), any());
 
         assertThatNoException().isThrownBy(() -> optionService.addOption(1L,
-                new OptionRequestDTO(1L, 1L, option1.getName(), option1.getQuantity())));
+                new OptionRequestDTO(option1.getName(), option1.getQuantity())));
     }
 
     @Test
@@ -80,7 +80,7 @@ class OptionServiceTest {
                 .checkUniqueOptionName(any(), any());
 
         assertThrows(BadRequestException.class, () -> optionService.addOption(1L,
-                new OptionRequestDTO(1L, 1L, option1.getName(), option1.getQuantity())));
+                new OptionRequestDTO(option1.getName(), option1.getQuantity())));
     }
 
     @Test
@@ -90,7 +90,7 @@ class OptionServiceTest {
         doNothing().when(optionRepositoryKeeperService).checkUniqueOptionName(any(), any());
 
         assertThatNoException().isThrownBy(() -> optionService.updateOption(1L, 1L,
-                new OptionRequestDTO(1L, 1L, option1.getName(), option1.getQuantity())));
+                new OptionRequestDTO(option1.getName(), option1.getQuantity())));
     }
 
     @Test
@@ -101,7 +101,7 @@ class OptionServiceTest {
                 .checkUniqueOptionName(any(), any());
 
         assertThrows(BadRequestException.class, () -> optionService.updateOption(1L, 1L,
-                new OptionRequestDTO(1L, 1L, option1.getName(), option1.getQuantity())));
+                new OptionRequestDTO(option1.getName(), option1.getQuantity())));
     }
 
     @Test

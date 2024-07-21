@@ -38,8 +38,6 @@ public class OptionService {
     @Transactional
     public void addOption(Long productId, OptionRequestDTO optionRequestDTO){
         try {
-            if(!Objects.equals(productId, optionRequestDTO.productId()))
-                throw new InvalidIdException("올바르지 않은 제품 Id 입니다.");
             Product product = productRepository.findById(productId).orElseThrow(
                     () -> new NoSuchProductIdException("해당 상품 Id인 상품을 찾지 못했습니다."));
             optionRepositoryKeeperService.checkUniqueOptionName(product, optionRequestDTO.name());
@@ -56,9 +54,6 @@ public class OptionService {
     @Transactional
     public void updateOption(Long productId, Long optionId, OptionRequestDTO optionRequestDTO){
         try {
-            if(!Objects.equals(optionId, optionRequestDTO.optionId()) || !Objects.equals(productId, optionRequestDTO.productId()))
-                throw new InvalidIdException("올바르지 않은 id 입니다.");
-
             Product product = productRepository.findById(productId).orElseThrow(
                     () -> new NoSuchProductIdException("해당 상품 Id인 상품을 찾지 못했습니다."));
             Option optionToReplace = optionRequestDTO.convertToOption(product);

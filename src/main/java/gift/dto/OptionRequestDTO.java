@@ -10,11 +10,6 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
 public record OptionRequestDTO(
-        Long optionId,
-
-        @NotNull(message = "상품 아이디를 입력해주세요")
-        Long productId,
-
         @NotBlank(message = "옵션 이름을 입력해주세요.")
         @Pattern(regexp = "[a-zA-Z0-9ㄱ-ㅎ가-힣()\\[\\]+\\-&/_ ]+", message = "( ), [ ], +, -, &, /, _을 제외한 특수문자는 입력할 수 없습니다.")
         @Length(min = 1, max = 50, message = "옵션 이름 길이는 1~50자만 가능합니다.")

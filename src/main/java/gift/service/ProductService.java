@@ -50,7 +50,7 @@ public class ProductService {
             Product product = productPostRequestDTO.convertToProduct(category);
             categoryRepository.save(product.getCategory());
             productRepository.save(product);
-            optionService.addOption(product.getId(), new OptionRequestDTO(0L, product.getId(), productPostRequestDTO.optionName(), productPostRequestDTO.optionQuantity()));
+            optionService.addOption(product.getId(), new OptionRequestDTO(productPostRequestDTO.optionName(), productPostRequestDTO.optionQuantity()));
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException("잘못된 제품 값을 입력했습니다. 입력 칸 옆의 설명을 다시 확인해주세요");
         } catch (BadRequestException e) {
