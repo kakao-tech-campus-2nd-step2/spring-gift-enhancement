@@ -117,7 +117,14 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
         Option option = product.findOptionByOptionId(optionId);
         return OptionResponse.from(option);
+    }
 
+    @Transactional
+    public int subtractQuantity(Long id, Long optionId, int amount) {
+        Product product = productRepository.findProductAndOptionByIdFetchJoin(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+        Option option = product.findOptionByOptionId(optionId);
+        return option.subtractQuantity(amount);
     }
 
     private void checkProductExist(Long id) {
