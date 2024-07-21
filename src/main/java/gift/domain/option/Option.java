@@ -51,4 +51,10 @@ public class Option {
     public Long getQuantity() {
         return quantity;
     }
+
+    public void subtractQuantity(Long quantity) {
+        if (quantity <= this.quantity) {
+            this.quantity -= quantity;
+        }
+    }
 }

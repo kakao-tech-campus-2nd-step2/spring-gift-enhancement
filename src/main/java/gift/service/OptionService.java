@@ -33,6 +33,16 @@ public class OptionService {
         OptionRepository.save(option);
     }
 
+    public void subtractQuantity(Long productId, Long optionId, Long quantity) {
+        Option option = OptionRepository.findById(optionId).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 옵션을 찾을 수 없습니다"));
+        if (option.getQuantity() < quantity) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "상품 수량이 부족합니다");
+        }
+        option.subtractQuantity(quantity);
+        OptionRepository.save(option);
+    }
+
     public void delete(Long productId, Long optionId) {
         OptionRepository.deleteById(optionId);
     }
