@@ -48,7 +48,9 @@ public class OptionService {
     @Transactional
     public List<Option> addOptions(Product product, List<OptionAddRequest> request) {
         validateOptionNamesDistinct(product.getOptions(), request);
-        request.forEach(req -> addOption(product, req));
+        List<Option> options = request.stream().map(req -> req.toEntity(product)).toList();
+        optionRepository.saveAll(options);
+        product.addOptions(options);
         return optionRepository.findAllByProduct(product);
     }
 

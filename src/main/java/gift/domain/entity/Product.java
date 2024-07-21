@@ -104,6 +104,10 @@ public class Product {
         options.add(option);
     }
 
+    public void addOptions(List<Option> options) {
+        this.options.addAll(options);
+    }
+
     @Override
     public String toString() {
         return "Product{" +
