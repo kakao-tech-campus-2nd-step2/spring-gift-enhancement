@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @SpringBootTest
@@ -40,6 +41,30 @@ class OptionTest {
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy( () -> new Option(null, mockProduct, falseName, 500))
                 .withMessage("상품명에 () [] + - & / 외의 특수기호는 불가합니다");
+    }
+    @Test
+    @DisplayName("Test for Success subtract option quantity")
+    void successfulQuantitySubtraction() {
+        // given
+        Option option = new Option(null, mockProduct, "true", 500);
+
+        // when
+        option.subtractQuantity(300);
+
+        // then
+        assertThat(option.getQuantity()).isEqualTo(200);
+    }
+
+    @Test
+    @DisplayName("Test for unSuccess subtract option quantity")
+    void unsuccessfulQuantitySubtraction() {
+        // given
+        Option option = new Option(null, mockProduct, "true", 500);
+
+        // When & then
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> option.subtractQuantity(600))
+                .withMessage("해당 상품 옵션의 재고가 선택하신 수량 보다 작습니다. " + "[남은 수량: "+option.getQuantity()+"]" );
     }
 
 }

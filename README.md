@@ -95,4 +95,4 @@ Content-Type: application/json
 
 ### ToDo
 - [X] 옵션 수량 지정된 숫자만큼 빼는 기능 구현 (엔티티 클래스)
-- [ ] Test code 작성 
+- [X] Test code 작성 
