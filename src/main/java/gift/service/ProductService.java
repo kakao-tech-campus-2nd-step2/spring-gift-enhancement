@@ -103,4 +103,17 @@ public class ProductService {
 
         return new OptionDto(addedOption.getId(), addedOption.getName(), addedOption.getQuantity());
     }
+
+    @Transactional
+    public void decreaseOptionQuantity(Long productId, String optionName, int amount) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("해당 id의 상품 없음: " + productId));
+        Option option = product.getOptions().stream()
+            .filter(opt -> opt.getName().equals(optionName))
+            .findFirst()
+            .orElseThrow(() -> new NoSuchElementException("해당 이름의 옵션 없음: " + optionName));
+
+        option.subtract(amount);
+        productRepository.save(product);
+    }
 }

@@ -52,4 +52,14 @@ public class Option {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    public void subtract(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("뺄 값은 양수만 가능하다.");
+        }
+        if (quantity < amount) {
+            throw new IllegalStateException("뺄 값은 기존 quantity보다 작아야 한다.");
+        }
+        this.quantity -= amount;
+    }
 }
