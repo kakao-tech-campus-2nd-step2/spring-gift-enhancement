@@ -1,11 +1,14 @@
 package gift.service;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
-import gift.dto.requestDTO.ProductRequestDTO;
-import gift.dto.responseDTO.ProductListResponseDTO;
-import gift.dto.responseDTO.ProductResponseDTO;
+import gift.dto.requestDto.OptionCreateRequestDTO;
+import gift.dto.requestDto.ProductCreateRequestDTO;
+import gift.dto.requestDto.ProductRequestDTO;
+import gift.dto.responseDto.ProductResponseDTO;
 import gift.repository.JpaCategoryRepository;
+import gift.repository.JpaOptionRepository;
 import gift.repository.JpaProductRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,32 +24,32 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
     private final JpaProductRepository jpaProductRepository;
     private final JpaCategoryRepository jpaCategoryRepository;
+    private final JpaOptionRepository jpaOptionRepository;
 
     public ProductService(JpaProductRepository jpaProductRepository,
-        JpaCategoryRepository jpaCategoryRepository) {
+        JpaCategoryRepository jpaCategoryRepository, JpaOptionRepository jpaOptionRepository) {
         this.jpaProductRepository = jpaProductRepository;
         this.jpaCategoryRepository = jpaCategoryRepository;
+        this.jpaOptionRepository = jpaOptionRepository;
     }
 
     @Transactional(readOnly = true)
-    public ProductListResponseDTO getAllProducts() {
-        List<ProductResponseDTO> productResponseDTOList = jpaProductRepository.findAll()
+    public List<ProductResponseDTO> getAllProducts() {
+
+        return jpaProductRepository.findAll()
             .stream()
             .map(ProductResponseDTO::of)
             .toList();
-
-        return new ProductListResponseDTO(productResponseDTOList);
     }
 
     @Transactional(readOnly = true)
-    public ProductListResponseDTO getAllProducts(int page, int size, String criteria) {
+    public List<ProductResponseDTO> getAllProducts(int page, int size, String criteria) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(criteria));
-        List<ProductResponseDTO> productResponseDTOList = jpaProductRepository.findAll(pageable)
+
+        return jpaProductRepository.findAll(pageable)
             .stream()
             .map(ProductResponseDTO::of)
             .toList();
-
-        return new ProductListResponseDTO(productResponseDTOList);
     }
 
     @Transactional(readOnly = true)
@@ -55,12 +58,16 @@ public class ProductService {
         return ProductResponseDTO.of(product);
     }
 
-    public Long addProduct(ProductRequestDTO productRequestDTO) {
+    public Long addProduct(ProductCreateRequestDTO productCreateRequestDTO) {
+        ProductRequestDTO productRequestDTO = productCreateRequestDTO.productRequestDTO();
+        OptionCreateRequestDTO optionCreateRequestDTO = productCreateRequestDTO.optionCreateRequestDTO();
+
         Category category = getCategory(productRequestDTO);
 
-        Product product = new Product(productRequestDTO.name(), productRequestDTO.price(),
-            productRequestDTO.imageUrl(), category);
+        Product product = productRequestDTO.toEntity(category);
+        Option option = optionCreateRequestDTO.toEntity(product);
 
+        jpaOptionRepository.save(option);
         return jpaProductRepository.save(product).getId();
     }
 
@@ -80,14 +87,12 @@ public class ProductService {
     }
 
     private Product getProduct(Long productId) {
-        Product product = jpaProductRepository.findById(productId)
+        return jpaProductRepository.findById(productId)
             .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
-        return product;
     }
 
     private Category getCategory(ProductRequestDTO productRequestDTO) {
-        Category category = jpaCategoryRepository.findById(productRequestDTO.categoryId())
+        return jpaCategoryRepository.findById(productRequestDTO.categoryId())
             .orElseThrow(() -> new NoSuchElementException("id가 잘못되었습니다."));
-        return category;
     }
 }

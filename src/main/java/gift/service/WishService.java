@@ -3,9 +3,8 @@ package gift.service;
 import gift.domain.Product;
 import gift.domain.User;
 import gift.domain.Wish;
-import gift.dto.requestDTO.WishRequestDTO;
-import gift.dto.responseDTO.WishListResponseDTO;
-import gift.dto.responseDTO.WishResponseDTO;
+import gift.dto.requestDto.WishRequestDTO;
+import gift.dto.responseDto.WishResponseDTO;
 import gift.repository.JpaProductRepository;
 import gift.repository.JpaUserRepository;
 import gift.repository.JpaWishRepository;
@@ -33,22 +32,21 @@ public class WishService {
     }
 
     @Transactional(readOnly = true)
-    public WishListResponseDTO getAllWishes(Long userId) {
-        List<WishResponseDTO> wishResponseDTOList = jpaWishRepository.findAllByUserId(userId)
+    public List<WishResponseDTO> getAllWishes(Long userId) {
+        return jpaWishRepository.findAllByUserId(userId)
             .stream()
             .map(WishResponseDTO::of)
             .toList();
-        return new WishListResponseDTO(wishResponseDTOList);
     }
 
     @Transactional(readOnly = true)
-    public WishListResponseDTO getAllWishes(Long userId, int page, int size, String criteria) {
+    public List<WishResponseDTO> getAllWishes(Long userId, int page, int size, String criteria) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(criteria));
         List<WishResponseDTO> wishResponseDTOList = jpaWishRepository.findAllByUser(userId, pageable)
             .stream()
             .map(WishResponseDTO::of)
             .toList();
-        return new WishListResponseDTO(wishResponseDTOList);
+        return wishResponseDTOList;
     }
 
     @Transactional(readOnly = true)

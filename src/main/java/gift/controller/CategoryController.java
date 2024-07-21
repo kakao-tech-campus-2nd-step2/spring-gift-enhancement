@@ -4,13 +4,12 @@ import gift.auth.LoginUser;
 import gift.domain.User;
 import gift.dto.common.apiResponse.ApiResponseBody.SuccessBody;
 import gift.dto.common.apiResponse.ApiResponseGenerator;
-import gift.dto.requestDTO.CategoryRequestDTO;
-import gift.dto.responseDTO.CategoryListResponseDTO;
-import gift.dto.responseDTO.CategoryResponseDTO;
+import gift.dto.requestDto.CategoryRequestDTO;
+import gift.dto.responseDto.CategoryResponseDTO;
 import gift.service.AuthService;
 import gift.service.CategoryService;
 import jakarta.validation.Valid;
-import org.apache.juli.logging.Log;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,10 +51,11 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<SuccessBody<CategoryListResponseDTO>> getAllCategory() {
-        CategoryListResponseDTO categoryListResponseDTO = categoryService.getAllCategories();
+    public ResponseEntity<SuccessBody<List<CategoryResponseDTO>>> getAllCategory() {
+        List<CategoryResponseDTO> categoryResponseDTOList = categoryService.getAllCategories();
+
         return ApiResponseGenerator.success(HttpStatus.OK, "모든 카테고리를 조회했습니다.",
-            categoryListResponseDTO);
+            categoryResponseDTOList);
     }
 
     @PutMapping("/category/{id}")

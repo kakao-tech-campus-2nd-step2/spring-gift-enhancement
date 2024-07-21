@@ -1,4 +1,4 @@
-package gift.dto.requestDTO;
+package gift.dto.requestDto;
 
 import gift.domain.User;
 import jakarta.validation.constraints.Email;
@@ -11,8 +11,7 @@ public record UserSignupRequestDTO(
     @Pattern(regexp = "^(관리자|일반)$", message = "권한이 잘못 설정되었습니다.")
     String role) {
 
-    public static User toEntity(UserSignupRequestDTO userSignupRequestDTO) {
-        return new User(userSignupRequestDTO.email(), userSignupRequestDTO.password(),
-            userSignupRequestDTO.role());
+    public User toEntity() {
+        return new User(email, password, role);
     }
 }

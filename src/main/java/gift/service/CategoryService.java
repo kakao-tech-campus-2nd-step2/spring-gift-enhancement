@@ -1,9 +1,8 @@
 package gift.service;
 
 import gift.domain.Category;
-import gift.dto.requestDTO.CategoryRequestDTO;
-import gift.dto.responseDTO.CategoryListResponseDTO;
-import gift.dto.responseDTO.CategoryResponseDTO;
+import gift.dto.requestDto.CategoryRequestDTO;
+import gift.dto.responseDto.CategoryResponseDTO;
 import gift.repository.JpaCategoryRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,7 +19,7 @@ public class CategoryService {
     }
 
     public Long addCategory(CategoryRequestDTO categoryRequestDTO){
-        Category category = CategoryRequestDTO.toEntity(categoryRequestDTO);
+        Category category = categoryRequestDTO.toEntity();
         return jpaCategoryRepository.save(category).getId();
     }
 
@@ -31,13 +30,11 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryListResponseDTO getAllCategories(){
-        List<CategoryResponseDTO> categoryResponseDTOList = jpaCategoryRepository.findAll()
+    public List<CategoryResponseDTO> getAllCategories(){
+        return jpaCategoryRepository.findAll()
             .stream()
             .map(CategoryResponseDTO::of)
             .toList();
-
-        return new CategoryListResponseDTO(categoryResponseDTOList);
     }
 
     public Long updateCategory(Long categoryId, CategoryRequestDTO categoryRequestDTO) {

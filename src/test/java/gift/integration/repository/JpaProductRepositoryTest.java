@@ -81,7 +81,7 @@ class JpaProductRepositoryTest {
         List<Product> productList = jpaProductRepository.findAll();
         //then
         assertAll(
-            () -> assertThat(productList.size()).isEqualTo(2)
+            () -> assertThat(productList).hasSize(2)
         );
     }
 
@@ -109,7 +109,7 @@ class JpaProductRepositoryTest {
         //then
         List<Product> productList = jpaProductRepository.findAll();
         assertAll(
-            () -> assertThat(productList.size()).isEqualTo(0)
+            () -> assertThat(productList).hasSize(0)
         );
     }
 }

@@ -4,13 +4,12 @@ import gift.auth.LoginUser;
 import gift.domain.User;
 import gift.dto.common.apiResponse.ApiResponseBody.SuccessBody;
 import gift.dto.common.apiResponse.ApiResponseGenerator;
-import gift.dto.requestDTO.WishRequestDTO;
-import gift.dto.responseDTO.WishListResponseDTO;
-import gift.dto.responseDTO.WishResponseDTO;
+import gift.dto.requestDto.WishRequestDTO;
+import gift.dto.responseDto.WishResponseDTO;
 import gift.service.AuthService;
 import gift.service.WishService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,18 +33,18 @@ public class WishController {
     }
 
     @GetMapping()
-    public ResponseEntity<SuccessBody<WishListResponseDTO>> getAllWishes(@LoginUser User user) {
-        WishListResponseDTO wishListResponseDTO = wishService.getAllWishes(user.getId());
+    public ResponseEntity<SuccessBody<List<WishResponseDTO>>> getAllWishes(@LoginUser User user) {
+        List<WishResponseDTO> wishListResponseDTO = wishService.getAllWishes(user.getId());
         return ApiResponseGenerator.success(HttpStatus.OK, "위시리스트를 조회했습니다.", wishListResponseDTO);
     }
 
     @GetMapping("/page")
-    public ResponseEntity<SuccessBody<WishListResponseDTO>> getAllWishPages(@LoginUser User user,
+    public ResponseEntity<SuccessBody<List<WishResponseDTO>>> getAllWishPages(@LoginUser User user,
         @RequestParam(value = "page", defaultValue = "0") int page,
         @RequestParam(value = "size", defaultValue = "0") int size,
         @RequestParam(value = "criteria", defaultValue = "id") String criteria) {
-        WishListResponseDTO wishListResponseDTO = wishService.getAllWishes(user.getId(), page, size, criteria);
-        return ApiResponseGenerator.success(HttpStatus.OK, "위시리스트를 조회했습니다.", wishListResponseDTO);
+        List<WishResponseDTO> wishResponseDTOList = wishService.getAllWishes(user.getId(), page, size, criteria);
+        return ApiResponseGenerator.success(HttpStatus.OK, "위시리스트를 조회했습니다.", wishResponseDTOList);
     }
 
     @PostMapping()

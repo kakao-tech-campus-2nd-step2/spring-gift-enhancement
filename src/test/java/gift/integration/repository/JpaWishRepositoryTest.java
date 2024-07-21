@@ -117,8 +117,8 @@ class JpaWishRepositoryTest {
         List<Wish> wishList2 = jpaWishRepository.findAllByUserId(userIdList.get(1));
         //then
         assertAll(
-            () -> assertThat(wishList1.size()).isEqualTo(4),
-            () -> assertThat(wishList2.size()).isEqualTo(2)
+            () -> assertThat(wishList1).hasSize(4),
+            () -> assertThat(wishList2).hasSize(2)
         );
     }
 
@@ -132,7 +132,7 @@ class JpaWishRepositoryTest {
         //then
         List<Wish> wishList = jpaWishRepository.findAllByUserId(1L);
         assertAll(
-            () -> assertThat(wishList.size()).isEqualTo(0)
+            () -> assertThat(wishList).hasSize(0)
         );
     }
 
@@ -146,7 +146,7 @@ class JpaWishRepositoryTest {
         //then
         List<Wish> productList = jpaWishRepository.findAll();
         assertAll(
-            () -> assertThat(productList.size()).isEqualTo(0)
+            () -> assertThat(productList).hasSize(0)
         );
     }
 }

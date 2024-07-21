@@ -1,4 +1,4 @@
-package gift.dto.requestDTO;
+package gift.dto.requestDto;
 
 import gift.domain.User;
 import jakarta.validation.constraints.Email;
@@ -8,7 +8,7 @@ public record UserLoginRequestDTO(
     String email,
     String password) {
 
-    public static User toEntity(UserLoginRequestDTO userLoginRequestDTO) {
-        return new User(userLoginRequestDTO.email(), userLoginRequestDTO.password(), null);
+    public User toEntity() {
+        return new User(email, password, null);
     }
 }

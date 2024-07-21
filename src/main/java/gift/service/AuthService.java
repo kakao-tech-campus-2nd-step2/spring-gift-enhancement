@@ -3,9 +3,9 @@ package gift.service;
 import gift.auth.JwtUtil;
 import gift.domain.Role;
 import gift.domain.User;
-import gift.dto.requestDTO.UserLoginRequestDTO;
-import gift.dto.requestDTO.UserSignupRequestDTO;
-import gift.dto.responseDTO.UserResponseDTO;
+import gift.dto.requestDto.UserLoginRequestDTO;
+import gift.dto.requestDto.UserSignupRequestDTO;
+import gift.dto.responseDto.UserResponseDTO;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class AuthService {
     }
 
     public UserResponseDTO login(UserLoginRequestDTO userLoginRequestDTO) {
-        User user = UserLoginRequestDTO.toEntity(userLoginRequestDTO);
+        User user = userLoginRequestDTO.toEntity();
         if (!user.getPassword().equals(userLoginRequestDTO.password())) {
             throw new NoSuchElementException("회원의 정보가 일치하지 않습니다.");
         }

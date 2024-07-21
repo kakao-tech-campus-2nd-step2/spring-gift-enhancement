@@ -1,17 +1,17 @@
 package gift.controller;
 
 import gift.auth.LoginUser;
-import gift.domain.Product;
 import gift.domain.User;
 import gift.dto.common.apiResponse.ApiResponseBody.SuccessBody;
 import gift.dto.common.apiResponse.ApiResponseGenerator;
-import gift.dto.requestDTO.ProductRequestDTO;
-import gift.dto.responseDTO.ProductListResponseDTO;
-import gift.dto.responseDTO.ProductResponseDTO;
+import gift.dto.requestDto.ProductCreateRequestDTO;
+import gift.dto.requestDto.ProductRequestDTO;
+import gift.dto.responseDto.ProductResponseDTO;
 import gift.service.AuthService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,28 +28,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ProductController {
     private final ProductService productService;
+    private final OptionService optionService;
     private final AuthService authService;
 
-    public ProductController(ProductService productService, AuthService authService) {
+    public ProductController(ProductService productService, OptionService optionService,
+        AuthService authService) {
         this.productService = productService;
+        this.optionService = optionService;
         this.authService = authService;
     }
 
     @GetMapping("/products")
-    public ResponseEntity<SuccessBody<ProductListResponseDTO>> getAllProducts() {
-        ProductListResponseDTO productListResponseDTO = productService.getAllProducts();
+    public ResponseEntity<SuccessBody<List<ProductResponseDTO>>> getAllProducts() {
+        List<ProductResponseDTO> productResponseDTOList = productService.getAllProducts();
         return ApiResponseGenerator.success(HttpStatus.OK, "모든 상품을 조회했습니다.",
-            productListResponseDTO);
+            productResponseDTOList);
     }
 
     @GetMapping("/products/page")
-    public ResponseEntity<SuccessBody<ProductListResponseDTO>> getAllProductPages(
+    public ResponseEntity<SuccessBody<List<ProductResponseDTO>>> getAllProductPages(
         @RequestParam(value = "page", defaultValue = "0") int page,
         @RequestParam(value = "size", defaultValue = "8") int size,
         @RequestParam(value = "criteria", defaultValue = "id") String criteria) {
-        ProductListResponseDTO productListResponseDTO = productService.getAllProducts(page, size, criteria);
+        List<ProductResponseDTO> productResponseDTOList = productService.getAllProducts(page, size, criteria);
         return ApiResponseGenerator.success(HttpStatus.OK, "모든 상품을 조회했습니다.",
-            productListResponseDTO);
+            productResponseDTOList);
     }
 
     @GetMapping("/product/{id}")
@@ -62,10 +65,11 @@ public class ProductController {
 
     @PostMapping("/product")
     public ResponseEntity<SuccessBody<Long>> addProduct(
-        @Valid @RequestBody ProductRequestDTO productRequestDTO,
+        @Valid @RequestBody ProductCreateRequestDTO productCreateRequestDTO,
         @LoginUser User user) {
         authService.authorizeAdminUser(user);
-        Long productId = productService.addProduct(productRequestDTO);
+        Long productId = productService.addProduct(productCreateRequestDTO);
+
         return ApiResponseGenerator.success(HttpStatus.CREATED, "상품이 등록되었습니다.", productId);
     }
 
