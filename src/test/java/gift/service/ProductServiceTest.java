@@ -17,10 +17,12 @@ import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishProductRepository;
 import gift.web.dto.request.product.CreateProductRequest;
+import gift.web.dto.request.product.UpdateProductRequest;
 import gift.web.dto.request.productoption.CreateProductOptionRequest;
 import gift.web.dto.response.product.CreateProductResponse;
 import gift.web.dto.response.product.ReadAllProductsResponse;
 import gift.web.dto.response.product.ReadProductResponse;
+import gift.web.dto.response.product.UpdateProductResponse;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -176,36 +178,34 @@ class ProductServiceTest {
         );
     }
 
-    /**
-     * todo 상품 옵션 검증 위치 변경 후 테스트 코드 작성
-     */
-//    @Test
-//    void updateProduct() {
-//        //given
-//        Product product = new Product.Builder()
-//            .id(1L)
-//            .name("상품01")
-//            .price(10000)
-//            .imageUrl(StringToUrlConverter.convert("https://www.google.com"))
-//            .category(new Builder().id(1L).name("카테고리01").description("카테고리01 설명").imageUrl(StringToUrlConverter.convert("https://www.google.com")).color(Color.from("#FFFFFF")).build())
-//            .productOptions(List.of(new ProductOption.Builder().id(1L).name("옵션01").stock(100).build()))
-//            .build();
-//
-//        given(productRepository.findById(any())).willReturn(Optional.of(product));
-//
-//        UpdateProductRequest request = new UpdateProductRequest("상품02", 20000, "https://www.google.com");
-//
-//        //when
-//        UpdateProductResponse response = productService.updateProduct(1L, request);
-//
-//        //then
-//        assertAll(
-//            () -> assertThat(response.getId()).isEqualTo(product.getId()),
-//            () -> assertThat(response.getName()).isEqualTo(request.getName()),
-//            () -> assertThat(response.getPrice()).isEqualTo(request.getPrice()),
-//            () -> assertThat(response.getImageUrl()).isEqualTo(request.getImageUrl())
-//        );
-//    }
+    @Test
+    @DisplayName("상품 수정 요청이 정상적일 때, 상품을 성공적으로 수정합니다.")
+    void updateProduct() {
+        //given
+        Product product = new Product.Builder()
+            .id(1L)
+            .name("상품01")
+            .price(10000)
+            .imageUrl(StringToUrlConverter.convert("https://www.google.com"))
+            .category(new Builder().id(1L).name("카테고리01").description("카테고리01 설명").imageUrl(StringToUrlConverter.convert("https://www.google.com")).color(Color.from("#FFFFFF")).build())
+            .productOptions(List.of(new ProductOption.Builder().id(1L).name("옵션01").stock(100).build()))
+            .build();
+
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+
+        UpdateProductRequest request = new UpdateProductRequest("상품02", 20000, "https://www.naver.com");
+
+        //when
+        UpdateProductResponse response = productService.updateProduct(1L, request);
+
+        //then
+        assertAll(
+            () -> assertThat(response.getId()).isEqualTo(product.getId()),
+            () -> assertThat(response.getName()).isEqualTo(request.getName()),
+            () -> assertThat(response.getPrice()).isEqualTo(request.getPrice()),
+            () -> assertThat(response.getImageUrl()).isEqualTo(request.getImageUrl())
+        );
+    }
 
     @Test
     @DisplayName("상품 삭제 요청이 정상적일 때, 상품을 성공적으로 삭제합니다.")
