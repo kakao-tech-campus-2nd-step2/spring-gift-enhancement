@@ -64,6 +64,11 @@ public class ProductOption extends BaseEntity {
         return this;
     }
 
+    public ProductOption subtractQuantity(Integer quantity) {
+        this.stock -= quantity;
+        return this;
+    }
+
     public String getName() {
         return name;
     }
