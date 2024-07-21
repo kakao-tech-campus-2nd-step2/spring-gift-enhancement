@@ -20,4 +20,16 @@ public class ProductDto {
         this.categoryDto = categoryDto;
         this.optionDtos = optionDtos;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }
