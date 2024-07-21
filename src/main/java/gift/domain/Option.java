@@ -11,9 +11,15 @@ import java.util.Objects;
 public class Option {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long Id;
+    Long id;
     String name;
     Long quantity;
+
+    public Option(Long id, String name, Long quantity) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+    }
 
     @Override
     public boolean equals(Object o) {
