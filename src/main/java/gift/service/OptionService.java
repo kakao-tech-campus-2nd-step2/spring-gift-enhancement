@@ -9,6 +9,7 @@ import gift.repository.ProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -44,6 +45,16 @@ public class OptionService {
         Option option = new Option(newOption.name(), newOption.quantity(), product);
         optionRepository.save(option);
         return OptionResponse.fromEntity(option);
+    }
+
+    @Transactional
+    public OptionResponse decrementOptionQuantity(Long optionId, Long quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new RuntimeException("No such option with id " + optionId));
+
+        option.subtract(quantity);
+        Option savedOption = optionRepository.save(option);
+        return OptionResponse.fromEntity(savedOption);
     }
 
     private void validateOptionName(Long productId, OptionRequest newOption) {
