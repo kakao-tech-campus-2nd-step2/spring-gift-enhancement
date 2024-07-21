@@ -109,7 +109,7 @@ class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
             .andExpect(status().isBadRequest())
-            .andExpect(content().string(ErrorMessage.OPTION_NAME_ALREADY_EXISTS_MSG));
+            .andExpect(content().string(ErrorMessage.OPTION_NAME_DUPLICATE_MSG));
     }
 
     @Test

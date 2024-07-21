@@ -6,7 +6,6 @@ import gift.dto.OptionResponse;
 import gift.dto.OptionSaveRequest;
 import gift.entity.Option;
 import gift.entity.Product;
-import gift.exception.ProductOptionRequiredException;
 import gift.repository.OptionJpaDao;
 import gift.repository.ProductJpaDao;
 import java.util.List;
@@ -32,38 +31,32 @@ public class OptionService {
      * @return List
      */
     public List<OptionResponse> getProductOptionList(Long productId) {
-        findProductByIdOrElseThrow(productId);
-        return findAllOptionsByProductId(productId);
+        Product product = findProductByIdOrElseThrow(productId);
+        return product.getOptions().stream()
+            .map(OptionResponse::new)
+            .toList();
     }
 
-    /**
-     * optionId에 해당하는 옵션을 반환
-     *
-     * @param optionId
-     * @return OptionDto
-     */
     public OptionResponse findOptionById(Long optionId) {
-        return new OptionResponse(findOptionByIdOrElseThrow(optionId));
+        Option option = optionJpaDao.findById(optionId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
+        return new OptionResponse(option);
     }
 
     public void saveOption(OptionSaveRequest saveRequest) {
         Product product = findProductByIdOrElseThrow(saveRequest.getProductId());
         Option option = saveRequest.toEntity(product);
 
-        if (product.isOptionDuplicate(option)) {
+        if (product.isOptionNameDuplicate(option)) {
             throw new IllegalArgumentException(ErrorMessage.OPTION_NAME_ALREADY_EXISTS_MSG);
         }
-
         optionJpaDao.save(saveRequest.toEntity(product));
     }
 
     @Transactional
     public void editOption(OptionEditRequest editRequest) {
         Product product = findProductByIdOrElseThrow(editRequest.getProductId());
-        Option option = product.getOptionById(editRequest.getId())
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
-
-        option.updateOption(editRequest);
+        product.updateOption(editRequest);
     }
 
     /**
@@ -71,13 +64,9 @@ public class OptionService {
      */
     public void deleteOption(Long productId, Long optionId) {
         Product product = findProductByIdOrElseThrow(productId);
-        product.getOptionById(optionId)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
-
-        if (product.getOptionSize() == 1) {
-            throw new ProductOptionRequiredException(ErrorMessage.OPTION_MUST_MORE_THAN_ZERO);
+        if (product.canDeleteOption(optionId)) {
+            optionJpaDao.deleteById(optionId);
         }
-        optionJpaDao.deleteById(optionId);
     }
 
     /**
@@ -86,21 +75,5 @@ public class OptionService {
     private Product findProductByIdOrElseThrow(Long productId) {
         return productJpaDao.findById(productId)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
-    }
-
-    /**
-     * optionId에 해당하는 상품이 존재하면 반환하고 아니면 NoSuchElementException
-     */
-    private Option findOptionByIdOrElseThrow(Long optionId) {
-        return optionJpaDao.findById(optionId)
-            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
-    }
-
-    /**
-     * 해당 상품의 옵션들을 리스트로 반환
-     */
-    private List<OptionResponse> findAllOptionsByProductId(Long productId) {
-        return optionJpaDao.findAllByProduct_Id(productId).stream().map(OptionResponse::new)
-            .toList();
     }
 }

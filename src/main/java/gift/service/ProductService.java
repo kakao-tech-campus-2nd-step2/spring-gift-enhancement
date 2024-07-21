@@ -76,8 +76,9 @@ public class ProductService {
         }
         productRequest.getOptions().forEach(optionSaveRequest -> {
             Option option = optionSaveRequest.toEntity(savedProduct);
-            if (savedProduct.isOptionDuplicate(option)) {
-                throw new IllegalArgumentException(ErrorMessage.OPTION_NAME_ALREADY_EXISTS_MSG);
+
+            if (savedProduct.isOptionNameDuplicate(option)) {
+                throw new IllegalArgumentException(ErrorMessage.OPTION_NAME_DUPLICATE_MSG);
             }
 
             savedProduct.addOption(option);
