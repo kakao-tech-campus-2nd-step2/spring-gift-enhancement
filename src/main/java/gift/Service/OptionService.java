@@ -57,6 +57,15 @@ public class OptionService {
     }
 
     @Transactional
+    public void subtractQuantity(Long productId, Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId).orElseThrow(() -> new OptionNotFoundException("매칭되는 옵션이 없습니다"));
+        if (!(option.isBelongToProduct(productId)))
+            throw new OptionNotFoundException("해당 옵션은 해당 상품에 속하지 않는 옵션입니다");
+        optionKeeperService.checkOptionQuantity(option.getQuantity(), quantity);
+        option.subtract(quantity);
+    }
+
+    @Transactional
     public void deleteOption(Long productId, Long optionId) {
         Option option = optionRepository.findById(optionId).orElseThrow(() -> new OptionNotFoundException("매칭되는 옵션이 없습니다"));
         if (!(option.isBelongToProduct(productId)))
