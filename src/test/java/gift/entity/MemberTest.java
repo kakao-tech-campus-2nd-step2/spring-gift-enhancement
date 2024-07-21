@@ -1,6 +1,5 @@
-package gift;
+package gift.entity;
 
-import gift.entity.Member;
 import gift.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
