@@ -2,6 +2,7 @@ package gift.model;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,11 +10,13 @@ import org.junit.jupiter.api.Test;
 class ProductTest {
 
     private Category category;
+    private Category testCategory;
     private Product product;
 
     @BeforeEach
     void setUp() {
         category = new Category(1L, "교환권");
+        testCategory = new Category(null, "테스트");
         product = new Product(1L, "상품", "100", category, "https://kakao");
     }
 
@@ -139,5 +142,112 @@ class ProductTest {
         }
     }
 
+    @Test
+    void testUpdateValidProduct() {
+        product.updateProduct("테스트","200", testCategory, "https://test");
+        assertAll(
+            () -> assertEquals(product.getId(),1L),
+            () -> assertEquals(product.getPrice(),"200"),
+            () -> assertEquals(product.getCategory().getName(),"테스트"),
+            () -> assertEquals(product.getImageUrl(),"https://test")
+        );
+    }
+    @Test
+    void testUpdateWithNullName() {
+        try {
+            product.updateProduct(null,"200", testCategory, "https://test");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
 
+    @Test
+    void testUpdateWithEmptyName() {
+        try {
+            product.updateProduct("","200", testCategory, "https://test");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithLengthName() {
+        try {
+            product.updateProduct("test".repeat(300),"200", testCategory, "https://test");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithInvalidName() {
+        try {
+            product.updateProduct(".<>".repeat(300),"200", testCategory, "https://test");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithKaKaoName() {
+        try {
+            product.updateProduct("뱅크카카오뱅크","200", testCategory, "https://test");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithNullPrice() {
+        try {
+            product.updateProduct("테스트",null, testCategory, "https://test");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithEmptyPrice() {
+        try {
+            product.updateProduct("테스트","", testCategory, "https://test");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithInvalidPrice() {
+        try {
+            product.updateProduct("테스트","가격", testCategory, "https://test");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithNullImageUrl() {
+        try {
+            product.updateProduct("테스트","2000", testCategory, null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithEmptyImageUrl() {
+        try {
+            product.updateProduct("테스트","2000", testCategory, "");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithInvalidImageUrl() {
+        try {
+            product.updateProduct("테스트","2000", testCategory, "test");
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
 }
