@@ -47,9 +47,14 @@
                     <td>
                         <table>
                             <tr th:each="option: ${options}">
-                                <td th:text="${option.name}"></td>
-                                <td th:text="${option.quantity}"></td>
                                 <td>
+                                    <input class="editedOptionName" type="text" th:value="${option.name}" required>
+                                </td>
+                                <td>
+                                    <input class="editedOptionQuantity" type="text" th:value="${option.quantity}" required>
+                                </td>
+                                <td>
+                                    <button class="btn primary-btn" type="button" th:onclick="editOption([[${product.id}]], [[${option.id}]])">Edit</button>
                                     <button class="btn danger-btn" th:data-product-id="${product.id}" th:data-option-id="${option.id}" type="button" onclick="deleteOption(this)">Delete</button>
                                 </td>
                             </tr>

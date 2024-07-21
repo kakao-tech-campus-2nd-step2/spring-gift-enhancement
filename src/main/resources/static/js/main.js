@@ -125,3 +125,34 @@ function deleteOption(btn) {
         });
     }
 }
+
+function editOption(productId, optionId) {
+    const button = event.target;
+    const row = button.closest('tr');
+
+    const optionData = {
+        id: optionId,
+        name: row.querySelector('.editedOptionName').value,
+        quantity: row.querySelector('.editedOptionQuantity').value,
+    };
+
+    fetch(`/api/products/${productId}/options`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(optionData)
+    })
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            return response.json().then(errorData => {
+                throw new Error(errorData.message || '옵션을 처리하지 못하였습니다.');
+            });
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+}
