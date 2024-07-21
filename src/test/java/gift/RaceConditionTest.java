@@ -1,5 +1,6 @@
 package gift;
 
+import gift.config.RedisConfig;
 import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
@@ -8,10 +9,9 @@ import gift.repository.ProductRepository;
 import gift.service.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.TransactionTimedOutException;
 
@@ -19,12 +19,13 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(RedisConfig.class)
 public class RaceConditionTest {
     @Autowired
     private ProductRepository productRepository;
@@ -32,8 +33,6 @@ public class RaceConditionTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private ProductService productService;
-    @Autowired
-    private RedissonClient redissonClient;
 
     @Test
     @DisplayName("동시에 삭제 요청[성공]-비관적락")
@@ -47,31 +46,20 @@ public class RaceConditionTest {
         Long optionId = product.getOptions().get(0).getId();
 
         int threadCount = 100; // 스레드 개수
+        AtomicInteger count = new AtomicInteger();
         ExecutorService executorService = Executors.newFixedThreadPool(32); // 스레드 풀 크기
         CountDownLatch latch = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
             Product finalProduct = product;
             executorService.submit(() -> {
-
-                String lockKey = "subtractQuantity:" + finalProduct.getId() + ":" + optionId;
-                RLock lock = redissonClient.getLock(lockKey);
                 try {
-                    // lock 걸기
-                    boolean lockAcquired = lock.tryLock(3000, 10000, TimeUnit.MILLISECONDS);
-                    if (!lockAcquired) {
-                        throw new RuntimeException("Unable to acquire lock for key: " + lockKey);
-                    }
-
                     int q = productService.subtractQuantity(finalProduct.getId(), optionId, subtractAmount);
-                    // lock 풀기
+                    count.incrementAndGet();
                 } catch (TransactionTimedOutException e) {
                     System.out.println("TimeOut");
                 }catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    if (lock.isHeldByCurrentThread()) {
-                        lock.unlock(); // 락 해제
-                    }
                     latch.countDown();
                 }
             });
@@ -79,6 +67,7 @@ public class RaceConditionTest {
         latch.await();
 
         // when
+        System.out.println(count.get());
         product = productRepository.findProductAndOptionByIdFetchJoin(product.getId()).get();
         Option actual = product.findOptionByOptionId(optionId);
 

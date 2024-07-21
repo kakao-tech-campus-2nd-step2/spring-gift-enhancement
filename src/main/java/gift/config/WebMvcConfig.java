@@ -3,6 +3,7 @@ package gift.config;
 import gift.security.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -18,21 +19,26 @@ public class WebMvcConfig implements WebMvcConfigurer {
         this.tokenProvider = tokenProvider;
     }
 
+
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();
     }
 
     @Bean
+    @Order(1)
     public JwtInterceptor jwtInterceptor() {
         return new JwtInterceptor(tokenProvider);
     }
 
     @Bean
+    @Order(2)
     public AuthorizationInterceptor authorizationInterceptor() {
 
         return new AuthorizationInterceptor();}
+
     @Bean
+    @Order(3)
     public AdminInterceptor adminInterceptor() {
         return new AdminInterceptor(tokenProvider);}
 
