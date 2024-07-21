@@ -11,7 +11,8 @@ public class DomainTest {
         Product product = new Product("name", 4500, "none", category);
         Assertions.assertThat(product).isNotNull();
 
-        Option option = new Option("[1] 아메리카노", 300L, product);
+        Option option = new Option("[1] 아메리카노", 300L);
+        product.addOption(option);
 
         product.updateEntity("name_", 9000, "url", category);
         Assertions.assertThat(product.getName()).isEqualTo("name_");
@@ -58,14 +59,15 @@ public class DomainTest {
 
     @Test
     void optionTest(){
-        Category category = new Category("물품");
-        Product product = new Product("name", 1, "none", category);
+        Option option = new Option("[1] 아시아", 23L);
 
-        Option option = new Option("[1] 아시아", 23L, product);
         Assertions.assertThat(option).isNotNull();
 
         option.update("[1] 아메리카", 22L);
         Assertions.assertThat(option.getName()).isEqualTo("[1] 아메리카");
         Assertions.assertThat(option.getQuantity()).isEqualTo(22L);
+
+        option.subtract(10L);
+        Assertions.assertThat(option.getQuantity()).isEqualTo(12L);
     }
 }

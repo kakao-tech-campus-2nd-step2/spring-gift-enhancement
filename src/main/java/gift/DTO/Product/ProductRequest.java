@@ -21,11 +21,12 @@ public class ProductRequest {
 
     }
   
-    public ProductRequest(String name, int price, String imageUrl, String categoryName) {
+    public ProductRequest(String name, int price, String imageUrl, String categoryName, String basicOption) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryName = categoryName;
+        this.basicOption = basicOption;
     }
 
     public String getName() {

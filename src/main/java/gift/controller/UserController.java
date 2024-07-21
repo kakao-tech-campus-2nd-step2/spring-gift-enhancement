@@ -42,7 +42,7 @@ public class UserController {
         if(userService.isDuplicate(user))
             return new ResponseEntity<>(HttpStatus.CONFLICT);
 
-        userService.createUser(user);
+        userService.save(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     /*
@@ -68,7 +68,7 @@ public class UserController {
      */
     @PutMapping("/api/users/{id}")
     public ResponseEntity<Void> updateUsers(@PathVariable("id") Long id, @RequestBody UserRequest user){
-        if(!id.equals(userService.loadOneUser(user.getUserId()).getId())) {
+        if(!id.equals(userService.findByUserId(user.getUserId()).getId())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -84,10 +84,7 @@ public class UserController {
      */
     @DeleteMapping("/api/users/{id}")
     public ResponseEntity<Void> deleteUsers(@PathVariable("id") Long id){
-        if(userService.isDuplicate(id)){
-            userService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        userService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

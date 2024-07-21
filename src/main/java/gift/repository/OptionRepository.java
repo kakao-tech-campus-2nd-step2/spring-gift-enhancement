@@ -11,10 +11,6 @@ import java.util.Optional;
 public interface OptionRepository extends JpaRepository<Option, Long> {
     Option save(Option option);
 
-    List<Option> findAll();
-
-    Page<Option> findAll(Pageable pageable);
-
     Optional<Option> findById(Long id);
 
     void deleteById(Long id);

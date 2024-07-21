@@ -19,7 +19,7 @@ public class JwtTokenProvider {
     private long validTime;
 
     /*
-     * User의 정보를 갖고 Token을 생성하는 로직
+     * 토큰 생성 : Claim => userId
      */
     public Token makeToken(UserRequest user) {
         Long nowMillis = System.currentTimeMillis();

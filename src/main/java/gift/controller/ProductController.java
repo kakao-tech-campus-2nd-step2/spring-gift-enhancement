@@ -29,7 +29,7 @@ public class ProductController {
      * GET 요청에 따라 Json 형식 배열을 반환
      */
     @GetMapping("/api/products")
-    public ResponseEntity<Page<ProductResponse>> getProducts(
+    public ResponseEntity<Page<ProductResponse>> readProducts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "5") int size,
             @RequestParam(value = "sort", defaultValue = "asc") String sort,
@@ -52,7 +52,7 @@ public class ProductController {
      */
     @PostMapping("/api/products")
     public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductRequest product){
-        productService.createProduct(product);
+        productService.save(product);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -73,11 +73,8 @@ public class ProductController {
      * 수정 성공 : 200 OK
      */
     @PutMapping("/api/products/{productId}")
-    public ResponseEntity<Void>modifyProduct(@PathVariable("productId") Long id, @Valid @RequestBody ProductRequest product){
-        if(!productService.isDuplicate(id)){
-            return new ResponseEntity<>((HttpStatus.NOT_FOUND));
-        }
+    public ResponseEntity<Void> updateProduct(@PathVariable("productId") Long id, @Valid @RequestBody ProductRequest product){
         productService.updateProduct(product, id);
-        return new ResponseEntity<>((HttpStatus.OK));
+        return new ResponseEntity<>((HttpStatus.NO_CONTENT));
     }
 }

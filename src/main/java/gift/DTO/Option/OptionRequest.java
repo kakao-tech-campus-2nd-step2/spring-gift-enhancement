@@ -11,6 +11,10 @@ public class OptionRequest {
     @Size(min=1, max=99999999, message = "옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다")
     Long quantity;
 
+    public OptionRequest(){
+
+    }
+
     public OptionRequest(String name, Long quantity) {
         this.name = name;
         this.quantity = quantity;

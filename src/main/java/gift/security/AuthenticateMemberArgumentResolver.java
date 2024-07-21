@@ -44,7 +44,7 @@ public class AuthenticateMemberArgumentResolver implements HandlerMethodArgument
         token = token.substring(7); // "Bearer " 부분을 제거
 
         String userId = jwtTokenProvider.getClaimsFromToken(token);
-        UserResponse userRes = userService.loadOneUser(userId);
+        UserResponse userRes = userService.findByUserId(userId);
 
         if (userRes == null) {
             throw new IllegalArgumentException("Member not found for token: " + token);
