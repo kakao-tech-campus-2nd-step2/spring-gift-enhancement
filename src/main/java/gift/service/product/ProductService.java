@@ -2,12 +2,17 @@ package gift.service.product;
 
 import gift.domain.category.Category;
 import gift.domain.category.CategoryRepository;
+import gift.domain.option.Option;
+import gift.domain.option.OptionRepository;
 import gift.domain.product.Product;
 import gift.domain.product.ProductRepository;
+import gift.mapper.OptionMappper;
 import gift.mapper.ProductMapper;
+import gift.web.dto.OptionDto;
 import gift.web.dto.ProductDto;
 import gift.web.exception.CategoryNotFoundException;
 import gift.web.exception.ProductNotFoundException;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,12 +22,17 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
+    private final OptionMappper optionMappper;
 
     public ProductService(ProductRepository productRepository, ProductMapper productMapper,
-        CategoryRepository categoryRepository) {
+        CategoryRepository categoryRepository, OptionRepository optionRepository,
+        OptionMappper optionMappper) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
+        this.optionMappper = optionMappper;
     }
 
     public Page<ProductDto> getProducts(Pageable pageable) {
@@ -40,7 +50,16 @@ public class ProductService {
         Category category = categoryRepository.findById(productDto.categoryId())
             .orElseThrow(() -> new CategoryNotFoundException("카테고리가 없슴다"));
 
-        Product product = productRepository.save(productMapper.toEntity(productDto, category));
+        Product product = productMapper.toEntity(productDto, category);
+
+        product = productRepository.save(product);
+
+        for (OptionDto optionDto : productDto.optionDtoList()) {
+            Option option = optionMappper.toEntity(optionDto, product);
+            optionRepository.save(option);
+            product.addOption(option);
+        }
+
         return productMapper.toDto(product);
     }
 

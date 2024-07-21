@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,7 +37,7 @@ public class Product {
     private List<Wish> wishList;
 
     @OneToMany(mappedBy = "product")
-    private List<Option> optionList;
+    private List<Option> optionList = new ArrayList<>();
 
     public Product(String name, Long price, String imageUrl, Category category) {
         this.name = name;
