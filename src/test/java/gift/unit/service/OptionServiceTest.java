@@ -13,6 +13,7 @@ import gift.product.entity.Product;
 import gift.product.option.dto.request.CreateOptionRequest;
 import gift.product.option.dto.request.UpdateOptionRequest;
 import gift.product.option.entity.Option;
+import gift.product.option.entity.Options;
 import gift.product.option.repository.OptionJpaRepository;
 import gift.product.option.service.OptionService;
 import gift.product.repository.ProductJpaRepository;
@@ -85,7 +86,7 @@ public class OptionServiceTest {
         Option option = new Option("a", 2, product);
         CreateOptionRequest newOption = new CreateOptionRequest(1L, "a", 1);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of(option));
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(List.of(option)));
 
         // when & then
         assertThatThrownBy(() -> optionService.createOption(newOption)).isInstanceOf(
@@ -113,7 +114,7 @@ public class OptionServiceTest {
         Product product = createProduct();
         CreateOptionRequest newOption = new CreateOptionRequest(1L, "a", 1);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(List.of()));
         given(optionRepository.save(any())).willReturn(new Option(1L));
 
         // when
@@ -147,7 +148,7 @@ public class OptionServiceTest {
         Option option = new Option(1L, 100);
         Product product = createProductWithOptions(option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(List.of()));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
         UpdateOptionRequest request = new UpdateOptionRequest("a", 0);
@@ -165,7 +166,7 @@ public class OptionServiceTest {
         Option option = new Option(1L, 1000);
         Product product = createProductWithOptions(option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(List.of()));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
         UpdateOptionRequest request = new UpdateOptionRequest("a", 100_000_000);
@@ -185,7 +186,7 @@ public class OptionServiceTest {
         Option option2 = new Option(2L, "b", 100, product);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(optionRepository.findById(any())).willReturn(Optional.of(option1));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of(option1, option2));
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(List.of(option1, option2)));
 
         UpdateOptionRequest newOption = new UpdateOptionRequest("b", 1000);
 
@@ -202,7 +203,7 @@ public class OptionServiceTest {
         Option option = new Option(1L, 100);
         Product product = createProductWithOptions(option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(List.of()));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
         UpdateOptionRequest request = new UpdateOptionRequest("!@#$", 100);
@@ -219,7 +220,7 @@ public class OptionServiceTest {
         Option option = new Option(1L, 100);
         Product product = createProductWithOptions(option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(List.of()));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
         UpdateOptionRequest request = new UpdateOptionRequest("updated", 1000);

@@ -21,7 +21,8 @@ public class OptionService {
     private final ProductJpaRepository productRepository;
     private final OptionJpaRepository optionRepository;
 
-    public OptionService(ProductJpaRepository productRepository, OptionJpaRepository optionRepository) {
+    public OptionService(ProductJpaRepository productRepository,
+        OptionJpaRepository optionRepository) {
         this.productRepository = productRepository;
         this.optionRepository = optionRepository;
     }
@@ -43,7 +44,7 @@ public class OptionService {
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Option option = new Option(request.name(), request.quantity(), product);
 
-        Options options = new Options(optionRepository.findAllByProduct(product));
+        Options options = optionRepository.findAllByProduct(product);
         options.validate(option);
 
         product.addOption(option);
@@ -59,7 +60,7 @@ public class OptionService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        Options options = new Options(optionRepository.findAllByProduct(product));
+        Options options = optionRepository.findAllByProduct(product);
         options.validate(request);
 
         option.edit(request.name(), request.quantity());
