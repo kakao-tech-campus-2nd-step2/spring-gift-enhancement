@@ -35,4 +35,4 @@ CREATE TABLE IF NOT EXISTS options (
     quantity INTEGER NOT NULL,
     product_id BIGINT NOT NULL,
     FOREIGN KEY (product_id) REFERENCES product(id)
-    );
+);
