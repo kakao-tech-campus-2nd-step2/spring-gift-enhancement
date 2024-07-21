@@ -6,6 +6,7 @@ import gift.product.dao.OptionRepository;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.OptionRequest;
 import gift.product.dto.OptionResponse;
+import gift.product.entity.Option;
 import gift.product.entity.Product;
 import gift.product.util.OptionMapper;
 import gift.product.util.ProductMapper;
@@ -35,24 +36,41 @@ public class OptionService {
 
     @Transactional
     public OptionResponse addOptionToProduct(Long id, OptionRequest request) {
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findProductAndOptionsById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        Option option = OptionMapper.toEntity(request, product);
+        if (!product.addOptionOrElseFalse(option)) {
+            throw new CustomException(ErrorCode.OPTION_ALREADY_EXISTS);
+        }
 
-        return OptionMapper.toResponseDto(
-                optionRepository.save(OptionMapper.toEntity(request, product))
-        );
+        return OptionMapper.toResponseDto(option);
     }
 
     @Transactional
     public void deleteOptionFromProduct(Long id, OptionRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        if (product.getOptions()
-                .size() == 1) {
+        if (product.hasOnlyOneOption()) {
             throw new CustomException(ErrorCode.OPTION_REMOVE_FAILED);
         }
+        Option option = optionRepository.findByProduct_IdAndName(product.getId(), request.name())
+                .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
 
-        optionRepository.deleteByProduct_IdAndName(id, request.name());
+        product.deleteOption(option);
+    }
+
+    @Transactional
+    public void subtractQuantityOfOption(Long id,
+                                         OptionRequest request,
+                                         int quantity) {
+        Option option = optionRepository.findByProduct_IdAndName(id, request.name())
+                .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
+
+        if (option.isLessEqual(quantity)) {
+            throw new CustomException(ErrorCode.OPTION_QUANTITY_SUBTRACT_FAILED);
+        }
+
+        option.subtract(quantity);
     }
 
 }

@@ -21,6 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import testFixtures.CategoryFixture;
+import testFixtures.MemberFixture;
+import testFixtures.ProductFixture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,13 +51,6 @@ class WishesServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
-    private final Category category = new Category.CategoryBuilder()
-            .setName("상품권")
-            .setColor("#ffffff")
-            .setImageUrl("https://product-shop.com")
-            .setDescription("")
-            .build();
-
     private Long memberId;
     private Long productId;
     private Member member;
@@ -62,15 +58,11 @@ class WishesServiceTest {
 
     @BeforeEach
     void setUp() {
+        Category category = CategoryFixture.createCategory("상품권");
         memberId = 1L;
         productId = 2L;
-        member = new Member("test@email.com", "password");
-        product = new Product.ProductBuilder()
-                .setName("product")
-                .setPrice(1000)
-                .setImageUrl("https://shop.com")
-                .setCategory(category)
-                .build();
+        member = MemberFixture.createMember("test@email.com");
+        product = ProductFixture.createProduct("product", category);
     }
 
     @Test
@@ -78,8 +70,10 @@ class WishesServiceTest {
     void addProductToWishlist() {
         given(wishesRepository.findByMember_IdAndProduct_Id(anyLong(), anyLong()))
                 .willReturn(Optional.empty());
-        given(memberRepository.findById(any())).willReturn(Optional.of(member));
-        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(memberRepository.findById(any()))
+                .willReturn(Optional.of(member));
+        given(productRepository.findById(any()))
+                .willReturn(Optional.of(product));
 
         wishesService.addProductToWishlist(memberId, productId);
 

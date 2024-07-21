@@ -5,11 +5,14 @@ import gift.product.entity.Category;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.ProductRequest;
 import gift.product.entity.Product;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+import testFixtures.CategoryFixture;
+import testFixtures.ProductFixture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,22 +26,17 @@ class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    private final Category category = new Category.CategoryBuilder()
-            .setName("상품권")
-            .setColor("#ffffff")
-            .setImageUrl("https://product-shop.com")
-            .setDescription("")
-            .build();
+    private Category category;
+
+    @BeforeEach
+    void setUp() {
+        category = CategoryFixture.createCategory("상품권");
+    }
 
     @Test
     @DisplayName("상품 추가 및 ID 조회 테스트")
     void saveAndFindById() {
-        Product product = new Product.ProductBuilder()
-                .setName("newproduct")
-                .setPrice(12345)
-                .setImageUrl("new.jpg")
-                .setCategory(category)
-                .build();
+        Product product = ProductFixture.createProduct("product", category);
         Product savedProduct = productRepository.save(product);
 
         Product foundProduct = productRepository.findById(savedProduct.getId())
@@ -53,15 +51,10 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("상품 ID 조회 실패 테스트")
     void findByIdFailed() {
-        Product product = new Product.ProductBuilder()
-                .setName("newproduct")
-                .setPrice(12345)
-                .setImageUrl("new.jpg")
-                .setCategory(category)
-                .build();
-        productRepository.save(product);
+        Product product = ProductFixture.createProduct("product", category);
+        Product savedProduct = productRepository.save(product);
 
-        Product foundProduct = productRepository.findById(123456789L)
+        Product foundProduct = productRepository.findById(savedProduct.getId() + 1L)
                 .orElse(null);
 
         assertThat(foundProduct).isNull();
@@ -70,62 +63,29 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("상품 ID 리스트 조회 테스트")
     void findByIds() {
-        List<Long> productIds = new ArrayList<>();
-        productIds.add(
-                productRepository.save(
-                        new Product.ProductBuilder()
-                                .setName("product1L")
-                                .setPrice(1000)
-                                .setImageUrl("1L.jpg")
-                                .setCategory(category)
-                                .build()
-                ).getId()
-        );
-        productIds.add(
-                productRepository.save(
-                        new Product.ProductBuilder()
-                                .setName("product2L")
-                                .setPrice(2000)
-                                .setImageUrl("2L.jpg")
-                                .setCategory(category)
-                                .build()
-                ).getId()
-        );
-        productIds.add(
-                productRepository.save(
-                        new Product.ProductBuilder()
-                                .setName("product3L")
-                                .setPrice(3000)
-                                .setImageUrl("3L.jpg")
-                                .setCategory(category)
-                                .build()
-                ).getId()
-        );
-        productIds.add(
-                productRepository.save(
-                        new Product.ProductBuilder()
-                                .setName("product4L")
-                                .setPrice(4000)
-                                .setImageUrl("4L.jpg")
-                                .setCategory(category)
-                                .build()
-                ).getId()
-        );
+        List<Product> products = new ArrayList<>();
+        products.add(productRepository.save(
+                ProductFixture.createProduct("product1", category)
+        ));
+        products.add(productRepository.save(
+                ProductFixture.createProduct("product2", category)
+        ));
+        products.add(productRepository.save(
+                ProductFixture.createProduct("product3", category)
+        ));
+        products.add(productRepository.save(
+                ProductFixture.createProduct("product4", category)
+        ));
 
-        List<Product> products = productRepository.findAll();
+        List<Product> foundProducts = productRepository.findAll();
 
-        assertThat(products.size()).isEqualTo(productIds.size());
+        assertThat(foundProducts).containsAll(products);
     }
 
     @Test
     @DisplayName("상품 수정 테스트")
     void updateProduct() {
-        Product product = new Product.ProductBuilder()
-                .setName("product1")
-                .setPrice(1000)
-                .setImageUrl("product1.jpg")
-                .setCategory(category)
-                .build();
+        Product product = ProductFixture.createProduct("product", category);
         ProductRequest request = new ProductRequest(
                 "updateproduct",
                 12345,
@@ -136,9 +96,7 @@ class ProductRepositoryTest {
         Product savedProduct = productRepository.save(product);
         savedProduct.update(request, category);
 
-        Product updatedProduct = productRepository.save(savedProduct);
-
-        Product foundProduct = productRepository.findById(updatedProduct.getId())
+        Product foundProduct = productRepository.findById(savedProduct.getId())
                 .orElse(null);
         assertThat(foundProduct).isNotNull();
         assertThat(foundProduct.getName()).isEqualTo(savedProduct.getName());
@@ -149,12 +107,7 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("상품 삭제 테스트")
     void deleteProduct() {
-        Product product = new Product.ProductBuilder()
-                .setName("product1")
-                .setPrice(1000)
-                .setImageUrl("product1.jpg")
-                .setCategory(category)
-                .build();
+        Product product = ProductFixture.createProduct("product", category);
         Product savedProduct = productRepository.save(product);
 
         productRepository.deleteById(savedProduct.getId());

@@ -7,10 +7,10 @@ import gift.global.security.JwtUtil;
 import gift.member.validator.LoginMember;
 import gift.member.validator.LoginMemberArgumentResolver;
 import gift.product.dto.ProductResponse;
-import gift.product.entity.Product;
 import gift.product.util.ProductMapper;
 import gift.wishlist.api.WishesController;
 import gift.wishlist.application.WishesService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +24,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
+import testFixtures.CategoryFixture;
+import testFixtures.ProductFixture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,35 +56,26 @@ class WishesControllerTest {
     private LoginMemberArgumentResolver loginMemberArgumentResolver;
     @MockBean
     private WishesService wishesService;
-    private final static String bearerToken = "Bearer token";
-    private final Long memberId = 1L;
 
-    private final Category category = new Category.CategoryBuilder()
-            .setName("상품권")
-            .setColor("#ffffff")
-            .setImageUrl("https://product-shop.com")
-            .setDescription("")
-            .build();
+    private final static String bearerToken = "Bearer token";
+    private Long memberId;
+    private Category category;
+
+    @BeforeEach
+    void setUp() {
+        memberId = 1L;
+        category = CategoryFixture.createCategory("상품권");
+    }
 
     @Test
     @DisplayName("위시 리스트 조회 기능 테스트")
     void getPagedWishes() throws Exception {
         List<ProductResponse> products = new ArrayList<>();
         ProductResponse productResponse1 = ProductMapper.toResponseDto(
-                new Product.ProductBuilder()
-                        .setName("product1")
-                        .setPrice(1000)
-                        .setImageUrl("https://testshop.com")
-                        .setCategory(category)
-                        .build()
+                ProductFixture.createProduct("product1", category)
         );
         ProductResponse productResponse2 = ProductMapper.toResponseDto(
-                new Product.ProductBuilder()
-                        .setName("product2")
-                        .setPrice(3000)
-                        .setImageUrl("https://testshop.com")
-                        .setCategory(category)
-                        .build()
+                ProductFixture.createProduct("product2", category)
         );
         products.add(productResponse1);
         products.add(productResponse2);

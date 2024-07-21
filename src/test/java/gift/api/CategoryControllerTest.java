@@ -22,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import testFixtures.CategoryFixture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,29 +55,19 @@ class CategoryControllerTest {
     @DisplayName("카테고리 전체 조회 기능 테스트")
     void getAllCategories() throws Exception {
         List<CategoryResponse> response = new ArrayList<>();
-        Category category1 = new Category.CategoryBuilder()
-                .setName("상품권")
-                .setColor("#ffffff")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
-        Category category2 = new Category.CategoryBuilder()
-                .setName("교환권")
-                .setColor("#123456")
-                .setImageUrl("https://product-shop.com")
-                .setDescription("")
-                .build();
+        Category category1 = CategoryFixture.createCategory("상품권");
+        Category category2 = CategoryFixture.createCategory("교환권");
         response.add(CategoryMapper.toResponseDto(category1));
         response.add(CategoryMapper.toResponseDto(category2));
 
         String responseJson = objectMapper.writeValueAsString(response);
-        given(categoryService.getAllCategories()).willReturn(response);
+        given(categoryService.getAllCategories())
+                .willReturn(response);
 
         mockMvc.perform(get("/api/categories")
                 .header(HttpHeaders.AUTHORIZATION, bearerToken))
                 .andExpect(status().isOk())
-                .andExpect(content().json(responseJson))
-                .andDo(print());
+                .andExpect(content().json(responseJson));
 
         verify(categoryService).getAllCategories();
     }
@@ -85,26 +76,17 @@ class CategoryControllerTest {
     @DisplayName("카테고리 상세 조회 기능 테스트")
     void getCategory() throws Exception {
         CategoryResponse response = CategoryMapper.toResponseDto(
-                new Category.CategoryBuilder()
-                        .setName("상품권")
-                        .setColor("#ffffff")
-                        .setImageUrl("https://product-shop.com")
-                        .setDescription("")
-                        .build()
+                CategoryFixture.createCategory("상품권")
         );
         Long responseId = 1L;
         String responseJson = objectMapper.writeValueAsString(response);
-        given(categoryService.getCategoryByIdOrThrow(any())).willReturn(response);
+        given(categoryService.getCategoryByIdOrThrow(any()))
+                .willReturn(response);
 
         mockMvc.perform(get("/api/categories/{id}", responseId)
                         .header(HttpHeaders.AUTHORIZATION, bearerToken))
                 .andExpect(status().isOk())
-                .andExpect(content().json(responseJson))
-                .andExpect(jsonPath("$.id").value(response.id()))
-                .andExpect(jsonPath("$.name").value(response.name()))
-                .andExpect(jsonPath("$.color").value(response.color()))
-                .andExpect(jsonPath("$.imageUrl").value(response.imageUrl()))
-                .andExpect(jsonPath("$.description").value(response.description()));
+                .andExpect(content().json(responseJson));
 
         verify(categoryService).getCategoryByIdOrThrow(responseId);
     }
@@ -114,7 +96,8 @@ class CategoryControllerTest {
     void getCategoryFailed() throws Exception {
         Long categoryId = 1L;
         Throwable exception = new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
-        given(categoryService.getCategoryByIdOrThrow(any())).willThrow(exception);
+        given(categoryService.getCategoryByIdOrThrow(any()))
+                .willThrow(exception);
 
         mockMvc.perform(get("/api/categories/{id}", categoryId)
                         .header(HttpHeaders.AUTHORIZATION, bearerToken))
@@ -138,19 +121,15 @@ class CategoryControllerTest {
         );
         String requestJson = objectMapper.writeValueAsString(request);
         String responseJson = objectMapper.writeValueAsString(response);
-        given(categoryService.createCategory(any())).willReturn(response);
+        given(categoryService.createCategory(any()))
+                .willReturn(response);
 
         mockMvc.perform(post("/api/categories")
                         .header(HttpHeaders.AUTHORIZATION, bearerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(responseJson))
-                .andExpect(jsonPath("$.id").value(response.id()))
-                .andExpect(jsonPath("$.name").value(response.name()))
-                .andExpect(jsonPath("$.color").value(response.color()))
-                .andExpect(jsonPath("$.imageUrl").value(response.imageUrl()))
-                .andExpect(jsonPath("$.description").value(response.description()));
+                .andExpect(content().json(responseJson));
 
         verify(categoryService).createCategory(request);
     }

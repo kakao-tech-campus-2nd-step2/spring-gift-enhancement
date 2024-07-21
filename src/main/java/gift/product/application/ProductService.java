@@ -3,7 +3,6 @@ package gift.product.application;
 import gift.global.error.CustomException;
 import gift.global.error.ErrorCode;
 import gift.product.dao.CategoryRepository;
-import gift.product.dao.OptionRepository;
 import gift.product.dao.ProductRepository;
 import gift.product.dto.ProductRequest;
 import gift.product.dto.ProductResponse;
@@ -21,33 +20,32 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final OptionRepository optionRepository;
 
     public ProductService(ProductRepository productRepository,
-                          CategoryRepository categoryRepository,
-                          OptionRepository optionRepository) {
+                          CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.optionRepository = optionRepository;
     }
 
+    @Transactional(readOnly = true)
     public Page<ProductResponse> getPagedProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(ProductMapper::toResponseDto);
     }
 
+    @Transactional(readOnly = true)
     public ProductResponse getProductByIdOrThrow(Long id) {
         return productRepository.findById(id)
                 .map(ProductMapper::toResponseDto)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
+    @Transactional
     public ProductResponse createProduct(ProductRequest request) {
         Category category = categoryRepository.findByName(request.categoryName())
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         Product product = productRepository.save(ProductMapper.toEntity(request, category));
-
-        optionRepository.save(OptionMapper.toEntity(request.option(), product));
+        product.addOptionOrElseFalse(OptionMapper.toEntity(request.option(), product));
 
         return ProductMapper.toResponseDto(product);
     }
@@ -55,7 +53,6 @@ public class ProductService {
     public void deleteProductById(Long id) {
         productRepository.deleteById(id);
     }
-
 
     public void deleteAllProducts() {
         productRepository.deleteAll();

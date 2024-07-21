@@ -7,6 +7,7 @@ import gift.product.dao.ProductRepository;
 import gift.product.entity.Product;
 import gift.wishlist.dao.WishesRepository;
 import gift.wishlist.entity.Wish;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import testFixtures.CategoryFixture;
+import testFixtures.MemberFixture;
+import testFixtures.ProductFixture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,25 +34,20 @@ class WishesRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    private final Category category = new Category.CategoryBuilder()
-            .setName("상품권")
-            .setColor("#ffffff")
-            .setImageUrl("https://product-shop.com")
-            .setDescription("")
-            .build();
+    private Category category;
+
+    @BeforeEach
+    void setUp() {
+        category = CategoryFixture.createCategory("상품권");
+    }
 
     @Test
     @DisplayName("위시 추가 및 ID 조회 테스트")
     void saveAndFindById() {
-        Member member = new Member("test@email.com", "test");
+        Member member = MemberFixture.createMember("test@email.com");
         member = memberRepository.save(member);
 
-        Product product = new Product.ProductBuilder()
-                .setName("test")
-                .setPrice(1000)
-                .setImageUrl("test.jpg")
-                .setCategory(category)
-                .build();
+        Product product = ProductFixture.createProduct("test", category);
         Product savedProduct = productRepository.save(product);
 
         Wish wish = new Wish(member, savedProduct);
@@ -65,15 +64,10 @@ class WishesRepositoryTest {
     @Test
     @DisplayName("위시 ID 조회 실패 테스트")
     void findByIdFailed() {
-        Member member = new Member("test@email.com", "test");
+        Member member = MemberFixture.createMember("test@email.com");
         Member savedMember = memberRepository.save(member);
 
-        Product product = new Product.ProductBuilder()
-                .setName("test")
-                .setPrice(1000)
-                .setImageUrl("test.jpg")
-                .setCategory(category)
-                .build();
+        Product product = ProductFixture.createProduct("test", category);
         Product savedProduct = productRepository.save(product);
 
         Wish wish = new Wish(savedMember, savedProduct);
@@ -88,32 +82,19 @@ class WishesRepositoryTest {
     @Test
     @DisplayName("위시 회원 ID 조회 테스트")
     void findByMemberId() {
-        Member member1 = new Member("test1@email.com", "test1");
+        Member member1 = MemberFixture.createMember("test1@email.com");
         member1 = memberRepository.save(member1);
-
-        Member member2 = new Member("test2@email.com", "test2");
+        Member member2 = MemberFixture.createMember("test2@email.com");
         member2 = memberRepository.save(member2);
 
-        Product product1 = new Product.ProductBuilder()
-                .setName("product1")
-                .setPrice(1000)
-                .setImageUrl("test1.jpg")
-                .setCategory(category)
-                .build();
+        Product product1 = ProductFixture.createProduct("product1", category);
         product1 = productRepository.save(product1);
-
-        Product product2 = new Product.ProductBuilder()
-                .setName("product2")
-                .setPrice(2000)
-                .setImageUrl("test2.jpg")
-                .setCategory(category)
-                .build();
+        Product product2 = ProductFixture.createProduct("product2", category);
         product2 = productRepository.save(product2);
 
         Wish wish1 = new Wish(member1, product1);
         Wish wish2 = new Wish(member2, product2);
         Wish wish3 = new Wish(member1, product2);
-
         wishesRepository.save(wish1);
         wishesRepository.save(wish2);
         wishesRepository.save(wish3);
@@ -126,32 +107,19 @@ class WishesRepositoryTest {
     @Test
     @DisplayName("위시 회원 ID 조회 실패 테스트")
     void findByMemberIdFailed() {
-        Member member1 = new Member("test1@email.com", "test1");
+        Member member1 = MemberFixture.createMember("test1@email.com");
         member1 = memberRepository.save(member1);
-
-        Member member2 = new Member("test2@email.com", "test2");
+        Member member2 = MemberFixture.createMember("test2@email.com");
         member2 = memberRepository.save(member2);
 
-        Product product1 = new Product.ProductBuilder()
-                .setName("product1")
-                .setPrice(1000)
-                .setImageUrl("test1.jpg")
-                .setCategory(category)
-                .build();
+        Product product1 = ProductFixture.createProduct("product1", category);
         product1 = productRepository.save(product1);
-
-        Product product2 = new Product.ProductBuilder()
-                .setName("product2")
-                .setPrice(2000)
-                .setImageUrl("test2.jpg")
-                .setCategory(category)
-                .build();
+        Product product2 = ProductFixture.createProduct("product2", category);
         product2 = productRepository.save(product2);
 
         Wish wish1 = new Wish(member1, product1);
         Wish wish2 = new Wish(member2, product2);
         Wish wish3 = new Wish(member1, product2);
-
         wishesRepository.save(wish1);
         wishesRepository.save(wish2);
         wishesRepository.save(wish3);
@@ -164,15 +132,10 @@ class WishesRepositoryTest {
     @Test
     @DisplayName("위시 삭제 테스트")
     void deleteWish() {
-        Member member = new Member("test@email.com", "test");
+        Member member = MemberFixture.createMember("test@email.com");;
         member = memberRepository.save(member);
 
-        Product product = new Product.ProductBuilder()
-                .setName("test")
-                .setPrice(1000)
-                .setImageUrl("test.jpg")
-                .setCategory(category)
-                .build();
+        Product product = ProductFixture.createProduct("test", category);
         product = productRepository.save(product);
 
         Wish wish = new Wish(member, product);
@@ -187,15 +150,10 @@ class WishesRepositoryTest {
     @Test
     @DisplayName("회원 ID 및 상품 ID로 위시 조회 테스트")
     void findByMember_IdAndProduct_Id() {
-        Member member = new Member("test@email.com", "test");
+        Member member = MemberFixture.createMember("test@email.com");;
         member = memberRepository.save(member);
 
-        Product product = new Product.ProductBuilder()
-                .setName("test")
-                .setPrice(1000)
-                .setImageUrl("test.jpg")
-                .setCategory(category)
-                .build();
+        Product product = ProductFixture.createProduct("test", category);
         product = productRepository.save(product);
 
         Wish wish = new Wish(member, product);
@@ -203,6 +161,7 @@ class WishesRepositoryTest {
 
         Wish foundWish = wishesRepository.findByMember_IdAndProduct_Id(member.getId(), product.getId())
                 .orElse(null);
+
         assertThat(foundWish).isNotNull();
         assertThat(foundWish.getMember()
                 .getEmail()).isEqualTo(member.getEmail());
@@ -213,15 +172,10 @@ class WishesRepositoryTest {
     @Test
     @DisplayName("회원 ID 및 상품 ID로 위시 존재 여부 실패 확인 테스트")
     void findByMember_IdAndProduct_IdFailed() {
-        Member member = new Member("test@email.com", "test");
+        Member member = MemberFixture.createMember("test@email.com");;
         member = memberRepository.save(member);
 
-        Product product = new Product.ProductBuilder()
-                .setName("test")
-                .setPrice(1000)
-                .setImageUrl("test.jpg")
-                .setCategory(category)
-                .build();
+        Product product = ProductFixture.createProduct("test", category);
         product = productRepository.save(product);
 
         Wish wish = new Wish(member, product);
@@ -229,6 +183,8 @@ class WishesRepositoryTest {
 
         Wish foundWish = wishesRepository.findByMember_IdAndProduct_Id(12345L, 67890L)
                 .orElse(null);
+
         assertThat(foundWish).isNull();
     }
+
 }

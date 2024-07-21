@@ -35,7 +35,7 @@
         <td><img th:src="${product.imageUrl}" alt="img" width="100px"></td>
         <td th:text="${product.categoryName}"></td>
         <td>
-          <select id="option">
+          <select th:id="'option'+${product.id}">
             <option th:each="option : ${product.options}"
                     th:text="${option.name}"
                     th:value="${option}"></option>
@@ -103,9 +103,10 @@
   }
 
   function deleteProductOption(productId) {
-      const option = parseOption(document.getElementById('option').value);
+      const option = parseOption(document.getElementById('option' + productId).value);
       const name = option['name'];
       const quantity = parseInt(option['quantity']);
+      console.log(option)
       const token = localStorage.getItem('token');
 
       fetch(`/api/products/${productId}/options`, {
