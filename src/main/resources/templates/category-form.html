@@ -2,32 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Category Form</title>
-<!--  <link rel="stylesheet" href="product-form.css">-->
+  <!--  <link rel="stylesheet" href="product-form.css">-->
 </head>
 <body>
 <h1 th:text="${category.id == null} ? 'Add Category' : 'Edit Category'">Category Form</h1>
 <div class="form-container">
-  <form th:action="@{${category.id == null} ? '/admin/categories/add' : '/admin/categories/category/' + ${category.id}}"
-        th:object="${category}" method="post">
+  <form
+      method="post"
+      th:action="@{${category.id == null} ? '/admin/categories/add' : '/admin/categories/category/' + ${category.id}}"
+      th:object="${category}">
 
     <div>
       <label for="name">Name:</label>
-      <input type="text" id="name" name="name" th:field="*{name}" />
+      <input id="name" name="name" th:field="*{name}" type="text"/>
     </div>
 
     <div>
       <label for="color">Color:</label>
-      <input type="text" id="color" name="color" th:field="*{color}" />
+      <input id="color" name="color" th:field="*{color}" type="text"/>
     </div>
 
     <div>
       <label for="imageUrl">Image URL:</label>
-      <input type="text" id="imageUrl" name="imageUrl" th:field="*{imageUrl}" />
+      <input id="imageUrl" name="imageUrl" th:field="*{imageUrl}" type="text"/>
     </div>
 
     <div>
       <label for="description">description:</label>
-      <input type="text" id="description" name="description" th:field="*{description}" />
+      <input id="description" name="description" th:field="*{description}" type="text"/>
     </div>
 
     <div>

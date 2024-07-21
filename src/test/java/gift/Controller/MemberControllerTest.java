@@ -4,7 +4,6 @@ package gift.Controller;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import gift.DTO.JwtToken;
 import gift.DTO.MemberDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -15,7 +14,6 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -25,12 +23,13 @@ class MemberControllerTest {
   private final MemberController memberController;
 
   @Autowired
-  public MemberControllerTest(MemberController memberController){
-    this.memberController=memberController;
+  public MemberControllerTest(MemberController memberController) {
+    this.memberController = memberController;
   }
+
   @Test
   void memberSignUpTest() {
-    MemberDto memberDto = new MemberDto(1L,"a@naver.com","abcde");
+    MemberDto memberDto = new MemberDto(1L, "a@naver.com", "abcde");
     MemberDto signedUpMemberDto = memberController.SignUp(memberDto).getBody();
 
     assertThat(signedUpMemberDto.getId()).isEqualTo(memberDto.getId());
@@ -46,13 +45,13 @@ class MemberControllerTest {
 //  }
 
   @Test
-  public void validateMemberDto(){
+  public void validateMemberDto() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     Validator validator = factory.getValidator();
 
-    MemberDto memberDto1 = new MemberDto(1L,"a","abcde");
-    MemberDto memberDto2 = new MemberDto(1L,"","abcde");
-    MemberDto memberDto3 = new MemberDto(1L,"a@naver.com","");
+    MemberDto memberDto1 = new MemberDto(1L, "a", "abcde");
+    MemberDto memberDto2 = new MemberDto(1L, "", "abcde");
+    MemberDto memberDto3 = new MemberDto(1L, "a@naver.com", "");
 
     MemberDto signedUpMemberDto1 = memberController.SignUp(memberDto1).getBody();
     MemberDto signedUpMemberDto2 = memberController.SignUp(memberDto2).getBody();

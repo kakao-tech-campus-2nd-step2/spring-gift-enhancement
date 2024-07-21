@@ -1,14 +1,8 @@
 package gift.DTO;
 
-import jakarta.validation.constraints.NotBlank;
-
 public class WishListDto {
 
   private Long id;
-  @NotBlank
-  private Long userId;
-  @NotBlank
-  private Long productId;
   private MemberDto memberDto;
   private ProductDto productDto;
 
