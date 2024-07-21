@@ -65,5 +65,8 @@ public class DomainTest {
         option.update("[1] 아메리카", 22L);
         Assertions.assertThat(option.getName()).isEqualTo("[1] 아메리카");
         Assertions.assertThat(option.getQuantity()).isEqualTo(22L);
+
+        option.subtract(10L);
+        Assertions.assertThat(option.getQuantity()).isEqualTo(12L);
     }
 }
