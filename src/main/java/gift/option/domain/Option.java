@@ -1,5 +1,6 @@
 package gift.option.domain;
 
+import gift.exception.type.InvalidOptionQuantityException;
 import gift.exception.type.InvalidProductOptionException;
 import gift.product.domain.Product;
 import jakarta.persistence.*;
@@ -19,6 +20,9 @@ public class Option {
 
     @Column(nullable = false)
     private int quantity;
+
+    @Version
+    private Long version;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -58,6 +62,13 @@ public class Option {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public void subtractQuantity(int quantity) {
+        if (this.quantity - quantity < 0) {
+            throw new InvalidOptionQuantityException("수량이 0 이하가 될 수 없습니다.");
+        }
+        this.quantity -= quantity;
     }
 
     public void validateName() {
