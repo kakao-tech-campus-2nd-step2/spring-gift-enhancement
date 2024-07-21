@@ -5,21 +5,23 @@ import gift.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@Transactional
 public class MemberServiceTest {
 
-    @Autowired
+    @Mock
     private MemberRepository memberRepository;
 
-    @Autowired
+    @InjectMocks
     private MemberService memberService;
 
     private String email = "test@example.com";
@@ -28,8 +30,8 @@ public class MemberServiceTest {
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
         member = new Member(email, password);
-        memberRepository.save(member);
     }
 
     @Test
@@ -37,6 +39,7 @@ public class MemberServiceTest {
     public void login_wrong_email() {
         // Given
         String wrongEmail = "wrong@example.com";
+        when(memberRepository.findByEmail(wrongEmail)).thenReturn(Optional.empty());
 
         // When & Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -49,6 +52,7 @@ public class MemberServiceTest {
     public void login_wrong_password() {
         // Given
         String wrongPassword = "wrongPassword";
+        when(memberRepository.findByEmail(email)).thenReturn(Optional.of(member));
 
         // When & Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
