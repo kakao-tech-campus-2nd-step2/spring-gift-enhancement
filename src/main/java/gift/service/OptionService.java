@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -34,6 +35,7 @@ public class OptionService {
         optionRepository.save(option);
     }
 
+    @Transactional
     public void subtractOptionQuantity(Long productId, int amount) {
         Option option = optionRepository.findByProductId(productId)
                 .orElseThrow(CustomException::optionNotFoundException);
