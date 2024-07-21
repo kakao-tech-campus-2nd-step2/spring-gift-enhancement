@@ -27,7 +27,7 @@ public class ProductParam {
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
         this.options = product.getOptions().stream()
-            .map(option -> new OptionParam(option.getId(), option.getName()))
+            .map(option -> new OptionParam(option.getId(), option.getName(), option.getQuantity()))
             .toList();
     }
 

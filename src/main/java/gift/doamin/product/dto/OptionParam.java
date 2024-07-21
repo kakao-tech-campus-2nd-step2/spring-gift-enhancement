@@ -4,10 +4,12 @@ public class OptionParam {
 
     private Long id;
     private String name;
+    private int quantity;
 
-    public OptionParam(Long id, String name) {
+    public OptionParam(Long id, String name, int quantity) {
         this.id = id;
         this.name = name;
+        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -16,5 +18,9 @@ public class OptionParam {
 
     public String getName() {
         return name;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }
