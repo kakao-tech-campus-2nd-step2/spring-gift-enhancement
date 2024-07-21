@@ -2,6 +2,7 @@ package gift;
 
 import gift.domain.model.dto.OptionAddRequestDto;
 import gift.domain.model.dto.OptionResponseDto;
+import gift.domain.model.dto.OptionUpdateRequestDto;
 import gift.domain.model.entity.Option;
 import gift.domain.model.entity.Product;
 import gift.domain.repository.OptionRepository;
@@ -21,7 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class OptionServiceTest {
+class OptionTest {
 
     @Mock
     private OptionRepository optionRepository;
@@ -90,7 +91,7 @@ class OptionServiceTest {
         Long optionId = 1L;
         Product mockProduct = mock(Product.class);
         Option existingOption = new Option(mockProduct, "Old Option", 10);
-        OptionAddRequestDto requestDto = new OptionAddRequestDto("Updated Option", 20);
+        OptionUpdateRequestDto requestDto = new OptionUpdateRequestDto("Updated Option", 20);
 
         when(optionRepository.findById(optionId)).thenReturn(Optional.of(existingOption));
         when(optionRepository.save(any(Option.class))).thenReturn(existingOption);
@@ -105,7 +106,7 @@ class OptionServiceTest {
     @Test
     void invalidUpdateOptionTest() {
         Long optionId = 1L;
-        OptionAddRequestDto requestDto = new OptionAddRequestDto("Updated Option", 20);
+        OptionUpdateRequestDto requestDto = new OptionUpdateRequestDto("Updated Option", 20);
 
         when(optionRepository.findById(optionId)).thenReturn(Optional.empty());
 
