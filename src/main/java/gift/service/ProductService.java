@@ -58,10 +58,7 @@ public class ProductService {
         Option option = optionRepository.findByProductIdAndName(productId, optionName)
                 .orElseThrow(() -> new IllegalArgumentException("해당 옵션이 존재하지 않습니다."));
 
-        if (option.getQuantity() < quantity) {
-            throw new IllegalArgumentException("차감할 수량이 현재 수량보다 많습니다.");
-        }
-        option.setQuantity(option.getQuantity() - quantity);
+        option.subtractQuantity(quantity);
         optionRepository.save(option);
     }
 }
