@@ -59,4 +59,11 @@ public class OptionService {
             optionRepository.findAllByProductId(option.getProduct().getId()));
         optionRepository.deleteById(optionId);
     }
+
+    @Transactional
+    public void subtractOption(Long optionId, OptionRequest optionRequest) throws OptionException {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
+        option.subtract(optionRequest.quantity());
+    }
 }

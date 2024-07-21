@@ -63,7 +63,10 @@ public class Option {
         this.quantity = quantity;
     }
 
-    public void subtract(Integer quantity) {
+    public void subtract(Integer quantity) throws OptionException {
+        if (this.quantity < quantity) {
+            throw new OptionException(OptionErrorCode.NOT_ENOUGH_QUANTITY);
+        }
         this.quantity = this.quantity - quantity;
     }
 
