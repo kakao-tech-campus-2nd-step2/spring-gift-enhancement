@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.util.Assert;
@@ -44,7 +45,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Option> optionSet = new HashSet<>();
 
-    private transient Options options;
+    @Transient
+    private Options options;
 
     protected Product() {
     }
