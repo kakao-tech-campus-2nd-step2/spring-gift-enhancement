@@ -46,4 +46,11 @@ public class Option extends BaseEntity {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    public void subtractQuantity(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("Quantity to subtract exceeds available quantity");
+        }
+        this.quantity -= quantity;
+    }
 }
