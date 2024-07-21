@@ -34,7 +34,7 @@ public class ProductDTO {
         this.categoryName = categoryName;
     }
 
-    // Getters and Setters
+
 
     public Long getId() {
         return id;
@@ -89,3 +89,4 @@ public class ProductDTO {
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getImageUrl(), product.getCategory(), categoryName);
     }
 }
+

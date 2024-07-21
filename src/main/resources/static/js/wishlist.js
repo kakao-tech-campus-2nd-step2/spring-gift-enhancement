@@ -1,3 +1,4 @@
+
 function updateOptionQuantity(selectElement) {
     const wishlistId = selectElement.getAttribute('data-wishlist-id');
     const optionId = selectElement.getAttribute('data-option-id');

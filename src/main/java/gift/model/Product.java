@@ -4,9 +4,7 @@ import gift.dto.ProductDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import java.util.List;
-
 @Entity
 @Table(name = "product")
 public class Product {
@@ -33,7 +31,6 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options;
 
-    // 생성자
     public Product() {
     }
 
@@ -45,7 +42,7 @@ public class Product {
         this.category = category;
     }
 
-    //getter
+
     public Long getId() {
         return id;
     }
@@ -65,7 +62,6 @@ public class Product {
         return options;
     }
 
-    // setter
     public void setId(Long id) {
         this.id = id;
     }
@@ -78,12 +74,14 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
     public void setCategory(int category) {
         this.category = category;
     }
     public void setOptions(List<Option> options) {
         this.options = options;
     }
+
 
     public Product(ProductDTO productDTO) {
         this.id = productDTO.getId();

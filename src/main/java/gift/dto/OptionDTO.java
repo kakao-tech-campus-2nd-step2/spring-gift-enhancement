@@ -30,13 +30,10 @@ public class OptionDTO {
         this.price = price;
         this.productId = productId;
     }
-
-    // Getters and Setters
-
+  
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -68,6 +65,7 @@ public class OptionDTO {
     public Long getProductId() {
         return productId;
     }
+
 
     public void setProductId(Long productId) {
         this.productId = productId;

@@ -72,7 +72,6 @@ public class Wishlist {
     public void setPrice(int price) {
         this.price = price;
     }
-
     public void setOptions(List<Option> options) {
         this.options = options;
     }
