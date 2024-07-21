@@ -72,4 +72,11 @@ public class Option {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    public void subtractQuantity(int quantityToSubtract) {
+        if (this.quantity < quantityToSubtract) {
+            throw new IllegalArgumentException("수량이 부족합니다.");
+        }
+        this.quantity -= quantityToSubtract;
+    }
 }
