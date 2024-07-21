@@ -71,7 +71,10 @@ public class OptionService {
     }
 
     public boolean checkNameLength(String name, int maxLen, int minLen) {
-        return name.length() <= maxLen && name.length() >= minLen;
+        if (name.length() <= maxLen && name.length() >= minLen) {
+            return true;
+        }
+        return false;
     }
 
     private boolean checkNameRedundancy(String optionName, Product product) {
