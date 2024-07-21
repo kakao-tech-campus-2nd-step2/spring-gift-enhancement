@@ -23,7 +23,7 @@ public class MemberController {
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid MemberRequest memberRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        var accessToken = JwtUtil.generateAccessToken(memberService.register(memberRequest), memberRequest.email(), memberRequest.role());
+        String accessToken = JwtUtil.generateAccessToken(memberService.register(memberRequest), memberRequest.email(), memberRequest.role());
         responseHeaders.set("Authorization", JwtUtil.generateHeaderValue(accessToken));
         return ResponseEntity.ok().headers(responseHeaders).build();
     }

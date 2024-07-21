@@ -1,6 +1,6 @@
 package gift.api.option.domain;
 
-import gift.api.option.InvalidNameException;
+import gift.api.option.exception.InvalidNameException;
 import java.util.List;
 
 public class Options {
@@ -15,7 +15,7 @@ public class Options {
         return new Options(options);
     }
 
-    public void validate(Option option) {
+    public void validateUniqueName(Option option) {
         if (options.stream()
                 .anyMatch(it -> it.getName().equals(option.getName()))) {
             throw new InvalidNameException();
