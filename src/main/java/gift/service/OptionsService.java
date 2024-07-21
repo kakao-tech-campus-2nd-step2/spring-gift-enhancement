@@ -79,17 +79,20 @@ public class OptionsService {
     @Retryable( //@RetryOptions가 @Transactional보다 먼저 적용되게 설정됨
         retryFor = {ObjectOptimisticLockingFailureException.class},
         maxAttempts = 100,
-        backoff = @Backoff(100)
+        backoff = @Backoff(100),
+        notRecoverable = {NotFoundProductException.class, NotFoundOptionsException.class,
+            OptionsQuantityException.class}
     )
     public void subtractQuantity(Long id, Integer subQuantity, Long productId) {
         productRepository.findById(productId)
             .orElseThrow(NotFoundProductException::new);
 
         optionsRepository.findByIdForUpdate(id)
-            .map(options -> {
-                options.subtractQuantity(subQuantity);
-                return options;
-            }).orElseThrow(NotFoundOptionsException::new);
+            .ifPresentOrElse(options ->
+                    options.subtractQuantity(subQuantity),
+                () -> {
+                    throw new NotFoundOptionsException();
+                });
     }
 
     @Transactional

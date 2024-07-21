@@ -241,13 +241,13 @@ class OptionsServiceTest {
 
         given(productRepository.findById(any(Long.class)))
             .willReturn(Optional.of(product));
-        given(optionsRepository.findById(any(Long.class)))
+        given(optionsRepository.findByIdForUpdate(any(Long.class)))
             .willReturn(Optional.of(savedOption));
         //when //then
         assertDoesNotThrow(() -> optionsService.subtractQuantity(id,
             subQuantity, product.getId()));
         then(productRepository).should().findById(product.getId());
-        then(optionsRepository).should().findById(id);
+        then(optionsRepository).should().findByIdForUpdate(id);
         then(savedOption).should().subtractQuantity(subQuantity);
     }
 
@@ -262,16 +262,16 @@ class OptionsServiceTest {
 
         given(productRepository.findById(any(Long.class)))
             .willReturn(Optional.of(product));
-        given(optionsRepository.findById(any(Long.class)))
+        given(optionsRepository.findByIdForUpdate(any(Long.class)))
             .willReturn(Optional.of(savedOption));
         doThrow(OptionsQuantityException.class)
-            .when(savedOption).subtractQuantity(subQuantity);
+            .when(savedOption).subtractQuantity(any(Integer.class));
         //when //then
         assertThatThrownBy(() -> optionsService.subtractQuantity(id,
             subQuantity, product.getId()))
             .isInstanceOf(OptionsQuantityException.class);
         then(productRepository).should().findById(product.getId());
-        then(optionsRepository).should().findById(id);
+        then(optionsRepository).should().findByIdForUpdate(id);
         then(savedOption).should().subtractQuantity(subQuantity);
     }
 
