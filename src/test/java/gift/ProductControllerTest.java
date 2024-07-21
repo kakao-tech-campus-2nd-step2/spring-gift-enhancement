@@ -1,7 +1,7 @@
 package gift;
 
 import gift.controller.ProductController;
-import gift.model.ProductDto;
+import gift.dto.ProductDto;
 import gift.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

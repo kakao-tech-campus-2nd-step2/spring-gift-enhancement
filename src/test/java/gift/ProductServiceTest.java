@@ -1,7 +1,7 @@
 package gift;
 
 import gift.model.Product;
-import gift.model.ProductDto;
+import gift.dto.ProductDto;
 import gift.repository.ProductRepository;
 import gift.repository.CategoryRepository;
 import gift.service.ProductService;
