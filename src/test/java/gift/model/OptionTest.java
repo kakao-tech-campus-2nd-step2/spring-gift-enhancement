@@ -2,6 +2,7 @@ package gift.model;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -102,87 +103,225 @@ class OptionTest {
     }
 
     @Test
-    void testUpdateWithValidName() {
-        option.updateName("테스트");
+    void testUpdateWithValidNameValidQuantity() {
+        option.updateOption("테스트",10L);
         assertThat("테스트").isEqualTo(option.getName());
+        assertEquals(10L,option.getQuantity());
     }
 
     @Test
-    void testUpdateWithNullName() {
+    void testUpdateWithValidNameNullQuantity() {
         try {
-            option.updateName(null);
+            option.updateOption("테스트", null);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
-    void testUpdateWithEmptyName() {
+    void testUpdateWithValidNameZeroQuantity() {
         try {
-            option.updateName("");
+            option.updateOption("테스트", 0L);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
-    void testUpdateWithLengthName() {
+    void testUpdateWithValidNameMinusQuantity() {
         try {
-            option.updateName("test".repeat(300));
+            option.updateOption("테스트", -10L);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
-    void testUpdateWithInvalidName() {
+    void testUpdateWithValidNameMillionQuantity() {
         try {
-            option.updateName(".<>");
+            option.updateOption("테스트", 100_000_000L);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
-    void testUpdateValidQuantity() {
-        option.updateQuantity(200L);
-        assertThat(200L).isEqualTo(option.getQuantity());
-    }
-
-    @Test
-    void testUpdateWithNullQuantity() {
+    void testUpdateWithNullNameValidQuantity() {
         try {
-            option.updateQuantity(null);
+            option.updateOption(null, 10L);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
-    void testUpdateWith0Quantity() {
+    void testUpdateWithNullNameNullQuantity() {
         try {
-            option.updateQuantity(0L);
+            option.updateOption(null, null);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
-    void testUpdateWith0LessQuantity() {
+    void testUpdateWithNullNameZeroQuantity() {
         try {
-            option.updateQuantity(-200L);
+            option.updateOption(null, 0L);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
 
     @Test
-    void testUpdateWith1MillionGreaterQuantity() {
+    void testUpdateWithNullNameMinusQuantity() {
         try {
-            option.updateQuantity(100_000_000L);
+            option.updateOption(null, -10L);
         } catch (IllegalArgumentException e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
 
+    @Test
+    void testUpdateWithNullNameMillionQuantity() {
+        try {
+            option.updateOption(null, 100_000_000L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithEmptyNameValidQuantity() {
+        try {
+            option.updateOption("", 10L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithEmptyNameNullQuantity() {
+        try {
+            option.updateOption("", null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithEmptyNameZeroQuantity() {
+        try {
+            option.updateOption("", 0L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithEmptyNameMinusQuantity() {
+        try {
+            option.updateOption("", -10L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithEmptyNameMillionQuantity() {
+        try {
+            option.updateOption("", 100_000_000L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithLengthNameValidQuantity() {
+        try {
+            option.updateOption("test".repeat(300), 10L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithLengthNameNullQuantity() {
+        try {
+            option.updateOption("test".repeat(300), null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithLengthNameZeroQuantity() {
+        try {
+            option.updateOption("test".repeat(300), 0L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithLengthNameMinusQuantity() {
+        try {
+            option.updateOption("test".repeat(300), -10L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithLengthNameMillionQuantity() {
+        try {
+            option.updateOption("test".repeat(300), 100_000_000L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithInvalidNameValidQuantity() {
+        try {
+            option.updateOption(".<>", 10L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithInvalidNameNullQuantity() {
+        try {
+            option.updateOption(".<>", null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithInvalidNameZeroQuantity() {
+        try {
+            option.updateOption(".<>", 0L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithInvalidNameMinusQuantity() {
+        try {
+            option.updateOption(".<>", -10L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testUpdateWithInvalidNameMillionQuantity() {
+        try {
+            option.updateOption(".<>", 100_000_000L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
 }
