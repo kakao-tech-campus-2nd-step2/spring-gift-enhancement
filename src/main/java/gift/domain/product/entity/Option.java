@@ -1,5 +1,6 @@
 package gift.domain.product.entity;
 
+import gift.exception.InvalidOptionInfoException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,8 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(
@@ -30,6 +34,40 @@ public class Option {
 
     @Column(nullable = false)
     private int quantity;
+
+    private static final String PRODUCT_NAME_REGEXP = "[a-zA-z0-9ㄱ-ㅎㅏ-ㅣ가-힣()\\[\\]+\\-&/_\\s]+";
+
+    @PrePersist
+    public void prePersist() {
+        validateProduct();
+        validateName();
+        validateQuantity();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        validateProduct();
+        validateName();
+        validateQuantity();
+    }
+
+    private void validateProduct() {
+        if (product == null) {
+            throw new InvalidOptionInfoException("error.invalid.option.product");
+        }
+    }
+
+    private void validateName() {
+        if (!Pattern.matches(PRODUCT_NAME_REGEXP, name) || name.length() > 50) {
+            throw new InvalidOptionInfoException("error.invalid.option.name");
+        }
+    }
+
+    private void validateQuantity() {
+        if (quantity < 1 || quantity > 100000000) {
+            throw new InvalidOptionInfoException("error.invalid.option.quantity");
+        }
+    }
 
     protected Option() {
     }

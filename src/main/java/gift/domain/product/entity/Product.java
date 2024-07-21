@@ -1,6 +1,8 @@
 package gift.domain.product.entity;
 
 import gift.exception.DuplicateOptionNameException;
+import gift.exception.InvalidCategoryInfoException;
+import gift.exception.InvalidProductInfoException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,9 +13,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Entity
 @Table
@@ -39,6 +44,27 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
+    private static final String PRODUCT_NAME_REGEXP = "[a-zA-z0-9ㄱ-ㅎㅏ-ㅣ가-힣()\\[\\]+\\-&/_\\s]+";
+    private static final String IMAGE_URL_REGEXP = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#()?&//=]*)";
+
+    @PrePersist
+    public void prePersist() {
+        validateCategory();
+        validateName();
+        validatePrice();
+        validateImageUrl();
+        validateOptions();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        validateCategory();
+        validateName();
+        validatePrice();
+        validateImageUrl();
+        validateOptions();
+    }
+
     protected Product() {
 
     }
@@ -46,6 +72,62 @@ public class Product {
     public Product(Long id, Category category, String name, int price, String imageUrl) {
         this.category = category;
         this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    private void validateCategory() {
+        if (category == null) {
+            throw new InvalidProductInfoException("error.invalid.product.category");
+        }
+    }
+
+    private void validateName() {
+        if (!Pattern.matches(PRODUCT_NAME_REGEXP, name) || name.length() > 15 || name.contains("카카오")) {
+            throw new InvalidProductInfoException("error.invalid.product.name");
+        }
+    }
+
+    private void validatePrice() {
+        if (price < 1 || price > Integer.MAX_VALUE) {
+            throw new InvalidProductInfoException("error.invalid.product.price");
+        }
+    }
+
+    private void validateImageUrl() {
+        if (!Pattern.matches(IMAGE_URL_REGEXP, imageUrl)) {
+            throw new InvalidProductInfoException("error.invalid.product.imageUrl");
+        }
+    }
+
+    private void validateOptions() {
+        if ((options.size() == 0) || (options.stream().distinct().count() != options.size())) {
+            throw new InvalidProductInfoException("error.invalid.product.options");
+        }
+    }
+
+    private void validateOption(Option option) {
+        options.stream()
+            .filter(existingOption -> existingOption.getName().equals(option.getName()))
+            .findFirst()
+            .ifPresent(sameNameOption -> {
+                throw new DuplicateOptionNameException("error.duplicate.option.name");
+            });
+    }
+
+    public void addOption(Option option) {
+        validateOption(option);
+        options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOptions() {
+        options.clear();
+    }
+
+    public void updateInfo(Category category, String name, int price, String imageUrl) {
+        this.category = category;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -71,33 +153,7 @@ public class Product {
         return imageUrl;
     }
 
-    public void updateInfo(Category category, String name, int price, String imageUrl) {
-        this.category = category;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
-
     public List<Option> getOptions() {
         return options;
-    }
-
-    public void removeOptions() {
-        options.clear();
-    }
-
-    public void addOption(Option option) {
-        validateOption(option);
-        options.add(option);
-        option.setProduct(this);
-    }
-
-    private void validateOption(Option option) {
-        options.stream()
-            .filter(existingOption -> existingOption.getName().equals(option.getName()))
-            .findFirst()
-            .ifPresent(sameNameOption -> {
-                throw new DuplicateOptionNameException("error.duplicate.option.name");
-            });
     }
 }
