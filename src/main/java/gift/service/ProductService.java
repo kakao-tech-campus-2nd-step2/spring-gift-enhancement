@@ -34,7 +34,6 @@ public class ProductService {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.asc(field));
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts));
-
         Page<Product> products = productRepository.findAll(pageable);
 
         return products.map(ProductResponse::new);

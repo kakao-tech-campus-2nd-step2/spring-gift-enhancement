@@ -60,6 +60,7 @@ public class DomainTest {
     @Test
     void optionTest(){
         Option option = new Option("[1] 아시아", 23L);
+
         Assertions.assertThat(option).isNotNull();
 
         option.update("[1] 아메리카", 22L);
