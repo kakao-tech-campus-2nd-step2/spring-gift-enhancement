@@ -21,6 +21,17 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public Option() {
+
+    }
+
+    public void subtract(Long subtractNumber) throws IllegalAccessException {
+        quantity -= subtractNumber;
+        if(quantity <= 0 || quantity > 1000000000){
+            throw new IllegalAccessException("옵션의 수량은 1이상이거나, 1억 이하여야 합니다.");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
