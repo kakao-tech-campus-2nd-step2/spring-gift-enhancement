@@ -1,0 +1,28 @@
+<div th:fragment="productTable" xmlns:th="http://www.w3.org/1999/xhtml">
+    <table id="productTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>imgUrl</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="productEntity : ${products}">
+            <td th:text="${productEntity.id}">0</td>
+            <td th:text="${productEntity.name}">name</td>
+            <td th:text="${productEntity.price}">0</td>
+            <td th:text="${productEntity.imgUrl}">image</td>
+            <td>
+                <a th:href="@{/products/{id}(id=${productEntity.id})}">View</a>
+                <a th:href="@{/products/edit/{id}(id=${productEntity.id})}">Edit</a>
+                <form th:action="@{/products/delete/{id}(id=${productEntity.id})}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
