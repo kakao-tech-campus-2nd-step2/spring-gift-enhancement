@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.converter.StringToUrlConverter;
 import gift.domain.Category;
 import gift.domain.Product;
 import gift.repository.CategoryRepository;
@@ -84,7 +85,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
             .orElseThrow(NoSuchElementException::new);
 
-        product.update(request.toEntity());
+        product.updateBasicInfo(request.getName(), request.getPrice(), StringToUrlConverter.convert(request.getImageUrl()));
         return UpdateProductResponse.from(product);
     }
 
