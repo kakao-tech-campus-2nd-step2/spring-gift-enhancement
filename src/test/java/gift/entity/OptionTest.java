@@ -1,7 +1,9 @@
 package gift.entity;
 
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OptionTest {
 
@@ -26,5 +28,22 @@ class OptionTest {
         assertThat(option.getName()).isEqualTo("New Option");
         assertThat(option.getQuantity()).isEqualTo(200);
         assertThat(option.getProduct()).isEqualTo(product);
+    }
+
+    @Test
+    void subtractQuantity() {
+        Option option = new Option("Test Option", 100, new Product());
+        option.subtractQuantity(50);
+
+        assertThat(option.getQuantity()).isEqualTo(50);
+    }
+
+    @Test
+    void subtractQuantityExceedsAvailable() {
+        Option option = new Option("Test Option", 100, new Product());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            option.subtractQuantity(150);
+        });
     }
 }
