@@ -47,10 +47,7 @@ public class Option {
     }
 
     public void subtract(long quantity) {
-        if (this.quantity - quantity < 0) {
-            this.quantity = 0L;
-        }
-        this.quantity = this.quantity - quantity;
+        this.quantity = Math.max(0, this.quantity - quantity);
     }
 
     public Long getId() {
