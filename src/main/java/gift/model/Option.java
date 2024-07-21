@@ -1,5 +1,6 @@
 package gift.model;
 
+import gift.exceptions.CustomException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,6 +39,13 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+    }
+
+    public void subtract(int amount) {
+        if  (amount > this.quantity) {
+            throw CustomException.quantityInvalidException();
+        }
+        this.quantity -= amount;
     }
 
     public Long getId() {
