@@ -6,8 +6,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "product_category")
-public class ProductCategory extends BaseEntity {
+@Table(name = "category")
+public class Category extends BaseEntity {
     @NotNull
     @Column(name = "name")
     private String name;
@@ -21,18 +21,14 @@ public class ProductCategory extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    protected ProductCategory() {
+    protected Category() {
     }
 
-    public ProductCategory(String name, String description, String color, String imageUrl) {
+    public Category(String name, String description, String color, String imageUrl) {
         this.name = name;
         this.description = description;
         this.color = color;
         this.imageUrl = imageUrl;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

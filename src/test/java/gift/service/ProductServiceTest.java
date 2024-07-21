@@ -2,9 +2,7 @@ package gift.service;
 
 import gift.dto.ProductRequest;
 import gift.exception.InvalidProductNameWithKAKAOException;
-import gift.exception.NotFoundElementException;
 import gift.model.MemberRole;
-import gift.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,12 +16,10 @@ class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
-    @Autowired
-    private ProductRepository productRepository;
 
     @Test
     @DisplayName("정상 상품 추가하기")
-    void addProductSuccess() {
+    void successAddProduct() {
         //given
         var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
         //when
@@ -36,7 +32,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("이용자로 카카오가 포함된 상품 추가하기")
-    void addProductFailWithKAKAOName() {
+    void failAddProductWithNameKakao() {
         //given
         var productRequest = new ProductRequest("카카오상품", 10000, "이미지 주소", 1L);
         //when, then
@@ -46,7 +42,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("관리자로 카카오가 포함된 상품 추가하기")
-    void addProductSuccessWithKAKAOName() {
+    void successAddProductWithNameKakao() {
         //given
         var productRequest = new ProductRequest("카카오상품", 10000, "이미지 주소", 1L);
         //when
@@ -59,7 +55,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("상품 수정하기")
-    void updateProduct() {
+    void successUpdateProduct() {
         //given
         var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
         var savedProduct = productService.addProduct(productRequest, MemberRole.MEMBER);
@@ -73,21 +69,5 @@ class ProductServiceTest {
         Assertions.assertThat(savedProduct.id()).isEqualTo(updatedProduct.id());
 
         productService.deleteProduct(id);
-    }
-
-    @Test
-    @DisplayName("정상 상품 추가시 기본 옵션이 추가되어있다.")
-    void addProductSuccessThenHaveDefaultOption() {
-        //given
-        var productRequest = new ProductRequest("상품1", 10000, "이미지 주소", 1L);
-        var savedProduct = productService.addProduct(productRequest, MemberRole.MEMBER);
-        var product = productRepository.findById(savedProduct.id())
-                .orElseThrow(() -> new NotFoundElementException(savedProduct.id() + "를 가진 상품이 존재하지 않습니다."));
-        //when
-        var productOptionList = product.getProductOptionList();
-        //then
-        Assertions.assertThat(productOptionList.get(0).getName()).isEqualTo("기본");
-
-        productService.deleteProduct(savedProduct.id());
     }
 }

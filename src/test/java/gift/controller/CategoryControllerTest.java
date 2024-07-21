@@ -1,9 +1,9 @@
 package gift.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gift.dto.CategoryRequest;
 import gift.dto.LoginRequest;
-import gift.dto.ProductCategoryRequest;
-import gift.service.ProductCategoryService;
+import gift.service.CategoryService;
 import gift.service.auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class ProductCategoryControllerTest {
+class CategoryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,7 +31,7 @@ class ProductCategoryControllerTest {
     @Autowired
     private AuthService authService;
     @Autowired
-    private ProductCategoryService productCategoryService;
+    private CategoryService categoryService;
     private String memberToken;
 
     @BeforeEach
@@ -43,12 +43,12 @@ class ProductCategoryControllerTest {
 
     @Test
     @DisplayName("잘못된 색상코드로 된 카테고리 생성하기")
-    void failCategoryAddWithWrongColorPattern() throws Exception {
+    void failAddCategoryWithWrongColorPattern() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("상품카테고리", "상품설명", "#11111", "image")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("상품카테고리", "상품설명", "#11111", "image")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -58,12 +58,12 @@ class ProductCategoryControllerTest {
 
     @Test
     @DisplayName("카테고리 이미지는 공백이 입력되면 안된다")
-    void failCategoryAddWithBlankCategoryImage() throws Exception {
+    void failAddCategoryWithBlankCategoryImage() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("상품카테고리", "상품설명", "#111111", "")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -73,12 +73,12 @@ class ProductCategoryControllerTest {
 
     @Test
     @DisplayName("카테고리 이름은 공백이 입력되면 안된다")
-    void failCategoryAddWithBlankCategoryName() throws Exception {
+    void failAddCategoryWithBlankCategoryName() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("", "상품설명", "#111111", "이미지")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("", "상품설명", "#111111", "이미지")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -88,12 +88,12 @@ class ProductCategoryControllerTest {
 
     @Test
     @DisplayName("카테고리 설명은 공백이 입력되면 안된다")
-    void failCategoryAddWithBlankCategoryDescription() throws Exception {
+    void failAddCategoryWithBlankCategoryDescription() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("상품카테고리", "", "#111111", "이미지")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("상품카테고리", "", "#111111", "이미지")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -103,10 +103,10 @@ class ProductCategoryControllerTest {
 
     @Test
     @DisplayName("카테고리는 중복되면 안된다.")
-    void failCategoryAddWithDuplicatedCategory() throws Exception {
+    void failAddCategoryWithDuplicatedCategory() throws Exception {
         //given
-        var productCategoryRequest = new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
-        var productCategory = productCategoryService.addCategory(productCategoryRequest);
+        var productCategoryRequest = new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지");
+        var productCategory = categoryService.addCategory(productCategoryRequest);
 
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -118,17 +118,17 @@ class ProductCategoryControllerTest {
         result.andExpect(status().isConflict())
                 .andExpect(content().string("이미 존재하는 이름입니다."));
 
-        productCategoryService.deleteCategory(productCategory.id());
+        categoryService.deleteCategory(productCategory.id());
     }
 
     @Test
     @DisplayName("정상 상품 카테고리 생성")
-    void successCategoryAdd() throws Exception {
+    void successAddCategory() throws Exception {
         //given
         var postRequest = post("/api/categories/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken)
-                .content(objectMapper.writeValueAsString(new ProductCategoryRequest("상품카테고리", "상품설명", "#111111", "이미지")));
+                .content(objectMapper.writeValueAsString(new CategoryRequest("상품카테고리", "상품설명", "#111111", "이미지")));
         //when
         var result = mockMvc.perform(postRequest);
         //then
@@ -137,6 +137,6 @@ class ProductCategoryControllerTest {
         var location = createdResult.getResponse().getHeader("Location");
         var categoryId = location.replaceAll("/api/categories/", "");
 
-        productCategoryService.deleteCategory(Long.parseLong(categoryId));
+        categoryService.deleteCategory(Long.parseLong(categoryId));
     }
 }

@@ -6,6 +6,7 @@ import gift.dto.LoginRequest;
 import gift.dto.ProductRequest;
 import gift.dto.ProductResponse;
 import gift.model.MemberRole;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import gift.service.auth.AuthService;
 import org.assertj.core.api.Assertions;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -41,6 +43,8 @@ class ProductControllerTest {
     private AuthService authService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private OptionService optionService;
     private String managerToken;
     private String memberToken;
 
@@ -55,7 +59,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("잘못된 가격으로 된 오류 상품 생성하기")
-    void addProductFailWithPrice() throws Exception {
+    void failAddProductWithWrongPrice() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +74,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("이름의 길이가 15초과인 오류 상품 생성하기")
-    void addProductFailWithNameLength() throws Exception {
+    void failAddProductWithNameOverLength() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -85,7 +89,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("카카오를 포함한 이름을 가진 오류 상품 생성하기")
-    void addProductFailWithNameKAKAO() throws Exception {
+    void failAddProductWithNameKakao() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -100,7 +104,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("카카오를 포함한 이름을 가진 상품 매니저로 생성하기")
-    void addProductSuccessWithNameKAKAO() throws Exception {
+    void successAddProductWithNameKakao() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -116,7 +120,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("빈 이름을 가진 오류 상품 생성하기")
-    void addProductFailWithEmptyName() throws Exception {
+    void failAddProductWithEmptyName() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -131,7 +135,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("정상 상품 생성하기 - 특수문자 포함")
-    void addProductSuccessWithSpecialChar() throws Exception {
+    void successAddProductWithSpecialChar() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -147,7 +151,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("정상 상품 생성하기 - 공백 포함")
-    void addProductSuccessWithEmptySpace() throws Exception {
+    void successAddProductWithEmptySpace() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -163,7 +167,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("오류 상품 생성하기 - 허용되지 않은 특수문자 포함")
-    void addProductFailWithSpecialChar() throws Exception {
+    void failAddProductWithSpecialChar() throws Exception {
         //given
         var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -178,7 +182,7 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("11개의 상품을 등록하였을 때, 2번째 페이지의 조회의 결과는 1개의 상품만을 반환한다.")
-    void getProductsWithPageable() throws Exception {
+    void successGetProductsWithPageable() throws Exception {
         List<ProductResponse> productResponseList = new ArrayList<>();
         //given
         var productRequest = new ProductRequest("햄버거()[]+-&/_**", 1000, "이미지 주소", 1L);
@@ -193,8 +197,8 @@ class ProductControllerTest {
         var getResult = mockMvc.perform(getRequest);
         //then
         var productResult = getResult.andExpect(status().isOk()).andReturn();
-        var productListString = productResult.getResponse().getContentAsString();
-        var productResponseResult = objectMapper.readValue(productListString, new TypeReference<List<ProductResponse>>() {
+        var productsString = productResult.getResponse().getContentAsString();
+        var productResponseResult = objectMapper.readValue(productsString, new TypeReference<List<ProductResponse>>() {
         });
         Assertions.assertThat(productResponseResult.size()).isEqualTo(4);
 
@@ -203,9 +207,9 @@ class ProductControllerTest {
 
     @Test
     @DisplayName("잘못된 정렬 데이터가 올 경우 예외를 던진다.")
-    void getProductsInvalidPageSort() throws Exception {
+    void failGetProductsWithInvalidPageSort() throws Exception {
         //given
-        var getRequest = get("/api/products?sort=name,desc")
+        var getRequest = get("/api/products?sort=wrong,desc")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + memberToken);
         //when
@@ -215,20 +219,29 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("잘못된 크기 데이터가 올 경우 예외를 던진다.")
-    void getProductsInvalidPageSize() throws Exception {
+    @DisplayName("상품이 추가되면 옵션이 자동적으로 생성된다.")
+    void successAddDefaultOption() throws Exception {
         //given
-        var getRequest = get("/api/products?size=30")
+        var postRequest = post("/api/products/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + memberToken);
+                .header("Authorization", "Bearer " + memberToken)
+                .content(objectMapper.writeValueAsString(new ProductRequest("햄버거", 1000, "이미지 주소", 1L)));
         //when
-        var getResult = mockMvc.perform(getRequest);
+        var result = mockMvc.perform(postRequest);
         //then
-        getResult.andExpect(status().isBadRequest());
+        var createdResult = result.andExpect(status().isCreated()).andReturn();
+
+        var location = createdResult.getResponse().getHeader("Location");
+        var productId = Long.parseLong(location.replaceAll("/api/products/", ""));
+
+        var optionResponses = optionService.getOptions(productId, Pageable.unpaged());
+        Assertions.assertThat(optionResponses.size()).isEqualTo(1);
+        Assertions.assertThat(optionResponses.get(0).name()).isEqualTo("기본");
+        productService.deleteProduct(productId);
     }
 
-    private void deleteProducts(List<ProductResponse> productResponseList) {
-        for (var product : productResponseList) {
+    private void deleteProducts(List<ProductResponse> productResponses) {
+        for (var product : productResponses) {
             productService.deleteProduct(product.id());
         }
     }

@@ -3,13 +3,13 @@ values ('멤버', 'member@naver.com', 'password', 0);
 insert into member(name, email, password, role)
 values ('관리자', 'admin@naver.com', 'password', 1);
 
-insert into product_category(name, description, color, image_url)
+insert into category(name, description, color, image_url)
 values ('디지털/가전', '가전설명', '#888888', '가전이미지');
-insert into product_category(name, description, color, image_url)
+insert into category(name, description, color, image_url)
 values ('상품권', '상품권설명', '#123456', '상품권이미지');
-insert into product_category(name, description, color, image_url)
+insert into category(name, description, color, image_url)
 values ('뷰티', '뷰티설명', '#777777', '뷰티이미지');
-insert into product_category(name, description, color, image_url)
+insert into category(name, description, color, image_url)
 values ('식품', '식품설명', '#222222', '식품이미지');
 
 insert into product(name, price, image_url, category_id)
@@ -24,6 +24,9 @@ insert into product(name, price, image_url, category_id)
 values ('50000원 상품권', 50000,
         'https://lh5.googleusercontent.com/proxy/M33I-cZvIHdtsY_uyd5R-4KXJ8uZBBAgVw4bmZagF1T5krxkC6AHpxPUvU_02yDsRljgOHwa-cUTlhgYG_bSNJbbmnf6k9OOPRQyvPf5m4nD',
         2);
+
+insert into option(product_id, name, quantity)
+values (3, '상품옵션', 10000);
 
 
 

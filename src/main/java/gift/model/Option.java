@@ -9,8 +9,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "product_option")
-public class ProductOption extends BaseEntity {
+@Table(name = "option")
+public class Option extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -22,18 +22,13 @@ public class ProductOption extends BaseEntity {
     @Column(name = "quantity")
     private Integer quantity;
 
-    protected ProductOption() {
+    protected Option() {
     }
 
-    public ProductOption(Product product, String name, Integer quantity) {
+    public Option(Product product, String name, Integer quantity) {
         this.product = product;
-        product.getProductOptionList().add(this);
         this.name = name;
         this.quantity = quantity;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Product getProduct() {
@@ -51,5 +46,9 @@ public class ProductOption extends BaseEntity {
     public void updateOptionInfo(String name, Integer quantity) {
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void subtract(Integer subQuantity) {
+        this.quantity = quantity - subQuantity;
     }
 }

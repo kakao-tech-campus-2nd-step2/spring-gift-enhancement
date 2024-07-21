@@ -37,7 +37,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("빈 이름으로 회원가입 요청하기")
-    void registerFailWithEmptyName() throws Exception {
+    void failRegisterWithEmptyName() throws Exception {
         //given
         var postRequest = post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -51,7 +51,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("이름의 길이가 8초과인 이용자의 회원가입 요청하기")
-    void registerFailWithNameLength() throws Exception {
+    void failRegisterWithNameOverLength() throws Exception {
         //given
         var postRequest = post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -65,7 +65,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("허용되지 않는 형식의 이메일로 회원가입 요청하기")
-    void registerFailWithEmail() throws Exception {
+    void failRegisterWithWrongEmailReg() throws Exception {
         //given
         var postRequest = post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -79,7 +79,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("허용되지 않는 형식의 패스워드로 회원가입 요청하기")
-    void registerFailWithPassword() throws Exception {
+    void failRegisterWithWrongPasswordReg() throws Exception {
         //given
         var postRequest = post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("허용되지 않는 형식의 회원타입으로 회원가입 요청하기")
-    void registerFailWithMemberRole() throws Exception {
+    void failRegisterWithWrongMemberRole() throws Exception {
         //given
         var postRequest = post("/api/members/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +107,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("허용되지 않는 형식의 이메일로 로그인 요청하기")
-    void loginFailWithEmail() throws Exception {
+    void failLoginWithWrongEmailReg() throws Exception {
         //given
         var postRequest = post("/api/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -121,7 +121,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("허용되지 않는 형식의 패스워드로 로그인 요청하기")
-    void loginFailWithPassword() throws Exception {
+    void failLoginWithWrongPasswordReg() throws Exception {
         //given
         var postRequest = post("/api/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +135,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("정상적으로 회원가입 후 잘못된 패스워드로 로그인 요청하기")
-    void registerAndLoginFail() throws Exception {
+    void failLoginWithWrongPassword() throws Exception {
         //given
         var auth = authService.register(new RegisterRequest("테스트", "test@naver.com", "testPassword", "MEMBER"));
         var postRequest = post("/api/members/login")
@@ -151,7 +151,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("정상적으로 회원가입 후 로그인 요청하기")
-    void registerAndLoginSuccess() throws Exception {
+    void successLogin() throws Exception {
         //given
         var auth = authService.register(new RegisterRequest("테스트", "test@naver.com", "testPassword", "MEMBER"));
         var postRequest = post("/api/members/login")

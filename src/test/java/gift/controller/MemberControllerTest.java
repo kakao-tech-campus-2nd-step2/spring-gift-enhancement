@@ -27,7 +27,7 @@ public class MemberControllerTest {
 
     @Test
     @DisplayName("정상적으로 가입 후 탈퇴 요청하기")
-    void registerAndLoginFail() throws Exception {
+    void successDeleteMember() throws Exception {
         //given
         var registerRequest = new RegisterRequest("테스트", "test@naver.com", "testPassword", "MEMBER");
         authService.register(registerRequest);
