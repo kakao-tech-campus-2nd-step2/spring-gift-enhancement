@@ -27,17 +27,17 @@ public class OptionController {
         return ResponseEntity.ok().body(optionService.getAllOptions(productId));
     }
 
-    @PostMapping("/api/products/options/{productId}")
+    @PostMapping("/api/products/{productId}/options")
     public ResponseEntity<Option> addOption(@RequestBody Option option, @PathVariable(name = "productId") Long productId){
         return ResponseEntity.ok().body(optionService.addOption(option, productId));
     }
 
-    @PutMapping("/api/products/options/{productId}/{optionId}")
+    @PutMapping("/api/products/{productId}/options/{optionId}")
     public ResponseEntity<Option> updateOption(@RequestBody Option option, @PathVariable(name = "productId") Long productId, @PathVariable(value = "optionId") Long optionId){
         return ResponseEntity.ok().body(optionService.updateOption(option,productId,optionId));
     }
 
-    @DeleteMapping("/api/products/options/{productId}/{optionId}")
+    @DeleteMapping("/api/products/{productId}/options/{optionId}")
     public ResponseEntity<Option> deleteOption(@PathVariable(value = "productId") Long productId, @PathVariable(value = "optionId") Long optionId){
         return ResponseEntity.ok().body(optionService.deleteOption(productId,optionId));
     }
