@@ -53,6 +53,13 @@ public class OptionService {
         optionRepository.deleteById(id);
     }
 
+    public void orderOption(Long id, int count) {
+        Option option = optionRepository.findById(id)
+                .orElseThrow(OptionNotFoundException::new);
+        option.subtract(count);
+        optionRepository.save(option);
+    }
+
     private void validateOptionExists(Long id) {
         if (!optionRepository.existsById(id)) {
             throw new OptionNotFoundException();
@@ -62,6 +69,4 @@ public class OptionService {
     private void validateEmailAndNicknameUnique(OptionServiceDto optionServiceDto) {
 
     }
-
-
 }

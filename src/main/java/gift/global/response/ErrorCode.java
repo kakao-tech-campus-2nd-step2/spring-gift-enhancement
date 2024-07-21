@@ -33,6 +33,7 @@ public enum ErrorCode {
     OPTION_NAME_LENGTH_ERROR(HttpStatus.BAD_REQUEST, "EO002", "옵션 이름은 공백이 아니고, 50자 이하여야 합니다"),
     OPTION_NAME_PATTER_ERROR(HttpStatus.BAD_REQUEST, "EO003", "( ), [ ], +, -, &, /, _ 이외의 특수문자는 사용 불가능합니다"),
     OPTION_COUNT_OUTBOUND_ERROR(HttpStatus.BAD_REQUEST, "EO004", "옵션은 1 ~ 1억개 여야 합니다"),
+    OPTION_NOT_ENOUGH_ERROR(HttpStatus.BAD_REQUEST, "EO005", "Option Not Enough Error"),
 
     ;
     private final HttpStatus status;

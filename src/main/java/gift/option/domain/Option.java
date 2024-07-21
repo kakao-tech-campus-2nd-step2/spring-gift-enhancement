@@ -1,5 +1,6 @@
 package gift.option.domain;
 
+import gift.option.exception.OptionNotEnoughException;
 import gift.product.domain.Product;
 import jakarta.persistence.*;
 import org.hibernate.Hibernate;
@@ -63,5 +64,13 @@ public class Option {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void subtract(int quantity) {
+        Long stock = this.count.getOptionCountValue();
+        if (stock < quantity) {
+            throw new OptionNotEnoughException();
+        }
+        this.count = new OptionCount(stock - quantity);
     }
 }
