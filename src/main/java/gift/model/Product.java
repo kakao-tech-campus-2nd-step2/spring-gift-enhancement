@@ -69,9 +69,26 @@ public class Product {
     option.setProduct(null);
   }
   public void updateFromDto(String name, int price, String imageUrl, Category category) {
+
+    if (name == null || name.isEmpty() || name.length()  > 15) {
+      throw new IllegalArgumentException("이름 필드를 비워둘 수 없습니다.");
+    }
+
+    if (price < 0) {
+      throw new IllegalArgumentException("- 값은 유효하지 않은 값입니다.");
+    }
+
+    if (imageUrl == null || imageUrl.isEmpty()) {
+      throw new IllegalArgumentException("Invalid image URL.");
+    }
+
+    if (category == null) {
+      throw new IllegalArgumentException("Category 필드를 비워둘 수 없습니다.");
+    }
+
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
     this.category = category;
-    }
+  }
   }

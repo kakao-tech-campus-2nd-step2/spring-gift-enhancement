@@ -111,4 +111,17 @@ public class OptionTest {
 
     assertThrows(CustomNotFoundException.class, () -> optionService.addOptionToProduct(productId, optionDto));
   }
+  @Test
+  void subtractQuantity_WithSufficientStock() {
+    Option option = new Option("Option Name", 10, null);
+    option.subtractQuantity(5);
+    assertEquals(5, option.getQuantity());
+  }
+
+  @Test
+  void subtractQuantity_WithInsufficientStock() {
+    Option option = new Option("Option Name", 5, null);
+    assertThrows(IllegalArgumentException.class, () -> option.subtractQuantity(10));
+  }
+
 }
