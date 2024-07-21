@@ -1,4 +1,4 @@
-package gift.domain;
+package gift.repository;
 
 import static gift.util.CategoryFixture.createCategory;
 import static gift.util.OptionFixture.createOption;
@@ -6,22 +6,38 @@ import static gift.util.ProductFixture.createProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import gift.domain.Option;
 import gift.exception.InsufficientQuantityException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-public class OptionTest {
+@DataJpaTest
+public class OptionRepositoryTest {
+
+    @Autowired
+    private OptionRepository optionRepository;
+
+    private int quantity;
+    private Option option;
+
+    @BeforeEach
+    void setup() {
+        quantity = 3;
+        option = optionRepository.save(createOption(1L, "test", quantity, createProduct(createCategory())));
+    }
 
     @DisplayName("옵션 수량 차감")
     @Test
     void subtract() {
         // given
-        int quantity = 3;
         int subtractedQuantity = 1;
-        Option option = createOption(1L, "test", quantity, createProduct(createCategory()));
 
         // when
         option.subtract(subtractedQuantity);
+        option = optionRepository.save(option);
 
         // then
         assertThat(option.getQuantity()).isEqualTo(quantity - subtractedQuantity);
@@ -31,9 +47,7 @@ public class OptionTest {
     @Test
     void subtractOverQuantity() {
         // given
-        int quantity = 3;
         int subtractedQuantity = 4;
-        Option option = createOption(1L, "test", quantity, createProduct(createCategory()));
 
         // when
         // then
