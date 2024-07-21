@@ -44,7 +44,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Option> options = new ArrayList<>();
-
+  
     protected Product() {
     }
 
