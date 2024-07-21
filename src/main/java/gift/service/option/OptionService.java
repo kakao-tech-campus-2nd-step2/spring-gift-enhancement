@@ -51,4 +51,11 @@ public class OptionService {
 
         return optionMapper.toDto(option);
     }
+
+    public void deleteOption(Long optionId, Long productId) {
+        Option option = optionRepository.findByIdAndProductId(optionId, productId)
+            .orElseThrow(() -> new OptionNotFoundException("옵션이 없슴다."));
+
+        optionRepository.delete(option);
+    }
 }

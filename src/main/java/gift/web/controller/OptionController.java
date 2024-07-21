@@ -6,6 +6,7 @@ import gift.web.dto.OptionDto;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,5 +37,11 @@ public class OptionController {
     @PutMapping("/{productId}/options/{optionId}")
     public ResponseEntity<OptionDto> updateOption(@PathVariable Long productId, @PathVariable Long optionId, @RequestBody OptionDto optionDto) {
         return new ResponseEntity<>(optionService.updateOption(optionId, productId, optionDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<String> deleteOption(@PathVariable Long productId, @PathVariable Long optionId) {
+        optionService.deleteOption(optionId, productId);
+        return ResponseEntity.ok("Option deleted");
     }
 }
