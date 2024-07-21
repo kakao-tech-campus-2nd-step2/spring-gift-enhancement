@@ -1,9 +1,9 @@
 ### 환경 설정
 @baseUrl = http://localhost:8080
-@token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZW9sYmluQGV4YW1wbGUuY29tIn0.5H5vKV5TqY2PepHu3b7rP2rA7E52Qnw3mxsKiPybD8o
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZW9sYmluQGV4YW1wbGUuY29tIn0.5H5vKV5TqY2PepHu3b7rP2rA7E52Qnw3mxsKiPybD8o
 
 ### 모든 상품 조회
-GET {{baseUrl}}/api/products
+GET {{baseUrl}}/api/products?page=0&size=10
 
 ### 상품 추가 (유효한 데이터)
 POST {{baseUrl}}/api/products
@@ -12,7 +12,20 @@ Content-Type: application/json
 {
   "name": "Product3",
   "price": 100,
-  "imageUrl": "http://example.com/image.jpg"
+  "imageUrl": "http://example.com/image.jpg",
+  "category": {
+    "name": "교환권"
+  },
+  "options": [
+    {
+      "name": "Option A",
+      "quantity": 100
+    },
+    {
+      "name": "Option B",
+      "quantity": 200
+    }
+  ]
 }
 
 ### 상품 추가 (유효하지 않은 데이터)
@@ -22,7 +35,10 @@ Content-Type: application/json
 {
   "name": "hello카카오",
   "price": 100,
-  "imageUrl": ""
+  "imageUrl": "",
+  "category": {
+    "name": "패션"
+  }
 }
 
 ### 특정 상품 조회
@@ -35,7 +51,20 @@ Content-Type: application/json
 {
   "name": "Updated Product",
   "price": 200,
-  "imageUrl": "http://example.com/updated.jpg"
+  "imageUrl": "http://example.com/updated.jpg",
+  "category": {
+    "name": "교환권"
+  },
+  "options": [
+    {
+      "name": "Updated Option A",
+      "quantity": 120
+    },
+    {
+      "name": "Updated Option B",
+      "quantity": 220
+    }
+  ]
 }
 
 ### 특정 상품 삭제
@@ -60,7 +89,7 @@ Content-Type: application/json
 }
 
 ### 위시리스트에 상품 추가
-POST {{baseUrl}}/api/wishlist/2
+POST {{baseUrl}}/api/wishlist/1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -75,3 +104,55 @@ Authorization: Bearer {{token}}
 ### 위시리스트에서 상품 삭제
 DELETE {{baseUrl}}/api/wishlist/2
 Authorization: Bearer {{token}}
+
+### 모든 카테고리 조회
+GET {{baseUrl}}/api/categories?page=0&size=10
+
+### 카테고리 추가
+POST {{baseUrl}}/api/categories
+Content-Type: application/json
+
+{
+  "name": "교환권",
+  "color": "#0000FF",
+  "imageUrl": "http://example.com/image.jpg",
+  "description": ""
+}
+
+### 카테고리 수정
+PUT {{baseUrl}}/api/categories/1
+Content-Type: application/json
+
+{
+  "name": "수정된 카테고리",
+  "color": "#FF0000",
+  "imageUrl": "http://example.com/image_updated.jpg",
+  "description": ""
+}
+
+### 상품 옵션 조회
+GET {{baseUrl}}/api/products/1/options
+
+### 상품 옵션 추가
+POST {{baseUrl}}/api/products/1/options
+Content-Type: application/json
+
+{
+  "name": "New Option",
+  "quantity": 150
+}
+
+### 특정 옵션 조회
+GET {{baseUrl}}/api/products/1/options/1
+
+### 특정 옵션 수정
+PUT {{baseUrl}}/api/products/1/options/1
+Content-Type: application/json
+
+{
+  "name": "Updated Option",
+  "quantity": 180
+}
+
+### 특정 옵션 삭제
+DELETE {{baseUrl}}/api/products/1/options/1

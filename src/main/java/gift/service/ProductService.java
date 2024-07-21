@@ -1,52 +1,96 @@
 package gift.service;
 
+import gift.dto.CategoryDTO;
+import gift.dto.OptionDTO;
+import gift.dto.ProductDTO;
+import gift.model.Category;
+import gift.model.Option;
 import gift.model.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
+import gift.repository.WishlistRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final WishlistRepository wishlistRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    @Autowired
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, WishlistRepository wishlistRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.wishlistRepository = wishlistRepository;
     }
 
-    public Page<Product> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public Page<ProductDTO> getAllProducts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> products = productRepository.findAll(pageable);
+        return products.map(ProductDTO::new);
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
+    public ProductDTO getProductById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
+        return new ProductDTO(product);
     }
 
-    public Product saveProduct(Product product) {
-        validateProductName(product.getName());
-        return productRepository.save(product);
-    }
-
-    public void updateProduct(Product product) {
-        validateProductName(product.getName());
-        if (!productRepository.existsById(product.getId())) {
-            throw new IllegalArgumentException("Invalid product Id:" + product.getId());
+    public void saveProduct(ProductDTO productDTO) {
+        CategoryDTO categoryDTO = productDTO.getCategory();
+        if (categoryDTO == null || categoryDTO.getName() == null) {
+            throw new IllegalArgumentException("Category must not be null");
         }
+
+        Category category = categoryRepository.findByName(categoryDTO.getName());
+        if (category == null) {
+            throw new IllegalArgumentException("Invalid category name: " + categoryDTO.getName());
+        }
+
+        Product product = new Product(null, productDTO.getName(), productDTO.getPrice(), productDTO.getImageUrl(), category);
+
+        // 상품에 최소 하나 이상의 옵션이 있는지 검증
+        if (productDTO.getOptions() == null || productDTO.getOptions().isEmpty()) {
+            throw new IllegalArgumentException("Product must have at least one option.");
+        }
+
+        product.setOptions(productDTO.getOptions().stream()
+                .map(optionDTO -> new Option(null, optionDTO.getName(), optionDTO.getQuantity(), product))
+                .collect(Collectors.toSet()));
+
         productRepository.save(product);
     }
 
-    public void deleteProduct(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new IllegalArgumentException("Invalid product Id:" + id);
+    public void updateProduct(Long id, ProductDTO productDTO) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
+        Category category = categoryRepository.findByName(productDTO.getCategory().getName());
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setImageUrl(productDTO.getImageUrl());
+        product.setCategory(category);
+
+        // 상품에 최소 하나 이상의 옵션이 있는지 검증
+        if (productDTO.getOptions() == null || productDTO.getOptions().isEmpty()) {
+            throw new IllegalArgumentException("Product must have at least one option.");
         }
-        productRepository.deleteById(id);
+
+        product.setOptions(productDTO.getOptions().stream()
+                .map(optionDTO -> new Option(optionDTO.getId(), optionDTO.getName(), optionDTO.getQuantity(), product))
+                .collect(Collectors.toSet()));
+
+        productRepository.save(product);
     }
 
-    private void validateProductName(String productName) {
-        if (productName.contains("카카오")) {
-            throw new IllegalArgumentException("'카카오'를 이름에 포함하려면 담당 MD와 협의해주세요.");
-        }
+    @Transactional
+    public void deleteProduct(Long id) {
+        wishlistRepository.deleteByProductId(id);
+        productRepository.deleteById(id);
     }
 }

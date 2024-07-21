@@ -3,6 +3,9 @@ package gift.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -23,21 +26,25 @@ public class Product {
         @Column(nullable = false, name = "image_url")
         private String imageUrl;
 
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "category_id", nullable = false)
+        private Category category;
+
+        @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+        private Set<Option> options = new HashSet<>();
+
         protected Product() {}
 
-        public Product(Long id, String name, int price, String imageUrl) {
+        public Product(Long id, String name, int price, String imageUrl, Category category) {
                 this.id = id;
                 this.name = name;
                 this.price = price;
                 this.imageUrl = imageUrl;
+                this.category = category;
         }
 
         public Long getId() {
                 return id;
-        }
-
-        public void setId(Long id) {
-                this.id = id;
         }
 
         public String getName() {
@@ -50,5 +57,37 @@ public class Product {
 
         public String getImageUrl() {
                 return imageUrl;
+        }
+
+        public Category getCategory() {
+                return category;
+        }
+
+        public void setId(Long id) {
+                this.id = id;
+        }
+
+        public void setName(String name) {
+                this.name = name;
+        }
+
+        public void setPrice(int price) {
+                this.price = price;
+        }
+
+        public void setImageUrl(String imageUrl) {
+                this.imageUrl = imageUrl;
+        }
+
+        public void setCategory(Category category) {
+                this.category = category;
+        }
+
+        public Set<Option> getOptions() {
+                return options;
+        }
+
+        public void setOptions(Set<Option> options) {
+                this.options = options;
         }
 }

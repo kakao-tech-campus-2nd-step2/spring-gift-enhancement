@@ -1,9 +1,8 @@
 package gift.controller;
 
-import gift.model.Product;
+import gift.dto.ProductDTO;
 import gift.service.ProductService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,47 +21,33 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Product>> getAllProducts(Pageable pageable) {
-        Page<Product> products = productService.getAllProducts(pageable);
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(@RequestParam int page, @RequestParam int size) {
+        Page<ProductDTO> products = productService.getAllProducts(page, size);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
-        if (product != null) {
-            return new ResponseEntity<>(product, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        ProductDTO product = productService.getProductById(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> addProduct(@RequestBody @Valid Product product, BindingResult bindingResult) {
+    public ResponseEntity<Void> addProduct(@RequestBody @Valid ProductDTO productDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        try {
-            Product newProduct = productService.saveProduct(product);
-            return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        productService.saveProduct(productDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody @Valid Product product, BindingResult bindingResult) {
+    public ResponseEntity<Void> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        try {
-            Product updatedProduct = new Product(id, product.getName(), product.getPrice(), product.getImageUrl());
-            productService.updateProduct(updatedProduct);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        productService.updateProduct(id, productDTO);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")

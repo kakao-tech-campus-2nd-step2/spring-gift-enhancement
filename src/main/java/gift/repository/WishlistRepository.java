@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
     Page<Wishlist> findByUserEmail(String email, Pageable pageable);
     void deleteByUserEmailAndProductId(String email, Long productId);
+    void deleteByProductId(Long productId);
 }
