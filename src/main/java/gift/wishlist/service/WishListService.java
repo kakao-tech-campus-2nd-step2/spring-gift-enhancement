@@ -1,5 +1,6 @@
 package gift.wishlist.service;
 
+import gift.category.entity.Category;
 import gift.global.dto.PageInfoDto;
 import gift.global.dto.ProductInfoDto;
 import gift.global.dto.UserInfoDto;
@@ -33,7 +34,9 @@ public class WishListService {
     public void insertWishProduct(ProductInfoDto productInfoDto, UserInfoDto userInfoDto) {
         UserProduct userProduct = new UserProduct(userInfoDto.userId(), new Product(
             productInfoDto.productId(), productInfoDto.name(), productInfoDto.price(),
-            productInfoDto.imageUrl()));
+            productInfoDto.imageUrl(),
+            new Category(productInfoDto.categoryId(), productInfoDto.categoryName(),
+                productInfoDto.categoryImageUrl())));
 
         // 검증하기 (내부 id로 검증하면 쓸 데 없는 조인이 일어나서 객체로 확인해야 함)
         verifyWishProductAlreadyExistence(userProduct);
@@ -60,22 +63,26 @@ public class WishListService {
             long wishProductId = wishProduct.getUserProduct().getProduct().getProductId();
             String name = wishProduct.getUserProduct().getProduct().getName();
             int price = wishProduct.getUserProduct().getProduct().getPrice();
-            String imageUrl = wishProduct.getUserProduct().getProduct().getImage();
+            String imageUrl = wishProduct.getUserProduct().getProduct().getImageUrl();
+            long categoryId = wishProduct.getUserProduct().getProduct().getCategory()
+                .getCategoryId();
+            String categoryName = wishProduct.getUserProduct().getProduct().getName();
+            String categoryImageUrl = wishProduct.getUserProduct().getProduct().getImageUrl();
             int quantity = wishProduct.getQuantity();
 
             return new WishListResponseDto(wishListId, wishUserId, wishProductId, name, price,
-                imageUrl,
-                quantity);
+                imageUrl, categoryId, categoryName, categoryImageUrl, quantity);
         }).collect(Collectors.toList());
     }
 
     // 개수 증가하는 핸들러
     @Transactional
     public void increaseWishProduct(WishListIdDto wishListIdDto) {
-        Optional<WishList> optionalWishList = wishListRepository.findById(wishListIdDto.wishListId());
-        verifyWishProductExistence(optionalWishList);
+        Optional<WishList> optionalWishList = wishListRepository.findById(
+            wishListIdDto.wishListId());
 
-        WishList actualWishList = optionalWishList.get();
+        // 검증 및 불러오기
+        WishList actualWishList = getActualWishProduct(optionalWishList);
         int afterQuantity = actualWishList.getQuantity() + 1;
 
         actualWishList.updateQuantity(afterQuantity);
@@ -84,10 +91,11 @@ public class WishListService {
     // 개수 감소하는 핸들러
     @Transactional
     public void decreaseWishProduct(WishListIdDto wishListIdDto) {
-        Optional<WishList> optionalWishList = wishListRepository.findById(wishListIdDto.wishListId());
-        verifyWishProductExistence(optionalWishList);
+        Optional<WishList> optionalWishList = wishListRepository.findById(
+            wishListIdDto.wishListId());
 
-        WishList actualWishList = optionalWishList.get();
+        // 검증 및 불러오기
+        WishList actualWishList = getActualWishProduct(optionalWishList);
         int afterQuantity = actualWishList.getQuantity() - 1;
 
         // 1을 뺀 경우가 0 이하가 되면 제거.
@@ -95,10 +103,12 @@ public class WishListService {
     }
 
     // 위시리스트에서 제품을 삭제하는 핸들러
+    // 자신의 위시리스트인지 검증하는 로직을 추가하였습니다.
     @Transactional
-    public void deleteWishProduct(WishListIdDto wishListIdDto) {
+    public void deleteWishProduct(WishListIdDto wishListIdDto, UserInfoDto userInfoDto) {
         Long wishListId = wishListIdDto.wishListId();
-        verifyWishProductExistence(wishListId);
+        WishList actualWishList = getActualWishProduct(wishListRepository.findById(wishListId));
+        verifyDeleteOwnWishProduct(actualWishList, userInfoDto.userId());
 
         wishListRepository.deleteById(wishListId);
     }
@@ -120,16 +130,25 @@ public class WishListService {
     }
 
     // 불러온 제품이 존재하는지 확인
-    private void verifyWishProductExistence(Optional<WishList> optionalWishProduct) {
+    private WishList getActualWishProduct(Optional<WishList> optionalWishProduct) {
         if (optionalWishProduct.isEmpty()) {
             throw new IllegalArgumentException("장바구니에 존재하지 않는 제품입니다.");
         }
+
+        return optionalWishProduct.get();
     }
 
     // Id를 통해 제품이 존재하는지 확인
     private void verifyWishProductExistence(Long wishListId) {
         if (!wishListRepository.existsById(wishListId)) {
             throw new IllegalArgumentException("이미 삭제된 제품입니다.");
+        }
+    }
+
+    // 삭제하려는 제품이 자신의 것이 맞는지 확인
+    private void verifyDeleteOwnWishProduct(WishList wishProduct, Long userId) {
+        if (wishProduct.getUserProduct().getUserId() != userId) {
+            throw new IllegalArgumentException("타인의 장바구니는 조작할 수 없습니다.");
         }
     }
 }

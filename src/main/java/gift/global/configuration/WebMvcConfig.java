@@ -2,6 +2,7 @@ package gift.global.configuration;
 
 import gift.global.component.AdminLoginInterceptor;
 import gift.global.component.LoginInterceptor;
+import gift.global.resolver.CategoryInfoResolver;
 import gift.global.resolver.PageInfoResolver;
 import gift.global.resolver.ProductInfoResolver;
 import gift.global.resolver.UserInfoResolver;
@@ -25,17 +26,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final UserInfoResolver userInfoResolver;
     private final PageInfoResolver pageInfoResolver;
     private final ProductInfoResolver productInfoResolver;
+    private final CategoryInfoResolver categoryInfoResolver;
 
     @Autowired
     public WebMvcConfig(LoginInterceptor loginInterceptor,
         AdminLoginInterceptor adminLoginInterceptor,
         UserInfoResolver userInfoResolver, PageInfoResolver pageInfoResolver,
-        ProductInfoResolver productInfoResolver) {
+        ProductInfoResolver productInfoResolver, CategoryInfoResolver categoryInfoResolver) {
         this.loginInterceptor = loginInterceptor;
         this.adminLoginInterceptor = adminLoginInterceptor;
         this.userInfoResolver = userInfoResolver;
         this.pageInfoResolver = pageInfoResolver;
         this.productInfoResolver = productInfoResolver;
+        this.categoryInfoResolver = categoryInfoResolver;
     }
 
     // 인터셉터를 추가하는 메서드를 재정의하여 loginInterceptor를 등록하도록 함.
@@ -77,5 +80,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         resolvers.add(userInfoResolver);
         resolvers.add(pageInfoResolver);
         resolvers.add(productInfoResolver);
+        resolvers.add(categoryInfoResolver);
     }
 }

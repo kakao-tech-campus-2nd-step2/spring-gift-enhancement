@@ -1,6 +1,6 @@
 package gift.permission.repository;
 
-import gift.user.entity.User;
+import gift.permission.entity.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -76,8 +76,9 @@ public class WishListApiController {
 
     // 삭제 버튼 눌러서 삭제
     @DeleteMapping("/wishlist/{wishlist-id}")
-    public ApiResponseDto deleteWishProduct(@PathVariable(name = "wishlist-id") Long wishListId) {
-        wishListService.deleteWishProduct(new WishListIdDto(wishListId));
+    public ApiResponseDto deleteWishProduct(@PathVariable(name = "wishlist-id") Long wishListId,
+        @UserInfo UserInfoDto userInfoDto) {
+        wishListService.deleteWishProduct(new WishListIdDto(wishListId), userInfoDto);
         return ApiResponseDto.of();
     }
 }

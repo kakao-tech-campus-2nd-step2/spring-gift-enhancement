@@ -8,6 +8,9 @@ public record WishListResponseDto(
     String name,
     int price,
     String imageUrl,
+    long categoryId,
+    String categoryName,
+    String categoryImageUrl,
     int quantity) {
 
 }
