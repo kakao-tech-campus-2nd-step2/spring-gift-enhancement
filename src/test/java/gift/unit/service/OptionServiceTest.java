@@ -278,6 +278,18 @@ public class OptionServiceTest {
         then(optionRepository).should().delete(any());
     }
 
+    @Test
+    @DisplayName("Option subtract - 남은 재고보다 큰 수 차감")
+    void optionsSubtractOverQuantity() {
+        // given
+        Option option1 = new Option("a", 100, null);
+        given(optionRepository.findById(any())).willReturn(Optional.of(option1));
+
+        // when & then
+        assertThatThrownBy(() -> optionService.subtractOptionQuantity(1L, 1000))
+            .isInstanceOf(CustomException.class);
+    }
+
     private Product createProduct() {
         return createProduct("Product 1");
     }

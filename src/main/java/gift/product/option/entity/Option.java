@@ -74,6 +74,10 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public void subtract(Integer subtractionQuantity) {
+        this.quantity -= subtractionQuantity;
+    }
+
     private void validateName(String name) {
         Pattern pattern = Pattern.compile("^[\\w\\s()\\[\\]+\\-&/_]*$");
         Matcher matcher = pattern.matcher(name);

@@ -20,6 +20,7 @@ public enum ErrorCode {
         "옵션 이름은 최대 50자까지 가능하고, 특수 문자는 `( ), [ ], +, -, &, /, _`만 혀용합니다."),
     LAST_OPTION(HttpStatus.BAD_REQUEST,
         "마지막 남은 옵션은 삭제할 수 없습니다. 다른 옵션을 추가한 후 삭제를 시도해 주세요."),
+    INVALID_SUBTRACTION_QUANTITY(HttpStatus.BAD_REQUEST, "차감할 수량은 1 이상 현재 재고 수량 이하이어야 합니다."),
 
     /* User 관련 예외 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),

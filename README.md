@@ -51,7 +51,7 @@ option.subtract(quantity)
 
 * 테스트 코드 작성
 * 옵션 수량 차감 기능 구현
-  * [ ] 차감을 원하는 양이 현재 quantity보다 크지 않아야 함
+  * [x] 차감을 원하는 양이 현재 quantity보다 크지 않아야 함
 
 
 
