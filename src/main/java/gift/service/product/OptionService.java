@@ -9,6 +9,9 @@ import gift.repository.product.ProductRepository;
 import gift.service.product.dto.OptionCommand;
 import gift.service.product.dto.OptionModel;
 import java.util.List;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,12 +74,18 @@ public class OptionService {
         optionRepository.deleteById(optionId);
     }
 
-    public synchronized void puchaseOption(Long optionId, Integer quantity) {
+    @Retryable(
+        retryFor = {ObjectOptimisticLockingFailureException.class},
+        maxAttempts = 100,
+        backoff = @Backoff(delay = 200)
+    )
+    @Transactional
+    public void purchaseOption(Long optionId, Integer quantity) {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new NotFoundException("Option not found"));
         option.purchase(quantity);
-        optionRepository.save(option);
     }
+
 
     @Transactional
     public Option findOptionById(Long optionId) {
