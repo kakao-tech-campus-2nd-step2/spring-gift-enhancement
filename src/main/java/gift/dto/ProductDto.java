@@ -1,11 +1,5 @@
 package gift.dto;
 
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 public class ProductDto {
 
     private String name;
@@ -13,20 +7,31 @@ public class ProductDto {
     private String imageUrl;
     private Long categoryId;
     private Long optionId;
+    private String optionName;
 
     public ProductDto() {
     }
 
     public ProductDto(String name, Integer price, String imageUrl, Long categoryId) {
+        this(name, price, imageUrl, categoryId, null, null);
+    }
+
+    public ProductDto(String name, Integer price, String imageUrl, Long categoryId, String optionName) {
+        this(name, price, imageUrl, categoryId, null, optionName);
+    }
+
+    public ProductDto(String name, Integer price, String imageUrl, Long categoryId, Long optionId) {
+        this(name, price, imageUrl, categoryId, optionId, null);
+    }
+
+    public ProductDto(String name, Integer price, String imageUrl, Long categoryId, Long optionId,
+        String optionName) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
-    }
-
-    public ProductDto(String name, Integer price, String imageUrl, Long categoryId, Long optionId) {
-        new ProductDto(name, price, imageUrl, categoryId);
         this.optionId = optionId;
+        this.optionName = optionName;
     }
 
     public String getName() {

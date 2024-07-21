@@ -19,6 +19,7 @@ import gift.model.Option;
 import gift.model.Product;
 import gift.security.LoginMemberArgumentResolver;
 import gift.service.CategoryService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +40,9 @@ class ProductControllerTest {
 
     @MockBean
     private ProductService productService;
+
+    @MockBean
+    private OptionService optionService;
 
 
     @MockBean

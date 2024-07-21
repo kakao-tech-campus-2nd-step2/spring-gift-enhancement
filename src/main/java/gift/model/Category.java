@@ -25,13 +25,14 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<Product> productList = new ArrayList<>();
+    private List<Product> productList;
 
     public Category() {
     }
 
     public Category(String name) {
-        this(null, name, null);
+        this.name = name;
+        this.productList = new ArrayList<>();
     }
 
     public Category(Long id, String name, List<Product> productList) {
