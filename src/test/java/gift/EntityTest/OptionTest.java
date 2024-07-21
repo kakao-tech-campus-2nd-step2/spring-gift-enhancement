@@ -16,7 +16,7 @@ public class OptionTest {
 
     @BeforeEach
     void beforEach(){
-        Category category = new Category("식품", "#8123f3D", "식품 url", "");
+        Category category = new Category("식품", "#812f3D", "식품 url", "");
         product1 = new Product("아메리카노", 4000, "아메리카노url", category);
     }
 
