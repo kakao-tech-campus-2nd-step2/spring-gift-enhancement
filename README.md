@@ -18,3 +18,10 @@
 2. product_option 테이블 추가
 3. product/options.html 추가 및 기존 view 수정
 4. option 기능에 대한 ProductOptionServiceTest 추가
+
+### Step3
+
+1. 상품수량 차감 기능 추가
+2. 기존 수량보다 큰 수 입력 시 에러
+3. 상품수량 차감 테스트코드 추가
+4. product/options.html 에서도 기능 구현

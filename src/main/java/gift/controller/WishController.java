@@ -17,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/wishes")
 public class WishController {
@@ -40,7 +38,7 @@ public class WishController {
     @PostMapping
     public Wish addWish(@RequestBody WishRequest wishRequest, @LoginMember Member member) {
         Product product = productService.findById(wishRequest.getProductId());
-        ProductOption productOption = productOptionService.findById(wishRequest.getOptionId());
+        ProductOption productOption = productOptionService.findProductOptionById(wishRequest.getOptionId());
         if (productOption == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid product option");
         }

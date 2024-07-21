@@ -3,9 +3,11 @@ package gift;
 import gift.model.Category;
 import gift.model.Member;
 import gift.model.Product;
+import gift.model.ProductOption;
 import gift.model.Wish;
 import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
+import gift.repository.ProductOptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,6 +37,9 @@ class WishRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ProductOptionRepository productOptionRepository;
+
     @Test
     void save() {
         Member member = new Member();
@@ -52,9 +58,21 @@ class WishRepositoryTest {
         product.setCategory(category);
         productRepository.save(product);
 
+        ProductOption option = new ProductOption();
+        option.setName("Default Option");
+        option.setQuantity(10);
+        option.setProduct(product);
+        productOptionRepository.save(option);
+
+        List<ProductOption> options = new ArrayList<>();
+        options.add(option);
+        product.setOptions(options);
+        productRepository.save(product);
+
         Wish wish = new Wish();
         wish.setMember(member);
         wish.setProduct(product);
+        wish.setProductOption(option);
         Wish savedWish = wishRepository.save(wish);
 
         assertThat(savedWish.getId()).isNotNull();
@@ -79,9 +97,21 @@ class WishRepositoryTest {
         product.setCategory(category);
         productRepository.save(product);
 
+        ProductOption option = new ProductOption();
+        option.setName("Default Option");
+        option.setQuantity(10);
+        option.setProduct(product);
+        productOptionRepository.save(option);
+
+        List<ProductOption> options = new ArrayList<>();
+        options.add(option);
+        product.setOptions(options);
+        productRepository.save(product);
+
         Wish wish = new Wish();
         wish.setMember(member);
         wish.setProduct(product);
+        wish.setProductOption(option);
         wishRepository.save(wish);
 
         Pageable pageable = PageRequest.of(0, 5);

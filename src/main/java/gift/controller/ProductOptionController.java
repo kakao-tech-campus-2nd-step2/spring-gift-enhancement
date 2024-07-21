@@ -1,26 +1,31 @@
 package gift.controller;
 
-import gift.model.ProductOption;
 import gift.service.ProductOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/products/options")
 public class ProductOptionController {
 
     @Autowired
     private ProductOptionService productOptionService;
 
-    @GetMapping("/{productId}/options")
-    public ResponseEntity<List<ProductOption>> getProductOptions(@PathVariable Long productId) {
-        List<ProductOption> options = productOptionService.getOptionsByProductId(productId);
-        return ResponseEntity.ok(options);
+    @PostMapping("/{optionId}/subtract")
+    public ResponseEntity<String> subtractOptionQuantity(@PathVariable Long optionId, @RequestBody Map<String, Integer> request) {
+        if (request == null || !request.containsKey("quantity")) {
+            return ResponseEntity.badRequest().body("Quantity is required");
+        }
+
+        int quantityToSubtract = request.get("quantity");
+        try {
+            productOptionService.subtractProductOptionQuantity(optionId, quantityToSubtract);
+            return ResponseEntity.ok("Quantity 차감 성공");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
