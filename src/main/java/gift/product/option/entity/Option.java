@@ -75,6 +75,9 @@ public class Option {
     }
 
     public void subtract(Integer subtractionQuantity) {
+        if (subtractionQuantity < 1 || quantity < subtractionQuantity) {
+            throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
+        }
         this.quantity -= subtractionQuantity;
     }
 

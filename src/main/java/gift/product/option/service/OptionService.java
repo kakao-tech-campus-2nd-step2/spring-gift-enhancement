@@ -79,10 +79,6 @@ public class OptionService {
         Option option = optionRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
 
-        if (subtractionQuantity < 1 || option.getQuantity() < subtractionQuantity) {
-            throw new CustomException(ErrorCode.INVALID_OPTION_QUANTITY);
-        }
-
         option.subtract(subtractionQuantity);
     }
 }
