@@ -3,9 +3,7 @@ package gift.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
 
 import gift.domain.category.entity.Category;
 import gift.domain.option.dto.OptionRequest;
@@ -54,10 +52,10 @@ public class OptionServiceTest {
         // then
         assertAll(
             () -> IntStream.range(0, actual.size()).forEach((i) -> {
-                assertThat(actual.get(i).getName())
-                    .isEqualTo(expected.get(i).getName());
-                assertThat(actual.get(i).getQuantity())
-                    .isEqualTo(expected.get(i).getQuantity());
+                assertThat(actual.get(i).name())
+                    .isEqualTo(expected.get(i).name());
+                assertThat(actual.get(i).quantity())
+                    .isEqualTo(expected.get(i).quantity());
             })
         );
     }
@@ -82,8 +80,8 @@ public class OptionServiceTest {
             new OptionRequest("newOption", 1000));
 
         assertAll(
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getQuantity()).isEqualTo(expected.getQuantity())
+            () -> assertThat(actual.name()).isEqualTo(expected.name()),
+            () -> assertThat(actual.quantity()).isEqualTo(expected.quantity())
         );
     }
 

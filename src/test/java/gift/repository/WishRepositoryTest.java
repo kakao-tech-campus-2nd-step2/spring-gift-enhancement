@@ -1,15 +1,16 @@
 package gift.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
 import gift.domain.member.entity.Member;
 import gift.domain.member.repository.MemberRepository;
 import gift.domain.product.entity.Product;
-import gift.domain.wishlist.entity.Wish;
 import gift.domain.product.repository.ProductRepository;
+import gift.domain.wishlist.entity.Wish;
 import gift.domain.wishlist.repository.WishRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

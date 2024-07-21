@@ -8,13 +8,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import gift.domain.category.entity.Category;
-import gift.domain.wishlist.dto.WishRequest;
 import gift.domain.member.entity.Member;
+import gift.domain.member.repository.MemberRepository;
 import gift.domain.product.entity.Product;
+import gift.domain.product.repository.ProductRepository;
+import gift.domain.wishlist.dto.WishRequest;
 import gift.domain.wishlist.dto.WishResponse;
 import gift.domain.wishlist.entity.Wish;
-import gift.domain.member.repository.MemberRepository;
-import gift.domain.product.repository.ProductRepository;
 import gift.domain.wishlist.repository.WishRepository;
 import gift.domain.wishlist.service.WishService;
 import java.util.Arrays;
@@ -74,10 +74,10 @@ class WishServiceTest {
         assertAll(
             () -> assertThat(actual).isNotNull(),
             () -> IntStream.range(0, actual.getContent().size()).forEach(i -> {
-                assertThat(actual.getContent().get(i).getMemberId())
-                    .isEqualTo(expected.getContent().get(i).getMemberId());
-                assertThat(actual.getContent().get(i).getProductId())
-                    .isEqualTo(expected.getContent().get(i).getProductId());
+                assertThat(actual.getContent().get(i).memberId())
+                    .isEqualTo(expected.getContent().get(i).memberId());
+                assertThat(actual.getContent().get(i).productId())
+                    .isEqualTo(expected.getContent().get(i).productId());
             })
         );
     }
@@ -104,8 +104,8 @@ class WishServiceTest {
         WishResponse actual = wishService.createWish(wishRequest);
 
         // then
-        assertThat(actual.getMemberId()).isEqualTo(expected.getMemberId());
-        assertThat(actual.getProductId()).isEqualTo(expected.getProductId());
+        assertThat(actual.memberId()).isEqualTo(expected.memberId());
+        assertThat(actual.productId()).isEqualTo(expected.productId());
 
     }
 

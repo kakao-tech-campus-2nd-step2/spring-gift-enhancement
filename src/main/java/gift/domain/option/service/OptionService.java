@@ -48,6 +48,15 @@ public class OptionService {
         return entityToDto(savedOption);
     }
 
+    @Transactional
+    public OptionResponse subtractQuantity(Long id, int quantity) {
+        Option option = optionRepository.findById(id)
+            .orElseThrow(() -> new OptionNotFoundException("해당 옵션이 존재하지 않습니다."));
+        option.subtract(quantity);
+
+        return entityToDto(option);
+    }
+
     private OptionResponse entityToDto(Option option) {
         return new OptionResponse(option.getId(), option.getName(), option.getQuantity());
     }

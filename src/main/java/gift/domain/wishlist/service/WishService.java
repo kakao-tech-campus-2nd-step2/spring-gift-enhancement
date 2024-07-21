@@ -45,7 +45,7 @@ public class WishService {
     @Transactional
     public WishResponse createWish(WishRequest wishRequest) {
         Wish wish = DtoToEntity(wishRequest);
-
+        wish.getMember().addWish(wish);
         return entityToDto(wishRepository.save(wish));
     }
 

@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import gift.domain.category.entity.Category;
 import gift.domain.category.repository.CategoryRepository;
 import gift.domain.member.dto.MemberRequest;
+import gift.domain.member.service.MemberService;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.ProductRepository;
 import gift.domain.wishlist.dto.ProductIdRequest;
-import gift.domain.member.service.MemberService;
 import gift.domain.wishlist.entity.Wish;
 import gift.domain.wishlist.repository.WishRepository;
 import java.net.URI;
@@ -26,6 +26,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -49,6 +51,9 @@ class WishControllerTest {
 
     @Autowired
     private WishRepository wishRepository;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     private String token;
 
@@ -103,14 +108,18 @@ class WishControllerTest {
     void deleteWishTest() {
 
         // given
-        Category category = new Category("name", "color", "imageUrl", "description");
-        Category savedCategory = categoryRepository.save(category);
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.execute(status -> {
+            Category category = new Category("name", "color", "imageUrl", "description");
+            Category savedCategory = categoryRepository.save(category);
 
-        Product product = new Product("name", 1000, "imageUrl", savedCategory);
-        productRepository.save(product);
+            Product product = new Product("name", 1000, "imageUrl", savedCategory);
+            productRepository.save(product);
+            Wish newWish = new Wish(memberService.getMemberFromToken(token), product);
+            wishRepository.save(newWish);
 
-        Wish wish = new Wish(memberService.getMemberFromToken(token), product);
-        wishRepository.save(wish);
+            return null;
+        });
 
         var id = 1L;
         var url = "http://localhost:" + port + "/api/wishes/" + id;

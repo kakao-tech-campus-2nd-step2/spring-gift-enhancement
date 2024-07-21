@@ -9,7 +9,6 @@ import gift.domain.product.dto.ProductRequest;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.ProductRepository;
 import java.net.URI;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

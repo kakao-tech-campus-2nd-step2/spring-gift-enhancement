@@ -3,7 +3,6 @@ package gift.domain.wishlist.entity;
 import gift.domain.member.entity.Member;
 import gift.domain.product.entity.Product;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -52,12 +51,5 @@ public class Wish {
 
     public Product getProduct() {
         return product;
-    }
-
-    public void updateMember(Member member) {
-        // 기존 memberEntity에서  wishEntity 삭제
-        this.member.getWishList().remove(this);
-        this.member = member;
-        member.getWishList().add(this);
     }
 }

@@ -65,14 +65,14 @@ class CategoryServiceTest {
         assertAll(
             () -> assertThat(actual).isNotNull(),
             () -> IntStream.range(0, actual.getContent().size()).forEach(i -> {
-                assertThat(actual.getContent().get(i).getName())
-                    .isEqualTo(expected.getContent().get(i).getName());
-                assertThat(actual.getContent().get(i).getColor())
-                    .isEqualTo(expected.getContent().get(i).getColor());
-                assertThat(actual.getContent().get(i).getImageUrl())
-                    .isEqualTo(expected.getContent().get(i).getImageUrl());
-                assertThat(actual.getContent().get(i).getDescription())
-                    .isEqualTo(expected.getContent().get(i).getDescription());
+                assertThat(actual.getContent().get(i).name())
+                    .isEqualTo(expected.getContent().get(i).name());
+                assertThat(actual.getContent().get(i).color())
+                    .isEqualTo(expected.getContent().get(i).color());
+                assertThat(actual.getContent().get(i).imageUrl())
+                    .isEqualTo(expected.getContent().get(i).imageUrl());
+                assertThat(actual.getContent().get(i).description())
+                    .isEqualTo(expected.getContent().get(i).description());
             })
         );
     }
@@ -93,11 +93,11 @@ class CategoryServiceTest {
 
         // then
         assertAll(
-            () -> assertThat(actual.getId()).isEqualTo(expected.getId()),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getColor()).isEqualTo(expected.getColor()),
-            () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl()),
-            () -> assertThat(actual.getDescription()).isEqualTo(expected.getDescription())
+            () -> assertThat(actual.id()).isEqualTo(expected.id()),
+            () -> assertThat(actual.name()).isEqualTo(expected.name()),
+            () -> assertThat(actual.color()).isEqualTo(expected.color()),
+            () -> assertThat(actual.imageUrl()).isEqualTo(expected.imageUrl()),
+            () -> assertThat(actual.description()).isEqualTo(expected.description())
         );
     }
 
@@ -122,11 +122,11 @@ class CategoryServiceTest {
 
         // then
         assertAll(
-            () -> assertThat(actual.getId()).isEqualTo(expected.getId()),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getColor()).isEqualTo(expected.getColor()),
-            () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl()),
-            () -> assertThat(actual.getDescription()).isEqualTo(expected.getDescription())
+            () -> assertThat(actual.id()).isEqualTo(expected.id()),
+            () -> assertThat(actual.name()).isEqualTo(expected.name()),
+            () -> assertThat(actual.color()).isEqualTo(expected.color()),
+            () -> assertThat(actual.imageUrl()).isEqualTo(expected.imageUrl()),
+            () -> assertThat(actual.description()).isEqualTo(expected.description())
         );
     }
 

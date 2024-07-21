@@ -1,6 +1,8 @@
 package gift.domain.option.exception;
 
-public class OptionNotFoundException extends RuntimeException {
+import gift.global.exception.NotFoundException;
+
+public class OptionNotFoundException extends NotFoundException {
 
     public OptionNotFoundException(String message) {
         super(message);
