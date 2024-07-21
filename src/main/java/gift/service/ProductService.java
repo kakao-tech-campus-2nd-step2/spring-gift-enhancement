@@ -120,15 +120,12 @@ public class ProductService {
         return OptionResponse.from(option);
     }
 
-    @Transactional
     @RedissonLock(value = "#optionId")
     public int subtractQuantity(Long id, Long optionId, int amount) {
         Product product = productRepository.findProductAndOptionByIdFetchJoin(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
         Option option = product.findOptionByOptionId(optionId);
-        int result = option.subtractQuantity(amount);
-        productRepository.saveAndFlush(product);
-        return result;
+        return option.subtractQuantity(amount);
     }
 
     private void checkProductExist(Long id) {

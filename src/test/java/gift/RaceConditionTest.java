@@ -35,7 +35,7 @@ public class RaceConditionTest {
     private ProductService productService;
 
     @Test
-    @DisplayName("동시에 삭제 요청[성공]-비관적락")
+    @DisplayName("동시에 삭제 요청[성공]-Redisson 분산락")
     void subtractRequestAtTheSameTime() throws InterruptedException {
         // given
         int quantity = 100;

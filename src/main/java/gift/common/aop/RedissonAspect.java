@@ -19,9 +19,11 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedissonAspect {
     private final RedissonClient redissonClient;
+    private final AopForTransaction aopForTransaction;
 
-    public RedissonAspect(RedissonClient redissonClient) {
+    public RedissonAspect(RedissonClient redissonClient, AopForTransaction aopForTransaction) {
         this.redissonClient = redissonClient;
+        this.aopForTransaction = aopForTransaction;
     }
 
     @Around("@annotation(gift.common.annotation.RedissonLock)")
@@ -31,15 +33,14 @@ public class RedissonAspect {
         RedissonLock annotation = method.getAnnotation(RedissonLock.class);
         String lockKey = method.getName() + getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), annotation.value());
         RLock lock = redissonClient.getLock(lockKey);
-        System.out.println(lockKey);
 
         try {
             boolean lockable = lock.tryLock(annotation.waitTime(), annotation.leaseTime(), TimeUnit.MILLISECONDS);
 
             if (!lockable) {
-                throw new RedissonLockException("Temporary errors failed to access the service");
+                return false;
             }
-            return joinPoint.proceed();
+            return aopForTransaction.proceed(joinPoint);
         } catch (Exception e) {
             throw new RedissonLockException("Temporary errors failed to access the service");
         } finally {
