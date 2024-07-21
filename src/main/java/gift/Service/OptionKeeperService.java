@@ -32,4 +32,9 @@ public class OptionKeeperService {
         if (optionList.size() == 1 )
             throw new OptionValidationException("상품 내의 옵션은 적어도 1개 이상이여야 합니다.");
     }
+
+    public void checkOptionQuantity(int OptionQuantity, int subtractQuantity) {
+        if (OptionQuantity - subtractQuantity < 1)
+            throw new IllegalArgumentException("옵션 수량은 최소 1개이상이여야 합니다. 현재 빼려고 하는 수량이 많습니다.");
+    }
 }
