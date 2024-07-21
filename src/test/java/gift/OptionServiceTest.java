@@ -23,9 +23,6 @@ import org.springframework.test.annotation.DirtiesContext;
 public class OptionServiceTest {
 
     @Autowired
-    private OptionRepository optionRepository;
-
-    @Autowired
     private OptionService optionService;
 
     @Autowired
