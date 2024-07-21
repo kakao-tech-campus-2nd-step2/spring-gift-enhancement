@@ -2,8 +2,10 @@ package gift.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,6 +37,10 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
+
     protected Product() {
     }
 
@@ -45,6 +51,7 @@ public class Product {
         this.imageUrl = builder.imageUrl;
         this.description = builder.description;
         this.wishes = builder.wishes;
+        this.options = builder.options != null ? builder.options : new ArrayList<>();
         this.category = builder.category;
     }
 
@@ -76,12 +83,17 @@ public class Product {
         return category;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public static class ProductBuilder {
         private Long id;
         private String name;
         private BigDecimal price;
         private String imageUrl;
         private String description;
+        private List<Option> options;
         private List<Wish> wishes;
         private Category category;
 
@@ -115,6 +127,12 @@ public class Product {
             return this;
         }
 
+        public ProductBuilder options(List<Option> options) {
+            this.options = options;
+            return this;
+        }
+
+
         public ProductBuilder category(Category category) {
             this.category = category;
             return this;
@@ -123,5 +141,21 @@ public class Product {
         public Product build() {
             return new Product(this);
         }
+    }
+
+    public ProductBuilder toBuilder() {
+        return new ProductBuilder()
+            .id(this.id)
+            .name(this.name)
+            .price(this.price)
+            .imageUrl(this.imageUrl)
+            .description(this.description)
+            .wishes(this.wishes)
+            .options(this.options)
+            .category(this.category);
+    }
+
+    public void updateCategory(Category category) {
+        this.category = category;
     }
 }
