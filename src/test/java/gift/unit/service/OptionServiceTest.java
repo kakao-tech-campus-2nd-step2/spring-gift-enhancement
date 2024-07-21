@@ -290,6 +290,21 @@ public class OptionServiceTest {
             .isInstanceOf(CustomException.class);
     }
 
+    @Test
+    @DisplayName("Option subtract test - happy case")
+    void optionSubtractTest() {
+        // given
+        Option option1 = new Option("a", 100, null);
+        given(optionRepository.findById(any())).willReturn(Optional.of(option1));
+
+        // when
+        optionService.subtractOptionQuantity(1L, 30);
+
+        // then
+        then(optionRepository).should().findById(any());
+        assertThat(option1.getQuantity()).isEqualTo(70);
+    }
+
     private Product createProduct() {
         return createProduct("Product 1");
     }

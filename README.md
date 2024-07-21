@@ -42,7 +42,7 @@
 
 ```java
 var option = optionRepository.findByProductId(productId).orElseThrow();
-option.subtract(quantity)
+option.subtract(quantity);
 ```
 
 
@@ -50,7 +50,7 @@ option.subtract(quantity)
 ### 3단계 기능 목록
 
 * 테스트 코드 작성
-* 옵션 수량 차감 기능 구현
+* [x] 옵션 수량 차감 기능 구현
   * [x] 차감을 원하는 양이 현재 quantity보다 크지 않아야 함
 
 
