@@ -2,6 +2,7 @@ package gift.domain;
 
 import gift.dto.CategoryDto;
 import gift.dto.OptionDto;
+import gift.dto.ProductDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -104,17 +105,22 @@ public class Product {
     public List<OptionDto> getOptionDtos() {
         List<OptionDto> optionDtos = new ArrayList<>();
         for (Option option : options) {
-            OptionDto optionDto = new OptionDto(option.getId(), option.getName(), option.getAmount(), option.getProductDto());
+            OptionDto optionDto = new OptionDto(option.getId(), option.getName(),
+                option.getAmount(), option.getProductDto());
             optionDtos.add(optionDto);
         }
         return optionDtos;
     }
 
-    public void update(String name, double price, String imageUrl, Category category, List<Option> options) {
+    public void update(String name, double price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        this.options = options;
+    }
+
+    public ProductDto toProductDto() {
+        return new ProductDto(this.getId(), this.getName(), this.getPrice(), this.getImageUrl(),
+            this.getCategoryDto(), this.getOptionDtos());
     }
 }
