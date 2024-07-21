@@ -1,6 +1,7 @@
 package gift.controller.product.dto;
 
 import gift.service.product.dto.OptionCommand;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -12,8 +13,8 @@ public class OptionRequest {
         List<Info> options
     ) {
 
-        public OptionCommand.Register toCommand() {
-            return new OptionCommand.Register(options.stream()
+        public OptionCommand.RegisterMany toCommand() {
+            return new OptionCommand.RegisterMany(options.stream()
                 .map(Info::toCommand)
                 .toList());
         }
@@ -22,7 +23,7 @@ public class OptionRequest {
     public record Update(
         @NotBlank
         String name,
-        @NotNull
+        @Min(0)
         Integer quantity
     ) {
 
@@ -35,7 +36,7 @@ public class OptionRequest {
     public record Info(
         @NotBlank
         String name,
-        @NotNull
+        @Min(0)
         Integer quantity
     ) {
 

@@ -60,44 +60,50 @@ insert into product (name, price, image_url, created_at, last_modified_at, categ
 values ('Merle', 6880, 'http://dummyimage.com/177x100.png/dddddd/000000', '2023-05-31 10:00:00',
         '2023-05-31 12:00:00', 1);
 
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option1', 5, 1, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option2', 5, 2, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option3', 5, 3, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option1', 5, 4, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option2', 5, 5, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option3', 5, 6, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option1', 5, 7, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option2', 5, 8, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option3', 5, 9, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option1', 5, 10, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option2', 5, 11, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option3', 5, 12, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option1', 5, 13, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option2', 5, 14, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option3', 5, 15, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option1', 5, 16, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option2', 5, 17, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option3', 5, 18, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
-insert into option (name, quantity, product_id, created_at, last_modified_at)
-values ('option3', 5, 19, '2023-05-31 10:00:00', '2023-05-31 12:00:00');
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('optio1', 1000, 19, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('optio2', 1000, 19, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('optio3', 1000, 19, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('optio4', 1000, 19, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option2', 5, 2, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option3', 5, 3, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option1', 5, 4, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option2', 5, 5, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option3', 5, 6, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option1', 5, 7, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option2', 5, 8, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option3', 5, 9, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option1', 5, 10, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option2', 5, 11, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option3', 5, 12, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option1', 5, 13, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option2', 5, 14, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option3', 5, 15, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option1', 5, 16, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option2', 5, 17, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option3', 5, 18, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
+insert into option (name, quantity, product_id, created_at, last_modified_at, version)
+values ('option3', 5, 19, '2023-05-31 10:00:00', '2023-05-31 12:00:00', 1);
 
 insert into member (name, email, password, role, created_at, last_modified_at)
 values ('Jarred', 'test@test.com',

@@ -9,10 +9,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import java.util.regex.Pattern;
 
 @Entity
+@Table(
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_option_name",
+            columnNames = {"name", "product_id"}
+        )
+    }
+)
 public class Option extends BaseTimeEntity {
 
     @Id
@@ -29,6 +40,10 @@ public class Option extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @Version
+    @Column(nullable = false)
+    private Long version;
 
     protected Option() {
     }
@@ -53,6 +68,10 @@ public class Option extends BaseTimeEntity {
         return quantity;
     }
 
+    public Long getVersion() {
+        return version;
+    }
+
     public void update(String name, Integer quantity) {
         OptionNameValidator.isValidName(name);
         OptionNameValidator.isValidCount(quantity);
@@ -64,6 +83,16 @@ public class Option extends BaseTimeEntity {
         return this.name.equals(name);
     }
 
+    //-- bussiness logic --//
+    public void purchase(int count) {
+        if (quantity < count) {
+            throw new IllegalArgumentException("재고가 부족합니다.");
+        }
+        quantity -= count;
+    }
+
+
+    //-- validation --//
     private static class OptionNameValidator {
 
         private static final int MAX_LENGTH = 50;
@@ -88,7 +117,7 @@ public class Option extends BaseTimeEntity {
         }
 
         public static boolean isValidCount(Integer value) {
-            if (value < 0) {
+            if (value < 1) {
                 throw new IllegalArgumentException("옵션 개수는 1 이상의 값이어야 합니다.");
             }
 

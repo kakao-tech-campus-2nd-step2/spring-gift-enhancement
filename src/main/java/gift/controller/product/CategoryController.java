@@ -29,7 +29,7 @@ public class CategoryController {
     @GetMapping("/categories")
     public ResponseEntity<CategoryResponse.InfoList> getCategories() {
         List<CategoryModel.Info> model = categoryService.getCategories();
-        return ResponseEntity.ok().body(CategoryResponse.InfoList.from(model));
+        return ResponseEntity.ok(CategoryResponse.InfoList.from(model));
     }
 
     @Authorization(role = Role.ADMIN)
@@ -38,7 +38,7 @@ public class CategoryController {
         @RequestBody @Valid CategoryRequest.Register request
     ) {
         CategoryModel.Info model = categoryService.createCategory(request.toCommand());
-        return ResponseEntity.ok().body(CategoryResponse.Info.from(model));
+        return ResponseEntity.ok(CategoryResponse.Info.from(model));
     }
 
     @GetMapping("/categories/{id}")
@@ -46,7 +46,7 @@ public class CategoryController {
         @PathVariable("id") Long id
     ) {
         CategoryModel.Info model = categoryService.getCategory(id);
-        return ResponseEntity.ok().body(CategoryResponse.Info.from(model));
+        return ResponseEntity.ok(CategoryResponse.Info.from(model));
     }
 
     @Authorization(role = Role.ADMIN)
@@ -56,7 +56,7 @@ public class CategoryController {
         @RequestBody @Valid CategoryRequest.Update request
     ) {
         CategoryModel.Info model = categoryService.updateCategory(id, request.toCommand());
-        return ResponseEntity.ok().body(CategoryResponse.Info.from(model));
+        return ResponseEntity.ok(CategoryResponse.Info.from(model));
     }
 
     @Authorization(role = Role.ADMIN)

@@ -1,6 +1,7 @@
 package gift.repository.product;
 
 import gift.model.product.Option;
+import gift.model.product.Options;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,8 +13,10 @@ public interface OptionRepository {
 
     Option save(Option option);
 
-    List<Option> findByProductId(Long productId);
+    Options findAllByProductId(Long productId);
 
     boolean existsById(Long optionId);
-    
+
+    void saveAllByOptions(Options options);
+
 }

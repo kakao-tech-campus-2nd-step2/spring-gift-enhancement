@@ -2,8 +2,7 @@ package gift.controller.product.dto;
 
 
 import gift.controller.product.dto.OptionRequest.Info;
-import gift.controller.product.dto.OptionRequest.Register;
-import gift.service.product.dto.OptionCommand;
+import gift.service.product.dto.OptionCommand.RegisterMany;
 import gift.service.product.dto.ProductCommand;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -31,8 +30,8 @@ public class ProductRequest {
             return new ProductCommand.Register(name, price, imageUrl, categoryId);
         }
 
-        public OptionCommand.Register toOptionCommand() {
-            return new OptionCommand.Register(options.stream()
+        public RegisterMany toOptionCommand() {
+            return new RegisterMany(options.stream()
                 .map(Info::toCommand)
                 .toList());
         }
