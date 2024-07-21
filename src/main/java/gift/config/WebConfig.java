@@ -11,8 +11,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    private JwtInterceptor jwtInterceptor;
-    private LoginMemberArgumentResolver loginMemberArgumentResolver;
+    private final JwtInterceptor jwtInterceptor;
+    private final LoginMemberArgumentResolver loginMemberArgumentResolver;
 
     public WebConfig(JwtInterceptor jwtInterceptor,
         LoginMemberArgumentResolver loginMemberArgumentResolver) {
@@ -24,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
             .addPathPatterns("/**")
-            .excludePathPatterns("/login", "/register","/admin/products", "/admin/products/**", "/members", "/members/*");
+            .excludePathPatterns("/login", "/register","/admin/products", "/admin/products/**", "/members", "/members/*", "/api/**");
     }
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {

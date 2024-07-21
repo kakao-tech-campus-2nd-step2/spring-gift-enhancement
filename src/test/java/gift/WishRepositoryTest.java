@@ -5,9 +5,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import gift.domain.Category;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
+import gift.repository.CategoryRepository;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
@@ -32,12 +34,17 @@ public class WishRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("위시 추가 성공")
     void addWish() {
         Member member = new Member("testemail@email", "testpassword");
         Member savedMember = memberRepository.save(member);
-        Product product = new Product("Test", 1000, "test.jpg");
+        Category category = new Category("category", "color", "image", "");
+        categoryRepository.save(category);
+        Product product = new Product("Test", 1000, "test.jpg", category);
         Product savedProduct = productRepository.save(product);
         Wish wish = new Wish(savedMember, savedProduct);
 
@@ -56,7 +63,9 @@ public class WishRepositoryTest {
     void deleteWish() {
         Member member = new Member("testemail@email", "testpassword");
         Member savedMember = memberRepository.save(member);
-        Product product = new Product("Test", 1000, "test.jpg");
+        Category category = new Category("category", "color", "image", "");
+        categoryRepository.save(category);
+        Product product = new Product("Test", 1000, "test.jpg", category);
         Product savedProduct = productRepository.save(product);
         Wish wish = new Wish(savedMember, savedProduct);
         Wish savedWish = wishRepository.save(wish);

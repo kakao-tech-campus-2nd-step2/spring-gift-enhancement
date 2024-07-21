@@ -2,22 +2,30 @@ package gift;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.domain.Category;
 import gift.domain.Product;
+import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+
 @DataJpaTest
 public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @DisplayName("상품 추가")
     void addProduct() {
-        Product product = new Product("Test", 1000, "test.jpg");
+        Category category = new Category("category", "color", "image", "");
+        categoryRepository.save(category);
+        Product product = new Product("Test", 1000, "test.jpg", category);
 
         Product savedProduct = productRepository.save(product);
         Long productId = savedProduct.getId();
@@ -31,7 +39,9 @@ public class ProductRepositoryTest {
     @Test
     @DisplayName("상품 수정")
     void updateProduct() {
-        Product product = new Product("Test", 1000, "test.jpg");
+        Category category = new Category("category", "color", "image", "");
+        categoryRepository.save(category);
+        Product product = new Product("Test", 1000, "test.jpg", category);
         Product savedProduct = productRepository.save(product);
         Long productId = savedProduct.getId();
 
@@ -48,8 +58,9 @@ public class ProductRepositoryTest {
     @Test
     @DisplayName("상품 삭제")
     void deleteProduct() {
-        Product product = new Product("Test", 1000, "test.jpg");
-        Product savedProduct = productRepository.save(product);
+        Category category = new Category("category", "color", "image", "");
+        categoryRepository.save(category);
+        Product product = new Product("Test", 1000, "test.jpg", category);        Product savedProduct = productRepository.save(product);
         Long productId = savedProduct.getId();
 
         productRepository.deleteById(productId);

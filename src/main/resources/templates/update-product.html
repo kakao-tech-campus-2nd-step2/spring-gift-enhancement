@@ -21,6 +21,15 @@
     <input type="number" id="price" name="price" th:field="*{price}" required>
   </div>
   <div>
+    <label for="category">Category</label>
+    <select id="category" name="categoryName" required>
+      <option th:each="category : ${categories}"
+              th:value="${category.name}"
+              th:text="${category.name}"
+              th:selected="${category.name == product.categoryName}"></option>
+    </select>
+  </div>
+  <div>
     <label for="imageUrl">이미지 URL</label>
     <input type="text" id="imageUrl" name="imageUrl" th:field="*{imageUrl}" required>
   </div>

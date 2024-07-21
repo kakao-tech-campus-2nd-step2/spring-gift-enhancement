@@ -1,10 +1,13 @@
 package gift.controller;
 
+import gift.dto.CategoryDto;
 import gift.dto.PageRequestDto;
 import gift.dto.ProductRegisterRequestDto;
 import gift.dto.ProductResponseDto;
+import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -19,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/products")
 public class ProductAdminController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductAdminController(ProductService productService) {
+    public ProductAdminController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -37,6 +42,8 @@ public class ProductAdminController {
     @GetMapping("/add")
     public String showAddProductForm(Model model) {
         model.addAttribute("product", new ProductRegisterRequestDto());
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "add-product";
     }
 
@@ -47,13 +54,15 @@ public class ProductAdminController {
     }
 
     @GetMapping("/update/{id}")
-    public String showEditProductForm(@PathVariable("id") Long id, Model model) {
+    public String showUpdateProductForm(@PathVariable("id") Long id, Model model) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID는 null, 0, 음수는 불가입니다.");
         }
         ProductResponseDto productDto = productService.getProductById(id);
         model.addAttribute("product", productDto);
         model.addAttribute("productId", id);
+        List<CategoryDto> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         return "update-product";
     }
 
