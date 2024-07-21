@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -87,12 +88,19 @@ public class OptionServiceTest {
         Product product = new Product("product", 0, "imageUrl", category);
         Option option = new Option(product, name, 100);
 
+        ArgumentCaptor<Option> optionCaptor = ArgumentCaptor.forClass(Option.class);
+
         when(optionRepository.findByName(name))
             .thenReturn(Optional.of(option));
+        when(optionRepository.save(any(Option.class)))
+            .thenReturn(option);
 
         optionService.subtractQuantity(name, 50);
-
-        assertEquals(50, option.getQuantity());
         
+        verify(optionRepository, times(1)).delete(option);
+        verify(optionRepository, times(1)).save(optionCaptor.capture());
+        Option savedOption = optionCaptor.getValue();
+
+        assertEquals(50, savedOption.getQuantity());
     }
 }
