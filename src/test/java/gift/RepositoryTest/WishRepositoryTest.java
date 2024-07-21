@@ -45,7 +45,7 @@ public class WishRepositoryTest {
 
     @BeforeEach
     void beforeEach(){
-        category = categoryRepository.save(new Category("카테고리", "#8123f3D", "카테고리 url", "카테고리 description"));
+        category = categoryRepository.save(new Category("카테고리", "#812f3D", "카테고리 url", "카테고리 description"));
         product1 = productRepository.save(new Product("아메리카노", 4000, "아메리카노url", category));
         product2 = productRepository.save(new Product("카푸치노", 4500, "카푸치노url", category));
         member = memberRepository.save(new Member("woo6388@naver.com", "12345678"));
