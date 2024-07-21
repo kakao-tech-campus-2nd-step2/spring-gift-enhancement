@@ -2,6 +2,8 @@ package gift.global;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,5 +37,21 @@ public class GlobalExceptionHandler {
         }
         return ResponseEntity.status(exception.getStatusCode())
             .body(responseBody);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(
+        IllegalArgumentException exception) {
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", exception.getMessage());
+        return ResponseEntity.badRequest().body(responseBody);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Map<String, Object>> handleNoSuchElementException(
+        NoSuchElementException exception) {
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
     }
 }

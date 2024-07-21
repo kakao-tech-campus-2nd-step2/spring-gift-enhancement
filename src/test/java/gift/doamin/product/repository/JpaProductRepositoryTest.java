@@ -2,6 +2,8 @@ package gift.doamin.product.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.doamin.category.entity.Category;
+import gift.doamin.category.repository.JpaCategoryRepository;
 import gift.doamin.product.entity.Product;
 import gift.doamin.user.entity.User;
 import gift.doamin.user.entity.UserRole;
@@ -12,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 @DataJpaTest
 class JpaProductRepositoryTest {
@@ -23,6 +24,9 @@ class JpaProductRepositoryTest {
     @Autowired
     private JpaUserRepository jpaUserRepository;
 
+    @Autowired
+    private JpaCategoryRepository categoryRepository;
+
     @BeforeEach
     void setUp() {
         jpaUserRepository.save(new User("test1@test.com", "test", "test1", UserRole.SELLER));
@@ -32,7 +36,8 @@ class JpaProductRepositoryTest {
     @Test
     void save() {
         User user = jpaUserRepository.findByEmail("test1@test.com").get();
-        Product product = new Product(user, "test", 10000, "test.png");
+        Category category = categoryRepository.findById(1L).get();
+        Product product = new Product(user, category, "test", 10000, "test.png");
 
         Product savedProduct = jpaProductRepository.save(product);
 
@@ -42,10 +47,11 @@ class JpaProductRepositoryTest {
     @Test
     void findAll() {
         User user1 = jpaUserRepository.findByEmail("test1@test.com").get();
-        Product product1 = new Product(user1, "test1", 1, "test1.png");
+        Category category = categoryRepository.findById(1L).get();
+        Product product1 = new Product(user1, category, "test1", 10000, "test1.png");
         jpaProductRepository.save(product1);
         User user2 = jpaUserRepository.findByEmail("test2@test.com").get();
-        Product product2 = new Product(user2, "test2", 2, "test2.png");
+        Product product2 = new Product(user2, category, "test2", 10000, "test.png2");
         jpaProductRepository.save(product2);
 
         List<Product> allProducts = jpaProductRepository.findAll();
@@ -56,8 +62,8 @@ class JpaProductRepositoryTest {
     @Test
     void findById() {
         User user = jpaUserRepository.findByEmail("test1@test.com").get();
-        System.out.println(user);
-        Product product = new Product(user, "test", 10000, "test.png");
+        Category category = categoryRepository.findById(1L).get();
+        Product product = new Product(user, category, "test", 10000, "test.png");
         Product savedProduct = jpaProductRepository.save(product);
 
         Optional<Product> foundProduct = jpaProductRepository.findById(savedProduct.getId());
@@ -68,7 +74,8 @@ class JpaProductRepositoryTest {
     @Test
     void deleteById() {
         User user = jpaUserRepository.findByEmail("test1@test.com").get();
-        Product product = new Product(user, "test", 10000, "test.png");
+        Category category = categoryRepository.findById(1L).get();
+        Product product = new Product(user, category, "test", 10000, "test.png");
         Product savedProduct = jpaProductRepository.save(product);
 
         jpaProductRepository.deleteById(savedProduct.getId());

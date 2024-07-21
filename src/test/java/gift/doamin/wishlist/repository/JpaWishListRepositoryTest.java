@@ -3,6 +3,8 @@ package gift.doamin.wishlist.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import gift.doamin.category.entity.Category;
+import gift.doamin.category.repository.JpaCategoryRepository;
 import gift.doamin.product.entity.Product;
 import gift.doamin.product.repository.JpaProductRepository;
 import gift.doamin.user.entity.User;
@@ -15,6 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @DataJpaTest
 class JpaWishListRepositoryTest {
@@ -28,12 +32,16 @@ class JpaWishListRepositoryTest {
     @Autowired
     JpaProductRepository jpaProductRepository;
 
+    @Autowired
+    JpaCategoryRepository categoryRepository;
+
     @BeforeEach
     void setUp() {
         User user1 = jpaUserRepository.save(
             new User("test1@test.com", "test", "test1", UserRole.SELLER));
-        jpaProductRepository.save(new Product(user1, "test", 1, "test.png"));
-        jpaProductRepository.save(new Product(user1, "test2", 1, "test2.png"));
+        Category category = categoryRepository.findById(1L).get();
+        jpaProductRepository.save(new Product(user1, category, "test", 1, "test.png"));
+        jpaProductRepository.save(new Product(user1, category, "test2", 1, "test2.png"));
     }
 
     @Test
@@ -71,8 +79,10 @@ class JpaWishListRepositoryTest {
         Product product2 = jpaProductRepository.findByName("test2").getFirst();
         Wish wish2 = new Wish(user, product2, 2);
         jpaWishListRepository.save(wish2);
+        Pageable pageable = PageRequest.of(0, 5);
 
-        List<Wish> wishes = jpaWishListRepository.findAllByUserId(user.getId());
+        List<Wish> wishes = jpaWishListRepository.findAllByUserId(user.getId(), pageable)
+            .getContent();
 
         assertThat(wishes.size()).isEqualTo(2);
     }

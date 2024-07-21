@@ -3,13 +3,10 @@ package gift.doamin.product.controller;
 import gift.doamin.product.dto.ProductForm;
 import gift.doamin.product.dto.ProductParam;
 import gift.doamin.product.service.ProductService;
-import gift.doamin.user.entity.UserRole;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,23 +49,16 @@ public class ProductsController {
     }
 
     @PutMapping("/{id}")
-    public ProductParam updateProduct(@PathVariable Long id, @RequestBody ProductForm productForm,
-        Authentication authentication) {
-        Long userId = Long.valueOf(authentication.getName());
-        boolean isSeller = authentication.getAuthorities()
-            .contains(new SimpleGrantedAuthority(UserRole.SELLER.getValue()));
-        productForm.setUserId(userId);
+    public ProductParam updateProduct(@PathVariable Long id,
+        @Valid @RequestBody ProductForm productForm) {
 
-        return productService.update(id, productForm, isSeller);
+        return productService.update(id, productForm);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProduct(@PathVariable Long id, Authentication authentication) {
-        Long userId = Long.valueOf(authentication.getName());
-        boolean isSeller = authentication.getAuthorities()
-            .contains(new SimpleGrantedAuthority(UserRole.SELLER.getValue()));
+    public void deleteProduct(@PathVariable Long id) {
 
-        productService.delete(userId, id, isSeller);
+        productService.delete(id);
     }
 }
