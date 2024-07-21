@@ -39,25 +39,11 @@ public class Option {
         foreignKey = @ForeignKey(name = "fk_options_product_id_ref_products_id"))
     private Product product;
 
-    public Option(Long id) {
-        this.id = id;
-    }
-
-    public Option(Long id, Integer quantity) {
-        this.id = id;
-        this.quantity = quantity;
-    }
-
-    public Option(Long id, String name, Integer quantity, Product product) {
-        this.id = id;
-        this.name = name;
-        this.quantity = quantity;
-        this.product = product;
-    }
-
     public Option(String name, Integer quantity, Product product) {
         validateName(name);
         validateQuantity(quantity);
+        this.name = name;
+        this.quantity = quantity;
         this.product = product;
     }
 
