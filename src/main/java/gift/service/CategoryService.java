@@ -14,7 +14,7 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
-  
+
     // 모든 카테고리 조회
     public List<CategoryResponseDTO> getAllCategories() {
         return categoryRepository.findAll().stream()

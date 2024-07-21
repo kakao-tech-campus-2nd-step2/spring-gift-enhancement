@@ -51,4 +51,12 @@ public class OptionService {
         }
         return false;
     }
+
+    public void subtractOptionQuantity(Long optionId, int quantityToSubtract) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new IllegalArgumentException("옵션을 찾을 수 없습니다."));
+        option.subtractQuantity(quantityToSubtract);
+        optionRepository.save(option);
+    }
+
 }
