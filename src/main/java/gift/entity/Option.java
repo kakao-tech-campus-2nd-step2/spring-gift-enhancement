@@ -51,4 +51,8 @@ public class Option {
     public Product getProduct() {
         return product;
     }
+
+    public void subtract(Long requestQuantity) {
+        this.quantity -= quantity;
+    }
 }
