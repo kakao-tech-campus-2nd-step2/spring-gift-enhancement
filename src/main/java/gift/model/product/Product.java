@@ -49,6 +49,17 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
+    public Product(){}
+    public Product(String name, int price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.options.add(new Option("기본옵션", 1));
+        if(options.isEmpty())
+            throw new OptionNotFoundException("상품에는 최소 하나 이상의 옵션이 있어야 합니다.");
+    }
+
     public void addOption(String name, int quantity) {
         if (validName(name)) {
             throw new AlreadyExistName("동일한 옵션명이 이미 존재합니다.");
@@ -59,22 +70,6 @@ public class Product {
     private boolean validName(String name) {
         return options.stream()
             .anyMatch(opt -> opt.getName().equals(name));
-    }
-    public Product(){}
-    public Product(String name, int price, String imageUrl, Category category) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.category = category;
-        if(options.isEmpty())
-            throw new OptionNotFoundException("상품에는 최소 하나 이상의 옵션이 있어야 합니다.");
-    }
-    public Product(String name, int price, String imageUrl, Category category, List<Option> option) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.category = category;
-        this.options = option;
     }
 
     // getters, setters
