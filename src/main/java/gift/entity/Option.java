@@ -36,4 +36,8 @@ public class Option {
     public String getName() {
         return name;
     }
+
+    public int getQuantity() {
+        return quantity;
+    }
 }
