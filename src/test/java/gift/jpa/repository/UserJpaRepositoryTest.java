@@ -1,4 +1,4 @@
-package gift.unit.repository;
+package gift.jpa.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
