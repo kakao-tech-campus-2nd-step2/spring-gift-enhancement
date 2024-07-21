@@ -15,7 +15,7 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category")
     private List<Menu> menus;
 
     public Category(Long id, String name, LinkedList<Menu> menus) {

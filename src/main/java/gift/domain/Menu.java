@@ -2,7 +2,9 @@ package gift.domain;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Menu {
@@ -23,27 +25,32 @@ public class Menu {
     @JoinColumn(name = "category_id",nullable = false)
     private Category category;
 
+    @OneToMany
+    private Set<Option> options;
+
     public Menu() {
     }
 
-    public Menu(String name, int price, String imageUrl,Category category) {
-        this(null, name, price, imageUrl, category);
+    public Menu(String name, int price, String imageUrl,Category category,Set<Option> options) {
+        this(null, name, price, imageUrl, category, options);
     }
 
-    public Menu(Long id, String name, int price, String imageUrl, Category category) {
+    public Menu(Long id, String name, int price, String imageUrl, Category category, Set<Option> options) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
     }
 
-    public Menu(Long id, MenuRequest menuRequest) 
+    public Menu(Long id, MenuRequest menuRequest) {
         this.id = id;
         this.name = menuRequest.name();
         this.price = menuRequest.price();
         this.imageUrl = menuRequest.imageUrl();
         this.category = menuRequest.category();
+        this.options = menuRequest.options();
     }
 
     public Long getId() {
@@ -61,6 +68,8 @@ public class Menu {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public Set<Option> getOptions() {return options;}
 
     public void update(Menu menu) {
         this.id = menu.id;

@@ -36,11 +36,11 @@ public class WishListController {
             @RequestParam("menuId") Long menuId
     ) {
         String jwtId = jwtService.getMemberId();
-        WishListRequest wishListRequest = new WishListRequest(
+        WishList wishList = new WishList(
                 memberService.findById(jwtId),
                 menuService.findById(menuId)
         );
-        wishListService.save(wishListRequest);
+        wishListService.save(wishList);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", token.replace("Bearer ", ""));
         return ResponseEntity.ok().headers(headers).body("success");
@@ -57,20 +57,11 @@ public class WishListController {
 
     @DeleteMapping
     public ResponseEntity<String> delete(
-            @RequestParam("Id") Long id
+            @RequestBody WishListRequest wishListRequest
     ) {
         jwtService.getMemberId();
-        wishListService.delete(id);
+        wishListService.delete(wishListRequest.id());
         return ResponseEntity.ok().body("성공적으로 삭제되었습니다.");
     }
-
-    public static WishList MapWishListRequestToWishList(WishListRequest wishListRequest) {
-        return new WishList(wishListRequest.member(), wishListRequest.menu());
-    }
-
-    public static WishListResponse MapWishListToWishListResponse(WishList wishList) {
-        return new WishListResponse(wishList.getId(), wishList.getMenu());
-    }
-
 
 }

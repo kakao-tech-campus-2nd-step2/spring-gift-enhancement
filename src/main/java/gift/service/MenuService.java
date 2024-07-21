@@ -4,6 +4,7 @@ import gift.controller.MenuController;
 import gift.domain.Menu;
 import gift.domain.MenuRequest;
 import gift.domain.MenuResponse;
+import gift.domain.Option;
 import gift.repository.MenuRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,8 +24,8 @@ public class MenuService {
     }
 
     public MenuResponse save(MenuRequest request) {
-        Menu menu = MenuController.MapMenuRequestToMenu(request);
-        return MenuController.MapMenuToMenuResponse(menuRepository.save(menu));
+        Menu menu = MapMenuRequestToMenu(request);
+        return MapMenuToMenuResponse(menuRepository.save(menu));
     }
 
     public List<MenuResponse> findall(
@@ -31,7 +33,7 @@ public class MenuService {
     ) {
         Page<Menu> menus = menuRepository.findAll(pageable);
         return menus.stream()
-                .map(MenuController::MapMenuToMenuResponse)
+                .map(this::MapMenuToMenuResponse)
                 .collect(Collectors.toList());
     }
 
@@ -45,10 +47,23 @@ public class MenuService {
         Menu menu = menuRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("메뉴 정보가 없습니다."));
         menu.update(new Menu(id, menuRequest));
-        return MenuController.MapMenuToMenuResponse(menuRepository.save(menu));
+        return MapMenuToMenuResponse(menuRepository.save(menu));
     }
 
     public void delete(Long id) {
         menuRepository.deleteById(id);
     }
+
+    public Set<Option> getOptions(Long id) {
+        return menuRepository.getOptionsById(id);
+    }
+
+    public Menu MapMenuRequestToMenu(MenuRequest menuRequest) {
+        return new Menu(menuRequest.name(), menuRequest.price(), menuRequest.imageUrl(),menuRequest.category(),menuRequest.options());
+    }
+
+    public MenuResponse MapMenuToMenuResponse(Menu menu) {
+        return new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(), menu.getImageUrl(), menu.getCategory(),menu.getOptions());
+    }
+
 }

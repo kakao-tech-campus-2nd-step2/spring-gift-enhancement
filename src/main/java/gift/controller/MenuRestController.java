@@ -2,6 +2,8 @@ package gift.controller;
 
 import gift.domain.MenuRequest;
 import gift.domain.MenuResponse;
+import gift.domain.Option;
+
 import gift.service.MenuService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+
 
 @RestController
 @RequestMapping("api/menus")
@@ -53,5 +57,12 @@ public class MenuRestController {
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         menuService.delete(id);
         return ResponseEntity.ok().body("successfully deleted");
+    }
+
+    @GetMapping("/{id}/options")
+    public ResponseEntity<Set<Option>> getOptions(
+            @PathVariable("id") Long id
+    ){
+        return ResponseEntity.ok().body(menuService.getOptions(id));
     }
 }
