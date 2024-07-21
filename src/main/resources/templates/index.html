@@ -16,6 +16,10 @@
       th {
         background-color: #f2f2f2;
       }
+      .product-img {
+        width: 100px;
+        height: auto;
+      }
     </style>
 </head>
 <body>
@@ -28,7 +32,7 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Price</th>
-                <th>ImageURL</th>
+                <th>Image</th>
                 <th>Category</th>
                 <th>Action</th>
             </tr>
@@ -38,7 +42,7 @@
                 <td th:text="${product.id}">ID</td>
                 <td th:text="${product.name}">Name</td>
                 <td th:text="${product.price}">Price</td>
-                <td th:text="${product.imgUrl}">Image URL</td>
+                <td><img th:src="@{${product.imgUrl}}" class="product-img"/></td>
                 <td th:text="${product.category.name}">Category</td>
                 <td>
                     <a th:href="@{/showUpdateProducts/{id}(id=${product.id})}">Edit</a>
