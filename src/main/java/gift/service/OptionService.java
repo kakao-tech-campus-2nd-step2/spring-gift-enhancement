@@ -57,6 +57,16 @@ public class OptionService {
         optionRepository.deleteById(id);
     }
 
+    public OptionResponseDto subtractOptionQuantity(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new NoSuchElementException("해당 상품 옵션이 존재하지 않습니다."));
+
+        option.subtract(quantity);
+        Option savedOption = optionRepository.save(option);
+
+        return OptionResponseDto.toDto(savedOption);
+    }
+
     private void validateOptionId(Long id) {
         if (!optionRepository.existsById(id)) {
             throw new IllegalArgumentException("해당 상품 옵션이 존재하지 않습니다.");

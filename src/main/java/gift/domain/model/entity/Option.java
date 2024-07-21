@@ -74,4 +74,14 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
     }
+
+    public void subtract(int quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("감소시킬 수량은 양수여야 합니다.");
+        }
+        if (this.quantity < quantity) {
+            throw new IllegalStateException("현재 재고량보다 많은 수량을 감소시킬 수 없습니다.");
+        }
+        this.quantity -= quantity;
+    }
 }
