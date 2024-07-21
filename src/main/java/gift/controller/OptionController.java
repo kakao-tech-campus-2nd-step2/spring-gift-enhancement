@@ -27,17 +27,17 @@ public class OptionController {
     }
 
     @GetMapping("options")
-    public ResponseEntity<List<Option>> getOptions() {
-        List<Option> options = optionService.findAll();
+    public ResponseEntity<List<OptionResponseDTO>> getOptions() {
+        List<OptionResponseDTO> options = optionService.findAll();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(options);
     }
 
     @GetMapping("options/{optionId}")
-    public ResponseEntity<List<OptionResponseDTO>> getOptionsByProductId(@PathVariable("optionId") Long optionId) {
-        List<OptionResponseDTO> options = optionService.getOption(optionId);
+    public ResponseEntity<OptionResponseDTO> getOptionsByProductId(@PathVariable("optionId") Long optionId) {
+        OptionResponseDTO option = optionService.getOption(optionId);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(options);
+                .body(option);
     }
 
     @PostMapping("options")

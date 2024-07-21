@@ -30,15 +30,17 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
-    public List<Option> findAll() {
-        return optionRepository.findAll();
-    }
-
-    public List<OptionResponseDTO> getOption(Long optionId) {
-        List<Option> options = optionRepository.findByProductId(optionId);
+    public List<OptionResponseDTO> findAll() {
+        List<Option> options = optionRepository.findAll();
         return options.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public OptionResponseDTO getOption(Long optionId) {
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(()-> new OptionException("Option not found"));
+        return toDto(option);
     }
 
     @Transactional
@@ -48,8 +50,9 @@ public class OptionService {
                 .orElseThrow(() -> new ProductException("상품이 존재하지 않습니다"));
 
         String optionName = optionRequestDTO.name();
-        Option Option = optionRepository.findByProductIdAndName(productId, optionName)
-                .orElseThrow(() -> new OptionException("중복되는 옵션 이름입니다."));
+        if (optionRepository.findByProductIdAndName(productId, optionName).isPresent()) {
+            throw new OptionException("중복되는 옵션 이름입니다.");
+        }
 
         existingProduct.addOption(optionRequestDTO);
     }
