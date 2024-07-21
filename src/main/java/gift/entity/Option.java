@@ -1,6 +1,7 @@
 package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import gift.dto.OptionRequestDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -52,5 +53,13 @@ public class Option {
         return product;
     }
 
-    // Add setters if needed
+    public void updateOption(OptionRequestDTO optionRequestDTO) {
+        this.name = optionRequestDTO.name();
+        this.quantity = optionRequestDTO.quantity();
+    }
+
+    public void subtract(int quantity){
+        this.quantity -= quantity;
+    }
+
 }

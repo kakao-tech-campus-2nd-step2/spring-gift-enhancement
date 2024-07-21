@@ -5,9 +5,11 @@ import gift.dto.OptionRequestDTO;
 import gift.dto.OptionResponseDTO;
 import gift.entity.Option;
 import gift.entity.Product;
+import gift.exception.ProductException;
 import gift.exception.optionException.OptionException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Service;
@@ -32,43 +34,52 @@ public class OptionService {
         return optionRepository.findAll();
     }
 
-    public List<OptionResponseDTO> findByProductId(Long productId) {
-        List<Option> options = optionRepository.findByProductId(productId);
+    public List<OptionResponseDTO> getOption(Long optionId) {
+        List<Option> options = optionRepository.findByProductId(optionId);
         return options.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void addOption(OptionRequestDTO optionRequestDTO) {
         Long productId = optionRequestDTO.productId();
         Product existingProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new OptionException("상품이 존재하지 않습니다"));
+                .orElseThrow(() -> new ProductException("상품이 존재하지 않습니다"));
+
         String optionName = optionRequestDTO.name();
-        Optional<Option> existingOption = optionRepository.findByProductIdAndName(productId, optionName);
-        if(existingOption.isPresent()) {
-            throw new OptionException("옵션 이름이 존재합니다.");
+        Option Option = optionRepository.findByProductIdAndName(productId, optionName)
+                .orElseThrow(() -> new OptionException("중복되는 옵션 이름입니다."));
+
+        existingProduct.addOption(optionRequestDTO);
+    }
+
+    @Transactional
+    public void removeOption(Long optionId) {
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new OptionException("product not found!"));
+        optionRepository.delete(option);
+    }
+
+    @Transactional
+    public void updateOption(Long optionId , OptionRequestDTO optionRequestDTO) {
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new OptionException("product not found!"));
+        option.updateOption(optionRequestDTO);
+    }
+
+    @Transactional
+    public void subtractOption(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new OptionException("product not found!"));
+        if (quantity >= option.getQuantity()) {
+            removeOption(optionId);
+            return ;
         }
-
-        optionRepository.save(toEntity(existingProduct, optionRequestDTO));
-    }
-
-    public void updateOption(Long productId, Long optionId, OptionRequestDTO optionRequestDTO) {
-        Optional<Option> option = optionRepository.findById(productId);
-
+        option.subtract(quantity);
 
     }
 
-    public void removeOption(Long productId, Long optionId) {
-
-    }
-
-    @Description("request DTO -> entity")
-    private Option toEntity(Product product, OptionRequestDTO optionRequestDTO) {
-        String optionName = optionRequestDTO.name();
-        int quantity = optionRequestDTO.quantity();
-        Option option = new Option(optionName, quantity, product);
-        return option;
-    }
 
     @Description("entity -> responseDTO")
     private OptionResponseDTO toDto(Option option) {

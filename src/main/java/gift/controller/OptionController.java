@@ -33,20 +33,40 @@ public class OptionController {
                 .body(options);
     }
 
-    @GetMapping("options/{productId}")
-    public ResponseEntity<List<OptionResponseDTO>> getOptionsByProductId(@PathVariable("productId") Long productId) {
-        List<OptionResponseDTO> options = optionService.findByProductId(productId);
+    @GetMapping("options/{optionId}")
+    public ResponseEntity<List<OptionResponseDTO>> getOptionsByProductId(@PathVariable("optionId") Long optionId) {
+        List<OptionResponseDTO> options = optionService.getOption(optionId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(options);
     }
 
-
-    @PostMapping("options/")
+    @PostMapping("options")
     public ResponseEntity<String> createOption(@Valid @RequestBody OptionRequestDTO optionRequestDTO) {
-
-        optionService.saveOption(productId, optionRequestDTO);
+        optionService.addOption(optionRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("상품 option 등록 완료");
     }
 
+    @DeleteMapping("options/{optionId}")
+    public ResponseEntity<String> deleteOption(@PathVariable("optionId") Long optionId) {
+        optionService.removeOption(optionId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("option 삭제 완료");
+    }
+
+    @PutMapping("options/{optionId}")
+    public ResponseEntity<String> updateOption(@PathVariable("optionId") Long optionId ,
+                                               @Valid @RequestBody OptionRequestDTO optionRequestDTO) {
+        optionService.updateOption(optionId, optionRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("상품 option update 완료");
+    }
+
+    @PutMapping("options/{optionId}/subtract/{quantity}")
+    public ResponseEntity<String> subtractOption(@PathVariable("optionId") Long optionId ,
+                                                 @PathVariable("quantity") int quantity){
+        optionService.subtractOption(optionId, quantity);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("상품 option 빼기 완료");
+    }
 }

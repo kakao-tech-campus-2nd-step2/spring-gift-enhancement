@@ -1,6 +1,7 @@
 package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import gift.dto.OptionRequestDTO;
 import gift.dto.ProductRequestDTO;
 import jakarta.persistence.*;
 
@@ -101,6 +102,15 @@ public class Product {
         this.price=productRequestDTO.price();
         this.imageUrl=productRequestDTO.imageUrl();
 
+    }
+
+    public void addOption(OptionRequestDTO optionRequestDTO){
+        Option option = new Option(
+                optionRequestDTO.name(),
+                optionRequestDTO.quantity(),
+                this
+        );
+        this.options.add(option);
     }
 
 }
