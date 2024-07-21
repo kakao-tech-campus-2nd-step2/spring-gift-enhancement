@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.domain.WishListDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,5 +37,9 @@ public class WishListEntity {
 
     public MemberEntity getUserEntity() {
         return userEntity;
+    }
+
+    public static WishListDTO toDTO(WishListEntity wishListEntity) {
+        return new WishListDTO(wishListEntity.getProductEntity().getId(), wishListEntity.getUserEntity().getId());
     }
 }

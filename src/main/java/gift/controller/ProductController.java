@@ -2,7 +2,7 @@ package gift.controller;
 
 import gift.domain.ProductDTO;
 import gift.service.ProductService;
-import gift.service.ProductServiceStatus;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class ProductController {
 
     // 상품 추가(Create)
     @PostMapping
-    public ResponseEntity<ProductServiceStatus> addProduct(@RequestBody ProductDTO productDTO) {
-        ProductServiceStatus response = productService.createProduct(productDTO);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<?> addProduct(@Valid @RequestBody ProductDTO productDTO) {
+        productService.createProduct(productDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     // 단일 상품 조회(Read)
@@ -54,13 +54,15 @@ public class ProductController {
 
     // 상품 수정(Update)
     @PutMapping("/{id}")
-    public ProductServiceStatus updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
-        return productService.editProduct(id, productDTO);
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+        productService.editProduct(id, productDTO);
+        return ResponseEntity.ok("상품이 수정 되었습니다.");
     }
 
     // 상품 삭제(Delete)
     @DeleteMapping("/{id}")
-    public ProductServiceStatus deleteProduct(@PathVariable Long id) {
-        return productService.deleteProduct(id);
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.ok("상품이 삭제 되었습니다.");
     }
 }
