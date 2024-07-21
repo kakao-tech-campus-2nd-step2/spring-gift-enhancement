@@ -9,12 +9,14 @@ import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
@@ -78,16 +80,16 @@ public class ProductServiceTest {
         }
 
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.asc("id"));
+        sorts.add(Sort.Order.asc("name"));
         Pageable pageable = PageRequest.of(0, 5, Sort.by(sorts));
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), products.size());
         List<Product> subList = products.subList(start, end);
 
         Page<Product> page = new PageImpl<>(subList, pageable, products.size());
-        given(productRepository.findAll(any(Pageable.class))).willAnswer(invocation -> page);
+        given(productRepository.findAll(pageable)).willAnswer(invocation -> page);
         // when
-        Page<ProductResponse> pageResult = productService.readAllProductASC(0, 5, "id");
+        Page<ProductResponse> pageResult = productService.readAllProductASC(0, 5, "name");
         // then
         Assertions.assertThat(pageResult).isNotNull();
         Assertions.assertThat(pageResult.get().count()).isEqualTo(5);
@@ -112,16 +114,16 @@ public class ProductServiceTest {
         }
 
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
+        sorts.add(Sort.Order.desc("name"));
         Pageable pageable = PageRequest.of(0, 5, Sort.by(sorts));
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), products.size());
         List<Product> subList = products.subList(start, end);
 
         Page<Product> page = new PageImpl<>(subList, pageable, products.size());
-        given(productRepository.findAll(any(Pageable.class))).willAnswer(invocation -> page);
+        given(productRepository.findAll(pageable)).willAnswer(invocation -> page);
         // when
-        Page<ProductResponse> pageResult = productService.readAllProductASC(0, 5, "id");
+        Page<ProductResponse> pageResult = productService.readAllProductDESC(0, 5, "name");
         // then
         Assertions.assertThat(pageResult).isNotNull();
         Assertions.assertThat(pageResult.get().count()).isEqualTo(5);
@@ -168,6 +170,6 @@ public class ProductServiceTest {
         // when
         productService.deleteProduct(1L);
         // then
-        then(productRepository).should().deleteById(1L);
+        then(productRepository).should(times(1)).deleteById(1L);
     }
 }
