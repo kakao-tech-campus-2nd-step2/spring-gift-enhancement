@@ -17,7 +17,7 @@ import gift.dto.*;
 
 @Controller
 @Validated
-@RequestMapping("/v3/products")
+@RequestMapping("/api/products")
 public class ProductController {
 
     @Autowired
@@ -42,7 +42,7 @@ public class ProductController {
         validateProductName(productRequestDTO.name());
         productService.createProduct(productRequestDTO);
 
-        return "redirect:/v3/products";
+        return "redirect:/api/products";
     }
 
     @PutMapping("/{id}")
@@ -50,14 +50,14 @@ public class ProductController {
         validateProductName(productRequestDTO.name());
         productService.updateProduct(id, productRequestDTO);
 
-        return "redirect:/v3/products";
+        return "redirect:/api/products";
     }
 
     @DeleteMapping("/{id}")
     public String DeleteProduct(@PathVariable(name = "id") Long id) {
         productService.deleteProduct(id);
 
-        return "redirect:/v3/products";
+        return "redirect:/api/products";
     }
 
     private void validateProductName(String name) {

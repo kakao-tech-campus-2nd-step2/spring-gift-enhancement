@@ -8,4 +8,6 @@ public class ErrorMessage {
     public static final String passwordInvalid = "잘못된 비밀번호입니다.";
     public static final String tokenInvalid = "유효하지 않은 토큰입니다.";
     public static final String headerInvalid = "유효하지 않은 헤더입니다.";
+    public static final String categoryNotExists = "카테고리가 존재하지 않습니다.";
+    public static final String productNotExists = "상품이 존재하지 않습니다.";
 }

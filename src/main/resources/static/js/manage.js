@@ -13,23 +13,12 @@ document.getElementById('delete-selected').addEventListener('click', function() 
         const row = checkbox.closest('tr');
         const id = row.getAttribute('data-id');
         deleteProduct(id); // 서버에서 해당 제품을 삭제
-        row.remove(); // 화면에서 행을 제거
-    });
-});
-
-// Delete a row
-document.querySelectorAll('.delete-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        deleteProduct(id); // 서버에서 해당 제품을 삭제
-        const row = this.closest('tr'); // 버튼이 속한 가장 가까운 tr 요소를 찾음
-        row.remove(); // 화면에서 행을 제거
     });
 });
 
 // Function to delete a product
 function deleteProduct(id) {
-    fetch(`/v3/products/${id}`, {
+    fetch(`/api/products/${id}`, {
         method: 'DELETE'
     })
     .then(response => {
@@ -62,7 +51,7 @@ document.getElementById('addProductForm').addEventListener('submit', function(ev
         categoryId: form.category.value
     };
 
-    fetch(`/v3/products`, {
+    fetch(`/api/products`, {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -81,7 +70,7 @@ document.getElementById('addProductForm').addEventListener('submit', function(ev
     .then(result => {
         // 모달 닫기
         $('#addProduct').modal('hide');
-        window.location.href = "/v3/products";
+        window.location.href = "/api/products";
     })
 
      .catch(error => {
@@ -127,7 +116,7 @@ document.getElementById('editProductForm').addEventListener('submit', function(e
         categoryId: form.category.value
     };
 
-    fetch(`/v3/products/${originalId}`, {
+    fetch(`/api/products/${originalId}`, {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: {
@@ -146,7 +135,7 @@ document.getElementById('editProductForm').addEventListener('submit', function(e
     .then(result => {
         // 모달 닫기
         $('#editProduct').modal('hide');
-        window.location.href = "/v3/products";
+        window.location.href = "/api/products";
     })
 
      .catch(error => {
@@ -156,4 +145,39 @@ document.getElementById('editProductForm').addEventListener('submit', function(e
             errorMessageElement.style.display = 'block';
         });
 
+});
+
+// go to option page
+document.querySelectorAll('.option-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const row = button.closest('tr');
+        const id = row.getAttribute('data-id');
+
+        fetch(`/api/product/options/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errorText => {
+                    throw new Error(`Failed to fetch wishes: ${errorText}`);
+                });
+            }
+            return response.text();
+        })
+
+        .then(text => {
+            document.open();
+            document.write(text);
+            document.close();
+        })
+
+        .catch(error => {
+            console.error('Error:', error);
+            alert(`An error occurred: ${error.message}`);
+        });
+    });
 });
