@@ -32,8 +32,9 @@ public class Category {
         this.description = description;
         this.imageUrl = imageUrl;
     }
-    public Category( String name, String color, String description, String imageUrl) {
-       this(null,name,color,description,imageUrl);
+
+    public Category(String name, String color, String description, String imageUrl) {
+        this(null, name, color, description, imageUrl);
     }
 
     public Long getId() {

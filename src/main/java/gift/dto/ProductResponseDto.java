@@ -45,7 +45,7 @@ public class ProductResponseDto {
     }
 
     public ProductResponseDto(HttpStatus httpStatus) {
-        this.httpStatus =httpStatus;
+        this.httpStatus = httpStatus;
     }
 
     public static ProductResponseDto fromEntity(Product product) {

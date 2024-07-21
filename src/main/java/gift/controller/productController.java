@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RequestMapping("/product/jdbc")
 @RestController()
 public class productController {
@@ -54,7 +52,7 @@ public class productController {
 
     @PutMapping("/{id}")
     public ProductResponseDto update(@PathVariable("id") Long id, @RequestBody ProductRequestDto productRequestDto) {
-        productService.update(id, productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl(), productRequestDto.getCategory(),productRequestDto.getOptions());
+        productService.update(id, productRequestDto.getName(), productRequestDto.getPrice(), productRequestDto.getUrl(), productRequestDto.getCategory(), productRequestDto.getOptions());
         return new ProductResponseDto(HttpStatus.OK);
     }
 

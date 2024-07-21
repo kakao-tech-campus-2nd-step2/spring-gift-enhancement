@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
 
     public CategoryController(CategoryService categoryService) {
@@ -27,7 +27,7 @@ public class CategoryController {
 
     @GetMapping("/{product_id}")
     public CategoryResponseDto requestDtoOfGetCategoryOfProduct(@RequestParam("product_id") Long productId) {
-        CategoryResponseDto categoryResponseDto =categoryService.getCategoryDtoByProductId(productId);
+        CategoryResponseDto categoryResponseDto = categoryService.getCategoryDtoByProductId(productId);
         categoryResponseDto.setHttpStatus(HttpStatus.OK);
         return categoryResponseDto;
     }

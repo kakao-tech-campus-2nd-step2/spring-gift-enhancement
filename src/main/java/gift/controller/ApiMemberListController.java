@@ -16,7 +16,7 @@ public class ApiMemberListController {
 
     @GetMapping("/user/list")
     public MemberResponseDto UserList() {
-        MemberResponseDto memberResponseDto=  memberService.getAllAndReturnMemberResponseDto();
+        MemberResponseDto memberResponseDto = memberService.getAllAndReturnMemberResponseDto();
         memberResponseDto.setHttpStatus(HttpStatus.OK);
         return memberResponseDto;
     }

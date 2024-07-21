@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class TokenInterceptor implements HandlerInterceptor {
 
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     public TokenInterceptor(TokenService tokenService) {
         this.tokenService = tokenService;

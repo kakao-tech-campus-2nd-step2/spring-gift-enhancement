@@ -32,16 +32,16 @@ public class WishRepositoryTest {
 
     @Test
     public void save() {
-        Category category = categories.save(new Category("카테고리1","빨강","설명1","카테고리 이미지url"));
+        Category category = categories.save(new Category("카테고리1", "빨강", "설명1", "카테고리 이미지url"));
 
-        List<Option> optionList= new ArrayList<>();
-        Option newOption = options.save(new Option("옵션이름1",10L));
+        List<Option> optionList = new ArrayList<>();
+        Option newOption = options.save(new Option("옵션이름1", 10L));
         optionList.add(newOption);
 
-        Product product = products.save(new Product("상품1",1000,"url",category,optionList));
-        Member member = members.save(new Member("이메일1","비밀번호"));
+        Product product = products.save(new Product("상품1", 1000, "url", category, optionList));
+        Member member = members.save(new Member("이메일1", "비밀번호"));
 
-        Wish wish = wishes.save(new Wish(product,member));
+        Wish wish = wishes.save(new Wish(product, member));
 
         assertThat(wish).isNotNull();
         assertThat(wish.getProduct()).isNotNull();

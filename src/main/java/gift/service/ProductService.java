@@ -43,9 +43,9 @@ public class ProductService {
     }
 
 
-    public void update(Long id, String name, Integer price, String url, Category category,List<Option> options) {
+    public void update(Long id, String name, Integer price, String url, Category category, List<Option> options) {
         Product actualProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("상품을 찾지 못했습니다."));
-        actualProduct.update(name, price, url, category,options);
+        actualProduct.update(name, price, url, category, options);
     }
 
     public void delete(Long id) {

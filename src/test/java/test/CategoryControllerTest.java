@@ -17,8 +17,7 @@ public class CategoryControllerTest {
 
     @Test
     void testGetAllCategories() throws Exception {
-        List<Category> categories = Arrays.asList(
-        );
+        List<Category> categories = List.of();
         when(categoryService.getAllCategories()).thenReturn(categories);
 
     }

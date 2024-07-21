@@ -7,7 +7,7 @@ import gift.repository.OptionRepository;
 import java.util.List;
 
 public class OptionService {
-    private OptionRepository optionRepository;
+    private final OptionRepository optionRepository;
 
     public OptionService(OptionRepository optionRepository) {
         this.optionRepository = optionRepository;
@@ -21,9 +21,9 @@ public class OptionService {
         return optionRepository.findAll();
     }
 
-    public Option save(Option option,Product product) {
-        if ( checkValidOptionName(option.getName(),product) &&
-                checkValidOptionQuantity(option.getQuantity())){
+    public Option save(Option option, Product product) {
+        if (checkValidOptionName(option.getName(), product) &&
+                checkValidOptionQuantity(option.getQuantity())) {
             return optionRepository.save(option);
         }
         return null;
@@ -32,7 +32,7 @@ public class OptionService {
     public void subtract(Option option, Long quantity) {
         Option actualOption = optionRepository.findById(option.getId()).get();
         Long afterSubtractQuantity = actualOption.getQuantity() - quantity;
-        Option newOption = new Option(actualOption.getId(),actualOption.getName(),afterSubtractQuantity,actualOption.getProduct());
+        Option newOption = new Option(actualOption.getId(), actualOption.getName(), afterSubtractQuantity, actualOption.getProduct());
         optionRepository.save(newOption);
     }
 
@@ -48,10 +48,10 @@ public class OptionService {
         return optionRepository.findOptionByName(optionName);
     }
 
-    public boolean checkValidOptionName(String optionName,Product product) {
+    public boolean checkValidOptionName(String optionName, Product product) {
         if (checkNameLength(optionName, 1, 50) &&
                 checkNameCharIsOkay(optionName) &&
-                checkNameRedundancy(optionName,product)) {
+                checkNameRedundancy(optionName, product)) {
             return true;
         }
         throw new IllegalArgumentException();
@@ -66,10 +66,7 @@ public class OptionService {
     }
 
     public boolean checkNameLength(String name, int maxLen, int minLen) {
-        if (name.length() <= maxLen && name.length() >= minLen) {
-            return true;
-        }
-        return false;
+        return name.length() <= maxLen && name.length() >= minLen;
     }
 
     private boolean checkNameRedundancy(String optionName, Product product) {

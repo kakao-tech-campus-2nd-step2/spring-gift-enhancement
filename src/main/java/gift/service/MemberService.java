@@ -51,7 +51,7 @@ public class MemberService {
     }
 
     public MemberResponseDto fromEntity(Member member) {
-        return new MemberResponseDto(member.getId(), member.getEmail(), member.getPassword(),member.getWishes(),null);
+        return new MemberResponseDto(member.getId(), member.getEmail(), member.getPassword(), member.getWishes(), null);
     }
 
     private boolean validatePassword(String inputPassword, String dbUserPassword) throws AuthenticationException {
