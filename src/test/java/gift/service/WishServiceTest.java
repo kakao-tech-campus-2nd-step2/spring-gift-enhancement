@@ -1,83 +1,88 @@
 package gift.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import gift.product.dto.LoginMember;
 import gift.product.dto.WishDto;
 import gift.product.model.Category;
+import gift.product.model.Member;
 import gift.product.model.Product;
-import gift.product.model.Wish;
-import gift.product.repository.CategoryRepository;
+import gift.product.repository.AuthRepository;
 import gift.product.repository.ProductRepository;
+import gift.product.repository.WishRepository;
 import gift.product.service.WishService;
 import java.util.NoSuchElementException;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@SuppressWarnings("NonAsciiCharacters")
 class WishServiceTest {
 
-    @Autowired
+    @Mock
     ProductRepository productRepository;
 
-    @Autowired
-    CategoryRepository categoryRepository;
+    @Mock
+    AuthRepository authRepository;
 
-    @Autowired
+    @Mock
+    WishRepository wishRepository;
+
+    @InjectMocks
     WishService wishService;
 
-    @BeforeEach
+    @Test
     void 위시리스트_항목_추가() {
-        Category category = categoryRepository.save(new Category("테스트카테고리1"));
+        //given
+        Category category = new Category(1L, "테스트카테고리");
+        Product product = new Product(1L, "테스트상품", 1500, "테스트주소", category);
+        Member member = new Member(1L, "tset@test.com", "test");
+        given(productRepository.findById(1L)).willReturn(Optional.of(product));
+        given(authRepository.findById(any())).willReturn(Optional.of(member));
 
-        for (int i = 1; i <= 9; i++) {
-            Product product = productRepository.save(
-                new Product("테스트" + i, 1000 + i, "테스트주소" + i, category));
-            wishService.insertWish(new WishDto(product.getId()), new LoginMember(1L));
-        }
+        //when
+        WishDto wishDto = new WishDto(1L);
+        LoginMember loginMember = new LoginMember(1L);
+        wishService.insertWish(wishDto, loginMember);
+
+        //then
+        then(wishRepository).should().save(any());
     }
 
     @Test
     void 위시리스트_전체_조회_페이지_테스트() {
         //given
-        int WISH_COUNT = 9;
         int PAGE = 1;
         int SIZE = 4;
         String SORT = "product.name";
         String DIRECTION = "desc";
+        Pageable pageable = PageRequest.of(PAGE, SIZE, Sort.Direction.fromString(DIRECTION), SORT);
 
         //when
-        Pageable pageable = PageRequest.of(PAGE, SIZE, Sort.Direction.fromString(DIRECTION), SORT);
-        Page<Wish> wishes = wishService.getWishAll(pageable);
+        wishService.getWishAll(pageable);
 
         //then
-        assertSoftly(softly -> {
-            assertThat(wishes.getTotalPages()).isEqualTo(
-                (int) Math.ceil((double) WISH_COUNT / SIZE));
-            assertThat(wishes.getTotalElements()).isEqualTo(WISH_COUNT);
-            assertThat(wishes.getSize()).isEqualTo(SIZE);
-            assertThat(wishes.getContent().get(0).getProduct().getName()).isEqualTo(
-                "테스트" + (WISH_COUNT - SIZE));
-        });
+        then(wishRepository).should().findAll(pageable);
     }
 
     @Test
     void 존재하지_않는_위시_항목_조회() {
         //given
         LoginMember testMember = new LoginMember(1L);
+        given(wishRepository.findByIdAndMemberId(any(), any())).willReturn(Optional.empty());
 
         //when, then
         assertThatThrownBy(() -> wishService.getWish(-1L, testMember)).isInstanceOf(
@@ -88,6 +93,7 @@ class WishServiceTest {
     void 존재하지_않는_위시_항목_삭제() {
         //given
         LoginMember testMember = new LoginMember(1L);
+        given(wishRepository.findByIdAndMemberId(any(), any())).willReturn(Optional.empty());
 
         //when, then
         assertThatThrownBy(() -> wishService.deleteWish(-1L, testMember)).isInstanceOf(
@@ -97,12 +103,17 @@ class WishServiceTest {
     @Test
     void 존재하지_않는_회원_정보로_위시리스트_추가_시도() {
         //given
-        Long productId = productRepository.findAll().getFirst().getId();
-        WishDto testWishDto = new WishDto(productId);
+        Category category = new Category(1L, "테스트카테고리");
+        Product product = new Product(1L, "테스트상품", 1500, "테스트주소", category);
+        given(productRepository.findById(1L)).willReturn(Optional.of(product));
+        given(authRepository.findById(any())).willReturn(Optional.empty());
+
+        WishDto wishDto = new WishDto(1L);
+        LoginMember loginMember = new LoginMember(-1L);
 
         //when, then
         assertThatThrownBy(
-            () -> wishService.insertWish(testWishDto, new LoginMember(-1L))).isInstanceOf(
+            () -> wishService.insertWish(wishDto, loginMember)).isInstanceOf(
             NoSuchElementException.class);
     }
 }

@@ -1,166 +1,144 @@
 package gift.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import gift.product.dto.ClientProductDto;
+import gift.product.dto.ProductDto;
 import gift.product.model.Category;
 import gift.product.model.Product;
 import gift.product.repository.CategoryRepository;
+import gift.product.repository.OptionRepository;
+import gift.product.repository.ProductRepository;
 import gift.product.service.ProductService;
-import java.util.List;
+import java.util.Collections;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class ProductServiceTest {
 
-    @Autowired
+    @InjectMocks
     ProductService productService;
 
-    @Autowired
+    @Mock
+    ProductRepository productRepository;
+
+    @Mock
     CategoryRepository categoryRepository;
+
+    @Mock
+    OptionRepository optionRepository;
 
     @Test
     void 상품_추가() {
         //given
-        categoryRepository.save(new Category("테스트카테고리1"));
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
+        Category category = new Category(1L, "테스트카테고리");
+        Product product = new Product(1L, "테스트상품", 1500, "테스트주소", category);
+        given(categoryRepository.findByName("테스트카테고리")).willReturn(Optional.of(category));
 
         //when
-        Product product = productService.insertProduct(productDTO);
+        productService.insertProduct(
+            new ClientProductDto(product.getName(), product.getPrice(), product.getImageUrl(),
+                product.getCategory().getName()));
 
         //then
-        assertSoftly(softly -> {
-            assertThat(product.getName()).isEqualTo("사과");
-            assertThat(product.getPrice()).isEqualTo(3000);
-            assertThat(product.getImageUrl()).isEqualTo("사진링크");
-        });
+        then(productRepository).should().save(any());
+        then(optionRepository).should().save(any());
     }
 
     @Test
     void 상품_조회() {
         //given
-        categoryRepository.save(new Category("테스트카테고리1"));
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
-        Product insertedProduct = productService.insertProduct(productDTO);
+        Category category = new Category(1L, "테스트카테고리");
+        Product product = new Product(1L, "테스트상품", 1500, "테스트주소", category);
+        given(productRepository.findById(1L)).willReturn(Optional.of(product));
 
         //when
-        Product product = productService.getProduct(insertedProduct.getId());
+        productService.getProduct(1L);
 
         //then
-        assertSoftly(softly -> {
-            assertThat(product.getName()).isEqualTo("사과");
-            assertThat(product.getPrice()).isEqualTo(3000);
-            assertThat(product.getImageUrl()).isEqualTo("사진링크");
-        });
-
+        then(productRepository).should().findById(1L);
     }
 
     @Test
     void 상품_전체_조회() {
         //given
-        categoryRepository.save(new Category("테스트카테고리1"));
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
-        productService.insertProduct(productDTO);
+        given(productRepository.findAll()).willReturn(Collections.emptyList());
 
         //when
-        List<Product> productAll = productService.getProductAll();
+        productService.getProductAll();
 
         //then
-        assertSoftly(softly -> {
-            assertThat(productAll.get(0).getName()).isEqualTo("사과");
-            assertThat(productAll.get(0).getPrice()).isEqualTo(3000);
-            assertThat(productAll.get(0).getImageUrl()).isEqualTo("사진링크");
-        });
+        then(productRepository).should().findAll();
     }
 
     @Test
     void 상품_전체_조회_페이지() {
         //given
-        int PRODUCT_COUNT = 9;
         int PAGE = 1;
         int SIZE = 4;
         String SORT = "name";
         String DIRECTION = "desc";
-
-        categoryRepository.save(new Category("테스트카테고리1"));
-
-        for (int i = 1; i <= PRODUCT_COUNT; i++) {
-            productService.insertProduct(
-                new ClientProductDto("테스트" + i, 1000 + i, "테스트주소" + i, "테스트카테고리1"));
-        }
+        Pageable pageable = PageRequest.of(PAGE, SIZE, Sort.Direction.fromString(DIRECTION), SORT);
 
         //when
-        Pageable pageable = PageRequest.of(PAGE, SIZE, Sort.Direction.fromString(DIRECTION), SORT);
-        Page<Product> products = productService.getProductAll(pageable);
+        productService.getProductAll(pageable);
 
         //then
-        assertSoftly(softly -> {
-            assertThat(products.getTotalPages()).isEqualTo(
-                (int) Math.ceil((double) PRODUCT_COUNT / SIZE));
-            assertThat(products.getTotalElements()).isEqualTo(PRODUCT_COUNT);
-            assertThat(products.getSize()).isEqualTo(SIZE);
-            assertThat(products.getContent().get(0).getName()).isEqualTo(
-                "테스트" + (PRODUCT_COUNT - SIZE));
-        });
+        then(productRepository).should().findAll(pageable);
     }
 
     @Test
     void 상품_수정() {
         //given
-        categoryRepository.save(new Category("테스트카테고리1"));
-
-        ClientProductDto productDTO = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
-        Product product = productService.insertProduct(productDTO);
-
-        ClientProductDto productUpdatedDTO = new ClientProductDto("사과", 5500, "사진링크2", "테스트카테고리1");
+        Category category = new Category(1L, "테스트카테고리");
+        Product product = new Product(1L, "테스트상품", 1500, "테스트주소", category);
+        given(productRepository.findById(1L)).willReturn(Optional.of(product));
+        given(categoryRepository.findByName("테스트카테고리")).willReturn(Optional.of(category));
 
         //when
-        Product productUpdated = productService.updateProduct(product.getId(), productUpdatedDTO);
+        ProductDto updatedProductDto = new ClientProductDto("테스트상품수정", 2000, "테스트주소수정", "테스트카테고리");
+        productService.updateProduct(1L, updatedProductDto);
 
         //then
-        assertSoftly(softly -> {
-            assertThat(productUpdated.getName()).isEqualTo("사과");
-            assertThat(productUpdated.getPrice()).isEqualTo(5500);
-            assertThat(productUpdated.getImageUrl()).isEqualTo("사진링크2");
-        });
+        then(productRepository).should().save(any());
     }
 
     @Test
     void 상품_삭제() {
         //given
-        categoryRepository.save(new Category("테스트카테고리1"));
-
-        ClientProductDto productDto = new ClientProductDto("사과", 3000, "사진링크", "테스트카테고리1");
-        productService.insertProduct(productDto);
-
-        productDto = new ClientProductDto("바나나", 1500, "사진링크2", "테스트카테고리1");
-        Product product = productService.insertProduct(productDto);
+        Category category = new Category(1L, "테스트카테고리");
+        Product product = new Product(1L, "테스트상품", 1500, "테스트주소", category);
+        given(productRepository.findById(1L)).willReturn(Optional.of(product));
 
         //when
-        productService.deleteProduct(product.getId());
-        List<Product> productAll = productService.getProductAll();
+        productService.deleteProduct(1L);
 
         //then
-        assertThat(productAll).hasSize(1);
+        then(productRepository).should().deleteById(1L);
     }
 
     @Test
     void 존재하지_않는_상품_조회() {
+        //given
+        given(productRepository.findById(any())).willReturn(Optional.empty());
+
+        //when, then
         assertThatThrownBy(() -> productService.getProduct(-1L)).isInstanceOf(
             NoSuchElementException.class);
     }
