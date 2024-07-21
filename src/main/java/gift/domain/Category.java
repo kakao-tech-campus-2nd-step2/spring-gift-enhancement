@@ -6,9 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.List;
 
 @Entity
 @Table(name = "category", uniqueConstraints = {
@@ -32,7 +32,7 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category")
-    private Product product;
+    private List<Product> product;
 
     protected Category() {
     }

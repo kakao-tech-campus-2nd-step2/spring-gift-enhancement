@@ -1,9 +1,9 @@
 package gift.service;
 
+import gift.DTO.product.ProductRequest;
 import gift.DTO.product.ProductResponse;
 import gift.domain.Category;
 import gift.domain.Product;
-import gift.DTO.product.ProductRequest;
 import gift.repository.ProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
