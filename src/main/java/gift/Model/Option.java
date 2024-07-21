@@ -81,6 +81,10 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public void subtract(int quantity){
+        this.quantity -= quantity;
+    }
+
     public boolean hasSameName(String name){
         return this.name.equals(name);
     }
