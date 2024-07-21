@@ -36,6 +36,13 @@ public class Option {
         this.product = product;
     }
 
+    public void subtractQuantity(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("기존 수량 보다 더 많이 삭제할 수 없습니다.");
+        }
+        this.quantity -= quantity;
+    }
+
     public Long getId() {
         return id;
     }

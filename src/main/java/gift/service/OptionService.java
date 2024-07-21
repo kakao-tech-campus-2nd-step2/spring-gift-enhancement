@@ -43,11 +43,19 @@ public class OptionService {
             .orElseThrow(() -> new IllegalArgumentException("옵션을 찾을 수 없습니다."));
 
         List<Option> options = optionRepository.findByProductId(option.getProduct().getId());
-        if(options.size() == 1) {
+        if (options.size() == 1) {
             throw new IllegalArgumentException("상품 당 하나의 옵션은 있어야 합니다.");
         }
 
         optionRepository.delete(option);
+    }
+
+    public void decreaseOptionQuantity(Long optionId, Long productId, int quantity) {
+        Option option = optionRepository.findByIdAndProductId(optionId, productId)
+            .orElseThrow(() -> new IllegalArgumentException("옵션을 찾을 수 없습니다."));
+
+        option.subtractQuantity(quantity);
+        optionRepository.save(option);
     }
 
 }
