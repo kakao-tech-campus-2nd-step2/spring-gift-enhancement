@@ -1,10 +1,9 @@
-package gift.web;
+package gift.web.controller;
 
 import gift.service.wish.WishService;
 import gift.web.dto.MemberDto;
 import gift.web.dto.WishDto;
 import gift.web.jwt.AuthUser;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

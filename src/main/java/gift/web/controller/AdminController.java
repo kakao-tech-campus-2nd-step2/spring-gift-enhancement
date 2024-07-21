@@ -1,6 +1,9 @@
-package gift.web;
+package gift.web.controller;
 
+import gift.domain.product.Product;
+import gift.service.category.CategoryService;
 import gift.service.product.ProductService;
+import gift.web.dto.CategoryDto;
 import gift.web.dto.ProductDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/products")
 public class AdminController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public AdminController(ProductService productService) {
+    public AdminController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -37,13 +42,15 @@ public class AdminController {
 
     @GetMapping("/create")
     public String createProductForm(Model model) {
-        model.addAttribute("product", new ProductDto(1L, "name", 0L, "image.url"));
+        model.addAttribute("product", new ProductDto(1L, "name", 0L, "image.url", null));
+        model.addAttribute("categories", categoryService.getCategories());
         return "create";
     }
 
     @PostMapping("/create")
-    public String createProduct(@ModelAttribute @Valid ProductDto productDto, BindingResult bindingResult) {
+    public String createProduct(@ModelAttribute @Valid ProductDto productDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.getCategories());
             return "create";
         }
         productService.createProduct(productDto);
@@ -54,6 +61,7 @@ public class AdminController {
     public String editProductForm(@PathVariable Long id, Model model) {
         ProductDto productDto = productService.getProductById(id);
         model.addAttribute("product", productDto);
+        model.addAttribute("categories", categoryService.getCategories());
         return "edit";
     }
 
@@ -61,6 +69,7 @@ public class AdminController {
     public String editProduct(@PathVariable Long id, @ModelAttribute @Valid ProductDto productDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("product", productDto);
+            model.addAttribute("categories", categoryService.getCategories());
             model.addAttribute("org.springframework.validation.BindingResult.product", bindingResult);
             return "edit";
         }

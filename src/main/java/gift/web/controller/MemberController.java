@@ -1,4 +1,4 @@
-package gift.web;
+package gift.web.controller;
 
 import gift.service.member.MemberService;
 import gift.web.dto.MemberDto;

@@ -12,30 +12,36 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<?> handleProductNotFoundException(ProductNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage()));
+            ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
     @ExceptionHandler(WishProductNotFoundException.class)
     public ResponseEntity<?> handleWishProductNotFoundException(WishProductNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage()));
+            ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
     @ExceptionHandler(MemberNotFoundException.class)
     public ResponseEntity<?> handleMemberNotFoundException(MemberNotFoundException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, e.getMessage()));
+            ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, e.getMessage()));
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<?> handleCategoryNotFoundException(CategoryNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return ResponseEntity.badRequest().body(
-                ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getBindingResult().getAllErrors().get(0).getDefaultMessage()));
+            ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getBindingResult().getAllErrors().get(0).getDefaultMessage()));
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<?> handleUnauthorizedException(UnauthorizedException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage()));
+            ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage()));
     }
 }
