@@ -2,12 +2,12 @@ package gift.domain.cartItem.dto;
 
 public class CartItemDTO {
 
-    Long id; // cartItem id;
-    Long productId;
-    String name;
-    Integer price;
-    String imageUrl;
-    Integer count;
+    private Long id; // cartItem id;
+    private Long productId;
+    private String name;
+    private Integer price;
+    private String imageUrl;
+    private Integer count;
 
     public CartItemDTO(Long id, Long productId, String name, Integer price, String imageUrl,
         Integer count) {

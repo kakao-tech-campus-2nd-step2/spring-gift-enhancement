@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,7 +63,7 @@ public class OptionRestController {
     /**
      * 특정 상품의 옵션 수정
      */
-    @PostMapping("/products/{productId}/options/{optionId}")
+    @PutMapping("/products/{productId}/options/{optionId}")
     public ResponseEntity<SimpleResultResponseDto> updateOption(
         @PathVariable("productId") Long productId,
         @PathVariable("optionId") Long optionId,
@@ -72,5 +73,5 @@ public class OptionRestController {
         return ResponseMaker.createSimpleResponse(HttpStatus.OK, "해당 상품에 옵션 수정 성공");
     }
 
-    
+
 }

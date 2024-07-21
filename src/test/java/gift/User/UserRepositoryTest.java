@@ -59,5 +59,4 @@ public class UserRepositoryTest {
         assertThat(userInfo.getId()).isEqualTo(savedUser.getId());
         assertThat(userInfo.getEmail()).isEqualTo(userDTO.getEmail());
     }
-
 }
