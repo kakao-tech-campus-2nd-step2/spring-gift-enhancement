@@ -53,6 +53,7 @@ public class ProductService {
             .stream()
             .map(it -> new Option(it.name(), it.quantity(), product))
             .toList();
+        Option.Validator.validateDuplicated(options);
         productRepository.save(product);
         options.forEach(optionRepository::save);
         return product.getId();

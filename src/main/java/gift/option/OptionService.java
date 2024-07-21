@@ -37,7 +37,7 @@ public class OptionService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
         Option option = new Option(optionRequest.name(), optionRequest.quantity(), product);
-        Option.Validator.validateDuplicated(option, optionRepository.findAllByProductId(productId));
+        Option.Validator.validateName(optionRepository.findAllByProductId(productId), option);
         optionRepository.save(option);
         return option.getId();
     }
@@ -46,8 +46,8 @@ public class OptionService {
     public void updateOption(Long optionId, OptionRequest optionRequest) throws OptionException {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
-        Option.Validator.validateDuplicated(option,
-            optionRepository.findAllByProductId(option.getProduct().getId()));
+        Option.Validator.validateName(
+            optionRepository.findAllByProductId(option.getProduct().getId()), option);
         option.updateInfo(optionRequest.name(), optionRequest.quantity());
     }
 
