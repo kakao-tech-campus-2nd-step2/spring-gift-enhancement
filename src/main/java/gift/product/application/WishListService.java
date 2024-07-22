@@ -51,7 +51,7 @@ public class WishListService {
     }
 
     @Transactional
-    public void addProductToWishList(Long userId, Long wishlistId, Long productId, Long optionId, int quantity) {
+    public void addProductToWishList(Long userId, Long wishlistId, Long productId, Long optionId, Long quantity) {
         WishList wishList = findById(wishlistId);
         if (!Objects.equals(wishList.getUser().getId(), userId)) {
             throw new ProductException(ErrorCode.NOT_USER_OWNED);
