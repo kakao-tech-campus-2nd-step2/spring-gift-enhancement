@@ -11,10 +11,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 @Table(name="options", uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "name"})})
@@ -30,6 +31,8 @@ public class Option {
 
     @NotNull
     @Column(columnDefinition = "bigint default 0")
+    @Min(value = 0, message = "quantity는 0이상이어야 합니다.")
+    @Max(value = 100_000_000, message = "quantity는 1억 이하여야합니다.")
     private Long quantity;
 
     @ManyToOne
@@ -37,7 +40,7 @@ public class Option {
     private Product product;
 
     // Constructor
-    public Option() {
+    protected Option() {
     }
 
     public Option(String name, Long quantity) {
@@ -56,16 +59,8 @@ public class Option {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Long getQuantity() {
@@ -82,5 +77,9 @@ public class Option {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+    // business logic
+    public void subtract(Long quantity){
+        setQuantity(this.quantity - quantity);
     }
 }

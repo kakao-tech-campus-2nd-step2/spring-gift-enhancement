@@ -41,3 +41,11 @@ category 반영
 - OneToMany-List<Option>
 ### add_product
 - option 입력 추가
+---
+## 3단계 요구사항
+### Option
+- subtract()
+### OptionRepository
+- findByProductId()
+### OptionServiceTest
+- 단위테스트들
