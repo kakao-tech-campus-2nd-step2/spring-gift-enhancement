@@ -56,6 +56,20 @@ class ProductOptionServiceTest {
     }
 
     @Test
+    @DisplayName("상품 옵션 생성 요청이 중복된 이름일 때, 예외를 발생시킵니다.")
+    void createInitialOptions() {
+        //given
+        List<CreateProductOptionRequest> request = List.of(
+            new CreateProductOptionRequest("optionName", 1000),
+            new CreateProductOptionRequest("optionName", 1000));
+
+        //when
+        //then
+        assertThatThrownBy(() -> productOptionService.createInitialOptions(1L, request))
+            .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
     @DisplayName("상품 옵션 조회 요청이 정상적일 때, 상품 옵션을 성공적으로 조회합니다.")
     void readAllOptions() {
         //given
