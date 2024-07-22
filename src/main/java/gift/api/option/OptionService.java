@@ -7,10 +7,10 @@ import gift.api.option.dto.OptionResponse;
 import gift.api.product.Product;
 import gift.api.product.ProductRepository;
 import gift.global.exception.NoSuchEntityException;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -42,7 +42,7 @@ public class OptionService {
 
     @Transactional
     public void subtract(Long id, Integer quantity) {
-        Option option = optionRepository.findById(id)
+        Option option = optionRepository.findByIdWithPessimisticWrite(id)
             .orElseThrow(() -> new NoSuchEntityException("option"));
         option.subtract(quantity);
     }

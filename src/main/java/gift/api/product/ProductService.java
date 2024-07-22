@@ -5,13 +5,13 @@ import gift.api.category.CategoryRepository;
 import gift.api.product.dto.ProductRequest;
 import gift.api.product.dto.ProductResponse;
 import gift.global.exception.NoSuchEntityException;
-import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {

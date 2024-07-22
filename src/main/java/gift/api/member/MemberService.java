@@ -3,8 +3,8 @@ package gift.api.member;
 import gift.global.exception.ForbiddenMemberException;
 import gift.global.exception.UnauthorizedMemberException;
 import gift.global.utils.JwtUtil;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberService {

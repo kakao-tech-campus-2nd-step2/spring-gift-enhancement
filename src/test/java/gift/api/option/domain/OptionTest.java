@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class OptionTest {
 
     @Test
-    @DisplayName(value = "정상_옵션_수량_차감_테스트")
+    @DisplayName("정상_옵션_수량_차감_테스트")
     void subtract() {
         // given
         var before = 100;

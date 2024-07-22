@@ -33,7 +33,7 @@ class OptionServiceTest {
     private OptionService optionService;
 
     @Test
-    @DisplayName(value = "옵션_조회_테스트")
+    @DisplayName("옵션_조회_테스트")
     void getOptions() {
         // given
         var productId = 1L;
@@ -49,7 +49,7 @@ class OptionServiceTest {
     }
 
     @Test
-    @DisplayName(value = "정상_옵션_추가_테스트")
+    @DisplayName("정상_옵션_추가_테스트")
     void add() {
         // given
         var product = mock(Product.class);
@@ -66,7 +66,7 @@ class OptionServiceTest {
     }
 
     @Test
-    @DisplayName(value = "중복_이름_옵션_추가_테스트")
+    @DisplayName("중복_이름_옵션_추가_테스트")
     void addRedundantOption() {
         // given
         var product = mock(Product.class);
@@ -83,7 +83,7 @@ class OptionServiceTest {
     }
 
     @Test
-    @DisplayName(value = "정상_옵션_수량_차감_테스트")
+    @DisplayName("정상_옵션_수량_차감_테스트")
     void subtract() {
         // given
         var before = 100;

@@ -10,7 +10,6 @@ import gift.api.wishlist.dto.WishAddUpdateRequest;
 import gift.api.wishlist.dto.WishDeleteRequest;
 import gift.api.wishlist.dto.WishResponse;
 import gift.global.exception.NoSuchEntityException;
-import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WishService {

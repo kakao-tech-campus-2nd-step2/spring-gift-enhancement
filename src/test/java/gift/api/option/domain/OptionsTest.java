@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class OptionsTest {
 
     @Test
-    @DisplayName(value = "중복된_이름의_옵션_추가_테스트")
+    @DisplayName("중복된_이름의_옵션_추가_테스트")
     void validateUniqueName() {
         // given
         var product = mock(Product.class);
