@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+
 @Service
 public class CategoryService {
 
@@ -43,4 +44,5 @@ public class CategoryService {
         }
         categoryRepository.deleteById(id);
     }
+
 }

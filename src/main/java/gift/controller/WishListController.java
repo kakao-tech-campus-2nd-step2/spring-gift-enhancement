@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/wishlists")
+
 public class WishListController {
     private final WishListService wishListService;
     private final JwtService jwtService;

@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.domain.MemberRequest;
 import gift.domain.MenuRequest;
+
 import gift.service.MemberService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/members")
+
 public class MemberController {
     private final MemberService memberService;
 
