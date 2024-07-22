@@ -16,6 +16,9 @@ public class Option {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
+    @Version
+    private int version;
+
     protected Option() {}
 
     public Option(OptionDTO optionDTO) {

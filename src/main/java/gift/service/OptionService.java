@@ -51,4 +51,16 @@ public class OptionService {
         options.deleteOption(id);
         optionsRepository.save(options);
     }
+
+    public int deductQuantity(int product_id, int id) {
+        var options = findByProduct_Id(product_id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다."));
+        var currentQuantity = optionRepository.searchQuantityById(id);
+        if (currentQuantity > 0) {
+            optionRepository.updateQuantityById(id, currentQuantity - 1);
+        } else {
+            throw new IllegalArgumentException("남은 수량이 없습니다.");
+        }
+        optionsRepository.save(options);
+        return currentQuantity - 1;
+    }
 }
