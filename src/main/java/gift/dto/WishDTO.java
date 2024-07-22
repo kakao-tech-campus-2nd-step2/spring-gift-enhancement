@@ -6,7 +6,6 @@ import gift.domain.Wish;
 import jakarta.validation.constraints.NotNull;
 
 public class WishDTO {
-
     @NotNull
     private Long productId;
 

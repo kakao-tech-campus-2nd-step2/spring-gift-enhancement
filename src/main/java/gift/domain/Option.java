@@ -58,8 +58,6 @@ public class Option {
         return product;
     }
 
-
-
     public static class OptionBuilder {
         private Long id;
         private String name;
