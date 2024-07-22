@@ -1,5 +1,8 @@
 package gift.domain;
 
+import gift.constants.Messages;
+import gift.exception.CannotDeleteLastOptionException;
+import gift.exception.InsufficientQuantityException;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -19,6 +22,11 @@ public class Option {
     private Product product;
 
     protected Option() {
+    }
+
+    public Option(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
     }
 
     public Option(Builder builder) {
@@ -44,7 +52,15 @@ public class Option {
         }
     }
 
+    public void validateOptionCountBeforeRemove(){
+        int productOptionCount = this.product.getOptions().size();
+        if(productOptionCount < 2){
+            throw new CannotDeleteLastOptionException(Messages.CANNOT_DELETE_LAST_OPTION);
+        }
+    }
+
     public void remove() {
+        validateOptionCountBeforeRemove();
         if (this.product != null) {
             this.product.removeOption(this);
         }
@@ -74,6 +90,13 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+    }
+
+    public void subtract(int subtractQuantity){
+        if(subtractQuantity > this.quantity){
+            throw new InsufficientQuantityException(Messages.INSUFFICIENT_QUANTITY);
+        }
+        this.quantity = this.quantity - subtractQuantity;
     }
 
     public static class Builder {

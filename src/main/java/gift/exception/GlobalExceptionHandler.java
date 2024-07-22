@@ -57,11 +57,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
-    @ExceptionHandler(DuplicateOptionNameException.class)
-    public ResponseEntity<ErrorResponse> handleDuplicateDuplicateOptionNameException(DuplicateOptionNameException ex, WebRequest request) {
+    @ExceptionHandler(ProductOptionRequiredException.class)
+    public ResponseEntity<ErrorResponse> handleProductOptionRequiredException(ProductOptionRequiredException ex, WebRequest request) {
         String path = request.getDescription(false).replace("uri=", "");
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage(), path);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(InsufficientQuantityException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientQuantityException(InsufficientQuantityException ex, WebRequest request) {
+        String path = request.getDescription(false).replace("uri=", "");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), path);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

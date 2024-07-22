@@ -1,5 +1,7 @@
 package gift.domain;
 
+import gift.constants.Messages;
+import gift.exception.ProductOptionRequiredException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -86,7 +88,7 @@ public class Product {
         this.category = category;
     }
 
-    public Product(String name, int price, String imageUrl, Category category){
+    public Product(String name, int price, String imageUrl, Category category, Option option){
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -94,6 +96,7 @@ public class Product {
         if(this.category != null){
             this.category.addProduct(this);
         }
+        addOption(option);
     }
 
     public Long getId() {
@@ -138,6 +141,14 @@ public class Product {
     public void remove(){
         if(this.category != null){
             this.category.removeProduct(this);
+        }
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void isOptionPresent() {
+        if (this.options.isEmpty()) {
+            throw new ProductOptionRequiredException(Messages.PRODUCT_OPTION_REQUIRED);
         }
     }
 

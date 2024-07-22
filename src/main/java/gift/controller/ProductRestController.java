@@ -1,5 +1,7 @@
 package gift.controller;
 
+import gift.dto.request.OptionRequest;
+import gift.dto.request.ProductOptionRequest;
 import gift.dto.request.ProductRequest;
 import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
@@ -28,8 +30,8 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> add(@Valid @RequestBody ProductRequest request) {
-        productService.save(request);
+    public ResponseEntity<Void> add(@Valid @RequestBody ProductOptionRequest productOptionRequest) {
+        productService.save(productOptionRequest.getProductRequest(), productOptionRequest.getOptionRequest());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -61,5 +63,11 @@ public class ProductRestController {
     public ResponseEntity<List<OptionResponse>> getProductOptions(@PathVariable Long id) {
         productService.findById(id);
         return ResponseEntity.ok().body(optionService.findByProductId(id));
+    }
+
+    @PostMapping("/{id}/options")
+    public ResponseEntity<Void> addProductOption(@PathVariable Long id, @Valid @RequestBody OptionRequest optionRequest){
+        optionService.save(id, optionRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

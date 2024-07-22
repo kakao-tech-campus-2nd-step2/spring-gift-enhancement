@@ -10,4 +10,6 @@ public class Messages {
     public static final String CATEGORY_NAME_ALREADY_EXISTS = "이미 존재하는 카테고리 이름입니다.";
     public static final String OPTION_NAME_ALREADY_EXISTS = "이미 존재하는 옵션 이름입니다.";
     public static final String CANNOT_DELETE_LAST_OPTION = "상품의 옵션은 1개 이상이어야 합니다. 옵션을 삭제할 수 없습니다";
+    public static final String PRODUCT_OPTION_REQUIRED = "상품의 옵션은 1개 이상이어야 합니다.";
+    public static final String INSUFFICIENT_QUANTITY = "옵션의 수량이 부족합니다.";
 }
