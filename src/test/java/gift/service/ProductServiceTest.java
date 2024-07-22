@@ -110,6 +110,7 @@ class ProductServiceTest {
         Product product = new Product(1L, "name", 500, "image.image");
         Category category1 = new Category(1L, "상품권");
         Option option = new Option("optionName", 100, product);
+        int initQuantity = option.getQuantity();
         product.setCategory(category1);
         product.setOption(option);
 
@@ -124,6 +125,6 @@ class ProductServiceTest {
 
         // then
         Assertions.assertThat(option.getQuantity())
-                .isEqualTo(91);
+                .isEqualTo(initQuantity - subtractOptionRequest.amount());
     }
 }
