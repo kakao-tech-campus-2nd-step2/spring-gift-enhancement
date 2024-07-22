@@ -95,23 +95,4 @@ public class ProductService {
 
         return new AddedOptionIdResponse(option.getId());
     }
-
-    @Transactional
-    public List<String> getOptionNames(Long productId) {
-        Product product = getProduct(productId);
-        return product.getOptions()
-                .stream()
-                .map(Option::getName)
-                .toList();
-    }
-
-    @Transactional
-    public List<String> updateOptionNames(Long productId, Long optionId, String changedName) {
-        Product product = getProduct(productId);
-        optionService.updateOptionName(optionId, changedName);
-        return product.getOptions()
-                .stream()
-                .map(Option::getName)
-                .toList();
-    }
 }
