@@ -1,4 +1,4 @@
-package gift.functionTest;
+package gift.e2e;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.dto.request.MemberRequest;
