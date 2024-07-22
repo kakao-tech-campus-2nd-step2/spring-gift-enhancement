@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface OptionRepository extends JpaRepository<Option, Long> {
     Optional<Option> findByIdAndProductId(Long optionId, Long productId);
+    Optional<Option> findByName(String name);
 }

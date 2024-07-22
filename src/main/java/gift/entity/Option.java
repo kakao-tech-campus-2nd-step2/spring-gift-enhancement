@@ -37,6 +37,13 @@ public class Option {
         this.quantity = quantity;
     }
 
+    // 필요한 필드를 설정하는 생성자
+    public Option(String name, Product product, int quantity) {
+        this.name = name;
+        this.product = product;
+        this.quantity = quantity;
+    }
+
     public Long getId() {
         return id;
     }
@@ -63,11 +70,11 @@ public class Option {
         this.quantity -= quantityToSubtract;
     }
 
-    void assignToProduct(Product product) {
+    public void assignToProduct(Product product) {  // Changed to public
         this.product = product;
     }
 
-    void removeFromProduct() {
+    public void removeFromProduct() {
         this.product = null;
     }
 }
