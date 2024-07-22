@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
+
     private final ProductService productService;
 
     @Autowired
@@ -38,19 +39,18 @@ public class ProductController {
                 .orElseThrow(() -> new ProductNotFoundException("상품을 찾을 수 없습니다. ID: " + id));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Long> addProduct(@RequestBody ProductDto productDto) {
-        Long id = productService.save(productDto);
-        return ResponseEntity.ok(id);
+    @PostMapping
+    public Long addProduct(@RequestBody ProductDto productDto) {
+        return productService.save(productDto);
     }
 
-    @PutMapping("/edit/{id}")
-    public void editProduct(@PathVariable("id") Long id, @RequestBody ProductDto productDto) {
+    @PutMapping("/{id}")
+    public void updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
         productService.update(id, productDto);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void deleteProduct(@PathVariable("id") Long id) {
-        productService.deleteById(id);
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        productService.delete(id);
     }
 }

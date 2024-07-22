@@ -24,27 +24,17 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Wish> wishes;
 
-    public Product(String name, int price, String imgUrl) {
-        this.id = null;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    protected Product() {}
+
+    public Product(String name, Integer price, String imgUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imgUrl = imgUrl;
-    }
-
-    public Product(Integer price, String name, String imgUrl) {
-        this.price = price;
-        this.name = name;
-        this.imgUrl = imgUrl;
-    }
-
-    public Product(Long id, String name, int price, String imgUrl) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.imgUrl = imgUrl;
-    }
-
-    public Product() {
+        this.category = category;
     }
 
     public Long getId() {
@@ -61,5 +51,16 @@ public class Product {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public Category getCategory() { return category; }
+
+    public List<Wish> getWishes() { return wishes; }
+
+    public void update(String name, Integer price, String imgUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imgUrl = imgUrl;
+        this.category = category;
     }
 }
