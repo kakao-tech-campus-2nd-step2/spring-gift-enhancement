@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +45,6 @@ public class RaceConditionTest {
         Long optionId = product.getOptions().get(0).getId();
 
         int threadCount = 100; // 스레드 개수
-        AtomicInteger count = new AtomicInteger();
         ExecutorService executorService = Executors.newFixedThreadPool(32); // 스레드 풀 크기
         CountDownLatch latch = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
@@ -54,7 +52,6 @@ public class RaceConditionTest {
             executorService.submit(() -> {
                 try {
                     int q = productService.subtractQuantity(finalProduct.getId(), optionId, subtractAmount);
-                    count.incrementAndGet();
                 } catch (TransactionTimedOutException e) {
                     System.out.println("TimeOut");
                 }catch (Exception e) {
@@ -67,7 +64,6 @@ public class RaceConditionTest {
         latch.await();
 
         // when
-        System.out.println(count.get());
         product = productRepository.findProductAndOptionByIdFetchJoin(product.getId()).get();
         Option actual = product.findOptionByOptionId(optionId);
 
