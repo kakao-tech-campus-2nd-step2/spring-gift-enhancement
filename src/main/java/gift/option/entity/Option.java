@@ -27,7 +27,7 @@ public class Option {
     @NotBlank
     private String name;
 
-    @Min(value = 1)
+    @Min(value = 0)
     @Max(value = 100_000_000)
     private int quantity;
 
@@ -50,6 +50,24 @@ public class Option {
 
     protected Option() {
 
+    }
+
+    // 수량 차감 메서드
+    public void subtractQuantity() {
+        if (quantity < 1) {
+            throw new IllegalArgumentException("품절된 상품입니다.");
+        }
+
+        quantity--;
+    }
+
+    // 아직은 쓰진 않지만, 언젠간 필요할 것 같아서 만든 물량 채우기 메서드
+    public void fillQuantity(int quantity) {
+        if (quantity < 1) {
+            throw new IllegalArgumentException("수량을 추가할 땐 자연수를 입력해주세요.");
+        }
+
+        this.quantity += quantity;
     }
 
     public Long getOptionId() {

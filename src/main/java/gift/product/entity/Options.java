@@ -5,6 +5,7 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,12 @@ public class Options {
         verifyOwnership(newOption, productId);
 
         options.add(newOption);
+    }
+
+    // 요소 검색
+    public Option getOption(long optionId) {
+        return options.stream().filter(option -> option.getOptionId() == optionId).findFirst()
+            .orElseThrow(() -> new NoSuchElementException("존재하지 않는 옵션입니다."));
     }
 
     // 요소를 추가할 때 사용할 중복 검사.
