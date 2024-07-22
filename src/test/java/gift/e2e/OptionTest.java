@@ -63,4 +63,52 @@ public class OptionTest {
         assertThat(response.getHeaders().getLocation()).isNotNull();
         assertThat(response.getBody()).isNotNull();
     }
+
+    @Test
+    @DisplayName("add option duplicate name test")
+    void addOptionDuplicateNameTest() {
+        // given
+        var url = "http://localhost:" + port + "/api/products/1/options";
+        var requestBody = new CreateOptionRequest(1L, "Option A1", 1000);
+        var request = new RequestEntity<>(requestBody, HttpMethod.POST, URI.create(url));
+
+        // when
+        var response = restTemplate.exchange(request, String.class);
+
+        // then
+        assertThat(response.getStatusCode().is4xxClientError()).isTrue();
+    }
+
+    @Test
+    @DisplayName("add option quantity over 1 million")
+    void addOptionQuantityOver1Million() {
+        // given
+        var url = "http://localhost:" + port + "/api/products/1/options";
+        var requestBody = new CreateOptionRequest(1L, "new option", 100_000_000);
+        var request = new RequestEntity<>(requestBody, HttpMethod.POST, URI.create(url));
+
+        // when
+        var response = restTemplate.exchange(request, String.class);
+        System.out.println(response);
+
+        // then
+        assertThat(response.getStatusCode().is4xxClientError()).isTrue();
+    }
+
+    @Test
+    @DisplayName("add option quantity under 1")
+    void addOptionQuantityUnder1() {
+        // given
+        var url = "http://localhost:" + port + "/api/products/1/options";
+        var requestBody = new CreateOptionRequest(1L, "new option", 100_000_000);
+        var request = new RequestEntity<>(requestBody, HttpMethod.POST, URI.create(url));
+
+        // when
+        var response = restTemplate.exchange(request, String.class);
+
+        // then
+        assertThat(response.getStatusCode().is4xxClientError()).isTrue();
+    }
+
+
 }
