@@ -29,7 +29,7 @@ public class Product {
     @NotNull
     private String imageUrl;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
     @PrePersist
@@ -84,6 +84,15 @@ public class Product {
         if (options.isEmpty()) {
             throw new IllegalArgumentException("상품에는 하나 이상의 옵션이 필요합니다.");
         }
+    }
+
+    public void addOption(Option option) {
+        options.add(option);
+        option.setProduct(this);
+    }
+
+    public void removeOptions() {
+        options.clear();
     }
 
     public Long getId() {

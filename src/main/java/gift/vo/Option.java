@@ -51,6 +51,10 @@ public class Option {
         }
     }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public Long getId() {
         return id;
     }

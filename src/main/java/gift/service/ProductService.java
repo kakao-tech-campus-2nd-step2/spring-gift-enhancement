@@ -18,10 +18,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
     
     private Category getCategory(Long categoryId) {
@@ -43,6 +45,7 @@ public class ProductService {
 
     public void addProduct(@Valid ProductRequestDto productRequestDto) {
         Product product = productRequestDto.toProduct(getCategory(productRequestDto.categoryId()));
+        optionService.addOption(product, productRequestDto.options());
         productRepository.save(product);
     }
 

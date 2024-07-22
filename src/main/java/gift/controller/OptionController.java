@@ -39,8 +39,8 @@ public class OptionController {
     }
 
     @PostMapping("/options")
-    public ResponseEntity<Void> addOption(@Valid @RequestBody OptionRequestDto optionRequestDto) {
-        optionService.addOption(optionRequestDto);
+    public ResponseEntity<Void> addOption(@Valid @RequestBody List<OptionRequestDto> optionRequestDtos) {
+        optionService.addOption(optionRequestDtos);
         return ResponseEntity.noContent().build();
     }
 
