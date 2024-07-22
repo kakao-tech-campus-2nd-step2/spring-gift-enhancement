@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class OptionService {
@@ -34,7 +35,14 @@ public class OptionService {
     }
 
     public void addOption(OptionRequestDto optionRequestDto) {
-        Option option = optionRequestDto.toOption(getProduct(optionRequestDto));
+        Product product = getProduct(optionRequestDto);
+        Optional<Option> existingOption = optionRepository.findByNameAndProductId(optionRequestDto.name(), product.getId());
+
+        if (existingOption.isPresent()) {
+            throw new IllegalArgumentException("상품 옵션명이 중복입니다. 다른 옵션명으로 변경해주세요.");
+        }
+
+        Option option = optionRequestDto.toOption(product);
         optionRepository.save(option);
     }
 
