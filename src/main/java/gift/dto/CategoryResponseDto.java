@@ -9,7 +9,8 @@ public class CategoryResponseDto {
     private String imageUrl;
     private String description;
 
-    public CategoryResponseDto() {}
+    public CategoryResponseDto() {
+    }
 
     public CategoryResponseDto(Category category) {
         this.id = category.getId();

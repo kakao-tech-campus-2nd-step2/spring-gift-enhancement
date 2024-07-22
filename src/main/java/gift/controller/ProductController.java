@@ -29,7 +29,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ApiResponse> saveProduct(@Valid @RequestBody ProductRequestDto requestDto) {
         productService.addProduct(requestDto);
-        return ResponseEntity.ok().body(new ApiResponse(HttpStatus.OK,"상품이 성공적으로 등록되었습니다."));
+        return ResponseEntity.ok().body(new ApiResponse(HttpStatus.OK, "상품이 성공적으로 등록되었습니다."));
     }
 
     @GetMapping
@@ -67,7 +67,7 @@ public class ProductController {
     public ResponseEntity<ApiResponse> saveOption(@PathVariable("productId") Long productId,
                                                   @RequestBody OptionRequestDto request) {
         optionService.saveOption(productId, request);
-        return ResponseEntity.ok().body(new ApiResponse(HttpStatus.OK,"옵션이 성공적으로 등록되었습니다."));
+        return ResponseEntity.ok().body(new ApiResponse(HttpStatus.OK, "옵션이 성공적으로 등록되었습니다."));
     }
 
     @GetMapping("/{productId}/options")
