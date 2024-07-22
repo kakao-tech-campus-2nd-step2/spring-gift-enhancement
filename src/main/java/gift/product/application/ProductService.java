@@ -27,8 +27,7 @@ public class ProductService {
     @Transactional
     public Long saveProduct(CreateProductRequestDTO createProductRequestDTO) {
         Category category = categoryService.getCategoryByName(createProductRequestDTO.getCategory());
-        Product product = new Product(createProductRequestDTO.getName(), createProductRequestDTO.getPrice(),
-                createProductRequestDTO.getImageUrl(), category);
+        Product product = new Product(createProductRequestDTO, category);
         validateProduct(product);
 
         return productRepository.save(product).getId();

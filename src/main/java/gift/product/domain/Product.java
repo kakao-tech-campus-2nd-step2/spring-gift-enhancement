@@ -32,10 +32,10 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, Double price, String imageUrl, Category category) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public Product(CreateProductRequestDTO createProductRequestDTO, Category category) {
+        this.name = createProductRequestDTO.getName();
+        this.price = createProductRequestDTO.getPrice();
+        this.imageUrl = createProductRequestDTO.getImageUrl();
         this.category = category;
     }
 
