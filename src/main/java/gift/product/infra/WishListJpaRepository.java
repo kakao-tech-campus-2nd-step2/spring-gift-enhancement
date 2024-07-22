@@ -6,10 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface WishListRepository extends JpaRepository<WishList, Long> {
+import java.util.Optional;
 
-    WishList findByUserId(Long userId);
+@Repository
+public interface WishListJpaRepository extends JpaRepository<WishList, Long> {
+
+    Optional<WishList> findByUserId(Long userId);
 
 
     Page<WishList> findByUserId(Long userId, Pageable pageable);

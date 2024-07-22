@@ -1,17 +1,13 @@
 package gift.product.application;
 
-import gift.product.domain.Category;
-import gift.product.domain.CreateProductRequestDTO;
-import gift.product.domain.Product;
+import gift.product.domain.*;
 import gift.product.exception.ProductException;
 import gift.product.infra.ProductRepository;
 import gift.util.ErrorCode;
-
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,13 +35,27 @@ public class ProductService {
         return productRepository.save(product).getId();
     }
 
+    @Transactional
+    public void addProductOption(Long id, CreateProductOptionRequestDTO createProductOptionRequestDTO) {
+        Product product = productRepository.findById(id);
+
+        productRepository.findProductOptionsByProductId(id).forEach(productOption -> {
+            if (productOption.getName().equals(createProductOptionRequestDTO.getName())) {
+                throw new ProductException(ErrorCode.DUPLICATED_OPTION_NAME);
+            }
+        });
+
+        ProductOption productOption = productRepository.saveProductOption(new ProductOption(createProductOptionRequestDTO.getName(),
+                createProductOptionRequestDTO.getQuantity(), product));
+        productRepository.save(product);
+    }
+
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
 
     public void updateProduct(Long id, String name, Double price, String imageUrl) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = productRepository.findById(id);
         product.setName(name);
         product.setPrice(price);
         product.setImageUrl(imageUrl);
@@ -77,10 +87,6 @@ public class ProductService {
         if (price < 0) {
             throw new ProductException(ErrorCode.NEGATIVE_PRICE);
         }
-    }
-
-    public Optional<Product> getProductByName(Long id) {
-        return productRepository.findById(id);
     }
 
     public List<Product> getProduct() {

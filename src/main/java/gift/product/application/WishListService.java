@@ -1,6 +1,7 @@
 package gift.product.application;
 
 import gift.product.domain.Product;
+import gift.product.domain.ProductOption;
 import gift.product.domain.WishList;
 import gift.product.domain.WishListProduct;
 import gift.product.exception.ProductException;
@@ -12,7 +13,7 @@ import gift.util.ErrorCode;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,21 +51,23 @@ public class WishListService {
     }
 
     @Transactional
-    public void addProductToWishList(Long userId, Long productId) {
-        WishList wishList = wishListRepository.findByUserId(userId);
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
-
-        if (wishList == null) {
-            User user = userService.getUser(userId);
-            wishList = new WishList(user, LocalDateTime.now());
-            wishList = wishListRepository.save(wishList);
+    public void addProductToWishList(Long userId, Long wishlistId, Long productId, Long optionId) {
+        WishList wishList = findById(wishlistId);
+        if (!Objects.equals(wishList.getUser().getId(), userId)) {
+            throw new ProductException(ErrorCode.NOT_USER_OWNED);
         }
 
-        WishListProduct wishListProduct = new WishListProduct(wishList, product);
-        wishList.addWishListProduct(wishListProduct);
+        Product product = productRepository.findById(productId);
+        ProductOption productOption = productRepository.getProductWithOption(productId, optionId);
+
+        wishList.addWishListProduct(new WishListProduct(wishList, product, productOption));
+
 
         wishListRepository.save(wishList);
+    }
+
+    public WishList findById(Long id) {
+        return wishListRepository.findById(id).orElseThrow(() -> new ProductException(ErrorCode.WISHLIST_NOT_FOUND));
     }
 
     @Transactional

@@ -7,6 +7,8 @@ import gift.util.CommonResponse;
 import gift.util.annotation.JwtAuthenticated;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,10 +46,13 @@ public class WishListController {
     }
 
     @JwtAuthenticated
-    @PostMapping("/{userId}/add/{productId}")
-    public ResponseEntity<?> addProductToWishList(@PathVariable Long userId, @PathVariable Long productId) {
-        wishListService.addProductToWishList(userId, productId);
-        return ResponseEntity.ok(new CommonResponse<>(null, "제품 추가 성공", true));
+    @PostMapping("/{wishListId}/add/{productId}/{optionId}")
+    public ResponseEntity<?> addProductToWishList(@PathVariable Long wishListId, @PathVariable Long productId, @PathVariable Long optionId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = Long.valueOf(authentication.getName());
+        wishListService.addProductToWishList(userId, wishListId, productId, optionId);
+
+        return ResponseEntity.ok(new CommonResponse<>(null, "위시리스트에 제품 추가 성공", true));
     }
 
     @JwtAuthenticated
