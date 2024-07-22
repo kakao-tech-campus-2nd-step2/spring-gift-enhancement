@@ -38,4 +38,9 @@ public class GlobalExceptionHandler {
                 .orElse("올바르지 않은 입력 방식입니다.");
         return ResponseEntity.badRequest().body(errorMessage);
     }
+
+    @ExceptionHandler(OutOfStockException.class)
+    public ResponseEntity<String> handleOutOfStockException(OutOfStockException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
 }

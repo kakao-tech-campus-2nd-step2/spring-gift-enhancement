@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.dto.OptionRequest;
+import gift.dto.OptionSubtractRequest;
 import gift.exception.AlreadyExistsException;
 import gift.exception.NotFoundException;
 import gift.model.Option;
@@ -41,5 +42,12 @@ public class OptionService {
                 product
         );
         return optionRepository.save(option);
+    }
+
+    @Transactional
+    public void subtractQuantity(OptionSubtractRequest request) {
+        Option option = optionRepository.findById(request.id())
+                .orElseThrow(() -> new NotFoundException("해당 id의 옵션이 존재하지 않습니다."));
+        option.subtract(request.quantity());
     }
 }

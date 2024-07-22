@@ -1,5 +1,6 @@
 package gift.model;
 
+import gift.exception.OutOfStockException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
@@ -52,5 +53,13 @@ public class Option {
 
     public Product getProduct() {
         return product;
+    }
+
+    public void subtract(Long quantity) {
+        Long remainingQuantity = this.quantity - quantity;
+        if (remainingQuantity < 0) {
+            throw new OutOfStockException("해당 옵션의 수량이 부족합니다.");
+        }
+        this.quantity -= quantity;
     }
 }

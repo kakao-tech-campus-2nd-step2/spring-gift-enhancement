@@ -1,11 +1,8 @@
-package gift;
+package gift.repository;
 
 import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
-import gift.repository.CategoryRepository;
-import gift.repository.OptionRepository;
-import gift.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
