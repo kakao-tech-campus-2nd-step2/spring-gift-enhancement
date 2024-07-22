@@ -8,8 +8,6 @@ import jakarta.validation.constraints.NotEmpty;
 public record OptionResponseDto(
     Long id,
 
-    ProductResponseDto productResponseDto,
-
     @ValidName
     @NotEmpty(message = "옵션명을 입력해 주세요.")
     String name,
@@ -23,7 +21,6 @@ public record OptionResponseDto(
     public static OptionResponseDto toOptionResponseDto (Option option) {
         return new OptionResponseDto(
                 option.getId(),
-                ProductResponseDto.toProductResponseDto(option.getProduct()),
                 option.getName(),
                 option.getQuantity()
         );

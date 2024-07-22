@@ -4,7 +4,11 @@ import gift.validation.NameValidator;
 import gift.validation.ValidName;
 import gift.vo.Category;
 import gift.vo.Product;
-import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+
+import java.util.List;
 
 public record ProductRequestDto(
         Long id,
@@ -18,7 +22,9 @@ public record ProductRequestDto(
         @Positive(message = "가격을 입력해 주세요(0보다 커야 합니다.)")
         int price,
 
-        String imageUrl
+        String imageUrl,
+
+        List<@Valid OptionRequestDto> options
 ) {
     public Product toProduct(Category category) {
         String nameKakaoErrorMessage = NameValidator.isValidKakaoName(name);

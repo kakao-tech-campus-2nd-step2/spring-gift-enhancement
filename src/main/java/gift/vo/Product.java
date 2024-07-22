@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table
 public class Product {
@@ -26,6 +29,9 @@ public class Product {
     @NotNull
     private String imageUrl;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
+
     public Product() {}
 
     public Product(Category category, String name, int price, String imageUrl) {
@@ -34,6 +40,8 @@ public class Product {
 
     public Product(Long id, Category category, String name, int price, String imageUrl) {
         validateName(name);
+        hasCategory(category);
+        hasOptions(options);
 
         this.id = id;
         this.category = category;
@@ -56,6 +64,18 @@ public class Product {
         }
     }
 
+    private void hasCategory(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException("상품에는 카테고리가 존재해야합니다.");
+        }
+    }
+
+    private void hasOptions(List<Option> options) {
+        if (options.isEmpty()) {
+            throw new IllegalArgumentException("상품에는 하나 이상의 옵션이 필요합니다.");
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -74,5 +94,9 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 }
