@@ -5,7 +5,7 @@ import gift.vo.Option;
 import gift.vo.Product;
 import jakarta.validation.constraints.NotEmpty;
 
-public record OptionDto (
+public record OptionRequestDto(
     Long id,
 
     Long productId,

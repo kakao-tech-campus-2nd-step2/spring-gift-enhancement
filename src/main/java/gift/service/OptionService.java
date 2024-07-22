@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.OptionDto;
+import gift.dto.OptionRequestDto;
 import gift.repository.OptionRepository;
 import gift.vo.Option;
 import gift.vo.Product;
@@ -20,8 +20,8 @@ public class OptionService {
         this.productService = productService;
     }
 
-    private Product getProduct(OptionDto optionDto) {
-        return productService.getProductById(optionDto.productId());
+    private Product getProduct(OptionRequestDto optionRequestDto) {
+        return productService.getProductById(optionRequestDto.productId());
     }
 
     private Option getOption(Long optionId) {
@@ -33,8 +33,8 @@ public class OptionService {
                 () -> new IllegalArgumentException("해당 상품의 옵션이 존재하지 않습니다."));
     }
 
-    public void addOption(OptionDto optionDto) {
-        Option option = optionDto.toOption(getProduct(optionDto));
+    public void addOption(OptionRequestDto optionRequestDto) {
+        Option option = optionRequestDto.toOption(getProduct(optionRequestDto));
         optionRepository.save(option);
     }
 
