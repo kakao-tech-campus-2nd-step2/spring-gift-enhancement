@@ -37,7 +37,7 @@ public class Option {
     }
 
     public void setProduct(Product product) {
-        if (this.product != null) {
+        if (this.product != null && !this.product.equals(product)) {
             this.product.getOptionList().remove(this);
         }
 
