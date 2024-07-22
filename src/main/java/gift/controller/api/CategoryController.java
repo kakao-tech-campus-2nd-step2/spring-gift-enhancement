@@ -5,6 +5,7 @@ import gift.dto.request.UpdateCategoryRequest;
 import gift.dto.response.CategoryIdResponse;
 import gift.dto.response.CategoryResponse;
 import gift.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class CategoryController {
     }
 
     @PostMapping("/api/categories")
-    public ResponseEntity<CategoryIdResponse> addCategory(@RequestBody AddCategoryRequest request) {
+    public ResponseEntity<CategoryIdResponse> addCategory(@Valid @RequestBody AddCategoryRequest request) {
         CategoryIdResponse categoryIdResponse = categoryService.addCategory(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryIdResponse);
     }
@@ -33,7 +34,7 @@ public class CategoryController {
     }
 
     @PutMapping("/api/categories")
-    public ResponseEntity<Void> updateCategory(@RequestBody UpdateCategoryRequest request) {
+    public ResponseEntity<Void> updateCategory(@Valid @RequestBody UpdateCategoryRequest request) {
         categoryService.updateCategory(request);
         return ResponseEntity.ok().build();
     }

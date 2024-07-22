@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -37,7 +38,7 @@ public class ProductAdminController {
 
     @GetMapping("/add")
     public String getAddForm(Model model) {
-        model.addAttribute("addProductRequest", new AddProductRequest("", 0, "", 0L));
+        model.addAttribute("addProductRequest", new AddProductRequest("", 0, "", 0L, new ArrayList<>()));
         model.addAttribute("categories", categoryService.getAllCategoryResponses());
         return "version-SSR/add-form";
     }

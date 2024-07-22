@@ -1,7 +1,8 @@
 package gift.exception;
 
 public class CategoryNotFoundException extends RuntimeException {
-    public CategoryNotFoundException() {
-        super("Category not found");
+
+    public CategoryNotFoundException(Long categoryId) {
+        super("CategoryId: " + categoryId + " not found");
     }
 }

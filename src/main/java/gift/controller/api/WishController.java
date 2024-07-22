@@ -4,6 +4,7 @@ import gift.dto.request.WishRequest;
 import gift.dto.response.WishProductResponse;
 import gift.interceptor.MemberId;
 import gift.service.WishService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,7 +23,7 @@ public class WishController {
     }
 
     @PostMapping("api/wishlist")
-    public ResponseEntity<Void> addProductToWish(@MemberId Long memberId, @RequestBody WishRequest request) {
+    public ResponseEntity<Void> addProductToWish(@MemberId Long memberId, @Valid @RequestBody WishRequest request) {
         wishService.addProductToWish(memberId, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -34,7 +35,7 @@ public class WishController {
     }
 
     @PutMapping("api/wishlist")
-    public ResponseEntity<Void> updateWishProductQuantity(@MemberId Long memberId, @RequestBody WishRequest request) {
+    public ResponseEntity<Void> updateWishProductQuantity(@MemberId Long memberId, @Valid @RequestBody WishRequest request) {
         wishService.updateWishProductQuantity(memberId, request);
         return ResponseEntity.ok().build();
     }

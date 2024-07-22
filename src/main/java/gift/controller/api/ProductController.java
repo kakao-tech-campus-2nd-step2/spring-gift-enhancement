@@ -1,8 +1,11 @@
 package gift.controller.api;
 
 import gift.dto.request.AddProductRequest;
+import gift.dto.request.OptionRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.dto.response.AddedOptionIdResponse;
 import gift.dto.response.AddedProductIdResponse;
+import gift.dto.response.OptionResponse;
 import gift.dto.response.ProductResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -12,6 +15,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -46,4 +51,15 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("api/products/{id}/options")
+    public ResponseEntity<List<OptionResponse>> getOptionResponses(@PathVariable("id") Long productId) {
+        return ResponseEntity.ok(productService.getOptionResponses(productId));
+    }
+
+    @PostMapping("api/products/{id}/options")
+    public ResponseEntity<AddedOptionIdResponse> addOptionToProduct(@PathVariable("id") Long productId,
+                                                                    @Valid @RequestBody OptionRequest optionRequest) {
+        AddedOptionIdResponse addedOptionId = productService.addOptionToProduct(productId, optionRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedOptionId);
+    }
 }

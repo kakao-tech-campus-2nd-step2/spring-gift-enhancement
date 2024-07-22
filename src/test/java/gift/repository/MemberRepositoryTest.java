@@ -2,13 +2,16 @@ package gift.repository;
 
 import gift.entity.Member;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("멤버 레포지토리 단위테스트")
@@ -52,5 +55,21 @@ class MemberRepositoryTest {
                 .hasValueSatisfying(m ->
                         assertThat(m.getId()).isEqualTo(savedMemberId)
                 );
+    }
+
+    @Nested
+    @DisplayName("멤버 엔티티 테스트")
+    class EntityTest {
+        @Test
+        @DisplayName("이메일 중복 예외처리")
+        void emailDuplicate() {
+            Member member = new Member("a@naver.com", "1234");
+            memberRepository.save(member);
+
+            Member sameEmailMember = new Member("a@naver.com", "1");
+
+            assertThatThrownBy(() -> memberRepository.save(sameEmailMember))
+                    .isInstanceOf(DataIntegrityViolationException.class);
+        }
     }
 }

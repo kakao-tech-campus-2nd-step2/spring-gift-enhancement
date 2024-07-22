@@ -22,8 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("카테고리 서비스 단위테스트")
@@ -38,11 +37,20 @@ class CategoryServiceTest {
     @DisplayName("모든 카테고리 조회")
     void getAllCategories() {
         //Given
+        Category category1 = mock(Category.class);
+        Category category2 = mock(Category.class);
+        Category category3 = mock(Category.class);
+
         List<Category> categoryList = List.of(
-                new Category(1L, "상품권", "test", "test", "test"),
-                new Category(2L, "교환권", "test", "test", "test"),
-                new Category(3L, "패션잡화", "test", "test", "test")
+                category1,
+                category2,
+                category3
         );
+
+        when(category1.getName()).thenReturn("상품권");
+        when(category2.getName()).thenReturn("교환권");
+        when(category3.getName()).thenReturn("패션잡화");
+
         when(categoryRepository.findAll()).thenReturn(categoryList);
 
         //When
@@ -62,26 +70,26 @@ class CategoryServiceTest {
         @DisplayName("성공")
         void success() {
             //Given
-            Category wantCategory = new Category(1L, "원하는 카테고리", "test", "test", "test");
-            when(categoryRepository.findById(1L)).thenReturn(Optional.of(wantCategory));
+            Category wantCategory = new Category("원하는 카테고리", "test", "test", "test");
+            when(categoryRepository.findById(any())).thenReturn(Optional.of(wantCategory));
 
             //When
-            Category result = categoryService.getCategory(1L);
+            Category result = categoryService.getCategory(any());
 
             //Then
             assertThat(result).isNotNull()
-                    .extracting("id", "name")
-                    .containsExactly(1L, "원하는 카테고리");
+                    .extracting("name", "color")
+                    .containsExactly("원하는 카테고리", "test");
         }
 
         @Test
         @DisplayName("실패 - 해당 카테고리 존재 안함")
         void fail() {
             //Given
-            when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
+            when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
             //When Then
-            assertThatThrownBy(() -> categoryService.getCategory(1L))
+            assertThatThrownBy(() -> categoryService.getCategory(any(Long.class)))
                     .isInstanceOf(CategoryNotFoundException.class);
         }
     }
@@ -94,8 +102,12 @@ class CategoryServiceTest {
         void success() {
             //Given
             when(categoryRepository.existsByName(any())).thenReturn(false);
+
             AddCategoryRequest request = new AddCategoryRequest("상품권", "색", "이미지주소", "설명");
-            when(categoryRepository.save(any())).thenReturn(new Category(1L, "상품권", "색", "이미지주소", "설명"));
+            Category category = mock(Category.class);
+
+            when(categoryRepository.save(any())).thenReturn(category);
+            when(category.getId()).thenReturn(1L);
 
             //When
             CategoryIdResponse response = categoryService.addCategory(request);
@@ -124,7 +136,7 @@ class CategoryServiceTest {
         @DisplayName("성공")
         void success() {
             //Given
-            Category existingCategory = new Category(1L, "기존", "기존", "기존", "기존");
+            Category existingCategory = new Category("기존", "기존", "기존", "기존");
 
             UpdateCategoryRequest request = new UpdateCategoryRequest(1L, "새로움", "새로움", "뉴이미지", "설명");
             when(categoryRepository.findById(1L)).thenReturn(Optional.of(existingCategory));
@@ -157,7 +169,7 @@ class CategoryServiceTest {
         @DisplayName("성공")
         void success() {
             //Given
-            Category deleteTargetCategory = new Category(1L, "타겟", "타겟", "타겟", "타겟");
+            Category deleteTargetCategory = new Category("타겟", "타겟", "타겟", "타겟");
             when(categoryRepository.findById(1L)).thenReturn(Optional.of(deleteTargetCategory));
 
             //When
