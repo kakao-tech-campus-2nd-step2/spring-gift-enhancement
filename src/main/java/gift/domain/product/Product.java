@@ -84,11 +84,11 @@ public class Product {
         if (isAlreadyExistOption(option)) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_OPTION, option.getName());
         }
-        options.add(option);
+        this.options.add(option);
     }
 
     private boolean isAlreadyExistOption(Option option) {
-        return options.stream()
-                .noneMatch(o -> o.hasSameName(option));
+        return this.options.stream()
+                .anyMatch(o -> o.hasSameName(option));
     }
 }

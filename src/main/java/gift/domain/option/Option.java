@@ -26,6 +26,7 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+        product.addOption(this);
     }
 
     public Long getId() {
@@ -41,6 +42,6 @@ public class Option {
     }
 
     public boolean hasSameName(Option target) {
-        return this.getName().equals(target.getName());
+        return this.name.equals(target.getName());
     }
 }
