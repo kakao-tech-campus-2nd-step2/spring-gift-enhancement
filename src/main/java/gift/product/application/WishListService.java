@@ -6,7 +6,6 @@ import gift.product.domain.WishList;
 import gift.product.domain.WishListProduct;
 import gift.product.exception.ProductException;
 import gift.product.infra.ProductRepository;
-import gift.product.infra.WishListRepository;
 import gift.user.application.UserService;
 import gift.user.domain.User;
 import gift.util.ErrorCode;
