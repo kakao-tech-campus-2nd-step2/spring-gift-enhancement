@@ -41,8 +41,8 @@ public class OptionService {
             validateOptionName(optionRequest, product);
             Option option = optionRequest.toOption(product);
             product.addOption(option);
+            optionRepository.save(option);
         }
-//        optionRepository.save(option);
     }
 
     public void addOption(Product product, List<OptionRequestDto> optionRequestDtos) {
@@ -50,8 +50,8 @@ public class OptionService {
             validateOptionName(optionRequest, product);
             Option option = optionRequest.toOption(product);
             product.addOption(option);
+            optionRepository.save(option);
         }
-//        optionRepository.save(option);
     }
 
     private void validateOptionName(OptionRequestDto optionRequestDto, Product product) {
