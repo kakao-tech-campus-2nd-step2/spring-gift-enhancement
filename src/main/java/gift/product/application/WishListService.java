@@ -6,8 +6,7 @@ import gift.product.domain.WishList;
 import gift.product.domain.WishListProduct;
 import gift.product.exception.ProductException;
 import gift.product.infra.ProductRepository;
-import gift.product.infra.WishLIstRepository;
-import gift.product.infra.WishListJpaRepository;
+import gift.product.infra.WishListRepository;
 import gift.user.application.UserService;
 import gift.user.domain.User;
 import gift.util.ErrorCode;
@@ -25,11 +24,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class WishListService {
 
-    private final WishLIstRepository wishListRepository;
+    private final WishListRepository wishListRepository;
     private final ProductRepository productRepository;
     private final UserService userService;
 
-    public WishListService(WishLIstRepository wishListRepository, ProductRepository productRepository,
+    public WishListService(WishListRepository wishListRepository, ProductRepository productRepository,
                            UserService userService) {
         this.wishListRepository = wishListRepository;
         this.productRepository = productRepository;
