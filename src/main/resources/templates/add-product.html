@@ -19,6 +19,7 @@
             optionsDiv.appendChild(optionFieldset);
         }
     </script>
+
 </head>
 <body>
 <h1>Add Product</h1>
@@ -40,10 +41,12 @@
                 th:text="${category.name}">Category Name</option>
     </select><br/>
 
+
     <div id="optionsDiv">
         <!-- 옵션 필드가 추가될 위치 -->
     </div>
     <button type="button" onclick="addOptionField()">Add Option</button><br/>
+
 
     <button type="submit">Add Product</button>
 </form>

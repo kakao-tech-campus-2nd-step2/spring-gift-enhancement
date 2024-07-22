@@ -1,11 +1,13 @@
 package gift.controller;
 
 import gift.dto.ProductDto;
+
 import gift.dto.OptionDto;
 import gift.entity.Category;
 import gift.entity.Product;
 import gift.service.CategoryService;
 import gift.service.OptionService;
+
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 @Controller
 @RequestMapping("/api/products")
 public class ProductController {
@@ -30,6 +33,7 @@ public class ProductController {
     private final CategoryService categoryService;
     private final ProductService productService;
     private OptionService optionService;
+
 
     @Autowired
     public ProductController(CategoryService categoryService, ProductService productService) {
@@ -42,6 +46,7 @@ public class ProductController {
     public Map<String, Object> getProducts(Pageable pageable) {
         Page<Product> productPage = productService.getProducts(pageable);
         Map<String, Object> response = new HashMap<>();
+
         List<ProductDto> productDtoList = new ArrayList<>();
 
         for (Product product : productPage.getContent()) {
@@ -50,6 +55,7 @@ public class ProductController {
         }
 
         response.put("content", productDtoList);
+
         response.put("currentPage", productPage.getNumber());
         response.put("totalPages", productPage.getTotalPages());
         response.put("hasNext", productPage.hasNext());
@@ -69,6 +75,7 @@ public class ProductController {
     public String addProduct(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("product", new ProductDto());
+
             model.addAttribute("categories", categoryService.getAllCategories());
             return "add-product";
         }
@@ -82,19 +89,23 @@ public class ProductController {
         if (product == null) {
             return "redirect:/view/products";
         }
+
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("options", optionService.getAllOptions());
+
         model.addAttribute("product", new ProductDto(product));
         return "edit-product";
     }
 
     @PostMapping("/edit/{id}")
     public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute("product") ProductDto productDto, BindingResult result, Model model) {
+
         Product product = productService.getProductById(productDto.getId());
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("options", optionService.getAllOptions());
             model.addAttribute("product", new ProductDto(product));
+
             return "edit-product";
         }
         if (productDto.getName().contains("카카오")) {
