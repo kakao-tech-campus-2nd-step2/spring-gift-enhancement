@@ -1,10 +1,17 @@
 # spring-gift-enhancement
 
 ---
-## 0단계 - 기본 코드 준비
+<details>
+<summary><strong>0단계 - 기본 코드 준비</strong></summary>
+
 - 3주차 코드 옮기기
+</details>
+
 ---
-## 1단계 - 상품 카테고리
+
+<details>
+<summary><strong>1단계 - 상품 카테고리</strong></summary>
+
 - 카테고리 엔티티 만들기
   - 필드는 id, name(unique)
 - 카테고리 DTO 만들기
@@ -38,3 +45,51 @@
   - WishlistRepositoryTest
   - WishlistRepositoryN1Test
   - CategoryRepositoryTest
+</details>
+
+---
+<details>
+<summary><strong>2단계 - 상품 옵션</strong></summary>
+
+- 옵션 엔티티 생성
+  - id
+  - name
+    - 공백 포함 최대 50자
+    - (),[],+,-,&,/,_ 외 사용 불가
+    - 동일한 상품 내의 옵션 이름은 중복 불가
+  - quantity
+    - 최소 1개 이상 1억 개 미만
+  - Product
+    - 옵션과 Product는 다대일, ManyToOne
+- 옵션 DTO 생성
+- DB 수정
+  - schema.sql
+    - 테이블 이름은 options
+    - 다중 열 UNIQUE 사용
+  - data.sql
+- application.properties 수정
+- 옵션 Repository 생성
+- 옵션 Service 생성
+  - 옵션 1개일 때 못지우게 설정
+    - 상품 정보에 항상 하나 이상의 옵션이 있어야 한다.
+- 옵션 Controller 생성
+- productService 수정
+  - Product 생성 시 임시 옵션 추가
+    - 상품 정보에 항상 하나 이상의 옵션이 있어야 한다.
+  - 상품 지우면 그에 해당하는 옵션들도 지워지도록
+- Product 관련 Controller 수정
+  - AdminController
+  - ProductController
+- HTML 추가 및 수정
+  - option 관련 HTML 추가
+    - option_list
+    - add_option_form
+    - edit_option_form
+  - product_list 수정
+    - 옵션 보기 버튼
+  - 보기 좋게 대부분 버튼으로 만들기
+- Test 코드 작성
+  - 옵션 단위 테스트
+  - 옵션 Repository 테스트
+  - 옵션 Service 테스트
+</details>

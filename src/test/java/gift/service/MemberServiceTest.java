@@ -1,6 +1,5 @@
 package gift.service;
 
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,8 +24,8 @@ class MemberServiceTest {
 
     @Test
     @Transactional
-    void saveMember() {
-        MemberDTO memberDTO = new MemberDTO("kbm","kbm@kbm.com","kbm");
+    void testSaveMember() {
+        MemberDTO memberDTO = new MemberDTO("kbm", "kbm@kbm.com", "kbm");
         Member savedMember = memberService.saveMember(memberDTO);
 
         assertAll(
@@ -39,9 +38,8 @@ class MemberServiceTest {
     }
 
     @Test
-    @Transactional
-    void findMemberByEmail() {
-        Member member = new Member(null, "kbm","kbm@kbm.com","kbm", "user");
+    void testFindMemberByEmail() {
+        Member member = new Member(null, "kbm", "kbm@kbm.com", "kbm", "user");
         memberRepository.save(member);
 
         Member foundMember = memberService.findMemberByEmail("kbm@kbm.com");
@@ -49,7 +47,7 @@ class MemberServiceTest {
         assertAll(
             () -> assertNotNull(foundMember),
             () -> assertEquals("kbm", foundMember.getName()),
-            () -> assertEquals("kbm@kbm.com",foundMember.getEmail()),
+            () -> assertEquals("kbm@kbm.com", foundMember.getEmail()),
             () -> assertEquals("kbm", foundMember.getPassword()),
             () -> assertEquals("user", foundMember.getRole())
         );

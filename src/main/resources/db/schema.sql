@@ -31,3 +31,13 @@ CREATE TABLE wishlist
     FOREIGN KEY (member_id) REFERENCES member (id),
     FOREIGN KEY (product_id) REFERENCES product (id)
 );
+
+CREATE TABLE options
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(255) NOT NULL,
+    quantity   BIGINT       NOT NULL,
+    product_id BIGINT       NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES product (id),
+    UNIQUE (product_id, name)
+);

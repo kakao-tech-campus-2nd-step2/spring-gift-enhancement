@@ -35,7 +35,7 @@ public class Category {
         return name;
     }
 
-    public void setName(String name) {
+    public void updateName(String name) {
         validateName(name);
         this.name = name;
     }

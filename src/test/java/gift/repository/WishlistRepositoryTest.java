@@ -8,6 +8,7 @@ import gift.model.Member;
 import gift.model.Product;
 import gift.model.Wishlist;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,19 @@ class WishlistRepositoryTest {
     @Test
     void testDeleteByMemberEmailAndProductId() {
         wishlistRepository.deleteByMemberAndProduct(savedMember, savedProduct);
+        Page<Wishlist> result = wishlistRepository.findByMember(savedMember, pageable);
+        assertThat(result.getTotalElements()).isEqualTo(0);
+    }
+
+    @Test
+    void testDeleteByProductIn() {
+        Product product2 = new Product(null, "상품2", "200", savedCategory, "https://kakao");
+        Product savedProduct2 = productRepository.save(product2);
+        Wishlist wishlist2 = new Wishlist(null, savedMember, savedProduct2);
+        wishlistRepository.save(wishlist2);
+
+        List<Product> products = List.of(savedProduct, savedProduct2);
+        wishlistRepository.deleteByProductIn(products);
         Page<Wishlist> result = wishlistRepository.findByMember(savedMember, pageable);
         assertThat(result.getTotalElements()).isEqualTo(0);
     }

@@ -1,13 +1,10 @@
 package gift.service;
 
-
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.dto.CategoryDTO;
 import gift.model.Category;
@@ -52,7 +49,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    void findAllCategories() {
+    void testFindAllCategories() {
         List<Category> categories = categoryService.findAllCategories();
         assertAll(
             () -> assertFalse(categories.isEmpty()),
@@ -61,7 +58,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    void findCategoryById() {
+    void testFindCategoryById() {
         category = categoryService.findCategoryById(testCategory.getId());
         assertAll(
             () -> assertNotNull(category),
@@ -70,7 +67,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    void findCategoryByName() {
+    void testFindCategoryByName() {
         category = categoryService.findCategoryByName(testCategory.getName());
         assertAll(
             () -> assertNotNull(category),
@@ -80,7 +77,7 @@ class CategoryServiceTest {
 
     @Test
     @Transactional
-    void saveCategory() {
+    void testSaveCategory() {
         CategoryDTO newCategoryDTO = new CategoryDTO("new테스트");
         categoryService.saveCategory(newCategoryDTO);
         Category savedCategory = categoryRepository.findByName("new테스트");
@@ -92,7 +89,7 @@ class CategoryServiceTest {
 
     @Test
     @Transactional
-    void updateCategory() {
+    void testUpdateCategory() {
         CategoryDTO updatedCategoryDTO = new CategoryDTO("update테스트");
         categoryService.updateCategory(updatedCategoryDTO, testCategory.getId());
 
@@ -105,7 +102,7 @@ class CategoryServiceTest {
 
     @Test
     @Transactional
-    void deleteCategory() {
+    void testDeleteCategory() {
         categoryService.deleteCategory(testCategory.getId());
         Category deletedCategory = categoryRepository.findById(testCategory.getId()).orElse(null);
         List<Product> remainingProducts = productRepository.findAll();

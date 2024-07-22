@@ -96,6 +96,8 @@
     </li>
   </ul>
 </div>
-<a th:href="@{/admin/products}">상품 목록으로 이동</a>
+<form th:action="@{/admin/products}" method="get">
+  <button type="submint">상품 목록으로 이동</button>
+</form>
 </body>
 </html>

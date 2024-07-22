@@ -1,10 +1,7 @@
 package gift.service;
 
-
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import gift.model.Category;
@@ -55,7 +52,7 @@ class WishlistServiceTest {
     private Product product;
     private Category category;
     private Wishlist wishlist;
-    private Pageable pageable = PageRequest.of(0,5);
+    private Pageable pageable = PageRequest.of(0, 5);
 
     @BeforeEach
     void setUp() {
@@ -68,7 +65,7 @@ class WishlistServiceTest {
     }
 
     @Test
-    void getWishlist() {
+    void testGetWishlist() {
         wishlist = new Wishlist(null, member, product);
         wishlistRepository.save(wishlist);
         Page<Product> wishlists = wishlistService.getWishlist(member.getEmail(), pageable);
@@ -80,7 +77,7 @@ class WishlistServiceTest {
 
     @Test
     @Transactional
-    void addWishlist() {
+    void testAddWishlist() {
         wishlistService.addWishlist(member.getEmail(), product.getId());
         List<Wishlist> wishlists = wishlistRepository.findAll();
         Wishlist wishlist = wishlists.get(0);
@@ -93,7 +90,7 @@ class WishlistServiceTest {
 
     @Test
     @Transactional
-    void removeWishlist() {
+    void testRemoveWishlist() {
         wishlist = new Wishlist(null, member, product);
         wishlistRepository.save(wishlist);
 
