@@ -80,4 +80,32 @@ class OptionServiceTest {
         assertThatExceptionOfType(CustomException.class)
                 .isThrownBy(() -> optionService.saveOption(1L, request));
     }
+
+    @Test
+    void 옵션_차감_성공() {
+        //given
+        Product product = new Product("더미", 10000, "test.jpg",
+                new Category("테스트", "##", "설명", "test"));
+        Option option = new Option("옵션",100,product);
+        given(optionRepository.findById(any()))
+                .willReturn(Optional.of(option));
+        //when
+        optionService.subtractOption(1L,70);
+        //then
+        assertThat(option.getQuantity()).isEqualTo(30);
+    }
+
+    @Test
+    void 옵션_차감_실패_재고보다_많은_요청() {
+        //given
+        Product product = new Product("더미", 10000, "test.jpg",
+                new Category("테스트", "##", "설명", "test"));
+        Option option = new Option("옵션",100,product);
+        given(optionRepository.findById(any()))
+                .willReturn(Optional.of(option));
+        //when
+        //then
+        assertThatExceptionOfType(CustomException.class)
+                .isThrownBy(() -> optionService.subtractOption(1L, 110));
+    }
 }
