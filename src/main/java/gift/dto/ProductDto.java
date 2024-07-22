@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.validation.NameValidator;
 import gift.validation.ValidName;
 import gift.vo.Category;
 import gift.vo.Product;
@@ -20,6 +21,10 @@ public record ProductDto(
         String imageUrl
 ) {
     public Product toProduct(Category category) {
+        String nameKakaoErrorMessage = NameValidator.isValidKakaoName(name);
+        if(nameKakaoErrorMessage != null) {
+            throw new IllegalArgumentException(nameKakaoErrorMessage);
+        }
         return new Product(id, category, name, price, imageUrl);
     }
 }

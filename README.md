@@ -48,3 +48,38 @@ Content-Type: application/json
 - [X]  Category Add 구현
 - [X]  Category Update 구현
 - [X]  Category Delete 구현
+   
+## **🚀 Step2 - 상품 옵션**
+
+---
+
+### 기능 요구 사항
+- 상품에는 항상 하나 이상의 옵션이 있어야 한다. 
+- **옵션 이름** 
+  - 공백 포함하여 최대 50자까지 입력할 수 있다. 
+  - 조건: 특수 문자 (), [], +, -, &, /, _ 외의 특수 문자 사용 불가 
+- 옵션 수량 
+  - 최소 1개 이상 1억 개 미만
+- 동일 상품 내의 옵션 이름은 중복될 수 없다. 
+
+**Request**
+```CURL
+GET /api/products/1/options HTTP/1.1
+```
+**Response**
+```CURL
+HTTP/1.1 200 
+Content-Type: application/json
+
+[
+  {
+    "id": 464946561,
+    "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+    "quantity": 969
+  }
+]
+```
+### ToDo
+- [X] Option: Repository, Service, Entity, Dto 구현
+- [X] 옵션 이름 공백 포함 최대 50자 유효성 검사 
+- [X] 옵션 이름 특수 문자 ( ), [ ], +, -, &, /, _ 그 외 특수 문자 사용 불가
