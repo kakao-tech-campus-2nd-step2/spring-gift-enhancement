@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -64,7 +65,7 @@ public class OptionQuantityTest {
 
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
         List<Future<?>> futures = new ArrayList<>();
-        List<Exception> exceptions = new ArrayList<>();
+        List<Exception> exceptions = Collections.synchronizedList(new ArrayList<>());
 
         //When
         for (int i = 0; i < threadCount; i++) {
