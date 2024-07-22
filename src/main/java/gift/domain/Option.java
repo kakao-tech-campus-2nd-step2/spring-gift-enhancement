@@ -1,16 +1,13 @@
 package gift.domain;
 
-import gift.dto.request.OptionRequest;
+import gift.dto.request.AddProductRequest;
+import gift.dto.request.AddOptionRequest;
 import gift.exception.CustomException;
-import gift.util.ProductValidationUtil;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import static gift.constant.Message.*;
 import static gift.exception.ErrorCode.INVALID_AMOUNT_ERROR;
-import static gift.exception.ErrorCode.INVALID_QUANTITY_ERROR;
 
 @Entity
 @Table(name = "option")
@@ -23,8 +20,13 @@ public class Option {
     @NotBlank(message = REQUIRED_FIELD_MSG)
     @Size(max = 50, message = LENGTH_ERROR_MSG)
     @Pattern(regexp = "^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/_]*$", message = SPECIAL_CHAR_ERROR_MSG)
+    @Column(nullable = false)
     private String name;
-    private int quantity;
+
+    @NotNull(message = REQUIRED_FIELD_MSG)
+    @Min(1)@Max(100_000_000)
+    @Column(nullable = false)
+    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -38,27 +40,20 @@ public class Option {
         this.product = product;
     }
 
-    public Option(OptionRequest optionRequest) {
-        this.name = optionRequest.getName();
-        this.quantity = validQuantity(optionRequest.getQuantity());
+    public Option(AddProductRequest request) {
+        this.name = request.optionName();
+        this.quantity = request.optionQuantity();
     }
 
-    public Option(OptionRequest optionRequest, Product product) {
-        this.name = optionRequest.getName();
-        this.quantity = validQuantity(optionRequest.getQuantity());
+    public Option(AddOptionRequest addOptionRequest, Product product) {
+        this.name = addOptionRequest.name();
+        this.quantity = addOptionRequest.quantity();
         this.product = product;
     }
 
     public void subtract(int amount) {
         checkAmount(amount);
         this.quantity -= amount;
-    }
-
-    private int validQuantity(int quantity) {
-        if (quantity < 1 || quantity >= 100_000_000) {
-            throw new CustomException(INVALID_QUANTITY_ERROR);
-        }
-        return quantity;
     }
 
     private void checkAmount(int amount) {
@@ -77,6 +72,10 @@ public class Option {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
 
