@@ -4,7 +4,6 @@ import gift.domain.Category;
 import gift.domain.CategoryName;
 import gift.domain.Option;
 import gift.domain.Product;
-import gift.dto.OptionDTO;
 import gift.dto.ProductDTO;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;

@@ -12,7 +12,6 @@ public class CategoryDTO {
     private String description;
 
     public CategoryDTO() {
-
     }
 
     private CategoryDTO(CategoryDTOBuilder builder) {

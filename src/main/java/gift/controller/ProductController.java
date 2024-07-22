@@ -1,6 +1,6 @@
 package gift.controller;
 
-import gift.domain.CategoryName;
+import gift.dto.CategoryDTO;
 import gift.dto.OptionDTO;
 import gift.dto.ProductDTO;
 import gift.service.CategoryService;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,7 +27,8 @@ public class ProductController {
     private final CategoryService categoryService;
     private final OptionService optionService;
 
-    public ProductController(ProductService productService, CategoryService categoryService, OptionService optionService) {
+    public ProductController(ProductService productService,
+        CategoryService categoryService, OptionService optionService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.optionService = optionService;
@@ -68,8 +68,9 @@ public class ProductController {
     }
 
     @PutMapping("/{id}/category")
-    public ResponseEntity<ProductDTO> updateProductCategory(@PathVariable Long id, @RequestParam CategoryName categoryName) {
-        ProductDTO updatedProduct = productService.updateProductCategory(id, categoryName);
+    public ResponseEntity<ProductDTO> updateProductCategory(@PathVariable Long id,
+        @RequestBody CategoryDTO categoryDTO) {
+        ProductDTO updatedProduct = productService.updateProductCategory(id, categoryDTO.getName());
         return ResponseEntity.ok(updatedProduct);
     }
 

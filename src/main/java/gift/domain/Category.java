@@ -50,7 +50,6 @@ public class Category {
         return name;
     }
 
-
     public String getColor() {
         return color;
     }

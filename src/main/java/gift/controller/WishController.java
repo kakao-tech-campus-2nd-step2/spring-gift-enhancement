@@ -1,8 +1,6 @@
 package gift.controller;
 
 import gift.domain.Member;
-import gift.domain.Product;
-import gift.domain.Wish;
 import gift.dto.ProductDTO;
 import gift.dto.WishDTO;
 import gift.service.ProductService;

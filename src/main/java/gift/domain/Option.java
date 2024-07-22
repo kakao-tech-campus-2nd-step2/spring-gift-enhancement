@@ -34,6 +34,13 @@ public class Option {
         this.product = builder.product;
     }
 
+    public void subtractQuantity(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("수량이 부족합니다.");
+        }
+        this.quantity -= quantity;
+    }
+
     public OptionBuilder toBuilder() {
         return new OptionBuilder()
             .id(this.id)
@@ -57,8 +64,6 @@ public class Option {
     public Product getProduct() {
         return product;
     }
-
-
 
     public static class OptionBuilder {
         private Long id;
