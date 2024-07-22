@@ -30,8 +30,8 @@ public class ProductController {
 
     @GetMapping("/api/products")
     public String getAllProductsByRoot(Model model,
-                                       @RequestParam(value="page", defaultValue="0") int page,
-                                       @RequestParam(value="size", defaultValue="10") int size) {
+                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                       @RequestParam(value = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductDto> paging = productService.getAllProductsByPage(pageable);
         model.addAttribute("paging", paging);
@@ -42,8 +42,8 @@ public class ProductController {
 
     @GetMapping("/products")
     public String getAllProductsByUser(Model model,
-                              @RequestParam(value="page", defaultValue="0") int page,
-                              @RequestParam(value="size", defaultValue="10") int size) {
+                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                       @RequestParam(value = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductDto> paging = productService.getAllProductsByPage(pageable);
         model.addAttribute("paging", paging);
