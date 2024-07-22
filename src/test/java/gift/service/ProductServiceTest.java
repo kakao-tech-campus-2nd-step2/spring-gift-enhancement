@@ -7,6 +7,7 @@ import gift.dto.request.AddOptionRequest;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.SubtractOptionRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.dto.response.MessageResponse;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
@@ -52,10 +53,10 @@ class ProductServiceTest {
         given(optionRepository.save(any())).willReturn(new Option(addProductRequest));
 
         // when
-        String successMsg = productService.addProduct(addProductRequest);
+        MessageResponse successMsg = productService.addProduct(addProductRequest);
 
         // then
-        Assertions.assertThat(successMsg).isEqualTo(ADD_SUCCESS_MSG);
+        Assertions.assertThat(successMsg).isEqualTo(new MessageResponse(ADD_SUCCESS_MSG));
     }
 
     @Test
@@ -73,10 +74,10 @@ class ProductServiceTest {
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category2));
 
         // when
-        String successMsg = productService.updateProduct(requestId, updateProductRequest);
+        MessageResponse successMsg = productService.updateProduct(requestId, updateProductRequest);
 
         // then
-        Assertions.assertThat(successMsg).isEqualTo(UPDATE_SUCCESS_MSG);
+        Assertions.assertThat(successMsg).isEqualTo(new MessageResponse (UPDATE_SUCCESS_MSG));
     }
 
     @Test

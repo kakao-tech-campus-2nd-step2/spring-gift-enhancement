@@ -5,6 +5,7 @@ import gift.domain.Product;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.AddOptionRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.dto.response.MessageResponse;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -30,22 +31,22 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public Product getProduct(@PathVariable("productId") Long productId) {
-        return productService.getProduct(productId);
+    public ResponseEntity<Product> getProduct(@PathVariable("productId") Long productId) {
+        return ResponseEntity.ok(productService.getProduct(productId));
     }
 
     @PostMapping
-    public ResponseEntity<String> addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
+    public ResponseEntity<MessageResponse> addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
         return ResponseEntity.ok(productService.addProduct(addProductRequest));
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<String> updateProduct(@PathVariable("productId") Long productId, @Valid @RequestBody UpdateProductRequest product) {
+    public ResponseEntity<MessageResponse> updateProduct(@PathVariable("productId") Long productId, @Valid @RequestBody UpdateProductRequest product) {
         return ResponseEntity.ok(productService.updateProduct(productId, product));
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<String> deleteProduct(@PathVariable("productId") Long productId) {
+    public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("productId") Long productId) {
         return ResponseEntity.ok(productService.deleteProduct(productId));
     }
 
@@ -55,7 +56,7 @@ public class ProductController {
     }
 
     @PostMapping("/{productId}/options")
-    public ResponseEntity<String> addOption(@PathVariable("productId") Long productId, @Valid @RequestBody AddOptionRequest addOptionRequest) {
+    public ResponseEntity<MessageResponse> addOption(@PathVariable("productId") Long productId, @Valid @RequestBody AddOptionRequest addOptionRequest) {
         return ResponseEntity.ok(productService.addOption(productId, addOptionRequest));
     }
 

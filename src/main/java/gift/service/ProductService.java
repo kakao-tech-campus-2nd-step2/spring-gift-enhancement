@@ -7,6 +7,7 @@ import gift.dto.request.AddOptionRequest;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.SubtractOptionRequest;
 import gift.dto.request.UpdateProductRequest;
+import gift.dto.response.MessageResponse;
 import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
@@ -41,23 +42,23 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public String addProduct(AddProductRequest request) {
+    public MessageResponse addProduct(AddProductRequest request) {
         Category category = categoryRepository.findByName(request.category()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         Option option = new Option(request);
         productRepository.save(new Product(request, category, option));
-        return ADD_SUCCESS_MSG;
+        return new MessageResponse(ADD_SUCCESS_MSG);
     }
 
-    public String updateProduct(Long productId, UpdateProductRequest productRequest) {
+    public MessageResponse updateProduct(Long productId, UpdateProductRequest productRequest) {
         Product existingProduct = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         Category category = categoryRepository.findByName(productRequest.category()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         productRepository.save(new Product(existingProduct.getId(), productRequest, category));
-        return UPDATE_SUCCESS_MSG;
+        return new MessageResponse(UPDATE_SUCCESS_MSG);
     }
 
-    public String deleteProduct(Long productId) {
+    public MessageResponse deleteProduct(Long productId) {
         productRepository.delete(productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND)));
-        return DELETE_SUCCESS_MSG;
+        return new MessageResponse(DELETE_SUCCESS_MSG);
     }
 
     public List<Option> getOptions(Long productId) {
@@ -65,11 +66,11 @@ public class ProductService {
         return optionRepository.findAllByProduct(product);
     }
 
-    public String addOption(Long productId, AddOptionRequest addOptionRequest) {
+    public MessageResponse addOption(Long productId, AddOptionRequest addOptionRequest) {
         Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         Option option = new Option(addOptionRequest, product);
         optionRepository.save(option);
-        return ADD_OPTION_SUCCESS_MSG;
+        return new MessageResponse(ADD_OPTION_SUCCESS_MSG);
     }
 
     public void subtractOptionQuantity(Long productId, SubtractOptionRequest subtractOptionRequest) {
