@@ -18,7 +18,6 @@ public class WishController {
 
     private final WishService wishService;
 
-    @Autowired
     public WishController(WishService wishService) {
         this.wishService = wishService;
     }

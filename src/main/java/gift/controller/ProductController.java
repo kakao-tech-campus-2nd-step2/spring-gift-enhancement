@@ -27,6 +27,11 @@ public class ProductController {
         return productService.getProducts(pageable);
     }
 
+    @GetMapping("/all")
+    public List<ProductDto> findAll() {
+        return productService.findAll();
+    }
+
     @GetMapping("/{id}")
     public ProductDto getProductById(@PathVariable("id") Long id) {
         return productService.findById(id)

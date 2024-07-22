@@ -9,6 +9,7 @@ import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,8 @@ public class WishService {
     private final ProductRepository productRepository;
 
     public Page<Wish> getWishes(Pageable pageable) {
-        return wishRepository.findAll(pageable);
+        Pageable limitedPageable = PageRequest.of(pageable.getPageNumber(), Math.min(pageable.getPageSize(), 5));
+        return wishRepository.findAll(limitedPageable);
     }
 
     @Autowired
