@@ -1,13 +1,20 @@
 package gift.controller;
 
+import gift.dto.OptionDto;
 import gift.dto.ProductDto;
 import gift.entity.Product;
+import gift.entity.Wishlist;
+import gift.service.MemberService;
+import gift.service.ProductService;
 import gift.service.WishlistService;
 import gift.util.JwtTokenProvider;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import gift.entity.Member;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +28,15 @@ import org.springframework.web.bind.annotation.*;
 public class WishlistController {
 
     private final WishlistService wishlistService;
+    private final MemberService memberService;
+    private final ProductService productService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public WishlistController(WishlistService wishlistService, JwtTokenProvider jwtTokenProvider) {
+    public WishlistController(WishlistService wishlistService, ProductService productService, MemberService memberService, JwtTokenProvider jwtTokenProvider) {
         this.wishlistService = wishlistService;
+        this.productService = productService;
+        this.memberService = memberService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -36,16 +47,14 @@ public class WishlistController {
             Pageable pageable) {
         Page<Product> productPage = wishlistService.getWishlistByEmail(email, pageable);
         Map<String, Object> response = new HashMap<>();
-        var data = productPage.getContent();
+        List<ProductDto> productDtoList = new ArrayList<>();
 
-        List<ProductDto> productDtos = data.stream().map(v -> {
-            ProductDto dto = new ProductDto(v);
-            dto.setCategoryId(v.getCategory().getId());
-            dto.setCategoryName(v.getCategory().getName());
-            return dto;
-        }).collect(Collectors.toList());
+        for (Product product : productPage.getContent()) {
+            ProductDto dto = new ProductDto(product);
+            productDtoList.add(dto);
+        }
 
-        response.put("content", productDtos);
+        response.put("content", productDtoList);
         response.put("currentPage", productPage.getNumber() + 1);
         response.put("totalPages", productPage.getTotalPages());
         response.put("hasNext", productPage.hasNext());

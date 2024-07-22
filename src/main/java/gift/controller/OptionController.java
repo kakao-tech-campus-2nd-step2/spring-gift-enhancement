@@ -25,11 +25,6 @@ public class OptionController {
         return optionService.getOptionById(id);
     }
 
-    @GetMapping("/product/{productId}")
-    public Set<Option> getOptionsByProductId(@PathVariable Long productId) {
-        return optionService.getOptionsByProductId(productId);
-    }
-
     @PostMapping
     public Option createOption(@RequestBody Option option) {
         return optionService.saveOption(option);
