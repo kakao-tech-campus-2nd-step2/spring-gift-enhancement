@@ -48,7 +48,7 @@ public class CategoryService {
     public void updateCategory(UpdateCategoryRequest request) {
         Category updateTargetCategory = categoryRepository.findById(request.id())
                 .orElseThrow(() -> new CategoryNotFoundException(request.id()));
-        updateTargetCategory.update(request);
+        updateTargetCategory.update(request.name(), request.color(), request.imageUrl(), request.description());
     }
 
     public Category getCategory(Long categoryId) {

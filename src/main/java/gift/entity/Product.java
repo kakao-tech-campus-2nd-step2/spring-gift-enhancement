@@ -1,6 +1,5 @@
 package gift.entity;
 
-import gift.dto.request.AddProductRequest;
 import gift.exception.OptionDuplicateException;
 import jakarta.persistence.*;
 
@@ -37,14 +36,6 @@ public class Product {
         for (Option option : options) {
             option.associateWithProduct(this);
         }
-    }
-
-    public Product(AddProductRequest request, Category category, List<Option> options) {
-        this.name = request.name();
-        this.price = request.price();
-        this.imageUrl = request.imageUrl();
-        this.category = category;
-        this.options.addAll(options);
     }
 
     public void addOption(Option option) {
