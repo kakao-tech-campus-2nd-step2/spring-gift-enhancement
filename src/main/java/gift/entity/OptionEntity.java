@@ -27,6 +27,11 @@ public class OptionEntity {
         this.product = product;
     }
 
+    public OptionEntity(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public OptionEntity(Long id, String name, int quantity, ProductEntity product) {
         this.id = id;
         this.name = name;
@@ -64,5 +69,12 @@ public class OptionEntity {
         }
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void subtractQuantity(int amountToSubtract) {
+        if(this.quantity < amountToSubtract) {
+            throw new IllegalArgumentException("해당 옵션의 재고가 사용하려는 수량보다 부족합니다.");
+        }
+        this.quantity -= amountToSubtract;
     }
 }
