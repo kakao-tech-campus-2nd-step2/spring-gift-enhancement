@@ -1,7 +1,6 @@
 package gift.domain.product.entity;
 
 import gift.exception.DuplicateOptionNameException;
-import gift.exception.InvalidCategoryInfoException;
 import gift.exception.InvalidProductInfoException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -103,7 +102,10 @@ public class Product {
     }
 
     private void validateOptions() {
-        if ((options.size() == 0) || (options.stream().distinct().count() != options.size())) {
+        long uniqueOptionNameCount = options.stream().map(Option::getName).distinct().count();
+        boolean hasDuplicateOptionName = uniqueOptionNameCount != options.size();
+
+        if ((options.size() == 0) || hasDuplicateOptionName) {
             throw new InvalidProductInfoException("error.invalid.product.options");
         }
     }
@@ -111,7 +113,7 @@ public class Product {
     private void validateOption(Option option) {
         options.stream()
             .filter(existingOption -> existingOption.getName().equals(option.getName()))
-            .findFirst()
+            .findAny()
             .ifPresent(sameNameOption -> {
                 throw new DuplicateOptionNameException("error.duplicate.option.name");
             });
@@ -120,7 +122,7 @@ public class Product {
     public boolean hasOption(long optionId) {
         return options.stream()
             .filter(option -> option.getId() == optionId)
-            .findFirst()
+            .findAny()
             .isPresent();
     }
 
