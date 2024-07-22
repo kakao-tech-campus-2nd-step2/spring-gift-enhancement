@@ -1,5 +1,6 @@
 package gift.domain;
 
+import gift.constants.Messages;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,10 +25,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotBlank(message = "상품 이름을 비우거나 공백으로 설정할 수 없습니다")
-    @Size(max=15,message = "상품명은 공백 포함하여 최대 15자까지 입력할 수 있습니다")
-    @Pattern(regexp = "^[\\w\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_가-힣]*$", message = "특수 문자는 ( ), [ ], +, -, &, /, _ 만 사용할 수 있습니다.")
-    @Pattern(regexp = "^(?!.*카카오).*$", message = "'카카오'가 포함된 상품 이름은 담당 MD와 협의한 후에 사용할 수 있습니다.")
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -95,7 +92,10 @@ public class Product {
         this.category = category;
     }
 
-    public void setOptions(Option option){this.options.add(option);}
+    public void setOption(Option option){
+        validateDuplicateOptionName(options, option.getName());
+        this.options.add(option);
+    }
 
     public void deleteOption(Long optionId){
         Option option = options.stream()
@@ -104,5 +104,14 @@ public class Product {
             .get();
         option.removeProduct();
         options.remove(option);
+    }
+
+    // 각 상품이 가진 옵션 이름 중복 검사
+    private void validateDuplicateOptionName(List<Option> options,String name){
+        for(Option option:options){
+            if(option.getName().equals(name)){
+                throw new IllegalArgumentException(Messages.DUPLICATE_OPTION_NAME_MESSAGE);
+            }
+        }
     }
 }

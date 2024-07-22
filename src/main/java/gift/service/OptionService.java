@@ -10,7 +10,6 @@ import gift.exception.OptionNotFoundException;
 import gift.exception.ProductNotFoundException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
-import gift.validator.OptionValidator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -21,27 +20,20 @@ public class OptionService {
 
     private final OptionRepository optionRepository;
     private final ProductRepository productRepository;
-    private final OptionValidator optionValidator;
 
-    public OptionService(OptionRepository optionRepository, ProductRepository productRepository,
-        OptionValidator optionValidator) {
+    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
         this.optionRepository = optionRepository;
         this.productRepository = productRepository;
-        this.optionValidator = optionValidator;
     }
 
-    public void save(Long id, OptionRequestDto optionRequestDto) {
+    @Transactional
+    public void addOption(Long id, OptionRequestDto optionRequestDto) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(
                 Messages.NOT_FOUND_PRODUCT_MESSAGE));
-
-        optionValidator.validateOptionName(optionRequestDto.getName());
-        optionValidator.validateDuplicateOptionName(product.getOptions(),
-            optionRequestDto.getName());
-        optionValidator.validateOptionQuantity(optionRequestDto.getQuantity());
-
         Option option = new Option(optionRequestDto.getName(), optionRequestDto.getQuantity());
         option.setProduct(product);
+
         optionRepository.save(option);
     }
 
@@ -59,7 +51,7 @@ public class OptionService {
     public void deleteById(Long productId, Long optionId) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_MESSAGE));
-        optionValidator.validateNumberOfOptions(productId);
+        validateNumberOfOptions(productId);
         product.deleteOption(optionId);
     }
 
@@ -72,9 +64,14 @@ public class OptionService {
             .filter(o -> o.getId().equals(optionId))
             .findAny()
             .orElseThrow(() -> new OptionNotFoundException(Messages.NOT_FOUND_OPTION_MESSAGE));
-        int newQuantity = option.getQuantity() - optionQuantityRequestDto.getQuantity();
-        optionValidator.validateUpdateQuantity(newQuantity);
-        option.setQuantity(newQuantity);
+        option.subtract(optionQuantityRequestDto.getQuantity());
         optionRepository.save(option);
+    }
+
+    private void validateNumberOfOptions(Long productId){
+        Product product = productRepository.findById(productId).orElseThrow(()-> new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_MESSAGE));
+        if(product.getOptions().size() < 2){
+            throw new IllegalArgumentException(Messages.OPTION_BELOW_MINIMUM_MESSAGE);
+        }
     }
 }

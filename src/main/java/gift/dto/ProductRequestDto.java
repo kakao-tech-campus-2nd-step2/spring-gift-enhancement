@@ -1,6 +1,7 @@
 package gift.dto;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;

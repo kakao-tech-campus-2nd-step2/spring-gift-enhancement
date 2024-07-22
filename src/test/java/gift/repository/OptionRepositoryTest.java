@@ -4,7 +4,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.domain.Option;
+import gift.domain.Product;
 import gift.repository.fixture.OptionFixture;
+import gift.repository.fixture.ProductFixture;
 import gift.service.OptionService;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;
