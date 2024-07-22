@@ -1,3 +1,12 @@
+-- Category 데이터 추가
+INSERT INTO category (name, color, img_url, description)
+VALUES ('교환권', '#6c95d1', 'https://category.png', 'Not NULL');
+
+-- Product 데이터 추가
+-- 위에서 삽입한 카테고리의 ID를 사용하여 제품을 추가합니다.
+INSERT INTO product (name, img_url, price, category_id)
+VALUES ('Sample Product', 'https://product.png', 1000.0, (SELECT id FROM category WHERE name = '교환권'));
+
 -- category 테이블에 데이터 삽입 전에 존재 여부 확인
 INSERT INTO category (name, color, img_url, description)
 SELECT '교환권', '#6c95d1', 'https://category.png', ''

@@ -5,6 +5,7 @@ import gift.entity.Category;
 import gift.entity.Product;
 import gift.exception.InvalidProductNameException;
 import gift.exception.ProductNotFoundException;
+import gift.exception.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +57,18 @@ public class ProductService {
     }
 
     public Long save(ProductDto productDto) {
+        validateProductName(productDto.getName()); // 이름 검증
         Category category = categoryRepository.findById(productDto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("카테고리가 없습니다."));
+                .orElseThrow(() -> new CategoryNotFoundException("카테고리가 없습니다."));
         Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImgUrl(), category);
         product = productRepository.save(product);
         return product.getId();
     }
 
     public void update(Long id, ProductDto productDto) {
+        validateProductName(productDto.getName()); // 이름 검증
         Category category = categoryRepository.findById(productDto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("카테고리가 없습니다."));
+                .orElseThrow(() -> new CategoryNotFoundException("카테고리가 없습니다."));
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("id로 상품을 찾을 수 없습니다." + id));
         product.update(productDto.getName(), productDto.getPrice(), productDto.getImgUrl(), category);
