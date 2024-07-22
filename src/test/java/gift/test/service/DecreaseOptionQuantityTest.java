@@ -16,7 +16,7 @@ import gift.entity.Product;
 import gift.repository.OptionRepository;
 import gift.service.OptionService;
 
-public class decreaseOptionQuantityTest {
+public class DecreaseOptionQuantityTest {
 	
 	@Mock
     private OptionRepository optionRepository;
@@ -40,7 +40,7 @@ public class decreaseOptionQuantityTest {
     
     @Test
     public void testDecreaseOptionQuantity() {
-        when(optionRepository.findById(option.getId())).thenReturn(Optional.of(option));
+    	when(optionRepository.findById(option.getId())).thenReturn(Optional.of(option));
 
         optionService.decreaseOptionQuantity(option.getId(), 30);
 
