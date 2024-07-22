@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.request.OptionRequest;
 import gift.entity.Option;
+import gift.entity.Product;
 import gift.exception.InsufficientOptionQuantityException;
 import gift.exception.OptionDuplicateException;
 import gift.exception.OptionNotFoundException;
@@ -59,11 +60,9 @@ public class OptionService {
         targetOption.subtract(subtractQuantity);
     }
 
-    @Transactional
-    public void updateOptionName(Long targetOptionId, String changedName) {
-        Option targetOption = optionRepository.findById(targetOptionId)
-                .orElseThrow(() -> new OptionNotFoundException(targetOptionId));
-
-        targetOption.updateName(changedName);
+    public Option saveOption(Product product, OptionRequest optionRequest) {
+        Option option = new Option(optionRequest.name(), optionRequest.quantity());
+        option.associateWithProduct(product);
+        return optionRepository.save(option);
     }
 }
