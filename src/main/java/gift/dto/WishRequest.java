@@ -5,7 +5,7 @@ public class WishRequest {
 
     public WishRequest(Long productId) {
         if (productId == null) {
-            throw new IllegalArgumentException("Product ID는 null일 수 없습니다.");
+            throw new IllegalArgumentException("상품 id를 입력해야 합니다.");
         }
         this.productId = productId;
     }
