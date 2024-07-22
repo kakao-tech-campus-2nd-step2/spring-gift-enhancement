@@ -1,13 +1,10 @@
 package gift.Controller;
 
-import gift.Entity.Category;
 import gift.Model.CategoryDto;
 import gift.Service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
 
