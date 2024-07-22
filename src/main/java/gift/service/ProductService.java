@@ -3,10 +3,10 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
-import gift.dto.requestDto.OptionCreateRequestDTO;
-import gift.dto.requestDto.ProductCreateRequestDTO;
-import gift.dto.requestDto.ProductRequestDTO;
-import gift.dto.responseDto.ProductResponseDTO;
+import gift.dto.requestdto.OptionCreateRequestDTO;
+import gift.dto.requestdto.ProductCreateRequestDTO;
+import gift.dto.requestdto.ProductRequestDTO;
+import gift.dto.responsedto.ProductResponseDTO;
 import gift.repository.JpaCategoryRepository;
 import gift.repository.JpaOptionRepository;
 import gift.repository.JpaProductRepository;
@@ -38,7 +38,7 @@ public class ProductService {
 
         return jpaProductRepository.findAll()
             .stream()
-            .map(ProductResponseDTO::of)
+            .map(ProductResponseDTO::from)
             .toList();
     }
 
@@ -48,14 +48,14 @@ public class ProductService {
 
         return jpaProductRepository.findAll(pageable)
             .stream()
-            .map(ProductResponseDTO::of)
+            .map(ProductResponseDTO::from)
             .toList();
     }
 
     @Transactional(readOnly = true)
     public ProductResponseDTO getOneProduct(Long productId) {
         Product product = getProduct(productId);
-        return ProductResponseDTO.of(product);
+        return ProductResponseDTO.from(product);
     }
 
     public Long addProduct(ProductCreateRequestDTO productCreateRequestDTO) {

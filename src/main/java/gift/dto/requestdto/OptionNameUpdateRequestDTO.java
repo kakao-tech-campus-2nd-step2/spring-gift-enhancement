@@ -1,7 +1,5 @@
-package gift.dto.requestDto;
+package gift.dto.requestdto;
 
-import gift.domain.Option;
-import gift.domain.Product;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

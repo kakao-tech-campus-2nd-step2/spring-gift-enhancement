@@ -3,9 +3,9 @@ package gift.service;
 import gift.auth.JwtUtil;
 import gift.domain.Role;
 import gift.domain.User;
-import gift.dto.requestDto.UserLoginRequestDTO;
-import gift.dto.requestDto.UserSignupRequestDTO;
-import gift.dto.responseDto.UserResponseDTO;
+import gift.dto.requestdto.UserLoginRequestDTO;
+import gift.dto.requestdto.UserSignupRequestDTO;
+import gift.dto.responsedto.UserResponseDTO;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 

@@ -3,8 +3,8 @@ package gift.service;
 import gift.domain.Product;
 import gift.domain.User;
 import gift.domain.Wish;
-import gift.dto.requestDto.WishRequestDTO;
-import gift.dto.responseDto.WishResponseDTO;
+import gift.dto.requestdto.WishRequestDTO;
+import gift.dto.responsedto.WishResponseDTO;
 import gift.repository.JpaProductRepository;
 import gift.repository.JpaUserRepository;
 import gift.repository.JpaWishRepository;
@@ -35,7 +35,7 @@ public class WishService {
     public List<WishResponseDTO> getAllWishes(Long userId) {
         return jpaWishRepository.findAllByUserId(userId)
             .stream()
-            .map(WishResponseDTO::of)
+            .map(WishResponseDTO::from)
             .toList();
     }
 
@@ -44,7 +44,7 @@ public class WishService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(criteria));
         List<WishResponseDTO> wishResponseDTOList = jpaWishRepository.findAllByUser(userId, pageable)
             .stream()
-            .map(WishResponseDTO::of)
+            .map(WishResponseDTO::from)
             .toList();
         return wishResponseDTOList;
     }
@@ -52,7 +52,7 @@ public class WishService {
     @Transactional(readOnly = true)
     public WishResponseDTO getOneWish(Long wishId) {
         Wish wish = getWish(wishId);
-        return WishResponseDTO.of(wish);
+        return WishResponseDTO.from(wish);
     }
 
     public Long addWish(WishRequestDTO wishRequestDTO) {

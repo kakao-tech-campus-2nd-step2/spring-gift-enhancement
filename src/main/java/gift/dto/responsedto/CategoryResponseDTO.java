@@ -1,4 +1,4 @@
-package gift.dto.responseDto;
+package gift.dto.responsedto;
 
 import gift.domain.Category;
 
@@ -9,7 +9,7 @@ public record CategoryResponseDTO(
     String imageUrl,
     String description) {
 
-    public static CategoryResponseDTO of(Category category) {
+    public static CategoryResponseDTO from(Category category) {
         return new CategoryResponseDTO(category.getId(), category.getName(), category.getColor(),
             category.getImageUrl(), category.getDescription());
     }

@@ -55,6 +55,10 @@ public class Option {
         this.name = name;
     }
 
+    public void subtract(int count){
+        this.quantity -= count;
+    }
+
     public static class Options {
         List<Option> options;
 

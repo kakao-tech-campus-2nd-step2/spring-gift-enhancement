@@ -3,9 +3,9 @@ package gift.service;
 import gift.domain.Option;
 import gift.domain.Option.Options;
 import gift.domain.Product;
-import gift.dto.requestDto.OptionCreateRequestDTO;
-import gift.dto.requestDto.OptionNameUpdateRequestDTO;
-import gift.dto.responseDto.OptionResponseDTO;
+import gift.dto.requestdto.OptionCreateRequestDTO;
+import gift.dto.requestdto.OptionNameUpdateRequestDTO;
+import gift.dto.responsedto.OptionResponseDTO;
 import gift.repository.JpaOptionRepository;
 import gift.repository.JpaProductRepository;
 import java.util.List;
@@ -59,6 +59,14 @@ public class OptionService {
         optionList.validDelete();
         jpaOptionRepository.delete(option);
         return option.getId();
+    }
+
+    public void subtractOptionQuantity(Long optionId, int count){
+        Option option = getOption(optionId);
+        if (option.getQuantity() < count){
+            throw new IllegalArgumentException("현재 남은 옵션 개수보다 많습니다.");
+        }
+        option.subtract(count);
     }
 
     private Option getOption(Long optionId) {

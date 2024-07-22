@@ -1,8 +1,8 @@
 package gift.service;
 
 import gift.domain.Category;
-import gift.dto.requestDto.CategoryRequestDTO;
-import gift.dto.responseDto.CategoryResponseDTO;
+import gift.dto.requestdto.CategoryRequestDTO;
+import gift.dto.responsedto.CategoryResponseDTO;
 import gift.repository.JpaCategoryRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,14 +26,14 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryResponseDTO getOneCategory(Long categoryId){
         Category category = getCategory(categoryId);
-        return CategoryResponseDTO.of(category);
+        return CategoryResponseDTO.from(category);
     }
 
     @Transactional(readOnly = true)
     public List<CategoryResponseDTO> getAllCategories(){
         return jpaCategoryRepository.findAll()
             .stream()
-            .map(CategoryResponseDTO::of)
+            .map(CategoryResponseDTO::from)
             .toList();
     }
 
