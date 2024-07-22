@@ -67,6 +67,21 @@ public class OptionService {
     }
 
     @Transactional
+    public void subtractOptionQuantity(Long productId, Long optionId, Integer quantity){
+        try {
+            Option optionInDb = optionRepository.findByIdAndProductId(optionId, productId).orElseThrow(
+                    () -> new BadRequestException("그러한 Id를 가지는 옵션을 찾을 수 없습니다."));
+            optionInDb.subtractQuantity(quantity);
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (DataIntegrityViolationException e) {
+            throw new BadRequestException(e.getMessage());
+        } catch (Exception e) {
+            throw new InternalServerException(e.getMessage());
+        }
+    }
+
+    @Transactional
     public void deleteOption(Long productId, Long optionId){
         try {
             Option optionToDelete = optionRepository.findByIdAndProductId(optionId, productId).orElseThrow(

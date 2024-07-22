@@ -74,7 +74,7 @@ public class Option {
         this.name = name;
     }
 
-    public void subtractQuantity(Integer subtractQuantity){ //나중에 사용할 메서드
+    public void subtractQuantity(Integer subtractQuantity){
         validateQuantity(subtractQuantity);
         if(quantity <= subtractQuantity)
             throw new BadRequestException("옵션 수량은 1보다 작을 수 없습니다.");
