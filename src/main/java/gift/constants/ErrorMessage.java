@@ -40,4 +40,5 @@ public class ErrorMessage {
     public static final String OPTION_NAME_INVALID_PATTERN_MSG = "옵션명은 한글,영문,숫자와 특수 문자 (,),[,],+,-,&,,_ 만 입력 가능합니다.";
     public static final String OPTION_QUANTITY_INVALID_MSG = "옵션 수량은 최소 1개 최대 1억개 미만이어야 합니다.";
     public static final String OPTION_MUST_MORE_THAN_ZERO = "옵션은 반드시 1개 이상 있어야 합니다.";
+    public static final String OPTION_QUANTITY_FEWER_MSG = "옵션의 수량이 부족합니다.";
 }

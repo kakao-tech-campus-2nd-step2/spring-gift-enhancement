@@ -1,6 +1,8 @@
 package gift.entity;
 
+import gift.constants.ErrorMessage;
 import gift.dto.OptionEditRequest;
+import gift.dto.OptionSubtractRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -46,5 +48,17 @@ public class Option extends BaseEntity {
     public void updateOption(OptionEditRequest editRequest) {
         name = editRequest.getName();
         quantity = editRequest.getQuantity();
+    }
+
+    public int subtractQuantity(OptionSubtractRequest subtractRequest) {
+        int quantity = subtractRequest.getQuantity();
+        if (!canSubtractQuantity(quantity)) {
+            throw new IllegalArgumentException(ErrorMessage.OPTION_QUANTITY_FEWER_MSG);
+        }
+        return this.quantity -= quantity;
+    }
+
+    private boolean canSubtractQuantity(int quantity) {
+        return this.quantity >= quantity;
     }
 }

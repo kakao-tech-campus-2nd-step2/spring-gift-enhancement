@@ -2,6 +2,7 @@ package gift.entity;
 
 import gift.constants.ErrorMessage;
 import gift.dto.OptionEditRequest;
+import gift.dto.OptionSubtractRequest;
 import gift.dto.ProductRequest;
 import gift.exception.ProductOptionRequiredException;
 import jakarta.persistence.CascadeType;
@@ -126,6 +127,11 @@ public class Product extends BaseEntity {
 
     private boolean isOptionSizeGreaterThanOne() {
         return options.size() > 1;
+    }
+
+    public int subtractOption(OptionSubtractRequest subtractRequest) {
+        Option option = getOptionById(subtractRequest.getId());
+        return option.subtractQuantity(subtractRequest);
     }
 
     /**
