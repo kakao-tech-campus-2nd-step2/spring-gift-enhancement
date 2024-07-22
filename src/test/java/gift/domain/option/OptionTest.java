@@ -19,6 +19,7 @@ class OptionTest {
         //then
         assertThat(product.getOptions()).isNotNull();
     }
+
     @Test
     void 옵션_차감_성공() {
         //given
