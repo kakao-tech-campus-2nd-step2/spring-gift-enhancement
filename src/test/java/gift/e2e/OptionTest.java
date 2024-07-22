@@ -2,6 +2,7 @@ package gift.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import gift.product.option.dto.request.CreateOptionRequest;
 import java.net.URI;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,4 +47,20 @@ public class OptionTest {
         assertThat(response.getBody()).isNotNull();
     }
 
+    @Test
+    @DisplayName("add option to product test")
+    void addOptionToProductTest() {
+        // given
+        var url = "http://localhost:" + port + "/api/products/1/options";
+        var requestBody = new CreateOptionRequest(1L, "new option", 1000);
+        var request = new RequestEntity<>(requestBody, HttpMethod.POST, URI.create(url));
+
+        // when
+        var response = restTemplate.exchange(request, String.class);
+
+        // then
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(response.getHeaders().getLocation()).isNotNull();
+        assertThat(response.getBody()).isNotNull();
+    }
 }
