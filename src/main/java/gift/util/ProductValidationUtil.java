@@ -24,10 +24,4 @@ public class ProductValidationUtil {
     private static boolean containsKAKAO(String productName) {
         return !productName.isEmpty() & productName.contains("카카오");
     }
-
-    public static void isValidOptionQuantity(int quantity) {
-        if (quantity < 1 || quantity >= 100_000_000) {
-            throw new CustomException(INVALID_QUANTITY_ERROR);
-        }
-    }
 }

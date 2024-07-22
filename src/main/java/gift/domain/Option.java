@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 
 import static gift.constant.Message.*;
 import static gift.exception.ErrorCode.INVALID_AMOUNT_ERROR;
+import static gift.exception.ErrorCode.INVALID_QUANTITY_ERROR;
 
 @Entity
 @Table(name = "option")
@@ -38,21 +39,26 @@ public class Option {
     }
 
     public Option(OptionRequest optionRequest) {
-        ProductValidationUtil.isValidOptionQuantity(optionRequest.getQuantity());
         this.name = optionRequest.getName();
-        this.quantity = optionRequest.getQuantity();
+        this.quantity = validQuantity(optionRequest.getQuantity());
     }
 
     public Option(OptionRequest optionRequest, Product product) {
-        ProductValidationUtil.isValidOptionQuantity(optionRequest.getQuantity());
         this.name = optionRequest.getName();
-        this.quantity = optionRequest.getQuantity();
+        this.quantity = validQuantity(optionRequest.getQuantity());
         this.product = product;
     }
 
     public void subtract(int amount) {
         checkAmount(amount);
         this.quantity -= amount;
+    }
+
+    private int validQuantity(int quantity) {
+        if (quantity < 1 || quantity >= 100_000_000) {
+            throw new CustomException(INVALID_QUANTITY_ERROR);
+        }
+        return quantity;
     }
 
     private void checkAmount(int amount) {
