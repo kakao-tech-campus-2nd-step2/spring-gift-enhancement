@@ -52,10 +52,8 @@ class ProductServiceTest {
         //Give
         AddProductRequest request = new AddProductRequest("productName", 100, "img", 1L, List.of(new OptionRequest("option", 1010)));
         Category category = new Category("CategoryName", "color", "description", "imageUrl");
-        List<Option> options = List.of(new Option("option", 1010));
 
         when(categoryService.getCategory(request.categoryId())).thenReturn(category);
-        when(optionService.convertToOptions(request.optionRequests())).thenReturn(options);
 
         Product savedProduct = mock(Product.class);
 
@@ -82,9 +80,7 @@ class ProductServiceTest {
         Option option = Mockito.mock(Option.class);
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-        doNothing().when(optionService).checkDuplicateOptionName(product.getOptions(), optionRequest.name());
-        when(optionService.convertToOption(optionRequest)).thenReturn(option);
-        doNothing().when(productRepository).flush();
+        when(optionService.saveOption(any(), any())).thenReturn(option);
         when(option.getId()).thenReturn(1L);
 
         //When
