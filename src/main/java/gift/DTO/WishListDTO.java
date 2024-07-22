@@ -4,16 +4,16 @@ import jakarta.validation.constraints.NotNull;
 
 public record WishListDTO(
 
-    Long id,
+        Long id,
 
-    @NotNull
-    Long productId,
-    @NotNull
-    Long userId,
+        @NotNull
+        Long productId,
+        @NotNull
+        Long userId,
 
-    ProductDTO productDTO,
+        ProductDTO productDTO,
 
-    MemberDTO memberDTO
+        MemberDTO memberDTO
 ) {
 
     public WishListDTO(ProductDTO productDTO, MemberDTO memberDTO) {

@@ -49,9 +49,9 @@ public class WishListMapper {
      */
     public WishListDTO toWishListDTO(WishListEntity wishListEntity) {
         return new WishListDTO(
-            wishListEntity.getId(),
-            productMapper.toProductDTO(wishListEntity.getProductEntity()),
-            memberMapper.toMemberDTO(wishListEntity.getMemberEntity())
+                wishListEntity.getId(),
+                productMapper.toProductDTO(wishListEntity.getProductEntity()),
+                memberMapper.toMemberDTO(wishListEntity.getMemberEntity())
         );
     }
 

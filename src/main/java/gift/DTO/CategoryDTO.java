@@ -4,10 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-/**
- * 제품의 세부 사항을 나타내는 클래스. ID, 이름, 가격, 이미지 URL을 포함한다.
- */
-public record ProductDTO(
+public record CategoryDTO(
         Long id,
 
         @NotNull(message = "이름은 null이 될 수 없습니다.")
@@ -16,18 +13,18 @@ public record ProductDTO(
         @Pattern(regexp = "^(?!.*카카오).*$", message = "카카오가 들어가는 품목명은 담당 MD와 협의한 경우에만 사용 가능합니다.")
         String name,
 
-        @NotNull(message = "가격은 null이 될 수 없습니다.")
-        long price,
-
-        @NotNull(message = "카테고리는 null이 될 수 없습니다.")
-        CategoryDTO categoryDTO,
+        @NotNull(message = "색상은 null이 될 수 없습니다.")
+        @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "색상은 16진수 6자리여야 합니다.")
+        String color,
 
         @NotNull(message = "이미지 URL은 null이 될 수 없습니다.")
         @Pattern(regexp = "https?://.*", message = "이미지 URL은 http 또는 https로 시작해야 합니다.")
-        String imageUrl
-) {
+        String imageUrl,
 
-    public ProductDTO(String name, long price, CategoryDTO categoryDTO, String imageUrl) {
-        this(null, name, price, categoryDTO, imageUrl);
+        @NotNull(message = "설명은 null이 될 수 없습니다.")
+        String description
+) {
+    public CategoryDTO(String name, String color, String imageUrl, String description) {
+        this(null, name, color, imageUrl, description);
     }
 }

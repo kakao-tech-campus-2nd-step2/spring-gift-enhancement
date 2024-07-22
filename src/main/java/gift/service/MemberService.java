@@ -32,7 +32,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public boolean isExist(MemberDTO memberDTO) {
         return memberRepository.existsByEmailAndPasswordAndDeleteFalse(memberDTO.getEmail(),
-            memberDTO.getPassword());
+                memberDTO.getPassword());
     }
 
     /**
@@ -44,7 +44,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public long getUserId(MemberDTO memberDTO) {
         MemberEntity member = memberRepository.findByEmailAndPasswordAndDeleteFalse(
-            memberDTO.getEmail(), memberDTO.getPassword());
+                memberDTO.getEmail(), memberDTO.getPassword());
         return member != null ? member.getId() : -1;
     }
 
@@ -63,7 +63,7 @@ public class MemberService {
 
         long userId = getUserId(loginRequestDTO);
         var memberDetailsDTO = new MemberDTO(userId, loginRequestDTO.getEmail(),
-            loginRequestDTO.getPassword());
+                loginRequestDTO.getPassword());
         return jwtToken.createToken(memberDetailsDTO);
     }
 
@@ -85,6 +85,5 @@ public class MemberService {
         } catch (Exception e) {
             throw new AuthException("회원가입에 실패했습니다.", HttpStatus.FORBIDDEN);
         }
-
     }
 }

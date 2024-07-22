@@ -2,6 +2,7 @@ package gift.mapper;
 
 import gift.DTO.ProductDTO;
 import gift.entity.ProductEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ProductMapper {
+
+    @Autowired
+    CategoryMapper categoryMapper;
 
     /**
      * ProductEntity를 ProductDTO로 변환하는 메서드
@@ -18,10 +22,13 @@ public class ProductMapper {
      */
     public ProductDTO toProductDTO(ProductEntity productEntity) {
         return new ProductDTO(
-            productEntity.getId(),
-            productEntity.getName(),
-            productEntity.getPrice(),
-            productEntity.getImageUrl()
+                productEntity.getId(),
+                productEntity.getName(),
+                productEntity.getPrice(),
+                categoryMapper.toCategoryDTO(
+                        productEntity.getCategoryEntity()
+                ),
+                productEntity.getImageUrl()
         );
     }
 
@@ -39,6 +46,11 @@ public class ProductMapper {
         }
         productEntity.setName(productDTO.name());
         productEntity.setPrice(productDTO.price());
+        productEntity.setCategoryEntity(
+                categoryMapper.toCategoryEntity(
+                        productDTO.categoryDTO()
+                )
+        );
         productEntity.setImageUrl(productDTO.imageUrl());
         return productEntity;
     }

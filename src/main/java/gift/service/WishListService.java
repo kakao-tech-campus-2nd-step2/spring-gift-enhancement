@@ -3,15 +3,17 @@ package gift.service;
 import gift.DTO.MemberDTO;
 import gift.DTO.ProductDTO;
 import gift.DTO.WishListDTO;
-import gift.aspect.CheckProductExists;
 import gift.entity.WishListEntity;
+import gift.exception.ProductNotFoundException;
 import gift.mapper.WishListMapper;
 import gift.repository.WishListRepository;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * WhishListService 클래스는 WishList 관련 비즈니스 로직을 처리하는 서비스 클래스입니다
@@ -19,9 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class WishListService {
 
-    private final WishListRepository wishListRepository;
+    @Autowired
+    private WishListRepository wishListRepository;
 
-    private final WishListMapper wishListMapper;
+    @Autowired
+    private WishListMapper wishListMapper;
+
+    @Autowired
+    private ProductService productService;
 
     /**
      * WhishListService 생성자
@@ -40,11 +47,18 @@ public class WishListService {
      * @param memberDTO WishList를 추가할 사용자의 정보
      * @return 생성된 WishList 객체의 ID 리스트
      */
-    @CheckProductExists
     @Transactional
     public ProductDTO addWishList(long productId, MemberDTO memberDTO) {
+        if (!productService.isProdutExit(productId)) {
+            throw new ProductNotFoundException("상품이 존재하지 않습니다.");
+        }
         var wishListEntity = wishListMapper.toWishListEntity(productId, memberDTO);
         wishListRepository.save(wishListEntity);
+
+        var productEntity = productService.getProductEntity(productId);
+        productEntity.getWishListEntities().add(wishListEntity);
+        productService.updateProductEntity(productId, productEntity);
+
         return wishListMapper.toWishListDTO(wishListEntity).productDTO();
     }
 
@@ -59,9 +73,9 @@ public class WishListService {
         List<WishListEntity> wishListEntities = wishListRepository.findAllByMemberEntityId(userId);
 
         return wishListEntities.stream()
-            .map(wishListMapper::toWishListDTO)
-            .map(WishListDTO::productDTO)
-            .collect(Collectors.toList());
+                .map(wishListMapper::toWishListDTO)
+                .map(WishListDTO::productDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -74,11 +88,11 @@ public class WishListService {
     @Transactional(readOnly = true)
     public List<ProductDTO> getWishListsByUserId(Long userId, Pageable pageable) {
         List<WishListEntity> wishListEntities = wishListRepository.findAllByMemberEntityId(userId,
-            pageable);
+                pageable);
         return wishListEntities.stream()
-            .map(wishListMapper::toWishListDTO)
-            .map(WishListDTO::productDTO)
-            .collect(Collectors.toList());
+                .map(wishListMapper::toWishListDTO)
+                .map(WishListDTO::productDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -99,11 +113,14 @@ public class WishListService {
      * @param productId 삭제할 상품의 ID
      * @return 삭제 성공 여부
      */
-    @CheckProductExists
+
     @Transactional
     public boolean deleteWishListByUserIdAndProductId(long productId, long userId) {
+        if (!productService.isProdutExit(productId)) {
+            throw new ProductNotFoundException("상품이 존재하지 않습니다.");
+        }
         return
-            wishListRepository.deleteWishListByMemberEntityIdAndProductEntityId(userId, productId)
-                > 0;
+                wishListRepository.deleteWishListByMemberEntityIdAndProductEntityId(userId, productId)
+                        > 0;
     }
 }
