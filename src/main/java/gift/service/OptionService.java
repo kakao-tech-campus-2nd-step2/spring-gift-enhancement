@@ -3,6 +3,7 @@ package gift.service;
 import gift.constants.Messages;
 import gift.domain.Option;
 import gift.domain.Product;
+import gift.dto.OptionQuantityRequestDto;
 import gift.dto.OptionRequestDto;
 import gift.dto.OptionResponseDto;
 import gift.exception.OptionNotFoundException;
@@ -12,6 +13,7 @@ import gift.repository.ProductRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -24,16 +26,15 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
-    public void save(Long id, OptionRequestDto optionRequestDto) {
+    @Transactional
+    public void addOption(Long id, OptionRequestDto optionRequestDto) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(
                 Messages.NOT_FOUND_PRODUCT_MESSAGE));
-        nameValidate(product.getOptions(),optionRequestDto.getName());
-        quantityValidate(optionRequestDto.getQuantity());
         Option option = new Option(optionRequestDto.getName(), optionRequestDto.getQuantity());
         option.setProduct(product);
+
         optionRepository.save(option);
-        product.setOptions(option);
     }
 
     public List<OptionResponseDto> findAll(Long id) {
@@ -46,33 +47,31 @@ public class OptionService {
             .collect(Collectors.toList());
     }
 
-    public void deleteById(Long id) {
-        Option option = optionRepository.findById(id).orElseThrow(()->new OptionNotFoundException(Messages.NOT_FOUND_OPTION_MESSAGE));
-        optionRepository.deleteById(id);
-        Product product = productRepository.findById(option.getProduct().getId()).orElseThrow(()-> new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_MESSAGE));
-        optionValidate(product.getOptions());
-        product.getOptions().remove(option);
-        optionRepository.deleteById(id);
+    @Transactional
+    public void deleteById(Long productId, Long optionId) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_MESSAGE));
+        validateNumberOfOptions(productId);
+        product.deleteOption(optionId);
     }
 
-    private void nameValidate(List<Option> options,String name){
-        for(Option option:options){
-            if(option.getName().equals(name)){
-                throw new IllegalArgumentException(Messages.DUPLICATE_OPTION_NAME_MESSAGE);
-            }
-        }
+    @Transactional
+    public void updateOptionQuantity(Long productId, Long optionId,
+        OptionQuantityRequestDto optionQuantityRequestDto) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_MESSAGE));
+        Option option = product.getOptions().stream()
+            .filter(o -> o.getId().equals(optionId))
+            .findAny()
+            .orElseThrow(() -> new OptionNotFoundException(Messages.NOT_FOUND_OPTION_MESSAGE));
+        option.subtract(optionQuantityRequestDto.getQuantity());
+        optionRepository.save(option);
     }
 
-    private void quantityValidate(int quantity){
-        if(quantity < 0 || quantity > 100000000){
-            throw new IllegalArgumentException(Messages.QUANTITY_OUT_OF_RANGE_MESSAGE);
-        }
-    }
-
-    private void optionValidate(List<Option> options){
-        if(options.size() == 1){
+    private void validateNumberOfOptions(Long productId){
+        Product product = productRepository.findById(productId).orElseThrow(()-> new ProductNotFoundException(Messages.NOT_FOUND_PRODUCT_MESSAGE));
+        if(product.getOptions().size() < 2){
             throw new IllegalArgumentException(Messages.OPTION_BELOW_MINIMUM_MESSAGE);
         }
     }
-
 }
