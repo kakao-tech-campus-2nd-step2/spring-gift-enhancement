@@ -6,8 +6,12 @@ import gift.domain.product.entity.Option;
 import gift.domain.product.entity.Product;
 import gift.domain.product.repository.OptionJpaRepository;
 import gift.domain.product.repository.ProductJpaRepository;
+import gift.exception.InvalidOptionInfoException;
 import gift.exception.InvalidProductInfoException;
 import java.util.List;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,5 +46,22 @@ public class OptionService {
         optionJpaRepository.deleteAllByProductId(product.getId());
         product.removeOptions();
         create(product, optionRequestDtos);
+    }
+
+    @Transactional
+    public void deleteAllByProductId(long productId) {
+        optionJpaRepository.deleteAllByProductId(productId);
+    }
+
+    @Transactional
+    @Retryable(
+        retryFor = {ObjectOptimisticLockingFailureException.class},
+        maxAttempts = 100,
+        backoff = @Backoff(delay = 100)
+    )
+    public void subtractQuantity(long optionId, int quantity) {
+        Option option = optionJpaRepository.findByIdWithOptimisticLock(optionId)
+            .orElseThrow(() -> new InvalidOptionInfoException("error.invalid.option.id"));
+        option.subtract(quantity);
     }
 }

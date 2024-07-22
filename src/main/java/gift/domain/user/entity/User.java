@@ -35,9 +35,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WishItem> wishlist = new ArrayList<>();
-
     protected User() {
 
     }
@@ -72,22 +69,5 @@ public class User {
 
     public boolean checkPassword(String password) {
         return this.password.equals(password);
-    }
-
-    public List<WishItem> getWishlist() {
-        return this.wishlist;
-    }
-
-    public void removeWishlist() {
-        this.wishlist.clear();
-    }
-
-    public void addWishItem(WishItem wishItem) {
-        wishlist.add(wishItem);
-        wishItem.setUser(this);
-    }
-
-    public void removeWishItem(WishItem wishItem) {
-        wishlist.remove(wishItem);
     }
 }
