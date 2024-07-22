@@ -1,7 +1,5 @@
 package gift.domain;
 
-import static gift.domain.validator.ProductValidator.validateProductOptionsPresence;
-
 import gift.domain.base.BaseEntity;
 import gift.domain.base.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -81,7 +79,6 @@ public class Product extends BaseEntity {
 
         @Override
         public Product build() {
-            validateProductOptionsPresence(productOptions);
             return new Product(this);
         }
     }
@@ -93,6 +90,7 @@ public class Product extends BaseEntity {
         imageUrl = builder.imageUrl;
         category = builder.category;
         productOptions = builder.productOptions;
+        validateProductOptionsPresence(productOptions);
     }
 
     public Product updateBasicInfo(String name, Integer price, URL imageUrl) {
@@ -100,6 +98,12 @@ public class Product extends BaseEntity {
         this.price = price;
         this.imageUrl = imageUrl;
         return this;
+    }
+
+    private void validateProductOptionsPresence(List<ProductOption> productOptions) {
+        if (productOptions == null || productOptions.isEmpty()) {
+            throw new IllegalArgumentException("상품 옵션은 최소 1개 이상이어야 합니다.");
+        }
     }
 
     public String getName() {
