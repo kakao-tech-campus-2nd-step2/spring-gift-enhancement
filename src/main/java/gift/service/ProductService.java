@@ -53,4 +53,12 @@ public class ProductService {
             throw new IllegalArgumentException("동일한 상품 내에 동일한 옵션 이름이 존재합니다.");
         }
     }
+
+    public void subtractOptionQuantity(Long productId, String optionName, int quantity) {
+        Option option = optionRepository.findByProductIdAndName(productId, optionName)
+                .orElseThrow(() -> new IllegalArgumentException("해당 옵션이 존재하지 않습니다."));
+
+        option.subtractQuantity(quantity);
+        optionRepository.save(option);
+    }
 }
