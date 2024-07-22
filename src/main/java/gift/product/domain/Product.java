@@ -24,7 +24,7 @@ public class Product {
     @Column(nullable = false)
     private Integer price;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String imageUrl;
 
     @ManyToOne

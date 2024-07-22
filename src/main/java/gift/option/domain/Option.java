@@ -1,5 +1,6 @@
 package gift.option.domain;
 
+import gift.exception.type.InvalidOptionQuantityException;
 import gift.exception.type.InvalidProductOptionException;
 import gift.product.domain.Product;
 import jakarta.persistence.*;
@@ -19,6 +20,9 @@ public class Option {
 
     @Column(nullable = false)
     private int quantity;
+
+    @Version
+    private Long version;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -60,6 +64,13 @@ public class Option {
         this.product = product;
     }
 
+    public void subtractQuantity(int quantity) {
+        if (this.quantity - quantity < 0) {
+            throw new InvalidOptionQuantityException("수량이 0 이하가 될 수 없습니다.");
+        }
+        this.quantity -= quantity;
+    }
+
     public void validateName() {
         if (this.name == null || this.name.isBlank() || this.name.length() > 50) {
             throw new InvalidProductOptionException("옵션 이름은 공백을 포함하여 최대 50자까지 입력 할 수 있습니다.");
@@ -70,7 +81,7 @@ public class Option {
     }
 
     public void validateQuantity() {
-        if (this.quantity < 1 || this.quantity >= 100000000) {
+        if (this.quantity < 1 || this.quantity >= 100_000_000) {
             throw new InvalidProductOptionException("옵션 수량은 최소 1개 이상 1억 개 미만이어야 합니다.");
         }
     }

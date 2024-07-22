@@ -72,7 +72,7 @@ public class ProductServiceTest {
         Pageable pageable = PageRequest.of(0, 2);
 
         // When
-        Page<ProductResponse> products = productService.findAll(pageable);
+        Page<ProductServiceResponse> products = productService.findAll(pageable);
 
         // Then
         assertThat(products.getTotalElements()).isEqualTo(2);
@@ -89,10 +89,10 @@ public class ProductServiceTest {
         when(productRepository.findById(any(Long.class))).thenReturn(Optional.of(product));
 
         // When
-        ProductResponse productResponse = productService.findById(1L);
+        ProductServiceResponse productServiceResponse = productService.findById(1L);
 
         // Then
-        assertThat(productResponse.name()).isEqualTo("Product1");
+        assertThat(productServiceResponse.name()).isEqualTo("Product1");
         verify(productRepository, times(1)).findById(1L);
     }
 
@@ -141,6 +141,8 @@ public class ProductServiceTest {
         Product product = new Product("Product1", 1000, "http://example.com/image1.jpg", category);
         Option option1 = new Option(1L, "Option1", 10);
         Option option2 = new Option(2L, "Option2", 20);
+        product.addOption(option1);
+        product.addOption(option2);
         OptionUpdateCommand newOption1 = new OptionUpdateCommand(1L, "newOption1", 100);
         OptionUpdateCommand newOption2 = new OptionUpdateCommand(2L, "newOption2", 200);
         ProductUpdateCommand updateCommand = new ProductUpdateCommand(
@@ -163,7 +165,6 @@ public class ProductServiceTest {
         // Then
         verify(productRepository, times(1)).findById(1L);
         verify(categoryRepository, times(1)).findById(2L);
-        verify(optionRepository, times(1)).findAllById(anyList());
         assertThat(product.getName()).isEqualTo("UpdatedProduct");
         assertThat(product.getPrice()).isEqualTo(2000);
         assertThat(product.getImageUrl()).isEqualTo("http://example.com/image2.jpg");

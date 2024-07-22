@@ -38,11 +38,10 @@ public class MemberService {
 
     @Transactional
     public void updateEmail(MemberEmailUpdateCommand command, ResolvedMember resolvedMember) {
-        Member member = memberRepository.findById(resolvedMember.id())
-                .orElseThrow(() -> new NotFoundException("해당 회원이 존재하지 않습니다."));
+        Member member = getMember(resolvedMember);
 
         if (memberRepository.existsByEmail(command.email()))
-                throw new DuplicateNameException("이미 사용중인 이메일입니다.");
+            throw new DuplicateNameException("이미 사용중인 이메일입니다.");
 
         member.updateEmail(command.email());
     }
@@ -54,23 +53,27 @@ public class MemberService {
                 .updatePassword(command.password());
     }
 
-    public MemberResponse findById(Long memberId) {
+    public MemberServiceResponse findById(Long memberId) {
         return memberRepository.findById(memberId)
-                .map(MemberResponse::from)
+                .map(MemberServiceResponse::from)
                 .orElseThrow(() -> new NotFoundException("해당 회원이 존재하지 않습니다."));
     }
 
-    public List<MemberResponse> findAll() {
+    public List<MemberServiceResponse> findAll() {
         return memberRepository.findAll()
-                .stream().map(MemberResponse::from).toList();
+                .stream().map(MemberServiceResponse::from).toList();
     }
 
     @Transactional
     public void delete(ResolvedMember resolvedMember) {
-        Member member = memberRepository.findById(resolvedMember.id())
-                .orElseThrow(() -> new NotFoundException("해당 회원이 존재하지 않습니다."));
+        Member member = getMember(resolvedMember);
 
         wishlistRepository.deleteAllByMemberId(member.getId());
         memberRepository.delete(member);
+    }
+
+    private Member getMember(ResolvedMember resolvedMember) {
+        return memberRepository.findById(resolvedMember.id())
+                .orElseThrow(() -> new NotFoundException("해당 회원이 존재하지 않습니다."));
     }
 }

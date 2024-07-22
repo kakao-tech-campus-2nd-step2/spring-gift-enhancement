@@ -1,8 +1,8 @@
 package gift.category.presentation;
 
 import gift.auth.TokenService;
-import gift.category.application.CategoryResponse;
 import gift.category.application.CategoryService;
+import gift.category.application.CategoryServiceResponse;
 import gift.category.presentation.request.CategoryCreateRequest;
 import gift.category.presentation.request.CategoryUpdateRequest;
 import gift.member.application.MemberService;
@@ -45,7 +45,7 @@ public class CategoryControllerTest {
     @MockBean
     private MemberService memberService;
 
-    private CategoryResponse categoryResponse;
+    private CategoryServiceResponse categoryServiceResponse;
 
 
     private String token;
@@ -54,7 +54,7 @@ public class CategoryControllerTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        categoryResponse = new CategoryResponse(1L, "Category", "#FFFFFF", "Description", "http://example.com/image.jpg");
+        categoryServiceResponse = new CategoryServiceResponse(1L, "Category", "#FFFFFF", "Description", "http://example.com/image.jpg");
 
         token = "testToken";
     }
@@ -86,7 +86,7 @@ public class CategoryControllerTest {
     @Test
     void 모든카테고리_조회_테스트() throws Exception {
         // Given
-        Page<CategoryResponse> page = new PageImpl<>(List.of(categoryResponse), PageRequest.of(0, 10), 1);
+        Page<CategoryServiceResponse> page = new PageImpl<>(List.of(categoryServiceResponse), PageRequest.of(0, 10), 1);
         when(categoryService.findAll(any(Pageable.class))).thenReturn(page);
 
         // When
@@ -105,7 +105,7 @@ public class CategoryControllerTest {
     @Test
     void 카테고리_아이디로_조회_테스트() throws Exception {
         // Given
-        when(categoryService.findById(1L)).thenReturn(categoryResponse);
+        when(categoryService.findById(1L)).thenReturn(categoryServiceResponse);
 
         // When
         MvcResult mvcResult = mockMvc.perform(get("/api/categories/1")

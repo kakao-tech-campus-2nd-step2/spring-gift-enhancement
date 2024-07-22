@@ -1,6 +1,5 @@
 package gift.category.presentation;
 
-import gift.category.application.CategoryResponse;
 import gift.category.application.CategoryService;
 import gift.category.presentation.request.CategoryCreateRequest;
 import gift.category.presentation.request.CategoryUpdateRequest;
@@ -27,16 +26,16 @@ public class CategoryController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<CategoryResponse>> findAll(
+    public ResponseEntity<Page<CategoryControllerResponse>> findAll(
             Pageable pageable
     ) {
-        return ResponseEntity.ok(categoryService.findAll(pageable));
+        return ResponseEntity.ok(categoryService.findAll(pageable).map(CategoryControllerResponse::from));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> findById(
+    public ResponseEntity<CategoryControllerResponse> findById(
             @PathVariable("id") Long categoryId) {
-        return ResponseEntity.ok(categoryService.findById(categoryId));
+        return ResponseEntity.ok(CategoryControllerResponse.from(categoryService.findById(categoryId)));
     }
 
     @PutMapping("/{id}")

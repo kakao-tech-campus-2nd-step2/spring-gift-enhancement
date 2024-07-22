@@ -1,7 +1,6 @@
 package gift.product.presentation;
 
-import gift.option.application.OptionResponse;
-import gift.product.application.ProductResponse;
+import gift.option.application.OptionServiceResponse;
 import gift.product.application.ProductService;
 import gift.product.presentation.request.ProductCreateRequest;
 import gift.product.presentation.request.ProductUpdateRequest;
@@ -28,17 +27,17 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<ProductResponse>> findAll(
+    public ResponseEntity<Page<ProductControllerResponse>> findAll(
             Pageable pageable
     ) {
-        return ResponseEntity.ok(productService.findAll(pageable));
+        return ResponseEntity.ok(productService.findAll(pageable).map(ProductControllerResponse::from));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> findById(
+    public ResponseEntity<ProductControllerResponse> findById(
             @PathVariable("id") Long productId
     ) {
-        return ResponseEntity.ok(productService.findById(productId));
+        return ResponseEntity.ok(ProductControllerResponse.from(productService.findById(productId)));
     }
 
     @PutMapping("/{id}")
@@ -57,7 +56,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}/options")
-    public ResponseEntity<List<OptionResponse>> findOptionsByProductId(@PathVariable("id") Long productId) {
+    public ResponseEntity<List<OptionServiceResponse>> findOptionsByProductId(@PathVariable("id") Long productId) {
         return ResponseEntity.ok(productService.findOptionsByProductId(productId));
     }
 }

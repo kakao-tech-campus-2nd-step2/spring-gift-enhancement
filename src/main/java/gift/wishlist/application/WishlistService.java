@@ -34,14 +34,14 @@ public class WishlistService {
         wishlistRepository.save(wishlist);
     }
 
-    public Page<WishlistResponse> findAllByMemberId(Long memberId, Pageable pageable) {
+    public Page<WishlistServiceResponse> findAllByMemberId(Long memberId, Pageable pageable) {
         return wishlistRepository.findAllByMemberId(memberId, pageable)
-                .map(WishlistResponse::from);
+                .map(WishlistServiceResponse::from);
     }
 
-    public Page<WishlistResponse> findAllByProductId(Long productId, Pageable pageable) {
+    public Page<WishlistServiceResponse> findAllByProductId(Long productId, Pageable pageable) {
         return wishlistRepository.findAllByProductId(productId, pageable)
-                .map(WishlistResponse::from);
+                .map(WishlistServiceResponse::from);
     }
 
     @Transactional

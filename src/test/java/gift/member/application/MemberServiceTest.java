@@ -107,7 +107,7 @@ public class MemberServiceTest {
         when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
 
         // When
-        MemberResponse response = memberService.findById(member.getId());
+        MemberServiceResponse response = memberService.findById(member.getId());
 
         // Then
         assertEquals(member.getId(), response.id());
@@ -130,7 +130,7 @@ public class MemberServiceTest {
         when(memberRepository.findAll()).thenReturn(Arrays.asList(member, member2));
 
         // When
-        List<MemberResponse> responses = memberService.findAll();
+        List<MemberServiceResponse> responses = memberService.findAll();
 
         // Then
         assertEquals(2, responses.size());

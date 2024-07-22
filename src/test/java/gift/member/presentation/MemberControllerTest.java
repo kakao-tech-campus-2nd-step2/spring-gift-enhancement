@@ -1,8 +1,8 @@
 package gift.member.presentation;
 
 import gift.auth.TokenService;
-import gift.member.application.MemberResponse;
 import gift.member.application.MemberService;
+import gift.member.application.MemberServiceResponse;
 import gift.member.application.command.MemberEmailUpdateCommand;
 import gift.member.application.command.MemberPasswordUpdateCommand;
 import gift.member.presentation.request.MemberJoinRequest;
@@ -86,7 +86,7 @@ public class MemberControllerTest {
     @Test
     void 아이디로_찾기_테스트() throws Exception {
         // Given
-        MemberResponse response = new MemberResponse(memberId, email, password);
+        MemberServiceResponse response = new MemberServiceResponse(memberId, email, password);
         when(memberService.findById(eq(memberId))).thenReturn(response);
 
         // When & Then
@@ -100,8 +100,8 @@ public class MemberControllerTest {
     @Test
     void 전체_회원_찾기_테스트() throws Exception {
         // Given
-        MemberResponse response1 = new MemberResponse(memberId, email, password);
-        MemberResponse response2 = new MemberResponse(2L, "test2@example.com", "password2");
+        MemberServiceResponse response1 = new MemberServiceResponse(memberId, email, password);
+        MemberServiceResponse response2 = new MemberServiceResponse(2L, "test2@example.com", "password2");
         when(memberService.findAll()).thenReturn(Arrays.asList(response1, response2));
 
         // When & Then
@@ -120,8 +120,8 @@ public class MemberControllerTest {
         ResolvedMember resolvedMember = new ResolvedMember(memberId);
         MemberEmailUpdateCommand expectedCommand = new MemberEmailUpdateCommand(newEmail);
 
-        MemberResponse memberResponse = new MemberResponse(memberId, email, password);
-        when(memberService.findById(anyLong())).thenReturn(memberResponse);
+        MemberServiceResponse memberServiceResponse = new MemberServiceResponse(memberId, email, password);
+        when(memberService.findById(anyLong())).thenReturn(memberServiceResponse);
 
         // When & Then
         mockMvc.perform(put("/api/member/email")
@@ -142,8 +142,8 @@ public class MemberControllerTest {
         ResolvedMember member = new ResolvedMember(memberId);
         MemberPasswordUpdateCommand updateCommand = new MemberPasswordUpdateCommand(newPassword);
 
-        MemberResponse memberResponse = new MemberResponse(memberId, email, password);
-        when(memberService.findById(anyLong())).thenReturn(memberResponse);
+        MemberServiceResponse memberServiceResponse = new MemberServiceResponse(memberId, email, password);
+        when(memberService.findById(anyLong())).thenReturn(memberServiceResponse);
 
         // When & Then
         mockMvc.perform(put("/api/member/password")
@@ -159,9 +159,9 @@ public class MemberControllerTest {
     void 회원_삭제_테스트() throws Exception {
         // Given
 //        Member member = new Member(memberId, email, password);
-        MemberResponse memberResponse = new MemberResponse(memberId, email, password);
+        MemberServiceResponse memberServiceResponse = new MemberServiceResponse(memberId, email, password);
         ResolvedMember member = new ResolvedMember(memberId);
-        when(memberService.findById(anyLong())).thenReturn(memberResponse);
+        when(memberService.findById(anyLong())).thenReturn(memberServiceResponse);
 
         // When & Then
         mockMvc.perform(delete("/api/member")

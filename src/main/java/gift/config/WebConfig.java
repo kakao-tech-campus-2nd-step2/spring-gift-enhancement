@@ -26,6 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/products/**")
                 .addPathPatterns("/api/member/**")
                 .addPathPatterns("/api/categories/**")
+                .addPathPatterns("/api/options/**")
                 .excludePathPatterns("/api/member/join")
                 .excludePathPatterns("/api/member/login");
 

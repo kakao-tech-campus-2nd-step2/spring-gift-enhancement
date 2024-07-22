@@ -3,7 +3,7 @@ package gift.product.application;
 import gift.category.domain.Category;
 import gift.category.domain.CategoryRepository;
 import gift.exception.type.NotFoundException;
-import gift.option.application.OptionResponse;
+import gift.option.application.OptionServiceResponse;
 import gift.option.application.command.OptionCreateCommand;
 import gift.option.domain.Option;
 import gift.option.domain.OptionRepository;
@@ -39,14 +39,14 @@ public class ProductService {
         this.optionRepository = optionRepository;
     }
 
-    public Page<ProductResponse> findAll(Pageable pageable) {
+    public Page<ProductServiceResponse> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
-                .map(ProductResponse::from);
+                .map(ProductServiceResponse::from);
     }
 
-    public ProductResponse findById(Long productId) {
+    public ProductServiceResponse findById(Long productId) {
         return productRepository.findById(productId)
-                .map(ProductResponse::from)
+                .map(ProductServiceResponse::from)
                 .orElseThrow(() -> new NotFoundException("해당 상품이 존재하지 않습니다."));
     }
 
@@ -101,10 +101,10 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public List<OptionResponse> findOptionsByProductId(Long productId) {
+    public List<OptionServiceResponse> findOptionsByProductId(Long productId) {
         return optionRepository.findAllByProductId(productId)
                 .stream()
-                .map(OptionResponse::from)
+                .map(OptionServiceResponse::from)
                 .toList();
     }
 }

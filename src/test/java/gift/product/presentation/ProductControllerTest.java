@@ -4,9 +4,9 @@ import gift.auth.TokenService;
 import gift.category.application.CategoryService;
 import gift.category.domain.Category;
 import gift.member.application.MemberService;
-import gift.option.application.OptionResponse;
-import gift.product.application.ProductResponse;
+import gift.option.application.OptionServiceResponse;
 import gift.product.application.ProductService;
+import gift.product.application.ProductServiceResponse;
 import gift.product.application.command.ProductCreateCommand;
 import gift.product.application.command.ProductUpdateCommand;
 import org.junit.jupiter.api.Assertions;
@@ -89,11 +89,11 @@ public class ProductControllerTest {
     void 모든상품조회시_상품목록반환() throws Exception {
         // Given
         Category category = new Category(1L, "Category", "#FFFFFF", "Description", "http://example.com/image.jpg");
-        OptionResponse option1 = new OptionResponse(1L, "Option1", 10);
-        OptionResponse option2 = new OptionResponse(2L, "Option2", 20);
-        ProductResponse response1 = new ProductResponse(1L, "Product1", 1000, "http://example.com/image1.jpg", category.getId(), List.of(option1, option2));
-        ProductResponse response2 = new ProductResponse(2L, "Product2", 2000, "http://example.com/image2.jpg", category.getId(), List.of(option1, option2));
-        Page<ProductResponse> page = new PageImpl<>(List.of(response1, response2), PageRequest.of(0, 2), 2);
+        OptionServiceResponse option1 = new OptionServiceResponse(1L, "Option1", 10);
+        OptionServiceResponse option2 = new OptionServiceResponse(2L, "Option2", 20);
+        ProductServiceResponse response1 = new ProductServiceResponse(1L, "Product1", 1000, "http://example.com/image1.jpg", category.getId(), List.of(option1, option2));
+        ProductServiceResponse response2 = new ProductServiceResponse(2L, "Product2", 2000, "http://example.com/image2.jpg", category.getId(), List.of(option1, option2));
+        Page<ProductServiceResponse> page = new PageImpl<>(List.of(response1, response2), PageRequest.of(0, 2), 2);
         when(productService.findAll(any(Pageable.class))).thenReturn(page);
 
         // When
@@ -109,17 +109,17 @@ public class ProductControllerTest {
         String responseContent = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         Assertions.assertTrue(responseContent.contains("\"id\":1,\"name\":\"Product1\",\"price\":1000,\"imageUrl\":\"http://example.com/image1.jpg\",\"categoryId\":1"));
         Assertions.assertTrue(responseContent.contains("\"id\":2,\"name\":\"Product2\",\"price\":2000,\"imageUrl\":\"http://example.com/image2.jpg\",\"categoryId\":1"));
-        Assertions.assertTrue(responseContent.contains("\"optionResponseList\":[{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}]"));
+        Assertions.assertTrue(responseContent.contains("{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}"));
     }
 
     @Test
     void 상품아이디로조회시_상품반환() throws Exception {
         // Given
         Category category = new Category(1L, "Category", "#FFFFFF", "Description", "http://example.com/image.jpg");
-        OptionResponse option1 = new OptionResponse(1L, "Option1", 10);
-        OptionResponse option2 = new OptionResponse(2L, "Option2", 20);
-        ProductResponse productResponse = new ProductResponse(1L, "Valid", 1000, "http://example.com/image.jpg", category.getId(), List.of(option1, option2));
-        when(productService.findById(1L)).thenReturn(productResponse);
+        OptionServiceResponse option1 = new OptionServiceResponse(1L, "Option1", 10);
+        OptionServiceResponse option2 = new OptionServiceResponse(2L, "Option2", 20);
+        ProductServiceResponse productServiceResponse = new ProductServiceResponse(1L, "Valid", 1000, "http://example.com/image.jpg", category.getId(), List.of(option1, option2));
+        when(productService.findById(1L)).thenReturn(productServiceResponse);
 
         // When
         MvcResult mvcResult = mockMvc.perform(get("/api/products/1")
@@ -135,7 +135,7 @@ public class ProductControllerTest {
         Assertions.assertTrue(responseContent.contains("\"price\":1000"));
         Assertions.assertTrue(responseContent.contains("\"imageUrl\":\"http://example.com/image.jpg\""));
         Assertions.assertTrue(responseContent.contains("\"categoryId\":1"));
-        Assertions.assertTrue(responseContent.contains("\"optionResponseList\":[{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}]"));
+        Assertions.assertTrue(responseContent.contains("{\"id\":1,\"name\":\"Option1\",\"quantity\":10},{\"id\":2,\"name\":\"Option2\",\"quantity\":20}"));
     }
 
     @Test

@@ -1,8 +1,8 @@
 package gift.option.application.command;
 
-public record OptionUpdateCommand(
+public record OptionSubtractQuantityCommand(
         Long id,
-        String name,
         Integer quantity
 ) {
+
 }

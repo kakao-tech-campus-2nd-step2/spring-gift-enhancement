@@ -1,7 +1,7 @@
 package gift.product.presentation;
 
-import gift.product.application.ProductResponse;
 import gift.product.application.ProductService;
+import gift.product.application.ProductServiceResponse;
 import gift.product.presentation.request.ProductCreateRequest;
 import gift.product.presentation.request.ProductUpdateRequest;
 import org.springframework.data.domain.Page;
@@ -21,14 +21,14 @@ public class ProductViewController {
 
     @GetMapping("")
     public String findAll(Pageable pageable, Model model) {
-        Page<ProductResponse> products = productService.findAll(pageable);
+        Page<ProductServiceResponse> products = productService.findAll(pageable);
         model.addAttribute("products", products);
         return "product/list";
     }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Long productId, Model model) {
-        ProductResponse product = productService.findById(productId);
+        ProductServiceResponse product = productService.findById(productId);
         model.addAttribute("product", product);
         return "product/detail";
     }
@@ -47,7 +47,7 @@ public class ProductViewController {
 
     @GetMapping("/{id}/update")
     public String updateForm(@PathVariable("id") Long productId, Model model) {
-        ProductResponse product = productService.findById(productId);
+        ProductServiceResponse product = productService.findById(productId);
         model.addAttribute("product", product);
         return "product/update";
     }

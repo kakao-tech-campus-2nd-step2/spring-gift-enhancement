@@ -2,8 +2,8 @@ package gift.wishlist.presentation;
 
 import gift.auth.TokenService;
 import gift.member.application.MemberService;
-import gift.wishlist.application.WishlistResponse;
 import gift.wishlist.application.WishlistService;
+import gift.wishlist.application.WishlistServiceResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,13 +67,13 @@ public class WishlistControllerTest {
     @Test
     void 모든_위시리스트_조회_테스트() throws Exception {
         // Given
-        WishlistResponse response1 = new WishlistResponse(1L, 1L, 1L);
-        WishlistResponse response2 = new WishlistResponse(2L, 1L, 2L);
-        WishlistResponse response3 = new WishlistResponse(3L, 1L, 3L);
-        WishlistResponse response4 = new WishlistResponse(4L, 1L, 4L);
-        WishlistResponse response5 = new WishlistResponse(5L, 1L, 5L);
-        Page<WishlistResponse> firstPage = new PageImpl<>(List.of(response1, response2, response3), PageRequest.of(0, 3), 5);
-        Page<WishlistResponse> secondPage = new PageImpl<>(List.of(response4, response5), PageRequest.of(1, 3), 5);
+        WishlistServiceResponse response1 = new WishlistServiceResponse(1L, 1L, 1L);
+        WishlistServiceResponse response2 = new WishlistServiceResponse(2L, 1L, 2L);
+        WishlistServiceResponse response3 = new WishlistServiceResponse(3L, 1L, 3L);
+        WishlistServiceResponse response4 = new WishlistServiceResponse(4L, 1L, 4L);
+        WishlistServiceResponse response5 = new WishlistServiceResponse(5L, 1L, 5L);
+        Page<WishlistServiceResponse> firstPage = new PageImpl<>(List.of(response1, response2, response3), PageRequest.of(0, 3), 5);
+        Page<WishlistServiceResponse> secondPage = new PageImpl<>(List.of(response4, response5), PageRequest.of(1, 3), 5);
 
         when(wishlistService.findAllByMemberId(eq(1L), any(Pageable.class)))
                 .thenReturn(firstPage)
@@ -112,13 +112,13 @@ public class WishlistControllerTest {
     @Test
     void 특정_상품의_위시리스트_조회_테스트() throws Exception {
         // Given
-        WishlistResponse response1 = new WishlistResponse(1L, 1L, 1L);
-        WishlistResponse response2 = new WishlistResponse(2L, 1L, 1L);
-        WishlistResponse response3 = new WishlistResponse(3L, 1L, 1L);
-        WishlistResponse response4 = new WishlistResponse(4L, 1L, 1L);
-        WishlistResponse response5 = new WishlistResponse(5L, 1L, 1L);
-        Page<WishlistResponse> firstPage = new PageImpl<>(List.of(response1, response2, response3), PageRequest.of(0, 3), 5);
-        Page<WishlistResponse> secondPage = new PageImpl<>(List.of(response4, response5), PageRequest.of(1, 3), 5);
+        WishlistServiceResponse response1 = new WishlistServiceResponse(1L, 1L, 1L);
+        WishlistServiceResponse response2 = new WishlistServiceResponse(2L, 1L, 1L);
+        WishlistServiceResponse response3 = new WishlistServiceResponse(3L, 1L, 1L);
+        WishlistServiceResponse response4 = new WishlistServiceResponse(4L, 1L, 1L);
+        WishlistServiceResponse response5 = new WishlistServiceResponse(5L, 1L, 1L);
+        Page<WishlistServiceResponse> firstPage = new PageImpl<>(List.of(response1, response2, response3), PageRequest.of(0, 3), 5);
+        Page<WishlistServiceResponse> secondPage = new PageImpl<>(List.of(response4, response5), PageRequest.of(1, 3), 5);
 
         when(wishlistService.findAllByProductId(eq(1L), any(Pageable.class)))
                 .thenReturn(firstPage)
