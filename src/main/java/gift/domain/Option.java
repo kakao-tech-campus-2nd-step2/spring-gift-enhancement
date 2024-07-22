@@ -20,7 +20,7 @@ public class Option {
     @NotBlank(message = REQUIRED_FIELD_MSG)
     @Size(max = 50, message = LENGTH_ERROR_MSG)
     @Pattern(regexp = "^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/_]*$", message = SPECIAL_CHAR_ERROR_MSG)
-    @Column(nullable = false)
+    @Column(nullable = false,  unique = true)
     private String name;
 
     @NotNull(message = REQUIRED_FIELD_MSG)
