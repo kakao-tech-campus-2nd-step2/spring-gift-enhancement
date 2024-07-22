@@ -101,6 +101,7 @@ public class ProductRepositoryTest {
     createAndAddOption("Large", 100, product);
     productRepository.save(product);
 
+
     // when
     product.setName("바나나 스무디");
     Option updatedOption = product.getOptions().get(1);  // Default 옵션이 0번째이므로 1번째 옵션을 수정

@@ -5,6 +5,7 @@ import gift.product.dto.ProductDto;
 import gift.product.entity.Option;
 import gift.user.dto.UserDto;
 import gift.wish.entity.Wish;
+
 import jakarta.validation.constraints.NotNull;
 
 public class WishDto {
@@ -36,6 +37,7 @@ public class WishDto {
         ProductDto.toDto(wish.getProduct())
     );
   }
+
 
   public Long getId() {
     return id;

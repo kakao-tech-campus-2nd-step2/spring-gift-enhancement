@@ -4,6 +4,7 @@ import static gift.wish.dto.WishDto.toDto;
 
 import gift.exception.BadRequestException;
 import gift.exception.ResourceNotFoundException;
+
 import gift.product.dto.ProductDto;
 import gift.user.dto.UserDto;
 import gift.product.entity.Product;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class WishService {
@@ -56,6 +58,7 @@ public class WishService {
     Wish savedWish = wishRepository.save(wish);
 
     return toDto(savedWish);
+
   }
 
   public void removeWish(String memberEmail, Long productId) {
@@ -63,6 +66,7 @@ public class WishService {
         .orElseThrow(() -> new ResourceNotFoundException("회원 정보를 찾을 수 없습니다."));
     Product product = productRepository.findById(productId)
         .orElseThrow(() -> new ResourceNotFoundException("상품 정보를 찾을 수 없습니다."));
+
     wishRepository.deleteByUserIdAndProduct(user.getId(), product);
   }
 }

@@ -74,6 +74,7 @@ public class WishRepositoryTest {
     return userRepository.save(user);
   }
 
+
   private Wish createAndSaveWish(User user, Product product) {
     Wish wish = new Wish();
     wish.setUser(user);
