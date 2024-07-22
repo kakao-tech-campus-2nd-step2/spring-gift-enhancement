@@ -11,7 +11,6 @@ import gift.exception.InternalServerExceptions.InternalServerException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
-import java.util.Objects;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OptionService {
     private final OptionRepository optionRepository;
-    private final OptionRepositoryKeeperService optionRepositoryKeeperService;
     private final ProductRepository productRepository;
 
-    public OptionService(OptionRepository optionRepository,
-            OptionRepositoryKeeperService optionRepositoryKeeperService, ProductRepository productRepository) {
+    public OptionService(OptionRepository optionRepository, ProductRepository productRepository) {
         this.optionRepository = optionRepository;
-        this.optionRepositoryKeeperService = optionRepositoryKeeperService;
         this.productRepository = productRepository;
     }
 
@@ -40,7 +36,7 @@ public class OptionService {
         try {
             Product product = productRepository.findById(productId).orElseThrow(
                     () -> new NoSuchProductIdException("해당 상품 Id인 상품을 찾지 못했습니다."));
-            optionRepositoryKeeperService.checkUniqueOptionName(product, optionRequestDTO.name());
+            checkUniqueOptionName(product, optionRequestDTO.name());
             optionRepository.save(optionRequestDTO.convertToOption(product));
         } catch (BadRequestException e) {
             throw e;
@@ -59,7 +55,7 @@ public class OptionService {
             Option optionToReplace = optionRequestDTO.convertToOption(product);
             Option optionInDb = optionRepository.findById(optionId).orElseThrow(
                     () -> new BadRequestException("그러한 Id를 가지는 옵션을 찾을 수 없습니다."));
-            optionRepositoryKeeperService.checkUniqueOptionName(product, optionRequestDTO.name());
+            checkUniqueOptionName(product, optionRequestDTO.name());
             optionInDb.changeOption(optionToReplace.getName(), optionToReplace.getQuantity());
         } catch (BadRequestException e) {
             throw e;
@@ -83,6 +79,11 @@ public class OptionService {
         } catch (Exception e) {
             throw new InternalServerException(e.getMessage());
         }
+    }
+
+    void checkUniqueOptionName(Product product, String optionName) throws DataIntegrityViolationException {
+        if(optionRepository.existsByProductAndName(product, optionName))
+            throw new DataIntegrityViolationException("이미 있는 옵션 이름입니다.");
     }
 
 }
