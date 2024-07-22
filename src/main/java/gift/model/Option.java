@@ -54,4 +54,14 @@ public class Option {
     public void assignProduct(Product product) {
         this.product = product;
     }
+
+    public void subtractQuantity(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("0보다 작은 숫자는 입력할 수 없습니다");
+        }
+        if (quantity < amount) {
+            throw new IllegalArgumentException("빼려는 수보다 수량이 적습니다");
+        }
+        this.quantity -= amount;
+    }
 }
