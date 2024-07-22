@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ProductTest {
 
@@ -26,11 +27,16 @@ class ProductTest {
     @DisplayName("옵션 이름 중복 검사 - 성공")
     void checkDuplicateOptionNameSuccess() {
         //Given
-        Product product = new Product("name", 100, "url", new Category("Food", "t", "t", "t"), List.of(new Option("option", 100)));
-        String newOptionName = "newName";
+        Option option = new Option("option", 100);
+        Product product = new Product("name", 100, "url", new Category("Food", "t", "t", "t"), List.of(option));
+        option.associateWithProduct(product);
 
-        //When Then
-        assertThatThrownBy(() -> product.checkDuplicateOptionName(newOptionName))
-                .isInstanceOf(OptionDuplicateException.class);
+        String newOptionName = "otherOptionName";
+
+        //When
+        product.checkDuplicateOptionName(newOptionName);
+
+        //Then
+        assertDoesNotThrow(() -> product.checkDuplicateOptionName(newOptionName));
     }
 }
