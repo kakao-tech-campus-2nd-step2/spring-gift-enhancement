@@ -23,9 +23,9 @@ public class CategoryService {
     }
 
     public List<CategoryResponse> getAllCategoryResponses() {
-        return categoryRepository.findAll().
-                stream().
-                map(CategoryResponse::fromCategory)
+        return categoryRepository.findAll()
+                .stream()
+                .map(CategoryResponse::fromCategory)
                 .toList();
     }
 
