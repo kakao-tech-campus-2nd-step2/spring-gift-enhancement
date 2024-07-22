@@ -1,6 +1,9 @@
 package gift.dto;
 
 public class OptionRequest {
+
+
+    private Long id;
     private String name;
     private int quantity;
     private String productName;
@@ -9,6 +12,11 @@ public class OptionRequest {
     }
 
     public OptionRequest(String name, int quantity, String productName) {
+        this(null, name, quantity, productName);
+    }
+
+    public OptionRequest(Long id, String name, int quantity, String productName) {
+        this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.productName = productName;
@@ -23,6 +31,9 @@ public class OptionRequest {
         return this;
     }
 
+    public Long getId() {
+        return id;
+    }
     public int getQuantity() {
         return quantity;
     }

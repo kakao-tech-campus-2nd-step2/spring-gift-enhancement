@@ -5,10 +5,12 @@ import gift.dto.OptionRequest;
 import gift.model.HttpResult;
 import gift.model.Option;
 import gift.service.OptionService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +43,7 @@ public class OptionController {
     }
 
     @GetMapping("/options/{id}")
-    public ResponseEntity<ApiResponse> getOptionById(@RequestParam("id") Long id) {
+    public ResponseEntity<ApiResponse> getOptionById(@PathVariable("id") Long id) {
         var option = optionService.retrieveOption(id);
         var apiResponse = new ApiResponse(HttpResult.OK, option.toString(), HttpStatus.OK);
         return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());

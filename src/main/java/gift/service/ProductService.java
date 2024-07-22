@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
@@ -98,6 +99,7 @@ public class ProductService {
         return productRepository.save(existingProduct.get());
     }
 
+    @Transactional
     public List<Optional<Product>> patchProducts(List<Map<String, Object>> updatesList) {
         List<Optional<Product>> updatedProducts = new ArrayList<>();
         for (Map<String, Object> updates : updatesList) {

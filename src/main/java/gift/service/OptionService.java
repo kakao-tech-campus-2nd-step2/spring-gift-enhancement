@@ -28,13 +28,14 @@ public class OptionService {
 
     // 옵션 생성
     public Option createOption(final OptionRequest optionRequest) {
-        var product = productRepository.findByName(optionRequest.getName())
+        var product = productRepository.findByName(optionRequest.getProductName())
             .orElseThrow(() -> new NoSuchElementException("상품이 존재하지 않습니다"));
         var option = new Option(optionRequest.getName(), optionRequest.getQuantity(), product);
         var foundOption = optionRepository.findAllByProduct(product);
         var options = new Options(foundOption);
+        product.getOptionList().add(option);
         options.validate();
-        return new Option(optionRequest.getName(), optionRequest.getQuantity(), product);
+        return optionRepository.save(option);  // 여기서 저장
     }
 
     // 옵션 탐색
@@ -58,10 +59,22 @@ public class OptionService {
 
     // 옵션 수정
     public Option updateOption(final OptionRequest optionRequest) {
-        var option = optionRepository.findByName(optionRequest.getName())
+        var option = optionRepository.findById(optionRequest.getId())
             .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 옵션입니다"));
-        var product = productRepository.findByName(optionRequest.getName())
+        var product = productRepository.findByName(optionRequest.getProductName())  // 여기를 수정
             .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 상품입니다."));
-        return optionRepository.save(new Option(option.getId(), optionRequest.getQuantity(), product));
+        option.setName(optionRequest.getName());
+        option.setQuantity(optionRequest.getQuantity());  // 수량만 업데이트
+        option.setProduct(product);  // 상품 업데이트
+        return optionRepository.save(option);
+    }
+
+
+    // 옵션 수량 변경
+    public boolean updateOptionQuantity(Long id, int quantity) {
+        var option = optionRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("존재 하지 않는 옵션입니다."));
+        option.subtract(quantity);
+        return true;
     }
 }

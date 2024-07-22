@@ -8,6 +8,7 @@ import gift.model.Category;
 import gift.model.HttpResult;
 import gift.model.Product;
 import gift.service.CategoryService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -33,11 +34,13 @@ public class ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
     public ProductController(ProductService productService,
-        CategoryService categoryService) {
+        CategoryService categoryService, OptionService optionService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
 
@@ -88,6 +91,7 @@ public class ProductController {
     public String showAddProductForm(Model model) {
         model.addAttribute("productDto", new ProductDto());
         model.addAttribute("categories", categoryService.getAllCategories());
+//        model.addAttribute("options", optionService.retreiveOptions());
         return "addproductform";
     }
 

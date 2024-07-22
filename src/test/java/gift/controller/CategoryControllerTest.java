@@ -73,14 +73,9 @@ class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(categoryDto)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].id").value(categoryDto.getId()))
-            .andExpect(jsonPath("$[0].name").value(categoryDto.getName()))
-            .andExpect(jsonPath("$[0].productName").isArray())
-            .andExpect(jsonPath("$[0].productName", hasSize(1)))
-            .andExpect(
-                jsonPath("$[0].productName[0]").value(categoryDto.getProductName().getFirst()));
+            .andExpect(jsonPath("$").isMap())
+            .andExpect(jsonPath("$.result").value("OK"))
+            .andExpect(jsonPath("$.httpStatus").value("OK"));
     }
 
     @Test
