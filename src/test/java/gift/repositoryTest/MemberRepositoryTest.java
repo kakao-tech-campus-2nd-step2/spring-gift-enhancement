@@ -7,22 +7,29 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 @DataJpaTest
 public class MemberRepositoryTest {
     @Autowired
     private MemberRepository members;
+    @Autowired
+    private TestEntityManager testEntityManager;
 
     @Test
     void save() {
         Member expected = new Member("wjdghtjd06@kakao.com", "1234");
-        Member actual = members.save(expected);
+        Member savedMember = members.save(expected);
+        testEntityManager.clear();
+
+        Member actual = members.findById(savedMember.getId())
+            .orElseThrow();
 
         Assertions.assertThat(actual.getId()).isEqualTo(expected.getId());
         Assertions.assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
         Assertions.assertThat(actual.getPassword()).isEqualTo(expected.getPassword());
 
-        // 아니 실제로 넣을 때는 user로 잘만 들어가는데 왜.. null이 들어가지.. dynamic insert해도 안 되네 ..
+
         Assertions.assertThat(actual.getRole()).isEqualTo("user");
     }
 
