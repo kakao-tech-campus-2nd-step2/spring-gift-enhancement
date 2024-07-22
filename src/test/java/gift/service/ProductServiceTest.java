@@ -1,6 +1,7 @@
 package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -57,40 +59,73 @@ class ProductServiceTest {
         productService = new ProductService(productRepository, categoryRepository, wishProductRepository, productOptionService);
     }
 
-    @Test
-    @DisplayName("상품 생성 요청이 정상적일 때, 상품을 성공적으로 생성합니다.")
-    void createProduct() {
-        //given
-        CreateProductOptionRequest optionRequest1 = new CreateProductOptionRequest("옵션01", 100);
-        CreateProductRequest request = new CreateProductRequest("상품01", 10000,
-            "https://www.google.com", 1L, List.of(optionRequest1));
+    @Nested
+    @DisplayName("createProduct 메서드는")
+    class createProduct {
 
-        Category category = new Builder()
-            .id(1L)
-            .name("카테고리01")
-            .description("카테고리01 설명")
-            .imageUrl(StringToUrlConverter.convert("https://www.google.com"))
-            .color(Color.from("#FFFFFF"))
-            .build();
+        @Test
+        @DisplayName("상품 생성 요청이 정상적일 때, 상품을 성공적으로 생성합니다.")
+        void when_valid_request() {
+            //given
+            CreateProductOptionRequest optionRequest1 = new CreateProductOptionRequest("옵션01", 100);
+            CreateProductOptionRequest optionRequest2 = new CreateProductOptionRequest("옵션02", 100);
+            CreateProductRequest request = new CreateProductRequest("상품01", 10000,
+                "https://www.google.com", 1L, List.of(optionRequest1));
 
-        Product product = request.toEntity(category);
-        given(categoryRepository.findById(any())).willReturn(Optional.of(category));
-        given(productRepository.save(any())).willReturn(product);
-        given(productOptionRepository.save(any())).willReturn(new ProductOption.Builder().id(1L).name("옵션01").stock(100).build());
+            Category category = new Builder()
+                .id(1L)
+                .name("카테고리01")
+                .description("카테고리01 설명")
+                .imageUrl(StringToUrlConverter.convert("https://www.google.com"))
+                .color(Color.from("#FFFFFF"))
+                .build();
 
-        //when
-        CreateProductResponse response = productService.createProduct(request);
+            Product product = request.toEntity(category);
+            given(categoryRepository.findById(any())).willReturn(Optional.of(category));
+            given(productRepository.save(any())).willReturn(product);
 
-        //then
-        assertAll(
-            () -> assertThat(response.getName()).isEqualTo(product.getName()),
-            () -> assertThat(response.getPrice()).isEqualTo(product.getPrice()),
-            () -> assertThat(response.getImageUrl()).isEqualTo(product.getImageUrl().toString()),
+            //when
+            CreateProductResponse response = productService.createProduct(request);
 
-            () -> assertThat(response.getOptions().size()).isEqualTo(product.getProductOptions().size()),
-            () -> assertThat(response.getOptions().get(0).getName()).isEqualTo(product.getProductOptions().get(0).getName()),
-            () -> assertThat(response.getOptions().get(0).getStock()).isEqualTo(product.getProductOptions().get(0).getStock())
-        );
+            //then
+            assertAll(
+                () -> assertThat(response.getName()).isEqualTo(product.getName()),
+                () -> assertThat(response.getPrice()).isEqualTo(product.getPrice()),
+                () -> assertThat(response.getImageUrl()).isEqualTo(product.getImageUrl().toString()),
+
+                () -> assertThat(response.getOptions().size()).isEqualTo(product.getProductOptions().size()),
+                () -> assertThat(response.getOptions().get(0).getName()).isEqualTo(product.getProductOptions().get(0).getName()),
+                () -> assertThat(response.getOptions().get(0).getStock()).isEqualTo(product.getProductOptions().get(0).getStock())
+            );
+        }
+
+        @Test
+        @DisplayName("상품 생성 시 옵션 이름에 중복이 존재하면 예외를 발생시킵니다.")
+        void when_duplicate_option_name() {
+            //given
+            CreateProductOptionRequest optionRequest1 = new CreateProductOptionRequest("옵션01", 100);
+            CreateProductOptionRequest optionRequest2 = new CreateProductOptionRequest("옵션01", 100);
+            CreateProductRequest request = new CreateProductRequest("상품01", 10000,
+                "https://www.google.com", 1L, List.of(optionRequest1, optionRequest2));
+
+            Category category = new Builder()
+                .id(1L)
+                .name("카테고리01")
+                .description("카테고리01 설명")
+                .imageUrl(StringToUrlConverter.convert("https://www.google.com"))
+                .color(Color.from("#FFFFFF"))
+                .build();
+
+            Product product = request.toEntity(category);
+            given(categoryRepository.findById(any())).willReturn(Optional.of(category));
+            given(productRepository.save(any())).willReturn(product);
+
+            //when
+            //then
+            assertThatThrownBy(() -> productService.createProduct(request))
+                .isInstanceOf(IllegalStateException.class);
+        }
+
     }
 
     @Test
