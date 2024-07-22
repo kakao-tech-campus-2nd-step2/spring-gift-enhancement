@@ -1,5 +1,7 @@
 package gift.wish.entity;
 
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import gift.product.entity.Product;
 import gift.user.entity.User;
 import gift.wish.dto.request.UpdateWishRequest;
@@ -44,7 +46,7 @@ public class Wish {
 
     public Wish(User user, Product product, int quantity) {
         if (isQuantityZero()) {
-            throw new IllegalArgumentException("수량은 0보다 큰 수이어야 합니다.");
+            throw new CustomException(ErrorCode.INVALID_WISH_QUANTITY);
         }
         this.user = user;
         this.product = product;
@@ -55,7 +57,6 @@ public class Wish {
     }
 
     private Wish(Builder builder) {
-        this.id = builder.id;
         this.quantity = builder.quantity;
         this.user = builder.user;
         this.product = builder.product;
@@ -91,15 +92,9 @@ public class Wish {
 
     public static class Builder {
 
-        private Long id;
         private Integer quantity;
         private User user;
         private Product product;
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public Builder quantity(Integer quantity) {
             this.quantity = quantity;

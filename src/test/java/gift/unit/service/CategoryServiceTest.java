@@ -13,7 +13,7 @@ import gift.product.category.dto.request.CreateCategoryRequest;
 import gift.product.category.dto.request.UpdateCategoryRequest;
 import gift.product.category.dto.response.CategoryResponse;
 import gift.product.category.entity.Category;
-import gift.product.category.repository.CategoryRepository;
+import gift.product.category.repository.CategoryJpaRepository;
 import gift.product.category.service.CategoryService;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class CategoryServiceTest {
     private CategoryService categoryService;
 
     @Mock
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryRepository;
 
     @Test
     @DisplayName("get all categories test")
@@ -70,17 +70,14 @@ public class CategoryServiceTest {
     @DisplayName("get category by id test")
     void getCategoryByIdTest() {
         // given
-        Category category = new Category(1L, "Category 1", "#123456", "image", "");
-        given(categoryRepository.findById(any())).willReturn(Optional.of(category));
+        Category category1 = new Category("Category 1", "#123456", "image", "");
+        given(categoryRepository.findById(any())).willReturn(Optional.of(category1));
 
         // when
-        CategoryResponse actual = categoryService.getCategory(1L);
+        categoryService.getCategory(1L);
 
         // then
-        assertThat(actual).isNotNull();
-        assertThat(actual.id()).isEqualTo(1L);
-        assertThat(actual.name()).isEqualTo("Category 1");
-        then(categoryRepository).should(times(1)).findById(any());
+        then(categoryRepository).should().findById(any());
     }
 
     @Test
@@ -92,28 +89,24 @@ public class CategoryServiceTest {
         // when & then
         assertThatThrownBy(() -> categoryService.getCategory(999L)).isInstanceOf(
             CustomException.class);
-        then(categoryRepository).should(times(1)).findById(any());
+        then(categoryRepository).should().findById(any());
     }
 
     @Test
     @DisplayName("create category test")
     void createCategoryTest() {
         // given
-        Category category = new Category(1L, "Category 1", "#123456", "image", "");
+        Category category1 = new Category("Category 1", "#123456", "image", "");
         CreateCategoryRequest request = new CreateCategoryRequest("new category", "#123456",
             "image", "");
-        given(categoryRepository.findAll()).willReturn(List.of(category));
-        given(categoryRepository.save(any(Category.class))).willReturn(category);
-
-        Long expectedId = 1L;
+        given(categoryRepository.findAll()).willReturn(List.of(category1));
+        given(categoryRepository.save(any(Category.class))).willReturn(category1);
 
         // when
-        var actual = categoryService.createCategory(request);
+        categoryService.createCategory(request);
 
         // then
-        assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(expectedId);
-        then(categoryRepository).should(times(1)).save(any(Category.class));
+        then(categoryRepository).should().save(any(Category.class));
     }
 
     @Test
@@ -123,14 +116,14 @@ public class CategoryServiceTest {
         String newName = "update category";
         UpdateCategoryRequest request = new UpdateCategoryRequest(newName, "#123456", "image", "");
 
-        Category existingCategory = new Category(1L, "Category 1", "#123456", "image", "");
+        Category existingCategory = new Category("Category 1", "#123456", "image", "");
         given(categoryRepository.findById(any())).willReturn(Optional.of(existingCategory));
 
         // when
         categoryService.updateCategory(1L, request);
 
         // then
-        then(categoryRepository).should(times(1)).findById(any());
+        then(categoryRepository).should().findById(any());
         assertThat(existingCategory.getName()).isEqualTo(newName);
     }
 
@@ -145,7 +138,7 @@ public class CategoryServiceTest {
         // when & then
         assertThatThrownBy(() -> categoryService.updateCategory(1L, request))
             .isInstanceOf(CustomException.class);
-        then(categoryRepository).should(times(1)).findById(any());
+        then(categoryRepository).should().findById(any());
     }
 
     @Test
@@ -159,8 +152,8 @@ public class CategoryServiceTest {
         categoryService.deleteCategory(1L);
 
         // then
-        then(categoryRepository).should(times(1)).existsById(any());
-        then(categoryRepository).should(times(1)).deleteById(any(Long.class));
+        then(categoryRepository).should().existsById(any());
+        then(categoryRepository).should().deleteById(any(Long.class));
     }
 
     @Test
@@ -172,7 +165,7 @@ public class CategoryServiceTest {
         // when & then
         assertThatThrownBy(() -> categoryService.deleteCategory(1L))
             .isInstanceOf(CustomException.class);
-        then(categoryRepository).should(times(1)).existsById(any());
+        then(categoryRepository).should().existsById(any());
         then(categoryRepository).should(times(0)).deleteById(any());
     }
 

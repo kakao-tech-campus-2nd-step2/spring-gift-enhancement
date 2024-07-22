@@ -8,8 +8,8 @@ import gift.product.option.dto.request.UpdateOptionRequest;
 import gift.product.option.dto.response.OptionResponse;
 import gift.product.option.entity.Option;
 import gift.product.option.entity.Options;
-import gift.product.option.repository.OptionRepository;
-import gift.product.repository.ProductRepository;
+import gift.product.option.repository.OptionJpaRepository;
+import gift.product.repository.ProductJpaRepository;
 import gift.util.mapper.OptionMapper;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OptionService {
 
-    private final ProductRepository productRepository;
-    private final OptionRepository optionRepository;
+    private final ProductJpaRepository productRepository;
+    private final OptionJpaRepository optionRepository;
 
-    public OptionService(ProductRepository productRepository, OptionRepository optionRepository) {
+    public OptionService(ProductJpaRepository productRepository,
+        OptionJpaRepository optionRepository) {
         this.productRepository = productRepository;
         this.optionRepository = optionRepository;
     }
@@ -43,9 +44,6 @@ public class OptionService {
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Option option = new Option(request.name(), request.quantity(), product);
 
-        Options options = new Options(optionRepository.findAllByProduct(product));
-        options.validate(option);
-
         product.addOption(option);
         Option saved = optionRepository.save(option);
 
@@ -59,10 +57,10 @@ public class OptionService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        Options options = new Options(optionRepository.findAllByProduct(product));
+        Options options = optionRepository.findAllByProduct(product);
         options.validate(request);
 
-        option.edit(request);
+        option.edit(request.name(), request.quantity());
     }
 
     @Transactional
@@ -74,5 +72,13 @@ public class OptionService {
 
         product.removeOption(option);
         optionRepository.delete(option);
+    }
+
+    @Transactional
+    public void subtractOptionQuantity(Long id, Integer subtractionQuantity) {
+        Option option = optionRepository.findByIdWithPessimisticLocking(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
+
+        option.subtract(subtractionQuantity);
     }
 }

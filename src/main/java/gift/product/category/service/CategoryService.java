@@ -7,7 +7,7 @@ import gift.product.category.dto.request.UpdateCategoryRequest;
 import gift.product.category.dto.response.CategoryResponse;
 import gift.product.category.entity.Categories;
 import gift.product.category.entity.Category;
-import gift.product.category.repository.CategoryRepository;
+import gift.product.category.repository.CategoryJpaRepository;
 import gift.util.mapper.CategoryMapper;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CategoryService {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryJpaRepository categoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryJpaRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
@@ -52,7 +52,8 @@ public class CategoryService {
     public void updateCategory(Long id, UpdateCategoryRequest request) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        category.edit(request);
+        category.edit(request.name(), request.color(), request.description(),
+            request.description());
     }
 
     @Transactional

@@ -1,10 +1,9 @@
 package gift.product.entity;
 
-import gift.exception.CustomException;
-import gift.exception.ErrorCode;
 import gift.product.category.entity.Category;
 import gift.product.dto.request.UpdateProductRequest;
 import gift.product.option.entity.Option;
+import gift.product.option.entity.Options;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,9 +14,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostLoad;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.util.Assert;
 
 @Entity
 @Table(name = "products")
@@ -42,18 +44,21 @@ public class Product {
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Option> options = new HashSet<>();
+    private Set<Option> optionSet = new HashSet<>();
+
+    @Transient
+    private Options options;
 
     protected Product() {
     }
 
     private Product(Builder builder) {
-        this.id = builder.id;
         this.name = builder.name;
         this.price = builder.price;
         this.imageUrl = builder.imageUrl;
         this.category = builder.category;
-        this.options = new HashSet<>(builder.options);
+        this.optionSet = new HashSet<>(builder.options);
+        this.options = new Options(this.optionSet);
     }
 
     public static Builder builder() {
@@ -68,19 +73,15 @@ public class Product {
     }
 
     public void addOption(Option option) {
-        options.add(option);
+        Assert.notNull(option, "Option is null");
+        option.initProduct(this);
+        this.options.addOption(option);
+        this.optionSet.add(option);
     }
 
     public void removeOption(Option option) {
-        if (!options.contains(option)) {
-            throw new CustomException(ErrorCode.OPTION_NOT_FOUND);
-        }
-
-        if (options.size() == 1 && options.contains(option)) {
-            throw new CustomException(ErrorCode.LAST_OPTION);
-        }
-
-        options.remove(option);
+        options.removeOption(option);
+        optionSet.remove(option);
     }
 
     public Long getId() {
@@ -104,26 +105,25 @@ public class Product {
     }
 
     public Set<Option> getOptions() {
-        return options;
+        return optionSet;
     }
 
     public void changeName(String name) {
         this.name = name;
     }
 
+    @PostLoad
+    private void postLoad() {
+        this.options = new Options(this.optionSet);
+    }
+
     public static class Builder {
 
-        private Long id;
         private String name;
         private Integer price;
         private String imageUrl;
         private Category category;
         private Set<Option> options = new HashSet<>();
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public Builder name(String name) {
             this.name = name;

@@ -1,6 +1,7 @@
 package gift.product.category.entity;
 
-import gift.product.category.dto.request.UpdateCategoryRequest;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(
@@ -40,20 +42,12 @@ public class Category {
     }
 
     public Category(String name, String color, String description, String imageUrl) {
+        validateColor(color);
         this.name = name;
         this.color = color;
         this.description = description;
         this.imageUrl = imageUrl;
     }
-
-    public Category(Long id, String name, String color, String description, String imageUrl) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-        this.description = description;
-        this.imageUrl = imageUrl;
-    }
-
 
     public Long getId() {
         return id;
@@ -63,11 +57,20 @@ public class Category {
         return name;
     }
 
-    public void edit(UpdateCategoryRequest request) {
-        this.name = request.name();
-        this.color = request.color();
-        this.description = request.description();
-        this.imageUrl = request.imageUrl();
+    public void edit(String name, String color, String description, String imageUrl) {
+        validateColor(color);
+        this.name = name;
+        this.color = color;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
+
+    private void validateColor(String color) {
+        final String colorRegex = "^#+[0-9a-fA-F]{6}$";
+        Pattern colorPattern = Pattern.compile(colorRegex);
+        if (!colorPattern.matcher(color).matches()) {
+            throw new CustomException(ErrorCode.INVALID_COLOR);
+        }
     }
 
 }

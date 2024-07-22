@@ -37,8 +37,8 @@ public class OptionController {
     public ResponseEntity<Long> addOption(@PathVariable("product_id") Long productId,
         @RequestBody @Valid CreateOptionRequest request) {
         Long id = optionService.createOption(request);
-        URI location = URI.create("/api/products/" + productId + "/options" + id);
-        return ResponseEntity.created(location).build();
+        URI location = URI.create("/api/products/" + productId + "/options/" + id);
+        return ResponseEntity.created(location).body(id);
     }
 
     @PutMapping("{id}")

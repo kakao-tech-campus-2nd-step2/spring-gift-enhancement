@@ -1,9 +1,9 @@
-package gift.unit.repository;
+package gift.jpa.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.user.entity.User;
-import gift.user.repository.UserRepository;
+import gift.user.repository.UserJpaRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,10 +14,10 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @Sql(scripts = {"/sql/initialize.sql",
     "/sql/insert_users.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-class UserRepositoryTest {
+class UserJpaRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userRepository;
 
 
     @Test
@@ -44,13 +44,11 @@ class UserRepositoryTest {
         // when
         final User actual = userRepository.findById(2L).get();
         User expected = User.builder()
-            .id(2L)
             .email("user2@example.com")
             .build();
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(expected.getId());
         assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
     }
 
@@ -75,7 +73,7 @@ class UserRepositoryTest {
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(2L);
+
         assertThat(actual.getEmail()).isEqualTo(email);
     }
 

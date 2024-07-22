@@ -1,13 +1,13 @@
-package gift.unit.repository;
+package gift.jpa.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.product.category.entity.Category;
-import gift.product.category.repository.CategoryRepository;
+import gift.product.category.repository.CategoryJpaRepository;
 import gift.product.entity.Product;
-import gift.product.repository.ProductRepository;
+import gift.product.repository.ProductJpaRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +19,12 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @Sql(scripts = {"/sql/initialize.sql", "/sql/insert_categories.sql",
     "/sql/insert_products.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-class ProductRepositoryTest {
+class ProductJpaRepositoryTest {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductJpaRepository productRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryRepository;
 
     @Test
     @DisplayName("find all test")
@@ -43,7 +43,6 @@ class ProductRepositoryTest {
         // when
         final Product actual = productRepository.findById(1L).get();
         Product expected = Product.builder()
-            .id(1L)
             .name("Product A")
             .price(1000)
             .imageUrl("http://example.com/images/product_a.jpg")
@@ -51,7 +50,6 @@ class ProductRepositoryTest {
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(expected.getId());
         assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
         assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl());
@@ -103,7 +101,6 @@ class ProductRepositoryTest {
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(1L);
         assertThat(actual.getName()).isEqualTo("update product");
         assertThat(actual.getPrice()).isEqualTo(1_000);
         assertThat(actual.getImageUrl()).isEqualTo("http://example.com/images/product_a.jpg");

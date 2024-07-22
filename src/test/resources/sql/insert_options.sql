@@ -16,5 +16,3 @@ INSERT INTO options (quantity, product_id, name)
 VALUES (6, 4, 'Option D2');
 INSERT INTO options (quantity, product_id, name)
 VALUES (14, 5, 'Option E1');
-INSERT INTO options (quantity, product_id, name)
-VALUES (9, 5, 'Option E2');

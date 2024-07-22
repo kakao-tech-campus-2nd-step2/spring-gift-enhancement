@@ -13,10 +13,10 @@ import gift.product.entity.Product;
 import gift.product.option.dto.request.CreateOptionRequest;
 import gift.product.option.dto.request.UpdateOptionRequest;
 import gift.product.option.entity.Option;
-import gift.product.option.repository.OptionRepository;
+import gift.product.option.entity.Options;
+import gift.product.option.repository.OptionJpaRepository;
 import gift.product.option.service.OptionService;
-import gift.product.repository.ProductRepository;
-import java.util.List;
+import gift.product.repository.ProductJpaRepository;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
@@ -33,10 +33,10 @@ public class OptionServiceTest {
     private OptionService optionService;
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductJpaRepository productRepository;
 
     @Mock
-    private OptionRepository optionRepository;
+    private OptionJpaRepository optionRepository;
 
     @Test
     @DisplayName("옵션 이름 공백 포함 최대 50자 예외")
@@ -81,11 +81,10 @@ public class OptionServiceTest {
     @DisplayName("동일한 상품 내 옵션 이름 중복 허용 X")
     void createOptionDuplicateOptionNameInProduct() {
         // given
-        Product product = createProduct();
-        Option option = new Option("a", 2, product);
+        Option option = new Option("a", 2, null);
+        Product product = createProductWithOptions(option);
         CreateOptionRequest newOption = new CreateOptionRequest(1L, "a", 1);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of(option));
 
         // when & then
         assertThatThrownBy(() -> optionService.createOption(newOption)).isInstanceOf(
@@ -113,8 +112,7 @@ public class OptionServiceTest {
         Product product = createProduct();
         CreateOptionRequest newOption = new CreateOptionRequest(1L, "a", 1);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
-        given(optionRepository.save(any())).willReturn(new Option(1L));
+        given(optionRepository.save(any())).willReturn(new Option("a", 1, product));
 
         // when
         optionService.createOption(newOption);
@@ -128,7 +126,7 @@ public class OptionServiceTest {
     @DisplayName("getProductOptionTest")
     void getProductOptionTest() {
         // given
-        Option newOption = new Option(1L);
+        Option newOption = new Option("a", 1, null);
         Product product = createProductWithOptions(newOption);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
 
@@ -144,10 +142,10 @@ public class OptionServiceTest {
     @DisplayName("옵션 수량 수정 1개 이상 1억 개 미만 - 1개 미만")
     void updateOptionQuantityUnder1() {
         // given
-        Option option = new Option(1L, 100);
+        Option option = new Option("a", 100, null);
         Product product = createProductWithOptions(option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(Set.of()));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
         UpdateOptionRequest request = new UpdateOptionRequest("a", 0);
@@ -162,10 +160,10 @@ public class OptionServiceTest {
     @DisplayName("옵션 수량 수정 1개 이상 1억 개 미만 - 1억 개 이상")
     void updateOptionQuantityOver1Million() {
         // given
-        Option option = new Option(1L, 1000);
+        Option option = new Option("a", 1000, null);
         Product product = createProductWithOptions(option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(Set.of()));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
         UpdateOptionRequest request = new UpdateOptionRequest("a", 100_000_000);
@@ -181,11 +179,12 @@ public class OptionServiceTest {
     void updateOptionIfNameDuplicate() {
         // given
         Product product = createProduct();
-        Option option1 = new Option(1L, "a", 100, product);
-        Option option2 = new Option(2L, "b", 100, product);
+        Option option1 = new Option("a", 100, product);
+        Option option2 = new Option("b", 100, product);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(optionRepository.findById(any())).willReturn(Optional.of(option1));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of(option1, option2));
+        given(optionRepository.findAllByProduct(any())).willReturn(
+            new Options(Set.of(option1, option2)));
 
         UpdateOptionRequest newOption = new UpdateOptionRequest("b", 1000);
 
@@ -199,10 +198,10 @@ public class OptionServiceTest {
     @DisplayName("옵션 수정 특수문자 예외")
     void updateOptionSpecialCharacterException() {
         // given
-        Option option = new Option(1L, 100);
+        Option option = new Option("a", 100, null);
         Product product = createProductWithOptions(option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(Set.of()));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
         UpdateOptionRequest request = new UpdateOptionRequest("!@#$", 100);
@@ -216,10 +215,10 @@ public class OptionServiceTest {
     @DisplayName("update Option test")
     void updateOptionTest() {
         // given
-        Option option = new Option(1L, 100);
+        Option option = new Option("a", 100, null);
         Product product = createProductWithOptions(option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findAllByProduct(any())).willReturn(List.of());
+        given(optionRepository.findAllByProduct(any())).willReturn(new Options(Set.of()));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
 
         UpdateOptionRequest request = new UpdateOptionRequest("updated", 1000);
@@ -236,7 +235,7 @@ public class OptionServiceTest {
     @DisplayName("유일한 옵션 삭제 불가")
     void deleteLastOption() {
         // given
-        Option option = new Option(1L, 100);
+        Option option = new Option("a", 100, null);
         Product product = createProductWithOptions(option);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
@@ -250,8 +249,8 @@ public class OptionServiceTest {
     @DisplayName("해당 상품의 옵션이 아닌 경우")
     void deleteOtherProductOption() {
         // given
-        Option option = new Option(1L, 100);
-        Option productOption = new Option(2L, 100);
+        Option option = new Option("a", 100, null);
+        Option productOption = new Option("b", 100, null);
         Product product = createProductWithOptions(productOption);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(optionRepository.findById(any())).willReturn(Optional.of(option));
@@ -265,8 +264,8 @@ public class OptionServiceTest {
     @DisplayName("deleteOption test")
     void deleteOptionTest() {
         // given
-        Option option1 = new Option(1L, 100);
-        Option option2 = new Option(2L, 100);
+        Option option1 = new Option("a", 100, null);
+        Option option2 = new Option("b", 100, null);
         Product product = createProductWithOptions(option1, option2);
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(optionRepository.findById(any())).willReturn(Optional.of(option1));
@@ -279,13 +278,39 @@ public class OptionServiceTest {
         then(optionRepository).should().delete(any());
     }
 
+    @Test
+    @DisplayName("Option subtract - 남은 재고보다 큰 수 차감")
+    void optionsSubtractOverQuantity() {
+        // given
+        Option option1 = new Option("a", 100, null);
+        given(optionRepository.findById(any())).willReturn(Optional.of(option1));
+
+        // when & then
+        assertThatThrownBy(() -> optionService.subtractOptionQuantity(1L, 1000))
+            .isInstanceOf(CustomException.class);
+    }
+
+    @Test
+    @DisplayName("Option subtract test - happy case")
+    void optionSubtractTest() {
+        // given
+        Option option1 = new Option("a", 100, null);
+        given(optionRepository.findById(any())).willReturn(Optional.of(option1));
+
+        // when
+        optionService.subtractOptionQuantity(1L, 30);
+
+        // then
+        then(optionRepository).should().findById(any());
+        assertThat(option1.getQuantity()).isEqualTo(70);
+    }
+
     private Product createProduct() {
         return createProduct("Product 1");
     }
 
     private Product createProduct(String name) {
         return Product.builder()
-            .id(1L)
             .name(name)
             .imageUrl("image")
             .category(new Category("category"))
@@ -296,7 +321,6 @@ public class OptionServiceTest {
 
     private Product createProductWithOptions(Option... option) {
         return Product.builder()
-            .id(1L)
             .name("Product 1")
             .imageUrl("image")
             .category(new Category("category"))

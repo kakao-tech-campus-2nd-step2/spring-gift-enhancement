@@ -13,8 +13,8 @@ import gift.user.dto.request.UserRegisterRequest;
 import gift.user.dto.response.UserResponse;
 import gift.user.entity.User;
 import gift.user.entity.UserRole;
-import gift.user.repository.RoleRepository;
-import gift.user.repository.UserRepository;
+import gift.user.repository.RoleJpaRepository;
+import gift.user.repository.UserJpaRepository;
 import gift.user.service.UserService;
 import gift.util.auth.JwtUtil;
 import java.util.ArrayList;
@@ -37,10 +37,10 @@ class UserServiceTest {
     private UserService userService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserJpaRepository userRepository;
 
     @Mock
-    private RoleRepository roleRepository;
+    private RoleJpaRepository roleRepository;
 
     @Mock
     private JwtUtil jwtUtil;
@@ -50,25 +50,24 @@ class UserServiceTest {
     @Transactional
     void registerUserTest() {
         //given
-        UserRegisterRequest request = new UserRegisterRequest("user@email.com", "1q2w3e4r!");
+        UserRegisterRequest request = new UserRegisterRequest("user1@email.com", "1q2w3e4r!");
         given(userRepository.findByEmail(request.email())).willReturn(Optional.empty());
-        User user = User.builder()
-            .id(1L)
+        User user1 = User.builder()
             .email(request.email())
             .password(request.password())
             .build();
         List<String> roles = new ArrayList<>();
-        given(userRepository.save(any(User.class))).willReturn(user);
-        given(jwtUtil.generateToken(user.getId(), user.getEmail(), roles)).willReturn("token");
+        given(userRepository.save(any(User.class))).willReturn(user1);
+        given(jwtUtil.generateToken(null, user1.getEmail(), roles)).willReturn("token");
 
         //when
         UserResponse actual = userService.registerUser(request);
 
         //then
         assertThat(actual.token()).isEqualTo("token");
-        then(userRepository).should(times(1)).findByEmail(request.email());
-        then(userRepository).should(times(1)).save(any(User.class));
-        then(jwtUtil).should(times(1)).generateToken(user.getId(), user.getEmail(), roles);
+        then(userRepository).should().findByEmail(request.email());
+        then(userRepository).should().save(any(User.class));
+        then(jwtUtil).should().generateToken(null, user1.getEmail(), roles);
     }
 
     @Test
@@ -78,12 +77,12 @@ class UserServiceTest {
         //given
         UserRegisterRequest request = new UserRegisterRequest("user1@example.com", "password1");
         given(userRepository.findByEmail(request.email())).willReturn(
-            Optional.of(User.builder().build()));
+            Optional.of(User.builder().email("user1@example.com").build()));
 
         //when&then
         assertThatThrownBy(() -> userService.registerUser(request))
             .isInstanceOf(CustomException.class);
-        then(userRepository).should(times(1)).findByEmail(request.email());
+        then(userRepository).should().findByEmail(request.email());
     }
 
     @Test
@@ -93,16 +92,15 @@ class UserServiceTest {
         //given
         UserLoginRequest loginRequest = new UserLoginRequest("user1@example.com", "password1");
         Set<UserRole> roles = new HashSet<>();
-        User user = User.builder()
-            .id(1L)
+        User user1 = User.builder()
             .email(loginRequest.email())
             .password(loginRequest.password())
             .userRoles(roles)
             .build();
         List<String> rolesName = new ArrayList<>();
         given(userRepository.findByEmailAndPassword(loginRequest.email(), loginRequest.password()))
-            .willReturn(Optional.of(user));
-        given(jwtUtil.generateToken(user.getId(), user.getEmail(), rolesName)).willReturn("token");
+            .willReturn(Optional.of(user1));
+        given(jwtUtil.generateToken(null, user1.getEmail(), rolesName)).willReturn("token");
         given(roleRepository.findAllById(any())).willReturn(List.of());
 
         //when
@@ -110,7 +108,7 @@ class UserServiceTest {
 
         //then
         assertThat(actual.token()).isEqualTo("token");
-        then(userRepository).should(times(1)).findByEmailAndPassword(loginRequest.email(),
+        then(userRepository).should().findByEmailAndPassword(loginRequest.email(),
             loginRequest.password());
     }
 
@@ -150,20 +148,18 @@ class UserServiceTest {
     @DisplayName("get user by id test")
     void getUserByIdTest() {
         // given
-        User user = User.builder()
-            .id(1L)
+        User user1 = User.builder()
             .email("user1@example.com")
             .password("password1")
             .build();
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(1L)).willReturn(Optional.of(user1));
 
         // when
         User actual = userService.getUserById(1L);
 
         // then
         assertThat(actual).isNotNull();
-        assertThat(actual.getId()).isEqualTo(1L);
-        then(userRepository).should(times(1)).findById(1L);
+        then(userRepository).should().findById(1L);
     }
 
     @Test
@@ -175,7 +171,7 @@ class UserServiceTest {
         // when & then
         assertThatThrownBy(() -> userService.getUserById(1L))
             .isInstanceOf(CustomException.class);
-        then(userRepository).should(times(1)).findById(1L);
+        then(userRepository).should().findById(1L);
     }
 
     @Test
@@ -191,8 +187,8 @@ class UserServiceTest {
 
         // then
         assertThat(userId).isEqualTo(1L);
-        then(jwtUtil).should(times(1)).extractUserId(token);
-        then(userRepository).should(times(1)).existsById(1L);
+        then(jwtUtil).should().extractUserId(token);
+        then(userRepository).should().existsById(1L);
     }
 
     @Test
@@ -205,6 +201,6 @@ class UserServiceTest {
         // when & then
         assertThatThrownBy(() -> userService.getUserIdByToken(token))
             .isInstanceOf(CustomException.class);
-        then(jwtUtil).should(times(1)).extractUserId(token);
+        then(jwtUtil).should().extractUserId(token);
     }
 }

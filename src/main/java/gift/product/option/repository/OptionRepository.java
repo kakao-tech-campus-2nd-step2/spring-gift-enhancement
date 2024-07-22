@@ -1,13 +1,9 @@
 package gift.product.option.repository;
 
 import gift.product.entity.Product;
-import gift.product.option.entity.Option;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import gift.product.option.entity.Options;
 
-@Repository
-public interface OptionRepository extends JpaRepository<Option, Long> {
+public interface OptionRepository {
 
-    List<Option> findAllByProduct(Product product);
+    Options findAllByProduct(Product product);
 }
