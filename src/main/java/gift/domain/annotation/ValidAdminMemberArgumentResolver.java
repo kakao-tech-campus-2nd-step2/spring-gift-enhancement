@@ -1,8 +1,9 @@
 package gift.domain.annotation;
 
 import gift.domain.entity.Member;
-import gift.domain.exception.MemberNotAdminException;
+import gift.domain.exception.forbidden.MemberNotAdminException;
 import gift.domain.service.MemberService;
+import gift.global.WebConfig.Constants.Domain.Member.Permission;
 import gift.global.util.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class ValidAdminMemberArgumentResolver implements HandlerMethodArgumentRe
 
         String userEmail = jwtUtil.getSubject(authorizationHeader);
         Member member = memberService.findByEmail(userEmail);
-        if (!member.getPermission().equals("admin")) {
+        if (!member.getPermission().equals(Permission.ADMIN)) {
             throw new MemberNotAdminException();
         }
         return member;

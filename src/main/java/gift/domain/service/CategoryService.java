@@ -3,9 +3,8 @@ package gift.domain.service;
 import gift.domain.dto.request.CategoryRequest;
 import gift.domain.dto.response.CategoryResponse;
 import gift.domain.entity.Category;
-import gift.domain.exception.CategoryAlreadyExistsException;
-import gift.domain.exception.CategoryHasProductsException;
-import gift.domain.exception.CategoryNotFoundException;
+import gift.domain.exception.conflict.CategoryAlreadyExistsException;
+import gift.domain.exception.notFound.CategoryNotFoundException;
 import gift.domain.repository.CategoryRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -58,9 +57,6 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(Long id) {
         Category category = findById(id);
-        if (!category.getProducts().isEmpty()) {
-            throw new CategoryHasProductsException();
-        }
         categoryRepository.delete(category);
     }
 }

@@ -1,10 +1,10 @@
 package gift.global.util;
 
 import gift.domain.entity.Member;
-import gift.domain.exception.TokenExpiredException;
-import gift.domain.exception.TokenNotFoundException;
-import gift.domain.exception.TokenStringInvalidException;
-import gift.domain.exception.TokenUnexpectedErrorException;
+import gift.domain.exception.forbidden.TokenExpiredException;
+import gift.domain.exception.unauthorized.TokenNotFoundException;
+import gift.domain.exception.forbidden.TokenStringInvalidException;
+import gift.domain.exception.unauthorized.TokenUnexpectedErrorException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

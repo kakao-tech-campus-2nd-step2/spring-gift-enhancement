@@ -2,7 +2,12 @@ package gift.domain.controller;
 
 import gift.domain.controller.apiResponse.ProductAddApiResponse;
 import gift.domain.controller.apiResponse.ProductListApiResponse;
-import gift.domain.dto.request.ProductRequest;
+import gift.domain.controller.apiResponse.ProductOptionsGetApiResponse;
+import gift.domain.dto.request.OptionAddRequest;
+import gift.domain.dto.request.OptionUpdateRequest;
+import gift.domain.dto.request.ProductAddRequest;
+import gift.domain.dto.request.ProductUpdateRequest;
+import gift.domain.dto.response.ProductWithCategoryIdResponse;
 import gift.domain.service.ProductService;
 import gift.global.apiResponse.BasicApiResponse;
 import gift.global.apiResponse.SuccessApiResponse;
@@ -30,11 +35,16 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<ProductListApiResponse> getProducts() {
-        return SuccessApiResponse.ok(new ProductListApiResponse(HttpStatus.OK, productService.getAllProducts()));
+        return SuccessApiResponse.ok(new ProductListApiResponse(
+            HttpStatus.OK,
+            productService.getAllProductsCategories(),
+            productService.getAllProducts().stream()
+                .map(ProductWithCategoryIdResponse::of)
+                .toList()));
     }
 
     @PostMapping
-    public ResponseEntity<ProductAddApiResponse> addProduct(@Valid @RequestBody ProductRequest requestDto) {
+    public ResponseEntity<ProductAddApiResponse> addProduct(@Valid @RequestBody ProductAddRequest requestDto) {
         var result = productService.addProduct(requestDto);
         return SuccessApiResponse.created(
             new ProductAddApiResponse(HttpStatus.CREATED, result),
@@ -43,14 +53,40 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BasicApiResponse> updateProduct(@PathVariable("id") Long id, @Valid @RequestBody ProductRequest requestDto) {
-        productService.updateProductById(id, requestDto);
+    public ResponseEntity<BasicApiResponse> updateProduct(@PathVariable("id") Long id, @Valid @RequestBody ProductUpdateRequest updateRequestDto) {
+        productService.updateProductById(id, updateRequestDto);
         return SuccessApiResponse.ok();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BasicApiResponse> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
+        return SuccessApiResponse.ok();
+    }
+
+    @GetMapping("/{productId}/options")
+    public ResponseEntity<ProductOptionsGetApiResponse> getProductOptions(@PathVariable("productId") Long productId) {
+        return SuccessApiResponse.ok(new ProductOptionsGetApiResponse(HttpStatus.OK, productService.getOptionsByProductId(productId)));
+    }
+
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<BasicApiResponse> addProductOption(@PathVariable("productId") Long productId, @Valid @RequestBody OptionAddRequest optionAddRequest) {
+        productService.addProductOption(productId, optionAddRequest);
+        return SuccessApiResponse.ok();
+    }
+
+    @PutMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<BasicApiResponse> updateProduct(@PathVariable("productId") Long productId,
+        @PathVariable("optionId") Long optionId,
+        @Valid @RequestBody OptionUpdateRequest optionUpdateRequest
+    ) {
+        productService.updateProductOptionById(productId, optionId, optionUpdateRequest);
+        return SuccessApiResponse.ok();
+    }
+
+    @DeleteMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<BasicApiResponse> deleteProduct(@PathVariable("productId") Long productId, @PathVariable("optionId") Long optionId) {
+        productService.deleteProductOption(productId, optionId);
         return SuccessApiResponse.ok();
     }
 }

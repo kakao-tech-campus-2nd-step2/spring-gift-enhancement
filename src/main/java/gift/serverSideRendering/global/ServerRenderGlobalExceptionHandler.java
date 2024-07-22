@@ -1,6 +1,6 @@
 package gift.serverSideRendering.global;
 
-import gift.domain.exception.ProductAlreadyExistsException;
+import gift.domain.exception.conflict.ProductAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;

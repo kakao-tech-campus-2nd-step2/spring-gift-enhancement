@@ -7,8 +7,9 @@ import gift.domain.dto.response.WishResponse;
 import gift.domain.entity.Member;
 import gift.domain.entity.Product;
 import gift.domain.entity.Wish;
-import gift.domain.exception.ProductNotIncludedInWishlistException;
+import gift.domain.exception.notFound.ProductNotIncludedInWishlistException;
 import gift.domain.repository.WishRepository;
+import gift.global.WebConfig.Constants.Domain.Wish.QuantityUpdateAction;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -46,10 +47,10 @@ public class WishService {
         if (search.isEmpty()) {
             if (wishRequest.quantity() <= 0) {
                 // 0 이하인 경우 아무 작업 하지 않음
-                return new WishAddResponse("nope", 0L);
+                return new WishAddResponse(QuantityUpdateAction.NOPE, 0L);
             }
             wishRepository.save(new Wish(product, member, wishRequest.quantity()));
-            return new WishAddResponse("create", wishRequest.quantity());
+            return new WishAddResponse(QuantityUpdateAction.CREATE, wishRequest.quantity());
         }
 
         Wish wish = search.get();
@@ -60,10 +61,10 @@ public class WishService {
         //업데이트 후 수량이 음수면 delete 수행
         if (wish.getQuantity() <= 0) {
             wishRepository.delete(wish);
-            return new WishAddResponse("delete", 0L);
+            return new WishAddResponse(QuantityUpdateAction.DELETE, 0L);
         }
 
-        return new WishAddResponse("add", wish.getQuantity());
+        return new WishAddResponse(QuantityUpdateAction.ADD, wish.getQuantity());
     }
 
     @Transactional
