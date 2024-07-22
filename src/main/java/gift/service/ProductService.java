@@ -87,12 +87,11 @@ public class ProductService {
     public AddedOptionIdResponse addOptionToProduct(Long productId, OptionRequest optionRequest) {
         Product product = getProduct(productId);
 
-        optionService.checkDuplicateOptionName(product.getOptions(), optionRequest.name());
+        product.checkDuplicateOptionName(optionRequest.name());
+        Option savedOption = optionService.saveOption(product, optionRequest);
 
-        Option option = optionService.convertToOption(optionRequest);
-        product.addOption(option);
-        productRepository.flush();
+        product.addOption(savedOption);
 
-        return new AddedOptionIdResponse(option.getId());
+        return new AddedOptionIdResponse(savedOption.getId());
     }
 }
