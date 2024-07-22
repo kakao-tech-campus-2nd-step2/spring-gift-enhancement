@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.exception.InsufficientOptionQuantityException;
 import gift.repository.OptionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,11 +45,25 @@ class OptionTest {
     }
 
     @Test
-    @DisplayName("옵션 수량 차감")
+    @DisplayName("옵션 수량 차감 - 성공")
     void subtractSuccess() {
+        //Given
         Option option = new Option("name", 100);
+
+        //When
         option.subtract(50);
 
+        //Then
         assertThat(option.getQuantity()).isEqualTo(50);
+    }
+    @Test
+    @DisplayName("옵션 수량 차감 - 차감 수량이 더 커서 실패")
+    void subtractFail() {
+        //Given
+        Option option = new Option("name", 100);
+
+        //When Then
+        assertThatThrownBy(()->option.subtract(101))
+                .isInstanceOf(InsufficientOptionQuantityException.class);
     }
 }
