@@ -4,6 +4,8 @@ import gift.domain.category.Category;
 import gift.domain.category.JpaCategoryRepository;
 import gift.domain.option.OptionService;
 import gift.global.exception.BusinessException;
+import gift.global.exception.ErrorCode;
+
 import gift.global.exception.category.CategoryNotFoundException;
 import gift.global.exception.product.ProductDuplicateException;
 import gift.global.exception.product.ProductNotFoundException;
@@ -114,7 +116,7 @@ public class ProductService {
      */
     public void deleteProductsByIds(List<Long> productIds) {
         if (productIds.isEmpty()) {
-            throw new BusinessException(HttpStatus.BAD_REQUEST, "삭제할 상품을 선택하세요.");
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "삭제할 상품을 선택하세요.");
         }
 
         productRepository.deleteAllByIdIn(productIds);
@@ -129,7 +131,7 @@ public class ProductService {
             String message = violations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining(", "));
-            throw new BusinessException(HttpStatus.BAD_REQUEST, message);
+            throw new BusinessException(ErrorCode.BAD_REQUEST, message);
         }
     }
 

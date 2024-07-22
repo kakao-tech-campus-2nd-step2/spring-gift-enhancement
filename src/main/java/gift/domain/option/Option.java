@@ -94,4 +94,8 @@ public class Option {
     public int hashCode() {
         return Objects.hash(getId(), getName(), getQuantity(), getProduct());
     }
+
+    public void decrease(Long quantity) {
+        this.quantity -= quantity;
+    }
 }

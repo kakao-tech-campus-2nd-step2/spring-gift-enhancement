@@ -25,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @ActiveProfiles("test")
 public class OptionRepositoryTest {
-
-
     @Autowired
     JpaProductRepository productRepository;
     @Autowired

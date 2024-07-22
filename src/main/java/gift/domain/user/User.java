@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -19,6 +20,8 @@ public class User extends BaseTimeEntity {
 
     @Column(unique = true)
     private String email;
+
+    @NotNull
     private String password;
 
     protected User() {

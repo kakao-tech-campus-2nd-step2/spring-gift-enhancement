@@ -9,13 +9,12 @@ public class BusinessException extends RuntimeException {
 
     private final HttpStatus status;
 
-    public BusinessException(HttpStatus status, String message) {
+    public BusinessException(ErrorCode errorCode, String message) {
         super(message);
-        this.status = status;
+        this.status = errorCode.getHttpStatus();
     }
 
     public HttpStatus getStatus() {
         return status;
     }
-
 }

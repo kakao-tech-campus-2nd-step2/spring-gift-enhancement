@@ -150,6 +150,7 @@ public class ProductRepositoryTest {
         // when
         Product savedProduct = productRepository.saveAndFlush(product1);
         productRepository.deleteById(savedProduct.getId());
+        flushAndClear();
 
         // then
         Optional<Product> findProduct = productRepository.findById(savedProduct.getId());
@@ -219,6 +220,11 @@ public class ProductRepositoryTest {
     }
 
     private void clear() {
+        entityManager.clear();
+    }
+
+    private void flushAndClear() {
+        entityManager.flush();
         entityManager.clear();
     }
 }

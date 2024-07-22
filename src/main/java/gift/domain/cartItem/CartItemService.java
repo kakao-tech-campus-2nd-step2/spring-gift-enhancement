@@ -6,6 +6,9 @@ import gift.domain.product.Product;
 import gift.domain.user.JpaUserRepository;
 import gift.domain.user.User;
 import gift.global.exception.BusinessException;
+import gift.global.exception.ErrorCode;
+import gift.global.exception.cartItem.CartItemNotFoundException;
+
 import gift.global.exception.product.ProductNotFoundException;
 import gift.global.exception.user.UserNotFoundException;
 import java.util.List;
@@ -98,7 +101,7 @@ public class CartItemService {
     @Transactional
     public int updateCartItem(Long cartItemId, int count) {
         CartItem findCartItem = cartItemRepository.findById(cartItemId)
-            .orElseThrow(() -> new BusinessException(HttpStatus.BAD_REQUEST, "해당 상품이 존재하지 않습니다."));
+            .orElseThrow(() -> new CartItemNotFoundException(cartItemId));
 
         findCartItem.updateCount(count); // 수량 수정
         return count;

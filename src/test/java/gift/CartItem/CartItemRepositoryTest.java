@@ -92,8 +92,8 @@ public class CartItemRepositoryTest {
     @Description("장바구니 삭제")
     void deleteCartItem() {
         // when
-        cartItemRepository.save(new CartItem(user, product1));
-        cartItemRepository.deleteByUserIdAndProductId(user.getId(), product1.getId());
+        CartItem savedCartItem = cartItemRepository.save(new CartItem(user, product1));
+        cartItemRepository.deleteById(savedCartItem.getId());
         List<CartItem> cartItems = cartItemRepository.findAllByUserId(user.getId());
         // then
         assertThat(cartItems.size()).isEqualTo(0);
