@@ -6,39 +6,34 @@ import gift.repository.OptionRepository;
 import gift.service.OptionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 @DisplayName("옵션 수량 감소 동시성 테스트")
 public class OptionQuantityTest {
 
-    @InjectMocks
+    @Autowired
     private OptionService optionService;
-    @Mock
+    @Autowired
     private OptionRepository optionRepository;
+
 
     @Test
     @DisplayName("100개 스레드가 비동기식으로 차감 시도")
-    void whenSubtractTwoThread0() {
+    void whenSubtractTwoThread0() throws InterruptedException {
         //Given
-        Option targetOption = new Option("option", 1000);
-        when(optionRepository.findByIdWithPessimisticWriteLock(any())).thenReturn(Optional.of(targetOption));
-
+        Long testOptionId = optionRepository.save(new Option("optionName", 1000)).getId();
         int subtractQuantity = 10;
         int threadCount = 100;
 
@@ -47,28 +42,27 @@ public class OptionQuantityTest {
         //When
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() ->
-                    optionService.subtractOptionQuantity(any(), subtractQuantity)
+                    optionService.subtractOptionQuantity(testOptionId, subtractQuantity)
             );
         }
 
         executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.MINUTES);
 
         //Then
-        assertEquals(0, targetOption.getQuantity());
+        Option updatedOption = optionRepository.findById(testOptionId).orElseThrow();
+        assertEquals(0, updatedOption.getQuantity());
     }
 
     @Test
     @DisplayName("100개 스레드가 비동기식으로 차감 시도 - 0개가 되면 예외처리 하는가")
-    void whenSubtractTwoThread1() {
+    void whenSubtractTwoThread1() throws InterruptedException {
         //Given
-        Option targetOption = new Option("option", 1000);
-        when(optionRepository.findByIdWithPessimisticWriteLock(any())).thenReturn(Optional.of(targetOption));
-
+        Long testOptionId = optionRepository.save(new Option("optionName", 1000)).getId();
         int subtractQuantity = 100;
         int threadCount = 100;
 
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-
         List<Future<?>> futures = new ArrayList<>();
         List<Exception> exceptions = new ArrayList<>();
 
@@ -76,7 +70,7 @@ public class OptionQuantityTest {
         for (int i = 0; i < threadCount; i++) {
             futures.add(executorService.submit(() -> {
                 try {
-                    optionService.subtractOptionQuantity(any(), subtractQuantity);
+                    optionService.subtractOptionQuantity(testOptionId, subtractQuantity);
                 } catch (Exception e) {
                     exceptions.add(e);
                 }
@@ -84,6 +78,7 @@ public class OptionQuantityTest {
         }
 
         executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.MINUTES);
 
         for (Future<?> future : futures) {
             try {
@@ -94,7 +89,9 @@ public class OptionQuantityTest {
         }
 
         //Then
-        assertThat(targetOption.getQuantity()).isEqualTo(0);
+        Option updatedOption = optionRepository.findById(testOptionId).orElseThrow();
+
+        assertThat(updatedOption.getQuantity()).isEqualTo(0);
         assertThat(exceptions).hasSize(90)
                 .first()
                 .isInstanceOf(InsufficientOptionQuantityException.class);
