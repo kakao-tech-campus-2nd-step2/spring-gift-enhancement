@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.exception.InsufficientOptionQuantityException;
 import jakarta.persistence.*;
 
 @Entity
@@ -43,11 +44,10 @@ public class Option {
         this.product = product;
     }
 
-    public void subtract(int quantity) {
+    public void subtract(int subtractQuantity) {
+        if (this.quantity < subtractQuantity) {
+            throw new InsufficientOptionQuantityException(subtractQuantity);
+        }
         this.quantity -= quantity;
-    }
-
-    public void updateName(String name) {
-        this.name = name;
     }
 }
