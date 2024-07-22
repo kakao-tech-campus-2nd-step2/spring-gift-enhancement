@@ -85,22 +85,26 @@ public class ProductService {
     public OptionDto saveOption(Long productId , OptionDto optionDto) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new NoSuchElementException("해당 id의 상품 없음: " + productId));
-        List<Option> options = product.getOptions();
-        for(Option option: options) {
-            if(option.getName().equals(optionDto.getName())){
-                throw new IllegalStateException("옵션에 중복 이름 안됨");
-            }
-        }
         Option newOption = new Option(optionDto.getName(), optionDto.getQuantity(), product);
         product.addOption(newOption);
         Product addedOptionProduct = productRepository.save(product);
 
         // 새로 저장된 Option을 찾기
-        Option addedOption = addedOptionProduct.getOptions().stream()
-            .filter(option -> option.getName().equals(optionDto.getName()))
-            .findFirst()
-            .orElseThrow(() -> new IllegalStateException("저장된 옵션을 찾을 수 없습니다."));
+        Option addedOption = addedOptionProduct.getOptionByName(optionDto.getName());
 
         return new OptionDto(addedOption.getId(), addedOption.getName(), addedOption.getQuantity());
+    }
+
+    @Transactional
+    public void decreaseOptionQuantity(Long productId, String optionName, int amount) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("해당 id의 상품 없음: " + productId));
+        Option option = product.getOptions().stream()
+            .filter(opt -> opt.getName().equals(optionName))
+            .findFirst()
+            .orElseThrow(() -> new NoSuchElementException("해당 이름의 옵션 없음: " + optionName));
+
+        option.subtract(amount);
+        productRepository.save(product);
     }
 }
