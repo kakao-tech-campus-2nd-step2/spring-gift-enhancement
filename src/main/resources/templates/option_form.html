@@ -1,149 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Options</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Basic styles for form and dynamic elements */
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .option-container {
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-y: auto;
-            max-height: 400px;
-        }
-        .option {
-            margin-bottom: 10px;
-        }
-        .option label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .option input[type="text"],
-        .option input[type="number"] {
-            width: 95%;
-            padding: 5px;
-            margin-bottom: 10px;
-        }
-        .btn-add {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-        .btn-remove {
-            background-color: #f44336;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            float: right;
-            margin-top: -35px;
-        }
-    </style>
+    <title th:text="${optionDto.id} != 0 ? 'Update Option'  : 'Add Option'">Option Form</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
+<h1 th:text="${optionDto.id} != 0 ? 'Edit Option' : 'Add Option'"></h1>
+<form th:action="${optionDto.id} != 0 ? '/api/products/options/' + ${optionDto.productId} + '/' + ${optionDto.id} + '/update' : '/api/products/options/add?productId=' + ${optionDto.productId}"
+      method="post">
+    <input type="hidden" th:if="${optionDto.id}" th:value="${optionDto.id}" name="id"/>
+    <input type="hidden" th:value="${optionDto.id}" name="id"/>
+    <input type="hidden" th:value="${optionDto.productId}" name="productId"/>
 
-<h1>Edit Options</h1>
-<form id="optionsForm">
-    <div id="optionList" class="option-container">
-        <!-- Options will be added here dynamically -->
-    </div>
-    <button type="button" class="btn-add" onclick="addOption()">Add Option</button>
+
+    <h2>Option Information</h2>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" th:value="${optionDto.name}" required/>
     <br>
-    <button type="submit" class="btn-add">Save Options</button>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" th:value="${optionDto.price}" required/>
+    <br>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" th:value="${optionDto.quantity}" required/>
+    <br>
+
+    <div th:if="${error}" style="color: red;">
+        <p th:text="${error}"></p>
+    </div>
+
+    <button type="submit" th:text="${optionDto.id} != 0 ? 'Update' : 'Save'">Save</button>
+    <a href="#" th:href="@{/api/products}">Cancel</a>
 </form>
-
-<script>
-    let optionCount = 0;
-
-    // URL에서 productId 추출
-    const pathSegments = window.location.pathname.split('/');
-    const productIdIndex = pathSegments.findIndex(segment => segment === 'products') + 1;
-    const productId = pathSegments[productIdIndex];
-    const optionList = document.getElementById('optionList');
-
-    function addOption(option = {}) {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'option';
-        optionDiv.innerHTML = `
-            <label for="optionName${optionCount}">Name:</label>
-            <input type="text" id="optionName${optionCount}" name="options[${optionCount}].name" placeholder="Option Name" required value="${option.name || ''}" />
-
-            <label for="optionDescription${optionCount}">Description:</label>
-            <input type="text" id="optionDescription${optionCount}" name="options[${optionCount}].description" placeholder="Option Description" value="${option.description || ''}" />
-
-            <label for="optionPrice${optionCount}">Price:</label>
-            <input type="number" id="optionPrice${optionCount}" name="options[${optionCount}].price" placeholder="Additional Price" required value="${option.price || 0}" />
-
-            <label for="optionQuantity${optionCount}">Quantity:</label>
-            <input type="number" id="optionQuantity${optionCount}" name="options[${optionCount}].quantity" placeholder="Remaining Quantity" required value="${option.quantity || 0}" />
-
-            <input type="hidden" name="options[${optionCount}].id" value="${option.id || ''}" />
-            <button type="button" class="btn-remove" onclick="removeOption(this)">Remove</button>
-        `;
-        optionList.appendChild(optionDiv);
-        optionCount++;
-    }
-
-    function removeOption(button) {
-        const optionDiv = button.parentElement;
-        optionDiv.remove();
-    }
-
-    document.getElementById('optionsForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        const options = [];
-        for (let [key, value] of formData.entries()) {
-            const match = key.match(/options\[(\d+)\]\.(.+)/);
-            if (match) {
-                const index = match[1];
-                const field = match[2];
-                if (!options[index]) {
-                    options[index] = {};
-                }
-                options[index][field] = value;
-            }
-        }
-
-        console.log('Submitted Options:', options);
-
-        // Send updated options to server
-        fetch(`/api/products/options/${productId}/save`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(options)
-        }).then(response => {
-            if (response.ok) {
-                alert('Options saved successfully.');
-                location.reload();
-            } else {
-                alert('Failed to save options.');
-            }
-        });
-    });
-
-    // Fetch existing options from the server
-    fetch(`/api/products/options/${productId}`)
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(option => addOption(option));
-        })
-        .catch(error => console.error('Error fetching options:', error));
-
-</script>
-
 </body>
 </html>
