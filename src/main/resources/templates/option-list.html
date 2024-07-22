@@ -5,13 +5,14 @@
 </head>
 <body>
 <h1>Option List</h1>
-<a th:href="@{/admin/product/{productId}/option/add(productId=${productId})}">Edit Options or Add new Option</a>
+<a th:href="@{/admin/product/{productId}/option/add(productId=${productId})}">Add new Option</a>
 <table>
   <thead>
   <tr>
     <th>ID</th>
     <th>Name</th>
     <th>Quantity</th>
+    <th>Action</th>
     <th></th>
   </tr>
   </thead>
@@ -21,6 +22,7 @@
     <td th:text="${option.name}"></td>
     <td th:text="${option.quantity}"></td>
     <td>
+      <a th:href="@{/admin/product/{productId}/option/edit/{optionId}(productId=${productId}, optionId=${option.id})}">Edit</a>
       <a href="javascript:void(0);"
          th:onclick="'deleteProduct(' + ${option.id} + ')'">Delete</a>
     </td>

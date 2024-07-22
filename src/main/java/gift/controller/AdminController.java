@@ -45,7 +45,7 @@ public class AdminController {
     @GetMapping("{productId}/option/list")
     public String optionList(Model model,
         @PathVariable long productId, Pageable pageable) {
-        List<OptionDTO> options = optionService.getOptions(productId, pageable);
+        List<OptionDTO> options = productService.getOptionsByProductId(productId, pageable);
         model.addAttribute("productId", productId);
         model.addAttribute("options", options);
         return "option-list";
@@ -73,11 +73,13 @@ public class AdminController {
         return modelAndView;
     }
 
-    @GetMapping("/option/edit/{optionId}")
-    public ModelAndView showOptionEditPage(@PathVariable Long optionId) {
+    @GetMapping("{productId}/option/edit/{optionId}")
+    public ModelAndView showOptionEditPage(@PathVariable Long productId, @PathVariable long optionId) {
         ModelAndView modelAndView = new ModelAndView("option-edit");
         OptionDTO optionDTO = optionService.getOption(optionId);
         modelAndView.addObject("option", optionDTO);
+        modelAndView.addObject("productId", productId);
+        modelAndView.addObject("optionId", optionId);
         return modelAndView;
     }
 
@@ -88,16 +90,23 @@ public class AdminController {
     }
 
     @PostMapping("/{productId}/option/add")
-    public String addOption(@Valid @ModelAttribute OptionDTO optionDTO, @PathVariable long productId) {
+    public String addOption(@Valid @ModelAttribute OptionDTO optionDTO,
+        @PathVariable long productId) {
         optionService.createOption(productId, optionDTO);
         return "redirect:/admin/product/" + productId + "/option/list";
     }
 
     @PutMapping("/edit/{id}")
-    public String updateProduct(@PathVariable Long id,
-        @Valid @ModelAttribute ProductDTO productDTO) {
-        productService.updateProduct(id, productDTO);
+    public String updateProduct(@Valid @ModelAttribute ProductDTO productDTO) {
+        productService.updateProduct(productDTO);
         return "redirect:/admin/product/list";
+    }
+
+    @PutMapping("/{productId}/option/edit")
+    public String updateOption(@Valid @ModelAttribute OptionDTO optionDTO,
+        @PathVariable long productId) {
+        optionService.updateOption(productId, optionDTO.id(), optionDTO);
+        return "redirect:/admin/product/" + productId + "/option/list";
     }
 
     @DeleteMapping("/delete/{id}")

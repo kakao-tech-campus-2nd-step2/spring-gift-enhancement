@@ -4,6 +4,7 @@ import gift.exception.ErrorCode;
 import gift.exception.RepositoryException;
 import gift.model.Category;
 import gift.model.Option;
+import gift.model.OptionDTO;
 import gift.model.Product;
 import gift.model.ProductDTO;
 import gift.model.ProductPageDTO;
@@ -35,11 +36,8 @@ public class ProductService {
             () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, productDTO.categoryId()));
         Product product = new Product(productDTO.id(), productDTO.name(), productDTO.price(),
             productDTO.imageUrl(), category);
+        Option option = new Option("[기본 옵션] 추후 수정바랍니다", 1L,  product);
         Product createdProduct = productRepository.save(product);
-
-        Option option = new Option(0L, "[기본 옵션] 추후 수정 바랍니다.", 0, product);
-        optionRepository.save(option);
-
         return convertToDTO(createdProduct);
     }
 
@@ -62,16 +60,31 @@ public class ProductService {
 
     public ProductDTO getProductById(long id) {
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, ""));
+            .orElseThrow(() -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, id));
         return convertToDTO(product);
     }
 
-    public ProductDTO updateProduct(long id, ProductDTO productDTO) {
+    public List<OptionDTO> getOptionsByProductId(long productId, Pageable pageable) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, productId));
+        List<OptionDTO> optionDTOList = product.getOptions()
+            .stream()
+            .map(this::convertToOptionDTO)
+            .toList();
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), optionDTOList.size());
+        return optionDTOList.subList(start, end);
+    }
+
+    public ProductDTO updateProduct(ProductDTO productDTO) {
+        Product currentProduct = productRepository.findById(productDTO.id())
+            .orElseThrow(
+                () -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, productDTO.id()));
         Category category = categoryRepository.findById(productDTO.categoryId()).orElseThrow(
             () -> new RepositoryException(ErrorCode.CATEGORY_NOT_FOUND, productDTO.categoryId()));
-        Product product = new Product(id, productDTO.name(), productDTO.price(),
-            productDTO.imageUrl(), category);
-        return convertToDTO(productRepository.save(product));
+        currentProduct.updateProduct(productDTO.name(), productDTO.price(), productDTO.imageUrl(),
+            category);
+        return convertToDTO(productRepository.save(currentProduct));
     }
 
     public String deleteProduct(long id) {
@@ -86,5 +99,9 @@ public class ProductService {
     private ProductDTO convertToDTO(Product product) {
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(),
             product.getImageUrl(), product.getCategory().getId());
+    }
+
+    private OptionDTO convertToOptionDTO(Option option) {
+        return new OptionDTO(option.getId(), option.getName(), option.getQuantity());
     }
 }

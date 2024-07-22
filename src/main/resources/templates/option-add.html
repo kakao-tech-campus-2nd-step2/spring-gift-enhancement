@@ -6,10 +6,7 @@
 <body>
 <h1>Option</h1>
 <form th:action="@{/admin/product/{productId}/option/add(productId=${productId})}" method="post" th:object="${option}">
-  <div>
-    <label for="id">ID:</label>
-    <input type="text" id="id" name="id" th:field="*{id}" required/>
-  </div>
+  <input type="hidden" th:field="*{id}">
   <div>
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" th:field="*{name}" required/>

@@ -7,8 +7,6 @@ import gift.model.OptionDTO;
 import gift.model.Product;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
-import java.util.List;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,15 +24,8 @@ public class OptionService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new RepositoryException(
                 ErrorCode.PRODUCT_NOT_FOUND, productId));
-        Option createdOption = new Option(optionDTO.id(), optionDTO.name(), optionDTO.quantity(), product);
+        Option createdOption = new Option(optionDTO.name(), optionDTO.quantity(), product);
         return convertToDTO(optionRepository.save(createdOption));
-    }
-
-    public List<OptionDTO> getOptions(long productId, Pageable pageable) {
-        return optionRepository.findAll(pageable)
-            .stream()
-            .map(this::convertToDTO)
-            .toList();
     }
 
     public OptionDTO getOption(long optionId) {
@@ -43,14 +34,10 @@ public class OptionService {
     }
 
     public OptionDTO updateOption(long productId, long optionId, OptionDTO optionDTO) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(
-                () -> new RepositoryException(ErrorCode.PRODUCT_NOT_FOUND, productId));
-        optionRepository.findById(optionId)
+        Option currentOption = optionRepository.findById(optionId)
             .orElseThrow(() -> new RepositoryException(ErrorCode.OPTION_NOT_FOUND, optionId));
-        Option updateOption = new Option(optionDTO.id(), optionDTO.name(), optionDTO.quantity(),
-            product);
-        return convertToDTO(optionRepository.save(updateOption));
+        currentOption.update(optionDTO.name(), optionDTO.quantity());
+        return convertToDTO(optionRepository.save(currentOption));
     }
 
     public void deleteOption(long optionId) {
