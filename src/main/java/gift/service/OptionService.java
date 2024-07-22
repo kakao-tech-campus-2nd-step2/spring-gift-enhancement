@@ -36,6 +36,13 @@ public class OptionService {
         optionRepository.save(option);
     }
 
+    @Transactional
+    public void subtractOption(Long id, Integer quantity) {
+        Option option = optionRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_OPTION, id));
+        option.subtract(quantity);
+    }
+
     private Product getProduct(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_PRODUCT, productId));
