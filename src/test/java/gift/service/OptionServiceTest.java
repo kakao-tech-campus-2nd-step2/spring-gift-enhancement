@@ -39,8 +39,6 @@ class OptionServiceTest {
                 new Category("테스트", "##", "설명", "test"));
         Option expected1 = new Option("옵션1",1000,product);
         Option expected2 = new Option("옵션2",100,product);
-        product.addOption(expected1);
-        product.addOption(expected2);
 
         given(productRepository.findById(any()))
                 .willReturn(Optional.of(product));
