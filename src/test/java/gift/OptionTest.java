@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -122,6 +124,13 @@ public class OptionTest {
   void subtractQuantity_WithInsufficientStock() {
     Option option = new Option("Option Name", 5, null);
     assertThrows(IllegalArgumentException.class, () -> option.subtractQuantity(10));
+  }
+
+  @Test
+  void  invalidNameTest(){
+    assertThrows(IllegalArgumentException.class, () ->  new Option("",10, null));
+    assertThrows(IllegalArgumentException.class, () ->  new Option("Option@",10, null));
+    assertThrows(IllegalArgumentException.class, () ->  new Option("123".repeat(50),10, null));
   }
 
 }
