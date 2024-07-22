@@ -33,6 +33,12 @@ public class GlobalExceptionHandler {
             ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<?> handleOptionNotFoundException(OptionNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return ResponseEntity.badRequest().body(

@@ -1,9 +1,11 @@
 package gift.web.dto;
 
+import gift.domain.option.Option;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 public record ProductDto(
     Long id,
@@ -17,6 +19,7 @@ public record ProductDto(
     @PositiveOrZero(message = "가격은 0원 이상이어야 합니다.")
     Long price,
     String imageUrl,
-    Long categoryId
+    Long categoryId,
+    List<OptionDto> optionDtoList
 ) {
 }
