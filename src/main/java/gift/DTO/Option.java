@@ -66,11 +66,10 @@ public class Option {
     return this.product;
   }
 
-  public boolean subtract(int amount) {
+  public void subtract(int amount) throws IllegalAccessException {
     if (amount > this.quantity) {
-      return false;
+      throw new IllegalAccessException("기존의 수량보다 빼는 수량이 더 많습니다.");
     }
     this.quantity -= amount;
-    return true;
   }
 }
