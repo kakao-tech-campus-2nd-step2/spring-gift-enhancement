@@ -1,8 +1,8 @@
 package gift;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import gift.DTO.Option;
 import org.junit.jupiter.api.Test;
@@ -17,11 +17,12 @@ public class OptionTest {
   private Option option;
 
   @Test
-  void subtractTest() {
+  void subtractTest() throws IllegalAccessException {
     Option option = mock(Option.class);
-    when(option.subtract(1)).thenReturn(true);
+    doThrow(IllegalAccessException.class).when(option).subtract(3);
 
-    boolean bool = option.subtract(1);
-    assertThat(bool).isEqualTo(true);
+    assertThrows(IllegalAccessException.class, () -> {
+      option.subtract(3);
+    });
   }
 }
