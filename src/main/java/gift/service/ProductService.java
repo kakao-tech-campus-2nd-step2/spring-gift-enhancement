@@ -4,15 +4,13 @@ import gift.dto.ProductRequestDTO;
 import gift.dto.ProductResponseDTO;
 import gift.entity.Category;
 import gift.entity.Product;
-import gift.exception.CategoryException;
+import gift.exception.categortException.CategoryNotFoundException;
 import gift.exception.ProductException;
+import gift.exception.productException.ProductNotFoundException;
 import gift.repository.CategoryRepository;
 import gift.repository.ProductRepository;
-import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,9 +31,9 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Product getProduct(long productId) {
+    public Product getProduct(Long productId) {
         Optional<Product> product = productRepository.findById(productId);
-        return product.orElseThrow(() -> new ProductException("상품을 찾을 수 없습니다."));
+        return product.orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
     public List<ProductResponseDTO> getAllProducts() {
@@ -45,40 +43,27 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void saveProduct(ProductRequestDTO productRequestDTO){
-
-        String categoryName = productRequestDTO.category();
-        Optional<Category> existingCategory = categoryRepository.findByName(categoryName);
-        existingCategory.orElseThrow(() -> new CategoryException("카테고리를 찾을 수 없습니다. 먼저 카테고리를 등록해주세요.") );
-
-        try {
-            Product product = toEntity(productRequestDTO, existingCategory.get());
-            productRepository.save(product);
-        } catch (DataAccessException e) {
-            throw new ProductException("데이터베이스 접근 오류가 발생했습니다.");
-        } catch (PersistenceException e) {
-            throw new ProductException("영속성 오류가 발생했습니다.");
-        } catch (ConstraintViolationException e) {
-            throw new ProductException("제약 조건 위반 오류가 발생했습니다.");
-        } catch (Exception e) {
-            throw new ProductException("알 수 없는 오류가 발생했습니다.");
-        }
+        Long categoryId = productRequestDTO.categoryId();
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+        category.addProduct(productRequestDTO);
     }
 
+
+    @Transactional
     public void deleteProduct(Long productId) {
-        Optional<Product> existingProduct = productRepository.findById(productId);
-        existingProduct.orElseThrow(() -> new ProductException("상품을 찾을 수 없어서 삭제할 수 없습니다."));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
         productRepository.deleteById(productId);
     }
 
     @Transactional
     public void updateProduct(Long productId, ProductRequestDTO productRequestDTO) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductException("상품을 찾을 수 없어서 업데이트 할 수 없습니다."));
-        product.setName(productRequestDTO.name());
-        product.setPrice(productRequestDTO.price());
-        product.setImageUrl(productRequestDTO.imageUrl());
-        productRepository.save(product);
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        product.updateProduct(productRequestDTO);
     }
 
     public static Product toEntity(ProductRequestDTO dto, Category category) {

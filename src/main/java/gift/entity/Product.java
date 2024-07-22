@@ -1,8 +1,11 @@
 package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import gift.dto.OptionRequestDTO;
+import gift.dto.ProductRequestDTO;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,17 +33,16 @@ public class Product {
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "product", orphanRemoval = true)
-    private List<Wish> wishes;
+    private List<Wish> wishes = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "product", orphanRemoval = true)
-    private List<Option> options;
+    private List<Option> options = new ArrayList<>();
 
     public Product() {}
 
-    public Product(Long id, String name, int price, String imageUrl, Category category) {
-        this.id = id;
+    public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -94,4 +96,21 @@ public class Product {
     public void setWishes(List<Wish> wishes) {
         this.wishes = wishes;
     }
+
+    public void updateProduct(ProductRequestDTO productRequestDTO){
+        this.name=productRequestDTO.name();
+        this.price=productRequestDTO.price();
+        this.imageUrl=productRequestDTO.imageUrl();
+
+    }
+
+    public void addOption(OptionRequestDTO optionRequestDTO){
+        Option option = new Option(
+                optionRequestDTO.name(),
+                optionRequestDTO.quantity(),
+                this
+        );
+        this.options.add(option);
+    }
+
 }

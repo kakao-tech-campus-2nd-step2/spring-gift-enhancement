@@ -1,7 +1,12 @@
 package gift.exception;
 
 import gift.dto.ErrorResponse;
+import gift.exception.categortException.CategoryNotFoundException;
+import gift.exception.optionException.OptionException;
+import gift.exception.productException.ProductNotFoundException;
 import io.jsonwebtoken.JwtException;
+import jakarta.persistence.PersistenceException;
+import jakarta.validation.ConstraintViolationException;
 import jdk.jfr.Description;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -21,32 +26,77 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @Description("category-service error")
-    @ExceptionHandler(value = CategoryException.class)
-    public ResponseEntity<ErrorResponse> handleCategoryException(ProductException e) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+
+
+    @Description("데이터베이스 접근 오류가 발생했습니다.")
+    @ExceptionHandler(value = DataAccessException.class)
+    public ResponseEntity<ErrorResponse> handleDataAccessException(DataAccessException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR
+                .value(), "데이터베이스 접근 오류가 발생했습니다.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorResponse);
+    }
+
+    @Description("영속성 오류가 발생했습니다.")
+    @ExceptionHandler(value = PersistenceException.class)
+    public ResponseEntity<ErrorResponse> handlePersistenceException(PersistenceException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR
+                .value(), "영속성 오류가 발생했습니다.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorResponse);
+    }
+
+
+    @Description("제약 조건 위반 오류가 발생했습니다.")
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR
+                .value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorResponse);
+    }
+
+
+    @Description("카테고리 서비스 exception")
+    @ExceptionHandler(value = CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryException(CategoryNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND
+                .value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
     }
 
-    @Description("option-service error")
+    @Description("옵션 서비스 exception")
     @ExceptionHandler(value = OptionException.class)
-    public ResponseEntity<ErrorResponse> handleOptionException(ProductException e) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    public ResponseEntity<ErrorResponse> handleOptionException(OptionException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND
+                .value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @Description("상품을 찾을 수 없을 때 exception")
+    @ExceptionHandler(value = ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProductNotFoundException(ProductNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND
+                .value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
     }
 
 
-    @Description("Product-service error")
+    @Description("상품 서비스 exception")
     @ExceptionHandler(value = ProductException.class)
     public ResponseEntity<ErrorResponse> handleProductNotFound(ProductException e) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND
+                .value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
     }
 
-    @Description("api exception")
+
+
+    @Description("api 서비스 exception")
     @ExceptionHandler(value = ApiException.class)
     public ResponseEntity<String> handleApiException(ApiException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -61,7 +111,7 @@ public class GlobalExceptionHandler {
     }
 
 
-    @Description("database access exception")
+    @Description("customer - database access exception")
     @ExceptionHandler(value = DatabaseAccessException.class)
     public ResponseEntity<String> handleDatabaseAccessException(DatabaseAccessException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -74,10 +124,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = DataAccessException.class)
-    public ResponseEntity<String> handleDataAccessException(DataAccessException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<String> handleDuplicateKeyException(DuplicateKeyException ex) {
@@ -92,6 +138,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
     }
 
+    @Description("customer exception")
     @ExceptionHandler(value = DuplicateValueException.class)
     public ResponseEntity<String> handleDuplicateValueException(DuplicateValueException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
@@ -107,6 +154,16 @@ public class GlobalExceptionHandler {
             errors.computeIfAbsent(fieldName, k -> new ArrayList<>()).add(errorMessage);
         });
         return ResponseEntity.badRequest().body(errors);
+    }
+
+
+    @Description("알 수 없는 오류가 발생했습니다.")
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<ErrorResponse> handleJpaDatabaseException(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR
+                .value(), "데이터베이스 접근 오류가 발생했습니다.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorResponse);
     }
 
 }

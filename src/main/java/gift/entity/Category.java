@@ -1,8 +1,11 @@
 package gift.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import gift.dto.CategoryRequestDTO;
+import gift.dto.ProductRequestDTO;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,7 +31,7 @@ public class Category {
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "category", orphanRemoval = true)
     @JsonManagedReference
-    private List<Product> products;
+    private List<Product> products = new ArrayList<Product>();
 
     public Category(){
 
@@ -88,4 +91,27 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void updateCategory(CategoryRequestDTO categoryRequestDTO){
+        this.name = categoryRequestDTO.name();
+        this.color = categoryRequestDTO.color();
+        this.description = categoryRequestDTO.description();
+        this.imageUrl = categoryRequestDTO.imageUrl();
+    }
+
+    public void addProduct(Product product){
+        this.products.add(product);
+        product.setCategory(this);
+    }
+
+
+    public void addProduct(ProductRequestDTO productRequestDTO){
+        Product product = new Product(productRequestDTO.name(),
+                productRequestDTO.price(),
+                productRequestDTO.imageUrl(),
+                this);
+        this.products.add(product);
+    }
+
+
 }
