@@ -48,7 +48,7 @@ public class ProductService {
 
     public String updateProduct(Long productId, UpdateProductRequest productRequest) {
         Product existingProduct = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
-        Category category = categoryRepository.findByName(productRequest.getCategory()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
+        Category category = categoryRepository.findByName(productRequest.category()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         productRepository.save(new Product(existingProduct.getId(), productRequest, category));
         return UPDATE_SUCCESS_MSG;
     }

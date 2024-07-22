@@ -65,9 +65,9 @@ public class Product {
 
     public Product(Long id, UpdateProductRequest productRequest, Category category) {
         this.id = id;
-        this.name = productRequest.getName();
-        this.price = productRequest.getPrice();
-        this.imageUrl = productRequest.getImageUrl();
+        this.name = productRequest.name();
+        this.price = productRequest.price();
+        this.imageUrl = productRequest.imageUrl();
         this.category = category;
     }
 
