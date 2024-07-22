@@ -110,5 +110,31 @@ public class OptionTest {
         assertThat(response.getStatusCode().is4xxClientError()).isTrue();
     }
 
+    @Test
+    @DisplayName("delete test")
+    void deleteTest() {
+        // given
+        var url = "http://localhost:" + port + "/api/products/1/options/1";
+        var request = new RequestEntity<>(HttpMethod.DELETE, URI.create(url));
 
+        // when
+        var response = restTemplate.exchange(request, String.class);
+
+        // then
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+    }
+
+    @Test
+    @DisplayName("delete last option test")
+    void deleteLastOptionTest() {
+        // given
+        var url = "http://localhost:" + port + "/api/products/5/options/9";
+        var request = new RequestEntity<>(HttpMethod.DELETE, URI.create(url));
+
+        // when
+        var response = restTemplate.exchange(request, String.class);
+
+        // then
+        assertThat(response.getStatusCode().is4xxClientError()).isTrue();
+    }
 }
