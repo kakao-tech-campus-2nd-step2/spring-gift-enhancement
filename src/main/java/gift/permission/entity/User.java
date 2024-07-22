@@ -27,11 +27,15 @@ public class User {
 
     }
 
-    public User(String email, String password, boolean isAdmin) {
-        this.userId = null;
+    public User(Long userId, String email, String password, boolean isAdmin) {
+        this.userId = userId;
         this.email = email;
         this.password = password;
         this.isAdmin = isAdmin;
+    }
+
+    public User(String email, String password, boolean isAdmin) {
+        this(null, email, password, isAdmin);
     }
 
     public void updatePassword(String password) {
