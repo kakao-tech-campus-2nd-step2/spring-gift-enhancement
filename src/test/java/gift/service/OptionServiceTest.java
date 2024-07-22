@@ -16,7 +16,12 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -124,9 +129,10 @@ class OptionServiceTest {
         int optionId = 1;
         OptionDTO optionDTO = new OptionDTO("Updated Option", 150);
 
+        // When
         when(optionsRepository.findByProduct_Id(productId)).thenReturn(Optional.empty());
 
-        // When & Then
+        // Then
         assertThrows(NoSuchElementException.class, () -> optionService.updateOption(productId, optionId, optionDTO));
     }
 
@@ -156,9 +162,114 @@ class OptionServiceTest {
         int productId = 1;
         int optionId = 1;
 
+        // When
         when(optionsRepository.findByProduct_Id(productId)).thenReturn(Optional.empty());
 
-        // When & Then
+        // Then
         assertThrows(NoSuchElementException.class, () -> optionService.deleteOption(productId, optionId));
+    }
+
+    @Test
+    void testDeductOptionQuantity() {
+        // Given
+        int productId = 1;
+        int optionId = 1;
+        Category testCategory = new Category("test", "test", "test", "test");
+        Product product = new Product(testCategory,1, "test", "testURL");
+        OptionDTO optionDTO = new OptionDTO("Updated Option", 150);
+        Option updatedOption = new Option(optionId, optionDTO);
+        Options options = new Options(product, new ArrayList<>());
+
+        // When
+        when(optionRepository.save(any(Option.class))).thenReturn(updatedOption);
+        when(optionsRepository.findByProduct_Id(productId)).thenReturn(Optional.of(options));
+        when(optionsRepository.save(any(Options.class))).thenReturn(options);
+        when(optionRepository.searchQuantityById(optionId)).thenReturn(updatedOption.getQuantity());
+        int currentQuantity = optionService.deductQuantity(productId, optionId);
+
+        // Then
+        assertNotNull(currentQuantity);
+        assertEquals(updatedOption.getQuantity() - 1, currentQuantity);
+    }
+
+    @Test
+    void testDeductOptionQuantityWhenQuantityisZero() {
+        // Given
+        int productId = 1;
+        int optionId = 1;
+        Category testCategory = new Category("test", "test", "test", "test");
+        Product product = new Product(testCategory,1, "test", "testURL");
+        OptionDTO optionDTO = new OptionDTO("Updated Option", 0);
+        Option updatedOption = new Option(optionId, optionDTO);
+        Options options = new Options(product, new ArrayList<>());
+
+        // When
+        when(optionRepository.save(any(Option.class))).thenReturn(updatedOption);
+        when(optionsRepository.findByProduct_Id(productId)).thenReturn(Optional.of(options));
+        when(optionsRepository.save(any(Options.class))).thenReturn(options);
+        when(optionRepository.searchQuantityById(optionId)).thenReturn(updatedOption.getQuantity());
+
+
+        // Then
+        assertThrows(IllegalArgumentException.class, () -> optionService.deductQuantity(productId, optionId));
+    }
+
+    @Test
+    void testDeductOptionQuantityAtSameTime() throws InterruptedException {
+        // Given
+        int numThreads = 10;
+        int initialStock = 5;
+
+        int productId = 1;
+        int optionId = 1;
+        Category testCategory = new Category("test", "test", "test", "test");
+        Product product = new Product(testCategory,1, "test", "testURL");
+        Options options = new Options(product, new ArrayList<>());
+
+        CountDownLatch doneSignal = new CountDownLatch(numThreads);
+        ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
+
+        AtomicInteger successCount = new AtomicInteger();
+        AtomicInteger failCount = new AtomicInteger();
+
+        // When
+        when(optionsRepository.findByProduct_Id(productId)).thenReturn(Optional.of(options));
+        when(optionsRepository.save(any(Options.class))).thenReturn(options);
+
+        AtomicInteger currentQuantity = new AtomicInteger(initialStock);
+
+        when(optionRepository.searchQuantityById(optionId)).thenAnswer(invocation -> currentQuantity.get());
+        when(optionRepository.updateQuantityWithOptimisticLock(eq(optionId), anyInt(), anyInt()))
+                .thenAnswer(invocation -> {
+                    int newQuantity = invocation.getArgument(1);
+                    int expectedQuantity = invocation.getArgument(2);
+                    if (currentQuantity.compareAndSet(expectedQuantity, newQuantity)) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+
+        for (int i = 0; i < numThreads; i++) {
+            executorService.execute(() -> {
+                try {
+                    optionService.deductQuantity(productId, optionId);
+                    successCount.getAndIncrement();
+                } catch (Exception e) {
+                    failCount.getAndIncrement();
+                } finally {
+                    doneSignal.countDown();
+                }
+            });
+        }
+        doneSignal.await();
+        executorService.shutdown();
+
+        //Then
+        assertAll(
+                () -> assertThat(successCount.get()).isEqualTo(5),
+                () -> assertThat(failCount.get()).isEqualTo(5),
+                () -> assertThat(currentQuantity.get()).isEqualTo(0)
+        );
     }
 }
