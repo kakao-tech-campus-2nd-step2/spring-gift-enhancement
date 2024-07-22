@@ -27,10 +27,14 @@ public record ProductRequestDto(
         List<@Valid OptionRequestDto> options
 ) {
     public Product toProduct(Category category) {
+        validateProductName();
+        return new Product(id, category, name, price, imageUrl);
+    }
+
+    private void validateProductName() {
         String nameKakaoErrorMessage = NameValidator.isValidKakaoName(name);
         if(nameKakaoErrorMessage != null) {
             throw new IllegalArgumentException(nameKakaoErrorMessage);
         }
-        return new Product(id, category, name, price, imageUrl);
     }
 }

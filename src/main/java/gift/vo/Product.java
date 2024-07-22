@@ -32,6 +32,20 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
+    @PrePersist
+    public void prePersist() {
+        hasCategory();
+        hasOptions();
+        validateName();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        hasCategory();
+        hasOptions();
+        validateName();
+    }
+
     public Product() {}
 
     public Product(Category category, String name, int price, String imageUrl) {
@@ -39,10 +53,6 @@ public class Product {
     }
 
     public Product(Long id, Category category, String name, int price, String imageUrl) {
-        validateName(name);
-        hasCategory(category);
-        hasOptions(options);
-
         this.id = id;
         this.category = category;
         this.name = name;
@@ -50,7 +60,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    private static void validateName(String name) {
+    private void validateName() {
         if (name == null || name.length() > 15) {
             throw new IllegalArgumentException("상품명은 15자를 넘을 수 없습니다.");
         }
@@ -64,13 +74,13 @@ public class Product {
         }
     }
 
-    private void hasCategory(Category category) {
+    private void hasCategory() {
         if (category == null) {
             throw new IllegalArgumentException("상품에는 카테고리가 존재해야합니다.");
         }
     }
 
-    private void hasOptions(List<Option> options) {
+    private void hasOptions() {
         if (options.isEmpty()) {
             throw new IllegalArgumentException("상품에는 하나 이상의 옵션이 필요합니다.");
         }
