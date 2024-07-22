@@ -10,6 +10,7 @@ import gift.web.exception.OptionNotFoundException;
 import gift.web.exception.ProductNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -25,6 +26,7 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public OptionDto createOption(Long productId, OptionDto optionDto) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductNotFoundException("제품이 없슴다."));
@@ -43,6 +45,7 @@ public class OptionService {
             .toList();
     }
 
+    @Transactional
     public OptionDto updateOption(Long optionId, Long productId, OptionDto optionDto) {
         Option option = optionRepository.findByIdAndProductId(optionId, productId)
             .orElseThrow(() -> new OptionNotFoundException("옵션이 없슴다."));

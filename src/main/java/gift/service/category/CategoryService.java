@@ -7,6 +7,7 @@ import gift.web.dto.CategoryDto;
 import gift.web.exception.CategoryNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CategoryService {
@@ -25,11 +26,13 @@ public class CategoryService {
             .toList();
     }
 
+    @Transactional
     public CategoryDto createCategory(CategoryDto categoryDto) {
         Category category = categoryRepository.save(categoryMapper.toEntity(categoryDto));
         return categoryMapper.toDto(category);
     }
 
+    @Transactional
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new CategoryNotFoundException("카테고리가 없슴다."));
