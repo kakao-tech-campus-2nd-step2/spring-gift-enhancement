@@ -2,6 +2,7 @@ package gift.product.presentation;
 
 
 import gift.product.application.WishListService;
+import gift.product.domain.AddWishListRequest;
 import gift.product.domain.WishList;
 import gift.util.CommonResponse;
 import gift.util.annotation.JwtAuthenticated;
@@ -50,8 +51,7 @@ public class WishListController {
     public ResponseEntity<?> addProductToWishList(@PathVariable Long wishListId, @PathVariable Long productId, @PathVariable Long optionId, @PathVariable Long quentity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = Long.valueOf(authentication.getName());
-        wishListService.addProductToWishList(userId, wishListId, productId, optionId, quentity);
-
+        wishListService.addProductToWishList(new AddWishListRequest(userId, wishListId, productId, optionId, quentity));
         return ResponseEntity.ok(new CommonResponse<>(null, "위시리스트에 제품 추가 성공", true));
     }
 
