@@ -1,5 +1,6 @@
 package gift.entity;
 
+import gift.exception.InvalidOptionException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -64,6 +65,9 @@ public class Wishlist {
 	}
 	
 	public void setQuantity(int quantity) {
+		if (quantity < 0) {
+			throw new InvalidOptionException("Quantity cannot be less than ZERO.");
+		}
 		this.quantity = quantity;
 	}
 }

@@ -36,7 +36,7 @@ public class Product {
 	
 	public Product(String name, int price, String imageUrl, Category category) {
 		this.setName(name);
-		this.price = price;
+		this.setPrice(price);
 		this.imageUrl = imageUrl;
 		this.category = category;
 	}
@@ -65,6 +65,9 @@ public class Product {
 	}
 	
 	public void setPrice(int price) {
+		if (price < 0) {
+			throw new InvalidProductException("Price cannot be less than ZERO.");
+		}
 		this.price = price;
 	}
 	

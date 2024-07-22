@@ -12,6 +12,7 @@ import gift.dto.OptionResponse;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.DuplicateOptionException;
+import gift.exception.InvalidOptionException;
 import gift.exception.InvalidProductException;
 import gift.exception.InvalidUserException;
 import gift.repository.OptionRepository;
@@ -43,6 +44,12 @@ public class OptionService {
 		optionRepository.save(option);
 	}
 	
+	public void decreaseOptionQuantity(Long optionId, int quantity) {
+		Option option = findOptionById(optionId);
+		option.decreaseQuantity(quantity);
+		optionRepository.save(option);
+	}
+	
 	private void validateBindingResult(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
         	String errorMessage = bindingResult
@@ -56,6 +63,11 @@ public class OptionService {
     	return productRepository.findById(productId)
     			.orElseThrow(() -> new InvalidProductException("Product not found"));
     }
+	
+	private Option findOptionById(Long optionId) {
+		return optionRepository.findById(optionId)
+				.orElseThrow(() -> new InvalidOptionException("Option not found"));
+	}
 
 	private List<OptionResponse> toOptionResponses(List<Option> options) {
 		return options.stream()
