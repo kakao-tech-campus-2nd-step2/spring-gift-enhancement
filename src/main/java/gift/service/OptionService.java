@@ -46,7 +46,7 @@ public class OptionService {
 	
 	public void decreaseOptionQuantity(Long optionId, int quantity) {
 		Option option = findOptionById(optionId);
-		decreaseQuantity(option, quantity);
+		option.decreaseQuantity(quantity);
 		optionRepository.save(option);
 	}
 	
@@ -73,13 +73,6 @@ public class OptionService {
 		return options.stream()
 				.map(Option::toDto)
 				.collect(Collectors.toList());
-	}
-	
-	public void decreaseQuantity(Option option, int quantity) {
-		if (option.getQuantity() - quantity < 0) {
-			throw new InvalidOptionException("Option quantity cannot be less than ZERO.");
-		}
-		option.setQuantity(option.getQuantity() - quantity);
 	}
 	
 	private void validateDuplicateOption(Long productId, String optionName) {
