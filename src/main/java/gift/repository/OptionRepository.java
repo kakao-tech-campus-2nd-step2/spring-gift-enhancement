@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface OptionRepository extends JpaRepository<Option, Long> {
     Optional<Option> findById(int id);
     int searchQuantityById(int id);
-    int updateQuantityWithOptimisticLock(@Param("id") int id, @Param("newQuantity") int newQuantity, @Param("expectedQuantity") int expectedQuantity);
+    int updateQuantity(int id, int quantity);
 }

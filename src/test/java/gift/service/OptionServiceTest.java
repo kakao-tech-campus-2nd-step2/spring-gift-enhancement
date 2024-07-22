@@ -239,16 +239,7 @@ class OptionServiceTest {
         AtomicInteger currentQuantity = new AtomicInteger(initialStock);
 
         when(optionRepository.searchQuantityById(optionId)).thenAnswer(invocation -> currentQuantity.get());
-        when(optionRepository.updateQuantityWithOptimisticLock(eq(optionId), anyInt(), anyInt()))
-                .thenAnswer(invocation -> {
-                    int newQuantity = invocation.getArgument(1);
-                    int expectedQuantity = invocation.getArgument(2);
-                    if (currentQuantity.compareAndSet(expectedQuantity, newQuantity)) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
+        when(optionRepository.updateQuantity(eq(optionId), anyInt())).thenAnswer(invocation -> currentQuantity.getAndDecrement());
 
         for (int i = 0; i < numThreads; i++) {
             executorService.execute(() -> {
