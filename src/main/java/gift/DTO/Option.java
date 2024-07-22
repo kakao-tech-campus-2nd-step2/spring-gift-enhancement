@@ -34,7 +34,7 @@ public class Option {
   @JoinColumn(name = "product_id", nullable = false)
   private Product product;
 
-  public Option() {
+  protected Option() {
   }
 
   public Option(Long id, String name, int quantity, Product product) {
@@ -64,5 +64,12 @@ public class Option {
 
   public Product getProduct() {
     return this.product;
+  }
+
+  public void subtract(int amount) throws IllegalAccessException {
+    if (amount > this.quantity) {
+      throw new IllegalAccessException("기존의 수량보다 빼는 수량이 더 많습니다.");
+    }
+    this.quantity -= amount;
   }
 }

@@ -35,7 +35,9 @@ public class OptionService {
 
   public List<OptionDto> getAllOptions() {
     List<Option> options = optionRepository.findAll();
-    List<OptionDto> optionDtos = options.stream().map(ConverterToDto::convertToOptionDto).toList();
+    List<OptionDto> optionDtos = options.stream()
+      .map(ConverterToDto::convertToOptionDto)
+      .toList();
 
     return optionDtos;
   }
@@ -65,5 +67,15 @@ public class OptionService {
     Option updatedOption = optionRepository.save(updateOption);
 
     return ConverterToDto.convertToOptionDto(updatedOption);
+  }
+
+  public void optionQuantitySubtract(OptionDto optionDto, int amount)
+    throws IllegalAccessException {
+    Long id = optionDto.getId();
+    Option option = optionRepository.findById(id)
+      .orElseThrow(() -> new EmptyResultDataAccessException("해당 데이터가 없습니다", 1));
+
+    option.subtract(amount);
+    optionRepository.save(option);
   }
 }
