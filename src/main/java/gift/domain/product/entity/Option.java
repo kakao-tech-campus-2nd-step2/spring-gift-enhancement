@@ -40,7 +40,10 @@ public class Option {
     @Version
     private Long version;
 
-    private static final String PRODUCT_NAME_REGEXP = "[a-zA-z0-9ㄱ-ㅎㅏ-ㅣ가-힣()\\[\\]+\\-&/_\\s]+";
+    private static final int OPTION_NAME_MAX_LENGTH = 50;
+    private static final int OPTION_QUANTITY_MIN = 0;
+    private static final int OPTION_QUANTITY_MAX = 100000000;
+    private static final String OPTION_NAME_REGEXP = "[a-zA-z0-9ㄱ-ㅎㅏ-ㅣ가-힣()\\[\\]+\\-&/_\\s]+";
 
     @PrePersist
     public void prePersist() {
@@ -63,13 +66,13 @@ public class Option {
     }
 
     private void validateName() {
-        if (!Pattern.matches(PRODUCT_NAME_REGEXP, name) || name.length() > 50) {
+        if (!Pattern.matches(OPTION_NAME_REGEXP, name) || name.length() > OPTION_NAME_MAX_LENGTH) {
             throw new InvalidOptionInfoException("error.invalid.option.name");
         }
     }
 
     private void validateQuantity() {
-        if (quantity < 0 || quantity > 100000000) {
+        if (quantity < OPTION_QUANTITY_MIN || quantity > OPTION_QUANTITY_MAX) {
             throw new InvalidOptionInfoException("error.invalid.option.quantity");
         }
     }

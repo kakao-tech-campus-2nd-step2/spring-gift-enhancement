@@ -44,6 +44,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
 
+    private static final int PRODUCT_NAME_MAX_LENGTH = 15;
     private static final String PRODUCT_NAME_REGEXP = "[a-zA-z0-9ㄱ-ㅎㅏ-ㅣ가-힣()\\[\\]+\\-&/_\\s]+";
     private static final String IMAGE_URL_REGEXP = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\[\\]\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\[\\]\\+.~#()?&//=]*)";
 
@@ -84,7 +85,7 @@ public class Product {
     }
 
     private void validateName() {
-        if (!Pattern.matches(PRODUCT_NAME_REGEXP, name) || name.length() > 15 || name.contains("카카오")) {
+        if (!Pattern.matches(PRODUCT_NAME_REGEXP, name) || name.length() > PRODUCT_NAME_MAX_LENGTH || name.contains("카카오")) {
             throw new InvalidProductInfoException("error.invalid.product.name");
         }
     }
