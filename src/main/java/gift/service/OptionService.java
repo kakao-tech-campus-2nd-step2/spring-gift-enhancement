@@ -6,6 +6,7 @@ import gift.entity.ProductEntity;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,5 +71,13 @@ public class OptionService {
         OptionEntity optionEntity = optionRepository.findById(optionId)
             .orElseThrow(() -> new EntityNotFoundException("해당 옵션이 존재하지 않습니다. ID: " + optionId));
         optionRepository.delete(optionEntity);
+    }
+
+    @Transactional
+    public void subtractOptionQuantity(Long optionId, int amountToSubtract) {
+        OptionEntity option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new NoSuchElementException("해당 옵션이 존재하지 않습니다. ID: " + optionId));
+        option.subtractQuantity(amountToSubtract);
+        optionRepository.save(option);
     }
 }
