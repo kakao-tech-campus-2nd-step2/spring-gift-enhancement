@@ -8,6 +8,8 @@ import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -20,6 +22,10 @@ public class WishService {
     private final WishRepository wishRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+
+    public Page<Wish> getWishes(Pageable pageable) {
+        return wishRepository.findAll(pageable);
+    }
 
     @Autowired
     public WishService(WishRepository wishRepository, MemberRepository memberRepository, ProductRepository productRepository) {
