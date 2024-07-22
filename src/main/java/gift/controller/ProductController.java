@@ -27,9 +27,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<String> saveProduct(@Valid @RequestBody ProductRequestDto requestDto) {
+    public ResponseEntity<ApiResponse> saveProduct(@Valid @RequestBody ProductRequestDto requestDto) {
         productService.addProduct(requestDto);
-        return ResponseEntity.ok("상품이 성공적으로 등록되었습니다.");
+        return ResponseEntity.ok().body(new ApiResponse(HttpStatus.OK,"상품이 성공적으로 등록되었습니다."));
     }
 
     @GetMapping
@@ -58,22 +58,21 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteProduct(
-            @PathVariable("id") Long id) {
+    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/{id}/options")
-    public ResponseEntity<String> saveOption(@PathVariable("id") Long id, @RequestBody OptionRequestDto request) {
-        optionService.saveOption(id, request);
-        return ResponseEntity.ok("옵션이 정상적으로 등록되었습니다.");
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<ApiResponse> saveOption(@PathVariable("productId") Long productId,
+                                                  @RequestBody OptionRequestDto request) {
+        optionService.saveOption(productId, request);
+        return ResponseEntity.ok().body(new ApiResponse(HttpStatus.OK,"옵션이 성공적으로 등록되었습니다."));
     }
 
-    @GetMapping("/{id}/options")
-    public ResponseEntity<List<OptionResponseDto>> getOptions(
-            @PathVariable("id") Long id) {
-        var result = optionService.getOptions(id);
+    @GetMapping("/{productId}/options")
+    public ResponseEntity<List<OptionResponseDto>> getOptions(@PathVariable("productId") Long productId) {
+        var result = optionService.getOptions(productId);
         return ResponseEntity.ok(result);
     }
 }
