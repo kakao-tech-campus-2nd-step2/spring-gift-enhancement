@@ -67,4 +67,13 @@ class OptionTest {
                 .withMessage("해당 상품 옵션의 재고가 선택하신 수량 보다 작습니다. " + "[남은 수량: "+option.getQuantity()+"]" );
     }
 
+    @Test
+    @DisplayName("Test for invalid quantity outside 1 <= quantity <100000000 range")
+    void invalidQuantityOutsideRange() {
+        // when & then
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> new Option(null, mockProduct,"true", 0))
+                .withMessage("옵션 수량은 최소 1개 이상 1억 개 미만이여야 합니다.");
+
+    }
 }

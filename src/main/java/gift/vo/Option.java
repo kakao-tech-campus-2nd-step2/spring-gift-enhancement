@@ -25,6 +25,7 @@ public class Option {
 
     public Option(Long id, Product product, String name, int quantity) {
         validateName(name);
+        validateQuantity(quantity);
         this.id = id;
         this.product = product;
         this.name = name;
@@ -41,6 +42,12 @@ public class Option {
         }
         if (!name.matches("^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/]*$")) {
             throw new IllegalArgumentException("상품명에 () [] + - & / 외의 특수기호는 불가합니다");
+        }
+    }
+
+    private static void validateQuantity(int quantity) {
+        if (quantity < 1 || quantity > 100000000) {
+            throw new IllegalArgumentException("옵션 수량은 최소 1개 이상 1억 개 미만이여야 합니다.");
         }
     }
 
