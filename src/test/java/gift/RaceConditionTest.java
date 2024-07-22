@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("dev")
 @Import(RedisConfig.class)
 public class RaceConditionTest {
     @Autowired

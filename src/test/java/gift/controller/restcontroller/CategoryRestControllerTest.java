@@ -2,8 +2,10 @@ package gift.controller.restcontroller;
 
 import gift.controller.dto.request.CategoryRequest;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
@@ -23,6 +25,8 @@ class CategoryRestControllerTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
+    @MockBean
+    private RedissonClient redissonClient;
 
     @Test
     void port() {
