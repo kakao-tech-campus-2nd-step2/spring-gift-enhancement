@@ -48,6 +48,6 @@ public class Option {
         if (this.quantity < subtractQuantity) {
             throw new InsufficientOptionQuantityException(subtractQuantity);
         }
-        this.quantity -= quantity;
+        this.quantity -= subtractQuantity;
     }
 }
