@@ -12,11 +12,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/h2-console/**").permitAll() // H2 콘솔 접근 허용
+                        .requestMatchers("/**").permitAll()  // 모든 엔드포인트 접근 허용
                         .anyRequest().authenticated()
                 )
-                .csrf().disable() // H2 콘솔 사용을 위해 CSRF 비활성화
-                .headers().frameOptions().disable(); // 프레임 옵션 비활성화
+                .csrf().disable()  // CSRF 비활성화
+                .headers().frameOptions().disable();  // 프레임 옵션 비활성화
 
         return http.build();
     }
