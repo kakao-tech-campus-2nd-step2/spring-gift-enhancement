@@ -1,4 +1,4 @@
-package gift.functionTest;
+package gift.e2e;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -117,7 +117,7 @@ public class ProductFunctionTest {
                 .andExpectAll(
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON),
-                        jsonPath("[0].quantity").value(999)
+                        jsonPath("[1].quantity").value(999)
                 );
     }
 }
