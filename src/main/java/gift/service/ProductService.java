@@ -3,7 +3,10 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
-import gift.dto.request.*;
+import gift.dto.request.AddOptionRequest;
+import gift.dto.request.AddProductRequest;
+import gift.dto.request.SubtractOptionRequest;
+import gift.dto.request.UpdateProductRequest;
 import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
@@ -16,7 +19,6 @@ import java.util.List;
 
 import static gift.constant.Message.*;
 import static gift.exception.ErrorCode.DATA_NOT_FOUND;
-import static gift.exception.ErrorCode.DUPLICATE_OPTION_NAME_ERROR;
 
 @Service
 public class ProductService {
@@ -66,8 +68,6 @@ public class ProductService {
     public String addOption(Long productId, AddOptionRequest addOptionRequest) {
         Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         Option option = new Option(addOptionRequest, product);
-        List<Option> options = optionRepository.findAllByProduct(product);
-        isNewOptionName(options, option);
         optionRepository.save(option);
         return ADD_OPTION_SUCCESS_MSG;
     }
@@ -76,13 +76,5 @@ public class ProductService {
         Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         Option option = optionRepository.findAllByProductAndName(product, subtractOptionRequest.optionName()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
         option.subtract(subtractOptionRequest.amount());
-    }
-
-    private void isNewOptionName(List<Option> options, Option requestOption){
-        for (Option option : options) {
-            if (option.getName().equals(requestOption.getName())) {
-                throw new CustomException(DUPLICATE_OPTION_NAME_ERROR);
-            }
-        }
     }
 }

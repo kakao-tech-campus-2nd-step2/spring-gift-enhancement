@@ -7,10 +7,10 @@ import gift.dto.request.AddOptionRequest;
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.SubtractOptionRequest;
 import gift.dto.request.UpdateProductRequest;
-import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
+import jakarta.persistence.PersistenceException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -93,11 +93,11 @@ class ProductServiceTest {
 
         given(productRepository.findProductById(any())).willReturn(Optional.of(product));
         given(optionRepository.findAllByProduct(any())).willReturn(List.of(option));
-        given(optionRepository.save(any())).willReturn(new Option(addOptionRequest, product));
+        given(optionRepository.save(any())).willThrow(new PersistenceException());
 
         // when
         // then
-        assertThrows(CustomException.class, () -> {
+        assertThrows(PersistenceException.class, () -> {
             productService.addOption(requestId, addOptionRequest);
         });
     }
