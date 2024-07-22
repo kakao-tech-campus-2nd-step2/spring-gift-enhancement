@@ -84,6 +84,12 @@ public class Product extends BaseEntity {
             validateProductOptionsPresence(productOptions);
             return new Product(this);
         }
+
+        private void validateProductOptionsPresence(List<ProductOption> productOptions) {
+            if (productOptions == null || productOptions.isEmpty()) {
+                throw new IllegalArgumentException("상품 옵션은 최소 1개 이상이어야 합니다.");
+            }
+        }
     }
 
     private Product(Builder builder) {
