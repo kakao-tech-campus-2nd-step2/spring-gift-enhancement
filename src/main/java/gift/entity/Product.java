@@ -1,6 +1,7 @@
 package gift.entity;
 
 import gift.dto.request.AddProductRequest;
+import gift.exception.OptionDuplicateException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -48,7 +49,6 @@ public class Product {
 
     public void addOption(Option option) {
         options.add(option);
-        option.associateWithProduct(this);
     }
 
     public Long getId() {
@@ -80,5 +80,14 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public void checkDuplicateOptionName(String newOptionName) {
+        boolean isDuplicate = options.stream()
+                .anyMatch(option -> option.getName().equals(newOptionName));
+
+        if (isDuplicate) {
+            throw new OptionDuplicateException(newOptionName);
+        }
     }
 }
