@@ -35,9 +35,13 @@ public class ProductService {
     @Transactional
     public AddedProductIdResponse addProduct(AddProductRequest request) {
         Category category = categoryService.getCategory(request.categoryId());
-        List<Option> options = optionService.convertToOptions(request.optionRequests());
 
-        Product product = new Product(request, category, options);
+        List<Option> options = request.optionRequests()
+                .stream()
+                .map(optionRequest -> new Option(optionRequest.name(), optionRequest.quantity()))
+                .toList();
+
+        Product product = new Product(request.name(), request.price(), request.imageUrl(), category, options);
 
         Long addedProductId = productRepository.save(product).getId();
         return new AddedProductIdResponse(addedProductId);
