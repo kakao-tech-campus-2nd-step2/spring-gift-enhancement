@@ -29,11 +29,11 @@ public class Category {
     public Category() {
     }
 
-    public Category(String name, String description, String imageUrl, String color) {
-        this.name = name;
-        this.description = description;
-        this.imageUrl = imageUrl;
-        this.color = color;
+    public Category(CreateCategoryRequest request) {
+        this.name = request.getName();
+        this.description = request.getDescription();
+        this.imageUrl = request.getImageUrl();
+        this.color = request.getColor();
     }
 
     public Long getId() {
