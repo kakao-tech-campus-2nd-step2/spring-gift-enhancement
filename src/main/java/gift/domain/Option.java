@@ -24,8 +24,8 @@ public class Option {
     private String name;
 
     @NotNull(message = REQUIRED_FIELD_MSG)
-    @Min(1)
-    @Max(100_000_000)
+    @Min(value = 1, message = INVALID_QUANTITY_ERROR_MSG)
+    @Max(value = 100_000_000, message = INVALID_QUANTITY_ERROR_MSG)
     @Column(nullable = false)
     private Integer quantity;
 
