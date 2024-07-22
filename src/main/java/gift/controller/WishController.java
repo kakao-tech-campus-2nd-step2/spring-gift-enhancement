@@ -4,6 +4,8 @@ import gift.dto.WishRequest;
 import gift.entity.Wish;
 import gift.service.WishService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +24,13 @@ public class WishController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Wish>> getWishes(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token) {
+    public ResponseEntity<Page<Wish>> getWishes(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
+            Pageable pageable) {
         if (token == null || !token.startsWith("Bearer ")) {
             return ResponseEntity.status(401).build();
         }
-        List<Wish> wishes = wishService.getWishes(token);
+        Page<Wish> wishes = wishService.getWishes(pageable);
         return ResponseEntity.ok(wishes);
     }
 
