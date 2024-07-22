@@ -59,7 +59,7 @@ public class Option {
     }
 
     public void subtractQuantity(Long subtractQuantity) {
-        validateQuantity(subtractQuantity);
+        validateSubtractQuantity(subtractQuantity);
         this.quantity = this.quantity - subtractQuantity;
     }
 
