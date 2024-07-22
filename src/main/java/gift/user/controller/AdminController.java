@@ -1,6 +1,7 @@
 package gift.user.controller;
 
 import gift.product.dto.ProductDto;
+import gift.product.dto.ProductSortField;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.Optional;
@@ -16,7 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@Secured("ROLE_ADMIN")
+//@Secured("ROLE_ADMIN")
 @RequestMapping("/admin")
 public class AdminController {
 
@@ -31,10 +32,10 @@ public class AdminController {
   public String showAllProducts(Model model,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
-      @RequestParam(defaultValue = "id") String sort,
-      @RequestParam(defaultValue = "asc") String direction) {
-    Sort.Direction sortDirection = Sort.Direction.fromString(direction);
-    Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort));
+      @RequestParam(defaultValue = "id") ProductSortField sort,
+      @RequestParam(defaultValue = "asc") Sort.Direction direction) {
+
+    Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort.getFieldName()));
     Page<ProductDto> products = productService.findAll(pageable);
 
     model.addAttribute("products", products);

@@ -1,4 +1,5 @@
 package gift.category.controller;
+
 import gift.category.dto.CategoryDto;
 import gift.category.service.CategoryService;
 import org.springframework.http.HttpStatus;
@@ -21,11 +22,7 @@ public class CategoryController {
 
   @GetMapping
   public ResponseEntity<List<CategoryDto>> getAllCategories() {
-    try {
-      List<CategoryDto> categories = categoryService.getAllCategories();
-      return ResponseEntity.ok(categories);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-    }
+    List<CategoryDto> categories = categoryService.getAllCategories();
+    return ResponseEntity.ok(categories);
   }
 }
