@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostLoad;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.HashSet;
@@ -109,6 +110,11 @@ public class Product {
 
     public void changeName(String name) {
         this.name = name;
+    }
+
+    @PostLoad
+    private void postLoad() {
+        this.options = new Options(this.optionSet);
     }
 
     public static class Builder {
