@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.OptionDto;
 import gift.dto.ProductDto;
 import gift.entity.Product;
 import gift.exception.ProductNotFoundException;
@@ -7,7 +8,6 @@ import gift.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,5 +52,15 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
         productService.delete(id);
+    }
+
+    @GetMapping("/{productId}/option")
+    public List<OptionDto> getProductOptions(@PathVariable Long productId) {
+        return productService.getProductOptions(productId);
+    }
+
+    @PostMapping("/{productId}/option/{optionId}/subtract")
+    public void subtractOptionQuantity(@PathVariable Long productId, @PathVariable Long optionId, @RequestParam int quantity) {
+        productService.subtractOptionQuantity(productId, optionId, quantity);
     }
 }

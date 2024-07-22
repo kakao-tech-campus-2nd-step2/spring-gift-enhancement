@@ -1,15 +1,6 @@
--- Category 데이터 추가
-INSERT INTO category (name, color, img_url, description)
-VALUES ('교환권', '#6c95d1', 'https://category.png', 'Not NULL');
-
--- Product 데이터 추가
--- 위에서 삽입한 카테고리의 ID를 사용하여 제품을 추가합니다.
-INSERT INTO product (name, img_url, price, category_id)
-VALUES ('Sample Product', 'https://product.png', 1000.0, (SELECT id FROM category WHERE name = '교환권'));
-
 -- category 테이블에 데이터 삽입 전에 존재 여부 확인
-INSERT INTO category (name, color, img_url, description)
-SELECT '교환권', '#6c95d1', 'https://category.png', ''
+INSERT INTO category (name, color, image_url, description)
+SELECT '교환권', '#6c95d1', 'https://category.png', 'detail'
 WHERE NOT EXISTS (
     SELECT 1 FROM category WHERE name = '교환권'
 );
@@ -22,12 +13,21 @@ WHERE NOT EXISTS (
 );
 
 -- product 테이블에 데이터 삽입 전에 존재 여부 확인
-INSERT INTO product (price, name, img_url, category_id)
+INSERT INTO product (price, name, image_url, category_id)
 SELECT 100, 'Product Name', 'http://product.jpg', c.id
 FROM category c
 WHERE c.name = '교환권'
   AND NOT EXISTS (
     SELECT 1 FROM product WHERE name = 'Product Name'
+);
+
+-- option 테이블에 데이터 삽입
+INSERT INTO option (name, quantity, product_id)
+SELECT '01. [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, p.id
+FROM product p
+WHERE p.name = 'Product Name'
+  AND NOT EXISTS (
+    SELECT 1 FROM option WHERE name = '01. [Best] 시어버터 핸드 & 시어 스틱 립 밤' AND product_id = p.id
 );
 
 -- wish 테이블에 데이터 삽입 전에 존재 여부 확인

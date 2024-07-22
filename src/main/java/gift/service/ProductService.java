@@ -1,12 +1,15 @@
 package gift.service;
 
+import gift.dto.OptionDto;
 import gift.dto.ProductDto;
 import gift.entity.Category;
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.InvalidProductNameException;
 import gift.exception.ProductNotFoundException;
 import gift.exception.CategoryNotFoundException;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,11 +24,13 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionRepository optionRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.optionRepository = optionRepository;
     }
 
     public Page<Product> getProducts(Pageable pageable) {
@@ -83,5 +88,21 @@ public class ProductService {
         if (name.contains("카카오")) {
             throw new InvalidProductNameException("상품명에 '카카오'를 포함할 경우, 담당 MD에게 문의바랍니다.");
         }
+    }
+
+    public List<OptionDto> getProductOptions(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("해당 id로 상품이 존재하지 않습니다.: " + productId));
+
+        return product.getOptions().stream()
+                .map(option -> new OptionDto(option.getId(), option.getName(), option.getQuantity()))
+                .collect(Collectors.toList());
+    }
+
+    public void subtractOptionQuantity(Long productId, Long optionId, int quantity) {
+        Option option = optionRepository.findByIdAndProductId(optionId, productId)
+                .orElseThrow(() -> new RuntimeException("해당 id로 옵션이 존재하지 않습니다.: " + optionId + " 상품 id : " + productId));
+        option.subtractQuantity(quantity);
+        optionRepository.save(option);
     }
 }
