@@ -2,15 +2,11 @@ package gift.global.configuration;
 
 import gift.global.component.AdminLoginInterceptor;
 import gift.global.component.LoginInterceptor;
-import gift.global.resolver.CategoryInfoResolver;
-import gift.global.resolver.PageInfoResolver;
-import gift.global.resolver.ProductInfoResolver;
-import gift.global.resolver.UserInfoResolver;
+import gift.global.resolver.UserIdResolver;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -18,27 +14,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 // WebMvcConfigurer를 구현하는 클래스.
 @Configuration
 @SpringBootConfiguration
-@Order(value = 1)
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final LoginInterceptor loginInterceptor;
     private final AdminLoginInterceptor adminLoginInterceptor;
-    private final UserInfoResolver userInfoResolver;
-    private final PageInfoResolver pageInfoResolver;
-    private final ProductInfoResolver productInfoResolver;
-    private final CategoryInfoResolver categoryInfoResolver;
+    private final UserIdResolver userIdResolver;
 
     @Autowired
     public WebMvcConfig(LoginInterceptor loginInterceptor,
-        AdminLoginInterceptor adminLoginInterceptor,
-        UserInfoResolver userInfoResolver, PageInfoResolver pageInfoResolver,
-        ProductInfoResolver productInfoResolver, CategoryInfoResolver categoryInfoResolver) {
+        AdminLoginInterceptor adminLoginInterceptor, UserIdResolver userIdResolver) {
         this.loginInterceptor = loginInterceptor;
         this.adminLoginInterceptor = adminLoginInterceptor;
-        this.userInfoResolver = userInfoResolver;
-        this.pageInfoResolver = pageInfoResolver;
-        this.productInfoResolver = productInfoResolver;
-        this.categoryInfoResolver = categoryInfoResolver;
+        this.userIdResolver = userIdResolver;
     }
 
     // 인터셉터를 추가하는 메서드를 재정의하여 loginInterceptor를 등록하도록 함.
@@ -77,9 +64,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     // argument resolver를 추가하는 메서드 재정의
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(userInfoResolver);
-        resolvers.add(pageInfoResolver);
-        resolvers.add(productInfoResolver);
-        resolvers.add(categoryInfoResolver);
+        resolvers.add(userIdResolver);
     }
 }
