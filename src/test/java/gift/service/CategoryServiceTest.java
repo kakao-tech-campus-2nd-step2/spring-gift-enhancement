@@ -5,8 +5,10 @@ import gift.model.Category;
 import gift.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -18,9 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CategoryServiceTest {
     @Autowired
     private CategoryService categoryService;
-
     @Autowired
     private CategoryRepository categoryRepository;
+    @MockBean
+    private RedissonClient redissonClient;
 
     @Test
     @DisplayName("카테고리 업데이트 테스트[성공]")
