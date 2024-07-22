@@ -1,9 +1,7 @@
 package gift.service;
 
-import gift.DTO.ProductAll;
 import gift.DTO.ProductDTO;
 import gift.DTO.ProductOptionDTO;
-import gift.aspect.CheckProductExists;
 import gift.entity.ProductEntity;
 import gift.exception.ProductNotFoundException;
 import gift.mapper.ProductMapper;
@@ -49,17 +47,17 @@ public class ProductService {
      *
      * @param id 조회할 상품의 ID
      */
-    @CheckProductExists
     @Transactional(readOnly = true)
     public ProductDTO getProduct(Long id) {
-        var productEntity = productRepository.findById(id).get();
+        var productEntity = productRepository.findById(id)
+            .orElseThrow(()-> new ProductNotFoundException("상품이 존재하지 않습니다."));
         return productMapper.toProductDTO(productEntity);
     }
 
-    @CheckProductExists
     @Transactional(readOnly = true)
     public ProductEntity getProductEntity(Long id) {
-        return productRepository.findById(id).get();
+        return productRepository.findById(id)
+            .orElseThrow(()-> new ProductNotFoundException("상품이 존재하지 않습니다."));
     }
 
     /**
@@ -76,9 +74,11 @@ public class ProductService {
      *
      * @param id 삭제할 상품의 ID
      */
-    @CheckProductExists
     @Transactional
     public void deleteProduct(Long id) {
+        if (!isProdutExit(id)) {
+            throw new ProductNotFoundException("상품이 존재하지 않습니다.");
+        }
         productRepository.deleteById(id);
     }
 
@@ -87,9 +87,12 @@ public class ProductService {
      *
      * @param productDTO 갱신할 상품 객체
      */
-    @CheckProductExists
+
     @Transactional
     public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
+        if (!isProdutExit(id)) {
+            throw new ProductNotFoundException("상품이 존재하지 않습니다.");
+        }
         var productEntity = productMapper.toProductEntity(productDTO);
         productEntity.setId(id);
         productRepository.save(productEntity);
@@ -102,7 +105,7 @@ public class ProductService {
     }
 
     /**
-     * 사용자 ID를 통해 사용자의 상품 목록을 가져옵니다.
+     * 사용자의 상품 목록을 가져옵니다.
      *
      * @param pageable 페이지 정보
      * @return ProductDTO 목록
@@ -155,7 +158,7 @@ public class ProductService {
      */
     @Transactional
     public void deleteProductOption(Long id){
-        if (!productOptionRepository.existsById(id)) {
+        if (!isProdutExit(id)) {
             throw new ProductNotFoundException("옵션이 존재하지 않습니다");
         }
         productOptionRepository.deleteById(id);
@@ -174,5 +177,9 @@ public class ProductService {
         productOptionEntity.setName(productOptionDTO.name());
         productOptionEntity.setQuantity(productOptionDTO.quantity());
         productOptionRepository.save(productOptionEntity);
+    }
+
+    public boolean isProdutExit(Long id) {
+        return productRepository.existsById(id);
     }
 }

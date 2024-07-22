@@ -3,8 +3,8 @@ package gift.service;
 import gift.DTO.MemberDTO;
 import gift.DTO.ProductDTO;
 import gift.DTO.WishListDTO;
-import gift.aspect.CheckProductExists;
 import gift.entity.WishListEntity;
+import gift.exception.ProductNotFoundException;
 import gift.mapper.WishListMapper;
 import gift.repository.WishListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +47,11 @@ public class WishListService {
      * @param memberDTO WishList를 추가할 사용자의 정보
      * @return 생성된 WishList 객체의 ID 리스트
      */
-    @CheckProductExists
     @Transactional
     public ProductDTO addWishList(long productId, MemberDTO memberDTO) {
+        if (!productService.isProdutExit(productId)) {
+            throw new ProductNotFoundException("상품이 존재하지 않습니다.");
+        }
         var wishListEntity = wishListMapper.toWishListEntity(productId, memberDTO);
         wishListRepository.save(wishListEntity);
 
@@ -111,9 +113,12 @@ public class WishListService {
      * @param productId 삭제할 상품의 ID
      * @return 삭제 성공 여부
      */
-    @CheckProductExists
+
     @Transactional
     public boolean deleteWishListByUserIdAndProductId(long productId, long userId) {
+        if (!productService.isProdutExit(productId)) {
+            throw new ProductNotFoundException("상품이 존재하지 않습니다.");
+        }
         return
                 wishListRepository.deleteWishListByMemberEntityIdAndProductEntityId(userId, productId)
                         > 0;
