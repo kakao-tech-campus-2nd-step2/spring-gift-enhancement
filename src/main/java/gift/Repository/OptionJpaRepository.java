@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface OptionJpaRepository extends JpaRepository<Option, Long>{
-    List<Option> findAllById(long productId);
+    List<Option> findAllByProductId(long productId);
     void deleteById(long id);
 }
