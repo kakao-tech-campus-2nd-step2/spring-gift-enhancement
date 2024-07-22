@@ -82,7 +82,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void addProductOption() {
+    void addProductOption_SameOptionName() {
         // given
         Product product = new Product(1L, "name", 500, "image.image");
         Category category1 = new Category(1L, "상품권");
