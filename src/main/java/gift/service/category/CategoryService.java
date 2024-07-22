@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CategoryService {
-    private CategoryRepository categoryRepository;
-    private CategoryMapper categoryMapper;
+    private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;

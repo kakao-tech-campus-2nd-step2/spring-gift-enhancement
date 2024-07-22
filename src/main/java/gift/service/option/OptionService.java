@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class OptionService {
 
     private final ProductRepository productRepository;
-    private OptionRepository optionRepository;
-    private OptionMappper optionMapper;
+    private final OptionRepository optionRepository;
+    private final OptionMappper optionMapper;
 
     public OptionService(OptionRepository optionRepository, OptionMappper optionMapper,
         ProductRepository productRepository) {
