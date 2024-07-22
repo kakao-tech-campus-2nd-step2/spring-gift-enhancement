@@ -11,9 +11,26 @@ import java.util.Objects;
 public class Option {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long Id;
+    Long id;
     String name;
     Long quantity;
+
+    public Option(Long id, String name, Long quantity) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+    }
+
+    public Option() {
+
+    }
+
+    public void subtract(Long subtractNumber) throws IllegalAccessException {
+        quantity -= subtractNumber;
+        if(quantity <= 0 || quantity > 1000000000){
+            throw new IllegalAccessException("옵션의 수량은 1이상이거나, 1억 이하여야 합니다.");
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

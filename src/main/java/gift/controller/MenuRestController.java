@@ -3,6 +3,8 @@ package gift.controller;
 import gift.domain.MenuRequest;
 import gift.domain.MenuResponse;
 import gift.domain.Option;
+import gift.domain.OptionRequest;
+import gift.domain.Menu;
 
 import gift.service.MenuService;
 import jakarta.validation.Valid;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
-
 
 @RestController
 @RequestMapping("api/menus")
@@ -65,4 +66,14 @@ public class MenuRestController {
     ){
         return ResponseEntity.ok().body(menuService.getOptions(id));
     }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<String> addOptions(
+            @PathVariable("id") Long id,
+            @RequestBody OptionRequest optionRequest
+    ){
+        menuService.addOptions(id,optionRequest);
+        return ResponseEntity.ok().body("옵션 추가에 성공하셨습니다.");
+    }
+
 }

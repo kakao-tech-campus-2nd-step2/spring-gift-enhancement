@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
 import java.util.Set;
 
 @Entity
@@ -25,8 +27,12 @@ public class Menu {
     @JoinColumn(name = "category_id",nullable = false)
     private Category category;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Option> options;
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public Menu() {
     }
@@ -44,12 +50,12 @@ public class Menu {
         this.options = options;
     }
 
-    public Menu(Long id, MenuRequest menuRequest) {
+    public Menu(Long id, MenuRequest menuRequest,Category category) {
         this.id = id;
         this.name = menuRequest.name();
         this.price = menuRequest.price();
         this.imageUrl = menuRequest.imageUrl();
-        this.category = menuRequest.category();
+        this.category = category;
         this.options = menuRequest.options();
     }
 
