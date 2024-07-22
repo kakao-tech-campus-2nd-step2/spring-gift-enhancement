@@ -1,13 +1,9 @@
 package gift.domain;
 
-import gift.dto.request.ProductRequest;
+import gift.dto.request.AddProductRequest;
 import gift.dto.request.UpdateProductRequest;
-import gift.util.ProductValidationUtil;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +20,17 @@ public class Product {
 
     @NotBlank(message = REQUIRED_FIELD_MSG)
     @Size(max = 15, message = LENGTH_ERROR_MSG)
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/_]*$", message = SPECIAL_CHAR_ERROR_MSG)
+    @Pattern(regexp = "^(?!.*카카오).*$", message = KAKAO_CONTAIN_ERROR_MSG)
     @Column(nullable = false)
     private String name;
 
     @NotNull(message = REQUIRED_FIELD_MSG)
     @Positive(message = POSITIVE_NUMBER_REQUIRED_MSG)
     @Column(nullable = false)
-    private int price;
+    private Integer price;
 
+    @NotBlank(message = REQUIRED_FIELD_MSG)
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
@@ -49,24 +48,22 @@ public class Product {
     }
 
     public Product(long id, String name, int price, String imageUrl) {
-        ProductValidationUtil.isValidProductName(name);
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public Product(ProductRequest productRequest, Category category, Option option) {
-        ProductValidationUtil.isValidProductName(productRequest.getName());
-        this.name = productRequest.getName();
-        this.price = productRequest.getPrice();
-        this.imageUrl = productRequest.getImageUrl();
+    public Product(AddProductRequest addProductRequest, Category category, Option option) {
+        this.name = addProductRequest.name();
+        this.price = addProductRequest.price();
+        this.imageUrl = addProductRequest.imageUrl();
         this.category = category;
         this.options.add(option);
+        option.setProduct(this);
     }
 
     public Product(Long id, UpdateProductRequest productRequest, Category category) {
-        ProductValidationUtil.isValidProductName(productRequest.getName());
         this.id = id;
         this.name = productRequest.getName();
         this.price = productRequest.getPrice();
@@ -103,7 +100,6 @@ public class Product {
     }
 
     public void setName(String name) {
-        ProductValidationUtil.isValidProductName(name);
         this.name = name;
     }
 
