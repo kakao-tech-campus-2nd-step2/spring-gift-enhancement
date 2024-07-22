@@ -44,6 +44,14 @@ public class OptionService {
         return convertToDTO(savedOption);
     }
 
+    @Transactional
+    public void subtractOptionQuantity(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid option ID"));
+        option.subtractQuantity(quantity);
+        optionRepository.save(option);
+    }
+
     private OptionDTO convertToDTO(Option option) {
         return new OptionDTO(option.getId(), option.getName(), option.getQuantity());
     }
