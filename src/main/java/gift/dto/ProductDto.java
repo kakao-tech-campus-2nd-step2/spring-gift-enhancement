@@ -1,5 +1,6 @@
 package gift.dto;
 
+import gift.entity.Option;
 import gift.entity.Product;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ProductDto {
@@ -35,6 +37,7 @@ public class ProductDto {
     @NotEmpty(message = "Product must have at least one option")
     private List<@Valid OptionDto> options;
 
+    private String selectOptionName = "";
 
     private String categoryName = "";
 
@@ -60,7 +63,12 @@ public class ProductDto {
         this.imageUrl = product.getImageUrl();
         this.categoryId = product.getCategory().getId();
         this.categoryName = product.getCategory().getName();
-        this.options = product.getOptions().stream().map(OptionDto::new).collect(Collectors.toList());
+        this.options = convertOptionsToDto(product.getOptions());
+    }
+
+    // Options를 OptionDto로 변환하는 메서드
+    private List<OptionDto> convertOptionsToDto(Set<Option> options) {
+        return options.stream().map(OptionDto::new).collect(Collectors.toList());
     }
 
     // Getters and Setters
@@ -114,5 +122,13 @@ public class ProductDto {
 
     public void setOptions(List<OptionDto> options) {
         this.options = options;
+    }
+
+    public String getSelectOptionName(){
+        return selectOptionName;
+    }
+
+    public void setSelectOptionName(String optionName) {
+        this.selectOptionName = selectOptionName;
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +42,14 @@ public class ProductController {
     public Map<String, Object> getProducts(Pageable pageable) {
         Page<Product> productPage = productService.getProducts(pageable);
         Map<String, Object> response = new HashMap<>();
-        var data = productPage.getContent();
-        response.put("content", data.stream().map(v -> {
-            var dto = new ProductDto(v);
-            dto.setCategoryName(v.getCategory().getName());
-            dto.setOptions(v.getOptions().stream().map(OptionDto::new).collect(Collectors.toList()));
-            return dto;
-        }).collect(Collectors.toList()));
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        for (Product product : productPage.getContent()) {
+            ProductDto dto = new ProductDto(product);
+            productDtoList.add(dto);
+        }
+
+        response.put("content", productDtoList);
         response.put("currentPage", productPage.getNumber());
         response.put("totalPages", productPage.getTotalPages());
         response.put("hasNext", productPage.hasNext());
