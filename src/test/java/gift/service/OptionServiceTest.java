@@ -239,7 +239,7 @@ class OptionServiceTest {
         AtomicInteger currentQuantity = new AtomicInteger(initialStock);
 
         when(optionRepository.searchQuantityById(optionId)).thenAnswer(invocation -> currentQuantity.get());
-        when(optionRepository.updateQuantity(eq(optionId), anyInt())).thenAnswer(invocation -> currentQuantity.getAndDecrement());
+        when(optionRepository.updateQuantityById(eq(optionId), anyInt())).thenAnswer(invocation -> currentQuantity.getAndDecrement());
 
         for (int i = 0; i < numThreads; i++) {
             executorService.execute(() -> {
