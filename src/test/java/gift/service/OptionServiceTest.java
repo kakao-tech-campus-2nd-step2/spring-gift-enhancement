@@ -127,4 +127,17 @@ class OptionServiceTest {
 
         assertThrows(BadRequestException.class, () -> optionService.deleteOption(1L, 1L));
     }
+
+    @Test
+    void subtractOptionQuantity(){ //추후에 구현할 메서드에 대한 테스트 코드
+        Option option = new Option(product1, "테스트 옵션", 100);
+        assertThat(option.getQuantity()).isEqualTo(100);
+
+        assertThrows(BadRequestException.class, () -> option.subtractQuantity(101));
+        assertThrows(BadRequestException.class, () -> option.subtractQuantity(0));
+
+        option.subtractQuantity(30);
+
+        assertThat(option.getQuantity()).isEqualTo(70);
+    }
 }
