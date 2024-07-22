@@ -10,13 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("멤버 회원가입, 로그인 기능 테스트")
-class MemberFunctionTest {
+class MemberTest {
 
     @Autowired
     private MockMvc mockMvc;

@@ -18,13 +18,14 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("상품/옵션 조회,추가,수정 기능 테스트")
-public class ProductFunctionTest {
+public class ProductTest {
 
     private static Long savedProductId;
     private static Long categoryId;
