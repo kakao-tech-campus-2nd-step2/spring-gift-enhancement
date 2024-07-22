@@ -1,11 +1,11 @@
-package gift.service;
+package gift.service.product;
 
 import gift.domain.category.Category;
 import gift.domain.product.Product;
 import gift.repository.category.CategoryRepository;
 import gift.repository.product.ProductRepository;
-import gift.service.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -27,7 +27,7 @@ class ProductServiceTest {
     private ProductRepository productRepository;
 
     @Mock
-    private CategoryRepository categoryRepository; // Mock the category repository
+    private CategoryRepository categoryRepository;
 
     @InjectMocks
     private ProductService productService;
@@ -38,6 +38,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("모든 제품을 조회할 수 있어야 한다")
     void getAllProducts() {
         List<Product> productList = new ArrayList<>();
         productList.add(new Product("Product 1", 1000L, "Description 1", "image1.jpg", null));
@@ -54,6 +55,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("존재하지 않는 제품 ID로 조회 시 예외가 발생해야 한다")
     void getProductById_ProductNotFound() {
         Long productId = 1L;
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
@@ -61,10 +63,11 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("제품을 정상적으로 추가할 수 있어야 한다")
     void addProduct() {
         Product product = new Product("New Product", 1500L, "New Description", "new_image.jpg", null);
         Long categoryId = 1L;
-        Category category = mock(Category.class); // Use Mockito to create a mock Category
+        Category category = mock(Category.class);
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
 
         productService.addProduct(product, categoryId);
@@ -73,6 +76,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("유효하지 않은 제품 이름으로 추가 시 예외가 발생해야 한다")
     void addProduct_InvalidProductName() {
         Product product = new Product(null, 1500L, "New Description", "new_image.jpg", null);
         Long categoryId = 1L;
@@ -80,10 +84,11 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("제품을 정상적으로 업데이트할 수 있어야 한다")
     void updateProduct() {
         Product product = new Product("Updated Product", 2000L, "Updated Description", "updated_image.jpg", null);
         Long categoryId = 1L;
-        Category category = mock(Category.class); // Use Mockito to create a mock Category
+        Category category = mock(Category.class);
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
 
         productService.updateProduct(product, categoryId);
@@ -92,6 +97,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("유효하지 않은 제품 이름으로 업데이트 시 예외가 발생해야 한다")
     void updateProduct_InvalidProductName() {
         Product product = new Product(null, 2000L, "Updated Description", "updated_image.jpg", null);
         Long categoryId = 1L;
@@ -99,6 +105,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("제품을 정상적으로 삭제할 수 있어야 한다")
     void deleteProduct() {
         Long productId = 1L;
         productService.deleteProduct(productId);

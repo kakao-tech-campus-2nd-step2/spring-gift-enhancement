@@ -1,4 +1,16 @@
 # spring-gift-enhancement
+## Step3
+기능 목록
+1. ProductOption 엔티티 및 레포지토리 추가
+2. ProductOption 서비스 및 컨트롤러 추가
+3. 상품 옵션 수량 차감 기능 구현
+4. ProductOptionService 및 ProductOption에 대한 단위 테스트 추가
+   
+커밋 메시지
+* feat: ProductOption 상품 옵션 수량 차감 기능 추가
+* fix: subtract 메소드에서 수량 부족 처리
+* test: 수량 차감 기능에 대한 단위 테스트 추가
+
 
 ## Step2
 feat: 상품 옵션 엔티티 클래스 생성 및 데이터베이스 초기화 스크립트 작성

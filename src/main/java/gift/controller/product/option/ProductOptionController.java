@@ -37,12 +37,32 @@ public class ProductOptionController {
         return ResponseEntity.ok(options);
     }
 
+    @PostMapping("/{productId}/subtract")
+    public ResponseEntity<Void> subtractProductOptionQuantity(
+            @PathVariable Long productId,
+            @RequestBody SubtractProductOptionQuantityRequest request) {
+        logger.info("Received subtractProductOptionQuantity request for productId {} and option {}", productId, request.getOptionName());
+        productOptionService.subtractProductOptionQuantity(productId, request.getOptionName(), request.getQuantity());
+        logger.info("Subtracted {} from option {} for productId {}", request.getQuantity(), request.getOptionName(), productId);
+        return ResponseEntity.ok().build();
+    }
+
     static class ProductOptionRequest {
         private String name;
         private Long quantity;
 
         public String getName() { return name; }
         public void setName(String name) { this.name = name; }
+        public Long getQuantity() { return quantity; }
+        public void setQuantity(Long quantity) { this.quantity = quantity; }
+    }
+
+    static class SubtractProductOptionQuantityRequest {
+        private String optionName;
+        private Long quantity;
+
+        public String getOptionName() { return optionName; }
+        public void setOptionName(String optionName) { this.optionName = optionName; }
         public Long getQuantity() { return quantity; }
         public void setQuantity(Long quantity) { this.quantity = quantity; }
     }

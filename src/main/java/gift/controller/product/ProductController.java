@@ -45,7 +45,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductRequestDTO productRequestDTO) {
         Product product = new Product(productRequestDTO.getName(), productRequestDTO.getPrice(),
-                productRequestDTO.getDescription(), productRequestDTO.getImageUrl(), null);
+                productRequestDTO.getDescription(), productRequestDTO.getImageUrl());
         productService.addProduct(product, productRequestDTO.getCategoryId());
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
@@ -58,7 +58,7 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
         product.update(productRequestDTO.getName(), productRequestDTO.getPrice(),
-                productRequestDTO.getDescription(), productRequestDTO.getImageUrl(), null);
+                productRequestDTO.getDescription(), productRequestDTO.getImageUrl());
 
         productService.updateProduct(product, productRequestDTO.getCategoryId());
 

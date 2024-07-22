@@ -30,7 +30,7 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOption> options;
 
@@ -44,6 +44,14 @@ public class Product {
         this.imageUrl = imageUrl;
         this.category = category;
     }
+
+    public Product(String name, Long price, String description, String imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
+
 
     public Long getId() {
         return id;
@@ -69,15 +77,11 @@ public class Product {
         return category;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     public List<ProductOption> getOptions() {
         return options;
     }
 
-    public void update(String name, Long price, String description, String imageUrl, Category category) {
+    public void update(String name, Long price, String description, String imageUrl) {
         if (name != null && !name.isEmpty()) {
             this.name = name;
         }
@@ -90,9 +94,6 @@ public class Product {
         if (imageUrl != null && !imageUrl.isEmpty()) {
             this.imageUrl = imageUrl;
         }
-        if (category != null) {
-            this.category = category;
-        }
     }
 
     public void updateImage(String imageUrl) {
@@ -101,7 +102,28 @@ public class Product {
         }
     }
 
-    public void setOptions(List<ProductOption> options) {
+    public void saveCategory(Category category) {
+        this.category = category;
+    }
+
+    public void saveOptions(List<ProductOption> options) {
         this.options = options;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 }
