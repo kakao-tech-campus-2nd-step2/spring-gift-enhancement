@@ -25,7 +25,6 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
-    @Transactional
     public OptionResponse findByProductId(Long productId){
 
         productRepository.findById(productId)
@@ -54,5 +53,17 @@ public class OptionService {
             throw new CustomException("Option with name " + optionDto.getName() + " exist", HttpStatus.CONFLICT);
         }
         
+    }
+
+    @Transactional
+    public void subtractQuantity(String name, int subtractQuantity) {
+
+        Option option = optionRepository.findByName(name)
+                        .orElseThrow(() -> new CustomException("Option with name " + name + " not exists", HttpStatus.NOT_FOUND));
+        
+        Option updatedOption = option.substract(subtractQuantity);
+
+        optionRepository.delete(option);
+        optionRepository.save(updatedOption);
     }
 }

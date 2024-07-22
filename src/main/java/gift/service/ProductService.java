@@ -41,7 +41,6 @@ public class ProductService{
         this.optionService = optionService;
     }
 
-    @Transactional
     public ProductPageResponse getPage(int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
@@ -61,7 +60,6 @@ public class ProductService{
         );
     }
 
-    @Transactional
     public ProductDto findById(Long id){
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new CustomException("Product with id " + id + " not found", HttpStatus.NOT_FOUND));

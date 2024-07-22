@@ -43,7 +43,7 @@ public class OptionController{
             for(FieldError error : bindingResult.getFieldErrors()){
                 erros.put(error.getField(), error.getDefaultMessage());
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(erros, HttpStatus.BAD_REQUEST);
         }
         optionService.addOption(optionDto, productId);
         return new ResponseEntity<>(HttpStatus.CREATED);
