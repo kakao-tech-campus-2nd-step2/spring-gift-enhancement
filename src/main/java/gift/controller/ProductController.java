@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.DTO.ProductAll;
 import gift.DTO.ProductDTO;
+import gift.DTO.ProductOptionDTO;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class ProductController {
      * 모든 상품을 반환함
      */
     @GetMapping("/all")
-    public List<ProductAll> getProducts() {
+    public List<ProductDTO> getProducts() {
         return productService.getAllProducts();
     }
 
@@ -62,14 +62,14 @@ public class ProductController {
      * @return ProductDTO 목록을 포함한 ResponseEntity
      */
     @GetMapping
-    public ResponseEntity<List<ProductAll>> getWishListsByUserId(
+    public ResponseEntity<List<ProductDTO>> getProduct(
             @RequestParam(required = false, defaultValue = "0", value = "page") int page,
             @RequestParam(required = false, defaultValue = "10", value = "size") int size,
             @RequestParam(required = false, defaultValue = "createdAt", value = "criteria") String criteria,
             @RequestParam(required = false, defaultValue = "desc", value = "direction") String direction) {
         Pageable pageable = PageRequest.of(page, size,
                 Sort.by(Sort.Direction.valueOf(direction.toUpperCase()), criteria));
-        List<ProductAll> productIds = productService.getAllProducts(pageable);
+        List<ProductDTO> productIds = productService.getAllProducts(pageable);
         return ResponseEntity.ok(productIds);
     }
 
@@ -93,5 +93,21 @@ public class ProductController {
     public ProductDTO updateProduct(@PathVariable Long id,
                                     @Valid @RequestBody ProductDTO productDTO) {
         return productService.updateProduct(id, productDTO);
+    }
+
+    @GetMapping("/{id}/options")
+    public List<ProductOptionDTO> getProductOption(@PathVariable Long id) {
+        return productService.getProductOptions(id);
+    }
+
+    @PostMapping("/{id}/options")
+    public ProductOptionDTO createProductOption(@PathVariable Long id,
+                                                @Valid @RequestBody ProductOptionDTO productOptionDTO) {
+        return productService.addProductOption(id, productOptionDTO);
+    }
+
+    @DeleteMapping("/{id}/options/{optionId}")
+    public void deleteProductOption(@PathVariable Long id, @PathVariable Long optionId) {
+        productService.deleteProductOption(optionId);
     }
 }

@@ -1,18 +1,23 @@
 package gift.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 제품 옵션 엔티티. 데이터베이스 테이블과 매핑된다.
  */
 @Entity(name = "product_option")
+@EntityListeners(value = {AuditingEntityListener.class, gift.entity.listener.ProductOptionEntityListener.class})
 public class ProductOptionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
 
     @Column(nullable = false)
@@ -22,7 +27,29 @@ public class ProductOptionEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity productEntity;
 
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
     protected ProductOptionEntity() {
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public ProductOptionEntity(Long id, String name, long quantity, ProductEntity productEntity) {

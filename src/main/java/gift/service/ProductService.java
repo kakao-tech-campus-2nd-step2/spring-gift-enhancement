@@ -1,9 +1,11 @@
 package gift.service;
 
+import gift.DTO.ProductAll;
 import gift.DTO.ProductDTO;
 import gift.DTO.ProductOptionDTO;
 import gift.aspect.CheckProductExists;
 import gift.entity.ProductEntity;
+import gift.exception.ProductNotFoundException;
 import gift.mapper.ProductMapper;
 import gift.mapper.ProductOptionMapper;
 import gift.repository.ProductOptionRepository;
@@ -118,7 +120,7 @@ public class ProductService {
      * @param id 옵션을 조회할 상품의 ID
      */
     @Transactional(readOnly = true)
-    public List<ProductOptionDTO> getProductOption(Long id){
+    public List<ProductOptionDTO> getProductOptions(Long id){
         var productEntity = productOptionRepository.findById(id).get().getProductEntity();
         return productEntity.getProductOptions().stream()
                 .map(productOptionMapper::toProductOptionDTO).toList();
@@ -128,16 +130,22 @@ public class ProductService {
      * 상품 옵션을 추가함
      *
      * @param productOptionDTO 추가할 상품 옵션 객체
-     * @param productDTO       상품 객체
+     * @param productId        상품 옵션을 추가할 상품의 ID
      */
     @Transactional
-    public void addProductOption(ProductOptionDTO productOptionDTO, ProductDTO productDTO){
-        var productOptionEntity = productOptionMapper.toProductOptionEntity(productOptionDTO, productMapper.toProductEntity(productDTO), false);
+    public ProductOptionDTO addProductOption(Long productId, ProductOptionDTO productOptionDTO){
+        var productEntity = productRepository.findById(productId)
+            .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
+
+        if (productEntity.getProductOptions().stream()
+            .anyMatch(option -> option.getName().equals(productOptionDTO.name()))) {
+            throw new IllegalArgumentException("이미 존재하는 옵션입니다.");
+        }
+
+        var productOptionEntity = productOptionMapper.toProductOptionEntity(productOptionDTO, productEntity, false);
         productOptionRepository.save(productOptionEntity);
 
-        var productEntity = productMapper.toProductEntity(productDTO);
-        productEntity.getProductOptions().add(productOptionEntity);
-        productRepository.save(productEntity);
+        return productOptionMapper.toProductOptionDTO(productOptionEntity);
     }
 
     /**
@@ -147,6 +155,9 @@ public class ProductService {
      */
     @Transactional
     public void deleteProductOption(Long id){
+        if (!productOptionRepository.existsById(id)) {
+            throw new ProductNotFoundException("옵션이 존재하지 않습니다");
+        }
         productOptionRepository.deleteById(id);
     }
 
@@ -158,9 +169,10 @@ public class ProductService {
      */
     @Transactional
     public void updateProductOption(Long id, ProductOptionDTO productOptionDTO) {
-        var productOptionEntity = productOptionMapper.toProductOptionEntity(productOptionDTO, getProductEntity(id));
-        productOptionEntity.setId(id);
+        var productOptionEntity = productOptionRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException("옵션이 존재하지 않습니다"));
+        productOptionEntity.setName(productOptionDTO.name());
+        productOptionEntity.setQuantity(productOptionDTO.quantity());
         productOptionRepository.save(productOptionEntity);
     }
-
 }
