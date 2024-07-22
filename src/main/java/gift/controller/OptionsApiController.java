@@ -27,7 +27,7 @@ public class OptionsApiController {
 
     @CheckRole("ROLE_ADMIN")
     @PostMapping("/api/products/{id}/options")
-    public ResponseEntity<Void> addOptions(@PathVariable Long id, @RequestBody @Valid
+    public ResponseEntity<Void> addOptions(@PathVariable("id") Long id, @RequestBody @Valid
     OptionsRequest dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new InputException(bindingResult.getAllErrors());
@@ -39,7 +39,7 @@ public class OptionsApiController {
 
     @CheckRole("ROLE_ADMIN")
     @PutMapping("/api/products/{id}/options")
-    public ResponseEntity<Void> updateOptions(@PathVariable Long id,
+    public ResponseEntity<Void> updateOptions(@PathVariable("id") Long id,
         @RequestParam("option_id") Long optionId,
         @RequestBody @Valid OptionsRequest dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -52,7 +52,7 @@ public class OptionsApiController {
 
     @CheckRole("ROLE_ADMIN")
     @DeleteMapping("/api/products/{id}/options")
-    public ResponseEntity<Void> deleteOptions(@PathVariable Long id,
+    public ResponseEntity<Void> deleteOptions(@PathVariable("id") Long id,
         @RequestParam("option_id") Long optionId) {
         optionsService.deleteOption(id, optionId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

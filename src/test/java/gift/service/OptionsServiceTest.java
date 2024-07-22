@@ -19,26 +19,23 @@ import gift.model.Options;
 import gift.model.Product;
 import gift.repository.OptionsRepository;
 import gift.repository.ProductRepository;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import javax.swing.text.html.Option;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Transactional
 class OptionsServiceTest {
 
     @Autowired
@@ -60,7 +57,7 @@ class OptionsServiceTest {
             .willReturn(options);
 
         // when
-        List<Options> allOptions = optionsService.getAllOptions(product.getId());
+        List<Options> allOptions = optionsRepository.findAllByProductId(product.getId());
 
         // then
         then(optionsRepository).should().findAllByProductId(product.getId());
@@ -79,11 +76,12 @@ class OptionsServiceTest {
         given(optionsRepository.findById(any(Long.class)))
             .willReturn(Optional.of(option));
         //when
-        Options foundOption = optionsService.getOption(id);
+        Optional<Options> foundOption = optionsRepository.findById(id);
         //then
         then(optionsRepository).should().findById(id);
-        assertThat(foundOption.getProduct()).isEqualTo(product);
-        assertThat(foundOption.getId()).isEqualTo(id);
+        assertThat(foundOption.isPresent()).isTrue();
+        assertThat(foundOption.get().getProduct()).isEqualTo(product);
+        assertThat(foundOption.get().getId()).isEqualTo(id);
     }
 
     @DisplayName("옵션 생성 테스트")
@@ -243,13 +241,13 @@ class OptionsServiceTest {
 
         given(productRepository.findById(any(Long.class)))
             .willReturn(Optional.of(product));
-        given(optionsRepository.findById(any(Long.class)))
+        given(optionsRepository.findByIdForUpdate(any(Long.class)))
             .willReturn(Optional.of(savedOption));
         //when //then
         assertDoesNotThrow(() -> optionsService.subtractQuantity(id,
             subQuantity, product.getId()));
         then(productRepository).should().findById(product.getId());
-        then(optionsRepository).should().findById(id);
+        then(optionsRepository).should().findByIdForUpdate(id);
         then(savedOption).should().subtractQuantity(subQuantity);
     }
 
@@ -264,16 +262,16 @@ class OptionsServiceTest {
 
         given(productRepository.findById(any(Long.class)))
             .willReturn(Optional.of(product));
-        given(optionsRepository.findById(any(Long.class)))
+        given(optionsRepository.findByIdForUpdate(any(Long.class)))
             .willReturn(Optional.of(savedOption));
         doThrow(OptionsQuantityException.class)
-            .when(savedOption).subtractQuantity(subQuantity);
+            .when(savedOption).subtractQuantity(any(Integer.class));
         //when //then
         assertThatThrownBy(() -> optionsService.subtractQuantity(id,
             subQuantity, product.getId()))
             .isInstanceOf(OptionsQuantityException.class);
         then(productRepository).should().findById(product.getId());
-        then(optionsRepository).should().findById(id);
+        then(optionsRepository).should().findByIdForUpdate(id);
         then(savedOption).should().subtractQuantity(subQuantity);
     }
 

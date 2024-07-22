@@ -22,6 +22,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -30,6 +31,7 @@ import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
     config = @SqlConfig(transactionMode = TransactionMode.ISOLATED),
     executionPhase = ExecutionPhase.BEFORE_TEST_CLASS
 )
+@Transactional
 class PagingTest {
 
     @Autowired

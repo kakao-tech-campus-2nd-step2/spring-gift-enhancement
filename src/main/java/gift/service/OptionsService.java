@@ -2,12 +2,22 @@ package gift.service;
 
 import gift.exception.option.DeleteOptionsException;
 import gift.exception.option.DuplicateOptionsException;
+import gift.exception.option.FailedRetryException;
 import gift.exception.option.NotFoundOptionsException;
+import gift.exception.option.OptionsQuantityException;
 import gift.exception.product.NotFoundProductException;
 import gift.model.Options;
+import gift.model.Product;
 import gift.repository.OptionsRepository;
 import gift.repository.ProductRepository;
+import gift.response.OptionResponse;
+import gift.response.ProductOptionsResponse;
 import java.util.List;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.ExhaustedRetryException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +34,22 @@ public class OptionsService {
         this.optionsRepository = optionsRepository;
     }
 
-    public List<Options> getAllOptions(Long productId) {
-        return optionsRepository.findAllByProductId(productId);
+    public ProductOptionsResponse getAllProductOptions(Product product) {
+        List<Options> options = optionsRepository.findAllByProductId(product.getId());
+        List<OptionResponse> optionResponse = options.stream()
+            .map(OptionResponse::createOptionResponse)
+            .toList();
+        return new ProductOptionsResponse(product, optionResponse);
     }
 
-    public Options getOption(Long id) {
-        return optionsRepository.findById(id)
-            .orElseThrow(NotFoundOptionsException::new);
+    public ProductOptionsResponse getProductOption(Product product, Long optionId) {
+        List<Options> options = List.of(optionsRepository.findById(optionId)
+            .orElseThrow(NotFoundOptionsException::new));
+
+        List<OptionResponse> optionResponse = options.stream()
+            .map(OptionResponse::createOptionResponse)
+            .toList();
+        return new ProductOptionsResponse(product, optionResponse);
     }
 
     @Transactional
@@ -58,24 +77,30 @@ public class OptionsService {
     }
 
     @Transactional
-    public Options subtractQuantity(Long id, Integer subQuantity, Long productId) {
+    @Retryable( //@RetryOptions가 @Transactional보다 먼저 적용되게 설정됨
+        retryFor = {ObjectOptimisticLockingFailureException.class},
+        maxAttempts = 100,
+        backoff = @Backoff(100)
+    )
+    public void subtractQuantity(Long id, Integer subQuantity, Long productId) {
         productRepository.findById(productId)
             .orElseThrow(NotFoundProductException::new);
 
-        return optionsRepository.findById(id)
-            .map(options -> {
-                options.subtractQuantity(subQuantity);
-                return options;
-            }).orElseThrow(NotFoundOptionsException::new);
+        optionsRepository.findByIdForUpdate(id)
+            .ifPresentOrElse(options ->
+                    options.subtractQuantity(subQuantity),
+                () -> {
+                    throw new NotFoundOptionsException();
+                });
     }
 
     @Transactional
-    public Long deleteOption(Long id, Long productId) {
+    public void deleteOption(Long id, Long productId) {
         if (optionsRepository.optionsCountByProductId(productId) < 2) {
             throw new DeleteOptionsException();
         }
 
-        return optionsRepository.findById(id)
+        optionsRepository.findById(id)
             .map(options -> {
                 optionsRepository.delete(options);
                 return options.getId();
@@ -87,5 +112,11 @@ public class OptionsService {
         optionsRepository.deleteAllByProductId(productId);
     }
 
-
+    @Recover
+    private void failedSubtractingOptionQuantity(RuntimeException e) {
+        if (e instanceof ExhaustedRetryException || e instanceof ObjectOptimisticLockingFailureException) {
+            throw new FailedRetryException();
+        }
+        throw e;
+    }
 }

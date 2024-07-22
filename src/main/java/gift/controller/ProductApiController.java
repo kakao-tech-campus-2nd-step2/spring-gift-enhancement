@@ -1,9 +1,7 @@
 package gift.controller;
 
 import gift.auth.CheckRole;
-import gift.model.Options;
 import gift.request.ProductAddRequest;
-import gift.response.OptionResponse;
 import gift.response.ProductOptionsResponse;
 import gift.response.ProductResponse;
 import gift.request.ProductUpdateRequest;
@@ -12,7 +10,6 @@ import gift.model.Product;
 import gift.service.OptionsService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,25 +47,26 @@ public class ProductApiController {
     }
 
     @CheckRole("ROLE_ADMIN")
-    @GetMapping("/api/products/{id}")
-    public ResponseEntity<ProductOptionsResponse> getProductWithOptions(
-        @PathVariable Long id, @RequestParam("option_id") Long optionId) {
+    @GetMapping("/api/products/{id}/all")
+    public ResponseEntity<ProductOptionsResponse> getProductWithAllOptions(
+        @PathVariable("id") Long id) {
         Product product = productService.getProduct(id);
         if (product == null) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        // optionId가 존재하면 단건 옵션 조회, 아니면 전체 옵션 조회
-        if (optionId != null) {
-            Options option = optionsService.getOption(optionId);
-            ProductOptionsResponse dto = new ProductOptionsResponse(product,
-                List.of(new OptionResponse(option.getId(), option.getName(), option.getQuantity())));
-            return new ResponseEntity<>(dto, HttpStatus.OK);
-        }
+        ProductOptionsResponse dto = optionsService.getAllProductOptions(product);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
 
-        List<OptionResponse> options = optionsService.getAllOptions(id).stream()
-            .map(o -> new OptionResponse(o.getId(), o.getName(), o.getQuantity()))
-            .toList();
-        ProductOptionsResponse dto = new ProductOptionsResponse(product, options);
+    @CheckRole("ROLE_ADMIN")
+    @GetMapping("/api/products/{id}")
+    public ResponseEntity<ProductOptionsResponse> getProductWithOption(
+        @PathVariable("id") Long id, @RequestParam("option_id") Long optionId) {
+        Product product = productService.getProduct(id);
+        if (product == null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        ProductOptionsResponse dto = optionsService.getProductOption(product, optionId);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

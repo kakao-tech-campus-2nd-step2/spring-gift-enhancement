@@ -60,8 +60,8 @@ public class ProductService {
     }
 
     @Transactional
-    public Long deleteProduct(Long id) {
-        return productRepository.findById(id)
+    public void deleteProduct(Long id) {
+        productRepository.findById(id)
             .map(product -> {
                 productRepository.delete(product);
                 return product.getId();

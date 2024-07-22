@@ -32,4 +32,10 @@ public class OptionsExceptionHandler {
     public ErrorResult optionsQuantityExHandle(OptionsQuantityException e) {
         return new ErrorResult("상품 옵션 수량 에러", e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(FailedRetryException.class)
+    public ErrorResult failedRetryExHandle(FailedRetryException e) {
+        return new ErrorResult("상품 옵션 수량 에러", e.getMessage());
+    }
 }
