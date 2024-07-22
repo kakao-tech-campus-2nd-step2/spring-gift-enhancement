@@ -23,6 +23,14 @@ public class OptionService {
     }
 
     @Transactional
+    public void subtractOptionQuantity(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new IllegalArgumentException("Option not found"));
+        option.subtractQuantity(quantity);
+        optionRepository.save(option);
+    }
+
+    @Transactional
     public OptionDTO addOption(Long productId, OptionDTO optionDTO) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new IllegalArgumentException("Product not found"));
