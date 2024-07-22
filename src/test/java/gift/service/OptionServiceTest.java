@@ -75,11 +75,11 @@ class OptionServiceTest {
         given(productRepository.findById(any()))
                 .willReturn(Optional.of(new Product("더미", 10000, "test.jpg",
                         new Category("테스트", "##", "설명", "test"))));
-
         //when
+        optionService.saveOption(1L,new OptionRequestDto("중복이름",10,1L));
+        var request = new OptionRequestDto("중복이름",10,1L);
         //then
-        optionService.saveOption(1L,new OptionRequestDto("새 옵션",10,1L));
         assertThatExceptionOfType(CustomException.class)
-                .isThrownBy(() -> optionService.saveOption(1L,new OptionRequestDto("새 옵션",10,1L)));
+                .isThrownBy(() -> optionService.saveOption(1L, request));
     }
 }
