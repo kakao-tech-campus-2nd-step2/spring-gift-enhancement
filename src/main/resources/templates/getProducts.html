@@ -75,7 +75,10 @@
   <tbody>
   <tr th:each="product : ${productPage.getContent()}" th:attr="data-id=${product.id}">
     <td th:text="${product.id}" class="productId">1</td>
-    <td th:text="${product.name}" class="productName">Product Name</td>
+    <td>
+      <a th:text="${product.name}" class="productName" th:onclick="'getRequestWithToken(\'/api/products/' + ${product.id} + '/options\');'">Product Name</a>
+    </td>
+
     <td th:text="${product.price}" class="productPrice">1000</td>
 
     <td class="productImage">

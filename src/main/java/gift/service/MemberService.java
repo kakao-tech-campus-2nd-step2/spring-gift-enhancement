@@ -9,7 +9,6 @@ import gift.exception.BadRequestExceptions.UserNotFoundException;
 import gift.exception.InternalServerExceptions.DuplicatedUserException;
 import gift.exception.InternalServerExceptions.InternalServerException;
 import gift.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

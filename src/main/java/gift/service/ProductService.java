@@ -1,5 +1,7 @@
 package gift.service;
 
+import gift.dto.OptionRequestDTO;
+import gift.dto.ProductPostRequestDTO;
 import gift.dto.ProductResponseDTO;
 import gift.dto.ProductRequestDTO;
 import gift.entity.Category;
@@ -9,6 +11,7 @@ import gift.exception.BadRequestExceptions.InvalidIdException;
 import gift.exception.BadRequestExceptions.NoSuchProductIdException;
 import gift.exception.InternalServerExceptions.InternalServerException;
 import gift.repository.CategoryRepository;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import java.util.List;
@@ -26,23 +29,28 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final WishRepository wishRepository;
     private final CategoryRepository categoryRepository;
+    private final OptionService optionService;
+    private final OptionRepository optionRepository;
 
     public ProductService(ProductRepository productRepository, WishRepository wishRepository,
-            CategoryRepository categoryRepository) {
-
+            CategoryRepository categoryRepository, OptionService optionService,
+            OptionRepository optionRepository) {
         this.productRepository = productRepository;
         this.wishRepository = wishRepository;
         this.categoryRepository = categoryRepository;
+        this.optionService = optionService;
+        this.optionRepository = optionRepository;
     }
 
     @Transactional
-    public void addProduct(ProductRequestDTO productRequestDTO) throws RuntimeException {
+    public void addProduct(ProductPostRequestDTO productPostRequestDTO) throws RuntimeException {
         try {
-            Category category = categoryRepository.findByName(productRequestDTO.categoryName())
+            Category category = categoryRepository.findByName(productPostRequestDTO.categoryName())
                     .orElseThrow(() -> new BadRequestException("그러한 카테코리를 찾을 수 없습니다."));
-            Product product = productRequestDTO.convertToProduct(category);
+            Product product = productPostRequestDTO.convertToProduct(category);
             categoryRepository.save(product.getCategory());
             productRepository.save(product);
+            optionService.addOption(product.getId(), new OptionRequestDTO(productPostRequestDTO.optionName(), productPostRequestDTO.optionQuantity()));
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException("잘못된 제품 값을 입력했습니다. 입력 칸 옆의 설명을 다시 확인해주세요");
         } catch (BadRequestException e) {
@@ -83,7 +91,8 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long id) throws RuntimeException {
         try {
-            wishRepository.deleteByProductId(id); // 외래키 제약조건
+            wishRepository.deleteAllByProductId(id); // 외래키 제약조건
+            optionRepository.deleteAllByProductId(id); // 외래키 제약조건
             productRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchProductIdException("id가 %d인 상품은 존재하지 않습니다.".formatted(id));
