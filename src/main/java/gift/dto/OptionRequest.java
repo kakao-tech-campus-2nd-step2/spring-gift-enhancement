@@ -2,7 +2,6 @@ package gift.dto;
 
 import gift.entity.Option;
 import gift.entity.Product;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -18,7 +17,6 @@ public class OptionRequest {
 	
 	@Min(value = 1, message = "옵션 수량은 최소 1개 이상이어야 합니다.")
 	@Max(value = 99999999, message = "옵션 수량은 1억 개 미만이어야 합니다.")
-	@Column(nullable = false)
 	private int quantity;
 	
 	public OptionRequest(String name, int quantity) {
