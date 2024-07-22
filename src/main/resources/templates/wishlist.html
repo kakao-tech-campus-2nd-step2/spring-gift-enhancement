@@ -36,7 +36,7 @@
     <span id="current-page">1</span>
     <button id="next-page">Next</button>
 </div>
-
+<a href="/view/home">go Home</a>
 <script>
     let currentPage = 1;
     const pageSize = 10;
@@ -67,7 +67,7 @@
             return;
         }
 
-        fetch(`/api/wishlist?email=${email}&page=${page - 1}&size=${size}`, {
+        fetch(`/view/wishlist/data?email=${email}&page=${page - 1}&size=${size}`, {
             method: 'GET'
         })
         .then(response => {

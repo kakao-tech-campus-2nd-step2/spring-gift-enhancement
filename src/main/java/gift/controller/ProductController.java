@@ -41,35 +41,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/data")
-    @ResponseBody
-    public Map<String, Object> getProducts(Pageable pageable) {
-        Page<Product> productPage = productService.getProducts(pageable);
-        Map<String, Object> response = new HashMap<>();
 
-        List<ProductDto> productDtoList = new ArrayList<>();
-
-        for (Product product : productPage.getContent()) {
-            ProductDto dto = new ProductDto(product);
-            productDtoList.add(dto);
-        }
-
-        response.put("content", productDtoList);
-
-        response.put("currentPage", productPage.getNumber());
-        response.put("totalPages", productPage.getTotalPages());
-        response.put("hasNext", productPage.hasNext());
-        response.put("hasPrevious", productPage.hasPrevious());
-        return response;
-    }
-
-
-    @GetMapping("/add")
-    public String showAddProductForm(Model model) {
-        model.addAttribute("product", new ProductDto());
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "add-product";
-    }
 
     @PostMapping("/add")
     public String addProduct(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult result, Model model) {
@@ -83,19 +55,7 @@ public class ProductController {
         return "redirect:/view/products";
     }
 
-    @GetMapping("/edit/{id}")
-    public String showEditProductForm(@PathVariable Long id, Model model) {
-        Product product = productService.getProductById(id);
-        if (product == null) {
-            return "redirect:/view/products";
-        }
 
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("options", optionService.getAllOptions());
-
-        model.addAttribute("product", new ProductDto(product));
-        return "edit-product";
-    }
 
     @PostMapping("/edit/{id}")
     public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute("product") ProductDto productDto, BindingResult result, Model model) {
@@ -118,9 +78,5 @@ public class ProductController {
         return "redirect:/view/products";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return "redirect:/view/products";
-    }
+
 }

@@ -44,7 +44,7 @@
             authSetup.setAuthorizationHeader();
             $.ajax({
                 type: "GET",
-                url: '/api/products/data?page=' + (page - 1) + '&size=' + size,
+                url: '/view/products/data?page=' + (page - 1) + '&size=' + size,
                 dataType: 'json',
                 contentType: 'application/json; charset=UTF-8',
             }).done(function (response) {
@@ -56,7 +56,7 @@
                     row.append($('<td>').text(product.price));
                     row.append($('<td>').text(product.categoryName));
                     row.append($('<td>').append($('<img>').attr('src', product.imageUrl).css({'max-width': '100px', 'max-height': '100px'})));
-                    row.append($('<td>').html('<a href="/api/products/edit/' + product.id + '">Edit</a> | <a href="/api/admin/products/delete/' + product.id + '">Delete</a>'));
+                    row.append($('<td>').html('<a href="/view/products/edit/' + product.id + '">Edit</a> | <a href="/view/admin/products/delete/' + product.id + '">Delete</a>'));
 
                     $('#product-table tbody').append(row);
                 });
@@ -87,7 +87,8 @@
 
 </script>
 <br>
-<a href="/api/products/add">Add Product</a>
+<a href="/view/products/add">Add Product</a>
+<a href="/view/home">go Home</a>
 </body>
 </html>
 
