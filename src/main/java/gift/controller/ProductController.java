@@ -3,7 +3,7 @@ package gift.controller;
 import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.request.AddProductRequest;
-import gift.dto.request.OptionRequest;
+import gift.dto.request.AddOptionRequest;
 import gift.dto.request.UpdateProductRequest;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -35,8 +35,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addProduct(@Valid @RequestBody AddProductRequest newProduct) {
-        return ResponseEntity.ok(productService.addProduct(newProduct.getProductRequest(), newProduct.getOptionRequest()));
+    public ResponseEntity<String> addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
+        return ResponseEntity.ok(productService.addProduct(addProductRequest));
     }
 
     @PutMapping("/{productId}")
@@ -55,8 +55,8 @@ public class ProductController {
     }
 
     @PostMapping("/{productId}/options")
-    public ResponseEntity<String> addOption(@PathVariable("productId") Long productId, OptionRequest optionRequest) {
-        return ResponseEntity.ok(productService.addOption(productId, optionRequest));
+    public ResponseEntity<String> addOption(@PathVariable("productId") Long productId, AddOptionRequest addOptionRequest) {
+        return ResponseEntity.ok(productService.addOption(productId, addOptionRequest));
     }
 
 }

@@ -3,10 +3,7 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
-import gift.dto.request.OptionRequest;
-import gift.dto.request.ProductRequest;
-import gift.dto.request.SubtractOptionRequest;
-import gift.dto.request.UpdateProductRequest;
+import gift.dto.request.*;
 import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
@@ -42,10 +39,10 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public String addProduct(ProductRequest requestProduct, OptionRequest requestOption) {
-        Category category = categoryRepository.findByName(requestProduct.getCategory()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
-        Option option = optionRepository.save(new Option(requestOption));
-        productRepository.save(new Product(requestProduct, category, option));
+    public String addProduct(AddProductRequest request) {
+        Category category = categoryRepository.findByName(request.category()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
+        Option option = new Option(request);
+        productRepository.save(new Product(request, category, option));
         return ADD_SUCCESS_MSG;
     }
 
@@ -66,9 +63,9 @@ public class ProductService {
         return optionRepository.findAllByProduct(product);
     }
 
-    public String addOption(Long productId, OptionRequest optionRequest) {
+    public String addOption(Long productId, AddOptionRequest addOptionRequest) {
         Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
-        Option option = new Option(optionRequest, product);
+        Option option = new Option(addOptionRequest, product);
         List<Option> options = optionRepository.findAllByProduct(product);
         isNewOptionName(options, option);
         optionRepository.save(option);

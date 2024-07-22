@@ -3,8 +3,8 @@ package gift.service;
 import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
-import gift.dto.request.OptionRequest;
-import gift.dto.request.ProductRequest;
+import gift.dto.request.AddOptionRequest;
+import gift.dto.request.AddProductRequest;
 import gift.dto.request.SubtractOptionRequest;
 import gift.dto.request.UpdateProductRequest;
 import gift.exception.CustomException;
@@ -43,18 +43,16 @@ class ProductServiceTest {
     @Test
     void addProduct() {
         //given
-        ProductRequest productRequest = new ProductRequest("newProduct", 500, "image.image", "뷰티");
-        OptionRequest optionRequest = new OptionRequest("newOption", 5);
-
+        AddProductRequest addProductRequest = new AddProductRequest("newProduct", 500, "image.image", "뷰티", "newOption", 5);
         Category category = new Category(1L, "뷰티");
-        Option option = new Option(optionRequest);
+        Option option = new Option(addProductRequest);
 
         given(categoryRepository.findByName(any())).willReturn(Optional.of(category));
-        given(productRepository.save(any())).willReturn(new Product(productRequest, category, option));
-        given(optionRepository.save(any())).willReturn(new Option(optionRequest));
+        given(productRepository.save(any())).willReturn(new Product(addProductRequest, category, option));
+        given(optionRepository.save(any())).willReturn(new Option(addProductRequest));
 
         // when
-        String successMsg = productService.addProduct(productRequest, optionRequest);
+        String successMsg = productService.addProduct(addProductRequest);
 
         // then
         Assertions.assertThat(successMsg).isEqualTo(ADD_SUCCESS_MSG);
@@ -91,16 +89,16 @@ class ProductServiceTest {
         product.setOption(option);
 
         Long requestId = 1L;
-        OptionRequest optionRequest = new OptionRequest("optionName", 5);
+        AddOptionRequest addOptionRequest = new AddOptionRequest("optionName", 5);
 
         given(productRepository.findProductById(any())).willReturn(Optional.of(product));
         given(optionRepository.findAllByProduct(any())).willReturn(List.of(option));
-        given(optionRepository.save(any())).willReturn(new Option(optionRequest));
+        given(optionRepository.save(any())).willReturn(new Option(addOptionRequest, product));
 
         // when
         // then
         assertThrows(CustomException.class, () -> {
-            productService.addOption(requestId, optionRequest);
+            productService.addOption(requestId, addOptionRequest);
         });
     }
 
