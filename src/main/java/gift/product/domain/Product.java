@@ -71,8 +71,8 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public void addProductOption(String name, Long quentity) {
-        ProductOption productOption = new ProductOption(name, quentity, this);
+    public void addProductOption(CreateProductOptionRequestDTO createProductOptionRequestDTO) {
+        ProductOption productOption = new ProductOption(createProductOptionRequestDTO.getName(), createProductOptionRequestDTO.getQuantity(), this);
         productOptions.add(productOption);
     }
 

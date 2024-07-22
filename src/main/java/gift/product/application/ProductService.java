@@ -38,7 +38,7 @@ public class ProductService {
     public void addProductOption(Long id, CreateProductOptionRequestDTO createProductOptionRequestDTO) {
         Product product = productRepository.findById(id);
 
-        product.addProductOption(createProductOptionRequestDTO.getName(), createProductOptionRequestDTO.getQuantity());
+        product.addProductOption(createProductOptionRequestDTO);
 
         productRepository.save(product);
     }
