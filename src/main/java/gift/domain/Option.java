@@ -1,7 +1,7 @@
 package gift.domain;
 
-import gift.dto.request.AddProductRequest;
 import gift.dto.request.AddOptionRequest;
+import gift.dto.request.AddProductRequest;
 import gift.exception.CustomException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -20,11 +20,12 @@ public class Option {
     @NotBlank(message = REQUIRED_FIELD_MSG)
     @Size(max = 50, message = LENGTH_ERROR_MSG)
     @Pattern(regexp = "^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/_]*$", message = SPECIAL_CHAR_ERROR_MSG)
-    @Column(nullable = false,  unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @NotNull(message = REQUIRED_FIELD_MSG)
-    @Min(1)@Max(100_000_000)
+    @Min(1)
+    @Max(100_000_000)
     @Column(nullable = false)
     private Integer quantity;
 
@@ -32,7 +33,8 @@ public class Option {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Option() { }
+    public Option() {
+    }
 
     public Option(String name, int quantity, Product product) {
         this.name = name;
@@ -57,7 +59,7 @@ public class Option {
     }
 
     private void checkAmount(int amount) {
-        if (amount < 1 || amount > this.quantity){
+        if (amount < 1 || amount > this.quantity) {
             throw new CustomException(INVALID_AMOUNT_ERROR);
         }
     }

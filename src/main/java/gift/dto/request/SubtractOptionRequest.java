@@ -1,3 +1,4 @@
 package gift.dto.request;
 
-public record SubtractOptionRequest(String optionName,int amount) {}
+public record SubtractOptionRequest(String optionName, int amount) {
+}

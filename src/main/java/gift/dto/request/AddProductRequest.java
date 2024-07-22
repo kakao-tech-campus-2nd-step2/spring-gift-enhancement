@@ -28,6 +28,6 @@ public record AddProductRequest(
         String optionName,
 
         @NotNull(message = REQUIRED_FIELD_MSG)
-        @Min(1)@Max(100_000_000)
+        @Min(1) @Max(100_000_000)
         Integer optionQuantity) {
 }
