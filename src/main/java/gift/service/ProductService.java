@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.converter.StringToUrlConverter;
 import gift.domain.Category;
 import gift.domain.Product;
 import gift.repository.CategoryRepository;
@@ -24,13 +25,15 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final WishProductRepository wishProductRepository;
+    private final ProductOptionService productOptionService;
 
     public ProductService(ProductRepository productRepository,
         CategoryRepository categoryRepository,
-        WishProductRepository wishProductRepository) {
+        WishProductRepository wishProductRepository, ProductOptionService productOptionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.wishProductRepository = wishProductRepository;
+        this.productOptionService = productOptionService;
     }
 
     @Transactional
@@ -39,7 +42,12 @@ public class ProductService {
             .orElseThrow(NoSuchElementException::new);
 
         Product product = request.toEntity(category);
-        return CreateProductResponse.fromEntity(productRepository.save(product));
+        Product savedProduct = productRepository.save(product);
+
+        request.getProductOptions().stream()
+            .forEach(productOptionRequest -> productOptionService.createOption(savedProduct.getId(), productOptionRequest));
+
+        return CreateProductResponse.fromEntity(savedProduct);
     }
 
     public ReadProductResponse readProductById(Long id) {
@@ -77,7 +85,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
             .orElseThrow(NoSuchElementException::new);
 
-        product.update(request.toEntity());
+        product.updateBasicInfo(request.getName(), request.getPrice(), StringToUrlConverter.convert(request.getImageUrl()));
         return UpdateProductResponse.from(product);
     }
 
@@ -86,6 +94,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
             .orElseThrow(NoSuchElementException::new);
         wishProductRepository.deleteAllByProductId(id);
+        productOptionService.deleteAllOptionsByProductId(id);
         productRepository.delete(product);
     }
 }

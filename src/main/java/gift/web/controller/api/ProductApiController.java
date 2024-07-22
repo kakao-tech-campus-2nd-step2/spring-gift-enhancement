@@ -1,16 +1,22 @@
 package gift.web.controller.api;
 
 import gift.authentication.annotation.LoginMember;
+import gift.service.ProductOptionService;
 import gift.service.ProductService;
 import gift.service.WishProductService;
 import gift.web.dto.MemberDetails;
 import gift.web.dto.request.product.CreateProductRequest;
 import gift.web.dto.request.product.UpdateProductRequest;
+import gift.web.dto.request.productoption.CreateProductOptionRequest;
+import gift.web.dto.request.productoption.UpdateProductOptionRequest;
 import gift.web.dto.request.wishproduct.CreateWishProductRequest;
 import gift.web.dto.response.product.CreateProductResponse;
 import gift.web.dto.response.product.ReadAllProductsResponse;
 import gift.web.dto.response.product.ReadProductResponse;
 import gift.web.dto.response.product.UpdateProductResponse;
+import gift.web.dto.response.productoption.CreateProductOptionResponse;
+import gift.web.dto.response.productoption.ReadAllProductOptionsResponse;
+import gift.web.dto.response.productoption.UpdateProductOptionResponse;
 import gift.web.dto.response.wishproduct.CreateWishProductResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,10 +41,12 @@ public class ProductApiController {
 
     private final ProductService productService;
     private final WishProductService wishProductService;
+    private final ProductOptionService productOptionService;
 
-    public ProductApiController(ProductService productService, WishProductService wishProductService) {
+    public ProductApiController(ProductService productService, WishProductService wishProductService, ProductOptionService productOptionService) {
         this.productService = productService;
         this.wishProductService = wishProductService;
+        this.productOptionService = productOptionService;
     }
 
     @GetMapping
@@ -62,27 +70,27 @@ public class ProductApiController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ReadProductResponse> readProduct(@PathVariable Long id) {
+    @GetMapping("/{productId}")
+    public ResponseEntity<ReadProductResponse> readProduct(@PathVariable Long productId) {
         ReadProductResponse response;
-        response = productService.readProductById(id);
+        response = productService.readProductById(productId);
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UpdateProductResponse> updateProduct(@PathVariable Long id, @Validated @RequestBody UpdateProductRequest request) {
+    @PutMapping("/{productId}")
+    public ResponseEntity<UpdateProductResponse> updateProduct(@PathVariable Long productId, @Validated @RequestBody UpdateProductRequest request) {
         UpdateProductResponse response;
         try {
-            response = productService.updateProduct(id, request);
+            response = productService.updateProduct(productId, request);
         } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
     }
 
@@ -92,4 +100,29 @@ public class ProductApiController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{productId}/options")
+    public ResponseEntity<ReadAllProductOptionsResponse> readOptions(@PathVariable Long productId) {
+        ReadAllProductOptionsResponse response = productOptionService.readAllOptions(productId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{productId}/options")
+    public ResponseEntity<CreateProductOptionResponse> createOption(@PathVariable Long productId, @Validated @RequestBody CreateProductOptionRequest request) {
+        CreateProductOptionResponse response = productOptionService.createOption(productId, request);
+
+        URI location = URI.create("http://localhost:8080/api/products/" + productId + "/options/" + response.getId());
+        return ResponseEntity.created(location).body(response);
+    }
+
+    @PutMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<UpdateProductOptionResponse> updateOption(@PathVariable Long productId, @PathVariable Long optionId, @Validated @RequestBody UpdateProductOptionRequest request) {
+        UpdateProductOptionResponse response = productOptionService.updateOption(optionId, productId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{productId}/options/{optionId}")
+    public ResponseEntity<Void> deleteOption(@PathVariable Long optionId) {
+        productOptionService.deleteOption(optionId);
+        return ResponseEntity.noContent().build();
+    }
 }

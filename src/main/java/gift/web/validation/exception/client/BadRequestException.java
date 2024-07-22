@@ -12,10 +12,6 @@ public class BadRequestException extends CustomException {
 
     private static final String ERROR_MESSAGE = "잘못된 요청입니다. 요청 URL: %s";
 
-    public BadRequestException() {
-        super();
-    }
-
     public BadRequestException(String url) {
         super(ERROR_MESSAGE.formatted(url));
     }

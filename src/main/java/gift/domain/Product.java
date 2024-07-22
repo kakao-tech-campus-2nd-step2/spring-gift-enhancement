@@ -9,7 +9,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.net.URL;
+import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -31,6 +33,9 @@ public class Product extends BaseEntity {
     @JoinColumn(foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT), nullable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
+    private List<ProductOption> productOptions;
+
     protected Product() {
     }
 
@@ -40,6 +45,7 @@ public class Product extends BaseEntity {
         private Integer price;
         private URL imageUrl;
         private Category category;
+        private List<ProductOption> productOptions;
 
         public Builder name(String name) {
             this.name = name;
@@ -61,6 +67,11 @@ public class Product extends BaseEntity {
             return this;
         }
 
+        public Builder productOptions(List<ProductOption> productOptions) {
+            this.productOptions = productOptions;
+            return this;
+        }
+
         @Override
         protected Builder self() {
             return this;
@@ -68,7 +79,14 @@ public class Product extends BaseEntity {
 
         @Override
         public Product build() {
+            validateProductOptionsPresence(productOptions);
             return new Product(this);
+        }
+
+        private void validateProductOptionsPresence(List<ProductOption> productOptions) {
+            if (productOptions == null || productOptions.isEmpty()) {
+                throw new IllegalArgumentException("상품 옵션은 최소 1개 이상이어야 합니다.");
+            }
         }
     }
 
@@ -78,13 +96,13 @@ public class Product extends BaseEntity {
         price = builder.price;
         imageUrl = builder.imageUrl;
         category = builder.category;
+        productOptions = builder.productOptions;
     }
 
-    public Product update(Product product) {
-        this.name = product.getName();
-        this.price = product.getPrice();
-        this.imageUrl = product.getImageUrl();
-        this.category = product.getCategory();
+    public Product updateBasicInfo(String name, Integer price, URL imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
         return this;
     }
 
@@ -102,5 +120,9 @@ public class Product extends BaseEntity {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<ProductOption> getProductOptions() {
+        return productOptions;
     }
 }

@@ -11,7 +11,7 @@ spring:
     defer-datasource-initialization: true #Hibernate 초기화 후 data.sql 실행
 
 jwt:
-  expiration: 3600000 #1시간
+  expiration: 86400000 #24시간
 
 logging:
   level:
