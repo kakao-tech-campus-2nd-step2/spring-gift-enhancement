@@ -56,6 +56,7 @@ class OptionTest {
         //Then
         assertThat(option.getQuantity()).isEqualTo(50);
     }
+
     @Test
     @DisplayName("옵션 수량 차감 - 차감 수량이 더 커서 실패")
     void subtractFail() {
@@ -63,7 +64,7 @@ class OptionTest {
         Option option = new Option("name", 100);
 
         //When Then
-        assertThatThrownBy(()->option.subtract(101))
+        assertThatThrownBy(() -> option.subtract(101))
                 .isInstanceOf(InsufficientOptionQuantityException.class);
     }
 }

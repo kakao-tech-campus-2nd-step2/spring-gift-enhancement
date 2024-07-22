@@ -87,7 +87,7 @@ class MemberFunctionTest {
 
     @Test
     @Order(2)
-    @DisplayName("로그인 실패 - 비번 틀림)")
+    @DisplayName("로그인 실패 - 비번 틀림")
     void loginFail() throws Exception {
         //Given
         MemberRequest wrongInfoRequest = new MemberRequest("member1@gmail.com", "999999");
