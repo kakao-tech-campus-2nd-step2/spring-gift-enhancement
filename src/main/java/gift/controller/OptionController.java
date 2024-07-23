@@ -3,9 +3,10 @@ package gift.controller;
 import gift.entity.Option;
 import gift.service.OptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -21,8 +22,13 @@ public class OptionController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Option> getOptionById(@PathVariable Long id) {
-        return optionService.getOptionById(id);
+    public ResponseEntity<Option> getOptionById(@PathVariable Long id) {
+        try {
+            Option option = optionService.getOptionById(id);
+            return ResponseEntity.ok(option);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @PostMapping

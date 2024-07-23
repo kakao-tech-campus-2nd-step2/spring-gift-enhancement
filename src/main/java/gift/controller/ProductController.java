@@ -36,9 +36,10 @@ public class ProductController {
 
 
     @Autowired
-    public ProductController(CategoryService categoryService, ProductService productService) {
+    public ProductController(CategoryService categoryService, ProductService productService, OptionService optionService) {
         this.categoryService = categoryService;
         this.productService = productService;
+        this.optionService = optionService;
     }
 
 
