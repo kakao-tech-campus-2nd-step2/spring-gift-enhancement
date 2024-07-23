@@ -41,9 +41,9 @@ public class MemberService {
     }
 
     public Member getMember(String email) {
-        Optional<Member> optionalMember = Optional.ofNullable(memberRepository.findByEmail(email));
-        if (optionalMember.isPresent()) {
-            return optionalMember.get();
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            return member;
         } else {
             throw new MemberNotFoundException("Member with email " + email + " not found");
         }
