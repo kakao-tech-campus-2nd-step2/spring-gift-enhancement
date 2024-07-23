@@ -32,13 +32,15 @@ class ProductServiceTest {
     private CategoryRepository categoryRepository;
     private OptionRepository optionRepository;
     private ProductService productService;
+    private OptionService optionService;
 
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
         categoryRepository = mock(CategoryRepository.class);
         optionRepository = mock(OptionRepository.class);
-        productService = new ProductService(productRepository, categoryRepository, optionRepository);
+        optionService = new OptionService(optionRepository);
+        productService = new ProductService(productRepository, categoryRepository, optionService);
     }
 
     @Test

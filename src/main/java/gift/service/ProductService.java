@@ -10,7 +10,6 @@ import gift.dto.request.UpdateProductRequest;
 import gift.dto.response.MessageResponse;
 import gift.exception.CustomException;
 import gift.repository.CategoryRepository;
-import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +25,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final OptionRepository optionRepository;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionRepository optionRepository) {
+
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.optionRepository = optionRepository;
+        this.optionService = optionService;
     }
 
     public Product getProduct(Long productId) {
@@ -63,19 +63,16 @@ public class ProductService {
 
     public List<Option> getOptions(Long productId) {
         Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
-        return optionRepository.findAllByProduct(product);
+        return optionService.getOptions(product);
     }
 
     public MessageResponse addOption(Long productId, AddOptionRequest addOptionRequest) {
         Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
-        Option option = new Option(addOptionRequest, product);
-        optionRepository.save(option);
-        return new MessageResponse(ADD_OPTION_SUCCESS_MSG);
+        return optionService.addOption(product, addOptionRequest);
     }
 
     public void subtractOptionQuantity(Long productId, SubtractOptionRequest subtractOptionRequest) {
         Product product = productRepository.findProductById(productId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
-        Option option = optionRepository.findAllByProductAndName(product, subtractOptionRequest.optionName()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
-        option.subtract(subtractOptionRequest.amount());
+        optionService.subtractOptionQuantity(product, subtractOptionRequest);
     }
 }
