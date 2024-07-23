@@ -42,6 +42,7 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+        product.getOptions().add(this);
     }
 
     public Option(String name, int quantity, Product product) {

@@ -14,6 +14,7 @@ import gift.domain.Category;
 import gift.domain.Option;
 import gift.domain.Product;
 import gift.dto.OptionDTO;
+import gift.exception.NoOptionsForProductException;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
@@ -114,13 +115,29 @@ public class OptionServiceTest {
     void deleteOption() {
         // given
         long id = 1L;
-        Option option = createOption(id, "test", 1, product);
+        Option option = createOption(id, "test1", 1, product);
+        createOption(id + 1, "test2", 1, product);
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
         given(optionRepository.findById(anyLong())).willReturn(Optional.of(option));
 
         // when
-        optionService.deleteOption(id);
+        optionService.deleteOption(product.getId(), id);
 
         // then
         then(optionRepository).should().delete(any(Option.class));
+    }
+
+    @DisplayName("하나 남은 옵션 삭제")
+    @Test
+    void deleteLastRemainingOption() {
+        // given
+        long id = 1L;
+        createOption(id, "test1", 1, product);
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(product));
+
+        // when
+        // then
+        assertThatExceptionOfType(NoOptionsForProductException.class)
+            .isThrownBy(() -> optionService.deleteOption(product.getId(), id));
     }
 }

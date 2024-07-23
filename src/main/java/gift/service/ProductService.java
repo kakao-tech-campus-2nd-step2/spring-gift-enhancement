@@ -2,9 +2,10 @@ package gift.service;
 
 import gift.domain.Category;
 import gift.domain.Product;
-import gift.repository.ProductRepository;
+import gift.dto.OptionDTO;
 import gift.dto.ProductDTO;
 import gift.exception.NoSuchProductException;
+import gift.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +16,14 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService,
+        OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
 
     public Page<ProductDTO> getProducts(Pageable pageable) {
@@ -35,7 +39,11 @@ public class ProductService {
 
     public ProductDTO addProduct(ProductDTO productDTO) {
         Category category = categoryService.getCategory(productDTO.categoryId()).toEntity();
-        return productRepository.save(productDTO.toEntity(category)).toDTO();
+        Product product = productRepository.save(productDTO.toEntity(category));
+        for (OptionDTO optionDTO : productDTO.optionDTOs()) {
+            optionService.addOption(product.getId(), optionDTO);
+        }
+        return product.toDTO();
     }
 
     public ProductDTO updateProduct(long id, ProductDTO productDTO) {
@@ -46,7 +54,8 @@ public class ProductService {
     }
 
     public ProductDTO deleteProduct(long id) {
-        Product deletedProduct = productRepository.findById(id).orElseThrow(NoSuchProductException::new);
+        Product deletedProduct = productRepository.findById(id)
+            .orElseThrow(NoSuchProductException::new);
         productRepository.delete(deletedProduct);
         return deletedProduct.toDTO();
     }
