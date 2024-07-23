@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -28,8 +27,7 @@ public class ProductService {
     @Transactional
     public Long saveProduct(CreateProductRequestDTO createProductRequestDTO) {
         Category category = categoryService.getCategoryByName(createProductRequestDTO.getCategory());
-        Product product = new Product(createProductRequestDTO.getName(), createProductRequestDTO.getPrice(),
-                createProductRequestDTO.getImageUrl(), category);
+        Product product = new Product(createProductRequestDTO, category);
         validateProduct(product);
 
         return productRepository.save(product).getId();
@@ -39,14 +37,8 @@ public class ProductService {
     public void addProductOption(Long id, CreateProductOptionRequestDTO createProductOptionRequestDTO) {
         Product product = productRepository.findById(id);
 
-        productRepository.findProductOptionsByProductId(id).forEach(productOption -> {
-            if (productOption.getName().equals(createProductOptionRequestDTO.getName())) {
-                throw new ProductException(ErrorCode.DUPLICATED_OPTION_NAME);
-            }
-        });
+        product.addProductOption(createProductOptionRequestDTO);
 
-        ProductOption productOption = productRepository.saveProductOption(new ProductOption(createProductOptionRequestDTO.getName(),
-                createProductOptionRequestDTO.getQuantity(), product));
         productRepository.save(product);
     }
 

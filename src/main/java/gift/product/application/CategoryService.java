@@ -25,7 +25,7 @@ public class CategoryService {
         if (categoryRepository.findByName(request.getName()) != null) {
             throw new IllegalArgumentException("이미 존재하는 카테고리입니다.");
         }
-        Category category = new Category(request.getName(), request.getDescription(), request.getImageUrl(), request.getColor());
+        Category category = new Category(request);
 
         categoryRepository.save(category);
     }

@@ -48,6 +48,7 @@ CREATE TABLE wishlist_product
     wishlist_product_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     wishlist_id         BIGINT NOT NULL,
     product_id          BIGINT NOT NULL,
+    quentity            BIGINT NOT NULL,
     FOREIGN KEY (wishlist_id) REFERENCES wishlist (wishlist_id),
     FOREIGN KEY (product_id) REFERENCES product (product_id)
 );

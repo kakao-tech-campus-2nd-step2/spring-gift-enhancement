@@ -1,9 +1,6 @@
 package gift.product.application;
 
-import gift.product.domain.Product;
-import gift.product.domain.ProductOption;
-import gift.product.domain.WishList;
-import gift.product.domain.WishListProduct;
+import gift.product.domain.*;
 import gift.product.exception.ProductException;
 import gift.product.infra.ProductRepository;
 import gift.product.infra.WishListRepository;
@@ -51,23 +48,23 @@ public class WishListService {
     }
 
     @Transactional
-    public void addProductToWishList(Long userId, Long wishlistId, Long productId, Long optionId) {
-        WishList wishList = findById(wishlistId);
-        if (!Objects.equals(wishList.getUser().getId(), userId)) {
+    public void addProductToWishList(AddWishListRequest request) {
+        WishList wishList = findById(request.getWishlistId());
+        if (!Objects.equals(wishList.getUser().getId(), request.getUserId())) {
             throw new ProductException(ErrorCode.NOT_USER_OWNED);
         }
 
-        Product product = productRepository.findById(productId);
-        ProductOption productOption = productRepository.getProductWithOption(productId, optionId);
+        Product product = productRepository.findById(request.getProductId());
+        ProductOption productOption = productRepository.getProductWithOption(request.getProductId(), request.getOptionId());
 
-        wishList.addWishListProduct(new WishListProduct(wishList, product, productOption));
+        wishList.addWishListProduct(new WishListProduct(wishList, product, productOption, request.getQuantity()));
 
 
         wishListRepository.save(wishList);
     }
 
     public WishList findById(Long id) {
-        return wishListRepository.findById(id).orElseThrow(() -> new ProductException(ErrorCode.WISHLIST_NOT_FOUND));
+        return wishListRepository.findById(id);
     }
 
     @Transactional

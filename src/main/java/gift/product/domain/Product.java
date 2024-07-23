@@ -32,10 +32,10 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, Double price, String imageUrl, Category category) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public Product(CreateProductRequestDTO createProductRequestDTO, Category category) {
+        this.name = createProductRequestDTO.getName();
+        this.price = createProductRequestDTO.getPrice();
+        this.imageUrl = createProductRequestDTO.getImageUrl();
         this.category = category;
     }
 
@@ -71,18 +71,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public List<WishListProduct> getWishListProducts() {
-        return wishListProducts;
-    }
-
-    public void setWishListProducts(List<WishListProduct> wishListProducts) {
-        this.wishListProducts = wishListProducts;
-    }
-
-    public void addProductOption(String name, Long quentity) {
-        ProductOption productOption = new ProductOption(name, quentity, this);
+    public void addProductOption(CreateProductOptionRequestDTO createProductOptionRequestDTO) {
+        ProductOption productOption = new ProductOption(createProductOptionRequestDTO.getName(), createProductOptionRequestDTO.getQuantity(), this);
         productOptions.add(productOption);
     }
+
 
     public void addProductOption(ProductOption productOption) {
         productOptions.add(productOption);

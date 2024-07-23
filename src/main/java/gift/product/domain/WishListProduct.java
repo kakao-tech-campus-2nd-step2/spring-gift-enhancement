@@ -22,13 +22,16 @@ public class WishListProduct {
     @JoinColumn(name = "product_option_id")
     private ProductOption productOption;
 
+    private Long quantity;
+
     public WishListProduct() {
     }
 
-    public WishListProduct(WishList wishList, Product product, ProductOption productOption) {
+    public WishListProduct(WishList wishList, Product product, ProductOption productOption, Long quantity) {
         this.wishList = wishList;
         this.product = product;
         this.productOption = productOption;
+        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -53,5 +56,14 @@ public class WishListProduct {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+
+    public ProductOption getProductOption() {
+        return productOption;
+    }
+
+    public Long getQuantity() {
+        return quantity;
     }
 }
