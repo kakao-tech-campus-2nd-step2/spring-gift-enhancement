@@ -1,11 +1,14 @@
 package gift.dto;
 
 import gift.domain.Category;
+import gift.domain.Option;
 import gift.domain.Product;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 public class UpdateProductDto {
     @NotBlank
@@ -20,11 +23,40 @@ public class UpdateProductDto {
     @NotBlank
     Category category;
 
+    List<Option> options;
+
+    public UpdateProductDto(String updatedProduct, int i, String url, Category category) {
+        this.name = updatedProduct;
+        this.price = i;
+        this.imageUrl = url;
+        this.category = category;
+    }
+
     public String getName() {
         return this.name;
     }
 
-    public void updateProduct(Product product) {
+    public List<Option> getOptions() {
+        return this.options;
+    }
+
+    public void setOptions(List<Option> list) {
+        this.options = list;
+    }
+
+    public  Integer getPrice() {
+        return this.price;
+    }
+
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public void update(Product product) {
         product.setName(this.name);
         product.setPrice(this.price);
         product.setImageUrl(this.imageUrl);

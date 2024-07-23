@@ -15,10 +15,12 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @OneToMany(mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
+
     public Category(String name) {
         this.name = name;
     }
-
     public Long getId() {
         return category_id;
     }

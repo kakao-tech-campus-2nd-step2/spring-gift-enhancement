@@ -10,16 +10,16 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long product_id;
+    private Long product_id;
 
     @Column(nullable = false, length = 15)
-    String name;
+    private String name;
 
     @Column(nullable = false)
-    Integer price;
+    private Integer price;
 
     @Column(nullable = false)
-    String imageUrl;
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -27,6 +27,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true )
+    private List<Option> options = new ArrayList<>();
 
     public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
@@ -57,5 +60,18 @@ public class Product {
     }
     public String getImageUrl() {
         return imageUrl;
+    }
+    public Category getCategory() {return category;}
+
+    public void setOptions(List<Option> optionList) {
+        this.options = optionList;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setId(long l) {
+        this.product_id = l;
     }
 }

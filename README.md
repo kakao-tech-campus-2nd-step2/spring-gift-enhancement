@@ -46,3 +46,54 @@
 - [x] CreateProductDto에 category 포함
 - [x] ProductService에서 CateggoryRepo 제거
 
+# 2단계
+
+## 구현할 기능 목록
+- [x] Option Entity 추가
+  - [x] Option Entity에는 id, option_name이 있음
+  - [x] option_name은 공백 포함 최대 50자
+  - [x] option_name은 ( ), [ ], +, -, &, /, _ 를 제외한 특수문자 사용 불가
+  - [x] 같은 Product의 option_name은 유니크 해야함
+    - [x] Option에 quantity 추가 (1개 이상 ~ 1억개 미만)
+
+- [x] Option Repository 구현
+  
+- [x] Product Entity 수정
+  - [x] Product에 하나 이상의 옵션을 추가하기 위해 List를 사용하여 옵션 저장
+  
+- [x] Product Controller 수정
+  - [x] Option 추가되면서 관련 내용들 확인하고 수정할 것 있다면 수정
+  - [x] 특정 Product의 Option 가져오기
+  
+## 2단계 피드백
+- [x] Product에서 Update문 수정
+  - product에서 Update문 삭제
+  - UpdateProductDto에서 update하도록 수정
+- [ ] UpdateProductDto jakarta validator 정상 작동할지?
+- [x] UpdateProductDto DAO역할 침범하지는 않는지?
+  - update를 product의 service code내에서 작성 완료
+  - Option을 update시키는 코드는 Option controller에서 진행하는 것이 맞는지 고민이 된다.
+- [x] ProductService의 Optionservice.getProductOptions 를 굳이 가져와야 하나?
+  - controller에서 바로 OptionService.getProductOptions를 호출하도록 수정
+
+# 3단계
+
+## 구현할 기능 목록
+- [x] 상품 옵션 수량을 지정된 숫자만큼 빼는 기능
+  - [x] OptionService에서 해당 기능 구현
+    - [x] 지정된 숫자가 1 이상인지 확인
+    - [x] 남은 수량보다 지정된 숫자가 더 큰 경우 오류 출력
+    - [x] (남은 수량 - 지정된 숫자)를 다시 남은 수량에 저장
+    - [x] 수량을 빼서 저장하는 기능 Entity 클레스에서도 구현해보기
+  - [ ] 테스트 코드 작성
+    - [x] 상품 추가
+      - [x] 카테고리가 잘 추가되는 지 확인
+      - [x] 옵션 추가도 잘 이루어지는 지 확인
+    - [x] 상품 수정
+      - [x] 카테고리가 잘 수정되는 지 확인
+      - [x] 옵션 수정도 잘 이루어지는 지 확인
+    - [x] 옵션 수량 차감
+
+## 3단계 피드백
+  - [x] ProductService의 Option update 부분 N x N 호출이 아닌 다른 방식으로 호출하기
+    - originOption은 HashMap으로 변환해서 ID를 키로 사용해보기 O(N)
