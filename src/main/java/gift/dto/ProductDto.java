@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Size;
 
 import jakarta.validation.constraints.NotEmpty;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,6 +48,7 @@ public class ProductDto {
 
     // 기본 생성자
     public ProductDto() {
+        this.options = new ArrayList<>();
     }
 
     // 모든 필드를 받는 생성자
@@ -56,7 +58,7 @@ public class ProductDto {
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
-
+        this.options = new ArrayList<>();
     }
 
     // Product 엔티티를 받아서 Dto로 변환하는 생성자
@@ -67,7 +69,6 @@ public class ProductDto {
         this.imageUrl = product.getImageUrl();
         this.categoryId = product.getCategory().getId();
         this.categoryName = product.getCategory().getName();
-
         this.options = convertOptionsToDto(product.getOptions());
     }
 

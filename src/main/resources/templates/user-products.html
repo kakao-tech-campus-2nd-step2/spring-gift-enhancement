@@ -20,6 +20,8 @@
     <span id="current-page">1</span>
     <button id="next-page" class="btn btn-secondary">Next</button>
 </div>
+<a href="/view/home">Back to Home</a>
+
 <script>
     $(document).ready(function() {
         let currentPage = 1;
@@ -44,7 +46,7 @@
 
         function fetchProducts(page, size) {
             $.ajax({
-                url: `/api/products/data?page=${page - 1}&size=${size}`, // Spring Data JPA는 페이지 번호가 0부터 시작
+                url: `/view/products/data?page=${page - 1}&size=${size}`, // Spring Data JPA는 페이지 번호가 0부터 시작
                 method: 'GET',
                 success: function(response) {
                     const products = response.content || response; // response.content가 있는 경우 처리
