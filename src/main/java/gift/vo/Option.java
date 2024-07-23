@@ -1,8 +1,8 @@
 package gift.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table
@@ -12,7 +12,6 @@ public class Option {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore //@Todo 추후 삭제 필요
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_option_product_id_ref_product_id"))
     private Product product;
@@ -21,10 +20,12 @@ public class Option {
     private String name;
 
     @NotNull
+    @Positive
     private int quantity;
 
     public Option(Long id, Product product, String name, int quantity) {
         validateName(name);
+        validateQuantity(quantity);
         this.id = id;
         this.product = product;
         this.name = name;
@@ -44,6 +45,16 @@ public class Option {
         }
     }
 
+    private static void validateQuantity(int quantity) {
+        if (quantity < 1 || quantity > 100000000) {
+            throw new IllegalArgumentException("옵션 수량은 최소 1개 이상 1억 개 미만이여야 합니다.");
+        }
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public Long getId() {
         return id;
     }
@@ -58,5 +69,12 @@ public class Option {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void subtractQuantity(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("해당 상품 옵션의 재고가 선택하신 수량 보다 작습니다. " + "[남은 수량: "+this.quantity+"]" );
+        }
+        this.quantity -= quantity;
     }
 }

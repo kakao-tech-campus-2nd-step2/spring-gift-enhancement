@@ -1,5 +1,6 @@
 package gift.controller;
 
+import gift.dto.WishDto;
 import gift.service.JwtUtil;
 import gift.service.WishlistService;
 import gift.vo.Wish;
@@ -9,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static gift.service.JwtUtil.getBearerToken;
 
@@ -33,9 +36,12 @@ public class WishlistController {
         Long memberId = jwtUtil.getMemberIdFromToken(token);
 
         Page<Wish> allWishlistsPaged = service.getWishProductList(memberId, pageNumber-1, pageSize);
+        List<WishDto> WishDtos = allWishlistsPaged.getContent().stream()
+                .map(WishDto::toWishDto)
+                .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
-        response.put("content", allWishlistsPaged.getContent());
+        response.put("content", WishDtos);
         response.put("totalPages", allWishlistsPaged.getTotalPages());
         response.put("currentPageNumber", allWishlistsPaged.getNumber());
 

@@ -1,6 +1,6 @@
 package gift.service;
 
-import gift.dto.ProductDto;
+import gift.dto.ProductRequestDto;
 import gift.dto.ProductUpdateDto;
 import gift.repository.ProductRepository;
 import gift.vo.Category;
@@ -18,10 +18,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.optionService = optionService;
     }
     
     private Category getCategory(Long categoryId) {
@@ -41,8 +43,9 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다."));
     }
 
-    public void addProduct(@Valid ProductDto productDto) {
-        Product product = productDto.toProduct(getCategory(productDto.categoryId()));
+    public void addProduct(@Valid ProductRequestDto productRequestDto) {
+        Product product = productRequestDto.toProduct(getCategory(productRequestDto.categoryId()));
+        optionService.addOption(product, productRequestDto.options());
         productRepository.save(product);
     }
 

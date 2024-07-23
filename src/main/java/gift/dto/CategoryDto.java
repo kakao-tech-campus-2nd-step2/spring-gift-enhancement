@@ -20,4 +20,13 @@ public record CategoryDto (
     public Category toCategory() {
         return new Category(id, name, color, imageUrl, description);
     }
+
+    public static CategoryDto fromCategory(Category category) {
+        return new CategoryDto(
+                category.getId(),
+                category.getName(),
+                category.getColor(),
+                category.getImageUrl(),
+                category.getDescription());
+    }
 }

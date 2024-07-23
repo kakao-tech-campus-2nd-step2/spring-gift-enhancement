@@ -75,18 +75,19 @@
                 const totalPages = response.totalPages;
 
                 // Display member's name
-                const memberName = wishlistItems.length > 0 ? wishlistItems[0].member.email : '';
+                const memberName = wishlistItems.length > 0 ? wishlistItems[0].memberDto.email : '';
                 $('#memberName').text(memberName);
 
                 // Display wishlist items
                 const wishlistTable = $("#wishlist-items");
                 wishlistTable.empty();
                 wishlistItems.forEach(function(item) {
+                    console.log(item)
                     wishlistTable.append(`
                         <tr>
-                            <td>${item.product.name}</td>
-                            <td>${item.product.price}</td>
-                            <td><img src="${item.product.imageUrl}" alt="상품 이미지" width="100"></td>
+                            <td>${item.productResponseDto.name}</td>
+                            <td>${item.productResponseDto.price}</td>
+                            <td><img src="${item.productResponseDto.imageUrl}" alt="상품 이미지" width="100"></td>
                             <td><button class="heart-button" onclick="removeFromWishlist(${item.id})" onmouseover="unfillHeart(this)" onmouseout="fillHeart(this)"><i class="fas fa-heart"></i></button></td>
                         </tr>
                     `);

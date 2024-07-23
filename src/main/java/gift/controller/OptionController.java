@@ -1,6 +1,7 @@
 package gift.controller;
 
-import gift.dto.OptionDto;
+import gift.dto.OptionRequestDto;
+import gift.dto.OptionResponseDto;
 import gift.service.OptionService;
 import gift.vo.Option;
 import jakarta.validation.Valid;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products/")
@@ -26,14 +28,19 @@ public class OptionController {
      * @return List<Option>
      */
     @GetMapping("/{id}/options")
-    public ResponseEntity<List<Option>> getOption(@PathVariable Long id) {
+    public ResponseEntity<List<OptionResponseDto>> getOption(@PathVariable Long id) {
         List<Option> allOptions = optionService.getOptionsPerProduct(id);
-        return new ResponseEntity<>(allOptions, HttpStatus.OK);
+
+        List<OptionResponseDto> allOptionsDtos = allOptions.stream()
+                .map(OptionResponseDto::toOptionResponseDto)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(allOptionsDtos, HttpStatus.OK);
     }
 
     @PostMapping("/options")
-    public ResponseEntity<Void> addOption(@Valid @RequestBody OptionDto optionDto) {
-        optionService.addOption(optionDto);
+    public ResponseEntity<Void> addOption(@Valid @RequestBody List<OptionRequestDto> optionRequestDtos) {
+        optionService.addOption(optionRequestDtos);
         return ResponseEntity.noContent().build();
     }
 
