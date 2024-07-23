@@ -35,9 +35,6 @@ public class OptionService {
 
     public void subtractOptionQuantity(Product product, SubtractOptionRequest subtractOptionRequest) {
         Option option = optionRepository.findAllByProductAndName(product, subtractOptionRequest.optionName()).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
-        System.out.println("before: " + option.getQuantity());
         option.subtract(subtractOptionRequest.amount());
-        System.out.println("after: " + option.getQuantity());
-
     }
 }
