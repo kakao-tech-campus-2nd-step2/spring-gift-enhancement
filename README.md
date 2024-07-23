@@ -30,6 +30,7 @@
         │       ├── controller
         │       │   ├── AdminController.java
         │       │   ├── CategoryController.java
+        │       │   ├── HomeController.java
         │       │   ├── MemberController.java
         │       │   ├── ProductConroller.java
         │       │   └── WishController.java
