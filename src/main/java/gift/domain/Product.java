@@ -44,7 +44,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Option> options = new ArrayList<>();
-  
+
     protected Product() {
     }
 
@@ -53,6 +53,11 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+    }
+
+    public void addOption(Option option) {
+        options.add(option);
+        option.setProduct(this);
     }
 
     public Long getId() {
@@ -93,5 +98,9 @@ public class Product {
 
     public List<Option> getOptions() {
         return options;
+    }
+
+    public Long getCategoryId() {
+        return category.getId();
     }
 }

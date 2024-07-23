@@ -1,10 +1,9 @@
 package gift.service;
 
-import gift.DTO.product.ProductResponse;
-import gift.domain.Category;
 import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wishlist;
+import gift.repository.ProductRepository;
 import gift.repository.WishlistRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +17,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class WishlistService {
 
     private final WishlistRepository wishlistRepository;
-    private final ProductService productService;
+    private final ProductRepository productRepository;
     private final MemberService memberService;
     private final CategoryService categoryService;
 
     @Autowired
     public WishlistService(
         WishlistRepository wr,
-        ProductService ps,
+        ProductRepository pr,
         MemberService ms,
         CategoryService cs
     ) {
         wishlistRepository = wr;
-        productService = ps;
+        productRepository = pr;
         memberService = ms;
         categoryService = cs;
     }
@@ -44,15 +43,9 @@ public class WishlistService {
 
     @Transactional
     public void addWishlist(String email, Long productId) {
-        ProductResponse productResponse = productService.getProductById(productId);
-        Category cat = categoryService.getCategoryById(productResponse.getCategoryId());
+        Product product= productRepository.findById(productId)
+                                        .orElseThrow(() -> new RuntimeException());
         Member member = memberService.getMemberByEmail(email);
-        Product product = new Product(
-                        productResponse.getName(),
-                        productResponse.getPrice(),
-                        productResponse.getImageUrl(),
-                        cat
-                    );
 
         Wishlist wish = new Wishlist(member, product);
         wishlistRepository.save(wish);

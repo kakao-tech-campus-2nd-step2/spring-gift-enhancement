@@ -33,7 +33,7 @@ public class Option {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Option() {
+    protected Option() {
     }
 
     public Option(String name, Long quantity, Product product) {
@@ -52,5 +52,16 @@ public class Option {
 
     public Long getQuantity() {
         return quantity;
+    }
+
+    public void subtract(Long amount) {
+        if(this.quantity < amount) {
+            throw new RuntimeException("Not enough quantity available");
+        }
+        this.quantity -= amount;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

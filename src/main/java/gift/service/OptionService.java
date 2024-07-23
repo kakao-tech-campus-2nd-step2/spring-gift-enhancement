@@ -9,6 +9,7 @@ import gift.repository.ProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -29,33 +30,42 @@ public class OptionService {
             .orElseThrow(() -> new RuntimeException("No such product with id" + productId));
 
         List<OptionResponse> responses = product.getOptions().stream()
-                                .map(op -> OptionResponse.fromEntity(op))
+                                .map(OptionResponse::fromEntity)
                                 .toList();
         return  responses;
     }
 
-    public OptionResponse addOption(Long productId, OptionRequest newOption) {
+    @Transactional
+    public OptionResponse addOption(Long productId, OptionRequest optionRequest) {
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new RuntimeException("No such product with id" + productId)
         );
 
-        validateOptionName(productId, newOption);
+        validateOptionNameNotDuplicated(productId, optionRequest);
 
-        Option option = new Option(newOption.name(), newOption.quantity(), product);
+        Option option = new Option(optionRequest.name(), optionRequest.quantity(), product);
+        product.addOption(option);
         optionRepository.save(option);
         return OptionResponse.fromEntity(option);
     }
 
-    private void validateOptionName(Long productId, OptionRequest newOption) {
-        String newOptionName = newOption.name();
-        getAllOptionsByProductId(productId).stream()
-            .map(OptionResponse::getName)
-            .anyMatch(name -> {
-                if (name.equals(newOptionName)) {
-                    throw new RuntimeException("An option with the name " + newOption.name() +
-                        " already exists for this product.");
-                }
-                return false;
-            });
+    @Transactional
+    public OptionResponse decrementOptionQuantity(Long optionId, Long quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new RuntimeException("No such option with id " + optionId));
+
+        option.subtract(quantity);
+        Option savedOption = optionRepository.save(option);
+        return OptionResponse.fromEntity(savedOption);
+    }
+
+    private void validateOptionNameNotDuplicated(Long productId, OptionRequest optionRequest) {
+        boolean exists = optionRepository.existsByProductIdAndName(productId, optionRequest.name());
+        if (exists) {
+            throw new RuntimeException(
+                String.format("Option with name %s already exists for product %d",
+                    optionRequest.name(), productId)
+            );
+        }
     }
 }

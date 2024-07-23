@@ -28,4 +28,8 @@ public class OptionResponse {
     public String getName() {
         return name;
     }
+
+    public Long getQuantity() {
+        return quantity;
+    }
 }
