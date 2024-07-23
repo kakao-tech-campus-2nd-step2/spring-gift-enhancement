@@ -4,6 +4,7 @@ import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
 import gift.dto.WishProduct;
+import gift.dto.response.MessageResponse;
 import gift.dto.response.WishProductResponse;
 import gift.exception.CustomException;
 import gift.repository.MemberRepository;
@@ -40,14 +41,14 @@ public class WishListService {
         return new PageImpl<>(wishProducts.subList(start, end), pageable, wishProducts.size());
     }
 
-    public String addWishProduct(WishProduct wishProduct) {
+    public MessageResponse addWishProduct(WishProduct wishProduct) {
         wishRepository.save(wish(wishProduct.getMemberId(), wishProduct.getProductId()));
-        return ADD_SUCCESS_MSG;
+        return new MessageResponse(ADD_SUCCESS_MSG);
     }
 
-    public String deleteWishProduct(WishProduct wishProduct) {
+    public MessageResponse deleteWishProduct(WishProduct wishProduct) {
         wishRepository.delete(wish(wishProduct.getMemberId(), wishProduct.getProductId()));
-        return DELETE_SUCCESS_MSG;
+        return new MessageResponse(DELETE_SUCCESS_MSG);
     }
 
     private Wish wish(Long memberId, Long productId) {

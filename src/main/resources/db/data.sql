@@ -33,3 +33,8 @@ INSERT INTO wish VALUES (4, 1, 4);
 INSERT INTO wish VALUES (5, 1, 3);
 INSERT INTO wish VALUES (6, 2, 1);
 INSERT INTO wish VALUES (7, 2, 3);
+
+-- option data for test
+INSERT INTO option VALUES (1, 'option1', 100, 1);
+INSERT INTO option VALUES (2, 'option2', 100, 1);
+INSERT INTO option VALUES (3, 'option3', 100, 1);

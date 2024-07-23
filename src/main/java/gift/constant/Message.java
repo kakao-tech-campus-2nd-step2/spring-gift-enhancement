@@ -6,6 +6,7 @@ public class Message {
     public static final String ADD_SUCCESS_MSG = "상품 추가 성공";
     public static final String UPDATE_SUCCESS_MSG = "상품 수정 성공";
     public static final String DELETE_SUCCESS_MSG = "상품 삭제 성공";
+    public static final String ADD_OPTION_SUCCESS_MSG = "상품 옵션 추가 성공";
 
     /*ERROR*/
     public static final String LENGTH_ERROR_MSG = "상품 이름은 공백 포함 15자를 초과할 수 없습니다.";
@@ -15,4 +16,7 @@ public class Message {
     public static final String POSITIVE_NUMBER_REQUIRED_MSG = "0이상의 값을 입력해 주세요.";
     public static final String EMAIL_PATTERN_ERROR_MSG = "이메일 형식이 잘못되었습니다.";
     public static final String DATA_NOT_FOUND_ERROR_MSG = "데이터를 찾을 수 없습니다.";
+    public static final String INVALID_QUANTITY_ERROR_MSG = "옵션 수량은 1개 이상 1억 개 미만이어야 합니다.";
+    public static final String DUPLICATE_OPTION_NAME_MSG = "하나의 상품에 중복된 이름의 옵션은 생성할 수 없습니다.";
+    public static final String INVALID_AMOUNT_ERROR_MSG = "1 이상, 남은 물품 수 미만의 수량만 차감할 수 있습니다.";
 }

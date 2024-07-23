@@ -21,13 +21,13 @@ public class AuthService {
     }
 
     public AuthResponse addMember(AuthRequest authRequest) {
-        Member requestMember = new Member(authRequest.getEmail(), authRequest.getPassword());
+        Member requestMember = new Member(authRequest.email(), authRequest.password());
         Member savedMember = memberRepository.save(requestMember);
         return new AuthResponse(jwtUtil.createJWT(savedMember.getId()));
     }
 
     public AuthResponse login(AuthRequest authRequest) {
-        Member storedMember = memberRepository.findMemberByEmail(authRequest.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        Member storedMember = memberRepository.findMemberByEmail(authRequest.email()).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         return new AuthResponse(jwtUtil.createJWT(storedMember.getId()));
     }
 

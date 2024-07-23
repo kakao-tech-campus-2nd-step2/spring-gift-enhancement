@@ -2,13 +2,10 @@ package gift.domain;
 
 import gift.dto.request.AddProductRequest;
 import gift.dto.request.UpdateProductRequest;
-import gift.util.ProductNameValidationUtil;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static gift.constant.Message.*;
@@ -23,14 +20,17 @@ public class Product {
 
     @NotBlank(message = REQUIRED_FIELD_MSG)
     @Size(max = 15, message = LENGTH_ERROR_MSG)
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣 ()\\[\\]+\\-&/_]*$", message = SPECIAL_CHAR_ERROR_MSG)
+    @Pattern(regexp = "^(?!.*카카오).*$", message = KAKAO_CONTAIN_ERROR_MSG)
     @Column(nullable = false)
     private String name;
 
     @NotNull(message = REQUIRED_FIELD_MSG)
     @Positive(message = POSITIVE_NUMBER_REQUIRED_MSG)
     @Column(nullable = false)
-    private int price;
+    private Integer price;
 
+    @NotBlank(message = REQUIRED_FIELD_MSG)
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
@@ -41,31 +41,33 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> options = new ArrayList<>();
+
     public Product() {
     }
 
     public Product(long id, String name, int price, String imageUrl) {
-        ProductNameValidationUtil.isValidProductName(name);
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public Product(AddProductRequest productRequest, Category category) {
-        ProductNameValidationUtil.isValidProductName(productRequest.getName());
-        this.name = productRequest.getName();
-        this.price = productRequest.getPrice();
-        this.imageUrl = productRequest.getImageUrl();
+    public Product(AddProductRequest addProductRequest, Category category, Option option) {
+        this.name = addProductRequest.name();
+        this.price = addProductRequest.price();
+        this.imageUrl = addProductRequest.imageUrl();
         this.category = category;
+        this.options.add(option);
+        option.setProduct(this);
     }
 
     public Product(Long id, UpdateProductRequest productRequest, Category category) {
-        ProductNameValidationUtil.isValidProductName(productRequest.getName());
         this.id = id;
-        this.name = productRequest.getName();
-        this.price = productRequest.getPrice();
-        this.imageUrl = productRequest.getImageUrl();
+        this.name = productRequest.name();
+        this.price = productRequest.price();
+        this.imageUrl = productRequest.imageUrl();
         this.category = category;
     }
 
@@ -89,12 +91,15 @@ public class Product {
         return category.getName();
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
     public void setName(String name) {
-        ProductNameValidationUtil.isValidProductName(name);
         this.name = name;
     }
 
@@ -108,5 +113,9 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public void setOption(Option option) {
+        this.options.add(option);
     }
 }

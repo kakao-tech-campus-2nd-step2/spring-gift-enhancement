@@ -3,6 +3,7 @@ package gift.controller;
 import gift.Login;
 import gift.dto.LoginMember;
 import gift.dto.WishProduct;
+import gift.dto.response.MessageResponse;
 import gift.dto.response.WishProductResponse;
 import gift.service.WishListService;
 import org.springframework.data.domain.Page;
@@ -27,12 +28,12 @@ public class WishListController {
     }
 
     @PostMapping("/{productId}")
-    public ResponseEntity<String> addWishProduct(@Login LoginMember member, @PathVariable("productId") Long productId) {
+    public ResponseEntity<MessageResponse> addWishProduct(@Login LoginMember member, @PathVariable("productId") Long productId) {
         return ResponseEntity.ok(wishListService.addWishProduct(new WishProduct(member.getId(), productId)));
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<String> deleteWishProduct(@Login LoginMember member, @PathVariable("productId") Long productId) {
+    public ResponseEntity<MessageResponse> deleteWishProduct(@Login LoginMember member, @PathVariable("productId") Long productId) {
         return ResponseEntity.ok(wishListService.deleteWishProduct(new WishProduct(member.getId(), productId)));
     }
 }
