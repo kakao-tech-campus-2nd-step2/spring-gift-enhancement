@@ -18,6 +18,7 @@ import gift.domain.exception.forbidden.TokenStringInvalidException;
 import gift.domain.exception.notFound.CategoryNotFoundException;
 import gift.domain.exception.notFound.MemberNotFoundException;
 import gift.domain.exception.notFound.NotFoundException;
+import gift.domain.exception.notFound.OptionNotIncludedInProductOptionsException;
 import gift.domain.exception.notFound.ProductNotFoundException;
 import gift.domain.exception.notFound.ProductNotIncludedInWishlistException;
 import gift.domain.exception.unauthorized.TokenNotFoundException;
@@ -50,7 +51,8 @@ public class GlobalExceptionHandler {
         MemberNotFoundException.class,
         ProductNotIncludedInWishlistException.class,
         CategoryNotFoundException.class,
-        OptionNotFoundException.class
+        OptionNotFoundException.class,
+        OptionNotIncludedInProductOptionsException.class
     })
     public ResponseEntity<ErrorApiResponse> handleNotFoundException(NotFoundException e) {
         return ErrorApiResponse.notFound(e);

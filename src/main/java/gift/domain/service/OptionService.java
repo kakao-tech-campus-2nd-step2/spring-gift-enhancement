@@ -9,6 +9,7 @@ import gift.domain.exception.badRequest.OptionQuantityOutOfRangeException;
 import gift.domain.exception.badRequest.OptionUpdateActionInvalidException;
 import gift.domain.exception.conflict.OptionAlreadyExistsInProductException;
 import gift.domain.exception.notFound.OptionNotFoundException;
+import gift.domain.exception.notFound.OptionNotIncludedInProductOptionsException;
 import gift.domain.repository.OptionRepository;
 import gift.global.WebConfig.Constants.Domain;
 import gift.global.WebConfig.Constants.Domain.Option.QuantityUpdateAction;
@@ -126,6 +127,6 @@ public class OptionService {
         product.getOptions().stream()
             .filter(o -> o.getId().equals(optionId))
             .findAny()
-            .orElseThrow(OptionNotFoundException::new);
+            .orElseThrow(OptionNotIncludedInProductOptionsException::new);
     }
 }
