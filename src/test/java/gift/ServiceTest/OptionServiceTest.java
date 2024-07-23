@@ -3,6 +3,7 @@ package gift.ServiceTest;
 import gift.Entity.Option;
 import gift.Mapper.Mapper;
 import gift.Model.OptionDto;
+import gift.Model.OrderRequestDto;
 import gift.Repository.OptionJpaRepository;
 import gift.Service.OptionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,14 +36,14 @@ public class OptionServiceTest {
     public void testGetAllOptionsByProductId() {
         // given
         long productId = 1L;
-        when(optionJpaRepository.findAllById(productId)).thenReturn(Collections.emptyList());
+        when(optionJpaRepository.findAllByProductId(productId)).thenReturn(Collections.emptyList());
         when(mapper.optionToDto(any(Option.class))).thenReturn(new OptionDto());
 
         // when
         List<OptionDto> optionDto = optionService.getAllOptionsByProductId(productId);
 
         // then
-        verify(optionJpaRepository, times(1)).findAllById(productId);
+        verify(optionJpaRepository, times(1)).findAllByProductId(productId);
         assertNotNull(optionDto);
     }
 
@@ -93,16 +94,30 @@ public class OptionServiceTest {
         //given
         OptionDto optionDto = new OptionDto(1L, 1L, "Option1", 1000, 5);
         Option option = new Option(1L, null, "Option1", 1000, 10);
-        when(optionJpaRepository.findById(optionDto.getId())).thenReturn(java.util.Optional.of(option));
+
+        OrderRequestDto orderRequestDto = new OrderRequestDto(1L, 1L, 5, 1L);
+        when(optionJpaRepository.findById(orderRequestDto.getOptionId())).thenReturn(java.util.Optional.of(option));
         when(optionJpaRepository.save(any(Option.class))).thenReturn(option);
 
         //when
-        optionService.subtractOption(optionDto);
+        optionService.subtractOption(orderRequestDto);
 
         //then
         verify(optionJpaRepository, times(1)).findById(optionDto.getId());
         verify(optionJpaRepository, times(1)).save(any(Option.class));
 
+    }
 
+    @Test
+    public void testSubtractOptionWhenQuantityIsNegative() {
+        //given
+        OrderRequestDto orderRequestDto = new OrderRequestDto(1L, 1L, -5, 1L);
+
+        //when
+        optionService.subtractOption(orderRequestDto);
+
+        //then
+        verify(optionJpaRepository, never()).findById(orderRequestDto.getOptionId());
+        verify(optionJpaRepository, never()).save(any(Option.class));
     }
 }

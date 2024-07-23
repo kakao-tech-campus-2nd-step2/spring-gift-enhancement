@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Controller
 public class ProductController {
@@ -31,8 +30,8 @@ public class ProductController {
 
     @GetMapping("/api/products")
     public String getAllProductsByRoot(Model model,
-                                       @RequestParam(value="page", defaultValue="0") int page,
-                                       @RequestParam(value="size", defaultValue="10") int size) {
+                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                       @RequestParam(value = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductDto> paging = productService.getAllProductsByPage(pageable);
         model.addAttribute("paging", paging);
@@ -43,8 +42,8 @@ public class ProductController {
 
     @GetMapping("/products")
     public String getAllProductsByUser(Model model,
-                              @RequestParam(value="page", defaultValue="0") int page,
-                              @RequestParam(value="size", defaultValue="10") int size) {
+                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                       @RequestParam(value = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductDto> paging = productService.getAllProductsByPage(pageable);
         model.addAttribute("paging", paging);
@@ -72,6 +71,7 @@ public class ProductController {
         if ("GET".equalsIgnoreCase(request.getMethod())) {
             Optional<ProductDto> optionalProduct = productService.getProductById(id);
             model.addAttribute("product", optionalProduct.get());
+            model.addAttribute("categories", categoryService.getAllCategories());
             return "product_form";
         } else if ("POST".equalsIgnoreCase(request.getMethod())) {
             productService.updateProduct(productDtoDetails);
