@@ -90,6 +90,7 @@ public class OptionService {
     public void deleteOptionById(Product product, Long optionId) {
         validateOptionIsInProduct(product, optionId);
         Option option = getOptionById(optionId);
+        product.getOptions().remove(option);
         optionRepository.delete(option);
     }
 
