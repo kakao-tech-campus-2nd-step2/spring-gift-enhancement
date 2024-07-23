@@ -29,22 +29,8 @@ public class Product {
     @NotNull
     private String imageUrl;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options = new ArrayList<>();
-
-    @PrePersist
-    public void prePersist() {
-        hasCategory();
-        hasOptions();
-        validateName();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        hasCategory();
-        hasOptions();
-        validateName();
-    }
 
     public Product() {}
 
@@ -58,6 +44,9 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+
+        validateName();
+        hasCategory();
     }
 
     private void validateName() {
@@ -80,7 +69,7 @@ public class Product {
         }
     }
 
-    private void hasOptions() {
+    public static void hasOptions(List<Option> options) {
         if (options.isEmpty()) {
             throw new IllegalArgumentException("상품에는 하나 이상의 옵션이 필요합니다.");
         }
