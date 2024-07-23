@@ -60,4 +60,23 @@ public class OptionService {
     public void deleteOption(Long optionId) {
         optionRepository.deleteById(optionId);
     }
+
+    public void decreaseOptionQuantity(Long optionId, Long quantity) {
+        Option decreaseOption = optionRepository.findById(optionId).orElseThrow(() -> new CustomException.EntityNotFoundException("Option not found"));
+
+        if (quantity <= 0) {
+            throw new CustomException.InvalidQuantityException("Quantity must be greater than zero");
+        }
+        if(decreaseOption.getQuantity() < quantity) {
+            throw new CustomException.InvalidQuantityException("Not enough quantity available");
+        }
+        Option updatedOption = new Option.Builder()
+                .id(decreaseOption.getId())
+                .name(decreaseOption.getName())
+                .quantity(decreaseOption.getQuantity()-quantity)
+                .product(decreaseOption.getProduct())
+                .build();
+
+        optionRepository.save(updatedOption);
+    }
 }
