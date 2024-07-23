@@ -10,7 +10,8 @@ import static gift.constant.Message.*;
 import static gift.exception.ErrorCode.INVALID_AMOUNT_ERROR;
 
 @Entity
-@Table(name = "option")
+@Table(name = "option",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "name"})})
 public class Option {
 
     @Id
