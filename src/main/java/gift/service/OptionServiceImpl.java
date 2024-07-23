@@ -37,6 +37,14 @@ public class OptionServiceImpl implements OptionService {
         return optionRepository.findAllByProduct(product);
     }
 
+    @Override
+    public void subtractOptionQuantity(Long optionId, int quantity) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new NoSuchElementException("옵션이 존재하지 않습니다."));
+        option.subtractQuantity(quantity);
+        optionRepository.save(option);
+    }
+
     private void validateOption(List<Option> options, Option newOption) {
         for (Option option : options) {
             if (option.getName().equals(newOption.getName())) {
