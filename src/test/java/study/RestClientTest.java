@@ -37,12 +37,13 @@ public class RestClientTest {
     assertThat(properties.redirect_url()).isNotEmpty();
     assertThat(properties.redirect_url()).isEqualTo("http://localhost:8081");
   }
+
   @Test
   void test1(){
     // https://kauth.kakao.com/oauth/authorize?scope=talk_message&response_type=code&redirect_uri=http://localhost:8080&client_id=3067383950805f02fd78a974d772f63f
     var url = "https://kauth.kakao.com/oauth/token";
     var body = new LinkedMultiValueMap<String,String>();
-    new KakaoProperties("3067383950805f02fd78a974d772f63f","http://localhost:8081 ");
+    new KakaoProperties(properties.clientId(),"http://localhost:8081 ");
     body.add("grant_type", "authorization_code");
     body.add("client_id",properties.clientId());
     body.add("redirect_url",properties.redirect_url());
