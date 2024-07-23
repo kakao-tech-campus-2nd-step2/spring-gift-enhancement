@@ -2,11 +2,9 @@
 
 ## 1단계 구현사항
 - 상품 카테고리 mvc 구현
-- add.html 상품 추가시 카테고리 지정할 수 있도록
-- 테스트코드 작성
 
 ## 2단계 구현사항
-- 상품에 옵션 정보 구현, 상품과 옵션 모델 간 관계 고려(?)
+- 상품에 옵션 정보 구현
 - 옵션 네이밍 규칙
 1) 공백 포함 최대 50자
 2) 특수문자
@@ -17,6 +15,9 @@
 - 컨트롤러 생성하여 HTTP 응답&요청 주고 받도록 구현
 - 옵션 서비스(행위) 테스트 구현
 
+## 3단계 구현사항
+- 옵션 수량 차감 메소드들 추가
+- @DataJpaTest 구현
 
 ## 현재 코드 구조
 ```plaintext
@@ -24,74 +25,57 @@
     └── main
         ├── java
         │   └── gift
-        │       ├── Application.java
-        │       ├── admin
-        │       │   └── AdminController.java
-        │       ├── category
-        │       │   ├── controller
-        │       │   │    └── categoryController.java
-        │       │   ├── model
-        │       │   │    └── category.java
-        │       │   ├── repostitory
-        │       │   │    └── categoryRepository.java
-        │       │   └── service
-        │       │        └── categoryService.java        
+        │       ├── config
+        │       │   └── SecurityConfig.java
+        │       ├── controller
+        │       │   ├── AdminController.java
+        │       │   ├── CategoryController.java
+        │       │   ├── HomeController.java
+        │       │   ├── MemberController.java
+        │       │   ├── ProductConroller.java
+        │       │   └── WishController.java
+        │       ├── dto
+        │       │   ├── MemberDto.java
+        │       │   ├── OptionDto.java
+        │       │   ├── ProductDto.java
+        │       │   └── WishRequest.java
+        │       ├── entity
+        │       │   ├── Catogory.java
+        │       │   ├── Member.java
+        │       │   ├── Option.java
+        │       │   ├── Product.java
+        │       │   └── Wish.java
         │       ├── exception
-        │       │   ├── ForbiddenException.java
-        │       │   ├── UnauthorizedException.java
-        │       │   ├── KakaoProductException.java
-        │       │   └── GlobalExceptionHandler.java
-        │       ├── member
-        │       │   ├── controller
-        │       │   │    └── MemberController.java
-        │       │   ├── dto
-        │       │   │    └── MemberDto.java
-        │       │   ├── model
-        │       │   │    └── Member.java
-        │       │   ├── repostitory
-        │       │   │    └── MemberRepository.java
-        │       │   └── service
-        │       │        ├── MemberService.java
-        │       │        └── TokenService.java
-        │       ├── option
-        │       │   ├── controller
-        │       │   │    └── OptionController.java
-        │       │   ├── model
-        │       │   │    └── Opion.java
-        │       │   ├── repository
-        │       │   │    └── OptionRepository.java
-        │       │   └── service
-        │       │        └── OpionService.java
-        │       ├── product
-        │       │   ├── controller
-        │       │   │    └── ProductController
-        │       │   ├── dto
-        │       │   │    └── ProductDto.java
-        │       │   ├── model
-        │       │   │    ├── Product.java
-        │       │   │    └── ProductName.java
-        │       │   ├── repository
-        │       │   │    └── ProductRepository.java
-        │       │   └── service
-        │       │        └── ProductService.java
-        │       └── wishlist
-        │           ├── WishList.java
-        │           ├── WishListController.java
-        │           ├── WishListRepository.java
-        │           └── WishListService.java      
+        │       │   ├── CategoryNotFoundException.java
+        │       │   ├── GlobalExceptionHandler.java
+        │       │   ├── InvalidProductNameException.java
+        │       │   └── ProductNotFoundException.java
+        │       ├── repository
+        │       │   ├── CategoryRepository.java
+        │       │   ├── MemberRepository.java
+        │       │   ├── OptionRepository.java
+        │       │   ├── ProductRepository.java
+        │       │   └── WishRepository.java
+        │       ├── service
+        │       │   ├── CategoryService.java
+        │       │   ├── MemberService.java
+        │       │   ├── ProductService.java
+        │       │   └── WishService.java      
+        │       └── Application.java
         └── resources
-            ├── sql
-            │   └── schema.sql
-            ├── static
+            ├── data.sql
+            ├── schema.sql
             └── templates
                 ├── add.html
                 ├── edit.html
                 ├── list.html
                 └── view.html             
 └── src
-    └── main
+    └── test
         └── java
             └── gift   
-                ├── OptionServiceTest.java
-                ├── CategoryServiceTest.java
-                └── MemberServiceTest.java
+                ├── CategoryRepositoryTest.java
+                ├── MemberRepositoryTest.java
+                ├── OptionRepositoryTest.java
+                ├── ProductRepositoryTest.java
+                └── WishRepositoryTest.java

@@ -17,39 +17,32 @@ repositories {
     mavenCentral()
 }
 
-/**
- * implementation : 컴파일 및 런타임 모두에서 사용하는 의존성
- * compileOnly : 컴파일 시에만 필요
- * runtimeOnly : 런타임 시에만 필요
- * **/
 dependencies {
-    // Spring Web 스타터
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    // Spring Validation
+    implementation 'org.springframework.security:spring-security-config'
+    implementation 'org.springframework.security:spring-security-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // implementation 'org.springframework.boot:spring-boot-starter-security'
+    // implementation 'org.springframework.security:spring-security-taglibs'
+
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    // Spring JDBC 스타터, JDBC 사용에 필요
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    // Spring Thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    // Spring Boot 테스트
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // Spring Data JPA
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-    // JWT
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
-
-    // H2 데이터베이스
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     runtimeOnly 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
 
-test {
-    useJUnitPlatform()
-    jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-parameters"
 }
