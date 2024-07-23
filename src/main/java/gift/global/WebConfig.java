@@ -4,6 +4,7 @@ import gift.domain.annotation.ValidAdminMemberArgumentResolver;
 import gift.domain.annotation.ValidMemberArgumentResolver;
 import gift.domain.service.MemberService;
 import gift.global.util.JwtUtil;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -59,21 +60,41 @@ public class WebConfig implements WebMvcConfigurer {
                 public static final int QUANTITY_RANGE_MIN = 1;
                 public static final int QUANTITY_RANGE_MAX = 99_999_999;
 
-                public static class QuantityUpdateAction {
+                public enum QuantityUpdateAction {
 
-                    public static final String ADD = "add";
-                    public static final String SUBTRACT = "subtract";
+                    ADD("add"), SUBTRACT("subtract");
+
+                    private final String action;
+
+                    QuantityUpdateAction(String action) {
+                        this.action = action;
+                    }
+
+                    public String toString() {
+                        return action;
+                    }
+
+                    public static List<String> toList() {
+                        return Arrays.stream(values()).map(QuantityUpdateAction::toString).toList();
+                    }
                 }
             }
 
             public static class Wish {
 
-                public static class QuantityUpdateAction {
+                public enum QuantityUpdateAction {
 
-                    public static final String NOPE = "nope";
-                    public static final String CREATE = "create";
-                    public static final String DELETE = "delete";
-                    public static final String ADD = "add";
+                    NOPE("nope"), CREATE("create"), DELETE("delete"), ADD("add");
+
+                    private final String action;
+
+                    QuantityUpdateAction(String action) {
+                        this.action = action;
+                    }
+
+                    public String toString() {
+                        return action;
+                    }
                 }
             }
         }

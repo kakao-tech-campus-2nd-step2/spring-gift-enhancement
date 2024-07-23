@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorApiResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         FieldError error = e.getBindingResult().getFieldError();
         assert error != null;
-        return ErrorApiResponse.of(error.getField() + ": " + error.getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        return ErrorApiResponse.of(error.getField() + ": " + error.getDefaultMessage(), ErrorCode.FIELD_VALIDATION_FAIL.getCode(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({

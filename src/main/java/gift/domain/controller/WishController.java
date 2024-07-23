@@ -8,7 +8,6 @@ import gift.domain.dto.request.WishDeleteRequest;
 import gift.domain.dto.request.WishRequest;
 import gift.domain.entity.Member;
 import gift.domain.service.WishService;
-import gift.global.apiResponse.BasicApiResponse;
 import gift.global.apiResponse.SuccessApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -49,8 +48,8 @@ public class WishController {
     }
 
     @DeleteMapping
-    public ResponseEntity<BasicApiResponse> deleteWish(@ValidMember Member member, @RequestBody WishDeleteRequest wishDeleteRequest) {
+    public ResponseEntity<Void> deleteWish(@ValidMember Member member, @RequestBody WishDeleteRequest wishDeleteRequest) {
         wishService.deleteWishlist(member, wishDeleteRequest);
-        return SuccessApiResponse.of(HttpStatus.NO_CONTENT);
+        return SuccessApiResponse.noContent();
     }
 }

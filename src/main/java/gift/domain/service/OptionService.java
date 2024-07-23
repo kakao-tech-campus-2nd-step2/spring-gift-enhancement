@@ -63,7 +63,7 @@ public class OptionService {
             validateOptionIsUniqueInProduct(product, request.name());
         }
 
-        if (request.action().equals(QuantityUpdateAction.ADD)) {
+        if (request.action().equals(QuantityUpdateAction.ADD.toString())) {
             int updatedQuantity = option.getQuantity() + request.quantity();
             if (updatedQuantity > Domain.Option.QUANTITY_RANGE_MAX) {
                 throw new OptionQuantityOutOfRangeException();
@@ -73,7 +73,7 @@ public class OptionService {
             return option;
         }
 
-        if (request.action().equals(QuantityUpdateAction.SUBTRACT)) {
+        if (request.action().equals(QuantityUpdateAction.SUBTRACT.toString())) {
             int updatedQuantity = option.getQuantity() - request.quantity();
             if (updatedQuantity < Domain.Option.QUANTITY_RANGE_MIN) {
                 throw new OptionQuantityOutOfRangeException();

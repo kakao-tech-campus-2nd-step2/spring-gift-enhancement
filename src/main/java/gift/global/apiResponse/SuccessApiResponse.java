@@ -15,14 +15,14 @@ public class SuccessApiResponse {
     public static ResponseEntity<BasicApiResponse> of(final HttpStatusCode statusCode) {
         return ResponseEntity
             .status(statusCode)
-            .body(new BasicApiResponse(statusCode));
+            .body(new BasicApiResponse(statusCode, true));
     }
 
     public static ResponseEntity<BasicApiResponse> of(final HttpHeaders headers, final HttpStatusCode statusCode) {
         return ResponseEntity
             .status(statusCode)
             .headers(headers)
-            .body(new BasicApiResponse(statusCode));
+            .body(new BasicApiResponse(statusCode, true));
     }
 
     // status 코드에 대한 기본적인 RESTful 응답을 생성
@@ -60,5 +60,9 @@ public class SuccessApiResponse {
 
         // 응답 생성
         return SuccessApiResponse.of(dto, headers, HttpStatus.CREATED);
+    }
+
+    public static ResponseEntity<Void> noContent() {
+        return ResponseEntity.noContent().build();
     }
 }

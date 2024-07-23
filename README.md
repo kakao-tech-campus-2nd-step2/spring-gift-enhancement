@@ -521,73 +521,76 @@ Content-Type: application/json
   - `products.category-id` 값으로 상품이 속한 카테고리 번호를 알 수 있으며, 카테고리 정보는 `categories` 배열에 나열되어 있다.
   - `products.options` 배열에 상품의 옵션들이 담긴다.
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "categories": [
-      {
-      "id": 1,
-      "name": "교환권",
-      "color": "#ff0000",
-      "image-url": "red.png",
+##### Response 예시
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "categories": [
+    {
+    "id": 1,
+    "name": "교환권",
+    "color": "#ff0000",
+    "image-url": "red.png",
+    "description": ""
+    },
+    {
+      "id": 2,
+      "name": "뷰티",
+      "color": "#919191",
+      "image-url": "orange.png",
       "description": ""
-      },
-      {
-        "id": 2,
-        "name": "뷰티",
-        "color": "#919191",
-        "image-url": "orange.png",
-        "description": ""
-      },
-      {}    
-    ],
-    "products": [
-      {
-        "id": 8146027,
-        "name": "아이스 카페 아메리카노 T",
-        "price": 4500,
-        "image-url": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
-        "category-id": 1,
-        "options": [
-          {
-            "id": 463616,
-            "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
-            "quantity": 969         
-          },
-          {
-            "id": 581819,
-            "name": "02. 가능성",
-            "quantity": 91
-          },
-          {},
-          {}
-        ]
-      },
-      {
-        "id": 1,
-        "name": "name",
-        "price": 2000,
-        "image-url": "url",
-        "category-id": 1,
-        "options": [
-          {
-            "id": 200000,
-            "name": "01. 첫째 옵션",
-            "quantity": 1
-          },
-          {
-            "id": 300300,
-            "name": "02. 둘째옵션",
-            "quantity": 39291
-          }
-        ]
-      },
-      {},
-      {}
-    ]
-  }
-  ```
+    },
+    {}    
+  ],
+  "products": [
+    {
+      "id": 8146027,
+      "name": "아이스 카페 아메리카노 T",
+      "price": 4500,
+      "image-url": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
+      "category-id": 1,
+      "options": [
+        {
+          "id": 463616,
+          "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+          "quantity": 969         
+        },
+        {
+          "id": 581819,
+          "name": "02. 가능성",
+          "quantity": 91
+        },
+        {},
+        {}
+      ]
+    },
+    {
+      "id": 1,
+      "name": "name",
+      "price": 2000,
+      "image-url": "url",
+      "category-id": 1,
+      "options": [
+        {
+          "id": 200000,
+          "name": "01. 첫째 옵션",
+          "quantity": 1
+        },
+        {
+          "id": 300300,
+          "name": "02. 둘째옵션",
+          "quantity": 39291
+        }
+      ]
+    },
+    {},
+    {}
+  ]
+}
+```
 
 </details>
 
@@ -605,7 +608,6 @@ Content-Type: application/json
 #### 상품 추가 API/Request/Body
 
 ```json
-
 {
   "name": "Product name",
   "price": 10000,
@@ -637,7 +639,7 @@ Content-Type: application/json
 - 옵션 수량
   - 최소 1개 이상 최대 1억 개 미만
 
-#### 상품 추가 API/Response(success)
+#### 상품 추가 API/Response
 
 - Status
   - 201 Created
@@ -647,111 +649,35 @@ Content-Type: application/json
 - Body
   - 생성된 리소스의 id 및 생성된 정보를 응답함
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 201,
-    "created-product": {
-      "id": 23,
-      "name": "Product name",
-      "price": 10000,
-      "image-url": "image.png",
-      "category": {
-        "id": 1,
-        "name": "교환권",
-        "color": "#ff0000",
-        "image-url": "red.png",
-        "description": ""
-      },
-      "options": [
-        {
-          "id": 2929,
-          "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
-          "quantity": 969
-        }
-      ]
-    }
+##### Response 예시
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 201,
+  "created-product": {
+    "id": 23,
+    "name": "Product name",
+    "price": 10000,
+    "image-url": "image.png",
+    "category": {
+      "id": 1,
+      "name": "교환권",
+      "color": "#ff0000",
+      "image-url": "red.png",
+      "description": ""
+    },
+    "options": [
+      {
+        "id": 2929,
+        "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+        "quantity": 969
+      }
+    ]
   }
-  ```
-
-#### 상품 추가 API/Response(fail)
-
-기등록된 상품 중 name, price, ImageUrl이 모두 일치할 경우 발생함
-
-- Status
-  - 409 Conflict
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 409,
-    "message": "The product already exists."
-  }
-  ```
-
-#### 상품 추가 API/Response(fail)
-
-등록하려는 상품의 `name` 유효성을 만족하지 못한 경우 발생함
-
-- Status
-  - 400 Bad Request
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "이름 형식이 올바르지 않습니다."
-  }
-  ```
-
-#### 상품 추가 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
-  }
-  ```
-
-#### 상품 추가 API/Response(fail)
-
-등록하려는 상품의 옵션 이름 유효성을 만족하지 못한 경우 발생함
-
-- Status
-  - 400 Bad Request
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "옵션 이름 제약조건을 만족하지 못했습니다."
-  }
-  ```
-
-#### 상품 추가 API/Response(fail)  
-
-등록하려는 상품 옵션 수량 유효성을 만족하지 못한 경우 발생함
-
-- Status
-  - 400 Bad Request
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "옵션 수량이 잘못되었습니다."
-  }
-  ```
+}
+```
   
 </details>
 
@@ -785,64 +711,21 @@ Content-Type: application/json
   -  이외 특수 문자 사용 불가
 - `카카오`가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있음
 
-#### 상품 수정 API/Response(success)
+#### 상품 수정 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200
-  }
-  ```
+##### Response 예시
 
-#### 상품 수정 API/Response(fail)
-
-- 수정하려는 상품이 존재하지 않을 경우 발생
-- Status
-  - 404 NOT FOUND
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product was not found."
-  }
-  ```
-
-#### 상품 수정 API/Response(fail)
-
-등록하려는 상품의 `name` 유효성을 만족하지 못한 경우 발생함
-
-- Status
-  - 400 Bad Request
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "이름 형식이 올바르지 않습니다."
-  }
-  ```
-
-#### 상품 수정 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200
+}
+```
   
 </details>
 
@@ -857,33 +740,21 @@ Content-Type: application/json
 |--------|--------------------|------------|---------------|------|
 | DELETE | /api/products/{id} | -          | yes{id: int}  | -    |
 
-#### 상품 삭제 API/Response(success)
+#### 상품 삭제 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200
-  }
-  ```
+##### Response 예시
 
-#### 상품 삭제 API/Response(fail)
-
-- 삭제하려는 상품이 존재하지 않을 경우 발생
-- Status
-  - 404 NOT FOUND
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product was not found."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200
+}
+```
 
 </details>
 
@@ -891,54 +762,42 @@ Content-Type: application/json
 
 <details>
 <summary><span style="font-size:1.3em;font-weight:bold">상품 옵션 조회 API</span></summary>
-  
+
 #### 상품 옵션 조회 API/Request
 
 | Method | URL                        | Path param | Path variable | Body |
 |--------|----------------------------|------------|---------------|------|
 | GET    | /api/products/{id}/options | -          | yes{id: int}  | -    |
 
-#### 상품 옵션 조회 API/Response(success)
+#### 상품 옵션 조회 API/Response
 
 - Status
   - 200 OK
 - Body
-  
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "options": [
-      {
-        "id": 463616,
-        "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
-        "quantity": 969
-      },
-      {
-        "id": 581819,
-        "name": "02. 가능성",
-        "quantity": 91
-      },
-      {},
-      {}
-    ]
-  }
-  ```
 
-#### 상품 옵션 조회 API/Response(fail)
+##### Response 예시  
 
-- 상품이 존재하지 않을 경우 발생
-- Status
-  - 404 NOT FOUND
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product was not found."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "options": [
+    {
+      "id": 463616,
+      "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+      "quantity": 969
+    },
+    {
+      "id": 581819,
+      "name": "02. 가능성",
+      "quantity": 91
+    },
+    {},
+    {}
+  ]
+}
+```
   
 </details>
 
@@ -946,7 +805,6 @@ Content-Type: application/json
 
 <details>
 <summary><span style="font-size:1.3em;font-weight:bold">상품 옵션 추가 API</span></summary>
-
 
 #### 상품 옵션 추가 API/Request
 
@@ -963,65 +821,21 @@ Content-Type: application/json
 }
 ```
 
-#### 상품 옵션 추가 API/Response(success)
+#### 상품 옵션 추가 API/Response
 
 - Status
   - 200 OK
 - Body
 
+##### Response 예시
+
 ```json
 {
   "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
   "status": 200
 }
 ```
-
-#### 상품 옵션 추가 API/Response(fail)
-
-- 상품이 존재하지 않을 경우 발생
-- Status
-  - 404 NOT FOUND
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product was not found."
-  }
-  ```
-
-#### 상품 옵션 추가 API/Response(fail)
-
-등록하려는 상품의 옵션 이름 유효성을 만족하지 못한 경우 발생함
-
-- Status
-  - 400 Bad Request
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "옵션 이름 제약조건을 만족하지 못했습니다."
-  }
-  ```
-
-#### 상품 옵션 추가 API/Response(fail)
-
-등록하려는 상품 옵션 수량 유효성을 만족하지 못한 경우 발생함
-
-- Status
-  - 400 Bad Request
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "옵션 수량이 잘못되었습니다."
-  }
-  ```
 
 </details>
 
@@ -1058,96 +872,21 @@ Content-Type: application/json
   }
   ```
 
-#### 상품 옵션 수정 API/Response(success)
+#### 상품 옵션 수정 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200
-  }
-  ```
+##### Response 예시
 
-#### 상품 옵션 수정 API/Response(fail)
-
-- 상품이 존재하지 않을 경우 발생
-- Status
-  - 404 NOT FOUND
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product was not found."
-  }
-  ```
-
-#### 상품 옵션 수정 API/Response(fail)
-
-- 옵션이 존재하지 않거나 상품에 속한 옵션이 아닌 경우 발생
-- Status
-  - 404 NOT FOUND
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The option was not found."
-  }
-  ```
-
-#### 상품 옵션 수정 API/Response(fail)
-
-수정하려는 상품의 옵션 이름 유효성을 만족하지 못한 경우 발생함
-
-- Status
-  - 400 Bad Request
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "옵션 이름 제약조건을 만족하지 못했습니다."
-  }
-  ```
-
-#### 상품 옵션 수정 API/Response(fail)
-
-수정하려는 상품 옵션 수량 유효성을 만족하지 못한 경우 발생함
-
-- Status
-  - 400 Bad Request
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "옵션 수량이 잘못되었습니다."
-  }
-  ```
-
-#### 상품 옵션 수정 API/Response(fail)
-
-수정 후 옵션 수량이 음수가 되는 경우 발생함
-
-- Status
-  - 400 Bad Request
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "옵션 수량이 음수가 될 수 없습니다."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200
+}
+```
 
 </details>
 
@@ -1156,47 +895,16 @@ Content-Type: application/json
 <details>
 <summary><span style="font-size:1.3em;font-weight:bold">상품 옵션 삭제 API</span></summary>
 
-
 #### 상품 옵션 삭제 API/Request
 
 | Method | URL                                            | Path param | Path variable                   | Body |
 |--------|------------------------------------------------|------------|---------------------------------|------|
 | DELETE | /api/products/{product-id}/options/{option-id} | -          | yes{product-id, option-id: int} | -    |
 
-#### 상품 옵션 삭제 API/Response(success)
+#### 상품 옵션 삭제 API/Response
 
 - Status
   - 204 No Content
-
-#### 상품 옵션 삭제 API/Response(fail)
-
-- 상품이 존재하지 않을 경우 발생
-- Status
-  - 404 NOT FOUND
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product was not found."
-  }
-  ```
-
-#### 상품 옵션 삭제 API/Response(fail)
-
-- 옵션이 존재하지 않을 경우 발생
-- Status
-  - 404 NOT FOUND
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The option was not found."
-  }
-  ```
   
 </details>
 
@@ -1224,33 +932,22 @@ Content-Type: application/json
 }
 ```
 
-#### 회원가입 API/Response(success)
+#### 회원가입 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "token": "your-token-is-here"
-  }
-  ```
+##### Response 예시
 
-#### 회원가입 API/Response(fail)
-
-- Status
-  - 409 Conflict
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 409,
-    "message": "Your email already registered. Retry with other one."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "token": "your-token-is-here"
+}
+```
   
 </details>
 
@@ -1274,33 +971,22 @@ Content-Type: application/json
 }
 ```
 
-#### 로그인 API/Response(success)
+#### 로그인 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "token": "your-token-is-here"
-  }
-  ```
+##### Response 예시
 
-#### 로그인 API/Response(fail)
-
-- Status
-  - 403 Forbidden
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "Incorrect your email or password. Try again."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "token": "your-token-is-here"
+}
+```
   
 </details>
 
@@ -1327,39 +1013,27 @@ Content-Type: application/json
   Authorization: Bearer your-token-string
   ```
 
-#### 멤버 리스트 조회 API/Response(success)
+#### 멤버 리스트 조회 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "list": [
-      {
-        "email": "example@example.com",
-        "permission": "member"
-      }, {}, {}
-    ]
-  }
-  ```
+##### Response 예시
 
-#### 멤버 리스트 조회 API/Response(fail)
-
-- 로그인하지 않았거나 권한이 부족한 경우 응답함
-- Status
-  - 403 Forbidden
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 403,
-    "message": "The admin permission required."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "list": [
+    {
+      "email": "example@example.com",
+      "permission": "member"
+    }, {}, {}
+  ]
+}
+```
   
 </details>
 
@@ -1395,33 +1069,21 @@ Content-Type: application/json
 }
 ```
 
-#### 멤버 비밀번호 변경 API/Response(success)
+#### 멤버 비밀번호 변경 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200
-  }
-  ```
+##### Response 예시
 
-#### 멤버 비밀번호 변경 API/Response(fail)
-
-- 로그인하지 않을 경우 응답한다.
-- Status
-  - 401 Unauthorized
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 401,
-    "message": "You need login."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200
+}
+```
   
 </details>
 
@@ -1456,33 +1118,21 @@ Content-Type: application/json
 }
 ```
 
-#### 멤버 권한 변경 API/Response(success)
+#### 멤버 권한 변경 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200
-  }
-  ```
+##### Response 예시
 
-#### 멤버 권한 변경 API/Response(fail)
-
-- 로그인하지 않았거나 권한이 부족한 경우 응답함
-- Status
-  - 403 Forbidden
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 403,
-    "message": "The admin permission required."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200
+}
+```
   
 </details>
 
@@ -1520,48 +1170,10 @@ Content-Type: application/json
 }
 ```
 
-#### 회원 탈퇴 API/Response(success)
+#### 회원 탈퇴 API/Response
 
 - Status
   - 204 No content
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 204
-  }
-  ```
-
-#### 회원 탈퇴 API/Response(fail)
-
-- 로그인하지 않을 경우 응답한다.
-- Status
-  - 401 Unauthorized
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 401,
-    "message": "You need login."
-  }
-  ```
-
-#### 회원 탈퇴 API/Response(fail)
-
-- 이메일 또는 비밀번호가 틀릴 경우 응답한다.
-- Status
-  - 403 Forbidden
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 400,
-    "message": "Incorrect your email or password. Try again."
-  }
-  ```
   
 </details>
 
@@ -1585,19 +1197,8 @@ Content-Type: application/json
   Authorization: Bearer your-token-string
   ```
 
-- 비로그인 상태로 위시리스트 도메인 API를 사용할 경우, 서버는 아래의 응답을 반환한다.
-  - Status
-    - 401 Unauthorized
-  - Body
-
-    ```json
-    {
-      "timestamp": "2024-01-01T00:00:00.0000000",
-      "status": 401,
-      "message": "You need login."
-    }
-    ```
-    
+- 비로그인 상태로 위시리스트 도메인 API를 사용할 경우, 서버는 401 Auauthorized 응답을 반환한다.
+- 
 </details>
 
 ---
@@ -1626,28 +1227,31 @@ Authorization: Bearer your-token-string
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "wishlist": [
-       { 
-          "product-id": 1,
-          "product-name": "아이스 카페 아메리카노 T",
-          "product-price": 4500,
-          "product-image-url": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
-          "quantity": 5 
-       },
-       { 
-          "product-id": 3,
-          "product-name": "오예스 12개입 360g",
-          "product-price": 3700,
-          "product-image-url": "https://img.danawa.com/prod_img/500000/965/117/img/10117965_1.jpg?shrink=330:*&_v=20191210171250",
-          "quantity": 2
-       }, {}, {}   
-    ]
-  }
-  ```
+##### Response 예시
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "wishlist": [
+     { 
+        "product-id": 1,
+        "product-name": "아이스 카페 아메리카노 T",
+        "product-price": 4500,
+        "product-image-url": "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
+        "quantity": 5 
+     },
+     { 
+        "product-id": 3,
+        "product-name": "오예스 12개입 360g",
+        "product-price": 3700,
+        "product-image-url": "https://img.danawa.com/prod_img/500000/965/117/img/10117965_1.jpg?shrink=330:*&_v=20191210171250",
+        "quantity": 2
+     }, {}, {}   
+  ]
+}
+```
   
 </details>
 
@@ -1673,69 +1277,59 @@ Authorization: Bearer your-token-string
 }
 ```
 
-#### 위시리스트 추가 API/Response(success)
+#### 위시리스트 추가 API/Response
 
 - Status
   - 200 OK
 - Body
-  - 위시리스트에 새로운 상품을 추가한 경우
 
-    ```json
-    {
-      "timestamp": "2024-01-01T00:00:00.0000000",
-      "status": 200,
-      "result": {
-        "action": "create",
-        "current-quantity": 2
-      }
-    }
-    ```
-- Body
-  - 위시리스트에 이미 상품이 추가된 경우 (기존 수량 3, 추가 요청 수량 2라고 가정)
+##### Response 예시
 
-    ```json
-    {
-      "timestamp": "2024-01-01T00:00:00.0000000",
-      "status": 200,
-      "result": {
-        "action": "add",
-        "current-quantity": 5
-      }
-    }
-    ```
+- 위시리스트에 새로운 상품을 추가한 경우
 
-- Body
-  - 수량 업데이트 후 위시리스트 수량이 0인 경우 (기존 수량 3, 추가 요청 수량 -5라고 가정)
-
-    ```json
-    {
-      "timestamp": "2024-01-01T00:00:00.0000000",
-      "status": 200,
-      "result": {
-        "action": "delete",
-        "product-id": 3,
-        "product-name": "오예스 12개입 360g",
-        "product-price": 3700,
-        "product-image-url": "https://img.danawa.com/prod_img/500000/965/117/img/10117965_1.jpg?shrink=330:*&_v=20191210171250",
-        "current-quantity": 0
-      }
-    }
-    ```
-
-#### 위시리스트 추가 API/Response(fail)
-
-- 위시리스트로 추가하려는 상품이 존재하지 않는 상품인 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product was not found."
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "result": {
+    "action": "create",
+    "current-quantity": 2
   }
-  ```
+}
+```
+
+- 위시리스트에 이미 상품이 추가된 경우 (기존 수량 3, 추가 요청 수량 2라고 가정)
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "result": {
+    "action": "add",
+    "current-quantity": 5
+  }
+}
+```
+
+- 수량 업데이트 후 위시리스트 수량이 0인 경우 (기존 수량 3, 추가 요청 수량 -5라고 가정)
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "result": {
+    "action": "delete",
+    "product-id": 3,
+    "product-name": "오예스 12개입 360g",
+    "product-price": 3700,
+    "product-image-url": "https://img.danawa.com/prod_img/500000/965/117/img/10117965_1.jpg?shrink=330:*&_v=20191210171250",
+    "current-quantity": 0
+  }
+}
+```
   
 </details>
 
@@ -1759,55 +1353,28 @@ Authorization: Bearer your-token-string
 }
 ```
 
-#### 위시리스트 (수량)수정 API/Response(success)
+#### 위시리스트 (수량)수정 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "result": { 
-      "product-id": 3,
-      "product-name": "오예스 12개입 360g",
-      "product-price": 3700,
-      "product-image-url": "https://img.danawa.com/prod_img/500000/965/117/img/10117965_1.jpg?shrink=330:*&_v=20191210171250",
-      "quantity": 2
-    }
+##### Response 예시
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "result": { 
+    "product-id": 3,
+    "product-name": "오예스 12개입 360g",
+    "product-price": 3700,
+    "product-image-url": "https://img.danawa.com/prod_img/500000/965/117/img/10117965_1.jpg?shrink=330:*&_v=20191210171250",
+    "quantity": 2
   }
-  ```
-
-#### 위시리스트 (수량)수정 API/Response(fail) (1)
-
-- 위시리스트에 해당 상품이 담겨있지 않는 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product is not included your wish."
-  }
-  ```
-
-#### 위시리스트 (수량)수정 API/Response(fail) (2)
-
-- 수정하려는 상품이 존재하지 않는 상품인 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product was not found."
-  }
-  ```
+}
+```
   
 </details>
 
@@ -1836,27 +1403,15 @@ Authorization: Bearer your-token-string
   - 204 No content
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 204
-  }
-  ```
+##### Response 예시
 
-#### 위시리스트 삭제 API/Response(fail)
-
-- 위시리스트에 해당 상품이 담겨있지 않는 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The product is not included your wish."
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 204
+}
+```
   
 </details>
 
@@ -1886,41 +1441,28 @@ Authorization: Bearer your-token-string
 }
 ```
 
-#### 카테고리 추가 API/Response(Success)
+#### 카테고리 추가 API/Response
 
 - Status
   - 201 Created
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 201,
-    "created-category": {
-      "id": 5,
-      "name": "교환권",
-      "color": "#6c95d1",
-      "image-url": "http://example.com/image.png",
-      "description": ""
-    }
+##### Response 예시
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 201,
+  "created-category": {
+    "id": 5,
+    "name": "교환권",
+    "color": "#6c95d1",
+    "image-url": "http://example.com/image.png",
+    "description": ""
   }
-  ```
-
-#### 카테고리 추가 API/Response(Fail)
-
-- 이름이 기존 카테고리와 중복되어있을 경우 발생
-- Status
-  - 409 Conflict
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 409,
-    "message": "This category name already exists. Try other one."
-  
-  }
-  ```
+}
+```
 
 </details>
 
@@ -1941,28 +1483,31 @@ Authorization: Bearer your-token-string
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "categories": [
-      {
-        "id": 5,
-        "name": "교환권",
-        "color": "#6c95d1",
-        "image-url": "http://example.com/image.png",
-        "description": ""
-      },   
-      {
-        "id": 7,
-        "name": "뷰티",
-        "color": "#205D2A",
-        "image-url": "http://example.com/image.png",
-        "description": ""
-      }   
-    ]
-  }
-  ```
+##### Response 예시
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+"success": true,
+  "status": 200,
+  "categories": [
+    {
+      "id": 5,
+      "name": "교환권",
+      "color": "#6c95d1",
+      "image-url": "http://example.com/image.png",
+      "description": ""
+    },   
+    {
+      "id": 7,
+      "name": "뷰티",
+      "color": "#205D2A",
+      "image-url": "http://example.com/image.png",
+      "description": ""
+    }   
+  ]
+}
+```
 
 </details>
 
@@ -1977,39 +1522,28 @@ Authorization: Bearer your-token-string
 |--------|----------------------|------------|---------------|------|
 | GET    | /api/categories/{id} | -          | {id: int}     | -    |
 
-#### 특정 id 카테고리 조회 API/Response(success)
+#### 특정 id 카테고리 조회 API/Response
 
 - Status
   - 200 OK
 - Body
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "category": {
-      "id": 5,
-      "name": "교환권",
-      "color": "#6c95d1",
-      "image-url": "http://example.com/image.png",
-      "description": ""
-    }
+
+##### Response 예시
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "category": {
+    "id": 5,
+    "name": "교환권",
+    "color": "#6c95d1",
+    "image-url": "http://example.com/image.png",
+    "description": ""
   }
-  ```
-
-#### 특정 id 카테고리 조회 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
-  }
-  ```
+}
+```
 
 </details>
 
@@ -2035,49 +1569,21 @@ Authorization: Bearer your-token-string
 }
 ```
 
-#### 카테고리 수정 API/Response(success)
+#### 카테고리 수정 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200
-  }
-  ```
+##### Response 예시
 
-#### 카테고리 수정 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
-  }
-  ```
-
-#### 카테고리 수정 API/Response(Fail)
-
-- 이름이 기존 카테고리와 중복되어있을 경우 발생
-- Status
-  - 409 Conflict
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 409,
-    "message": "This category name already exists. Try other one."
-  
-  }
-  ```
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200
+}
+```
 
 </details>
 
@@ -2092,40 +1598,10 @@ Authorization: Bearer your-token-string
 |--------|----------------------|------------|---------------|------|
 | DELETE | /api/categories/{id} | -          | {id}          | -    |
 
-#### 카테고리 삭제 API/Response(success)
+#### 카테고리 삭제 API/Response
 
 - Status
   - 204 NO CONTENT
-
-#### 카테고리 삭제 API/Response(fail)
-
-- 카테고리가 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The category was not found."
-  }
-  ```
-
-#### 카테고리 삭제 API/Response(fail)
-
-- 삭제하려는 카테고리에 속한 상품이 존재하는 경우 발생
-- Status
-  - 409 Conflict
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "This category cannot be deleted because some products are included in it."
-  }
-  ```
   
 </details>
 
@@ -2144,15 +1620,18 @@ Authorization: Bearer your-token-string
 |--------|--------------|------------|---------------|------|
 | GET    | /api/options | -          | -             | -    |
 
-#### 옵션 리스트 조회 API/Response(success)
+#### 옵션 리스트 조회 API/Response
 
 - Status
   - 200 OK
 - Body
 
+##### Response 예시
+
 ```json
 {
   "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
   "status": 200,
   "options": [
     {
@@ -2186,134 +1665,106 @@ Authorization: Bearer your-token-string
 |--------|-------------------|------------|---------------|------|
 | GET    | /api/options/{id} | -          | yes{id: int}  | -    |
 
-#### 특정 id 옵션 조회 API/Response(success)
+#### 특정 id 옵션 조회 API/Response
 
 - Status
   - 200 OK
 - Body
 
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 200,
-    "option": {
-        "id": 463616,
-        "product-id": 1,
-        "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
-        "quantity": 969
-      }
+##### Response 예시
+
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": true,
+  "status": 200,
+  "option": {
+    "id": 463616,
+    "product-id": 1,
+    "name": "01. [Best] 시어버터 핸드 & 시어 스틱 립 밤",
+    "quantity": 969
   }
-  ```
-
-#### 특정 id 옵션 조회 API/Response(fail)
-
-- 옵션이 존재하지 않은 경우 발생
-- Status
-  - 404 Not found
-- Body
-
-  ```json
-  {
-    "timestamp": "2024-01-01T00:00:00.0000000",
-    "status": 404,
-    "message": "The option was not found."
-  }
-  ```
+}
+```
 
 </details>
 
-[//]: # ()
-[//]: # (---)
+<br>
 
-[//]: # ()
-[//]: # (<details>)
+---
 
-[//]: # (<summary><span style="font-size:1.3em;font-weight:bold">~ API</span></summary>)
 
-[//]: # ()
-[//]: # (#### ~ API/Request)
 
-[//]: # ()
-[//]: # (| Method | URL    | Path param | Path variable | Body |)
+### API 명세서/서버 오류 코드 대응표
 
-[//]: # (|--------|--------|------------|---------------|------|)
+- 요청에 따라 서버 오류 응답이 반환될 수 있으며, 이런 경우 `success` 필드가 `fail`으로 설정된다.
+- 다음은 서버에서 발생할 수 있는 오류 코드이며, 오류 코드는 `error-code` 필드에서 확인할 수 있다.
 
-[//]: # (| ~      | /api/~ | -          | -             | yes  |)
+#### 오류 응답 예시/상품을 찾을 수 없는 경우
 
-[//]: # ()
-[//]: # (#### ~ API/Request/Body)
+```json
+{
+  "timestamp": "2024-01-01T00:00:00.0000000",
+  "success": false,
+  "status": 404,
+  "error-code": "ENF_OP001",
+  "message": "The product was not found."
+}
+```
 
-[//]: # ()
-[//]: # (```json)
+#### Bad Request
 
-[//]: # ({)
+- HTTP 응답 코드 `400 BAD REQUEST`인 경우에 발생 할 수 있는 오류이다.
 
-[//]: # (  "product-id": 5,)
+| Error Code  | Cause                    | Solution                 |
+|-------------|--------------------------|--------------------------|
+| `EBR_OP001` | 옵션 추가/수정 시 수량이 범위를 벗어남   | 수량이 범위 안으로 들어오게 요청       |
+| `EBR_OP002` | 옵션 수량 수정 시 `action`이 잘못됨 | 허용되는 `action`으로 옵션 수량 수정 |
+| `EBR_OP003` | 상품 등록시 옵션이 하나도 주어지지 않음   | 1개 이상의 옵션과 함께 상품 등록      |
+| `EBR_VF001` | 요청시 만족해야 하는 제약 조건을 위반함   | 제약조건을 준수하여 재요청           |
 
-[//]: # (  "quantity": 2)
+#### Conflict
 
-[//]: # (})
+- HTTP 응답 코드 `409 CONFLICT`인 경우에 발생 할 수 있는 오류이다.
 
-[//]: # (```)
+| Error Code    | Cause                         | Solution               |
+|---------------|-------------------------------|------------------------|
+| `ECF_CAT001`  | 카테고리 추가/수정 시 이름이 기존 카테고리와 중복됨 | 중복되지 않은 이름을 사용         |
+| `ECF_CAT002`  | 삭제할 카테고리에 속한 상품이 있음           | 카테고리에 속한 상품이 하나도 없어야 함 |
+| `ECF_MB001`   | 주어진 이메일로 이미 회원가입 되어 있음        | 다른 이메일로 회원가입 시도        |
+| `ECF_OP001`   | 상품 옵션에 이미 이름이 중복되는 옵션이 있음     | 중복되지 않은 이름을 사용         |
+| `ECF_PD001`   | 등록/수정할 상품이 기존 상품으로 이미 존재함     | 중복되지 않은 상품을 등록/수정      |
 
-[//]: # ()
-[//]: # (#### ~ API/Response&#40;success&#41;)
+#### Forbidden
 
-[//]: # ()
-[//]: # (- Status)
+- HTTP 응답 코드 `403 FORBIDDEN`인 경우에 발생 할 수 있는 오류이다.
 
-[//]: # (  - 200 OK)
+| Error Code   | Cause                      | Solution                   |
+|--------------|----------------------------|----------------------------|
+| `EFD_MB001`  | 로그인 시 아이디 또는 비밀번호가 틀림      | 회원가입하거나 올바른 회원정보로 로그인 재시도  |
+| `EFD_MB002`  | 사용자가 관리자가 아님               | 관리자 권한을 가진 사용자로 재시도        |
+| `EFD_MB003`  | 토큰이 만료됨                    | 토큰을 재발급함                   |
+| `EFD_MB004`  | 헤더의 Authorization 값이 잘못되었음 | 서버에서 지정한 토큰 형식에 맞추어 헤더를 작성 |
 
-[//]: # (- Body)
+#### Not Found
 
-[//]: # (  - ~ 경우)
+- HTTP 응답 코드 `404 NOT FOUND`인 경우에 발생 할 수 있는 오류이다.
 
-[//]: # ()
-[//]: # (    ```json)
+| Error Code   | Cause                       | Solution             |
+|--------------|-----------------------------|----------------------|
+| `ENF_CAT001` | 카테고리를 찾을 수 없음               | -                    |
+| `ENF_MB001`  | 사용자를 찾을 수 없음                | -                    |
+| `ENF_OP001`  | 옵션을 찾을 수 없거나, 상품에 해당 옵션이 없음 | 상품에 해당하는 옵션인지 확인     |
+| `ENF_PD001`  | 상품을 찾을 수 없음                 | -                    |
+| `ENF_WS001`  | 위시리스트에 상품을 찾을 수 없음          | 위시리스트에 존재하는 상품으로 재시도 |
 
-[//]: # (    {)
+#### Unauthorized
 
-[//]: # (      "timestamp": "2024-01-01T00:00:00.0000000",)
+- HTTP 응답 코드 `401 AUAUTHORIZED`인 경우에 발생 할 수 있는 오류이다.
 
-[//]: # (      "status": 200)
-
-[//]: # (      )
-[//]: # (    })
-
-[//]: # (    ```)
-
-[//]: # (- Body)
-
-[//]: # (  - ~ 경우)
-
-[//]: # ()
-[//]: # (#### ~ API/Response&#40;fail&#41;)
-
-[//]: # ()
-[//]: # (- ~ 경우 발생)
-
-[//]: # (- Status)
-
-[//]: # (  - 404 Not found)
-
-[//]: # (- Body)
-
-[//]: # ()
-[//]: # (  ```json)
-
-[//]: # (  {)
-
-[//]: # (    "timestamp": "2024-01-01T00:00:00.0000000",)
-
-[//]: # (    "status": 404,)
-
-[//]: # (    "message": "~")
-
-[//]: # (  })
-
-[//]: # (  ```)
-
-[//]: # ()
-[//]: # (</details>)
+| Error Code  | Cause             | Solution                            |
+|-------------|-------------------|-------------------------------------|
+| `EUA_MB001` | 토큰을 찾을 수 없음       | 토큰을 발급하고 Authorization 헤더를 설정 후 재시도 |
+| `EUA_MB002` | 토큰과 관련된 알 수 없는 오류 | 토큰을 재발급                             |
 
 <br>
