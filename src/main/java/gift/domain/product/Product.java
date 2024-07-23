@@ -25,7 +25,7 @@ public class Product {
 
     @JoinColumn(name = "category_id")
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
@@ -81,9 +81,14 @@ public class Product {
     }
 
     public void addOption(Option option) {
-        if (options.stream().anyMatch(o -> option.getName().equals(o.getName()))) {
+        if (isAlreadyExistOption(option)) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_OPTION, option.getName());
         }
-        options.add(option);
+        this.options.add(option);
+    }
+
+    private boolean isAlreadyExistOption(Option option) {
+        return this.options.stream()
+                .anyMatch(o -> o.hasSameName(option));
     }
 }

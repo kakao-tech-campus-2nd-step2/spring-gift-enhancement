@@ -37,6 +37,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    @Transactional(readOnly = true)
     public List<ProductResponseDto> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .stream()
@@ -44,6 +45,7 @@ public class ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public ProductResponseDto findProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(INVALID_PRODUCT, id));
@@ -57,7 +59,6 @@ public class ProductService {
         Category category = categoryRepository.findById(request.getCategory())
                 .orElseThrow(() -> new CustomException(INVALID_CATEGORY, id));
         product.update(request.getName(), request.getPrice(), request.getImgUrl(), category);
-        productRepository.save(product);
         return new ProductResponseDto(product);
     }
 

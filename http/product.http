@@ -20,6 +20,7 @@ Content-Type: application/json
 {
   "name" : "coffeeeeeee",
   "imgUrl" : "test.jpg",
-  "price" : 100
+  "price" : 100,
+  "category": 1
 }
 

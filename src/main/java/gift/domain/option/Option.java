@@ -1,6 +1,8 @@
 package gift.domain.option;
 
 import gift.domain.product.Product;
+import gift.exception.CustomException;
+import gift.exception.ErrorCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -26,6 +28,7 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+        product.addOption(this);
     }
 
     public Long getId() {
@@ -38,5 +41,16 @@ public class Option {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public boolean hasSameName(Option target) {
+        return this.name.equals(target.getName());
+    }
+
+    public void subtract(int target) {
+        if (target >= this.quantity) {
+            throw new CustomException(ErrorCode.INVALID_QUANTITY, this.quantity);
+        }
+        this.quantity = this.quantity - target;
     }
 }

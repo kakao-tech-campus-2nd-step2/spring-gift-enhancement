@@ -3,11 +3,14 @@ package gift.dto;
 import gift.domain.category.Category;
 
 public class CategoryResponseDto {
-    private final Long id;
-    private final String name;
-    private final String color;
-    private final String imageUrl;
-    private final String description;
+    private Long id;
+    private String name;
+    private String color;
+    private String imageUrl;
+    private String description;
+
+    public CategoryResponseDto() {
+    }
 
     public CategoryResponseDto(Category category) {
         this.id = category.getId();

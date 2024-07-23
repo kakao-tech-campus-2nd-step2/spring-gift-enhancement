@@ -24,7 +24,6 @@ public class Category {
     @NotNull
     private String imageUrl;
 
-
     protected Category() {
     }
 

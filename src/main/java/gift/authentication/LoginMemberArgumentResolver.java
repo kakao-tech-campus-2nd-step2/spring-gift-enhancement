@@ -39,8 +39,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
                     .getBody();
             Long id = claims.get("id", Long.class);
             String email = claims.get("email", String.class);
-            System.out.println("여기가 문젠가  " + id);
-            System.out.println("이메일은??" + email);
             return new UserDetails(id, email);
         }
         throw new IllegalArgumentException("유효하지 않은 토큰입니다.");

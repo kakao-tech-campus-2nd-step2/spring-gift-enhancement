@@ -9,6 +9,7 @@ import gift.dto.OptionResponseDto;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,20 +23,27 @@ public class OptionService {
         this.optionRepository = optionRepository;
     }
 
-    public List<OptionResponseDto> getOptions(long productId) {
+    @Transactional(readOnly = true)
+    public List<OptionResponseDto> getOptions(Long productId) {
         Product product = getProduct(productId);
         return product.getOptions().stream().map(OptionResponseDto::new).toList();
     }
 
-
-    public void saveOption(Long id, OptionRequestDto request) {
-        Product product = getProduct(id);
+    @Transactional
+    public void saveOption(Long productId, OptionRequestDto request) {
+        Product product = getProduct(productId);
         Option option = new Option(request.getName(), request.getQuantity(), product);
-        product.addOption(option);
         optionRepository.save(option);
     }
 
-    private Product getProduct(long productId) {
+    @Transactional
+    public void subtractOption(Long id, Integer quantity) {
+        Option option = optionRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_OPTION, id));
+        option.subtract(quantity);
+    }
+
+    private Product getProduct(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_PRODUCT, productId));
     }

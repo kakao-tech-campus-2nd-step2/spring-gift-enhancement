@@ -20,9 +20,9 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<String> saveCategory(@RequestBody CategoryRequestDto request) {
+    public ResponseEntity<ApiResponse> saveCategory(@RequestBody CategoryRequestDto request) {
         categoryService.saveCategory(request);
-        return ResponseEntity.ok().body("카테고리가 성공적으로 등록되었습니다.");
+        return ResponseEntity.ok().body(new ApiResponse(HttpStatus.OK, "카테고리가 성공적으로 등록되었습니다."));
     }
 
     @GetMapping

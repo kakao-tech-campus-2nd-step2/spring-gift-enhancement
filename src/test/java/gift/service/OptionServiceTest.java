@@ -39,8 +39,6 @@ class OptionServiceTest {
                 new Category("테스트", "##", "설명", "test"));
         Option expected1 = new Option("옵션1",1000,product);
         Option expected2 = new Option("옵션2",100,product);
-        product.addOption(expected1);
-        product.addOption(expected2);
 
         given(productRepository.findById(any()))
                 .willReturn(Optional.of(product));
@@ -75,11 +73,39 @@ class OptionServiceTest {
         given(productRepository.findById(any()))
                 .willReturn(Optional.of(new Product("더미", 10000, "test.jpg",
                         new Category("테스트", "##", "설명", "test"))));
+        //when
+        optionService.saveOption(1L,new OptionRequestDto("중복이름",10,1L));
+        var request = new OptionRequestDto("중복이름",10,1L);
+        //then
+        assertThatExceptionOfType(CustomException.class)
+                .isThrownBy(() -> optionService.saveOption(1L, request));
+    }
 
+    @Test
+    void 옵션_차감_성공() {
+        //given
+        Product product = new Product("더미", 10000, "test.jpg",
+                new Category("테스트", "##", "설명", "test"));
+        Option option = new Option("옵션",100,product);
+        given(optionRepository.findById(any()))
+                .willReturn(Optional.of(option));
+        //when
+        optionService.subtractOption(1L,70);
+        //then
+        assertThat(option.getQuantity()).isEqualTo(30);
+    }
+
+    @Test
+    void 옵션_차감_실패_재고보다_많은_요청() {
+        //given
+        Product product = new Product("더미", 10000, "test.jpg",
+                new Category("테스트", "##", "설명", "test"));
+        Option option = new Option("옵션",100,product);
+        given(optionRepository.findById(any()))
+                .willReturn(Optional.of(option));
         //when
         //then
-        optionService.saveOption(1L,new OptionRequestDto("새 옵션",10,1L));
         assertThatExceptionOfType(CustomException.class)
-                .isThrownBy(() -> optionService.saveOption(1L,new OptionRequestDto("새 옵션",10,1L)));
+                .isThrownBy(() -> optionService.subtractOption(1L, 110));
     }
 }
