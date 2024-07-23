@@ -40,7 +40,7 @@ public class RestClientTest {
 
   @Test
   void test1(){
-    // https://kauth.kakao.com/oauth/authorize?scope=talk_message&response_type=code&redirect_uri=http://localhost:8080&client_id=3067383950805f02fd78a974d772f63f
+    // https://kauth.kakao.com/oauth/authorize?scope=talk_message&response_type=code&redirect_uri=http://localhost:8080&client_id=
     var url = "https://kauth.kakao.com/oauth/token";
     var body = new LinkedMultiValueMap<String,String>();
     new KakaoProperties(properties.clientId(),"http://localhost:8081 ");
