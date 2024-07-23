@@ -10,6 +10,7 @@ import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
@@ -56,5 +57,13 @@ public class OptionService {
             .orElseThrow(NoSuchOptionException::new);
         optionRepository.delete(deletedOption);
         return deletedOption.toDTO();
+    }
+
+    @Transactional
+    public OptionDTO buyOption(long id, int quantity) {
+        Option option = optionRepository.findById(id)
+            .orElseThrow(NoSuchOptionException::new);
+        option.subtract(quantity);
+        return optionRepository.save(option).toDTO();
     }
 }

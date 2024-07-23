@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "option", uniqueConstraints = {
@@ -33,6 +34,9 @@ public class Option {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Version
+    private Long version;
+
     protected Option() {
 
     }
@@ -50,7 +54,7 @@ public class Option {
     }
 
     public void subtract(int quantity) {
-        if (this.quantity <= quantity) {
+        if (this.quantity < quantity) {
             throw new InsufficientQuantityException(this.quantity);
         }
         this.quantity -= quantity;
@@ -58,6 +62,10 @@ public class Option {
 
     public OptionDTO toDTO() {
         return new OptionDTO(id, name, quantity);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public int getQuantity() {
