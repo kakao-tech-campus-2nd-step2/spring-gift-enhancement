@@ -42,12 +42,12 @@ public class AdminController {
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid @ModelAttribute ProductRequest.Create create,
+    public String addProduct(@Valid @ModelAttribute ProductRequest.Create productCreate,
         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "add-product-form";
         }
-        productService.insertProduct(create);
+        productService.insertProduct(productCreate);
         return "redirect:/admin/products";
     }
 
@@ -60,12 +60,12 @@ public class AdminController {
 
     @PostMapping("edit/{id}")
     public String updateProduct(@PathVariable("id") Long id,
-        @Valid @ModelAttribute ProductRequest.Update update,
+        @Valid @ModelAttribute ProductRequest.Update productUpdate,
         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "modify-product-form";
         }
-        productService.updateProductById(id, update);
+        productService.updateProductById(id, productUpdate);
         return "redirect:/admin/products";
     }
 

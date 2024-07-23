@@ -4,8 +4,8 @@ import gift.common.exception.OptionException;
 import gift.common.exception.ProductException;
 import gift.option.model.Option;
 import gift.option.model.OptionRequest;
+import gift.option.model.OptionRequest.Create;
 import gift.option.model.OptionResponse;
-import gift.option.model.Options;
 import gift.product.ProductErrorCode;
 import gift.product.ProductRepository;
 import gift.product.model.Product;
@@ -33,29 +33,39 @@ public class OptionService {
     }
 
     @Transactional
-    public Long addOption(Long productId, OptionRequest optionRequest)
+    public Long addOption(Long productId, OptionRequest.Create optionCreate)
         throws ProductException, OptionException {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ProductException(
-                ProductErrorCode.NOT_FOUND));
-        Options options = new Options(optionRepository.findAllByProductId(productId));
-        Option option = new Option(optionRequest.name(), optionRequest.quantity(), product);
-        options.validateDuplicated(option);
-        option = optionRepository.save(option);
+            .orElseThrow(() -> new ProductException(ProductErrorCode.NOT_FOUND));
+        Option option = new Option(optionCreate.name(), optionCreate.quantity(), product);
+        Option.Validator.validateName(optionRepository.findAllByProductId(productId), option);
+        optionRepository.save(option);
         return option.getId();
     }
 
     @Transactional
-    public void updateOption(Long optionId, OptionRequest optionRequest) throws OptionException {
+    public void updateOption(Long optionId, OptionRequest.Update optionUpdate)
+        throws OptionException {
         Option option = optionRepository.findById(optionId)
             .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
-        option.updateInfo(optionRequest.name(), optionRequest.quantity());
+        Option.Validator.validateName(
+            optionRepository.findAllByProductId(option.getProduct().getId()), option);
+        option.updateInfo(optionUpdate.name(), optionUpdate.quantity());
     }
 
     @Transactional
-    public void deleteOption(Long productId, Long optionId) {
-        Options options = new Options(optionRepository.findAllByProductId(productId));
-        options.validateOptionSize();
+    public void deleteOption(Long optionId) {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
+        Option.Validator.validateOptionCount(
+            optionRepository.findAllByProductId(option.getProduct().getId()));
         optionRepository.deleteById(optionId);
+    }
+
+    @Transactional
+    public void subtractOption(Long optionId, OptionRequest.Subtract optionSubtract) throws OptionException {
+        Option option = optionRepository.findById(optionId)
+            .orElseThrow(() -> new OptionException(OptionErrorCode.NOT_FOUND));
+        option.subtract(optionSubtract.quantity());
     }
 }

@@ -10,6 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Option {
@@ -53,15 +58,41 @@ public class Option {
         return product;
     }
 
-    public void validateDuplicated(Option other) throws OptionException {
-        if (name.equals(other.getName())) {
-            throw new OptionException(OptionErrorCode.NAME_DUPLICATED);
-        }
-    }
-
-    public void updateInfo(String name, Integer quantity) throws OptionException {
-        validateDuplicated(new Option(name, quantity, null));
+    public void updateInfo(String name, Integer quantity) {
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public void subtract(Integer quantity) throws OptionException {
+        if (this.quantity < quantity) {
+            throw new OptionException(OptionErrorCode.NOT_ENOUGH_QUANTITY);
+        }
+        this.quantity = this.quantity - quantity;
+    }
+
+    public static class Validator {
+
+        public static void validateName(List<Option> optionList, Option newOption) throws OptionException {
+            optionList.add(newOption);
+            validateDuplicated(optionList);
+        }
+
+        public static void validateOptionCount(List<Option> options) throws OptionException {
+            if (options.size() <= 1) {
+                throw new OptionException(OptionErrorCode.OPTION_COUNT_ONE);
+            }
+        }
+
+        public static void validateDuplicated(List<Option> optionList) throws OptionException {
+            List<String> optionNameList = getOptionNames(optionList);
+            Set<String> optionSet = new HashSet<>(optionNameList);
+            if(optionList.size() != optionSet.size()) {
+                throw new OptionException(OptionErrorCode.NAME_DUPLICATED);
+            }
+        }
+
+        private static List<String> getOptionNames(List<Option> optionList) {
+            return optionList.stream().map(Option::getName).toList();
+        }
     }
 }

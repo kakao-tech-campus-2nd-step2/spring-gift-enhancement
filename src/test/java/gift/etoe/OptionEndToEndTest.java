@@ -5,13 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gift.category.model.CategoryRequest;
-import gift.common.model.PageResponseDto;
 import gift.member.model.MemberRequest;
-import gift.option.model.OptionRequest;
+import gift.option.model.OptionRequest.Create;
+import gift.option.model.OptionResponse;
 import gift.product.model.ProductRequest;
-import gift.product.model.ProductResponse;
 import java.net.URI;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +27,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
-class ProductEndToEndTest {
+public class OptionEndToEndTest {
 
     @LocalServerPort
     private int port;
@@ -38,23 +38,23 @@ class ProductEndToEndTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    void getAllProducts() throws JsonProcessingException {
-        var headers = getToken();
-        saveCategory(headers);
-        var url = "http://localhost:" + port + "/api/products";
-        addProduct("gamza", 500, "gamza.jpg", url, headers);
-        addProduct("goguma", 1000, "goguma.jpg", url, headers);
+    private HttpHeaders headers;
 
+    @BeforeEach
+    void setUp() throws JsonProcessingException {
+        headers = getToken();
+        saveCategory(headers);
+        saveProduct(headers);
+    }
+
+    @Test
+    void getOptions() {
+        var url = "http://localhost:" + port + "/api/products/1/options";
         var requestEntity = new RequestEntity<>(headers, HttpMethod.GET, URI.create(url));
-        var actual = restTemplate.exchange(
-            requestEntity,
-            new ParameterizedTypeReference<PageResponseDto<ProductResponse>>() {
+        var actual = restTemplate.exchange(requestEntity,
+            new ParameterizedTypeReference<List<OptionResponse>>() {
             });
-        assertThat(actual.getBody()).isEqualTo(
-            new PageResponseDto<>(List.of(new ProductResponse(1L, "gamza", 500, "gamza.jpg", 1L),
-                new ProductResponse(2L, "goguma", 1000, "goguma.jpg", 1L)), 0, 10)
-        );
+        assertThat(actual.getBody()).isEqualTo(List.of(new OptionResponse(1L, "option", 1)));
     }
 
     private HttpHeaders getToken() throws JsonProcessingException {
@@ -66,18 +66,9 @@ class ProductEndToEndTest {
         var tokenResponseEntity = restTemplate.exchange(tokenRequestEntity, String.class);
         var token = objectMapper.readTree(tokenResponseEntity.getBody()).get("accessToken")
             .asText();
-        var headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-        return headers;
-    }
-
-    private void addProduct(String name, Integer price, String imageUrl, String url,
-        HttpHeaders headers) {
-        var expected = new ProductRequest.Create(name, price, imageUrl, 1L,
-            List.of(new OptionRequest.Create("option", 1)));
-        var expected1RequestEntity = new RequestEntity<>(expected, headers, HttpMethod.POST,
-            URI.create(url));
-        restTemplate.exchange(expected1RequestEntity, String.class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Authorization", "Bearer " + token);
+        return httpHeaders;
     }
 
     private void saveCategory(HttpHeaders headers) {
@@ -85,6 +76,15 @@ class ProductEndToEndTest {
         var categoryRequest = new CategoryRequest("test", "##test", "test.jpg", "test");
         var categoryRequestEntity = new RequestEntity<>(categoryRequest, headers, HttpMethod.POST,
             URI.create(categoryUrl));
-        var categoryResponseEntity = restTemplate.exchange(categoryRequestEntity, String.class);
+        restTemplate.exchange(categoryRequestEntity, String.class);
+    }
+
+    private void saveProduct(HttpHeaders headers) {
+        var url = "http://localhost:" + port + "/api/products";
+        var expected = new ProductRequest.Create("kimchi", 500, "kimchi.jpg", 1L,
+            List.of(new Create("option", 1)));
+        var expected1RequestEntity = new RequestEntity<>(expected, headers, HttpMethod.POST,
+            URI.create(url));
+        restTemplate.exchange(expected1RequestEntity, String.class);
     }
 }
