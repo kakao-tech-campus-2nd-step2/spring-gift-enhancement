@@ -1,18 +1,12 @@
 package gift.controller;
 
-import gift.dto.ProductDto;
-import gift.entity.Product;
+
+import gift.service.MemberService;
+import gift.service.ProductService;
 import gift.service.WishlistService;
 import gift.util.JwtTokenProvider;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,37 +15,18 @@ import org.springframework.web.bind.annotation.*;
 public class WishlistController {
 
     private final WishlistService wishlistService;
+    private final MemberService memberService;
+    private final ProductService productService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public WishlistController(WishlistService wishlistService, JwtTokenProvider jwtTokenProvider) {
+    public WishlistController(WishlistService wishlistService, ProductService productService, MemberService memberService, JwtTokenProvider jwtTokenProvider) {
         this.wishlistService = wishlistService;
+        this.productService = productService;
+        this.memberService = memberService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-
-    @GetMapping
-    public ResponseEntity<Map<String, Object>> getWishlistItems(
-            @RequestParam("email") String email,
-            Pageable pageable) {
-        Page<Product> productPage = wishlistService.getWishlistByEmail(email, pageable);
-        Map<String, Object> response = new HashMap<>();
-        var data = productPage.getContent();
-
-        List<ProductDto> productDtos = data.stream().map(v -> {
-            ProductDto dto = new ProductDto(v);
-            dto.setCategoryId(v.getCategory().getId());
-            dto.setCategoryName(v.getCategory().getName());
-            return dto;
-        }).collect(Collectors.toList());
-
-        response.put("content", productDtos);
-        response.put("currentPage", productPage.getNumber() + 1);
-        response.put("totalPages", productPage.getTotalPages());
-        response.put("hasNext", productPage.hasNext());
-        response.put("hasPrevious", productPage.hasPrevious());
-        return ResponseEntity.ok(response);
-    }
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteWishlistItem(@RequestHeader("Authorization") String token, @PathVariable Long productId) {
@@ -61,8 +36,10 @@ public class WishlistController {
     }
 
     @PostMapping("/{productId}")
-    public ResponseEntity<Void> addWishlistItem( @RequestParam("email") String email, @PathVariable Long productId) {
-        wishlistService.addWishlistItem(email, productId);
+
+    public ResponseEntity<Void> addWishlistItem( @RequestParam("email") String email, @RequestParam("optionId") Long optionId, @PathVariable Long productId) {
+        wishlistService.addWishlistItem(email, optionId, productId);
+
         return ResponseEntity.ok().build();
     }
 

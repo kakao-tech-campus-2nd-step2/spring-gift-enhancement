@@ -1,9 +1,13 @@
 package gift.controller;
 
 import gift.dto.ProductDto;
+
+import gift.dto.OptionDto;
 import gift.entity.Category;
 import gift.entity.Product;
 import gift.service.CategoryService;
+import gift.service.OptionService;
+
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +19,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 
 @Controller
 @RequestMapping("/api/products")
@@ -25,42 +32,23 @@ public class ProductController {
 
     private final CategoryService categoryService;
     private final ProductService productService;
+    private OptionService optionService;
+
 
     @Autowired
-    public ProductController(CategoryService categoryService, ProductService productService) {
+    public ProductController(CategoryService categoryService, ProductService productService, OptionService optionService) {
         this.categoryService = categoryService;
         this.productService = productService;
-    }
-
-    @GetMapping("/data")
-    @ResponseBody
-    public Map<String, Object> getProducts(Pageable pageable) {
-        Page<Product> productPage = productService.getProducts(pageable);
-        Map<String, Object> response = new HashMap<>();
-        var data = productPage.getContent();
-        response.put("content", data.stream().map(v -> {
-            var dto = new ProductDto(v);
-            dto.setCategoryName(v.getCategory().getName());
-            return dto;
-        }));
-        response.put("currentPage", productPage.getNumber());
-        response.put("totalPages", productPage.getTotalPages());
-        response.put("hasNext", productPage.hasNext());
-        response.put("hasPrevious", productPage.hasPrevious());
-        return response;
+        this.optionService = optionService;
     }
 
 
-    @GetMapping("/add")
-    public String showAddProductForm(Model model) {
-        model.addAttribute("product", new ProductDto());
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "add-product";
-    }
 
     @PostMapping("/add")
     public String addProduct(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("product", new ProductDto());
+
             model.addAttribute("categories", categoryService.getAllCategories());
             return "add-product";
         }
@@ -68,23 +56,17 @@ public class ProductController {
         return "redirect:/view/products";
     }
 
-    @GetMapping("/edit/{id}")
-    public String showEditProductForm(@PathVariable Long id, Model model) {
-        Product product = productService.getProductById(id);
-        if (product == null) {
-            return "redirect:/view/products";
-        }
-        List<Category> categories = categoryService.getAllCategories();
-        model.addAttribute("categories", categories);
-        model.addAttribute("product", new ProductDto(product));
-        return "edit-product";
-    }
+
 
     @PostMapping("/edit/{id}")
     public String updateProduct(@PathVariable Long id, @Valid @ModelAttribute("product") ProductDto productDto, BindingResult result, Model model) {
+
+        Product product = productService.getProductById(productDto.getId());
         if (result.hasErrors()) {
-            List<Category> categories = categoryService.getAllCategories();
-            model.addAttribute("categories", categories);
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("options", optionService.getAllOptions());
+            model.addAttribute("product", new ProductDto(product));
+
             return "edit-product";
         }
         if (productDto.getName().contains("카카오")) {
@@ -97,9 +79,5 @@ public class ProductController {
         return "redirect:/view/products";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return "redirect:/view/products";
-    }
+
 }

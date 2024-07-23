@@ -1,13 +1,17 @@
 package gift.service;
 
+import gift.dto.OptionDto;
 import gift.entity.Category;
 import gift.dto.ProductDto;
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.ProductNotFoundException;
 import gift.repository.ProductRepository;
-import gift.repository.CategoryRepository;
+
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+
 
 
 import org.springframework.data.domain.Page;
@@ -23,10 +27,14 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
 
+    private final OptionService optionService;
+
     @Autowired
-    public  ProductService(ProductRepository productRepository, CategoryService categoryService){
+    public  ProductService(ProductRepository productRepository, CategoryService categoryService, OptionService optionService){
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.optionService = optionService;
+
     }
 
     public Page<Product> getProducts(Pageable pageable) {
@@ -42,6 +50,10 @@ public class ProductService {
         Category category = categoryService.getCategory(productDto.getCategoryId());
         Product product = new Product(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
         product.setCategory(category);
+
+        Set<Option> options = convertOptionDtosToOptions(productDto.getOptions(), product);
+        product.setOptions(options);
+
         category.addProduct(product);
         productRepository.save(product);
     }
@@ -51,9 +63,17 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> ProductNotFoundException.of(id));
         product.edit(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
+
+        Set<Option> options = convertOptionDtosToOptions(productDto.getOptions(), product);
+        product.edit(productDto.getName(), productDto.getPrice(), productDto.getImageUrl());
+        product.setOptions(options);
         product.setCategory(category);
+        for (Option option : options) {
+            option.setProduct(product);
+        }
         productRepository.save(product);
     }
+
 
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
@@ -65,4 +85,17 @@ public class ProductService {
         }
         productRepository.delete(product);
     }
+
+    private Set<Option> convertOptionDtosToOptions(List<OptionDto> optionDtos, Product product) {
+        Set<Option> options = new HashSet<>();
+        for (OptionDto optionDto : optionDtos) {
+            Option option = new Option();
+            option.setName(optionDto.getName());
+            option.setQuantity(optionDto.getQuantity());
+            option.setProduct(product);
+            options.add(option);
+        }
+        return options;
+    }
+
 }

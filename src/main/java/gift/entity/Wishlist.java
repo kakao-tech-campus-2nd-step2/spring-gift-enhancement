@@ -17,12 +17,18 @@ public class Wishlist {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+
+
+    private String optionName;
+
     public Wishlist(){
 
     }
-    public Wishlist(Member member, Product product){
+    public Wishlist(Member member, Product product, String optionName){
         this.member = member;
         this.product = product;
+        this.optionName = optionName;
+
     }
 
     public Long getId() {
@@ -48,4 +54,14 @@ public class Wishlist {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+
+    public String getOptionName(){
+        return optionName;
+    }
+
+    public void setOptionName(String optionName) {
+        this.optionName = optionName;
+    }
+
 }

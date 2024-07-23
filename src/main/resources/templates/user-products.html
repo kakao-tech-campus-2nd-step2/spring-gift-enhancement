@@ -20,6 +20,8 @@
     <span id="current-page">1</span>
     <button id="next-page" class="btn btn-secondary">Next</button>
 </div>
+<a href="/view/home">Back to Home</a>
+
 <script>
     $(document).ready(function() {
         let currentPage = 1;
@@ -44,7 +46,7 @@
 
         function fetchProducts(page, size) {
             $.ajax({
-                url: `/api/products/data?page=${page - 1}&size=${size}`, // Spring Data JPA는 페이지 번호가 0부터 시작
+                url: `/view/products/data?page=${page - 1}&size=${size}`, // Spring Data JPA는 페이지 번호가 0부터 시작
                 method: 'GET',
                 success: function(response) {
                     const products = response.content || response; // response.content가 있는 경우 처리
@@ -58,6 +60,9 @@
                     }
 
                     products.forEach(product => {
+
+                        const options = product.options.map(option => `<option value="${option.id}">${option.name} (Quantity: ${option.quantity})</option>`).join('');
+
                         const productCard = `
                             <div class="col-md-4 mb-3">
                                 <div class="card">
@@ -66,6 +71,12 @@
                                         <h5 class="card-title">${product.name}</h5>
                                         <h6 class="card-category">${product.categoryName}</h6>
                                         <p class="card-text">${product.description}</p>
+
+                                        <select class="form-control mb-2 option-select">
+                                            <option value="" disabled selected>-- Select Option --</option>
+                                            ${options}
+                                        </select>
+
                                         <button class="btn btn-primary add-to-wishlist" data-id="${product.id}">Add to Wishlist</button>
                                     </div>
                                 </div>
@@ -78,13 +89,23 @@
                     $('.add-to-wishlist').click(function() {
                         const productId = $(this).data('id');
                         const email = getEmailFromToken();
+
+                        const selectedOptionId = $(this).siblings('.option-select').val();
+                        if (!selectedOptionId) {
+                            alert('Please select an option.');
+                            return;
+                        }
+
+
                         if (!email) return;
 
                         $.ajax({
                             url: `/api/wishlist/${productId}`,
                             method: 'POST',
                             data: {
-                                email: email
+                                email: email,
+                                optionId: selectedOptionId
+
                             },
                             success: function() {
                                 alert('Product added to wishlist!');

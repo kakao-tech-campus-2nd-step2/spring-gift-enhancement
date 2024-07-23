@@ -1,16 +1,15 @@
 package gift.service;
 
 import gift.entity.Member;
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.entity.Wishlist;
-import gift.repository.MemberRepository;
-import gift.repository.ProductRepository;
 import gift.repository.WishlistRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class WishlistService {
@@ -18,13 +17,15 @@ public class WishlistService {
     private final WishlistRepository wishlistRepository;
     private final ProductService productService;
     private final MemberService memberService;
+    private final OptionService optionService;
 
     @Autowired
     public WishlistService(WishlistRepository wishlistRepository, ProductService productService,
-                           MemberService memberService) {
+                           MemberService memberService, OptionService optionService) {
         this.wishlistRepository = wishlistRepository;
         this.productService = productService;
         this.memberService = memberService;
+        this.optionService = optionService;
     }
 
     public Page<Product> getWishlistByEmail(String email, Pageable pageable) {
@@ -41,9 +42,11 @@ public class WishlistService {
         }
     }
 
-    public void addWishlistItem(String email, Long productId) {
+    public void addWishlistItem(String email, Long optionId, Long productId) {
         Member member = memberService.getMember(email);
         Product product = productService.getProductById(productId);
-        wishlistRepository.save(new Wishlist(member, product));
+        Option option = optionService.getOptionById(optionId);
+        String optionName = option.getName();
+        wishlistRepository.save(new Wishlist(member, product, optionName));
     }
 }

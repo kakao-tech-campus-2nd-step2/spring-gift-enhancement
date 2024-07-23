@@ -1,10 +1,22 @@
 package gift.dto;
 
+import gift.entity.Option;
 import gift.entity.Product;
+
+import jakarta.validation.Valid;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
+import jakarta.validation.constraints.NotEmpty;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 public class ProductDto {
 
@@ -27,10 +39,16 @@ public class ProductDto {
     @Min(value = 1, message = "Category ID must be positive")
     private Long categoryId;
 
+    @NotEmpty(message = "Product must have at least one option")
+    private List<@Valid OptionDto> options;
+
+    private String selectOptionName = "";
+
     private String categoryName = "";
 
     // 기본 생성자
     public ProductDto() {
+        this.options = new ArrayList<>();
     }
 
     // 모든 필드를 받는 생성자
@@ -40,6 +58,7 @@ public class ProductDto {
         this.price = price;
         this.imageUrl = imageUrl;
         this.categoryId = categoryId;
+        this.options = new ArrayList<>();
     }
 
     // Product 엔티티를 받아서 Dto로 변환하는 생성자
@@ -50,6 +69,13 @@ public class ProductDto {
         this.imageUrl = product.getImageUrl();
         this.categoryId = product.getCategory().getId();
         this.categoryName = product.getCategory().getName();
+        this.options = convertOptionsToDto(product.getOptions());
+    }
+
+    // Options를 OptionDto로 변환하는 메서드
+    private List<OptionDto> convertOptionsToDto(Set<Option> options) {
+        return options.stream().map(OptionDto::new).collect(Collectors.toList());
+
     }
 
     // Getters and Setters
@@ -96,4 +122,22 @@ public class ProductDto {
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
+
+
+    public List<OptionDto> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<OptionDto> options) {
+        this.options = options;
+    }
+
+    public String getSelectOptionName(){
+        return selectOptionName;
+    }
+
+    public void setSelectOptionName(String optionName) {
+        this.selectOptionName = selectOptionName;
+    }
+
 }
