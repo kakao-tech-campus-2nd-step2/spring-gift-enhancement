@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.config.LoginUser;
+import gift.dto.ResponseMessage;
 import gift.dto.WishRequest;
 import gift.entity.User;
 import gift.entity.Wish;
@@ -49,17 +50,18 @@ public class WishController {
     }
 
     @PutMapping("/{wishId}")
-    public ResponseEntity<String> updateNumber(@PathVariable Long wishId, @LoginUser User user,
+    public ResponseEntity<ResponseMessage> updateNumber(@PathVariable Long wishId,
+        @LoginUser User user,
         @RequestBody WishRequest wishRequest) {
-        wishService.getWishById(user.getId(), wishId);
         wishService.updateNumber(user.getId(), wishId, wishRequest.getNumber());
-        return ResponseEntity.ok("수정되었습니다.");
+        ResponseMessage responseMessage = new ResponseMessage("수정되었습니다.");
+        return ResponseEntity.ok(responseMessage);
     }
 
     @DeleteMapping("/{wishId}")
-    public ResponseEntity<String> delete(@PathVariable Long wishId, @LoginUser User user) {
-        wishService.getWishById(user.getId(), wishId);
+    public ResponseEntity<ResponseMessage> delete(@PathVariable Long wishId, @LoginUser User user) {
         wishService.removeWish(user.getId(), wishId);
-        return ResponseEntity.ok("삭제되었습니다.");
+        ResponseMessage responseMessage = new ResponseMessage("삭제되었습니다.");
+        return ResponseEntity.ok(responseMessage);
     }
 }

@@ -3,6 +3,7 @@ package gift.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +14,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -32,20 +34,16 @@ public class Product {
     private List<Wish> wishes = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @NotNull
     private Category category;
 
-    public Product() {
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<Option> options = new ArrayList<>();
+
+    protected Product() {
     }
 
     public Product(String name, Integer price, String img, Category category) {
-        this.name = name;
-        this.price = price;
-        this.img = img;
-        this.category = category;
-    }
-
-    public Product(Long id, String name, Integer price, String img, Category category) {
-        this.id = id;
         this.name = name;
         this.price = price;
         this.img = img;
@@ -70,5 +68,29 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void updateProduct(String name, Integer price, String img, Category category) {
+        this.name = name;
+        this.price = price;
+        this.img = img;
+        this.category = category;
+    }
+
+    public List<Option> sortAndBringOptions() {
+        options.sort(Comparator.comparing(Option::getId));
+        return options;
+    }
+
+    public void removeOption(Option option) {
+        this.options.remove(option);
+    }
+
+    public Integer optionAmount() {
+        return this.options.size();
     }
 }

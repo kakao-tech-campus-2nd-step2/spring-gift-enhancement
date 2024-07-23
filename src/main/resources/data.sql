@@ -74,36 +74,99 @@ INSERT INTO products (name, price, img, category_id)
 VALUES ('Product 14', 1400, 'image14.jpg', 2);
 INSERT INTO products (name, price, img, category_id)
 VALUES ('Product 15', 1500, 'image15.jpg', 3);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 16', 1600, 'image16.jpg', 4);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 17', 1700, 'image17.jpg', 5);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 18', 1800, 'image18.jpg', 6);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 19', 1900, 'image19.jpg', 7);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 20', 2000, 'image20.jpg', 8);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 21', 2100, 'image21.jpg', 9);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 22', 2200, 'image22.jpg', 10);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 23', 2300, 'image23.jpg', 11);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 24', 2400, 'image24.jpg', 12);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 25', 2500, 'image25.jpg', 1);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 26', 2600, 'image26.jpg', 2);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 27', 2700, 'image27.jpg', 3);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 28', 2800, 'image28.jpg', 4);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 29', 2900, 'image29.jpg', 5);
-INSERT INTO products (name, price, img, category_id)
-VALUES ('Product 30', 3000, 'image30.jpg', 6);
+
+-- 옵션 더미 데이터 추가 (각 제품당 2개 옵션)
+
+-- Product 1
+INSERT INTO options (name, quantity, product_id)
+VALUES ('01 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 1);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('02 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 1);
+
+-- Product 2
+INSERT INTO options (name, quantity, product_id)
+VALUES ('03 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 2);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('04 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 2);
+
+-- Product 3
+INSERT INTO options (name, quantity, product_id)
+VALUES ('05 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 3);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('06 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 3);
+
+-- Product 4
+INSERT INTO options (name, quantity, product_id)
+VALUES ('07 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 4);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('08 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 4);
+
+-- Product 5
+INSERT INTO options (name, quantity, product_id)
+VALUES ('09 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 5);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('10 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 5);
+
+-- Product 6
+INSERT INTO options (name, quantity, product_id)
+VALUES ('11 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 6);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('12 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 6);
+
+-- Product 7
+INSERT INTO options (name, quantity, product_id)
+VALUES ('13 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 7);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('14 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 7);
+
+-- Product 8
+INSERT INTO options (name, quantity, product_id)
+VALUES ('15 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 8);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('16 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 8);
+
+-- Product 9
+INSERT INTO options (name, quantity, product_id)
+VALUES ('17 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 9);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('18 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 9);
+
+-- Product 10
+INSERT INTO options (name, quantity, product_id)
+VALUES ('19 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 10);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('20 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 10);
+
+-- Product 11
+INSERT INTO options (name, quantity, product_id)
+VALUES ('21 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 11);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('22 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 11);
+
+-- Product 12
+INSERT INTO options (name, quantity, product_id)
+VALUES ('23 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 12);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('24 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 12);
+
+-- Product 13
+INSERT INTO options (name, quantity, product_id)
+VALUES ('25 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 13);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('26 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 13);
+
+-- Product 14
+INSERT INTO options (name, quantity, product_id)
+VALUES ('27 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 14);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('28 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 14);
+
+-- Product 15
+INSERT INTO options (name, quantity, product_id)
+VALUES ('29 [Best] 시어버터 핸드 & 시어 스틱 립 밤', 969, 15);
+INSERT INTO options (name, quantity, product_id)
+VALUES ('30 [Top] 라벤더 핸드 & 스틱 립 밤', 500, 15);
+
 
 -- 위시리스트 더미 데이터 추가
 INSERT INTO wishes (user_id, product_id, number)
@@ -136,33 +199,3 @@ INSERT INTO wishes (user_id, product_id, number)
 VALUES (1, 14, 28);
 INSERT INTO wishes (user_id, product_id, number)
 VALUES (1, 15, 30);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 16, 32);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 17, 34);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 18, 36);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 19, 38);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 20, 40);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 21, 42);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 22, 44);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 23, 46);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 24, 48);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 25, 50);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 26, 52);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 27, 54);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 28, 56);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 29, 58);
-INSERT INTO wishes (user_id, product_id, number)
-VALUES (1, 30, 60);

@@ -27,7 +27,7 @@ public class Wish {
     @NotNull
     private int number;
 
-    public Wish() {
+    protected Wish() {
     }
 
     public Wish(User user, Product product, int number) {

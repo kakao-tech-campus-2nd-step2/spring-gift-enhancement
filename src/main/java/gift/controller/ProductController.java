@@ -1,6 +1,8 @@
 package gift.controller;
 
+import gift.dto.ProductCreateRequest;
 import gift.dto.ProductRequest;
+import gift.dto.ResponseMessage;
 import gift.entity.Product;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -41,23 +43,23 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> addProduct(@Valid @RequestBody ProductRequest productRequest) {
-        Product product = productService.saveProduct(productRequest);
+    public ResponseEntity<Product> addProduct(
+        @Valid @RequestBody ProductCreateRequest productCreateRequest) {
+        Product product = productService.saveProduct(productCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> changeProduct(@PathVariable("id") Long id,
         @Valid @RequestBody ProductRequest productRequest) {
-        productService.getProductById(id);
         Product product = productService.updateProduct(id, productRequest);
         return ResponseEntity.ok(product);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> removeProduct(@PathVariable("id") Long id) {
-        productService.getProductById(id);
+    public ResponseEntity<ResponseMessage> removeProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
-        return ResponseEntity.ok("삭제되었습니다.");
+        ResponseMessage responseMessage = new ResponseMessage("삭제되었습니다.");
+        return ResponseEntity.ok(responseMessage);
     }
 }

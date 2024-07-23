@@ -31,8 +31,8 @@ class CategoryRepositoryTest {
     @Test
     @DisplayName("DB에 저장된 ID를 기반으로 저장된 카테고리를 불러오는지 테스트")
     void findByIdTest() {
-        Long Frist_Category_ID = 1L;
-        Optional<Category> actual = categoryRepository.findById(Frist_Category_ID);
+        Long First_Category_ID = 1L;
+        Optional<Category> actual = categoryRepository.findById(First_Category_ID);
 
         assertThat(actual).isPresent().hasValueSatisfying(
             w -> assertThat(w.getDescription()).isEqualTo("교환권 카테고리입니다."));

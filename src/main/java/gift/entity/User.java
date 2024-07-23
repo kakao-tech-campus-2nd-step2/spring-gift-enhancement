@@ -26,7 +26,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Wish> wishes = new ArrayList<>();
 
-    public User() {
+    protected User() {
     }
 
     public User(String email, String password) {

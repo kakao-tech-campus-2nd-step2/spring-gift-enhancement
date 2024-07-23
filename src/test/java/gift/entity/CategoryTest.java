@@ -12,17 +12,16 @@ class CategoryTest {
 
     @BeforeEach
     void setUp() {
-        category = new Category(1L, "음식", "testColor", "testImage.jpg", "TestDescription");
+        category = new Category("음식", "testColor", "testImage.jpg", "TestDescription");
     }
 
     @Test
     @DisplayName("생성자 테스트")
     void CategoryConstructorTest() {
-        Category newCategory = new Category(2L, "상품권", "testColor2", "testImage2.jpg",
+        Category newCategory = new Category("상품권", "testColor2", "testImage2.jpg",
             "TestDescription2");
 
         assertThat(newCategory).isNotNull();
-        assertThat(newCategory.getId()).isEqualTo(2L);
         assertThat(newCategory.getName()).isEqualTo("상품권");
         assertThat(newCategory.getColor()).isEqualTo("testColor2");
         assertThat(newCategory.getImageUrl()).isEqualTo("testImage2.jpg");
@@ -32,10 +31,26 @@ class CategoryTest {
     @Test
     @DisplayName("Getter 테스트")
     void CategoryGetterTest() {
-        assertThat(category.getId()).isEqualTo(1L);
         assertThat(category.getName()).isEqualTo("음식");
         assertThat(category.getColor()).isEqualTo("testColor");
         assertThat(category.getImageUrl()).isEqualTo("testImage.jpg");
         assertThat(category.getDescription()).isEqualTo("TestDescription");
+    }
+
+    @Test
+    @DisplayName("updateCategory 테스트")
+    void updateCategoryTest() {
+        category.updateCategory("자동차", "자동차 색상", "자동차 이미지", "자동차 카테고리입니다.");
+
+        assertThat(category.getName()).isEqualTo("자동차");
+        assertThat(category.getColor()).isEqualTo("자동차 색상");
+        assertThat(category.getImageUrl()).isEqualTo("자동차 이미지");
+        assertThat(category.getDescription()).isEqualTo("자동차 카테고리입니다.");
+    }
+
+    @Test
+    @DisplayName("emptyCategoryCheck 테스트")
+    void emptyCategoryCheckTest() {
+        assertThat(category.emptyCategoryCheck()).isTrue();
     }
 }

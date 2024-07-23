@@ -1,8 +1,10 @@
 package gift.controller;
 
+import gift.dto.ProductCreateRequest;
 import gift.dto.ProductRequest;
 import gift.entity.Category;
 import gift.entity.Product;
+import gift.entity.ProductFactory;
 import gift.service.CategoryService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -26,10 +28,13 @@ public class ProductAdminController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final ProductFactory productFactory;
 
-    public ProductAdminController(ProductService productService, CategoryService categoryService) {
+    public ProductAdminController(ProductService productService, CategoryService categoryService,
+        ProductFactory productFactory) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.productFactory = productFactory;
     }
 
     @GetMapping
@@ -41,28 +46,32 @@ public class ProductAdminController {
         Page<Product> productPage = productService.getAllProducts(pageable);
         model.addAttribute("productPage", productPage);
         model.addAttribute("sortBy", sortBy);
+        model.addAttribute("productRequest", new ProductRequest());
         return "product-list";
     }
 
     @GetMapping("/add")
     public String addProductForm(Model model) {
-        model.addAttribute("productRequest", new ProductRequest());
+        model.addAttribute("productCreateRequest", new ProductCreateRequest());
         Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
         Page<Category> categoryPage = categoryService.getAllCategories(pageable);
         model.addAttribute("categories", categoryPage.getContent());
-        return "product-form";
+        model.addAttribute("product", productFactory.createProduct());
+        return "product-create";
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid @ModelAttribute("productRequest") ProductRequest productRequest,
+    public String addProduct(
+        @Valid @ModelAttribute("productCreateRequest") ProductCreateRequest productCreateRequest,
         BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
             Page<Category> categoryPage = categoryService.getAllCategories(pageable);
             model.addAttribute("categories", categoryPage.getContent());
-            return "product-form";
+            model.addAttribute("productCreateRequest", productCreateRequest);
+            return "product-create";
         }
-        productService.saveProduct(productRequest);
+        productService.saveProduct(productCreateRequest);
         return "redirect:/admin/products";
     }
 
@@ -72,11 +81,7 @@ public class ProductAdminController {
         ProductRequest productRequest = new ProductRequest(
             product.getName(), product.getPrice(), product.getImg(), product.getCategory().getId());
         model.addAttribute("productRequest", productRequest);
-        model.addAttribute("product", product);
-        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-        Page<Category> categoryPage = categoryService.getAllCategories(pageable);
-        model.addAttribute("categories", categoryPage.getContent());
-        return "product-form";
+        return getString(model, product);
     }
 
     @PostMapping("/edit/{id}")
@@ -85,14 +90,19 @@ public class ProductAdminController {
         BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             Product product = productService.getProductById(id);
-            model.addAttribute("product", product);
-            Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-            Page<Category> categoryPage = categoryService.getAllCategories(pageable);
-            model.addAttribute("categories", categoryPage.getContent());
-            return "product-form";
+            return getString(model, product);
         }
         productService.updateProduct(id, productRequest);
         return "redirect:/admin/products";
+    }
+
+    private String getString(Model model, Product product) {
+        model.addAttribute("product", product);
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+        Page<Category> categoryPage = categoryService.getAllCategories(pageable);
+        model.addAttribute("categories", categoryPage.getContent());
+        model.addAttribute("productOptions", product.getOptions());
+        return "product-edit";
     }
 
     @GetMapping("/delete/{id}")
