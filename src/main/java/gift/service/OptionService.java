@@ -41,7 +41,6 @@ public class OptionService {
             validateOptionName(optionRequest, product);
             Option option = optionRequest.toOption(product);
             product.addOption(option);
-            optionRepository.save(option);
         }
     }
 
