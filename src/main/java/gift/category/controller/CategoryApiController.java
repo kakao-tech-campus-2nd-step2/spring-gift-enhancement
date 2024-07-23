@@ -35,7 +35,7 @@ public class CategoryApiController {
     public ApiResponseDto createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
         categoryService.insertCategory(categoryRequestDto);
 
-        return ApiResponseDto.of();
+        return ApiResponseDto.succeed();
     }
 
     // 카테고리를 조회하는 핸들러. 프런트에서 제품 추가 명령 중, 카테고리를 제시해 주기 위해서 만들었습니다.
@@ -43,7 +43,7 @@ public class CategoryApiController {
     public ApiResponseDto readCategory() {
         List<CategoryResponseDto> categories = categoryService.selectCategories();
 
-        return ApiResponseDto.of(categories);
+        return ApiResponseDto.succeed(categories);
     }
 
     // 카테고리를 수정하는 핸들러
@@ -52,13 +52,13 @@ public class CategoryApiController {
         @RequestBody CategoryRequestDto categoryRequestDto) {
         categoryService.updateCategory(new CategoryIdDto(categoryId), categoryRequestDto);
 
-        return ApiResponseDto.of();
+        return ApiResponseDto.succeed();
     }
 
     @DeleteMapping("/{category-id}")
     public ApiResponseDto deleteCategory(@PathVariable(name = "category-id") Long categoryId) {
         categoryService.deleteCategory(new CategoryIdDto(categoryId));
 
-        return ApiResponseDto.of();
+        return ApiResponseDto.succeed();
     }
 }

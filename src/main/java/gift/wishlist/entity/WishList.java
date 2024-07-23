@@ -1,6 +1,5 @@
 package gift.wishlist.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
+// wishlist 객체. quantity는 없앴습니다.
 @Entity
 @Table(name = "wish_products", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "product_id"})})
 public class WishList {
@@ -20,16 +20,16 @@ public class WishList {
     @Embedded
     private UserProduct userProduct;
 
-    @Column(nullable = false)
-    private int quantity;
-
     protected WishList() {
     }
 
-    public WishList(UserProduct userProduct, int quantity) {
-        this.wishListId = null;
+    public WishList(Long wishListId, UserProduct userProduct) {
+        this.wishListId = wishListId;
         this.userProduct = userProduct;
-        this.quantity = quantity;
+    }
+
+    public WishList(UserProduct userProduct) {
+        this(null, userProduct);
     }
 
     public Long getWishListId() {
@@ -38,13 +38,5 @@ public class WishList {
 
     public UserProduct getUserProduct() {
         return userProduct;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void updateQuantity(int quantity) {
-        this.quantity = quantity;
     }
 }

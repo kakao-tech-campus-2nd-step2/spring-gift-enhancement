@@ -5,8 +5,7 @@ import gift.global.dto.TokenDto;
 import gift.permission.dto.LoginRequestDto;
 import gift.permission.dto.RegistrationRequestDto;
 import gift.permission.repository.PermissionRepository;
-import gift.permission.entity.User;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -30,27 +29,20 @@ public class PermissionService {
     // 회원가입 비즈니스 로직 처리
     @Transactional
     public void register(RegistrationRequestDto registrationRequestDto) {
-        try {
-            User user = new User(registrationRequestDto.email(), registrationRequestDto.password(),
-                registrationRequestDto.isAdmin());
-            permissionRepository.save(user);
-        } catch (Exception e) {
-            // email이 unique하지 않은 경우. exist를 써서 쿼리를 한 번 더 날리지 않기 위해 이렇게 구성했습니다.
-            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
-        }
+        verifyEmailAlreadyExists(registrationRequestDto.email());
 
+        permissionRepository.save(registrationRequestDto.toUser());
     }
 
     // 로그인 비즈니스 로직 처리
     @Transactional
     public TokenDto userLogin(LoginRequestDto loginRequestDto) {
-        String email = loginRequestDto.email();
-        String password = loginRequestDto.password();
+        var email = loginRequestDto.email();
+        var password = loginRequestDto.password();
 
         // 이메일이 멀쩡하면 이메일로 불러오기
-        Optional<User> optionalUser = permissionRepository.findByEmail(email);
-        verifyExistence(optionalUser);
-        User actualUser = optionalUser.get();
+        var actualUser = permissionRepository.findByEmail(email)
+            .orElseThrow(() -> new NoSuchElementException("가입되지 않은 이메일입니다."));
 
         // 비밀번호 검증
         verifyPassword(password, actualUser.getPassword());
@@ -62,13 +54,12 @@ public class PermissionService {
     // 어드민 로그인 비즈니스 로직
     @Transactional
     public TokenDto adminLogin(LoginRequestDto loginRequestDto) {
-        String email = loginRequestDto.email();
-        String password = loginRequestDto.password();
+        var email = loginRequestDto.email();
+        var password = loginRequestDto.password();
 
         // 이메일이 멀쩡하면 이메일로 불러오기
-        Optional<User> optionalUser = permissionRepository.findByEmail(email);
-        verifyExistence(optionalUser);
-        User actualUser = optionalUser.get();
+        var actualUser = permissionRepository.findByEmail(email)
+            .orElseThrow(() -> new NoSuchElementException("가입되지 않은 이메일입니다."));
 
         // 비밀번호 검증
         verifyPassword(password, actualUser.getPassword());
@@ -82,10 +73,9 @@ public class PermissionService {
         return tokenComponent.getToken(actualUser.getUserId(), email, true);
     }
 
-    // 존재하는 유저인지 검증
-    private void verifyExistence(Optional<User> optionalUser) {
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("가입되지 않은 이메일입니다.");
+    private void verifyEmailAlreadyExists(String email) {
+        if (permissionRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
     }
 

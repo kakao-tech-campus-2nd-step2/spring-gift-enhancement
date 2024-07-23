@@ -1,5 +1,6 @@
 package gift.permission.dto;
 
+import gift.permission.entity.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -16,4 +17,7 @@ public record RegistrationRequestDto(
 
     boolean isAdmin) {
 
+    public User toUser() {
+        return new User(email, password, isAdmin);
+    }
 }

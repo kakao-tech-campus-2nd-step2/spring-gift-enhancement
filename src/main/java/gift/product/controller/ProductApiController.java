@@ -1,25 +1,22 @@
 package gift.product.controller;
 
-import gift.global.annotation.CategoryInfo;
-import gift.global.annotation.PageInfo;
 import gift.global.dto.ApiResponseDto;
-import gift.global.dto.CategoryInfoDto;
 import gift.global.dto.PageInfoDto;
 import gift.product.dto.ProductRequestDto;
 import gift.product.service.ProductService;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -36,39 +33,40 @@ public class ProductApiController {
 
     // 제품을 추가하는 핸들러
     @PostMapping("/admin/products")
-    @Parameter(name = "category-id", required = true)
     public ApiResponseDto createProduct(
         @RequestBody @Valid ProductRequestDto productRequestDto,
-        @CategoryInfo CategoryInfoDto categoryInfoDto) {
-        System.out.println(categoryInfoDto.categoryId());
-        productService.insertProduct(productRequestDto, categoryInfoDto);
+        @RequestParam(name = "category-id") long categoryId,
+        @RequestParam(name = "option-id") long optionId) {
+        productService.insertProduct(productRequestDto, categoryId, optionId);
 
-        return ApiResponseDto.of();
+        return ApiResponseDto.succeed();
     }
 
     // 페이지 내의 제품을 조회하는 핸들러.
-    @Parameters({
-        @Parameter(name = "page-no"),
-        @Parameter(name = "page-size"),
-        @Parameter(name = "sort-property"),
-        @Parameter(name = "sort-direction")
-    })
     @GetMapping("/users/products")
-    public ApiResponseDto readUserProducts(@PageInfo PageInfoDto pageInfoDto) {
-        return ApiResponseDto.of(productService.selectProducts(pageInfoDto));
+    public ApiResponseDto readUserProducts(@ModelAttribute PageInfoDto pageInfoDto) {
+        return ApiResponseDto.succeed(productService.selectProducts(pageInfoDto));
     }
 
     // id가 i인 상품을 수정하는 핸들러
     @PutMapping("/admin/products/{product-id}")
-    @Parameter(name = "category-id", required = true)
     public ApiResponseDto updateProduct(@PathVariable(name = "product-id") long productId,
         @RequestBody @Valid ProductRequestDto productRequestDto,
-        @CategoryInfo CategoryInfoDto categoryInfoDto) {
-        System.out.println(productRequestDto.name());
+        @RequestParam(name = "category-id") long categoryId) {
         // service를 호출해서 제품 수정
-        productService.updateProduct(productId, productRequestDto, categoryInfoDto);
+        productService.updateProduct(productId, productRequestDto, categoryId);
 
-        return ApiResponseDto.of();
+        return ApiResponseDto.succeed();
+    }
+
+    // 제품에 새로운 옵션을 추가하는 핸들러
+    // 최소 하나 이상의 옵션이 있어야 하므로 제품을 추가할 때도 기본 옵션을 받도록 하고, 해당 핸들러로 옵션을 더 추가하도록 함.
+    @PutMapping("/admin/products/{product-id}/options")
+    public ApiResponseDto addProductOption(@PathVariable(name = "product-id") long productId,
+        @RequestParam(name = "option-id") long optionId) {
+        productService.insertOption(productId, optionId);
+
+        return ApiResponseDto.succeed();
     }
 
     // id가 i인 상품을 삭제하는 핸들러
@@ -77,6 +75,6 @@ public class ProductApiController {
         // service를 사용해서 하나의 제품 제거
         productService.deleteProduct(productId);
 
-        return ApiResponseDto.of();
+        return ApiResponseDto.succeed();
     }
 }

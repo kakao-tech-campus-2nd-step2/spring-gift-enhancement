@@ -1,7 +1,9 @@
 package gift.product.entity;
 
 import gift.category.entity.Category;
+import gift.option.entity.Option;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,19 +34,24 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Embedded
+    private Options options;
+
     protected Product() {
     }
 
-    public Product(String name, int price, String imageUrl, Category category) {
-        this(null, name, price, imageUrl, category);
-    }
-
-    public Product(Long productId, String name, int price, String imageUrl, Category category) {
+    public Product(Long productId, String name, int price, String imageUrl, Category category, Options options) {
         this.productId = productId;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.options = options;
+    }
+
+    public static Product of(String name, int price, String imageUrl, Category category, Option option) {
+        // 상품 추가 시에 무조건 하나의 옵션을 넣게 해서 최소 하나 이상의 옵션 유지
+        return new Product(null, name, price, imageUrl, category, new Options(option));
     }
 
     public void updateProduct(String name, int price, String image, Category category) {
@@ -72,5 +79,13 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public Options getOptions() {
+        return options;
+    }
+
+    public void addNewOption(Option option) {
+        options.addNewOption(option, productId);
     }
 }

@@ -1,9 +1,7 @@
 package gift.wishlist.controller;
 
-import gift.global.annotation.PageInfo;
-import gift.global.annotation.UserInfo;
+import gift.global.annotation.UserId;
 import gift.global.dto.PageInfoDto;
-import gift.global.dto.UserInfoDto;
 import gift.product.dto.ProductResponseDto;
 import gift.wishlist.dto.WishListResponseDto;
 import gift.wishlist.service.WishListService;
@@ -37,14 +35,14 @@ public class WishListController {
     // 로그인 직후에 메인 화면(wishlist)을 보여주는 핸들러
     @GetMapping("/wishlist")
     @Operation
-    public String loadUserWishList(@UserInfo UserInfoDto userInfoDto,
-        @PageInfo PageInfoDto pageInfoDto, Model model) {
+    public String loadUserWishList(@UserId Long userId,
+        PageInfoDto pageInfoDto, Model model) {
         // 특정 id를 갖는 사람이 추가한 위시 리스트 페이지를 가져와서 thymeleaf를 통해 html로 전송
         List<WishListResponseDto> wishListResponseDtoList = wishListService.readWishProducts(
-            userInfoDto, pageInfoDto);
+            userId, pageInfoDto);
 
         model.addAttribute("products", wishListResponseDtoList);
-        model.addAttribute("userInfo", userInfoDto);
+        model.addAttribute("userInfo", userId);
         model.addAttribute("pageInfo", pageInfoDto);
 
         return "html/user-main";
@@ -54,7 +52,7 @@ public class WishListController {
     // 모든 제품을 가져오는 행위는 resolver로 처리가 가능해서 resolver를 사용하였습니다.
     @GetMapping("/products")
     @Operation
-    public String loadAddingPage(@PathVariable(name = "user-id") long userId,
+    public String loadAddingPage(@PathVariable(name = "user-id") Long userId,
         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token,
         List<ProductResponseDto> products, Model model) {
         model.addAttribute("userId", userId);
