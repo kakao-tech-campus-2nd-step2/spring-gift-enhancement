@@ -4,6 +4,7 @@ import gift.constants.ErrorMessage;
 import gift.dto.OptionEditRequest;
 import gift.dto.OptionResponse;
 import gift.dto.OptionSaveRequest;
+import gift.dto.OptionSubtractRequest;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.repository.OptionJpaDao;
@@ -69,11 +70,26 @@ public class OptionService {
         }
     }
 
+    @Transactional
+    public void subtractOption(OptionSubtractRequest subtractRequest) {
+        findOptionWithLock(subtractRequest.getId());
+        Product product = findProductById(subtractRequest.getProductId());
+        product.subtractOption(subtractRequest);
+    }
+
     /**
      * productId에 해당하는 상품이 존재하면 반환하고 아니면 NoSuchElementException
      */
     private Product findProductById(Long productId) {
         return productJpaDao.findById(productId)
             .orElseThrow(() -> new NoSuchElementException(ErrorMessage.PRODUCT_NOT_EXISTS_MSG));
+    }
+
+    /**
+     * Pessimistic Lock 을 걸기위한 조회
+     */
+    private Option findOptionWithLock(Long optionId) {
+        return optionJpaDao.findByIdForUpdate(optionId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorMessage.OPTION_NOT_EXISTS_MSG));
     }
 }

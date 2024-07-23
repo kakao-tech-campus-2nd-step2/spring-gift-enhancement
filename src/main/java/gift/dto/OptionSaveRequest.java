@@ -35,7 +35,7 @@ public class OptionSaveRequest {
     }
 
     public Option toEntity(Product product) {
-        return new Option(name, getQuantity(), product);
+        return new Option(name, quantity, product);
     }
 
     public String getName() {
