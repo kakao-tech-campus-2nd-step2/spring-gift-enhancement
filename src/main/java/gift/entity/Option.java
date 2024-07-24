@@ -64,4 +64,10 @@ public class Option {
         this.product = product;
     }
 
+    public void subtractQuantity(int quantity) {
+        if (this.quantity < quantity) {
+            throw new RuntimeException("Not enough quantity available");
+        }
+        this.quantity -= quantity;
+    }
 }

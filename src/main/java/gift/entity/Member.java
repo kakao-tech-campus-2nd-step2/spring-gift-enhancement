@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+import static gift.dto.Role.ADMIN;
+
 @Entity
 public class Member {
 
@@ -37,6 +39,13 @@ public class Member {
         this.email = email;
         this.password = password;
         this.role = Role.USER;
+    }
+
+    // admin 계정을 생성자로 만들기 위해 추가함
+    public Member(String email, String password, Role role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public Long getId() {

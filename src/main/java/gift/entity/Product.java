@@ -50,6 +50,13 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
     }
+    // 더미데이터 생성 시 사용되는 생성자
+    public Product(String name, int price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
 
     public Long getId() {
         return id;

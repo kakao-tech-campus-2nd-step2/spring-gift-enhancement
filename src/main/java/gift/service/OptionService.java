@@ -1,7 +1,9 @@
 package gift.service;
 
+import gift.dto.OptionDto;
 import gift.entity.Option;
 import gift.repository.OptionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
@@ -51,6 +53,13 @@ public class OptionService {
         option.setName(optionDetails.getName());
         option.setQuantity(optionDetails.getQuantity());
         return optionRepository.save(option);
+    }
+
+    @Transactional
+    public void subtractOptionQuantity(OptionDto optionDto, int quantity) {
+        Option option = getOptionById(optionDto.getId());
+        option.subtractQuantity(quantity);
+        optionRepository.save(option);
     }
 
 }
