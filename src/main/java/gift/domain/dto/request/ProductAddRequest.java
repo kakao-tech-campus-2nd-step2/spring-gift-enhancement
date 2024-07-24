@@ -4,6 +4,7 @@ import gift.domain.annotation.RestrictedSpecialChars;
 import gift.domain.entity.Product;
 import gift.domain.service.CategoryService;
 import gift.global.WebConfig.Constants.Domain;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,7 @@ public record ProductAddRequest(
     String imageUrl,
     @NotNull
     Long categoryId,
+    @Valid
     @NotNull
     List<OptionAddRequest> options
     ) {

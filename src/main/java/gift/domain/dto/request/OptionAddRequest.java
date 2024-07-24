@@ -11,11 +11,11 @@ import org.hibernate.validator.constraints.Range;
 
 public record OptionAddRequest(
     @NotNull
-    @Size(min = Domain.Option.NAME_LENGTH_MIN, max = Domain.Option.NAME_LENGTH_MAX)
+    @Size(min = Domain.Option.NAME_LENGTH_MIN, max = Domain.Option.NAME_LENGTH_MAX, message = Domain.Option.NAME_LENGTH_INVALID_MSG)
     @RestrictedSpecialChars
     String name,
     @NotNull
-    @Range(min = Domain.Option.QUANTITY_RANGE_MIN, max = Domain.Option.QUANTITY_RANGE_MAX)
+    @Range(min = Domain.Option.QUANTITY_RANGE_MIN, max = Domain.Option.QUANTITY_RANGE_MAX, message = Domain.Option.QUANTITY_INVALID_MSG)
     Integer quantity
 ) {
 

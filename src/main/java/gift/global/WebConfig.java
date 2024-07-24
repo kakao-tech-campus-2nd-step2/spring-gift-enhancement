@@ -32,6 +32,7 @@ public class WebConfig implements WebMvcConfigurer {
         public static class Constraints {
 
             public static final String DEFAULT_ALLOWED_SPECIAL_CHARS = "()[]+-&/_";
+            public static final String DEFAULT_ALLOWED_SPECIAL_MSG = "(), [], +, -, &, /, _ 이외의 특수 문자는 사용할 수 없습니다.";
         }
 
         public static class Domain {
@@ -59,6 +60,8 @@ public class WebConfig implements WebMvcConfigurer {
                 public static final int NAME_LENGTH_MAX = 50;
                 public static final int QUANTITY_RANGE_MIN = 1;
                 public static final int QUANTITY_RANGE_MAX = 99_999_999;
+                public static final String NAME_LENGTH_INVALID_MSG = "공백을 포함해 최대 50자까지 입력할 수 있습니다.";
+                public static final String QUANTITY_INVALID_MSG = "수량은 최소 1, 최대 100,000,000 미만만 가능합니다.";
 
                 public enum QuantityUpdateAction {
 
