@@ -2,6 +2,7 @@ package gift.service.option;
 
 import gift.domain.option.Option;
 import gift.domain.option.OptionRepository;
+import gift.domain.option.Options;
 import gift.domain.product.Product;
 import gift.domain.product.ProductRepository;
 import gift.mapper.OptionMappper;
@@ -31,7 +32,12 @@ public class OptionService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductNotFoundException("제품이 없슴다."));
 
-        Option option = optionRepository.save(optionMapper.toEntity(optionDto, product));
+        Option option = new Option(optionDto.name(), optionDto.quantity(), product);
+
+        final Options options = new Options(optionRepository.findAllByProductId(productId));
+        options.validate(option);
+
+        optionRepository.save(optionMapper.toEntity(optionDto, product));
         return optionMapper.toDto(option);
     }
 

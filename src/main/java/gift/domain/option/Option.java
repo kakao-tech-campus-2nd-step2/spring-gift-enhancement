@@ -31,6 +31,13 @@ public class Option {
     }
 
     public Option(String name, Long quantity, Product product) {
+        if (name.length() > 50) {
+            throw new IllegalArgumentException("Name is too long");
+        }
+        if (quantity < 1 || quantity >= 100_000_000)  {
+            throw new IllegalArgumentException("Quantity is invalid");
+        }
+
         this.name = name;
         this.quantity = quantity;
         this.product = product;
@@ -61,4 +68,9 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
     }
+
+    public boolean isSameName(Option option) {
+        return this.name.equals(option.name);
+    }
+
 }
