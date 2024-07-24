@@ -73,4 +73,14 @@ public class Option {
         return this.name.equals(option.name);
     }
 
+    public void subtractQuantity(Long quantity) {
+        if (quantity < 1) {
+            throw new IllegalArgumentException("Deduct Quantity value is invalid");
+        }
+        if(quantity > this.quantity) {
+            throw new IllegalArgumentException("cannot subtract by more than quantity");
+        }
+
+        this.quantity -= quantity;
+    }
 }
