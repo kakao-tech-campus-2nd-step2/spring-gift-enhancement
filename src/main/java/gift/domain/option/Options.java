@@ -17,4 +17,8 @@ public class Options {
 
         options.add(option);
     }
+
+    public List<Option> toList() {
+        return new ArrayList<>(options);
+    }
 }
