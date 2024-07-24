@@ -46,6 +46,7 @@ public class ProductService {
     public void addProduct(@Valid ProductRequestDto productRequestDto) {
         Product product = productRequestDto.toProduct(getCategory(productRequestDto.categoryId()));
         optionService.addOption(product, productRequestDto.options());
+        Product.hasOptions(product.getOptions());
         productRepository.save(product);
     }
 

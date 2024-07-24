@@ -41,12 +41,25 @@
 
 <form id="add-product-form" style="display: none;">
     <h2>상품 추가</h2>
+    <label for="category">카테고리:</label>
+    <select id="category" name="category"></select>
     <label for="name">상품명:</label>
     <input type="text" id="name" name="name">
     <label for="price">가격:</label>
     <input type="text" id="price" name="price">
     <label for="imageUrl">이미지 URL:</label>
     <input type="text" id="imageUrl" name="imageUrl">
+    <h3>옵션</h3>
+    <div id="options">
+        <div class="option">
+            <label for="option-name-0">옵션명:</label>
+            <input type="text" id="option-name-0" name="option-name">
+            <label for="option-quantity-0">수량:</label>
+            <input type="text" id="option-quantity-0" name="option-quantity">
+            <button type="button" onclick="removeOption(this)">삭제</button>
+        </div>
+    </div>
+    <button type="button" onclick="addOption()">옵션 추가</button>
     <button class="add-button" type="button" onclick="addProduct()">추가</button>
 </form>
 
@@ -54,12 +67,17 @@
 <form id="edit-product-form" style="display: none;">
     <h2>상품 수정</h2>
     <input type="hidden" id="edit-id" name="id">
+    <label for="edit-category">카테고리:</label>
+    <select id="edit-category" name="category"></select>
     <label for="edit-name">상품명:</label>
     <input type="text" id="edit-name" name="name">
     <label for="edit-price">가격:</label>
     <input type="text" id="edit-price" name="price">
     <label for="edit-imageUrl">이미지 URL:</label>
     <input type="text" id="edit-imageUrl" name="imageUrl">
+    <h3>옵션</h3>
+    <div id="edit-options"></div>
+    <button type="button" onclick="addEditOption()">옵션 추가</button>
     <button class="edit-button" type="button" onclick="updateProduct()">수정</button>
 </form>
 
@@ -117,66 +135,89 @@
         }
     }
 
-    // 상품 추가
+    function fetchCategories(selectElementId) {
+        $.get('/api/categories', function(categories) {
+            const selectElement = $(`#${selectElementId}`);
+            selectElement.empty();
+            categories.forEach(function(category) {
+                selectElement.append(`<option value="${category.id}">${category.name}</option>`);
+            });
+        });
+    }
+
     function addProduct() {
+        var categoryId = $("#category").val();
         var name = $("#name").val();
         var price = $("#price").val();
         var imageUrl = $("#imageUrl").val();
+        var options = [];
+        $('#options .option').each(function(index, element) {
+            var optionName = $(element).find('input[name="option-name"]').val();
+            var optionQuantity = $(element).find('input[name="option-quantity"]').val();
+            options.push({ name: optionName, quantity: optionQuantity });
+        });
         $.ajax({
             url: "/api/products",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify({name: name, price: price, imageUrl: imageUrl}),
+            data: JSON.stringify({categoryId: categoryId, name: name, price: price, imageUrl: imageUrl, options: options}),
             success: function() {
                 fetchProducts();
                 resetAddProductForm();
-                $("#add-product-form").hide();   // 성공 시 숨기기
+                $("#add-product-form").hide();
             },
-            error: function(xhr, textStatus, errorThrown) {
-                console.log(xhr);  // 서버에서 반환된 전체 오류 객체를 콘솔에 출력
-                var errorMessage = xhr.responseText;  // 서버에서 넘어온 오류 메시지
-                alert(errorMessage);  // 오류 메시지를 alert 창에 표시
-            }
-        });
-    }
-
-    // 상품 수정
-    function editProduct(id) {
-        $.get(`/api/products/${id}`, function(product) {
-            $("#edit-id").val(product.id);
-            $("#edit-name").val(product.name);
-            $("#edit-price").val(product.price);
-            $("#edit-imageUrl").val(product.imageUrl);
-            $("#edit-product-form").show();
-        });
-    }
-
-    // 상품 수정
-    function updateProduct() {
-        var id = $("#edit-id").val();
-        var name = $("#edit-name").val();
-        var price = $("#edit-price").val();
-        var imageUrl = $("#edit-imageUrl").val();
-
-        $.ajax({
-            url: `/api/products`,
-            type: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify({id: id, name: name, price: price, imageUrl: imageUrl}),
-            success: function() {
-                fetchProducts();
-                resetEditProductForm();
-                $("#edit-product-form").hide();   // 성공 시 숨기기
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                console.log(xhr);  // 서버에서 반환된 전체 오류 객체를 콘솔에 출력
-                var errorMessage = xhr.responseText;  // 서버에서 넘어온 오류 메시지
+            error: function(xhr) {
+                var errorMessage = xhr.responseText;
                 alert(errorMessage);
             }
         });
     }
 
-    // 상품 삭제
+    function editProduct(id) {
+        $.get(`/api/products/${id}`, function(product) {
+            $("#edit-id").val(product.id);
+            $("#edit-category").val(product.categoryId);
+            $("#edit-name").val(product.name);
+            $("#edit-price").val(product.price);
+            $("#edit-imageUrl").val(product.imageUrl);
+            $("#edit-options").empty();
+            product.options.forEach(function(option, index) {
+                addEditOption(option.name, option.quantity);
+            });
+            $("#edit-product-form").show();
+        });
+    }
+
+    function updateProduct() {
+        var id = $("#edit-id").val();
+        var categoryId = $("#edit-category").val();
+        var name = $("#edit-name").val();
+        var price = $("#edit-price").val();
+        var imageUrl = $("#edit-imageUrl").val();
+        var options = [];
+        $('#edit-options .option').each(function(index, element) {
+            var optionName = $(element).find('input[name="option-name"]').val();
+            var optionQuantity = $(element).find('input[name="option-quantity"]').val();
+            options.push({ name: optionName, quantity: optionQuantity });
+        });
+
+        $.ajax({
+            url: `/api/products`,
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({id: id, categoryId: categoryId, name: name, price: price, imageUrl: imageUrl, options: options}),
+            success: function() {
+                fetchProducts();
+                resetEditProductForm();
+                $("#edit-product-form").hide();
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var errorMessage = xhr.responseText;
+                alert(errorMessage);
+            }
+        });
+    }
+
     function deleteProduct(id) {
         $.ajax({
             url: `/api/products/${id}`,
@@ -187,28 +228,61 @@
         });
     }
 
-    // 상품 추가
     function toggleAddProductForm() {
         $("#add-product-form").toggle();
+        fetchCategories('category');
     }
 
-    // 상품 추가
     function resetAddProductForm() {
         $("#name").val("");
         $("#price").val("");
         $("#imageUrl").val("");
+        $("#options").empty();
+        addOption();
     }
 
-    // 상품 수정
     function resetEditProductForm() {
         $("#edit-id").val("");
         $("#edit-name").val("");
         $("#edit-price").val("");
         $("#edit-imageUrl").val("");
+        $("#edit-options").empty();
+        fetchCategories('edit-category');
+    }
+
+    function addOption() {
+        var optionCount = $("#options .option").length;
+        var optionHtml = `
+            <div class="option">
+                <label for="option-name-${optionCount}">옵션명:</label>
+                <input type="text" id="option-name-${optionCount}" name="option-name">
+                <label for="option-quantity-${optionCount}">수량:</label>
+                <input type="text" id="option-quantity-${optionCount}" name="option-quantity">
+                <button type="button" onclick="removeOption(this)">삭제</button>
+            </div>`;
+        $("#options").append(optionHtml);
+    }
+
+    function addEditOption(name = '', quantity = '') {
+        var optionCount = $("#edit-options .option").length;
+        var optionHtml = `
+            <div class="option">
+                <label for="edit-option-name-${optionCount}">옵션명:</label>
+                <input type="text" id="edit-option-name-${optionCount}" name="option-name" value="${name}">
+                <label for="edit-option-quantity-${optionCount}">수량:</label>
+                <input type="text" id="edit-option-quantity-${optionCount}" name="option-quantity" value="${quantity}">
+                <button type="button" onclick="removeOption(this)">삭제</button>
+            </div>`;
+        $("#edit-options").append(optionHtml);
+    }
+
+    function removeOption(button) {
+        $(button).closest('.option').remove();
     }
 
     $(document).ready(function() {
         fetchProducts();
+        fetchCategories('category');
     });
 </script>
 </body>

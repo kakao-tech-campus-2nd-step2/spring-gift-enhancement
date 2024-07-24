@@ -42,6 +42,7 @@ public class OptionService {
             Option option = optionRequest.toOption(product);
             product.addOption(option);
             optionRepository.save(option);
+            productRepository.save(product);
         }
     }
 
@@ -50,7 +51,6 @@ public class OptionService {
             validateOptionName(optionRequest, product);
             Option option = optionRequest.toOption(product);
             product.addOption(option);
-            optionRepository.save(option);
         }
     }
 
