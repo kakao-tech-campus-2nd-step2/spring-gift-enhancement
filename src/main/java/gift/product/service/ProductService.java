@@ -96,6 +96,16 @@ public class ProductService {
         product.addNewOption(option);
     }
 
+    // option의 개수를 하나 차감시키는 메서드
+    @Transactional
+    public void subtractOption(long productId, long optionId) {
+        var product = productRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("존재하지 않는 제품입니다."));
+
+        var option = product.getOptions().getOption(optionId);
+        option.subtractQuantity();
+    }
+
     // repository를 호출해서 특정 로우를 제거하는 함수
     @Transactional
     public void deleteProduct(long productId) {
