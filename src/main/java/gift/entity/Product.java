@@ -83,15 +83,16 @@ public class Product {
         this.category = category;
     }
 
+
     public Set<Option> getOptions() { return options; }
 
     public void setOptions(Set<Option> options) {
+
 
         this.options = options;
     }
 
     public void addOption(Option option) {
-
         options.add(option);
         option.setProduct(this);
     }
@@ -112,5 +113,6 @@ public class Product {
             throw new ProductNoConferredException(List.of("카카오"));
         }
     }
-    
+
+
 }

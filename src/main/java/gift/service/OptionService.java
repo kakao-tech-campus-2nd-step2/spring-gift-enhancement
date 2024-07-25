@@ -1,5 +1,6 @@
 package gift.service;
 
+
 import gift.dto.OptionDto;
 import gift.entity.Option;
 import gift.entity.Product;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 import java.util.Set;
 
 @Service
@@ -21,7 +23,6 @@ public class OptionService {
 
     @Autowired
     private ProductRepository productRepository;
-
 
     public Option getOptionByName(String name) {
         return optionRepository.findByName(name)
@@ -63,11 +64,13 @@ public class OptionService {
         return optionRepository.save(option);
     }
 
+
     @Transactional
     public void subtractOptionQuantity(OptionDto optionDto, int quantity) {
         Option option = getOptionById(optionDto.getId());
         option.subtractQuantity(quantity);
         optionRepository.save(option);
     }
+
 
 }
