@@ -51,6 +51,13 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public Product(String name, int price, String imageUrl, Category category) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
     public Long getId() {
         return id;
     }
@@ -77,18 +84,15 @@ public class Product {
     }
 
 
-
     public Set<Option> getOptions() { return options; }
 
     public void setOptions(Set<Option> options) {
-        for (Option option : options) {
-            checkDuplicateOptionName(option.getName());
-        }
+
+
         this.options = options;
     }
 
     public void addOption(Option option) {
-        checkDuplicateOptionName(option.getName());
         options.add(option);
         option.setProduct(this);
     }
@@ -110,12 +114,5 @@ public class Product {
         }
     }
 
-    private void checkDuplicateOptionName(String optionName) {
-        for (Option option : options) {
-            if (option.getName().equals(optionName)) {
-                throw new IllegalArgumentException("같은 상품 내에 있는 옵션들의 이름은 중복될 수 없습니다.");
-            }
-        }
-    }
 
 }

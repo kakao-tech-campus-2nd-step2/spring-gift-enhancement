@@ -14,6 +14,7 @@ import java.util.Set;
 
 
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -55,7 +56,11 @@ public class ProductService {
         product.setOptions(options);
 
         category.addProduct(product);
-        productRepository.save(product);
+        try {
+            productRepository.save(product);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("같은 상품 내에 있는 옵션들의 이름은 중복될 수 없습니다.", e);
+        }
     }
 
     public void updateProduct(Long id, ProductDto productDto) {

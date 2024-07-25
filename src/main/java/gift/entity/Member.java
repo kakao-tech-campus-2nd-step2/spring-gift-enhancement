@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+import static gift.dto.Role.ADMIN;
+
 @Entity
 public class Member {
 
@@ -38,6 +40,7 @@ public class Member {
         this.password = password;
         this.role = Role.USER;
     }
+
 
     public Long getId() {
         return id;
