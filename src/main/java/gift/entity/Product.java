@@ -50,7 +50,7 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
     }
-    // 더미데이터 생성 시 사용되는 생성자
+
     public Product(String name, int price, String imageUrl, Category category) {
         this.name = name;
         this.price = price;
@@ -83,19 +83,15 @@ public class Product {
         this.category = category;
     }
 
-
-
     public Set<Option> getOptions() { return options; }
 
     public void setOptions(Set<Option> options) {
-        for (Option option : options) {
-            checkDuplicateOptionName(option.getName());
-        }
+
         this.options = options;
     }
 
     public void addOption(Option option) {
-        checkDuplicateOptionName(option.getName());
+
         options.add(option);
         option.setProduct(this);
     }
@@ -116,13 +112,5 @@ public class Product {
             throw new ProductNoConferredException(List.of("카카오"));
         }
     }
-
-    private void checkDuplicateOptionName(String optionName) {
-        for (Option option : options) {
-            if (option.getName().equals(optionName)) {
-                throw new IllegalArgumentException("같은 상품 내에 있는 옵션들의 이름은 중복될 수 없습니다.");
-            }
-        }
-    }
-
+    
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "product_id"})})
 public class Option {
 
     @Id
@@ -26,7 +27,19 @@ public class Option {
     public Option() {
     }
 
-    public Option(String name, int quantity, Product product) {
+    public Option(String name, int quantity, Product product){
+        if(name.length()>50){
+            throw new IllegalArgumentException();
+        }
+        if(quantity<1||quantity>=100_000_000){
+            throw new IllegalArgumentException();
+        }
+        if(product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        if(!name.matches("^[\\w\\s\\(\\)\\[\\]\\+\\-\\&\\/\\_]+$")) {
+            throw new IllegalArgumentException("Invalid characters in option name");
+        }
         this.name = name;
         this.quantity = quantity;
         this.product = product;
