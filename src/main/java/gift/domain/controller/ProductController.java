@@ -85,8 +85,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}/options/{optionId}")
-    public ResponseEntity<BasicApiResponse> deleteProduct(@PathVariable("productId") Long productId, @PathVariable("optionId") Long optionId) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Long productId, @PathVariable("optionId") Long optionId) {
         productService.deleteProductOption(productId, optionId);
-        return SuccessApiResponse.ok();
+        return SuccessApiResponse.noContent();
     }
 }

@@ -9,6 +9,7 @@ import gift.domain.exception.badRequest.OptionQuantityOutOfRangeException;
 import gift.domain.exception.badRequest.OptionUpdateActionInvalidException;
 import gift.domain.exception.conflict.OptionAlreadyExistsInProductException;
 import gift.domain.exception.notFound.OptionNotFoundException;
+import gift.domain.exception.notFound.OptionNotIncludedInProductOptionsException;
 import gift.domain.repository.OptionRepository;
 import gift.global.WebConfig.Constants.Domain;
 import gift.global.WebConfig.Constants.Domain.Option.QuantityUpdateAction;
@@ -63,7 +64,7 @@ public class OptionService {
             validateOptionIsUniqueInProduct(product, request.name());
         }
 
-        if (request.action().equals(QuantityUpdateAction.ADD)) {
+        if (request.action().equals(QuantityUpdateAction.ADD.toString())) {
             int updatedQuantity = option.getQuantity() + request.quantity();
             if (updatedQuantity > Domain.Option.QUANTITY_RANGE_MAX) {
                 throw new OptionQuantityOutOfRangeException();
@@ -73,7 +74,7 @@ public class OptionService {
             return option;
         }
 
-        if (request.action().equals(QuantityUpdateAction.SUBTRACT)) {
+        if (request.action().equals(QuantityUpdateAction.SUBTRACT.toString())) {
             int updatedQuantity = option.getQuantity() - request.quantity();
             if (updatedQuantity < Domain.Option.QUANTITY_RANGE_MIN) {
                 throw new OptionQuantityOutOfRangeException();
@@ -90,6 +91,7 @@ public class OptionService {
     public void deleteOptionById(Product product, Long optionId) {
         validateOptionIsInProduct(product, optionId);
         Option option = getOptionById(optionId);
+        product.getOptions().remove(option);
         optionRepository.delete(option);
     }
 
@@ -125,6 +127,6 @@ public class OptionService {
         product.getOptions().stream()
             .filter(o -> o.getId().equals(optionId))
             .findAny()
-            .orElseThrow(OptionNotFoundException::new);
+            .orElseThrow(OptionNotIncludedInProductOptionsException::new);
     }
 }

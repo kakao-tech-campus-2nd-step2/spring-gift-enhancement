@@ -18,6 +18,7 @@ import gift.domain.exception.forbidden.TokenStringInvalidException;
 import gift.domain.exception.notFound.CategoryNotFoundException;
 import gift.domain.exception.notFound.MemberNotFoundException;
 import gift.domain.exception.notFound.NotFoundException;
+import gift.domain.exception.notFound.OptionNotIncludedInProductOptionsException;
 import gift.domain.exception.notFound.ProductNotFoundException;
 import gift.domain.exception.notFound.ProductNotIncludedInWishlistException;
 import gift.domain.exception.unauthorized.TokenNotFoundException;
@@ -42,7 +43,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorApiResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         FieldError error = e.getBindingResult().getFieldError();
         assert error != null;
-        return ErrorApiResponse.of(error.getField() + ": " + error.getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        return ErrorApiResponse.of(error.getField() + ": " + error.getDefaultMessage(), ErrorCode.FIELD_VALIDATION_FAIL.getCode(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({
@@ -50,7 +51,8 @@ public class GlobalExceptionHandler {
         MemberNotFoundException.class,
         ProductNotIncludedInWishlistException.class,
         CategoryNotFoundException.class,
-        OptionNotFoundException.class
+        OptionNotFoundException.class,
+        OptionNotIncludedInProductOptionsException.class
     })
     public ResponseEntity<ErrorApiResponse> handleNotFoundException(NotFoundException e) {
         return ErrorApiResponse.notFound(e);

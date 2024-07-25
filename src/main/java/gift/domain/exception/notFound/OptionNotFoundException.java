@@ -1,8 +1,10 @@
 package gift.domain.exception.notFound;
 
+import gift.domain.exception.ErrorCode;
+
 public class OptionNotFoundException extends NotFoundException {
 
     public OptionNotFoundException() {
-        super("The option was not found.");
+        super("option", ErrorCode.OPTION_NOT_FOUND);
     }
 }

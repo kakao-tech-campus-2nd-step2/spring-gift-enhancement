@@ -4,6 +4,7 @@ import gift.domain.annotation.ValidAdminMemberArgumentResolver;
 import gift.domain.annotation.ValidMemberArgumentResolver;
 import gift.domain.service.MemberService;
 import gift.global.util.JwtUtil;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -31,6 +32,7 @@ public class WebConfig implements WebMvcConfigurer {
         public static class Constraints {
 
             public static final String DEFAULT_ALLOWED_SPECIAL_CHARS = "()[]+-&/_";
+            public static final String DEFAULT_ALLOWED_SPECIAL_MSG = "(), [], +, -, &, /, _ 이외의 특수 문자는 사용할 수 없습니다.";
         }
 
         public static class Domain {
@@ -58,22 +60,44 @@ public class WebConfig implements WebMvcConfigurer {
                 public static final int NAME_LENGTH_MAX = 50;
                 public static final int QUANTITY_RANGE_MIN = 1;
                 public static final int QUANTITY_RANGE_MAX = 99_999_999;
+                public static final String NAME_LENGTH_INVALID_MSG = "공백을 포함해 최대 50자까지 입력할 수 있습니다.";
+                public static final String QUANTITY_INVALID_MSG = "수량은 최소 1, 최대 100,000,000 미만만 가능합니다.";
 
-                public static class QuantityUpdateAction {
+                public enum QuantityUpdateAction {
 
-                    public static final String ADD = "add";
-                    public static final String SUBTRACT = "subtract";
+                    ADD("add"), SUBTRACT("subtract");
+
+                    private final String action;
+
+                    QuantityUpdateAction(String action) {
+                        this.action = action;
+                    }
+
+                    public String toString() {
+                        return action;
+                    }
+
+                    public static List<String> toList() {
+                        return Arrays.stream(values()).map(QuantityUpdateAction::toString).toList();
+                    }
                 }
             }
 
             public static class Wish {
 
-                public static class QuantityUpdateAction {
+                public enum QuantityUpdateAction {
 
-                    public static final String NOPE = "nope";
-                    public static final String CREATE = "create";
-                    public static final String DELETE = "delete";
-                    public static final String ADD = "add";
+                    NOPE("nope"), CREATE("create"), DELETE("delete"), ADD("add");
+
+                    private final String action;
+
+                    QuantityUpdateAction(String action) {
+                        this.action = action;
+                    }
+
+                    public String toString() {
+                        return action;
+                    }
                 }
             }
         }

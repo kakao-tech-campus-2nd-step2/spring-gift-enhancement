@@ -47,10 +47,10 @@ public class WishService {
         if (search.isEmpty()) {
             if (wishRequest.quantity() <= 0) {
                 // 0 이하인 경우 아무 작업 하지 않음
-                return new WishAddResponse(QuantityUpdateAction.NOPE, 0L);
+                return new WishAddResponse(QuantityUpdateAction.NOPE.toString(), 0L);
             }
             wishRepository.save(new Wish(product, member, wishRequest.quantity()));
-            return new WishAddResponse(QuantityUpdateAction.CREATE, wishRequest.quantity());
+            return new WishAddResponse(QuantityUpdateAction.CREATE.toString(), wishRequest.quantity());
         }
 
         Wish wish = search.get();
@@ -61,10 +61,10 @@ public class WishService {
         //업데이트 후 수량이 음수면 delete 수행
         if (wish.getQuantity() <= 0) {
             wishRepository.delete(wish);
-            return new WishAddResponse(QuantityUpdateAction.DELETE, 0L);
+            return new WishAddResponse(QuantityUpdateAction.DELETE.toString(), 0L);
         }
 
-        return new WishAddResponse(QuantityUpdateAction.ADD, wish.getQuantity());
+        return new WishAddResponse(QuantityUpdateAction.ADD.toString(), wish.getQuantity());
     }
 
     @Transactional

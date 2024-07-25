@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RestrictedSpecialChars {
 
-    String message() default "(), [], +, -, &, /, _ 이외의 특수 문자는 사용할 수 없습니다.";
+    String message() default Constraints.DEFAULT_ALLOWED_SPECIAL_MSG;
 
     Class<?>[] groups() default {};
 
