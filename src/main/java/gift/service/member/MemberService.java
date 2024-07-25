@@ -7,6 +7,7 @@ import gift.web.dto.MemberDto;
 import gift.web.exception.MemberNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -33,10 +34,12 @@ public class MemberService {
             .orElseThrow(() -> new MemberNotFoundException("멤버가 엄슴다"));
     }
 
+    @Transactional
     public void createMember(MemberDto memberDto) {
         memberRepository.save(memberMapper.toEntity(memberDto));
     }
 
+    @Transactional
     public MemberDto updateMember(String email, MemberDto memberDto) {
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new MemberNotFoundException("멤버가 없슴다."));

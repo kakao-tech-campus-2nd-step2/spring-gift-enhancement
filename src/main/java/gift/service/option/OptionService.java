@@ -2,6 +2,7 @@ package gift.service.option;
 
 import gift.domain.option.Option;
 import gift.domain.option.OptionRepository;
+import gift.domain.option.Options;
 import gift.domain.product.Product;
 import gift.domain.product.ProductRepository;
 import gift.mapper.OptionMappper;
@@ -10,13 +11,14 @@ import gift.web.exception.OptionNotFoundException;
 import gift.web.exception.ProductNotFoundException;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionService {
 
     private final ProductRepository productRepository;
-    private OptionRepository optionRepository;
-    private OptionMappper optionMapper;
+    private final OptionRepository optionRepository;
+    private final OptionMappper optionMapper;
 
     public OptionService(OptionRepository optionRepository, OptionMappper optionMapper,
         ProductRepository productRepository) {
@@ -25,11 +27,17 @@ public class OptionService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public OptionDto createOption(Long productId, OptionDto optionDto) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductNotFoundException("제품이 없슴다."));
 
-        Option option = optionRepository.save(optionMapper.toEntity(optionDto, product));
+        Option option = new Option(optionDto.name(), optionDto.quantity(), product);
+
+        final Options options = new Options(optionRepository.findAllByProductId(productId));
+        options.validate(option);
+
+        optionRepository.save(optionMapper.toEntity(optionDto, product));
         return optionMapper.toDto(option);
     }
 
@@ -43,11 +51,22 @@ public class OptionService {
             .toList();
     }
 
+    @Transactional
     public OptionDto updateOption(Long optionId, Long productId, OptionDto optionDto) {
         Option option = optionRepository.findByIdAndProductId(optionId, productId)
             .orElseThrow(() -> new OptionNotFoundException("옵션이 없슴다."));
 
         option.updateOption(optionDto.name(), optionDto.quantity());
+
+        return optionMapper.toDto(option);
+    }
+
+    @Transactional
+    public OptionDto subtractOptionQuantity(Long optionId, Long productId, Long quantity) {
+        Option option = optionRepository.findByIdAndProductId(optionId, productId)
+            .orElseThrow(() -> new OptionNotFoundException("옵션이 없슴다."));
+
+        option.subtractQuantity(quantity);
 
         return optionMapper.toDto(option);
     }

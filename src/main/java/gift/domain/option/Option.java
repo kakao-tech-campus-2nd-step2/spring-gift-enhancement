@@ -31,13 +31,20 @@ public class Option {
     }
 
     public Option(String name, Long quantity, Product product) {
+        if (name.length() > 50) {
+            throw new IllegalArgumentException("Name is too long");
+        }
+        if (quantity < 1 || quantity >= 100_000_000)  {
+            throw new IllegalArgumentException("Quantity is invalid");
+        }
+
         this.name = name;
         this.quantity = quantity;
         this.product = product;
     }
 
     public void setProduct(Product product) {
-        if (this.product != null) {
+        if (this.product != null && !this.product.equals(product)) {
             this.product.getOptionList().remove(this);
         }
 
@@ -60,5 +67,20 @@ public class Option {
     public void updateOption(String name, Long quantity) {
         this.name = name;
         this.quantity = quantity;
+    }
+
+    public boolean isSameName(Option option) {
+        return this.name.equals(option.name);
+    }
+
+    public void subtractQuantity(Long quantity) {
+        if (quantity < 1) {
+            throw new IllegalArgumentException("Deduct Quantity value is invalid");
+        }
+        if(quantity > this.quantity) {
+            throw new IllegalArgumentException("cannot subtract by more than quantity");
+        }
+
+        this.quantity -= quantity;
     }
 }

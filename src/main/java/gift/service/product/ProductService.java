@@ -16,6 +16,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 // Service단에서는 DTO를 Entity로 변환해서 Repository로 넘겨주고, Entity를 DTO로 변환해서 Controller에서 넘겨주면 되나?
 @Service
 public class ProductService {
@@ -46,6 +48,7 @@ public class ProductService {
             .orElseThrow(() -> new ProductNotFoundException("제품이 없슴다."));
     }
 
+    @Transactional
     public ProductDto createProduct(ProductDto productDto) {
         Category category = categoryRepository.findById(productDto.categoryId())
             .orElseThrow(() -> new CategoryNotFoundException("카테고리가 없슴다"));
@@ -63,6 +66,7 @@ public class ProductService {
         return productMapper.toDto(product);
     }
 
+    @Transactional
     public ProductDto updateProduct(Long id, ProductDto productDto) {
         Category category = categoryRepository.findById(productDto.categoryId())
             .orElseThrow(() -> new CategoryNotFoundException("카테코리가 없슴다"));
@@ -76,8 +80,6 @@ public class ProductService {
             productDto.imageUrl(),
             category
         );
-
-        productRepository.save(product);
 
         return productMapper.toDto(product);
     }

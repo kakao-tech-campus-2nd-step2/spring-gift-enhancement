@@ -14,6 +14,7 @@ import gift.web.exception.WishProductNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WishService {
@@ -42,6 +43,7 @@ public class WishService {
             .map(wishMapper::toDto);
     }
 
+    @Transactional
     public WishDto createWish(String email, WishDto wishDto) {
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new MemberNotFoundException("멤버가 엄슴다"));
@@ -53,6 +55,7 @@ public class WishService {
         return wishMapper.toDto(wish);
     }
 
+    @Transactional
     public WishDto updateWish(String email, WishDto wishDto) {
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new MemberNotFoundException("멤버가 엄슴다"));
