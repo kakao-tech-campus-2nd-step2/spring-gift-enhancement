@@ -13,9 +13,17 @@ create table Member
     password    VARCHAR(255)    NOT NULL
 );
 
-create table Wish
+create table WishList
 (
     id          BIGINT            AUTO_INCREMENT   PRIMARY KEY,
     member_id   BIGINT          NOT NULL,
     product_id  BIGINT          NOT NULL
+);
+
+create table Option
+(
+    id          BIGINT            AUTO_INCREMENT   PRIMARY KEY,
+    name        VARCHAR(255)   NOT NULL,
+    quantity    BIGINT         NOT NULL         CHECK (0 <= quantity),
+    product_id  BIGINT         NOT NULL
 );
