@@ -35,7 +35,6 @@ public class AdminController {
     @GetMapping("/{id}")
     public String getProduct(@PathVariable("id") Long id, Model model) {
         model.addAttribute("product", productService.getProduct(id));
-        model.addAttribute("options", optionService.getOptions(id));
         return "product";
     }
 

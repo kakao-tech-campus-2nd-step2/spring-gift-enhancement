@@ -33,7 +33,8 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler({AlreadyExistMemberException.class, NoSuchMemberException.class, InvalidPasswordException.class})
+    @ExceptionHandler({AlreadyExistMemberException.class, NoSuchMemberException.class,
+        InvalidPasswordException.class, NoOptionsForProductException.class})
     public ProblemDetail handleRuntimeException(RuntimeException runtimeException) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setDetail(runtimeException.getMessage());

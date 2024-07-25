@@ -1,6 +1,7 @@
 package gift.domain;
 
 import gift.dto.OptionDTO;
+import gift.exception.InsufficientQuantityException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "option", uniqueConstraints = {
@@ -32,6 +34,9 @@ public class Option {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Version
+    private Long version;
+
     protected Option() {
 
     }
@@ -41,13 +46,29 @@ public class Option {
         this.name = name;
         this.quantity = quantity;
         this.product = product;
+        product.getOptions().add(this);
     }
 
     public Option(String name, int quantity, Product product) {
         this(null, name, quantity, product);
     }
 
+    public void subtract(int quantity) {
+        if (this.quantity < quantity) {
+            throw new InsufficientQuantityException(this.quantity);
+        }
+        this.quantity -= quantity;
+    }
+
     public OptionDTO toDTO() {
         return new OptionDTO(id, name, quantity);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }

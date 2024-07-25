@@ -1,6 +1,7 @@
 package gift.domain;
 
 import gift.dto.ProductDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,7 +10,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -32,6 +36,9 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Option> options = new ArrayList<>();
+
     protected Product() {
 
     }
@@ -49,7 +56,10 @@ public class Product {
     }
 
     public ProductDTO toDTO() {
-        return new ProductDTO(id, name, price, imageUrl, category.getId());
+        return new ProductDTO(id, name, price, imageUrl, category.getId(),
+            options.stream()
+                .map(option -> option.toDTO())
+                .toList());
     }
 
     public Long getId() {
@@ -70,5 +80,9 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 }

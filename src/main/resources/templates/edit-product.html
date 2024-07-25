@@ -42,6 +42,36 @@
                         <input id="imageUrl" type="text" th:value="${product.imageUrl}" required>
                     </td>
                 </tr>
+                <tr>
+                    <th>Option</th>
+                    <td>
+                        <table>
+                            <tr th:each="option: ${product.optionDTOs}">
+                                <td>
+                                    <input class="editedOptionName" type="text" th:value="${option.name}" required>
+                                </td>
+                                <td>
+                                    <input class="editedOptionQuantity" type="text" th:value="${option.quantity}" required>
+                                </td>
+                                <td>
+                                    <button class="btn primary-btn" type="button" th:onclick="editOption([[${product.id}]], [[${option.id}]])">Edit</button>
+                                    <button class="btn danger-btn" th:data-product-id="${product.id}" th:data-option-id="${option.id}" type="button" onclick="deleteOption(this)">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input id="optionName" type="text">
+                                </td>
+                                <td>
+                                    <input id="optionQuantity" type="text">
+                                </td>
+                                <td>
+                                    <button class="btn primary-btn" type="button" th:onclick="addOption([[${product.id}]])">Add</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
             </table>
             <div class="btn-container">
                 <button class="btn primary-btn" type="submit">Edit</button>

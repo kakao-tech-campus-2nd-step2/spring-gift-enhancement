@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.dto.ProductDTO;
+import gift.exception.NoOptionsForProductException;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO) {
+        if(productDTO.optionDTOs() == null || productDTO.optionDTOs().size() == 0) {
+            throw new NoOptionsForProductException();
+        }
         ProductDTO addedProductDTO = productService.addProduct(productDTO);
         return ResponseEntity.ok().body(addedProductDTO);
     }

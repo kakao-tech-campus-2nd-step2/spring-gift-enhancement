@@ -44,7 +44,6 @@ public class ProductServiceTest {
     void addProduct() {
         // given
         Product product = createProduct(1L, "아이스 아메리카노", category);
-        System.out.println(product.getId());
         given(categoryService.getCategory(anyLong())).willReturn(category.toDTO());
         given(productRepository.save(any(Product.class))).willReturn(product);
 
