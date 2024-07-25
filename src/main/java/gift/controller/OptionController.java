@@ -1,7 +1,7 @@
 package gift.controller;
 
-import gift.domain.option.Option;
 import gift.domain.option.OptionRequest;
+import gift.domain.option.OptionResponse;
 import gift.service.OptionService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -25,7 +25,7 @@ public class OptionController {
     }
 
     @GetMapping
-    public List<Option> readOptions(@PathVariable("productId") Long productId) {
+    public List<OptionResponse> readOptions(@PathVariable("productId") Long productId) {
         return optionService.findAllByProductId(productId);
     }
 
