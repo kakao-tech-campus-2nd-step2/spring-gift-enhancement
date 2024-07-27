@@ -7,7 +7,7 @@ public record CategoryRequest(
     @NotBlank(message = "카테고리명이 입력되지 않았습니다")
     String name,
 
-    @NotBlank
+    @NotBlank(message = "색상코드가 입력되지 않았습니다")
     @Pattern(regexp = "#[\\da-fA-F]{6}", message = "카테고리 색상 코드가 올바르지 않습니다")
     String color,
 
