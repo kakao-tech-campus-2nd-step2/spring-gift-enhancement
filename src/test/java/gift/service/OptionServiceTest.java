@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import gift.dto.OptionDTO;
+import gift.dto.OptionSubtractQuantityDTO;
 import gift.model.Category;
 import gift.model.Option;
 import gift.model.Product;
@@ -125,5 +126,14 @@ class OptionServiceTest {
     void testDeleteOptionWithSingleOption() {
         assertThrows(IllegalArgumentException.class,
             () -> optionService.deleteOption(option.getId(), product.getId()));
+    }
+
+    @Test
+    @Transactional
+    void testSubtractQuantity() {
+        OptionSubtractQuantityDTO optionSubtractQuantityDTO = new OptionSubtractQuantityDTO(1L);
+        optionService.subtractQuantity(option.getId(), optionSubtractQuantityDTO);
+        Option subtractedOption = optionService.findOptionById(option.getId());
+        assertEquals(0L, subtractedOption.getQuantity());
     }
 }

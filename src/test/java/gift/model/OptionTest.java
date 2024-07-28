@@ -324,4 +324,46 @@ class OptionTest {
             assertThat(e).isInstanceOf(IllegalArgumentException.class);
         }
     }
+
+    @Test
+    void testSubtractQuantityWithNull() {
+        try {
+            option.subtractQuantity(null);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testSubtractQuantityWithZero() {
+        try {
+            option.subtractQuantity(0L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testSubtractQuantityWith0Less() {
+        try {
+            option.subtractQuantity(-10L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testSubtractQuantityMoreThanQuantity() {
+        try {
+            option.subtractQuantity(200L);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
+    void testValidSubtractQuantity() {
+        option.subtractQuantity(50L);
+        assertEquals(50L, option.getQuantity());
+    }
 }

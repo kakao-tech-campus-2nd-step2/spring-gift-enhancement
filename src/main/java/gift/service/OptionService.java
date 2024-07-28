@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.dto.OptionDTO;
+import gift.dto.OptionSubtractQuantityDTO;
 import gift.model.Option;
 import gift.model.Product;
 import gift.repository.OptionRepository;
@@ -57,6 +58,14 @@ public class OptionService {
             throw new IllegalArgumentException("상품 정보에 항상 하나 이상의 옵션이 있어야 합니다.");
         }
         optionRepository.deleteById(optionId);
+    }
+
+    @Transactional
+    public void subtractQuantity(Long optionId, OptionSubtractQuantityDTO optionSubtractQuantityDTO) {
+        Option option = optionRepository.findById(optionId).orElse(null);
+        Long subtractQuantity = optionSubtractQuantityDTO.subtractQuantity();
+        option.subtractQuantity(subtractQuantity);
+        optionRepository.save(option);
     }
 
     public static OptionDTO toDTO(Option option) {

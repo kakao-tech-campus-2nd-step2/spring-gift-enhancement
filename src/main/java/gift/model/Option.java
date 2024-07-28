@@ -58,6 +58,13 @@ public class Option {
         this.quantity = quantity;
     }
 
+    public void subtractQuantity(Long subtractQuantity) {
+        if (this.quantity < subtractQuantity) {
+            throw new IllegalArgumentException("차감할 수량이 현재 수량보다 많을 수 없습니다.");
+        }
+        this.quantity = this.quantity - subtractQuantity;
+    }
+
 
     public Product getProduct() {
         return product;
