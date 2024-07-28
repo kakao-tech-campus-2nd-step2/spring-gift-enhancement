@@ -44,8 +44,7 @@ public class ProductService {
         Product product = request.toEntity(category);
         Product savedProduct = productRepository.save(product);
 
-        request.getProductOptions().stream()
-            .forEach(productOptionRequest -> productOptionService.createOption(savedProduct.getId(), productOptionRequest));
+        productOptionService.createInitialOptions(savedProduct.getId(), request.getProductOptions());
 
         return CreateProductResponse.fromEntity(savedProduct);
     }

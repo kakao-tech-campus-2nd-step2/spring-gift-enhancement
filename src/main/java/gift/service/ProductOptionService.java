@@ -3,10 +3,12 @@ package gift.service;
 import gift.domain.ProductOption;
 import gift.repository.ProductOptionRepository;
 import gift.web.dto.request.productoption.CreateProductOptionRequest;
+import gift.web.dto.request.productoption.SubtractProductOptionQuantityRequest;
 import gift.web.dto.request.productoption.UpdateProductOptionRequest;
 import gift.web.dto.response.productoption.CreateProductOptionResponse;
 import gift.web.dto.response.productoption.ReadAllProductOptionsResponse;
 import gift.web.dto.response.productoption.ReadProductOptionResponse;
+import gift.web.dto.response.productoption.SubtractProductOptionQuantityResponse;
 import gift.web.dto.response.productoption.UpdateProductOptionResponse;
 import gift.web.validation.exception.client.AlreadyExistsException;
 import gift.web.validation.exception.client.ResourceNotFoundException;
@@ -61,6 +63,42 @@ public class ProductOptionService {
             });
     }
 
+    /**
+     * 해당 상품에 옵션이 존재하지 않는 경우 최초 옵션 등록을 위해 사용됩니다.
+     * @param productId 상품 아이디
+     * @param request 상품 옵션 생성 요청
+     * @return 상품 옵션 생성 응답
+     */
+    public List<CreateProductOptionResponse> createInitialOptions(Long productId, List<CreateProductOptionRequest> request) {
+        List<ProductOption> productOptions = request.stream()
+            .map(productOption -> productOption.toEntity(productId))
+            .toList();
+        validateDuplicateOptionNames(productOptions);
+
+        List<ProductOption> createdOptions = productOptionRepository.saveAll(productOptions);
+
+        return createdOptions.stream()
+            .map(CreateProductOptionResponse::fromEntity)
+            .toList();
+    }
+
+    /**
+     * 상품 옵션 이름에 중복이 존재하는지 검열합니다<br>
+     * 중복이 존재한다면 {@link IllegalStateException}을 발생시킵니다.
+     * @param productOptions 상품 옵션 리스트
+     */
+    private void validateDuplicateOptionNames(List<ProductOption> productOptions) {
+        long originalCount = productOptions.size();
+        long distinctCount = productOptions.stream()
+            .map(ProductOption::getName)
+            .distinct()
+            .count();
+
+        if (originalCount != distinctCount) {
+            throw new IllegalStateException("상품 옵션 이름에 중복이 존재합니다");
+        }
+    }
+
     public ReadAllProductOptionsResponse readAllOptions(Long productId) {
         List<ReadProductOptionResponse> options = productOptionRepository.findAllByProductId(productId)
             .stream()
@@ -81,6 +119,16 @@ public class ProductOptionService {
         option.update(updateParam);
 
         return UpdateProductOptionResponse.fromEntity(option);
+    }
+
+    @Transactional
+    public SubtractProductOptionQuantityResponse subtractOptionStock(Long optionId, SubtractProductOptionQuantityRequest request) {
+        ProductOption option = productOptionRepository.findById(optionId)
+            .orElseThrow(() -> new ResourceNotFoundException("상품 옵션", optionId.toString()));
+
+        option.subtractQuantity(request.getQuantity());
+
+        return SubtractProductOptionQuantityResponse.fromEntity(option);
     }
 
     @Transactional

@@ -64,6 +64,18 @@ public class ProductOption extends BaseEntity {
         return this;
     }
 
+    public ProductOption subtractQuantity(Integer quantity) {
+        validatedRequestQuantity(quantity);
+        this.stock -= quantity;
+        return this;
+    }
+
+    private void validatedRequestQuantity(int quantity) {
+        if(quantity > stock) {
+            throw new IllegalStateException("재고보다 많은 수량을 요청할 수 없습니다.");
+        }
+    }
+
     public String getName() {
         return name;
     }

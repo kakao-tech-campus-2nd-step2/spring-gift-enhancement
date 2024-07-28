@@ -1,8 +1,10 @@
 package gift.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -10,13 +12,16 @@ import gift.domain.ProductOption;
 import gift.domain.ProductOption.Builder;
 import gift.repository.ProductOptionRepository;
 import gift.web.dto.request.productoption.CreateProductOptionRequest;
+import gift.web.dto.request.productoption.SubtractProductOptionQuantityRequest;
 import gift.web.dto.request.productoption.UpdateProductOptionRequest;
 import gift.web.dto.response.productoption.CreateProductOptionResponse;
 import gift.web.dto.response.productoption.ReadAllProductOptionsResponse;
+import gift.web.dto.response.productoption.SubtractProductOptionQuantityResponse;
 import gift.web.dto.response.productoption.UpdateProductOptionResponse;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -48,6 +53,20 @@ class ProductOptionServiceTest {
             () -> assertThat(response.getName()).isEqualTo(request.getName()),
             () -> assertThat(response.getStock()).isEqualTo(request.getStock())
         );
+    }
+
+    @Test
+    @DisplayName("상품 옵션 생성 요청이 중복된 이름일 때, 예외를 발생시킵니다.")
+    void createInitialOptions() {
+        //given
+        List<CreateProductOptionRequest> request = List.of(
+            new CreateProductOptionRequest("optionName", 1000),
+            new CreateProductOptionRequest("optionName", 1000));
+
+        //when
+        //then
+        assertThatThrownBy(() -> productOptionService.createInitialOptions(1L, request))
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -88,6 +107,50 @@ class ProductOptionServiceTest {
             () -> assertThat(response.getName()).isEqualTo(request.getName()),
             () -> assertThat(response.getStock()).isEqualTo(request.getStock())
         );
+    }
+
+    @Nested
+    @DisplayName("subtractOptionStock 메서드는")
+    class SubtractOptionStock {
+
+        @Test
+        @DisplayName("요청 수량이 재고보다 적을 때, 재고를 감소시킨다.")
+        void valid_request() {
+            //given
+            int requestedQuantity = 3;
+            SubtractProductOptionQuantityRequest request = new SubtractProductOptionQuantityRequest(
+                requestedQuantity);
+
+            int stock = 10;
+            ProductOption productOption = new Builder().stock(stock).build();
+            given(productOptionRepository.findById(any())).willReturn(Optional.of(productOption));
+
+            //when
+            SubtractProductOptionQuantityResponse response = productOptionService.subtractOptionStock(
+                1L, request);
+
+            //then
+            int expectedStock = stock - requestedQuantity;
+            assertThat(response.getStock()).isEqualTo(expectedStock);
+        }
+
+        @Test
+        @DisplayName("요청 수량이 재고보다 많을 때, 예외를 발생시킨다.")
+        void invalid_request() {
+            //given
+            int requestedQuantity = 11;
+            SubtractProductOptionQuantityRequest request = new SubtractProductOptionQuantityRequest(
+                requestedQuantity);
+
+            int stock = 10;
+            ProductOption productOption = new Builder().stock(stock).build();
+            given(productOptionRepository.findById(any())).willReturn(Optional.of(productOption));
+
+            //when
+            //then
+            assertThatThrownBy(() -> productOptionService.subtractOptionStock(1L, request))
+                .isInstanceOf(IllegalStateException.class);
+        }
     }
 
     @Test
