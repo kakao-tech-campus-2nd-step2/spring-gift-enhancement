@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
 
 import gift.dto.OptionRequestDTO;
 import gift.entity.Category;
@@ -31,9 +32,6 @@ class OptionServiceTest {
     @Mock
     private ProductRepository productRepository;
 
-    @Mock
-    private OptionRepositoryKeeperService optionRepositoryKeeperService;
-
     OptionService optionService;
 
     private Product product1;
@@ -41,8 +39,10 @@ class OptionServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
-        optionService = new OptionService(optionRepository, optionRepositoryKeeperService, productRepository);
+        MockitoAnnotations.openMocks(this);
+        optionService = new OptionService(optionRepository, productRepository);
+
+        optionService = spy(optionService);
 
         product1 = new Product("커피", 10000,
                 "https://st.kakaocdn.net/product/gift/product/20231010111814_9a667f9eccc943648797925498bdd8a3.jpg",
@@ -66,7 +66,7 @@ class OptionServiceTest {
     void addOption() {
         given(optionRepository.save(any())).willReturn(option1);
         given(productRepository.findById(any())).willReturn(Optional.of(product1));
-        doNothing().when(optionRepositoryKeeperService).checkUniqueOptionName(any(), any());
+        doNothing().when(optionService).checkUniqueOptionName(any(), any());
 
         assertThatNoException().isThrownBy(() -> optionService.addOption(1L,
                 new OptionRequestDTO(option1.getName(), option1.getQuantity())));
@@ -76,7 +76,7 @@ class OptionServiceTest {
     void duplicatedAddOptionTest(){
         given(optionRepository.save(any())).willReturn(option1);
         given(productRepository.findById(any())).willReturn(Optional.of(product1));
-        doThrow(new DataIntegrityViolationException("테스트")).when(optionRepositoryKeeperService)
+        doThrow(new DataIntegrityViolationException("테스트")).when(optionService)
                 .checkUniqueOptionName(any(), any());
 
         assertThrows(BadRequestException.class, () -> optionService.addOption(1L,
@@ -87,7 +87,7 @@ class OptionServiceTest {
     void updateOption() {
         given(productRepository.findById(any())).willReturn(Optional.of(product1));
         given(optionRepository.findById((Long) any())).willReturn(Optional.of(option1));
-        doNothing().when(optionRepositoryKeeperService).checkUniqueOptionName(any(), any());
+        doNothing().when(optionService).checkUniqueOptionName(any(), any());
 
         assertThatNoException().isThrownBy(() -> optionService.updateOption(1L, 1L,
                 new OptionRequestDTO(option1.getName(), option1.getQuantity())));
@@ -97,7 +97,7 @@ class OptionServiceTest {
     void duplicateUpdateOptionTest(){
         given(productRepository.findById(any())).willReturn(Optional.of(product1));
         given(optionRepository.findById((Long) any())).willReturn(Optional.of(option1));
-        doThrow(new DataIntegrityViolationException("테스트")).when(optionRepositoryKeeperService)
+        doThrow(new DataIntegrityViolationException("테스트")).when(optionService)
                 .checkUniqueOptionName(any(), any());
 
         assertThrows(BadRequestException.class, () -> optionService.updateOption(1L, 1L,
@@ -126,5 +126,13 @@ class OptionServiceTest {
         given(optionRepository.countByProduct(any())).willReturn(1);
 
         assertThrows(BadRequestException.class, () -> optionService.deleteOption(1L, 1L));
+    }
+
+    @Test
+    void subtractOptionQuantity(){
+        given(optionRepository.findByIdAndProductId(any(), any())).willReturn(Optional.of(option1));
+        assertThatNoException().isThrownBy(() -> optionService.subtractOptionQuantity(1L, 1L, 50));
+        assertThrows(BadRequestException.class, () -> optionService.subtractOptionQuantity(1L, 1L, 100));
+        assertThrows(BadRequestException.class, () -> optionService.subtractOptionQuantity(1L, 1L, 0));
     }
 }
