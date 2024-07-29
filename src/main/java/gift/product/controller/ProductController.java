@@ -2,6 +2,7 @@ package gift.product.controller;
 
 import gift.product.dto.OptionDto;
 import gift.product.dto.ProductDto;
+import gift.product.dto.ProductSortField;
 import gift.product.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -26,16 +27,17 @@ public class ProductController {
   }
 
   @GetMapping
-  public ResponseEntity<Page<ProductDto>> getAllProducts(@RequestParam(defaultValue = "0") int page,
+  public ResponseEntity<Page<ProductDto>> getAllProducts(
+      @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
-      @RequestParam(defaultValue = "id") String sort,
-      @RequestParam(defaultValue = "asc") String direction) {
-    Sort.Direction sortDirection = Sort.Direction.fromString(direction);
-    Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sort));
+      @RequestParam(defaultValue = "ID") ProductSortField sort,
+      @RequestParam(defaultValue = "ASC") Sort.Direction direction) {
 
+    Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort.getFieldName()));
     Page<ProductDto> products = productService.findAll(pageable);
     return ResponseEntity.ok(products);
   }
+
 
   @GetMapping("/{id}")
   public ResponseEntity<ProductDto> getProductById(@PathVariable long id) {

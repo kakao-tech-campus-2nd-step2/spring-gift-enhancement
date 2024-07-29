@@ -1,4 +1,5 @@
 package gift.product.entity;
+import gift.exception.QuantityException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -74,5 +75,15 @@ public class Option {
 
   public void setQuantity(int quantity) {
     this.quantity = quantity;
+  }
+
+  public void subtractQuantity(int quantity){
+    if (quantity <= 0) {
+      throw new QuantityException("차감할 수량은 0보다 커야 합니다.");
+    }
+    if (this.quantity < quantity) {
+      throw new QuantityException("차감할 수량이 현재 수량보다 많습니다.");
+    }
+    this.quantity -= quantity;
   }
 }

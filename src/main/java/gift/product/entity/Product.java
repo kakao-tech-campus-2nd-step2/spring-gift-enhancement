@@ -1,4 +1,5 @@
 package gift.product.entity;
+
 import gift.category.entity.Category;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

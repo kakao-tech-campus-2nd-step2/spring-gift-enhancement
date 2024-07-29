@@ -1,6 +1,8 @@
 package gift.category.service;
+
 import gift.category.dto.CategoryDto;
 import gift.category.repository.CategoryRepository;
+import gift.exception.ResourceNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,14 @@ public class CategoryService {
   }
 
   public List<CategoryDto> getAllCategories() {
-    return categoryRepository.findAll().stream().map(CategoryDto::toDto)
-        .collect(Collectors.toList());
+    List<CategoryDto> categories = categoryRepository.findAll().stream().map(CategoryDto::toDto)
+        .toList();
+
+    if (categories.isEmpty()) {
+      throw new ResourceNotFoundException("카테고리를 찾을 수 없습니다.");
+    }
+
+    return categories;
   }
 
 }

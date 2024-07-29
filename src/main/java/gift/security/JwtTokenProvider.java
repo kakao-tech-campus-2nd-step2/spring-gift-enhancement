@@ -6,16 +6,18 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import javax.crypto.SecretKey;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenProvider {
 
-  private final String secretKey = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E=";
-  private final long validityInMilliseconds = 3600000;
+  @Value("${jwt.secret}")
+  private String secretKey;
 
   public String createToken(String email) {
     Date now = new Date();
+    long validityInMilliseconds = 3600000;
     Date validity = new Date(now.getTime() + validityInMilliseconds);
 
     return Jwts.builder().setSubject(email).setIssuedAt(now).setExpiration(validity)
@@ -32,6 +34,4 @@ public class JwtTokenProvider {
         .getBody()
         .getSubject();
   }
-
-
 }
